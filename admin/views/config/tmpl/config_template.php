@@ -4,7 +4,7 @@
 <?php
 defined('_JEXEC') or die('Restricted access');
 
-	$config			= &JComponentHelper::getParams( 'com_clm' );
+	$config			= JComponentHelper::getParams( 'com_clm' );
 	
     ?>
     

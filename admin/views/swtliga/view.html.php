@@ -12,20 +12,18 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
-
-class CLMViewSWTliga extends JView {
+class CLMViewSWTliga extends JViewLegacy {
 
 	function display($tpl = null) { 
 
 		//Daten vom Model
-		$state		=& $this->get( 'state' );
-		$saisons	=& $this->get( 'saisons' );
-		$ligen		=& $this->get( 'ligen' );
+		$state		= $this->get( 'state' );
+		$saisons	= $this->get( 'saisons' );
+		$ligen		= $this->get( 'ligen' );
 		
 			
 		//Toolbar
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( JText::_('TITLE_SWT_LEAGUE') ,'clm_headmenu_manager.png' );
 		
 		JToolBarHelper::custom('update','refresh.png','refresh_f2.png', JText::_('SWT_LEAGUE_UPDATE'), false);

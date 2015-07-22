@@ -41,14 +41,9 @@ if ($liga[0]->durchgang > 1) {
     }
 } }
 
-$free_date_new = $this->free_date_new;		
-if (isset($free_date_new[0])) {
-	if ($free_date_new[0]->nr_aktion  == 201) $hint_freenew = JText::_('ROUND_FREE_COMMENT').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $free_date_new[0]->datum, JText::_('DATE_FORMAT_CLM_F')); 
-	if ($free_date_new[0]->nr_aktion  == 202) $hint_freenew = JText::_('ROUND_FREE_COMMENT_DEL').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $free_date_new[0]->datum, JText::_('DATE_FORMAT_CLM_F')); 
-	}
-if ((!isset($free_date_new[0]->nr_aktion)) AND (isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok > 0)) $hint_freenew = JText::_('CHIEF_OK');  
-if ((!isset($free_date_new[0]->nr_aktion)) AND (isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok == 0)) $hint_freenew = JText::_('CHIEF_NOK');  
-if ((!isset($free_date_new[0]->nr_aktion)) AND (!isset($ok[0]->sl_ok))) $hint_freenew = JText::_('CHIEF_NOK');  
+if ((isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok > 0)) $hint_freenew = JText::_('CHIEF_OK');  
+if ((isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok == 0)) $hint_freenew = JText::_('CHIEF_NOK');  
+if ((!isset($ok[0]->sl_ok))) $hint_freenew = JText::_('CHIEF_NOK');
 
 $runden_modus = $liga[0]->runden_modus;
 //require_once(JPATH_COMPONENT.DS.'includes'.DS.'fpdf.php');
@@ -103,8 +98,8 @@ function RotatedImage($file,$x,$y,$w,$h,$angle)
 	$date_font = 8;
 
 // Datum der Erstellung
-$date =& JFactory::getDate();
-$now = $date->toMySQL();
+$date =JFactory::getDate();
+$now = $date->toSQL();
 
 $pdf=new PDF();
 $pdf->AliasNbPages();

@@ -14,66 +14,31 @@
 /**
  * schreibt einen Log-Eintrag
 */
+
+/*
+//
+//	Diese Klasse ist veraltet und leitet alles auf die neue Log Klasse um.
+// Beim Umzug der entsprechenden Views sollten die Abhängigkeiten zu dieser Klasse aufgelöst werden.
+//
+*/
 	
 class CLMLog {
 
 	function __construct() {
 
-		// INIT
-		// DB
-		$this->_db				= & JFactory::getDBO();
-		
-		// datum
-		$date 					= & JFactory::getDate();
-		$this->_datum 			= $date->toMySQL();
-		
-		// user
-		$user 					= & JFactory::getUser();
-		$this->_jid_aktion	= $user->get('id');
-		
 		// aktion
 		$this->aktion 			= NULL; // wird von außen befüllt
 		$this->nr_aktion 		= 0; // wird von außen befüllt 
-		
 		// parameters
 		$this->params 			= array();  // wird von außen befüllt mit key=>value-Paaren
-
-		// Konfigurationsparameter auslesen
-		$config = &JComponentHelper::getParams('com_clm');
-		$this->logfile = $config->get('logfile', 1);
 	
 	}
-
 
 	/**
 	 * log schreiben
 	 */
 	function write() {
-
-		if (($this->logfile == 1) || ($this->nr_aktion > 0)) {
-
-			// bereits vorhandene felder und Werte
-			$queryFields = array('`aktion`', '`nr_aktion`', '`jid_aktion`', '`datum`');									//klkl
-			$queryValues = array('\''.$this->aktion.'\'', '\''.$this->nr_aktion.'\'', '\''.$this->_jid_aktion.'\'', '\''.$this->_datum.'\'');  //klkl
-			
-			if (!isset($this->params["sid"])) $this->params["sid"] = CLM_SEASON;
-			// Parameter ergänzen
-			foreach ($this->params as $key => $value) {
-				$queryFields[] = '`'.$key.'`';
-				$queryValues[] = '\''.$value.'\'';
-			}
-			
-			$query	= 'INSERT INTO #__clm_log '
-				. '('.implode($queryFields, ', ').')'
-				. ' VALUES '
-				. '('.implode($queryValues, ', ').')'
-				;
-	
-			$this->_db->setQuery($query);
-			$this->_db->query();
-
-		}
-
+		clm_core::addDeprecated($this->aktion, json_encode($this->params));
 	}
 
 

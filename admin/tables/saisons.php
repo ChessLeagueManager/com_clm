@@ -31,31 +31,4 @@ class TableCLMSaisons extends JTable
 	function __construct( &$_db ) {
 		parent::__construct( '#__clm_saison', 'id', $_db );
 	}
-
-	/**
-	 * Overloaded check function
-	 *
-	 * @access public
-	 * @return boolean
-	 * @see JTable::check
-	 * @since 1.5
-	 */
-	function check()
-	{
-		// check for valid client name
-		if (trim($this->name == '')) {
-			$this->setError(JText::_( 'BNR_CLIENT_NAME' ));
-			return false;
-		}
-
-		// check for valid client contact
-/**		if (trim($this->sid == '')) {
-			$this->setError(JText::_( 'Saison muss angegeben werden !' ));
-			return false;
-		}
-
-**/		
-
-		return true;
-	}
 }

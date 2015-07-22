@@ -15,7 +15,7 @@ defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 jimport( 'joomla.html.parameter' );
 
-class CLMModelTurnier_Player extends JModel {
+class CLMModelTurnier_Player extends JModelLegacy {
 	
 	
 	function __construct() {
@@ -50,12 +50,12 @@ class CLMModelTurnier_Player extends JModel {
 
 		// TO-DO: auslagern
 		// zudem PGN-Parameter auswerten
-		$turParams = new JParameter($this->turnier->params);
+		$turParams = new clm_class_params($this->turnier->params);
 		$pgnInput = $turParams->get('pgnInput', 1);
 		$pgnPublic = $turParams->get('pgnPublic', 1);	
 		
 		// User ermitteln
-		$user =& JFactory::getUser();
+		$user =JFactory::getUser();
 		
 		// Flag für View und Template setzen: pgnShow
 		// FALSE - PGN nicht verlinken/anzeigen
@@ -147,7 +147,7 @@ class CLMModelTurnier_Player extends JModel {
 	function _getPlayerPhoto() {
 	
 		// JoomGallery-Parameter auswerten
-		$turParams = new JParameter($this->turnier->params);
+		$turParams = new clm_class_params($this->turnier->params);
         $this->joomGalleryPhotosWidth = $turParams->get('joomGalleryPhotosWidth', '');
         if(!is_numeric($this->joomGalleryPhotosWidth)){$this->joomGalleryPhotosWidth=0;}
 		$joomGalleryDisplayPlayerPhotos = $turParams->get('joomGalleryDisplayPlayerPhotos', 0);

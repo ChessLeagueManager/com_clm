@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerTurPlayers extends JController {
+class CLMControllerTurPlayers extends JControllerLegacy {
 	
 
 	// Konstruktor
@@ -27,7 +25,7 @@ class CLMControllerTurPlayers extends JController {
 		// turnierid
 		$this->id = JRequest::getInt('id');
 		
-		$this->_db		= & JFactory::getDBO();
+		$this->_db		= JFactory::getDBO();
 		
 		// Register Extra tasks
 		$this->registerTask( 'unactive','active' );
@@ -67,7 +65,21 @@ class CLMControllerTurPlayers extends JController {
 		$this->adminLink->makeURL();
 		
 		$this->setRedirect( $this->adminLink->url );
-	
+	}
+
+	function del_player() {
+		// ausgewählte Einträge
+		$cid = JRequest::getVar('cid', array(), '', 'array');
+
+		$output = clm_core::$api->db_tournament_player_del($this->id,$cid);
+		$error = clm_core::$load->load_view("notification", array($output[1],false));	
+
+		// Message
+		$app =JFactory::getApplication();
+		$app->enqueueMessage($error[0][0]);
+
+		$this->adminLink->makeURL();
+		$this->setRedirect( $this->adminLink->url );
 	}
 
 	function plusTln() {
@@ -107,7 +119,7 @@ class CLMControllerTurPlayers extends JController {
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
 		// Turnierdaten holen
-		$turnier =& JTable::getInstance( 'turniere', 'TableCLM' );
+		$turnier =JTable::getInstance( 'turniere', 'TableCLM' );
 		$turnier->load( $this->id ); // Daten zu dieser ID laden
 
 		// Turnier existent?
@@ -116,11 +128,9 @@ class CLMControllerTurPlayers extends JController {
 			return false;
 		}
 	
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if (($turnier->tl != CLM_ID AND $clmAccess->access() !== true) OR $clmAccess->access() === false) {
-		//if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+		$clmAccess = clm_core::$access;      
+		if (($turnier->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
+		//if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
 			return false;
 		}
@@ -164,7 +174,7 @@ class CLMControllerTurPlayers extends JController {
 	
 	
 		// Message
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		$app->enqueueMessage( $text );
 	
 		return true;
@@ -198,11 +208,9 @@ class CLMControllerTurPlayers extends JController {
 		// Check for request forgeries
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if ($clmAccess->access() === false) {
-		//if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+		$clmAccess = clm_core::$access;      
+		if ($clmAccess->access('BE_tournament_edit_detail') === false) {
+		//if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
 			return false;
 		}
@@ -211,14 +219,14 @@ class CLMControllerTurPlayers extends JController {
 		JArrayHelper::toInteger($cid);
 		$tlnid = $cid[0];
 	
-		$row =& JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
+		$row =JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
 		if ( !$row->load($tlnid) ) {
 			JError::raiseWarning( 500, CLMText::errorText('PLAYER', 'NOTEXISTING') );
 			return false;
 		}
 		$row->move($inc, '');
 	
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		$app->enqueueMessage( JText::_('ORDERING_CHANGED') );
 		
 		return true;
@@ -232,11 +240,9 @@ class CLMControllerTurPlayers extends JController {
 		// Check for request forgeries
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if ($clmAccess->access() === false) {
-		//if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+		$clmAccess = clm_core::$access;      
+		if ($clmAccess->access('BE_tournament_edit_detail') === false) {
+		//if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
 			return false;
 		}
@@ -250,7 +256,7 @@ class CLMControllerTurPlayers extends JController {
 		$order		= JRequest::getVar( 'order', array(0), 'post', 'array' );
 		JArrayHelper::toInteger($order, array(0));
 	
-		$row =& JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
+		$row =JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
 		
 		$groupings = array();
 	
@@ -274,7 +280,7 @@ class CLMControllerTurPlayers extends JController {
 		}
 		
 		
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		$app->enqueueMessage( JText::_('NEW_ORDERING_SAVED') );
 	
 		$this->adminLink->makeURL();
@@ -306,11 +312,9 @@ class CLMControllerTurPlayers extends JController {
 		// Check for request forgeries
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if ($clmAccess->access() === false) {
-		//if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+		$clmAccess = clm_core::$access;      
+		if ($clmAccess->access('BE_tournament_edit_detail') === false) {
+		//if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
 			return false;
 		}
@@ -352,7 +356,7 @@ class CLMControllerTurPlayers extends JController {
 		$this->_db->setQuery($queryOrderBy);
 		$players = $this->_db->loadObjectList();
 	
-		$table	=& JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
+		$table	=JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
 		// Snr umsortieren
 		$snr = 0;
 		// alle Spieler durchgehen
@@ -369,7 +373,7 @@ class CLMControllerTurPlayers extends JController {
 		$clmLog->params = array('sid' => $turnier->sid, 'tid' => $this->id, 'cids' => count($cid));
 		$clmLog->write();
 		
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		$app->enqueueMessage( $stringMessage );
 	
 	}
@@ -387,11 +391,9 @@ class CLMControllerTurPlayers extends JController {
 		// Check for request forgeries
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if ($clmAccess->access() === false) {
-		//if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+		$clmAccess = clm_core::$access;      
+		if ($clmAccess->access('BE_tournament_edit_detail') === false) {
+		//if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
 			return false;
 		}
@@ -417,7 +419,7 @@ class CLMControllerTurPlayers extends JController {
 		$clmLog->params = array('sid' => $tournament->data->sid, 'tid' => $this->id);
 		$clmLog->write();
 		
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		$app->enqueueMessage( $stringMessage );
 	
 		return true;
@@ -454,7 +456,7 @@ class CLMControllerTurPlayers extends JController {
 		$tlnrID = $cid[0];
 	
 		// Teilnehmerdaten holen
-		$tlnr =& JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
+		$tlnr =JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
 		$tlnr->load( $tlnrID ); // Daten zu dieser ID laden
 		// Teilnehmer existent?
 		if (!$tlnr->id) {
@@ -476,7 +478,7 @@ class CLMControllerTurPlayers extends JController {
 			return false;
 		}
 	
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		if ($active) {
 			$app->enqueueMessage( $tlnr->name.": "." ".JText::_('PLAYER_ACTIVE') );
 		} else {
@@ -492,337 +494,6 @@ class CLMControllerTurPlayers extends JController {
 	
 		return true;
 	
-	}
-
-	// Prüft die DWZ und Elo der Teilnehmer gegen die aktuellen DSB-Daten mittels API-Schnittstelle
-	function daten_dsb_API()
-	{
-		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
-	
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if ($clmAccess->access() === false) {
-			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
-			return false;
-		}
-		
-		// Turnierdaten holen
-		$turnier =& JTable::getInstance( 'turniere', 'TableCLM' );
-		$turnier->load( $this->id ); // Daten zu dieser ID laden
-		$turParams = new JParameter($turnier->params);
-		$param_useastwz = $turParams->get('useAsTWZ', 0);
-
-		$sid = $turnier->sid;
-		// Teilnehmer auslesen
-		$query = 'SELECT id FROM `#__clm_turniere_tlnr`'
-					.' WHERE turnier = '.$this->id
-					.' ORDER BY zps, mgl_nr DESC'
-					;
-		$this->_db->setQuery($query);
-		$players = $this->_db->loadObjectList();
-		$player	=& JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
-		
-		// Initial-Werte setzen
-		$vzps = '';
-		$ct_update = 0;
-		$cd_update = 0;
-		$c_player = 0;
-		// alle Teilnehmer durchgehen
-		foreach ($players as $value_players) {
-			$c_player++;
-			$player->load($value_players->id);
-			echo "<br>player: $c_player "; var_dump($player);
-			// Spielerliste des Vereins
-			if ($player->zps != $vzps) {
-				// Daten als Array laden (Zeichensatz UTF-8!) vom DSB 
-				$vzps = $player->zps;
-				$dsbdaten = unserialize(file_get_contents("http://www.schachbund.de/php/dewis/verein.php?zps=".$vzps."&format=array"));		
-			}
-			// Abgleich der Mitgliedsnummer
-			foreach($dsbdaten as $key => $value)
-			{	
-				$i_dsbmglnr = (integer) $value["mglnr"];
-				if ($i_dsbmglnr != $player->mgl_nr) continue;
-				// Array umbauen (nur relevante Spalten)    
-				$dsbid = $value["id"];
-				$dsbnachname = $value["nachname"];
-				$dsbvorname = $value["vorname"];
-				$dsbdwz = $value["dwz"];
-				$dsbdwzindex = $value["dwzindex"];
-				$dsbzps = $value["verein"];
-				$dsbstatus = $value["status"];
-				$dsbfideid = $value["fideid"];
-				$dsbfideelo = $value["fideelo"];
-				$dsbfidetitel = $value["fidetitel"];
-				// Die Mitgliedsnummer müssen mindestens dreistellig sein, mit führenden Nullen auffüllen
-				$dsbmglnr = $value["mglnr"];
-				if (strlen ($dsbmglnr) == 1) {
-					$dsbmglnr= "00" . $dsbmglnr;
-				} elseif (strlen ($dsbmglnr) == 2) {
-					$dsbmglnr= "0" . $dsbmglnr;
-				}
-				// Falls Namensänderungen anliegen (Heirat)
-				$name = $dsbnachname.",".$dsbvorname;
-				$name_g = strtoupper($name);
-				$search = array("ä", "ö", "ü", "ß", "é");
-				$replace = array("AE", "OE", "UE", "SS", "É");
-				$name_g =  str_replace($search, $replace, $name_g);
-
-				// Update Teilnehmer-Tabelle
-				$player->name = $name;
-				$player->twz = $this->_getTWZ($param_useastwz, $dsbdwz, $dsbfideelo);
-				$player->NATrating 	= $dsbdwz;
-				$player->FIDEelo	= $dsbfideelo;
-				$player->FIDEid 	= $dsbfideid;
-				$player->store();
-				$ct_update++;
-
-				// Update interne DWZ-Datenbank	
-				// Prüfen ob Teilnehmer in interner DB ist
-				$query	= "SELECT Mgl_Nr FROM #__clm_dwz_spieler "
-					." WHERE ZPS ='$dsbzps '"
-					." AND sid = '$sid'"
-					." AND Mgl_Nr = '$dsbmglnr'"
-					;
-				$this->_db->setQuery($query);
-				$mgl_exist = $this->_db->loadObjectList();
-				if(!isset($mgl_exist[0])) break;
-				$query	= "UPDATE #__clm_dwz_spieler "
-					." SET DWZ = '$dsbdwz' "
-					." , DWZ_Index = '$dsbdwzindex' "
-					." , PKZ = '$dsbid' "
-					." , Spielername = '$name' "
-					." , Spielername_G = '$name_g' "
-					." , FIDE_Elo = '$dsbfideelo' "
-					." , FIDE_Titel = '$dsbfidetitel' "
-					." , FIDE_ID = '$dsbfideid' "
-					." , Status = '$dsbstatus' "
-					." WHERE ZPS = '$dsbzps' "
-					." AND sid = '$sid' "
-					." AND Mgl_Nr = '$dsbmglnr' "
-					;
-				$this->_db->setQuery($query);
-				$this->_db->query();
-				if (mysql_errno() == 0) $cd_update++;
-			}
-		}
-		
- 	// Log schreiben
-  	$clmLog = new CLMLog();
-  	$clmLog->aktion = "DWZ-Update Teilnehmer";
-  	$clmLog->params = array('sid' => $sid, 'lid' => $turnier->id, 'cids' => 'sp:'.$c_player.',tl:'.$ct_update.',db:'.$cd_update);
-  	$clmLog->write();
-  	
-	$msg = JText::_( 'DB_MSG_DWZ_TOURNAMENT_UPDATE');
-	
-	$app =& JFactory::getApplication();
-	$app->enqueueMessage( $msg );
-
-	$this->adminLink->makeURL();
-	$this->setRedirect( $this->adminLink->url );
-
-	}
-
-	// Prüft die DWZ und Elo der Teilnehmer gegen die aktuellen DSB-Daten mittels SOAP-Webservice
-	function daten_dsb_SOAP()
-	{
-		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
-	
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if ($clmAccess->access() === false) {
-			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
-			return false;
-		}
-		
-		// Turnierdaten holen
-		$turnier =& JTable::getInstance( 'turniere', 'TableCLM' );
-		$turnier->load( $this->id ); // Daten zu dieser ID laden
-		$turParams = new JParameter($turnier->params);
-		$param_useastwz = $turParams->get('useAsTWZ', 0);
-
-		$sid = $turnier->sid;
-		// Teilnehmer auslesen
-		$query = 'SELECT id FROM `#__clm_turniere_tlnr`'
-					.' WHERE turnier = '.$turnier->id
-					.' ORDER BY zps, mgl_nr DESC'
-					;
-		$this->_db->setQuery($query);
-		$players = $this->_db->loadObjectList();
-		$player	=& JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
-		
-		// Dewis Tabelle leeren
-		$query = " DELETE FROM #__clm_dwz_dewis "
-			." WHERE turnier = ".$turnier->id
-			;
-		$this->_db->setQuery($query);
-		$this->_db->query();
-
-		// Initial-Werte setzen
-		$vzps = '';
-
-	// SOAP Webservice
-		try {
-			$client = new SOAPClient( "https://dwz.svw.info/services/files/dewis.wsdl" );
-			$c_player = 0;
-			// alle Teilnehmer durchgehen
-			foreach ($players as $value_players) {
-				$c_player++;
-				$player->load($value_players->id);
-				// Spielerliste des Vereins
-				if ($player->zps == '0' OR $player->zps == '') continue;
-				if ($player->zps != $vzps) {
-					$vzps = $player->zps;
-					// VKZ des Vereins --> Vereinsliste
-					$unionRatingList = $client->unionRatingList($vzps);
-					$marray = $unionRatingList->members;
-				}
-				// Detaildaten zu Mitgliedern lesen
-				foreach ($marray as $m) {
-					if ($m->membership != $player->mgl_nr) continue;
-					$tcard = $client->tournamentCardForId($m->pid);
-					$query = " REPLACE INTO #__clm_dwz_dewis (`pkz`,`nachname`, `vorname`,`zps`,`mgl_nr`, `dwz` ,`dwz_index` ,`status` "
-						." ,`geschlecht`,`geburtsjahr`,`fide_elo`,`fide_land`,`fide_id`,`turnier`) VALUES"
-						." ('$m->pid','$m->surname','$m->firstname','$vzps','$m->membership','$m->rating','$m->ratingIndex','$m->state' "
-						." ,'".$tcard->member->gender."' "
-						." ,'".$tcard->member->yearOfBirth."' ,'".$tcard->member->elo."' "
-						." ,'".$tcard->member->fideNation."' ,'".$tcard->member->idfide."' ,".$turnier->id
-						." )"
-						;
-					$this->_db->setQuery($query);
-					$this->_db->query();
-					break;
-				}
-			}
-		}
-		catch (SOAPFault $f) {  print $f->faultstring;  }
-	
-		// Spieler aus der CLM DEWIS Tabelle holen
-		$query = " SELECT a.* FROM #__clm_dwz_dewis as a"
-			." WHERE turnier = ".$turnier->id
-			;
-		$this->_db->setQuery($query);
-		$dsbdaten = $this->_db->loadObjectList();
-
-		$ct_update = 0;
-		$cd_update = 0;
-		$c_player = 0;
-		// alle Teilnehmer durchgehen
-		foreach($dsbdaten as $value)
-		{	$c_player++;
-			// Array umbauen (nur relevante Spalten)    
-			$dsbid = $value->pkz;
-			$dsbnachname = $value->nachname;
-			$dsbvorname = $value->vorname;
-			$dsbdwz = $value->dwz;
-			$dsbdwzindex = $value->dwz_index;
-			$dsbzps = $value->zps;
-			$dsbstatus = $value->status;
-			$dsbgeschlecht = $value->geschlecht;
-			$dsbgeburtsjahr = $value->geburtsjahr;
-			$dsbfideid = $value->fide_id;
-			$dsbfideelo = $value->fide_elo;
-			$dsbfideland = $value->fide_land;
-			// Die Mitgliedsnummer müssen mindestens dreistellig sein, mit führenden Nullen auffüllen
-			$dsbmglnr = $value->mgl_nr;
-			if (strlen ($dsbmglnr) == 1) {
-				$dsbmglnr= "00" . $dsbmglnr;
-			} elseif (strlen ($dsbmglnr) == 2) {
-				$dsbmglnr= "0" . $dsbmglnr;
-			}
-			// Falls Namensänderungen anliegen (Heirat)
-			$name = $dsbnachname.",".$dsbvorname;
-			$name_g = strtoupper($name);
-			$search = array("ä", "ö", "ü", "ß", "é");
-			$replace = array("AE", "OE", "UE", "SS", "É");
-			$name_g =  str_replace($search, $replace, $name_g);
-			if ($dsbgeschlecht == 'm') $dsbgeschlecht = 'M';
-			if ($dsbgeschlecht == 'f') $dsbgeschlecht = 'W';
-			if ($dsbfideid == '' OR $dsbfideid == '0') $dsbfideland = '';
-
-			// Update Teilnehmer-Tabelle
-			$twz = $this->_getTWZ($param_useastwz, $dsbdwz, $dsbfideelo);
-			$query	= "UPDATE #__clm_turniere_tlnr "
-				." SET name = '$name' "
-				." , geschlecht = '$dsbgeschlecht' "
-				." , birthYear = '$dsbgeburtsjahr' "
-				." , NATrating = '$dsbdwz' "
-				." , FIDEelo = '$dsbfideelo' "
-				." , FIDEcco = '$dsbfideland' "
-				." , FIDEid = '$dsbfideid' "
-				." , twz = '$twz' "
-				." WHERE zps = '$dsbzps' "
-				." AND sid = '$sid' "
-				." AND mgl_nr = '$dsbmglnr' "
-				." AND turnier = '$turnier->id' "
-				;
-			$this->_db->setQuery($query);
-			$this->_db->query();
-			if (mysql_errno() == 0) $ct_update++;
-
-			// Update interne DWZ-Datenbank	
-			// Prüfen ob Teilnehmer in interner DB ist
-			$query	= "SELECT Mgl_Nr FROM #__clm_dwz_spieler "
-				." WHERE ZPS ='$dsbzps '"
-				." AND sid = '$sid'"
-				." AND Mgl_Nr = '$dsbmglnr'"
-				;
-			$this->_db->setQuery($query);
-			$mgl_exist = $this->_db->loadObjectList();
-			if(!isset($mgl_exist[0])) continue;
-			if ($dsbdwz != '0')
-				$query	= "UPDATE #__clm_dwz_spieler "
-					." SET DWZ = '$dsbdwz' "
-					." , DWZ_Index = '$dsbdwzindex' "
-					." , PKZ = '$dsbid' "
-					." , Spielername = '$name' "
-					." , Spielername_G = '$name_g' "
-					." , FIDE_Elo = '$dsbfideelo' "
-					." , FIDE_Land = '$dsbfideland' "
-					." , FIDE_ID = '$dsbfideid' "
-					." , Status = '$dsbstatus' "
-					." WHERE ZPS = '$dsbzps' "
-					." AND sid = '$sid' "
-					." AND Mgl_Nr = '$dsbmglnr' "
-					;
-			else
-				$query	= "UPDATE #__clm_dwz_spieler "
-					." SET DWZ = NULL "
-					." , DWZ_Index = NULL "
-					." , PKZ = '$dsbid' "
-					." , Spielername = '$name' "
-					." , Spielername_G = '$name_g' "
-					." , FIDE_Elo = '$dsbfideelo' "
-					." , FIDE_Land = '$dsbfideland' "
-					." , FIDE_ID = '$dsbfideid' "
-					." , Status = '$dsbstatus' "
-					." WHERE ZPS = '$dsbzps' "
-					." AND sid = '$sid' "
-					." AND Mgl_Nr = '$dsbmglnr' "
-					;
-			$this->_db->setQuery($query);
-			$this->_db->query();
-			if (mysql_errno() == 0) $cd_update++;
-		}
-		
- 	// Log schreiben
-  	$clmLog = new CLMLog();
-  	$clmLog->aktion = "DWZ-Update Teilnehmer";
-  	$clmLog->params = array('sid' => $sid, 'tid' => $turnier->id, 'cids' => 'sp:'.$c_player.',tl:'.$ct_update.',db:'.$cd_update);
-  	$clmLog->write();
-  	
-	$msg = JText::_( 'DB_MSG_DWZ_TOURNAMENT_UPDATE');
-	
-	$app =& JFactory::getApplication();
-	$app->enqueueMessage( $msg );
-
-	$this->adminLink->makeURL();
-	$this->setRedirect( $this->adminLink->url );
-
 	}
 
 	// TWZ aus Parameter des Turniers, NWZ und ELO ermitteln

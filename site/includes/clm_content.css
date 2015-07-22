@@ -13,7 +13,7 @@
 @charset "UTF-8";
 @media all
 {
-#clm th a { color: #CCC !important; } 
+#clm .clm th a { color: #CCC !important; } 
 /***********************************/
 /** F A R B E I N S T E L L U N G **/
 /***********************************/
@@ -23,14 +23,14 @@
 #header h1, #verein h4 { color: #000000;  }
 #verein .column { color: #777777;}
 #spieler ul, #verein ul {color:#999999;}
-#rangliste .ran_chief_left, #rangliste .ran_note_left, #runde .run_note_title, #clm .hint { color:#666666; }
+#rangliste .ran_chief_left, #rangliste .ran_note_left, #runde .run_note_title, #clm .clm .hint { color:#666666; }
 
 /** Hintergrundfarbe **/
 
 #rangliste .erg { background-color: #F2F2F2;}
-#clm .trenner {background-color: #E8E8E8 !important;}
+#clm .clm .trenner {background-color: #E8E8E8 !important;}
 
-#clm .pdf, #clm .pdf img { background-color:#FFFFFF;}
+#clm .clm .pdf, #clm .clm .pdf img { background-color:#FFFFFF;}
 .clmbox .pdf img { background:none !important;}
 
 #spieler table.spielerverlauf .gsp2_w { background-color:#F7F7F7; } 
@@ -47,22 +47,22 @@
 /* Generische Klassen fuer die Ueberschriften***/
 /***********************************************/
 
-#clm h1, #clm h2, #clm h3, #clm h4, #clm h5, #clm h6, #clm .componentheading, #clm .contentheading {font-weight:normal;margin: 0;text-transform:none; }
+#clm .clm h1, #clm .clm h2, #clm .clm h3, #clm .clm h4, #clm .clm h5, #clm .clm h6, #clm .clm .componentheading, #clm .clm .contentheading {font-weight:normal;margin: 0;text-transform:none; }
 
-#clm h1 { font-size: 22px; }                         /* 24px */
-#clm h2, #clm .contentheading { font-size: 20px;} /* 20px */
-#clm h3 { font-size: 18px;  padding: 10px 0;}        /* 18px */
-#clm h4 { font-size: 16px; padding: 5px 0; }      /* 16px */
-#clm h5 { font-size: 14px; }                       /* 14px */
-#clm h6 { font-size: 13px; font-style:italic }    /* 14px */
+#clm .clm h1 { font-size: 22px; }                         /* 24px */
+#clm .clm h2, #clm .clm .contentheading { font-size: 20px;} /* 20px */
+#clm .clm h3 { font-size: 18px;  padding: 10px 0;}        /* 18px */
+#clm .clm h4 { font-size: 16px; padding: 5px 0; }      /* 16px */
+#clm .clm h5 { font-size: 14px; }                       /* 14px */
+#clm .clm h6 { font-size: 13px; font-style:italic }    /* 14px */
 
-#clm #pdf { float: right;}
-#clm .pdf { border: 1px solid #CCC; margin: 0 5px 0 0; padding: 2px !important;float: right; }
-#clm .clmbox .pdf { border: none; background:none;}
-#clm .pdf img, #clm .pdf a{ margin: 0; padding: 0 !important;}
+#clm .clm #pdf { float: right;}
+#clm .clm .pdf { border: 1px solid #CCC; margin: 0 5px 0 0; padding: 2px !important;float: right; }
+#clm .clm .clmbox .pdf { border: none; background:none;}
+#clm .clm .pdf img, #clm .clm .pdf a{ margin: 0; padding: 0 !important;}
 
-#clm span.edit { margin: 0 5px 0 0; padding: 2px !important; float: right; }
-#clm h4 {margin: 5px 0 10px 0 !important;}
+#clm .clm span.edit { margin: 0 5px 0 0; padding: 2px !important; float: right; }
+#clm .clm h4 {margin: 5px 0 10px 0 !important;}
 #statistik h4 {font-size: 150% !important;}
 
 /*********************************************/
@@ -72,27 +72,27 @@
 /** Fehlermeldung **/
 #wrong, .wrong {text-align: center !important; padding: 10px 0;}
 
-#clm ol { padding: 5px 15px; }
+#clm .clm ol { padding: 5px 15px; }
 #termine .clmbox ul, #termine .clmbox li {list-style-type: none !important;}
 
 /** Hinweisbox / Beschreibung Staffelleiter **/
-#clm #desc { padding: 10px 20px; }
-#clm #desc h4 { padding: 0px !important; }
+#clm .clm #desc { padding: 10px 20px; }
+#clm .clm #desc h4 { padding: 0px !important; }
 
 /** Zwei Spalten **/
-#clm #leftalign, #clm .left { float: left; width: 49%;}
-#clm #rightalign  { float: right; width: 49%;}
+#clm .clm #leftalign, #clm .clm .left { float: left; width: 49%;}
+#clm .clm #rightalign  { float: right; width: 49%;}
 .clr {clear: both; }
 
 /** Navigation **/
-#clm .clmbox { margin: 10px 0 0 0; border: 1px solid #CCC; float: none !important; padding: 5px 0; height: 20px;}
-#clm .clmbox a { padding: 0px 10px; text-decoration: none; line-height: 20px;}
-#clm .clmbox a:hover { text-decoration: underline; }
+#clm .clm .clmbox { margin: 10px 0 0 0; border: 1px solid #CCC; float: none !important; padding: 5px 0;}
+#clm .clm .clmbox a { padding: 0px 10px; text-decoration: none; line-height: 20px;}
+#clm .clm .clmbox a:hover { text-decoration: underline; }
 
-#clm span.left { float: left; margin-left: 5px; width: auto;}
-#clm span.right { float: right; margin-right: 5px;}
+#clm .clm span.left { float: left; margin-left: 5px; width: auto;}
+#clm .clm span.right { float: right; margin-right: 5px;}
 
-#clm .selectteam { border: 1px solid #CCC; padding: 2px 3px; font-size: 12px; }
+#clm .clm .selectteam { border: 1px solid #CCC; padding: 2px 3px; font-size: 12px; height:auto; }
 
 /* Tooltips */
 
@@ -104,39 +104,37 @@
 /** Darstellung saemtlicher Tabellen **/
 /**************************************/
 
-#clm table { border-collapse:collapse; margin-bottom: 10px !important; }
-#clm table.rangliste, #clm table.runde, #clm table.spielerdwzneu, #clm table.spielerverlauf, #clm #dwz table, #clm table#mannschaft, #clm table.dwz_liga, #clm table#turnier_teilnehmer, #clm table#turnier_tabelle, #clm table.paarungsliste, #turnier_info table,  #vereinsliste table, #turnier_player table, #clm .spielplan, #clm .details, #verein .vereinstats, #termine table { width: 100%; }
+#clm .clm table { border-collapse:collapse; margin-bottom: 10px !important; width:100%; }
+#clm .clm table.rangliste, #clm .clm table.runde, #clm .clm table.spielerdwzneu, #clm .clm table.spielerverlauf, #clm .clm #dwz table, #clm .clm table#mannschaft, #clm .clm table.dwz_liga, #clm .clm table#turnier_teilnehmer, #clm .clm table#turnier_tabelle, #clm .clm table.paarungsliste, #turnier_info table,  #vereinsliste table, #turnier_player table, #clm .clm .spielplan, #clm .clm .details, #verein .vereinstats, #termine table { width: 100%; }
 
-#clm table th { font-size: 110%; }
-#clm table td { }
-#clm .noborder, #clm table.noborder { border: none !important; }
+#clm .clm table th { font-size: 110%; }
+#clm .clm table * { word-wrap: break-word; }
+#clm .clm .noborder, #clm .clm table.noborder { border: none !important; }
 
 #turnier_rangliste table td, #turnier_rangliste table th, .meldung td, #meldeliste table td { padding: 0.3em !important; } 
-
-#rangliste .rnd, #rangliste .erg, #rangliste .tln, #rangliste .mp, #rangliste .bp, #rangliste .trenner{ width: 20px; }
+#turnier_rangliste table { word-wrap:normal; white-space:nowrap; }
 #rangliste .gsrv{ width: 15px; }
 #rangliste .rndch{ width: 42px; }
-#clm table .anfang, #clm table .ende { font-weight: bold; }
-#clm tr.ende { border-top: 2px solid #999; }
+#clm .clm table .anfang, #clm .clm table .ende { font-weight: bold; }
+#clm .clm tr.ende { border-top: 2px solid #999; }
 
 /** Fussnote **/
-#clm .hint { font-size: 11px; text-indent: 5px; }
+#clm .clm .hint { font-size: 11px; text-indent: 5px; }
 
-
+#clm .clm #rangliste table.rangliste tr td.zeile1, #clm .clm #rangliste table.rangliste tr td.zeile2 { text-align: center; }
 /*************************************/
 /** Darstellung bei der DWZ Ansicht **/
 /*************************************/
 
 #dwz { }
-#dwz .dwz_1 { width: 15px; text-align: center; } /** Brettnummer **/
-#dwz .dwz_2 { width: 30px; text-align: center; } /** Mitgliedsnummer **/
+#dwz .dwz_1 { text-align: center; } /** Brettnummer **/
+#dwz .dwz_2 { text-align: center; } /** Mitgliedsnummer **/
 #dwz .dwz_3 { text-align: left; } /** Name **/
-#dwz .dwz_4 { width: 30px; text-align: center; } /** Status **/
-#dwz .dwz_5 { width: 30px;text-align: center; } /** Geschlecht **/
-/** #dwz .dwz_6 { width: 60px; text-align: left; } /** DWZ **/
-#dwz .dwz_6 { width: 70px; text-align: left; } /** DWZ **/
-#dwz .dwz_7 { width: 40px; text-align: center; } /** ELO **/
-#dwz .dwz_8 { width: 30px; text-align: center; } /** Titel **/
+#dwz .dwz_4 { text-align: center; } /** Status **/
+#dwz .dwz_5 { text-align: center; } /** Geschlecht **/
+#dwz .dwz_6 { text-align: center; } /** DWZ **/
+#dwz .dwz_7 { text-align: center; } /** ELO **/
+#dwz .dwz_8 { text-align: center; } /** Titel **/
 #dwz table td div { } /** Hier kann eine individuelle Anpassung der Zellen vorgenommen werden **/
 
 
@@ -159,10 +157,6 @@
 #paarungsliste table .paarungen { text-align: center; }
 #paarungsliste table .paar { width: 25px; text-align:center;} 
 #paarungsliste table .tln { width: 25px; text-align:center; } 
-/** #paarungsliste table .heim { width: 140px; text-align:left; } 
-#paarungsliste table .dwz { width: 25px; text-align:center; } 
-#paarungsliste table .erg { text-align:center; font-weight: bold; } 
-#paarungsliste table .gast { width: 140px; text-align:left; } **/
 #paarungsliste table .heim { width: 200px; text-align:left; } 
 #paarungsliste table .dwz { width: 25px; text-align:center; } 
 #paarungsliste table .erg {  width: 100px;text-align:center; font-weight: bold; }
@@ -180,11 +174,11 @@
 /** Darstellung bei der Rangliste **/
 /***********************************/
 
-#rangliste .rang, #rangliste .rang_auf, #rangliste .rang_auf_evtl, #rangliste .rang_ab, #rangliste .rang_ab_evtl { width: 5px; text-align: center; } /** Spalte "Rang m�gliche Absteiger" **/
+#rangliste .rang, #rangliste .rang_auf, #rangliste .rang_auf_evtl, #rangliste .rang_ab, #rangliste .rang_ab_evtl { text-align: center; } /** Spalte "Rang m�gliche Absteiger" **/
 #rangliste .mp { border-left: 2px solid #DDD;} /** Teamname in der Zeile **/
-#rangliste td.team div { float: left; font-size: 110%;} /** Teamname in der Zeile **/
-#rangliste td.team .dwz{ padding-left: 10px; } /** ( DWZ ) neben Teamname **/
-#rangliste .rnd, #rangliste .rndch, #rangliste .erg, #rangliste .mp, #rangliste .bp, #rangliste .trenner{ text-align: center; }
+#rangliste td.team  div{ float: left; font-size: 110%;} /** Teamname in der Zeile **/
+#rangliste .team .dwz  { padding-left: 10px; } /** ( DWZ ) neben Teamname **/
+#rangliste .rnd, #rangliste .rndch, #rangliste .erg, #rangliste .mp, #rangliste .bp, #rangliste .trenner, #rangliste .gsrv{ text-align: center; }
 
 #rangliste #desc {border: 1px solid #DDD; margin: 0 0 10px 0; padding: 10px 10px 0 10px;}
 #rangliste .ran_chief, #rangliste .ran_note { width: 100%; float:left; padding: 0 0 10px 0;}
@@ -262,19 +256,19 @@
 /** Darstellung der Turnierteilnehmer **/
 /***************************************/
 
-#turnier_player .tp_col_1 { width: 100px;}
-#turnier_player .tp_col_2 { width: 20px; text-align: center;}
+#turnier_player .tp_col_1 { }
+#turnier_player .tp_col_2 {  text-align: center;}
 #turnier_player .tp_col_3 { }
 #turnier_player .tp_col_3c { }
-#turnier_player .tp_col_4 { width: 40px; text-align: center; }
-#turnier_player .tp_col_5 { width: 80px; text-align: center; }
+#turnier_player .tp_col_4 { text-align: center; }
+#turnier_player .tp_col_5 { text-align: center; }
 
 /* JoomGallery - Teilnehmerfoto */
 
 #turnier_player .tp_col_playerContent { display:flex; margin-bottom: 5px; }
 #turnier_player .tp_col_playerInfoDivWithPhoto { margin: auto 0; width:50%; }
 #turnier_player .tp_col_playerInfoDivWithoutPhoto { width:100%; }
-#turnier_player .tp_col_playerInfo { margin-bottom:0 !important;} /* "#clm table" ebenfalls !important */
+#turnier_player .tp_col_playerInfo { margin-bottom:0 !important;} /* "#clm .clm table" ebenfalls !important */
 #turnier_player .tp_col_playerPhoto { width: 45%; margin: auto;}
 #turnier_player .tp_col_playerPhotoFrame a { visibility:hidden;} /* fix für merkwürdige a:hover */
 #turnier_player .tp_col_playerPhotoFrame a img{ visibility:visible; border-radius:12px; -moz-border-radius:12px; -webkit-border-radius:12px; -khtml-border-radius:12px; width:100%; }
@@ -284,14 +278,14 @@
 /** Darstellung der Teilnehmerliste **/
 /*************************************/
 
-#turnier_teilnehmer .tt_col_1 {width: 30px; text-align: center;}
-#turnier_teilnehmer .tt_col_2 {width: 30px; text-align: center;}
+#turnier_teilnehmer .tt_col_1 {text-align: center;}
+#turnier_teilnehmer .tt_col_2 {text-align: center;}
 #turnier_teilnehmer .tt_col_3 {}
 #turnier_teilnehmer .tt_col_4 {}
 #turnier_teilnehmer .tt_col_5 {}
-#turnier_teilnehmer .tt_col_6 {width: 40px; text-align: center;}
-#turnier_teilnehmer .tt_col_7 {width: 40px; text-align: center;}
-#turnier_teilnehmer .tt_col_8 {width: 40px; text-align: center;}
+#turnier_teilnehmer .tt_col_6 {text-align: center;}
+#turnier_teilnehmer .tt_col_7 {text-align: center;}
+#turnier_teilnehmer .tt_col_8 {text-align: center;}
 
 
 /*****************************************/
@@ -323,15 +317,15 @@
 /** Definition Zellen **/
 #turnier_rangliste .rang, #turnier_rangliste .rang_auf, #turnier_rangliste .rang_auf_evtl, #turnier_rangliste .rang_ab, #turnier_rangliste .rang_ab_evtl {width: 20px; text-align: right !important;} 
 #turnier_rangliste .tln, #turnier_rangliste .twz {width: 20px; text-align: center !important;}
-#clm .fw_col {width: 35px; text-align:center !important;} 
+#clm .clm .fw_col {width: 35px; text-align:center !important;} 
 
-#turnier_rangliste .erg div { width: 10px !important; margin: auto; text-align:center !important; } /* Ein Durchgang */
+#turnier_rangliste .erg div { width: 15px !important; margin: auto; text-align:center !important; } /* Ein Durchgang */
 #turnier_rangliste .erg_2 div { width: 30px !important; margin: auto; text-align:center !important; }  /* Zwei Durchgaenge */
 #turnier_rangliste .erg_ch div { width: 40px !important; margin: auto; text-align:center !important; } /* Ein Durchgang */
 #turnier_rangliste .trenner { text-align:center !important; } 
 
 /* sorgt dafuer, dass die Zellen alle in einer Linie bleiben */
-#tableoverflow th div, #tableoverflow td div { height: 15px !important; font-size: 12px !important;}
+#tableoverflow th div, #tableoverflow td div { line-height: 1.2em; font-size: 12px !important;}
 
 /* Spielername darf die Breite nicht verlassen, sonst verzerrt das Layout */
 #turnier_rangliste td.name, #turnier_rangliste th.name { width: 150px; overflow: hidden!important; }
@@ -342,7 +336,7 @@
 /************************************/
 
 #turnier_tabelle .rang { width: 30px; text-align:center; } 
-#turnier_tabelle .titel { width: 30px; text-align:center; } 
+#turnier_tabelle .titel { width: 40px; text-align:center; } 
 #turnier_tabelle .name_float {} 
 #turnier_tabelle .verein {} 
 #turnier_tabelle .twz { width: 50px; text-align:center; } 
@@ -381,21 +375,21 @@
 #vereinsliste .col_4 { width: 20px; text-align: center; }
 #vereinsliste .col_5 { width: 20px; text-align: center;  }
 #vereinsliste .col_6 { width: 20px; text-align: center;  }
-#vereinsliste .col_7 { width: 50px; text-align: right; }
+#vereinsliste .col_7 { width: 60px; text-align: right; }
 #vereinsliste .col_8 { width: 50px; text-align: right; }
 
 /********************/
 /** Terminkalender **/
 /********************/
 
-#clm #termine th { font-size: 130%; line-height: 140%; text-indent: 5px; text-align: left;}
-#clm #termine .anfang td { font-size: 110%; line-height: 110%; }
+#clm .clm #termine th { font-size: 130%; line-height: 140%; text-indent: 5px; text-align: left;}
+#clm .clm #termine .anfang td { font-size: 110%; line-height: 110%; }
 
-#clm #termine .clmbox ul { padding: 0;margin: 0;line-height: 1; }
-#clm #termine .clmbox li {display: block;float: none;  margin: 0;height: 27px;line-height:27px;}
-#clm #termine .clmbox li li { float: left;  }
-#clm #termine .clmbox li li li { float: left;  }
-#clm #termine .clmbox a { line-height: 20px; }
+#clm .clm #termine .clmbox ul { padding: 0;margin: 0;line-height: 1; }
+#clm .clm #termine .clmbox li {display: block;float: none;  margin: 0;height: 27px;line-height:27px;}
+#clm .clm #termine .clmbox li li { float: left;  }
+#clm .clm #termine .clmbox li li li { float: left;  }
+#clm .clm #termine .clmbox a { line-height: 20px; }
 
 .calender { width:420px; border:2px solid #CCC; }
 * html .calender, * + html .calender { width:422px; }
@@ -408,3 +402,15 @@
 .pagination a { width:30px; height:30px; float:left; color:white;}
 .pagination span {display:block; float:left; width: 300px; }
 .clear { clear:both; }
+
+/********************/
+/**** Ergänzungen ***/
+/********************/
+#clm .clm .noBorder {
+    border: 0 none;
+    height: 5px;
+}
+
+#clm .clm .meldeliste_rangliste input {
+	width:auto;	
+}

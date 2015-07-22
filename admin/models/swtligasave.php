@@ -11,213 +11,23 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelSWTLigasave extends JModel {
+class CLMModelSWTLigasave extends JModelLegacy {
 
     function __construct () {
 
         parent::__construct ();
-
-		// Mannschafts-Nummer fuer update
-		// ...
-        // $db_man_nr  = ...
-		
-        // Daten an View weitergeben
         
     }
     
-    /*	function leereRundenErstellen ($letzteRunde, $letzterDgang) {
-		
-		// DB-Zugriff
-		$db		=& JFactory::getDBO ();
-		//$row	=& JTable::getInstance ('ligenSWT', 'TableCLM');
-		
-		$swt_id	= JRequest::getVar ('swt_id', 0, 'default', 'int');
-		$sid	= JRequest::getVar ('sid', 0, 'default', 'int');
-		
-		// zuvor in der DB gespeicherte Daten und (allgemeine) SWT-Daten
-		$swt_data		= $this->getDataSWT ();
-		$swt_db_data	= $this->getDataSWTdb ();
-
-		$sieg		= $swt_db_data['sieg'];
-		$remis		= $swt_db_data['remis'];
-		$nieder		= $swt_db_data['nieder'];
-		$antritt	= $swt_db_data['antritt'];
-		
-		$man_sieg		= $swt_db_data['man_sieg'];
-		$man_remis		= $swt_db_data['man_remis'];
-		$man_nieder		= $swt_db_data['man_nieder'];
-		$man_antritt	= $swt_db_data['man_antritt'];
-		
-		$anz_mannschaften	= $swt_db_data['anz_mannschaften'];
-		$anz_bretter		= $swt_db_data['anz_bretter'];
-		$anz_durchgaenge	= $swt_db_data['anz_durchgaenge'];
-		$anz_runden			= $swt_db_data['anz_runden'];
-
-		$anz_paarungen = ceil ($anz_mannschaften / 2);
-		
-		$m_fields = '`sid`, `swt_id`, `runde`, `paar`, `dg`, `comment`, '
-					. '`heim`, `tln_nr`, `gegner`, `brettpunkte`, `manpunkte`, `published`';
-		
-		$sp_fields = '`sid`, `swt_id`, `runde`, `paar`, `dg`, '
-					. '`tln_nr`, `brett`, `heim`, `weiss`, `spieler`, `zps`, `gegner`, `gzps`, '
-					. '`ergebnis`, `kampflos`, `punkte`';
-		
-		for ($p = 1; $p <= $anz_paarungen; $p++) {
-			
-			$htln_nr = $swt_data[$p]['heim']; // tln_nr der Heimmannschaft
-			$gtln_nr = $swt_data[$p]['gast']; // tln_nr der Gastmannschaft
-			
-			$hmanpunkte = 0;
-			$gmanpunkte = 0;
-			
-			$hbrettpunkte = 0;
-			$gbrettpunkte = 0;
-			
-			for ($b = 1; $b <= $anz_bretter; $b++) {
-			
-				// Einzelergebnisse 
-				$hbrett = JRequest::getVar ('hbrett_'.$p.'_'.$b);
-				$gbrett = JRequest::getVar ('gbrett_'.$p.'_'.$b);
-				
-				$hfarbe		= JRequest::getVar ('hfarbe_'.$p.'_'.$b);
-				$hweiss		= ($hfarbe == 'w');
-				$hspieler	= $this->findSpieler ($hbrett);
-				$hmgl_nr	= $hspieler->mgl_nr;
-				$hzps		= $hspieler->zps;
-				
-				$gfarbe		= JRequest::getVar ('gfarbe_'.$p.'_'.$b);
-				$gweiss		= ($gfarbe == 'w');
-				$gspieler	= $this->findSpieler ($gbrett);
-				$gmgl_nr	= $gspieler->mgl_nr;
-				$gzps		= $gspieler->zps;
-				
-				$ergebnis	= JRequest::getVar ('erg_'.$p.'_'.$b);
-				$kampflos	= ($ergebnis == 4 || $ergebnis == 5 || $ergebnis == 6) * 2; // 0 (nicht kampflos) oder 2 (kampflos)
-				
-				if		($ergebnis == 0) { $hpunkte = $nieder + $antritt;	$gpunkte = $sieg + $antritt;	}
-				elseif	($ergebnis == 1) { $hpunkte = $sieg + $antritt;		$gpunkte = $nieder + $antritt;	}
-				elseif	($ergebnis == 2) { $hpunkte = $remis + $antritt;	$gpunkte = $remis + $antritt;	}
-				elseif	($ergebnis == 3) { $hpunkte = $nieder + $antritt;	$gpunkte = $nieder + $antritt;	}
-				elseif	($ergebnis == 4) { $hpunkte = $nieder;				$gpunkte = $sieg;	} // kampflos
-				elseif	($ergebnis == 5) { $hpunkte = $sieg;				$gpunkte = $nieder;	} // kampflos
-				elseif	($ergebnis == 6) { $hpunkte = $nieder;				$gpunkte = $nieder;	} // kampflos
-				else { // "---" (eid 7) oder "spielfrei" (eid 8)
-					$hpunkte = 0;
-					$gpunkte = 0;
-				}
-			
-				$sp_hvalues = '"'.$sid.'", "'.$swt_id.'", "'.$runde.'", "'.$p.'", "'.$dgang.'", '
-							. '"'.$htln_nr.'", "'.$b.'", "1", "'.$hweiss.'", '
-							. '"'.$hmgl_nr.'", "'.$hzps.'", "'.$gmgl_nr.'", "'.$gzps.'", '
-							. '"'.$ergebnis.'", "'.$kampflos.'", "'.$hpunkte.'"';
-				
-				$sp_gvalues = '"'.$sid.'", "'.$swt_id.'", "'.$runde.'", "'.$p.'", "'.$dgang.'", '
-							. '"'.$gtln_nr.'", "'.$b.'", "0", "'.$gweiss.'", '
-							. '"'.$gmgl_nr.'", "'.$gzps.'", "'.$hmgl_nr.'", "'.$hzps.'", '
-							. '"'.$ergebnis.'", "'.$kampflos.'", "'.$gpunkte.'"';
-				
-				$query = ' INSERT INTO #__clm_swt_rnd_spl'
-						. ' ( ' . $sp_fields . ' ) '
-						. ' VALUES ( ' . $sp_hvalues . ' ), ( ' . $sp_gvalues . ' ) ';
-				
-				$db->setQuery ($query);
-				if (!$db->query ()) {
-					print $db->getErrorMsg ();
-					return false;
-				}
-				
-				$hbrettpunkte += $hpunkte;
-				$gbrettpunkte += $gpunkte;
-				
-			} // for-Schleife Bretter
-			
-			// Mannschaftsergebnisse
-			$sieg_bed = $swt_db_data['sieg_bed'];
-			
-			if ($swt_data[$p]['heim_kampflos'] != 2) { // Heimmannschaft ist angetreten
-				$hmanpunkte = $man_antritt;
-			}
-			
-			if ($swt_data[$p]['gast_kampflos'] != 2) { // Gastmannschaft ist angetreten
-				$gmanpunkte = $man_antritt;
-			}
-			
-			
-			if ($sieg_bed == 1) { // Standard: Mannschaft mit mehr Brettpunkten gewinnt, bei BP-Gleichheit wird geteilt
-			
-				if ($hbrettpunkte > $gbrettpunkte) {
-					$hmanpunkte += $man_sieg;
-					$gmanpunkte += $man_nieder;
-				}
-				elseif ($hbrettpunkte == $gbrettpunkte) {
-					$hmanpunkte += $man_remis;
-					$gmanpunkte += $man_remis;
-				}
-				else { // $hbrettpunkte < $gbrettpunkte
-					$hmanpunkte += $man_nieder;
-					$gmanpunkte += $man_sieg;
-				}
-			
-			}
-			elseif ($sieg_bed == 2) { // erw. Standard: Sieg bei mehr als 50% der BP, Hälfte der MP bei Hälfte der BP
-				
-				$max_brettpunkte = $anz_bretter * ($sieg + $antritt);
-				$haelfte = $max_brettpunkte / 2;
-				
-				if ($hbrettpunkte > $haelfte) {
-					$hmanpunkte += $man_sieg;
-				}
-				elseif ($hbrettpunkte == $haelfe) {
-					$hmanpunkte += $man_remis;
-				}
-				else { // $hbrettpunkte < $haelfte
-					$hmanpunkte += $man_nieder;
-				}
-				
-				if ($gbrettpunkte > $haelfte) {
-					$gmanpunkte += $man_sieg;
-				}
-				elseif ($gbrettpunkte == $haelfe) {
-					$gmanpunkte += $man_remis;
-				}
-				else { // $gbrettpunkte < $haelfte
-					$gmanpunkte += $man_nieder;
-				}
-				
-			}
-			
-			$m_hvalues = '"'.$sid.'", "'.$swt_id.'", "'.$runde.'", "'.$p.'", "'.$dgang.'", "Aus SWT-Datei importiert!", '
-						. '"1", "'.$htln_nr.'", "'.$gtln_nr.'", "'.$hbrettpunkte.'", "'.$hmanpunkte . '", "1"';
-						
-			$m_gvalues = '"'.$sid.'", "'.$swt_id.'", "'.$runde.'", "'.$p.'", "'.$dgang.'", "Aus SWT-Datei importiert!", '
-						. '"0", "'.$gtln_nr.'", "'.$htln_nr.'", "'.$gbrettpunkte.'", "'.$gmanpunkte . '", "1"';
-						
-			$query = ' INSERT INTO #__clm_swt_rnd_man'
-					. ' ( ' . $m_fields . ' ) '
-					. ' VALUES ( ' . $m_hvalues . ' ), ( ' . $m_gvalues . ' ) ';
-			
-			$db->setQuery ($query);
-			if (!$db->query ()) {
-				print $db->getErrorMsg ();
-				return false;
-			}
-			
-		} // for-Schleife Paarungen
-		
-		return true;
-	}*/
-	
 	function finalCopy () {
 
 		//echo "in finalCopy ()<br/>";
+		set_time_limit(60);
+		$db		=JFactory::getDBO ();
+		$conf =JFactory::getConfig();   
 		
-		$db		=& JFactory::getDBO ();
-		$conf =& JFactory::getConfig();   
-		
-		$date =& JFactory::getDate ();
-		$zeit = $date->toMySQL ();
+		$date =JFactory::getDate ();
+		$zeit = $date->toSQL ();
 		
 		$swt_id	= JRequest::getVar ('swt_id', 0, 'default', 'int');
 		$sid	= JRequest::getVar ('sid', 0, 'default', 'int');
@@ -276,7 +86,7 @@ class CLMModelSWTLigasave extends JModel {
 			//echo 'Kopiere Tabelle '.$swt_prefix.$table.' nach '.$clm_prefix.$table.' ...<br/>';
 			$col_query = ' SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS`'
 						. ' WHERE `TABLE_NAME` = "' . $swt_prefix . $table . '"'
-						. ' AND `TABLE_SCHEMA` = "'.$conf->getValue('config.db').'"'       
+						. ' AND `TABLE_SCHEMA` = "'.$conf->get('db').'"'       
 						. ' AND ' . $col_condition[$table];
 			
 //			echo "col_query: $col_query"; //DBG
@@ -332,7 +142,7 @@ class CLMModelSWTLigasave extends JModel {
 			}
 			$select_columns[$table] = substr ($select_columns[$table], 0, -2);
 			$columns[$table] = substr ($columns[$table], 0, -2);
-			
+		
 			if ($table != 'liga') {
 				$upd = ' UPDATE ' . $swt_prefix . $table
 						. ' SET `' . $liga_col[$table] . '` = "' . $liga_id . '"'
@@ -361,21 +171,21 @@ class CLMModelSWTLigasave extends JModel {
 							. ' FROM ' . $swt_prefix . $table
 							. ' WHERE ' . $where[$table];
 			} else {
-			$copy[$table] = ' INSERT INTO ' . $clm_prefix . $table
+			$copy[$table] = ' INSERT IGNORE INTO ' . $clm_prefix . $table
 							. ' ( ' . $columns[$table] . ' ) '
 							. ' SELECT ' . $select_columns[$table]
 							. ' FROM ' . $swt_prefix . $table
 							. ' WHERE ' . $where[$table];
 			}
-
+			
 				//echo "<br/><br/>query: $query"; //DBG
 				
 					
 			$db->setQuery ($copy[$table]);
-			if (!$db->query ()) {
-				print $db->getErrorMsg ();
-				return false;
-			}
+					if (!$db->query ()) {
+						print $db->getErrorMsg ();
+						return false;
+					}
 			if ($liga_id < 1 AND $table == 'liga') {
 				$liga_id = $db->insertid ();
 				JRequest::setVar ('lid', $liga_id);
@@ -455,31 +265,31 @@ class CLMModelSWTLigasave extends JModel {
 					if (!$db->query ()) {
 						print $db->getErrorMsg ();
 						return false;
-					}
-					
-				}
-
-
+			} 
+		
+		}
+ 
 		$swt_db_data = $this->getDataSWTdb ();
 		$anz_mannschaften = $swt_db_data['anz_mannschaften'];
 		// man_nr für spielfrei zurücksetzen
 		$sql_fix = ' UPDATE #__clm_mannschaften'
-					. ' SET `man_nr` = "0"'
+					. ' SET `man_nr` = "0", `name` = "spielfrei"'
 					. ' WHERE `liga` = "' . $liga_id . '"'
-					. ' AND `name` = "spielfrei" '
+					. ' AND (`name` = "spielfrei" OR `name` = "")'
 					. ' AND `zps` = "0"';
-		//			. ' AND `man_nr` = CONCAT(`liga`, "'.$anz_mannschaften.'")'
 		$db->setQuery ($sql_fix);
 		if (!$db->query ()) {
 			print $db->getErrorMsg ();
 			return false;
 		}
-		
-	require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'controllers'.DIRECTORY_SEPARATOR.'ergebnisse.php');
-	CLMControllerErgebnisse::calculateRanking($sid,$liga_id);
-	
-	require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'controllers'.DIRECTORY_SEPARATOR.'runden.php');
-	CLMControllerRunden::dwz(0, $sid, $liga_id); 
+
+	clm_core::$api->db_tournament_ranking($liga_id,true); 
+	//require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'controllers'.DIRECTORY_SEPARATOR.'ergebnisse.php');
+	//CLMControllerErgebnisse::calculateRanking($sid,$liga_id);
+
+	clm_core::$api->db_tournament_genDWZ($liga_id,true); 
+	//require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'controllers'.DIRECTORY_SEPARATOR.'runden.php');
+	//CLMControllerRunden::dwz(0, $sid, $liga_id); 
 		
 		return true;
 		
@@ -487,7 +297,7 @@ class CLMModelSWTLigasave extends JModel {
 	
 	function userAnlegen () {
 	
-		$db		=& JFactory::getDBO ();
+		$db		=JFactory::getDBO ();
 		$sid	= JRequest::getVar ('sid', 0, 'default', 'int');
 		
 		$sql = ' SELECT `id`, `jid` FROM #__clm_user '
@@ -497,7 +307,7 @@ class CLMModelSWTLigasave extends JModel {
 		
 		if (count ($objs) < 1) {
 		
-			$row =& JTable::getInstance ('users', 'TableCLM');
+			$row =JTable::getInstance ('users', 'TableCLM');
 			$row->sid			= $sid;
 			$row->jid			= '9997';
 			$row->name			= 'SWT-Import';
@@ -505,7 +315,6 @@ class CLMModelSWTLigasave extends JModel {
 			$row->aktive		= "1";
 			$row->email			= "swt_import@clm.de";
 			$row->usertype		= "sl";
-			$row->user_clm		= "70";
 			$row->zps			= "1";
 			$row->published		= "1";
 			$row->bemerkungen	= "Dieser User ist nur für Importzwecke gedacht!";
@@ -525,10 +334,10 @@ class CLMModelSWTLigasave extends JModel {
 	
 	function rundenTermine () {
 		
-		$db		=& JFactory::getDBO ();
+		$db		=JFactory::getDBO ();
 		
-		$date =& JFactory::getDate ();
-		$zeit = $date->toMySQL ();
+		$date =JFactory::getDate ();
+		$zeit = $date->toSQL ();
 		
 		$swt_id	= JRequest::getVar ('swt_id', 0, 'default', 'int');
 		$sid	= JRequest::getVar ('sid', 0, 'default', 'int');
@@ -545,7 +354,7 @@ class CLMModelSWTLigasave extends JModel {
 		$termineFromDatabase = array();
 		if ($update == 1 AND $liga_id > 0) {
 			
-			$db		=& JFactory::getDBO ();
+			$db		=JFactory::getDBO ();
 			$select_query = ' SELECT * FROM #__clm_runden_termine '
 							.' WHERE liga = '.$liga_id;
 			$db->setQuery ($select_query);
@@ -598,7 +407,7 @@ class CLMModelSWTLigasave extends JModel {
 		}
 		$values = substr ($values, 0, -2);
 		
-		$sql = ' INSERT INTO #__clm_runden_termine'
+		$sql = ' INSERT IGNORE INTO #__clm_runden_termine'
 						. ' ( ' . $fields . ' ) '
 						. ' VALUES ' . $values;
 		
@@ -660,7 +469,7 @@ class CLMModelSWTLigasave extends JModel {
 		}
 		
 		$swt_id = JRequest::getVar( 'swt_id', '', 'default', 'int' );
-		$sql = ' SELECT id, teil as anz_mannschaften, stamm as anz_bretter, ersatz as anz_ersatzspieler, ' 
+		$sql = ' SELECT id, teil as anz_mannschaften, stamm as anz_bretter, ersatz as anz_ersatzspieler,' 
 				. 'durchgang as anz_durchgaenge, runden as anz_runden, sieg, remis, nieder, antritt, man_sieg, '
 				. 'man_remis, man_nieder, man_antritt, sieg_bed'
 				. ' FROM #__clm_swt_liga'

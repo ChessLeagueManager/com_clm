@@ -12,10 +12,10 @@
 defined('_JEXEC') or die('Restricted access');
 
 // Konfigurationsparameter auslesen
-$config		= &JComponentHelper::getParams( 'com_clm' );
-$upload		=$config->get('upload_swt',0);
-$execute	=$config->get('execute_swt',0);
-$lv			=$config->get('lv',705);
+$config		= clm_core::$db->config();
+$upload		=$config->upload_swt;
+$execute	=$config->execute_swt;
+$lv			=$config->lv;
 
 
 ?>

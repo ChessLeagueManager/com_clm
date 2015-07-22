@@ -1,0 +1,24 @@
+/********************/
+/*** form_select ****/
+/********************/
+
+#clm .clm .clm_view_form_select {
+	border: 1px solid black;
+}
+
+#clm .clm .clm_view_form_select input, #clm .clm .clm_view_form_select select {
+	height:auto;
+	padding: 0 3px 0 3px;
+	margin:0;
+	border-radius: 0px;
+	width:100%;
+}
+
+#clm .clm .clm_view_form_select input {
+	border-bottom: 0;
+}
+
+#clm .clm .clm_view_form_select select {
+	border-top: 1px solid black;
+}
+

@@ -52,8 +52,8 @@ $font = 12;
 $leer = 18;
 
 // Datum der Erstellung mit Joomla Methode holen und in SQL Format konvertieren
-$date	= & JFactory::getDate();
-$now	= $date->toMySQL();
+$date	= JFactory::getDate();
+$now	= $date->toSQL();
 
 // FPDF Objekt aufrufen und neues Dokument starten
 $pdf=new PDF();

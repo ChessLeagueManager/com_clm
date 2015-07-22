@@ -12,20 +12,18 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
-
-class CLMViewSWTLigaman extends JView {
+class CLMViewSWTLigaman extends JViewLegacy {
 
 	function display ($tpl = null) {
 		
 		// Daten vom Model
-		$state			=& $this->get( 'state' );
+		$state			= $this->get( 'state' );
 
-		$swt_data		=& $this->get( 'dataSWT' );
-		$swt_db_data	=& $this->get( 'dataSWTdb' );
+		$swt_data		= $this->get( 'dataSWT' );
+		$swt_db_data	= $this->get( 'dataSWTdb' );
 		
-		$db_vlist		=& $this->get( 'vereinsliste' );
-		$db_splist		=& $this->get( 'spielerliste' );
+		$db_vlist		= $this->get( 'vereinsliste' );
+		$db_splist		= $this->get( 'spielerliste' );
 		// !!! WICHTIG !!!
 		// getSpielerliste muss *nach* getDataSWT aufgerufen werden, damit die
 		// aus der SWT-Datei ausgelesene ZPS bekannt ist und danach gefiltert
@@ -38,7 +36,7 @@ class CLMViewSWTLigaman extends JView {
 		$anz_mannschaften = $swt_db_data['anz_mannschaften'];
 
 		// Toolbar
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( JText::_('TITLE_SWT_LEAGUE_MAN') ,'clm_headmenu_manager.png' );
 		
 		//echo "man: [$man]";
@@ -92,13 +90,13 @@ class CLMViewSWTLigaman extends JView {
 			$splist		= array ();
 			$splist[]	= JHtml::_('select.option', '0', JText::_( 'SWT_LEAGUE_PLAYER_SELECT' ), 'id', 'name');
 			$splist		= array_merge( $splist, $db_splist );
-			$splist[]	= JHtml::_('select.option', '-1', JText::_( 'SWT_LEAGUE_NOT_NAMED' ), 'id', 'name');
+			$splist[]	= JHtml::_('select.option', '-1', $swt_data['spieler_'.$i]['name'] . " " . JText::_( 'SWT_LEAGUE_NEW' ), 'id', 'name');
 			$blist		= JHtml::_('select.genericlist', $splist, 'dwzid_'.$i, 'class="inputbox" size="1"', 'id', 'name', $dwzid);
-
+			
 			$swt_spieler = $swt_data['spieler_'.$i]['name'];
 			if ($dwzid == -1) {
 				$swt_spieler = '<b style="color: #f00">' . $swt_spieler . '</b>';
-				$swt_spieler .= '<br>'.$swt_data['spieler_'.$i]['zps']."/".$swt_data['spieler_'.$i]['mgl_nr'];
+				$swt_spieler .= '<br>'.$swt_data['spieler_'.$i]['zps'].($swt_data['spieler_'.$i]['mgl_nr']!="" ? "/".$swt_data['spieler_'.$i]['mgl_nr'] : "");
 			}
 			$tablerow = '<tr>'
 					  . '<td nowrap="nowrap">'
@@ -123,13 +121,13 @@ class CLMViewSWTLigaman extends JView {
 			$splist		= array ();
 			$splist[]	= JHtml::_('select.option', '0', JText::_( 'SWT_LEAGUE_PLAYER_SELECT' ), 'id', 'name');
 			$splist		= array_merge( $splist, $db_splist );
-			$splist[]	= JHtml::_('select.option', '-1', JText::_( 'SWT_LEAGUE_NOT_NAMED' ), 'id', 'name');
+			$splist[]	= JHtml::_('select.option', '-1', $swt_data['spieler_'.$i]['name'] . " " . JText::_( 'SWT_LEAGUE_NEW' ), 'id', 'name');
 			$blist		= JHtml::_('select.genericlist', $splist, 'dwzid_'.$i, 'class="inputbox" size="1"', 'id', 'name', $dwzid);
 
 			$swt_spieler = $swt_data['spieler_'.$i]['name'];
 			if ($dwzid == -1) {
 				$swt_spieler = '<b style="color: #f00">' . $swt_spieler . '</b>';
-				$swt_spieler .= '<br>'.$swt_data['spieler_'.$i]['zps']."/".$swt_data['spieler_'.$i]['mgl_nr'];
+				$swt_spieler .= '<br>'.$swt_data['spieler_'.$i]['zps'].($swt_data['spieler_'.$i]['mgl_nr']!="" ? "/".$swt_data['spieler_'.$i]['mgl_nr'] : "");
 			}
 			$tablerow = '<tr>'
 					  . '<td nowrap="nowrap">'
@@ -159,7 +157,7 @@ class CLMViewSWTLigaman extends JView {
 // swtligainfo-controller ab hier:
 /*
 		//Toolbar
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( JText::_('TITLE_SWT_LEAGUE') ,'clm_headmenu_manager.png' );
 		
 		JToolBarHelper::custom('next','next.png','next_f2.png', JText::_('SWT_LEAGUE_NEXT'), false);

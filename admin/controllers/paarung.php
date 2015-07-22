@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerPaarung extends JController
+class CLMControllerPaarung extends JControllerLegacy
 {
 	/**
 	 * Constructor
@@ -29,18 +27,18 @@ function __construct( $config = array() )
 		$this->registerTask( 'apply','save' );
 	}
 
-function display()
+function display($cachable = false, $urlparams = array())
 	{
 	$mainframe	= JFactory::getApplication();
 
-	$db 		=& JFactory::getDBO();
-	$user 		=& JFactory::getUser();
+	$db 		=JFactory::getDBO();
+	$user 		=JFactory::getUser();
 	$task 		= JRequest::getVar( 'task');
 	$cid 		= JRequest::getVar( 'cid', array(0), '', 'array' );
 	$option 	= JRequest::getCmd( 'option' );
 	$section 	= JRequest::getVar( 'section' );
 	JArrayHelper::toInteger($cid, array(0));
-	$row =& JTable::getInstance( 'ligen', 'TableCLM' );
+	$row =JTable::getInstance( 'ligen', 'TableCLM' );
 	// load the row from the db table
 	$row->load( $cid[0] );
 
@@ -52,13 +50,11 @@ function display()
 		$mppoint = 'teamtournament';
 		$csection = 'mturniere';
 	}
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;      
 	// Prüfen ob User Berechtigung hat
-	//if ( $liga->sl !== CLM_ID AND CLM_usertype !== 'admin') {
-	$clmAccess->accesspoint = 'BE_'.$mppoint.'_edit_fixture';
-	if (( $row->sl !== CLM_ID AND $clmAccess->access() !== true) OR ($clmAccess->access() === false)) {
-	//if ( $row->sl !== CLM_ID AND CLM_usertype !== 'admin') {
+	//if ( $liga->sl !== clm_core::$access->getJid() AND clm_core::$access->getType() !== 'admin') {
+	if (( $row->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_fixture') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_fixture') === false)) {
+	//if ( $row->sl !== clm_core::$access->getJid() AND clm_core::$access->getType() !== 'admin') {
 		JError::raiseWarning( 500, JText::_( 'PAARUNG_LIGEN' ) );
 		$link = 'index.php?option='.$option.'&section='.$csection;
 		$mainframe->redirect( $link);
@@ -114,7 +110,7 @@ function display()
 		}
 	}
 
-	require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'paarung.php');
+	require_once(JPATH_COMPONENT.DS.'views'.DS.'paarung.php');
 	CLMViewPaarung::paarung( $row, $paarung, $man, $count_man, $option, $cid, $lists );
 	}
 
@@ -125,16 +121,12 @@ function cancel()
 	JRequest::checkToken() or die( 'Invalid Token' );
 	
 	$option		= JRequest::getCmd('option');
-	$row 		=& JTable::getInstance( 'ligen', 'TableCLM' );
+	$row 		=JTable::getInstance( 'ligen', 'TableCLM' );
 	$id		= JRequest::getVar('id');	
 	// load the row from the db table
 	$row->load( $id );  //mtmt
-	$row->checkin( $id);
 	$msg = JText::_( 'PAARUNG_AENDERN');
-	if ($row->liga_mt == 1) //mtmt
-	$mainframe->redirect( 'index.php?option='. $option.'&section=mturniere', $msg );
-	else
-	$mainframe->redirect( 'index.php?option='. $option.'&section=ligen', $msg );
+	$mainframe->redirect( 'index.php?option='. $option.'&section=runden&liga='.$row->id, $msg );
 	}
 
 function save()
@@ -146,11 +138,11 @@ function save()
 	$option		= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
 
-	$db 		=& JFactory::getDBO();
+	$db 		=JFactory::getDBO();
 	$task 		= JRequest::getVar( 'task');
-	$user 		=& JFactory::getUser();
+	$user 		=JFactory::getUser();
 	$meldung 	= $user->get('id');
-	$row 		=& JTable::getInstance( 'ligen', 'TableCLM' );
+	$row 		=JTable::getInstance( 'ligen', 'TableCLM' );
 	$cid		=JRequest::getVar( 'id');
 	$row->load( $cid);
 
@@ -216,12 +208,14 @@ function save()
 			break;
 		case 'save':
 		default:
-		$row->checkin();
+		
 		$msg = JText::_( 'PAARUNG_AENDERN_IST' );
 		if ($row->liga_mt == 1) //mtmt
-		$link = 'index.php?option='.$option.'&section=mturniere';
+			//$link = 'index.php?option='.$option.'&section=mturniere';
+			$link = 'index.php?option='.$option.'&view=view_tournament_group&liga=0';
 		else
-		$link = 'index.php?option='.$option.'&section=ligen';
+			//$link = 'index.php?option='.$option.'&section=ligen';
+			$link = 'index.php?option='.$option.'&view=view_tournament_group&liga=1';
 			break;
 	}
 

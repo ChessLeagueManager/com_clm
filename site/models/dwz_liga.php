@@ -14,7 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.model');
 
 
-class CLMModelDWZ_Liga extends JModel
+class CLMModelDWZ_Liga extends JModelLegacy
 {
 	
 	function _getCLMLiga( &$options )
@@ -24,7 +24,7 @@ class CLMModelDWZ_Liga extends JModel
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 
-	$row	=& JTable::getInstance( 'ligen', 'TableCLM' );
+	$row	= JTable::getInstance( 'ligen', 'TableCLM' );
 	$row->load( $lid );
 
 	if ($row->rang > 0) {
@@ -84,10 +84,9 @@ class CLMModelDWZ_Liga extends JModel
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
  
-	$query = " SELECT tln_nr, COUNT(a.zps) as count, SUM(m.DWZ) as dwz, SUM(Punkte) as punkte, SUM(I0) as i0, SUM(Partien) as partien, SUM(We) as we, SUM(Leistung) as leistung,"
-		." SUM(EFaktor) as efaktor, SUM(Niveau) as niveau, SUM(d.DWZ) as dsbDWZ, SUM(m.start_dwz) as start_dwz"
+	$query = " SELECT a.tln_nr, COUNT(a.zps) as count, SUM(m.DWZ) as dwz, SUM(m.Punkte) as punkte, SUM(m.I0) as i0, SUM(m.Partien) as partien, SUM(m.We) as we, SUM(m.Leistung) as leistung,"
+		." SUM(m.EFaktor) as efaktor, SUM(m.Niveau) as niveau, SUM(d.DWZ) as dsbDWZ, SUM(m.start_dwz) as start_dwz"
 		." FROM #__clm_mannschaften as a "
-		//." LEFT JOIN #__clm_meldeliste_spieler AS m ON m.lid = a.liga AND ( m.zps = a.zps OR m.zps = a.sg_zps) AND m.mnr = a.man_nr AND m.sid = a.sid "
 		." LEFT JOIN #__clm_meldeliste_spieler AS m ON m.lid = a.liga AND ( m.zps = a.zps OR FIND_IN_SET(m.zps,a.sg_zps) != 0) AND m.mnr = a.man_nr AND m.sid = a.sid "
 		." LEFT JOIN #__clm_dwz_spieler AS d ON d.ZPS = m.zps  AND d.Mgl_Nr = m.mgl_nr AND d.sid = m.sid"
 		." WHERE a.liga = ".$lid
@@ -126,30 +125,6 @@ class CLMModelDWZ_Liga extends JModel
 	function getCLMdwz( $options=array() )
 	{
 		$query	= $this->_getCLMdwz( $options );
-		$result = $this->_getList( $query );
-		return @$result;
-	}
-
-	
-	function _getCLMlog( &$options )   //klkl
-	{
-	$sid	= JRequest::getInt('saison','1');
-	$lid	= JRequest::getInt('liga','1');
-	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
-	//letztes DWZ-Update finden 
-	$query = " SELECT a.datum, a.nr_aktion "
-		." FROM #__clm_log as a "
-		." WHERE a.lid = ".$lid
-		." AND a.sid = ".$sid
-		." AND (a.nr_aktion = 101 OR a.nr_aktion = 102)" 	// 101 DWZ ausgewertet; 102 DWZ gelöscht
-		." ORDER BY a.datum DESC LIMIT 1 ";
-		return $query;
-	}
-
-	function getCLMlog( $options=array() )
-	{
-		$query	= $this->_getCLMlog( $options );
 		$result = $this->_getList( $query );
 		return @$result;
 	}

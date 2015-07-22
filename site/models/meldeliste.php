@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -13,7 +13,7 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
-class CLMModelMeldeliste extends JModel
+class CLMModelMeldeliste extends JModelLegacy
 {
 	function _getCLMLiga( &$options )
 	{
@@ -65,10 +65,10 @@ class CLMModelMeldeliste extends JModel
 		$db	= JFactory::getDBO();
 		$id	= @$options['id'];
 	// Konfigurationsparameter auslesen
-	$config = &JComponentHelper::getParams( 'com_clm' );
-	$val=$config->get('meldeliste',1);
+	$config = clm_core::$db->config();
+	$val=$config->meldeliste;
 
-	if($layout =="rangliste"){
+	if (($layout =="rangliste") OR ($layout =="sent_rangliste")) {
 
 	$sql = " SELECT * "
 		." FROM #__clm_rangliste_name"
@@ -80,6 +80,8 @@ class CLMModelMeldeliste extends JModel
 
 	$melde = explode ("-",$gid[0]->Meldeschluss);
 	$jahr = $melde[0];
+	$gid1 = $gid[0]->id;
+
 
 	$geb = "";
 	$ges = "";
@@ -96,12 +98,13 @@ class CLMModelMeldeliste extends JModel
 		$ges = " AND a.Geschlecht = 'M' ";
 		}
 
-	$query = " SELECT a.sid,a.ZPS,a.Mgl_Nr,a.PKZ,a.DWZ,a.DWZ_Index,a.Geburtsjahr,a.Spielername"
+	$query = " SELECT l.man_nr,l.Rang,a.sid,a.ZPS,a.Mgl_Nr,a.PKZ,a.DWZ,a.DWZ_Index,a.Geburtsjahr,a.Spielername"
 		." FROM #__clm_dwz_spieler as a"
+		." LEFT JOIN #__clm_rangliste_spieler as l ON l.Gruppe = $gid1 AND l.sid = $sid AND l.ZPS = '$zps' AND l.Mgl_Nr = a.Mgl_Nr "
 		." WHERE a.ZPS = '$zps'"
-		." AND sid =".$sid
+		." AND a.sid =".$sid
 		.$geb.$ges
-		." ORDER BY a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
+		." ORDER BY IFNULL(l.man_nr,999) ASC,IFNULL(l.Rang,999) ASC,a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
 		;
 			}
 	else {
@@ -153,11 +156,12 @@ class CLMModelMeldeliste extends JModel
 			;
 		$db->setQuery($query);
 		$team = $db->loadObjectList();
- 
+		if (count($team) > 0) $team_sg_zps = $team[0]->sg_zps;
+		else $team_sg_zps = '';
 		$query = "SELECT COUNT(ZPS) as zps " 
 			." FROM #__clm_dwz_spieler "
-			//." WHERE zps = '$zps'  "
-			." WHERE (zps = '$zps' OR FIND_IN_SET(zps,'".$team[0]->sg_zps."') != 0 )"
+			//." WHERE (zps = '$zps' OR FIND_IN_SET(zps,'".$team[0]->sg_zps."') != 0 )"
+			." WHERE (zps = '$zps' OR FIND_IN_SET(zps,'".$team_sg_zps."') != 0 )"
 			;
 	return $query;
 	}
@@ -238,7 +242,7 @@ class CLMModelMeldeliste extends JModel
 	// Prüfen ob User berechtigt ist zu melden
 	function _getCLMClmuser ( &$options )
 	{
-	$user	= & JFactory::getUser();
+	$user	= JFactory::getUser();
 	$jid	= $user->get('id');
 	$sid	= JRequest::getInt('saison','1');
 
@@ -261,7 +265,7 @@ class CLMModelMeldeliste extends JModel
 		return @$result;
 	}
 
-	function Sortierung ( $cids ) {
+	public static function Sortierung ( $cids ) {
 
 	$zps 	= clm_escape(JRequest::getVar('zps'));
 	$man	= JRequest::getInt('man','1');
@@ -278,7 +282,7 @@ class CLMModelMeldeliste extends JModel
 	$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.Mgl_Nr) as id, a.zps, a.Mgl_Nr, a.DWZ as dwz, IFNULL(l.snr,999) as snr " 
 		." ,v.Vereinname "
 		." FROM #__clm_dwz_spieler as a "
-		." LEFT JOIN #__clm_dwz_vereine as v ON v.ZPS = a.zps AND v.sid = a.sid  "
+		." LEFT JOIN #__clm_dwz_vereine as v ON v.ZPS = a.zps AND v.sid = a.sid"
 		." LEFT JOIN #__clm_meldeliste_spieler as l ON l.lid = $liga AND l.sid = $sid AND l.mnr = $man "
 				." AND (l.zps = '$zps' OR FIND_IN_SET(l.zps,'".$team[0]->sg_zps."') != 0 ) AND l.mgl_nr = a.Mgl_Nr  ";
 		if ($team[0]->sg_zps > '0') {
@@ -311,14 +315,15 @@ class CLMModelMeldeliste extends JModel
 			." AND a.liga = $lid AND a.man_nr = $man AND a.published = 1 "
 			;
 	$db->setQuery( $query );
-	$teamdata = $db->loadObjectList();
+	$team = $db->loadObjectList();
+	if (count($team) > 0) $team_sg_zps = $team[0]->sg_zps;
+	else $team_sg_zps = '';
 
 	$query	= "SELECT a.jid as mf, a.name as mfname "
 		." FROM #__clm_user as a"
-		." WHERE (zps = '".$zps."' OR FIND_IN_SET(zps,'".$teamdata[0]->sg_zps."' ) != 0 )"
+		." WHERE (zps = '".$zps."' OR FIND_IN_SET(zps,'".$team_sg_zps."' ) != 0 )"
 		."   AND sid = ".$sid
 		."   AND published = 1"
-		."   AND user_clm > 20"
 		;
 	return $query;
 	}

@@ -12,6 +12,12 @@
 defined('_JEXEC') or die('Restricted access');
 ?>
 
+<style type="text/css">
+#auswertung_dewis input[type="submit"] {
+	margin-bottom: 9px;
+}
+</style>
+
 <div class="width-50 fltlft">
 	<fieldset class="adminform">
 	<legend><?php echo JText::_( 'Dewis Auswertungsdateien' ); ?></legend>
@@ -20,13 +26,13 @@ defined('_JEXEC') or die('Restricted access');
 </div>
 
 <div class="width-50 fltlft">
-<form action="index.php?option=com_clm&view=auswertung" method="post" id="auswertung_dewis" name="adminForm"  enctype="multipart/form-data" >
+		<form action="index.php?option=com_clm&view=auswertung" method="post" id="auswertung_dewis" name="adminForm"  enctype="multipart/form-data" >
 		<fieldset class="adminform"> 
 		<legend><?php echo JText::_( 'Liga : Auswertungsdatei erstellen' ); ?></legend>
 			<table width="100%">
 				<tr>
 					<td width="50%"><?php echo $this->lists['lid'] ?></td>
-					<td width="50%"><a href="#" onclick="Joomla.submitbutton('datei')" class="toolbar">Datei erstellen</a></td>
+					<td width="50%"><input type="submit" value=" Datei erstellen "></td>
 				</tr>
 				<tr>
 					<td width="50%"><select id="filter_format" name="filter_format" class="inputbox" size="1" onchange="">
@@ -37,31 +43,39 @@ defined('_JEXEC') or die('Restricted access');
 				</tr>
 			</table>
 		</fieldset>
-	
+		<input type="hidden" name="controller" value="auswertung" />
+		<input type="hidden" name="task" value="datei" />
+		<?php echo JHTML::_( 'form.token' ); ?>
+		</form>
+		
+		<form action="index.php?option=com_clm&view=auswertung" method="post" id="auswertung_dewis" name="adminForm"  enctype="multipart/form-data" >
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Einzelturnier : Auswertungsdatei erstellen' ); ?></legend> 
 			<table width="100%">
 				<tr>
 				<td width="50%"><?php echo $this->lists['et_lid'] ?></td>
-				<td width="50%"><a href="#" onclick="Joomla.submitbutton('datei')" class="toolbar">Datei erstellen</a></td>	
+				<td width="50%"><input type="submit" value=" Datei erstellen "></td>	
 				</tr>
 			</table>
 		</fieldset>
+		<input type="hidden" name="controller" value="auswertung" />
+		<input type="hidden" name="task" value="datei" />
+		<?php echo JHTML::_( 'form.token' ); ?>
+		</form>
 		
+		<form action="index.php?option=com_clm&view=auswertung" method="post" id="auswertung_dewis" name="adminForm"  enctype="multipart/form-data" >
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'Mannschaftsturnier : Auswertungsdatei erstellen' ); ?></legend> 
 			<table width="100%">
 				<tr>
 				<td width="50%"><?php echo $this->lists['mt_lid'] ?></td>
-				<td width="50%"><a href="#" onclick="Joomla.submitbutton('datei')" class="toolbar">Datei erstellen</a></td>	
+				<td width="50%"><input type="submit" value=" Datei erstellen "></td>	
 				</tr>
 			</table>
 		</fieldset>
-
-	<input type="hidden" name="controller" value="auswertung" />
-	<input type="hidden" name="task" value="" />
-	<?php echo JHTML::_( 'form.token' ); ?>
-</form>		
+		<input type="hidden" name="controller" value="auswertung" />
+		<input type="hidden" name="task" value="datei" />
+		<?php echo JHTML::_( 'form.token' ); ?>
+		</form>
 <div class="clr"></div>
 </div>
-

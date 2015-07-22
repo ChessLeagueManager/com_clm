@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerTurPlayerEdit extends JController {
+class CLMControllerTurPlayerEdit extends JControllerLegacy {
 	
 
 	// Konstruktor
@@ -28,9 +26,9 @@ class CLMControllerTurPlayerEdit extends JController {
 		$this->playerid = JRequest::getInt('playerid');
 		$this->turnierid = JRequest::getInt('turnierid');
 		
-		$this->_db		= & JFactory::getDBO();
+		$this->_db		= JFactory::getDBO();
 		
-		$this->app =& JFactory::getApplication();
+		$this->app =JFactory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -58,14 +56,12 @@ class CLMControllerTurPlayerEdit extends JController {
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
 		// Instanz der Tabelle
-		$row = & JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = JTable::getInstance( 'turniere', 'TableCLM' );
 		$row->load( $this->turnierid ); // Daten zu dieser ID laden
 
-		require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_clm'.DS.'classes'.DS.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if (($row->tl != CLM_ID AND $clmAccess->access() !== true) OR $clmAccess->access() === false) {
-		//if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+		$clmAccess = clm_core::$access;      
+		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
+		//if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
 			return false;
 		}
@@ -74,7 +70,6 @@ class CLMControllerTurPlayerEdit extends JController {
 		$task = JRequest::getVar('task');
 		
 		// Instanz der Tabelle
-		//$row = & JTable::getInstance( 'turplayeredit', 'TableCLM' );
 		$row = & JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
 		$row->load( $this->playerid ); // Daten zu dieser ID laden
 
@@ -102,8 +97,8 @@ class CLMControllerTurPlayerEdit extends JController {
 			return false;
 		}
 	
-	
-		$row->checkin();
+		
+	 	clm_core::$api->direct("db_tournament_delDWZ",array($this->turnierid,false));
 
 		$text = JText::_('PARTICIPANT_EDITED').": ".$row->name;
 
@@ -113,7 +108,7 @@ class CLMControllerTurPlayerEdit extends JController {
 		$clmLog->params = array('sid' => $row->sid, 'tid' => $this->turnierid); // TurnierID wird als LigaID gespeichert
 		$clmLog->write();
 		
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		$app->enqueueMessage( $text );
 
 		// wenn 'apply', weiterleiten in form
@@ -125,7 +120,6 @@ class CLMControllerTurPlayerEdit extends JController {
 			$this->adminLink->more = array('id' => $this->turnierid);
 			$this->adminLink->view = "turplayers"; // WL in Liste
 		}
-	
 		return true;
 	
 	}

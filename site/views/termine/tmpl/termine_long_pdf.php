@@ -13,7 +13,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 $sid			= JRequest::getInt('saison','1');
-$config			= &JComponentHelper::getParams( 'com_clm' );
+$config			= clm_core::$db->config();
 
 $termine		= $this->termine;
 $plan			= $this->plan;
@@ -76,8 +76,8 @@ $arrWochentag = array(
 	);
             
 // Datum der Erstellung
-$date =& JFactory::getDate();
-$now = $date->toMySQL();
+$date =JFactory::getDate();
+$now = $date->toSQL();
 
 $pdf=new PDF();
 $pdf->AliasNbPages();

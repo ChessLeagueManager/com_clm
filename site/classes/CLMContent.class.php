@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -23,7 +23,7 @@ class CLMContent {
 	* componentheading()
 	* erstellt cpmponentheading
 	*/
-	function componentheading($text) {
+	public static function componentheading($text) {
 	
 		$string = '<div class="componentheading">';
 		$string .= $text;
@@ -38,7 +38,7 @@ class CLMContent {
 	* clmWarning()
 	* erstellt Hinweistext
 	*/
-	function clmWarning($text) {
+	public static function clmWarning($text) {
 		
 		$string = '<div id="wrong">';
 		$string .= $text;
@@ -53,7 +53,7 @@ class CLMContent {
 	* createPDFLink()
 	* erstellt Link auf PDF
 	*/
-	function createPDFLink($view, $title, $params = array()) {
+	public static function createPDFLink($view, $title, $params = array()) {
 	
 		// open div
 		$string = '<div class="pdf">';
@@ -77,7 +77,7 @@ class CLMContent {
 	* createViewLink()
 	* erstellt Link anderen View
 	*/
-	function createViewLink($view, $title, $params = array()) {
+	public static function createViewLink($view, $title, $params = array()) {
 	
 		// open div
 		$string = '<div class="pdf">';
@@ -100,7 +100,7 @@ class CLMContent {
 	* erstellt Link auf PGN-Vorlage
 	* Parameter pgn optional
 	*/
-	function createPGNLink($view, $title, $params = array(), $pgn = 1) {
+	public static function createPGNLink($view, $title, $params = array(), $pgn = 1) {
 	
 		// open div
 		$string = '<div class="pdf">';
@@ -126,7 +126,7 @@ class CLMContent {
 	* erstellt clmFooter mit Versionsnummer und Link
 	*/
 	/*
-	function clmFooter() {
+	public static function clmFooter() {
 	
 		$Dir = JPATH_ADMINISTRATOR .DS. 'components'.DS.'com_clm';
 		$data = JApplicationHelper::parseXMLInstallFile($Dir.DS.'clm.xml');

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -60,8 +60,8 @@ function showRounds(){
 <br/--->
 <?php
 
-if (count($this->runden) > 0) {
-  foreach($this->runden as $rnd => $runde) {
+if (isset($this->runden) AND count($this->runden) > 0) {
+foreach($this->runden as $rnd => $runde) {
 	if ($runde->nr < $rfirst) continue;
 	if ($runde->nr > ($rfirst + $rrange - 1)) { $rlast = ($runde->nr - 1); break;}
 	echo "
@@ -216,8 +216,9 @@ if (count($this->runden) > 0) {
 			</table>
 		</fieldset>";
 	
-  }
-} else echo "<br>Es liegen keine Ergebnisse vor!";	?>
+	}
+	} else echo "<br>Es liegen keine Ergebnisse vor!";
+	?>
 	
 
 	<!---script>

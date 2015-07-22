@@ -12,19 +12,17 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
-
-class CLMViewSonderranglistenForm extends JView {
+class CLMViewSonderranglistenForm extends JViewLegacy {
 
 	function display($tpl = null) { 
 		$task = JRequest::getVar( 'task');
 		$id = JRequest::getVar( 'id');
 	
 		//Daten vom Model
-		$sonderrangliste	= & $this->get('Sonderrangliste');
-		$ordering			= &	$this->get('Ordering');
-		$turniere			= &	$this->get('Turniere');
-		$saisons			= &	$this->get('Saisons');
+		$sonderrangliste	= $this->get('Sonderrangliste');
+		$ordering			= $this->get('Ordering');
+		$turniere			= $this->get('Turniere');
+		$saisons			= $this->get('Saisons');
 		
 		if (JRequest::getVar( 'task') == 'add') {
 			$isNew = true;
@@ -38,15 +36,16 @@ class CLMViewSonderranglistenForm extends JView {
 			$text = JText::_( 'SPECIALRANKING_CREATE' );
 		}
 		
-		require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_clm'.DS.'images'.DS.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( $text, 'clm_headmenu_sonderranglisten.png' );
 		
-		$row = & JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
-		$row->load($id);
-		require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_clm'.DS.'classes'.DS.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if (($sonderrangliste->tl == CLM_ID AND $clmAccess->access() !== true) OR $clmAccess->access() === true) {
+		$clmAccess = clm_core::$access;
+		if (isset($sonderrangliste->id) AND $sonderrangliste->id > 0) {
+			if (($sonderrangliste->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
+				JToolBarHelper::save( 'save' );
+				JToolBarHelper::apply( 'apply' );
+			}
+		} else {
 			JToolBarHelper::save( 'save' );
 			JToolBarHelper::apply( 'apply' );
 		}
@@ -56,7 +55,7 @@ class CLMViewSonderranglistenForm extends JView {
 		// das MainMenu abschalten
 		JRequest::setVar( 'hidemainmenu', 1 );
 
-		$config	= &JComponentHelper::getParams( 'com_clm' );
+		$config = clm_core::$db->config();
 		
 		//Listen
 		$lists['published']			= JHtml::_('select.booleanlist', 'published', 'class="inputbox"', $sonderrangliste->published );
@@ -132,10 +131,10 @@ class CLMViewSonderranglistenForm extends JView {
 
 				
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
-		$model =   &$this->getModel();
+		$model = $this->getModel();
 
 		// Document/Seite
-		$document =& JFactory::getDocument();
+		$document = JFactory::getDocument();
 
 		// JS-Array jtext -> Fehlertexte
 		$document->addScriptDeclaration("var jserror = new Array();");

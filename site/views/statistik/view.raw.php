@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link http://www.fishpoke.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,69 +12,69 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewStatistik extends JView
+class CLMViewStatistik extends JViewLegacy
 {
-	function display($tpl = 'raw')
+	function display($tpl = "raw")
 	{
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$liga		= $model->getCLMliga();
 		$this->assignRef('liga'  , $liga);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$remis		= $model->getCLMRemis();
 		$this->assignRef('remis'  , $remis);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$kampflos	= $model->getCLMKampflos();
 		$this->assignRef('kampflos'  , $kampflos);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$heim		= $model->getCLMHeim();
 		$this->assignRef('heim'  , $heim);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$gast		= $model->getCLMGast();
 		$this->assignRef('gast'  , $gast);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$gesamt		= $model->getCLMGesamt();
 		$this->assignRef('gesamt'  , $gesamt);
 
-		//$model		= &$this->getModel();
+		//$model		= $this->getModel();
 		//$spieler	= $model->getCLMSpieler();
 		//$this->assignRef('spieler'  , $spieler);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$bestenliste	= $model->getCLMBestenliste();
 		$this->assignRef('bestenliste'  , $bestenliste);
 		
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$mannschaft	= $model->getCLMMannschaft();
 		$this->assignRef('mannschaft'  , $mannschaft);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$brett		= $model->getCLMBrett();
 		$this->assignRef('brett'  , $brett);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$rbrett		= $model->getCLMRBrett();
 		$this->assignRef('rbrett'  , $rbrett);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$kbrett		= $model->getCLMKBrett();
 		$this->assignRef('kbrett'  , $kbrett);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$kgmannschaft	= $model->getCLMkgMannschaft();
 		$this->assignRef('kgmannschaft'  , $kgmannschaft);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$kvmannschaft	= $model->getCLMkvMannschaft();
 		$this->assignRef('kvmannschaft'  , $kvmannschaft);
 
 	$html	= JRequest::getInt('html','1');
 	if($html !="1"){
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 		$document->setMimeEncoding('text/css');
 	}
 		parent::display($tpl);

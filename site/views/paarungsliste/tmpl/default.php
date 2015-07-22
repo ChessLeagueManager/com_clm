@@ -48,20 +48,19 @@ if ($liga[0]->durchgang > 1) {
 }
 
 // Browsertitelzeile setzen
-$doc =& JFactory::getDocument();
+$doc =JFactory::getDocument();
 $daten['title'] = JText::_('PAAR_OVERVIEW').' '.$liga[0]->name;
 if ($doc->_type != "raw") $doc->setHeadData($daten);
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-// require_once(JPATH_COMPONENT.DS.'includes'.DS.'image_path.php');
 
 // Konfigurationsparameter auslesen
-$config			= &JComponentHelper::getParams( 'com_clm' );
-$fe_runde_tln	= $config->get('fe_runde_tln',1);
+$config			= clm_core::$db->config();
+$fe_runde_tln	= $config->fe_runde_tln;
 ?>
 
-<div id="clm">
+<div >
 <div id="paarungsliste">
 
 <div class="componentheading">

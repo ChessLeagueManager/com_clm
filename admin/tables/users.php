@@ -16,8 +16,6 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 
 class TableCLMUsers extends JTable
 {
-
-
 	var $id			= null;
 	var $sid		= '';
 	var $jid		= '';
@@ -28,7 +26,6 @@ class TableCLMUsers extends JTable
 	var $tel_fest		= '';
 	var $tel_mobil		= '';
 	var $usertype		= '';
-	var $user_clm		= '';
 	var $zps		= '';
 	var $mglnr		= '';
 	var $mannschaft		= '';

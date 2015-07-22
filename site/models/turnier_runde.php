@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -14,7 +14,7 @@ defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 jimport( 'joomla.html.parameter' );
 
-class CLMModelTurnier_Runde extends JModel {
+class CLMModelTurnier_Runde extends JModelLegacy {
 
 
 	function __construct() {
@@ -46,12 +46,12 @@ class CLMModelTurnier_Runde extends JModel {
 
 		// TO-DO: auslagern
 		// zudem PGN-Parameter auswerten
-		$turParams = new JParameter($this->turnier->params);
+		$turParams = new clm_class_params($this->turnier->params);
 		$pgnInput = $turParams->get('pgnInput', 1);
 		$pgnPublic = $turParams->get('pgnPublic', 1);
 		
 		// User ermitteln
-		$user =& JFactory::getUser();
+		$user =JFactory::getUser();
 		
 		// Flag für View und Template setzen: pgnShow
 		// FALSE - PGN nicht verlinken/anzeigen
@@ -87,8 +87,8 @@ class CLMModelTurnier_Runde extends JModel {
 	function _getRoundMatches() {
 	
 		$query = " SELECT a.*, "
-			." t.name as wname, t.twz as wtwz, t.verein as wverein, t.NATrating as wdwz, t.FIDEelo as welo, "
-			." u.name as sname, u.twz as stwz, u.verein as sverein, u.NATrating as sdwz, u.FIDEelo as selo "
+			." t.name as wname, t.twz as wtwz, t.verein as wverein, t.start_dwz as wdwz, t.FIDEelo as welo, "
+			." u.name as sname, u.twz as stwz, u.verein as sverein, u.start_dwz as sdwz, u.FIDEelo as selo "
 			." FROM #__clm_turniere_rnd_spl as a"
 			." LEFT JOIN #__clm_turniere_tlnr as t ON t.snr = a.spieler AND t.turnier = a.turnier "
 			." LEFT JOIN #__clm_turniere_tlnr as u ON u.snr = a.gegner AND u.turnier = a.turnier "

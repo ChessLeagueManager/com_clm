@@ -37,10 +37,10 @@ defined('_JEXEC') or die('Restricted access');
 		<thead>
 			<tr>
 				<th width="10">
-					<?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?>
+				#
 				</th>
 				<th width="10">
-					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $this->termine ); ?>);" />
+					<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 				</th>
 				<th width="6%">
 					<?php echo JHtml::_('grid.sort', JText::_('TERMINE_DATUM'), 'a.startdate', $this->param['order_Dir'], $this->param['order'] ); ?>
@@ -84,9 +84,11 @@ defined('_JEXEC') or die('Restricted access');
 		$k = 0;
 		
 		$n=count( $this->termine );
+		$row =JTable::getInstance( 'termine', 'TableCLM' );
 		foreach ($this->termine as $i => $value) {
-			$row = &$value;
-			
+			//$row = &$value;
+			// load the row from the db table 
+			$row->load( $value->id );
 			$checked 	= JHtml::_('grid.checkedout',   $row, $i );
 			$published 	= JHtml::_('grid.published', $row, $i );
 
@@ -111,9 +113,7 @@ defined('_JEXEC') or die('Restricted access');
 				</td>
 				<td>
 					<?php
-					if (  JTable::isCheckedOut($this->user->get ('id'), $row->checked_out ) ) {
-						echo $row->name;
-					} else {
+
 						$adminLink = new AdminLink();
 						$adminLink->view = "termineform";
 						$adminLink->more = array('task' => 'edit', 'id' => $row->id);
@@ -125,9 +125,7 @@ defined('_JEXEC') or die('Restricted access');
 								<?php echo $row->name; ?>
 							</a>
 						</span>
-						<?php
-					}
-					?>
+		
 				</td>
 				<td align="justify">
 					<?php echo $row->beschreibung;?>
@@ -144,7 +142,7 @@ defined('_JEXEC') or die('Restricted access');
 					<?php echo $row->category;?>
 				</td>
 				<td align="center">
-					<?php if (isset($row->hostname)) echo $row->hostname;?>
+					<?php if (isset($value->hostname)) echo $value->hostname;?>
 				</td>
 				<td align="center">
 					<?php echo $published;?>

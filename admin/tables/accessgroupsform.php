@@ -19,12 +19,10 @@ class TableCLMAccessgroupsForm extends JTable
 	var $id			= null;
 	var $name		= '';
 	var $usertype	= '';
-	var $user_clm	= 0;
 	var $kind		= 'USER';
 	var $published	= 0;
 	var $ordering	= 0;
-	var $fe_params	= '';
-	var $be_params	= '';
+	var $params	= '';
 
 	function __construct( &$_db ) {
 		parent::__construct( '#__clm_usertype', 'id', $_db );

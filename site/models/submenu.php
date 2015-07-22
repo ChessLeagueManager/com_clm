@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link http://www.fishpoke.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -64,16 +64,4 @@ defined('_JEXEC') or die();
 	
 	$db->setQuery($query);
 	$saisonlist = $db->loadObjectList();
-	$count_saisonlist = count ($saisonlist);
-		
-	// Aktueller Saison name
-	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
-		
-	$query = " SELECT a.name, a.id FROM #__clm_saison AS a"
-			." WHERE id=". $sid;	
-	
-	$db->setQuery($query);
-	$saisonname = $db->loadObjectList();
-	
 ?>

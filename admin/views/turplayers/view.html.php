@@ -12,29 +12,25 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
+class CLMViewTurPlayers extends JViewLegacy {
 
-class CLMViewTurPlayers extends JView {
-
-	function display() {
+	function display($tpl = NULL) {
 
 		
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
-		$model =   &$this->getModel();
+		$model =   $this->getModel();
 		
 		$adminLink = new AdminLink();
 		$adminLink->view = "turform";
 		$adminLink->more = array('task' => 'edit', 'id' => $model->param['id']);
 		$adminLink->makeURL();
 		
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( $model->turnier->name.": ".JText::_('PARTICIPANTS'), 'clm_turnier.png'  );
 		
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if (($model->turnier->tl == CLM_ID AND $clmAccess->access() !== false) OR $clmAccess->access() === true) {
-		//if (CLM_usertype == 'admin' OR CLM_usertype == 'tl') {
+		$clmAccess = clm_core::$access;
+		if (($model->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
+
 				
 			// noch Spieler möglich
 			if ($model->turnier->teil > $model->playersTotal) {
@@ -46,11 +42,9 @@ class CLMViewTurPlayers extends JView {
 			if (($model->turnier->teil == $model->playersTotal) AND $model->turnier->started AND
 				($model->turnier->typ == 1)) { // nur bei CH-System
 				JToolBarHelper::addNew('add_nz', JText::_('ADD_NZ'));
+				JToolBarHelper::custom('del_player', 'cancel.png', 'copy_f2.png', JText::_('DEL_PLAYER'),false);
 				JToolBarHelper::spacer();
 			}
-			
-			//JToolBarHelper::custom( 'daten_dsb_API', 'refresh.png', 'refresh_f2.png', JText::_( 'DB_BUTTON_DWZ_UPDATE_API'),false );
-			JToolBarHelper::custom( 'daten_dsb_SOAP', 'refresh.png', 'refresh_f2.png', JText::_( 'DB_BUTTON_DWZ_UPDATE_SOAP'),false );
 			
 			// noch keine Ergebnisse eingetragen
 			if (!$model->turnier->started) { 
@@ -74,10 +68,7 @@ class CLMViewTurPlayers extends JView {
 		}
 		
 		JToolBarHelper::cancel();
-
-		if (($model->turnier->tl == CLM_ID AND $clmAccess->access() !== false) OR $clmAccess->access() === true) {
-		//if (CLM_usertype == 'admin' OR CLM_usertype == 'tl') {
-		
+		if (($model->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
 			JToolBarHelper::divider();
 			JToolBarHelper::spacer();
 			JToolBarHelper::custom( 'turform', 'config.png', 'config_f2.png', JText::_('TOURNAMENT'), false);

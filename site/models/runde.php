@@ -13,7 +13,7 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
-class CLMModelRunde extends JModel
+class CLMModelRunde extends JModelLegacy
 {
 
 	function _getCLMLiga( &$options )
@@ -198,7 +198,7 @@ class CLMModelRunde extends JModel
 	$query = "  SELECT a.zps, a.gzps, a.paar,a.brett,a.spieler,a.gegner,a.ergebnis,a.kampflos, a.dwz_edit, a.dwz_editor, a.weiss,"
 		." m.name, n.name as mgname, m.sname, n.sname as smgname, d.Spielername as hname, d.DWZ as hdwz, d.FIDE_Elo as helo,"
 		." p.erg_text as erg_text, e.Spielername as gname, e.DWZ as gdwz, e.FIDE_Elo as gelo, q.erg_text as dwz_text,"
-		." k.snr as hsnr, l.snr as gsnr, k.start_dwz as hstart_dwz, l.start_dwz as gstart_dwz"                                                                                     //klkl
+		." k.snr as hsnr, l.snr as gsnr, k.start_dwz as hstart_dwz, l.start_dwz as gstart_dwz"
 		." FROM #__clm_rnd_spl as a "
 		." LEFT JOIN #__clm_rnd_man as r ON ( r.lid = a.lid AND r.runde = a.runde AND r.tln_nr = a.tln_nr AND  r.dg = a.dg) "
 		." LEFT JOIN #__clm_mannschaften AS m ON ( m.tln_nr = r.tln_nr AND m.liga = a.lid) "
@@ -221,8 +221,8 @@ class CLMModelRunde extends JModel
 		$query = "  SELECT a.zps, a.gzps, a.paar,a.brett,a.spieler,a.gegner,a.ergebnis,a.kampflos, a.dwz_edit, a.dwz_editor, a.weiss,"
 		." m.name, n.name as mgname, m.sname, n.sname as smgname, d.Spielername as hname, d.DWZ as hdwz, d.FIDE_Elo as helo,"
 		." p.erg_text as erg_text, e.Spielername as gname, e.DWZ as gdwz, e.FIDE_Elo as gelo, q.erg_text as dwz_text,"
-		." k.snr as hsnr, l.snr as gsnr, k.start_dwz as hstart_dwz, l.start_dwz as gstart_dwz," 
-		." t.man_nr as tmnr, t.Rang as trang, s.man_nr as smnr, s.Rang as srang"                                                                                     //klkl
+		." k.snr as hsnr, l.snr as gsnr, k.start_dwz as hstart_dwz, l.start_dwz as gstart_dwz,"
+		." t.man_nr as tmnr, t.Rang as trang, s.man_nr as smnr, s.Rang as srang"
 		." FROM #__clm_rnd_spl as a "
 		." LEFT JOIN #__clm_rnd_man as r ON ( r.lid = a.lid AND r.runde = a.runde AND r.tln_nr = a.tln_nr AND  r.dg = a.dg) "
 		." LEFT JOIN #__clm_mannschaften AS m ON ( m.tln_nr = r.tln_nr AND m.liga = a.lid) "
@@ -357,9 +357,8 @@ class CLMModelRunde extends JModel
  			if ($order[0]->order == 1) { $ordering = " , m.ordering ASC";}
 			//else { $ordering =', a.tln_nr ASC ';} 
 			else { $ordering =' ';} 
-		//$query = " SELECT a.tln_nr as tln_nr,m.name as name, SUM(a.manpunkte) as mp, "
+		// $query = " SELECT a.tln_nr as tln_nr,m.name as name, SUM(a.manpunkte) as mp, "
 		$query = " SELECT a.tln_nr as tln_nr,m.name as name, (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
-			//." SUM(a.brettpunkte) as bp, SUM(a.wertpunkte) as wp, m.published, m.man_nr, COUNT(DISTINCT a.runde, a.dg) as spiele, "  
 			." SUM(a.brettpunkte) as bp, SUM(a.wertpunkte) as wp, m.published, m.man_nr, "  
 			." COUNT(DISTINCT case when a.gemeldet > 1 then CONCAT(a.dg,' ',a.runde) else null end) as spiele, "  
 			." m.sumtiebr1, m.sumtiebr2, m.sumtiebr3 "
@@ -367,8 +366,6 @@ class CLMModelRunde extends JModel
 			." LEFT JOIN #__clm_mannschaften as m ON m.liga = $liga AND m.tln_nr = a.tln_nr "
 			." WHERE a.lid = ".$liga
 			." AND m.man_nr <> 0 ";
-			//if (($runde != "") AND ($dg == 1) AND ($order[0]->liga_mt == 0)) { $query = $query." AND runde < ".($runde +1)." AND dg = 1";}
-			//if (($runde != "") AND ($dg > 1) AND ($order[0]->liga_mt == 0)) { $query = $query." AND ( runde < ".($runde +1)." OR dg = 1)";}
 			if (($runde != "") AND ($dg == 1)) { $query = $query." AND runde < ".($runde +1)." AND dg = 1";}
 			if (($runde != "") AND ($dg > 1)) { $query = $query." AND (( runde < ".($runde +1)." AND dg = ".$dg.") OR dg < ".$dg.")";}
 			 
@@ -398,7 +395,7 @@ class CLMModelRunde extends JModel
 	}
 
 	
-	function punkte_tlnr ( $sid, $lid, $tlnr, $dg, $runden_modus )
+	public static function punkte_tlnr ( $sid, $lid, $tlnr, $dg, $runden_modus )
 	{
 	//defined('_JEXEC') or die('Restricted access'); 
 	$db	= JFactory::getDBO();
@@ -413,25 +410,25 @@ class CLMModelRunde extends JModel
 		;
 	if ($runden_modus == 3) $query .= " ORDER BY a.runde";	
 	else $query .= " ORDER BY a.gegner ";
-	$db 	=& JFactory::getDBO();
+	$db 	=JFactory::getDBO();
 	$db->setQuery( $query );
 	$runden	=$db->loadObjectList();
 	
 	return $runden;
 	}
 
-	function punkte_text ($lid)
+	public static function punkte_text ($lid)
 	{
 	defined('_JEXEC') or die('Restricted access'); 
 	
 	//Konfigurationsparameter laden
-	$config			= &JComponentHelper::getParams( 'com_clm' );
+	$config			= clm_core::$db->config();
 	
 	// Ergebnisliste laden
 	$sql = "SELECT a.id, a.erg_text "
 		." FROM #__clm_ergebnis as a "
 		;
-	$db 		=& JFactory::getDBO();
+	$db 		=JFactory::getDBO();
 	$db->setQuery( $sql );
 	$ergebnis	= $db->loadObjectList();
 
@@ -452,7 +449,7 @@ class CLMModelRunde extends JModel
 	$ergebnis[1]->erg_text = ($sieg+$antritt)." - ".($nieder+$antritt);
 	$ergebnis[2]->erg_text = ($remis+$antritt)." - ".($remis+$antritt);
 	$ergebnis[3]->erg_text = ($nieder+$antritt)." - ".($nieder+$antritt);
-	if ($config->get('fe_display_lose_by_default',0) == 1) {
+	if ($config->fe_display_lose_by_default == 1) {
 		$ergebnis[4]->erg_text = round($nieder)." - ".round($antritt+$sieg)." (kl)";
 		$ergebnis[5]->erg_text = round($antritt+$sieg)." - ".round($nieder)." (kl)";
 		$ergebnis[6]->erg_text = round($nieder)." - ".round($nieder)." (kl)";
@@ -514,47 +511,10 @@ class CLMModelRunde extends JModel
 		$result = $this->_getList( $query );
 		return @$result;
 	}
-
-	function _getCLMlog( &$options )   //klkl
-	{
-	$sid	= JRequest::getInt('saison','1');
-	$lid	= JRequest::getInt('liga','1');
-	$dg 	= JRequest::getInt('dg');
-	$runde 	= JRequest::getInt('runde');
-	$db		= JFactory::getDBO();
-	$id		= @$options['id'];
-	
-	// Anz.Runden und Durchgänge aus #__clm_liga holen
-	$query = " SELECT a.runden, a.durchgang "
-		." FROM #__clm_liga as a"
-		." WHERE a.id = ".$lid
-		;
-	$db->setQuery($query);
-	$liga = $db->loadObjectList();
-	 
-	if ($dg > 1) $runde = $runde + $liga[0]->runden;
-	//letztes Freigabe-Update finden 
-	$query = " SELECT a.datum, a.nr_aktion "
-		." FROM #__clm_log as a "
-		." WHERE a.lid = ".$lid
-		." AND a.sid = ".$sid
-		." AND a.rnd = ".$runde
-		//." AND a.dg = ".$dg
-		." AND (a.nr_aktion = 201 OR a.nr_aktion = 202)" 	// 201 Runde freigegeben; 202 Freigabe zurückgenommen
-		." ORDER BY a.datum DESC LIMIT 1 ";
-		return $query;
-	}
-	
-	function getCLMlog( $options=array() )
-	{
-		$query	= $this->_getCLMlog( $options );
-		$result = $this->_getList( $query );
-		return @$result;
-	}
 	
 	function _getCLMClmuser ( &$options )
 	{
-	$user	= & JFactory::getUser();
+	$user	= JFactory::getUser();
 	$jid	= $user->get('id');
 	$sid	= JRequest::getInt('saison','1');
 

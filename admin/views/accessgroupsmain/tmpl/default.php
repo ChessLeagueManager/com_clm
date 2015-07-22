@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -36,13 +36,12 @@ defined('_JEXEC') or die('Restricted access');
 	<table class="adminlist">
 		<thead>
 			<tr>
-				<th width="10"><?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?></th>
+				<th width="10">#</th>
 				<th width="20">
-					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $this->accessgroups ); ?>);" />
+					<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 				</th>
 				<th width="" class="title"><?php echo JHtml::_('grid.sort',   JText::_('ACCESSGROUP_NAME'), 'name', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
 				<th width="" class="title"><?php echo JHtml::_('grid.sort',   JText::_('ACCESSGROUP_KIND'), 'kind', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
-				<th width="" class="title"><?php echo JHtml::_('grid.sort',   JText::_('ACCESSGROUP_USER'), 'user_clm', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
 				<th width="" class="title"><?php echo JHtml::_('grid.sort',   JText::_('ACCESSGROUP_USERTYPE'), 'usertype', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
 				<th width="20"><?php echo JHtml::_('grid.sort',   JText::_('CLM_PUBLISHED'), 'a.published', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
 				<th width="100" nowrap="nowrap">
@@ -64,8 +63,10 @@ defined('_JEXEC') or die('Restricted access');
 		$k = 0;
 		$n=count( $this->accessgroups );
 		$disabled = $this->ordering ?  '' : 'disabled="disabled"';
+		$row	= JTable::getInstance( 'accessgroupsform', 'TableCLM' );
 		foreach ($this->accessgroups as $i => $value) {
-			$row = &$value;
+			//$row = $value;
+			$row->load( $value->id );
 			$checked 	= JHtml::_('grid.checkedout',   $row, $i );
 			$published 	= JHtml::_('grid.published', $row, $i );
 			?>
@@ -74,9 +75,7 @@ defined('_JEXEC') or die('Restricted access');
 				<td align="center"><?php echo $checked; ?></td>
 				<td>
 					<?php
-					if ( 1 == 2) { // JTable::isCheckedOut($this->user->get ('id'), $row->checked_out ) ) {
-						echo $row->name;
-					} else {
+
 						
 						$adminLink = new AdminLink();
 						$adminLink->view = "accessgroupsform";
@@ -91,11 +90,10 @@ defined('_JEXEC') or die('Restricted access');
 							</a>
 						</span>
 						<?php 
-					} 
+					
 					?>				
 				</td>
 				<td align="center"><?php echo $row->kind;?></td>
-				<td align="center"><?php echo $row->user_clm;?></td>
 				<td align="center"><?php echo $row->usertype;?></td>
 				<td align="center"><?php echo $published;?></td>
 				<td class="order" align="center">

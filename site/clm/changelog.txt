@@ -1,0 +1,127 @@
+CHANGELOG clm
+------------
+
+Legend:
+* -> Security Fix
+# -> Bug Fix
+$ -> Language fix or change
++ -> Addition
+^ -> Change
+% -> Performance Fix
+> -> Compatibility
+- -> Removed
+! -> Note
+/ -> Comment
+
+- - - - - 0.0.5 - [26-10-2014] - - - - - - - - - - - - - - - - - - - -
++ Neues Ergebnismeldeview (report, report_overview von der API view_report umfasst)
+/ Als View für den direkten Aufruf eingerichtet
+/ Eingabekontrollen sowie die zu sendende Mail optimiert.
++ Internes/Externes Joomla Login sowie Logout möglich
+/ clm_core::$cms->login($name,$password);
+/ clm_core::$cms->logout();
++ Direkter API Aufruf nun möglich
+/ view=view_report&key=value
+/ includes/bindings.php -> key der passenden Stelle im Funktionsaufruf zuweisen
+# Alle Auswählen im Backend in den Auflistungen funktioniert wieder
+# Mitglieder können wieder angelegt werden
+^ Neuer DWZ Rechner für Mannschaftsturniere/Ligen
+/ Funktion zum Aktualisieren der zur Generierung verwendeten DWZ ebenfalls integriert
+/ Beides auch noch für Turniere nötig!
+
+- - - - - 0.0.4 - [10-09-2014] - - - - - - - - - - - - - - - - - - - -
+! mit r287 des Repos Synchronisiert
+^ Einstellungsview (siehe Backend Einstellungen)
+^ Alle DeWIS Zugriffe laufen nun über ein einheitliches Skript
+# PDF Ausgabe im Frontend funktioniert nun wieder
+- Die Tabellen #__clm_dwz_dewis und #__clm_dwz_dewis_merge entfernt
+- Das ungenutzte View dewis entfernt
+
+- - - - - 0.0.3 - [14-08-2014] - - - - - - - - - - - - - - - - - - - -
+! mit r279 des Repos Synchronisiert
++ alle Module, Komponenten und Plugins sind nun Joomla 3.x kompatibel
++ Vereine können nun über DeWIS importiert werden
++ Die Joomla Login Informationen werden nun auch beim direkten Aufruf des CLM (für die API) verwendet
++ Die API ist nun funktionsfähig und wird für den Manuellen und Automatischen Import von Vereinen und Spielern verwendet
+/ für die Funktionsweise siehe clm/functions/execute_command.php und clm/js/dewis_import.js
++ Import von Javascript ist nun "sauber" möglich
+/ Im Ordner clm/js kann die Datei dewis_import.php über den Aufruf
+/ "clm_core::$load->load_js("dewis_import");" geladen werden.
+/ Diese verwendet die Zeile "clm_core::$cms->addScriptDeclaration(<javascript>);"
+/ um Javascript direkt in den Head des Dokumentes zu schreiben und
+/ "clm_core::$cms->addScript(clm_core::$url."js/<file>");"
+/ um statisches Javascript zu Laden.
+^ Die Einstellungen werden nun vom CLM verwaltet
+/ das in 0.0.1 eingeführte Kommando "clm_core::$db->config()->PARAMETER;",
+/ wird nun im gesamten CLM zum Abfragen der Konfiguration verwendet.
+/ Die config.xml wurde dementsprechend entfernt
+/ Das zugehörige View ist in Arbeit
+^ Optimierung beim Importieren von Spielern über DeWIS
+/ es ist nun unabhängig von JQuery
+/ es benötigt keine eigene Datenbank mehr (Datenbank wird für verstreute Skriptfragmente noch benötigt)
+^ Der Manuelle Import von Spielern und Vereinen über den Export als CSV des DSB funktioniert nun wieder
+/ es läuft wie der DeWIS Import über ein Javascript
+/ beim Import des gesamten Schachbundes sollte es nun keine Probleme mehr geben, 
+/ es werden immer nur 400 Spieler oder Vereine bei einem Ajax Aufruf importiert.
+^ Datenbank View in Spoilern zusammengefasst
+^ Der Upload von Dateien für den Liga Import wurde optimiert
+/ es können keine SQL Dateien mehr hochgeladen oder ausgeführt werden,
+/ da dies für den Import von Spielern/Vereinen nicht länger notwendig ist.
+# Fehler beim Speichern von Einstellungen behoben
+# Beim Exportieren einer Liga war der Dateiname fehlerhaft
+-> Die Datenbankumwandlung auf ein englische oder niederländische Version wurde entfernt
+/ das Umwandeln ging nicht in alle Richtungen und der Import spezieller Dateien sah nicht funktionsfähig aus
+/ die entsprechenden Zeilen sind nur ausgeklammert und können wieder verwendet werden sobald die Funktion sichergestellt ist
+
+- - - - - 0.0.2 - [10-07-2014] - - - - - - - - - - - - - - - - - - - -
+! mit r270 des Repos Synchronisiert
++ Installation: eine sql zum Update der Datenbank wurde hinzugefügt, eine Aktualisierung einer bestehenden CLM Installation wird damit möglich 
+^ Rechteverwaltung: Optimierungen, neue Klasse, Dopplungen entfernt, Parameter in die Methoden verschoben, usertypelist gibt nun Gruppen aus die mehr Rechte haben als man selbst
+/ zu usertypelist: Jemand mit ungültiger Gruppe besitzt stets weniger oder gleich viele Rechte als man selbst, diese sollten also auch gefunden werden
+/ zu Optimierungen: bei Abfragen wird ein Zwischenspeicher verwendet, nur Zugriffspunkte bei denen 1 oder 2 gesetzt wird sind in der Datenbank bei einer Gruppe hinterlegt, 
+/ die Tabelle für die Zugriffpunkte selbst befindet sich nun in einem Array (site/clm/include/accesspoints.php), da sie ohnehin statisch ist
+/ zu jeder Methode gibt es nun auch ein statisches equivalent, zum Beispiel um zwei beliebige Gruppen zu vergleichen (anstatt nur die eigene mit einer anderen)
+/ Beispiel: clm_core::$access->access('BE_team_edit') gibt false,true oder 2 zurück (siehe /site/clm/classes/access.php)
+^ Saison und Administrationsbenutzer werden automatisch angelegt sobald ein Joomla Administrator ein View der Komponente betritt, 
+/ falls keine oder mehrere Saisons aktiv sind oder es in der aktuellen Saison keinen Administrator gibt
+^ ein neuer Benutzer kann nur in der aktuellen Saison angelegt werden
+^ beim erstellen eines Benutzer kann nur die aktuelle Saison gewählt werden
+^ die aktuelle Saison ist die Vorauswahl beim Filter der Benutzerverwaltung
+# javascript der einzelnen Views wird wieder korrekt ausgeführt (JVersion::isCompatible entfernt)
+# CSS Fehler im neuen Template korrigiert (site/clm/css/fix.css)
+# die Benutzerverwaltung wurde angepasst um auch Benutzer anzuzeigen die keine gültige Gruppe gesetzt haben
+
+- - - - - 0.0.1 - [22-04-2014] - - - - - - - - - - - - - - - - - - - -
++ language: Sprachdateien sind wie in Joomla möglich
+/ $lang = clm_core::$lang->dates_display;		
+/ lade die Datei dates_display.ini der jeweiligen Sprache
+/ echo $lang->a; bei dates_display.init mit a=b
+/ gebe an dieser Stelle das b zu a aus
++ db_update: Die Datenbank besitzt eine eigene Versionsnummer (fortlaufende Nummer), ihre Updates werden mit .sql verteillt
+/ .sql Dateien im sql Ordner werden nach ihrer Versionsnummer verwendet um die Datenbank bei einem Update zu Aktualsieren
+/ die Datenbank in Version 1.4.x erhält die Versionsnummer 0, die Datei zum aktualisieren auf die Versionsnummer 1 heißt 0up.sql im sql Ordner
+/ dementsprechend geht es von 1 auf 2 mit 1up.sql, die aktuell Version zusammen mit der Client Version wird in der index.php als Konstante gesetzt in der form major.minor.revision:db_version
++ FunctionLoader: Mithilfe des Funktionloader können gezielt Funktionen aus dem Ordner Funktion dynamisch geladen und ausgeführt werden
+/ beim Aufruf von clm_core::$load->is_timestamp(323424); wird die Datei is_timestamp.php im Ordner functions geladen und die darin enthaltene Funktion clm_function_is_timestamp ausgeführt
+/ Klassen, CSS, Models, Views können mit einer Funktion in diesem Ordner ebenfalls geladen werden, dieses vorgehen verhindert bei vielen Dateien allzu lange Ladezeiten 
+/ und Fehler können auf geladene Elemente zurückgeführt werden
++ Datenbank: clm verwendet eine eigene Klasse für den Datenbank, es wird auf mysqli gesetzt
+/ clm_core::$db->query($query) führt einen Query aus mit dem Erstzen von #__ durch den jeweiligen Prefix und gibt einen result zurück (dieser muss selbständig geschlossen werden)
+/ clm_core::$db->loadObjectList($query) führt einen Query durch und gibt die Ergebnisse als Objekte in einem Array zurück (unter verschiedenen Bezeichnungen in Joomla oft verwendet)
+/ clm_core::$db->config->get($id) lädt aus der Tabelle #__config den Eintrag mit der ID $id, wobei die dafür gültigen Tabellen ind er config/table.php angegebenen werden müssen
+/ clm_core::$db->config()->cl_version lädt den Eintrag cl_version aus der Konfiguration, Standardwerte und gültige Werte werden in der config/config.php abgelegt (ein Filter liegt darüber)
++ cms: Alle Verbindungen zu einem cms werden über die Klasse cms geregelt (Ausnahme config Übernahem und Rechteverwaltung, dieser müssen noch erneuert werden)
+/ clm_core::$db->addStyleSheet($file) fügt die Datei $file den CSS Dateien hinzu, dies geschieht über Joomla falls aktiv oder selbständig 
+/ das Erweitern um andere cms oder aktualisieren auf neuere Varianten ist damit kein Problem / in sehr kurzer Zeit schaffbar
++ make_valid: Ein Filter kümmert sich um eingehende Variablen und korrigiert ungültige Eingaben
+/ $out=clm_core::$load->make_valid($out,0,1) überprüft ob $out eine Ganzzahl (0 als Zweiter Parameter) ist, wennn nicht wird $out auf 1 (dritter Parameter) gesetzt
+^ das InstallerScript für Joomla wurde aktualisiert, unnötige Dateien wurden entfernt
+^ Skript aus PHP 4.x Zeiten wurde aktualisiert, ungültige SQL Querys besser gefiltert, Kompatibilitätsprobleme zu Joomla 3.2 beseitigt
+/ alte Joomla Klassen wurden vorübergehend eingebaut (admin/classes/JParameterOLD.class.php) um Probleme zu vermeiden
+/ vorallem Skript aus dem Backend muss dringend überarbeitet werden, clm Berechtigungssystem kann aktuell für viele Views unterlaufen werden 
+- Datenbanken ohne Prefix wurden unbenannt, Dopplungen entfernt
+- die Datenbankupdate Funktion für frühere Versionen wurde entfernt, Update nur von 1.4.7 und höher möglich
+- die backup Funktionen wurden entfernt, da sie ein überbleibsel aus Joomla 1.5 sind (solche Änderungen gehören in das Template)
+
+
+

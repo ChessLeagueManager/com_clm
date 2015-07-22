@@ -12,19 +12,19 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewDWZ extends JView
+class CLMViewDWZ extends JViewLegacy
 {
 	function display($tpl = 'pdf')
 	{
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$liga     = $model->getCLMLiga();
 		$this->assignRef('liga'  , $liga);
 
-		$model	= &$this->getModel();
+		$model	= $this->getModel();
 		$zps	= $model->getCLMzps();
 		$this->assignRef('zps'  , $zps);
 
-$document =& JFactory::getDocument();
+$document =JFactory::getDocument();
 $document->setMimeEncoding('application/pdf');
 
 		parent::display($tpl);

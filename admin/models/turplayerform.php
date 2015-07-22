@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelTurPlayerForm extends JModel {
+class CLMModelTurPlayerForm extends JModelLegacy {
 
 	var $_pagination = null;
 	var $_total = null;
@@ -26,7 +24,7 @@ class CLMModelTurPlayerForm extends JModel {
 
 
 		// user
-		$this->user =& JFactory::getUser();
+		$this->user =JFactory::getUser();
 		
 		// get parameters
 		$this->_getParameters();
@@ -48,7 +46,7 @@ class CLMModelTurPlayerForm extends JModel {
 		global $mainframe, $option;
 		//Joomla 1.6 compatibility
 		if (empty($mainframe)) {
-			$mainframe = &JFactory::getApplication();
+			$mainframe = JFactory::getApplication();
 			$option = $mainframe->scope;
 		}
 	
@@ -64,8 +62,8 @@ class CLMModelTurPlayerForm extends JModel {
 		$this->param['dwz'] = $mainframe->getUserStateFromRequest( "$option.filter_dwz", 'filter_dwz', 0, 'int' );
 		
 		// verband
-		$config	= &JComponentHelper::getParams( 'com_clm' );
-		$this->param['verband'] = $mainframe->getUserStateFromRequest( "$option.filter_verband", 'filter_verband', $config->get('lv', '000'), 'string' );
+		$config = clm_core::$db->config();
+		$this->param['verband'] = $mainframe->getUserStateFromRequest( "$option.filter_verband", 'filter_verband', $config->lv);
 		
 		// verein
 		$this->param['vid'] = $mainframe->getUserStateFromRequest( "$option.filter_vid", 'filter_vid', 0, 'string' );
@@ -125,9 +123,9 @@ class CLMModelTurPlayerForm extends JModel {
 		} else {
 			$sqlZPS = "";
 		}
-		
+
 		if ($this->param['search'] != '') {
-			$sqlName = ' AND LOWER(ds.Spielername) LIKE '.$this->_db->Quote( '%'.$this->_db->getEscaped( $this->param['search'], true ).'%', false );
+			$sqlName = ' AND LOWER(ds.Spielername) LIKE '.$this->_db->Quote( '%'.clm_escape($this->param['search']).'%', false );
 		} else {
 			$sqlName = '';
 		}
@@ -144,14 +142,16 @@ class CLMModelTurPlayerForm extends JModel {
 		// SELECT 
 		$query = 'SELECT ds.*, dv.Vereinname, tt.snr '
 				. ' FROM #__clm_dwz_spieler AS ds'
-				. ' LEFT JOIN dwz_vereine AS dv ON dv.ZPS = ds.ZPS '
-				. ' LEFT JOIN #__clm_turniere_tlnr AS tt ON tt.zps = ds.ZPS AND tt.mgl_nr = ds.Mgl_Nr AND tt.turnier ='.$this->param['id']
+				. ' LEFT JOIN #__clm_dwz_vereine AS dv ON dv.ZPS = ds.ZPS AND dv.sid = ds.sid'
+				. ' LEFT JOIN #__clm_turniere_tlnr AS tt ON tt.zps = ds.ZPS AND tt.sid = ds.sid AND tt.mgl_nr = ds.Mgl_Nr AND tt.turnier ='.$this->param['id']
 				. ' WHERE ds.sid = '.$this->turnier->sid
 				. $sqlZPS
 				. $sqlName
 				. $sqlDWZ
+				. " AND ds.sid = ".clm_core::$access->getSeason()
 				. $this->_sqlOrder()
 				;
+
 		$this->_db->setQuery($query);
 		$this->PlayersCount = $this->_getListCount($query);
 		$this->PlayersList = $this->_getList($query, $this->limitstart, $this->limit);

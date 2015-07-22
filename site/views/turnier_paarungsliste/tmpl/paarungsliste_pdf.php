@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -13,9 +13,9 @@
 defined('_JEXEC') or die('Restricted access');
 
 $turnierid		= JRequest::getInt('turnier','1');
-$config			= &JComponentHelper::getParams( 'com_clm' );
+$config			= clm_core::$db->config();
 
-$turParams = new JParameter($this->turnier->params);
+$turParams = new clm_class_params($this->turnier->params);
 
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'fpdf.php');
 
@@ -49,8 +49,8 @@ $br1_6 = 170;
 $font = 10;
 
 // Datum der Erstellung
-$date =& JFactory::getDate();
-$now = $date->toMySQL();
+$date =JFactory::getDate();
+$now = $date->toSQL();
 
 $pdf=new PDF();
 $pdf->AliasNbPages();

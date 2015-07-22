@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelCatMain extends JModel {
+class CLMModelCatMain extends JModelLegacy {
 
 	var $_pagination = null;
 	var $_total = null;
@@ -27,7 +25,7 @@ class CLMModelCatMain extends JModel {
 		global $mainframe, $option;
 		//Joomla 1.6 compatibility
 		if (empty($mainframe)) {
-			$mainframe = &JFactory::getApplication();
+			$mainframe = JFactory::getApplication();
 			$option = $mainframe->scope;
 		}
 
@@ -38,7 +36,7 @@ class CLMModelCatMain extends JModel {
 		$this->setState('limitstart', $this->limitstart);
 
 		// user
-		$this->user =& JFactory::getUser();
+		$this->user =JFactory::getUser();
 		
 		// get parameters
 		$this->_getParameters();
@@ -54,7 +52,7 @@ class CLMModelCatMain extends JModel {
 	// alle vorhandenen Parameter auslesen
 	function _getParameters() {
 	
-		$mainframe =& JFactory::getApplication();
+		$mainframe =JFactory::getApplication();
 		global $option;
 	
 		// search
@@ -152,7 +150,7 @@ class CLMModelCatMain extends JModel {
 		}
 		
 		if ($this->param['search']) {
-			$where[] = 'LOWER(c.name) LIKE '.$this->_db->Quote( '%'.$this->_db->getEscaped( $this->param['search'], true ).'%', false );
+			$where[] = 'LOWER(c.name) LIKE '.$this->_db->Quote( '%'.clm_escape( $this->param['search']).'%', false );
 		}
 	
 		if ($this->param['state']) {

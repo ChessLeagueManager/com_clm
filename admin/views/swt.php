@@ -16,7 +16,7 @@ class CLMViewSWT
 
 function setImport_1Toolbar ($execute,$upload)
 	{
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 	JToolBarHelper::title(   JText::_( 'SWT_STEP1' ), 'clm_headmenu_manager.png' );
 	JToolBarHelper::custom('import_2','apply.png','apply_f2.png','SWT_STEP2',false);
 	JToolBarHelper::custom('back','apply.png','apply_f2.png','SWT_BACK',false);
@@ -136,7 +136,7 @@ function Import_1 (&$spieler, &$lists,&$man, &$swt, &$man_zps, &$vereine, &$sid,
 
 function setImport_2Toolbar ($execute,$upload)
 	{
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 	JToolBarHelper::title(   JText::_( 'SWT_STEP2A' ), 'clm_headmenu_manager.png' );
 	JToolBarHelper::custom('import_3','apply.png','apply_f2.png','SWT_STEP3',false);
 	JToolBarHelper::custom('back','apply.png','apply_f2.png','SWT_BACK',false);
@@ -255,7 +255,7 @@ function Import_2 (&$lists, &$swt, &$name_manuell, &$zps_db, &$vereine, &$sid, &
 	
 function setImport_3Toolbar ($execute,$upload)
 	{
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 	JToolBarHelper::title(   JText::_( 'SWT_STEP3A' ), 'clm_headmenu_manager.png' );
 	JToolBarHelper::custom('import_4','apply.png','apply_f2.png','SWT_STEP4',false);
 	JToolBarHelper::custom('back','apply.png','apply_f2.png','SWT_BACK',false);
@@ -293,7 +293,7 @@ function Import_3 (&$lists, &$swt, &$zps_db, &$sid, &$data, &$liga_swt, &$man_zp
 		<th width="8%" class="key" nowrap="nowrap"><?php echo JText::_( 'SWT_MGL_NR' ); ?></th>
 		<th width="8%" class="key" nowrap="nowrap"><?php echo JText::_( 'SWT_ZPS' ); ?></th>
 		<th class="key" nowrap="nowrap"><?php echo JText::_( 'SWT_NAME' ); ?></th>
-		<th width="2%" class="key" nowrap="nowrap"><?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?></th>
+		<th width="2%" class="key" nowrap="nowrap">#</th>
 		<th width="50%" class="key" nowrap="nowrap"><?php echo JText::_( 'SWT_ADVICE' ); ?></th>
 	</tr>
 	
@@ -341,18 +341,16 @@ function Import_3 (&$lists, &$swt, &$zps_db, &$sid, &$data, &$liga_swt, &$man_zp
 
 function setSWTToolbar($execute,$upload)
 	{
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 	JToolBarHelper::title(   JText::_( 'TITLE_SWT' ), 'clm_headmenu_manager.png' );	
 	
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
-	$clmAccess->accesspoint = 'BE_swt_general';
-	if ( $execute == 1 AND $clmAccess->access() ) {
+	$clmAccess = clm_core::$access;
+	if ( $execute == 1 AND $clmAccess->access('BE_swt_general') ) {
 		JToolBarHelper::custom('import_1','apply.png','apply_f2.png','SWT_DATEI_IMPORT',false);
 		JToolBarHelper::custom('swt_dat_del','delete.png','apply_f2.png','SWT_DATEN_DEL',false);
 		JToolBarHelper::custom('swt_dat_nach','delete.png','apply_f2.png','SWT_NACHM_DEL',false);
 	}
-	if ( $upload == 1 AND $clmAccess->access() ) {
+	if ( $upload == 1 AND $clmAccess->access('BE_swt_general') ) {
 		JToolBarHelper::custom('upload_jfile','upload.png','send_f2.png','SWT_DATEI_LOAD',false);
 	}
 
@@ -363,10 +361,10 @@ function setSWTToolbar($execute,$upload)
 function SWT ( &$rows, &$lists, &$pageNav)
 	{
 	// Konfigurationsparameter auslesen
-	$config		= &JComponentHelper::getParams( 'com_clm' );
-	$upload		=$config->get('upload_swt',0);
-	$execute	=$config->get('execute_swt',0);
-	$lv		=$config->get('lv',705);
+	$config		= clm_core::$db->config();
+	$upload		=$config->upload_swt;
+	$execute	=$config->execute_swt;
+	$lv		=$config->lv;
 
 	CLMViewSWT::setSWTToolbar($execute,$upload);
 ?>

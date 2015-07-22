@@ -16,7 +16,11 @@ JHtml::_('behavior.tooltip', '.CLMTooltip');
 
 $liga		= $this->liga;
 	//Liga-Parameter aufbereiten
-	$paramsStringArray = explode("\n", $liga[0]->params);
+	if(isset($liga[0])){
+		$paramsStringArray = explode("\n", $liga[0]->params);
+	} else {
+		$paramsStringArray = array();
+	}
 	$params = array();
 	foreach ($paramsStringArray as $value) {
 		$ipos = strpos ($value, '=');
@@ -24,44 +28,35 @@ $liga		= $this->liga;
 			$params[substr($value,0,$ipos)] = substr($value,$ipos+1);
 		}
 	}	
-	if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
+	if (!isset($params['dwz_date'])) { $params['dwz_date'] = '0000-00-00'; $old=true; } else { $old=false; }
 $dwz		= $this->dwz;
 $spieler	= $this->spieler;
 $sid		= JRequest::getInt( 'saison','1');
 $lid		= JRequest::getInt('liga','1');
 $item		= JRequest::getInt('Itemid','1');
-$ex = 0;
  
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-// require_once(JPATH_COMPONENT.DS.'includes'.DS.'image_path.php');
 
 	// Browsertitelzeile setzen
-	$doc =& JFactory::getDocument();
-	$daten['title'] = JText::_('DWZ_LIGA').' '.$dwz[0]->name; 
+	$doc =JFactory::getDocument();
+	$daten['title'] = JText::_('DWZ_LIGA').' '.(isset($dwz[0]) ? $dwz[0]->name : ""); 
 	if ($doc->_type != "raw") $doc->setHeadData($daten);
 	
 ?>
 
-<div id="clm">
+<div >
 <div id="dwz_liga">
-<?php echo CLMContent::componentheading(JText::_('DWZ_LIGA').'&nbsp;'.$dwz[0]->name); ?>
+<?php echo CLMContent::componentheading(JText::_('DWZ_LIGA').'&nbsp;'.(isset($dwz[0]) ? $dwz[0]->name : "")); ?>
 
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
 
 <?php
-$dwz_date_new = $this->dwz_date_new;		
-if (isset($dwz_date_new[0])) {	
-	if ($dwz_date_new[0]->nr_aktion  == 101) $hint_dwznew = JText::_('DWZ_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $dwz_date_new[0]->datum, JText::_('DATE_FORMAT_CLM_PDF')); 
-	if ($dwz_date_new[0]->nr_aktion  == 102) $hint_dwznew = JText::_('DWZ_COMMENT_DEL').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $dwz_date_new[0]->datum, JText::_('DATE_FORMAT_CLM_PDF')); 
-	}
-if (!isset($dwz_date_new[0]->nr_aktion)) $hint_dwznew = JText::_('DWZ_COMMENT_UNCLEAR');  
-
-if ($params['dwz_date'] == '0000-00-00') {
-	if ($dwz[0]->dsb_datum  > 0) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $dwz[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F')); 
-	if (($dwz[0]->dsb_datum == 0) || (!isset($dwz))) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_UNCLEAR');  
+if (!isset($dwz_date) || $params[$dwz_date] == '0000-00-00') {
+	if (isset($dwz[0]) && $dwz[0]->dsb_datum  > 0) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $dwz[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F')); 
+	if (!isset($dwz[0]) || $dwz[0]->dsb_datum == 0) {$hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_UNCLEAR');  }
 } else {
-	$hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_LEAGUE').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $params['dwz_date'], JText::_('DATE_FORMAT_CLM_F'));  
+	$hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_LEAGUE').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $params[$dwz_date], JText::_('DATE_FORMAT_CLM_F'));  
 }
 
 if ( !$dwz OR $dwz[0]->published == "0") { echo '<br><div class="wrong">'. JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD') .'</div><br>'; } 
@@ -124,7 +119,7 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 <tr class="<?php echo $zeilenr; ?>">
     <td><?php if($liga->rang =="1") { echo $liga->mnr.'-';} echo $liga->snr;?></td>
     <td><a href="index.php?option=com_clm&amp;view=spieler&amp;saison=<?php echo $sid; ?>&amp;zps=<?php echo $liga->zps; ?>&amp;mglnr=<?php echo $liga->mgl_nr; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $liga->Spielername;?></a></td>
-    <?php if ($params['dwz_date'] == '0000-00-00') { ?>
+    <?php if ($old) { ?>
 		<td><?php echo $liga->dsbDWZ.'-'.$liga->DWZ_Index;?></td>
 	<?php } else { ?>
 		<td><?php echo $liga->start_dwz.'-'.$liga->start_I0;?></td>	
@@ -132,10 +127,7 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
     <td><?php echo $liga->Punkte;?></td>
     <td><?php echo $liga->We;?></td>
     <td><?php echo $liga->EFaktor;?></td>
-    <td><?php  if($liga->Punkte == $liga->Partien AND $liga->Niveau == $liga->Leistung AND $liga->Punkte !=0) { echo 667+$liga->Leistung.' &sup2;'; $ex=1;} else { 
-    if ( $liga->Leistung == 0 ) { echo "-";}
-    else { echo $liga->Leistung; }
-    } ?></td>
+    <td><?php if ( $liga->Leistung == 0 ) { echo "-";}else { echo $liga->Leistung; }?></td>
     <td><?php echo $liga->Niveau;?></td>
     
     <?php  $Pkt = explode (".", $liga->Punkte);
@@ -158,8 +150,11 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 		<td><?php echo JText::_('DWZ_REST') ?></td>
 		<?php } ?>
     <td>
-    <?php if ($params['dwz_date'] == '0000-00-00') $dwzdifferenz = $liga->DWZ - $liga->dsbDWZ;
-		 else $dwzdifferenz = $liga->DWZ - $liga->start_dwz; 
+    <?php if ($old) { 
+		$dwzdifferenz = $liga->DWZ - $liga->dsbDWZ; 
+	 } else {
+		$dwzdifferenz = $liga->DWZ - $liga->start_dwz; 
+	 }
     if ( $dwzdifferenz > 0 ) { echo "+" . $dwzdifferenz; } else { echo $dwzdifferenz; } ?></td>
 </tr>
 
@@ -183,10 +178,8 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 <?php } ?>
 </table>
 <?php }} ?>
-<?php if($ex >0) { echo '<div class="hint">'.JText::_('LEAGUE_RATING_IMPOSSIBLE').'</div><br>';} ?>
 
 <?php echo '<div class="hint">'.$hint_dwzdsb.'</div>'; ?>
-<?php echo '<div class="hint">'.$hint_dwznew.'</div><br>'; ?>
 
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); ?>
 <div class="clr"></div>

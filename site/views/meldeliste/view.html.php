@@ -12,39 +12,39 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewMeldeliste extends JView
+class CLMViewMeldeliste extends JViewLegacy
 {
 	function display($tpl = null)
 	{
 	$layout = JRequest::getVar('layout');
 
-		$model	= &$this->getModel();
+		$model	= $this->getModel();
 		$liga	= $model->getCLMLiga();
 		$this->assignRef('liga',$liga);
 
-		$model	= &$this->getModel();
+		$model	= $this->getModel();
 		$spieler= $model->getCLMSpieler();
 		$this->assignRef('spieler',$spieler);
 
-		$model	= &$this->getModel();
+		$model	= $this->getModel();
 		$count	= $model->getCLMCount();
 		$this->assignRef('count',$count);
 
-		$model	= &$this->getModel();
+		$model	= $this->getModel();
 		$clmuser= $model->getCLMCLMuser();
 		$this->assignRef('clmuser',$clmuser);
 
 	if (!isset($layout) OR $layout == '') {
-		$model	= &$this->getModel();
+		$model	= $this->getModel();
 		$access	= $model->getCLMAccess();
 		$this->assignRef('access',$access);
 			}
 
-		$model	= &$this->getModel();
+		$model	= $this->getModel();
 		$abgabe	= $model->getCLMAbgabe();
 		$this->assignRef('abgabe',$abgabe);
 
-		$model	= &$this->getModel();
+		$model	= $this->getModel();
 		$mllist	= $model->getCLMML();
 		$this->assignRef('mllist',$mllist);
 

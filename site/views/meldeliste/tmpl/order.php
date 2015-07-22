@@ -100,7 +100,7 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
 		$deadline_roster = JHTML::_('date', $abgabe[0]->params['deadline_roster'], JText::_('DATE_FORMAT_CLM_F')); }
 
 ?>
-<div id="clm">
+<div >
 <div id="meldeliste">
 <div class="componentheading"><?php echo JText::_('CLUB_LIST_SORT_LIST') ?> <?php echo $man_name; ?></div>
 <br>

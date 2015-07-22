@@ -12,18 +12,16 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
+class CLMViewTurRoundMatches extends JViewLegacy {
 
-class CLMViewTurRoundMatches extends JView {
-
-	function display() {
+	function display($tpl = NULL) {
 
 		
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
-		$model =   &$this->getModel();
+		$model =   $this->getModel();
 		
 		// Die Toolbar erstellen, die über der Seite angezeigt wird
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( $model->turnier->name.", ".$model->round->name.": ".JText::_('MATCHES'), 'clm_turnier.png'  );
 	
 		if ($model->round->tl_ok != 1) {
@@ -51,7 +49,7 @@ class CLMViewTurRoundMatches extends JView {
 
 
 		// Document/Seite
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 
 		// Script
 		$document->addScript(CLM_PATH_JAVASCRIPT.'turroundmatches.js');

@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelTermineMain extends JModel {
+class CLMModelTermineMain extends JModelLegacy {
 
 	var $_pagination = null;
 	var $_total = null;
@@ -27,7 +25,7 @@ class CLMModelTermineMain extends JModel {
 		global $mainframe, $option;
 		//Joomla 1.6 compatibility
 		if (empty($mainframe)) {
-			$mainframe = &JFactory::getApplication();
+			$mainframe = JFactory::getApplication();
 			$option = $mainframe->scope;
 		}
 
@@ -38,7 +36,7 @@ class CLMModelTermineMain extends JModel {
 		$this->setState('limitstart', $this->limitstart);
 
 		// user
-		$this->user =& JFactory::getUser();
+		$this->user =JFactory::getUser();
 		
 		// get parameters
 		$this->_getParameters();
@@ -54,13 +52,13 @@ class CLMModelTermineMain extends JModel {
 	// alle vorhandenen Parameter auslesen
 	function _getParameters() {
 	
-		$mainframe =& JFactory::getApplication();
+		$mainframe =JFactory::getApplication();
 		global $option;
 	
 		// search
 		$this->param['search'] = $mainframe->getUserStateFromRequest( "$option.search", 'search', '', 'string' );
 		$this->param['search'] = JString::strtolower( $this->param['search'] );
-	
+
 		// status
 		$this->param['state'] = $mainframe->getUserStateFromRequest( "$option.filter_state",'filter_state','','word' );
 		
@@ -88,31 +86,17 @@ class CLMModelTermineMain extends JModel {
 		// Zudem weitere Daten ermitteln
 		foreach ($this->termine as $key => $value) {
 			// Verein
-			if (($value->host != null AND $value->host != '0') OR (strlen($value->host) > 1)) {
-				if (strlen($value->host) == 5)
-					$query = 'SELECT Vereinname as hostname'
-							. ' FROM dwz_vereine'
-							. ' WHERE ZPS = "'.$value->host.'"'
-							;
-				elseif (strlen($value->host) == 3)
-					$query = 'SELECT Verbandname as hostname'
-							. ' FROM dwz_verbaende'
-							. ' WHERE Verband = "'.$value->host.'"'
-							;
-				else $query = "";
-				$this->_db->setQuery($query);
-				$this->termine[$key]->hostname = $this->_db->loadResult();
-			}
+			$this->termine[$key]->hostname = clm_core::$load->zps_to_district($value->host);
 		}		
 	}
 	
 	function _sqlWhere() {
-	
+
 		// init
 		$where = array();
 		
 		if ($this->param['search']) {
-			$where[] = 'LOWER(a.name) LIKE '.$this->_db->Quote( '%'.$this->_db->getEscaped( $this->param['search'], true ).'%', false );
+			$where[] = 'LOWER(a.name) LIKE "'.$this->_db->escape( '%'.$this->param['search'].'%').'"';
 		}
 		
 		if ($this->param['state']) {
@@ -124,7 +108,7 @@ class CLMModelTermineMain extends JModel {
 		}
 	
 		$where 		= ( count( $where ) ? ' WHERE ' . implode( ' AND ', $where ) : '' );
-		
+
 		return $where;
 		
 	}

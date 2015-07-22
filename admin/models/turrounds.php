@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelTurRounds extends JModel {
+class CLMModelTurRounds extends JModelLegacy {
 
 	var $_pagination = null;
 	var $_total = null;
@@ -24,7 +22,7 @@ class CLMModelTurRounds extends JModel {
 		parent::__construct();
 
 		// user
-		$this->user =& JFactory::getUser();
+		$this->user =JFactory::getUser();
 		
 		// get parameters
 		$this->_getParameters();
@@ -51,13 +49,12 @@ class CLMModelTurRounds extends JModel {
 		global $mainframe, $option;
 		//Joomla 1.6 compatibility
 		if (empty($mainframe)) {
-			$mainframe = &JFactory::getApplication();
+			$mainframe = JFactory::getApplication();
 			$option = $mainframe->scope;
 		}
 	
 		// turnierid
 		$this->param['id'] = JRequest::getInt('id');
-		//$this->param['dg'] = JRequest::getInt('dg','1');
 	
 	
 		// Order
@@ -96,10 +93,9 @@ class CLMModelTurRounds extends JModel {
 	// limit
 /*		$rlimit = JRequest::getInt('rlimit',0);
 		if ($rlimit == 0) {
-			$this->limit = $this->turnier->runden;
-//			$this->limitstart = 0;
-			$this->limitstart = ($this->param['dg'] - 1) * $this->turnier->runden;
-		}	
+			$this->limitstart = 0;
+		}
+		$this->limit = $this->turnier->runden;
 		$this->setState('limit', $this->limit);
 		$this->setState('limitstart', $this->limitstart);
 */	
@@ -113,10 +109,7 @@ class CLMModelTurRounds extends JModel {
 		$this->roundsTotal = $this->_getListCount($query);
 		
 		if ($this->limit > 0) {
-			//$query .= $this->_sqlOrder().' LIMIT '.$this->limitstart.', '.$this->limit;
-			$query .= $this->_sqlOrder().', id LIMIT 0, '.$this->limit;
-		} else {
-			$query .= $this->_sqlOrder();
+			$query .= $this->_sqlOrder().' LIMIT '.$this->limitstart.', '.$this->limit;
 		}
 		
 		$this->_db->setQuery($query);
@@ -125,13 +118,13 @@ class CLMModelTurRounds extends JModel {
 		
 		// matches ermitteln
 		foreach ($this->turRounds as $key => $value) {
-			$query = 'SELECT COUNT(*), COUNT(ergebnis IS NOT NULL)'
+			$query = 'SELECT COUNT(*) '
 					. ' FROM #__clm_turniere_rnd_spl'
 					. ' WHERE turnier = '.$this->param['id'].' AND runde = '.$value->nr.' AND dg = '.$value->dg;
 			$this->_db->setQuery($query);
 			$this->turRounds[$key]->countMatches = ($this->_db->loadResult()/2);
 			// gespielte matches ermitteln
-			$query = 'SELECT COUNT(*), COUNT(ergebnis IS NOT NULL)'
+			$query = 'SELECT COUNT(*) '
 					. ' FROM #__clm_turniere_rnd_spl'
 					. ' WHERE turnier = '.$this->param['id'].' AND runde = '.$value->nr.' AND dg = '.$value->dg.' AND ergebnis IS NOT NULL';
 			$this->_db->setQuery($query);
@@ -177,7 +170,7 @@ class CLMModelTurRounds extends JModel {
 		if (!in_array($this->param['order'], $arrayOrderAllowed)) {
 			$this->param['order'] = 'id';
 		}
-		$orderby = ' ORDER BY '. $this->param['order'] .' '. $this->param['order_Dir'];
+		$orderby = ' ORDER BY '. $this->param['order'] .' '. $this->param['order_Dir'] .', id';
 	
 		return $orderby;
 	

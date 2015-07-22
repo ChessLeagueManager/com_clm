@@ -12,46 +12,46 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewMannschaft extends JView
+class CLMViewMannschaft extends JViewLegacy
 {
 	function display($tpl = 'pdf')
 	{
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$mannschaft     = $model->getCLMMannschaft();
 		$this->assignRef('mannschaft'  , $mannschaft);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$count     = $model->getCLMCount();
 		$this->assignRef('count'  , $count);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$bp     = $model->getCLMBP();
 		$this->assignRef('bp'  , $bp);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$sumbp     = $model->getCLMSumBP();
 		$this->assignRef('sumbp'  , $sumbp);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$plan     = $model->getCLMSumPlan();
 		$this->assignRef('plan'  , $plan);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$termin     = $model->getCLMTermin();
 		$this->assignRef('termin'  , $termin);
 		
 		//neu Einzelergebnisse (klkl)
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$einzel     = $model->getCLMEinzel();
 		$this->assignRef('einzel'  , $einzel);
 
 		//neu Saison (klkl)
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$saison     = $model->getCLMSaison();
 		$this->assignRef('saison'  , $saison);
 
 	// Dokumenttyp setzen
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 		$document->setMimeEncoding('application/pdf');
 
 		parent::display($tpl);

@@ -18,10 +18,10 @@
 class CLMCategoryTree {
 
 
-	function getTree() {
+	public static function getTree() {
 	
 		// DB
-		$_db				= & JFactory::getDBO();
+		$_db				= JFactory::getDBO();
 	
 		// alle Cats holen
 		$query = "SELECT id, name, parentid FROM #__clm_categories";
@@ -29,16 +29,16 @@ class CLMCategoryTree {
 		$parentList = $_db->loadObjectList('id');
 	
 		// Array speichert alle Kategorien in der Tiefe ihrer Verschachtelung
-		$this->parentArray = array();
+		$parentArray = array();
 	
 		// Array speichert für alle Kategorien die spezielle einzelne parentID ab
-		$this->parentID = array();
+		$parentID = array();
 		
 		// Array speichert für alle Kategorien die Keys aller vorhandenen Parents ab
-		$this->parentKeys = array();
+		$parentKeys = array();
 		
 		// Array speichert für alle Kategorien die Childs ab
-		$this->parentChilds = array();
+		$parentChilds = array();
 		
 		// aufheben für Bearbeitung in parentChilds
 		$saved_parentList = $parentList;
@@ -47,7 +47,7 @@ class CLMCategoryTree {
 		$parentsExisting = array(); // enthält alle IDs von Parents, die bereits ermittelt wurden
 		foreach ($parentList as $key => $value) {
 			if (!$value->parentid OR $value->parentid == 0) {
-				$this->parentArray[$key] = $value->name; // Name an ID binden
+				$parentArray[$key] = $value->name; // Name an ID binden
 				$parentsExisting[] = $value->id; // ID als existierender Parent eintragen
 				// Eintrag kann nun aus Liste gelöscht werden!
 				unset($parentList[$key]);
@@ -69,16 +69,16 @@ class CLMCategoryTree {
 				// checken, ob ParentID in Array der bereits ermittelten Parents vorhanden
 				if (in_array($value->parentid, $parentsExisting)) {
 					
-					$this->parentArray[$key] = $this->parentArray[$value->parentid].' > '.$value->name;
+					$parentArray[$key] = $parentArray[$value->parentid].' > '.$value->name;
 					
 					// Parent
-					$this->parentID[$key] = $value->parentid;
+					$parentID[$key] = $value->parentid;
 					
 					// Key
-					$this->parentKeys[$key] = array($value->parentid);
+					$parentKeys[$key] = array($value->parentid);
 					// hatte Parent schon keys?
-					if (isset($this->parentKeys[$value->parentid])) {
-						$this->parentKeys[$key] = array_merge($this->parentKeys[$key], $this->parentKeys[$value->parentid]);
+					if (isset($parentKeys[$value->parentid])) {
+						$parentKeys[$key] = array_merge($parentKeys[$key], $parentKeys[$value->parentid]);
 					}
 					$parentsExisting[] = $value->id;
 					
@@ -98,13 +98,13 @@ class CLMCategoryTree {
 			// nur welche, die auch Kind sind, können Kindschaft den Parents anhängen
 			if ($value->parentid > 0) {
 				// allen Parents dieses Childs diesen Eintrag anhängen
-				foreach ($this->parentKeys[$key] AS $pvalue) {
-					$this->parentChilds[$pvalue][] = $key;
+				foreach ($parentKeys[$key] AS $pvalue) {
+					$parentChilds[$pvalue][] = $key;
 				}
 			}
 		}
 	
-		return array($this->parentArray, $this->parentKeys, $this->parentChilds);
+		return array($parentArray, $parentKeys, $parentChilds);
 	
 	}
 

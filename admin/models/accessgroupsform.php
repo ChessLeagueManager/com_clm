@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelAccessgroupsForm extends JModel {
+class CLMModelAccessgroupsForm extends JModelLegacy {
 	var $_accessgroup;
 	var $_accessgroups;
 	var $_ordering;
@@ -48,26 +46,17 @@ class CLMModelAccessgroupsForm extends JModel {
 			$this->_accessgroup->kind			= 'USER';
 			$this->_accessgroup->published		= 0;
 			$this->_accessgroup->ordering 		= 0;
-			$this->_accessgroup->fe_params 		= '';
-			$this->_accessgroup->be_params 		= '';
+			$this->_accessgroup->params 		= '';
 		} 
 		return $this->_accessgroup; 
 	}
 
 	function getAccessgroups() { 
-		$query = ' SELECT id, name, usertype, user_clm FROM #__clm_usertype as a'
+		$query = ' SELECT id, name, usertype FROM #__clm_usertype as a'
 				.' WHERE id <> '.$this->_id; 
 		$this->_accessgroups = $this->_getList($query); 
 		
 		return $this->_accessgroups; 
-	}
-	
-	function getAccesspoints() { 
-		$query = ' 	SELECT * FROM #__clm_access_points
-						WHERE published = 1
-						ORDER by ordering ASC '; 
-		$this->_accesspoints = $this->_getList($query); 
-		return $this->_accesspoints; 
 	}
 	
 	function getOrdering() {
@@ -96,7 +85,7 @@ class CLMModelAccessgroupsForm extends JModel {
 	}
 	
 	function store() { 
-		$row = & JTable::getInstance( 'accessgroupsform', 'TableCLM' );
+		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
 		$accessgroup = JRequest::get( 'post' ); 
 		if (!$row->bind($accessgroup)) { 
 			$this->setError($this->_db->getErrorMsg()); 
@@ -115,7 +104,7 @@ class CLMModelAccessgroupsForm extends JModel {
 	
 	function delete() { 
 		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' ); 
-		$row = & JTable::getInstance( 'accessgroupsform', 'TableCLM' );
+		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
 		if (count( $cids )) { 
 			foreach($cids as $cid) { 
 				if (!$row->delete( $cid )) { 
@@ -129,7 +118,7 @@ class CLMModelAccessgroupsForm extends JModel {
 	
 	function publish() {
 		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' );
-		$row = & JTable::getInstance( 'accessgroupsform', 'TableCLM' );
+		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
 		if (!$row->publish( $cids )) { 
 			$this->setError( $row->_db->getErrorMsg() ); 
 			return false; 
@@ -139,7 +128,7 @@ class CLMModelAccessgroupsForm extends JModel {
 	
 	function unpublish() {
 		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' );
-		$row = & JTable::getInstance( 'accessgroupsform', 'TableCLM' );
+		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
 		if (!$row->publish($cids,0)) { 
 			$this->setError( $row->_db->getErrorMsg() ); 
 			return false; 
@@ -150,7 +139,7 @@ class CLMModelAccessgroupsForm extends JModel {
 	function saveOrder() {
 		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' );
 		$order = JRequest::getVar('order', array (0), 'post', 'array');
-		$row = & JTable::getInstance( 'accessgroupsform', 'TableCLM' );		
+		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );		
 		for($i = 0; $i < count($cids); $i ++) {
 			$row->load((int)$cids[$i]);
 			if($row->ordering != $order[$i]) {
@@ -171,7 +160,7 @@ return true;
 	function orderUp() {
 		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' );
 		if(isset($cids[0])) {
-			$row = & JTable::getInstance( 'accessgroupsform', 'TableCLM' );
+			$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
 			$row->load((int)$cids[0]);
 			$row->move(-1, 'name = '.$row->name);
 			$row->reorder('name = '.$row->name);
@@ -183,7 +172,7 @@ return true;
 		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' );
 				
 		if(isset($cids[0])) {
-			$row = & JTable::getInstance( 'accessgroupsform', 'TableCLM' );
+			$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
 			$row->load((int)$cids[0]);
 			$row->move(1, 'name = '.$row->name);
 			$row->reorder('name = '.$row->name);
@@ -195,7 +184,7 @@ return true;
 		$cids = JRequest::getVar( 'cid', array(0), 'post', 'array' );
 		$n		= count( $cids );
 
-		$row = & JTable::getInstance( 'accessgroupsform', 'TableCLM' );
+		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
 		$rn = 0;
 		if ($n > 0) {
 			foreach ($cids as $id) {
@@ -219,7 +208,7 @@ return true;
 	// Log schreiben
 	$clmLog = new CLMLog();
 	$clmLog->aktion = JText::_( 'ACCESSGROUP_COPIED_LOG' );
-	$clmLog->params = array('sid' => CLM_SEASON, 'cids' => $row->usertype);
+	$clmLog->params = array('sid' => clm_core::$access->getSeason(), 'cids' => $row->usertype);
 	$clmLog->write();
 	return true;
 	}

@@ -93,8 +93,9 @@ if ( $liga[0]->b_wertung == 0) $leer = $leer + 4;
 if ($leer < 3) $leer = 2;
  
 // Datum der Erstellung
-$date =& JFactory::getDate();
-$now = $date->toMySQL();
+$date =JFactory::getDate();
+$now = $date->toSQL();
+
 
 $pdf=new PDF();
 $pdf->AliasNbPages();
@@ -194,3 +195,4 @@ $pdf->Ln();
 $pdf->Output(JText::_('TABELLE').' '.utf8_decode($liga[0]->name).'.pdf','D');
 
 ?>
+

@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelSonderranglistenMain extends JModel {
+class CLMModelSonderranglistenMain extends JModelLegacy {
 
 	var $_sonderranglisten;
 	var $_turniere;
@@ -27,7 +25,7 @@ class CLMModelSonderranglistenMain extends JModel {
 	function __construct(){
 		parent::__construct();
 		
-		$mainframe 	= & JFactory::getApplication();
+		$mainframe 	= JFactory::getApplication();
 		$option 	= JRequest::getVar( 'option' );
 
 		//Pagination Variabeln
@@ -55,7 +53,7 @@ class CLMModelSonderranglistenMain extends JModel {
 		$this->setState( 'filter_order_Dir' , $filter_order_Dir );
 		
 		// User
-		$this->user =& JFactory::getUser();
+		$this->user =JFactory::getUser();
 	}
 	
 	function getSonderranglisten() { 
@@ -86,7 +84,7 @@ class CLMModelSonderranglistenMain extends JModel {
 	function getUser()
 		{
 		if (empty($this->_user)) {
-			$this->_user =& JFactory::getUser();;
+			$this->_user =JFactory::getUser();;
 		}
 		return $this->_user;
 	}
@@ -185,7 +183,7 @@ class CLMModelSonderranglistenMain extends JModel {
 		
 			$aktSaison = $this->_getAktuelleSaison();
 			//$filter_saison	= JRequest::getVar( 'filter_saison' , $aktSaison , 'default' , 'int' );
-			$filter_saison	= JRequest::getVar( 'filter_saison' , CLM_SEASON , 'default' , 'int' );
+			$filter_saison	= JRequest::getVar( 'filter_saison' , clm_core::$access->getSeason() , 'default' , 'int' );
 			
 			$query =  ' SELECT 
 							id,

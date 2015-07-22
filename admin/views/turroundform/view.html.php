@@ -12,18 +12,16 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
+class CLMViewTurRoundForm extends JViewLegacy {
 
-class CLMViewTurRoundForm extends JView {
-
-	function display() {
+	function display($tpl = NULL) {
 
 		
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
-		$model =   &$this->getModel();
+		$model =   $this->getModel();
 		
 		// Die Toolbar erstellen, die über der Seite angezeigt wird
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( $model->turnierData->name.", ".JText::_('ROUND').": ".$model->roundData->name, 'clm_turnier.png'  );
 	
 		JToolBarHelper::save();
@@ -35,7 +33,7 @@ class CLMViewTurRoundForm extends JView {
 		JRequest::setVar( 'hidemainmenu', 1 );
 		
 		// Document/Seite
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 
 		// JS-Array jtext -> Fehlertexte
 		$document->addScriptDeclaration("var jtext = new Array();");

@@ -1,0 +1,10 @@
+/********************/
+/** copyright **/
+/********************/
+
+#clm .clm .clm_sub_view_copyright {
+	font-size: 11px; text-align: center; 
+	border-top: 1px solid #CCC; 
+	padding: 10px 0 5px 0; 
+	color:#999999
+}

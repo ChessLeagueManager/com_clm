@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -26,7 +26,7 @@ $man_name 	= JRequest::getInt('man_name');
 $liga_lokal	= JRequest::getVar('lokal');
 $liga_mf 	= JRequest::getVar('mf');
  
-$user 		=& JFactory::getUser();
+$user 		=JFactory::getUser();
 $meldung 	= $user->get('id');
 $clmuser 	= $this->clmuser;
 //$access		= $this->access;
@@ -80,11 +80,11 @@ if ($abgabe[0]->liste > 0 AND $abgabe[0]->params['deadline_roster'] < $today) {
 	$mainframe->redirect( $link, $msg );
 }
 	$link 	= 'index.php';
-	$db 	=& JFactory::getDBO();
+	$db 	=JFactory::getDBO();
 
 // Datum und Uhrzeit für Meldung
-	$date =& JFactory::getDate();
-	$now = $date->toMySQL();
+	$date =JFactory::getDate();
+	$now = $date->toSQL();
 
 // Datensätze in Meldelistentabelle schreiben
 	$query	= "UPDATE #__clm_mannschaften"
@@ -127,18 +127,11 @@ for ($y=1; $y< (1+$stamm+$ersatz) ; $y++){
 	}
 
 // Log
-	$date 		=& JFactory::getDate();
-	$now 		= $date->toMySQL();
-	$user 		=& JFactory::getUser();
+	$date 		=JFactory::getDate();
+	$now 		= $date->toSQL();
+	$user 		=JFactory::getUser();
 	$jid_aktion 	=  ($user->get('id'));
 	$aktion 	= "Meldeliste FE";
-
-	$query	= "INSERT INTO #__clm_log "
-		." ( `aktion`, `jid_aktion`, `sid` , `lid` ,`zps`,`man`, `datum`) "
-		." VALUES ('$aktion','$jid_aktion','$sid','$lid','$zps','$man','$now') "
-		;
-	$db->setQuery($query);
-	$db->query();
 
 // Mails verschicken ?
 	$query	= "SELECT l.*, u.email as sl_email, u.name as sl_name FROM #__clm_liga as l "
@@ -155,13 +148,13 @@ for ($y=1; $y< (1+$stamm+$ersatz) ; $y++){
 
 if ( $liga[0]->mail > 0 ) {
 	// Konfigurationsparameter auslesen
-	$config = &JComponentHelper::getParams( 'com_clm' );
+	$config = clm_core::$db->config();
 	// Zur Abwärtskompatibilität mit CLM <= 1.0.3 werden alte Daten aus Language-Datei als Default eingelesen
-	$from = $config->get('email_from', JText::_('RESULT_DATA_MAIL'));
-	$fromname = $config->get('email_fromname', JText::_('RESULT_DATA_FROM'));
-	$bcc	= $config->get('email_bcc', $config->get('bcc'));
-	$bcc_mail	= $config->get('bcc');
-	$sl_mail	= $config->get('sl_mail',0);
+	$from = $config->email_from;
+	$fromname = $config->email_fromname;
+	$bcc	= $config->email_bcc;
+	$bcc_mail	= $config->bcc;
+	$sl_mail	= $config->sl_mail;
 	
 // nur wegen sehr leistungsschwachen Providern
 	$query	= " SET SQL_BIG_SELECTS=1";
@@ -322,7 +315,6 @@ if ( $liga[0]->mail > 0 ) {
 	$subject = $fromname.': '.JTEXT::_('CLUB_LIST_SUBJECT').' '.$liga[0]->name.': '.$mannschaft[0]->name;
 
 	$body_name = JText::_('RESULT_NAME').$melder[0]->name.",";
-	$cc = '';
 	$countmail = 0;
 
 	// Textparameter setzen
@@ -356,7 +348,9 @@ if ( $liga[0]->mail > 0 ) {
 		$body_name = JText::_('RESULT_NAME').$melder[0]->name.",";
 		$body = $body_html_header.$body_name.$body_html_md.$body_html.$body_html_footer;
 		$recipient = $melder[0]->email;
-		JUtility::sendMail ($from,$fromname,$recipient,$subject,$body,1,$cc,$bcc);
+		jimport( 'joomla.mail.mail' );
+		$mail = JFactory::getMailer();
+		$mail->sendMail($from,$fromname,$recipient,$subject,$body,1,null,$bcc);
 		$countmail++;
 	}
 	// Mail Mannschaftsleiter
@@ -382,7 +376,9 @@ if ( $liga[0]->mail > 0 ) {
 		$body_name = JText::_('RESULT_NAME').$mannschaft[0]->mf_name.",";
 		$body = $body_html_header.$body_name.$body_html_mf.$body_html.$body_html_footer;
 		$recipient = $mannschaft[0]->mf_email;
-		JUtility::sendMail ($from,$fromname,$recipient,$subject,$body,1,$cc,$bcc);
+		jimport( 'joomla.mail.mail' );
+		$mail = JFactory::getMailer();
+		$mail->sendMail($from,$fromname,$recipient,$subject,$body,1,null,$bcc);
 		$countmail++;
 	}
 	// Mail Staffelleiter
@@ -405,7 +401,9 @@ if ( $liga[0]->mail > 0 ) {
 		$body_name = JText::_('RESULT_NAME').$liga[0]->sl_name.",";
 		$body = $body_html_header.$body_name.$body_html_sl.$body_html.$body_html_footer;
 		$recipient = $liga[0]->sl_email;
-		JUtility::sendMail ($from,$fromname,$recipient,$subject,$body,1,$cc,$bcc);
+		jimport( 'joomla.mail.mail' );
+		$mail = JFactory::getMailer();
+		$mail->sendMail($from,$fromname,$recipient,$subject,$body,1,null,$bcc);
 		$countmail++;
 	}
 	if ($bcc_mail != "") {
@@ -425,7 +423,9 @@ if ( $liga[0]->mail > 0 ) {
 		$body_name = JText::_('RESULT_NAME').$bcc_name.",";
 		$body = $body_html_header.$body_name.$body_html_ad.$body_html.$body_html_footer;
 		$recipient = $bcc_mail;
-		JUtility::sendMail ($from,$fromname,$recipient,$subject,$body,1);
+		jimport( 'joomla.mail.mail' );
+		$mail = JFactory::getMailer();
+		$mail->sendMail($from,$fromname,$recipient,$subject,$body,1);
 		$countmail++;
 	}
 

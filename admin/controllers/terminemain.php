@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerTermineMain extends JController {
+class CLMControllerTermineMain extends JControllerLegacy {
 	
 
 	// Konstruktor
@@ -24,7 +22,7 @@ class CLMControllerTermineMain extends JController {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= & JFactory::getDBO();
+		$this->_db		= JFactory::getDBO();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply','save' );
@@ -77,7 +75,7 @@ class CLMControllerTermineMain extends JController {
 		
 		
 		// Daten holen
-		$row =& JTable::getInstance( 'termine', 'TableCLM' );
+		$row =JTable::getInstance( 'termine', 'TableCLM' );
 
 		if ( !$row->load($termineid) ) {
 			JError::raiseWarning( 500, CLMText::errorText('TERMINE_TASK', 'NOTEXISTING') );
@@ -125,7 +123,7 @@ class CLMControllerTermineMain extends JController {
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
 		// termine? evtl global inconstruct anlegen
-		$user 		=& JFactory::getUser();
+		$user 		=JFactory::getUser();
 		
 		$cid		= JRequest::getVar('cid', array(), '', 'array');
 		JArrayHelper::toInteger($cid);
@@ -144,7 +142,7 @@ class CLMControllerTermineMain extends JController {
 			foreach ($cid as $key => $value) {
 		
 				// load the row from the db table
-				$row =& JTable::getInstance( 'termine', 'TableCLM' );
+				$row =JTable::getInstance( 'termine', 'TableCLM' );
 				$row->load( $value ); // Daten zu dieser ID laden
 		
 				// Änderung nötig?
@@ -165,11 +163,11 @@ class CLMControllerTermineMain extends JController {
 			// immer noch Einträge vorhanden?
 			if ( !empty($cid) ) { 
 		
-				$row =& JTable::getInstance( 'termine', 'TableCLM' );
+				$row =JTable::getInstance( 'termine', 'TableCLM' );
 				$row->publish( $cid, $publish );
 			
 				// Meldung erstellen
-				$app =& JFactory::getApplication();
+				$app =JFactory::getApplication();
 				if ($publish) {
 					$app->enqueueMessage( CLMText::sgpl(count($cid), JText::_('TERMINE_TASK'), JText::_('TERMINE_TASKS'))." ".JText::_('CLM_PUBLISHED') );
 				} else {
@@ -178,7 +176,7 @@ class CLMControllerTermineMain extends JController {
 			
 			} else {
 			
-				$app =& JFactory::getApplication();
+				$app =JFactory::getApplication();
 				$app->enqueueMessage(JText::_('NO_CHANGES'));
 			
 			}
@@ -222,17 +220,14 @@ class CLMControllerTermineMain extends JController {
 		
 		
 		// access? nur admin darf löschen
-		require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_clm'.DS.'classes'.DS.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_event_delete';
-		if ($clmAccess->access() === false) {
-		//if (CLM_usertype != 'admin') {
+		$clmAccess = clm_core::$access;
+		if ($clmAccess->access('BE_event_delete') === false) {
 			JError::raiseWarning( 500, JText::_('NO_ACCESS') );
 			return false;
 		}
 		
 		// termindaten laden
-		$row =& JTable::getInstance( 'termine', 'TableCLM' );
+		$row =JTable::getInstance( 'termine', 'TableCLM' );
 		$row->load( $termineid );
 		
 		// ob Termin existent?
@@ -258,7 +253,7 @@ class CLMControllerTermineMain extends JController {
 		
 		
 		// Message
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		$app->enqueueMessage( $row->name.": ".JText::_('TERMINE_TASK')." ".JText::_('CLM_DELETED') );
 		
 		return true;
@@ -298,14 +293,14 @@ class CLMControllerTermineMain extends JController {
 		$termineid = $cid[0];
 	
 	
-		$row =& JTable::getInstance( 'termine', 'TableCLM' );
+		$row =JTable::getInstance( 'termine', 'TableCLM' );
 		if ( !$row->load( $termineid ) ) {
 			JError::raiseWarning( 500, CLMText::errorText('TERMINE_TASK', 'NOTEXISTING') );
 			return false;
 		}
 		$row->move( $inc, '' );
 	
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		$app->enqueueMessage( $row->name.": ".JText::_('ORDERING_CHANGED') );
 		
 		return true;
@@ -319,7 +314,7 @@ class CLMControllerTermineMain extends JController {
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
 		/*
-		if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+		if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			JError::raiseWarning( 500, JText::_('SECTION_NO_ACCESS') );
 			return false;
 		}
@@ -332,7 +327,7 @@ class CLMControllerTermineMain extends JController {
 		$order		= JRequest::getVar( 'order', array(0), 'post', 'array' );
 		JArrayHelper::toInteger($order, array(0));
 	
-		$row =& JTable::getInstance( 'termine', 'TableCLM' );
+		$row =JTable::getInstance( 'termine', 'TableCLM' );
 		$groupings = array();
 	
 		// update ordering values
@@ -351,10 +346,10 @@ class CLMControllerTermineMain extends JController {
 		// execute updateOrder for each parent group
 		$groupings = array_unique( $groupings );
 		foreach ($groupings as $group){
-			$row->reorder('saison = '.(int) $group);
+			$row->reorder('sid = '.(int) $group);
 		}
 		
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		$app->enqueueMessage( JText::_('NEW_ORDERING_SAVED') );
 	
 		$this->adminLink->makeURL();

@@ -20,11 +20,11 @@ class CLMText {
 	
 	
 	/**
-	* function composeHeadTitle
+	* public static function composeHeadTitle
 	* erstellt den Titel der Seite -> Browserzeile
 	*
 	*/
-	function composeHeadTitle($text, $showSitename = true, $showCLM = true ) {
+	public static function composeHeadTitle($text, $showSitename = true, $showCLM = true ) {
 	
 		// INIT
 		$string = '';
@@ -56,11 +56,11 @@ class CLMText {
 	
 	
 	/**
-	* function sgpl
+	* public static function sgpl
 	* weist einer vorgegebenen Zahl einen Singular- oder Pluraltext zu
 	*
 	*/
-	function sgpl ($count, $text_sg, $text_pl, $complete_string = true) {
+	public static function sgpl ($count, $text_sg, $text_pl, $complete_string = true) {
 	
 		if ($count == 1) {
 			$text_return = $text_sg;
@@ -80,7 +80,7 @@ class CLMText {
 	* getResultString()
 	* erzeugt Ergebnis-String
 	*/
-	function getResultString($erg, $length = 1) {
+	public static function getResultString($erg, $length = 1) {
 	
 		$strShort = array("0", "1", "&frac12;", "0", "-", "+", "-", "---", "*");
 		$strLong = array("0:1", "1:0", "&frac12;:&frac12;", "0:0", "-/+", "+/-", "-/-", "---", "*");
@@ -106,7 +106,7 @@ class CLMText {
 	* $afterPoint - ob Platzzahl mit Ordnungspunkt ergänzt werden soll
 	* $stringNoPos - überigibt String, falls keine Position vorliegt
 	*/
-	function getPosString($pos, $afterPoint = 1, $stringNoPos = "") {
+	public static function getPosString($pos, $afterPoint = 1, $stringNoPos = "") {
 	
 		if ($pos > 0) {
 			$string = $pos;
@@ -128,11 +128,11 @@ class CLMText {
 	
 	
 	/**
-	* function tiebrFormat
+	* public static function tiebrFormat
 	* erstellt formatierten String einer Feinwertung
 	*
 	*/
-	function tiebrFormat ($tiebrID, $value) {
+	public static function tiebrFormat ($tiebrID, $value) {
 	
 		switch ($tiebrID) {
 			case 1: // buchholz
@@ -201,7 +201,7 @@ class CLMText {
 	* formatRating()
 	* formatiert Wertungszahl
 	*/
-	function formatRating($rating) {
+	public static function formatRating($rating) {
 	
 		if ($rating > 0) {
 			return $rating;
@@ -217,7 +217,7 @@ class CLMText {
 	* formatNote()
 	* formatiert öffentliche Notiz
 	*/
-	function formatNote($text) {
+	public static function formatNote($text) {
 	
 		$string = nl2br(JFilterOutput::cleantext($text));
 		
@@ -227,17 +227,17 @@ class CLMText {
 	
 	
 	
-	function addCatToName($addCatToName, $name, $catidAlltime, $catidEdition) {
+	public static function addCatToName($addCatToName, $name, $catidAlltime, $catidEdition) {
 	
 		// init
 		$catStrings = array();
 		// get Tree
-		list($this->parentArray, $this->parentKeys, $this->parentChilds) = CLMCategoryTree::getTree();
+		list($parentArray, $parentKeys, $parentChilds) = CLMCategoryTree::getTree();
 		if ($catidAlltime > 0) {
-			$catStrings[] = $this->parentArray[$catidAlltime];
+			$catStrings[] = $parentArray[$catidAlltime];
 		}
 		if ($catidEdition > 0) {
-			$catStrings[] = $this->parentArray[$catidEdition];
+			$catStrings[] = $parentArray[$catidEdition];
 		}
 		// set
 		$catName = implode(', ', $catStrings);
@@ -255,7 +255,7 @@ class CLMText {
 	
 	
 	
-	function createCLMLink($string, $view, $params = array()) {
+	public static function createCLMLink($string, $view, $params = array()) {
 	
 		$html = '<a href="index.php?option=com_clm&amp;view='.$view;
 		

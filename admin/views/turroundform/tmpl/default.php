@@ -13,7 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 
 ?>
 
-<form action="index.php" method="post" name="adminForm">
+<form action="index.php"  id="adminForm"  method="post" name="adminForm">
 
 		<div class="width-50 fltlft">
 		<fieldset class="adminform">

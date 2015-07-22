@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+        <layout title="CLM">
+                <message>
+                        <![CDATA[CLM]]>
+                </message>
+        </layout>        
+    <fields name="request">
+        <fieldset name="request">
+            <field name="tag" type="text" default="" label="tag" />
+        </fieldset>
+    </fields>
+</metadata>

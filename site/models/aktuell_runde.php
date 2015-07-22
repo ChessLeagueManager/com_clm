@@ -13,38 +13,38 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
-class CLMModelAktuell_Runde extends JModel
+class CLMModelAktuell_Runde extends JModelLegacy
 {
 	
-	function Runden ()
+	public static function Runden ()
 	{
 	$db	= JFactory::getDBO();
 	$sid	= JRequest::getInt('saison','1');
 	$liga	= JRequest::getInt('liga','1');
 	
 	// Konfigurationsparameter auslesen
-	$config	= &JComponentHelper::getParams( 'com_clm' );
-	$datum_sl = $config->get('runde_aktuell',1);
+	$config = clm_core::$db->config();
+	$datum_sl = $config->runde_aktuell;
 
 	// Aktuelle Runde aus SL OK (= 0) oder Datum (= 1) errechnen
 	if($datum_sl == 0) {
-	$query = " SELECT * FROM #__clm_runden_termine WHERE liga = $liga AND sl_ok = 1  ORDER BY nr DESC LIMIT 1 "
+	$query = " SELECT * FROM #__clm_runden_termine WHERE liga = $liga AND sl_ok = 1 ORDER BY nr DESC LIMIT 1 "
 		;
 		$db->setQuery( $query);
 		$data	= $db->loadObjectList();
-		$nr	= $data[0]->nr;
 	// Es existiert noch keine SL Freigabe
 	if(count($data) < 1){
 		$runde	= 1;
 		$dg	= 1;
 	} else {
+	$nr	= $data[0]->nr;
 	// Es gibt mindestens eine SL Freigabe
 	$query = " SELECT runden, durchgang FROM #__clm_liga WHERE id = $liga "
 		;
 		$db->setQuery( $query);
-		$liga	= $db->loadObjectList();
-		$rnd	= $liga[0]->runden;
-		$dg	= $liga[0]->durchgang;
+		$liga_db	= $db->loadObjectList();
+		$rnd	= $liga_db[0]->runden;
+		$dg	= $liga_db[0]->durchgang;
 	
 	// Wenn letzte Runde
 	if ($nr == ($rnd*$dg) ) {
@@ -529,7 +529,7 @@ class CLMModelAktuell_Runde extends JModel
 		." AND a.dg = $dg "
 		." ORDER BY a.gegner "
 		;
-	$db 	=& JFactory::getDBO();
+	$db 	=JFactory::getDBO();
 	$db->setQuery( $query );
 	$runden	=$db->loadObjectList();
 	
@@ -543,7 +543,7 @@ class CLMModelAktuell_Runde extends JModel
 	$sql = "SELECT a.id, a.erg_text "
 		." FROM #__clm_ergebnis as a "
 		;
-	$db 		=& JFactory::getDBO();
+	$db 		=JFactory::getDBO();
 	$db->setQuery( $sql );
 	$ergebnis	= $db->loadObjectList();
 
@@ -623,43 +623,6 @@ class CLMModelAktuell_Runde extends JModel
 	function getCLMPaar1 ( $options=array() )
 	{
 		$query	= $this->_getCLMPaar1( $options );
-		$result = $this->_getList( $query );
-		return @$result;
-	}
-	
-	function _getCLMlog( &$options )   //klkl
-	{
-	$sid	= JRequest::getInt('saison','1');
-	$lid	= JRequest::getInt('liga','1');
-	$dg 	= JRequest::getInt('dg');
-	$runde 	= JRequest::getInt('runde');
-	$db		= JFactory::getDBO();
-	$id		= @$options['id'];
-	
-	// Anz.Runden und Durchgänge aus #__clm_liga holen
-	$query = " SELECT a.runden, a.durchgang "
-		." FROM #__clm_liga as a"
-		." WHERE a.id = ".$lid
-		;
-	$db->setQuery($query);
-	$liga = $db->loadObjectList();
-	 
-	if ($dg > 1) $runde = $runde + $liga[0]->runden;
-	//letztes Freigabe-Update finden 
-	$query = " SELECT a.datum, a.nr_aktion "
-		." FROM #__clm_log as a "
-		." WHERE a.lid = ".$lid
-		." AND a.sid = ".$sid
-		." AND a.rnd = ".$runde
-		//." AND a.dg = ".$dg
-		." AND (a.nr_aktion = 201 OR a.nr_aktion = 202)" 	// 201 Runde freigegeben; 202 Freigabe zurückgenommen
-		." ORDER BY a.datum DESC LIMIT 1 ";
-		return $query;
-	}
-	
-	function getCLMlog( $options=array() )
-	{
-		$query	= $this->_getCLMlog( $options );
 		$result = $this->_getList( $query );
 		return @$result;
 	}	

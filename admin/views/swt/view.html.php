@@ -12,23 +12,19 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
-
-class CLMViewSWT extends JView {
+class CLMViewSWT extends JViewLegacy {
 	function display($tpl = null) { 
 				
 		//Daten vom Model
-		$swtFiles 	=& $this->get( 'swtFiles' );
+		$swtFiles 	= $this->get( 'swtFiles' );
 		
 		//Toolbar
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( JText::_('TITLE_SWT') ,'clm_headmenu_manager.png' );
 		
 		JToolBarHelper::custom( 'import', 'upload.png', 'upload_f2.png', JText::_('SWT_IMPORT'), false);
 		JToolBarHelper::custom('delete','delete.png','delete_f2.png', JText::_('SWT_DELETE'), false);
 		JToolBarHelper::custom( 'upload', 'upload.png', 'upload_f2.png', JText::_('SWT_UPLOAD'), false);
-		
-		
 		
 		//SWT-File-Auswahl erstellen
 		jimport( 'joomla.filesystem.file' );
@@ -40,7 +36,6 @@ class CLMViewSWT extends JView {
 		} 	}
 		$lists['swt_files']	= JHtml::_('select.genericlist', $options_swt_files, 'swt_file', 'class="inputbox"', 'value', 'text', 0 );
 	
-		
 		//Daten an Template
 		$this->assignRef( 'lists', $lists );
 	

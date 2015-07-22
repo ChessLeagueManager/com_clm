@@ -13,35 +13,32 @@
 
 class CLMViewMannschaften
 {
-function setMannschaftenToolbar()
+public static function setMannschaftenToolbar()
 	{
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;
 	// Menubilder laden
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 
 		JToolBarHelper::title( JText::_( 'TITLE_MANNSCHAFT' ), 'clm_headmenu_mannschaften.png' );
-	//if (CLM_usertype === 'admin') {
-	$clmAccess->accesspoint = 'BE_team_registration_list';
-	if($clmAccess->access() !== false) {
+	if($clmAccess->access('BE_team_registration_list') !== false) {
 		JToolBarHelper::custom('delete_meldeliste','send.png','send_f2.png', JText::_( 'MANNSCHAFT_BUTTON_ML_DEL'), false);
 		JToolBarHelper::custom('meldeliste','send.png','send_f2.png', JText::_( 'MANNSCHAFT_BUTTON_ML_UPD'), false);
 		JToolBarHelper::custom('spielfrei','cancel.png','cancel_f2.png', JText::_( 'MANNSCHAFT_BUTTON_SPIELFREI'), false);
 		JToolBarHelper::publishList();
 		JToolBarHelper::unpublishList();
-		JToolBarHelper::customX( 'copy', 'copy.png', 'copy_f2.png', JText::_( 'MANNSCHAFT_BUTTON_COPY' )); 
+		JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', JText::_( 'MANNSCHAFT_BUTTON_COPY' )); 
 		JToolBarHelper::deleteList();
-		JToolBarHelper::editListX();
-		JToolBarHelper::addNewX();
+		JToolBarHelper::editList();
+		JToolBarHelper::addNew();
 		}
 		JToolBarHelper::help( 'screen.clm.mannschaft' );
 	}
 
-function mannschaften( &$rows, &$lists, &$pageNav, $option )
+public static function mannschaften( $rows, $lists, $pageNav, $option )
 	{
 		$mainframe	= JFactory::getApplication();
 		CLMViewMannschaften::setMannschaftenToolbar();
-		$user =& JFactory::getUser();
+		$user =JFactory::getUser();
 		//Ordering allowed ?
 		$ordering = ($lists['order'] == 'a.ordering');
 
@@ -73,10 +70,10 @@ function mannschaften( &$rows, &$lists, &$pageNav, $option )
 			<thead>
 				<tr>
 					<th width="10">
-						<?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?>
+#
 					</th>
 					<th width="10">
-						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $rows ); ?>);" />
+						<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 					</th>
 					<th class="title">
 						<?php echo JHtml::_('grid.sort',   'MANNSCHAFT', 'a.name', @$lists['order_Dir'], @$lists['order'] ); ?>
@@ -126,11 +123,12 @@ function mannschaften( &$rows, &$lists, &$pageNav, $option )
 			<tbody>
 			<?php
 			$k = 0;
+			$row =JTable::getInstance( 'mannschaften', 'TableCLM' );
 			for ($i=0, $n=count( $rows ); $i < $n; $i++) {
-				$row = &$rows[$i];
-
+				//$row = &$rows[$i];
+				// load the row from the db table 
+				$row->load( $rows[$i]->id );
 				$link 		= JRoute::_( 'index.php?option=com_clm&section=mannschaften&task=edit&cid[]='. $row->id );
-
 				$checked 	= JHtml::_('grid.checkedout',   $row, $i );
 				$published 	= JHtml::_('grid.published', $row, $i );
 
@@ -146,17 +144,11 @@ function mannschaften( &$rows, &$lists, &$pageNav, $option )
 					</td>
 
 					<td>
-						<?php
-						if (  JTable::isCheckedOut($user->get ('id'), $row->checked_out ) ) {
-							echo $row->name;
-						} else {
-							?>
+
 								<span class="editlinktip hasTip" title="<?php echo JText::_( 'MANNSCHAFT_EDIT' );?>::<?php echo $row->name; ?>">
 							<a href="<?php echo $link; ?>">
 								<?php echo $row->name; ?></a></span>
-							<?php
-						}
-						?>
+
 					</td>
 
 					<td align="center">
@@ -164,7 +156,7 @@ function mannschaften( &$rows, &$lists, &$pageNav, $option )
 					</td>
 
 					<td align="center">
-						<?php echo $row->liga_name;?>
+						<?php echo $rows[$i]->liga_name;?>
 					</td>
 					<td align="center">
 						<?php echo $row->tln_nr;?>
@@ -181,10 +173,10 @@ function mannschaften( &$rows, &$lists, &$pageNav, $option )
 						else 	{ ?><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /> <?php }?>
 					</td>
 					<td align="center">
-						<?php echo $row->verein;?>
+						<?php echo $rows[$i]->verein;?>
 					</td>
 					<td align="center">
-						<?php echo $row->saison;?>
+						<?php echo $rows[$i]->saison;?>
 					</td>
 
 					<td align="center">
@@ -218,23 +210,23 @@ function mannschaften( &$rows, &$lists, &$pageNav, $option )
 		<?php
 	}
 
-function setMannschaftToolbar()
+public static function setMannschaftToolbar()
 	{
 	// Menubilder laden
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 
 		$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
 		JArrayHelper::toInteger($cid, array(0));
 		if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
 			else { $text = JText::_( 'New' );}
-		JToolBarHelper::title(  JText::_( 'MANNSCHAFT' ).': <small><small>[ '. $text.' ]</small></small>' , 'clm_headmenu_mannschaften.png'  );
+		JToolBarHelper::title(  JText::_( 'MANNSCHAFT' ).': [ '. $text.' ]' , 'clm_headmenu_mannschaften.png'  );
 		JToolBarHelper::save();
 		JToolBarHelper::apply();
 		JToolBarHelper::cancel();
 		JToolBarHelper::help( 'screen.clm.edit' );
 	}
 		
-function mannschaft( &$row,$lists, $option )
+public static function mannschaft( &$row,$lists, $option )
 	{
 		CLMViewMannschaften::setMannschaftToolbar();
 		JRequest::setVar( 'hidemainmenu', 1 );
@@ -242,11 +234,7 @@ function mannschaft( &$row,$lists, $option )
 		?>
 	<script language="javascript" type="text/javascript">
 
-	<?php if (JVersion::isCompatible("1.6.0")) { ?>
-		 Joomla.submitbutton = function (pressbutton) { 
-	<?php } else { ?>
-		 function submitbutton(pressbutton) {
-	<?php } ?>		
+		 Joomla.submitbutton = function (pressbutton) { 		
 			var form = document.adminForm;
 			if (pressbutton == 'cancel') {
 				submitform( pressbutton );
@@ -371,7 +359,6 @@ function mannschaft( &$row,$lists, $option )
 			<input class="inputbox" type="text" name="abzug" id="abzug" size="10" maxlength="10" value="<?php echo $row->abzug; ?>" />
 			</td>
 		</tr>
-		
 <tr><td colspan="2"><hr></td></tr>
 
 		<tr>

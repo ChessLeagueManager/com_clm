@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelTurInvite extends JModel {
+class CLMModelTurInvite extends JModelLegacy {
 
 	
 	// benötigt für Pagination

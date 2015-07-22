@@ -12,9 +12,7 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
-
-class CLMViewTurForm extends JView {
+class CLMViewTurForm extends JViewLegacy {
 
 	function display($tpl = null) {
 		$task = JRequest::getVar( 'task');
@@ -27,15 +25,13 @@ class CLMViewTurForm extends JView {
 			$text = JText::_( 'TOURNAMENT_CREATE' );
 		}
 		
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( $text, 'clm_turnier.png' );
 		
-		$row = & JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = JTable::getInstance( 'turniere', 'TableCLM' );
 		$row->load($id);
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();		
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if (($row->tl == CLM_ID AND $clmAccess->access() !== false) OR ($clmAccess->access() === true)) {
+		$clmAccess = clm_core::$access;
+		if (($row->tl == $clmAccess->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR ($clmAccess->access('BE_tournament_edit_detail') === true)) {
 			JToolBarHelper::save( 'save' );
 			JToolBarHelper::apply( 'apply' );
 		}
@@ -45,14 +41,14 @@ class CLMViewTurForm extends JView {
 		// das MainMenu abschalten
 		JRequest::setVar( 'hidemainmenu', 1 );
 
-		$config	= &JComponentHelper::getParams( 'com_clm' );
-		$params['tourn_showtlok'] = $config->get('tourn_showtlok',0);
+		$config = clm_core::$db->config();
+		$params['tourn_showtlok'] = $config->tourn_showtlok;
 
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
-		$model =   &$this->getModel();
+		$model =   $this->getModel();
 
 		// Document/Seite
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 
 		// JS-Array jtext -> Fehlertexte
 		$document->addScriptDeclaration("var jserror = new Array();");
@@ -73,10 +69,6 @@ class CLMViewTurForm extends JView {
 
 		$document->addScriptDeclaration("var jsform = new Array();");
 		$document->addScriptDeclaration("jsform['runden'] = '<input class=\"inputbox\" type=\"text\" name=\"runden\" id=\"runden\" size=\"10\" maxlength=\"5\" value=\"".$model->turnier->runden."\" />';");
-		//$document->addScriptDeclaration("jsform['stages'] = '".$model->form['dg']."';");
-		//$document->addScriptDeclaration("jsform['tiebreakers'] = '1. ".$model->form['tiebr1']."<br />2. ".$model->form['tiebr2']."<br />3. ".$model->form['tiebr3']."<br />';");
-
-
 
 		// Script
 		$document->addScript(CLM_PATH_JAVASCRIPT.'turform.js');

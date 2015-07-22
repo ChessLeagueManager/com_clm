@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelSWTliga extends JModel {
+class CLMModelSWTliga extends JModelLegacy {
 
 	function __construct(){
 		parent::__construct();

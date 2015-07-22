@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerTermineForm extends JController {
+class CLMControllerTermineForm extends JControllerLegacy {
 	
 
 	// Konstruktor
@@ -24,7 +22,7 @@ class CLMControllerTermineForm extends JController {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= & JFactory::getDBO();
+		$this->_db		= JFactory::getDBO();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -39,7 +37,7 @@ class CLMControllerTermineForm extends JController {
 	
 		if ($this->_saveDo()) { // erfolgreich?
 			
-			$app =& JFactory::getApplication();
+			$app =JFactory::getApplication();
 			
 			if ($this->neu) { // neues termine?
 				$app->enqueueMessage( JText::_('TERMINE_TASK_CREATED') );
@@ -65,7 +63,7 @@ class CLMControllerTermineForm extends JController {
 		$task = JRequest::getVar('task');
 		
 		// Instanz der Tabelle
-		$row = & JTable::getInstance( 'termine', 'TableCLM' );
+		$row = JTable::getInstance( 'termine', 'TableCLM' );
 		
 	
 		if (!$row->bind(JRequest::get('post'))) {
@@ -104,7 +102,7 @@ class CLMControllerTermineForm extends JController {
 		}
 	
 	
-		$row->checkin();
+		
 
 
 		// wenn 'apply', weiterleiten in form

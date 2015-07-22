@@ -12,59 +12,59 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewInfo extends JView
+class CLMViewInfo extends JViewLegacy
 {
 	function display($tpl = null)
 	{
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$saison		= $model->getCLMSaison();
 		$this->assignRef('saison'  , $saison);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$remis		= $model->getCLMRemis();
 		$this->assignRef('remis'  , $remis);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$kampflos	= $model->getCLMKampflos();
 		$this->assignRef('kampflos'  , $kampflos);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$heim		= $model->getCLMHeim();
 		$this->assignRef('heim'  , $heim);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$gast		= $model->getCLMGast();
 		$this->assignRef('gast'  , $gast);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$gesamt		= $model->getCLMGesamt();
 		$this->assignRef('gesamt'  , $gesamt);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$spieler	= $model->getCLMSpieler();
 		$this->assignRef('spieler'  , $spieler);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$mannschaft	= $model->getCLMMannschaft();
 		$this->assignRef('mannschaft'  , $mannschaft);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$brett		= $model->getCLMBrett();
 		$this->assignRef('brett'  , $brett);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$wbrett		= $model->getCLMWBrett();
 		$this->assignRef('wbrett'  , $wbrett);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$sbrett		= $model->getCLMSBrett();
 		$this->assignRef('sbrett'  , $sbrett);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$rbrett		= $model->getCLMRBrett();
 		$this->assignRef('rbrett'  , $rbrett);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$kbrett		= $model->getCLMKBrett();
 		$this->assignRef('kbrett'  , $kbrett);
 

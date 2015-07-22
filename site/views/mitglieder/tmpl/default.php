@@ -19,15 +19,15 @@ $zps = JRequest::getVar( 'zps' );
 
 // Login Status prüfen
 $clmuser 	= $this->clmuser;
-$user		=& JFactory::getUser();
+$user		=JFactory::getUser();
 
-$mainframe = &JFactory::getApplication();
+$mainframe = JFactory::getApplication();
 $link = 'index.php';
 	
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 // Konfigurationsparameter auslesen
-$config = &JComponentHelper::getParams( 'com_clm' );
+$config = clm_core::$db->config();
 
 if (!$user->get('id')) {
 	$msg = JText::_( 'CLUB_LIST_LOGIN' );
@@ -58,7 +58,7 @@ function tableOrdering( order, dir, task )
 	document.adminForm.submit( task );
 }
 </script>
-<div id="clm">
+<div >
 <div id="mitglieder">
     <div class="componentheading"><?php echo JText::_('Mitgliederverwaltung') ?> </div>
 

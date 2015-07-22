@@ -42,13 +42,13 @@ $lid		= JRequest::getInt('liga','1');
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-// require_once(JPATH_COMPONENT.DS.'includes'.DS.'image_path.php');
+
 
 // Konfigurationsparameter auslesen
-$config	= &JComponentHelper::getParams( 'com_clm' );
+$config = clm_core::$db->config();
 
 // Browsertitelzeile setzen
-$doc =& JFactory::getDocument();
+$doc =JFactory::getDocument();
 $daten['title'] = JText::_('LEAGUE_STATISTIK').' '.$liga[0]->name;
 $doc->setHeadData($daten);
 	
@@ -66,7 +66,7 @@ function tableOrdering( order, dir, task )
 }
 </SCRIPT>
 
-<div id="clm">
+<div >
 <div id="statistik">
 <?php echo CLMContent::componentheading(JText::_('LEAGUE_STATISTIK').'&nbsp;'.$liga[0]->name); ?>
 

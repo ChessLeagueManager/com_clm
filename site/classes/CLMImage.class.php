@@ -22,7 +22,7 @@ class CLMImage {
 	* imageURL()
 	* Stellt die URL eines Frontend-Images zusammen
 	*/
-	function imageURL($image) {
+	public static function imageURL($image) {
 	
 		$string = JUri::root().'components/com_clm/images/'.$image;
 		

@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerCatForm extends JController {
+class CLMControllerCatForm extends JControllerLegacy {
 	
 
 	// Konstruktor
@@ -24,7 +22,7 @@ class CLMControllerCatForm extends JController {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= & JFactory::getDBO();
+		$this->_db		= JFactory::getDBO();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -39,7 +37,7 @@ class CLMControllerCatForm extends JController {
 	
 		if ($this->_saveDo()) { // erfolgreich?
 			
-			$app =& JFactory::getApplication();
+			$app =JFactory::getApplication();
 			
 			if ($this->neu) { // neue Kategorie?
 				$app->enqueueMessage( JText::_('CATEGORY_CREATED') );
@@ -61,7 +59,7 @@ class CLMControllerCatForm extends JController {
 		// Check for request forgeries
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
-		if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+		if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			JError::raiseWarning(500, JText::_('SECTION_NO_ACCESS') );
 			return false;
 		}
@@ -70,7 +68,7 @@ class CLMControllerCatForm extends JController {
 		$task = JRequest::getVar('task');
 		
 		// Instanz der Tabelle
-		$row = & JTable::getInstance( 'categories', 'TableCLM' );
+		$row = JTable::getInstance( 'categories', 'TableCLM' );
 		
 		if (!$row->bind(JRequest::get('post'))) {
 			JError::raiseError(500, $row->getError() );
@@ -112,7 +110,7 @@ class CLMControllerCatForm extends JController {
 		}
 	
 	
-		$row->checkin();
+		
 
 		// Log schreiben
 		$clmLog = new CLMLog();

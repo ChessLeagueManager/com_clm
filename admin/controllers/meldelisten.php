@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerMeldelisten extends JController
+class CLMControllerMeldelisten extends JControllerLegacy
 {
 	/**
 	 * Constructor
@@ -30,12 +28,12 @@ function __construct( $config = array() )
 		$this->registerTask( 'unpublish',	'publish' );
 	}
 
-function display()
+function display($cachable = false, $urlparams = array())
 	{
 	$mainframe	= JFactory::getApplication();
 	$option 	= JRequest::getCmd( 'option' );
 	$section = JRequest::getVar('section');
-	$db=& JFactory::getDBO();
+	$db=JFactory::getDBO();
 
 	$filter_order		= $mainframe->getUserStateFromRequest( "$option.filter_order",'filter_order','a.id',	'cmd' );
 	$filter_order_Dir	= $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",'filter_order_Dir','','word' );
@@ -55,7 +53,7 @@ function display()
 	if ( $filter_sid ) {	$where[] = 'a.sid = '.(int) $filter_sid; }
 	if ( $filter_lid ) {	$where[] = 'a.liga = '.(int) $filter_lid; }
 	if ( $filter_vid ) {	$where[] = "e.id = '$filter_vid'"; }
-	if ($search) {	$where[] = 'LOWER(a.name) LIKE '.$db->Quote( '%'.$db->getEscaped( $search, true ).'%', false );	}
+	if ($search) {	$where[] = 'LOWER(a.name) LIKE "'.$db->escape('%'.$search.'%').'"';	}
 
 	if ( $filter_state ) {
 		if ( $filter_state == 'P' ) {
@@ -136,7 +134,7 @@ function display()
 
 	// search filter
 	$lists['search']= $search;
-	require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'meldelisten.php');
+	require_once(JPATH_COMPONENT.DS.'views'.DS.'meldelisten.php');
 	CLMViewMeldelisten::meldelisten( $rows, $lists, $pageNav, $option );
 }
 
@@ -145,15 +143,15 @@ function edit()
 	{
 	$mainframe	= JFactory::getApplication();
 
-	$db 		=& JFactory::getDBO();
-	$user 		=& JFactory::getUser();
+	$db 		=JFactory::getDBO();
+	$user 		=JFactory::getUser();
 	$task 		= JRequest::getVar( 'task');
 	$cid 		= JRequest::getVar( 'cid', array(0), '', 'array' );
 	$option 	= JRequest::getCmd( 'option' );
 	$section 	= JRequest::getVar( 'section' );
 	$liga 		= JRequest::getVar( 'liga');
 	JArrayHelper::toInteger($cid, array(0));
-	$row =& JTable::getInstance( 'mannschaften', 'TableCLM' );
+	$row =JTable::getInstance( 'mannschaften', 'TableCLM' );
 	// load the row from the db table
 	$row->load( $cid[0] );
 
@@ -163,18 +161,14 @@ function edit()
 		;
 	$db->setQuery($sql);
 	$lid = $db->loadObjectList();
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
-	$clmAccess->accesspoint = 'BE_team_registration_list';
-	if ($clmAccess->access() === false) {
+	$clmAccess = clm_core::$access;
+	if ($clmAccess->access('BE_team_registration_list') === false) {
 		$section = 'info';
 		JError::raiseWarning( 500, JText::_( 'TEAM_NO_ACCESS' ) );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
-	//if ( $lid[0]->sl !== CLM_ID AND CLM_usertype !== 'admin' AND $task == 'edit') {
-	if ( $lid[0]->sl !== CLM_ID AND $clmAccess->access() !== true AND $task == 'edit') {
-	$row->checkin();
+	if ( isset($lid[0]) && $lid[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_team_registration_list') !== true AND $task == 'edit') {
 		JError::raiseWarning( 500, JText::_( 'MELDELISTEN_STAFFEL' ) );
 		$link = 'index.php?option='.$option.'&section=mannschaften';
 		$mainframe->redirect( $link);
@@ -199,8 +193,8 @@ function edit()
 
 	// Daten für DropDown Menue
 	// Konfigurationsparameter auslesen
-	$config = &JComponentHelper::getParams( 'com_clm' );
-	$val=$config->get('meldeliste',1);
+	$config = clm_core::$db->config();
+	$val=$config->meldeliste;
 	
 	if ($val == 1) { $order = "Spielername ASC";}
 		else { $order = "DWZ DESC"; }
@@ -235,11 +229,11 @@ function edit()
 		." AND sid = ".$row->sid
 		." ORDER BY snr ASC"
 		;
-	$db 		=& JFactory::getDBO();
+	$db 		=JFactory::getDBO();
 	$db->setQuery( $selsql );
 	$row_sel=$db->loadObjectList();
 
-	require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'meldelisten.php');
+	require_once(JPATH_COMPONENT.DS.'views'.DS.'meldelisten.php');
 	CLMViewMeldelisten::meldeliste( $row, $row_spl, $row_sel, $max, $liga, $abgabe, $option);
 	}
 
@@ -256,10 +250,10 @@ function cancel()
 	$option		= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
 	$id		= JRequest::getVar('id');	
-	$row 		=& JTable::getInstance( 'meldelisten', 'TableCLM' );
-	$row->checkin( $id);
+	$row 		=JTable::getInstance( 'meldelisten', 'TableCLM' );
+
 
 	$msg = JText::_( 'MELDELISTEN_ML_ABGE').$id;
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg ,"message");
 	}
 }

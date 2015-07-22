@@ -53,7 +53,7 @@ usort($bpr, 'vergleich');
  
 $sql = ' SELECT `sieg`, `remis`, `nieder`, `antritt` FROM #__clm_liga'
 		. ' WHERE `id` = "' . $liga . '"';
-$db =& JFactory::getDBO ();
+$db =JFactory::getDBO ();
 $db->setQuery ($sql);
 $ligapunkte = $db->loadObject ();
 $sieg = $ligapunkte->sieg;
@@ -62,13 +62,13 @@ $nieder = $ligapunkte->nieder;
 $antritt = $ligapunkte->antritt;
 
 // Konfigurationsparameter auslesen
-$config	= &JComponentHelper::getParams( 'com_clm' );
-	$telefon= $config->get('man_tel',1);
-	$mobil	= $config->get('man_mobil',1);
-	$mail	= $config->get('man_mail',1);
+$config = clm_core::$db->config();
+	$telefon= $config->man_tel;
+	$mobil	= $config->man_mobil;
+	$mail	= $config->man_mail;
 
 	// Userkennung holen
-	$user	=& JFactory::getUser();
+	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
 
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'fpdf.php');
@@ -95,8 +95,8 @@ $font = 9;
 $date_font = 8;
 
 // Datum der Erstellung
-$date =& JFactory::getDate();
-$now = $date->toMySQL();
+$date =JFactory::getDate();
+$now = $date->toSQL();
 
 $pdf=new PDF();
 $pdf->AliasNbPages();
@@ -279,13 +279,13 @@ for ($x=0; $x< 100; $x++){
 			if ($einzel[$ie]->kampflos == 0) {
 				$dr_einzel = $punkte_text;
 			} else {
-				if ($config->get('fe_display_lose_by_default',0) == 0) {
+				if ($config->fe_display_lose_by_default == 0) {
 					if($einzel[$ie]->punkte == 0) {
 						$dr_einzel = "-";
 					} else {
 						$dr_einzel = "+";
 					}
-				} elseif ($config->get('fe_display_lose_by_default',0) == 1) {
+				} elseif ($config->fe_display_lose_by_default == 1) {
 					$dr_einzel =  $punkte_text.' (kl)';
 				} else {
 					$dr_einzel = $punkte_text;
@@ -394,7 +394,7 @@ $pdf->SetFont('Times','',$font);
 //		echo "<br>pl: "; var_dump($planl);
 	}
 	foreach ($plan as $planl) { 
-		//$datum =& JFactory::getDate($planl->datum);
+		//$datum =JFactory::getDate($planl->datum);
 		$hpkt = "";
 		$gpkt = "";
 		$pdf->Cell(10,4,' ',0,0);

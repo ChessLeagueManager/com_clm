@@ -14,39 +14,39 @@ jimport( 'joomla.application.component.view');
 /**
  * HTML View class for the auto Component
  */
-class CLMViewPaarungsliste extends JView
+class CLMViewPaarungsliste extends JViewLegacy
 {
 	function display($tpl = 'pdf')
 	{
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$liga     = $model->getCLMLiga();
 		$this->assignRef('liga'  , $liga);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$termin     = $model->getCLMTermin();
 		$this->assignRef('termin'  , $termin);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$paar     = $model->getCLMPaar();
 		$this->assignRef('paar'  , $paar);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$dwzschnitt     = $model->getCLMDWZSchnitt();
 		$this->assignRef('dwzschnitt'  , $dwzschnitt);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$dwzgespielt     = $model->getCLMDWZgespielt();
 		$this->assignRef('dwzgespielt'  , $dwzgespielt);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$summe     = $model->getCLMSumme();
 		$this->assignRef('summe'  , $summe);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$rundensumme     = $model->getCLMRundensumme();
 		$this->assignRef('rundensumme'  , $rundensumme);
 
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 		$document->setMimeEncoding('application/pdf');
 
 		parent::display($tpl);

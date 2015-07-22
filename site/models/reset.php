@@ -25,7 +25,7 @@ jimport('joomla.application.component.model');
  * @subpackage	User
  * @since		1.5
  */
-class CLMModelReset extends JModel
+class CLMModelReset extends JModelLegacy
 {
 	/**
 	 * Registry namespace prefix
@@ -49,7 +49,7 @@ class CLMModelReset extends JModel
 	$mainframe	= JFactory::getApplication();
 	$option 	= JRequest::getCmd( 'option' );
 
-		$db	= &JFactory::getDBO();
+		$db	= JFactory::getDBO();
 		$db->setQuery('SELECT id FROM #__users WHERE block = 0 AND activation = '.$db->Quote($token));
 
 		// Verify the token
@@ -98,7 +98,7 @@ class CLMModelReset extends JModel
 		}
 
 		// Get the necessary variables
-		$db			= &JFactory::getDBO();
+		$db			= JFactory::getDBO();
 		$id			= $mainframe->getUserState($this->_namespace.'id');
 		$token		= $mainframe->getUserState($this->_namespace.'token');
 		$salt		= JUserHelper::genRandomPassword(32);

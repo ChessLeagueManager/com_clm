@@ -12,23 +12,23 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewRangliste extends JView
+class CLMViewRangliste extends JViewLegacy
 {
 	function display($tpl = null)
 	{
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$liga     = $model->getCLMLiga();
 		$this->assignRef('liga'  , $liga);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$spielfrei     = $model->getCLMSpielfrei();
 		$this->assignRef('spielfrei'  , $spielfrei);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$punkte     = $model->getCLMPunkte();
 		$this->assignRef('punkte'  , $punkte);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$dwzschnitt     = $model->getCLMDWZSchnitt();
 		$this->assignRef('dwzschnitt'  , $dwzschnitt);
 

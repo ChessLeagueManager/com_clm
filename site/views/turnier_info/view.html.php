@@ -12,13 +12,13 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewTurnier_Info extends JView {
+class CLMViewTurnier_Info extends JViewLegacy {
 	
 	function display($tpl = null) {
 		
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 		
 		// Title in Browser
 		$headTitle = CLMText::composeHeadTitle( array( $model->turnier->name, JText::_('TOURNAMENT_INFO') ) );

@@ -11,8 +11,14 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-$turParams = new JParameter($this->turnier->params);
-
+/**
+ * @package     Joomla.Platform
+ * @subpackage  HTML
+ *
+ * @copyright   Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE
+ */
+$turParams = new clm_class_params($this->turnier->params);
 ?>
 
 	<script language="javascript" type="text/javascript">
@@ -322,6 +328,23 @@ $turParams = new JParameter($this->turnier->params);
 				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
 			}
 			echo JHtml::_('select.genericlist', $optionlist, 'params[useAsTWZ]', 'class="inputbox"', 'id', 'name', $turParams->get('useAsTWZ', 0)); ?>
+		</td>
+	</tr>
+	<tr>
+		<td width="40%" class="paramlist_key">
+			<?php echo JText::_('OPTION_AUTODWZ'); ?>:
+		</td>
+		<td class="paramlist_value">
+			<?php 
+			$options = array();
+			$options[0] = JText::_('OPTION_AUTODWZ_0');
+			$options[1] = JText::_('OPTION_AUTODWZ_1');
+			$options[2] = JText::_('OPTION_AUTODWZ_2');
+			$optionlist = array();
+			foreach ($options as $key => $val) {
+				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
+			}
+			echo JHtml::_('select.genericlist', $optionlist, 'params[autoDWZ]', 'class="inputbox"', 'id', 'name', $turParams->get('autoDWZ', 0)); ?>
 		</td>
 	</tr>
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -15,7 +15,7 @@ defined('_JEXEC') or die('Restricted access');
 JRequest::checkToken() or die( 'Invalid Token' );
 $mainframe	= JFactory::getApplication();
 // Variablen holen
-$sid 	= JRequest::getInt('sid','1');
+$sid 	= JRequest::getInt('saison','1');
 $lid 	= JRequest::getInt('liga');
 $zps 	= JRequest::getVar('zps');
 $gid 	= JRequest::getInt('gid');
@@ -24,7 +24,7 @@ $count 	= JRequest::getInt('count');
 	$option = JRequest::getCmd( 'option' );
 	$db	= JFactory::getDBO();
 
-$user 		=& JFactory::getUser();
+$user 		=JFactory::getUser();
 $meldung 	= $user->get('id');
 
 // Prüfen ob Datensatz schon vorhanden ist
@@ -33,14 +33,29 @@ $meldung 	= $user->get('id');
 		." WHERE sid = $sid AND zps = '$zps' AND gid = $gid ";
 	$db->setQuery( $query );
 	$abgabe=$db->loadObjectList();
+//if ($abgabe[0]->id != "") {
+/* if (count($abgabe) > 0) {
 
-if ($abgabe[0]->id != "") {
 	$link = 'index.php?option=com_clm&view=info';
 	$msg = JText::_( '<h2>Diese Rangliste wurde bereits abgegeben ! </h2>Bitte schauen Sie in die entsprechende Mannschaftsübersicht' );
 	$mainframe->redirect( $link, $msg);
  			}
-
+*/
 	// evtl. vorhandene Daten in der Tabelle löschen
+	$query	=" DELETE FROM #__clm_rangliste_id "
+		." WHERE gid = ".$gid
+		." AND zps = '$zps'"
+		;
+	$db->setQuery($query);
+	$db->query();
+
+	$query	=" DELETE FROM #__clm_rangliste_spieler "
+		." WHERE Gruppe = ".$gid
+		." AND ZPS = '$zps'"
+		;
+	$db->setQuery($query);
+	$db->query();
+
 	$query	=" DELETE FROM #__clm_meldeliste_spieler "
 		." WHERE status = ".$gid
 		." AND ZPS = '$zps'"
@@ -57,8 +72,8 @@ if ($abgabe[0]->id != "") {
 	$lid_rang	= $db->loadObjectList();
 
 	// Datum und Uhrzeit für Meldung
-	$date =& JFactory::getDate();
-	$now = $date->toMySQL();
+	$date =JFactory::getDate();
+	$now = $date->toSQL();
 
 	// Datensätze schreiben
 	$liga_count	= 0;
@@ -96,20 +111,6 @@ if ($abgabe[0]->id != "") {
 	$query = " INSERT INTO #__clm_rangliste_id "
 		." (`gid`, `sid`, `zps`, `rang`, `published`) "
 		." VALUES ('$gid','$sid','$zps','0','0') "
-		;
-	$db->setQuery($query);
-	$db->query();
-
-	// Log
-	$date 		=& JFactory::getDate();
-	$now 		= $date->toMySQL();
-	$user 		=& JFactory::getUser();
-	$jid_aktion 	=  $user->get('id');
-	$aktion 	= "Rangliste FE";
-
-	$query	= "INSERT INTO #__clm_log "
-		." ( `aktion`, `jid_aktion`, `sid` , `lid` ,`zps`,`man`, `datum`) "
-		." VALUES ('$aktion','$jid_aktion','$sid','$lid','$zps','$gid','$now') "
 		;
 	$db->setQuery($query);
 	$db->query();

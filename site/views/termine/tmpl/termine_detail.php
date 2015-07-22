@@ -22,10 +22,9 @@ $termine_detail	= $this->termine_detail;
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'image_path.php');
 
 // Browsertitelzeile setzen
-$doc =& JFactory::getDocument();
+$doc =JFactory::getDocument();
 $daten['title'] = JText::_('TERMINE_HEAD');
 $doc->setHeadData($daten);
            
@@ -36,7 +35,7 @@ $enddate[0] = strtotime($termine_detail[0]->enddate);
 $arrWochentag = array( "Monday" => "Montag", "Tuesday" => "Dienstag", "Wednesday" => "Mittwoch", "Thursday" => "Donnerstag", "Friday" => "Freitag", "Saturday" => "Samstag", "Sunday" => "Sonntag", );
        
 ?>
-<div id="clm">
+<div >
 <div id="termine">
     <div class="componentheading"><?php echo JText::_('TERMINE_HEAD') ?></div>
     

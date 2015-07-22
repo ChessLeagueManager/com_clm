@@ -1,0 +1,106 @@
+/**
+  * CSS Style for Chess League Manager
+  * Template: isis
+*/
+
+#clm .clm .adminlist {
+	width:100%;
+}
+
+#clm .clm .adminlist th {
+    background: none repeat scroll 0 0 #f7f7f7;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #fff;
+    color: #666;
+    text-align: center;
+}
+
+#clm .clm .adminlist tr.row1 td {
+    background: none repeat scroll 0 0 #f0f0f0;
+    border-top: 1px solid #fff;
+}
+
+#clm .clm .adminlist tr td {
+    background: none repeat scroll 0 0 #fff;
+    border: 1px solid #fff;
+}
+
+#clm  .clm .adminlist tr:hover td {
+    background-color: #e8f6fe;
+}
+
+#clm .clm .adminlist tr td input, #clm .clm .adminlist tr td select {
+	margin:0;
+	width:100%;
+}
+
+#clm .clm tr td input, #clm .clm tr td select {
+	width:auto;
+	height:auto;
+	box-sizing: border-box;
+}
+
+/* Ausnahme bei tourroundmatches */
+#clm .clm .adminlist tr td input[name^='tiebr'] {
+	width:auto;
+}
+
+/* Aufteilung */
+
+#clm .clm .width-20 {
+    width: 20%;
+}
+#clm .clm .width-30 {
+    width: 30%;
+}
+#clm .clm .width-35 {
+    width: 35%;
+}
+#clm .clm .width-40 {
+    width: 40%;
+}
+#clm .clm .width-45 {
+    width: 45%;
+}
+#clm .clm .width-50 {
+    width: 50%;
+}
+#clm .clm .width-55 {
+    width: 55%;
+}
+#clm .clm .width-60 {
+    width: 60%;
+}
+#clm .clm .width-65 {
+    width: 65%;
+}
+#clm .clm .width-70 {
+    width: 70%;
+}
+#clm .clm .width-80 {
+    width: 80%;
+}
+#clm .clm .width-100 {
+    width: 100%;
+}
+#clm .clm .clrlft {
+    clear: left;
+}
+#clm .clm .clrrt {
+    clear: right;
+}
+#clm .clm .fltlft {
+    float: left;
+}
+#clm .clm .fltrt {
+    float: right;
+}
+#clm .clm .fltnone {
+    float: none;
+}
+#clm .clm #adminForm {
+    min-width:1000px;
+}
+#clm .clm #adminForm select {
+    max-width:200px;
+}

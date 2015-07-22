@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelTermineForm extends JModel {
+class CLMModelTermineForm extends JModelLegacy {
 
 	// benötigt für Pagination
 	function __construct()
@@ -21,7 +19,7 @@ class CLMModelTermineForm extends JModel {
 		parent::__construct();
 
 		// user
-		$this->user =& JFactory::getUser();
+		$this->user =JFactory::getUser();
 		
 		$this->_getData();
 
@@ -46,7 +44,7 @@ class CLMModelTermineForm extends JModel {
 	function _getData() {
 		
 		// Instanz der Tabelle
-		$this->termine = & JTable::getInstance( 'termine', 'TableCLM');
+		$this->termine = JTable::getInstance( 'termine', 'TableCLM');
 		if ($id = JRequest::getInt('id')) {
 			$this->termine->load($id);
 		}

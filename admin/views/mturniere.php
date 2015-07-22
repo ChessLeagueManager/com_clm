@@ -13,264 +13,26 @@
 
 class CLMViewMTurniere
 {
-function setMTurniereToolbar()
+	public static function setMTurnierToolbar($new)
 	{
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
-	// Nur CLM-Admin hat Zugriff auf Toolbar
-	//if (JFactory::getUser()->authorise('core.manage.clm', 'com_clm')) 	{       
-	 
-	// Menubilder laden
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
-
-	JToolBarHelper::title( JText::_( 'TITLE_MTURNIERE' ), 'clm_headmenu_mturnier.png' );
-	$clmAccess->accesspoint = 'BE_teamtournament_edit_fixture';
-	if($clmAccess->access() !== false) {
-	JToolBarHelper::custom('paarung','edit.png','edit_f2.png',JText::_( 'LEAGUE_BUTTON_1' ),false);
-	}
-	$clmAccess->accesspoint = 'BE_teamtournament_edit_detail';
-	if($clmAccess->access() !== false) {
-		JToolBarHelper::custom('wertpunkte','default.png','apply_f2.png','LEAGUE_BUTTON_W',false);  //klkl
-	}	
-	$clmAccess->accesspoint = 'BE_teamtournament_edit_round';
-	if($clmAccess->access() !== false) {
-		JToolBarHelper::custom('runden','back.png','edit_f2.png',JText::_( 'LEAGUE_BUTTON_2' ),false);
-		JToolBarHelper::custom('del_runden','cancel.png','unarchive_f2.png',JText::_( 'LEAGUE_BUTTON_3' ),false);
-	}
-	$clmAccess->accesspoint = 'BE_teamtournament_edit_detail';
-	if($clmAccess->access() !== false) {
-		//JToolBarHelper::custom( 'daten_dsb_API', 'refresh.png', 'refresh_f2.png', JText::_( 'DB_BUTTON_DWZ_UPDATE_API'),false );
-		JToolBarHelper::custom( 'daten_dsb_SOAP', 'refresh.png', 'refresh_f2.png', JText::_( 'DB_BUTTON_DWZ_UPDATE_SOAP'),false );
-		//JToolBarHelper::publishList();
-		//JToolBarHelper::unpublishList();
-		JToolBarHelper::custom( 'sortByTWZ', 'copy.png', 'copy_f2.png', JText::_('MTURN_BUTTON_S'), false);
-	}
-	$clmAccess->accesspoint = 'BE_teamtournament_create';
-	if($clmAccess->access() !== false) {
-		JToolBarHelper::customX( 'copy', 'copy.png', 'copy_f2.png', JText::_( 'LEAGUE_BUTTON_4' ) );
-	}
-	$clmAccess->accesspoint = 'BE_teamtournament_delete';
-	if($clmAccess->access() !== false) {
-		JToolBarHelper::custom('remove','delete.png','delete_f2.png',JText::_( 'MTURN_BUTTON_5' ),false);
-	}
-	// JToolBarHelper::editListX();
-	$clmAccess->accesspoint = 'BE_teamtournament_create';
-	if($clmAccess->access() !== false) {
-	JToolBarHelper::custom('add','new.png','new_f2.png',JText::_( 'MTURN_BUTTON_6' ),false);
-		}
-	JToolBarHelper::help( 'screen.clm.mturnier' );
+		if (!$new) { $text = JText::_( 'Edit' );}
+		else { $text = JText::_( 'New' );}
+		clm_core::$load->load_css("icons_images");
+		JToolBarHelper::title( JText::_( 'MTURN_BUTTON_7' ).': [ '. $text.' ]', 'clm_headmenu_mturnier.png' );
+		JToolBarHelper::save( 'save' );
+		JToolBarHelper::apply( 'apply' );
+		JToolBarHelper::cancel();
 	}
 
-function mturniere(&$rows, &$lists, &$pageNav, &$option)
+	public static function mturnier(&$row, $lists, $option, $new)
 	{
-	$mainframe	= JFactory::getApplication();
-	CLMViewMTurniere::setMTurniereToolbar();
-	$user =& JFactory::getUser();
-	// Konfigurationsparameter auslesen
-	$config = &JComponentHelper::getParams( 'com_clm' );
-	$val	= $config->get('menue',1);
-
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
-
-	//Ordering allowed ?
-	$ordering = ($lists['order'] == 'a.ordering');
-
-	JHtml::_('behavior.tooltip');
-	?>
-	<form action="index.php?option=com_clm&section=mturniere" method="post" name="adminForm" id="adminForm">
-	<table>
-	<tr>
-	<td align="left" width="100%">
-	<?php echo JText::_( 'Filter' ); ?>:
-	<input type="text" name="search" id="search" value="<?php echo $lists['search'];?>" class="text_area" onchange="document.adminForm.submit();" />
-	<button onclick="this.form.submit();"><?php echo JText::_( 'Go' ); ?></button>
-	<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo JText::_( 'Reset' ); ?></button>
-	</td>
-	<td nowrap="nowrap">
-	<?php
-	// eigenes Dropdown Menue
-		echo "&nbsp;&nbsp;&nbsp;".$lists['sid'];
-		echo "&nbsp;&nbsp;&nbsp;".$lists['state'];
-	?>
-	</td>
-	</tr>
-	</table>
-
-	<table class="adminlist">
-		<thead>
-		<tr>
-		<th width="10">
-			<?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?>		</th>
-		<th width="10">
-			<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $rows ); ?>);" />		</th>
-		<th class="title">
-			<?php echo JHtml::_('grid.sort', JText::_( 'MTURN_OVERVIEW_LEAGUE' ), 'a.name', @$lists['order_Dir'], @$lists['order'] ); ?>		</th>
-		<th width="9%">
-			<?php echo JHtml::_('grid.sort', JText::_( 'LEAGUE_OVERVIEW_SEASON' ), 'c.name', @$lists['order_Dir'], @$lists['order'] ); ?>		</th>
-		<th width="9%">
-			<?php echo JHtml::_('grid.sort', JText::_( 'MTURN_OVERVIEW_MODE' ), 'a.runden_modus', @$lists['order_Dir'], @$lists['order'] ); ?> </th>
-		<th width="9%">
-			<?php echo JHtml::_('grid.sort', JText::_( 'LEAGUE_OVERVIEW_ROUNDS' ), 'a.runden', @$lists['order_Dir'], @$lists['order'] ); ?><br />(<?php echo JText::_( 'LEAGUE_OVERVIEW_DG' ); ?>)</th>
-		<th width="9%">
-			<?php echo JHtml::_('grid.sort', JText::_( 'LEAGUE_OVERVIEW_TEAMS' ), 'a.teil', @$lists['order_Dir'], @$lists['order'] ); ?>		</th>
-		<th width="5%">
-			<?php echo JHtml::_('grid.sort', JText::_( 'LEAGUE_OVERVIEW_STAMM' ), 'a.stamm', @$lists['order_Dir'], @$lists['order'] ); ?>		</th>
-		<th width="5%">
-			<?php echo JHtml::_('grid.sort', JText::_( 'LEAGUE_OVERVIEW_ERSATZ' ), 'a.ersatz', @$lists['order_Dir'], @$lists['order'] ); ?>		</th>
-		<th width="3%">
-			<?php echo JHtml::_('grid.sort', JText::_( 'MTURN_OVERVIEW_TL' ), 'a.sl', @$lists['order_Dir'], @$lists['order'] ); ?>		</th>
-		<th width="4%">
-			<?php echo JHtml::_('grid.sort', JText::_( 'LEAGUE_OVERVIEW_MAIL' ), 'a.mail', @$lists['order_Dir'], @$lists['order'] ); ?>		</th>
-		<th width="4%">
-			<?php echo JHtml::_('grid.sort', JText::_( 'LEAGUE_OVERVIEW_HINT' ), 'a.bemerkungen', @$lists['order_Dir'], @$lists['order'] ); ?>		</th>
-
-		<th width="6%">
-		<?php echo JHtml::_('grid.sort',   'JPUBLISHED', 'a.published', @$lists['order_Dir'], @$lists['order'] ); ?>		</th>
-<?php 	$clmAccess->accesspoint = 'BE_teamtournament_edit_round';
-		if($clmAccess->access() === true) {
-		//if (CLM_usertype === 'admin') { ?>
-		<th width="8%" nowrap="nowrap">
-			<?php echo JHtml::_('grid.sort',   'JGRID_HEADING_ORDERING', 'a.ordering', @$lists['order_Dir'], @$lists['order'] ); ?>
-			<?php echo JHtml::_('grid.order',  $rows ); ?>		</th>
-<?php	} ?>
-		<th width="1%" nowrap="nowrap">
-			<?php echo JHtml::_('grid.sort',   'JGRID_HEADING_ID', 'a.id', @$lists['order_Dir'], @$lists['order'] ); ?>		</th>
-		</tr>
-		</thead>
-
-		<tfoot>
-		<tr>
-		<td colspan="16">
-			<?php echo $pageNav->getListFooter(); ?>		</td>
-		</tr>
-		</tfoot>
-
-		<tbody>
-		<?php
-		$k = 0;
-	if ($val == 1) { $menu ='index.php?option=com_clm&section=runden&liga=';
-				}
-		else { $menu ='index.php?option=com_clm&section=mturniere&task=edit&cid[]=';
-			}
-
-		for ($i=0, $n=count( $rows ); $i < $n; $i++) {
-			$row = &$rows[$i];
-
-			$link = JRoute::_( $menu . $row->id );
-			$checked 	= JHtml::_('grid.checkedout',   $row, $i );
-			$published 	= JHtml::_('grid.published', $row, $i );
-			?>
-			<tr class="<?php echo 'row'. $k; ?>">
-			<td align="center">
-				<?php echo $pageNav->getRowOffset( $i ); ?>			</td>
-			<td>
-				<?php echo $checked; ?>
-            </td>
-			<td>
-				<?php
-// 				if (  JTable::isCheckedOut($user->get ('id'), $row->checked_out ) ) {
-				// Nur CLM-Admin darf hier zugreifen 
-				//if (!JFactory::getUser()->authorise('core.manage.clm', 'com_clm')) 	{       
-				$clmAccess->accesspoint = 'BE_teamtournament_edit_detail';
-				if (($row->sl != CLM_ID AND $clmAccess->access() !== true ) OR ($clmAccess->access() === false)) {
-					echo $row->name;} 
-				else {	
-				
-					$ligenedit ='index.php?option=com_clm&section=mturniere&task=edit&cid[]=' . $row->id;
-					
-					?>
-				<span class="editlinktip hasTip" title="<?php echo JText::_( 'MTURN_OVERVIEW_TIP' );?>::<?php echo $row->name; ?>">
-					<a href="<?php echo $ligenedit; ?>">
-						<?php echo $row->name; ?>
-					</a>
-				<?php } ?>
-				</span>
-				<?php //} ?>			
-            </td>
-			<td align="center"><?php echo $row->saison;?></td>
-			<td align="center"><?php echo JText::_( 'MTURN_PAIRING_MODE_'.($row->runden_modus + 1) );?></td>
-			<td align="center">
-			<?php
-				$clmAccess->accesspoint = 'BE_teamtournament_edit_result';
-				if (($row->sl != CLM_ID AND $clmAccess->access() !== true ) OR ($clmAccess->access() === false)) {
-			if ( $row->durchgang > 1 ) { echo $row->durchgang."&nbsp;x&nbsp;"; } ?><?php echo $row->runden."&nbsp;".JText::_( 'SWT_RUNDEN' );
-			} else { ?>
-            <a href="<?php echo $link; ?>">
-				<?php if ( $row->durchgang > 1 ) { echo $row->durchgang."&nbsp;x&nbsp;"; } ?><?php echo $row->runden."&nbsp;".JText::_( 'SWT_RUNDEN' );?>
-            </a><?php } if ($row->rnd == '0') { ?><br /><?php echo '('.JText::_( 'LEAGUE_OVERVIEW_NOTCREATED' ).')';?><?php }?>
-            </td>
-			<td align="center"><?php echo $row->teil;?></td>
-	 	 	<td align="center"><?php echo $row->stamm;?></td>
-			<td align="center"><?php echo $row->ersatz;?></td>
-			<td align="center"><?php echo $row->sl;?></td>
-			<td align="center">
-				<?php if ($row->mail == '1') 
-				{ ?><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /> <?php }
-				else 	{ ?><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /> <?php }?>			</td>
-			<td align="center">
-				<?php if ($row->bemerkungen <> '') 
-				{ ?><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /> <?php }
-				else 	{ ?><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /> <?php }?>			</td>
-
-			<td align="center">
-				<?php echo $published;?>			</td>
-<?php
-// Nur CLM-Admin darf hier zugreifen 
-	if (JFactory::getUser()->authorise('core.manage.clm', 'com_clm')) 	{   ?>
-	<td class="order">
-	<span><?php echo $pageNav->orderUpIcon($i, ($row->sid == @$rows[$i-1]->sid), 'orderup()', 'Move Up', $ordering ); ?></span>
-	<span><?php echo $pageNav->orderDownIcon($i, $n, ($row->sid == @$rows[$i+1]->sid), 'orderdown()', 'Move Down', $ordering ); ?></span>
-	<?php $disabled = $ordering ?  '' : 'disabled="disabled"'; ?>
-	<input type="text" name="order[]" size="5" value="<?php echo $row->ordering;?>" <?php echo $disabled ?> class="text_area" style="text-align: center" />					</td>
-<?php		} ?>
-					<td align="center">
-						<?php echo $row->id; ?>					</td>
-				</tr>
-				<?php
-				$k = 1 - $k;
-			}
-			?>
-			</tbody>
-			</table>
-
-
-
-    <input type="hidden" name="option" value="com_clm" />
-		<input type="hidden" name="task" value="" />
-		<input type="hidden" name="boxchecked" value="0" />
-		<input type="hidden" name="filter_order" value="<?php echo $lists['order']; ?>" />
-		<input type="hidden" name="filter_order_Dir" value="<?php echo $lists['order_Dir']; ?>" />
-
-		<?php echo JHtml::_( 'form.token' ); ?>
-		</form>
-		<?php
-	}
-
-
-function setMTurnierToolbar()
-	{
-	if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
-	else { $text = JText::_( 'New' );}
-	
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
-	JToolBarHelper::title( JText::_( 'MTURN_BUTTON_7' ).': <small><small>[ '. $text.' ]</small></small>', 'clm_headmenu_mturnier.png' );
-	JToolBarHelper::save( 'save' );
-	if (JRequest::getVar( 'task') == 'new') {
-	JToolBarHelper::apply( 'apply' );
-	}
-	JToolBarHelper::cancel();
-	}
-
-function mturnier(&$row, $lists, $option )
-	{
-	CLMViewMTurniere::setMTurnierToolbar();
+	CLMViewMTurniere::setMTurnierToolbar($new);
 	JRequest::setVar( 'hidemainmenu', 1 );
 
 	// Konfigurationsparameter auslesen
-	$config = &JComponentHelper::getParams( 'com_clm' );
-	$rang	= $config->get('rangliste',0);
-	$sl_mail= $config->get('sl_mail',0);
+	$config = clm_core::$db->config();
+	$rang	= $config->rangliste;
+	$sl_mail= $config->sl_mail;
 	?>
 	<?php 
 	//Liga-Parameter aufbereiten
@@ -301,11 +63,7 @@ function mturnier(&$row, $lists, $option )
 	
 	<script language="javascript" type="text/javascript">
 
-	<?php if (JVersion::isCompatible("1.6.0")) { ?>
 		 Joomla.submitbutton = function (pressbutton) { 
-	<?php } else { ?>
-		 function submitbutton(pressbutton) {
-	<?php } ?>		
 			var form = document.adminForm;
 			var i;
 			var potenzg = 1;
@@ -345,6 +103,8 @@ function mturnier(&$row, $lists, $option )
 				alert( "<?php echo JText::_( 'MTURN_HINT_8', true ).'\n'.JText::_( 'MTURN_HINT_15', true ); ?>" ); 
 			} else if ( form.runden_modus.value == 5 && form.teil.value < potenzk5 ) {
 				alert( "<?php echo JText::_( 'MTURN_HINT_9', true ).'\n'.JText::_( 'MTURN_HINT_15', true ); ?>" ); 
+			} else if ( form.runden_modus.value == 3 && form.durchgang.value > 1 ) {
+				alert( "<?php echo JText::_( 'MTURN_HINT_10', true ); ?>" ); 
 			} else if (form.anz_sgp.value < 0 ) {
 				alert( "<?php echo JText::_( 'LEAGUE_HINT_8', true ); ?>" );
 			} else if (form.anz_sgp.value > 20 ) {
@@ -374,7 +134,58 @@ function mturnier(&$row, $lists, $option )
 	<?php echo $lists['sl']; ?>
 	</td>
 	</tr>
-
+	<?php
+	// Kategorien
+	list($parentArray, $parentKeys) = CLMCategoryTree::getTree();
+	if (count($parentArray) > 0)  { // nur, wenn Kategorien existieren
+		$parentlist[]	= JHtml::_('select.option',  '0', CLMText::selectOpener(JText::_( 'NO_PARENT' )), 'id', 'name' );
+		foreach ($parentArray as $key => $value) {
+			$parentlist[]	= JHtml::_('select.option',  $key, $value, 'id', 'name' );
+		}
+		$catidAlltime = JHtml::_('select.genericlist', $parentlist, 'catidAlltime', 'class="inputbox" size="1" style="max-width: 250px;"', 'id', 'name', intval($row->catidAlltime));
+		$catidEdition = JHtml::_('select.genericlist', $parentlist, 'catidEdition', 'class="inputbox" size="1" style="max-width: 250px;"', 'id', 'name', intval($row->catidEdition));
+	}
+	if (isset($catidAlltime)) { 
+	?>
+		<tr>
+			<td colspan="1" class="paramlist_key">
+				<label for="category">
+					<?php echo JText::_( 'CATEGORY_ALLTIME' ); ?>:
+				</label>
+			</td>
+			<td colspan="2" class="paramlist_value">
+				<?php echo $catidAlltime; ?>
+			</td>
+			<td colspan="1" class="paramlist_key">
+				<label for="category">
+					<?php echo JText::_( 'CATEGORY_EDITION' ); ?>:
+				</label>
+			</td>
+			<td colspan="2" class="paramlist_value">
+				<?php echo $catidEdition; ?>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="1" class="paramlist_key">
+							<?php echo JText::_('OPTION_ADDCATTONAME'); ?>:
+			</td>
+			<td colspan="5" class="paramlist_value">
+				<?php
+				$options = array();
+				$options[0] = JText::_('OPTION_ADDCATTONAME_0');
+				$options[1] = JText::_('OPTION_ADDCATTONAME_1');
+				$options[2] = JText::_('OPTION_ADDCATTONAME_2');
+				$optionlist = array();
+				foreach ($options as $key => $val) {
+					$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
+				}
+				echo JHtml::_('select.genericlist', $optionlist, 'params[addCatToName]', 'class="inputbox"', 'id', 'name', (isset($row->params['addCatToName']) ? $row->params['addCatToName'] : "0"));
+				?>
+			</td>
+		</tr>
+	<?php
+	}
+	?>
 	<tr>
 	<td nowrap="nowrap">
 	<label for="saison"><?php echo JText::_( 'LEAGUE_SEASON' ); ?></label>
@@ -439,7 +250,7 @@ function mturnier(&$row, $lists, $option )
 
 	<tr>
 	<td nowrap="nowrap">
-	<label for="params['color_order']"><?php echo JText::_( 'LEAGUE_COLOR_ORDER' ); ?></label>
+<label for="params['color_order']"><?php echo JText::_( 'LEAGUE_COLOR_ORDER' ); ?></label>
 	</td><td colspan="2">
 		<select name="params['color_order']" id="params['color_order']" value="<?php echo $row->params['color_order']; ?>" size="1">
 		<!--<option>- wählen -</option>-->
@@ -554,6 +365,38 @@ function mturnier(&$row, $lists, $option )
 	</td>
 	</tr>
 	
+		<tr>
+		<td class="paramlist_key">
+			<?php echo JText::_('OPTION_AUTODWZ'); ?>:
+		</td>
+		<td colspan="2" class="paramlist_value">
+			<?php 
+			$options = array();
+			$options[0] = JText::_('OPTION_AUTODWZ_0');
+			$options[1] = JText::_('OPTION_AUTODWZ_1');
+			$options[2] = JText::_('OPTION_AUTODWZ_2');
+			$options[3] = JText::_('OPTION_AUTODWZ_3');
+			$optionlist = array();
+			foreach ($options as $key => $val) {
+				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
+			}
+			echo JHtml::_('select.genericlist', $optionlist, 'params[autoDWZ]', 'class="inputbox"', 'id', 'name', (isset($row->params['autoDWZ']) ? $row->params['autoDWZ'] : "0")); ?>
+		</td>
+		<td class="paramlist_key">
+			<?php echo JText::_('OPTION_AUTORANKING'); ?>:
+		</td>
+		<td colspan="2" class="paramlist_value">
+			<?php 
+			$options = array();
+			$options[0] = JText::_('OPTION_AUTORANKING_0');
+			$options[1] = JText::_('OPTION_AUTORANKING_1');
+			$optionlist = array();
+			foreach ($options as $key => $val) {
+				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
+			}
+			echo JHtml::_('select.genericlist', $optionlist, 'params[autoRANKING]', 'class="inputbox"', 'id', 'name', (isset($row->params['autoRANKING']) ? $row->params['autoRANKING'] : "0")); ?>
+		</td>
+	</tr>
 		</table>
   </fieldset>
   
@@ -731,8 +574,9 @@ function mturnier(&$row, $lists, $option )
 	</fieldset></td>
 	</tr>
 
-    <tr>
+     <tr>
 	<td nowrap="nowrap">
+ 	<label for="mail">
 	<label for="mail"><?php echo JText::_( 'LEAGUE_MAIL' ); ?></label>
 	</td><td colspan="4"><fieldset class="radio">
 	<?php echo $lists['mail']; ?>
@@ -795,14 +639,14 @@ function mturnier(&$row, $lists, $option )
   
     <fieldset>
   	<legend><?php echo JText::_( 'LEAGUE_HINTS' ); ?></legend>
-  	<b><?php echo JText::_( 'MTURN_HINTS_FINE_RANKINGS' ); ?></b>
-  	<?php echo JText::_( 'MTURN_HINTS_01' ); ?>
-  	<?php echo JText::_( 'MTURN_HINTS_02' ); ?>
-  	<?php echo JText::_( 'MTURN_HINTS_03' ); ?>
-  	<?php echo JText::_( 'MTURN_HINTS_04' ); ?>
-  	<?php echo JText::_( 'MTURN_HINTS_05' ); ?>
-  	<?php echo JText::_( 'MTURN_HINTS_06' ); ?>
-  	<?php echo JText::_( 'MTURN_HINTS_07' ); ?>
+ 	<b><?php echo JText::_( 'MTURN_HINTS_FINE_RANKINGS' ); ?></b>
+	<?php echo JText::_( 'MTURN_HINTS_01' ); ?>
+ 	<?php echo JText::_( 'MTURN_HINTS_02' ); ?>
+ 	<?php echo JText::_( 'MTURN_HINTS_03' ); ?>
+ 	<?php echo JText::_( 'MTURN_HINTS_04' ); ?>
+ 	<?php echo JText::_( 'MTURN_HINTS_05' ); ?>
+ 	<?php echo JText::_( 'MTURN_HINTS_06' ); ?>
+ 	<?php echo JText::_( 'MTURN_HINTS_07' ); ?>
 	<br><br><br>
   	<b><?php echo JText::_( 'MTURN_HINTS_PAIRING_MODE' ); ?></b>
   	<?php echo JText::_( 'LEAGUE_HINTS_1' ); ?>

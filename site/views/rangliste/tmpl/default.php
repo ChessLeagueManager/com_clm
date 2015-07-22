@@ -19,16 +19,18 @@ $sid		= JRequest::getInt('saison',0);
 $runde		= JRequest::getInt('runde');
 $item		= JRequest::getInt('Itemid','1');
 $liga		= $this->liga;
-	//Liga-Parameter aufbereiten
-	$paramsStringArray = explode("\n", $liga[0]->params);
-	$params = array();
-	foreach ($paramsStringArray as $value) {
-		$ipos = strpos ($value, '=');
-		if ($ipos !==false) {
-			$params[substr($value,0,$ipos)] = substr($value,$ipos+1);
-		}
-	}	
-	if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
+
+//Liga-Parameter aufbereiten
+$paramsStringArray = explode("\n", $liga[0]->params);
+$params = array();
+foreach ($paramsStringArray as $value) {
+	$ipos = strpos ($value, '=');
+	if ($ipos !==false) {
+		$params[substr($value,0,$ipos)] = substr($value,$ipos+1);
+	}
+}	
+if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
+
 $punkte		= $this->punkte;
 $spielfrei	= $this->spielfrei;
 $dwzschnitt	= $this->dwzschnitt;
@@ -50,38 +52,27 @@ if ($sid == 0) {
  
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-// require_once(JPATH_COMPONENT.DS.'includes'.DS.'image_path.php');
 
-echo '<div id="clm"><div id="rangliste">';
+echo '<div ><div id="rangliste">';
 
-// schon veröffentlicht
-if (!$liga OR $liga[0]->published == 0) {
+if (!$liga OR $liga[0]->published == "0") {
 	
-	echo CLMContent::clmWarning(JText::_('NOT_PUBLISHED')."<br/>".JText::_('GEDULD'));
-
-// falscher Modus
-} elseif (!in_array($liga[0]->runden_modus, array(1,2,3)) ) {
-
-	$link = new CLMcLink();
-	$link->view = 'paarungsliste';
-	$link->more = array('saison' => $sid, 'liga' => $lid, 'Itemid' => $item);
-	$link->makeURL();
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_TABLENOTAVAILABLE')."<br />".$link->makeLink(JText::_('PAAR_OVERVIEW')));
+	echo "<div id='wrong'>".JText::_('NOT_PUBLISHED')."<br>".JText::_('GEDULD')."</div>";
 
 } else {
 
 	// Browsertitelzeile setzen
-	$doc =& JFactory::getDocument();
+	$doc =JFactory::getDocument();
 	$daten['title'] = JText::_('RANGLISTE').' '.$liga[0]->name;
 	if ($doc->_type != "raw") $doc->setHeadData($daten);
 
 	// Konfigurationsparameter auslesen
-	$config	= &JComponentHelper::getParams( 'com_clm' );
-	$pdf_melde = $config->get('pdf_meldelisten',1);
-	$man_showdwz = $config->get('man_showdwz',1);
+	$config = clm_core::$db->config();
+	$pdf_melde = $config->pdf_meldelisten;
+	$man_showdwz = $config->man_showdwz;
 
 		// Userkennung holen
-	$user	=& JFactory::getUser();
+	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
 
 	// Array für DWZ Schnitt setzen
@@ -89,10 +80,12 @@ if (!$liga OR $liga[0]->published == 0) {
 	for ($y=1; $y< ($liga[0]->teil)+1; $y++) {
 		if ($params['dwz_date'] == '0000-00-00') {
 			if(isset($dwzschnitt[($y-1)]->dwz)) {
-			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->dwz; }
+				$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->dwz; 
+			}
 		} else {
 			if(isset($dwzschnitt[($y-1)]->start_dwz)) {
-			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; }
+				$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; 
+			}
 		}
 	}
 
@@ -121,9 +114,8 @@ if (!$liga OR $liga[0]->published == 0) {
 		echo CLMContent::createPDFLink('rangliste', JText::_('PDF_RANGLISTE_LIGAHEFT'), array('saison' => $sid, 'layout' => 'heft', 'o_nr' => 0, 'saison' => $sid, 'liga' => $lid));
 		
 	}
-	echo CLMContent::createViewLink('tabelle', JText::_('RANGLISTE_GOTO_TABELLE'), array('saison' => $sid, 'liga' => $lid, 'Itemid' => $item) );
+	echo CLMContent::createViewLink('tabelle', JText::_('RANGLISTE_GOTO_TABELLE'), array('saison' => $sid, 'liga' => $lid, 'Itemid' => $item));
 	?>
-
 	</div></div>
 	<div class="clr"></div>
 
@@ -137,7 +129,6 @@ if (!$liga OR $liga[0]->published == 0) {
 			<th class="team"><div><?php echo JText::_('TEAM') ?></div></th>
 			
 			<?php 
-			
 			// vollrundig
 			if (($liga[0]->durchgang * ($liga[0]->teil-$diff)) < 21) $estyle = '';
 			else $estyle = ' style="font-size:85%; width:17px;"';
@@ -364,10 +355,10 @@ if (!$liga OR $liga[0]->published == 0) {
 					if ($dg == 1 AND $liga[0]->runden_modus == 3) {
 						for ($y=0; $y< $liga[0]->runden; $y++) {
 							echo '<td class="'.$zeilenr.'">';
-							if ($runden[$y]->name == "spielfrei") {
-								echo "  +";
-							} elseif (!isset($runden[$y])) {
+							if (!isset($runden[$y])) {
 								echo " ";
+							} elseif ($runden[$y]->name == "spielfrei") {
+								echo " +";
 							} else {
 								echo $runden[$y]->brettpunkte." (".$runden[$y]->rankingpos.")";
 							}
@@ -491,7 +482,7 @@ if (!$liga OR $liga[0]->published == 0) {
 				// MP
 				//echo '<td class="mp"><div>'.$punkte[$x]->mp.'</div></td>';
 				echo '<td class="mp"><div>'.$punkte[$x]->mp; if ($punkte[$x]->abzug > 0) echo '*'; echo '</div></td>';
-				
+ 	
 				// BP
 				if ( $liga[0]->liga_mt == 0) {
 					echo '<td class="bp"><div>'.$punkte[$x]->bp.'</div></td>';

@@ -13,18 +13,18 @@
 
 class CLMViewMeldelisten
 {
-function setMeldelistenToolbar()
+public static function setMeldelistenToolbar()
 	{
 		JToolBarHelper::title( JText::_( 'TITLE_MELDELISTE' ), 'generic.png' );
-		JToolBarHelper::editListX();
+		JToolBarHelper::editList();
 		JToolBarHelper::help( 'screen.clm.meldeliste' );
 	}
 
-function meldelisten ( &$rows, &$lists, &$pageNav, $option )
+public static function meldelisten ( &$rows, &$lists, &$pageNav, $option )
 	{
 		$mainframe	= JFactory::getApplication();
 		CLMViewMeldelisten::setMeldelistenToolbar();
-		$user =& JFactory::getUser();
+		$user =JFactory::getUser();
 		//Ordering allowed ?
 		$ordering = ($lists['order'] == 'a.ordering');
 
@@ -56,10 +56,10 @@ function meldelisten ( &$rows, &$lists, &$pageNav, $option )
 			<thead>
 				<tr>
 					<th width="10">
-						<?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?>
+						#
 					</th>
 					<th width="10">
-						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $rows ); ?>);" />
+						<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 					</th>
 					<th class="title">
 						<?php echo JHtml::_('grid.sort',   'MELDELISTE_MANNSCHAFT', 'a.name', @$lists['order_Dir'], @$lists['order'] ); ?>
@@ -119,17 +119,11 @@ function meldelisten ( &$rows, &$lists, &$pageNav, $option )
 					</td>
 
 					<td>
-						<?php
-						if (  JTable::isCheckedOut($user->get ('id'), $row->checked_out ) ) {
-							echo $row->name;
-						} else {
-							?>
+	
 								<span class="editlinktip hasTip" title="<?php echo JText::_( 'MELDELISTE_EDIT' );?>::<?php echo $row->name.$row->man_nr; ?>">
 							<a href="<?php echo $link; ?>">
 								<?php echo $row->name; ?></a></span>
-							<?php
-						}
-						?>
+	
 					</td>
 
 
@@ -180,24 +174,24 @@ function meldelisten ( &$rows, &$lists, &$pageNav, $option )
 		<?php
 	}
 
-function setMeldelisteToolbar($row)
+public static function setMeldelisteToolbar($row)
 	{
 	// Menubilder laden
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 
 		$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
 		JArrayHelper::toInteger($cid, array(0));
 		if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
 			else { $text = JText::_( 'New' );}
 		$verein 	= JRequest::getVar( 'verein' );
-		JToolBarHelper::title(  JText::_( 'MELDELISTE')." ".$row->name .': <small><small>[ '. $text.' ]</small></small>', 'clm_headmenu_mannschaften.png');
+		JToolBarHelper::title(  JText::_( 'MELDELISTE')." ".$row->name .': [ '. $text.' ]', 'clm_headmenu_mannschaften.png');
 		JToolBarHelper::custom( 'save_meldeliste', 'save.png', 'save_f2.png', JText::_('SAVE'), false );
 		JToolBarHelper::custom( 'apply_meldeliste', 'apply.png', 'apply_f2.png', JText::_('APPLY'), false );
 		JToolBarHelper::cancel();
 		JToolBarHelper::help( 'screen.clm.edit' );
 	}
 		
-function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abgabe, $option)
+public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abgabe, $option)
 	{
 		CLMViewMeldelisten::setMeldelisteToolbar($row);
 		JRequest::setVar( 'hidemainmenu', 1 );
@@ -223,7 +217,7 @@ function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abgabe, $option)
 				<?php echo JText::_( 'MELDELISTE_BLOCK' ); ?>
 			</th>
 		</tr>
-<?php 	for ($i=0; $i<$liga[0]->stamm; $i++){ ?>
+<?php if(isset($liga[0])){for ($i=0; $i<$liga[0]->stamm; $i++){ ?>
 	<tr>
 		<td class="key" nowrap="nowrap">
 		  <label for="sid">
@@ -245,7 +239,7 @@ function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abgabe, $option)
 		  <input type="checkbox" name="check<?php echo $i+1; ?>" value="1" <?php if(isset($row_sel[$i]) AND $row_sel[$i]->gesperrt =="1") { echo 'checked="checked"'; }?>>
 		</td>
 	</tr>
-<?php } ?> 
+<?php }} ?> 
 		</table>
 		</fieldset>
 </div>
@@ -305,7 +299,7 @@ function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abgabe, $option)
 		</tr>
 <?php
 	// Ersatzspieler
- 	for ($i=$liga[0]->stamm; $i< ($liga[0]->stamm + $liga[0]->ersatz); $i++){
+ if(isset($liga[0])){	for ($i=$liga[0]->stamm; $i< ($liga[0]->stamm + $liga[0]->ersatz); $i++){
 ?>
 		<tr>
 			<td class="key" nowrap="nowrap"><label for="sid"><?php echo JText::_( 'MELDELISTE_BRETT_NR' ).' '.($i+1).' : '; ?></label>
@@ -326,7 +320,7 @@ function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abgabe, $option)
 		</td>
 
 	</tr>
-<?php } ?> 
+<?php }} ?> 
 		</table>
 		</fieldset>
 		</div>

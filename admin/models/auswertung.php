@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelAuswertung extends JModel {
+class CLMModelAuswertung extends JModelLegacy {
 
 	var $_swtFiles;
 
@@ -26,7 +24,7 @@ function datei() {
 
 	// Check for request forgeries
 	JRequest::checkToken() or die( 'Invalid Token' );
-	$db	= &JFactory::getDBO();
+	$db	= JFactory::getDBO();
 	$app	= JFactory::getApplication();
 	$option	= JRequest::getCmd('option');
 	$jinput = $app->input;
@@ -34,7 +32,7 @@ function datei() {
 	$mt	= $jinput->get('filter_mt', null, null);
 	$et	= $jinput->get('filter_et', null, null);
 	$format	= $jinput->get('filter_format', null, null);
-	$sid	= CLM_SEASON;
+	$sid	= clm_core::$access->getSeason();
 
 	// Link zum redirect generieren
 	$adminLink = new AdminLink();
@@ -42,14 +40,14 @@ function datei() {
 	$adminLink->makeURL();
 
 	// Dateinamen zusammensetzen
-	$date	=& JFactory::getDate();
-	$now	= $date->toMySQL();
+	$date	=JFactory::getDate();
+	$now	= $date->toSQL();
 	$datum	= JHTML::_('date',  $now, JText::_('d-m-Y__H-i-s'));
 
 	// Grunddaten für Ligen und Mannschaftsturniere laden
-	if($liga !="0" OR $mt !="0"){
+	if($liga !=null OR $mt !=null){
 		// Mannschaftsturnier eine Liga ID zuweisen
-		if($mt !="0"){ $liga = $mt;}
+		if($mt !=null){ $liga = $mt;}
 		
 		$sql = " SELECT a.* FROM #__clm_liga as a"
 			." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
@@ -87,8 +85,8 @@ function datei() {
 			$counter= intval(($liga_name[0]->teil - $count)/2)*$liga_name[0]->stamm;
 		} else {
 			$counter= 0;
-		}
- 
+	}
+	
 		// 2.	Einzelergebnisse pro Durchgang/Runde
 		for ($dg = 1; $dg <= $liga_name[0]->durchgang; $dg++) { 
 		  for ($rnd = 1; $rnd <= $liga_name[0]->runden; $rnd++) { 
@@ -119,7 +117,7 @@ function datei() {
 	}
 	
 	// Grunddaten für Einzelturniere laden
-	if($et !="0"){
+	if($et !=null){
 		$liga = $et;
 		$sql = " SELECT a.* FROM #__clm_turniere as a"
 			." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
@@ -133,7 +131,7 @@ function datei() {
 	}
 	
 	// Unterscheidung Einzel- und Mannschaftsturnier mit verschiedenen Ausgabemodi
-	if($et !="0") {
+	if($et !=null) {
 		$format = 2;  // Nur XML für Einzelturniere
 		$typ	= $liga_name[0]->typ;
 		if($typ =="1"){ $turnier_typ = 'SR'; } // SR: Einzelturnier; jeder gegen jeden
@@ -142,8 +140,8 @@ function datei() {
 		if($typ =="4"){ $turnier_typ = 'SC'; } 
 		if($typ =="5"){ $turnier_typ = 'SC'; } // SC: Einzelturnier; K.O. System (Pokal)
 	}
-	if($liga !="0") {
-		if($mt !="0"){ $format	= 2; } // Nur XML für Mannschaftsturniere. KEINE LIGA !
+	if($liga !=null) {
+		if($mt !=null){ $format	= 2; } // Nur XML für Mannschaftsturniere. KEINE LIGA !
 		
 		$typ	= $liga_name[0]->runden_modus;
 		if($typ =="1"){ $turnier_typ = 'TR'; } // TR: Mannschaftsturnier; jeder gegen jeden
@@ -312,10 +310,10 @@ function datei() {
 			if(!$spieler_runden[$cnt][($zg+1)][($zr+1)]) { $runde_temp .= "  :  0";	}
 				else { $runde_temp .= $spieler_runden[$cnt][($zg+1)][($zr+1)]; }
 		}
-	  }
-	  $xml .= $spl_data.$runde_temp."\n";
-	  unset($runde_temp);
-	  $cnt++;
+		}
+		$xml .= $spl_data.$runde_temp."\n";
+		unset($runde_temp);
+	$cnt++;
 	}
 
 
@@ -384,7 +382,7 @@ function datei() {
 		.'<notes>Erstellt mit CLM - ChessLeagueManager</notes>'
 		.'</tournament>'
 		;
-	
+
 	// Rundendaten ermitteln
 	if(!$et){
 		$sql = " SELECT * FROM #__clm_runden_termine "
@@ -428,7 +426,7 @@ function datei() {
 	if(!$et){
 		$sql = " SELECT a.*,v.Vereinname,s.PKZ,s.Geburtsjahr,s.Spielername,s.DWZ FROM `#__clm_rnd_spl` as a "
 			." LEFT JOIN #__clm_dwz_spieler as s ON s.sid = a.sid AND s.ZPS = a.zps AND s.Mgl_Nr = a.spieler "
-			." LEFT JOIN #__clm_dwz_vereine as v ON v.sid = a.sid AND v.ZPS = a.zps "
+			." LEFT JOIN #__clm_dwz_vereine as v ON v.ZPS = a.zps "
 			." WHERE a.sid = ".$sid
 			." AND a.lid = ".$liga_name[0]->id
 			." GROUP BY a.zps, a.spieler "
@@ -639,7 +637,7 @@ function datei() {
 	// Slashes aus Namen filtern und Namen mit Pfad zusammensetzen
 	$dat_name	= ereg_replace("[/]", "_", $liga_name[0]->name);
 	$file		= $dat_name.'__'.$datum;
-	$path		= JPath::clean(JPATH_ADMINISTRATOR.DS.'components'.DS.$option.DS.'elobase');
+	$path		= JPath::clean(JPATH_ADMINISTRATOR.DS.'components'.DS.$option.DS.'dewis');
 	if($format =="1"){ $datei_endung = "txt";}
 	if($format =="2"){ $datei_endung = "xml";}
 	$write		= $path.DS.$file.'.'.$datei_endung;
@@ -657,7 +655,7 @@ function xml_dateien()
 	{
 	jimport( 'joomla.filesystem.folder' );
 	$option		= JRequest::getCmd('option');
-	$filesDir 	= 'components'.DS.$option.DS.'elobase';
+	$filesDir 	= 'components'.DS.$option.DS.'dewis';
 	$ex_dbf		= JFolder::files( $filesDir, 'dbf$',true, false);
 	$ex_dbf[]	= 'index.html';
 	$files		= JFolder::files( $filesDir, '',true, false, $ex_dbf );
@@ -667,13 +665,13 @@ function xml_dateien()
 	$dateien = '<table style="width:100%;">';
 		for ($x=0; $x< $count; $x++ ) {
 			$dateien.='<tr>'
-				.'<td width="70%"><a href="components/com_clm/elobase/'.$files[$x].'" target="_blank">'.$files[$x].'</a></td>'
+				.'<td width="70%"><a href="components/com_clm/dewis/'.$files[$x].'" target="_blank">'.$files[$x].'</a></td>'
 				.'<td width="10%">&nbsp;&nbsp;</td>'
 				.'<td width="20%"><a href="index.php?option=com_clm&view=auswertung&task=delete&datei='.$files[$x].'" '
 				//.'onClick="submitform();"'
 				.'>Löschen</a></td>'
 				.'</tr>';
-			//$dateien .= '<a href="components/com_clm/elobase/'.$files[$x].'" target="_blank">'.$files[$x].'</a><br>';
+			//$dateien .= '<a href="components/com_clm/dewis/'.$files[$x].'" target="_blank">'.$files[$x].'</a><br>';
 		}
 	$dateien .= '</table>';
 	} else { $dateien = 'Keine Dateien vorhanden !'; }
@@ -690,7 +688,7 @@ function delete()
 	$app		= JFactory::getApplication();
 	
 	if($datei){
-		$filesDir 	= 'components'.DS.$option.DS.'elobase';
+		$filesDir 	= 'components'.DS.$option.DS.'dewis';
 		jimport('joomla.filesystem.file');
 		JFile::delete( $filesDir.DS.$datei );
 		$msg =JText::_( 'DB_DEL_SUCCESS');
@@ -705,7 +703,7 @@ function delete()
 	}	
 
 function liga_filter() {
-	$db =& JFactory::getDBO();	
+	$db =JFactory::getDBO();	
 	// Ligafilter
 	$sql = 'SELECT d.id AS cid, d.name FROM #__clm_liga as d'
 		." LEFT JOIN #__clm_saison as s ON s.id = d.sid"
@@ -719,7 +717,7 @@ function liga_filter() {
 	}
 	
 function turnier_filter() {
-	$db =& JFactory::getDBO();	
+	$db =JFactory::getDBO();	
 	// Ligafilter
 	$sql = 'SELECT d.id AS cid, d.name FROM #__clm_turniere as d'
 		." LEFT JOIN #__clm_saison as s ON s.id = d.sid"
@@ -733,7 +731,7 @@ function turnier_filter() {
 	}
 
 function mannschaftsturnier_filter() {
-	$db =& JFactory::getDBO();	
+	$db =JFactory::getDBO();	
 	// Ligafilter
 	$sql = 'SELECT d.id AS cid, d.name FROM #__clm_liga as d'
 		." LEFT JOIN #__clm_saison as s ON s.id = d.sid"

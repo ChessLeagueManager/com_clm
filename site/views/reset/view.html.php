@@ -25,7 +25,7 @@ jimport('joomla.application.component.view');
  * @subpackage	User
  * @since		1.5
  */
-class CLMViewReset extends JView
+class CLMViewReset extends JViewLegacy
 {
 	/**
 	 * Registry namespace prefix

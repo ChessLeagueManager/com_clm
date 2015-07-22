@@ -12,36 +12,34 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
+class CLMViewCatMain extends JViewLegacy {
 
-class CLMViewCatMain extends JView {
-
-	function display()
+	function display($tpl = NULL)
 	{
 
 		// Die Toolbar erstellen, die über der Seite angezeigt wird
 		JToolBarHelper::title( JText::_( 'JCATEGORIES' ) );
 
 		// nur, wenn Admin
-		if (CLM_usertype == 'admin' OR CLM_usertype == 'tl') {
+		if (clm_core::$access->getType() == 'admin' OR clm_core::$access->getType() == 'tl') {
 			JToolBarHelper::custom('add','new.png','new_f2.png', JText::_('ADD'), false);
-			JToolBarHelper::customX('copy', 'copy.png', 'copy_f2.png', JText::_('JTOOLBAR_DUPLICATE'));
+			JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', JText::_('JTOOLBAR_DUPLICATE'));
 		}
-		JToolBarHelper::editListX();
+		JToolBarHelper::editList();
 		// nur, wenn Admin
-		if (CLM_usertype == 'admin' OR CLM_usertype == 'tl') {
+		if (clm_core::$access->getType() == 'admin' OR clm_core::$access->getType() == 'tl') {
 			JToolBarHelper::spacer();
 			JToolBarHelper::publishList();
 			JToolBarHelper::unpublishList();
 		}
 		
-		if (CLM_usertype === 'admin') {
+		if (clm_core::$access->getType() === 'admin') {
 			JToolBarHelper::spacer();
 			JToolBarHelper::custom('delete','delete.png','delete_f2.png', JText::_('DELETE'), false);
 		}
 
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
-		$model =   &$this->getModel();
+		$model =   $this->getModel();
 
 		
 

@@ -1,0 +1,107 @@
+/* Ikonen  */
+#clm .clm .clm_button_big,  #clm .clm .clm_button_big:disabled{
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	text-shadow: none;
+	background-image:none;
+	background: transparent;
+	border:none;
+    	color: #666;
+    	list-style: outside none none;
+    	border: 1px solid #f4f4f4;
+    	padding: 1px 5px;
+    	text-align: center;
+}
+#clm .clm .clm_button_big:hover:enabled {
+    background: none repeat scroll 0 0 #f9f9f9;
+    background-image:none;
+    border-color: #eee #ccc #ccc #eee;
+    border-left: 1px solid #eee;
+    border-style: solid;
+    border-width: 1px;
+    color: #0b55c4;
+}
+#clm .clm .clm_button_big:enabled a:active {
+	position:relative;
+	top:1px;
+}
+#clm .clm .clm_button_big span {
+    	display: block;
+    	float: none;
+    	height: 32px;
+    	margin: 0 auto;
+    	width: 32px;
+}
+#clm .clm .clm_button_big_article span {
+	background-image:url(../images/bluestork/article.png);
+}
+#clm .clm .clm_button_big_back span {
+	background-image:url(../images/bluestork/back.png);
+}
+#clm .clm .clm_button_big_default span {
+	background-image:url(../images/bluestork/default.png);
+}
+#clm .clm .clm_button_big_delete span {
+	background-image:url(../images/bluestork/delete.png);
+}
+#clm .clm .clm_button_big_edit span {
+	background-image:url(../images/bluestork/edit.png);
+}
+#clm .clm .clm_button_big_publish span {
+	background-image:url(../images/bluestork/publish.png);
+}
+#clm .clm .clm_button_big_purge span {
+	background-image:url(../images/bluestork/purge.png);
+}
+#clm .clm .clm_button_big_refresh span {
+	background-image:url(../images/bluestork/refresh.png);
+}
+#clm .clm .clm_button_big_save span {
+	background-image:url(../images/bluestork/save.png);
+}
+#clm .clm .clm_button_big_save-copy span {
+	background-image:url(../images/bluestork/save-copy.png);
+}
+#clm .clm .clm_button_big_unpublish span {
+	background-image:url(../images/bluestork/unpublish.png);
+}
+#clm .clm .clm_button_big_new span {
+	background-image:url(../images/bluestork/new.png);
+}
+#clm .clm .clm_button_big_cancel span {
+	background-image:url(../images/bluestork/cancel.png);
+}
+#clm .clm .clm_button_big:disabled span{
+     	background-position: 0 32px; 
+}
+
+#clm .clm .clm_table_image_tournament {
+    	height: 40px;
+		background-image:url(../images/icons/clm_turnier.png);
+		background-repeat:no-repeat;
+}
+#clm .clm .clm_table_image_tournament p {
+	line-height: 2em;
+	margin:0 0 0 40px;
+}
+
+#clm .clm .clm_table_image_league {
+    	height: 40px;
+	background-image:url(../images/icons/clm_headmenu_liga.png);
+	background-repeat:no-repeat;
+}
+#clm .clm .clm_table_image_league p {
+	line-height: 2em;
+	margin:0 0 0 50px;
+}
+
+#clm .clm .clm_table_image_logging {
+    	height: 60px;
+	background-image:url(../images/icons/clm_logging.png);
+	background-repeat:no-repeat;
+}
+#clm .clm .clm_table_image_logging p {
+	line-height: 2.2em;
+	margin:0 0 0 60px;
+}

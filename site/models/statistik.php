@@ -13,7 +13,7 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
-class CLMModelStatistik extends JModel
+class CLMModelStatistik extends JModelLegacy
 {
 
 	function _getCLMLiga( &$options )
@@ -204,7 +204,7 @@ class CLMModelStatistik extends JModel
 			.", g.gpunkte, g.gpartien, g.gpunkte*100/g.gpartien as gprozent, g.gbrett "
 			." FROM #__clm_meldeliste_spieler as a"
 			." LEFT JOIN #__clm_dwz_spieler as d ON d.ZPS = a.zps AND d.Mgl_Nr = a.mgl_nr AND d.sid = a.sid"
-			." LEFT JOIN #__clm_dwz_vereine as v ON v.ZPS = a.zps AND v.sid = a.sid"
+			." LEFT JOIN #__clm_dwz_vereine as v ON v.ZPS = a.zps  AND v.sid = a.sid"
 			//." LEFT JOIN #__clm_mannschaften as m ON m.liga = a.lid AND m.sid = a.sid AND (m.zps = a.zps OR m.sg_zps = a.zps) AND m.man_nr = a.mnr"			
 			." LEFT JOIN #__clm_mannschaften as m ON m.liga = a.lid AND m.sid = a.sid AND (m.zps = a.zps OR FIND_IN_SET(a.zps,m.sg_zps) != 0) AND m.man_nr = a.mnr"			
 			." LEFT JOIN ( SELECT *, SUM(punkte) as gpunkte, COUNT(punkte) as gpartien, SUM(brett) as gbrett FROM #__clm_rnd_spl "
@@ -240,7 +240,7 @@ class CLMModelStatistik extends JModel
 		return @$result;
 	}
 
-	function checkSpieler( $punkte )
+	public static function checkSpieler( $punkte )
 	{
 	$sid = JRequest::getInt('saison','1');
 	$lid = JRequest::getInt('liga','1');	
@@ -286,7 +286,7 @@ class CLMModelStatistik extends JModel
 		return @$result;
 	}
 
-	function Bretter()
+	public static function Bretter()
 	{
 	$sid = JRequest::getInt('saison','1');
 	$lid = JRequest::getInt('liga','1');	
@@ -344,7 +344,7 @@ class CLMModelStatistik extends JModel
 		return $query;
 	}
 
-	function CLMBrett_all( $bretter )
+	public static function CLMBrett_all( $bretter )
 	{
 	$sid = JRequest::getInt('saison','1');
 	$lid = JRequest::getInt('liga','1');

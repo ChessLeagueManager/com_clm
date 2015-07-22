@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -20,16 +20,6 @@ $view = JRequest::getVar( 'view');
 $o_nr = JRequest::getVar( 'o_nr');
 // Variablen ohne foreach setzen
 $liga=$this->liga;
-	//Liga-Parameter aufbereiten
-	$paramsStringArray = explode("\n", $liga[0]->params);
-	$params = array();
-	foreach ($paramsStringArray as $value) {
-		$ipos = strpos ($value, '=');
-		if ($ipos !==false) {
-			$params[substr($value,0,$ipos)] = substr($value,$ipos+1);
-		}
-	}	
-	if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
 $punkte=$this->punkte;
 $spielfrei=$this->spielfrei;
 $dwzschnitt=$this->dwzschnitt;
@@ -42,6 +32,17 @@ $sumbp		=$this->sumbp;
 $einzel		=$this->einzel;
 $plan		=$this->plan;
 $termin		=$this->termin;
+  
+	//Liga-Parameter aufbereiten
+	$paramsStringArray = explode("\n", $liga[0]->params);
+	$params = array();
+	foreach ($paramsStringArray as $value) {
+		$ipos = strpos ($value, '=');
+		if ($ipos !==false) {
+			$params[substr($value,0,$ipos)] = substr($value,$ipos+1);
+		}
+	}	
+	if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
   
 if ($liga[0]->rang > 0) $anz_player = 999;
 else $anz_player = $liga[0]->stamm + $liga[0]->ersatz;
@@ -72,13 +73,13 @@ function Footer()
 }
 
 	// Konfigurationsparameter auslesen
-	$config	= &JComponentHelper::getParams( 'com_clm' );
-	$telefon= $config->get('man_tel',1);
-	$mobil	= $config->get('man_mobil',1);
-	$mail	= $config->get('man_mail',1);
+	$config = clm_core::$db->config();
+	$telefon= $config->man_tel;
+	$mobil	= $config->man_mobil;
+	$mail	= $config->man_mail;
 
 	// Userkennung holen
-	$user	=& JFactory::getUser();
+	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
 
 // Array für DWZ Schnitt setzen
@@ -138,8 +139,8 @@ if ( $liga[0]->b_wertung == 0) $leer = $leer + 4;
 if ($leer < 3) $leer = 2;
 
 // Datum der Erstellung
-$date =& JFactory::getDate();
-$now = $date->toMySQL();
+$date =JFactory::getDate();
+$now = $date->toSQL();
 
 $pdf=new PDF();
 $pdf->AliasNbPages();
@@ -233,10 +234,10 @@ if ($liga[0]->runden_modus == 1 OR $liga[0]->runden_modus == 2) {
 }
 if ($liga[0]->runden_modus == 3) { 
 	for ($y=0; $y< $liga[0]->runden; $y++) { 
-		if ($runden[$y]->name == "spielfrei") 
-			$pdf->Cell(13-$breite,$zelle,"  +",1,0,'C'); 
-		elseif (!isset($runden[$y])) 
+		if (!isset($runden[$y])) 
 			$pdf->Cell(13-$breite,$zelle,"",1,0,'C'); 
+		elseif ($runden[$y]->name == "spielfrei") 
+			$pdf->Cell(13-$breite,$zelle,"  +",1,0,'C'); 
 		else 
 			$pdf->Cell(13-$breite,$zelle,$runden[$y]->brettpunkte." (".$runden[$y]->rankingpos.")",1,0,'C'); 
 	}
@@ -283,7 +284,7 @@ if ($liga[0]->runden_modus == 3) {
 // Ende Runden
 	$pdf->Cell(8-$rbreite,$zelle,$punkte[$x]->mp,1,0,'C');
 	if ( $liga[0]->liga_mt == 0) {
-		$pdf->Cell(10-$breite,$zelle,$punkte[$x]->bp,1,0,'C'); 
+	$pdf->Cell(10-$breite,$zelle,$punkte[$x]->bp,1,0,'C'); 
 		if ($liga[0]->b_wertung > 0) {
 			$pdf->Cell(10-$breite,$zelle,$punkte[$x]->wp,1,0,'C'); }
 	} else {
@@ -351,7 +352,7 @@ $pdf->SetFont('Times','',$font);
 	$ibpr = 0;
 	foreach ($plan as $planl) { 
 		//if (($planl->tln_nr !== $mannschaft[$m]->tln_nr) AND ($planl->gegner !== $mannschaft[$m]->tln_nr)) continue;
-		//$datum =& JFactory::getDate($planl->datum);
+		//$datum =JFactory::getDate($planl->datum);
 		$hpkt = "";
 		$gpkt = "";
 		if (isset($termin[$cnt]->nr)) {
@@ -684,7 +685,7 @@ $pdf->SetFont('Times','',$font);
 	$ibpr = 0;
 	foreach ($plan as $planl) { 
 		if (($planl->tln_nr !== $mannschaft[$m]->tln_nr) AND ($planl->gegner !== $mannschaft[$m]->tln_nr)) continue;
-		//$datum =& JFactory::getDate($planl->datum);
+		//$datum =JFactory::getDate($planl->datum);
 		$pdf->Cell(10,4,' ',0,0);
 		$pdf->Cell(12,4,$planl->runde,0,0,'C');
 		$pdf->Cell(12,4,$planl->paar,0,0,'C');

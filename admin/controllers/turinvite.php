@@ -14,11 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-$clmAccess = new CLMAccess();
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerTurInvite extends JController {
+class CLMControllerTurInvite extends JControllerLegacy {
 	
 
 	// Konstruktor
@@ -26,24 +22,21 @@ class CLMControllerTurInvite extends JController {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= & JFactory::getDBO();
+		$this->_db		= JFactory::getDBO();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
 		
 		// turnierid
 		$this->id = JRequest::getInt('id');
-		
-		// access?
-		$clmAccess = new CLMAccess();
-		$row = & JTable::getInstance( 'turniere', 'TableCLM' );
+		$clmAccess = clm_core::$access;      
+		$row = JTable::getInstance( 'turniere', 'TableCLM' );
 		$row->load($this->id);
 		echo "<br>invrow: "; var_dump($row);
 		//$tournament = new CLMTournament($this->id, true);
 		//die('    tinvite');
 		//if (!$tournament->checkAccess(0,0,$row->tl)) {
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if (($row->tl != CLM_ID AND $clmAccess->access() !== false) AND ($clmAccess->access() !== true)) {
+		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) AND ($clmAccess->access('BE_tournament_edit_detail') !== true)) {
 			JError::raiseWarning( 500, JText::_('TOURNAMENT_NO_ACCESS') );
 			$this->adminLink = new AdminLink();
 			$this->adminLink->view = "turmain";
@@ -60,7 +53,7 @@ class CLMControllerTurInvite extends JController {
 
 	function save() {
 	
-		$this->app =& JFactory::getApplication();
+		$this->app =JFactory::getApplication();
 		
 		if ($this->_saveDo()) {
 	
@@ -84,14 +77,12 @@ class CLMControllerTurInvite extends JController {
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
 		// Instanz der Tabelle
-		$row = & JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = JTable::getInstance( 'turniere', 'TableCLM' );
 		$row->load( $this->id ); // Daten zu dieser ID laden
 
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if (($row->tl != CLM_ID AND $clmAccess->access() !== true) OR $clmAccess->access() === false) {
-		//if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+		$clmAccess = clm_core::$access;      
+		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
+		//if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
 			return false;
 		}

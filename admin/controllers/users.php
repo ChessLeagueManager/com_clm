@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerUsers extends JController
+class CLMControllerUsers extends JControllerLegacy
 {
 	/**
 	 * Constructor
@@ -30,21 +28,20 @@ function __construct( $config = array() )
 		$this->registerTask( 'unpublish','publish' );
 	}
 
-function display()
+function display($cachable = false, $urlparams = array())
 	{
 	$mainframe	= JFactory::getApplication();
 	$option 	= JRequest::getCmd( 'option' );
 	$section	= JRequest::getVar('section');
-	$db		=& JFactory::getDBO();
+	$db		=JFactory::getDBO();
 
-	require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_clm'.DS.'classes'.DS.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
-	$usertypestring = $clmAccess->usertypelist();  // usertypes, die der aktive user ändern darf
-	
+	$clmAccess = clm_core::$access;
+	$usertypestring = $clmAccess->usertypelist();  // usertypes, die der aktive user NICHT ändern darf
+
 	$filter_order		= $mainframe->getUserStateFromRequest( "$option.filter_order",'filter_order','a.id',	'cmd' );
 	$filter_order_Dir	= $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",'filter_order_Dir','','word' );
 	$filter_state		= $mainframe->getUserStateFromRequest( "$option.filter_state",'filter_state','','word' );
-	$filter_sid		= $mainframe->getUserStateFromRequest( "$option.filter_sid",'filter_sid',0,'int' );
+	$filter_sid		= $mainframe->getUserStateFromRequest( "$option.filter_sid",'filter_sid',clm_core::$access->getSeason(),'int' );
 	$filter_vid		= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'string' );
 	$filter_usertype	= $mainframe->getUserStateFromRequest( "$option.filter_usertype",'filter_usertype',0,'string' );
 	$search			= $mainframe->getUserStateFromRequest( "$option.search",'search','','string' );
@@ -52,12 +49,13 @@ function display()
 	$limit			= $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
 	$limitstart		= $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
 
+
 	$where = array();
-	$where[]=' c.archiv = 0'; // AND c.published = 1';
+	$where[]=' c.published = 1';
 	if ( $filter_usertype ) {	$where[] = "a.usertype = '$filter_usertype'"; }
-	if ( $filter_sid ) {	$where[] = 'a.sid = '.(int) $filter_sid; }
+	if ( $filter_sid ) {	$where[] = 'a.sid = '.$filter_sid;}
 	if ( $filter_vid ) {	$where[] = "a.zps = '$filter_vid'"; }
-	if ($search) {	$where[] = 'LOWER(a.name) LIKE '.$db->Quote( '%'.$db->getEscaped( $search, true ).'%', false );	}
+	if ($search) {	$where[] = 'LOWER(a.name) LIKE "'.$db->escape( '%'.$search.'%').'"';	}
 
 	if ( $filter_state ) {
 		if ( $filter_state == 'P' ) {
@@ -66,7 +64,7 @@ function display()
 			$where[] = 'a.published = 0';
 		}
 	}
-	$where[]=' a.usertype IN ('.$usertypestring.' ) '; 
+	if($usertypestring!=""){$where[]=' a.usertype OUT ('.$usertypestring.' ) ';} 
 
 	$where 		= ( count( $where ) ? ' WHERE ' . implode( ' AND ', $where ) : '' );
 	if ($filter_order == 'a.id') {
@@ -75,7 +73,7 @@ function display()
 		$orderby 	= ' ORDER BY d.ordering '.$filter_order_Dir.', a.id';
 	} elseif ($filter_order =='name' OR $filter_order == 'd.name' OR $filter_order == 'b.Vereinname' OR $filter_order == 'c.name' OR $filter_order == 'u.lastvisitDate' OR $filter_order == 'a.aktive' OR  $filter_order == 'a.published' OR $filter_order == 'a.ordering') { 
 		$orderby 	= ' ORDER BY '. $filter_order .' '. $filter_order_Dir .', a.id';
-	} else { $filter_order = 'a.id'; }
+	} else { $orderby=""; $filter_order = 'a.id'; }
  
 	// get the total number of records
 	$query = ' SELECT COUNT(*) '
@@ -85,6 +83,7 @@ function display()
 		;
 	$db->setQuery( $query );
 	$total = $db->loadResult();
+
 
 	jimport('joomla.html.pagination');
 	$pageNav = new JPagination( $total, $limitstart, $limit );
@@ -109,6 +108,11 @@ function display()
 	$db->setQuery( $query, $pageNav->limitstart, $pageNav->limit );
 
 	$rows = $db->loadObjectList();
+	
+	if($rows==0){
+		JError::raiseNotice( 6000, JText::_( 'USERS_NO_USER' ));	
+   }
+
 	if ($db->getErrorNum()) {
 		echo $db->stderr();
 		return false;
@@ -117,24 +121,26 @@ function display()
 	// Statusfilter
 	$lists['state']	= JHTML::_('grid.state',  $filter_state );
 	// Saisonfilter
-	$sql = 'SELECT id, name FROM #__clm_saison WHERE archiv =0';
+	$sql = 'SELECT id, name FROM #__clm_saison WHERE published=1';
 	$db->setQuery($sql);
 	$saisonlist[]		= JHTML::_('select.option',  '0', JText::_( 'USERS_SAISON' ), 'id', 'name' );
 	$saisonlist		= array_merge( $saisonlist, $db->loadObjectList() );
-	$lists['sid']		= JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+	
+	$lists['sid']		= JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_sid );
 
 	// Vereinefilter laden
-	require_once(JPATH_COMPONENT.DS.'controllers'.DS.'filter_vereine.php');
 	$vereinlist	= CLMFilterVerein::vereine_filter(0);
 	$lists['vid']	= JHTML::_('select.genericlist', $vereinlist, 'filter_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
 
+
 	// Funktionsliste
-	$sql = 'SELECT usertype, name FROM #__clm_usertype '
-			.' WHERE usertype IN ('.$usertypestring.' ) ' 
-			.' ORDER BY ordering ASC ';
+	$sql = 'SELECT usertype, name FROM #__clm_usertype ';
+	if($usertypestring!=""){ $sql.=	' WHERE usertype OUT ('.$usertypestring.' ) '; }
+	$sql.=	' ORDER BY ordering ASC ';
 	$db->setQuery($sql);
 	$usertypelist[]	= JHTML::_('select.option',  '0', JText::_( 'USERS_BENUTZER_DD' ), 'usertype', 'name' );
 	$usertypelist		= array_merge( $usertypelist, $db->loadObjectList() );
+
 	$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'filter_usertype', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','usertype', 'name', intval ($filter_usertype) );
 	// Ordering
 	$lists['order_Dir']	= $filter_order_Dir;
@@ -151,8 +157,8 @@ function edit()
 	{
 	$mainframe = JFactory::getApplication();
 
-	$db 		=& JFactory::getDBO();
-	$user 		=& JFactory::getUser();
+	$db 		=JFactory::getDBO();
+	$user 		=JFactory::getUser();
 	$task 		= JRequest::getVar( 'task');
 	$cid 		= JRequest::getVar( 'cid', array(0), '', 'array' );
 	$option 	= JRequest::getCmd( 'option' );
@@ -160,7 +166,7 @@ function edit()
 	JArrayHelper::toInteger($cid, array(0));
 
 	// Prüfen ob User Berechtigung zum editieren hat //
-	$row	= & JTable::getInstance( 'users', 'TableCLM' );
+	$row	= JTable::getInstance( 'users', 'TableCLM' );
 	$row->load( $cid[0] );
 	$id	= $row->jid;
 	$jid	= $user->get('id');
@@ -180,34 +186,22 @@ function edit()
  	}
  	$sid	= $row->sid;
 
-	require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_clm'.DS.'classes'.DS.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;
 	$usertypestring = $clmAccess->usertypelist();		// usertypes, die der aktive user ändern darf
 
 	// illegaler Einbruchversuch über URL !
 	// evtl. mitschneiden !?!
-	$saison		=& JTable::getInstance( 'saisons', 'TableCLM' );
+	$saison		=JTable::getInstance( 'saisons', 'TableCLM' );
 	$saison->load( $sid );
-	$clmAccess->accesspoint = 'BE_user_general';
-	if ( $saison->archiv == "1" AND $clmAccess->access() ) {
-	//if ($saison->archiv == "1" AND CLM_usertype !== 'admin') {
+	if ($task != 'add' && $saison->published == "0" && $clmAccess->access('BE_user_general') ) {
 		JError::raiseWarning( 500, JText::_( 'USERS_USER_BEAR' ));
-		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
+		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg , "message");
 				}
 	if ($cid[0]== "" AND $task =='edit') {
 		JError::raiseWarning( 500, JText::_( 'USERS_FALSCH' ));
-		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
+		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg , "message");
 				}
-
-	// User 62 (1. Superadmin) kann von niemanden geändert werden
-	//	 - Warum wird dann denn ausgerechnet 42 geprüft? -> FB
  	$user_publish = new JUser($id);
-	if ((JVersion::isCompatible("1.6.0") AND $user_publish->get('id') == 42 AND $user->get( 'id' ) != 42 ) OR
-		(JVersion::isCompatible("1.5.0") AND $user_publish->get('id') == 62 AND $user->get( 'id' ) != 62 ) )   {
-	JError::raiseWarning( 500, JText::_( 'USERS_USER_NO') );
-	$link = 'index.php?option='.$option.'&section='.$section;
-	$mainframe->redirect( $link, $msg );
-	}
 	// Es können keine Admin / Superadmin geändert werden von nicht-Superadmin-User
  	// Fehler: get('gid') existiert nicht mehr
  	// also erst wie oben gid laden, dann mit neuer gid prüfen
@@ -226,19 +220,13 @@ function edit()
 	{
 	JError::raiseWarning( 500, JText::_( 'USERS_NO_JOMMLA_ADMIN') );
 	$link = 'index.php?option='.$option.'&section='.$section;
-	$mainframe->redirect( $link, $msg );
+	$mainframe->redirect( $link, $msg, "message" );
 	}
-	// User kann nur niedrigere CLM-Berechtigungen ändern
-	//$sql = "SELECT usertype, user_clm, jid FROM #__clm_user WHERE jid =".$jid;
-	//$db->setQuery($sql);
-	//$clmuser = $db->loadObjectList();
-
-	//if ( $clmuser[0]->user_clm <= $row->user_clm AND $jid != $row->jid AND $gid != 8)
-	$clmAccess->accessusertype = $row->usertype;
-	if ( !$clmAccess->comparison() ) {
+	
+	if ( !$clmAccess->compare($row->usertype) ) {
 		JError::raiseWarning( 500, JText::_( 'USERS_BENUTZER') );
 		$link = 'index.php?option='.$option.'&section='.$section;
-		$mainframe->redirect( $link, $msg );
+		$mainframe->redirect( $link, $msg , "message");
 	}
  
 	if ($task == 'edit') {
@@ -251,7 +239,6 @@ function edit()
 	}
 
 	// Vereinefilter laden
-	require_once(JPATH_COMPONENT.DS.'controllers'.DS.'filter_vereine.php');
 	$vereinlist	= CLMFilterVerein::vereine_filter(0);
 
 	$filter_vid		= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'string' );
@@ -264,26 +251,19 @@ function edit()
 	// Publishliste
 	$lists['published']	= JHTML::_('select.booleanlist',  'published', 'class="inputbox"', $row->published );
 	// Saisonliste
-	if($task =="edit"){ $sql = 'SELECT id as sid, name FROM #__clm_saison WHERE id='.$sid;} 
-	else { $sql = 'SELECT id as sid, name FROM #__clm_saison WHERE archiv =0'; }
-	$db->setQuery($sql);
-	if (!$db->query()){$this->setRedirect( 'index.php?option='.$option.'&section='.$section );
-		return JError::raiseWarning( 500, $db->getErrorMsg() );}
-	if ($task !="edit") {
-	$saisonlist[]	= JHTML::_('select.option',  '0', JText::_( 'USERS_SAISON' ), 'sid', 'name' );
-	$saisonlist	= array_merge( $saisonlist, $db->loadObjectList() );
-		} else { $saisonlist	= $db->loadObjectList(); }
-	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="inputbox" size="1"','sid', 'name', $row->sid );
-	// Joomla Nutzer ohne CLM Account
-	$saisonids	= $db->loadObjectList();
-	$saisonidstring = "";
- 	foreach ($saisonids as $saisonid) {
-		$saisonidstring .= $saisonid->sid.",";
-	}
+	if($task =="edit"){ 
+	$season_list[]	= JHTML::_('select.option',  $sid, clm_core::$db->saison->get($sid)->name, 'sid', 'name' );
+	$lists['saison']= JHTML::_('select.genericlist',   $season_list, 'sid', 'class="inputbox" size="1"','sid', 'name', $row->sid );
 	$sql = " SELECT u.* FROM #__users as u "
-		." LEFT JOIN #__clm_user as a ON u.id = a.jid AND a.sid IN ('".$saisonidstring."')"
-		//." LEFT JOIN #__clm_user as a ON u.id = a.jid "
+		." LEFT JOIN #__clm_user as a ON u.id = a.jid AND a.sid IN ('".$sid."')"
 		." WHERE a.name IS NULL";
+	} else { 
+	$season_list[]	= JHTML::_('select.option',  clm_core::$access->getSeason(), clm_core::$db->saison->get(clm_core::$access->getSeason())->name, 'sid', 'name' );
+	$lists['saison']= JHTML::_('select.genericlist',  $season_list, 'sid', 'class="inputbox" size="1"','sid', 'name', clm_core::$access->getSeason() );
+	$sql = " SELECT u.* FROM #__users as u "
+		." LEFT JOIN #__clm_user as a ON u.id = a.jid AND a.sid IN ('".clm_core::$access->getSeason()."')"
+		." WHERE a.name IS NULL";
+	}
 	$db->setQuery($sql);
 	if (!$db->query()){
 		$this->setRedirect( 'index.php?option='.$option.'&section='.$section );
@@ -293,11 +273,12 @@ function edit()
 	$lists['jid']	= JHTML::_('select.genericlist',   $jid_list, 'pid', 'class="inputbox" size="1"','id', 'name', $row->jid );
 
 	// Funktionsliste
-	$sql = 'SELECT usertype, name FROM #__clm_usertype '
-			.' WHERE published = 1 AND usertype IN ('.$usertypestring.' ) '
-			.' ORDER BY ordering ';
+	$sql = 'SELECT usertype, name FROM #__clm_usertype ';
+	$sql .= ' WHERE published = 1 ';
+	if($usertypestring!=""){ $sql .= 'AND usertype OUT ('.$usertypestring.' ) '; }
+	$sql .= ' ORDER BY ordering ';
 	$db->setQuery($sql);
-	$usertypelist[]		= JHTML::_('select.option',  '0', JText::_( 'USERS_TYP' ), 'usertype', 'name' );
+	$usertypelist[]		= JHTML::_('select.option',  '', JText::_( 'USERS_TYP' ), 'usertype', 'name' );
 	$usertypelist		= array_merge( $usertypelist, $db->loadObjectList() );
 	$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'usertype', 'class="inputbox" size="1"','usertype', 'name', $row->usertype );
 
@@ -314,9 +295,9 @@ function save() {
 
 	$option		= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
-	$db 		= & JFactory::getDBO();
+	$db 		= JFactory::getDBO();
 	$task 		= JRequest::getVar( 'task');
-	$row 		= & JTable::getInstance( 'users', 'TableCLM' );
+	$row 		= JTable::getInstance( 'users', 'TableCLM' );
 	$clm_id		= JRequest::getVar( 'id');
 	$jid_clm	= JRequest::getInt( 'pid');
 
@@ -332,13 +313,7 @@ function save() {
 	$published	= JRequest::getVar('published');
 
 	// Vorbereitung Admin-Zugang setzen oder prüfen
-	require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_clm'.DS.'classes'.DS.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
-
-	// Zuordnen Zugangswert zu gewählten Usertype
-	$query = "SELECT user_clm FROM #__clm_usertype WHERE usertype = '$row->usertype' ";
-	$db->setQuery($query);
-	$row->user_clm=$db->loadResult();
+	$clmAccess = clm_core::$access;
 	
 	////////////////
 	// Neuer User //
@@ -372,11 +347,7 @@ function save() {
 			jimport('joomla.user.helper');
 			$activation= md5(JUserHelper::genRandomPassword());
 
-			// 6 = Manager ; 7 = Admin; 8 = Superadmin ; 2= registered
-			//if ($funktion > 69){ $group = '6'; } else { $group = '2'; }
-			$clmAccess->accessusertype = $usertype;
-			$clmAccess->accesspoint = 'BE_general_general';
-			if($clmAccess->accesstype() === true) { $group = '6'; } else { $group = '2'; }
+			if($clmAccess->accessWithType($usertype, 'BE_general_general') === true) { $group = '6'; } else { $group = '2'; }
 			if ($published == 1) { $block = 0; } else { $block = 1; }
 
 			$user_new		= new JUser();
@@ -414,7 +385,7 @@ function save() {
 			$jid = $row->jid;
 
 			$user_edit	= new JUser($jid_clm);
-			$user 		= &JFactory::getUser($jid_clm);
+			$user 		= JFactory::getUser($jid_clm);
 			$gids 		= $user->get('groups');
 			$gid	= 0;
 			foreach ($gids as $key => $value) {
@@ -430,10 +401,7 @@ function save() {
 			$data['username']	= $j_data[0]->username;
 			$data['email']		= $j_data[0]->email;	
 			$gids['2']		= 2;	// Registered immer setzen
-			//if ($funktion > 69) {		// Wenn clm-Funktion >69, dann setze Admin ggf. zusätzlich
-			$clmAccess->accessusertype = $usertype;
-			$clmAccess->accesspoint = 'BE_general_general';
-			if($clmAccess->accesstype() === true) { 
+			if($clmAccess->accessWithType($usertype, 'BE_general_general') === true) { 
 				$gids['6']		= 6;
 			} else {
 				unset($gids['6']);	// Ansonsten entferne Admin (und nur Admin!)
@@ -462,7 +430,7 @@ function save() {
 		$jid = $row->jid;
  
 		$user_edit	= new JUser($jid);
-		$user 		= &JFactory::getUser($jid);
+		$user 		= JFactory::getUser($jid);
 		$gids 		= $user->get('groups');
 		$gid	= 0;
 		foreach ($gids as $key => $value) {
@@ -480,10 +448,7 @@ function save() {
 		$data['email']		= $email;
 		$gids['2']		= 2;	// Registered immer setzen
 		
-		//if ($funktion > 69) {				// Wenn clm-Funktion >69, dann setze Admin ggf. zusätzlich
-		$clmAccess->accessusertype = $usertype;
-		$clmAccess->accesspoint = 'BE_general_general';
-		if ($clmAccess->accesstype()) {		// Wenn clm-usertype Admin-Zugang hat, dann setze Admin ggf. zusätzlich
+		if ($clmAccess->accessWithType($usertype,'BE_general_general')) {		// Wenn clm-usertype Admin-Zugang hat, dann setze Admin ggf. zusätzlich
 			$gids['6']		= 6;
 		} else {
 			unset($gids['6']);	// Ansonsten entferne Admin (und nur Admin!)
@@ -506,7 +471,7 @@ function save() {
 		JError::raiseError(500, $row->getError() );
 	}
 
-	$row->checkin();
+	
 
 	switch ($task) {
 		// 6 = Manager ; 7 = Admin; 8 = Superadmin ; 2= registered
@@ -514,14 +479,10 @@ function save() {
 		if ( $gid > 6 ) {
 			JError::raiseNotice( 6000,  JText::_( 'USERS_CLM' ));
 		}
-		//if ( $funktion > 69 AND $gid == 2 ) {
-		$clmAccess->accessusertype = $usertype;
-		$clmAccess->accesspoint = 'BE_general_general';
-		if ( $clmAccess->accesstype() AND $gid == 2 ) {
+		if ($clmAccess->accessWithType($usertype,'BE_general_general') AND $gid == 2 ) {
 			JError::raiseNotice( 6000,  JText::_( 'USERS_GO_ADMIN' ));
 		}
-		//if ( $funktion < 70 AND $gid == 6 ) {
-		if ( !$clmAccess->accesstype() AND $gid == 6 ) {
+		if ( !$clmAccess->accessWithType($usertype,'BE_general_general') AND $gid == 6 ) {
 			JError::raiseNotice( 6000,  JText::_( 'USERS_NO_ADMIN' ));
 		}
 		$msg = JText::_( 'USERS_AENDERN');
@@ -532,14 +493,10 @@ function save() {
 		if ( $gid > 6 ) {
 			JError::raiseNotice( 6000, JText::_( 'USERS_CLM') );
 		}
-		//if ( $funktion > 69 AND $gid == 2 ) {
-		$clmAccess->accessusertype = $usertype;
-		$clmAccess->accesspoint = 'BE_general_general';
-		if ( $clmAccess->accesstype() AND $gid == 2 ) {
+		if ($clmAccess->accessWithType($usertype,'BE_general_general') AND $gid == 2 ) {
 			JError::raiseNotice( 6000, JText::_( 'USERS_GO_ADMIN' ));
 		}
-		//if ( $funktion < 70 AND $gid == 6 ) {
-		if ( !$clmAccess->accesstype() AND $gid == 6 ) {
+		if ( !$clmAccess->accessWithType($usertype,'BE_general_general') AND $gid == 6 ) {
 			JError::raiseNotice( 6000,  JText::_( 'USERS_NO_ADMIN' ));
 		}
 		$msg = JText::_( 'USERS_BENUTZER_GESPEI');
@@ -553,23 +510,15 @@ function save() {
 	$clmLog->params = array('sid' => $row->sid, 'jid' => $row->jid);
 	$clmLog->write();
 	
-	$mainframe->redirect( $link, $msg );
+	$mainframe->redirect( $link, $msg, "message" );
 }
 
 
 function cancel() {
 	$mainframe = JFactory::getApplication();
-	// Check for request forgeries
-	JRequest::checkToken() or die( 'Invalid Token' );
-	
 	$option		= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
-	$id		= JRequest::getVar('id');	
-	$row 		=& JTable::getInstance( 'users', 'TableCLM' );
-	$row->checkin( $id);
-
-	$msg = JText::_( 'USERS_AKTION');
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
+	$mainframe->redirect('index.php?option='. $option.'&section='.$section);
 	}
 
 
@@ -579,11 +528,11 @@ function remove() {
 	// Check for request forgeries
 	JRequest::checkToken() or die( 'Invalid Token' );
 
-	$db 		= & JFactory::getDBO();
+	$db 		= JFactory::getDBO();
 	$cid 		= JRequest::getVar('cid', array(), '', 'array');
 	$option 	= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
-	$user 		= & JFactory::getUser();
+	$user 		= JFactory::getUser();
 	JArrayHelper::toInteger($cid);
 
 	if (count($cid) < 1) {
@@ -591,11 +540,10 @@ function remove() {
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
-	require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_clm'.DS.'classes'.DS.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;
 
 	// Prüfen ob User Berechtigung zum Löschen hat
-	$row =& JTable::getInstance( 'users', 'TableCLM' );
+	$row =JTable::getInstance( 'users', 'TableCLM' );
 	$row->load( $cid[0] );
 	$id	= $row->jid;
 	$jid	= $user->get('id');
@@ -606,33 +554,19 @@ function remove() {
 	if ( $user_publish->get('id') == $jid ) {
 		JError::raiseWarning( 500, JText::_( 'USERS_NO_LOESCH') );
 		$link = 'index.php?option='.$option.'&section='.$section;
-		$mainframe->redirect( $link, $msg );
-	}
-	// User 62 (1. Superadmin) kann von niemanden gelöscht werden
-	//if ( $user_publish->get('id') == 62 ) {
-	if ((JVersion::isCompatible("1.6.0") AND $user_publish->get('id') == 42 ) OR
-		(JVersion::isCompatible("1.5.0") AND $user_publish->get('id') == 62 ) )   {
-		JError::raiseWarning( 500, JText::_( 'USERS_USER_NO_LOESCH') );
-		$link = 'index.php?option='.$option.'&section='.$section;
-		$mainframe->redirect( $link, $msg );
+		$mainframe->redirect( $link, $msg, "message" );
 	}
 	// Es können keine Admin / Superadmin gelöscht werden von nicht-Superadmin-User
 	if ( $user_publish->get('gid') > 23 AND $gid < 25 ) {
 		JError::raiseWarning( 500, JText::_( 'USERS_NO_ADMIN_LOESCH') );
 		$link = 'index.php?option='.$option.'&section='.$section;
-		$mainframe->redirect( $link, $msg );
+		$mainframe->redirect( $link, $msg, "message" );
 	}
-	// User kann nur niedrigere CLM-Berechtigungen löschen
-	//$sql = "SELECT user_clm, jid FROM #__clm_user WHERE jid =".$jid;
-	//$db->setQuery($sql);
-	//$clmuser = $db->loadObjectList();;
 
-	//if ( $clmuser[0]->user_clm <= $row->user_clm AND CLM_usertype !== 'admin' ) {
-	$clmAccess->accessusertype = $row->usertype;
-	if ( !$clmAccess->comparison() ) {
+	if ( !$clmAccess->compare($row->usertype) ) {
 		JError::raiseWarning( 500, JText::_( 'USERS_BENUTZER_LOESCH') );
 		$link = 'index.php?option='.$option.'&section='.$section;
-		$mainframe->redirect( $link, $msg );
+		$mainframe->redirect( $link, $msg, "message" );
 	}
 	// aktuelle Saison holen
 	$query = 'SELECT id FROM #__clm_saison WHERE archiv=0 AND published=1 ORDER BY id DESC LIMIT 1';
@@ -643,7 +577,7 @@ function remove() {
 	if ( !$sid ) {
 	JError::raiseWarning( 500, JText::_( 'USERS_NO_SAISON') );
 	$link = 'index.php?option='.$option.'&section='.$section;
-	$mainframe->redirect( $link, $msg );
+	$mainframe->redirect( $link, $msg , "message");
 	}
 
 	$user_edit = new JUser($id);
@@ -672,7 +606,7 @@ function remove() {
 		JError::raiseNotice( 6000,  JText::_( 'USERS_JOOMLA_ACCOUNT' ));
 	}
 	$msg = "CLM Account wurde gelöscht !";
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg , "message");
 	}
 
 
@@ -683,8 +617,8 @@ function publish()
 	// Check for request forgeries
 	JRequest::checkToken() or die( 'Invalid Token' );
 
-	$db 		=& JFactory::getDBO();
-	$user 		=& JFactory::getUser();
+	$db 		=JFactory::getDBO();
+	$user 		=JFactory::getUser();
 	$cid		= JRequest::getVar('cid', array(), '', 'array');
 	$task		= JRequest::getCmd( 'task' );
 	$publish	= ($task == 'publish');
@@ -699,11 +633,10 @@ function publish()
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
-	require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_clm'.DS.'classes'.DS.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;
 
 	// Prüfen ob User Berechtigung zum (un-)publishen hat
-	$row =& JTable::getInstance( 'users', 'TableCLM' );
+	$row =JTable::getInstance( 'users', 'TableCLM' );
 	$row->load( $cid[0] );
 	$id = $row->jid;
 	$jid = $user->get('id');
@@ -715,40 +648,34 @@ function publish()
 	{
 	JError::raiseWarning( 500, JText::_( 'USERS_NO_BLOCK') );
 	$link = 'index.php?option='.$option.'&section='.$section;
-	$mainframe->redirect( $link, $msg );
+	$mainframe->redirect( $link, $msg, "message" );
 	}
 	// User 62 (1. Superadmin) kann von niemanden geblockt werden
 	if ( $user_publish->get('id') == 62 AND $task !="publish")
 	{
 	JError::raiseWarning( 500, JText::_( 'USERS_ZURUECKZIEHEN') );
 	$link = 'index.php?option='.$option.'&section='.$section;
-	$mainframe->redirect( $link, $msg );
+	$mainframe->redirect( $link, $msg, "message" );
 	}
 	// Es können keine Admin / Superadmin geblockt werden von nicht-Superadmin-User
 	if ( $user_publish->get('gid') > 23 AND $gid < 25 )
 	{
 	JError::raiseWarning( 500, JText::_( 'USERS_NO_JOOMLA') );
 	$link = 'index.php?option='.$option.'&section='.$section;
-	$mainframe->redirect( $link, $msg );
+	$mainframe->redirect( $link, $msg, "message" );
 	}
-	// User kann nur niedrigere CLM-Berechtigungen blocken
-	//$sql = "SELECT user_clm, jid FROM #__clm_user WHERE jid =".$jid;
-	//$db->setQuery($sql);
-	//$clmuser = $db->loadObjectList();;
-	//if ( $clmuser[0]->user_clm <= $row->user_clm AND $gid != 25 ) 	{
-	$clmAccess->accessusertype = $row->usertype;
-	if ( !$clmAccess->comparison() ) {
+
+	if ( !$clmAccess->compare($row->usertype) ) {
 		JError::raiseWarning( 500, JText::_( 'USERS_NO_ZURUECK') );
 		$link = 'index.php?option='.$option.'&section='.$section;
-		$mainframe->redirect( $link, $msg );
+		$mainframe->redirect( $link, $msg, "message" );
 	}
 
 	$cids = implode( ',', $cid );
 	$query = ' UPDATE #__clm_user'
 		.' SET published = '.(int) $publish
 		.' WHERE id IN ( '. $cids .' )'
-		.' AND jid <> '.CLM_ID
-		.' AND user_clm <= '.CLM_user
+		.' AND jid <> '.clm_core::$access->getJid()
 		.' AND ( checked_out = 0 OR ( checked_out = '.(int) $user->get('id') .' ) )'
 		;
 	if ($task =='publish') { $block = 0; }
@@ -757,7 +684,7 @@ function publish()
 	for ($x=0; $x <count($cid); $x++) {
 		$row->load( $cid[$x] );
 		$block_id = $row->jid;
-	$user_block =& JUser::getInstance( $block_id );
+	$user_block = JUser::getInstance( $block_id );
 	if ($user_block->gid < 24 ) {
 		$user_block->set('block', $block);
 		$user_block->save();
@@ -772,9 +699,8 @@ function publish()
 	if (!$db->query()) { JError::raiseError(500, $db->getErrorMsg() );
 	}
 	if (count( $cid ) == 1) {
-		$row =& JTable::getInstance( 'users', 'TableCLM' );
+		$row =JTable::getInstance( 'users', 'TableCLM' );
 		$row->load( $cid[0] );
-		$row->checkin( $cid[0] );
 	}
 
 	// Log schreiben
@@ -788,7 +714,7 @@ function publish()
 	if ( $row->aktive == 0 ) {
 	JError::raiseNotice( 6000, JText::_( 'USERS_INAKTIVE') );
 	}
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg , "message");
 	}
 /**
 * Moves the record up one position
@@ -815,7 +741,7 @@ function order( $inc )
 	// Check for request forgeries
 	JRequest::checkToken() or die( 'Invalid Token' );
 
-	$db		=& JFactory::getDBO();
+	$db		=JFactory::getDBO();
 	$cid		= JRequest::getVar('cid', array(0), '', 'array');
 	$option 	= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
@@ -824,12 +750,12 @@ function order( $inc )
 	$limit 		= JRequest::getVar( 'limit', 0, '', 'int' );
 	$limitstart 	= JRequest::getVar( 'limitstart', 0, '', 'int' );
 
-	$row =& JTable::getInstance( 'users', 'TableCLM' );
+	$row =JTable::getInstance( 'users', 'TableCLM' );
 	$row->load( $cid[0] );
 	$row->move( $inc, 'sid = '.(int) $row->sid.' AND published != 0' );
 
 	$msg 	= 'Liste umsortiert !'.$cid[0];
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg , "message");
 	}
 
 /**
@@ -842,7 +768,7 @@ function saveOrder(  )
 	// Check for request forgeries
 	JRequest::checkToken() or die( 'Invalid Token' );
 
-	$db		=& JFactory::getDBO();
+	$db		=JFactory::getDBO();
 	$cid		= JRequest::getVar( 'cid', array(), 'post', 'array' );
 	$option 	= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
@@ -852,7 +778,7 @@ function saveOrder(  )
 	$order		= JRequest::getVar( 'order', array(0), 'post', 'array' );
 	JArrayHelper::toInteger($order, array(0));
 
-	$row =& JTable::getInstance( 'users', 'TableCLM' );
+	$row =JTable::getInstance( 'users', 'TableCLM' );
 	$groupings = array();
 
 	// update ordering values
@@ -871,9 +797,10 @@ function saveOrder(  )
 	// execute updateOrder for each parent group
 	$groupings = array_unique( $groupings );
 	foreach ($groupings as $group){
-		$row->reorder('liga = '.(int) $group);
+		$row->reorder('id = '.(int) $group);
 	}
-	$msg 	= 'New ordering saved';
+	$app =JFactory::getApplication();
+	$app->enqueueMessage( JText::_('CLM_NEW_ORDERING_SAVED') );
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
@@ -885,11 +812,10 @@ function copy()
 	$option 	= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
 	$cid		= JRequest::getVar( 'cid', null, 'post', 'array' );
-	$db		= & JFactory::getDBO();
+	$db		= JFactory::getDBO();
 	$this->setRedirect( 'index.php?option='.$option.'&section='.$section );
 
-	require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_clm'.DS.'classes'.DS.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;
 	
 	JArrayHelper::toInteger($cid);
 	$n	= count( $cid );
@@ -898,25 +824,14 @@ function copy()
 	if ($n < 1) {
 		JError::raiseWarning( 500, JText::_( 'USERS_KOPIE') );
 		$link = 'index.php?option='.$option.'&section='.$section;
-		$mainframe->redirect( $link, $msg );
+		$mainframe->redirect( $link, $msg, "message" );
 	}
-	// Prüfen ob User Berechtigung zum kopieren hat
-	$query = " SELECT MAX(user_clm) as max FROM #__clm_user as a"
-		." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
-		." WHERE a.id IN ( $cids )"
-		." AND s.published = 1 AND s.archiv = 0 "
-		;
-	$db->setQuery( $query );
-	$err = $db->loadObjectList();
 
-	//	if ( $usertype != 'admin' AND ($table->usertype == 'admin' OR $table->usertype == sl) AND $table->jid != $jid ) {
-	//if ($err[0]->max > CLM_user AND CLM_usertype != 'admin') {
-	$clmAccess->accesspoint = 'BE_user_copy';
-	if($clmAccess->access() === false) {
+	if($clmAccess->access('BE_user_copy') === false) {
 		JError::raiseWarning( 500, JText::_( 'USERS_NO_KOPIE') );
 		//JError::raiseNotice( 6000,  JText::_( 'USERS_IST_HOEHER') );
 		$link = 'index.php?option='.$option.'&section='.$section;
-		$mainframe->redirect( $link, $msg );
+		$mainframe->redirect( $link, $msg , "message");
 					}
 
 	// id nächste Saison bestimmen
@@ -944,7 +859,7 @@ function copy()
 	$jids = $db->loadObjectList();
 
 	$cnt = 0;
-	$row = & JTable::getInstance( 'users', 'TableCLM' );
+	$row = JTable::getInstance( 'users', 'TableCLM' );
 
 	foreach ($jids as $jids) {
 	// schon kopiert ?
@@ -986,11 +901,11 @@ function send()
 	$mainframe = JFactory::getApplication();
 	// Check for request forgeries
 	JRequest::checkToken() or die( 'Invalid Token' );
-	$db		=& JFactory::getDBO();
+	$db		=JFactory::getDBO();
 	$cid 		= JRequest::getVar('cid', array(), '', 'array');
 	$option 	= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
-	$user	= &JFactory::getUser();
+	$user	= JFactory::getUser();
 	JArrayHelper::toInteger($cid);
 	$n = count($cid);
 
@@ -1000,39 +915,28 @@ function send()
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section ); 
 			}
 	// Prüfen ob User Berechtigung zum Accountdaten schicken / erneuern hat
-	$row =& JTable::getInstance( 'users', 'TableCLM' );
+	$row =JTable::getInstance( 'users', 'TableCLM' );
 	//$row->load( $cid[0] );
 
-	//$jid		=  $user->get('id');
-	//$sql		= "SELECT usertype,user_clm FROM #__clm_user WHERE jid =".$jid;
-	//$db->setQuery($sql);
-	//$clmuser	= $db->loadObjectList();
-	//$usertype	= $clmuser[0]->usertype;
-	//$user_clm	= $clmuser[0]->user_clm;
 
-	require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_clm'.DS.'classes'.DS.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
-	$clmAccess->accesspoint = 'BE_user_general';
-	if ($clmAccess->access() === false) {
-	//if ( $usertype != 'admin' AND ($table->usertype == 'admin' OR $table->usertype == 'sl') AND $table->jid != $jid ) {
+	$clmAccess = clm_core::$access;
+	if ($clmAccess->access('BE_user_general') === false) {
 		JError::raiseWarning( 500, JText::_( 'USERS_NO_SEND') );
 		$link = 'index.php?option='.$option.'&section='.$section;
-		$mainframe->redirect( $link, $msg );
-					}
+		$mainframe->redirect( $link, $msg, "message" );
+	}
+	if ($clmAccess->access('BE_user_copy') === true) {
 
-	$clmAccess->accesspoint = 'BE_user_copy';
-	if ($clmAccess->access() === true) {
-	//if ($user_clm == '100') {
 	$cids = implode( ',', $cid );
 	$query = "SELECT a.jid,a.name,a.email,a.username,a.aktive, b.name as funktion, u.activation"
 	." FROM #__clm_user as a"
-	." LEFT JOIN #__clm_usertype AS b ON b.user_clm = a.user_clm"
+	." LEFT JOIN #__clm_usertype AS b ON b.usertype = a.usertype"
 	." LEFT JOIN #__users AS u ON u.id = a.jid "
 	. " WHERE a.id IN ( '". $cids ."' )";
 	} else {
 	$query = "SELECT a.jid,a.name,a.email,a.username,a.aktive, b.name as funktion, u.activation"
 	." FROM #__clm_user as a"
-	." LEFT JOIN #__clm_usertype AS b ON b.user_clm = a.user_clm"
+	." LEFT JOIN #__clm_usertype AS b ON b.usertype = a.usertype"
 	." LEFT JOIN #__users AS u ON u.id = a.jid "
 	." WHERE a.id = ".$cid[0];
 	$n=1;
@@ -1046,14 +950,14 @@ function send()
 
 	// BCC Adresse aus Konfiguration holen
 	// Konfigurationsparameter auslesen
-	$config = &JComponentHelper::getParams( 'com_clm' );
+	$config = clm_core::$db->config();
 
 	// Zur Abwärtskompatibilität mit CLM <= 1.0.3 werden alte Daten aus Language-Datei als Default eingelesen
-	$from = $config->get('email_from', JText::_('USER_MAIL_FROM'));
-	$fromname = $config->get('email_fromname', JText::_('USER_MAIL_FROM_NAME'));
-	$bcc	= $config->get('email_bcc', $config->get('bcc'));
+	$from = $config->email_from;
+	$fromname = $config->email_fromname;
+	$bcc	= $config->email_bcc;
 	
-	$subject_neu = "[".$config->get('email_fromname', JText::_('USER_MAIL_FROM_NAME'))."]: ".JText::_('USER_MAIL_SUBJECT_NEWACCOUNT');
+	$subject_neu = "[".$config->email_fromname."]: ".JText::_('USER_MAIL_SUBJECT_NEWACCOUNT');
 	
 	$msg = JText::_( 'USERS_VERSCHICKT');
 
@@ -1081,7 +985,9 @@ function send()
 				.JText::_('USER_MAIL_10')
 				;
 			// Email mit Accountdaten schicken
-			JUtility::sendMail ($from, $fromname, $recipient, $subject_neu, $body, 0, $cc, $bcc);
+			jimport( 'joomla.mail.mail' );
+			$mail = JFactory::getMailer();
+			$mail->sendMail($from, $fromname, $recipient, $subject_neu, $body, 0, null, $bcc);
 
 		}
 		////////////////////////////////////////////////
@@ -1092,7 +998,7 @@ function send()
 			//$jid = $rows[$i]->jid;
 
 			$recipient = $rows[$i]->email;
-			$subject_remind = "[".$config->get('email_fromname', JText::_('USER_PASSWORD_SUBJECT'))."]: ".JText::_('USER_PASSWORD_SUBJECT');
+			$subject_remind = "[".$config->email_fromname."]: ".JText::_('USER_PASSWORD_SUBJECT');
 			$body = JText::_('USER_PASSWORD_MAIL_1')." ".$rows[$i]->name."," 
 				.JText::_('USER_PASSWORD_MAIL_2')
 				.JText::_('USER_PASSWORD_MAIL_3')
@@ -1107,7 +1013,9 @@ function send()
 				;
 
 			// Erinnerungsmail schicken
-			JUtility::sendMail ($from,$fromname,$recipient,$subject_remind,$body,0,$cc,$bcc);
+			jimport( 'joomla.mail.mail' );
+			$mail = JFactory::getMailer();
+			$mail->sendMail($from,$fromname,$recipient,$subject_remind,$body,0,null,$bcc);
 
 			//$msg = JText::_( 'USERS_MIDESTENS'.$bcc);
 			$msg = JText::_( 'USERS_MIDESTENS');
@@ -1131,7 +1039,7 @@ function send()
 	$clmLog->params = array('jid' => $cid[0], 'cids' => $cids);
 	$clmLog->write();
 	
-	$mainframe->redirect( $link, $msg );
+	$mainframe->redirect( $link, $msg, "message" );
 	}
 
 function copy_saison()
@@ -1139,16 +1047,13 @@ function copy_saison()
 	$mainframe = JFactory::getApplication();
 	// Check for request forgeries
 	JRequest::checkToken() or die( 'Invalid Token' );
-	$db		= & JFactory::getDBO();
+	$db		= JFactory::getDBO();
 	$option 	= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
 
-	require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_clm'.DS.'classes'.DS.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;
 
-	//if (CLM_usertype !="admin" ) {
-	$clmAccess->accesspoint = 'BE_user_copy';
-	if($clmAccess->access() === false) {
+	if($clmAccess->access('BE_user_copy') === false) {
 		JError::raiseWarning(500, JText::_( 'USERS_ADMIN', true ) );
 		$mainframe->redirect( 'index.php?option='.$option.'&section='.$section );
 			}
@@ -1223,7 +1128,7 @@ function copy_saison()
 		}
 
 	// User laden und mit neuer Saison speichern
-	$row =& JTable::getInstance( 'users', 'TableCLM' );
+	$row =JTable::getInstance( 'users', 'TableCLM' );
 
 	for($x=0; $x < count($spieler); $x++) {
 		$row->load( ($spieler[$x]->id));
@@ -1238,7 +1143,7 @@ function copy_saison()
 	$clmLog->params = array('jid' => $jid, 'cids' => $users);
 	$clmLog->write();
 	
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg, "message" );
 	}
 	
 	//UserAccessGroups

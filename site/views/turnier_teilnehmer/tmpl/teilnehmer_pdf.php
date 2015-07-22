@@ -13,9 +13,9 @@
 defined('_JEXEC') or die('Restricted access');
 
 $turnierid		= JRequest::getInt('turnier','1');
-$config			= &JComponentHelper::getParams( 'com_clm' );
+$config			= clm_core::$db->config();
 
-$turParams = new JParameter($this->turnier->params);
+$turParams = new clm_class_params($this->turnier->params);
 
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'fpdf.php');
 
@@ -50,8 +50,8 @@ $br08 = 10;
 $font = 10;
 
 // Datum der Erstellung
-$date =& JFactory::getDate();
-$now = $date->toMySQL();
+$date =JFactory::getDate();
+$now = $date->toSQL();
 
 $pdf=new PDF();
 $pdf->AliasNbPages();
@@ -112,7 +112,7 @@ $pdf->SetTextColor(0);
 		$pdf->Cell($br05,$zelle,$value->FIDEcco,1,0,'C',1); }
 	$pdf->Cell($br06,$zelle,$value->twz,1,0,'C',1); 
 	if ($turParams->get('displayPlayerRating', 1) == 1) {
-		$pdf->Cell($br07,$zelle,$value->NATrating,1,0,'C',1); }
+		$pdf->Cell($br07,$zelle,$value->start_dwz,1,0,'C',1); }
 	if ($turParams->get('displayPlayerElo', 0) == 1) {
 		$pdf->Cell($br08,$zelle,$value->FIDEelo,1,0,'C',1); }
 	$pdf->Cell(1,$zelle," ",0,1,'C');

@@ -14,7 +14,7 @@ defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
 
-class CLMModelMannschaft extends JModel
+class CLMModelMannschaft extends JModelLegacy
 {
 
 	function _getCLMMannschaft( &$options )
@@ -73,7 +73,7 @@ class CLMModelMannschaft extends JModel
 		$rang	=$man[0]->rang;
 		$ersatz_regel	=$man[0]->ersatz_regel;
 	if ($rang > 0) {
-		$query = " SELECT m.tln_nr as tln_nr,a.snr,a.start_dwz,a.mgl_nr,a.zps, d.Spielername as name,d.DWZ as dwz "
+		$query = " SELECT a.start_dwz, m.tln_nr as tln_nr,a.snr,a.dwz,a.mgl_nr,a.zps, d.Spielername as name,d.DWZ as dwz "
 			.",r.man_nr as rmnr, r.Rang as rrang "
 			." FROM #__clm_meldeliste_spieler as a "
 			." LEFT JOIN #__clm_rangliste_spieler as r on r.ZPS = a.zps AND r.Mgl_Nr = a.mgl_nr AND r.sid = a.sid "

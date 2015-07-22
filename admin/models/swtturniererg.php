@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelSWTTurnierErg extends JModel {
+class CLMModelSWTTurnierErg extends JModelLegacy {
 
 	var $_SWTmatchesWhite;
 	var $_SWTmatchesBlack;
@@ -125,7 +123,7 @@ class CLMModelSWTTurnierErg extends JModel {
 	
 	function getTeilnehmerNamen(){
 		if(empty($this->_teilnehmerNamen)) {
-			$db		=& JFactory::getDBO ();
+			$db		=JFactory::getDBO ();
 			
 			//Turnier-ID auslesen
 			$swt_tid = clm_escape(JRequest::getVar('swt_tid'));
@@ -145,7 +143,7 @@ class CLMModelSWTTurnierErg extends JModel {
 	}
 	
 	function getErgebnisTexte() {
-		$db		=& JFactory::getDBO ();
+		$db		=JFactory::getDBO ();
 		
 		$select_query = " 	SELECT 
 								`eid`,`erg_text`
@@ -369,7 +367,7 @@ class CLMModelSWTTurnierErg extends JModel {
 	}
 	
 	function _setRundenDetailsByDatabase($tid, $runde) {
-		$db		=& JFactory::getDBO ();
+		$db		=JFactory::getDBO ();
 		
 		$select_query = " 	SELECT 
 								*
@@ -446,13 +444,13 @@ class CLMModelSWTTurnierErg extends JModel {
 	
 	
 	function _storeRundenInfos() {
-		$db		=& JFactory::getDBO ();
+		$db		=JFactory::getDBO ();
 		$this->getRunden();
 		$rfirst = JRequest::getVar('rfirst', '', 'post', 'int');
 		$rlast  = JRequest::getVar('rlast', '', 'post', 'int');
 		
 		if(!empty($this->_runden)) {
-			$insert_query = " 	INSERT INTO 
+			$insert_query = " 	INSERT IGNORE INTO 
 									#__clm_swt_turniere_rnd_termine" . " 
 									( `sid`, `name`, `turnier`, `swt_tid`, `dg`, `nr`, `datum`, `startzeit`, `abgeschlossen`, `tl_ok`, `published`, `bemerkungen`, `bem_int`) "
 						  . " 	VALUES";
@@ -502,13 +500,13 @@ class CLMModelSWTTurnierErg extends JModel {
 	}
 	
 	function _storePaarungen() {
-		$db		=& JFactory::getDBO ();
+		$db		=JFactory::getDBO ();
 		$this->getRunden();
 		$rfirst = JRequest::getVar('rfirst', '', 'post', 'int');
 		$rlast  = JRequest::getVar('rlast', '', 'post', 'int');
 		
 		if(!empty($this->_runden)) {
-			$insert_query = " 	INSERT INTO 
+			$insert_query = "INSERT IGNORE INTO 
 									#__clm_swt_turniere_rnd_spl" . " 
 									( `sid`, `turnier`, `swt_tid`, `runde`, `brett`, `dg`, `tln_nr`, `heim`, `spieler`, `gegner`, `ergebnis`) "
 						  . " 	VALUES";
@@ -586,7 +584,7 @@ class CLMModelSWTTurnierErg extends JModel {
 	
 	function _deleteSpielfreiDummys() {
 		$swt_tid	= clm_escape(JRequest::getVar('swt_tid'));
-		$db		=& JFactory::getDBO ();
+		$db		=JFactory::getDBO ();
 		
 		//Anzahl der Spielfrei-Dummys feststellen
 		
@@ -678,7 +676,7 @@ class CLMModelSWTTurnierErg extends JModel {
 	}
 	
 	function _copyTurnier($swt_tid, $update, $tid) {
-		$db		=& JFactory::getDBO ();
+		$db		=JFactory::getDBO ();
 	
 		$select_query = "	SELECT 
 								*
@@ -719,7 +717,7 @@ class CLMModelSWTTurnierErg extends JModel {
 	}
 	
 	function _copyTeilnehmer($swt_tid, $update, $tid) {
-		$db		=& JFactory::getDBO ();
+		$db		=JFactory::getDBO ();
 	
 		$delete_query = "	DELETE FROM
 								#__clm_turniere_tlnr
@@ -753,7 +751,7 @@ class CLMModelSWTTurnierErg extends JModel {
 	}
 	
 	function _copyRundenInfos($swt_tid, $update, $tid) {
-		$db		=& JFactory::getDBO ();
+		$db		=JFactory::getDBO ();
 	
 		$delete_query = "	DELETE FROM
 								#__clm_turniere_rnd_termine
@@ -788,7 +786,7 @@ class CLMModelSWTTurnierErg extends JModel {
 	}
 	
 	function _copyPaarungen($swt_tid, $update, $tid) {
-		$db		=& JFactory::getDBO ();
+		$db		=JFactory::getDBO ();
 	
 		$delete_query = "	DELETE FROM
 								#__clm_turniere_rnd_spl
@@ -823,7 +821,7 @@ class CLMModelSWTTurnierErg extends JModel {
 	}
 	
 	function _getTid($swt_tid) {
-		$db		=& JFactory::getDBO ();
+		$db		=JFactory::getDBO ();
 		
 		$select_query = "	SELECT 
 								tid

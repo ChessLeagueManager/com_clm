@@ -12,15 +12,15 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewTurnier_Player extends JView {
+class CLMViewTurnier_Player extends JViewLegacy {
 	
 	function display($tpl = null) {
 		
-		$config	= &JComponentHelper::getParams( 'com_clm' );
+		$config = clm_core::$db->config();
 		
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 		
 		if ($model->pgnShow) {
 			$document->addScript(JURI::base().'components/com_clm/javascript/jsPgnViewer.js');
@@ -31,9 +31,9 @@ class CLMViewTurnier_Player extends JView {
 			$document->addScriptDeclaration("var randomid = $now;");
 			// pgn-params
 			$document->addScriptDeclaration("var param = new Array();");
-			$document->addScriptDeclaration("param['fe_pgn_moveFont'] = '".$config->get('fe_pgn_moveFont',"#666")."';");
-			$document->addScriptDeclaration("param['fe_pgn_commentFont'] = '".$config->get('fe_pgn_commentFont',"#888")."';");
-			$document->addScriptDeclaration("param['fe_pgn_style'] = '".$config->get('fe_pgn_style',"png")."';");
+			$document->addScriptDeclaration("param['fe_pgn_moveFont'] = '".$config->fe_pgn_moveFont."'");
+			$document->addScriptDeclaration("param['fe_pgn_commentFont'] = '".$config->fe_pgn_commentFont."'");
+			$document->addScriptDeclaration("param['fe_pgn_style'] = '".$config->fe_pgn_style."'");
 			// Tooltip-Texte
 			$document->addScriptDeclaration("var text = new Array();");
 			$document->addScriptDeclaration("text['altRewind'] = '".JText::_('PGN_ALT_REWIND')."';");
@@ -55,7 +55,9 @@ class CLMViewTurnier_Player extends JView {
 		$this->assignRef('turnier', $model->turnier);
 		
 		$this->assignRef('pgnShow', $model->pgnShow);
-		$this->assignRef('tourn_linkclub', $config->get('tourn_linkclub', 1));
+		
+		$tourn_linkclub = $config->tourn_linkclub;
+		$this->assignRef('tourn_linkclub', $tourn_linkclub);
 
 		$this->assignRef('player', $model->player);
 		

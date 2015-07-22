@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link http://www.fishpoke.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,22 +12,22 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewVereinsliste extends JView
+class CLMViewVereinsliste extends JViewLegacy
 {
-	function display($tpl = 'raw') {
+	function display($tpl = "raw") {
 	
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$vereinsliste     = $model->getCLMVereinsliste();
 		$this->assignRef('vereinsliste'  , $vereinsliste);
 		
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$vereine     = $model->getCLMVereine();
 		$this->assignRef('vereine'  , $vereine);
 		
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		
 		$mainframe = JFactory::getApplication();
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 		$document->setTitle($mainframe->getCfg('sitename')." - ".JText::_('CLUBS_LIST'));
 		
 		parent::display($tpl);

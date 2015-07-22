@@ -12,9 +12,7 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
-
-class CLMViewAuswertung extends JView {
+class CLMViewAuswertung extends JViewLegacy {
 	function display($tpl = null) {
 		
 		$app	= JFactory::getApplication();
@@ -23,9 +21,8 @@ class CLMViewAuswertung extends JView {
  		$model	= $this->getModel('auswertung');
 
 		//Toolbar
-		require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_clm'.DS.'images'.DS.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( JText::_('Liga- und Turnierauswertung per DeWiS') ,'clm_headmenu_manager.png' );
-		JToolBarHelper::custom( 'datei', 'upload.png', 'upload_f2.png', JText::_('Datei erstellen'), false);
 		$tpl = null;
 		
 		if($task =='datei'){
@@ -55,7 +52,7 @@ class CLMViewAuswertung extends JView {
 		$lists['et_lid']	= $model->turnier_filter();
 		$lists['mt_lid']	= $model->mannschaftsturnier_filter();
 		$lists['files']	= $model->xml_dateien();
-		
+
 		// Daten an Template
 		$this->assignRef( 'lists', $lists );
 

@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelTurPlayers extends JModel {
+class CLMModelTurPlayers extends JModelLegacy {
 
 	var $_pagination = null;
 	var $_total = null;
@@ -26,7 +24,7 @@ class CLMModelTurPlayers extends JModel {
 
 
 		// user
-		$this->user =& JFactory::getUser();
+		$this->user =JFactory::getUser();
 		
 		// get parameters
 		$this->_getParameters();
@@ -46,7 +44,7 @@ class CLMModelTurPlayers extends JModel {
 		global $mainframe, $option;
 		//Joomla 1.6 compatibility
 		if (empty($mainframe)) {
-			$mainframe = &JFactory::getApplication();
+			$mainframe = JFactory::getApplication();
 			$option = $mainframe->scope;
 		}
 	
@@ -128,7 +126,7 @@ class CLMModelTurPlayers extends JModel {
 			$where[] = 'a.zps = '.$this->_db->Quote($this->param['vid']); 
 		}
 		if ($this->param['search'] != '') {
-			$where[] = 'a.LOWER(name) LIKE '.$this->_db->Quote( '%'.$this->_db->getEscaped( $this->param['search'], true ).'%', false );
+			$where[] = 'LOWER(a.name) LIKE '.$this->_db->Quote( '%'.clm_escape( $this->param['search'] ).'%', false );
 		}
 	
 		$where 		= ( count( $where ) ? ' WHERE ' . implode( ' AND ', $where ) : '' );
@@ -140,7 +138,7 @@ class CLMModelTurPlayers extends JModel {
 	function _sqlOrder() {
 		
 		// array erlaubter order-Felder:
-		$arrayOrderAllowed = array('name', 'rankingPos', 'titel', 'snr', 'NATrating', 'FIDEelo', 'twz', 'verein', 'ordering', 'sum_punkte');
+		$arrayOrderAllowed = array('name', 'rankingPos', 'titel', 'snr', 'start_dwz', 'FIDEelo', 'twz', 'verein', 'ordering', 'sum_punkte');
 		if (!in_array($this->param['order'], $arrayOrderAllowed)) {
 			$this->param['order'] = 'id';
 		}

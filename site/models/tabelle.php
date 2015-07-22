@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -13,7 +13,7 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
-class CLMModelTabelle extends JModel
+class CLMModelTabelle extends JModelLegacy
 {
 	
 	function _getCLMLiga( &$options )
@@ -188,7 +188,7 @@ class CLMModelTabelle extends JModel
 		return @$result;
 	}
 	
-	function punkte_tlnr ( $sid, $lid, $tlnr, $dg, $runden_modus )
+	public static function punkte_tlnr ( $sid, $lid, $tlnr, $dg, $runden_modus )
 	{
 	$db	= JFactory::getDBO();
 	$query = " SELECT a.runde,a.tln_nr,a.gegner,a.runde, a.brettpunkte, m.rankingpos, m.name "
@@ -202,7 +202,7 @@ class CLMModelTabelle extends JModel
 		;
 	if ($runden_modus == 3) $query .= " ORDER BY a.runde";	
 	else $query .= " ORDER BY a.gegner ";
-	$db 	=& JFactory::getDBO();
+	$db 	=JFactory::getDBO();
 	$db->setQuery( $query );
 	$runden	=$db->loadObjectList();
 	
@@ -388,11 +388,10 @@ class CLMModelTabelle extends JModel
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
 
-		$query = " SELECT a.tln_nr, SUM(a.brettpunkte) as summe "
-			." FROM #__clm_rnd_man as a "
-			." WHERE a.lid = ".$liga
-			//." AND a.sid = ".$sid
-			." ORDER BY a.tln_nr ASC "
+		$query = " SELECT tln_nr, SUM(brettpunkte) as summe "
+			." FROM #__clm_rnd_man"
+			." WHERE lid = ".$liga
+			." GROUP BY tln_nr ORDER BY tln_nr ASC"
 			;
 		return $query;
 	}

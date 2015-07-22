@@ -12,14 +12,14 @@
 defined('_JEXEC') or die('Restricted access');
 $document = JFactory::getDocument();
 // Konfigurationsparameter auslesen
-$config	= JComponentHelper::getParams( 'com_clm' );
-$fe_submenu = $config->get('fe_submenu',1);
+$config = clm_core::$db->config();
+$fe_submenu = $config->fe_submenu;
 if ($fe_submenu == 1) {
 	$document = JFactory::getDocument();
 	if (!isset($submenu_where[0])) {
 		$submenu_where[0] = - 1;
 	}
-	if ($config->get('clm_template', 1) == 1) {
+	if ($config->template) {
 		$document->addStyleSheet('components/com_clm/includes/submenu.css', 'text/css');
 	}
 	$itemid = JRequest::getVar('Itemid');

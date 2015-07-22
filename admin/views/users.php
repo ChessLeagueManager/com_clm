@@ -12,39 +12,35 @@
 
 class CLMViewUsers
 {
-function setUsersToolbar()
+public static function setUsersToolbar()
 	{
 	// Menubilder laden
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 
 	JToolBarHelper::title( JText::_( 'TITLE_USER' ), 'clm_headmenu_benutzer.png' );
-  //if (CLM_usertype === 'admin') {
-  require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-  $clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;      
 
-	$clmAccess->accesspoint = 'BE_user_general';
-	if($clmAccess->access() === true) {
+	if($clmAccess->access('BE_user_general') === true) {
 		JToolBarHelper::custom('copy_saison','copy.png','copy_f2.png','USER_VORSAISON',false);
-		$clmAccess->accesspoint = 'BE_accessgroup_general';
-		if($clmAccess->access() === true) {
+		if($clmAccess->access('BE_accessgroup_general') === true) {
 			JToolBarHelper::custom('showaccessgroups','specialrankings.png','specialrankings_f2.png', JText::_('ACCESSGROUPS_BUTTON'), false);
 			}
 		JToolBarHelper::custom('send','send.png','send_f2.png','USER_ACCOUNT',false);
 		JToolBarHelper::publishList();
 		JToolBarHelper::unpublishList();
-		JToolBarHelper::customX( 'copy', 'copy.png', 'copy_f2.png', JText::_('COPY') ); 
+		JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', JText::_('COPY') ); 
 		JToolBarHelper::deleteList();
-		JToolBarHelper::editListX();
-		JToolBarHelper::addNewX();
+		JToolBarHelper::editList();
+		JToolBarHelper::addNew();
 	}
 	JToolBarHelper::help( 'screen.clm.user' );
 	}
 
-function users( &$rows, &$lists, &$pageNav, $option )
+public static function users( &$rows, &$lists, &$pageNav, $option )
 	{
 		$mainframe	= JFactory::getApplication();
 		CLMViewUsers::setUsersToolbar();
-		$user =& JFactory::getUser();
+		$user =JFactory::getUser();
 		//Ordering allowed ?
 		$ordering = ($lists['order'] == 'a.ordering');
 		JHtml::_('behavior.tooltip');
@@ -75,10 +71,10 @@ function users( &$rows, &$lists, &$pageNav, $option )
 			<thead>
 				<tr>
 					<th width="10">
-						<?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?>
+#
 					</th>
 					<th width="10">
-						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $rows ); ?>);" />
+						<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 					</th>
 					<th class="title">
 						<?php echo JHtml::_('grid.sort',   'USER', 'name', @$lists['order_Dir'], @$lists['order'] ); ?>
@@ -90,7 +86,7 @@ function users( &$rows, &$lists, &$pageNav, $option )
 						<?php echo JHtml::_('grid.sort',   'VEREIN', 'b.Vereinname', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="11%">
-						<?php echo JHtml::_('grid.sort',   'SAISON', 'c.name', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo JHtml::_('grid.sort',   'SAISON', 'c.name', @$lists['order_Dir'], @$lists['order']); ?>
 					</th>
 					<th width="3%">
 						<?php echo JHtml::_('grid.sort',   'USER_ACTIVE', 'u.lastvisitDate', @$lists['order_Dir'], @$lists['order'] ); ?>
@@ -122,17 +118,17 @@ function users( &$rows, &$lists, &$pageNav, $option )
 			<tbody>
 			<?php
 			$k = 0;
+			$row	= JTable::getInstance( 'users', 'TableCLM' );
 			for ($i=0, $n=count( $rows ); $i < $n; $i++) {
-				$row = &$rows[$i];
-
+				//$row = &$rows[$i];
+				//$row = $value;
+				$row->load( $rows[$i]->id );
 				$link 		= JRoute::_( 'index.php?option=com_clm&section=users&task=edit&cid[]='. $row->id );
-
 				$checked 	= JHtml::_('grid.checkedout',   $row, $i );
 				$published 	= JHtml::_('grid.published', $row, $i );
 
 				?>
 				<tr class="<?php echo 'row'. $k; ?>">
-
 
 					<td align="center">
 						<?php echo $pageNav->getRowOffset( $i ); ?>
@@ -143,38 +139,30 @@ function users( &$rows, &$lists, &$pageNav, $option )
 					</td>
 
 					<td>
-						<?php
-						if (  JTable::isCheckedOut($user->get ('id'), $row->checked_out ) ) {
-							echo $row->name;
-						} else {
-							?>
 								<span class="editlinktip hasTip" title="<?php echo JText::_( 'USER_EDIT' );?>::<?php echo $row->name; ?>">
 							<a href="<?php echo $link; ?>">
 								<?php echo $row->name; ?></a></span>
-							<?php
-						}
-						?>
 					</td>
 
 					<td align="center">
-						<?php echo $row->funktion;?>
+						<?php echo $rows[$i]->funktion;?>
 					</td>
 
 					<td align="center">
-						<?php echo $row->verein;?>
+						<?php echo $rows[$i]->verein;?>
 					</td>
 					<td align="center">
-						<?php echo $row->saison;?>
+						<?php echo $rows[$i]->saison;?>
 					</td>
 
 					<td align="center">
-						<?php if ($row->date=='0000-00-00 00:00:00' OR !$row->date) 
+						<?php if ($rows[$i]->date=='0000-00-00 00:00:00' OR !$rows[$i]->date) 
 							{ ?><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /> <?php }
 						else 	{ ?><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /> <?php }?>
 					</td>
 
 					<td align="center">
-						<?php if ($row->aktive=='1') 
+						<?php if ($rows[$i]->aktive=='1') 
 							{ ?><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /> <?php }
 						else 	{ ?><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /> <?php }?>
 					</td>
@@ -182,10 +170,10 @@ function users( &$rows, &$lists, &$pageNav, $option )
 					<td align="center">
 						<?php echo $published;?>
 					</td>
-	<td class="order">
-	
-	<?php $disabled = $ordering ?  '' : 'disabled="disabled"'; ?>
-	<input type="text" name="order[]" size="5" value="<?php echo $row->ordering;?>" <?php echo $disabled ?> class="text_area" style="text-align: center" />
+ 
+					<td class="order">
+						<?php $disabled = $ordering ?  '' : 'disabled="disabled"'; ?>
+						<input type="text" name="order[]" size="5" value="<?php echo $row->ordering;?>" <?php echo $disabled ?> class="text_area" style="text-align: center" />
 					</td>
 
 					<td align="center">
@@ -208,7 +196,7 @@ function users( &$rows, &$lists, &$pageNav, $option )
 		<?php
 	}
 
-function setUserToolbar()
+public static function setUserToolbar()
 	{
 
 		$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
@@ -219,15 +207,15 @@ function setUserToolbar()
 			$text = JText::_( 'New' );
 		}
 		// Menubilder laden
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
-		JToolBarHelper::title(  JText::_( 'USER' ).': <small><small>[ '. $text.' ]</small></small>', 'clm_headmenu_benutzer.png' );
+		clm_core::$load->load_css("icons_images");
+		JToolBarHelper::title(  JText::_( 'USER' ).': [ '. $text.' ]', 'clm_headmenu_benutzer.png' );
 		JToolBarHelper::save();
 		JToolBarHelper::apply();
 		JToolBarHelper::cancel();
 		JToolBarHelper::help( 'screen.clm.edit' );
 	}
 
-function user( &$row,$lists, $option )
+public static function user( &$row,$lists, $option )
 	{
 		CLMViewUsers::setUserToolbar();
 		JRequest::setVar( 'hidemainmenu', 1 );
@@ -235,12 +223,7 @@ function user( &$row,$lists, $option )
 		?>
 
 	<script language="javascript" type="text/javascript">
-
-	<?php if (JVersion::isCompatible("1.6.0")) { ?>
-		 Joomla.submitbutton = function (pressbutton) { 
-	<?php } else { ?>
-		 function submitbutton(pressbutton) {
-	<?php } ?>		
+		 Joomla.submitbutton = function (pressbutton) { 	
 			var form = document.adminForm;
 			if (pressbutton == 'cancel') {
 				submitform( pressbutton );
@@ -254,18 +237,16 @@ function user( &$row,$lists, $option )
 					alert( "<?php echo JText::_( 'USER_USER_ANGEBEN', true ); ?>" );
 				} else if (form.email.value == "") {
 					alert( "<?php echo JText::_( 'USER_MAIL_ANGEBEN', true ); ?>" );
-				} else if ( getSelectedValue('adminForm','usertype') == 0 ) {
+				} else if ( getSelectedValue('adminForm','usertype') == "" ) {
 					alert( "<?php echo JText::_( 'USER_FUNKTION_AUSWAEHLEN', true ); ?>" );  
 				} else if ( getSelectedValue('adminForm','zps') == 0 ) {
 					alert( "<?php echo JText::_( 'USER_VEREIN_AUSWAEHLEN', true ); ?>" );
-				} else if ( getSelectedValue('adminForm','sid') == 0 ) {
-					alert( "<?php echo JText::_( 'USER_SAISON_AUSWAEHLEN', true ); ?>" );
 				} else {
 					submitform( pressbutton );
 				}
 			} else {
 			// do field validation
-				if ( getSelectedValue('adminForm','usertype') == 0 ) {
+				if ( getSelectedValue('adminForm','usertype') == "" ) {
 					alert( "<?php echo JText::_( 'USER_FUNKTION_AUSWAEHLEN', true ); ?>" );
 				} else if ( getSelectedValue('adminForm','zps') == 0 ) {
 				alert( "<?php echo JText::_( 'USER_VEREIN_AUSWAEHLEN', true ); ?>" );

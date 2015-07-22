@@ -134,10 +134,12 @@ $lid = JRequest::getVar('lid', 0, 'default', 'int');
    	<?php
    		for ($i = 1; $i <= $this->swt_db_data['anz_spieler']; $i++) {
 			if (!isset($this->swt_data['spieler_'.$i])) continue;
-			$dwzid = $this->swt_data['spieler_'.$i]['dwzid'];
-   			if (isset ($spielerid[$dwzid])) {
+			$brett = $this->swt_data['spieler_'.$i]['brett'];
+			$name = $this->swt_data['spieler_'.$i]['name'];
+   			if (isset ($spielerid[$brett])) {
    			?>
-   	<input type="hidden" name="spielerid_<?php echo $dwzid; ?>" value="<?php echo $spielerid[$dwzid]; ?>" />
+   	<input type="hidden" name="spielerid_<?php echo $brett; ?>" value="<?php echo $spielerid[$brett]; ?>" />
+   	<input type="hidden" name="name_<?php echo $brett; ?>" value="<?php echo addcslashes ($name,'"'); ?>" />
    			<?php
    			}
    		}

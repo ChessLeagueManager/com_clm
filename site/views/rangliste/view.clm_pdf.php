@@ -12,70 +12,70 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewRangliste extends JView
+class CLMViewRangliste extends JViewLegacy
 {
 	function display($tpl = 'pdf')
 	// Man beachte den Unterschied zum Standard View "$tpl = null" !!
 	{
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$liga     = $model->getCLMLiga();
 		$this->assignRef('liga'  , $liga);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$spielfrei     = $model->getCLMSpielfrei();
 		$this->assignRef('spielfrei'  , $spielfrei);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$punkte     = $model->getCLMPunkte();
 		$this->assignRef('punkte'  , $punkte);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$dwzschnitt     = $model->getCLMDWZSchnitt();
 		$this->assignRef('dwzschnitt'  , $dwzschnitt);
 		
 		//neu: Mannschaftsliste (klkl)
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$mannschaft     = $model->getCLMMannschaft();
 		$this->assignRef('mannschaft'  , $mannschaft);
 		
 		//neu: Mannschaftsleiterliste (klkl)
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$mleiter     = $model->getCLMMLeiter();
 		$this->assignRef('mleiter'  , $mleiter);
 		
 		//neu: Meldeliste (klkl)
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$count     = $model->getCLMCount();
 		$this->assignRef('count'  , $count);
 		
 		//neu Saison (klkl)
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$saison     = $model->getCLMSaison();
 		$this->assignRef('saison'  , $saison);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$bp     = $model->getCLMBP();
 		$this->assignRef('bp'  , $bp);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$sumbp     = $model->getCLMSumBP();
 		$this->assignRef('sumbp'  , $sumbp);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$plan     = $model->getCLMSumPlan();
 		$this->assignRef('plan'  , $plan);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$termin     = $model->getCLMTermin();
 		$this->assignRef('termin'  , $termin);
 		
 		//neu Einzelergebnisse (klkl)
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$einzel     = $model->getCLMEinzel();
 		$this->assignRef('einzel'  , $einzel);
 
 	// Dokumenttyp setzen
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 		$document->setMimeEncoding('application/pdf');
  
 		parent::display($tpl);

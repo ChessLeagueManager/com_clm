@@ -2,9 +2,9 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -13,35 +13,27 @@
 
 class CLMViewGruppen
 {
-function setGruppenToolbar()
+public static function setGruppenToolbar()
 	{
 	// Make sure the user is authorized to view this page
-	$user = & JFactory::getUser();
+	$user = JFactory::getUser();
 	$jid = $user->get('id');
 	// CLM Userstatus auslesen 
-	$db		=& JFactory::getDBO();
-	$query = "SELECT user_clm FROM #__clm_user "
-		." WHERE jid = ".$jid
-		." AND published = 1 "
-		;
-	$db->setQuery( $query );
-	$clm=$db->loadObjectList();
-		$clm_id	= $clm[0]->user_clm;
 		JToolBarHelper::title( JText::_( 'TITLE_GROUPS' ), 'generic.png' );
 		JToolBarHelper::publishList();
 		JToolBarHelper::unpublishList();
-		JToolBarHelper::customX( 'copy', 'copy.png', 'copy_f2.png', 'Copy' );
+		JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', 'Copy' );
 		JToolBarHelper::deleteList();
-		JToolBarHelper::editListX();
-		JToolBarHelper::addNewX();
+		JToolBarHelper::editList();
+		JToolBarHelper::addNew();
 		JToolBarHelper::help( 'screen.clm.mannschaft' );
 	}
 
-function gruppen( &$rows, &$lists, &$pageNav, $option )
+public static function gruppen( &$rows, &$lists, &$pageNav, $option )
 	{
 		$mainframe	= JFactory::getApplication();
 		CLMViewGruppen::setGruppenToolbar();
-		$user =& JFactory::getUser();
+		$user =JFactory::getUser();
 		//Ordering allowed ?
 		$ordering = ($lists['order'] == 'a.ordering');
 
@@ -71,22 +63,19 @@ function gruppen( &$rows, &$lists, &$pageNav, $option )
 			<thead>
 				<tr>
 					<th width="10">
-						<?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?>
+						#
 					</th>
 					<th width="10">
-						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $rows ); ?>);" />
+						<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 					</th>
 					<th class="title">
 						<?php echo JHtml::_('grid.sort',  JText::_( 'GROUPS_OVERVIEW_GROUPS'), 'a.Gruppe', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="15%">
-						<?php echo JHtml::_('grid.sort',   JText::_( 'GROUPS_OVERVIEW_END'), 'a.Meldelschluss', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo JHtml::_('grid.sort',   JText::_( 'GROUPS_OVERVIEW_END'), 'a.Meldeschluss', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="15%">
 						<?php echo JHtml::_('grid.sort',   JText::_( 'GROUPS_OVERVIEW_BY'), 'a.user', @$lists['order_Dir'], @$lists['order'] ); ?>
-					</th>
-					<th width="10%">
-						<?php echo JHtml::_('grid.sort',   JText::_( 'GROUPS_OVERVIEW_CLM_GROUP'), 'a.user_clm', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="11%">
 						<?php echo JHtml::_('grid.sort',   JText::_( 'GROUPS_OVERVIEW_SEASON'), 'c.name', @$lists['order_Dir'], @$lists['order'] ); ?>
@@ -134,17 +123,11 @@ function gruppen( &$rows, &$lists, &$pageNav, $option )
 					</td>
 
 					<td>
-						<?php
-						if (  JTable::isCheckedOut($user->get ('id'), $row->checked_out ) ) {
-							echo $row->Gruppe;
-						} else {
-							?>
+
 								<span class="editlinktip hasTip" title="<?php echo JText::_( 'GROUPS_OVERVIEW_TIP' );?>::<?php echo $row->Gruppe; ?>">
 							<a href="<?php echo $link; ?>">
 								<?php echo $row->Gruppe; ?></a></span>
-							<?php
-						}
-						?>
+
 					</td>
 
 					<td align="center">
@@ -152,9 +135,6 @@ function gruppen( &$rows, &$lists, &$pageNav, $option )
 					</td>
 					<td align="center">
 						<?php echo $row->user;?>
-					</td>
-					<td align="center">
-						<?php echo $row->user_clm;?>
 					</td>
 					<td align="center">
 						<?php echo $row->saison;?>
@@ -189,21 +169,21 @@ function gruppen( &$rows, &$lists, &$pageNav, $option )
 		<?php
 	}
 
-function setGruppeToolbar()
+public static function setGruppeToolbar()
 	{
 
 		$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
 		JArrayHelper::toInteger($cid, array(0));
 		if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
 			else { $text = JText::_( 'New' );}
-		JToolBarHelper::title(  JText::_( 'TITLE_GROUPS_2' ).': <small><small>[ '. $text.' ]</small></small>' );
+		JToolBarHelper::title(  JText::_( 'TITLE_GROUPS_2' ).': [ '. $text.' ]' );
 		JToolBarHelper::save();
 		JToolBarHelper::apply();
 		JToolBarHelper::cancel();
 		JToolBarHelper::help( 'screen.clm.edit' );
 	}
 		
-function gruppe( &$row,$lists, $option, $jid, $user_clm )
+public static function gruppe( &$row,$lists, $option, $jid)
 	{
 		CLMViewGruppen::setGruppeToolbar();
 		JRequest::setVar( 'hidemainmenu', 1 );
@@ -211,11 +191,7 @@ function gruppe( &$row,$lists, $option, $jid, $user_clm )
 		?>
 	<script language="javascript" type="text/javascript">
 
-	<?php if (JVersion::isCompatible("1.6.0")) { ?>
-		 Joomla.submitbutton = function (pressbutton) { 
-	<?php } else { ?>
-		 function submitbutton(pressbutton) {
-	<?php } ?>		
+		 Joomla.submitbutton = function (pressbutton) { 	
 			var form = document.adminForm;
 			if (pressbutton == 'cancel') {
 				submitform( pressbutton );
@@ -344,9 +320,9 @@ function gruppe( &$row,$lists, $option, $jid, $user_clm )
 
  <div class="width-50 fltrt">
   <fieldset class="adminform">
-   <legend><?php echo JText::_( 'MANNSCHAFT_BEMERKUNGEN' ); ?></legend>
+   <legend><?php echo JText::_( 'REMARKS' ); ?></legend>
 	<table class="adminlist">
-	<legend><?php echo JText::_( 'MANNSCHAFT_OEFFENTLICH' ); ?></legend>
+	<legend><?php echo JText::_( 'REMARKS_PUBLIC' ); ?></legend>
 	<br>
 	<tr>
 	<td width="100%" valign="top">
@@ -356,7 +332,7 @@ function gruppe( &$row,$lists, $option, $jid, $user_clm )
 	</table>
 
 	<table class="adminlist">
-	<tr><legend><?php echo JText::_( 'MANNSCHAFT_INTERN' ); ?></legend>
+	<tr><legend><?php echo JText::_( 'REMARKS_INTERNAL' ); ?></legend>
 	<br>
 	<td width="100%" valign="top">
 	<textarea class="inputbox" name="bem_int" id="bem_int" cols="40" rows="5" style="width:90%"><?php echo str_replace('&','&amp;',$row->bem_int);?></textarea>
@@ -373,7 +349,6 @@ function gruppe( &$row,$lists, $option, $jid, $user_clm )
 		<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
 		<input type="hidden" name="cid" value="<?php echo $row->cid; ?>" />
 		<input type="hidden" name="user" value="<?php echo $jid; ?>" />
-		<input type="hidden" name="user_clm" value="<?php echo $user_clm; ?>" />
 		<input type="hidden" name="liste" value="<?php echo $row->liste; ?>" />
 		<input type="hidden" name="task" value="" />
 		<?php echo JHtml::_( 'form.token' ); ?>

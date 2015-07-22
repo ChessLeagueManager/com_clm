@@ -17,10 +17,13 @@ $plast = $pcount;
 JRequest::setVar('pfirst', $pfirst);
 $prange = 50;
 JRequest::setVar('prange', $prange);
- 
-$params = JRequest::getVar('params');
-$useAsTWZ = $params['useAsTWZ'];
 
+$params = JRequest::getVar('params');
+if(isset($params['useAsTWZ'])) {
+	$useAsTWZ = $params['useAsTWZ'];
+} else {
+	$useAsTWZ = 0;
+}
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm" >
@@ -82,10 +85,10 @@ $useAsTWZ = $params['useAsTWZ'];
 							echo "<td><input class='inputbox' type='text' name='name[".$i."]' id='name' size='40' maxlength='60' value='".$spieler->name."' /></td>";
 							echo "<td>".JHtml::_('select.genericlist', $this->geschlechter, 'geschlecht['.$i.']', 'class="inputbox" autocomplete="off"', 'value', 'text', $spieler->geschlecht, false)."</td>";
 							echo "<td>".CLMForm::selectVereinZPS('zps['.$i.']',$spieler->zps);
-							echo "<input type='hidden' name='zps_z[".$i."]' value='".$spieler->zps."' /></td>";
+                          				echo "<input type='hidden' name='tlnrStatus[".$i."]' value='".$spieler->tlnrStatus."' /><input type='hidden' name='zps_z[".$i."]' value='".$spieler->zps."' />"."</td>";
 							echo "<td align='center'><input class='inputbox' type='text' name='mgl_nr[".$i."]' id='mgl_nr".$i."' size='4' maxlength='4' value='".$spieler->mgl_nr."' /></td>";
 							echo "<td><input class='inputbox' type='text' name='verein[".$i."]' id='verein".$i."' size='40' maxlength='60' value='".$spieler->verein."' /></td>";
-							echo "<td align='center'><input class='inputbox' type='text' name='NATrating[".$i."]' id='NATrating".$i."' size='4' maxlength='4' value='".$spieler->NATrating."' /></td>";
+							echo "<td align='center'><input class='inputbox' type='text' name='start_dwz[".$i."]' id='start_dwz".$i."' size='4' maxlength='4' value='".$spieler->start_dwz."' /></td>";
 							echo "<td align='center'><input class='inputbox' type='text' name='FIDEelo[".$i."]' id='FIDEelo".$i."' size='4' maxlength='4' value='".$spieler->FIDEelo."' /><input type='hidden' name='twz[".$i."]' id='twz'  value='".$spieler->twz."' /></td>";
 							echo "<td align='center'><input class='inputbox' type='text' name='birthYear[".$i."]' id='birthYear".$i."' size='4' maxlength='4' value='".$spieler->birthYear."' /></td>";
 							echo "<input type='hidden' name='FIDEcco[".$i."]' id='FIDEcco".$i."' value='".$spieler->FIDEcco."' />";
@@ -112,7 +115,7 @@ $useAsTWZ = $params['useAsTWZ'];
 	<input type="hidden" name="pfirst" 	value="<?php echo $pfirst; ?>" />
 	<input type="hidden" name="plast" 	value="<?php echo $plast; ?>" />
 	<input type="hidden" name="pcount" 	value="<?php echo $pcount; ?>" />
-	<input type="hidden" name="params[useAsTWZ]" 	value="<?php echo $useAsTWZ; ?>" />	
+	<input type="hidden" name="params[useAsTWZ]"    value="<?php echo $useAsTWZ; ?>" />
 	<input type="hidden" name="option" value="com_clm" />
 	<input type="hidden" name="view" value="swtturniertlnr" />
 	<input type="hidden" name="controller" value="swtturniertlnr" />

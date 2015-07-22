@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/component-install.dtd">
 <extension type="component" version="2.5.0" method="upgrade">
-	<name>clm</name>
-	<creationDate>07.07.2015</creationDate>
-	<author>CLM Project</author>
+	<name>CLM</name>
+	<creationDate>16.07.2015</creationDate>
+	<author>CLM Team</author>
 	<copyright>(C) Copyright 2008-2015 by CLM Project</copyright>
 	<license>GNU/GPL</license>
 	<authorEmail>fishpoke@fishpoke.de</authorEmail>
 	<authorUrl>www.chessleaguemanager.de</authorUrl>
-	<version>1.6 J2.5</version>
+	<version>3.2.0</version>
+ 	<scriptfile>installer.php</scriptfile>
 	<description>
 		<![CDATA[
 	 	<img src="components/com_clm/images/clm_logo.png" alt="" align="left" />
@@ -27,11 +27,6 @@
 		 <li>Thomas Schwietert, Projektgründer</li>
 		 ]]>
 	</description>
-	<scriptfile>script.php</scriptfile>
-
-	<uninstallfile>uninstall.clm.php</uninstallfile>
-	<installfile>install.clm.php</installfile>
-
 	<files folder="site">
 		<filename>clm.php</filename>
 		<filename>controller.php</filename>
@@ -40,58 +35,36 @@
 		<folder>classes</folder>
 		<folder>images</folder>
 		<folder>includes</folder>
+		<folder>clm</folder>
 		<folder>javascript</folder>
-
 		<folder>models</folder>
 		<folder>views</folder>
 	</files>
-
 	<languages folder="site/languages">
 		<language tag="en-GB">en-GB.com_clm.ini</language>
 		<language tag="de-DE">de-DE.com_clm.ini</language>
 	</languages>
-
-	<install>
-		<sql>
-			<file charset="utf8" driver="mysql">install.sql</file>
-			<file driver="mysql">verband.sql</file>
-		</sql>
-	</install>
-	<uninstall>
-		<sql>
-			<file charset="utf8" driver="mysql">uninstall.sql</file>
-		</sql>
-	</uninstall>
-
 	<administration>
-		<menu img="components/com_clm/images/CLM_Logo_mini.png" link="option=com_clm&amp;section=info&amp;">ChessLeagueManager</menu>
-	
+		<menu img="components/com_clm/images/CLM_Logo_mini.png" link="option=com_clm&amp;section=info&amp;">COM_CHESSLEAGUEMANAGER</menu>
 		<files folder="admin">
 			<filename>changelog.txt</filename>
-			<filename>admin.clm.php</filename>
-			<filename>config.xml</filename>
+			<filename>clm.php</filename>
 			<filename>controller.php</filename>
-			<filename>verband.sql</filename>
-			<filename>install.sql</filename>
-			<filename>uninstall.sql</filename>
 			<filename>index.html</filename>
 			<filename>access.xml</filename>
 
 			<folder>classes</folder>
 			<folder>controllers</folder>
-			<folder>elobase</folder>
 			<folder>helpers</folder>
 			<folder>images</folder>
 			<folder>javascript</folder>
-			<folder>languages</folder>
+		        <folder>dewis</folder>
 			<folder>models</folder>
-			<folder>includes</folder>
 			<folder>swt</folder>
 			<folder>tables</folder>
 			<folder>upload</folder>
 			<folder>views</folder>
 		</files>
-	
 		<languages folder="admin/languages">
 			<language tag="de-DE">de-DE.com_clm.ini</language>
 			<language tag="de-DE">de-DE.com_clm.config.ini</language>
@@ -106,8 +79,5 @@
 			<language tag="en-GB">en-GB.com_clm.swtimport.ini</language>
 			<language tag="en-GB">en-GB.com_clm.sys.ini</language>
 		</languages>
-
 	</administration>
-	
 </extension>
- 

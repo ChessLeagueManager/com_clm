@@ -14,7 +14,7 @@ defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 jimport( 'joomla.html.parameter' );
 
-class CLMModelTurnier_DWZ extends JModel {
+class CLMModelTurnier_DWZ extends JModelLegacy {
 	
 	function __construct() {
 		
@@ -27,7 +27,7 @@ class CLMModelTurnier_DWZ extends JModel {
 		$this->_getTurnierPlayers();
 
 	}
-	
+
 	function _getTurnierData() {
 	
 		$query = "SELECT *"
@@ -38,7 +38,8 @@ class CLMModelTurnier_DWZ extends JModel {
 		$this->turnier = $this->_db->loadObject();
 
 		// turniernamen anpassen?
-		$turParams = new JParameter($this->turnier->params);
+		$turParams = new JRegistry();
+		$turParams->loadString($this->turnier->params);
 		$addCatToName = $turParams->get('addCatToName', 0);
 		if ($addCatToName != 0 AND ($this->turnier->catidAlltime > 0 OR $this->turnier->catidEdition > 0)) {
 			$this->turnier->name = CLMText::addCatToName($addCatToName, $this->turnier->name, $this->turnier->catidAlltime, $this->turnier->catidEdition);

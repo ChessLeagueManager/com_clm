@@ -19,12 +19,12 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 	
 // Konfigurationsparameter auslesen
 $itemid 		= JRequest::getVar( 'Itemid' );
-$config	= &JComponentHelper::getParams( 'com_clm' );
-// $pdf_melde = $config->get('pdf_meldelisten',1);
-$turParams = new JParameter($this->turnier->params);
+$config = clm_core::$db->config();
+// $pdf_melde = $config->pdf_meldelisten;
+$turParams = new clm_class_params($this->turnier->params);
 	
 // CLM-Container
-echo '<div id="clm"><div id="turnier_player">';
+echo '<div ><div id="turnier_player">';
 	
 	
 // Componentheading
@@ -71,14 +71,15 @@ if ($this->playerPhoto != '') { ?>
 				<td align="left" class="tp_col_1"><?php echo JText::_('TOURNAMENT_TWZ') ?>:</td>
 				<td class="tp_col_data"><?php echo CLMText::formatRating($this->player->twz) ?></td>
 			</tr>
-			<?php // NATrating
+			<?php // start_dwz
 			if ($turParams->get('displayPlayerRating', 0) == 1) { ?>
 			<tr>
 				<td align="left" class="tp_col_1"><?php echo JText::_('TOURNAMENT_RATING') ?>:</td>
 				<?php  $mgl4 = ''.$this->player->mgl_nr; while (strlen($mgl4) < 4) { $mgl4 = '0'.$mgl4; } ?>
-				<td class="tp_col_data"><a href="http://schachbund.de/spieler.html?zps=<?php echo $this->player->zps; ?>-<?php echo $mgl4; ?>" target="_blank"><?php echo CLMText::formatRating($this->player->NATrating) ?></td>
+				<td class="tp_col_data"><a href="http://schachbund.de/spieler.html?zps=<?php echo $this->player->zps; ?>-<?php echo $mgl4; ?>" target="_blank"><?php echo CLMText::formatRating($this->player->start_dwz) ?></td>
 			</tr>
 			<?php } ?>
+			
 			<?php // ELO
 			if ($turParams->get('displayPlayerElo', 0) == 1) { ?>
 			<tr>

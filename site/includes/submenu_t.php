@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -11,14 +11,14 @@
 */
 defined('_JEXEC') or die('Restricted access');
 // Konfigurationsparameter auslesen
-$config	= JComponentHelper::getParams( 'com_clm' );
-$fe_submenu_t = $config->get('fe_submenu_t',1);
+$config = clm_core::$db->config();
+$fe_submenu_t = $config->fe_submenu_t;
 ?>
 
 <?php // Prüfen, ob active
 if ($fe_submenu_t == 1) {
 	$document = JFactory::getDocument();
-	if ($config->get('clm_template', 1) == 1) {
+	if ($config->template) {
 		$document->addStyleSheet('components/com_clm/includes/submenu.css', 'text/css');
 	}
 	$itemid = JRequest::getVar('Itemid');

@@ -24,18 +24,18 @@ $turniere	 	= $this->turniere;
 
 // Login Status prüfen
 $clmuser= $this->clmuser;
-$user	= & JFactory::getUser();
+$user	= JFactory::getUser();
 
 // Konfigurationsparameter auslesen
-$config 			= &JComponentHelper::getParams( 'com_clm' );
-$conf_vereinsdaten	=$config->get('conf_vereinsdaten',1);
-$googlemaps_ver   	= $config->get('googlemaps_ver',1);
-$googlemaps   		= $config->get('googlemaps',0);
-$googlemaps_rtype   		= $config->get('googlemaps_rtype',0);
-$googlemaps_vrout   		= $config->get('googlemaps_vrout',1);
+$config 			= clm_core::$db->config();
+$conf_vereinsdaten	=$config->conf_vereinsdaten;
+$googlemaps_ver   	= $config->googlemaps_ver;
+$googlemaps   		= $config->googlemaps;
+$googlemaps_rtype   		= $config->googlemaps_rtype;
+$googlemaps_vrout   		= $config->googlemaps_vrout;
  
 // Browsertitelzeile setzen
-$doc =& JFactory::getDocument();
+$doc =JFactory::getDocument();
 if (isset($verein[0])) { $daten['title'] = $verein[0]->name; }
 else $daten['title'] = '';
 if ($doc->_type != "raw") $doc->setHeadData($daten);
@@ -54,11 +54,11 @@ if (isset($verein[0])) {
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-// require_once(JPATH_COMPONENT.DS.'includes'.DS.'image_path.php');
+
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'googlemaps.php');
 
 
-echo '<div id="clm"><div id="verein">';
+echo '<div ><div id="verein">';
 
 // Überprüfen ob diese Mannschaft bereits angelegt ist
 if (!isset($verein[0]->name)){
@@ -98,7 +98,7 @@ location=form.select.options[index].value;}}
 // Vereinsdaten ändern
 if ($conf_vereinsdaten == 1) {
 	if ($user->get('id') > 0) {
-		if ( $clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps OR $clmuser[0]->user_clm == 100) {
+		if (isset($clmuser[0]) AND ($clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps OR $clmuser[0]->usertype == "admin")) {
 	 echo '<span class="edit"><a href="' . JURI::base() .'index.php?option=com_clm&view=verein&saison='. $sid .'&zps='. $zps .'&layout=vereinsdaten'; if ($itemid <>'') { echo "&Itemid=".$itemid; } echo '">'. JText::_('CLUB_DATA_EDIT') .'</a></span>'; 
 	} }
 } 
@@ -111,7 +111,7 @@ if ($conf_vereinsdaten == 1) {
         <td width="30%" valign="top">
 
             <div class="column">
-            
+            <?php if (isset($vereinstats[0])) { ?>
                 <table class="vereinstats">
                 <tr>
                     <td><?php echo JText::_('CLUBS_LIST_MEMBER') ?>:</td>
@@ -130,7 +130,8 @@ if ($conf_vereinsdaten == 1) {
                     <td></td>
                 </tr>
                 </table>
-            
+              <?php } ?>
+              
 				<table class="vereinstats" width="100%">
 					<tr><td><h4><?php echo JText::_('CLUB_CHIEF'); ?></h4></td></tr>
 					<tr><td><?php echo $verein[0]->vs; ?></td></tr>

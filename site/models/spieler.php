@@ -14,7 +14,7 @@ defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
 
-class CLMModelSpieler extends JModel
+class CLMModelSpieler extends JModelLegacy
 {
 	function _getCLMSpieler( &$options )
 	{
@@ -26,7 +26,6 @@ class CLMModelSpieler extends JModel
 
 	$query = "SELECT a.Spielername,l.name as liga_name,l.id as liga,a.ZPS,a.Mgl_Nr,"
 		." a.DWZ as dsbDWZ,a.DWZ_Index,a.FIDE_ELO,a.FIDE_ID,"
-		." a.DWZ_neu, a.I0 as SI0, a.Punkte as SPunkte, a.WE as SWe, a.EFaktor as SEFaktor, a.Partien as SPartien, a.Niveau as SNiveau, a.Leistung as SLeistung,"   //klkl 
 		." d.Vereinname, n.name,n.tln_nr, m.*, s.datum as dsb_datum, s.name as s_name"      
 		." FROM #__clm_dwz_spieler as a "
 		." LEFT JOIN #__clm_dwz_vereine as d ON a.ZPS = d.ZPS AND d.sid = a.sid"
@@ -52,7 +51,7 @@ class CLMModelSpieler extends JModel
 		return @$result;
 	}
 
-	function getCLMLink()
+	public static function getCLMLink()
 	{
 	$sid	= JRequest::getInt('saison','1');
 	$zps	= clm_escape(JRequest::getVar('zps'));
@@ -102,7 +101,7 @@ class CLMModelSpieler extends JModel
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 
-	$query = " SELECT s.gegner as Mgl_Nr,s.gzps,s.lid,s.runde,s.heim,s.weiss,s.brett,"
+	$query = " SELECT l.name as league, s.gegner as Mgl_Nr,s.gzps,s.lid,s.runde,s.heim,s.weiss,s.brett,"
 		." s.kampflos,s.punkte,d.Spielername,m.name,d.DWZ,a.dg,a.gegner as tln"
 		." FROM #__clm_rnd_spl as s "
 		." LEFT JOIN #__clm_rnd_man as a ON s.sid = a.sid AND s.lid = a.lid AND s.runde = a.runde AND s.paar = a.paar AND s.dg = a.dg AND s.tln_nr = a.tln_nr "
@@ -124,29 +123,6 @@ class CLMModelSpieler extends JModel
 		$result = $this->_getList( $query );
 		return @$result;
 	}
-
-	function _getCLMlog( &$options )   
-	{
-	$sid	= JRequest::getInt('saison','1');
-	$lid	= JRequest::getInt('liga','1');
-	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
-	// DWZ-Update finden 
-	$query = " SELECT a.datum, a.lid, a.nr_aktion "
-		." FROM #__clm_log as a "
-		." WHERE a.sid = ".$sid
-		." AND (a.nr_aktion = 101 OR a.nr_aktion = 102)" 	// 101 DWZ ausgewertet; 102 DWZ gelöscht
-		." ORDER BY a.lid ASC, a.datum DESC ";
-		return $query;
-	}
-
-	function getCLMlog( $options=array() )
-	{
-		$query	= $this->_getCLMlog( $options );
-		$result = $this->_getList( $query );
-		return @$result;
-	}	
-	
 	
 	function _getCLMVereinsliste( &$options )
 	{

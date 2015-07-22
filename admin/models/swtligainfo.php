@@ -11,18 +11,16 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelSWTLigainfo extends JModel {
+class CLMModelSWTLigainfo extends JModelLegacy {
 
 	function __construct () {
 	
 		parent::__construct ();
 		
 		// Konfigurationsparameter auslesen
-		$config = &JComponentHelper::getParams( 'com_clm' );
-		$rang	= $config->get('rangliste',0);
-		$sl_mail= $config->get('sl_mail',0);
+		$config = clm_core::$db->config();
+		$rang	= $config->rangliste;
+		$sl_mail= $config->sl_mail;
 		
 		// Listen aus der Datenbank auslesen
 		$db_data = $this->dbQuery ();
@@ -60,7 +58,7 @@ class CLMModelSWTLigainfo extends JModel {
 		//Mit Daten aus Datenbank überschreiben, falls ein Liga geupdated wird
 		if(JRequest::getInt('update') == 1) {
 			if ($id = JRequest::getInt('liga')) {
-				$db		=& JFactory::getDBO ();
+				$db		=JFactory::getDBO ();
 				$select_query = '  SELECT * FROM #__clm_liga '
 								.' WHERE id = '.$id.'; ';
 				$db->setQuery ($select_query);
@@ -297,35 +295,28 @@ class CLMModelSWTLigainfo extends JModel {
 	
 	// Listen aus der DB auslesen (SL, Saison, Ranglisten)
 	function dbQuery () {
-		$db			=& JFactory::getDBO ();
-		$user		=& JFactory::getUser ();
+		$db			=JFactory::getDBO ();
+		$user		=JFactory::getUser ();
 		$option 	= JRequest::getCmd( 'option' );
 		$section 	= JRequest::getVar( 'section' );
 		$mturnier 	= JRequest::getVar ('mturnier', '0', 'default', 'int');
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
+	        $clmAccess = clm_core::$access;
 		
-		// SL Liste
-		//$tql =	' SELECT a.jid,a.name  FROM #__clm_user as a'
-		//		.' LEFT JOIN #__clm_saison as s ON s.id = a.sid'
-		//		.' WHERE (a.usertype = "sl" OR a.usertype = "dv" OR a.usertype = "dwz" OR a.usertype = "admin" )'
-		//		.' AND a.published = 1 AND s.published = 1 AND s.archiv =0'
-
-		//	;
-		//$db->setQuery ($tql);
-		if ($mturnier == 0) $clmAccess->accesspoint = 'BE_league_edit_result';  //nur wer wenigstens Ergebnisse im BE pflegen darf, kann SL sein
-		else $clmAccess->accesspoint = 'BE_teamtournament_edit_result';  		//nur wer wenigstens Ergebnisse im BE pflegen darf, kann SL sein
-		$clmAccess->accessvalue = '>0';  										//für alle ligen/mturniere oder nur ausgewählte
-		if($clmAccess->userlist() === false) {
-//			echo "<br>cl: "; var_dump($clmAccess->userlist()); die('clcl'); }
-//		if (!$db->query()) {
+		// Der Besitzer des Turniers muss dieses auch Editieren dürfen
+		if ($mturnier == 0) 
+		{
+			$accesspoint = 'BE_league_edit_result';
+		}
+		else 
+		{
+			$accesspoint = 'BE_teamtournament_edit_result';
+		} 
+		$db_data['sllist'] = $clmAccess->userlist($accesspoint,'>0');
+		if($db_data['sllist'] === false) {
 			$this->setRedirect( 'index.php?option='.$option.'&section='.$section );
 			return JError::raiseWarning( 500, $db->getErrorMsg() );
 		}
-		
-		$db_data['sllist'] = $clmAccess->userlist();
-		//$db_data['sllist'] = $db->loadObjectList ();
-		// Saisonliste
+
 		$sql = 'SELECT id as sid, name FROM #__clm_saison WHERE archiv = 0';
 		$db->setQuery ($sql);
 		if (!$db->query()) {
@@ -350,50 +341,7 @@ class CLMModelSWTLigainfo extends JModel {
 	function store () {
 	
 		// DB-Zugriff
-		$db		=& JFactory::getDBO ();
-		//$row	=& JTable::getInstance ('ligenSWT', 'TableCLM');
-		
-		/*
-		// Daten aus dem Formular holen
-		// allgemeine Ligadaten
-		$name					= JRequest::getVar ('name');
-		$sl						= JRequest::getVar ('sl');
-		$sid					= JRequest::getVar ('sid');
-		$rang					= JRequest::getVar ('rang');
-		$anz_mannschaften		= JRequest::getVar ('teil');
-		$anz_bretter			= JRequest::getVar ('stamm');
-		$anz_ersatz				= JRequest::getVar ('ersatz');
-		$anz_runden				= JRequest::getVar ('runden');
-		$anz_durchgaenge		= JRequest::getVar ('durchgang');
-		$runden_modus			= JRequest::getVar ('runden_modus');
-		$heimrecht_vertauscht	= JRequest::getVar ('heim');
-		
-		// Wertung
-		$siegpunkte				= JRequest::getVar ('sieg');
-		$remispunkte			= JRequest::getVar ('remis');
-		$verlustpunkte			= JRequest::getVar ('nieder');
-		$antrittspunkte			= JRequest::getVar ('antritt');
-		$man_siegpunkte			= JRequest::getVar ('man_sieg');
-		$man_remispunkte		= JRequest::getVar ('man_remis');
-		$man_verlustpunkte		= JRequest::getVar ('man_nieder');
-		$man_antrittspunkte		= JRequest::getVar ('man_antritt');
-		$sieg_bed				= JRequest::getVar ('sieg_bed');
-		$b_wertung				= JRequest::getVar ('b_wertung');
-		$anz_aufsteiger			= JRequest::getVar ('auf');
-		$anz_moegl_aufsteiger	= JRequest::getVar ('auf_evtl');
-		$anz_absteiger			= JRequest::getVar ('ab');
-		$anz_moegl_absteiger	= JRequest::getVar ('ab_evtl');
-		
-		// Einstellungen
-		$mail		= JRequest::getVar ('mail');
-		$sl_mail	= JRequest::getVar ('sl_mail');
-		$order		= JRequest::getVar ('order');
-		$published	= JRequest::getVar ('published');
-		
-		// Bemerkungen
-		$bemerkungen		= JRequest::getVar ('bemerkungen');
-		$bemerkungen_int	= JRequest::getVar ('bem_int');
-		*/
+		$db		=JFactory::getDBO ();
 		
 		//Liga-Parameter aufbereiten
 		$default['params'] = JRequest::getVar ('params');
@@ -427,6 +375,7 @@ class CLMModelSWTLigainfo extends JModel {
 		                   'sieg', 'remis', 'nieder', 'antritt', 'man_sieg', 'man_remis', 'man_nieder', 'man_antritt', 'sieg_bed',
 						   'b_wertung', 'auf', 'auf_evtl', 'ab', 'ab_evtl', 'mail', 'sl_mail', 'order', 
 						   'published', 'ordering', 'bem_int', 'liga_mt', 'tiebr1', 'tiebr2', 'tiebr3', 'params' );
+
 		
 		$fields = '';
 		$values = '';
@@ -436,7 +385,7 @@ class CLMModelSWTLigainfo extends JModel {
 		}
 		$fields = substr ($fields, 0, -1);
 		$values = substr ($values, 0, -1);
-		$insert_query = ' INSERT INTO #__clm_swt_liga'
+		$insert_query = ' INSERT IGNORE INTO #__clm_swt_liga'
 		              . ' ( ' . $fields . ' ) '
 		              . ' VALUES ( ' . $values . ' ); ';
 		
@@ -452,183 +401,6 @@ class CLMModelSWTLigainfo extends JModel {
 		}
 		
 	}
-		
-/*		/// aus dem Ligen-Controller
-
-		$option		= JRequest::getCmd('option');
-		$section	= JRequest::getVar('section');
-		$db 		= & JFactory::getDBO();
-		$task 		= JRequest::getVar( 'task');
-		$row 		= & JTable::getInstance( 'ligen', 'TableCLM' );
-		$msg		= JRequest::getVar( 'id');
-		$sid		= JRequest::getVar( 'sid');
-
-	if (!$row->bind(JRequest::get('post'))) {
-		JError::raiseError(500, $row->getError() );
-	}
-	// pre-save checks
-	if (!$row->check()) { JError::raiseError(500, $row->getError() ); }
-
-	$teil	= $row->teil;
-
-	// if new item, order last in appropriate group
-	$aktion = JText::_( 'LIGEN_AKTION_LEAGUE_EDIT' );
-	if (!$row->id) {
-	$neu_id = 1;
-	$aktion = JText::_( 'LIGEN_AKTION_NEW_LEAGUE' );
-		$where = 'sid = ' . (int) $row->sid;
-		$row->ordering = $row->getNextOrder( $where );
-
-	// Bei ungerader Anzahl Mannschaften Teilnehmerzahl um 1 erhöhen
-	if (($row->teil)%2 != 0) {
-		$ungerade_id	= 1;
-		$row->teil	= $row->teil+1;
-		$tln		= $row->teil;
-	JError::raiseWarning(500, JText::_( 'LIGEN_MANNSCH', true ) );
-				}
-			}
-	// save the changes
-	if (!$row->store()) {
-		JError::raiseError(500, $row->getError() );
-		}
-	$liga_man	= $row->id;
-	$liga_rnd	= $row->runden;
-	$liga_dg	= $row->durchgang;
-	$publish	= $row->published;
-
-	// Wenn sid gewechselt wurde, alle Daten in neue Saison verschieben
-	if ($sid_alt != $sid AND $sid_alt != '') {
-	JError::raiseNotice( 6000,  JText::_( 'LIGEN_SAISON_AEND' ));
-	$query = ' UPDATE #__clm_mannschaften '
-		.' SET sid = '.$sid
-		.' WHERE liga = '.$liga_man
-		.' AND sid = '.$sid_alt
-		;
-	$db->setQuery($query);
-	$db->query();
-
-	$query = ' UPDATE #__clm_meldeliste_spieler '
-		.' SET sid = '.$sid
-		.' WHERE lid = '.$liga_man
-		.' AND sid = '.$sid_alt
-		;
-	$db->setQuery($query);
-	$db->query();
-
-	$query = ' UPDATE #__clm_rnd_man '
-		.' SET sid = '.$sid
-		.' WHERE lid = '.$liga_man
-		.' AND sid = '.$sid_alt
-		;
-	$db->setQuery($query);
-	$db->query();
-
-	$query = ' UPDATE #__clm_rnd_spl '
-		.' SET sid = '.$sid
-		.' WHERE lid = '.$liga_man
-		.' AND sid = '.$sid_alt
-		;
-	$db->setQuery($query);
-	$db->query();
-
-	$query = ' UPDATE #__clm_runden_termine '
-		.' SET sid = '.$sid
-		.' WHERE liga = '.$liga_man
-		.' AND sid = '.$sid_alt
-		;
-	$db->setQuery($query);
-	$db->query();
-	}
-
-	// Bei ungerader Anzahl Mannschaften 'spielfrei' hinzufügen
-	if ($ungerade_id == '1') {
-
-	$query = ' INSERT INTO #__clm_mannschaften '
-		.' ( `sid`,`name`,`liga`,`zps`,`liste`,`edit_liste`,`man_nr`,`tln_nr`,`mf`) '
-		.' VALUES ('$sid','spielfrei','$liga_man','0','0','62','0','$tln','0') '
-		;
-	$db->setQuery($query);
-	$db->query();
-
-	JError::raiseNotice( 6000,  JText::_( 'LIGEN_MANNSCH_1' ));
-		}
-	// Mannschaftsrunden anlegen
-	if ($neu_id == '1') {
-		CLMControllerLigen::runden($liga_man);
-
-	// Mannschaften anlegen
-	for($x=1; $x< 1+$teil; $x++) {
-	$man_name = 'Mannschaft '.$x;
-	$man_nr = $liga_man.$x;
-	$query = ' INSERT INTO #__clm_mannschaften '
-		.' (`sid`,`name`,`liga`,`zps`,`liste`,`edit_liste`,`man_nr`,`tln_nr`,`mf`,`published`) '
-		.' VALUES ('$sid','$man_name','$liga_man','1','0','0','$man_nr','$x','0','$publish') '
-		;
-	$db->setQuery($query);
-	$db->query();
-				}
-
-	// Runden (Termine) anlegen
-	for($y=1; $y< 1+$liga_dg; $y++) {
-	for($x=1; $x< 1+$liga_rnd; $x++) {
-
-	$nr	= $x + ($y-1)*$liga_rnd;
-	$name	= 'Runde '.$nr;
-
-	$query = ' INSERT INTO #__clm_runden_termine '
-		.' (`sid`,`name`,`liga`,`nr`,`meldung`,`sl_ok`,`published` ) '
-		.' VALUES ("'.$sid.'","'.$name.'","'.$liga_man.'","'.$nr.'","0","0","'.$publish.'") '
-		;
-	$db->setQuery($query);
-	$db->query();
-				}}}
-
-	$row->checkin();
-
-	switch ($task)
-	{
-		case 'apply':
-			$msg = JText::_( 'LIGEN_AENDERN' );
-			$link = 'index.php?option='.$option.'&section='.$section.'&task=edit&cid[]='. $row->id ;
-			break;
-		case 'save':
-		default:
-			$msg = JText::_( 'LIGEN_LIGA' );
-			$link = 'index.php?option='.$option.'&section='.$section;
-			break;
-	}
-	
-	// Log schreiben
-	$clmLog = new CLMLog();
-	$clmLog->aktion = $aktion;
-	$clmLog->params = array('sid' => $row->sid, 'lid' => $row->id);
-	$clmLog->write();
-	
-
-	$mainframe->redirect( $link, $msg );
-	}
-
-
-// ENDE Ligen-Controller
-	
-*/
-
-/*	function _getAktuelleSaison() {
-		if (empty( $this->_aktuelleSaison )) { 
-		
-			$query =  ' SELECT 
-							id,
-							name,
-							published
-						FROM 
-							#__clm_liga 
-						WHERE
-							published = 1';
-			$var = $this->_getList( $query );
-		} 
-		return $var[0]->id;
-	}*/
-	
 	
 	function _SWTReadName($file, $offset, $length){
 		$i = 0;
@@ -662,44 +434,3 @@ class CLMModelSWTLigainfo extends JModel {
 	}
 	
 }
-	
-/*
-/// aus dem swtliga-model:
-	function __construct(){
-		parent::__construct();
-		$filter_saison	= JRequest::getVar( 'filter_saison' , $this->_getAktuelleSaison() , 'default' , 'int' );
-
-		$this->setState( 'filter_saison' , $filter_saison );
-	}
-	
-	function getSaisons() {
-		if (empty( $this->_saisons )) { 
-			$query =  ' SELECT 
-							id,
-							name
-						FROM 
-							#__clm_saison';
-			$this->_saisons = $this->_getList( $query );
-		} 
-		return $this->_saisons;
-	}
-	
-/// aus dem ligen-controller:
-
-	$db 		=& JFactory::getDBO();
-	$user 		=& JFactory::getUser();
-	$task 		= JRequest::getVar( 'task');
-	$cid 		= JRequest::getVar( 'cid', array(0), '', 'array' );
-	$option 	= JRequest::getCmd( 'option' );
-	$section 	= JRequest::getVar( 'section' );
-	$row 		=& JTable::getInstance( 'ligen', 'TableCLM' );
-	JArrayHelper::toInteger($cid, array(0));
-	
-	// load the row from the db table
-	$row->load( $cid[0] );
-
-
-	require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'ligen.php');
-	CLMViewLigen::liga( $row, $lists, $option );
-	}
-*/

@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelSWTTurnierTlnr extends JModel {
+class CLMModelSWTTurnierTlnr extends JModelLegacy {
 
 	var $_teilnehmer;
 
@@ -40,7 +38,7 @@ class CLMModelSWTTurnierTlnr extends JModel {
 		$aktueller_durchgang	= CLMSWT::readInt($swt,598,1);
 		$ausgeloste_runden		= CLMSWT::readInt($swt,5,2);
 		$modus = $this->_calculateCLMModus(CLMSWT::readInt($swt,596,1));
-			
+				
 		//offset f�r Teilnehmerdaten berechnen
 		if($aktuelle_runde != 0) { //Turnier ist bereits angefangen
 			if($modus == 2){ //Vollrundig
@@ -51,10 +49,10 @@ class CLMModelSWTTurnierTlnr extends JModel {
 		} else { //Turnier ist noch nicht angefangen
 			$offset = 13384;
 		}
-
+		
 		//TWZ-Bestimmen Parameter lesen
 		$useAsTWZ = CLMSWT::getFormValue('params',0,'int','useAsTWZ');
-		
+				
 		//Spielerdaten werden aus SWT-Datei gelesen und in einem Array von JObjects gespeichert
 		$i = 1;
 		while($i <= $anz_teilnehmer) {
@@ -70,25 +68,31 @@ class CLMModelSWTTurnierTlnr extends JModel {
 				$teilnehmer->set('verein'		, CLMSWT::readName($swt,$offset+33	,32));
 				$teilnehmer->set('title'		, CLMSWT::readName($swt,$offset+66	,3));
 				$teilnehmer->set('FIDEelo'		, CLMSWT::readName($swt,$offset+70	,4));
-				$teilnehmer->set('NATrating'	, CLMSWT::readName($swt,$offset+75	,4));
+				$teilnehmer->set('start_dwz'	, CLMSWT::readName($swt,$offset+75	,4));
 				$teilnehmer->set('FIDEcco'		, CLMSWT::readName($swt,$offset+105	,3));
 				$teilnehmer->set('NATcco'		, CLMSWT::readName($swt,$offset+109	,3));
 				$teilnehmer->set('birthYear'	, CLMSWT::readName($swt,$offset+128	,4));
 				$teilnehmer->set('zps'			, CLMSWT::readName($swt,$offset+153	,5));
 				$teilnehmer->set('mgl_nr'		, CLMSWT::readName($swt,$offset+159	,4));
 				$teilnehmer->set('geschlecht'	, CLMSWT::readName($swt,$offset+184	,1));
+				$teilnehmer->set('tlnrStatus'	, (CLMSWT::readName($swt,$offset+184	,1)=="*" ? "0" : "1"));
 				$teilnehmer->set('FIDEid'   	, CLMSWT::readName($swt,$offset+324	,12));
-				
-				//TWZ-Bestimmen 
+
+				//TWZ-Bestimmen
 				if($useAsTWZ == 0) { 
-					if ($teilnehmer->FIDEelo >= $teilnehmer->NATrating) { $teilnehmer->set('twz'	, $teilnehmer->FIDEelo); }
-					else { $teilnehmer->set('twz'	, $teilnehmer->NATrating); } 
+					if ($teilnehmer->FIDEelo >= $teilnehmer->start_dwz) { $teilnehmer->set('twz'	, $teilnehmer->FIDEelo); }
+					else { $teilnehmer->set('twz'	, $teilnehmer->start_dwz); } 
 				} elseif ($useAsTWZ ==1) {
-					if ($teilnehmer->NATrating > 0) { $teilnehmer->set('twz'	, $teilnehmer->NATrating); }
+					if ($teilnehmer->start_dwz > 0) { $teilnehmer->set('twz'	, $teilnehmer->start_dwz); }
 					else { $teilnehmer->set('twz'	, $teilnehmer->FIDEelo); }
 				} elseif ($useAsTWZ ==2) {
 					if ($teilnehmer->FIDEelo > 0) { $teilnehmer->set('twz'	, $teilnehmer->FIDEelo); }
-					else { $teilnehmer->set('twz'	, $teilnehmer->NATrating); }
+					else { $teilnehmer->set('twz'	, $teilnehmer->start_dwz); }
+				}
+				// Geschlecht korrigieren
+				// Keine Angabe = Männlich
+				if($teilnehmer->geschlecht==" ") {
+					$teilnehmer->set('geschlecht'	, "M",1);
 				}
 			}
 			
@@ -104,7 +108,7 @@ class CLMModelSWTTurnierTlnr extends JModel {
 	}
 	
 	function store() {
-		$db		=& JFactory::getDBO ();
+		$db		=JFactory::getDBO ();
 		
 		//Name und Verzeichnis der SWT-Datei
 		$filename 	= JRequest::getVar('swt', '', 'post', 'string');
@@ -115,9 +119,9 @@ class CLMModelSWTTurnierTlnr extends JModel {
 		$anz_teilnehmer 		= CLMSWT::readInt($swt,7,2);
 	
 		if($anz_teilnehmer > 0){
-			$insert_query = " 	INSERT INTO 
+			$insert_query = "INSERT IGNORE INTO 
 									#__clm_swt_turniere_tlnr" . " 
-									( `sid`, `turnier`, `swt_tid`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `NATrating`, `FIDEelo`, `titel`, `FIDEcco`, `FIDEid`, `mgl_nr`, `zps`, `status`) "
+									( `sid`, `turnier`, `swt_tid`, `snr`, `name`, `birthYear`, `geschlecht`, `tlnrStatus`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `titel`, `FIDEcco`, `FIDEid`, `mgl_nr`, `zps`, `status`) "
 						  . " 	VALUES";
 			
 			print JRequest::getVar('snr[1]');
@@ -126,11 +130,12 @@ class CLMModelSWTTurnierTlnr extends JModel {
 			$i = 1;
 			$name = JRequest::getVar('name');
 			while($i <= $anz_teilnehmer) {
-			
+
 				if ($i >= $pfirst AND $i <= $plast) {
-				  if (isset($name[$i])) {
-					$zpscode = CLMSWT::getFormValue('zps','','string',$i);
-					if ($zpscode == '' OR $zpscode == 0) $zpscode = CLMSWT::getFormValue('zps_z','','string',$i);
+				  if (isset($name[$i])) {	
+				  $zpscode = CLMSWT::getFormValue('zps','','string',$i);
+					if ($zpscode == '' OR $zpscode == 0) { $zpscode = CLMSWT::getFormValue('zps_z','','string',$i); }
+
 					$insert_query .= 	" ( 
 										".CLMSWT::getFormValue('sid',null,'int').", 
 										".CLMSWT::getFormValue('tid',null,'int').", 
@@ -139,9 +144,10 @@ class CLMModelSWTTurnierTlnr extends JModel {
 										'".CLMSWT::getFormValue('name','','string',$i)."',
 										".CLMSWT::getFormValue('birthYear',0,'int',$i).", 
 										'".CLMSWT::getFormValue('geschlecht','','string',$i)."', 
+										".CLMSWT::getFormValue('tlnrStatus',0,'int',$i).",
 										'".CLMSWT::getFormValue('verein','','string',$i)."',
-										".CLMSWT::getFormValue('twz',0,'int',$i).", 										
-										".CLMSWT::getFormValue('NATrating',0,'int',$i).", 
+										".CLMSWT::getFormValue('twz',0,'int',$i).", 
+										".CLMSWT::getFormValue('start_dwz',0,'int',$i).", 
 										".CLMSWT::getFormValue('FIDEelo',0,'int',$i).", 
 										'".CLMSWT::getFormValue('title','','string',$i)."', 
 										'".CLMSWT::getFormValue('FIDEcco','','string',$i)."',

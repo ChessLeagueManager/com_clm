@@ -13,7 +13,7 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
-class CLMModelPaarungsliste extends JModel
+class CLMModelPaarungsliste extends JModelLegacy
 {
 
 	function _getCLMLiga( &$options )

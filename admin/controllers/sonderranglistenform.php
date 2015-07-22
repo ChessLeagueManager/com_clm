@@ -4,7 +4,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerSonderranglistenForm extends JController {
+class CLMControllerSonderranglistenForm extends JControllerLegacy {
 	
 
 	// Konstruktor
@@ -24,7 +22,7 @@ class CLMControllerSonderranglistenForm extends JController {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= & JFactory::getDBO();
+		$this->_db		= JFactory::getDBO();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save', 'edit' );
@@ -53,7 +51,7 @@ class CLMControllerSonderranglistenForm extends JController {
 	
 		if ($this->_saveDo()) { // erfolgreich?
 			
-			$app =& JFactory::getApplication();
+			$app =JFactory::getApplication();
 			
 			if ($this->neu) { // neues Turnier?
 				$app->enqueueMessage( JText::_('SP_RANKING_CREATED') );
@@ -79,23 +77,21 @@ class CLMControllerSonderranglistenForm extends JController {
 		$task = JRequest::getVar('task');
 		
 		// Instanz der Tabelle
-		$row = & JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
+		$row = JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
 		
 		if (!$row->bind(JRequest::get('post'))) {
 			JError::raiseError(500, $row->getError() );
 			return false;
 		}
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if ($clmAccess->access() === false) {
+		$clmAccess = clm_core::$access;      
+		if ($clmAccess->access('BE_tournament_edit_detail') === false) {
 			//$section = 'info';
 			JError::raiseWarning( 500, JText::_( 'TOURNAMENT_NO_ACCESS' ) );
 			//$link = 'index.php?option='.$option.'&section='.$section;
 			//$mainframe->redirect( $link);
 			return false;
 		}
-//		if ( $row->tl !== CLM_ID AND $clmAccess->access() !== true ) {
+//		if ( $row->tl !== clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true ) {
 //			JError::raiseWarning(500, JText::_('SECTION_NO_ACCESS') );
 //			return false;
 //		}
@@ -126,7 +122,6 @@ class CLMControllerSonderranglistenForm extends JController {
 			JError::raiseError(500, $row->getError() );
 		}
 		$row->checkin();
-		
 
 		// Log schreiben
 		$clmLog = new CLMLog();

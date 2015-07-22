@@ -14,24 +14,24 @@
 class CLMViewPaarung
 {
 
-function setPaarungToolbar($row)
+public static function setPaarungToolbar($row)
 	{
 	// Menubilder laden
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 
 	$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
 	JArrayHelper::toInteger($cid, array(0));
 	if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
 		else { $text = JText::_( 'New' );}
 	$verein 	= JRequest::getVar( 'verein' );
-	JToolBarHelper::title(  JText::_( 'TITLE_PAARUNG').' '.$row->name.': <small><small>[ '. $text.' ]</small></small>' ,'clm_settings_2');
+	JToolBarHelper::title(  JText::_( 'TITLE_PAARUNG').' '.$row->name.': [ '. $text.' ]' ,'clm_settings_2');
 	JToolBarHelper::custom( 'save', 'save.png', 'save_f2.png', JText::_( 'SAVE'),false );
 	JToolBarHelper::custom( 'apply', 'apply.png', 'apply_f2.png', JText::_( 'APPLY'),false );
 	JToolBarHelper::cancel();
 	JToolBarHelper::help( 'screen.clm.edit' );
 	}
 		
-function paarung( &$row, $paarung, $man, $count_man, $option, $cid, &$lists)
+public static function paarung( &$row, $paarung, $man, $count_man, $option, $cid, &$lists)
 	{
 	CLMViewPaarung::setPaarungToolbar($row);
 	JRequest::setVar( 'hidemainmenu', 1 );

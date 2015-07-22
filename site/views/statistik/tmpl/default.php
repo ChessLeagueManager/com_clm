@@ -25,7 +25,7 @@ $lid		= JRequest::getInt('liga','1');
 $sql = ' SELECT `sieg`, `remis`, `nieder`, `antritt`, `man_sieg`, `man_remis`, `man_nieder`, `man_antritt`'
 		. ' FROM #__clm_liga'
 		. ' WHERE `id` = "' . $lid . '"';
-$db =& JFactory::getDBO ();
+$db =JFactory::getDBO ();
 $db->setQuery ($sql);
 $ligapunkte = $db->loadObject ();
 
@@ -51,17 +51,17 @@ $ligapunkte = $db->loadObject ();
 	}
  
 // Stylesheet laden
-require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'includes'.DIRECTORY_SEPARATOR.'css_path.php');
-// require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'includes'.DIRECTORY_SEPARATOR.'image_path.php');
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
+
 ?>
-<div id="clm">
+<div >
 <div id="statistik">
 <?php
-$config	= &JComponentHelper::getParams( 'com_clm' );
-$googlecharts   = $config->get('googlecharts',0);
+$config = clm_core::$db->config();
+$googlecharts   = $config->googlecharts;
 
 // Browsertitelzeile setzen
-$doc =& JFactory::getDocument();
+$doc =JFactory::getDocument();
 $daten['title'] = JText::_('LEAGUE_STATISTIK').' '.$liga[0]->name;
 if ($doc->_type != "raw") $doc->setHeadData($daten);
 	
@@ -76,7 +76,7 @@ echo CLMContent::createPDFLink('statistik', JText::_('LEAGUE_STAT_PDF'), array('
 </div></div>
 <div class="clr"></div>
  
-<?php require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'includes'.DIRECTORY_SEPARATOR.'submenu.php'); ?>
+<?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
 
 <?php
 if ( !$liga OR $liga[0]->published == "0") { echo '<br>'.CLMContent::clmWarning(JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD')); } 
@@ -106,7 +106,7 @@ $lid 		= JRequest::getInt('liga');
 // $itemid 	= JRequest::getInt('Itemid');
 
 // Konfigurationsparameter auslesen
-$config		= &JComponentHelper::getParams( 'com_clm' );
+$config		= clm_core::$db->config();
 	
 ?>
 <br>
@@ -410,6 +410,7 @@ echo CLMContent::clmWarning(JText::_('LEAGUE_NO_GAMES'));
 } else { 
 	$stat_kampflos = array();
 	foreach($mannschaft as $mannschaft1) {
+		$stat_kampflos[$mannschaft1->tln_nr] = new stdClass();
 		$stat_kampflos[$mannschaft1->tln_nr]->name = $mannschaft1->name;
 		$stat_kampflos[$mannschaft1->tln_nr]->tln_nr = $mannschaft1->tln_nr;
 		$stat_kampflos[$mannschaft1->tln_nr]->kg_sum = 0;
@@ -493,7 +494,7 @@ if ($count > 1 AND $mannschaft) { ?>
 
 <br>
 
-<?php require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'includes'.DIRECTORY_SEPARATOR.'copy.php'); ?>
+<?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); ?>
 
 
 <div class="clr"></div>

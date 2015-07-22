@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerCatMain extends JController {
+class CLMControllerCatMain extends JControllerLegacy {
 	
 
 	// Konstruktor
@@ -24,7 +22,7 @@ class CLMControllerCatMain extends JController {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= & JFactory::getDBO();
+		$this->_db		= JFactory::getDBO();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply','save' );
@@ -83,7 +81,7 @@ class CLMControllerCatMain extends JController {
 		}
 		
 		// Daten holen
-		$row =& JTable::getInstance( 'categories', 'TableCLM' );
+		$row =JTable::getInstance( 'categories', 'TableCLM' );
 
 		if ( !$row->load($catid) ) {
 			JError::raiseWarning( 500, CLMText::errorText('JCATEGORY', 'NOTEXISTING') );
@@ -112,7 +110,7 @@ class CLMControllerCatMain extends JController {
 		$clmLog->write();
 		
 		// Message
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		$app->enqueueMessage( $nameOld.": ".JText::_('CATEGORY_COPIED') );
 
 		// Ende Runden erstellt
@@ -142,7 +140,7 @@ class CLMControllerCatMain extends JController {
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
 		// TODO? evtl global inconstruct anlegen
-		$user 		=& JFactory::getUser();
+		$user 		=JFactory::getUser();
 		
 		$cid		= JRequest::getVar('cid', array(), '', 'array');
 		JArrayHelper::toInteger($cid);
@@ -161,11 +159,11 @@ class CLMControllerCatMain extends JController {
 			foreach ($cid as $key => $value) {
 		
 				// load the row from the db table
-				$row =& JTable::getInstance( 'categories', 'TableCLM' );
+				$row =JTable::getInstance( 'categories', 'TableCLM' );
 				$row->load( $value ); // Daten zu dieser ID laden
 		
 				// Prüfen ob User Berechtigung für diese category hat
-				if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+				if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 					
 					JError::raiseWarning( 500, $row->name.": ".JText::_( 'CATEGORY_NO_ACCESS' ) );
 					
@@ -196,11 +194,11 @@ class CLMControllerCatMain extends JController {
 			// immer noch Einträge vorhanden?
 			if ( !empty($cid) ) { 
 		
-				$row =& JTable::getInstance( 'categories', 'TableCLM' );
+				$row =JTable::getInstance( 'categories', 'TableCLM' );
 				$row->publish( $cid, $publish );
 			
 				// Meldung erstellen
-				$app =& JFactory::getApplication();
+				$app =JFactory::getApplication();
 				if ($publish) {
 					$app->enqueueMessage( CLMText::sgpl(count($cid), JText::_('JCATEGORY'), JText::_('JCATEGORIES'))." ".JText::_('CLM_PUBLISHED') );
 				} else {
@@ -209,7 +207,7 @@ class CLMControllerCatMain extends JController {
 			
 			} else {
 			
-				$app =& JFactory::getApplication();
+				$app =JFactory::getApplication();
 				$app->enqueueMessage(JText::_('NO_CHANGES'));
 			
 			}
@@ -265,7 +263,7 @@ class CLMControllerCatMain extends JController {
 		}
 		
 		// Daten laden
-		$row =& JTable::getInstance( 'categories', 'TableCLM' );
+		$row =JTable::getInstance( 'categories', 'TableCLM' );
 		$row->load( $catid );
 		
 		// falls Cat existent?
@@ -294,7 +292,7 @@ class CLMControllerCatMain extends JController {
 		
 		
 		// Message
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		$app->enqueueMessage( $row->name.": ".JText::_('CATEGORY_DELETED') );
 		
 		return true;
@@ -340,14 +338,14 @@ class CLMControllerCatMain extends JController {
 			return false;
 		}
 	
-		$row =& JTable::getInstance( 'categories', 'TableCLM' );
+		$row =JTable::getInstance( 'categories', 'TableCLM' );
 		if ( !$row->load( $catid ) ) {
 			JError::raiseWarning( 500, CLMText::errorText('CATEGORY', 'NOTEXISTING') );
 			return false;
 		}
 		$row->move( $inc, '' );
 	
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		$app->enqueueMessage( $row->name.": ".JText::_('ORDERING_CHANGED') );
 		
 		return true;
@@ -360,7 +358,7 @@ class CLMControllerCatMain extends JController {
 		// Check for request forgeries
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
-		if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+		if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			JError::raiseWarning( 500, JText::_('SECTION_NO_ACCESS') );
 			return false;
 		}
@@ -373,7 +371,7 @@ class CLMControllerCatMain extends JController {
 		$order		= JRequest::getVar( 'order', array(0), 'post', 'array' );
 		JArrayHelper::toInteger($order, array(0));
 	
-		$row =& JTable::getInstance( 'categories', 'TableCLM' );
+		$row =JTable::getInstance( 'categories', 'TableCLM' );
 		$groupings = array();
 	
 		// update ordering values
@@ -392,10 +390,10 @@ class CLMControllerCatMain extends JController {
 		// execute updateOrder for each parent group
 		$groupings = array_unique( $groupings );
 		foreach ($groupings as $group){
-			$row->reorder('saison = '.(int) $group);
+			$row->reorder('sid = '.(int) $group);
 		}
 		
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		$app->enqueueMessage( JText::_('NEW_ORDERING_SAVED') );
 	
 		$this->adminLink->makeURL();

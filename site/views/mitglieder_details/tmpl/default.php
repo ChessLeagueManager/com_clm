@@ -25,7 +25,7 @@ $clmuser 	= $this->clmuser;
 $spieler	= $this->spieler;
 $verein		= $this->verein;
 
-$user		=& JFactory::getUser();
+$user		=JFactory::getUser();
 
 $mainframe = JFactory::getApplication();
 $link = 'index.php';
@@ -33,7 +33,7 @@ $link = 'index.php';
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 // Konfigurationsparameter auslesen
-$config = &JComponentHelper::getParams( 'com_clm' );
+$config = clm_core::$db->config();
 
 if (!$user->get('id')) {
 	$msg = JText::_( 'CLUB_LIST_LOGIN' );
@@ -51,7 +51,7 @@ if ($clmuser[0]->zps <> $zps) {
 if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps){
 
 ?>
-<div id="clm">
+<div >
 <div id="mitglieder">
 
 	<?php if (!$mgl ) { ?>

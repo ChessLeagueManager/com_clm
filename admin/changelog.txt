@@ -1,4 +1,4 @@
-CHANGELOG com_clm ab 1.0.0 - Joomla 2.5
+CHANGELOG com_clm ab 1.0.0
 ------------
 
 Legend:
@@ -12,47 +12,12 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 1.6.0 - [05-07-2015] - - - - - - - - - - - - - - - - - - - -
-- - - - - 1.5.7 - [05-07-2015] - - - - - - - - - - - - - - - - - - - -
-# Einzelturniere: Gegner-Elo-Durchschnitt
-# SWT-Import: TWZ-Bestimmung bei mehr als 50 Teilnehmern
-# Einzelturniere: Bugfix Anzeige Rundenliste
-# SWT-Import Einzel: Nachbesserung FIDE-Land und FIDE-Id
-+ Sonderranglisten: Kombiauswahl m/w mit verschiedenen Geburtsjahren
-# Einzelturniere: Gegner-DWZ- und -TWZ-Durchschnitt
-
-- - - - - 1.5.6 - [28-04-2015] - - - - - - - - - - - - - - - - - - - -
-# Ligen/M-Turniere: Runden-View Browsertitelzeile
-# DeWIS-Auswertungsdateien: Vollständigkeitsprüfung, 2 Durchgänge bei txt-Format
-+ M-Turniere: neue Feinwertung Direkter Vergleich
-^ Ligen/M-Turniere: Mannschaftsaufstellung mit Schwarz/Weiß
-^ M-Turniere: Umstellung Sonneborn-Berger nach ECU
-^ SWT-Import Mannschaftswettbewerbe: Standard Mannschaftsturnier
-
-- - - - - 1.5.5 - [08-03-2015] - - - - - - - - - - - - - - - - - - - -
-# Fehler beim Nachmelden bei bestimmten Sonderzeichen (escaping)
-+ Einzelturniere: neue Feinwertung Direkter Vergleich
-+ Einzelturniere: neue Feinwertung Prozentpunkte
-# SWT-Import Liga: Nachspielen von Paarungen
-# Mannschaftsview: Behandlung von langen Adressen
-# SWT-Import: Mannschaftsturnier CH-System
-+ Ligen/M-Turniere: neuer View Tabelle
-# Rundenbericht: Uhrzeit Folgerunde
-^ Einzelturniere: Umstellung Rangliste bei mehreren Durchgängen
-
-- - - - - 1.5.4 - [21-01-2015] - - - - - - - - - - - - - - - - - - - -
-+ Einzelturniere: neue Feinwertung Ordering
-^ Einzelturniere: Umstellung für Turniere mit bis zu 4 Durchgängen
-# Einzelturniere: Bugfix SoBe-Wertung Rundenturnier
-# Ranglistenänderung: Start DWZ und DWZ Auswertung beibehalten
-
-- - - - - 1.5.3 - [05-01-2015] - - - - - - - - - - - - - - - - - - - -
+- - - - - 1.5.3 - [xx-xx-2014] - - - - - - - - - - - - - - - - - - - -
 # views: Codebereinigung e.g. raw->'raw'
 # Einzelturniere: Geburtsjahr bei DWZ-Berechnung
 # SWT-Import: Erhalten der Reihenfolgenummer bei Liga-Update
 # SWT-Import: Spielgemeinschaften von 3 und mehr Vereinen
-+ SWT-Import: Hinweis, wenn Summe der Brettergebnisse nicht gleich Mannschaftsergebnis
-# Löschen von Log-Einträgen 
++ SWT-Import: Hinweis, wenn Summe der Brettergebnisse nicht gleich Mannschaftsergebnis 
 
 - - - - - 1.5.2a - [07-09-2014] - - - - - - - - - - - - - - - - - - - -
 # Meldelisten: Bugfix beim Löschen
@@ -308,7 +273,7 @@ Code-Bereinigung
 ^ Ligaheft für Rangl.-system (Spielerliste analog pdf-Mannschaftsliste)
 # Vereinsmanager: Filter zur Ranglistenbearbeitung
 # DWZ-Berechnung: kein Programmstopp, falls keine Ergebnisse vorliegen
-^ Einzelturniere technisch: Class JParameter verfügbar in 2.5
+^ Einzelturniere technisch: Class JParameterOLD verfügbar in 2.5
 + install.clm.php um Hinweise zu Modulen ergänzt
 + Icons für Mannschaftsturniere
 ^ apply_f2.png, cancel_f2.png, ... verfügbar im CLM

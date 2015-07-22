@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link http://www.fishpoke.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -14,7 +14,7 @@ defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
 
-class CLMModelVerein extends JModel
+class CLMModelVerein extends JModelLegacy
 {
 	function _getCLMVereinstats( &$options )
 	{
@@ -35,7 +35,6 @@ class CLMModelVerein extends JModel
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 		." WHERE a.ZPS = '$zps'"
 		." AND a.sid = ".$sid
-		." AND a.Status = ''" 
 		." GROUP BY a.ZPS"
 		;
 	return $query;
@@ -198,7 +197,7 @@ class CLMModelVerein extends JModel
 	$query	= "SELECT Vereinname "
 		." FROM #__clm_dwz_vereine "
 		." WHERE zps = '$zps' "
-		." AND sid = ". $sid 
+		." AND sid = ". $sid
 		;
 
 		return $query;
@@ -214,7 +213,7 @@ class CLMModelVerein extends JModel
 ////// Prüfen ob User berechtigt ist Daten zu ändern ///////////////////////////////////
 	function _getCLMClmuser ( &$options )
 	{
-	$user =& JFactory::getUser();
+	$user =JFactory::getUser();
 	$jid = $user->get('id');
 	$sid = JRequest::getInt('saison','1');
 

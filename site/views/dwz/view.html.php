@@ -12,32 +12,32 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewDWZ extends JView
+class CLMViewDWZ extends JViewLegacy
 {
 	function display($tpl = null)
 	{
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$liga     = $model->getCLMLiga();
 		$this->assignRef('liga'  , $liga);
 
-		$model = &$this->getModel();
+		$model = $this->getModel();
 		$zps = $model->getCLMzps();
 		$this->assignRef('zps'  , $zps);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$vereinsliste     = $model->getCLMVereinsliste();
 		$this->assignRef('vereinsliste'  , $vereinsliste);
 		
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$saisons     = $model->getCLMSaisons();
 		$this->assignRef('saisons'  , $saisons);
 		
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
 		$document->addScript(JURI::base().'components/com_clm/javascript/updateTableHeaders.js');
 		 
 		/* Call the state object */
-		$state =& $this->get( 'state' );
+		$state = $this->get( 'state' );
  
 		/* Get the values from the state object that were inserted in the model's construct function */
 		$lists['order']     = $state->get( 'filter_order_dwz' );

@@ -20,7 +20,7 @@
 class CLMForm {
 
 	// Formularelement hidden
-	function hidden ($name, $value, $id = FALSE) {
+	public static function hidden ($name, $value, $id = FALSE) {
 	
 		$parts = array();
 		$parts[] = 'name="'.$name.'"';
@@ -37,9 +37,9 @@ class CLMForm {
 	}
 	
 	
-	function selectSeason ($name, $value = 0, $filter = FALSE) {
+	public static function selectSeason ($name, $value = 0, $filter = FALSE) {
 	
-		$_db				= & JFactory::getDBO();
+		$_db				= JFactory::getDBO();
 		
 		$saisonlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_SEASON' )), 'id', 'name' );
 		
@@ -52,7 +52,7 @@ class CLMForm {
 	}
 	
 
-	function selectModus ($name, $value = 0, $filter = FALSE, $more = '') {
+	public static function selectModus ($name, $value = 0, $filter = FALSE, $more = '') {
 	
 		$modi = array();
 		$modi[0] = CLMText::selectOpener(JText::_('SELECT_MODUS'));
@@ -70,7 +70,7 @@ class CLMForm {
 	}
 
 	
-	function selectTiebreakers ($name, $value = 0, $filter = FALSE) {
+	public static function selectTiebreakers ($name, $value = 0, $filter = FALSE) {
 	
 		$modi = array();
 		$tiebr[0] = CLMText::selectOpener(JText::_('SELECT_TIEBREAKER'));
@@ -102,7 +102,7 @@ class CLMForm {
 	}
 	
 	
-	function selectStages ($name, $value = 0, $filter = FALSE) {
+	public static function selectStages ($name, $value = 0, $filter = FALSE) {
 	
 		// $stagelist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_STAGES' )), 'id', 'name' );
 		$stagelist[]	= JHTML::_('select.option',  '1', '1', 'id', 'name' );
@@ -115,39 +115,26 @@ class CLMForm {
 	}
 
 
-	function selectDirector ($name, $value = 0, $filter = FALSE) {
+	public static function selectDirector ($name, $value = 0, $filter = FALSE) {
 
-		require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_clm'.DS.'classes'.DS.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
+		$clmAccess = clm_core::$access;
 		
-		/* $_db				= & JFactory::getDBO();
-		// TL Liste
-		//$query =  " SELECT a.jid,a.name "
-		//	." FROM #__clm_user as a"
-		//	." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
-		//	//." WHERE usertype = 'tl' OR usertype = 'admin' AND s.published = 1 "
-		//	." WHERE (usertype = 'tl' OR usertype = 'admin')"   //klkl
-		//	." AND s.published = 1 "                            //klkl
-		//	." AND s.archiv = 0"
-		//	;
-		$_db->setQuery($query); */
-		$clmAccess->accesspoint = 'BE_tournament_edit_result';  //nur wer wenigstens Ergebnisse im BE pflegen darf, kann SL sein
-		$clmAccess->accessvalue = '>0';  						//für alle ligen oder nur ausgewählte
-		if($clmAccess->userlist() === false) {
-			echo "<br>cl: "; var_dump($clmAccess->userlist()); die('clcl'); }
+		$userlist = $clmAccess->userlist('BE_tournament_edit_result','>0');
+
+		if($userlist === false) {
+			echo "<br>cl: "; var_dump($userlist); die('clcl'); }
 		
 		$tllist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_DIRECTOR' )), 'jid', 'name' );
-		//$tllist		= array_merge( $tllist, $_db->loadObjectList() );
-		$tllist		= array_merge( $tllist, $clmAccess->userlist() );
+		$tllist		= array_merge( $tllist, $userlist);
 		
 		return JHTML::_('select.genericlist', $tllist, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter), 'jid', 'name', $value );
 	
 	}
 
 
-	function selectDistrict ($name, $value = '0', $filter = FALSE) {
+	public static function selectDistrict ($name, $value = '0', $filter = FALSE) {
 
-		$_db				= & JFactory::getDBO();
+		$_db				= JFactory::getDBO();
 		
 		// Bezirksveranstaltung
 		$query = "SELECT ZPS, Vereinname FROM #__clm_dwz_vereine";
@@ -163,12 +150,12 @@ class CLMForm {
 	}
 
 
-	function selectAssociation ($name, $value = '0', $filter = FALSE) {
+	public static function selectAssociation ($name, $value = '0', $filter = FALSE) {
 		
-		$_db				= & JFactory::getDBO();
+		$_db				= JFactory::getDBO();
 		
 		// Verbandfilter
-		$query = 'SELECT Verband, Verbandname FROM dwz_verbaende';
+		$query = 'SELECT Verband, Verbandname FROM #__clm_dwz_verbaende';
 		$_db->setQuery($query);
 		$verbandlist[] = JHTML::_('select.option',  '0', JText::_( 'SELECT_ASSOCIATION' ), 'Verband', 'Verbandname' );
 		$verbandlist = array_merge( $verbandlist, $_db->loadObjectList() );
@@ -178,9 +165,9 @@ class CLMForm {
 	}
 
 
-	function selectVereinZPS ($name, $value = NULL, $filter = FALSE) {
+	public static function selectVereinZPS ($name, $value = NULL, $filter = FALSE) {
 	
-		$_db				= & JFactory::getDBO();
+		$_db				= JFactory::getDBO();
 		
 		$query = "SELECT ZPS, Vereinname FROM #__clm_dwz_vereine GROUP BY ZPS";
 		$_db->setQuery($query);
@@ -191,11 +178,11 @@ class CLMForm {
 	
 	}
 
-	function selectVerband ($name, $value = NULL, $filter = FALSE) {
+	public static function selectVerband ($name, $value = NULL, $filter = FALSE) {
 	
-		$_db				= & JFactory::getDBO();
+		$_db				= JFactory::getDBO();
 		
-		$query = " (SELECT v2.Verband AS ZPS, v2.Verbandname AS Vereinname FROM dwz_verbaende AS v2 GROUP BY ZPS) "
+		$query = " (SELECT v2.Verband AS ZPS, v2.Verbandname AS Vereinname FROM #__clm_dwz_verbaende AS v2 GROUP BY ZPS) "
 				;
 		$_db->setQuery($query);
 		$veranstalter[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_VERBAND' )), 'ZPS', 'Vereinname' );
@@ -205,15 +192,15 @@ class CLMForm {
 	
 	}
 
-	function selectVereinZPSuVerband ($name, $value = NULL, $filter = FALSE) {
+	public static function selectVereinZPSuVerband ($name, $value = NULL, $filter = FALSE) {
 	
-		$_db				= & JFactory::getDBO();
+		$_db				= JFactory::getDBO();
 		
-		$query = " (SELECT v2.Verband AS ZPS, v2.Verbandname AS Vereinname FROM dwz_verbaende AS v2 GROUP BY ZPS) "
+		$query = " (SELECT v2.Verband AS ZPS, v2.Verbandname AS Vereinname FROM #__clm_dwz_verbaende AS v2 GROUP BY ZPS) "
 
 				." UNION ALL "
 				
-				." (SELECT v1.ZPS AS ZPS, v1.Vereinname AS Vereinname FROM #__clm_dwz_vereine AS v1 WHERE sid = ".CLM_SEASON." GROUP BY ZPS) "
+				." (SELECT v1.ZPS AS ZPS, v1.Vereinname AS Vereinname FROM #__clm_dwz_vereine AS v1 WHERE sid = ".clm_core::$access->getSeason()." GROUP BY ZPS) "
  
 				;
 		$_db->setQuery($query);
@@ -224,18 +211,18 @@ class CLMForm {
 	
 	}
 
-	function selectVereinZPSinAssoc ($name, $value = NULL, $verband = '000', $filter = FALSE) {
+	public static function selectVereinZPSinAssoc ($name, $value = NULL, $verband = '000', $filter = FALSE) {
 	
-		$_db				= & JFactory::getDBO();
+		$_db				= JFactory::getDBO();
 		
 		if ($verband != '000') {
 			$temp = $verband;
 			WHILE (substr($temp, -1) == '0') {
 				$temp = substr_replace($temp, "", -1);
 			}
-			$query = "SELECT ZPS, Vereinname FROM #__clm_dwz_vereine WHERE Verband LIKE '".$temp."%' AND sid = ".CLM_SEASON;
+			$query = "SELECT ZPS, Vereinname FROM #__clm_dwz_vereine WHERE Verband LIKE '".$temp."%' AND sid = ".clm_core::$access->getSeason();
 		} else {
-			$query = "SELECT ZPS, Vereinname FROM #__clm_dwz_vereine WHERE sid = ".CLM_SEASON;
+			$query = "SELECT ZPS, Vereinname FROM #__clm_dwz_vereine WHERE sid = ".clm_core::$access->getSeason();
 		}
 		$_db->setQuery($query);
 		$veranstalter[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_CLUB' )), 'ZPS', 'Vereinname' );
@@ -246,7 +233,7 @@ class CLMForm {
 	}
 
 
-	function radioPublished ($name, $value = 0) {
+	public static function radioPublished ($name, $value = 0) {
 	
 		return JHTML::_('select.booleanlist', $name, 'class="inputbox"', $value);
 	
@@ -254,32 +241,22 @@ class CLMForm {
 
 
 	// ersetzt CLMFilterVerein::filter_vereine, aber ohne Option von $vl = 1, also nur DB-Auswahl
-	function selectVerein ($name, $value = 0, $filter = FALSE) {
+	public static function selectVerein ($name, $value = 0, $filter = FALSE) {
 		
-		$_db				= & JFactory::getDBO();
+		$_db				= JFactory::getDBO();
 	
-		$config	= &JComponentHelper::getParams( 'com_clm' );
-		$lv	= $config->get('lv', 705);
-		$vl	= $config->get('vereineliste', 1);
-		$vs	= $config->get('verein_sort', 1);
-		$version = $config->get('version', 0);
-		$dat	= substr($lv, 1);
-		$dat2	= substr($lv, 2);
-	
-		// 1 = Auswahl DB obwohl manuell aktiviert wurde ! (z.B. Vereine anlegen !!!)
-		/*
-		if ($override == 1) {
-			$vl = 0;
+		$config = clm_core::$db->config();
+		$lv	= $config->lv;
+		$vl	= $config->vereineliste;
+		$vs	= $config->verein_sort;
+		$sid = clm_core::$access->getSeason();
+		$language = $config->language;
+
+		if($language=="de") {
+			$out = clm_core::$load->unit_range($lv);
 		}
-		*/
-	
-		// Vereinefilter
-		// 0 = DB ; 1 = manuell
-		// if ($vl =="0") {
-			$sql = 'SELECT id FROM #__clm_saison WHERE archiv = 0 and published = 1';
-			$_db->setQuery($sql);
-			$sid = $_db->loadResult();
-	
+
+			/*
 			if ($version == "0") {
 				if ($dat == "00") {
 					$ug = (substr($lv, 0, 1)).'0000';
@@ -294,7 +271,9 @@ class CLMForm {
 					$og =$lv.'99';
 				}
 			}
-		
+			*/
+			/*
+			$version = $config->version;
 			if($version == "1"){
 				if($lv=="00") {
 					$ug =$lv;
@@ -304,37 +283,20 @@ class CLMForm {
 					$og =$lv;
 				}
 			}
+			*/
+
 			$sql = "SELECT ZPS as zps, Vereinname as name FROM #__clm_dwz_vereine as a "
 				." LEFT JOIN #__clm_saison as s ON s.id= a.sid "
-				." WHERE a.ZPS BETWEEN '$ug' AND '$og' "
-				." AND s.archiv = 0 AND s.published = 1 ORDER BY ";
-			
+				." WHERE a.Verband >= '$out[0]' AND a.Verband <= '$out[1]' "
+				." AND s.id = '$sid' ORDER BY ";
 			if ($vs =="1") { 
 				$sql =$sql."a.ZPS ASC";
 			} else {
 				$sql = $sql." a.Vereinname ASC";
 			}
-		/*
-		} else {
-			$sql = 'SELECT a.zps, a.name FROM #__clm_vereine as a'
-				.' LEFT JOIN #__clm_saison AS s ON s.id = a.sid'
-				." WHERE s.archiv = 0";
-		}
-		*/
+
 		$_db->setQuery($sql);
 		$vereine = $_db->loadObjectList();
-	
-		/*
-		// Hinweis setzen wenn Filter leer !
-		if (count($vereine) == 0 AND $vl == 1) {
-		JError::raiseWarning( 500,  JText::_( ' Vereineliste (Filter) ist leer !'));
-		JError::raiseNotice( 6000,  JText::_( ' Ursache : Es wurde kein Verein angelegt und die Auswahl steht auf manuell !'));
-		}
-		if (count($vereine) == 0 AND $vl == 0) {
-		JError::raiseWarning( 500,  JText::_( ' Vereineliste (Filter) ist leer !'));
-		JError::raiseNotice( 6000,  JText::_( ' Ursache : Die Datenbank enthält keinen Verein dieses Verbandes und die Auswahl ist auf Datenbank eingestellt ! Falsche Verbandeinstellungen !?!'));
-		}
-		*/
 	
 		$vlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_CLUB' )), 'zps', 'name' );
 		$vlist		= array_merge( $vlist, $vereine);
@@ -343,7 +305,7 @@ class CLMForm {
 	
 	}
 
-	function selectMatchPlayer($name, $selected, $players = array()) {
+	public static function selectMatchPlayer($name, $selected, $players = array()) {
 	
 		$pllist[] = JHTML::_('select.option', '0', CLMText::selectOpener(JText::_( 'SELECT_PLAYER_'.strtoupper(substr($name, 0, 1)) ) ), 'snr', 'name' );
 		$pllist[] = JHTML::_('select.option', '-1', JText::_( ' ---------------------------- ' ), 'snr', 'name');
@@ -357,7 +319,7 @@ class CLMForm {
 	}
 
 
-	function selectMatchResult($name, $value) {
+	public static function selectMatchResult($name, $value) {
 	
 		$resultlist[] = JHTML::_('select.option', '-1', CLMText::selectOpener(JText::_( 'SELECT_RESULT' ) ), 'eid', 'ergebnis' );
 		$resultlist[] = JHTML::_('select.option', '-2', JText::_( ' ---------------- ' ), 'eid', 'ergebnis');
@@ -370,7 +332,7 @@ class CLMForm {
 	
 	}
 
-	function selectDWZRanges ($name, $value = 0, $filter = FALSE) {
+	public static function selectDWZRanges ($name, $value = 0, $filter = FALSE) {
 	
 		$dwzlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_RATING' )), 'id', 'name' );
 		$dwzlist[]	= JHTML::_('select.option',  '28', 'DWZ >= 2600', 'id', 'name' );
@@ -383,7 +345,7 @@ class CLMForm {
 	}
 
 
-	function selectPriority ($name, $value = 0, $filter = FALSE) {
+	public static function selectPriority ($name, $value = 0, $filter = FALSE) {
 	
 		$list[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_PRIORITY' )), 'id', 'name' );
 		

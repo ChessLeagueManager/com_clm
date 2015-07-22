@@ -13,56 +13,44 @@
 
 class CLMViewVereine
 {
-function setVereineToolbar()
+public static function setVereineToolbar()
 	{
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;
 	// Menubilder laden
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 	JToolBarHelper::title( JText::_( 'TITLE_VEREIN' ), 'clm_headmenu_vereine.png' );
 
-	$clmAccess->accesspoint = 'BE_club_copy';
-	if($clmAccess->access() === true) {
-	//if (CLM_usertype === 'admin') {
+	if($clmAccess->access('BE_club_copy') === true) {
+	//if (clm_core::$access->getType() === 'admin') {
 		JToolBarHelper::custom('copy_saison','copy.png','copy_f2.png','VEREIN_BUTTON_COPY_LAST_YEAR',false);
 	}
 
-			//if (CLM_sl_count !== '0' OR CLM_usertype === 'admin') {
-	$clmAccess->accesspoint = 'BE_club_general';
-	if($clmAccess->access() === true) {
-	//if (CLM_usertype === 'admin' || CLM_usertype === 'sl' ) {
+	if($clmAccess->access('BE_club_general') === true) {
 		JToolBarHelper::custom('gruppen','send.png','send_f2.png','VEREIN_BUTTON_GROUP_EDIT',false);
 		JToolBarHelper::custom('rangliste','send.png','send_f2.png','VEREIN_BUTTON_RANG_EDIT',false);
 	}
-	$clmAccess->accesspoint = 'BE_club_edit_member';
-	if($clmAccess->access() === true) {
-	//if (CLM_usertype === 'admin' OR CLM_usertype === 'dv' OR CLM_usertype === 'dwz') {
+	if($clmAccess->access('BE_club_edit_member') === true) {
+	//if (clm_core::$access->getType() === 'admin' OR clm_core::$access->getType() === 'dv' OR clm_core::$access->getType() === 'dwz') {
 		JToolBarHelper::custom('dwz','send.png','send_f2.png','VEREIN_BUTTON_MEMBER_EDIT',false);
 	}
-	$clmAccess->accesspoint = 'BE_club_general';
-	if($clmAccess->access() === true) {
-	//if (CLM_usertype === 'admin' || CLM_usertype === 'dv' || CLM_usertype === 'sl') {
+	if($clmAccess->access('BE_club_general') === true) {
 		JToolBarHelper::publishList();
 		JToolBarHelper::unpublishList();
 	}
-	$clmAccess->accesspoint = 'BE_club_create';
-	if($clmAccess->access() === true) {
-	//if (CLM_usertype === 'admin') {
-		JToolBarHelper::customX( 'copy', 'copy.png', 'copy_f2.png', 'VEREIN_BUTTON_COPY' );
+	if($clmAccess->access('BE_club_create') === true) {
+		JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', 'VEREIN_BUTTON_COPY' );
 		JToolBarHelper::custom('remove','delete.png','delete_f2.png','VEREIN_BUTTON_DEL',false);
-	//}
-		JToolBarHelper::editListX();
-	//if (CLM_usertype === 'admin') {
+		JToolBarHelper::editList();
 		JToolBarHelper::custom('add','new.png','new_f2.png','VEREIN_BUTTON_NEW',false);
 	}
 		JToolBarHelper::help( 'screen.clm.verein' );
 	}
 
-function vereine ( &$rows, &$lists, &$pageNav, $option )
+public static function vereine ( $rows, $lists, $pageNav, $option )
 	{
 		$mainframe	= JFactory::getApplication();
 		CLMViewVereine::setVereineToolbar();
-		$user =& JFactory::getUser();
+		$user =JFactory::getUser();
 		// Ordering allowed ?
 		$ordering = ($lists['order'] == 'a.ordering');
 
@@ -92,10 +80,10 @@ function vereine ( &$rows, &$lists, &$pageNav, $option )
 			<thead>
 				<tr>
 					<th width="10">
-						<?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?>
+#
 					</th>
 					<th width="10">
-						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $rows ); ?>);" />
+						<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 					</th>
 					<th class="title">
 						<?php echo JHtml::_('grid.sort',   'VEREIN', 'a.name', @$lists['order_Dir'], @$lists['order'] ); ?>
@@ -131,11 +119,12 @@ function vereine ( &$rows, &$lists, &$pageNav, $option )
 			<tbody>
 			<?php
 			$k = 0;
+			$row =JTable::getInstance( 'vereine', 'TableCLM' );
 			for ($i=0, $n=count( $rows ); $i < $n; $i++) {
-				$row = &$rows[$i];
-
+				//$row = &$rows[$i];
+				// load the row from the db table
+				$row->load( $rows[$i]->id );
 				$link 		= JRoute::_( 'index.php?option=com_clm&section=vereine&task=edit&cid[]='. $row->id );
-
 				$checked 	= JHtml::_('grid.checkedout',   $row, $i );
 				$published 	= JHtml::_('grid.published', $row, $i );
 
@@ -152,17 +141,11 @@ function vereine ( &$rows, &$lists, &$pageNav, $option )
 					</td>
 
 					<td>
-						<?php
-						if (  JTable::isCheckedOut($user->get ('id'), $row->checked_out ) ) {
-							echo $row->name;
-						} else {
-							?>
+
 								<span class="editlinktip hasTip" title="<?php echo JText::_( 'VEREIN_EDIT' );?>::<?php echo $row->name; ?>">
 							<a href="<?php echo $link; ?>">
 								<?php echo $row->name; ?></a></span>
-							<?php
-						}
-						?>
+
 					</td>
 
 					<td align="center">
@@ -173,7 +156,7 @@ function vereine ( &$rows, &$lists, &$pageNav, $option )
 					</td>
                     
 					<td align="center">
-						<?php echo $row->saison;?>
+						<?php echo $rows[$i]->saison;?>
 					</td>
                     
 					<td align="center">
@@ -207,24 +190,24 @@ function vereine ( &$rows, &$lists, &$pageNav, $option )
 		<?php
 	}
 
-function setVereinToolbar()
+public static function setVereinToolbar()
 	{
 	// Menubilder laden
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 
 		//$zps = $row->zps;
 		$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
 		JArrayHelper::toInteger($cid, array(0));
 		if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
 			else { $text = JText::_( 'New' );}
-		JToolBarHelper::title(  JText::_( 'VEREIN' ).': <small><small>[ '. $text.' ]</small></small>', 'clm_headmenu_vereine.png' );
+		JToolBarHelper::title(  JText::_( 'VEREIN' ).': [ '. $text.' ]', 'clm_headmenu_vereine.png' );
 		JToolBarHelper::save();
 		JToolBarHelper::apply();
 		JToolBarHelper::cancel();
 		JToolBarHelper::help( 'screen.clm.edit' );
 	}
 		
-function verein( &$row, $lists, $option )
+public static function verein( &$row, $lists, $option )
 	{
 		$url = $_SERVER["REQUEST_URI"];
 		$ipos = strpos($url,'administrator');
@@ -255,11 +238,7 @@ function verein( &$row, $lists, $option )
 			document.getElementById('vs').value=selected_text;
 		}
 
-	<?php if (JVersion::isCompatible("1.6.0")) { ?>
-		 Joomla.submitbutton = function (pressbutton) { 
-	<?php } else { ?>
-		 function submitbutton(pressbutton) {
-	<?php } ?>		
+		 Joomla.submitbutton = function (pressbutton) { 		
 			var form = document.adminForm;
 			if (pressbutton == 'cancel') {
 				submitform( pressbutton );

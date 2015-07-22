@@ -10,20 +10,20 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewTermine extends JView
+class CLMViewTermine extends JViewLegacy
 {
 	function display($tpl = null)
 	{
 		
-		$model	  		= &$this->getModel();
+		$model	  		= $this->getModel();
 		$termine     	= $model->getTermine();
 		$this->assignRef('termine'  , $termine);
 		
-		$model	  		= &$this->getModel();
+		$model	  		= $this->getModel();
 		$termine_detail     	= $model->getTermine_Detail();
 		$this->assignRef('termine_detail'  , $termine_detail);
 		
-		$model	  		= &$this->getModel();
+		$model	  		= $this->getModel();
 		$schnellmenu  	= $model->getSchnellmenu();
 		$this->assignRef('schnellmenu'  , $schnellmenu);
 		

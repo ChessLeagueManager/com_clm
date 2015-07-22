@@ -19,14 +19,14 @@ class TableCLMTurnier_Teilnehmer extends JTable
 
 	var $id			= null;
 	var $sid		= null;
-	var $turnier	= '';
+	var $turnier		= '';
 	var $snr		= '';
 	var $name       = '';
 	var $birthYear  = '';
 	var $geschlecht = '';
 	var $verein     = '';
 	var $twz        = '';
-	var $NATrating  = '';
+	var $start_dwz  = '';
 	var $FIDEelo    = '';
 	var $FIDEid     = '';
 	var $FIDEcco    = '';
@@ -50,10 +50,10 @@ class TableCLMTurnier_Teilnehmer extends JTable
 	var $DWZ		= '';
 	var $I0			= '';
 	var $Punkte		= 0;
-	var $Partien	= 0;
+	var $Partien		= 0;
 	var $We			= 0;
-	var $Leistung	= 0;
-	var $EFaktor	= 0;
+	var $Leistung		= 0;
+	var $EFaktor		= 0;
 	var $Niveau		= 0;
 	var $published		= 0;
 	var $checked_out	= 0;
@@ -78,7 +78,7 @@ class TableCLMTurnier_Teilnehmer extends JTable
 		if (trim($this->name) == '') { // Name vorhanden
 			$this->setError( CLMText::errorText('NAME', 'MISSING') );
 			return false;
-		} elseif (!is_numeric($this->NATrating)) { // TWZ = Zahl
+		} elseif (!is_numeric($this->start_dwz)) { // TWZ = Zahl
 			$this->setError( CLMText::errorText('RATING', 'NOTANUMBER') );
 			return false;
 		} elseif (!is_numeric($this->FIDEelo)) { // TWZ = Zahl

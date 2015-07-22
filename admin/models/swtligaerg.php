@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -14,7 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.model');
 
 
-class CLMModelSWTLigaerg extends JModel {
+class CLMModelSWTLigaerg extends JModelLegacy {
 
 	var $debug_ausgaben = -1; // -1 or 1 or 3 or 5
 	
@@ -35,7 +35,7 @@ class CLMModelSWTLigaerg extends JModel {
     	if (!empty ($this->_splist)) {
     		return $this->_splist;
     	}
-    	
+    	set_time_limit(30);
     	$swt_id = clm_escape(JRequest::getVar ('swt_id', 0, 'default', 'int'));
     	
 		$swt_db_data = $this->getDataSWTdb ();
@@ -177,7 +177,7 @@ class CLMModelSWTLigaerg extends JModel {
 	function store () {
 		
 		// DB-Zugriff
-		$db		=& JFactory::getDBO ();
+		$db		= JFactory::getDBO ();
 		//$row	=& JTable::getInstance ('ligenSWT', 'TableCLM');
 		
 		$swt_id	= JRequest::getVar ('swt_id', 0, 'default', 'int');
@@ -314,7 +314,7 @@ class CLMModelSWTLigaerg extends JModel {
 						$gmpunkte = 0;
 					}
 					$dwz_edit = $ergebnisk;
-					$dwz_editor = CLM_ID;
+					$dwz_editor = clm_core::$access->getID();
 				}
 				
 				if ($ergebnis != null) {
@@ -327,16 +327,16 @@ class CLMModelSWTLigaerg extends JModel {
 					$sp_hvalues = '"'.$sid.'", "'.$swt_id.'", "'.$runde.'", "'.$p.'", "'.$dgang.'", '
 								. '"'.$htln_nr.'", "'.$b.'", "1", "'.$hweiss.'", '
 								. '"'.$hmgl_nr.'", "'.$hzps.'", "'.$gmgl_nr.'", "'.$gzps.'", '
-								. '"'.$ergebnis.'", "'.$kampflos.'", "'.$hpunkte.'", "'.CLM_ID.'"';
+								. '"'.$ergebnis.'", "'.$kampflos.'", "'.$hpunkte.'", "'.clm_core::$access->getID().'"';
 					if ($dwz_edit > 0) $sp_hvalues .= ', "'.$dwz_edit.'", "'.$dwz_editor.'"';					
 					$sp_gvalues = '"'.$sid.'", "'.$swt_id.'", "'.$runde.'", "'.$p.'", "'.$dgang.'", '
 								. '"'.$gtln_nr.'", "'.$b.'", "0", "'.$gweiss.'", '
 								. '"'.$gmgl_nr.'", "'.$gzps.'", "'.$hmgl_nr.'", "'.$hzps.'", '
-								. '"'.$ergebnis.'", "'.$kampflos.'", "'.$gpunkte.'", "'.CLM_ID.'"';
+								. '"'.$ergebnis.'", "'.$kampflos.'", "'.$gpunkte.'", "'.clm_core::$access->getID().'"';
 					if ($dwz_edit > 0) $sp_gvalues .= ', "'.$dwz_edit.'", "'.$dwz_editor.'"';							
-					$query = ' INSERT INTO #__clm_swt_rnd_spl'
+					$query = ' INSERT IGNORE INTO #__clm_swt_rnd_spl'
 							. ' ( ' . $sp_fields . ' ) '
-							. ' VALUES ( ' . $sp_hvalues . ' ), ( ' . $sp_gvalues . ' ) ';
+							. ' VALUES ( ' . $sp_hvalues . ' ), ( ' . $sp_gvalues . ' ); ';
 				
 					$db->setQuery ($query);
 					if (!$db->query ()) {
@@ -424,9 +424,9 @@ class CLMModelSWTLigaerg extends JModel {
 			$m_gvalues = '"'.$sid.'", "'.$swt_id.'", "'.$runde.'", "'.$p.'", "'.$dgang.'", '
 						. '"0", "'.$gtln_nr.'", "'.$htln_nr.'", "'.$gbrettpunkte.'", "'.$gmanpunkte . '", "1"';
 						
-			$query = ' INSERT INTO #__clm_swt_rnd_man'
+			$query = ' INSERT IGNORE INTO #__clm_swt_rnd_man'
 					. ' ( ' . $m_fields . ' ) '
-					. ' VALUES ( ' . $m_hvalues . ' ), ( ' . $m_gvalues . ' ) ';
+					. ' VALUES ( ' . $m_hvalues . ' ), ( ' . $m_gvalues . ' ); ';
 			
 			$db->setQuery ($query);
 			if (!$db->query ()) {
@@ -460,7 +460,6 @@ class CLMModelSWTLigaerg extends JModel {
 			// mit Paarungsdaten ($swt_data[1], $swt_data[2], ...) zu verhindern!
 			$swt_data['gesp_runden']		= CLMSWT::readInt ($swt, 3);
 			$swt_data['ausgeloste_runden']	= CLMSWT::readInt ($swt, 5);
-			
 			$swt_data_man = $this->_getDataSWTman ();
 			$swt_data_spl = $this->_getDataSWTspl ($during_store);
 			
@@ -553,8 +552,8 @@ class CLMModelSWTLigaerg extends JModel {
 			$heimrecht	= ($farbe == 1);
 			$gegner		= CLMSWT::readInt ($swt, $offset + 9) - 230;
 			$paarung	= CLMSWT::readInt ($swt, $offset + 13);
-			$kampflos	= CLMSWT::readInt ($swt, $offset + 15);
-			
+			$kampflos	= CLMSWT::readInt ($swt, $offset + 15);			
+
 			$swt_data[$paarung]['farbe'] = $farbe;
 			
 			if ($heimrecht) {
@@ -571,10 +570,15 @@ class CLMModelSWTLigaerg extends JModel {
 			}
 			$swt_data[$paarung]['heim'] = $heim;
 			$swt_data[$paarung]['gast'] = $gast;
-
-			$swt_data[$paarung]['heim_mannschaft'] = $mannschaft[$heim-1]->name;
-			$swt_data[$paarung]['gast_mannschaft'] = $mannschaft[$gast-1]->name;
 			
+			// Es scheint das $gegner in der ersten Hälfte immer ungültig ist.
+			if(isset($mannschaft[$heim-1])) {
+				$swt_data[$paarung]['heim_mannschaft'] = $mannschaft[$heim-1]->name;
+			}
+			if(isset($mannschaft[$gast-1])) {
+				$swt_data[$paarung]['gast_mannschaft'] = $mannschaft[$gast-1]->name;
+			}
+
 			$offset += $abstand;
 			
 		}
@@ -663,7 +667,7 @@ class CLMModelSWTLigaerg extends JModel {
 		$tln_paarung = array();
 		for ($s = 1; $s <= $anz_spieler; $s++) {
 		  if (isset($spieler[$s-1])) {
-			//echo "<br>spieler-s: ".$s."  "; var_dump($spieler[$s-1]); echo "<br>";
+			// echo "<br>spieler-s: ".$s."  "; var_dump($spieler[$s-1]); echo "<br>";
 			
 			if ($this->debug_ausgaben > 1) {
 				echo "offset: $offset<br/>";
@@ -680,11 +684,13 @@ class CLMModelSWTLigaerg extends JModel {
 			//}
 			$ergebnis	= CLMSWT::readInt ($swt, $offset + 11);
 			$paarung	= CLMSWT::readInt ($swt, $offset + 13);
+
 			if ($paarung > 0) {
 				$tln_paarung[$spieler[$s-1]->tln_nr] = $paarung;
 			} else {
 				if (isset($tln_paarung[$spieler[$s-1]->tln_nr])) $paarung = $tln_paarung[$spieler[$s-1]->tln_nr];
 			}
+
 			$attribut	= CLMSWT::readInt ($swt, $offset + 15);
 			if ($attribut == 34) $kampflos	= 2; else $kampflos = 0;
 			$spielfrei	= ($attribut == 3 || $attribut == 51);
@@ -784,6 +790,8 @@ class CLMModelSWTLigaerg extends JModel {
 //				echo "mannschaft: $mannschaft"; //DBG
 			} */
 			
+
+
 			if ($paarung != 0) {
 			
 				$offsets[$paarung][$brett][] = $offset;
@@ -858,6 +866,7 @@ class CLMModelSWTLigaerg extends JModel {
 			
 			
 				//if (!isset ($swt_data[$paarung]['hbrett_'.$brett])) {
+	
 				if (!isset ($swt_data[$paarung]['hbrett_'.$brett]) AND !isset ($swt_data[$paarung]['gbrett_'.$brett])) {
 					if ($mannschaft == $heim) {
 						$swt_data[$paarung]['hfarbe_'.$brett] = $farbe;
@@ -1041,6 +1050,7 @@ class CLMModelSWTLigaerg extends JModel {
 				} else {
 					$erg_id = $objs[0]->eid;
 				}
+
 				$swt_data[$p]['ergstr_'.$b] = $erg_string;
 				$swt_data[$p]['erg_'.$b] = $erg_id;
 			}

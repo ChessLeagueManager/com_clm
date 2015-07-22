@@ -13,10 +13,10 @@
 
 class CLMViewErgebnisse
 {
-function setErgebnisseToolbar($val, $rows, $f_lid, $f_runde, $f_dg)
+static function setErgebnisseToolbar($val, $rows, $f_lid, $f_runde, $f_dg)
 	{
 	// Menubilder laden
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 
 	if ($val == 1) {
 		if ($f_lid >0) { $msg = $rows[0]->liga ;
@@ -32,25 +32,25 @@ function setErgebnisseToolbar($val, $rows, $f_lid, $f_runde, $f_dg)
 		JToolBarHelper::custom('heim_kampflos','send.png','send_f2.png',JText::_('RESULTS_HEIM_KL'),false);
 		JToolBarHelper::custom('gast_kampflos','send.png','send_f2.png',JText::_('RESULTS_GAST_KL'),false);
 		JToolBarHelper::custom('wertung','send.png','send_f2.png',JText::_('RESULTS_CHANGE_VALUATION'),false);
-		JToolBarHelper::editListX();
+		JToolBarHelper::editList();
 		JToolBarHelper::deleteList();
 	if ($val == 1) { JToolBarHelper::custom('back','cancel.png','download_f2.png',JText::_('MEMBER_BUTTON_BACK'),false); }
 		JToolBarHelper::help( 'screen.clm.ergebnisse' );
 	}
 
-function ergebnisse ( &$rows, &$lists, &$pageNav, $option )
+static function ergebnisse ( $rows, $lists, $pageNav, $option )
 	{
 	$mainframe	= JFactory::getApplication();
 	$f_lid		= $mainframe->getUserStateFromRequest( "$option.filter_lid",'filter_lid',0,'int' );
 	$f_runde	= $mainframe->getUserStateFromRequest( "$option.filter_runde",'filter_runde',0,'int' );
 	$f_dg		= $mainframe->getUserStateFromRequest( "$option.filter_dg",'filter_dg',0,'int' );
 	// Konfigurationsparameter auslesen
-	$config		= &JComponentHelper::getParams( 'com_clm' );
-	$val		= $config->get('menue',1);
-	$dropdown	= $config->get('dropdown',1);
+	$config		= clm_core::$db->config();
+	$val		= $config->menue;
+	$dropdown	= $config->dropdown;
 
 	CLMViewErgebnisse::setErgebnisseToolbar($val, $rows, $f_lid, $f_runde, $f_dg);
-	$user =& JFactory::getUser();
+	$user =JFactory::getUser();
 	//Ordering allowed ?
 	$ordering = ($lists['order'] == 'a.ordering');
 
@@ -94,10 +94,10 @@ function ergebnisse ( &$rows, &$lists, &$pageNav, $option )
 		<thead>
 			<tr>
 				<th width="10">
-					<?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?>
+					#
 				</th>
 				<th width="10">
-					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $rows ); ?>);" />
+					<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 				</th>
 				<th class="title">
 					<?php echo JHtml::_('grid.sort', JText::_( 'RESULTS_OVERVIEW_HOME' ), 'hname', @$lists['order_Dir'], @$lists['order'] ); ?>
@@ -142,9 +142,11 @@ function ergebnisse ( &$rows, &$lists, &$pageNav, $option )
 		<tbody>
 		<?php
 		$k = 0;
+		$row = JTable::getInstance( 'ergebnisse', 'TableCLM' );
 		for ($i=0, $n=count( $rows ); $i < $n; $i++) {
-			$row = &$rows[$i];
-
+			//$row = &$rows[$i];
+			// load the row from the db table
+			$row->load( $rows[$i]->id );
 		$link 		= JRoute::_( 'index.php?option=com_clm&section=ergebnisse&task=edit&cid[]='. $row->id );
 			$checked 	= JHtml::_('grid.checkedout',   $row, $i );
 			$published 	= JHtml::_('grid.published', $row, $i );
@@ -157,23 +159,15 @@ function ergebnisse ( &$rows, &$lists, &$pageNav, $option )
 					<?php echo $checked; ?>
 				</td>
 				<td>
-					<?php
-					if (  JTable::isCheckedOut($user->get ('id'), $row->checked_out ) OR $row->gemeldet =="1" OR ($row->sid_pub =="0" AND $val =="0")) {
-						echo $row->hname;
-					} else {
-						?>
-					<span class="editlinktip hasTip" title="<?php echo JText::_( 'RESULTS_OVERVIEW_EDIT_TIP' );?>::<?php echo $row->hname.' - '.$row->gname.JText::_( 'RESULTS_OVERVIEW_EDIT_TIP_2' ).$row->runde.JText::_( 'RESULTS_OVERVIEW_EDIT_TIP_3' ).$row->paar; ?>">
+					<span class="editlinktip hasTip" title="<?php echo JText::_( 'RESULTS_OVERVIEW_EDIT_TIP' );?>::<?php echo $rows[$i]->hname.' - '.$rows[$i]->gname." ".JText::_( 'RESULTS_OVERVIEW_EDIT_TIP_2' ).$row->runde.JText::_( 'RESULTS_OVERVIEW_EDIT_TIP_3' ).$row->paar; ?>">
 						<a href="<?php echo $link; ?>">
-							<?php echo $row->hname; ?></a></span>
-						<?php
-					}
-					?>
+							<?php echo $rows[$i]->hname; ?></a></span>	
 				</td>
 				<td align="center">
-					<?php echo $row->gname;?>
+					<?php echo $rows[$i]->gname;?>
 				</td>
 				<td align="center">
-					<?php echo $row->liga;?>
+					<?php echo $rows[$i]->liga;?>
 				</td>
 				<td align="center">
 					<?php echo $row->runde;?>
@@ -185,7 +179,7 @@ function ergebnisse ( &$rows, &$lists, &$pageNav, $option )
 					<?php echo $row->dg;?>
 				</td>
 				<td align="center">
-					<?php echo $row->saison;?>
+					<?php echo $rows[$i]->saison;?>
 				</td>
 					<td align="center">
 					<?php if ($row->gemeldet > 0) 
@@ -197,7 +191,7 @@ function ergebnisse ( &$rows, &$lists, &$pageNav, $option )
 				</td>
 				<td align="center">
 					<?php if ($row->gemeldet ==1) { echo JText::_( 'RESULTS_OVERVIEW_FREE' ); }
-						else { echo $row->uname; } ?>
+						else { echo $rows[$i]->uname; } ?>
 				</td>
 				<td align="center">
 					<?php echo $row->id;?>
@@ -219,18 +213,18 @@ function ergebnisse ( &$rows, &$lists, &$pageNav, $option )
 	<?php
 	}
 
-function setErgebnisToolbar($runde)
+static function setErgebnisToolbar($runde)
 	{
 		if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
 			else { $text = JText::_( 'New' );}
-		JToolBarHelper::title(  JText::_( 'TITLE_RESULTS_8').' '.$runde[0]->hname.' - '.$runde[0]->gname .': <small><small>[ '. $text.' ]</small></small>' );
+		JToolBarHelper::title(  JText::_( 'TITLE_RESULTS_8').' '.$runde[0]->hname.' - '.$runde[0]->gname .': [ '. $text.' ]' );
 		JToolBarHelper::save();
 		JToolBarHelper::apply();
 		JToolBarHelper::cancel();
 		JToolBarHelper::help( 'screen.clm.edit' );
 	}
 		
-function Ergebnis( &$row, $runde, $heim, $hcount, $gast, $gcount, $bretter, $ergebnis, $option, $hvoraufstellung, $gvoraufstellung)
+static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter, $ergebnis, $option, $hvoraufstellung, $gvoraufstellung)
 	{
 		CLMViewErgebnisse::setErgebnisToolbar($runde);
 		JRequest::setVar( 'hidemainmenu', 1 );
@@ -381,8 +375,8 @@ function Ergebnis( &$row, $runde, $heim, $hcount, $gast, $gcount, $bretter, $erg
 <?php } ?> 
  
 <?php // Konfigurationsparameter auslesen
-	$config	= &JComponentHelper::getParams( 'com_clm' );
-	$pcomment = $config->get('kommentarfeld',0);
+	$config = clm_core::$db->config();
+	$pcomment = $config->kommentarfeld;
 	if (($pcomment == 1) OR ($pcomment == 2 AND ($runde[0]->runden_modus == 4 OR $runde[0]->runden_modus == 5))) {    // Kommentarfeld ?>			
 	<div class="width-40 fltrt">
 	  <fieldset class="adminform">

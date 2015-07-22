@@ -15,7 +15,7 @@ defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 jimport( 'joomla.html.parameter' );
 
-class CLMModelTurnier_Info extends JModel {
+class CLMModelTurnier_Info extends JModelLegacy {
 	
 	
 	function __construct() {
@@ -42,35 +42,21 @@ class CLMModelTurnier_Info extends JModel {
 			." FROM #__clm_turniere AS t"
 			." LEFT JOIN #__clm_saison AS s ON s.id = t.sid"
 			." LEFT JOIN #__clm_user AS u ON jid = t.tl"
-			// ." LEFT JOIN #__clm_dwz_vereine AS v ON v.ZPS = t.vereinZPS"
 			." WHERE t.id = ".$this->turnierid
 			;
 		$this->_db->setQuery( $query );
 		$this->turnier = $this->_db->loadObject();
 
 		// Ausrichter
-		if (strlen($this->turnier->vereinZPS) == 5) {
-			$query = 'SELECT Vereinname as hostname'
-					. ' FROM dwz_vereine'
-					. ' WHERE ZPS = "'.$this->turnier->vereinZPS.'"'
-					;
-			$this->_db->setQuery( $query );
-			$this->turnier->organame = $this->_db->loadResult();
-		} elseif  (strlen($this->turnier->vereinZPS) == 3) {
-			$query = 'SELECT Verbandname as hostname'
-					. ' FROM dwz_verbaende'
-					. ' WHERE Verband = "'.$this->turnier->vereinZPS.'"'
-				;
-			$this->_db->setQuery( $query );
-			$this->turnier->organame = $this->_db->loadResult();
-		} else  {
-			$this->turnier->organame = "";
-		}
+		$this->turnier->organame = clm_core::$load->zps_to_district($this->turnier->vereinZPS);
 
 
 		// turniernamen anpassen?
-		$turParams = new JParameter($this->turnier->params);
+		$turParams = new clm_class_params($this->turnier->params);
+
+
 		$addCatToName = $turParams->get('addCatToName', 0);
+
 		if ($addCatToName != 0 AND ($this->turnier->catidAlltime > 0 OR $this->turnier->catidEdition > 0)) {
 			$this->turnier->name = CLMText::addCatToName($addCatToName, $this->turnier->name, $this->turnier->catidAlltime, $this->turnier->catidEdition);
 		}

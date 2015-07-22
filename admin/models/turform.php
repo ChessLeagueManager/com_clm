@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelTurForm extends JModel {
+class CLMModelTurForm extends JModelLegacy {
 
 	// benötigt für Pagination
 	function __construct()
@@ -21,7 +19,7 @@ class CLMModelTurForm extends JModel {
 		parent::__construct();
 
 		// user
-		$this->user =& JFactory::getUser();
+		$this->user =JFactory::getUser();
 		
 		$this->_getData();
 
@@ -84,7 +82,7 @@ class CLMModelTurForm extends JModel {
 	function _getData() {
 		
 		// Instanz der Tabelle
-		$this->turnier = & JTable::getInstance( 'turniere', 'TableCLM');
+		$this->turnier = JTable::getInstance( 'turniere', 'TableCLM');
 		if ($id = JRequest::getInt('id')) {
 			$this->turnier->load($id);
 		}

@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelSWTTurnier extends JModel {
+class CLMModelSWTTurnier extends JModelLegacy {
 
 	var $_saisons;
 	var $_turniere;

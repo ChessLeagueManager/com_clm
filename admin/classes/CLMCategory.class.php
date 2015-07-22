@@ -22,7 +22,7 @@ class CLMCategory {
 		// $getData, ob die Turneirdaten aus clm_categories sofort ausgelesen werden sollen
 
 		// DB
-		$this->_db				= & JFactory::getDBO();
+		$this->_db				= JFactory::getDBO();
 		
 		// catid
 		$this->catid = $catid;	
@@ -37,7 +37,7 @@ class CLMCategory {
 
 	function _getData() {
 	
-		$this->data = & JTable::getInstance( 'categories', 'TableCLM' );
+		$this->data = JTable::getInstance( 'categories', 'TableCLM' );
 		$this->data->load($this->catid);
 	
 	}
@@ -50,15 +50,15 @@ class CLMCategory {
 	function checkAccess($usertype_admin = TRUE, $usertype_tl = TRUE, $id_tl = TRUE) {
 	
 		// admin?
-		if ($usertype_admin AND CLM_usertype == 'admin') {
+		if ($usertype_admin AND clm_core::$access->getType() == 'admin') {
 			return TRUE;
 		}
 		// tl?
-		if ($usertype_tl AND CLM_usertype == 'tl') {
+		if ($usertype_tl AND clm_core::$access->getType() == 'tl') {
 			return TRUE;
 		}
 		// category->tl
-		if ($id_tl AND CLM_ID == $this->data->tl) {
+		if ($id_tl AND clm_core::$access->getJid() == $this->data->tl) {
 			return TRUE;
 		}
 		// nichts hat zugetroffen

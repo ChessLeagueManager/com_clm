@@ -12,15 +12,15 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewMitglieder extends JView
+class CLMViewMitglieder extends JViewLegacy
 {
 	function display($tpl = null)
 	{
-		$model	= &$this->getModel();
+		$model	= $this->getModel();
 		$spieler= $model->getCLMSpieler();
 		$this->assignRef('spieler',$spieler);
 
-		$model	= &$this->getModel();
+		$model	= $this->getModel();
 		$clmuser= $model->getCLMCLMuser();
 		$this->assignRef('clmuser',$clmuser);
 

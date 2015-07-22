@@ -19,7 +19,7 @@ $itemid 	= JRequest::getInt('Itemid');
 $sql = ' SELECT `sieg`, `remis`, `nieder`, `antritt`, `man_sieg`, `man_remis`, `man_nieder`, `man_antritt`'
 		. ' FROM #__clm_liga'
 		. ' WHERE `sid` = "' . $sid . '"';
-$db =& JFactory::getDBO ();
+$db =JFactory::getDBO ();
 $db->setQuery ($sql);
 $saisonpunkte = $db->loadObjectList ();
 $ligapunkte = $saisonpunkte[0];
@@ -29,16 +29,15 @@ if (($saison[0]->dsb_datum == 0) || (!isset($saison))) $hint_dwzdsb = JText::_('
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-// require_once(JPATH_COMPONENT.DS.'includes'.DS.'image_path.php');
 
 	// Browsertitelzeile setzen
-	$doc =& JFactory::getDocument();
+	$doc =JFactory::getDocument();
 	$daten['title'] = JText::_('SEASON_STATISTIK').' '.$saison[0]->name;
 	$doc->setHeadData($daten);
 
 ?>
 
-<div id="clm">
+<div >
 <div id="info">
 <div class="componentheading"><?php echo JText::_('SEASON_STATISTIK') ?> <?php echo $saison[0]->name; ?></div>
 

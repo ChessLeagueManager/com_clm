@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -11,10 +11,8 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-$clmAccess = new CLMAccess();
-
-$turParams = new JParameter($this->turnier->params);
+$clmAccess = clm_core::$access;
+$turParams = new clm_class_params($this->turnier->params);
 
 ?>
 <form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -39,10 +37,10 @@ $turParams = new JParameter($this->turnier->params);
 			<thead>
 				<tr>
 					<th width="10">
-						<?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?>
+						#
 					</th>
 					<th width="10">
-						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $this->turplayers ); ?>);" />
+					<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 					</th>
 					<?php if ($this->turnier->typ != 3) { ?>
 						<th width="3%">
@@ -85,7 +83,7 @@ $turParams = new JParameter($this->turnier->params);
 						<?php echo JHtml::_('grid.sort', JText::_('TWZ'), 'twz', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<th width="5%">
-						<?php echo JHtml::_('grid.sort', JText::_('RATING'), 'NATrating', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo JHtml::_('grid.sort', JText::_('RATING'), 'start_dwz', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<th width="5%">
 						<?php echo JHtml::_('grid.sort', JText::_('FIDE_ELO'), 'FIDEelo', $this->param['order_Dir'], $this->param['order'] ); ?>
@@ -196,8 +194,7 @@ $turParams = new JParameter($this->turnier->params);
 						<?php 
 						
 						// admin/tl kann Spieler editieren
-						$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-						if (($this->turnier->tl == CLM_ID AND $clmAccess->access() !== false) OR $clmAccess->access() === true) {
+						if (($this->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
 							$adminLink = new AdminLink();
 							$adminLink->view = "turplayeredit";
 							$adminLink->more = array('playerid' => $row->id);
@@ -239,8 +236,8 @@ $turParams = new JParameter($this->turnier->params);
 					</td>
 					<td align="center">
 						<?php 
-						if ($row->NATrating > 0) {
-							echo $row->NATrating;
+						if ($row->start_dwz > 0) {
+							echo $row->start_dwz;
 						} else {
 							echo '-';
 						}

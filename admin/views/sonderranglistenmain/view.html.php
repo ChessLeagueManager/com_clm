@@ -12,23 +12,21 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
-
-class CLMViewSonderranglistenMain extends JView {
+class CLMViewSonderranglistenMain extends JViewLegacy {
 	function display($tpl = null) { 
 		
 		$mainframe	= JFactory::getApplication();
 		$option 	= JRequest::getCmd( 'option' );
 		
 		//Daten vom Model
-		$state =& $this->get( 'State' );
-		$sonderranglisten = & $this->get( 'Sonderranglisten' );
-		$turniere = & $this->get( 'Turniere' );
-		$pagination = & $this->get( 'Pagination' );
-		$user 	=& $this->get( 'User' );
+		$state = $this->get( 'State' );
+		$sonderranglisten =  $this->get( 'Sonderranglisten' );
+		$turniere =  $this->get( 'Turniere' );
+		$pagination =  $this->get( 'Pagination' );
+		$user 	= $this->get( 'User' );
 		
-		$filter_saisons	 = & $this->get( 'FilterSaisons' );
-		$filter_turniere = & $this->get( 'FilterTurniere' );
+		$filter_saisons	 =  $this->get( 'FilterSaisons' );
+		$filter_turniere =  $this->get( 'FilterTurniere' );
 		
 		//Turnier vorhanden
 		if(count($turniere) == 0){
@@ -38,15 +36,15 @@ class CLMViewSonderranglistenMain extends JView {
 		}
 		
 		//Toolbar
-		require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_clm'.DS.'images'.DS.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( JText::_('TITLE_SPECIALRANKINGS') ,'clm_headmenu_sonderranglisten.png' );
 		
 		if($turnierExists) {
 			JToolBarHelper::publishList('publish');
 			JToolBarHelper::unpublishList();
 			JToolBarHelper::deleteList();
-			JToolBarHelper::editListX(); 
-			JToolBarHelper::addNewX(); 
+			JToolBarHelper::editList(); 
+			JToolBarHelper::addNew(); 
 		}
 		
 		JHtml::_('behavior.tooltip');

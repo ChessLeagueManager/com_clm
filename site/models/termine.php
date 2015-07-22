@@ -11,7 +11,7 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
-class CLMModelTermine extends JModel
+class CLMModelTermine extends JModelLegacy
 {
 	
 	function _getTermine( &$options )
@@ -22,18 +22,18 @@ class CLMModelTermine extends JModel
 		$db	= JFactory::getDBO();
 		if ($start == '1') $date = date("Y-m-d");
 		else $date = $start;
-	 
+	
 		$query = " (SELECT 'liga' AS source, li.datum AS datum, li.sid, li.name, li.nr, li.liga AS typ_id, t.id, t.name AS typ, t.durchgang AS durchgang, t.published, t.runden AS ligarunde"
 				." , t.ordering, li.startzeit AS starttime "
 				." FROM #__clm_runden_termine AS li LEFT JOIN #__clm_liga AS t ON t.id = li.liga "
-				." WHERE t.published != '0' AND  TO_DAYS(datum)+183 >= TO_DAYS('".$date."') )"
+				." WHERE t.published != '0' AND TO_DAYS(datum)+183 >= TO_DAYS('".$date."') )"
 				
 				." UNION ALL"
 				
 				." (SELECT 'termin', e.startdate AS datum, '1', e.name, '1', '', e.id, e.address AS typ, '1', e.published, 'event' AS ligarunde "
 				." , e.ordering, starttime "
 				." FROM #__clm_termine AS e "
-				." WHERE e.published != '0' AND  TO_DAYS(e.startdate)+183 >= TO_DAYS('".$date."') )"
+				." WHERE e.published != '0' AND TO_DAYS(e.startdate)+183 >= TO_DAYS('".$date."') )"
 				
 				." UNION ALL"
 				
@@ -44,7 +44,7 @@ class CLMModelTermine extends JModel
 				
 				." ORDER BY datum ASC, starttime ASC, ABS(ordering) ASC, ABS(typ_id) ASC, ABS(nr) ASC "
 				;
-				
+
 		return $query;
 	}
 	function getTermine( $options=array() )
@@ -58,28 +58,29 @@ class CLMModelTermine extends JModel
 	function _getTermine_Detail( &$options )
 	{
 	
-		$nr		= clm_escape(JRequest::getVar('nr'));
+		$nr		= JRequest::getInt('nr',-1);
 		$db		= JFactory::getDBO();
 		$date 	= date("Y-m-d");
-	 
+		if($nr!=-1){
 		$query = " SELECT host FROM #__clm_termine AS a "
 				." WHERE a.id =". $nr
 				." AND a.published != 0"
 				;
 		$db->setQuery($query);
 		$termin=$db->loadObjectList();
+		}
 
 		if (isset($termin[0]) AND strlen($termin[0]->host) == 5)
 		$query = " SELECT a.*, b.Vereinname AS hostname "
 				." FROM #__clm_termine AS a "
-				." LEFT JOIN dwz_vereine AS b ON b.ZPS = a.host "
+				." LEFT JOIN #__clm_dwz_vereine AS b ON b.ZPS = a.host "
 				." WHERE a.id =". $nr
 				." AND a.published != 0"
 				;
 		elseif (isset($termin[0]) AND strlen($termin[0]->host) == 3)
 			$query = " SELECT a.*, b.Verbandname AS hostname "
 				." FROM #__clm_termine AS a "
-				." LEFT JOIN dwz_verbaende AS b ON b.Verband = a.host "
+				." LEFT JOIN #__clm_dwz_verbaende AS b ON b.Verband = a.host "
 				." WHERE a.id =". $nr
 				." AND a.published != 0"
 				;

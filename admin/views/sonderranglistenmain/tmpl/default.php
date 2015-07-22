@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -35,9 +35,9 @@ defined('_JEXEC') or die('Restricted access');
 	<table class="adminlist">
 		<thead>
 			<tr>
-				<th width="10"><?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?></th>
+				<th width="10">#</th>
 				<th width="20">
-					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $this->sonderranglisten ); ?>);" />
+					<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 				</th>
 				<th width="" class="title"><?php echo JHtml::_('grid.sort',   JText::_('SPECIALRANKINGS_NAME'), 'name', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
 				<th width="" class="title"><?php echo JHtml::_('grid.sort',   JText::_('SPECIALRANKINGS_TOURNEMENT_NAME'), 'turnier', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
@@ -71,14 +71,13 @@ defined('_JEXEC') or die('Restricted access');
 				<td align="center"><?php echo $checked; ?></td>
 				<td>
 					<?php
-					if (  JTable::isCheckedOut($this->user->get ('id'), $row->checked_out ) ) {
-						echo $row->name;
-					} else {
+
 						
 						$adminLink = new AdminLink();
 						$adminLink->view = "sonderranglistenform";
 						//$adminLink->more = array('task' => 'edit', 'layout' => 'form', 'hidemainmenu' => 1, 'cid' => $row->id);
 						$adminLink->more = array('task' => 'edit', 'hidemainmenu' => 1, 'cid' => $row->id);
+
 						$adminLink->makeURL();
 					
 						?>
@@ -88,19 +87,13 @@ defined('_JEXEC') or die('Restricted access');
 							</a>
 						</span>
 						<?php 
-					} 
 					?>				
 				</td>
 				<td>
 					<?php
 					
-					// Abfrage, ob Turnier ausgecheckt ist, fehlt noch.
+
 					
-					/*if (  JTable::isCheckedOut($this->user->get ('id'), $row->checked_out ) ) {
-						echo $row->name;
-					} else {*/
-					
-						
 						$adminLink = new AdminLink();
 						$adminLink->view = "turform";
 						$adminLink->more = array('task' => 'edit', 'id' => $row->turnier);
@@ -113,7 +106,7 @@ defined('_JEXEC') or die('Restricted access');
 							</a>
 						</span>
 						<?php 
-					//} 
+				
 					?>				
 				</td>
 				<td align="center"><?php echo $published;?></td>

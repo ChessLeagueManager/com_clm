@@ -59,7 +59,7 @@ $detail		= JRequest::getInt('detail','0');
 if ($detail == 0) $detailp = '1'; else $detailp = '0';
 
 	// Userkennung holen
-	$user	=& JFactory::getUser();
+	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
     // Check ob User Mitglied eines Vereins dieser Liga ist
 	if ($jid != 0) {
@@ -82,12 +82,12 @@ if ($detail == 0) $detailp = '1'; else $detailp = '0';
 	  if (($einz->zps == $clmuser[0]->zps) OR ($einz->gzps == $clmuser[0]->zps) OR ($pgn == 2)) {
 		  $gtmarker = "*";
 		  $resulthint = "";
-		switch ($liga[0]->params[pgntype]) {
+		switch ($liga[0]->params['pgntype']) {
 		  case 1:
 			fputs($pdatei, '[Event "'.utf8_decode($liga[0]->name).'"]'.$nl);
 			break;
 		  case 2:
-			fputs($pdatei, '[Event "'.utf8_decode($liga[0]->params[pgnlname]).'"]'.$nl);
+			fputs($pdatei, '[Event "'.utf8_decode($liga[0]->params['pgnlname']).'"]'.$nl);
 			break;
 		  case 3:
 			fputs($pdatei, '[Event "'.utf8_decode($einz->name).' - '.utf8_decode($einz->mgname).'"]'.$nl);
@@ -96,7 +96,7 @@ if ($detail == 0) $detailp = '1'; else $detailp = '0';
 			fputs($pdatei, '[Event "'.utf8_decode($einz->sname).' - '.utf8_decode($einz->smgname).'"]'.$nl);
 			break;
 		  case 5:
-			fputs($pdatei, '[Event "'.utf8_decode($liga[0]->params[pgnlname]).': '.utf8_decode($einz->sname).' - '.utf8_decode($einz->smgname).'"]'.$nl);
+			fputs($pdatei, '[Event "'.utf8_decode($liga[0]->params['pgnlname']).': '.utf8_decode($einz->sname).' - '.utf8_decode($einz->smgname).'"]'.$nl);
 			break;
 		  default:
 		 	fputs($pdatei, '[Event "'.'"]'.$nl);
@@ -173,7 +173,7 @@ if ($dg == 3) { $runde = $runde + (2 * $liga[0]->runden); }
 if ($dg == 4) { $runde = $runde + (3 * $liga[0]->runden); }
  
 // Browsertitelzeile setzen
-$doc =& JFactory::getDocument();
+$doc =JFactory::getDocument();
 $daten['title'] = $liga[0]->name.', '.$liga[$runde-1]->rname;      // JText::_('ROUND').' '.$runde; 
 if(isset($liga[$runde-1]->datum)) { $daten['title'] .= ' '.JText::_('ON_DAY').' '.JHTML::_('date',  $liga[$runde-1]->datum, JText::_('DATE_FORMAT_CLM_F'));
 	if(isset($liga[$runde-1]->startzeit)) { $daten['title'] .= '  '.substr($liga[$runde-1]->startzeit,0,5).' Uhr'; } }
@@ -181,31 +181,26 @@ if ($doc->_type != "raw") $doc->setHeadData($daten);
 	
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-// require_once(JPATH_COMPONENT.DS.'includes'.DS.'image_path.php');
 
 // Konfigurationsparameter auslesen
-$config		= &JComponentHelper::getParams( 'com_clm' );
-$rang_runde	= $config->get('fe_runde_rang',1);
-$clm_zeile1			= $config->get('clm_zeile1');
-$clm_zeile2			= $config->get('clm_zeile2');
+$config		= clm_core::$db->config();
+$rang_runde	= $config->fe_runde_rang;
+$clm_zeile1			= $config->zeile1;
+$clm_zeile2			= $config->zeile2;
 $clm_zeile1D			= RGB($clm_zeile1);
 $clm_zeile2D			= RGB($clm_zeile2);
 
 ?>
 
-<div id="clm">
+<div >
 <div id="runde">
 
 <?php
-$free_date_new = $this->free_date_new;	
 $ok=$this->ok;
-if (isset($free_date_new[0]->nr_aktion)) {
-	if ($free_date_new[0]->nr_aktion  == 201) $hint_freenew = JText::_('ROUND_FREE_COMMENT').' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $free_date_new[0]->datum, JText::_('DATE_FORMAT_CLM_F'))); 
-	if ($free_date_new[0]->nr_aktion  == 202) $hint_freenew = JText::_('ROUND_FREE_COMMENT_DEL').' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $free_date_new[0]->datum, JText::_('DATE_FORMAT_CLM_F'))); 
-}
-if ((!isset($free_date_new[0]->nr_aktion)) AND (isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok > 0)) $hint_freenew = JText::_('CHIEF_OK');  
-if ((!isset($free_date_new[0]->nr_aktion)) AND (isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok == 0)) $hint_freenew = JText::_('CHIEF_NOK');  
-if ((!isset($free_date_new[0]->nr_aktion)) AND (!isset($ok[0]->sl_ok))) $hint_freenew = JText::_('CHIEF_NOK');  
+
+if ((isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok > 0)) $hint_freenew = JText::_('CHIEF_OK');  
+if ((isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok == 0)) $hint_freenew = JText::_('CHIEF_NOK');  
+if ((!isset($ok[0]->sl_ok))) $hint_freenew = JText::_('CHIEF_NOK');  
 
 if (isset($liga[$runde-1]->datum) AND $liga[$runde-1]->datum =='0000-00-00') {
 ?>
@@ -378,7 +373,7 @@ for ($x=0; $x<$liga[0]->stamm; $x++) {
 		$zeiled = $clm_zeile1D; }
 	else { $zeilenr = 'zeile2';
 		$zeiled = $clm_zeile2D; }
-	if ($einzel[$w]->ergebnis != 8) { $RESULT_YET++;      
+	if ($einzel[$w]->ergebnis != 8) { $RESULT_YET++;    
 ?>
     <tr class="<?php echo $zeilenr; ?>">
     <td class="paarung"><div><?php echo $einzel[$w]->brett; ?></div></td>
@@ -633,7 +628,7 @@ if ($liga[0]->runden_modus == 3) {
 // Ende Runden
 ?>
 	<td class="mp"><div><?php echo $punkte[$x]->mp; if ($punkte[$x]->abzug > 0) echo '*'; ?></div></td>
-	<?php if ( $liga[0]->liga_mt == 0) { 		// Liga  ?>					
+	<?php if ( $liga[0]->liga_mt == 0) { // Liga ?>				
 		<td class="bp"><div><?php echo $punkte[$x]->bp; ?></div></td>
 		<?php if ( $liga[0]->b_wertung > 0) { ?><td class="bp"><div><?php echo $punkte[$x]->wp; ?></div></td><?php } ?>
 	<?php } else { 								// Turniere ?>

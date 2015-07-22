@@ -48,7 +48,11 @@ defined('_JEXEC') or die('Restricted access');
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('RATING'); ?>:</td>
-				<td><input class="inputbox" type="text" name="NATrating" id="NATrating" size="4" maxlength="4" value="<?php echo $this->player->NATrating; ?>" /></td>
+				<td><input class="inputbox" type="text" name="start_dwz" id="start_dwz" size="4" maxlength="4" value="<?php echo $this->player->start_dwz; ?>" /></td>
+			</tr>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo JText::_('RATING_INDEX'); ?>:</td>
+				<td><input class="inputbox" type="text" name="start_I0" id="start_I0" size="4" maxlength="4" value="<?php echo $this->player->start_I0; ?>" /></td>
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('FIDE_ELO'); ?>:</td>

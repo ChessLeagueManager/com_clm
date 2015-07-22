@@ -25,7 +25,7 @@ $clmuser 	= $this->clmuser;
 $spieler	= $this->spieler;
 $verein		= $this->verein;
 
-$user 		=& JFactory::getUser();
+$user 		=JFactory::getUser();
 $link = JURI::base() . 'index.php?option=com_clm&view=mitglieder_details&saison='. $sid .'&zps='. $zps .'&mglnr='. $mgl; 
 
 if ($clmuser[0]->zps <> $zps) {
@@ -37,7 +37,7 @@ if ($clmuser[0]->zps <> $zps) {
 if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps) {
 
 	// Prüfen ob Datensatz schon vorhanden ist
-	$db	=& JFactory::getDBO();
+	$db	=JFactory::getDBO();
 
 	// Variablen holen
 	$sid		= JRequest::getVar('saison');
@@ -78,18 +78,12 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 		}
 
 	// Log
-	$date =& JFactory::getDate();
-	$now = $date->toMySQL();
-	$user 		=& JFactory::getUser();
+	$date =JFactory::getDate();
+	$now = $date->toSQL();
+	$user 		=JFactory::getUser();
 	$jid_aktion =  ($user->get('id'));
 	$aktion = "Spielerdaten FE";
 
-	$query	= "INSERT INTO #__clm_log "
-		." ( `aktion`, `jid_aktion`, `sid` , `Mgl_Nr`, `zps`, `datum`) "
-		." VALUES ('$aktion','$jid_aktion','$sid','$mglnr','$zps','$now') "
-		;
-	$db->setQuery($query);
-	$db->query();
 
 $msg = JText::_( 'Spielerdaten geändert' );
 $linkback = JURI::base() . 'index.php?option=com_clm&view=mitglieder&saison='. $sid .'&zps='. $zps; 

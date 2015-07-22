@@ -70,7 +70,7 @@ $ungerade = JRequest::getVar('ungerade', false, 'default', 'bool');
 							<?php if ($this->swt_data[$p]['hemsum'] != $this->swt_data[$p]['hmmsum'])  { ?>
 							<tr>
 								<th widhth="90%" nowrap="nowrap">
-				    			<label><?php echo JText::_( 'SWT_LEAGUE_PAIRING' ).' '.$p.' '.$this->swt_data[$p]['heim_mannschaft'].': '.JText::_( 'SWT_LEAGUE_PRELIM01' ).'('.$this->swt_data[$p]['hmmsum'].') '.JText::_( 'SWT_LEAGUE_PRELIM02' ); ?></label>
+			    			<label><?php echo JText::_( 'SWT_LEAGUE_PAIRING' ).' '.$p.' '.$this->swt_data[$p]['heim_mannschaft'].': '.JText::_( 'SWT_LEAGUE_PRELIM01' ).'('.$this->swt_data[$p]['hmmsum'].') '.JText::_( 'SWT_LEAGUE_PRELIM02' ); ?></label>
 								</th>
 							</tr>	
 							<?php } ?>
@@ -85,7 +85,6 @@ $ungerade = JRequest::getVar('ungerade', false, 'default', 'bool');
 				    </table>
 				</fieldset>
 			<?php }	
-			
     		for ($p = 1; $p <= $this->anz_paarungen; $p++) {
     			?>
 				<fieldset class="adminform">

@@ -21,20 +21,20 @@ $verband 		= $this->verband;
 //$saisonid 		= $this->saisonid;
 $saisons	 	= $this->saisons;
 
-$config					= &JComponentHelper::getParams( 'com_clm' );
-$fe_vereinsliste_vs 	= $config->get('fe_vereinsliste_vs',1);
-$fe_vereinsliste_hpage 	= $config->get('fe_vereinsliste_hpage',1);
-$fe_vereinsliste_dwz 	= $config->get('fe_vereinsliste_dwz',1);
-$fe_vereinsliste_elo 	= $config->get('fe_vereinsliste_elo',1);
+$config					= clm_core::$db->config();
+$fe_vereinsliste_vs 	= $config->fe_vereinsliste_vs;
+$fe_vereinsliste_hpage 	= $config->fe_vereinsliste_hpage;
+$fe_vereinsliste_dwz 	= $config->fe_vereinsliste_dwz;
+$fe_vereinsliste_elo 	= $config->fe_vereinsliste_elo;
 
 // Browsertitelzeile setzen
-$doc =& JFactory::getDocument();
+$doc =JFactory::getDocument();
 $daten['title'] = JText::_('CLUBS_LIST');
 if ($doc->_type != "raw") $doc->setHeadData($daten);
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-// require_once(JPATH_COMPONENT.DS.'includes'.DS.'image_path.php');
+
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'googlemaps.php');
 
 // Sortierung
@@ -59,7 +59,7 @@ function tableOrdering( order, dir, task )
 }
 </SCRIPT>
 
-<div id="clm">
+<div >
 <div id="vereinsliste">
 
 <div class="componentheading"><?php echo JText::_('CLUBS_LIST'); ?></div>
@@ -113,12 +113,12 @@ function tableOrdering( order, dir, task )
          for ($z = 0; $z < count ( $vereine ); $z++) { 
 		 
 			// Verband
-			if ( (!isset($verband[$z-1]->LV)) OR ($verband[$z]->LV != $verband[$z-1]->LV) ) { 
+			if (isset($verband[$z-1]) AND ((!isset($verband[$z-1]->LV)) OR (isset($verband[$z]) && $verband[$z]->LV != $verband[$z-1]->LV) )) { 
 			echo '<tr><td colspan="9" class="noborder">&nbsp;</td></tr>';
 			echo '<tr class="anfang"><td colspan="9">'. $verband[$z]->Verbandname .'</td></tr>';
 			}
 			
-			// Verb�nde / Bezirke
+			// Verbände / Bezirke
 			if ( (!isset($vereine[$z-1]->Verband)) OR (( $vereine[$z]->Verband != $vereine[$z-1]->Verband ) AND ( $vereine[$z]->Verbandname <> $verband[$z]->Verbandname )) ) { 
 			echo '<tr class="anfang"><td colspan="9">'. $vereine[$z]->Verbandname .'</td></tr>'; }
 			
@@ -134,11 +134,11 @@ function tableOrdering( order, dir, task )
         <td class="col_5"><?php echo $vereine[$z]->MGL_M; ?></td>
         <td class="col_6"><?php echo $vereine[$z]->MGL_W; ?></td>
         <td class="col_6"><?php echo $vereine[$z]->MGL_P; ?></td>
-        <?php if ($fe_vereinsliste_dwz == 1) { ?><td class="col_7"><?php echo substr ($vereine[$z]->DWZ, 0, -3); ?> (<?php echo $vereine[$z]->DWZ_SUM; ?>)</td><?php } ?>
+        <?php if ($fe_vereinsliste_dwz == 1) { ?><td class="col_7"><?php echo round($vereine[$z]->DWZ); ?> (<?php echo round($vereine[$z]->DWZ_SUM); ?>)</td><?php } ?>
         <?php if ($fe_vereinsliste_elo == 1) { ?>
         <td class="col_8">
         <?php if ( $vereine[$z]->FIDE_Elo == 0 ) { echo "-"; } 
-		else { echo substr ($vereine[$z]->FIDE_Elo, 0, -3) . '<br>(' . $vereine[$z]->ELO_SUM .')' ; } ?>
+		else { echo round($vereine[$z]->FIDE_Elo) . '(' . $vereine[$z]->ELO_SUM .')' ; } ?>
         </td>
 		<?php } ?>
     </tr>

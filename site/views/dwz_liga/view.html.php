@@ -12,25 +12,23 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewDWZ_Liga extends JView
+class CLMViewDWZ_Liga extends JViewLegacy
 {
 	function display($tpl = null)
 	{
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
   		$liga		= $model->getCLMLiga();
 		$this->assignRef('liga' , $liga);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
   		$spieler	= $model->getCLMSpieler();
 		$this->assignRef('spieler' , $spieler);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
   		$dwz		= $model->getCLMdwz();
 		$this->assignRef('dwz' , $dwz);
 		
-		$model		= &$this->getModel();   
-  		$dwz_date_new		= $model->getCLMlog();
-		$this->assignRef('dwz_date_new' , $dwz_date_new);
+		$model		= $this->getModel();   
 
 		parent::display($tpl);
 	}

@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerTurPlayerForm extends JController {
+class CLMControllerTurPlayerForm extends JControllerLegacy {
 	
 
 	// Konstruktor
@@ -27,9 +25,9 @@ class CLMControllerTurPlayerForm extends JController {
 		// turnierid
 		$this->turnierid = JRequest::getInt('id');
 		
-		$this->_db		= & JFactory::getDBO();
+		$this->_db		= JFactory::getDBO();
 		
-		$this->app =& JFactory::getApplication();
+		$this->app =JFactory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -70,14 +68,12 @@ class CLMControllerTurPlayerForm extends JController {
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
 		// Instanz der Tabelle
-		$row = & JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = JTable::getInstance( 'turniere', 'TableCLM' );
 		$row->load( $this->turnierid ); // Daten zu dieser ID laden
 
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if (($row->tl != CLM_ID AND $clmAccess->access() !== true) OR $clmAccess->access() === false) {
-		//if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+		$clmAccess = clm_core::$access;      
+		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
+		//if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
 			return false;
 		}
@@ -100,7 +96,7 @@ class CLMControllerTurPlayerForm extends JController {
 		// Turnierdaten
 		$tournament = new CLMTournament($this->turnierid, true);
 		$playersIn = $tournament->getPlayersIn();
-		$turParams = new JParameter($tournament->data->params);
+		$turParams = new clm_class_params($tournament->data->params);
 		$param_useastwz = $turParams->get('useAsTWZ', 0);
 	
 		// Turnier schon vorher voll?
@@ -121,10 +117,10 @@ class CLMControllerTurPlayerForm extends JController {
 			$geschlecht = JRequest::getString('geschlecht', 'NULL');
 			$birthYear = JRequest::getString('birthYear', '0000');
 			
-			$twz = $this->_getTWZ($param_useastwz, $natrating, $fideelo);
+			$twz = clm_core::$load->gen_twz($param_useastwz, $natrating, $fideelo);
 
 			$query = " INSERT INTO #__clm_turniere_tlnr"
-				." (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `NATrating`, `FIDEelo`, `titel`, `mgl_nr` ,`zps`)"
+				." (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `titel`, `mgl_nr` ,`zps`)"
 				." VALUES"
 				." ('".$tournament->data->sid."', '".$this->turnierid."', '".$maxSnr++."', '$name', '$birthYear', '$geschlecht', '$verein', '$twz', '$natrating', '$fideelo', '$titel', '".$maxFzps."', '99999')";
 			$this->_db->setQuery($query);
@@ -149,30 +145,22 @@ class CLMControllerTurPlayerForm extends JController {
 			
 				// ausgelesene Daten
 				$mgl	= substr($id, 5);
+				if(!is_numeric($mgl)) { $mgl = -1; }
 				$zps	= substr($id, 0, 5);
 				
 				// weitere Daten des Spielers ermitteln
 				// in CLM DB suchen
 				$query = "SELECT a.Spielername, a.Geburtsjahr, a.Geschlecht, a.FIDE_Titel, a.FIDE_Elo, a.FIDE_ID, FIDE_Land, a.DWZ, v.Vereinname"
 						. " FROM `#__clm_dwz_spieler` as a"
-						. " LEFT JOIN dwz_vereine as v ON v.ZPS = a.ZPS"
-						. " LEFT JOIN #__clm_saison as s ON s.id = a.sid"
+						. " LEFT JOIN #__clm_dwz_vereine as v ON v.ZPS = a.ZPS"
+						. " LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 						. " WHERE a.ZPS = '$zps'"
 						. " AND a.Mgl_Nr = ".$mgl
-						. " AND s.archiv = 0 ";
+						. " AND s.archiv = 0 "
+						. " AND a.sid = ".clm_core::$access->getSeason();
+
 				$this->_db->setQuery($query);
-				if (!$data	= $this->_db->loadObject()) {
-					// in DSB DB suchen
-					$query = "SELECT a.Spielername, a.Geburtsjahr, a.Geschlecht, a.FIDE_Titel, a.FIDE_Elo, a.FIDE_ID, FIDE_Land, a.DWZ, v.Vereinname"
-							. " FROM `dwz_spieler` as a "
-							. " LEFT JOIN dwz_vereine as v ON v.ZPS = a.ZPS "
-							. " WHERE a.ZPS = '$zps'"
-							. " AND a.Mgl_Nr = ".$mgl;
-					$this->_db->setQuery($query);
-					$data	= $this->_db->loadObject();
-				
-				}
-				
+				$data	= $this->_db->loadObject();
 				if (isset($data->Spielername)) {
 				
 					// checken ob Spieler schon eingetragen, um Doppelungen zu vermeiden
@@ -183,12 +171,12 @@ class CLMControllerTurPlayerForm extends JController {
 						JError::raiseWarning( 500, JText::_('PLAYER')." ".$data->Spielername." ".JText::_('ALREADYIN') );
 					} else {
 					
-						$twz = $this->_getTWZ($param_useastwz, $data->DWZ, $data->FIDE_Elo);
+						$twz = clm_core::$load->gen_twz($param_useastwz, $data->DWZ, $data->FIDE_Elo);
 						
 						$query = " INSERT INTO #__clm_turniere_tlnr"
-								. " (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `NATrating`, `FIDEelo`, `FIDEid`, `FIDEcco`, `titel`,`mgl_nr` ,`zps`) "
+								. " (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `FIDEid`, `FIDEcco`, `titel`,`mgl_nr` ,`zps`) "
 								. " VALUES"
-								. " ('".$tournament->data->sid."','".$this->turnierid."', '".$maxSnr++."', '".mysql_real_escape_string( $data->Spielername )."', '".$data->Geburtsjahr."', '".$data->Geschlecht."','".mysql_real_escape_string( $data->Vereinname )."', '".$twz."', '".$data->DWZ."', '".$data->FIDE_Elo."', '".$data->FIDE_ID."', '".$data->FIDE_Land."', '".$data->FIDE_Titel."', '$mgl', '$zps')";
+								. " ('".$tournament->data->sid."','".$this->turnierid."', '".$maxSnr++."', '".clm_escape( $data->Spielername )."', '".$data->Geburtsjahr."', '".$data->Geschlecht."','".clm_escape( $data->Vereinname )."', '".$twz."', '".$data->DWZ."', '".$data->FIDE_Elo."', '".$data->FIDE_ID."', '".$data->FIDE_Land."', '".$data->FIDE_Titel."', '$mgl', '$zps')";
 						$this->_db->setQuery($query);
 						
 						if ($this->_db->query()) {
@@ -237,33 +225,10 @@ class CLMControllerTurPlayerForm extends JController {
 		$clmLog->aktion = $stringAktion;
 		$clmLog->params = array('sid' => $tournament->data->sid, 'tid' => $this->turnierid); // TurnierID wird als LigaID gespeichert
 		$clmLog->write();
-		
+
 		return true;
 	
 	}
-
-
-	// TWZ aus Parameter des Turniers, NWZ und ELO ermitteln
-	function _getTWZ ($param = 0, $natrating = 0, $fideelo = 0) {
-	
-		$twz = 0;
-		if ($param == 0) {
-			$twz = max(array($natrating, $fideelo));
-		} elseif ($param == 1) {
-			$twz = $natrating;
-			if ($twz == 0) {
-				$twz = $fideelo;
-			}
-		} else {
-			$twz = $fideelo;
-			if ($twz == 0) {
-				$twz = $natrating;
-			}
-		}
-		return $twz;
-	
-	}
-
 
 	function cancel() {
 		$add_nz = JRequest::getInt('add_nz');

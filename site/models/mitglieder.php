@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link http://www.fishpoke.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -13,7 +13,7 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
-class CLMModelMitglieder extends JModel
+class CLMModelMitglieder extends JModelLegacy
 {
 	function _getCLMSpieler( &$options )
 	{
@@ -50,7 +50,7 @@ class CLMModelMitglieder extends JModel
 	// Prüfen ob User berechtigt ist zu melden
 	function _getCLMClmuser ( &$options )
 	{
-	$user	= & JFactory::getUser();
+	$user	= JFactory::getUser();
 	$jid	= $user->get('id');
 	$sid	= JRequest::getInt('saison','1');
 

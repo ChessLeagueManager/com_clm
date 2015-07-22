@@ -88,6 +88,7 @@ list-style-image:inherit;
 
 #clm .clm-navigator ul li p, #clm .clm-navigator ul li a{
 height:100%;
+text-align:center;
 color:inherit;
 display: inherit;
 line-height: inherit;

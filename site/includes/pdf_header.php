@@ -3,10 +3,10 @@
     $this->Image(JPATH_COMPONENT.DS.'images'.DS.'clm_logo.png',15,6,22);
 
 // Konfigurationsparameter auslesen
-	$config = &JComponentHelper::getParams( 'com_clm' );
+	$config = clm_core::$db->config();
 	// Zur Abwärtskompatibilität mit CLM <= 1.0.3 werden alte Daten aus Language-Datei als Default eingelesen
-	$fromname = $config->get('email_fromname', JText::_('USER_MAIL_FROM_NAME'));
-	$org_logo = $config->get('org_logo', '');
+	$fromname = $config->email_fromname;
+	$org_logo = $config->org_logo;
 
 //Titel
     $this->SetFont('Arial','',12);

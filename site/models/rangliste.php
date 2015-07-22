@@ -13,7 +13,7 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
-class CLMModelRangliste extends JModel
+class CLMModelRangliste extends JModelLegacy
 {
 	
 	function _getCLMLiga( &$options )
@@ -185,7 +185,7 @@ class CLMModelRangliste extends JModel
 		return @$result;
 	}
 	
-	function punkte_tlnr ( $sid, $lid, $tlnr, $dg, $runden_modus )
+	public static function punkte_tlnr ( $sid, $lid, $tlnr, $dg, $runden_modus )
 	{
 	$db	= JFactory::getDBO();
 	$query = " SELECT a.runde,a.tln_nr,a.gegner,a.runde, a.brettpunkte, m.rankingpos, m.name "
@@ -199,7 +199,7 @@ class CLMModelRangliste extends JModel
 		;
 	if ($runden_modus == 3) $query .= " ORDER BY a.runde";	
 	else $query .= " ORDER BY a.gegner ";
-	$db 	=& JFactory::getDBO();
+	$db 	=JFactory::getDBO();
 	$db->setQuery( $query );
 	$runden	=$db->loadObjectList();
 	
@@ -385,11 +385,10 @@ class CLMModelRangliste extends JModel
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
 
-		$query = " SELECT a.tln_nr, SUM(a.brettpunkte) as summe "
-			." FROM #__clm_rnd_man as a "
-			." WHERE a.lid = ".$liga
-			//." AND a.sid = ".$sid
-			." ORDER BY a.tln_nr ASC "
+		$query = " SELECT tln_nr, SUM(brettpunkte) as summe "
+			." FROM #__clm_rnd_man"
+			." WHERE lid = ".$liga
+			." GROUP BY tln_nr ORDER BY tln_nr ASC"
 			;
 		return $query;
 	}

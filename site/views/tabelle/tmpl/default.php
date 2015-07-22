@@ -70,17 +70,17 @@ if (!$liga OR $liga[0]->published == 0) {
 } else {
 
 	// Browsertitelzeile setzen
-	$doc =& JFactory::getDocument();
+	$doc =JFactory::getDocument();
 	$daten['title'] = JText::_('Tabelle').' '.$liga[0]->name;
 	if ($doc->_type != "raw") $doc->setHeadData($daten);
 
 	// Konfigurationsparameter auslesen
-	$config	= &JComponentHelper::getParams( 'com_clm' );
-	$pdf_melde = $config->get('pdf_meldelisten',1);
-	$man_showdwz = $config->get('man_showdwz',1);
+	$config = clm_core::$db->config();
+	$pdf_melde = $config->pdf_meldelisten;
+	$man_showdwz = $config->man_showdwz;
 
 		// Userkennung holen
-	$user	=& JFactory::getUser();
+	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
 
 	// Array für DWZ Schnitt setzen

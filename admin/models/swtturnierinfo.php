@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelSWTTurnierInfo extends JModel {
+class CLMModelSWTTurnierInfo extends JModelLegacy {
 
 	var $_turnier;
 	
@@ -52,7 +50,7 @@ class CLMModelSWTTurnierInfo extends JModel {
 			//Standartwerte
 			$this->_turnier->set('tid'				, 0);
 			//$this->_turnier->set('sid'				, $this->_getAktuelleSaison());
-			$this->_turnier->set('sid'				, CLM_SEASON);
+			$this->_turnier->set('sid'				, clm_core::$access->getSeason());
 			$this->_turnier->set('dateStart'		, NULL);
 			$this->_turnier->set('dateEnd'			, NULL);
 			$this->_turnier->set('catidAlltime'		, 0);
@@ -124,7 +122,6 @@ class CLMModelSWTTurnierInfo extends JModel {
 			if($this->_turnier->modus == 2){ //Vollrundig
 				$anzStreichwertungen = 0;
 			}
-			
 			if($this->_turnier->modus == 1){
 				$feinwertung1 = CLMSWT::readInt($swt,621,1);
 				$feinwertung2 = CLMSWT::readInt($swt,572,1);
@@ -262,7 +259,7 @@ class CLMModelSWTTurnierInfo extends JModel {
 	}
 	
 	function store(){
-		$db		=& JFactory::getDBO ();
+		$db		=JFactory::getDBO ();
 	
 		//Namen aller Formularfelder als Array
 		$spalten = array ( "tid", "name", "sid", "dateStart", "dateEnd", "catidAlltime", "catidEdition", "typ", "tiebr1", "tiebr2", "tiebr3",
@@ -285,7 +282,7 @@ class CLMModelSWTTurnierInfo extends JModel {
 		$values .= " '".implode("\n", $paramsStringArray)." '";
 		
 		
-		$insert_query = " 	INSERT INTO 
+		$insert_query = "INSERT IGNORE INTO 
 								#__clm_swt_turniere" . " 
 								( " . $fields . " ) "
 		              . " 	VALUES 
@@ -306,7 +303,7 @@ class CLMModelSWTTurnierInfo extends JModel {
 	function _getTurnierFromDatabase(){
 		if ($id = JRequest::getInt('turnier')) {
 			
-			$db		=& JFactory::getDBO ();
+			$db		=JFactory::getDBO ();
 			$select_query = ' 	SELECT 
 							* 
 						FROM 

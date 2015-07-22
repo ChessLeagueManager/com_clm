@@ -12,9 +12,7 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
-
-class CLMViewSWTTurnierErg extends JView {
+class CLMViewSWTTurnierErg extends JViewLegacy {
 	function display($tpl = null) { 
 	
 		//Daten vom Model
@@ -24,7 +22,7 @@ class CLMViewSWTTurnierErg extends JView {
 		$runden				= $this->get('runden');
 		
 		//Toolbar
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( JText::_('TITLE_SWT_TOURNAMENT_ERG') ,'clm_headmenu_manager.png' );
 		
 		//JToolBarHelper::custom('next','next.png','next_f2.png', JText::_('SWT_TOURNAMENT_NEXT'), false);
@@ -32,21 +30,21 @@ class CLMViewSWTTurnierErg extends JView {
 		JToolBarHelper::custom('next','forward.png','forward_f2.png', JText::_('SWT_TOURNAMENT_NEXT'), false);
 		JToolBarHelper::custom('cancel','cancel.png','cancel_f2.png', JText::_('SWT_TOURNAMENT_CANCEL'), false);	
 		
-		//Auswahllisten für Rundenfilter
+		//Auswahllisten f�r Rundenfilter
 		$runden_options[] = JHtml::_('select.option',0,JText::_('SWT_ALL_ROUNDS'));
-		if (count($runden) > 0) {
+		if (isset($runden) AND count($runden) > 0) {
 			foreach($runden as $rnd => $runde) {
 				$runden_options[] = JHtml::_('select.option',$rnd,$runde->name); 
 			}
 		}
 		
-		//Auswahllisten für Teilnehmer
+		//Auswahllisten f�r Teilnehmer
 		$teilnehmer_options[] = JHtml::_('select.option',0,JText::_('SWT_LEAGUE_PLAYER_SELECT'));
 		foreach($teilnehmerNamen as $teil) {
 			$teilnehmer_options[] = JHtml::_('select.option',$teil->snr,$teil->name);
 		}
 		
-		//Auswahllisten für Ergebnisse
+		//Auswahllisten f�r Ergebnisse
 		foreach($ergebnisTexte as $erg) {
 			$ergebnis_options[] = JHtml::_('select.option',$erg->eid,$erg->erg_text);
 		}

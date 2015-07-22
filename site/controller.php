@@ -15,9 +15,9 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.controller');
 
-class CLMController extends JController
+class CLMController extends JControllerLegacy
 {
-	function display()
+	function display($cachable = false, $urlparams = false)
 	{
 		// Setzt einen Standard view 
 		if ( ! JRequest::getCmd( 'view') ) {
@@ -32,12 +32,12 @@ class CLMController extends JController
 		$mainframe	= JFactory::getApplication();
 
 		// Initialize some variables
-		$db			=& JFactory::getDBO();
-		$user 		=& JFactory::getUser();
-		$document   =& JFactory::getDocument();
+		$db			=JFactory::getDBO();
+		$user 		=JFactory::getUser();
+		$document   =JFactory::getDocument();
 		$pathway 	=& $mainframe->getPathWay();
 
-		$usersConfig = &JComponentHelper::getParams( 'com_users' );
+		$usersConfig = JComponentHelper::getParams( 'com_users' );
 		$userActivation			= $usersConfig->get('useractivation');
 		$allowUserRegistration	= $usersConfig->get('allowUserRegistration');
 
@@ -53,7 +53,7 @@ class CLMController extends JController
 		}
 
 		// create the view
-		require_once (JPATH_COMPONENT.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'register'.DIRECTORY_SEPARATOR.'view.html.php');
+		require_once (JPATH_COMPONENT.DS.'views'.DS.'register'.DS.'view.html.php');
 		$view = new UserViewRegister();
 
 		$message = new stdClass();

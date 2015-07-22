@@ -13,9 +13,9 @@
 defined('_JEXEC') or die('Restricted access');
 
 $turnierid		= JRequest::getInt('turnier','1');
-$config			= &JComponentHelper::getParams( 'com_clm' );
+$config			= clm_core::$db->config();
 
-$turParams = new JParameter($this->turnier->params);
+$turParams = new clm_class_params($this->turnier->params);
 
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'fpdf.php');
 
@@ -48,8 +48,8 @@ $br06 = 22;
 $font = 10;
 
 // Datum der Erstellung
-$date =& JFactory::getDate();
-$now = $date->toMySQL();
+$date =JFactory::getDate();
+$now = $date->toSQL();
 
 $pdf=new PDF();
 $pdf->AliasNbPages();

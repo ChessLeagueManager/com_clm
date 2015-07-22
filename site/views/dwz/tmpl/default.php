@@ -22,14 +22,13 @@ $vereinsliste 	= $this->vereinsliste;
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-// require_once(JPATH_COMPONENT.DS.'includes'.DS.'image_path.php');
 
 // Konfigurationsparameter auslesen
-$config	= &JComponentHelper::getParams( 'com_clm' );
-$fixth_dwz = $config->get('fixth_dwz',1);
+$config = clm_core::$db->config();
+$fixth_dwz = $config->fixth_dwz;
 
 	// Browsertitelzeile setzen
-	$doc =& JFactory::getDocument();
+	$doc =JFactory::getDocument();
 	$daten['title'] = JText::_('CLUB_RATING').' '.$liga[0]->Vereinname;
 	if ($doc->_type != "raw") $doc->setHeadData($daten);
 	
@@ -51,7 +50,7 @@ function tableOrdering( order, dir, task )
 }
 </script>
 
-<div id="clm">
+<div >
 <div id="dwz">
 <div class="componentheading">
 <?php echo JText::_('CLUB_RATING') ?> ::: <?php echo $liga[0]->Vereinname; ?>
@@ -132,7 +131,6 @@ echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
     <td class="dwz_3"><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $zps->ZPS; ?>&mglnr=<?php echo $zps->Mgl_Nr; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php  echo $zps->Spielername; ?></a></td>
     <td class="dwz_4"><?php echo $zps->Status; ?></td>
     <td class="dwz_5"><?php echo $zps->Geschlecht; ?></td>
-    <!---td class="dwz_6"><a href="http://schachbund.de/dwz/db/spieler.html?zps=<?php echo $zps->ZPS; ?>-<?php echo $zps->Mgl_Nr; ?>" target="_blank"><?php echo $zps->DWZ; ?></a> - <?php echo $zps->DWZ_Index; ?></td--->
     <td class="dwz_6"><a href="http://schachbund.de/spieler.html?zps=<?php echo $zps->ZPS; ?>-<?php echo $zps->Mgl_Nr; ?>" target="_blank"><?php echo $zps->DWZ; ?></a> - <?php echo $zps->DWZ_Index; ?></td>
     <td class="dwz_7"><?php if ( $zps->FIDE_Elo == 0 ) { echo "-"; } else { echo '<a href="http://ratings.fide.com/card.phtml?event=' . $zps->FIDE_ID . '" target="_blank">' . $zps->FIDE_Elo .'</a>'; } ?></td>
     <td class="dwz_8"><?php echo $zps->FIDE_Titel; ?></td>
@@ -145,7 +143,6 @@ echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
 <input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />
 </form>
 
-<!---div class="hint">DWZ Liste: <a href="http://schachbund.de/dwz/db/verein.html?zps=<?php echo $urlzps; ?>" target="_blank">http://schachbund.de/dwz/db/verein.html?zps=<?php echo $urlzps; ?></a></div--->
 <div class="hint">DWZ Liste: <a href="http://schachbund.de/verein.html?zps=<?php echo $urlzps; ?>" target="_blank">http://schachbund.de/verein.html?zps=<?php echo $urlzps; ?></a></div>   
 <br>
 

@@ -11,8 +11,6 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-// $catParams = new JParameter($this->category->params);
-
 ?>
 
 	<script language="javascript" type="text/javascript">

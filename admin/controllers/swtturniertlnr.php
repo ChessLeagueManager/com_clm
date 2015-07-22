@@ -11,15 +11,13 @@
 */
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerSWTTurnierTlnr extends JController
+class CLMControllerSWTTurnierTlnr extends JControllerLegacy
 {
 	function __construct() {		
 		parent::__construct();		
 	}
 	
-	function display() { 
+	function display($cachable = false, $urlparams = array()) { 
 		JRequest::setVar('view','swtturniertlnr');
 		parent::display(); 
 	} 

@@ -60,8 +60,8 @@ $font = 12;
 $leer = 4+(9-$rnd)-$breite;
 
 // Datum der Erstellung
-$date =& JFactory::getDate();
-$now = $date->toMySQL();
+$date =JFactory::getDate();
+$now = $date->toSQL();
 
 $pdf=new PDF();
 $pdf->AliasNbPages();
@@ -111,7 +111,7 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 		." AND a.dg = 1"
 		." ORDER BY a.gegner "
 		;
-	$db 	=& JFactory::getDBO();
+	$db 	=JFactory::getDBO();
 	$db->setQuery( $query );
 	$runden	=$db->loadObjectList();
 

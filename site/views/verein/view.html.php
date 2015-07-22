@@ -12,52 +12,52 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewVerein extends JView
+class CLMViewVerein extends JViewLegacy
 {
 	function display($tpl = null)
 	{
 		
-		$config	= &JComponentHelper::getParams( 'com_clm' );
-		$googlemaps_api = $config->get('googlemaps_api');
-		$googlemaps     = $config->get('googlemaps',0);
+		$config = clm_core::$db->config();
+		$googlemaps_api = $config->googlemaps_api;
+		$googlemaps     = $config->googlemaps;
 		
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$verein     = $model->getCLMVerein();
 		$this->assignRef('verein'  , $verein);
 		
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$vereinstats     = $model->getCLMVereinstats();
 		$this->assignRef('vereinstats'  , $vereinstats);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$mannschaft     = $model->getCLMMannschaft();
 		$this->assignRef('mannschaft'  , $mannschaft);
 		
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$vereinsliste     = $model->getCLMVereinsliste();
 		$this->assignRef('vereinsliste'  , $vereinsliste);
 		
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$saisons     = $model->getCLMSaisons();
 		$this->assignRef('saisons'  , $saisons);
 		
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
 		$turniere     = $model->getCLMTurniere();
 		$this->assignRef('turniere'  , $turniere);
 		
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$row     = $model->getCLMData();
 		$this->assignRef('row'  , $row);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$name     = $model->getCLMName();
 		$this->assignRef('name'  , $name);
 
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		$clmuser     = $model->getCLMCLMuser();
 		$this->assignRef('clmuser'  , $clmuser);
 		
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 		
 		if ($googlemaps == 1) {
 		$document->addScript('http://maps.google.com/maps?file=api&v=2&key='.$googlemaps_api.'');

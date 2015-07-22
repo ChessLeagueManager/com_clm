@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelTurRoundForm extends JModel {
+class CLMModelTurRoundForm extends JModelLegacy {
 
 	var $_pagination = null;
 	var $_total = null;
@@ -26,7 +24,7 @@ class CLMModelTurRoundForm extends JModel {
 
 
 		// user
-		$this->user =& JFactory::getUser();
+		$this->user =JFactory::getUser();
 		
 		// get parameters
 		$this->_getParameters();

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -12,6 +12,10 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+$document = JFactory::getDocument();
+$cssDir = JURI::base().DS. 'components'.DS.'com_clm'.DS.'includes';
+$document->addStyleSheet( $cssDir.DS.'clm_content.css', 'text/css', null, array() );
+	
 // Variablen holen
 $sid = JRequest::getInt( 'saison', '1' );
 $zps = JRequest::getVar( 'zps','1');
@@ -20,12 +24,12 @@ $gid	= JRequest::getInt('gid');
 
 // Login Status prüfen
 $clmuser 	= $this->clmuser;
-$user		= & JFactory::getUser();
+$user		= JFactory::getUser();
 	$mainframe	= JFactory::getApplication();
 	$link = "index.php?option=com_clm&view=info";
 // Konfigurationsparameter auslesen
-	$config		= &JComponentHelper::getParams( 'com_clm' );
-	$conf_meldeliste= $config->get('conf_meldeliste',1);
+	$config		= clm_core::$db->config();
+	$conf_meldeliste= $config->conf_meldeliste;
 
 if ($conf_meldeliste != 1) {
 	$msg = JText::_( '<h2>Die Eingabe von Ranglisten wurde durch den Administrator gesperrt !</h2>');
@@ -48,10 +52,10 @@ if ($clmuser[0]->zps <> $zps) {
 
 $abgabe	= $this->abgabe;
 
-if (isset($abgabe[0]->id) AND $abgabe[0]->id != "") {
-	$msg = JText::_( '<h1>Diese Rangliste wurde bereits abgegeben ! </h1><h2>Bitte schauen Sie in die entsprechende Mannschaftsübersicht</h2>' );
-	$mainframe->redirect( $link, $msg );
- 			}
+//if (isset($abgabe[0]->id) AND $abgabe[0]->id != "") {
+//	$msg = JText::_( '<h1>Diese Rangliste wurde bereits abgegeben ! </h1><h2>Bitte schauen Sie in die entsprechende Mannschaftsübersicht</h2>' );
+//	$mainframe->redirect( $link, $msg );
+// 			}
 // NICHT vorhanden
 // Variablen initialisieren
 $liga 		= $this->liga;
@@ -194,6 +198,7 @@ function Pruefen()
  {
   Sortieren();
   var Ma=0;
+  var Ra=0;
   var Sp=0;
   var Ersatz=1;
   i=0;
@@ -208,6 +213,18 @@ function Pruefen()
 	if (TempMa==0) {
 		break;
 	}		
+	//Hilfsprüfung: nur auf doppelte Einträge
+    if ((TempMa==Ma) && (TempRa==Ra)) {
+        alert('Doppelte Rangnummer! \n Mannschaft: '+Ma+'  Rang: '+Ra);
+		return false;
+	} else {
+        Ma=TempMa;
+        Ra=TempRa;
+		i++;
+		continue;
+	}
+	return true;
+	//Ende Hilfsprüfung
     if (TempMa==Ma) {
       if (TempRa==(Sp+1)) {
         i++;
@@ -267,6 +284,10 @@ function Pruefbutton()
  {
   if (Pruefen()==true) alert('Alles in Ordnung');
  }
+function Sendbutton()
+ {
+  if (Pruefen()==true) document.adminForm.submit();
+ }
 
 </script>
 
@@ -275,9 +296,10 @@ function Pruefbutton()
 <br>
 <u><b>Hinweise</u></b> : 
 <br><b>(1)</b> Setzen Sie Mannschaftsnummer und Rang bei allen Spielern, die Sie in die Rangliste aufnehmen möchten.
-<br><b>(2)</b> Mit dem "Sortieren" Knopf können Sie die Liste in die aktuelle Reihenfolge bringen.
-<br><b>(3)</b> Der "Neu laden" Knopf <u><i>verwirft ALLE Änderungen</i></u> und lädt die Seite neu !
-<br><b>(4)</b> Sobald "Liste absenden" gedrückt wurde ist die Rangliste verbindlich gemeldet.
+<br><b>(2)</b> Mit dem "Prüfen" Knopf können Sie die Liste auf doppelte Rangnummern kontrollieren.
+<br><b>(3)</b> Mit dem "Sortieren" Knopf können Sie die Liste in die aktuelle Reihenfolge bringen.
+<br><b>(4)</b> Der "Neu laden" Knopf <u><i>verwirft ALLE Änderungen</i></u> und lädt die Seite neu !
+<br><b>(5)</b> Sobald "Liste absenden" gedrückt wurde ist die Rangliste verbindlich gemeldet.
 <br><br><br>
 
 <center>
@@ -298,7 +320,7 @@ echo $bar->render();
 **/
 ?>
 <table class="toolbar"><tr>
-<!---
+ 
 <td class="button" id="Ranglisten-pruefen">
 <a href="#" onclick="javascript:Pruefbutton(); return false;" class="toolbar">
 <span class="icon-32-trash" title="Prüfen">
@@ -306,7 +328,7 @@ echo $bar->render();
 Prüfen
 </a>
 </td>
---->
+ 
 <td class="button" id="Ranglisten-sortieren">
 <a href="#" onclick="javascript:Sortieren(); return false;" class="toolbar">
 <span class="icon-32-pruefen" title="Sortieren">
@@ -324,7 +346,9 @@ Neu laden
 </td>
 
 <td class="button" id="Ranglisten-speichern">
-<a href="#" onclick="javascript:document.adminForm.submit(); return false;" class="toolbar">
+<!-- <a href="#" onclick="javascript:document.adminForm.submit(); return false;" class="toolbar"> -->
+<a href="#" onclick="javascript:Sendbutton(); return false;" class="toolbar"> 
+
 <span class="icon-32-pruefen" title="Speichern">
 </span>
 Liste absenden !
@@ -340,11 +364,11 @@ Liste absenden !
 
 <style type="text/css">table { width:60%; }</style>
 
-<div class="col width-100">
+<div class="col">
   <fieldset class="adminform">
    <legend><?php echo "Rangliste Platz 1 - ".count($spieler); ?></legend>
 	
-	<table class="admintable">
+	<table class="admintable meldeliste_rangliste">
 
 	<tr>
 		<td width="8%" class="key" nowrap="nowrap">Mnr</td>
@@ -369,7 +393,7 @@ Liste absenden !
 	<td class="key" nowrap="nowrap">
 	<input type="text" name="RA<?php echo $x ?>" size="5" maxLength="5" value="<?php if(isset($spieler[$x]->Rang)) { echo $spieler[$x]->Rang; } ?>" onChange="Rcheck(this)">
 	</td>
-	<td id="SP<?php echo $x; ?>" class="key" nowrap="nowrap">
+	<td id="SP<?php echo $x; ?>" name="SP<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->Spielername; ?></td>
 	<td id="MGL<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->Mgl_Nr; ?></td>
@@ -391,18 +415,12 @@ Liste absenden !
 
 		<input type="hidden" name="count" value="<?php echo count($spieler); ?>" />
 		<input type="hidden" name="zps" value="<?php echo $spieler[0]->ZPS; ?>" />
-		<input type="hidden" name="sid" value="<?php echo $spieler[0]->sid; ?>" />
+		<input type="hidden" name="saison" value="<?php echo $spieler[0]->sid; ?>" />
 		<input type="hidden" name="gid" value="<?php echo JRequest::getInt('gid'); ?>" />
 
 		<?php echo JHTML::_( 'form.token' ); ?>
 		</form>
 </center>
 
-<br><br><br>
-<hr>
-<?php
-$Dir = JPATH_ADMINISTRATOR .DS. 'components'.DS.'com_clm';
-$data = JApplicationHelper::parseXMLInstallFile($Dir.DS.'clm.xml');
-?>
-<div style="float:left; text-align:left; padding-left:1%">CLM <?php echo $data['version'];?></div>
+<br>
 <div style=" text-align:right; padding-right:1%"><label for="name" class="hasTip" title="<?php echo JText::_('Das Chess League Manager (CLM) Projekt ist freie, kostenlose Software unter der GNU / GPL. Besuchen Sie unsere Projektseite www.chessleaguemanager.de für die neueste Version, Dokumentationen und Fragen. Wenn Sie an der Entwicklung des CLM teilnehmen wollen melden Sie sich bei uns per E-mail. Wir sind für jede Hilfe dankbar !'); ?>">Sie wollen am Projekt teilnehmen oder haben Verbesserungsvorschläge - <a href="http://www.chessleaguemanager.de">CLM Projektseite</a></label></div>

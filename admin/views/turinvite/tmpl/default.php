@@ -15,7 +15,7 @@ defined('_JEXEC') or die('Restricted access');
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 
 <?php
-$editor =& JFactory::getEditor();
+$editor =JFactory::getEditor();
 echo $editor->display('invitationText', $this->turnier->invitationText, '800', '600', '60', '20', false);
 
 /*

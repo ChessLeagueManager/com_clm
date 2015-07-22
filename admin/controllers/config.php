@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerConfig extends JController {
+class CLMControllerConfig extends JControllerLegacy {
 	
 
 	// Konstruktor
@@ -24,7 +22,7 @@ class CLMControllerConfig extends JController {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= & JFactory::getDBO();
+		$this->_db		= JFactory::getDBO();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -39,7 +37,7 @@ class CLMControllerConfig extends JController {
 	
 		if ($this->_saveDo()) { // erfolgreich?
 			
-			$app =& JFactory::getApplication();
+			$app =JFactory::getApplication();
 			$app->enqueueMessage( JText::_('CONFIG_SAVED') );
 		
 		}
@@ -56,11 +54,8 @@ class CLMControllerConfig extends JController {
 		// Check for request forgeries
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		//if (CLM_usertype != 'admin') {
-		$clmAccess->accesspoint = 'BE_config_general';
-		if($clmAccess->access() === false) {
+	        $clmAccess = clm_core::$access;
+		if($clmAccess->access('BE_config_general') === false) {
 			JError::raiseWarning(500, JText::_('SECTION_NO_ACCESS') );
 			return false;
 		}

@@ -15,12 +15,12 @@ defined('_JEXEC') or die('Restricted access');
 //require('fpdf.php');
 
 $lid = JRequest::getInt( 'liga', '1' ); 
-$sid = JRequest::getInt( 'saison','1');
-$view = JRequest::getVar( 'view');
-// Variablen ohne foreach setzen
-$liga=$this->liga;
 	//Liga-Parameter aufbereiten
-	$paramsStringArray = explode("\n", $liga[0]->params);
+	if(isset($liga[0])){
+		$paramsStringArray = explode("\n", $liga[0]->params);
+	} else  {
+		$paramsStringArray = array();
+	}
 	$params = array();
 	foreach ($paramsStringArray as $value) {
 		$ipos = strpos ($value, '=');
@@ -29,6 +29,10 @@ $liga=$this->liga;
 		}
 	}	
 	if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
+$sid = JRequest::getInt( 'saison','1');
+$view = JRequest::getVar( 'view');
+// Variablen ohne foreach setzen
+$liga=$this->liga;
 $punkte=$this->punkte;
 $spielfrei=$this->spielfrei;
 $dwzschnitt=$this->dwzschnitt;
@@ -63,7 +67,6 @@ function Footer()
 			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; }
 		}
 	}
-  
 // Spielfreie Teilnehmer finden
 $diff = $spielfrei[0]->count;
 
@@ -101,8 +104,8 @@ if ( $liga[0]->b_wertung == 0) $leer = $leer + 4;
 if ($leer < 3) $leer = 2;
  
 // Datum der Erstellung
-$date =& JFactory::getDate();
-$now = $date->toMySQL();
+$date =JFactory::getDate();
+$now = $date->toSQL();
 
 $pdf=new PDF();
 $pdf->AliasNbPages();
@@ -194,10 +197,10 @@ if ($liga[0]->runden_modus == 1 OR $liga[0]->runden_modus == 2) {
 }
 if ($liga[0]->runden_modus == 3) { 
 	for ($y=0; $y< $liga[0]->runden; $y++) { 
-		if ($runden[$y]->name == "spielfrei") 
-			$pdf->Cell(14-$breite,$zelle,"  +",1,0,'C',$fc); 
-		elseif (!isset($runden[$y])) 
+		if (!isset($runden[$y])) 
 			$pdf->Cell(14-$breite,$zelle,"",1,0,'C',$fc); 
+		elseif ($runden[$y]->name == "spielfrei") 
+			$pdf->Cell(14-$breite,$zelle,"  +",1,0,'C',$fc); 
 		else 
 			$pdf->Cell(14-$breite,$zelle,$runden[$y]->brettpunkte." (".$runden[$y]->rankingpos.")",1,0,'C',$fc); 
 		}

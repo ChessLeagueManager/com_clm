@@ -39,13 +39,13 @@ $lid		= JRequest::getInt('liga','1');
 	}
 
 // Konfigurationsparameter auslesen
-$config	= &JComponentHelper::getParams( 'com_clm' );
-	$telefon= $config->get('man_tel',1);
-	$mobil	= $config->get('man_mobil',1);
-	$mail	= $config->get('man_mail',1);
+$config = clm_core::$db->config();
+	$telefon= $config->man_tel;
+	$mobil	= $config->man_mobil;
+	$mail	= $config->man_mail;
 
 	// Userkennung holen
-	$user	=& JFactory::getUser();
+	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
 
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'fpdf.php');
@@ -78,8 +78,8 @@ $lrand = 10;
 
 
 // Datum der Erstellung
-$date =& JFactory::getDate();
-$now = $date->toMySQL();
+$date =JFactory::getDate();
+$now = $date->toSQL();
 
 $pdf=new PDF();
 $pdf->AliasNbPages();

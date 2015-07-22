@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelSonderranglistenForm extends JModel {
+class CLMModelSonderranglistenForm extends JModelLegacy {
 	var $_sonderrangliste;
 	var $_ordering;
 	var $_turniere;
@@ -132,7 +130,7 @@ class CLMModelSonderranglistenForm extends JModel {
 	}
 	
 	function _getAktuelleSaison() {
-		$db =& $this->getDbo();
+		$db = $this->getDbo();
 
 		$query = ' 	SELECT
 						id
@@ -147,7 +145,7 @@ class CLMModelSonderranglistenForm extends JModel {
 	}
  
 	function _getTurnierSaison($tid) {
-		$db =& $this->getDbo();
+		$db = $this->getDbo();
 			$query = ' 	SELECT
 							sid
 						FROM 
@@ -159,7 +157,7 @@ class CLMModelSonderranglistenForm extends JModel {
 	}
 	
 	function store() { 
-		$row = & JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
+		$row = JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
 		$sonderrangliste = JRequest::get( 'post' ); 
 		if (!$row->bind($sonderrangliste)) { 
 			$this->setError($this->_db->getErrorMsg()); 
@@ -182,7 +180,7 @@ class CLMModelSonderranglistenForm extends JModel {
 	
 	function delete() { 
 		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' ); 
-		$row = & JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
+		$row = JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
 		if (count( $cids )) { 
 			foreach($cids as $cid) { 
 				if (!$row->delete( $cid )) { 
@@ -200,7 +198,7 @@ class CLMModelSonderranglistenForm extends JModel {
 	
 	function publish() {
 		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' );
-		$row = & JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
+		$row = JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
 		if (!$row->publish( $cids )) { 
 			$this->setError( $row->_db->getErrorMsg() ); 
 			return false; 
@@ -210,7 +208,7 @@ class CLMModelSonderranglistenForm extends JModel {
 	
 	function unpublish() {
 		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' );
-		$row = & JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
+		$row = JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
 
 		if (!$row->publish($cids,0)) { 
 			$this->setError( $row->_db->getErrorMsg() ); 
@@ -222,7 +220,7 @@ class CLMModelSonderranglistenForm extends JModel {
 	function saveOrder() {
 		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' );
 		$order = JRequest::getVar('order', array (0), 'post', 'array');
-		$row = & JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
+		$row = JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
 		//var_dump(	$cids);
 		
 		for($i = 0; $i < count($cids); $i ++) {
@@ -245,7 +243,7 @@ class CLMModelSonderranglistenForm extends JModel {
 	function orderUp() {
 		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' );
 		if(isset($cids[0])) {
-		$row = & JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
+		$row = JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
 			$row->load((int)$cids[0]);
 			$row->move(-1, 'turnier = '.$row->turnier);
 			$row->reorder('turnier = '.$row->turnier);
@@ -257,7 +255,7 @@ class CLMModelSonderranglistenForm extends JModel {
 		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' );
 				
 		if(isset($cids[0])) {
-		$row = & JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
+		$row = JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
 			$row->load((int)$cids[0]);
 			$row->move(1, 'turnier = '.$row->turnier);
 			$row->reorder('turnier = '.$row->turnier);

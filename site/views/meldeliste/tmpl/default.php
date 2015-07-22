@@ -18,14 +18,16 @@ $zps = JRequest::getVar( 'zps','1');
 $man = JRequest::getInt( 'man' ); 
 $liga 		= $this->liga;
 
+
 // Login Status prüfen
 $clmuser 	= $this->clmuser;
-$user		=& JFactory::getUser();
+$user		=JFactory::getUser();
 	$mainframe	= JFactory::getApplication();
+
 	$link = 'index.php';
 // Konfigurationsparameter auslesen
-	$config = &JComponentHelper::getParams( 'com_clm' );
-	$conf_meldeliste=$config->get('conf_meldeliste',1);
+	$config = clm_core::$db->config();
+	$conf_meldeliste=$config->conf_meldeliste;
 
 if ($conf_meldeliste != 1) {
 	$msg = JText::_( 'CLUB_LIST_DISABLED');
@@ -47,8 +49,8 @@ if ($clmuser[0]->zps <> $zps AND strpos($liga[0]->sg_zps,$clmuser[0]->zps) === f
 	$link = "index.php?option=com_clm&view=info";
 	$mainframe->redirect( $link, $msg );
 				}
-
 if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND ($clmuser[0]->zps == $zps OR strpos($liga[0]->sg_zps,$clmuser[0]->zps) !== false )) {
+
 
 // Prüfen ob Datensatz schon vorhanden ist
 $access		= $this->access;
@@ -102,7 +104,7 @@ $mflist			= array_merge( $mflist, $mllist );
 $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox" size="1"', 'mf', 'mfname', $liga[0]->mf );
 if ($liga[0]->lokal == '') $liga[0]->lokal = $liga[0]->vlokal;
 ?>
-<div id="clm">
+<div >
 <div id="meldeliste">
 <div class="componentheading"><?php echo JText::_('CLUB_LIST_LIST') ?> <?php echo $liga[0]->man_name; ?></div>
 <br>

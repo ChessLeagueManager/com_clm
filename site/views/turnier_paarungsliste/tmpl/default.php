@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -17,12 +17,12 @@ JHtml::_('behavior.tooltip', '.CLMTooltip');
 // Konfigurationsparameter auslesen
 $itemid 		= JRequest::getVar( 'Itemid' );
 // $turnierid		= JRequest::getInt('turnier','1');
-$config	= &JComponentHelper::getParams( 'com_clm' );
-// $pdf_melde = $config->get('pdf_meldelisten',1);
+$config = clm_core::$db->config();
+// $pdf_melde = $config->pdf_meldelisten;
 $pgn		= JRequest::getInt('pgn','0'); 
 
 // Userkennung holen
-$user	=& JFactory::getUser();
+$user	=JFactory::getUser();
 $jid	= $user->get('id');
 
   if ($pgn == 1) { 
@@ -79,10 +79,10 @@ $jid	= $user->get('id');
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-// require_once(JPATH_COMPONENT.DS.'includes'.DS.'image_path.php');
+
 
 // CLM-Container
-echo '<div id="clm"><div id="turnier_paarungsliste">';
+echo '<div ><div id="turnier_paarungsliste">';
 
 // componentheading vorbereiten
 $heading = $this->turnier->name.": ".JText::_('TOURNAMENT_PAIRINGLIST');
@@ -108,7 +108,7 @@ if ( $this->turnier->published == 0) {
 	
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
 
-	$turParams = new JParameter($this->turnier->params);
+	$turParams = new clm_class_params($this->turnier->params);
 
 	// alle Runden durchgehen
 	foreach ($this->rounds as $value) {
@@ -136,13 +136,13 @@ if ( $this->turnier->published == 0) {
 			// Spaltenüberschriften
 			?>
 			<tr>
-				<th align="center" width="5%"><?php echo JText::_('TOURNAMENT_TNR'); ?></th>
-				<th align="center" width="40%"><?php echo JText::_('TOURNAMENT_WHITE'); ?></th>
-				<th align="center" width="10%"><?php echo JText::_('TOURNAMENT_TWZ'); ?></th>
-				<th align="center" width="5%">-</th>
-				<th align="center" width="40%"><?php echo JText::_('TOURNAMENT_BLACK'); ?></th>
-				<th align="center" width="10%"><?php echo JText::_('TOURNAMENT_TWZ'); ?></th>
-				<th align="center" width="5%"><?php echo JText::_('RESULT'); ?></th>
+				<th align="center"><?php echo JText::_('TOURNAMENT_TNR'); ?></th>
+				<th align="center"><?php echo JText::_('TOURNAMENT_WHITE'); ?></th>
+				<th align="center"><?php echo JText::_('TOURNAMENT_TWZ'); ?></th>
+				<th align="center">-</th>
+				<th align="center"><?php echo JText::_('TOURNAMENT_BLACK'); ?></th>
+				<th align="center"><?php echo JText::_('TOURNAMENT_TWZ'); ?></th>
+				<th align="center"><?php echo JText::_('RESULT'); ?></th>
 			</tr>
 			<?php
 		
@@ -207,6 +207,7 @@ if ( $this->turnier->published == 0) {
 						//} else {
 						//	echo '<td align="center">&nbsp;</td>';
 						//}
+
 						if ($matches->ergebnis != NULL) {
 							echo '<td align="center">';
 							if ($matches->pgn == '' OR !$this->pgnShow) {

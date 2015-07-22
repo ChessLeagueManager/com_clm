@@ -13,28 +13,26 @@
 
 class CLMViewSaisons
 {
-function setSaisonsToolbar()
+public static function setSaisonsToolbar()
 	{
 	
 	// Menubilder laden
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 
 		JToolBarHelper::title( JText::_( 'Saison Manager' ), 'clm_headmenu_saison.png' );
-		JToolBarHelper::custom('dwz_del','cancel.png','unarchive_f2.png','RUNDE_DWZ_DELETE',false);	
-		JToolBarHelper::custom('dwz_start','default.png','apply_f2.png','RUNDE_DWZ_APPLY',false);			
 	/* Debugging / Testing
-		JToolBarHelper::customX( 'change', 'upload.png', 'upload_f2.png', 'Status ändern' , false);
+		JToolBarHelper::custom( 'change', 'upload.png', 'upload_f2.png', 'Status ändern' , false);
 	*/
 		JToolBarHelper::publishList();
 		JToolBarHelper::unpublishList();
-		JToolBarHelper::customX( 'copy', 'copy.png', 'copy_f2.png', 'Copy' );
+		JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', 'Copy' );
 		JToolBarHelper::deleteList();
-		JToolBarHelper::editListX();
-		JToolBarHelper::addNewX();
+		JToolBarHelper::editList();
+		JToolBarHelper::addNew();
 		JToolBarHelper::help( 'screen.clm.saison' );
 	}
 
-function saisons ( &$rows, &$lists, &$pageNav, $option )
+public static function saisons ( &$rows, &$lists, &$pageNav, $option )
 	{
 	// Nur CLM-Amin darf hier zugreifen
 	if (!JFactory::getUser()->authorise('core.manage.clm', 'com_clm')) 
@@ -44,7 +42,7 @@ function saisons ( &$rows, &$lists, &$pageNav, $option )
 	 
 		$mainframe	= JFactory::getApplication();
 		CLMViewSaisons::setSaisonsToolbar();
-		$user =& JFactory::getUser();
+		$user =JFactory::getUser();
 		//Ordering allowed ?
 		$ordering = ($lists['order'] == 'a.ordering');
 
@@ -73,10 +71,10 @@ function saisons ( &$rows, &$lists, &$pageNav, $option )
 			<thead>
 				<tr>
 					<th width="10">
-						<?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?>
+						#
 					</th>
 					<th width="10">
-						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $rows ); ?>);" />
+						<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 					</th>
 					<th class="title">
 						<?php echo JHtml::_('grid.sort',   'SAISON', 'a.name', @$lists['order_Dir'], @$lists['order'] ); ?>
@@ -109,11 +107,12 @@ function saisons ( &$rows, &$lists, &$pageNav, $option )
 			<tbody>
 			<?php
 			$k = 0;
+			$row = JTable::getInstance('saisons', 'TableCLM');
 			for ($i=0, $n=count( $rows ); $i < $n; $i++) {
-				$row = &$rows[$i];
-
+				//$row = &$rows[$i];
+				// load the row from the db table
+				$row->load( $rows[$i]->id );
 				$link 		= JRoute::_( 'index.php?option=com_clm&section=saisons&task=edit&cid[]='. $row->id );
-
 				$checked 	= JHtml::_('grid.checkedout',   $row, $i );
 				$published 	= JHtml::_('grid.published', $row, $i );
 
@@ -125,24 +124,13 @@ function saisons ( &$rows, &$lists, &$pageNav, $option )
 						<?php echo $pageNav->getRowOffset( $i ); ?>
 					</td>
 
-
 					<td>
 						<?php echo $checked; ?>
 					</td>
 
-
 					<td>
-						<?php
-						if (  JTable::isCheckedOut($user->get ('id'), $row->editor ) ) {
-							echo $row->name;
-						} else {
-							?>
-								<span class="editlinktip hasTip" title="<?php echo JText::_( 'SAISON_EDIT' );?>::<?php echo $row->name.$row->man_nr; ?>">
-							<a href="<?php echo $link; ?>">
+			 <span title="<?php echo JText::_( 'SAISON_EDIT' );?>"><a href="<?php echo $link; ?>">
 								<?php echo $row->name; ?></a></span>
-							<?php
-						}
-						?>
 					</td>
 					
 					<td align="center">
@@ -186,7 +174,7 @@ function saisons ( &$rows, &$lists, &$pageNav, $option )
 		<?php
 	}
 
-function setSaisonToolbar()
+public static function setSaisonToolbar()
 	{
 
 		$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
@@ -194,15 +182,15 @@ function setSaisonToolbar()
 		if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
 			else { $text = JText::_( 'New' );}
 	
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
-		JToolBarHelper::title(  JText::_( 'SAISON' ).': <small><small>[ '. $text.' ]</small></small>', 'clm_headmenu_saison.png' );
+		clm_core::$load->load_css("icons_images");
+		JToolBarHelper::title(  JText::_( 'SAISON' ).': [ '. $text.' ]', 'clm_headmenu_saison.png' );
 		JToolBarHelper::save();
 		JToolBarHelper::apply();
 		JToolBarHelper::cancel();
 		JToolBarHelper::help( 'screen.clm.edit' );
 	}
 		
-function saison( &$row,$lists, $option )
+public static function saison( &$row,$lists, $option)
 	{
 	// Nur CLM-Admin darf hier zugreifen (neue Saison)
 	if (!JFactory::getUser()->authorise('core.manage.clm', 'com_clm')) 
@@ -286,8 +274,6 @@ function saison( &$row,$lists, $option )
 		<input type="hidden" name="section" value="saisons" />
 		<input type="hidden" name="option" value="com_clm" />
 		<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
-		<input type="hidden" name="cid" value="<?php echo $row->cid; ?>" />
-		<input type="hidden" name="client_id" value="<?php echo $row->cid; ?>" />
 		<input type="hidden" name="task" value="" />
 		<?php echo JHtml::_( 'form.token' ); ?>
 		</form>

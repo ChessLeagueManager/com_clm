@@ -12,29 +12,24 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
+class CLMViewTurPlayerEdit extends JViewLegacy {
 
-class CLMViewTurPlayerEdit extends JView {
-
-	function display() {
+	function display($tpl = NULL) {
 
 		
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
-		$model =   &$this->getModel();
+		$model =   $this->getModel();
 		
 		// Die Toolbar erstellen, die über der Seite angezeigt wird
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( $model->turnierData->name.", ".JText::_('PLAYER').": ".$model->playerData->name, 'clm_turnier.png'  );
 	
 		// Instanz der Tabelle
-		$row = & JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = JTable::getInstance( 'turniere', 'TableCLM' );
 		$row->load( $model->playerData->turnier ); // Daten zu dieser ID laden
 
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if (($row->tl == CLM_ID AND $clmAccess->access() !== true) OR $clmAccess->access() === true) {
-		//if (CLM_usertype == 'admin' OR CLM_usertype == 'tl') {
+		$clmAccess = clm_core::$access;
+		if (($row->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') == 2) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
 			JToolBarHelper::save( 'save' );
 			JToolBarHelper::apply( 'apply' );
 		}
@@ -47,10 +42,10 @@ class CLMViewTurPlayerEdit extends JView {
 		
 
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
-		$model =   &$this->getModel();
+		$model =   $this->getModel();
 
 		// Document/Seite
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 
 		// JS-Array jtext -> Fehlertexte
 		$document->addScriptDeclaration("var jtext = new Array();");

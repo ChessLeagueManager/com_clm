@@ -49,7 +49,6 @@ $mannschaft	=$this->mannschaft;
 		}
 	}
 	if (!isset($mannschaft[0]->params['dwz_date'])) $mannschaft[0]->params['dwz_date'] = '0000-00-00';
-
 $count		=$this->count;
 $bp			=$this->bp;
 $sumbp		=$this->sumbp;
@@ -69,7 +68,7 @@ $mainframe	= JFactory::getApplication();
  
 $sql = ' SELECT `sieg`, `remis`, `nieder`, `antritt` FROM #__clm_liga'
 		. ' WHERE `id` = "' . $liga . '"';
-$db =& JFactory::getDBO ();
+$db =JFactory::getDBO ();
 $db->setQuery ($sql);
 $ligapunkte = $db->loadObject ();
 
@@ -79,7 +78,6 @@ if ($mannschaft[0]->params['dwz_date'] == '0000-00-00') {
 } else {
 	$hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_LEAGUE').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $mannschaft[0]->params['dwz_date'], JText::_('DATE_FORMAT_CLM_F'));  
 }
-
 if ( !$mannschaft OR $mannschaft[0]->lpublished == 0) {
 	$msg = JText::_('NOT_PUBLISHED').JText::_('GEDULD');
 	$link = 'index.php?option='.$option.'&view=info&Itemid='.$itemid;
@@ -94,26 +92,25 @@ if ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) {
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-// require_once(JPATH_COMPONENT.DS.'includes'.DS.'image_path.php'); 
 
 	// Browsertitelzeile setzen
-	$doc =& JFactory::getDocument();
+	$doc =JFactory::getDocument();
 	$daten['title'] = $mannschaft[0]->name.' - '.$mannschaft[0]->liga_name;
 	if ($doc->_type != "raw") $doc->setHeadData($daten);
 
 	// Konfigurationsparameter auslesen
-	$config	= &JComponentHelper::getParams( 'com_clm' );
-	$telefon= $config->get('man_tel',1);
-	$mobil	= $config->get('man_mobil',1);
-	$mail	= $config->get('man_mail',1);
-	$man_manleader	= $config->get('man_manleader',1);
-	$man_spiellokal	= $config->get('man_spiellokal',1);
-	$man_spielplan	= $config->get('man_spielplan',1);
-	$fixth_msch = $config->get('fixth_msch',1);
-	$googlemaps_msch   = $config->get('googlemaps_msch',1);
-	$googlemaps   = $config->get('googlemaps',0);
-	$googlemaps_rtype   = $config->get('googlemaps_rtype',0);
-	$googlemaps_mrout   = $config->get('googlemaps_mrout',1);
+	$config = clm_core::$db->config();
+	$telefon= $config->man_tel;
+	$mobil	= $config->man_mobil;
+	$mail	= $config->man_mail;
+	$man_manleader	= $config->man_manleader;
+	$man_spiellokal	= $config->man_spiellokal;
+	$man_spielplan	= $config->man_spielplan;
+	$fixth_msch = $config->fixth_msch;
+	$googlemaps_msch   = $config->googlemaps_msch;
+	$googlemaps   = $config->googlemaps;
+	$googlemaps_rtype   = $config->googlemaps_rtype;
+	$googlemaps_mrout   = $config->googlemaps_mrout;
 	// Aufbereitung Googledaten 1. Spiellokal
 	$spiellokal1G = explode(",", $mannschaft[0]->lokal); 
     if (isset($spiellokal1G[2]) AND $googlemaps_rtype == 1) {
@@ -126,17 +123,17 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'googlemaps.php');
  
 	// Userkennung holen
-	$user	=& JFactory::getUser();
+	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
 	
 // Konfigurationsparameter auslesen Teil2
-$clm_zeile1			= $config->get('zeile1','#FFFFFF');
-$clm_zeile2			= $config->get('zeile2','#F3F3F3');
+$clm_zeile1			= $config->zeile1;
+$clm_zeile2			= $config->zeile2;
 $clm_zeile1D			= RGB($clm_zeile1);
 $clm_zeile2D			= RGB($clm_zeile2);
 ?>
 
-<div id="clm">
+<div >
 <div id="mannschaft">
 
     <div class="componentheading"><?php echo $mannschaft[0]->name; ?> - <?php echo $mannschaft[0]->liga_name; ?></div>
@@ -337,13 +334,13 @@ for ($x=0; $x< 100; $x++){
 				$dr_einzel = $punkte_text;
 			}
 			else {
-				if ($config->get('fe_display_lose_by_default',0) == 0) {
+				if ($config->fe_display_lose_by_default == 0) {
 					if($einzel[$ie]->punkte == 0) {
 						$dr_einzel = "-";
 					} else {
 						$dr_einzel = "+";
 					}
-				} elseif ($config->get('fe_display_lose_by_default',0) == 1) {
+				} elseif ($config->fe_display_lose_by_default == 1) {
 					$dr_einzel =  $punkte_text.' (kl)';
 				} else {
 					$dr_einzel = $punkte_text;
@@ -470,7 +467,7 @@ for ($x=0; $x< 100; $x++){
     <?php 
     $cnt = 0;
     foreach ($plan as $plan) { 
-		//$datum =& JFactory::getDate($plan->datum);?>
+		//$datum =JFactory::getDate($plan->datum);?>
     <tr>
     <td><a href="index.php?option=com_clm&view=runde&saison=<?php echo $sid; ?>&liga=<?php echo $liga; ?>&runde=<?php echo $plan->runde; ?>&dg=<?php echo $plan->dg; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $plan->runde; ?></a></td>
     <td><?php echo $plan->paar; ?></td>

@@ -1,0 +1,25 @@
+/********************/
+/**** dsb import ****/
+/********************/
+
+#clm .clm .clm_view_dsb_import .clm_view_dsb_import_div {
+	margin-top:10px;
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+}
+
+#clm .clm .clm_view_dsb_import .clm_view_dsb_import_update {
+	margin-top:20px;
+}
+
+#clm .clm .clm_view_dsb_import .clm_view_dsb_import_update {
+	font-size:1.5em;
+}
+
+#clm .clm .clm_view_dsb_import .clm_view_dsb_import_div input[type=button] {
+	margin:3px;
+	padding:3px;
+}

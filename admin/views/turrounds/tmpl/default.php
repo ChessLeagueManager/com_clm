@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -11,8 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-$clmAccess = new CLMAccess();
+$clmAccess = clm_core::$access;
  
 ?>
 <form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -22,10 +21,10 @@ $clmAccess = new CLMAccess();
 		<thead>
 			<tr>
 				<th width="10">
-					<?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?>
+					#
 				</th>
 				<th width="10">
-					<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $this->turrounds ); ?>);" />
+					<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 				</th>
 				<th width="3%">
 					<?php echo JHtml::_('grid.sort',   JText::_('ROUND_DG'), 'dg', $this->param['order_Dir'], $this->param['order'] ); ?>
@@ -75,8 +74,11 @@ $clmAccess = new CLMAccess();
 		$k = 0;
 		
 		$n=count( $this->turrounds );
+		$row =JTable::getInstance( 'turnier_runden', 'TableCLM' );
 		foreach ($this->turrounds as $i => $value) {
-			$row = &$value;
+			//$row = &$value;
+			// load the row from the db table 
+			$row->load( $value->id );
 			$checked 	= JHtml::_('grid.checkedout',   $row, ($i) ); //-1
 			$published 	= JHtml::_('grid.published', $row, ($i) );  //-1
 			?>
@@ -101,11 +103,8 @@ $clmAccess = new CLMAccess();
 				
 				<td>
 					<?php
-					$clmAccess->accesspoint = 'BE_tournament_edit_round';
-					//echo "<br>tr: ".$this->turnier->tl."  user: ".CLM_ID."  Acc:"; var_dump($clmAccess->access());
-					if (($this->turnier->tl != CLM_ID AND $clmAccess->access() !== true ) OR ($clmAccess->access() === false)) {
-						echo $row->name;
-					} elseif ( JTable::isCheckedOut($this->user->get('id'), $row->checked_out) ) {
+					if (($this->turnier->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true ) OR ($clmAccess->access('BE_tournament_edit_round') === false))
+					{
 						echo $row->name;
 					} else {
 						$adminLink = new AdminLink();
@@ -128,24 +127,21 @@ $clmAccess = new CLMAccess();
 				
 				<td align="center">
 					<?php 
-					$clmAccess->accesspoint = 'BE_tournament_edit_result';
-					if (($this->turnier->tl != CLM_ID AND $clmAccess->access() !== true ) OR ($clmAccess->access() === false)) {
-						echo CLMText::sgpl($row->countMatches, JText::_('MATCH'), JText::_('MATCHES'));
+					if (($this->turnier->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_result') !== true ) OR ($clmAccess->access('BE_tournament_edit_result') === false)) {
+						echo CLMText::sgpl($value->countMatches, JText::_('MATCH'), JText::_('MATCHES'));
 					} else {	
 						$adminLink = new AdminLink();
 						$adminLink->view = "turroundmatches";
 						$adminLink->more = array('turnierid' =>  $this->param['id'], 'roundid' => $row->id);
 						$adminLink->makeURL();
-						echo '<a href="'.$adminLink->url.'">'.CLMText::sgpl($row->countMatches, JText::_('MATCH'), JText::_('MATCHES')).'</a>';
+						echo '<a href="'.$adminLink->url.'">'.CLMText::sgpl($value->countMatches, JText::_('MATCH'), JText::_('MATCHES')).'</a>';
 					} ?>
 				</td>
 				
 				<td align="center">
 					<?php 
-						echo $row->countAssigned."&nbsp;".JText::_('MATCHES_ASSIGNED');
-						echo '<br />'.$row->countResults."&nbsp;".JText::_('MATCHES_PLAYED');
-					
-					
+						echo $value->countAssigned."&nbsp;".JText::_('MATCHES_ASSIGNED');
+						echo '<br />'.$value->countResults."&nbsp;".JText::_('MATCHES_PLAYED');
 					?>
 				</td>
 				
@@ -156,7 +152,7 @@ $clmAccess = new CLMAccess();
 				<td align="center">
 					<?php 
 						// tl_ok/director approval
-						if ($row->abgeschlossen == '1') { 
+						if ($value->abgeschlossen == '1') { 
 							echo '<a href="javascript:void(0);" onclick="return listItemTask(\'cb'.($i).'\', \'disbale\')" title="'.JText::_('DISABLE_ENTRY').'"><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /></a>';
 						} else {
 							echo '<a href="javascript:void(0);" onclick="return listItemTask(\'cb'.($i).'\', \'enable\')" title="'.JText::_('ENABLE_ENTRY').'"><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /></a>';

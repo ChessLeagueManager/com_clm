@@ -16,19 +16,19 @@ defined('_JEXEC') or die('Restricted access');
 $sid = JRequest::getInt('saison','1');
 $zps = JRequest::getVar('zps');
 
-echo '<div id="clm"><div id="vereinsdaten">';
+echo '<div ><div id="vereinsdaten">';
 
 // Login Status prüfen
 $clmuser= $this->clmuser;
-$user	= & JFactory::getUser();
+$user	= JFactory::getUser();
 
 	$mainframe	= JFactory::getApplication();
 
 	$link = JURI::base() .'index.php?option=com_clm&view=verein&saison='. $sid .'&zps='. $zps;
 
 // Konfigurationsparameter auslesen
-	$config = &JComponentHelper::getParams( 'com_clm' );
-	$conf_vereinsdaten=$config->get('conf_vereinsdaten',1);
+	$config = clm_core::$db->config();
+	$conf_vereinsdaten=$config->conf_vereinsdaten;
 
 if ($conf_vereinsdaten != 1) {
 	$msg = JText::_( 'CLUB_DATA_DISABLED');
@@ -43,15 +43,15 @@ if ($clmuser[0]->published < 1) {
 	$msg = JText::_( 'CLUB_DATA_ACCOUNT' );
 	$mainframe->redirect( $link, $msg );
 				}
-if ( $clmuser[0]->user_clm < 100) {
+if ( $clmuser[0]->usertype == "admin") {
 	if ($clmuser[0]->zps <> $zps ) { 
 		$msg = JText::_( 'CLUB_DATA_FALSE' );
 		$mainframe->redirect( $link, $msg );
 					}
 		}
-if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps  OR $clmuser[0]->user_clm == 100){
+if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps  OR $clmuser[0]->usertype == "admin"){
 
-	$document = &JFactory::getDocument();
+	$document = JFactory::getDocument();
 	$cssDir = JURI::base().DS. 'components'.DS.'com_clm'.DS.'includes';
 	$document->addStyleSheet( $cssDir.DS.'clm_content.css', 'text/css', null, array() );
 
@@ -62,7 +62,7 @@ if (!isset($row[0]->name)) { ?>
 <?php } else {
 
 	// Browsertitelzeile setzen
-	$doc =& JFactory::getDocument();
+	$doc =JFactory::getDocument();
 	$daten['title'] = JText::_('CLUB_DATA_EDIT').' '.$row[0]->name;
 	$doc->setHeadData($daten);
  ?>

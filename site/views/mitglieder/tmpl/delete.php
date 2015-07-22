@@ -22,7 +22,7 @@ $mgl		= JRequest::getInt('mglnr');
 $clmuser 	= $this->clmuser;
 $spieler	= $this->spieler;
 
-$user 		=& JFactory::getUser();
+$user 		=JFactory::getUser();
 $link = JURI::base() . 'index.php?option=com_clm&view=mitglieder_details&saison='. $sid .'&zps='. $zps ; 
 
 if ($clmuser[0]->zps <> $zps) {
@@ -34,7 +34,7 @@ if ($clmuser[0]->zps <> $zps) {
 if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps) {
 
 	// Prüfen ob Datensatz schon vorhanden ist
-	$db	=& JFactory::getDBO();
+	$db	=JFactory::getDBO();
 	
 	// Datensatz löschen
 	$query	= "DELETE FROM #__clm_dwz_spieler"
@@ -47,18 +47,11 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 	$db->query();
 
 	// Log
-	$date =& JFactory::getDate();
-	$now = $date->toMySQL();
-	$user 		=& JFactory::getUser();
+	$date =JFactory::getDate();
+	$now = $date->toSQL();
+	$user 		=JFactory::getUser();
 	$jid_aktion =  ($user->get('id'));
 	$aktion = "Spielerdaten gelöscht FE";
-
-	$query	= "INSERT INTO #__clm_log "
-		." ( `aktion`, `jid_aktion`, `sid` , `Mgl_Nr`, `zps`, `datum`) "
-		." VALUES ('$aktion','$jid_aktion','$sid','$mglnr','$zps','$now') "
-		;
-	$db->setQuery($query);
-	$db->query();
 
 $msg = JText::_( 'Spielerdaten gelöscht FE' );
 $linkback = JURI::base() . 'index.php?option=com_clm&view=mitglieder&saison='. $sid .'&zps='. $zps; 

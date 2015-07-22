@@ -27,7 +27,7 @@ $liga 		= $this->liga;
 $clmuser 	= $this->clmuser;
 $row 		= $this->row;
 
-$user =& JFactory::getUser();
+$user =JFactory::getUser();
 	$link = JURI::base() .'index.php?option=com_clm&view=verein&saison='. $sid .'&zps='. $zps;
 
 // Login Status prüfen
@@ -40,16 +40,16 @@ if ($clmuser[0]->published < 1) {
 	$mainframe->redirect( $link, $msg );
 			}
 if ( $clmuser[0]->user_clm < 100) {
-	if ($clmuser[0]->zps <> $zps  OR $clmuser[0]->user_clm == 100) {
+	if ($clmuser[0]->zps <> $zps  OR $clmuser[0]->usertype == "admin") {
 		$msg = JText::_( 'CLUB_DATA_SENT_FALSE' );
 		$mainframe->redirect( $link, $msg );
 					}
  			}
 // Login Status prüfen
-if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps OR $clmuser[0]->user_clm == 100)
+if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps OR $clmuser[0]->usertype == "admin")
 	{
 // Prüfen ob Datensatz schon vorhanden ist
-$db	=& JFactory::getDBO();
+$db	=JFactory::getDBO();
 
 // Datensätze in Meldelistentabelle schreiben
 
@@ -123,16 +123,12 @@ else {
 	$db->query();
 	}
 // Log
-	$date =& JFactory::getDate();
-	$now = $date->toMySQL();
-	$user 		=& JFactory::getUser();
+	$date =JFactory::getDate();
+	$now = $date->toSQL();
+	$user 		=JFactory::getUser();
 	$jid_aktion =  ($user->get('id'));
 	$aktion = "Vereinsdaten FE";
 
-	$query	= "INSERT INTO #__clm_log "
-		." ( `aktion`, `jid_aktion`, `sid` , `zps`, `datum`) "
-		." VALUES ('$aktion','$jid_aktion','$sid','$zps','$now') "
-		;
 	$db->setQuery($query);
 	$db->query();
 

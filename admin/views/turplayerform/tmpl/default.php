@@ -15,11 +15,7 @@ defined('_JEXEC') or die('Restricted access');
 
 	<script language="javascript" type="text/javascript">
 
-	<?php if (JVersion::isCompatible("1.6.0")) { ?>
-		 Joomla.submitbutton = function (pressbutton) { 
-	<?php } else { ?>
-		 function submitbutton(pressbutton) {
-	<?php } ?>		
+		 Joomla.submitbutton = function (pressbutton) { 		
 			var form = document.adminForm;
 			if (pressbutton == 'cancel') {
 				submitform( pressbutton );
@@ -69,10 +65,10 @@ defined('_JEXEC') or die('Restricted access');
 					<thead>
 						<tr>
 							<th width="10">
-								<?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?>
+								#
 							</th>
 							<th width="10">
-								<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $this->playerlist ); ?>);" />
+								<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 							</th>
 							<th class="title">
 								<?php echo JHtml::_('grid.sort',   JText::_('PLAYER_NAME'), 'Spielername', $this->param['order_Dir'], $this->param['order'] ); ?>

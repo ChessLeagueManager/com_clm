@@ -12,20 +12,18 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
-
-class CLMViewSWTLigaerg extends JView {
+class CLMViewSWTLigaerg extends JViewLegacy {
 
 	function display ($tpl = null) {
 		// Daten vom Model
-		$state			=& $this->get( 'state' );
+		$state			= $this->get( 'state' );
 
-		$swt_data		=& $this->get( 'dataSWT' );
-		$swt_db_data	=& $this->get( 'dataSWTdb' );
+		$swt_data		= $this->get( 'dataSWT' );
+		$swt_db_data	= $this->get( 'dataSWTdb' );
 		
-		$db_splist		=& $this->get( 'spielerliste' );
-		$db_erglist		=& $this->get( 'ergebnisliste' );
-		$db_erglistk	=& $this->get( 'ergebnisliste' );
+		$db_splist		= $this->get( 'spielerliste' );
+		$db_erglist		= $this->get( 'ergebnisliste' );
+		$db_erglistk	= $this->get( 'ergebnisliste' );
 		// !!! WICHTIG !!!
 		// getSpielerliste muss *nach* getDataSWT aufgerufen werden, damit die
 		// aus der SWT-Datei ausgelesene ZPS bekannt ist und danach gefiltert
@@ -47,7 +45,7 @@ class CLMViewSWTLigaerg extends JView {
 		$ausgeloste_runden	= $swt_data['ausgeloste_runden'];
 		
 		// Toolbar
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( JText::_('TITLE_SWT_LEAGUE_ERG') ,'clm_headmenu_manager.png' );
 		
 		//echo "runde, gesp, ausgelost, anz_runden: $runde, $gesp_runden, $ausgeloste_runden, $anz_runden"; //DBG
@@ -73,8 +71,10 @@ class CLMViewSWTLigaerg extends JView {
 		
 			$spielertables[$p] = '';
 			for ($b = 1; $b <= $swt_db_data['anz_bretter']; $b++) {
+
 				if (isset($swt_data[$p]['hbrett_'.$b])) $hspieler = $swt_data[$p]['hbrett_'.$b];
 				else $hspieler = 0;
+
 				$hsplist = array ();
 				$hsplist[] = JHtml::_('select.option', '0', JText::_( 'SWT_LEAGUE_PLAYER_SELECT' ), 'id', 'text');
 				$hsplist = array_merge( $hsplist, $db_splist[$heim] );

@@ -12,14 +12,11 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport('joomla.application.component.controller');
-
-
 /**
  * CLM Component Controller
  * weitere extends in controllers/*
  */
-class CLMController extends JController {
+class CLMController extends JControllerLegacy {
 	
 	function __construct() {
 		
@@ -31,7 +28,7 @@ class CLMController extends JController {
 	/**
 	 * Display the view
 	 */
-	function display() {
+	function display($cachable = false, $urlparams = array()) {
 
 		parent::display();
 

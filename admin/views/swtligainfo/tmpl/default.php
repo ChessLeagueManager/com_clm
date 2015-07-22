@@ -21,11 +21,7 @@ $ordering = $this->default['ordering'];
 
 <script language="javascript" type="text/javascript">
 
-	<?php if (JVersion::isCompatible("1.6.0")) { ?>
-		 Joomla.submitbutton = function (pressbutton) { 
-	<?php } else { ?>
-		 function submitbutton(pressbutton) {
-	<?php } ?>		
+		 Joomla.submitbutton = function (pressbutton) { 		
         var form = document.adminForm;
         if (pressbutton == 'cancel') {
             submitform( pressbutton );
@@ -153,7 +149,7 @@ $ordering = $this->default['ordering'];
 					</td>
 				</tr>
 				
-		<tr>
+				<tr>
 		<td nowrap="nowrap">
 		<label for="color_order"><?php echo JText::_( 'LEAGUE_COLOR_ORDER' ); ?></label>
 		</td><td colspan="2">

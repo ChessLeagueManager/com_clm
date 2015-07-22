@@ -22,16 +22,15 @@ $termine		= $this->termine;
 $schnellmenu	= $this->schnellmenu;
 
 // Stylesheet laden
-require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'includes'.DIRECTORY_SEPARATOR.'css_path.php');
-// require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'includes'.DIRECTORY_SEPARATOR.'image_path.php');
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 // Browsertitelzeile setzen
-$doc =& JFactory::getDocument();
+$doc =JFactory::getDocument();
 $daten['title'] = JText::_('TERMINE_HEAD');
 $doc->setHeadData($daten);
 
 ?>
-<div id="clm">
+<div >
 <div id="termine">
 	<div class="componentheading"><?php echo JText::_('TERMINE_HEAD') ?>
 
@@ -43,7 +42,7 @@ $doc->setHeadData($daten);
 	</div>
 
 	<!-- Navigationsmenu -->
-    <?php require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'includes'.DIRECTORY_SEPARATOR.'submenu.php'); ?>
+    <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
     <br />
     
     <?php if (isset($termine[0]) AND $termine[0]->nr == 0) {	?>
@@ -79,7 +78,7 @@ $doc->setHeadData($daten);
         <?php // START : Terminschleife
 		if ($start == '1') $date = date("Y-m-d");
 		else $date = $start;
-		
+
 		for ($t = 0 ; $t < count ($termine); $t++) {
        
         if ( $date <= $termine[$t]->datum ) {
@@ -140,7 +139,7 @@ $doc->setHeadData($daten);
     <?php  } ?>
     
     <br />
-    <?php require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'includes'.DIRECTORY_SEPARATOR.'copy.php'); ?>
+    <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); ?>
     <div class="clr"></div>
 </div>
 </div>

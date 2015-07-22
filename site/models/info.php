@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -14,10 +14,10 @@ defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
 
-class CLMModelInfo extends JModel
+class CLMModelInfo extends JModelLegacy
 {
 
-	function CLMSid()
+	public static function CLMSid()
 	{
 	$db			= JFactory::getDBO();
 	$sid = JRequest::getInt('saison','0');     	//klkl
@@ -181,11 +181,11 @@ class CLMModelInfo extends JModel
 	{
 		$query	= $this->_getCLMSpieler( $options );
 		$result = $this->_getList( $query );
-
+		//$result = array();
 		return @$result;
 	}
 
-	function checkSpieler( $punkte )
+	public static function checkSpieler( $punkte )
 	{
 	$sid = CLMModelInfo::CLMSid();
 	
@@ -193,8 +193,8 @@ class CLMModelInfo extends JModel
 		$id			= @$options['id'];
  
 		$query = " SELECT COUNT(lid) as id FROM #__clm_meldeliste_spieler "
-			." WHERE Punkte =".$punkte
-			." AND a.sid = ".$sid
+			." WHERE Punkte = ".$punkte
+			." AND sid = ".$sid
 			;
 		$db->setQuery( $query);
 		$count	= $db->loadObjectList();
@@ -232,7 +232,7 @@ class CLMModelInfo extends JModel
 		return @$result;
 	}
 
-	function Bretter()
+	public static function Bretter()
 	{
 	$sid = CLMModelInfo::CLMSid();
 	

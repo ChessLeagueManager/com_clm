@@ -5,7 +5,7 @@
 $mainframe	= JFactory::getApplication();
 
 $token = JRequest::getVar('token');
-	$db	= &JFactory::getDBO();
+	$db	= JFactory::getDBO();
 	$db->setQuery('SELECT id FROM #__users WHERE block = 0 AND activation = '.$db->Quote($token));
 
 	// Verify the token

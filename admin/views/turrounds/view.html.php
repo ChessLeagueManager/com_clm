@@ -12,30 +12,21 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
+class CLMViewTurRounds extends JViewLegacy {
 
-class CLMViewTurRounds extends JView {
-
-	function display() {
+	function display($tpl = NULL) {
 
 		
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
-		$model =   &$this->getModel();
+		$model =   $this->getModel();
 		
 		// Die Toolbar erstellen, die über der Seite angezeigt wird
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( $model->turnier->name.": ".JText::_('ROUNDS'), 'clm_turnier.png'  );
 	
 		JToolBarHelper::spacer();
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_round';
-		if (($model->turnier->tl == CLM_ID AND $clmAccess->access() !== false) OR $clmAccess->access() === true) {
-			// auslosen
-			//if ($model->turnier->roundToDraw != 0) {
-			//	JToolBarHelper::spacer();
-			//	JToolBarHelper::custom('assignMatches', 'edit.png', 'edit_f2.png', JText::_('MATCHES_ASSIGN'), FALSE);
-			//}
+		$clmAccess = clm_core::$access;
+		if (($model->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== false) OR $clmAccess->access('BE_tournament_edit_round') === true) {
 			JToolBarHelper::spacer();
 			JToolBarHelper::publishList();
 			JToolBarHelper::unpublishList();
@@ -43,7 +34,7 @@ class CLMViewTurRounds extends JView {
 		JToolBarHelper::spacer();
 		JToolBarHelper::cancel();
 
-		if (($model->turnier->tl == CLM_ID AND $clmAccess->access() !== false) OR $clmAccess->access() === true) {
+		if (($model->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== false) OR $clmAccess->access('BE_tournament_edit_round') === true) {
 			JToolBarHelper::divider();
 			JToolBarHelper::spacer();
 			JToolBarHelper::custom( 'turform', 'config.png', 'config_f2.png', JText::_('TOURNAMENT'), false);
@@ -62,7 +53,6 @@ class CLMViewTurRounds extends JView {
 		
 		// zusätzliche Funktionalitäten
 		JHtml::_('behavior.tooltip');
-
 
 		parent::display();
 

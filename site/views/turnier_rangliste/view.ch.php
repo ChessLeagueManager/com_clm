@@ -12,19 +12,19 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewTurnier_Rangliste extends JView
+class CLMViewTurnier_Rangliste extends JViewLegacy
 {
 	function display($tpl = ch)
 	{
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$daten		= $model->getCLMTurnier();
 		$this->assignRef('daten'  , $daten);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$rang		= $model->getCLMRang();
 		$this->assignRef('rang'  , $rang);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$runde		= $model->getCLMRunde();
 		$this->assignRef('runde'  , $runde);
 

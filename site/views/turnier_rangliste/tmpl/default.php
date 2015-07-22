@@ -16,20 +16,19 @@ JHtml::_('behavior.tooltip', '.CLMTooltip');
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
-// require_once(JPATH_COMPONENT.DS.'includes'.DS.'image_path.php');
 	
 // Konfigurationsparameter auslesen
 $itemid 		= JRequest::getVar( 'Itemid' );
 $spRang		= JRequest::getVar( 'spRang' ,0);	//Sonderranglisten
 
 // $turnierid		= JRequest::getInt('turnier','1');
-$config	= &JComponentHelper::getParams( 'com_clm' );
-// $pdf_melde = $config->get('pdf_meldelisten',1);
-$fixth_tkreuz = $config->get('fixth_tkreuz',1);
+$config = clm_core::$db->config();
+// $pdf_melde = $config->pdf_meldelisten;
+$fixth_tkreuz = $config->fixth_tkreuz;
 
 // CLM-Container
-echo '<div id="clm"><div id="turnier_rangliste">';
-	
+echo '<div ><div id="turnier_rangliste">';
+
 // Componentheading
 if($spRang != 0){			//Sonderranglisten
 	$heading = $this->turnier->name.": ".$this->turnier->spRangName." ".JText::_('TOURNAMENT_RANKING'); 
@@ -41,17 +40,12 @@ if ( $this->turnier->published == 0) {
 	echo CLMContent::componentheading($heading);
 	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
 
-} elseif ($spRang == 0 and $this->turnier->playersCount < $this->turnier->teil) { //�nderung wegen Sonderranglisten
+} elseif ($spRang == 0 and $this->turnier->playersCount < $this->turnier->teil) { //Änderung wegen Sonderranglisten
 	echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
 	echo CLMContent::clmWarning(JText::_('TOURNAMENT_PLAYERLISTNOTCOMPLETE')."<br/>".JText::_('TOURNAMENT_NORANKINGEXISTING'));
 
-} elseif($this->turnier->typ == 3) { // KO-System
-	echo CLMContent::componentheading($heading);
-   require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_TABLENOTAVAILABLE'));
-	
-} elseif ($spRang != 0 and $this->turnier->playersCount == 0 ) { //Hinzugef�gt wegen Sonderranglisten
+} elseif ($spRang != 0 and $this->turnier->playersCount == 0 ) { //Hinzugefügt wegen Sonderranglisten
 	echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
 	echo CLMContent::clmWarning(JText::_('TOURNAMENT_SPECIALRANKING_NOPLAYERS'));
@@ -59,11 +53,14 @@ if ( $this->turnier->published == 0) {
 } else {
 // PDF-Link
 	echo CLMContent::createPDFLink('turnier_rangliste', JText::_('TOURNAMENT_RANKING'), array('turnier' => $this->turnier->id, 'layout' => 'rangliste', 'spRang' => $spRang));
-	echo CLMContent::createViewLink('turnier_tabelle', JText::_('RANGLISTE_GOTO_TABELLE'), array('turnier' => $this->turnier->id, 'Itemid' => $itemid) );
-
+	if($spRang != 0){			//Sonderranglisten
+	  echo CLMContent::createViewLink('turnier_tabelle', JText::_('RANGLISTE_GOTO_TABELLE'), array('turnier' => $this->turnier->id, 'spRang' => $spRang, 'Itemid' => $itemid) );
+	} else {
+	  echo CLMContent::createViewLink('turnier_tabelle', JText::_('RANGLISTE_GOTO_TABELLE'), array('turnier' => $this->turnier->id, 'Itemid' => $itemid) );
+	}
 	echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	$turParams = new JParameter($this->turnier->params);
+	$turParams = new clm_class_params($this->turnier->params);
 
 	$heim = array(1 => "W", 0 => "S");
 	$fwFieldNames = array(1 => 'sum_bhlz', 'sum_busum', 'sum_sobe', 'sum_wins');
@@ -230,7 +227,7 @@ if ( $this->turnier->published == 0) {
 							echo CLMText::getResultString($this->matrix[$this->players[$p]->snr][$rnd]->ergebnis, 0);
 							
 							echo '</a>';
-						}
+						} else { echo '&nbsp;'; }
 						echo '</div></td>';
 					}
 				echo '</tr>';
@@ -366,7 +363,7 @@ if ( $this->turnier->published == 0) {
 		
 				// alle Durchgänge
 				for ($dg=1; $dg<=$this->turnier->dg; $dg++) {
-					for ($rnd=1; $rnd<=$this->turnier->teil; $rnd++) {				
+				for ($rnd=1; $rnd<=$this->turnier->teil; $rnd++) {
 						echo '<th class="erg"><div>'.$rnd.'</div></th>';
 					}
 				}
@@ -389,15 +386,15 @@ if ( $this->turnier->published == 0) {
 						if ($rnd == ($p+1)) {
 							echo'<td class="trenner"><div>X</div></td>';
 						} else {
-							echo '<td class="erg" ><div>';
-							if (isset($this->matrix[$this->players[$p]->snr][$this->posToPlayers[$rnd]][$dg]->ergebnis)) {
-								$link = new CLMcLink();
-								$link->view = 'turnier_runde';
-								$link->more = array('turnier' => $this->turnier->id, 'runde' => $this->matrix[$this->players[$p]->snr][$this->posToPlayers[$rnd]][$dg]->runde, 'dg' => $dg, 'Itemid' => $itemid);
-								$link->makeURL();
-								echo $link->makeLink(CLMText::getResultString($this->matrix[$this->players[$p]->snr][$this->posToPlayers[$rnd]][$dg]->ergebnis, 0));					
-							}
-						echo '</div></td>';
+							echo '<td class="erg"><div>';
+								if (isset($this->matrix[$this->players[$p]->snr][$this->posToPlayers[$rnd]][$dg]->ergebnis)) {
+									$link = new CLMcLink();
+									$link->view = 'turnier_runde';
+									$link->more = array('turnier' => $this->turnier->id, 'runde' => $this->matrix[$this->players[$p]->snr][$this->posToPlayers[$rnd]][$dg]->runde, 'dg' => $dg, 'Itemid' => $itemid);
+									$link->makeURL();
+									echo $link->makeLink(CLMText::getResultString($this->matrix[$this->players[$p]->snr][$this->posToPlayers[$rnd]][$dg]->ergebnis, 0));
+								}
+							echo '</div></td>';
 						}
 					}
 				}

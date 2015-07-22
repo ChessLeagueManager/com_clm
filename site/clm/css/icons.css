@@ -1,0 +1,45 @@
+#clm .clm .clm_icons {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-flow: row wrap;
+	-moz-flex-flow: row wrap;
+	-ms-flex-flow: row wrap;
+	flex-flow: row wrap;
+	align-items:center;
+}
+#clm .clm .clm_icon {
+	justify-content: center;
+}
+#clm .clm .clm_icon a {
+    border: 1px solid #f0f0f0;
+    color: #666;
+    display: block;
+    height: 112px;
+    text-decoration: none;
+    vertical-align: middle;
+    width: 115px;
+    text-align: center;
+    margin:2px;
+}
+#clm .clm .clm_icon a:hover {
+    background: none repeat scroll 0 0 #f9f9f9;
+    border-color: #eee #ccc #ccc #eee;
+    border-left: 1px solid #eee;
+    border-style: solid;
+    border-width: 1px;
+    color: #0b55c4;
+}
+#clm .clm .clm_icon a:active {
+    background: none repeat scroll 0 0 #e9e9e9;
+}
+#clm .clm .clm_icon img {
+    margin: 0 auto;
+    padding: 10px 0;
+}
+#clm .clm .clm_icon span {
+    display: block;
+    text-align: center
+}

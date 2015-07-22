@@ -12,12 +12,12 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewTurnier_Runde extends JView
+class CLMViewTurnier_Runde extends JViewLegacy
 {
 	function display($tpl = 'pdf')
 	// Man beachte den Unterschied zum Standard View "$tpl = null" !!
 	{
-		$model	  = &$this->getModel();
+		$model	  = $this->getModel();
   		
 		$this->assignRef('turnier', $model->turnier);
 		
@@ -30,7 +30,7 @@ class CLMViewTurnier_Runde extends JView
 		$this->assignRef('points', $model->points);
 		
 	// Dokumenttyp setzen
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 		$document->setMimeEncoding('application/pdf');
 		parent::display($tpl);
 	}	

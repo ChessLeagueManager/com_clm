@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerTurRounds extends JController {
+class CLMControllerTurRounds extends JControllerLegacy {
 	
 
 	// Konstruktor
@@ -24,7 +22,7 @@ class CLMControllerTurRounds extends JController {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= & JFactory::getDBO();
+		$this->_db		= JFactory::getDBO();
 		
 		// turnierid
 		$this->id = JRequest::getInt('id');
@@ -69,12 +67,9 @@ class CLMControllerTurRounds extends JController {
 		// Turnierdaten!
 		$tournament = new CLMTournament($this->id, true);
 		// $tournament->data->typ
-		
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_round';
-		if (($tournament->data->tl != CLM_ID AND $clmAccess->access() !== true) OR $clmAccess->access() === false) {
-		//if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+
+		if (($tournament->data->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+		//if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
 			return false;
 		}
@@ -155,7 +150,7 @@ class CLMControllerTurRounds extends JController {
 				}
 			}
 	
-			$app =& JFactory::getApplication();
+			$app =JFactory::getApplication();
 			$app->enqueueMessage( JText::_('ROUND_KO_'.$roundToDraw).": ".JText::_('TOURNAMENT_MATCHES_ASSIGNED') );
 	
 			// Log
@@ -193,20 +188,17 @@ class CLMControllerTurRounds extends JController {
 		$roundID = $cid[0];
 	
 		// Instanz der Tabelle
-		$row = & JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = JTable::getInstance( 'turniere', 'TableCLM' );
 		$row->load( $this->id ); // Daten zu dieser ID laden
 
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_round';
-		if (($row->tl != CLM_ID AND $clmAccess->access() !== true) OR $clmAccess->access() === false) {
-		//if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+	        $clmAccess = clm_core::$access;      
+		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
 			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
 			return false;
 		}
 
 		// Rundendaten holen
-		$round =& JTable::getInstance( 'turnier_runden', 'TableCLM' );
+		$round =JTable::getInstance( 'turnier_runden', 'TableCLM' );
 		$round->load( $roundID ); // Daten zu dieser ID laden
 
 		// Runde existent?
@@ -230,7 +222,7 @@ class CLMControllerTurRounds extends JController {
 			return false;
 		}
 	
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		if ($enable) {
 			$app->enqueueMessage( $round->name.": "." ".JText::_('ENTRY_ENABLED') );
 		} else {
@@ -265,14 +257,12 @@ class CLMControllerTurRounds extends JController {
 		JRequest::checkToken() or die( 'Invalid Token' );
 
 		// Instanz der Tabelle
-		$row = & JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = JTable::getInstance( 'turniere', 'TableCLM' );
 		$row->load( $this->id ); // Daten zu dieser ID laden
 
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_round';
-		if (($row->tl != CLM_ID AND $clmAccess->access() !== true) OR $clmAccess->access() === false) {
-		//if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+	        $clmAccess = clm_core::$access;      
+		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+		//if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
 			return false;
 		}
@@ -282,7 +272,7 @@ class CLMControllerTurRounds extends JController {
 		$roundID = $cid[0];
 	
 		// Rundendaten holen
-		$round =& JTable::getInstance( 'turnier_runden', 'TableCLM' );
+		$round =JTable::getInstance( 'turnier_runden', 'TableCLM' );
 		$round->load( $roundID ); // Daten zu dieser ID laden
 
 		// Runde existent?
@@ -315,7 +305,7 @@ class CLMControllerTurRounds extends JController {
 			return false;
 		}
 	
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		if ($approve) {
 			$app->enqueueMessage( $round->name." ".JText::_('CLM_APPROVED') );
 		} else {
@@ -342,20 +332,18 @@ class CLMControllerTurRounds extends JController {
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
 		// Instanz der Tabelle
-		$row = & JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = JTable::getInstance( 'turniere', 'TableCLM' );
 		$row->load( $this->id ); // Daten zu dieser ID laden
 
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if (($row->tl != CLM_ID AND $clmAccess->access() !== true) OR $clmAccess->access() === false) {
-		//if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+	        $clmAccess = clm_core::$access;      
+		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
+		//if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
 			return false;
 		}
 	
 		// TODO? evtl global inconstruct anlegen
-		$user 		=& JFactory::getUser();
+		$user 		=JFactory::getUser();
 		
 		$cid = JRequest::getVar('cid', array(), '', 'array');
 		JArrayHelper::toInteger($cid);
@@ -380,7 +368,7 @@ class CLMControllerTurRounds extends JController {
 				JError::raiseWarning(500, JText::_( 'DB_ERROR', true ) );
 			}
 			
-			$app =& JFactory::getApplication();
+			$app =JFactory::getApplication();
 			if ($publish) {
 				$app->enqueueMessage( CLMText::sgpl(count($cid), JText::_('ROUND'), JText::_('ROUNDS'))." ".JText::_('CLM_PUBLISHED') );
 			} else {
@@ -430,14 +418,12 @@ class CLMControllerTurRounds extends JController {
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
 		// Instanz der Tabelle
-		$row = & JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = JTable::getInstance( 'turniere', 'TableCLM' );
 		$row->load( $this->id ); // Daten zu dieser ID laden
 
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if (($row->tl != CLM_ID AND $clmAccess->access() !== true) OR $clmAccess->access() === false) {
-		//if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+	        $clmAccess = clm_core::$access;      
+		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
+		//if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
 			return false;
 		}
@@ -446,14 +432,14 @@ class CLMControllerTurRounds extends JController {
 		JArrayHelper::toInteger($cid);
 		$rundenid = $cid[0];
 	
-		$row =& JTable::getInstance( 'turnier_runden', 'TableCLM' );
+		$row =JTable::getInstance( 'turnier_runden', 'TableCLM' );
 		if ( !$row->load( $rundenid ) ) {
 			JError::raiseWarning( 500, CLMText::errorText('ROUND', 'NOTEXISTING') );
 			return false;
 		}
 		$row->move( $inc, '' );
 	
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		$app->enqueueMessage( $row->name.": ".JText::_('ORDERING_CHANGED') );
 		
 		return true;
@@ -467,14 +453,12 @@ class CLMControllerTurRounds extends JController {
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
 		// Instanz der Tabelle
-		$row = & JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = JTable::getInstance( 'turniere', 'TableCLM' );
 		$row->load( $this->id ); // Daten zu dieser ID laden
 
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_round';
-		if (($row->tl != CLM_ID AND $clmAccess->access() !== true) OR $clmAccess->access() === false) {
-		//if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+	        $clmAccess = clm_core::$access;      
+		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+		//if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
 			return false;
 		}
@@ -486,7 +470,7 @@ class CLMControllerTurRounds extends JController {
 		$order		= JRequest::getVar( 'order', array(0), 'post', 'array' );
 		JArrayHelper::toInteger($order, array(0));
 	
-		$row =& JTable::getInstance( 'turnier_runden', 'TableCLM' );
+		$row =JTable::getInstance( 'turnier_runden', 'TableCLM' );
 		$groupings = array();
 	
 		// update ordering values
@@ -505,10 +489,10 @@ class CLMControllerTurRounds extends JController {
 		// execute updateOrder for each parent group
 		$groupings = array_unique( $groupings );
 		foreach ($groupings as $group){
-			$row->reorder('saison = '.(int) $group);
+			$row->reorder('sid = '.(int) $group);
 		}
 		
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		$app->enqueueMessage( JText::_('NEW_ORDERING_SAVED') );
 	
 		$this->adminLink->makeURL();

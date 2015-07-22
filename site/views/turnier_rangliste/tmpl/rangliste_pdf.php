@@ -14,9 +14,9 @@
 defined('_JEXEC') or die('Restricted access');
 
 $turnierid		= JRequest::getInt('turnier','1');
-$config			= &JComponentHelper::getParams( 'com_clm' );
+$config			= clm_core::$db->config();
 
-$turParams = new JParameter($this->turnier->params);
+$turParams = new clm_class_params($this->turnier->params);
 
 $heim = array(1 => "W", 0 => "S");
 	
@@ -52,8 +52,8 @@ $br92 = 10;
 $font = 10;
 
 // Datum der Erstellung
-$date =& JFactory::getDate();
-$now = $date->toMySQL();
+$date =JFactory::getDate();
+$now = $date->toSQL();
 
 $pdf=new PDF();
 $pdf->AliasNbPages();
@@ -155,7 +155,7 @@ $pdf->SetTextColor(0);
 		if ($this->turnier->$fwFieldName > 0 AND $this->turnier->$fwFieldName < 50) {
 			$pdf->Cell($br92,$zelle,CLMtext::tiebrFormat($this->turnier->$fwFieldName, $this->players[$p]->$plTiebrField),1,0,'C',1); 
 		}
-		}
+	}
 	$pdf->Cell(1,$zelle," ",0,1,'C');
 }	
 }

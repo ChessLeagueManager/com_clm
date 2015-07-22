@@ -12,74 +12,74 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewStatistik extends JView
+class CLMViewStatistik extends JViewLegacy
 {
 	function display($tpl = null)
 	{
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$liga		= $model->getCLMliga();
 		$this->assignRef('liga'  , $liga);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$remis		= $model->getCLMRemis();
 		$this->assignRef('remis'  , $remis);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$kampflos	= $model->getCLMKampflos();
 		$this->assignRef('kampflos'  , $kampflos);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$heim		= $model->getCLMHeim();
 		$this->assignRef('heim'  , $heim);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$gast		= $model->getCLMGast();
 		$this->assignRef('gast'  , $gast);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$gesamt		= $model->getCLMGesamt();
 		$this->assignRef('gesamt'  , $gesamt);
 
-		//$model		= &$this->getModel();
+		//$model		= $this->getModel();
 		//$spieler	= $model->getCLMSpieler();
 		//$this->assignRef('spieler'  , $spieler);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$bestenliste	= $model->getCLMBestenliste();
 		$this->assignRef('bestenliste'  , $bestenliste);
 		
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$mannschaft	= $model->getCLMMannschaft();
 		$this->assignRef('mannschaft'  , $mannschaft);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$brett		= $model->getCLMBrett();
 		$this->assignRef('brett'  , $brett);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$rbrett		= $model->getCLMRBrett();
 		$this->assignRef('rbrett'  , $rbrett);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$kbrett		= $model->getCLMKBrett();
 		$this->assignRef('kbrett'  , $kbrett);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$kgmannschaft	= $model->getCLMkgMannschaft();
 		$this->assignRef('kgmannschaft'  , $kgmannschaft);
 
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		$kvmannschaft	= $model->getCLMkvMannschaft();
 		$this->assignRef('kvmannschaft'  , $kvmannschaft);
 
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 		
 		// Title in Browser
 		$headTitle = CLMText::composeHeadTitle( array( $liga[0]->name, JText::_('LEAGUE_STATISTIK') ) );
 		$document->setTitle( $headTitle );
 
 		/* Call the state object */
-		$state =& $this->get( 'state' );
+		$state = $this->get( 'state' );
  
 		/* Get the values from the state object that were inserted in the model's construct function */
 		$lists['order']     = $state->get( 'filter_order_bl' );

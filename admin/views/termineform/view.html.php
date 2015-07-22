@@ -12,23 +12,21 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
+class CLMViewTermineForm extends JViewLegacy {
 
-class CLMViewTermineForm extends JView {
-
-	function display() {
+	function display($tpl = NULL) {
 
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
-		$model =   &$this->getModel();
+		$model =   $this->getModel();
 		
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		
 		if (JRequest::getVar( 'task') == 'edit') { 
 			$text = JText::_( 'EDIT' );
 		} else {
 			$text = JText::_( 'NEW' );
 		}
-		JToolBarHelper::title( JText::_('TITLE_TERMINE').": ".JText::_('TERMINE_TASK').': <small><small>[ '. $text.' ]</small></small>', 'clm_headmenu_termine.png' );
+		JToolBarHelper::title( JText::_('TITLE_TERMINE').": ".JText::_('TERMINE_TASK').': [ '. $text.' ]', 'clm_headmenu_termine.png' );
 		JToolBarHelper::save();
 		JToolBarHelper::apply();
 		JToolBarHelper::spacer();
@@ -38,7 +36,7 @@ class CLMViewTermineForm extends JView {
 		JRequest::setVar( 'hidemainmenu', 1 );
 
 		// Document/Seite
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 
 		// JS-Array jtext -> Fehlertexte
 		$document->addScriptDeclaration("var jserror = new Array();");

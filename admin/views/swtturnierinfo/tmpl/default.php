@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link http://www.fishpoke.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -15,8 +15,7 @@ $swt = JRequest::getVar('swt', '', 'post', 'string');
 $update = JRequest::getVar('update', 0, 'post', 'int');
 $tid = JRequest::getVar('turnier', 0, 'post', 'int');
 
-$turParams = new JParameter($this->turnier->params);
-
+$turParams = new clm_class_params($this->turnier->params);
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm" >

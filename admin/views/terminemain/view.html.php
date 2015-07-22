@@ -12,33 +12,29 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
+class CLMViewTermineMain extends JViewLegacy {
 
-class CLMViewTermineMain extends JView {
-
-	function display() {
+	function display($tpl = NULL) {
 
 		
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
-		$model =   &$this->getModel();
+		$model =   $this->getModel();
 		
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( JText::_( 'TITLE_TERMINE' ), 'clm_headmenu_termine.png' );
 	
-		JToolBarHelper::addNewX();
-		JToolBarHelper::customX( 'copy', 'copy.png', 'copy_f2.png', JText::_('TERMINE_COPY'));
+		JToolBarHelper::addNew();
+		JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', JText::_('TERMINE_COPY'));
 		
 		JToolBarHelper::spacer();
-		JToolBarHelper::editListX();
+		JToolBarHelper::editList();
 		
 		JToolBarHelper::spacer();
 		JToolBarHelper::publishList();
 		JToolBarHelper::unpublishList();
-		
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_event_delete';
-		if ( $clmAccess->access() !== false) {
+
+		$clmAccess = clm_core::$access;
+		if ( $clmAccess->access('BE_event_delete') !== false) {
 			JToolBarHelper::spacer();
 			JToolBarHelper::custom('delete','delete.png','delete_f2.png', JText::_('TERMINE_DELETE')); 
 		}
@@ -58,7 +54,6 @@ class CLMViewTermineMain extends JView {
 		JHtml::_('behavior.tooltip');
 
 		parent::display();
-
 	}
 
 }

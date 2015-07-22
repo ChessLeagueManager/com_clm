@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link http://www.fishpoke.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -13,7 +13,7 @@
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.model');
 
-class CLMModelDWZ extends JModel
+class CLMModelDWZ extends JModelLegacy
 {
 
 	function _getCLMzps ()
@@ -57,7 +57,7 @@ class CLMModelDWZ extends JModel
 	$id	= @$options['id'];
  
 	$query = "SELECT Vereinname FROM #__clm_dwz_vereine as a "
-		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
+		." LEFT JOIN #__clm_saison as s ON s.id = ".$sid
 		." WHERE a.ZPS = '$zps'"
 		." AND a.sid = ".$sid
 		." AND s.published = 1"

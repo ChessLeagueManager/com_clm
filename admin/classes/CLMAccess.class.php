@@ -16,26 +16,46 @@
 	
 class CLMAccess {
 
+		// Korrektur durch alten PHP 4.x Code
+		private $_db;
+		private $_season;
+
 	function __construct() {
 	  // DB
-		$this->_db				= & JFactory::getDBO();
+		$this->_db				= JFactory::getDBO();
 	  // season
 		$query = ' SELECT id FROM #__clm_saison
 					WHERE published = 1 AND archiv = 0
 					ORDER BY name DESC LIMIT 1;' ;
 		$this->_db->setQuery($query);
+
+		// !NOTE: loadObject gibt null zurück wenn die Abfrage kein Ergebnis ausgibt
+		// wenn _season nicht gesetzt wird gibt es ungültigen SQL Code.
+		// Das ist mist und führt unter Joomla 3.2 aus Sicherheitsgründen zu Fehlern :(
+		// Der gesamte Code muss darauf untersucht werden!!!
+		if(!is_null($this->_db->loadObject()))
+		{
 		$this->_season = $this->_db->loadObject()->id;
+		}
+		else
+		{
+
+		}
 		
 		$query = ' 	SELECT usertype FROM #__clm_user
 					WHERE sid = '.$this->_season.' AND jid = '.CLM_ID.' LIMIT 1;' ;
 		$this->_db->setQuery($query);
-		$this->_usertype = $this->_db->loadObject()->usertype;
+
+		$out=$this->_db->loadObject();
+		if(isset($out->usertype)){
+		$this->_usertype = $out->usertype;
  
 		$query = ' 	SELECT be_params FROM #__clm_usertype '
 				 .' WHERE usertype = "'.$this->_usertype.'" LIMIT 1;' ;
 		$this->_db->setQuery($query);
 		$this->_be_params = $this->_db->loadObject()->be_params;
-	
+		}else{$this->_be_params="";}
+
 	  // parameters
 		$this->accesspoint		= '';  // wird von außen befüllt mit accesspoint like BE_league_create
 		$this->accessvalue		= '';  // wird von außen befüllt mit operator und accessvalue (z.B. =1 oder >0) 

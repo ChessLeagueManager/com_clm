@@ -14,15 +14,13 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerSWT extends JController
+class CLMControllerSWT extends JControllerLegacy
 {
 	function __construct() {		
 		parent::__construct();		
 	}
 	
-	function display() { 
+	function display($cachable = false, $urlparams = array()) { 
 		JRequest::setVar('view','swt');
 		parent::display(); 
 	} 

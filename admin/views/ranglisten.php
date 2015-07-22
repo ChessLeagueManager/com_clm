@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -13,28 +13,25 @@
 
 class CLMViewRanglisten
 {
-function setRanglistenToolbar($check)
+public static function setRanglistenToolbar($check)
 	{
 	JToolBarHelper::title(   JText::_( 'TITLE_RANGLISTE' ), 'generic.png' );	
 	JToolBarHelper::publish();
 	JToolBarHelper::unpublish();
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
-	$clmAccess->accesspoint = 'BE_club_edit_ranking';
-	if ($clmAccess->access() === true) {
-	//if ((int)$check[0]->usertype == 'admin') {
-	JToolBarHelper::customX( 'copy', 'copy.png', 'copy_f2.png', JText::_('COPY') ); 
+	$clmAccess = clm_core::$access;
+	if ($clmAccess->access('BE_club_edit_ranking') === true) {
+	JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', JText::_('COPY') ); 
 	}
 	JToolBarHelper::deleteList();
-	JToolBarHelper::editListX();
-	JToolBarHelper::addNewX();
+	JToolBarHelper::editList();
+	JToolBarHelper::addNew();
 	JToolBarHelper::help( 'screen.clm.info' );
 	}
 
-function Ranglisten ( &$rows, &$lists, &$pageNav, $option )
+public static function Ranglisten ( &$rows, &$lists, &$pageNav, $option )
 	{
-	$db		= &JFactory::getDBO();
-	$user 		= &JFactory::getUser();
+	$db		= JFactory::getDBO();
+	$user 		= JFactory::getUser();
 	$jid 		= $user->get('id');
 	$sql = " SELECT usertype FROM #__clm_user "
 		." WHERE jid =".$jid
@@ -72,10 +69,10 @@ function Ranglisten ( &$rows, &$lists, &$pageNav, $option )
 			<thead>
 				<tr>
 					<th width="10">
-						<?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?>
+						#
 					</th>
 					<th width="10">
-						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $rows ); ?>);" />
+						<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 					</th>
 					<th class="title">
 						<?php echo JHtml::_('grid.sort',   'RANGLISTE_VEREIN', 'c.vname', @$lists['order_Dir'], @$lists['order'] ); ?>
@@ -84,7 +81,7 @@ function Ranglisten ( &$rows, &$lists, &$pageNav, $option )
 						<?php echo JHtml::_('grid.sort',   'RANGLISTE_GRUPPE', 'a.Meldelschluss', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="10%">
-						<?php echo JHtml::_('grid.sort',   'RANGLISTE_AUTOR', 'a.user_clm', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo JHtml::_('grid.sort',   'RANGLISTE_AUTOR', 'a.rang', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="11%">
 						<?php echo JHtml::_('grid.sort',   'RANGLISTE_SAISON', 'c.name', @$lists['order_Dir'], @$lists['order'] ); ?>
@@ -132,17 +129,11 @@ function Ranglisten ( &$rows, &$lists, &$pageNav, $option )
 					</td>
 
 					<td>
-						<?php
-						if ( JTable::isCheckedOut($user->get ('id'), $row->checked_out ) ) {
-							echo $row->name;
-						} else {
-							?>
+
 								<span class="editlinktip hasTip" title="<?php echo JText::_( 'RANGLISTE_EDIT' ).' ';?>: <?php echo $row->vname; ?>">
 							<a href="<?php echo $link; ?>">
 								<?php echo $row->vname; ?></a></span>
-							<?php
-						}
-						?>
+
 					</td>
 
 					<td align="center">
@@ -186,14 +177,14 @@ function Ranglisten ( &$rows, &$lists, &$pageNav, $option )
 		<?php
 	}
 
-function setRanglisteToolbar($vname)
+public static function setRanglisteToolbar($vname)
 	{
 
 		$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
 		JArrayHelper::toInteger($cid, array(0));
 		if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
 			else { $text = JText::_( 'New' );}
-		JToolBarHelper::title(  JText::_( 'RANGLISTE' )." $vname : <small><small>[ ". $text.' ]</small></small>' );
+		JToolBarHelper::title(  JText::_( 'RANGLISTE' )." $vname : [ ". $text.' ]' );
 		JToolBarHelper::custom('sortieren','back.png','edit_f2.png','REORDER',false);
 		JToolBarHelper::custom('pruefen','back.png','edit_f2.png','RANGLISTE_CHECK',false);	
 		JToolBarHelper::custom('neu_laden','back.png','edit_f2.png','RANGLISTE_LOAD',false);
@@ -203,7 +194,7 @@ function setRanglisteToolbar($vname)
 		JToolBarHelper::help( 'screen.clm.edit' );
 	}
 
-function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$gname,$sname,$cid,$exist,$count,$gid_exist)
+public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$gname,$sname,$cid,$exist,$count,$gid_exist)
 	{
 		CLMViewRanglisten::setRanglisteToolbar($vname);
 		JRequest::setVar( 'hidemainmenu', 1 );
@@ -221,23 +212,29 @@ function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$gname,$sname,$c
 	document.adminForm.submit();
 	}
 
-	<?php if (JVersion::isCompatible("1.6.0")) { ?>
-		 Joomla.submitbutton = function (pressbutton) { 
-	<?php } else { ?>
-		 function submitbutton(pressbutton) {
-	<?php } ?>		
+		 Joomla.submitbutton = function (pressbutton) { 		
 		var form = document.adminForm;
 		var pre_task = document.getElementsByName ( "pre_task") [0];
 
-		if (pressbutton == 'sortieren') { Sortieren() }
-		else if (pressbutton == 'pruefen') { Pruefbutton() }
-		else if (pressbutton == 'neu_laden') { location.reload() }
-	else {
+		if (pressbutton == 'sortieren') { 
+			//alert( 'sort:'+pressbutton+'test2' );
+			Sortieren(); return true; }
+		if (pressbutton == 'pruefen') { 
+	//alert( 'test1'+pressbutton+'test2' );
+			Pruefbutton(); 	return true; }
+		if (pressbutton == 'neu_laden') { 
+			location.reload(); return true; }
+		if (pressbutton == 'save') { 
+			if (Pruefen()==false) return; }
+		if (pressbutton == 'apply') { 
+			if (Pruefen()==false) return; }
 		if (pre_task.value == 'add') {
 		if (pressbutton == 'cancel') {
-			submitform( pressbutton );
-			return;
-		}
+				submitform( pressbutton ); return; }
+			if (pressbutton == 'save') { 
+				if (Pruefen()==false) return; }
+			if (pressbutton == 'apply') { 
+				if (Pruefen()==false) return; }
 		// do field validation
 		if (form.filter_vid.value == "0") {
 			alert( "<?php echo JText::_( 'RANGLISTE_VEREIN_ANGEBEN', true ); ?>" );
@@ -248,11 +245,13 @@ function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$gname,$sname,$c
 		} else {
 			submitform( pressbutton );
 		}
-		}
-		else {
+		} else {
+			if (pressbutton == 'save') { 
+				if (Pruefen()==false) return; }
+			if (pressbutton == 'apply') { 
+				if (Pruefen()==false) return; }
 			submitform( pressbutton );
 		}
-	}
 	}
 
 function Zcheck(Wert)
@@ -263,7 +262,7 @@ function Zcheck(Wert)
         Wert.charAt(i) > "9")
       chkZ = -1;
   if (chkZ == -1) {
-   return false
+   return false;
    }
   else {return true};
  }
@@ -325,7 +324,7 @@ function Spielerschreiben(i)
     document.getElementById('MGL'+i).innerHTML=Spieler[i][3];
     document.getElementById('DWZ'+i).innerHTML=Spieler[i][4];
     document.getElementById('DWI'+i).innerHTML=Spieler[i][5];
-    <?php if (UsePKZ) { ?>document.getElementById('PKZ'+i).innerHTML=Spieler[i][6];
+    <?php if (isset($UsePKZ) AND $UsePKZ == 1) { ?>document.getElementById('PKZ'+i).innerHTML=Spieler[i][6];
     document.getElementsByName('PKZ'+i)[0].innerHTML=Spieler[i][6];
     <?php } ?>
 }
@@ -365,7 +364,7 @@ function Sortieren()
     Spieler[i][3]=document.getElementById('MGL'+i).innerHTML-0;
     Spieler[i][4]=document.getElementById('DWZ'+i).innerHTML-0;
     Spieler[i][5]=document.getElementById('DWI'+i).innerHTML-0;
-    <?php if (UsePKZ) { ?>Spieler[i][6]=document.getElementById('PKZ'+i).innerHTML-0;<?php } ?>
+    <?php if (isset($UsePKZ) AND $UsePKZ == 1) { ?>Spieler[i][6]=document.getElementById('PKZ'+i).innerHTML-0;<?php } ?>
     i++;    
    }
   QSort(0,i-1,0)
@@ -380,12 +379,34 @@ function Pruefen()
  {
   Sortieren();
   var Ma=0;
+  var Ra=0;
   var Sp=0;
   var Ersatz=1;
   i=0;
+  var TempMa01=document.getElementsByName('MA'+i)[0].value;
+  if (TempMa01==0) {
+	alert('Keine Daten!');
+	return false;
+  }
   while(document.getElementsByName('MA'+i)[0]) {
     var TempMa=document.getElementsByName('MA'+i)[0].value;
     var TempRa=document.getElementsByName('RA'+i)[0].value;
+	if (TempMa==0) {
+		break;
+	}
+	//Hilfsprüfung: nur auf doppelte Einträge
+    if ((TempMa==Ma) && (TempRa==Ra)) {
+        alert('Doppelte Rangnummer! \n Mannschaft: '+Ma+'  Rang: '+Ra);
+		return false;
+	} else {
+        Ma=TempMa;
+        Ra=TempRa;
+		i++;
+		continue;
+	}
+	return true;
+	//Ende Hilfsprüfung
+
     if (TempMa==Ma) {
       if (TempRa==(Sp+1)) {
         i++;
@@ -444,82 +465,6 @@ function Pruefen()
 function Pruefbutton()
  {
   if (Pruefen()==true) alert('Alles in Ordnung');
- }
-function Neuer(Zeile,Objekt)
- {
-  
-  alert('Diese Funktion ist deaktiviert.\n\nGrund:\nEs ist noch unklar, an welche zusätzliche Stellen der Eintrag gehört.');
-//  return false;
-  ObZeile=document.getElementById('Neuer');
-  NeueZeile=document.createElement('tr');
-    NeueZelle=document.createElement('td');
-      NeuesInput=document.createElement('input');
-      NeuesInput.setAttribute('type','text');
-      NeuesInput.setAttribute('name','MA'+Zeile);
-      NeuesInput.setAttribute('size','3');
-      NeuesInput.setAttribute('maxLength','3');
-      NeuesInput.setAttribute('value','0');
-      NeuesInput.setAttribute('onChange','Mcheck(this)');
-    NeueZelle.appendChild(NeuesInput);
-  NeueZeile.appendChild(NeueZelle.cloneNode(true));
-      NeuesInput.setAttribute('name','RA'+Zeile);
-      NeuesInput.setAttribute('size','5');
-      NeuesInput.setAttribute('maxLength','5');
-      NeuesInput.setAttribute('onChange','Rcheck(this)');
-    NeueZelle.appendChild(NeuesInput);
-  NeueZeile.appendChild(NeueZelle.cloneNode(true));
-    NeueZelle=document.createElement('td');
-    NeueZelle.innerHTML=prompt('Wie hei�t der Spieler?','');
-    NeueZelle.setAttribute('id','SP'+Zeile);
-    NeueZelle.setAttribute('style','text-align:left; font-weight:bold');
-  NeueZeile.appendChild(NeueZelle.cloneNode(true));
-    <?php if (UsePKZ) { 
-  ?>var PKZ=prompt('Welche PKZ hat der Spieler?','0');
-    while (!Zcheck(PKZ)) PKZ=prompt('Die PKZ ist eine Zahl!\n\nWelche PKZ hat der Spieler?',PKZ);
-    NeueZelle.innerHTML=PKZ;
-    NeueZelle.setAttribute('id','PKZ'+Zeile);
-    NeueZelle.setAttribute('style','text-align:right;');
-  NeueZeile.appendChild(NeueZelle.cloneNode(true));
-      NeuesInput=document.createElement('input');
-      NeuesInput.setAttribute('type','hidden');
-      NeuesInput.setAttribute('name','PKZ'+Zeile);
-      NeuesInput.setAttribute('value',NeueZelle.innerHTML);
-    document.getElementById('inputfelder').appendChild(NeuesInput.cloneNode(true));
-  <?php } ?>var PKZ=prompt('Welche Mitgliedsnummer hat der Spieler?','0');
-    while (!Zcheck(PKZ)) PKZ=prompt('Die Mitgliedsnummer ist eine Zahl!\n\nWelche Mitgliedsnummer hat der Spieler?',PKZ);
-    NeueZelle.innerHTML=PKZ;
-    NeueZelle.setAttribute('id','MGL'+Zeile);
-    NeueZelle.setAttribute('style','text-align:right;');
-  NeueZeile.appendChild(NeueZelle.cloneNode(true));
-      NeuesInput=document.createElement('input');
-      NeuesInput.setAttribute('type','hidden');
-      NeuesInput.setAttribute('name','MGL'+Zeile);
-      NeuesInput.setAttribute('value',NeueZelle.innerHTML);
-    document.getElementById('inputfelder').appendChild(NeuesInput.cloneNode(true));
-    NeueZelle.innerHTML='0';
-    NeueZelle.setAttribute('id','DWZ'+Zeile);
-  NeueZeile.appendChild(NeueZelle.cloneNode(true));
-    NeueZelle=document.createElement('td');
-    NeueZelle.innerHTML='-';
-  NeueZeile.appendChild(NeueZelle.cloneNode(true));
-    NeueZelle=document.createElement('td');
-    NeueZelle.innerHTML='0';
-    NeueZelle.setAttribute('id','DWI'+Zeile);
-    NeueZelle.setAttribute('style','text-align:right;');
-  NeueZeile.appendChild(NeueZelle.cloneNode(true));
-  document.getElementById('Neuer').parentNode.insertBefore(NeueZeile.cloneNode(true),document.getElementById('Neuer'));
-  Objekt.setAttribute('onclick',(Zeile+1)+',this');
-  NeuesInput=document.createElement('input');
-  NeuesInput.setAttribute('type','hidden');
-  NeuesInput.setAttribute('name','Name[]');
-  NeuesInput.setAttribute('value',document.getElementById('SP'+Zeile).innerHTML);
-  document.getElementById('inputfelder').appendChild(NeuesInput.cloneNode(true));
-  NeuesInput.setAttribute('name','PKZ[]');
-  NeuesInput.setAttribute('value',document.getElementById('PKZ'+Zeile).innerHTML);
-  document.getElementById('inputfelder').appendChild(NeuesInput.cloneNode(true));
-  NeuesInput.setAttribute('name','MGL[]');
-  NeuesInput.setAttribute('value',document.getElementById('MGL'+Zeile).innerHTML);
-  document.getElementById('inputfelder').appendChild(NeuesInput.cloneNode(true));
  }
 
  
@@ -679,7 +624,7 @@ for ($x=0; $x < (count($spieler)-$count); $x++) {
 	<td class="key" nowrap="nowrap">
 	<input type="text" name="RA<?php echo $x ?>" size="5" maxLength="5" value="<?php echo $spieler[$rang[$x]]->Rang; ?>" onChange="Rcheck(this)">
 	</td>
-	<td id="SP<?php echo $x; ?>" class="key" nowrap="nowrap">
+	<td id="SP<?php echo $x; ?>" name="SP<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$rang[$x]]->Spielername; ?></td>
 	<td id="MGL<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$rang[$x]]->Mgl_Nr; ?></td>
@@ -705,7 +650,7 @@ for ($x=0; $x < (count($spieler)-$count); $x++) {
 	<td class="key" nowrap="nowrap">
 	<input type="text" name="RA<?php echo $x ?>" size="5" maxLength="5" <?php if(isset($spieler[$x]->Rang)) { ?> value="<?php echo $spieler[$x]->Rang; ?>" <?php } ?> onChange="Rcheck(this)">
 	</td>
-	<td id="SP<?php echo $x; ?>" class="key" nowrap="nowrap">
+	<td id="SP<?php echo $x; ?>" name="SP<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->Spielername; ?></td>
 	<td id="MGL<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->Mgl_Nr; ?></td>

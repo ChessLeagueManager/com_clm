@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelCatForm extends JModel {
+class CLMModelCatForm extends JModelLegacy {
 
 	// benötigt für Pagination
 	function __construct()
@@ -21,7 +19,7 @@ class CLMModelCatForm extends JModel {
 		parent::__construct();
 
 		// user
-		$this->user =& JFactory::getUser();
+		$this->user =JFactory::getUser();
 		
 		$this->_getData();
 
@@ -33,7 +31,7 @@ class CLMModelCatForm extends JModel {
 	function _getData() {
 		
 		// Instanz der Tabelle
-		$this->category = & JTable::getInstance( 'categories', 'TableCLM');
+		$this->category = JTable::getInstance( 'categories', 'TableCLM');
 		if ($id = JRequest::getInt('id')) {
 			$this->category->load($id);
 		}

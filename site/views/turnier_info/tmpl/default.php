@@ -17,7 +17,7 @@ defined('_JEXEC') or die('Restricted access');
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 
-echo "<div id='clm'><div id='turnier_info'>";
+echo "<div><div id='turnier_info'>";
 
 // Konfigurationsparameter auslesen
 $itemid 		= JRequest::getVar( 'Itemid' );

@@ -1,0 +1,114 @@
+#clm .icon-32-export {
+    background-image: url(../images/icons/icon-32-export.png);
+}
+
+#clm .icon-32-download {
+    background-image: url(../images/icons/icon-32-download.png);
+}
+
+#clm .icon-32-refresh {
+    background-image: url(../images/icons/icon-32-refresh.png);
+}
+
+#clm .icon-32-specialrankings {
+    background-image: url(../images/icons/icon-32-specialrankings.png);
+}
+
+#clm .icon-32-minus {
+    background-image: url(../images/icons/icon-32-minus.png);
+}
+
+#clm .icon-48-clm_info, #clm .icon-48-clm_logo_bg {
+    background-image: url(../images/icons/clm_logo_bg.png);
+    text-shadow: #c0c0c0 1px 2px;
+    color: #5B8383;
+}
+
+#clm .icon-48-clm_user {
+    background-image: url(../images/icons/clm_user.png);
+}
+
+#clm .icon-48-clm_manager {
+    background-image: url(../images/icons/clm_manager.png);
+}
+
+#clm .icon-48-clm_logging {
+    background-image: url(../images/icons/clm_logging.png);
+}
+
+#clm .icon-48-clm_einstellungen {
+    background-image: url(../images/icons/clm_einstellungen.png);
+    background-position: left;
+}
+
+#clm .icon-48-clm_settings {
+    background-image: url(../images/icons/clm_settings.png);
+}
+
+#clm .icon-48-clm_settings_2 {
+    background-image: url(../images/icons/clm_settings_2.png);
+}
+
+#clm .icon-48-clm_turnier {
+    background-image: url(../images/icons/clm_turnier.png);
+    background-position: left;
+}
+
+#clm .icon-48-clm_headmenu_benutzer {
+    background-image: url(../images/icons/clm_headmenu_benutzer.png);
+    background-position: left;
+}
+
+#clm .icon-48-clm_headmenu_datenbank {
+    background-image: url(../images/icons/clm_headmenu_datenbank.png);
+    background-position: left;
+}
+
+#clm .icon-48-clm_headmenu_liga {
+    background-image: url(../images/icons/clm_headmenu_liga.png);
+    background-position: left;
+}
+
+#clm .icon-48-clm_headmenu_mturnier {
+    background-image: url(../images/icons/clm_headmenu_mturnier.png);
+    background-position: left;
+}
+
+#clm .icon-48-clm_headmenu_mannschaften {
+    background-image: url(../images/icons/clm_headmenu_mannschaften.png);
+    background-position: left;
+}
+
+#clm .icon-48-clm_headmenu_saison {
+    background-image: url(../images/icons/clm_headmenu_saison.png);
+    background-position: left;
+}
+
+#clm .icon-48-clm_headmenu_sonderranglisten {
+    background-image: url(../images/icons/clm_headmenu_sonderranglisten.png);
+    background-position: left;
+}
+
+#clm .icon-48-clm_headmenu_einstellungen {
+    background-image: url(../images/icons/clm_headmenu_einstellungen.png);
+    background-position: left;
+}
+
+#clm .icon-48-clm_headmenu_vereine {
+    background-image: url(../images/icons/clm_headmenu_vereine.png);
+    background-position: left;
+}
+
+#clm .icon-48-clm_headmenu_mitglieder {
+    background-image: url(../images/icons/clm_headmenu_mitglieder.png);
+    background-position: left;
+}
+
+#clm .icon-48-clm_headmenu_manager {
+    background-image: url(../images/icons/clm_headmenu_manager.png);
+    background-position: left;
+}
+
+#clm .icon-48-clm_headmenu_termine {
+    background-image: url(../images/icons/clm_headmenu_termine.png);
+}

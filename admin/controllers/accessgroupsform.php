@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerAccessgroupsForm extends JController {
+class CLMControllerAccessgroupsForm extends JControllerLegacy {
 	
 
 	// Konstruktor
@@ -24,7 +22,7 @@ class CLMControllerAccessgroupsForm extends JController {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= & JFactory::getDBO();
+		$this->_db		= JFactory::getDBO();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -39,7 +37,7 @@ class CLMControllerAccessgroupsForm extends JController {
 
 		if ($this->_saveDo()) { // erfolgreich?
 			
-			$app =& JFactory::getApplication();
+			$app =JFactory::getApplication();
 			
 			if ($this->neu) { // new access group?
 				$app->enqueueMessage( JText::_('ACCESSGROUP_CREATED') );
@@ -61,11 +59,9 @@ class CLMControllerAccessgroupsForm extends JController {
 		// Check for request forgeries
 		JRequest::checkToken() or die( 'Invalid Token' );
 
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		//if (CLM_usertype != 'admin') {
-		$clmAccess->accesspoint = 'BE_accessgroup_general';
-		if($clmAccess->access() === false) {
+		$clmAccess = clm_core::$access;      
+
+		if($clmAccess->access('BE_accessgroup_general') === false) {
 			JError::raiseWarning(500, JText::_('SECTION_NO_ACCESS') );
 			return false;
 		}
@@ -73,7 +69,7 @@ class CLMControllerAccessgroupsForm extends JController {
 		// Task
 		$task = JRequest::getVar('task');
 		// Instanz der Tabelle
-		$row = & JTable::getInstance( 'accessgroupsform', 'TableCLM' );
+		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
 		
 		if (!$row->bind(JRequest::get('post'))) {
 			JError::raiseError(500, $row->getError() );
@@ -82,10 +78,12 @@ class CLMControllerAccessgroupsForm extends JController {
 		
 		// Parameter
 		$paramsStringArray = array();
-		foreach ($row->be_params as $key => $value) {
+		foreach ($row->params as $key => $value) {
+			if(intval($value)>0){
 			$paramsStringArray[] = $key.'='.intval($value);
+	   	}
 		}
-		$row->be_params = implode("\n", $paramsStringArray);
+		$row->params = implode("\n", $paramsStringArray);
 		
 		if (!$row->checkData()) {
 			// pre-save checks
@@ -110,12 +108,12 @@ class CLMControllerAccessgroupsForm extends JController {
 		if (!$row->store()) {
 			JError::raiseError(500, $row->getError() );
 		}
-		$row->checkin();		
+				
 
 		// Log schreiben
 		$clmLog = new CLMLog();
 		$clmLog->aktion = $stringAktion.": ".$row->name;
-		$clmLog->params = array('sid' => CLM_SEASON, 'cids' => $row->usertype); 
+		$clmLog->params = array('sid' => clm_core::$access->getSeason(), 'cids' => $row->usertype); 
 		$clmLog->write();
 		
 		// wenn 'apply', weiterleiten in form

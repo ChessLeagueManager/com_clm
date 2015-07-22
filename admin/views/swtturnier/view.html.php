@@ -12,19 +12,17 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
-
-class CLMViewSWTTurnier extends JView {
+class CLMViewSWTTurnier extends JViewLegacy {
 	function display($tpl = null) { 
 		
 		//Daten vom Model
-		$state 		=& $this->get( 'State' );
-		$saisons 	=& $this->get( 'saisons' );
-		$turniere 	=& $this->get( 'turniere' );
+		$state 		= $this->get( 'State' );
+		$saisons 	= $this->get( 'saisons' );
+		$turniere 	= $this->get( 'turniere' );
 		
 		
 		//Toolbar
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( JText::_('TITLE_SWT_TOURNAMENT') ,'clm_headmenu_manager.png' );
 		
 		JToolBarHelper::custom('update','refresh.png','refresh_f2.png', JText::_('SWT_TOURNAMENT_UPDATE'), false);

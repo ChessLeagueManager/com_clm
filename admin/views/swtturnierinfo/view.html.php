@@ -12,17 +12,15 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
-
-class CLMViewSWTTurnierInfo extends JView {
+class CLMViewSWTTurnierInfo extends JViewLegacy {
 	function display($tpl = null) { 
 		
 		
 		//Daten vom Model
-		$turnier =& $this->get('turnier');	
+		$turnier = $this->get('turnier');	
 
 		//Toolbar
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( JText::_('TITLE_SWT_TOURNAMENT_INFO') ,'clm_headmenu_manager.png' );
 		
 		//JToolBarHelper::custom('next','next.png','next_f2.png', JText::_('SWT_TOURNAMENT_NEXT'), false);
@@ -30,8 +28,8 @@ class CLMViewSWTTurnierInfo extends JView {
 		JToolBarHelper::custom('cancel','cancel.png','cancel_f2.png', JText::_('SWT_TOURNAMENT_CANCEL'), false);		
 		
 		// CLM Parameter
-		$config	= &JComponentHelper::getParams( 'com_clm' );
-		$params['tourn_showtlok'] = $config->get('tourn_showtlok',0);
+		$config = clm_core::$db->config();
+		$params['tourn_showtlok'] = $config->tourn_showtlok;
 
 		//Kategorie
 		list($this->parentArray, $this->parentKeys) = CLMCategoryTree::getTree();
@@ -63,7 +61,7 @@ class CLMViewSWTTurnierInfo extends JView {
 		$lists['bezirkTur']		= JHtml::_('select.booleanlist', 'bezirkTur', 'class="inputbox"', $turnier->bezirkTur);
 		
 		// vereinZPS
-		$lists['vereinZPS']		= CLMForm::selectVereinZPS('vereinZPS', $turnier->vereinZPS);
+		$lists['vereinZPS']		= CLMForm::selectVereinZPSuVerband('vereinZPS', $turnier->vereinZPS);
 		
 		// published
 		$lists['published']		= CLMForm::radioPublished('published', $turnier->published);

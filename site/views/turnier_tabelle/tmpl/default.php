@@ -15,19 +15,19 @@ JHtml::_('behavior.tooltip', '.CLMTooltip');
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-// require_once(JPATH_COMPONENT.DS.'includes'.DS.'image_path.php');
+
 
 // Konfigurationsparameter auslesen
 $itemid 		= JRequest::getVar( 'Itemid' );
 $spRang		= JRequest::getVar( 'spRang' ,0);	//Sonderranglisten
 
 // $turnierid		= JRequest::getInt('turnier','1');
-$config	= &JComponentHelper::getParams( 'com_clm' );
-// $pdf_melde = $config->get('pdf_meldelisten',1);
-$fixth_ttab = $config->get('fixth_ttab',1);
+$config = clm_core::$db->config();
+// $pdf_melde = $config->pdf_meldelisten;
+$fixth_ttab = $config->fixth_ttab;
 	
 // CLM-Container
-echo '<div id="clm"><div id="turnier_tabelle">';
+echo '<div ><div id="turnier_tabelle">';
 	
 // Componentheading
 if($spRang != 0){			//Sonderranglisten
@@ -55,13 +55,16 @@ if ( $this->turnier->published == 0) {
 
 } else {
 // PDF-Link
-echo CLMContent::createPDFLink('turnier_tabelle', JText::_('TOURNAMENT_TABLE'), array('turnier' => $this->turnier->id, 'layout' => 'tabelle', 'spRang' => $spRang) );
-echo CLMContent::createViewLink('turnier_rangliste', JText::_('TABELLE_GOTO_RANGLISTE'), array('turnier' => $this->turnier->id, 'Itemid' => $itemid) );
-
+	echo CLMContent::createPDFLink('turnier_tabelle', JText::_('TOURNAMENT_TABLE'), array('turnier' => $this->turnier->id, 'layout' => 'tabelle', 'spRang' => $spRang) );
+	if($spRang != 0){			//Sonderranglisten
+	  echo CLMContent::createViewLink('turnier_rangliste', JText::_('TABELLE_GOTO_RANGLISTE'), array('turnier' => $this->turnier->id, 'spRang' => $spRang, 'Itemid' => $itemid) );
+	} else {
+	  echo CLMContent::createViewLink('turnier_rangliste', JText::_('TABELLE_GOTO_RANGLISTE'), array('turnier' => $this->turnier->id, 'Itemid' => $itemid) );
+	}
    echo CLMContent::componentheading($heading);
    require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
 
-	$turParams = new JParameter($this->turnier->params);
+	$turParams = new clm_class_params($this->turnier->params);
 
 	// Table
 	echo '<table cellpadding="0" cellspacing="0" id="turnier_tabelle"';

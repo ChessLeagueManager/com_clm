@@ -21,7 +21,7 @@ class CLMText {
 	* weist einer vorgegebenen Zahl einen Singular- oder Pluraltext zu
 	*
 	*/
-	function sgpl ($count, $text_sg, $text_pl, $complete_string = TRUE) {
+	public static function sgpl ($count, $text_sg, $text_pl, $complete_string = TRUE) {
 	
 		if ($count == 1) {
 			$text_return = $text_sg;
@@ -42,7 +42,7 @@ class CLMText {
 	* erstellt formatierten String einer Feinwertung
 	*
 	*/
-	function tiebrFormat ($tiebrID, $value) {
+	public static function tiebrFormat ($tiebrID, $value) {
 	
 		switch ($tiebrID) {
 			case 1: // buchholz
@@ -108,14 +108,14 @@ class CLMText {
 	* formatiert einen standartisierten String für Verwendung als Erklärung in einem Dropdown
 	*
 	*/
-	function selectOpener($text) {
+	public static function selectOpener($text) {
 	
 		return " - ".$text." - ";
 	
 	}
 
 	
-	function selectEntity($entity) {
+	public static function selectEntity($entity) {
 	
 		return JText::_('SELECT').' '.$entity;
 	
@@ -127,7 +127,7 @@ class CLMText {
 	* gibt für ein formularfeld eine JS-onchnage-Anweisung aus, wenn $filter == TRUE
 	*
 	*/
-	function stringOnchange ($filter) {
+	public static function stringOnchange ($filter) {
 	
 		if ($filter) {
 			return 'onchange="document.adminForm.submit();"';
@@ -143,7 +143,7 @@ class CLMText {
 	* setzt einen Fehlertext zusammen
 	*
 	*/
-	function errorText ($subject, $error) {
+	public static function errorText ($subject, $error) {
 	
 		return JText::_($subject).": ".JText::_('ERROR_'.$error);
 	
@@ -155,7 +155,7 @@ class CLMText {
 	* überprüft, ob Zeitstring korrekt ist
 	*
 	*/
-	function isTime ($time, $is24Hours=true, $seconds=false) {
+	public static function isTime ($time, $is24Hours=true, $seconds=false) {
 		$pattern = "/^".($is24Hours ? "([0-2][0-3]|[01]?[1-9])" : "(1[0-2]|0?[1-9])").":([0-5]?[0-9])".($seconds ? ":([0-5]?[0-9])" : "")."$/";
 		if (preg_match($pattern, $time)) {
         return true;

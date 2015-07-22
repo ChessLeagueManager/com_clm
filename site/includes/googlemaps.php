@@ -1,4 +1,12 @@
+<?php
+if(!isset($google_address)) {
+	$google_address = "";
+} else {
+	$google_address = preg_replace('~[\r\n]+~', '', $google_address);
+}
+?>
 <script type="text/javascript">
+   
    var address ="<?php echo $google_address; ?>";
    var map = null;
    var geocoder = null;

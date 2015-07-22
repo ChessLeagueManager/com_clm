@@ -12,13 +12,13 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewTurnier_Rangliste extends JView {
+class CLMViewTurnier_Rangliste extends JViewLegacy {
 	
 	function display($tpl = null) {
 		
-		$model		= &$this->getModel();
+		$model		= $this->getModel();
 		
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 		
 		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
 		$document->addScript(JURI::base().'components/com_clm/javascript/updateTableHeaders.js');

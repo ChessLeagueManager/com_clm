@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerSWTLigasave extends JController
+class CLMControllerSWTLigasave extends JControllerLegacy
 {
 	function __construct() {
 				
@@ -24,7 +22,7 @@ class CLMControllerSWTLigasave extends JController
 		
 	}
 	
-	function display() {
+	function display($cachable = false, $urlparams = array()) {
 	
 		JRequest::setVar('view','swtligasave');
 		parent::display();

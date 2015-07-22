@@ -12,22 +12,23 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewTurnier_Tabelle extends JView
+class CLMViewTurnier_Tabelle extends JViewLegacy
 {
 	function display($tpl = 'pdf')
 	// Man beachte den Unterschied zum Standard View "$tpl = null" !!
 	{
-		$config	= &JComponentHelper::getParams( 'com_clm' );
-		$model	  = &$this->getModel();
+		$config = clm_core::$db->config();
+		$model	  = $this->getModel();
   		
 		$this->assignRef('turnier', $model->turnier);
 
-		$this->assignRef('tourn_linkclub', $config->get('tourn_linkclub', 1));
+		$tourn_linkclub = $config->tourn_linkclub;
+		$this->assignRef('tourn_linkclub', $tourn_linkclub);
 
 		$this->assignRef('players', $model->players);
 		
 	// Dokumenttyp setzen
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 		$document->setMimeEncoding('application/pdf');
 		parent::display($tpl);
 	}	

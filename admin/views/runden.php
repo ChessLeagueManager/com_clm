@@ -13,46 +13,45 @@
 
 class CLMViewRunden
 {
-function setRundenToolbar()
+public static function setRundenToolbar()
 	{
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;
+
 	// Menubilder laden
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( JText::_( 'TITLE_RUNDE' ), 'clm_settings.png' );
-		JToolBarHelper::custom('dwz_del','cancel.png','unarchive_f2.png','RUNDE_DWZ_DELETE',false);
-		JToolBarHelper::custom('dwz_start','default.png','apply_f2.png','RUNDE_DWZ_APPLY',false);
+		if($clmAccess->access('BE_league_edit_fixture') !== false) {
+			JToolBarHelper::custom('paarung','edit.png','edit_f2.png',JText::_( 'LEAGUE_BUTTON_1' ),false);
+		}
 		JToolBarHelper::custom('check','preview.png','upload_f2.png','RUNDE_CHECK',false);
 		// Nur CLM-Admin hat Zugriff auf Toolbar
-	//if (JFactory::getUser()->authorise('core.manage.clm', 'com_clm')) 	{ 
-	$clmAccess->accesspoint = 'BE_league_edit_round';
-	if($clmAccess->access() !== false) {
+	if($clmAccess->access('BE_league_edit_round') !== false) {
 		JToolBarHelper::publishList();
 		JToolBarHelper::unpublishList();
-		JToolBarHelper::customX( 'copy', 'copy.png', 'copy_f2.png', 'Copy' );
+		JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', 'Copy' );
 		JToolBarHelper::deleteList();
-		// JToolBarHelper::editListX();
-		JToolBarHelper::addNewX();
+		// JToolBarHelper::editList();
+		JToolBarHelper::addNew();
 	}
 		JToolBarHelper::help( 'screen.clm.runde' );
 	}
 
-function runden( &$rows, &$lists, &$pageNav, $option )
+public static function runden( $rows, $lists, $pageNav, $option )
 	{
 		$mainframe	= JFactory::getApplication();
 		CLMViewRunden::setRundenToolbar();
-		$user =& JFactory::getUser();
+		$user =JFactory::getUser();
 	// Konfigurationsparameter auslesen
-	$config = &JComponentHelper::getParams( 'com_clm' );
-	$val=$config->get('menue',1);
-	$dropdown=$config->get('dropdown',1);
+	$config = clm_core::$db->config();
+	$val=$config->menue;
+	$dropdown=$config->dropdown;
 
 		//Ordering allowed ?
 		$ordering = ($lists['order'] == 'a.ordering');
 
 		JHtml::_('behavior.tooltip');
 
-	if($rows[0]->sid_pub =="0" AND $val !=0) {
+	if(isset($rows[0]) && $rows[0]->sid_pub =="0" AND $val !=0) {
 	JError::raiseNotice( 6000,  JText::_( 'RUNDE_ERROR_SAISON_UNPUBLISHED' ));
 	}
 		?>
@@ -82,11 +81,11 @@ function runden( &$rows, &$lists, &$pageNav, $option )
 			<table class="adminlist">
 			<thead>
 				<tr>
-					<th width="10">
-						<?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?>
+					<th width="3%">
+						#
 					</th>
-					<th width="10">
-						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $rows ); ?>);" />
+					<th width="3%">
+						<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 					</th>
 					<th class="title">
 						<?php echo JHtml::_('grid.sort',   'RUNDE', 'a.name', @$lists['order_Dir'], @$lists['order'] ); ?>
@@ -98,10 +97,10 @@ function runden( &$rows, &$lists, &$pageNav, $option )
 					<th width="7%">
 						<?php echo JHtml::_('grid.sort',   'JDATE', 'a.datum', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
-					<th width="5%">
+					<th width="4%">
 						<?php echo JHtml::_('grid.sort',   'RUNDE_STARTTIME', 'a.startzeit', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
-					<th width="9%">
+					<th width="8%">
 						<?php echo JHtml::_('grid.sort',   'ERGEBNISSE', 'e.name', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="15%">
@@ -120,17 +119,13 @@ function runden( &$rows, &$lists, &$pageNav, $option )
 						<?php echo JHtml::_('grid.sort',   'RUNDE_INFO', 'a.bemerkungen', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="4%">
-						<?php echo JHtml::_('grid.sort',   'RUNDE_DWZ', 'a.dwz', @$lists['order_Dir'], @$lists['order'] ); ?>
-					</th>
-
-					<th width="5%">
 						<?php echo JHtml::_('grid.sort',   'JPUBLISHED', 'a.published', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
-					<th width="8%" nowrap="nowrap">
+					<th width="9%" nowrap="nowrap">
 						<?php echo JHtml::_('grid.sort',   'JGRID_HEADING_ORDERING', 'a.ordering', @$lists['order_Dir'], @$lists['order'] ); ?>
 						<?php echo JHtml::_('grid.order',  $rows ); ?>
 					</th>
-					<th width="1%" nowrap="nowrap">
+					<th width="3%" nowrap="nowrap">
 						<?php echo JHtml::_('grid.sort',   'JGRID_HEADING_ID', 'a.id', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 				</tr>
@@ -145,15 +140,15 @@ function runden( &$rows, &$lists, &$pageNav, $option )
 			<tbody>
 			<?php
 			$k = 0;
-
+				$row 	= JTable::getInstance( 'runden', 'TableCLM' );
 			for ($i=0, $n=count( $rows ); $i < $n; $i++) {
-				$row = &$rows[$i];
+				$row->load( $rows[$i]->id );
 			if ($val == 0) { $menu = 'index.php?option=com_clm&section=runden&task=edit&cid[]='. $row->id; }
 			else {
-				if ($row->durchgang >1 ) {
-					if($row->nr > (3 * $row->runden)) {$menu ='index.php?option=com_clm&section=ergebnisse&runde='.($row->nr-(3 * $row->runden)).'&dg=4&liga='.$row->liga;}
-					elseif($row->nr > (2 * $row->runden)) {$menu ='index.php?option=com_clm&section=ergebnisse&runde='.($row->nr-(2 * $row->runden)).'&dg=3&liga='.$row->liga;}
-					elseif($row->nr > $row->runden) {$menu ='index.php?option=com_clm&section=ergebnisse&runde='.($row->nr-$row->runden).'&dg=2&liga='.$row->liga;}
+				if ($rows[$i]->durchgang >1 ) {
+					if($row->nr > (3 * $rows[$i]->runden)) {$menu ='index.php?option=com_clm&section=ergebnisse&runde='.($row->nr-(3 * $rows[$i]->runden)).'&dg=4&liga='.$row->liga;}
+					elseif($row->nr > (2 * $rows[$i]->runden)) {$menu ='index.php?option=com_clm&section=ergebnisse&runde='.($row->nr-(2 * $rows[$i]->runden)).'&dg=3&liga='.$row->liga;}
+					elseif($row->nr > $rows[$i]->runden) {$menu ='index.php?option=com_clm&section=ergebnisse&runde='.($row->nr-$rows[$i]->runden).'&dg=2&liga='.$row->liga;}
 					else { $menu ='index.php?option=com_clm&section=ergebnisse&runde='.($row->nr).'&dg=1&liga='.$row->liga; }
 					}
 				else {
@@ -177,17 +172,11 @@ function runden( &$rows, &$lists, &$pageNav, $option )
 					</td>
 
 					<td>
-						<?php
-						if (  JTable::isCheckedOut($user->get ('id'), $row->checked_out ) OR ($row->sid_pub =="0" AND $val !=0)) {
-							echo $row->name;
-						} else {
-							?>
+	
 								<span class="editlinktip hasTip" title="<?php echo JText::_( 'Edit Runde' );?>::<?php echo $row->name; ?>">
 							<a href="index.php?option=com_clm&section=runden&task=edit&cid[]=<?php echo $row->id; ?>">
 								<?php echo $row->name; ?></a></span>
-							<?php
-						}
-						?>
+	
 					</td>
 
 					<td align="center">
@@ -203,10 +192,10 @@ function runden( &$rows, &$lists, &$pageNav, $option )
 						<a href="<?php echo $link; ?>"><?php echo JText::_( 'ERGEBNISSE' );?></a>
 					</td>
 					<td align="center">
-						<?php echo $row->liga_name;?>
+						<?php echo $rows[$i]->liga_name;?>
 					</td>
 					<td align="center">
-						<?php echo $row->saison;?>
+						<?php echo $rows[$i]->saison;?>
 					</td>
 					<td align="center">
 						<?php if ($row->meldung=='1') 
@@ -223,26 +212,15 @@ function runden( &$rows, &$lists, &$pageNav, $option )
 							{ ?><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /> <?php }
 						else 	{ ?><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /> <?php }?>
 					</td>
-
-					<td align="center">
-						<?php 	if ($row->dwz =='1') 
-								{ ?><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /> <?php }
-							if ($row->dwz =='0')
-								{ ?><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /> <?php }
-							if ($row->dwz =='2')
-								{ ?><img width="16" height="16" src="components/com_clm/images/lupe.png" /> <?php }
-							?>
-					</td>
-
 					<td align="center">
 						<?php echo $published;?>
 					</td>
 
 	<td class="order">
-	<span><?php echo $pageNav->orderUpIcon($i, ($row->liga == @$rows[$i-1]->liga), 'orderup()', 'Move Up', $ordering ); ?></span>
-	<span><?php echo $pageNav->orderDownIcon($i, $n, ($row->liga == @$rows[$i+1]->liga), 'orderdown()', 'Move Down', $ordering ); ?></span>
+	<span><?php echo $pageNav->orderUpIcon($i, (isset($rows[$i-1]) AND $rows[$i]->liga == $rows[$i-1]->liga), 'orderup()', 'Move Up', $ordering ); ?></span>
+	<span><?php echo $pageNav->orderDownIcon($i, $n, (isset($rows[$i+1]) AND $rows[$i]->liga == $rows[$i+1]->liga), 'orderdown()', 'Move Down', $ordering ); ?></span>
 	<?php $disabled = $ordering ?  '' : 'disabled="disabled"'; ?>
-	<input type="text" name="order[]" size="5" value="<?php echo $row->ordering;?>" <?php echo $disabled ?> class="text_area" style="text-align: center" />
+	<input type="text" name="order[]" size="4" value="<?php echo $row->ordering;?>" <?php echo $disabled ?> class="text_area" style="text-align: center" />
 					</td>
 
 					<td align="center">
@@ -258,6 +236,7 @@ function runden( &$rows, &$lists, &$pageNav, $option )
 
 		<input type="hidden" name="option" value="<?php echo $option;?>" />
 		<input type="hidden" name="task" value="" />
+		<input type="hidden" name="liga" value="<?php echo JRequest::getVar( 'liga' ); ?>" />
 		<input type="hidden" name="boxchecked" value="0" />
 		<input type="hidden" name="filter_order" value="<?php echo $lists['order']; ?>" />
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $lists['order_Dir']; ?>" />
@@ -266,21 +245,21 @@ function runden( &$rows, &$lists, &$pageNav, $option )
 		<?php
 	}
 
-function setRundeToolbar()
+public static function setRundeToolbar()
 	{
 
 		$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
 		JArrayHelper::toInteger($cid, array(0));
 		if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
 			else { $text = JText::_( 'New' );}
-		JToolBarHelper::title(  JText::_( 'RUNDE' ).': <small><small>[ '. $text.' ]</small></small>' );
+		JToolBarHelper::title(  JText::_( 'RUNDE' ).': [ '. $text.' ]' );
 		JToolBarHelper::save();
 		JToolBarHelper::apply();
 		JToolBarHelper::cancel();
 		JToolBarHelper::help( 'screen.clm.edit' );
 	}
 		
-function runde( &$row,$lists, $option )
+public static function runde( &$row,$lists, $option )
 	{
 		CLMViewRunden::setRundeToolbar();
 		JRequest::setVar( 'hidemainmenu', 1 );
@@ -288,11 +267,7 @@ function runde( &$row,$lists, $option )
 		?>
 	<script language="javascript" type="text/javascript">
 
-	<?php if (JVersion::isCompatible("1.6.0")) { ?>
-		 Joomla.submitbutton = function (pressbutton) { 
-	<?php } else { ?>
-		 function submitbutton(pressbutton) {
-	<?php } ?>		
+		 Joomla.submitbutton = function (pressbutton) { 		
 			var form = document.adminForm;
 			if (pressbutton == 'cancel') {
 				submitform( pressbutton );
@@ -458,118 +433,5 @@ function runde( &$row,$lists, $option )
 		<?php
 	}
 
-function setDWZToolbar()
-	{
-	JToolBarHelper::title(  JText::_( 'DWZ Auswertung erfolgreich !' ));
-	JToolBarHelper::custom('dwz_cancel','cancel.png','cancel_f2.png','Zurück zu Spieltage',false);
-	}
-		
-function setDWZSToolbar()
-	{
-	JToolBarHelper::title(  JText::_( 'DWZ Saison-Auswertung erfolgreich !' ));
-	JToolBarHelper::custom('dwz_cancels','cancel.png','cancel_f2.png','Zurück zu Saison',false);
-	}	
-function dwz( $option, $dwz, $sid, $lid )
-	{
-	if ($dwz==0) CLMViewRunden::setDWZToolbar();
-	if ($dwz==1) CLMViewRunden::setDWZSToolbar();
-
-	$db 		=& JFactory::getDBO();
-	if ($dwz==0) {
-		// Angaben für Liga und Saison wenn Ligaauswertung
-		$query	= "SELECT a.sid, a.name as liga, s.name as saison "
-		." FROM #__clm_liga as a "
-		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
-		." WHERE a.id =".$lid
-		;
-	} 
-	if ($dwz==1) {
-		// Angaben für Saison wenn Saisonauswertung
-		$query	= "SELECT id as sid, name as saison "
-		." FROM #__clm_saison "
-		." WHERE id =".$sid
-		;
-	}
-		$db->setQuery($query);
-		$row = $db->loadObjectList();
-
-	?>
-		<form action="index.php" method="post" name="adminForm" id="adminForm">
-
-		<div class="col width-65">
-		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'RUNDE_AUSWERTUNG' ); ?></legend>
-		<br>
-		<?php require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'controllers'.DIRECTORY_SEPARATOR.'runden.php');
-			CLMControllerRunden::dwz($dwz, $sid, $lid); ?>
-		</fieldset>
-		</div>
-		<?php if ($dwz =="0") { ?>
-		<div class="col width-35">
-		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'RUNDE_DETAILS' ); ?></legend>
-
-		<table class="admintable">
-		<tr>
-			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'RUNDE_LIGA' ).' : '; ?></label>
-			</td>
-			<td>
-			<?php echo $row[0]->liga; ?>
-			</td>
-		</tr>
-		<tr>
-			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'RUNDE_SAISON' ).' : '; ?></label>
-			</td>
-			<td>
-			<?php echo $row[0]->saison; ?>
-			</td>
-		</tr>
-		<tr>
-			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'RUNDE_TURNIER' ).' : '; ?></label>
-			</td>
-			<td>
-			<?php echo $row[0]->sid; ?>
-			</td>
-		</tr>
-		</table>
-		</fieldset>
-		</div>
-		<?php } ?>
-		<?php if ($dwz =="1") { ?>
-		<div class="col width-35">
-		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'RUNDE_DETAILS' ); ?></legend>
-
-		<table class="admintable">
-		<tr>
-			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'RUNDE_SAISON' ).' : '; ?></label>
-			</td>
-			<td>
-			<?php echo $row[0]->saison; ?>
-			</td>
-		</tr>
-		<tr>
-			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'RUNDE_TURNIER' ).' : '; ?></label>
-			</td>
-			<td>
-			<?php echo $row[0]->sid; ?>
-			</td>
-		</tr>
-		</table>
-		</fieldset>
-		</div>
-		<?php } ?>	
-		<input type="hidden" name="section" value="runden" />
-		<input type="hidden" name="option" value="com_clm" />
-		<input type="hidden" name="task" value="" />
-		<?php echo JHtml::_( 'form.token' ); ?>
-		</form>
-		<?php
-	}
 }
 ?>

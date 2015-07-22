@@ -1,0 +1,48 @@
+/**********************/
+/******* be_menu ******/
+/**********************/
+#clm .clm .clm_view_be_menu .clm_clear {
+	clear:both;
+}
+
+#clm .clm .clm_view_be_menu p {
+	margin:0;
+}
+#clm .clm .clm_view_be_menu {
+	width:100%;
+}
+
+#clm .clm .clm-version {
+	margin-top:10px;
+}
+
+#clm .clm .clm_view_be_menu .clm-status {
+	float:left;
+	width: 360px;
+	font-size:1.1em;
+	margin: 0 0 0 15px;
+}
+#clm .clm .clm_view_be_menu .clm-menu {
+	float:left;
+}
+
+#clm .clm .clm_view_be_menu .clm-status .clm-logo {
+	text-align:center;
+	margin-bottom:10px;
+}
+#clm .clm .clm_view_be_menu .clm_good_version {
+	color:#00FF00;	
+}
+#clm .clm .clm_view_be_menu .clm_bad_version {
+	color:#FE9A2E;
+}
+#clm .clm .clm_view_be_menu .clm_evil_version {
+	color:#FF0000;	
+}
+#clm .clm .clm_view_be_menu td {
+	padding-bottom: 10px;
+}
+#clm .clm .clm_view_be_menu .clm-extern-information {
+	border:1px dashed black;
+	padding: 2px;
+}

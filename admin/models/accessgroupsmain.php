@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelAccessgroupsMain extends JModel {
+class CLMModelAccessgroupsMain extends JModelLegacy {
 
 	var $_accessgroups;
 	var $_total = null;
@@ -24,7 +22,7 @@ class CLMModelAccessgroupsMain extends JModel {
 
 	function __construct(){
 		parent::__construct();
-		$mainframe 	= & JFactory::getApplication();
+		$mainframe 	= JFactory::getApplication();
 		$option 	= JRequest::getVar( 'option' );
 
 		//Pagination Variabeln
@@ -48,7 +46,7 @@ class CLMModelAccessgroupsMain extends JModel {
 		$this->setState( 'filter_order_Dir' , $filter_order_Dir );
  
 		// User
-		$this->user =& JFactory::getUser();
+		$this->user =JFactory::getUser();
 	}
 	
 	function getAccessgroups() { 
@@ -79,7 +77,7 @@ class CLMModelAccessgroupsMain extends JModel {
 	function getUser()
 		{
 		if (empty($this->_user)) {
-			$this->_user =& JFactory::getUser();;
+			$this->_user =JFactory::getUser();;
 		}
 		return $this->_user;
 	}
@@ -88,8 +86,8 @@ class CLMModelAccessgroupsMain extends JModel {
 		$where = $this->_buildContentWhere();
 		$order = $this->_buildContentOrderBy();
 		$query = ' 	SELECT *, 0 as checked_out FROM #__clm_usertype 
-					'.$where.' 
-					'.clm_escape($order); 
+					'.$where 
+					 .$order; 
 		return $query;
 	}
 	

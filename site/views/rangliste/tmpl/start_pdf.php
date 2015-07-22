@@ -32,11 +32,11 @@ $spielfrei=$this->spielfrei;
 $dwzschnitt=$this->dwzschnitt;
 $mannschaft	=$this->mannschaft; 
 $mleiter	=$this->mleiter; 
-$count		=$this->count;      
+$count		=$this->count;  
 	if ($params['dwz_date'] != '0000-00-00') {
 		for ($i=0; $i < (count($count)); $i++){
 			$count[$i]->dwz = $count[$i]->start_dwz; }
-	}
+	}    
 $saison     =$this->saison;   
 $name_liga = $liga[0]->name;
 
@@ -57,13 +57,13 @@ function Footer()
 }
 
 	// Konfigurationsparameter auslesen
-	$config	= &JComponentHelper::getParams( 'com_clm' );
-	$telefon= $config->get('man_tel',1);
-	$mobil	= $config->get('man_mobil',1);
-	$mail	= $config->get('man_mail',1);
+	$config = clm_core::$db->config();
+	$telefon= $config->man_tel;
+	$mobil	= $config->man_mobil;
+	$mail	= $config->man_mail;
 
 	// Userkennung holen
-	$user	=& JFactory::getUser();
+	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
 
 // Array für DWZ Schnitt setzen
@@ -85,8 +85,8 @@ $breite1 = 30;
 $font = 9;
 
 // Datum der Erstellung
-$date =& JFactory::getDate();
-$now = $date->toMySQL();
+$date =JFactory::getDate();
+$now = $date->toSQL();
 
 // Löschen der Aufstellungen, falls Druck geblockt
 if ($liga[0]->anzeige_ma == 1) $count = '';

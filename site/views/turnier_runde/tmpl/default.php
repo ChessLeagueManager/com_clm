@@ -18,13 +18,13 @@ JHtml::_('behavior.tooltip', '.CLMTooltip');
 // Konfigurationsparameter auslesen
 // $turnierid		= JRequest::getInt('turnier','1');
 $itemid = JRequest::getVar( 'Itemid' );
-$config	= &JComponentHelper::getParams( 'com_clm' );
-// $pdf_melde = $config->get('pdf_meldelisten',1);
-$commentParse = $config->get('tourn_comment_parse',0);
+$config = clm_core::$db->config();
+$commentParse = $config->tourn_comment_parse;
+// $pdf_melde = $config->pdf_meldelisten;
 $pgn		= JRequest::getInt('pgn','0'); 
 
 // Userkennung holen
-$user	=& JFactory::getUser();
+$user	=JFactory::getUser();
 $jid	= $user->get('id');
 
   if ($pgn == 1) { 
@@ -78,7 +78,7 @@ $jid	= $user->get('id');
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-// require_once(JPATH_COMPONENT.DS.'includes'.DS.'image_path.php');
+
 
 echo "<div id='clm'><div id='turnier_runde'>";
 
@@ -104,7 +104,7 @@ if ( $this->turnier->published == 0) {
 
 // Turnier/Runde kann ausgegeben werden
 } else {
-	$turParams = new JParameter($this->turnier->params);
+	$turParams = new clm_class_params($this->turnier->params);
 	if ($this->round->datum != "0000-00-00" AND $turParams->get('displayRoundDate', 1) == 1) {
 		$heading .=  ',&nbsp;'.JHTML::_('date',  $this->round->datum, JText::_('DATE_FORMAT_CLM_F')); 
 		if(isset($this->round->startzeit) and $this->round->startzeit != '00:00:00') { $heading .= '  '.substr($this->round->startzeit,0,5).' Uhr'; }
@@ -136,13 +136,13 @@ if ( $this->turnier->published == 0) {
 	?>
 
 	<tr>
-		<th align="center" width="5%"><?php echo JText::_('TOURNAMENT_TNR'); ?></th>
-		<th align="center" width="40%"><?php echo JText::_('TOURNAMENT_WHITE'); ?></th>
-		<th align="center" width="10%"><?php echo JText::_('TOURNAMENT_TWZ'); ?></th>
-		<th align="center" width="5%">-</th>
-		<th align="center" width="40%"><?php echo JText::_('TOURNAMENT_BLACK'); ?></th>
-		<th align="center" width="10%"><?php echo JText::_('TOURNAMENT_TWZ'); ?></th>
-		<th align="center" width="5%"><?php echo JText::_('RESULT'); ?></th>
+		<th align="center"><?php echo JText::_('TOURNAMENT_TNR'); ?></th>
+		<th align="center"><?php echo JText::_('TOURNAMENT_WHITE'); ?></th>
+		<th align="center"><?php echo JText::_('TOURNAMENT_TWZ'); ?></th>
+		<th align="center">-</th>
+		<th align="center"><?php echo JText::_('TOURNAMENT_BLACK'); ?></th>
+		<th align="center"><?php echo JText::_('TOURNAMENT_TWZ'); ?></th>
+		<th align="center"><?php echo JText::_('RESULT'); ?></th>
 	</tr>
 
 	<?php

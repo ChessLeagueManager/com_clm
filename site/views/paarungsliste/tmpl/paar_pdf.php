@@ -81,7 +81,6 @@ for ($y=1; $y< ($liga[0]->teil)+1; $y++){
 			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; }
 		}
 	}
- 
 // Zellenhöhe -> Standard 6
 $zelle = 6;
 // Wert von Zellenbreite abziehen
@@ -103,8 +102,8 @@ if ($liga[0]->teil/2 == 3) {$lspalte_paar = 250;}
 if ($liga[0]->teil/2 == 2) {$lspalte_paar = 260;}
 
 // Datum der Erstellung
-$date =& JFactory::getDate();
-$now = $date->toMySQL();
+$date =JFactory::getDate();
+$now = $date->toSQL();
 
 $pdf=new PDF();
 $pdf->AliasNbPages();
@@ -180,6 +179,7 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 	if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 1 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
 		{ if ($params['dwz_date'] == '0000-00-00') $pdf->Cell(12-$breite,$zelle,round($dwzgespielt[$z2]->dwz),1,0,'C'); 
 			else $pdf->Cell(12-$breite,$zelle,round($dwzgespielt[$z2]->start_dwz),1,0,'C'); }
+
 		elseif (isset($dwz[($paar[$z]->htln)])) { $pdf->Cell(12-$breite,$zelle,round($dwz[($paar[$z]->htln)]),1,0,'C');}
 		else { $pdf->Cell(12-$breite,$zelle,'',1,0,'C');}
 // Wenn Paarung existiert dann Ergebnis-Summen anzeigen

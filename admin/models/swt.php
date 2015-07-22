@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelSWT extends JModel {
+class CLMModelSWT extends JModelLegacy {
 
 	var $_swtFiles;
 
@@ -24,7 +22,7 @@ class CLMModelSWT extends JModel {
 	function getSwtFiles() { 
 		jimport( 'joomla.filesystem.folder' );
 		
-		$filesDir = 'components'.DIRECTORY_SEPARATOR."com_clm".DIRECTORY_SEPARATOR.'swt';
+		$filesDir = 'components'.DS."com_clm".DS.'swt';
 		$this->swtFiles = JFolder::files( $filesDir, '.SWT$|.swt$', false, true );
 		
 		return $this->swtFiles;
@@ -79,9 +77,13 @@ class CLMModelSWT extends JModel {
 		$filename = JRequest::getVar('swt_file', '', 'post', 'string');
 		
 		//SWT-Verzeichnis
-		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
-			
-		return CLMSWT::readInt($path.$filename,606,1);
+		$path = JPATH_COMPONENT . DS . "swt" . DS;
+
+		if($filename!=""&&file_exists($path.$filename)) {
+			return CLMSWT::readInt($path.$filename,606,1);
+		} else {
+			return -1;
+		}
 	}
 
 }

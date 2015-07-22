@@ -22,7 +22,7 @@ class CLMTournamentRound {
 		// $roundid übergibt id des Runde (nicht RundenNr!)
 
 		// DB
-		$this->_db				= & JFactory::getDBO();
+		$this->_db				= JFactory::getDBO();
 		
 		// turnierid
 		$this->turnierid = $turnierid;	
@@ -36,7 +36,7 @@ class CLMTournamentRound {
 
 	function _getRoundData() {
 	
-		$this->round = & JTable::getInstance( 'turnier_runden', 'TableCLM' );
+		$this->round = JTable::getInstance( 'turnier_runden', 'TableCLM' );
 		$this->round->load($this->roundid);
 	
 	}

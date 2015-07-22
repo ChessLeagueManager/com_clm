@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerRanglisten extends JController
+class CLMControllerRanglisten extends JControllerLegacy
 {
 	/**
 	 * Constructor
@@ -31,12 +29,12 @@ function __construct( $config = array() )
 		$this->registerTask( 'update_clm','update_clm');
 	}
 
-function display()
+function display($cachable = false, $urlparams = array())
 	{
 	$mainframe	= JFactory::getApplication();
 	$option 	= JRequest::getCmd( 'option' );
 	$section	= JRequest::getVar('section');
-	$db		=& JFactory::getDBO();
+	$db		=JFactory::getDBO();
 
 	$filter_gid		= $mainframe->getUserStateFromRequest( "$option.filter_gid",'filter_gid',0,'int' );
 	$filter_order		= $mainframe->getUserStateFromRequest( "$option.filter_order",'filter_order','a.id',	'cmd' );
@@ -59,7 +57,7 @@ function display()
 	if ( $filter_catid ) {	$where[] = 'a.published = '.(int) $filter_catid; }
 	if ( $filter_sid ) {	$where[] = 'a.sid = '.(int) $filter_sid; }
 	if ( $filter_vid ) {	$where[] = "a.zps = '$filter_vid'"; }
-	if ($search) {	$where[] = 'LOWER(v.Vereinname) LIKE '.$db->Quote( '%'.$db->getEscaped( $search, true ).'%', false );	}
+
 
 	if ( $filter_state ) {
 		if ( $filter_state == 'P' ) {
@@ -69,27 +67,33 @@ function display()
 		}
 	}
 
-	$where 		= ( count( $where ) ? ' WHERE ' . implode( ' AND ', $where ) : '' );
-	if ($filter_order == 'a.id'){
-		$orderby 	= ' ORDER BY sid '.$filter_order_Dir.', n.id '.$filter_order_Dir;
-	} else {
-	if ($filter_order =='a.Gruppe' OR  $filter_order == 'a.Meldeschluss' OR  $filter_order == 'a.user' OR  $filter_order == 'a.user_clm' OR  $filter_order == 'a.saison' OR $filter_order == 'a.ordering' OR $filter_order == 'a.published' ) { 
-		$orderby 	= ' ORDER BY '. $filter_order .' '. $filter_order_Dir .', a.id';
-			}
-		else { $filter_order = 'a.id'; }
-	}
+	$where2 = ( count( $where ) ? ' WHERE ' . implode( ' AND ', $where ) : '' );
+
+	if ($search) {	$where[] = 'LOWER(v.Vereinname) LIKE "'.$db->escape('%'.$search.'%').'"';	}
+	$where = ( count( $where ) ? ' WHERE ' . implode( ' AND ', $where ) : '' );
 
 	// get the total number of records
 	$query = ' SELECT COUNT(*) '
-		.' FROM #__clm_rangliste_name AS a'
+		.' FROM #__clm_rangliste_id AS a'
 		.' LEFT JOIN #__clm_saison AS c ON c.id = a.sid'
-		. $where
+		. $where2
 		;
 	$db->setQuery( $query );
 	$total = $db->loadResult();
 
+
+	if ($filter_order == 'a.id'){
+		$orderby 	= ' ORDER BY sid '.$filter_order_Dir.', n.id '.$filter_order_Dir;
+	} else {
+	if ($filter_order =='a.Gruppe' OR  $filter_order == 'a.Meldeschluss' OR $filter_order == 'a.rang' OR  $filter_order == 'a.user' OR  $filter_order == 'a.saison' OR $filter_order == 'a.ordering' OR $filter_order == 'a.published' ) { 
+		$orderby 	= ' ORDER BY '. $filter_order .' '. $filter_order_Dir .', a.id';
+			}
+		else { $filter_order = 'a.id'; $orderby 	= '';}
+	}
+	
+
 	jimport('joomla.html.pagination');
-	$pageNav = new JPagination( $total, $limitstart, $limit );
+	$pageNav = new JPagination($total, $limitstart, $limit );
 
 	// get the subset (based on limits) of required records
 	$query = 'SELECT a.*, c.name AS saison, v.Vereinname as vname, n.Gruppe as gname '
@@ -118,7 +122,6 @@ function display()
 	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 
 	// Vereinefilter laden
-	require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'controllers'.DIRECTORY_SEPARATOR.'filter_vereine.php');
 	$vereinefilter = CLMFilterVerein::vereine_filter(0);
 	$lists['vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
 
@@ -128,7 +131,7 @@ function display()
 	$lists['order_Dir']	= $filter_order_Dir;
 	$lists['order']		= $filter_order;
 
-	require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'ranglisten.php');
+	require_once(JPATH_COMPONENT.DS.'views'.DS.'ranglisten.php');
 	CLMViewRanglisten::Ranglisten( $rows, $lists, $pageNav, $option );
 	}
 
@@ -141,13 +144,13 @@ function edit()
 	$filter_sid	= $mainframe->getUserStateFromRequest( "$option.filter_sid",'filter_sid',0,'int' );
 	$filter_gid	= $mainframe->getUserStateFromRequest( "$option.filter_gid",'filter_gid',0,'int' );
 
-	$db 		=& JFactory::getDBO();
-	$user 		=& JFactory::getUser();
+	$db 		=JFactory::getDBO();
+	$user 		=JFactory::getUser();
 	$task 		= JRequest::getVar( 'task');
 	$cid 		= JRequest::getVar( 'cid', array(0), '', 'array' );
 	$section 	= JRequest::getVar( 'section' );
 	JArrayHelper::toInteger($cid, array(0));
-	$row =& JTable::getInstance( 'ranglisten', 'TableCLM' );
+	$row =JTable::getInstance( 'ranglisten', 'TableCLM' );
 	$vname="";
 	$gname="";
 	$sname="";
@@ -155,9 +158,9 @@ function edit()
 	if ($task == 'edit') {
 	// illegaler Einbruchversuch über URL !
 	// evtl. mitschneiden !?!
-	$saison		=& JTable::getInstance( 'saisons', 'TableCLM' );
+	$saison		=JTable::getInstance( 'saisons', 'TableCLM' );
 	$saison->load( $row->sid );
-	if ($saison->archiv == "1") {  // AND CLM_usertype !== 'admin') {
+	if ($saison->archiv == "1") {  // AND clm_core::$access->getType() !== 'admin') {
 		JError::raiseWarning( 500, JText::_( 'RANGLISTE_ARCHIV' ));
 		$mainframe->redirect( 'index.php?option='. $option.'&section=vereine', $msg );
 				}
@@ -302,11 +305,8 @@ function edit()
 		$db->setQuery($sql);
 		$lid = $db->loadObjectList();
 	} else { $lid = 0; }
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
-	$clmAccess->accesspoint = 'BE_club_edit_ranking';
-	if ($clmAccess->access() === false AND $task == 'edit') {
-	//if ( CLM_usertype !== 'sl' AND CLM_usertype !== 'admin' AND CLM_usertype !== 'dv' AND $task == 'edit') {
+	$clmAccess = clm_core::$access;
+	if ($clmAccess->access('BE_club_edit_ranking') === false AND $task == 'edit') {
 		JError::raiseWarning( 500, JText::_( 'RANGLISTE_STAFFEL' ) );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
@@ -328,7 +328,7 @@ function edit()
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
 	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="inputbox" size="1" onchange="javascript:edit();"','id', 'name', intval( $filter_sid ) );
 
-	if ($filter_sid == 0) $filter_sid = CLM_SEASON;
+	if ($filter_sid == 0) $filter_sid = clm_core::$access->getSeason();
 	// Gruppenliste //
 	$sql = "SELECT id as gid, Gruppe FROM #__clm_rangliste_name"
 		." WHERE sid =".intval( $filter_sid )
@@ -343,11 +343,10 @@ function edit()
 
 	// Vereinliste
 	// Vereinefilter laden
-	require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'controllers'.DIRECTORY_SEPARATOR.'filter_vereine.php');
 	$vereinlist	= CLMFilterVerein::vereine_filter(0);
 	$lists['vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_vid', 'class="inputbox" size="1" onchange="javascript:edit();"','zps', 'name', $filter_vid );
 
-	require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'ranglisten.php');
+	require_once(JPATH_COMPONENT.DS.'views'.DS.'ranglisten.php');
 	$jid = 0;
 	CLMViewRanglisten::Rangliste( $spieler,$row,$lists,$option,$jid,$vname,$gname,$sname,$cid,$exist,$count,$gid_exist);
 	}
@@ -362,10 +361,10 @@ function save()
 	$option		= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
 
-	$db		= & JFactory::getDBO();
+	$db		= JFactory::getDBO();
 	$task		= JRequest::getVar( 'task');
 	$pre_task	= JRequest::getVar( 'pre_task');
-	$row		= & JTable::getInstance( 'ranglisten', 'TableCLM' );
+	$row		= JTable::getInstance( 'ranglisten', 'TableCLM' );
 	$msg		= JRequest::getVar( 'id');
 	$exist		= JRequest::getVar( 'exist');
 
@@ -415,9 +414,9 @@ function save()
 	if (!$row->store()) {
 		JError::raiseError(500, $row->getError() );
 	}
-	$row->checkin();
+	
 
-	// Rangnummern in clm_rangliste_spieler abspeichern
+	// Rangnummern in #__clm_rangliste_spieler abspeichern
 	$count		= JRequest::getVar( 'count');
 
 	$query	=" DELETE FROM #__clm_rangliste_spieler "
@@ -428,7 +427,7 @@ function save()
 	$db->setQuery($query);
 	$db->query();
 
-	//vor Löschen der Meldelisten Start DWZ sichern
+	//vor Löschen der Meldelisten Start-DWZ, u.a. sichern
 	$query	=" SELECT * FROM #__clm_meldeliste_spieler "
 		." WHERE status = ".$gid
 		." AND ZPS = '$zps'"
@@ -436,16 +435,11 @@ function save()
 		;
 	$db->setQuery($query);
 	$dwz_meldeliste	= $db->loadObjectList();
-	//echo "<br>ml:"; var_dump($dwz_meldeliste);
 	$old_ml = array();
 	foreach ($dwz_meldeliste as $dwz_ml){
 		$old_ml[$dwz_ml->lid.' '.$dwz_ml->mnr.' '.$dwz_ml->zps.' '.$dwz_ml->mgl_nr] = $dwz_ml;
 	}
-	foreach ($old_ml as $dkey => $dwz_sl){
-		echo "<br>sd:".$dkey." ".$dwz_sl->start_dwz;
-	}
-		echo "<br>ende<br>";
-	//die('ml');
+
 	//Löschen der Meldelisten
 	$query	=" DELETE FROM #__clm_meldeliste_spieler "
 		." WHERE status = ".$gid
@@ -562,18 +556,10 @@ function save()
 			;
 		$db->setQuery($query);
 		$db->query();
-	if ($db->getErrorNum()) {
-		echo $query; 
-		echo $db->stderr(); 
-		//die('er'); 
-		}
-		//die('sa');
 		$sn_cnt++;
 		$snr_counter++;
 	}
 	}
-	//die('in');
-
 		if($sn_cnt > 1) {
 				$query = " UPDATE #__clm_mannschaften "
 					." SET  liste = 1"
@@ -621,8 +607,7 @@ function cancel()
 	$option		= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
 	$id		= JRequest::getVar('id');	
-	$row 		=& JTable::getInstance( 'ranglisten', 'TableCLM' );
-	$row->checkin( $id);
+	$row 		=JTable::getInstance( 'ranglisten', 'TableCLM' );
 	$filter_vid	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
 	$msg = JText::_( 'RANGLISTE_AKTION').$filter_vid;
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
@@ -635,7 +620,7 @@ function remove()
 	// Check for request forgeries
 	JRequest::checkToken() or die( 'Invalid Token' );
 
-	$db 		=& JFactory::getDBO();
+	$db 		=JFactory::getDBO();
 	$cid 		= JRequest::getVar('cid', array(), '', 'array');
 	$option 	= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
@@ -655,17 +640,14 @@ function remove()
 	$lid = $db->loadObjectList();
 
 	// Wenn User nicht Admin oder DWZ prüfen ob SL der Staffel //
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
-	$clmAccess->accesspoint = 'BE_club_edit_ranking';
-	if ($clmAccess->access() === false) {
-	//if (CLM_usertype !== 'admin' AND $lid[0]->sl != CLM_ID) {
+	$clmAccess = clm_core::$access;
+	if ($clmAccess->access('BE_club_edit_ranking') === false) {
 			JError::raiseWarning( 500, JText::_( 'RANGLISTE_RL_STAFFEL' ) );
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link);
 					}
 	else {
-		$row	= & JTable::getInstance( 'ranglisten', 'TableCLM' );
+		$row	= JTable::getInstance( 'ranglisten', 'TableCLM' );
 		$row->load( $cid[0] );
 
 		$query	=" DELETE FROM #__clm_rangliste_spieler "
@@ -721,8 +703,8 @@ function publish()
 	// Check for request forgeries
 	JRequest::checkToken() or die( 'Invalid Token' );
 
-	$db 		= &JFactory::getDBO();
-	$user 		= &JFactory::getUser();
+	$db 		= JFactory::getDBO();
+	$user 		= JFactory::getUser();
 	$cid		= JRequest::getVar('cid', array(), '', 'array');
 	$task		= JRequest::getCmd( 'task' );
 	$publish	= ($task == 'publish');
@@ -743,11 +725,8 @@ function publish()
 	$lid = $db->loadObjectList();
 
 	// Wenn User nicht Admin oder DWZ prüfen ob SL der Staffel
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
-	$clmAccess->accesspoint = 'BE_club_edit_ranking';
-	if ($clmAccess->access() === false) {
-	//if (CLM_usertype !== 'admin') {
+	$clmAccess = clm_core::$access;
+	if ($clmAccess->access('BE_club_edit_ranking') === false) {
 		JError::raiseWarning( 500, JText::_( 'RANGLISTE_STAL_RANG' ) );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
@@ -763,8 +742,7 @@ function publish()
 	if (!$db->query()) { JError::raiseError(500, $db->getErrorMsg() );
 			}
 	if (count( $cid ) == 1) {
-		$row =& JTable::getInstance( 'ranglisten', 'TableCLM' );
-		$row->checkin( $cid[0] );
+		$row =JTable::getInstance( 'ranglisten', 'TableCLM' );
 		}
 	
 	// Log schreiben
@@ -803,7 +781,7 @@ function order( $inc )
 	// Check for request forgeries
 	JRequest::checkToken() or die( 'Invalid Token' );
 
-	$db		=& JFactory::getDBO();
+	$db		=JFactory::getDBO();
 	$cid		= JRequest::getVar('cid', array(0), '', 'array');
 	$option 	= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
@@ -812,7 +790,7 @@ function order( $inc )
 	$limit 		= JRequest::getVar( 'limit', 0, '', 'int' );
 	$limitstart 	= JRequest::getVar( 'limitstart', 0, '', 'int' );
 
-	$row =& JTable::getInstance( 'mannschaften', 'TableCLM' );
+	$row =JTable::getInstance( 'mannschaften', 'TableCLM' );
 	$row->load( $cid[0]);
 	$row->move( $inc, 'liga = '.(int) $row->liga.' AND published != 0' );
 
@@ -830,7 +808,7 @@ function saveOrder(  )
 	// Check for request forgeries
 	JRequest::checkToken() or die( 'Invalid Token' );
 
-	$db			=& JFactory::getDBO();
+	$db			=JFactory::getDBO();
 	$cid		= JRequest::getVar( 'cid', array(), 'post', 'array' );
 	$option 	= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
@@ -840,7 +818,7 @@ function saveOrder(  )
 	$order		= JRequest::getVar( 'order', array(0), 'post', 'array' );
 	JArrayHelper::toInteger($order, array(0));
 
-	$row =& JTable::getInstance( 'mannschaften', 'TableCLM' );
+	$row =JTable::getInstance( 'mannschaften', 'TableCLM' );
 	$groupings = array();
 
 	// update ordering values
@@ -874,18 +852,15 @@ function copy()
 	$option 	= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
 	$cid		= JRequest::getVar( 'cid', null, 'post', 'array' );
-	$db		= &JFactory::getDBO();
+	$db		= JFactory::getDBO();
 	$table		= &JTable::getInstance('ranglisten', 'TableCLM');
-	$user		= &JFactory::getUser();
+	$user		= JFactory::getUser();
 	$n		= count( $cid );
 	$this->setRedirect( 'index.php?option='.$option.'&section='.$section );
 
 	// Prüfen ob User Berechtigung zum kopieren hat
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
-	$clmAccess->accesspoint = 'BE_club_edit_ranking';
-	if ($clmAccess->access() === false) {
-	//if (CLM_usertype !== 'admin') {
+	$clmAccess = clm_core::$access;
+	if ($clmAccess->access('BE_club_edit_ranking') === false) {
 		JError::raiseWarning( 500, JText::_( 'RANGLISTE_ADMIN' ) );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);

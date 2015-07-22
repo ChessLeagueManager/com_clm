@@ -8,14 +8,18 @@
                     floatingHeaderRow.css("visibility", "visible");
                     floatingHeaderRow.css("top", Math.min(scrollTop - offset.top, $(this).height() - floatingHeaderRow.height()) + "px");
 
+
+		    var border;
                     // Copy cell widths from original header
                     $("th", floatingHeaderRow).each(function(index) {
-                        var cellWidth = $("th", originalHeaderRow).eq(index).css('width');
+                        var cellWidth = $("th", originalHeaderRow).eq(index).innerWidth();
+			border = $("th", originalHeaderRow).eq(index).outerWidth() - $("th", originalHeaderRow).eq(index).innerWidth();
                         $(this).css('width', cellWidth);
                     });
 
                     // Copy row width from whole table
                     floatingHeaderRow.css("width", $(this).css("width"));
+		    floatingHeaderRow.css("left", -border+"px");
                 }
                 else {
                     floatingHeaderRow.css("visibility", "hidden");

@@ -35,10 +35,10 @@ defined('_JEXEC') or die('Restricted access');
 		<thead>
 		<tr>
 		<th width="2%">
-			<?php echo JText::_( 'JGRID_HEADING_ROW_NUMBER' ); ?>
+			#
 		</th>
 		<th width="2%">
-			<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $this->categories ); ?>);" />
+			<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 		</th>
 		<th width="18%" class="title">
 			<?php echo JHtml::_('grid.sort',   JText::_('CATEGORY_NAME'), 'name', $this->param['order_Dir'], $this->param['order'] ); ?>
@@ -96,9 +96,7 @@ defined('_JEXEC') or die('Restricted access');
 
 			<td>
 				<?php
-				if (  JTable::isCheckedOut($this->user->get ('id'), $row->checked_out ) ) {
-					echo $row->name;
-				} else {
+
 					
 					$adminLink = new AdminLink();
 					$adminLink->view = "catform";
@@ -112,9 +110,9 @@ defined('_JEXEC') or die('Restricted access');
 						</a>
 					</span>
 					<?php 
-				} 
-				echo '<br />';
-				echo $row->nameTotal;
+				
+				//echo '<br />';
+				//echo $row->nameTotal;
 				?>
 			</td>
 

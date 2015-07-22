@@ -13,9 +13,10 @@
 defined('_JEXEC') or die('Restricted access');
 
 $turnierid		= JRequest::getInt('turnier','1');
-$config			= &JComponentHelper::getParams( 'com_clm' );
+$config			= clm_core::$db->config();
 
-$turParams = new JParameter($this->turnier->params);
+$turParams = new JRegistry();
+$turParams->loadString($this->turnier->params);
 
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'fpdf.php');
 
@@ -51,8 +52,8 @@ $br09 = 6;
 $font = 10;
 
 // Datum der Erstellung
-$date =& JFactory::getDate();
-$now = $date->toMySQL();
+$date = JFactory::getDate();
+$now = $date->toSQL();
 
 $pdf=new PDF();
 $pdf->AliasNbPages();
@@ -107,8 +108,8 @@ $pdf->SetTextColor(0);
 	if ($turParams->get('displayPlayerTitle', 1) == 1) {
 		$pdf->Cell($br02,$zelle,$value->titel,1,0,'C',1); }
 	$pdf->Cell($br03,$zelle,utf8_decode($value->name),1,0,'L',1);
-	if ($value->NATrating == 0) $pdf->Cell($br04,$zelle,'-',1,0,'C',1);
-	else $pdf->Cell($br04,$zelle,$value->NATrating,1,0,'C',1); 
+	if ($value->start_dwz == 0) $pdf->Cell($br04,$zelle,'-',1,0,'C',1);
+	else $pdf->Cell($br04,$zelle,$value->start_dwz,1,0,'C',1); 
 	$pdf->Cell($br05,$zelle,$value->Punkte,1,0,'C',1); 
 	$pdf->Cell($br06,$zelle,$value->We,1,0,'C',1); 
 	$pdf->Cell($br07,$zelle,$value->EFaktor,1,0,'C',1); 
@@ -129,13 +130,13 @@ $pdf->SetTextColor(0);
 	$pdf->Cell($br08,$zelle,$Partien,1,0,'C',1); 
 	if ($value->DWZ == 0) $pdf->Cell($br04,$zelle,'-',1,0,'C',1);
 	else $pdf->Cell($br04,$zelle,$value->DWZ,1,0,'C',1); 
-	if ($value->DWZ == 0 OR $value->NATrating == 0) 	$pdf->Cell($br09,$zelle,'-',1,0,'C',1); 
-	else $pdf->Cell($br09,$zelle,($value->DWZ - $value->NATrating),1,0,'C',1); 
+	if ($value->DWZ == 0 OR $value->start_dwz == 0) 	$pdf->Cell($br09,$zelle,'-',1,0,'C',1); 
+	else $pdf->Cell($br09,$zelle,($value->DWZ - $value->start_dwz),1,0,'C',1); 
 	$pdf->Cell(1,$zelle," ",0,1,'C');
 }	
 
 // Ausgabe
-$pdf->Output(utf8_decode(JText::_('TOURNAMENT_PARTICIPANTLIST')).' '.utf8_decode($this->turnier->name).'.pdf','D');
+$pdf->Output(utf8_decode(JText::_('TOURNAMENT_DWZ_PDF')).' '.utf8_decode($this->turnier->name).'.pdf','D');
 
 
 ?>

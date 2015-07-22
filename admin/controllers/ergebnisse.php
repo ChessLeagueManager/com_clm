@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerErgebnisse extends JController
+class CLMControllerErgebnisse extends JControllerLegacy
 {
 	/**
 	 * Constructor
@@ -30,21 +28,21 @@ function __construct( $config = array() )
 		$this->registerTask( 'apply_wertung','save_wertung' );
 	}
 
-function display()
+function display($cachable = false, $urlparams = array())
 	{
 	$mainframe	= JFactory::getApplication();
 	$option 	= JRequest::getCmd( 'option' );
 	$section	= JRequest::getVar('section');
-	$db		=& JFactory::getDBO();
+	$db		= JFactory::getDBO();
 
 	// für kaskadierende Menüführung
 	// Parameter auslesen
-	$config	= &JComponentHelper::getParams( 'com_clm' );
-	$val	= $config->get('menue',1);
+	$config = clm_core::$db->config();
+	$val	= $config->menue;
 	if ($val == 1) {
 		$runde	= JRequest::getVar( 'runde' );
 		$dg	= JRequest::getVar( 'dg' );
-			}
+			} else { $dg = ""; }
 	if ($val == 1 AND $runde !="") { $mainframe->setUserState( "$option.filter_runde", "$runde" ); }
 	if ($dg  !="") { $mainframe->setUserState( "$option.filter_dg", "$dg" ); }
 
@@ -95,7 +93,7 @@ function display()
 			$where[] = 'a.dg = '.(int) $filter_dg; }
 		else { $where[] = 'a.dg = '.(int) $filter_dg; }}
 
-	if ($search) {	$where[] = 'LOWER(m.name) LIKE '.$db->Quote( '%'.$db->getEscaped( $search, true ).'%', false );}
+	if ($search) {	$where[] = 'LOWER(m.name) LIKE "'.$db->escape('%'.$search.'%').'"';}
 
 	if ( $filter_state ) {
 		if ( $filter_state == 'P' ) {
@@ -163,8 +161,7 @@ function display()
 	if ($rows[0]->liga) {
 	
 	//Zugangscheck
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;      
 	if ($rows[0]->liga_mt == "0") {
 		$mppoint = 'league';
 		$csection = 'ligen';
@@ -172,16 +169,15 @@ function display()
 		$mppoint = 'teamtournament';
 		$csection = 'mturniere';
 	}
-	$clmAccess->accesspoint = 'BE_'.$mppoint.'_edit_result';
 	//echo "<br>erg: "; var_dump($rows);  die('  section');
-	if($clmAccess->access() === false) {
+	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
 		JError::raiseWarning( 500, JText::_( 'LIGEN_STAFFEL_TOTAL' ) );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
-	} elseif ($clmAccess->access() === true) $where_sl = '';
-	else $where_sl = ' AND a.sl = '.CLM_ID;
+	} elseif ($clmAccess->access('BE_'.$mppoint.'_edit_result') === true) $where_sl = '';
+	else $where_sl = ' AND a.sl = '.clm_core::$access->getJid();
 	
-	if($rows[0]->sl !== CLM_ID AND $clmAccess->access() !== true) {
+	if($rows[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
 		JError::raiseWarning( 500, JText::_( 'LIGEN_STAFFEL' ) );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
@@ -218,7 +214,7 @@ function display()
 	// Suchefilter
 	$lists['search']= $search;
  
-	require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'ergebnisse.php');
+	require_once(JPATH_COMPONENT.DS.'views'.DS.'ergebnisse.php');
 	CLMViewErgebnisse::ergebnisse( $rows, $lists, $pageNav, $option );
 }
 
@@ -227,8 +223,8 @@ function edit()
 	{
 	$mainframe	= JFactory::getApplication();
 
-	$db 		=& JFactory::getDBO();
-	$user 		=& JFactory::getUser();
+	$db 		=JFactory::getDBO();
+	$user 		=JFactory::getUser();
 	$task 		= JRequest::getVar( 'task');
 	$option 	= JRequest::getCmd( 'option' );
 	$section 	= JRequest::getVar( 'section' );
@@ -236,10 +232,10 @@ function edit()
 	JArrayHelper::toInteger($cid);
 
 	// load the row from the db table
-	$row =& JTable::getInstance( 'ergebnisse', 'TableCLM' );
+	$row =JTable::getInstance( 'ergebnisse', 'TableCLM' );
 	$row->load( $cid[0] );
 
-	$sid =& JTable::getInstance( 'saisons', 'TableCLM' );
+	$sid =JTable::getInstance( 'saisons', 'TableCLM' );
 	$sid->load($row->sid);
 
 	// Ergebnisse einer unveröffentlichten Saison nicht bearbeiten
@@ -256,9 +252,9 @@ function edit()
 
 	// illegaler Einbruchversuch über URL !
 	// evtl. mitschneiden !?!
-	$saison		=& JTable::getInstance( 'saisons', 'TableCLM' );
+	$saison		=JTable::getInstance( 'saisons', 'TableCLM' );
 	$saison->load( $row->sid );
-	if ($saison->archiv == "1") { //  AND CLM_usertype !== 'admin') {
+	if ($saison->archiv == "1") { //  AND clm_core::$access->getType() !== 'admin') {
 		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_ARCHIV' ));
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
 				}
@@ -282,8 +278,7 @@ function edit()
 	$runde		= $db->loadObjectList();
 
 	// Prüfen ob User Berechtigung zum editieren hat
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;      
 	if ($runde[0]->liga_mt == "0") {
 		$mppoint = 'league';
 		$csection = 'ligen';
@@ -291,19 +286,18 @@ function edit()
 		$mppoint = 'teamtournament';
 		$csection = 'mturniere';
 	}
-	$clmAccess->accesspoint = 'BE_'.$mppoint.'_edit_result';
-	if($clmAccess->access() === false) {
+	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
 		JError::raiseWarning( 500, JText::_( 'LIGEN_STAFFEL_TOTAL' ) );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
 	} 
-	if ($runde[0]->sl !== CLM_ID AND $clmAccess->access() !== true) {
-	//if ( $runde[0]->sl !== CLM_ID AND CLM_usertype !== 'admin') {
+	if ($runde[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+	//if ( $runde[0]->sl !== clm_core::$access->getJid() AND clm_core::$access->getType() !== 'admin') {
 		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_IHRER' ) );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 					}
-	$row->checkout( CLM_ID );
+	$row->checkout( clm_core::$access->getJid() );
 
 	if ( $runde[0]->hmnr > ($runde[0]->lid)*10 OR $runde[0]->gmnr > ($runde[0]->lid)*10) {
 		JError::raiseNotice( 6000, JText::_( 'ERGEBNISSE_MANNSCHAFTNUMMER' ) );
@@ -311,7 +305,7 @@ function edit()
 	}
 	// Spieler Heim
 	$sql = "SELECT a.*, d.Spielername as name ";
-		if($runde[0]->rang !="0") {$sql = $sql.",r.Rang ,r.man_nr as rmnr";}
+		if($runde[0]->rang !="0") {$sql = $sql.",r.Rang as snr,r.man_nr as rmnr";}
 		$sql = $sql
 		." FROM #__clm_meldeliste_spieler as a "
 		." LEFT JOIN #__clm_dwz_spieler as d ON ( d.ZPS = a.zps AND d.Mgl_Nr= a.mgl_nr AND d.sid = a.sid) ";
@@ -322,7 +316,6 @@ function edit()
 		$sql = $sql
 		." WHERE a.sid = ".$runde[0]->sid
 		." AND (( a.zps = '".$runde[0]->hzps."' AND a.mnr = ".$runde[0]->hmnr." )"
-		//." OR ( a.zps ='".$runde[0]->sgh_zps."' AND a.mnr = ".$runde[0]->hmnr." ))";
 		." OR ( FIND_IN_SET(a.zps, '".$runde[0]->sgh_zps."') != 0 AND a.mnr = ".$runde[0]->hmnr." )) ";
 		if($runde[0]->rang !="0") {
 			$sql = $sql
@@ -344,7 +337,6 @@ function edit()
 		." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) "
 		." WHERE a.sid = ".$runde[0]->sid
 		." AND (( a.zps = '".$runde[0]->hzps."' AND a.mnr = ".$runde[0]->hmnr." ) "
-		//." OR ( a.zps ='".$runde[0]->sgh_zps."' AND a.mnr = ".$runde[0]->hmnr." )) ";
 		." OR ( FIND_IN_SET(a.zps, '".$runde[0]->sgh_zps."') != 0 AND a.mnr = ".$runde[0]->hmnr." )) ";
 		if($runde[0]->rang !="0") {
 			$sql = $sql
@@ -377,7 +369,7 @@ function edit()
 	$sql = "SELECT a.id, a.erg_text "
 		." FROM #__clm_ergebnis as a "
 		;
-	$db 		=& JFactory::getDBO();
+	$db 		=JFactory::getDBO();
 	$db->setQuery( $sql );
 	$ergebnis	= $db->loadObjectList();
 
@@ -412,7 +404,7 @@ function edit()
 		}
 	// Spieler Gast
 	$sql = "SELECT a.*, d.Spielername as name";
-		if($runde[0]->rang !="0") {$sql = $sql.",r.Rang,r.man_nr as rmnr ";}
+		if($runde[0]->rang !="0") {$sql = $sql.",r.Rang as snr,r.man_nr as rmnr ";}
 		$sql = $sql
 		." FROM #__clm_meldeliste_spieler as a "
 		." LEFT JOIN #__clm_dwz_spieler as d ON ( d.ZPS = a.zps AND d.Mgl_Nr= a.mgl_nr AND d.sid = a.sid) ";
@@ -489,7 +481,7 @@ function edit()
 	//}	
 
 	
-	require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'ergebnisse.php');
+	require_once(JPATH_COMPONENT.DS.'views'.DS.'ergebnisse.php');
 	CLMViewErgebnisse::ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter,$ergebnis, $option, $hvoraufstellung, $gvoraufstellung);
 	}
 
@@ -500,11 +492,11 @@ function remove()
 	// Check for request forgeries
 	JRequest::checkToken() or die( 'Invalid Token' );
 
-	$db 		=& JFactory::getDBO();
+	$db 		=JFactory::getDBO();
 	$cid 		= JRequest::getVar('cid', array(), '', 'array');
 	$option 	= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
-	$user 		=& JFactory::getUser();
+	$user 		=JFactory::getUser();
 	JArrayHelper::toInteger($cid);
 
 	if (count($cid) < 1) {
@@ -521,8 +513,7 @@ function remove()
 	$data		= $db->loadObjectList();
 
 	// Prüfen ob User Berechtigung zum löschen hat
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;      
 	if ($data[0]->liga_mt == "0") {
 		$mppoint = 'league';
 		$csection = 'ligen';
@@ -530,14 +521,13 @@ function remove()
 		$mppoint = 'teamtournament';
 		$csection = 'mturniere';
 	}
-	$clmAccess->accesspoint = 'BE_'.$mppoint.'_edit_result';
-	if($clmAccess->access() === false) {
+	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
 		JError::raiseWarning( 500, JText::_( 'LIGEN_STAFFEL_TOTAL' ) );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
 	} 
-	if ($data[0]->sl !== CLM_ID AND $clmAccess->access() !== true) {
-	//if ( $data[0]->sl !== CLM_ID AND CLM_usertype !== 'admin') {
+	if ($data[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+	//if ( $data[0]->sl !== clm_core::$access->getJid() AND clm_core::$access->getType() !== 'admin') {
 		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_LOESCH' ) );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
@@ -607,20 +597,14 @@ function remove()
 		if (!$db->query()) {
 		echo "<script> alert('".$db->getErrorMsg(true)."'); window.history.go(-1); </script>\n";
 				}
-	
-	CLMControllerErgebnisse::calculateRanking($data[0]->sid,$data[0]->lid);
-	//require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'runden.php');
-	//CLMViewRunden::dwz( $option, 0, $data[0]->sid, $data[0]->lid );
+	clm_core::$api->db_tournament_ranking($data[0]->lid,true); 
+	//CLMControllerErgebnisse::calculateRanking($data[0]->sid,$data[0]->lid);
 	
 	// Log schreiben
 	$clmLog = new CLMLog();
 	$clmLog->aktion = "Ergebnis gelöscht";
 	$clmLog->params = array('cids' => $cids, 'sid' => $data[0]->sid, 'lid' => $data[0]->lid, 'rnd' => $data[0]->runde, 'paar' => $data[0]->paar, 'dg' => $data[0]->dg);
 	$clmLog->write();
-
-	// Inoffizielle DWZ-Auswertung		
-	require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'runden.php');
-	CLMViewRunden::dwz( $option, 0, $data[0]->sid, $data[0]->lid );
 
 	$msg = JText::_( 'ERGEBNISSE_GELOESCHT');
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section , $msg);
@@ -636,11 +620,11 @@ function save()
 
 	$option		= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
-	$db 		=&JFactory::getDBO();
+	$db 		=JFactory::getDBO();
 	$task		= JRequest::getVar( 'task');
-	$user 		=&JFactory::getUser();
+	$user 		=JFactory::getUser();
 	$id_id 		= JRequest::getVar( 'id');
-	$date		=&JFactory::getDate();
+	$date		=JFactory::getDate();
 
 	$meldung 	= $user->get('id');
 	$sid		= JRequest::getVar( 'sid');
@@ -683,7 +667,8 @@ function save()
 		$man_antritt	= $liga[0]->man_antritt;
 		$runden_modus	= $liga[0]->runden_modus;
 		$runden		= $liga[0]->runden;
-	//Liga-Parameter aufbereiten
+
+//Liga-Parameter aufbereiten
 	$paramsStringArray = explode("\n", $liga[0]->params);
 	$params = array();
 	foreach ($paramsStringArray as $value) {
@@ -706,7 +691,7 @@ function save()
 		case '6': $colorstr = '11'; break;
 		default: $colorstr = '01';	
 	}
-	
+
 	// Runde noch NICHT gemeldet
 	if (!$id[0]->gemeldet) {
 	
@@ -774,7 +759,7 @@ function save()
 	if ($weiss == 1) $schwarz = 0; else $schwarz = 1;
 	$y1++;
 	if ($y1 >= strlen($colorstr)) $y1 = 0;
- 
+
 	$query	= "INSERT INTO #__clm_rnd_spl "
 		." ( `sid`, `lid`, `runde`, `paar`, `dg`, `tln_nr`, `brett`, `heim`, `weiss`, `spieler` "
 		." , `zps`, `gegner`, `gzps`, `ergebnis` , `kampflos`, `punkte`, `gemeldet`) "
@@ -909,7 +894,7 @@ function save()
 	if ( $stamm > $gman_kl_punkte ) { $gman_punkte = $gman_punkte + $man_antritt;}
 
 	// Datum und Uhrzeit für Meldung
-	$now = $date->toMySQL();
+	$now = $date->toSQL();
 	// Für Heimmannschaft updaten
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET gemeldet = ".$meldung
@@ -1196,7 +1181,7 @@ function save()
 	if ( $stamm > $gman_kl_punkte ) { $gman_punkte = $gman_punkte + $man_antritt;}
 	}
 	// Datum und Uhrzeit für Editorzeit
-	$now = $date->toMySQL();
+	$now = $date->toSQL();
 	// Für Heimmannschaft updaten
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET editor = ".$meldung
@@ -1305,10 +1290,9 @@ function save()
 		$db->setQuery($query);
 		$db->query();
 	}
- 
-	CLMControllerErgebnisse::calculateRanking($sid,$lid);
-	//require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'runden.php');
-	//CLMViewRunden::dwz( $option, 0, $sid, $lid );
+ 	
+	clm_core::$api->db_tournament_ranking($lid,true); 
+	//CLMControllerErgebnisse::calculateRanking($sid,$lid);
 
 	switch ($task)
 	{
@@ -1318,8 +1302,7 @@ function save()
 			break;
 		case 'save':
 		default:
-		$row =& JTable::getInstance( 'ergebnisse', 'TableCLM' );
-		$row->checkin( $id_id);
+		$row =JTable::getInstance( 'ergebnisse', 'TableCLM' );
 		$msg = JText::_( 'ERGEBNISSE_GESPEICHERT' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 			break;
@@ -1334,11 +1317,10 @@ function save()
 	}
 	$clmLog->params = array('sid' => $sid, 'lid' => $lid, 'rnd' => $rnd, 'paar' => $paarung, 'dg' => $dg);
 	$clmLog->write();
-	
-	// Inoffizielle DWZ-Auswertung
-	require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'runden.php');
-	CLMViewRunden::dwz( $option, 0, $sid, $lid );
-	
+
+	// errechnte/aktualisiere Rangliste & inoff. DWZ falls eingestellt (autoDWZ, autoRANKING)
+	clm_core::$api->direct("db_tournament_auto",array($liga,true,true));
+ 	
 	$mainframe->redirect( $link, $msg );
 	}
 
@@ -1352,8 +1334,7 @@ function cancel()
 	$option		= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
 	$id		= JRequest::getVar('id');	
-	$row 		=& JTable::getInstance( 'ergebnisse', 'TableCLM' );
-	$row->checkin( $id);
+	$row 		=JTable::getInstance( 'ergebnisse', 'TableCLM' );
 
 	$msg = JText::_( 'ERGEBNISSE_AKTION');
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
@@ -1365,18 +1346,18 @@ function wertung()
 	// Check for request forgeries
 	JRequest::checkToken() or die( 'Invalid Token !!' );
 
-	$db 		=& JFactory::getDBO();
-	$user 		=& JFactory::getUser();
+	$db 		=JFactory::getDBO();
+	$user 		=JFactory::getUser();
 	$task 		= JRequest::getVar( 'task');
 	$option 	= JRequest::getCmd( 'option' );
 	$section 	= JRequest::getVar( 'section' );
 	$cid 		= JRequest::getVar( 'cid', array(0), '', 'array' );
 	JArrayHelper::toInteger($cid);
 	// load the row from the db table
-	$row =& JTable::getInstance( 'ergebnisse', 'TableCLM' );
+	$row =JTable::getInstance( 'ergebnisse', 'TableCLM' );
 	$row->load( $cid[0] );
 
-	$sid =& JTable::getInstance( 'saisons', 'TableCLM' );
+	$sid =JTable::getInstance( 'saisons', 'TableCLM' );
 	$sid->load($row->sid);
 
 	// Ergebnisse einer unveröffentlichten Saison nicht bearbeiten
@@ -1417,8 +1398,7 @@ function wertung()
 	}
 
 	// Prüfen ob User Berechtigung zum editieren hat
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;      
 	if ($runde[0]->liga_mt == "0") {
 		$mppoint = 'league';
 		$csection = 'ligen';
@@ -1426,19 +1406,19 @@ function wertung()
 		$mppoint = 'teamtournament';
 		$csection = 'mturniere';
 	}
-	$clmAccess->accesspoint = 'BE_'.$mppoint.'_edit_result';
-	if($clmAccess->access() === false) {
+
+	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
 		JError::raiseWarning( 500, JText::_( 'LIGEN_STAFFEL_TOTAL' ) );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
 	} 
-	if ($runde[0]->sl !== CLM_ID AND $clmAccess->access() !== true) {
-	//if ( $runde[0]->sl !== CLM_ID AND CLM_usertype !== 'admin') {
+	if ($runde[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+	//if ( $runde[0]->sl !== clm_core::$access->getJid() AND clm_core::$access->getType() !== 'admin') {
 		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_DWZ_BEARBEIT' ) );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 					}
-	$row->checkout( CLM_ID );
+	$row->checkout( clm_core::$access->getJid() );
 
 	// Bretter / Spieler ermitteln
 	$sql = "SELECT a.spieler, a.gegner, a.ergebnis, a.dwz_edit, d.Spielername as hname, e.Spielername as gname "
@@ -1522,7 +1502,7 @@ function wertung()
 	$lists['weiss_w']	= $list_heim[0]->wp;
 	$lists['schwarz_w']	= $list_gast[0]->wp;
 
-	require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'ergebnisse.php');
+	require_once(JPATH_COMPONENT.DS.'views'.DS.'ergebnisse.php');
 	CLMViewErgebnisse::wertung( $row, $runde,$bretter,$ergebnis, $option, $lists);
 	}
 
@@ -1534,11 +1514,11 @@ function save_wertung()
 
 	$option		= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
-	$db 		= & JFactory::getDBO();
+	$db 		= JFactory::getDBO();
 	$task 		= JRequest::getVar('task');
-	$user 		= & JFactory::getUser();
+	$user 		= JFactory::getUser();
 	$id_id 		= JRequest::getVar('id');
-	$date 		= & JFactory::getDate();
+	$date 		= JFactory::getDate();
 
 	$meldung 	= $user->get('id');
 	$sid		= JRequest::getVar('sid');
@@ -1819,7 +1799,7 @@ function save_wertung()
 	if ( $stamm > $gman_kl_punkte ) { $gman_punkte = $gman_punkte + $man_antritt;}
 
 	// Datum und Uhrzeit für Meldung
-	$now = $date->toMySQL();
+	$now = $date->toSQL();
 
 	// Für Heimmannschaft updaten
 	$query	= "UPDATE #__clm_rnd_man";
@@ -1884,8 +1864,7 @@ function save_wertung()
 			break;
 		case 'save_wertung':
 		default:
-		$row =& JTable::getInstance( 'ergebnisse', 'TableCLM' );
-		$row->checkin( $id_id);
+		$row =JTable::getInstance( 'ergebnisse', 'TableCLM' );
 		$msg = JText::_( 'ERGEBNISSE_TW_GESPEICHERT' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 			break;
@@ -1909,11 +1888,11 @@ function delete_wertung()
 
 	$option		= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
-	$db 		=&JFactory::getDBO();
+	$db 		=JFactory::getDBO();
 	$task 		= JRequest::getVar( 'task');
-	$user 		=&JFactory::getUser();
+	$user 		=JFactory::getUser();
 	$id_id 		= JRequest::getVar( 'id');
-	$date 		=&JFactory::getDate();
+	$date 		=JFactory::getDate();
 
 	$meldung 	= $user->get('id');
 	$sid		= JRequest::getVar( 'sid');
@@ -1924,12 +1903,11 @@ function delete_wertung()
 	$hzps		= JRequest::getVar( 'hzps');
 	$gzps		= JRequest::getVar( 'gzps');
 
-	$liga_sl	=& JTable::getInstance( 'ligen', 'TableCLM' );
+	$liga_sl	=JTable::getInstance( 'ligen', 'TableCLM' );
 	$liga_sl->load( $lid );
 
 	// Prüfen ob User Berechtigung zum löschen hat
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;      
 	if ($liga_sl->liga_mt == "0") {
 		$mppoint = 'league';
 		$csection = 'ligen';
@@ -1937,21 +1915,20 @@ function delete_wertung()
 		$mppoint = 'teamtournament';
 		$csection = 'mturniere';
 	}
-	$clmAccess->accesspoint = 'BE_'.$mppoint.'_edit_result';
-	if($clmAccess->access() === false) {
+	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
 		JError::raiseWarning( 500, JText::_( 'LIGEN_STAFFEL_TOTAL' ) );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
 	} 
-	if ($liga_sl->sl !== CLM_ID AND $clmAccess->access() !== true) {
-	//if ( $liga_sl->sl !== CLM_ID AND CLM_usertype !== 'admin') {
+	if ($liga_sl->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+	//if ( $liga_sl->sl !== clm_core::$access->getJid() AND clm_core::$access->getType() !== 'admin') {
 		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_DWZ_LOESCHEN' ) );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 					}
 
 	// Datum und Uhrzeit für Editorzeit
-	$now = $date->toMySQL();
+	$now = $date->toSQL();
 
 	// Mannschaftsergebnis holen
 		$stamm 		= $liga_sl->stamm;
@@ -2179,13 +2156,13 @@ function kampflos($gast)
 
 	$option		= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
-	$db 		= &JFactory::getDBO();
+	$db 		= JFactory::getDBO();
 	$link		= 'index.php?option='.$option.'&section='.$section;
 	$cid 		= JRequest::getVar( 'cid', array(0), '', 'array' );
 	JArrayHelper::toInteger($cid);
 
 	// load the row from the db table
-	$row =& JTable::getInstance( 'ergebnisse', 'TableCLM' );
+	$row =JTable::getInstance( 'ergebnisse', 'TableCLM' );
 	$row->load( $cid[0] );
 		$sid	= $row->sid;
 		$lid 	= $row->lid;
@@ -2193,7 +2170,7 @@ function kampflos($gast)
 		$paar	= $row->paar;
 		$dg	= $row->dg;
 
-	$liga_sl	=& JTable::getInstance( 'ligen', 'TableCLM' );
+	$liga_sl	=JTable::getInstance( 'ligen', 'TableCLM' );
 	$liga_sl->load( $row->lid );
 		$bretter	= $liga_sl->stamm;
 		$sieg		= $liga_sl->sieg;
@@ -2202,8 +2179,7 @@ function kampflos($gast)
 		$man_antritt	= $liga_sl->man_antritt;
 
 	// Prüfen ob User Berechtigung zum editieren hat
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;      
 	if ($liga_sl->liga_mt == "0") {
 		$mppoint = 'league';
 		$csection = 'ligen';
@@ -2211,14 +2187,13 @@ function kampflos($gast)
 		$mppoint = 'teamtournament';
 		$csection = 'mturniere';
 	}
-	$clmAccess->accesspoint = 'BE_'.$mppoint.'_edit_result';
-	if($clmAccess->access() === false) {
+	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
 		JError::raiseWarning( 500, JText::_( 'LIGEN_STAFFEL_TOTAL' ) );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
 	} 
-	if ($liga_sl->sl !== CLM_ID AND $clmAccess->access() !== true) {
-	//if ( $liga_sl->sl !== CLM_ID AND CLM_usertype !== 'admin') {
+	if ($liga_sl->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+	//if ( $liga_sl->sl !== clm_core::$access->getJid() AND clm_core::$access->getType() !== 'admin') {
 		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_LIGEN_ARBEIT' ) );
 		$mainframe->redirect( $link);
 					}
@@ -2239,9 +2214,9 @@ function kampflos($gast)
 		$mainframe->redirect( $link);
 					}
 	// Datum und Uhrzeit für Meldezeitpunkt
-	$date		=&JFactory::getDate();
-	$now		= $date->toMySQL();
-	$user		=&JFactory::getUser();
+	$date		=JFactory::getDate();
+	$now		= $date->toSQL();
+	$user		=JFactory::getUser();
 	$meldung	= $user->get('id');
 	if ($gast=="heim") { $comment = 'Heimmannschaft gewinnt kampflos'; }
 		else { $comment = 'Gastmannschaft gewinnt kampflos'; }
@@ -2313,418 +2288,11 @@ function kampflos($gast)
 	}
 
 	/**
-	* errechnet/aktualisiert Rangliste/Punktesummen eines Turniers
+	* alt: errechnet/aktualisiert Rangliste/Punktesummen eines Turniers
+	* neu: errechnte/aktualisiere Rangliste & inoff. DWZ falls eingestellt (autoDWZ, autoRANKING)
 	*/
 	function calculateRanking($sid,$liga) {
-	
-		//echo "calculate sid:".$sid." liga:".$liga; //die();
-		$date		=&JFactory::getDate();
-		$db			= JFactory::getDBO();
-		
-		$query = " SELECT a.tln_nr,a.zps as zps, a.sg_zps as sgzps, a.man_nr as man_nr, a.name, a.ordering, "
-				." l.teil, l.stamm, l.liga_mt, l.runden_modus, l.tiebr1, l.tiebr2, l.tiebr3, "
-				." l.man_sieg, l.man_remis, l.sieg, l.remis "
-			." FROM #__clm_mannschaften as a "
-			." LEFT JOIN #__clm_liga as l ON l.id =".$liga
-			." WHERE a.liga = ".$liga
-			." AND a.sid = ".$sid
-			." ORDER BY a.tln_nr "
-			;
-		$db->setQuery($query);
-		$team	=$db->loadObjectList();
-		$runden_modus	= $team[0]->runden_modus;
-		//if ($runden_modus == 1) return;
-		$man_sieg		= $team[0]->man_sieg;
-		$man_remis		= $team[0]->man_remis;
-		$brett_sieg		= $team[0]->sieg;
-		$brett_remis	= $team[0]->remis;
-		$liga_stamm 	= $team[0]->stamm;
-		
-		// "spielfrei(e)" Mannschaft suchen
-		$query = " SELECT COUNT(id) as anzahl FROM #__clm_mannschaften as a "
-			." WHERE a.liga = ".$liga
-			." AND a.sid = ".$sid
-			." AND a.name = 'spielfrei'"
-			." ORDER BY a.tln_nr "
-			;
-		$db->setQuery($query);
-		$spielfreiNumber	=$db->loadObjectList();
-		$query = " SELECT a.tln_nr FROM #__clm_mannschaften as a "
-			." WHERE a.liga = ".$liga
-			." AND a.sid = ".$sid
-			." AND a.name = 'spielfrei'"
-			." ORDER BY a.tln_nr "
-			;
-		$db->setQuery($query);
-		$spielfreiList	=$db->loadObjectList();
-		if (($spielfreiNumber[0]->anzahl >= 1) AND ($runden_modus > 2)) {
-			// Datum und Uhrzeit für Meldung
-			$now = $date->toMySQL();
-			// letzte gemeldete Runde suchen
-			$query = "SELECT tln_nr, gegner, brettpunkte, manpunkte, dg, runde FROM `#__clm_rnd_man`"
-					. " WHERE lid = ".$liga." AND brettpunkte IS NOT NULL"
-					;
-			$db->setQuery( $query );
-			$maxData = $db->loadObjectList();
-			$dg_max	= 0;
-			$runde_max	= 0;
-			foreach ($maxData as $key => $value) {
-				if (($dg_max < $value->dg) OR (($dg_max == $value->dg) AND ($runde_max < $value->runde))) {
-					$dg_max	= $value->dg;
-					$runde_max	= $value->runde;
-				}
-			}
-			foreach ($spielfreiList as $key => $spielfrei) {
-				// Paarungen mit "spielfrei" Mannschaft suchen
-				$query = "SELECT a.*, m.zps as zps, n.zps as gzps FROM `#__clm_rnd_man` as a"
-					." LEFT JOIN #__clm_mannschaften as m ON m.liga = a.lid AND m.sid = a.sid AND m.tln_nr = a.tln_nr"
-					." LEFT JOIN #__clm_mannschaften as n ON n.liga = a.lid AND n.sid = a.sid AND n.tln_nr = a.gegner"
-					. " WHERE a.lid = ".$liga
-					. " AND a.sid = ".$sid
-					. " AND a.tln_nr = ".$spielfrei->tln_nr   //.") OR (a.gegner =".$spielfrei."))"
-					;
-				if (($runden_modus == 4) OR ($runden_modus == 5))
-					$query .= " AND a.dg = ".$dg_max." AND a.runde = ".$runde_max;
-				if ($runden_modus == 3)	
-					$query .= " AND ((a.dg < ".$dg_max.") OR ( a.dg = ".$dg_max." AND a.runde <= ".$runde_max." ))";
-				$db->setQuery( $query );
-				$spielfreiData = $db->loadObjectList();
-				// Loop über Paarungen mit "spielfrei" Mannschaft
-				foreach ($spielfreiData as $key => $value) {
-					// Paarungen mit "spielfrei" Mannschaft updaten in clm_rnd_man
-					$query = "UPDATE `#__clm_rnd_man`"
-						. " SET manpunkte = 0, brettpunkte = 0, gemeldet = 62, zeit = '$now'";
-					if (($runden_modus == 4) OR ($runden_modus == 5)) 
-						$query .= " , ko_decision = 1";	
-					$query .= " WHERE lid = ".$liga." AND sid = ".$sid
-						. " AND dg = ".$value->dg." AND runde = ".$value->runde
-						. " AND tln_nr = ".$value->tln_nr." AND paar = ".$value->paar
-						;
-					$db->setQuery($query);
-					$db->query();
-					
-					$query = "UPDATE `#__clm_rnd_man`"
-						. " SET manpunkte = ".$man_sieg.", brettpunkte = ".$liga_stamm.", gemeldet = 62, zeit = '$now'";
-					if (($runden_modus == 4) OR ($runden_modus == 5)) 
-						$query .= " , ko_decision = 1";	
-					$query .= " WHERE lid = ".$liga." AND sid = ".$sid
-						. " AND dg = ".$value->dg." AND runde = ".$value->runde
-						. " AND gegner = ".$value->tln_nr." AND paar = ".$value->paar
-						;
-					$db->setQuery($query);
-					$db->query();
-					// KO Turnier: Sieger ist für nächste Runde qualifiziert
-					if (($runden_modus == 4) OR ($runden_modus == 5)) {
-					$query = "UPDATE `#__clm_mannschaften`"
-						. " SET rankingpos = ".$value->runde
-						. " WHERE liga = ".$liga." AND sid = ".$sid
-						. " AND tln_nr = ".$value->gegner
-						;
-					$db->setQuery($query);
-					$db->query();
-					}
-					// Paarungen mit "spielfrei" Mannschaften updaten in clm_rnd_spl
-					if ($value->heim == 0) {$heim = 0; $gast = 1;}     // Setzen Heim/Gast 
-					else {$heim = 1; $gast = 0;}
-				  for ($y=1; $y< ($liga_stamm +1) ; $y++){
-					if ($y%2 != 0) {$weiss = 0; $schwarz = 1;}		// ungerade Zahl für Weiss/Schwarz 
-					else { $weiss = 1; $schwarz = 0;}
-					// 1.Satz - zuerst testen, ob satz schon existiert 
-					$query = "SELECT COUNT(id) as anzahl FROM `#__clm_rnd_spl`"
-						. " WHERE lid = '$liga' AND sid = '$sid'"
-						. " AND dg = '$value->dg' AND runde = '$value->runde'"
-						. " AND tln_nr = '$value->tln_nr' AND paar = '$value->paar' AND brett = '$y'"
-						;
-					$db->setQuery( $query );
-					$testData = $db->loadObjectList();
-					if ($testData[0]->anzahl == 0) {
-						$query	= "INSERT INTO #__clm_rnd_spl "
-							." ( `sid`, `lid`, `runde`, `paar`, `dg`, `tln_nr`, `brett`, `heim`, `weiss`, `spieler` "
-							." , `zps`, `gegner`, `gzps`, `ergebnis` , `kampflos`, `punkte`, `gemeldet`) "
-							." VALUES ('$sid','$liga','$value->runde','$value->paar','$value->dg','$value->tln_nr','$y','$heim','$weiss',0,'$value->zps',"
-							." 0,'$value->gzps',8, 1,0,62) "
-						;
-						$db->setQuery($query);
-						$db->query();
-					} else {
-						$query	= "UPDATE #__clm_rnd_spl "
-							. " SET heim = '$heim', weiss = '$weiss', spieler = 0, zps = '$value->zps', gegner = 0, gzps = '$value->gzps',"
-							. " ergebnis = 8, kampflos = 1, punkte = 1, gemeldet = 62"
-							. " WHERE lid = ".$liga." AND sid = ".$sid
-							. " AND dg = ".$value->dg." AND runde = ".$value->runde
-							. " AND gegner = ".$value->tln_nr." AND paar = ".$value->paar
-						;
-						$db->setQuery($query);
-						$db->query();
-					} 
-					// 2.Satz - zuerst testen, ob satz schon existiert 
-					$query = "SELECT COUNT(id) as anzahl FROM `#__clm_rnd_spl`"
-						. " WHERE lid = '$liga' AND sid = '$sid'"
-						. " AND dg = '$value->dg' AND runde = '$value->runde'"
-						. " AND tln_nr = '$value->gegner' AND paar = '$value->paar' AND brett = '$y'"
-						;
-					$db->setQuery( $query );
-					$testData = $db->loadObjectList();
-					//echo "<br>testData: ".$testData->anzahl; var_dump($testData);
-					if ($testData[0]->anzahl == 0) {
-						$query	= "INSERT INTO #__clm_rnd_spl "
-							." ( `sid`, `lid`, `runde`, `paar`, `dg`, `tln_nr`, `brett`, `heim`, `weiss`, `spieler` "
-							." , `zps`, `gegner`, `gzps`, `ergebnis` , `kampflos`, `punkte`, `gemeldet`) "
-							." VALUES ('$sid','$liga','$value->runde','$value->paar','$value->dg','$value->gegner','$y','$gast','$schwarz',0,'$value->gzps',"
-							." 0,'$value->zps',8, 1,1,62) "
-						;
-						$db->setQuery($query);
-						$db->query();
-					} else {
-						$query	= "UPDATE #__clm_rnd_spl "
-							. " SET heim = '$gast', weiss = '$schwarz', spieler = 0, zps = '$value->gzps', gegner = 0, gzps = '$value->zps',"
-							. " ergebnis = 8, kampflos = 1, punkte = 0, gemeldet = 62"
-							. " WHERE lid = ".$liga." AND sid = ".$sid
-							. " AND dg = ".$value->dg." AND runde = ".$value->runde
-							. " AND gegner = ".$value->tln_nr." AND paar = ".$value->paar
-						;
-						$db->setQuery($query);
-						$db->query();
-					} 
-				}
-			}
-		
-		} 
-	}	
-
-		if (($runden_modus == 4) OR ($runden_modus == 5)) return;
-		
-		// alle FW in Array schreiben
-		$arrayFW = array();
-		$arrayFW[1] = $team[0]->tiebr1;
-		$arrayFW[2] = $team[0]->tiebr2;
-		$arrayFW[3] = $team[0]->tiebr3;
-		// für alle Spieler Datensätze mit Summenwert 0 anlegen
-		// TODO: da gab es einen eigenen PHP-Befehl für?!
-		$array_PlayerMPunkte = array();
-		$array_PlayerBPunkte = array();
-		$array_PlayerBerlWertung = array();
-		$array_PlayerBuch = array();
-		$array_PlayerBuchOpp = array();
-		$array_PlayeraSoBe = array();
-		$array_PlayerSoBe = array();
-		$array_PlayerBuSum = array();
-		$array_PlayerWins = array();
-		for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
-			$array_PlayerMPunkte[$s] = 0;
-			$array_PlayerBPunkte[$s] = 0;
-			$array_PlayerBerlWertung[$s] = 0;
-			$array_PlayerBuch[$s] = 0;
-			$array_PlayeraSoBe[$s] = 0;
-			$array_PlayerSoBe[$s] = 0;
-			$array_PlayerBuSum[$s] = 0;
-			$array_PlayerWins[$s] = 0;
-		}
-		
-		// alle Matches in DatenArray schreiben
-		$query = "SELECT tln_nr, gegner, brettpunkte, manpunkte FROM `#__clm_rnd_man`"
-				. " WHERE lid = ".$liga." AND brettpunkte IS NOT NULL"
-				;
-		$db->setQuery( $query );
-		$matchData = $db->loadObjectList();
-		// alle Matches in DatenArray schreiben
-		$query = "SELECT tln_nr, brett, punkte FROM `#__clm_rnd_spl`"
-				. " WHERE lid = ".$liga." AND sid = ".$sid." AND punkte IS NOT NULL"
-				;
-		$db->setQuery( $query );
-		$einzelData = $db->loadObjectList();
-		
-		// Punkte/Siege
-		// alle Matches durchgehen -> Spieler erhalten Punkte und Wins
-		foreach ($matchData as $key => $value) {
-			if ($value->manpunkte == $man_sieg) { // Mannschaftssieg
-				$array_PlayerWins[$value->tln_nr] += 1;
-			}
-			$array_PlayerMPunkte[$value->tln_nr] += $value->manpunkte;
-			$array_PlayerBPunkte[$value->tln_nr] += $value->brettpunkte;
-		}
-		
-		// Berliner Wertung
-		// alle Einzels durchgehen -> Mannschaften erhalten Wertpunkte
-		foreach ($einzelData as $key => $valuee) {
-			$array_PlayerBerlWertung[$valuee->tln_nr] += $valuee->punkte * ($liga_stamm + 1 - $valuee->brett);
-		}
-	
-		// Buchholz & Sonneborn-Berger
-		// erneut alle Matches durchgehen -> Spieler erhalten Feinwertungen
-		foreach ($matchData as $key => $value) {
-			// Buchholz
-			if (in_array(1, $arrayFW) OR in_array(2, $arrayFW) OR in_array(11, $arrayFW)) { // beliebige Buchholz als TieBreaker gewünscht?
-				$array_PlayerBuchOpp[$value->tln_nr][] = $array_PlayerBPunkte[$value->gegner]; // Array mit Gegnerwerten - für Streichresultat
-			}
-			
-			// Sonneborn-Berger alt
-			if (in_array(3, $arrayFW)) { // SoBe(alt) als ein TieBreaker gewünscht?
-				if ($value->manpunkte == $man_remis) { // remis
-					$array_PlayeraSoBe[$value->tln_nr] += ($array_PlayerBPunkte[$value->gegner]/2);
-				} elseif ($value->manpunkte == $man_sieg) { // Sieger
-					$array_PlayeraSoBe[$value->tln_nr] += $array_PlayerBPunkte[$value->gegner];
-				}
-			}
-			
-			// Sonneborn-Berger neu
-			if (in_array(23, $arrayFW)) { // SoBe(neu) als ein TieBreaker gewünscht?
-				if ($value->brettpunkte > 0) { 
-					$array_PlayerSoBe[$value->tln_nr] += $value->brettpunkte * $array_PlayerMPunkte[$value->gegner];
-				}
-			}
-		}
-	
-		// Buchholz
-		if (in_array(1, $arrayFW)) { // normale Buchholz als TieBreaker gewünscht?
-			for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
-				$array_PlayerBuch[$s] = array_sum($array_PlayerBuchOpp[$s]);
-			}
-		} elseif (in_array(11, $arrayFW)) { // Buchholz mit Streichresultat
-			for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
-				$array_PlayerBuch[$s] = array_sum($array_PlayerBuchOpp[$s]) - min($array_PlayerBuchOpp[$s]);
-			}
-		}
-	
-		// BuchholzSumme
-		if (in_array(2, $arrayFW)) { // Buchholz-Summe als TieBreaker gewünscht?
-			// erneut alle Matches durchgehen -> Spieler erhalten Buchholzsummen
-			foreach ($matchData as $key => $value) {
-				//echo "<br>matchdata: "; var_dump($value);
-				//echo "<br>BuSum: "; var_dump($array_PlayerBuSum);
-				//echo "<br>Buch: "; var_dump($array_PlayerBuch);
-				$array_PlayerBuSum[$value->tln_nr] += $array_PlayerBuch[$value->gegner];
-			}
-		}
-		
-		// alle Spieler durchgehen und updaten (kein vorheriges Löschen notwendig)
-		for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
-			// den TiebrSummen ihre Werte zuordnen
-			for ($tb=1; $tb<=3; $tb++) {
-				$sumTiebr[$tb] = 0;
-				switch ($arrayFW[$tb]) {
-					case 1: // buchholz
-						$sumTiebr[$tb] = $array_PlayerBuch[$s];
-						break;
-					case 2: // bhhlz.-summe
-						$sumTiebr[$tb] = $array_PlayerBuSum[$s];
-						break;
-					case 3: // sobe (alt)
-						$sumTiebr[$tb] = $array_PlayeraSoBe[$s];
-						break;
-					case 4: // wins
-						$sumTiebr[$tb] = $array_PlayerWins[$s];
-						break;
-					case 5: // brettpunkte
-						$sumTiebr[$tb] = $array_PlayerBPunkte[$s];
-						break;
-					case 6: // berliner wertung
-						$sumTiebr[$tb] = $array_PlayerBerlWertung[$s];
-						break;
-					case 11: // bhhlz mit 1 streichresultat
-						$sumTiebr[$tb] = $array_PlayerBuch[$s];
-						break;
-					case 23: // sobe 
-						$sumTiebr[$tb] = $array_PlayerSoBe[$s];
-						break;
-					case 51: // ordering
-						$sumTiebr[$tb] = 1000 - $team[$s-1]->ordering;
-						break;
-					default:
-						$sumTiebr[$tb] = 0;
-				}
-			}
-			$query = "UPDATE #__clm_mannschaften"
-					. " SET summanpunkte = ".$array_PlayerMPunkte[$s].", sumbrettpunkte = ".$array_PlayerBPunkte[$s].", sumwins = ".$array_PlayerWins[$s].", "
-					. " sumTiebr1 = ".$sumTiebr[1].", sumTiebr2 = ".$sumTiebr[2].", sumTiebr3 = ".$sumTiebr[3]
-					. " WHERE liga = ".$liga
-					. " AND sid = ".$sid
-					. " AND tln_nr = ".$s
-					;
-			$db->setQuery($query);
-			$db->query();
-		}
-
-		if ($team[0]->tiebr1 == 25 OR $team[0]->tiebr2 == 25 OR $team[0]->tiebr3 == 25) {
-			$query = "SELECT * "
-				." FROM `#__clm_mannschaften`"
-				." WHERE liga = ".$liga
-				." ORDER BY summanpunkte DESC, sumtiebr1 DESC, sumtiebr2 DESC, sumtiebr3 DESC, tln_nr ASC"
-				;
-			$db->setQuery( $query );
-			$players = $db->loadObjectList();
-			// alle Mannschaften durchgehen
-			foreach ($players as $xvalue) {
-				$sum_erg = 0; $id_dv = 0;
-				// alle Spieler durchgehen
-				foreach ($players as $yvalue) {
-					if ($xvalue->tln_nr == $yvalue->tln_nr) continue;	
-					// sind x und y wertungsgleich ?
-					if (($team[0]->tiebr1 == 25 AND $xvalue->summanpunkte == $yvalue->summanpunkte) OR			
-						($team[0]->tiebr2 == 25 AND $xvalue->summanpunkte == $yvalue->summanpunkte AND $xvalue->sumtiebr1 == $yvalue->sumtiebr1)	OR		
-						($team[0]->tiebr3 == 25 AND $xvalue->summanpunkte == $yvalue->summanpunkte AND $xvalue->sumtiebr1 == $yvalue->sumtiebr1 AND $xvalue->sumtiebr2 == $yvalue->sumtiebr2)) {			
-						$id_dv = 1;
-						// alle Matches in DatenArray schreiben
-						$query = "SELECT * FROM `#__clm_rnd_man`"
-							. " WHERE lid = ".$liga." AND brettpunkte IS NOT NULL"
-							. " AND tln_nr = ".$xvalue->tln_nr." AND gegner = ".$yvalue->tln_nr
-							;
-						$db->setQuery( $query );
-						$matchesdirect = $db->loadObjectList();
-						$zdirect = count($matchesdirect);
-						foreach ($matchesdirect as $mdvalue) {
-							if ($mdvalue->manpunkte == $team[0]->man_remis) $sum_erg += 1;
-							elseif ($mdvalue->manpunkte == $team[0]->man_sieg) $sum_erg += 2;
-						}
-					}
-				}
-				if ($id_dv == 1) {
-					$query = "UPDATE #__clm_mannschaften";
-					if ($team[0]->tiebr1 == 25) $query .= " SET sumTiebr1 = ".$sum_erg;
-					elseif ($team[0]->tiebr2 == 25) $query .= " SET sumTiebr2 = ".$sum_erg;
-					else $query .= " SET sumTiebr3 = ".$sum_erg;
-					$query .= " WHERE liga = ".$liga
-						. " AND tln_nr = ".$xvalue->tln_nr
-						;
-					$db->setQuery($query);
-					$db->query();
-				} else {
-					$query = "UPDATE #__clm_mannschaften";
-					if ($team[0]->tiebr1 == 25) $query .= " SET sumTiebr1 = NULL";
-					elseif ($team[0]->tiebr2 == 25) $query .= " SET sumTiebr2 = NULL";
-					else $query .= " SET sumTiebr3 = NULL";
-					$query .= " WHERE liga = ".$liga
-						. " AND tln_nr = ".$xvalue->tln_nr
-						;
-					$db->setQuery($query);
-					$db->query();
-				}
-			}
-		}
-	//}	//die();
-	// function setRankingPositions() {
-	
-		$query = "SELECT id"
-			." FROM `#__clm_mannschaften`"
-			." WHERE liga = ".$liga
-			." AND sid = ".$sid
-			." ORDER BY summanpunkte DESC, sumtiebr1 DESC, sumtiebr2 DESC, sumtiebr3 DESC, tln_nr ASC"
-			;
-		
-		$db->setQuery( $query );
-		$players = $db->loadObjectList();		 
-		$table	=& JTable::getInstance( 'mannschaften', 'TableCLM' );
-		// rankingPos umsortieren
-		$rankingPos = 0;
-		// alle Spieler durchgehen
-		foreach ($players as $value) {
-			$table->load($value->id);
-			if ($table->name != "spielfrei") {
-				$rankingPos++;
-				$table->rankingpos = $rankingPos; }
-			else {$table->rankingpos = 0; }
-			$table->store();
-		} 
+		clm_core::$api->direct("db_tournament_auto",array($liga,true,false));
 	}
 
 }

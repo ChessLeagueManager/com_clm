@@ -12,11 +12,9 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
+class CLMViewCatForm extends JViewLegacy {
 
-class CLMViewCatForm extends JView {
-
-	function display() {
+	function display($tpl = NULL) {
 
 		// Die Toolbar erstellen, die über der Seite angezeigt wird
 		if (JRequest::getVar( 'task') == 'edit') { 
@@ -27,7 +25,7 @@ class CLMViewCatForm extends JView {
 		
 		JToolBarHelper::title( $text );
 		
-		if (CLM_usertype == 'admin' OR CLM_usertype == 'tl') {
+		if (clm_core::$access->getType() == 'admin' OR clm_core::$access->getType() == 'tl') {
 			JToolBarHelper::save( 'save' );
 			JToolBarHelper::apply( 'apply' );
 		}
@@ -39,10 +37,10 @@ class CLMViewCatForm extends JView {
 
 
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
-		$model =   &$this->getModel();
+		$model =   $this->getModel();
 
 		// Document/Seite
-		$document =& JFactory::getDocument();
+		$document =JFactory::getDocument();
 
 		// JS-Array jtext -> Fehlertexte
 		$document->addScriptDeclaration("var jserror = new Array();");

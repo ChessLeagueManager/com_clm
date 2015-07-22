@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerTurForm extends JController {
+class CLMControllerTurForm extends JControllerLegacy {
 	
 
 	// Konstruktor
@@ -24,7 +22,7 @@ class CLMControllerTurForm extends JController {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= & JFactory::getDBO();
+		$this->_db		= JFactory::getDBO();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save', 'edit' );
@@ -53,7 +51,7 @@ class CLMControllerTurForm extends JController {
 	
 		if ($this->_saveDo()) { // erfolgreich?
 			
-			$app =& JFactory::getApplication();
+			$app =JFactory::getApplication();
 			
 			if ($this->neu) { // neues Turnier?
 				$app->enqueueMessage( JText::_('TOURNAMENT_CREATED') );
@@ -79,17 +77,16 @@ class CLMControllerTurForm extends JController {
 		$task = JRequest::getVar('task');
 		
 		// Instanz der Tabelle
-		$row = & JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = JTable::getInstance( 'turniere', 'TableCLM' );
 		
 		if (!$row->bind(JRequest::get('post'))) {
 			JError::raiseError(500, $row->getError() );
 			return false;
 		}
 		
-		require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_clm'.DS.'classes'.DS.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
+	        $clmAccess = clm_core::$access;
 		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
-		if ($row->tl != CLM_ID AND $clmAccess->access() !== true) {
+		if ($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) {
 			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
 			return false;
 		}
@@ -139,7 +136,7 @@ class CLMControllerTurForm extends JController {
 		if (!$row->store()) {
 			JError::raiseError(500, $row->getError() );
 		}
-		$row->checkin();
+		
 
 		
 		// bei bereits bestehendem Turnier noch calculateRanking

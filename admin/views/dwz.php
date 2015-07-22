@@ -14,78 +14,65 @@
 class CLMViewDWZ
 {
 
-function setDWZToolbar()
+static function setDWZToolbar()
 	{
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;      
 	// Menubilder laden
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 
-		JToolBarHelper::title(  JText::_( 'TITLE_MEMBER'),'clm_headmenu_mitglieder' );
-	$clmAccess->accesspoint = 'BE_club_edit_member';
-	if($clmAccess->access() !== false) {
-	//if (CLM_usertype === 'admin' OR CLM_usertype === 'dv' OR CLM_usertype === 'dwz') {
+	JToolBarHelper::title(  JText::_( 'TITLE_MEMBER'),'clm_headmenu_mitglieder' );
+	if($clmAccess->access('BE_club_edit_member') !== false) {
 		JToolBarHelper::custom( 'spieler_delete', 'trash.png', 'trash_f2.png', JText::_( 'MEMBER_BUTTON_DEL'),false );
 	}
 		JToolBarHelper::custom( 'nachmeldung_delete', 'trash.png', 'trash_f2.png', JText::_( 'MEMBER_BUTTON_DEL_NACH'),false );
 		JToolBarHelper::custom( 'nachmeldung', 'apply.png', 'apply_f2.png', JText::_( 'MEMBER_BUTTON_NACH'),false );
 		JToolBarHelper::custom( 'daten_edit', 'apply.png', 'apply_f2.png', JText::_( 'MEMBER_BUTTON_EDIT'),false );
-		//JToolBarHelper::custom( 'daten_dsb_API', 'refresh.png', 'refresh_f2.png', JText::_( 'DB_BUTTON_DWZ_UPDATE_API'),false );
-		JToolBarHelper::custom( 'daten_dsb_SOAP', 'refresh.png', 'refresh_f2.png', JText::_( 'DB_BUTTON_DWZ_UPDATE_SOAP'),false );
 		JToolBarHelper::cancel();
 		JToolBarHelper::help( 'screen.clm.edit' );
 	}
 
-function DWZ( $spieler,$verein,$lists, $pageNav, $option )
+static function DWZ( $spieler,$verein,$lists, $pageNav, $option )
 	{
 		CLMViewDWZ::setDWZToolbar();
 		JRequest::setVar( 'hidemainmenu', 1 );
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 		
-	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-	$clmAccess = new CLMAccess();
+	$clmAccess = clm_core::$access;      
 		?>
 
 <script language="javascript" type="text/javascript">
 
 	function edit()
 	{
-	var task 	= document.getElementsByName ( "task") [0];
-	var pre_task 	= document.getElementsByName ( "pre_task") [0];
-	task.value 	= "add";
-	pre_task.value 	= "add";
-	document.adminForm.submit();
+		var task 	= document.getElementsByName ( "task") [0];
+		var pre_task 	= document.getElementsByName ( "pre_task") [0];
+		task.value 	= "add";
+		pre_task.value 	= "add";
+		document.adminForm.submit();
 	}
 
-	<?php if (JVersion::isCompatible("1.6.0")) { ?>
-		 Joomla.submitbutton = function (pressbutton) { 
-	<?php } else { ?>
-		 function submitbutton(pressbutton) {
-	<?php } ?>		
+	Joomla.submitbutton = function (pressbutton) { 
 		var form = document.adminForm;
 		var pre_task = document.getElementsByName ( "pre_task") [0];
 
-	else {
 		if (pre_task.value == 'add') {
-		if (pressbutton == 'cancel') {
-			submitform( pressbutton );
-			return;
-		}
-		// do field validation
-		if (form.filter_vid.value == "0") {
-			alert( "<?php echo JText::_( 'MEMBER_JS_1', true ); ?>" );
-		} else if (form.filter_sid.value == "0") {
-			alert( "<?php echo JText::_( 'MEMBER_JS_2', true ); ?>" );
-		} else if (form.filter_gid.value == "0") {
-			alert( "<?php echo JText::_( 'MEMBER_JS_3', true ); ?>" );
+			if (pressbutton == 'cancel') {
+				submitform( pressbutton );
+				return;
+			}
+			// do field validation
+			if (form.filter_vid.value == "0") {
+				alert( "<?php echo JText::_( 'MEMBER_JS_1', true ); ?>" );
+			} else if (form.filter_sid.value == "0") {
+				alert( "<?php echo JText::_( 'MEMBER_JS_2', true ); ?>" );
+			} else if (form.filter_gid.value == "0") {
+				alert( "<?php echo JText::_( 'MEMBER_JS_3', true ); ?>" );
+			} else {
+				submitform( pressbutton );
+			}
 		} else {
 			submitform( pressbutton );
 		}
-		}
-		else {
-			submitform( pressbutton );
-		}
-	}
 	}
  
 </script>
@@ -93,13 +80,13 @@ function DWZ( $spieler,$verein,$lists, $pageNav, $option )
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 
 	<table class="admintable">
-		<tr><td width=55%>
+		<tr><td>
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'MEMBER_TABLE_DATA' ); ?></legend>
 		<?php echo $lists['vid'];  ?>&nbsp;&nbsp;
 		<?php if (isset($lists['mgl'])) echo $lists['mgl'];  ?>&nbsp;&nbsp;
 		<?php $mainframe	= JFactory::getApplication();
-		$filter_sort	= $mainframe->getUserStateFromRequest( "$option.filter_mgl",'filter_sort',0,'string' ); ?>
+		$filter_sort	= $mainframe->getUserStateFromRequest( "$option.filter_sort",'filter_sort',0,'string' ); ?>
 		<select name="filter_sort" id="filter_sort" class="inputbox" size="1" onchange="document.adminForm.submit();">
 		<option value="0"  <?php if ($filter_sort =="0") { ?>selected="selected"<?php } ?>><?php echo JText::_( 'MEMBER_DD_1');?></option>
 		<option value="(0+Mgl_Nr) DESC" <?php if ($filter_sort =="(0+Mgl_Nr) DESC") { ?>selected="selected"<?php } ?>><?php echo JText::_( 'MEMBER_DD_2');?></option>
@@ -111,19 +98,7 @@ function DWZ( $spieler,$verein,$lists, $pageNav, $option )
 		</select>
 		</fieldset>
 		</td>
-		<td>                 </td>
-		<td width=40%>
-		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'DB_UPDATE_VERBAND' ); ?></legend>
-		<table class="admintable">
-			<tr>	
-			<td><input type="checkbox" id="incl_pd" name="incl_pd" value="1" /><?php echo JText::_('DB_UPDATE_INCL_P'); ?></td>
-			<td>     </td>
-			<td><?php echo JText::_('DB_UPDATE_INCL_P_HINT'); ?></td>
-			</tr>
-		</table>
-		</fieldset>
-		</td></tr>
+		</tr>
 	</table>
 
 <?php	 $filter_vid	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' ); ?>
@@ -267,7 +242,9 @@ function DWZ( $spieler,$verein,$lists, $pageNav, $option )
 	</div>
 
 	<div>
-	<?php 	$zps = $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
+	<?php 	
+$zps = $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
+
 		$spl = CLMControllerDWZ::spieler($zps); ?>
 	<fieldset class="adminform">
 	<legend><?php echo JText::_( 'MEMBER_TABLE_27' ); ?></legend>
@@ -287,9 +264,7 @@ function DWZ( $spieler,$verein,$lists, $pageNav, $option )
 	</fieldset>
 	</div>
 
-<?php 	$clmAccess->accesspoint = 'BE_club_edit_member';
-		if($clmAccess->access() === true) {
-		//if (CLM_usertype === 'admin' OR CLM_usertype === 'dv' OR CLM_usertype === 'dwz') { ?>
+<?php if($clmAccess->access('BE_club_edit_member') === true) { ?>
 	<div>
 	<?php 	$zps = $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
 		$spl = CLMControllerDWZ::spieler($zps); ?>
@@ -314,15 +289,14 @@ function DWZ( $spieler,$verein,$lists, $pageNav, $option )
 	</div>
 
 		<div class="clr"></div>
-		<?php if (!isset($verein[0]->sid)) $verein[0]->sid = $lists['saison'][0]->id; ?>
 		<input type="hidden" name="section" value="dwz" />
 		<input type="hidden" name="option" value="com_clm" />
 		<input type="hidden" name="zps" value="<?php echo $filter_vid; ?>" />
 		<input type="hidden" name="mgl" value="<?php echo $filter_mgl; ?>" />
 
-		<input type="hidden" name="sid" value="<?php echo $verein[0]->sid; ?>" />
+		<?php if(isset($verein[0])){ echo '<input type="hidden" name="sid" value="'.$verein[0]->sid.'" />'; } ?>
 		<input type="hidden" name="task" value="" />
-
+		<input type="hidden" name="pre_task" value="" />
 		<?php echo JHtml::_( 'form.token' ); ?>
 		</form>
 		<?php

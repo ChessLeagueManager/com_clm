@@ -11,9 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
-
-class CLMModelTurPlayerEdit extends JModel {
+class CLMModelTurPlayerEdit extends JModelLegacy {
 
 
 	// benötigt für Pagination
@@ -23,7 +21,7 @@ class CLMModelTurPlayerEdit extends JModel {
 
 
 		// user
-		$this->user =& JFactory::getUser();
+		$this->user =JFactory::getUser();
 		
 		// get parameters
 		$this->_getParameters();
@@ -50,7 +48,7 @@ class CLMModelTurPlayerEdit extends JModel {
 	
 	function _getPlayerData() {
 	
-		$query = 'SELECT snr, name, birthYear, geschlecht, verein, NATrating, FIDEelo, titel, twz, turnier, sum_punkte, koStatus, sumTiebr1, sumTiebr2, sumTiebr3'
+		$query = 'SELECT snr, name, birthYear, geschlecht, verein, start_dwz, start_I0, FIDEelo, titel, twz, turnier, sum_punkte, koStatus, sumTiebr1, sumTiebr2, sumTiebr3'
 			. ' FROM #__clm_turniere_tlnr'
 			. ' WHERE id = '.$this->param['playerid']
 			;

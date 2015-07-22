@@ -13,23 +13,19 @@
 defined('_JEXEC') or die('Restricted access');
 
 	//BE-Parameter aufbereiten
-	$be_paramsStringArray = explode("\n", $this->accessgroup->be_params);
-	$this->accessgroup->be_params = array();
-	foreach ($be_paramsStringArray as $value) {
+	$paramsStringArray = explode("\n", $this->accessgroup->params);
+	$this->accessgroup->params = array();
+	foreach ($paramsStringArray as $value) {
 		$ipos = strpos ($value, '=');
 		if ($ipos !== false) {
-			$this->accessgroup->be_params[substr($value,0,$ipos)] = substr($value,$ipos+1);
+			$this->accessgroup->params[substr($value,0,$ipos)] = substr($value,$ipos+1);
 		}
 	}	
 ?>
 
 	<script language="javascript" type="text/javascript">
 
-	<?php if (JVersion::isCompatible("1.6.0")) { ?>
-		 Joomla.submitbutton = function (pressbutton) { 
-	<?php } else { ?>
-		 function submitbutton(pressbutton) {
-	<?php } ?>		
+		 Joomla.submitbutton = function (pressbutton) { 		
 			var form = document.adminForm;
 			if (pressbutton == 'cancel') {
 				submitform( pressbutton );
@@ -48,14 +44,6 @@ defined('_JEXEC') or die('Restricted access');
 			} else if (form.usertype.value == "<?php echo $agroup->usertype; ?>") {
 				alert( "<?php echo JText::_( 'ACCESSGROUP_HINT_GROUPTYPE_EXISTING', true ); ?>" );
 			  <?php } ?>
-			} else if (form.user_clm.value == "") {
-				alert( "<?php echo JText::_( 'ACCESSGROUP_HINT_USER_MISSING', true ); ?>" ); 
-			 <?php foreach ($this->accessgroups as $agroup) { ?>		
-			} else if (form.user_clm.value == "<?php echo $agroup->user_clm; ?>") {
-				alert( "<?php echo JText::_( 'ACCESSGROUP_HINT_USER_EXISTING', true ); ?>" );
-			  <?php } ?>
-			} else if (form.kind.value == "CLM") {
-				alert( "<?php echo JText::_( 'ACCESSGROUP_HINT_KIND_CLM', true ); ?>" );
 			} else {
 				submitform( pressbutton );
 			}
@@ -94,30 +82,6 @@ defined('_JEXEC') or die('Restricted access');
 						</tr>
 						<tr> 
 							<td width="100" align="right" class="key"> 
-								<label for="user_clm">
-								<span class="editlinktip hasTip" title="<?php echo JText::_( 'ACCESSGROUP_USER_HINT' );?>">
-								<?php echo JText::_( 'ACCESSGROUP_USER' ); ?></span></label> 
-							</td> 
-							<td> 
-								<input class="inputbox" type="text" name="user_clm" 
-								id="user_clm" size="4" maxlength="4" 
-								value="<?php echo $this->accessgroup->user_clm;?>" /> 
-							</td> 
-						</tr>
-						<tr> 
-							<td width="100" align="right" class="key"> 
-								<label for="kind">
-								<span class="editlinktip hasTip" title="<?php echo JText::_( 'ACCESSGROUP_KIND_HINT' );?>">
-								<?php echo JText::_( 'ACCESSGROUP_KIND' ); ?></span></label> 
-							</td> 
-							<td> 
-								<input class="inputbox" type="text" name="kind" 
-								id="kind" size="4" maxlength="4" 
-								value="<?php echo $this->accessgroup->kind;?>" /> 
-							</td> 
-						</tr>
-						<tr> 
-							<td width="100" align="right" class="key"> 
 								<label for="published"><?php echo JText::_( 'JPUBLISHED' ); ?></label> 
 							</td> 
 							<td><fieldset class="radio"> 
@@ -134,7 +98,18 @@ defined('_JEXEC') or die('Restricted access');
 							</td>
 						</tr>
 						<?php } ?>
-						
+						<tr> 
+							<td width="100" align="right" class="key"> 
+								<label for="kind">
+								<span class="" title="<?php echo JText::_( 'ACCESSGROUP_KIND_HINT' );?>">
+								<?php echo JText::_( 'ACCESSGROUP_KIND' ); ?></span></label> 
+							</td> 
+							<td> 
+								<label for="kind">
+								<span class="editlinktip hasTip">
+								<?php echo $this->accessgroup->kind;?></span></label> 
+							</td> 
+						</tr>
 					</table> 
 				</fieldset>
 
@@ -143,27 +118,25 @@ defined('_JEXEC') or die('Restricted access');
 				<fieldset class="adminform"> 
 					<legend><?php echo JText::_( 'ACCESSGROUP_BE_DETAILS' ); ?></legend> 
 					<table class="admintable">
-						<?php  foreach ($this->accesspoints as $apoint) { 
-								if ($apoint->area == 'BE') {
-									$pname = $apoint->area.'_'.$apoint->accesstopic.'_'.$apoint->accesspoint;
+						<?php  foreach (clm_core::$access->getAccesspoints() as $pname => $value) { 
 									$tname = 'TAP_'.$pname;
-									if (!isset($this->accessgroup->be_params[$pname])) $this->accessgroup->be_params[$pname] = 0;
+									if (!isset($this->accessgroup->params[$pname])) { $this->accessgroup->params[$pname] = 0; }
 						?> 
 							<tr> 
 								<td width="100" align="right" class="key"> 
 									<label for="<?php echo $pname; ?>"><?php echo JText::_( $tname ); ?></label> 
 									</td><td>
-									<select name="be_params[<?php echo $pname; ?>]" id="be_params[<?php echo $pname; ?>]" value="<?php echo $this->accessgroup->be_params[$pname]; ?>" size="1">
-									<option value="0" <?php if ($this->accessgroup->be_params[$pname] == 0) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'ACCESS_VALUE_0' );?></option>
-									<option value="1" <?php if ($this->accessgroup->be_params[$pname] == 1) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'ACCESS_VALUE_1' );?></option>
-									<?php if ($apoint->rule != "NY") {
-											$access2 = 'ACCESS_VALUE_2'.substr($apoint->rule,2,1); ?>
-									<option value="2" <?php if ($this->accessgroup->be_params[$pname] == 2) {echo 'selected="selected"';}  ?>><?php echo JText::_( $access2 );?></option>
+									<select name="params[<?php echo $pname; ?>]" id="params[<?php echo $pname; ?>]" value="<?php echo $this->accessgroup->params[$pname]; ?>" size="1">
+									<option value="0" <?php if ($this->accessgroup->params[$pname] == 0) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'ACCESS_VALUE_0' );?></option>
+									<option value="1" <?php if ($this->accessgroup->params[$pname] == 1) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'ACCESS_VALUE_1' );?></option>
+									<?php if ($value>0) {
+											$access2 = 'ACCESS_VALUE_2'.($value == 1 ? "L":"T"); ?>
+									<option value="2" <?php if ($this->accessgroup->params[$pname] == 2) {echo 'selected="selected"';}  ?>><?php echo JText::_( $access2 );?></option>
 									<?php } ?>		
 									</select>
 								</td>	
 							</tr>
-							<?php } } ?>
+							<?php } ?>
 					</table> 
 				</fieldset>
 			</td>

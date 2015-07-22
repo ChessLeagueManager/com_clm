@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerCheck extends JController
+class CLMControllerCheck extends JControllerLegacy
 {
 	/**
 	 * Constructor
@@ -28,7 +26,7 @@ function __construct( $config = array() )
 		//$this->registerTask( 'add','edit' );
 	}
 
-function display()
+function display($cachable = false, $urlparams = array())
 	{
 	$mainframe	= JFactory::getApplication();
 	$option 	= JRequest::getCmd( 'option' );
@@ -40,8 +38,8 @@ function edit()
 	{
 	$mainframe	= JFactory::getApplication();
 
-	$db 		=& JFactory::getDBO();
-	$user 		=& JFactory::getUser();
+	$db 		=JFactory::getDBO();
+	$user 		=JFactory::getUser();
 	$task 		= JRequest::getVar( 'task');
 	$cid 		= JRequest::getVar( 'cid', array(0), '', 'array' );
 	$option 	= JRequest::getCmd( 'option' );
@@ -60,9 +58,9 @@ function edit()
 
 	// illegaler Einbruchversuch über URL !
 	// evtl. mitschneiden !?!
-	$saison		=& JTable::getInstance( 'saisons', 'TableCLM' );
+	$saison		=JTable::getInstance( 'saisons', 'TableCLM' );
 	$saison->load( $rnd[0]->sid );
-	if ($saison->archiv == "1") { // AND CLM_usertype !== 'admin') {
+	if ($saison->archiv == "1") { // AND clm_core::$access->getType() !== 'admin') {
 		JError::raiseWarning( 500, JText::_( 'CHECK_RUNDEN' ));
 		$mainframe->redirect( 'index.php?option='. $option.'&section=info', $msg );
 				}
@@ -96,7 +94,7 @@ function edit()
 	$db->setQuery( $query);
 	$dat=$db->loadObjectList();
 
-	require_once(JPATH_COMPONENT.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'check.php');
+	require_once(JPATH_COMPONENT.DS.'views'.DS.'check.php');
 	CLMViewCheck::check( $row, $dat, $rnd, $liga,$dg,$runde );
 	}
 
@@ -106,7 +104,7 @@ function check_d_spl($zps,$spieler,$runde,$dg,$rnd)
 	$sid = $rnd[0]->sid;
 	$rt_date = $rnd[0]->datum;
 	
-	$db 	=& JFactory::getDBO();
+	$db 	=JFactory::getDBO();
 	$query = " SELECT COUNT(*) as count "
 		." FROM #__clm_rnd_spl as a "
 		." LEFT JOIN #__clm_liga as l ON a.lid = l.id "
@@ -129,7 +127,7 @@ function show_d_spl($zps,$spieler,$runde,$dg,$rnd)
 	$sid = $rnd[0]->sid;
 	$rt_date = $rnd[0]->datum;
 	
-	$db 	=& JFactory::getDBO();
+	$db 	=JFactory::getDBO();
 	$query = " SELECT l.name, a.lid, a.paar, a.brett, rt.datum"
 		." FROM #__clm_rnd_spl as a "
 		." LEFT JOIN #__clm_liga as l ON a.lid = l.id "
@@ -150,7 +148,7 @@ function check_r_spl($zps,$spieler,$runde,$dg,$rnd)
 	{
 	$sid = $rnd[0]->sid;
 	
-	$db 	=& JFactory::getDBO();
+	$db 	=JFactory::getDBO();
 	$query = " SELECT COUNT(*) as count "
 		." FROM #__clm_rnd_spl as a "
 		." WHERE a.zps = '$zps'"
@@ -170,7 +168,7 @@ function show_r_spl($zps,$spieler,$runde,$dg,$rnd)
 	{
 	$sid = $rnd[0]->sid;
 	
-	$db 	=& JFactory::getDBO();
+	$db 	=JFactory::getDBO();
 	$query = " SELECT l.name, a.lid, a.paar, a.brett, rt.datum"
 		." FROM #__clm_rnd_spl as a "
 		." LEFT JOIN #__clm_liga as l ON a.lid = l.id "

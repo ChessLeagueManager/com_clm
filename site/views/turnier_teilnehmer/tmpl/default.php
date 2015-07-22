@@ -16,14 +16,14 @@ JHtml::_('behavior.tooltip', '.CLMTooltip');
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-// require_once(JPATH_COMPONENT.DS.'includes'.DS.'image_path.php');
+
 
 // Konfigurationsparameter auslesen
 $itemid 		= JRequest::getVar( 'Itemid' );
 // $turnierid		= JRequest::getInt('turnier','1');
-$config			= &JComponentHelper::getParams( 'com_clm' );
-// $pdf_melde 		= $config->get('pdf_meldelisten',1);
-$fixth_ttln		= $config->get('fixth_ttln',1);
+$config			= clm_core::$db->config();
+// $pdf_melde 		= $config->pdf_meldelisten;
+$fixth_ttln		= $config->fixth_ttln;
 
 // CLM-Container
 echo "<div id='clm'><div id='turnier_teilnehmer'>";
@@ -47,7 +47,7 @@ if ( $this->turnier->published == 0) {
 echo CLMContent::createPDFLink('turnier_teilnehmer', JText::_('TOURNAMENT_PARTICIPANTLIST'), array('turnier' => $this->turnier->id, 'layout' => 'teilnehmer'));
     echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	$turParams = new JParameter($this->turnier->params);
+	$turParams = new clm_class_params($this->turnier->params);
 
 	?>
 
@@ -167,10 +167,10 @@ echo CLMContent::createPDFLink('turnier_teilnehmer', JText::_('TOURNAMENT_PARTIC
 			// TWZ
 			echo '<td class="tt_col_6">'.CLMText::formatRating($value->twz).'</td>';
 			
-			// NATrating
+			// start_dwz
 			if ($turParams->get('displayPlayerRating', 0) == 1) {
 				echo '<td class="tt_col_7">';
-					echo CLMText::formatRating($value->NATrating);
+					echo CLMText::formatRating($value->start_dwz);
 				echo '</td>';
 			}
 			

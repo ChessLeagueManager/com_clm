@@ -14,9 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.controller' );
-
-class CLMControllerTurRoundForm extends JController {
+class CLMControllerTurRoundForm extends JControllerLegacy {
 	
 
 	// Konstruktor
@@ -24,7 +22,7 @@ class CLMControllerTurRoundForm extends JController {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= & JFactory::getDBO();
+		$this->_db		= JFactory::getDBO();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -63,14 +61,12 @@ class CLMControllerTurRoundForm extends JController {
 		JRequest::checkToken() or die( 'Invalid Token' );
 	
 		// Instanz der Tabelle
-		$row = & JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = JTable::getInstance( 'turniere', 'TableCLM' );
 		$row->load($this->param['turnierid']);
 
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'CLMAccess.class.php');
-		$clmAccess = new CLMAccess();
-		$clmAccess->accesspoint = 'BE_tournament_edit_round';
-		if (($row->tl != CLM_ID AND $clmAccess->access() !== true) OR $clmAccess->access() === false) {
-		//if (CLM_usertype != 'admin' AND CLM_usertype != 'tl') {
+		$clmAccess = clm_core::$access;      
+		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+		//if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
 			return false;
 		}
@@ -79,7 +75,7 @@ class CLMControllerTurRoundForm extends JController {
 		$task = JRequest::getVar('task');
 		
 		// Instanz der Tabelle
-		$row = & JTable::getInstance( 'turnier_runden', 'TableCLM' );
+		$row = JTable::getInstance( 'turnier_runden', 'TableCLM' );
 		$row->load($this->param['roundid']);
 	
 		// bind
@@ -97,10 +93,10 @@ class CLMControllerTurRoundForm extends JController {
 			JError::raiseError(500, $row->getError() );
 			return false;
 		}
-		$row->checkin();
+		
 	
 		if ($row->startzeit != '00:00') {
-			$db			=& JFactory::getDBO();
+			$db			=JFactory::getDBO();
 			$startzeit 	= $row->startzeit.':00';
 			$query = " UPDATE #__clm_turniere_rnd_termine "
 				." SET startzeit = '".$startzeit."' "
@@ -121,7 +117,7 @@ class CLMControllerTurRoundForm extends JController {
 		
 		$stringAktion = JText::_('ROUND_EDITED');
 		
-		$app =& JFactory::getApplication();
+		$app =JFactory::getApplication();
 		$app->enqueueMessage($stringAktion);
 	
 		// Log schreiben

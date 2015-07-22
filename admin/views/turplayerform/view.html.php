@@ -12,15 +12,13 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
+class CLMViewTurPlayerForm extends JViewLegacy {
 
-class CLMViewTurPlayerForm extends JView {
-
-	function display() {
+	function display($tpl = NULL) {
 
 		
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
-		$model =   &$this->getModel();
+		$model =   $this->getModel();
 		
 		// Die Toolbar erstellen, die über der Seite angezeigt wird
 		$adminLink = new AdminLink();
@@ -28,7 +26,7 @@ class CLMViewTurPlayerForm extends JView {
 		$adminLink->more = array('task' => 'edit', 'id' => $model->param['id']);
 		$adminLink->makeURL();
 		
-		require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( '<a href="'.$adminLink->url.'">'.$model->turnier->name."</a>: ".JText::_('PLAYERS_ADD'), 'clm_turnier.png'  );
 	
 		JToolBarHelper::save();

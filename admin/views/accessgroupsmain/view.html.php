@@ -12,20 +12,18 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport( 'joomla.application.component.view');
-
-class CLMViewAccessgroupsMain extends JView {
+class CLMViewAccessgroupsMain extends JViewLegacy {
 	function display($tpl = null) { 
 		
 		$mainframe	= JFactory::getApplication();
 		$option 	= JRequest::getCmd( 'option' );
 		
 		//Daten vom Model
-		$state =& $this->get( 'State' );
-		$accessgroups = & $this->get( 'Accessgroups' );
+		$state = $this->get( 'State' );
+		$accessgroups =  $this->get( 'Accessgroups' );
 
-		$pagination = & $this->get( 'Pagination' );
-		$user 	=& $this->get( 'User' );
+		$pagination =  $this->get( 'Pagination' );
+		$user 	= $this->get( 'User' );
 		
 		//Benutzergruppen vorhanden
 		if(count($accessgroups) == 0){
@@ -35,16 +33,16 @@ class CLMViewAccessgroupsMain extends JView {
 		}
 		
 		//Toolbar
-		require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_clm'.DS.'images'.DS.'admin_menue_images.php');
+		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( JText::_('TITLE_ACCESSGROUPS') ,'clm_headmenu_sonderranglisten.png' );
 		
 		if($accessgroupExists) {
 			JToolBarHelper::publishList('publish');
 			JToolBarHelper::unpublishList();
 			JToolBarHelper::deleteList();
-			JToolBarHelper::editListX(); 
-			JToolBarHelper::customX( 'copy', 'copy.png', 'copy_f2.png', JText::_( 'LEAGUE_BUTTON_4' ) );
-			JToolBarHelper::addNewX(); 
+			JToolBarHelper::editList(); 
+			JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', JText::_( 'LEAGUE_BUTTON_4' ) );
+			JToolBarHelper::addNew(); 
 		}
 		
 		JHtml::_('behavior.tooltip');

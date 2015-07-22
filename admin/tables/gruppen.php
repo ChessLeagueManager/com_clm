@@ -25,7 +25,6 @@ class TableCLMGruppen extends JTable
 	var $alter		= '';
 	var $sid		= '';
 	var $user		= '';
-	var $user_clm		= '';
 	var $bemerkungen	= '';
 	var $bem_int		= '';
 	var $published		= 0;

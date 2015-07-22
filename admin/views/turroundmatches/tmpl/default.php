@@ -11,11 +11,17 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-$turParams = new JParameter($this->turnier->params);
+$turParams = new clm_class_params($this->turnier->params);
 $pgnInput = $turParams->get('pgnInput', 1);
 ?>
 
-<form action="index.php" method="post" name="adminForm">
+<style type="text/css">
+#clm .clm input, #clm .clm textarea, #clm .clm .uneditable-input {
+    width: auto;
+}
+</style>
+
+<form action="index.php" method="post" id="adminForm" name="adminForm">
 
 	<div class="width-60 fltlft">
 	<fieldset class="adminform">
