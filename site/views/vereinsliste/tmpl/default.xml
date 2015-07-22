@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+        <layout title="COM_CLM_VEREINSLISTE_VIEW_DEFAULT_TITLE">
+                <message>
+                        <![CDATA[COM_CLM_VEREINSLISTE_VIEW_DEFAULT_DESC]]>
+                </message>
+        </layout>
+        <fields name="request">
+			<fieldset name="request" >
+				<field name="saison" type="sql" default="1" label="Saison auswaehlen" query="
+						SELECT s.id AS value, name AS sname 
+						FROM #__clm_saison as s " value_field="sname" >
+                </field>
+            </fieldset>
+        </fields>
+</metadata>

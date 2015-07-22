@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+
+	<fieldset name="basics">
+		<field name="version" type="list" default="0" label="CONFIG_BASICS_VERSION" description="CONFIG_BASICS_VERSION_HINT">
+			<option value="0">CONFIG_GERMAN</option>
+			<option value="1">CONFIG_NETHERLANDS</option>
+			<option value="2">CONFIG_ENG</option>
+		</field>
+
+		<field name="lv" type="sql" default="0221" label="CONFIG_BASICS_VERBAND" description="CONFIG_BASICS_VERBAND_HINT"  query="SELECT a.Verband AS value,a.Verbandname as lv FROM dwz_verbaende as a WHERE a.Verband != '000' ORDER BY a.Verband ASC" />
+
+
+		<field name="menue" type="list" default="1" label="CONFIG_BASICS_MENU" description="CONFIG_BASICS_MENU_HINT">
+			<option value="0">CONFIG_BASICS_EINZEL</option>
+			<option value="1">CONFIG_BASICS_KASKAD</option>
+		</field>
+
+
+		<field name="dropdown" type="radio" default="1" label="CONFIG_BASICS_DROPDOWN" description="CONFIG_BASICS_DROPDOWN_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+
+		<field name="vereineliste" type="radio" default="0" label="CONFIG_BASICS_TEAMLIST" description="CONFIG_BASICS_TEAMLIST_HINT">
+			<option value="0">CONFIG_BASICS_TEAMLIST_DATA</option>
+			<option value="1">CONFIG_BASICS_TEAMLIST_MANU</option>
+		</field>
+
+
+		<field name="verein_sort" type="radio" default="1" label="CONFIG_BASICS_TEAMLIST_SORT" description="CONFIG_BASICS_TEAMLIST_SORT_HINT">
+			<option value="0">CONFIG_BASICS_TEAMLIST_SORT_ALPHA</option>
+			<option value="1">ZPS</option>
+		</field>
+
+
+		<field name="logfile" type="radio" default="1" label="CONFIG_BASICS_LOG" description="CONFIG_BASICS_LOG_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="erstauswerter" type="sql" default="10" label="CONFIG_BASICS_ELOBASEAUSW" description="CONFIG_BASICS_ELOBASEAUSW_HINT" query="SELECT a.jid AS value,a.name as erstauswerter FROM #__clm_user as a LEFT JOIN #__clm_saison as s ON s.id = a. sid WHERE a.user_clm > 70 AND s.archiv = 0 AND s.published = 1" />
+		
+		<field name="dwz_fe" type="radio" default="0" label="CONFIG_BASICS_DWZ_FE" description="CONFIG_BASICS_DWZ_FE_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+
+		<field name="liga_saison" type="radio" default="0" label="CONFIG_BASICS_LIGASEASON" description="CONFIG_BASICS_LIGASEASON_HINT">
+			<option value="0">CONFIG_BASICS_LIGASEASON_ONLYL</option>
+			<option value="1">CONFIG_BASICS_LIGASEASON_LMR</option>
+		</field>
+
+		<field name="bcc" type="text" default="" label="CONFIG_BASICS_BCC" description="CONFIG_BASICS_BCC_HINT" />
+		
+		<field name="sl_mail" type="radio" default="1" label="CONFIG_BASICS_SLMAIL" description="CONFIG_BASICS_SLMAIL_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+
+		<field name="meldeliste" type="radio" default="0" label="CONFIG_BASICS_MELDELISTE" description="CONFIG_BASICS_MELDELISTE_HINT">
+			<option value="0">CONFIG_BASICS_MELDELISTE_DWZ</option>
+			<option value="1">CONFIG_BASICS_MELDELISTE_ALP</option>
+		</field>
+
+
+		<field name="rangliste" type="list" default="0" label="CONFIG_BASICS_RANGMELD" description="CONFIG_BASICS_RANGMELD_HINT">
+			<option value="0">CONFIG_BASICS_RANGMELD_1</option>
+			<option value="1">CONFIG_BASICS_RANGMELD_2</option>
+			<option value="2">CONFIG_BASICS_RANGMELD_3</option>
+		</field>
+		
+		<field name="kommentarfeld" type="list" default="0" label="CONFIG_BASICS_KOMMENTARFELD" description="CONFIG_BASICS_KOMMENTARFELD_HINT">
+			<option value="0">CONFIG_BASICS_KOMMENTARFELD_1</option>
+			<option value="1">CONFIG_BASICS_KOMMENTARFELD_2</option>
+			<option value="2">CONFIG_BASICS_KOMMENTARFELD_3</option>
+		</field>
+		
+	</fieldset>
+
+	<fieldset name="email">
+		<field name="email_from" type="text" size="40" default="" label="CONFIG_EMAIL_FROM" description="CONFIG_EMAIL_FROM_HINT" />
+		
+		<field name="email_bcc" type="text" size="40" default="" label="CONFIG_EMAIL_BCC" description="CONFIG_EMAIL_BCC_HINT" />
+		
+		<field name="email_fromname" type="text" size="40" default="" label="CONFIG_EMAIL_FROMNAME" description="CONFIG_EMAIL_FROMNAME_HINT" />
+
+		<field name="org_logo" type="text" size="100" default="" label="CONFIG_ORG_LOGO" description="CONFIG_ORG_LOGO_HINT" />
+	</fieldset>
+	
+	<fieldset name="database">
+		<field name="upload_sql" type="radio" default="0" label="CONFIG_BASICS_UPLOADSQL" description="CONFIG_BASICS_UPLOADSQL_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+
+		<field name="execute_sql" type="radio" default="0" label="CONFIG_BASICS_EXECUTESQL" description="CONFIG_BASICS_EXECUTESQL_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+
+		<field name="upload_swt" type="radio" default="0" label="CONFIG_BASICS_UPLOADSWT" description="CONFIG_BASICS_UPLOADSWT_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+
+		<field name="execute_swt" type="radio" default="0" label="CONFIG_BASICS_EXECUTESWT" description="CONFIG_BASICS_EXECUTESWT_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+	</fieldset>
+
+
+	<fieldset name="update">
+		<field name="dbuninstall" type="radio" default="0" label="CONFIG_BASICS_DBUNINSTALL" description="CONFIG_BASICS_DBUNINSTALL_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+
+		<field name="uninstall_be_language" type="radio" default="0" label="CONFIG_BASICS_UNINSTALLBE" description="CONFIG_BASICS_UNINSTALLBE_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+
+		<field name="uninstall_fe_language" type="radio" default="0" label="CONFIG_BASICS_UNINSTALLFE" description="CONFIG_BASICS_UNINSTALLFE_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+
+		<field name="uninstall_fe_pdf" type="radio" default="0" label="CONFIG_BASICS_UNINSTALLPDF" description="CONFIG_BASICS_UNINSTALLPDF_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+
+		<field name="uninstall_fe_css" type="radio" default="1" label="CONFIG_BASICS_UNINSTALLCSS" description="CONFIG_BASICS_UNINSTALLCSS_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+
+		<field name="uninstall_fe_copyright" type="radio" default="0" label="CONFIG_BASICS_UNINSTALLCOPY" description="CONFIG_BASICS_UNINSTALLCOPY_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+	
+	</fieldset>
+
+	<fieldset name="fe_meldelisten">
+		<field name="conf_ergebnisse" type="radio" default="1" label="CONFIG_FRONTEND_CONFERGEBNIS" description="CONFIG_FRONTEND_CONFERGEBNIS_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="meldung_heim" type="radio" default="1" label="CONFIG_FRONTEND_MELDUNGHEIM" description="CONFIG_FRONTEND_MELDUNGHEIM_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="meldung_verein" type="radio" default="1" label="CONFIG_FRONTEND_MELDUNGVEREIN" description="CONFIG_FRONTEND_MELDUNGVEREIN_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="conf_meldeliste" type="radio" default="1" label="CONFIG_FRONTEND_CONFMELDELIST" description="CONFIG_FRONTEND_CONFMELDELIST_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="pdf_meldelisten" type="radio" default="1" label="CONFIG_FRONTEND_PDFMELDELIST" description="CONFIG_FRONTEND_PDFMELDELIST_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+	</fieldset>
+
+
+	<fieldset name="fe_submenu">
+		<field name="fe_submenu" type="radio" default="0" label="CONFIG_FRONTEND_SUBMENU_LIGA" description="CONFIG_FRONTEND_SUBMENU_LIGA_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="fe_submenu_t" type="radio" default="0" label="CONFIG_FRONTEND_SUBMENU_TURN" description="CONFIG_FRONTEND_SUBMENU_TURN_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+	</fieldset>
+
+
+	<fieldset name="fe_vereine">
+
+		<field name="conf_vereinsdaten" type="radio" default="1" label="CONFIG_FRONTEND_CONFTEAMDATA" description="CONFIG_FRONTEND_CONFTEAMDATA_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+	</fieldset>
+	
+	<fieldset name="fe_msch">
+	
+		<field name="man_manleader" type="radio" default="1" label="CONFIG_FRONTEND_MANLEADER" description="CONFIG_FRONTEND_MANLEADER_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+		<field name="man_mail" type="radio" default="1" label="CONFIG_FRONTEND_MANMAIL" description="CONFIG_FRONTEND_MANMAIL_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+		<field name="man_tel" type="radio" default="1" label="CONFIG_FRONTEND_MANTEL" description="CONFIG_FRONTEND_MANTEL_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+		<field name="man_mobil" type="radio" default="1" label="CONFIG_FRONTEND_MANMOBIL" description="CONFIG_FRONTEND_MANMOBIL_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+		<field name="man_spiellokal" type="radio" default="1" label="CONFIG_FRONTEND_SPIELLOKAL" description="CONFIG_FRONTEND_SPIELLOKAL_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+		<field name="man_spielplan" type="radio" default="1" label="CONFIG_FRONTEND_SPIELPLAN" description="CONFIG_FRONTEND_SPIELPLAN_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+		<field name="man_showdwz" type="radio" default="1" label="CONFIG_FRONTEND_SHOWDWZ" description="CONFIG_FRONTEND_SHOWDWZ_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+	
+	</fieldset>
+
+	<fieldset name="fe_vereinsliste">
+	
+		<field name="fe_vereinsliste_vs" type="radio" default="1" label="CONFIG_FRONTEND_CLUBS_VS" description="CONFIG_FRONTEND_CLUBS_VS_HINT">
+			<option value="0">JNO</option><option value="1">JYES</option>
+		</field>
+		<field name="fe_vereinsliste_hpage" type="radio" default="1" label="CONFIG_FRONTEND_CLUBS_HMP" description="CONFIG_FRONTEND_CLUBS_HMP_HINT">
+			<option value="0">JNO</option><option value="1">JYES</option>
+		</field>
+		<field name="fe_vereinsliste_dwz" type="radio" default="1" label="CONFIG_FRONTEND_CLUBS_DWZ" description="CONFIG_FRONTEND_CLUBS_DWZ_HINT">
+			<option value="0">JNO</option><option value="1">JYES</option>
+		</field>
+		<field name="fe_vereinsliste_elo" type="radio" default="1" label="CONFIG_FRONTEND_CLUBS_ELO" description="CONFIG_FRONTEND_CLUBS_ELO_HINT">
+			<option value="0">JNO</option><option value="1">JYES</option>
+		</field>
+		
+	</fieldset>
+
+	<fieldset name="fe_runde">
+
+		<field name="fe_runde_rang" type="radio" default="1" label="CONFIG_FRONTEND_FE_RUNDERANG" description="CONFIG_FRONTEND_FE_RUNDERANG_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="runde_aktuell" type="radio" default="1" label="CONFIG_FRONTEND_RUNDEAKT" description="CONFIG_FRONTEND_RUNDEAKT_HINT">
+			<option value="0">LEAGUE_CHIEF</option>
+			<option value="1">JDATE</option>
+		</field>
+		
+		<field name="fe_runde_tln" type="radio" default="1" label="CONFIG_FRONTEND_TLN" description="CONFIG_FRONTEND_TLN_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+	</fieldset>
+	
+	<fieldset name="fe_pgn">
+	
+		<field name="fe_pgn_show" type="text" default="#666" label="CONFIG_FRONTEND_SHOW_PGN" description="CONFIG_FRONTEND_SHOW_PGN_HINT" />
+
+		<field name="fe_pgn_moveFont" type="text" default="#666" label="CONFIG_FRONTEND_PGN_MOVEFONT" description="CONFIG_FRONTEND_PGN_MOVEFONT_HINT" />
+		
+		<field name="fe_pgn_commentFont" type="text" default="#888" label="CONFIG_FRONTEND_PGN_COMMENT" description="CONFIG_FRONTEND_PGN_COMMENT_HINT" />
+		
+		<field name="fe_pgn_style" type="list" default="png" label="CONFIG_FRONTEND_PGN_STYLE" description="CONFIG_FRONTEND_PGN_STYLE_HINT">
+				<option value="default">default</option>
+				<option value="kent">kent</option>
+				<option value="png">png</option>
+				<option value="zurich">zurich</option>
+		</field>
+		
+	</fieldset>
+	
+	<fieldset name="fe_fixheader">
+	
+		<field type="spacer" default="Liga" />
+		<field name="fixth_msch" type="radio" default="1" label="CONFIG_FRONTEND_FIXMSCH" description="CONFIG_FRONTEND_FIXMSCH_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="fixth_dwz" type="radio" default="1" label="CONFIG_FRONTEND_FIXDWZ" description="CONFIG_FRONTEND_FIXDWZ_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field type="spacer" default="Turniere" />
+		<field name="fixth_tkreuz" type="radio" default="1" label="CONFIG_FRONTEND_FIXTKREUZ" description="CONFIG_FRONTEND_FIXTKREUZ_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="fixth_ttab" type="radio" default="1" label="CONFIG_FRONTEND_FIXTAB" description="CONFIG_FRONTEND_FIXTAB_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="fixth_ttln" type="radio" default="1" label="CONFIG_FRONTEND_FIXTLN" description="CONFIG_FRONTEND_FIXTLN_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+	</fieldset>
+	
+	<fieldset name="template_generell">
+		<field name="clm_template" type="radio" default="1" label="CONFIG_TEMP_USE" description="CONFIG_TEMP_USE_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="clm_lesehilfe" type="radio" default="1" label="CONFIG_TEMP_READHELP" description="CONFIG_TEMP_READHELP_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="clm_border" type="text" default="1px solid #CCC" label="CONFIG_TEMP_ALLBORDER" description="CONFIG_TEMP_ALLBORDER_HINT"></field>
+
+		<field name="clm_cellin" type="text" default="0.4em" label="CONFIG_TEMP_CELLIN" description="CONFIG_TEMP_CELLIN_HINT"></field>
+	</fieldset>
+	
+	<fieldset name="template_background">
+
+		<field name="clm_tableth" type="text" default="#333333" label="CONFIG_TEMP_BACKGROUND_TAB1" description="CONFIG_TEMP_BACKGROUND_TAB1_HINT"></field>
+		<field name="clm_subth" type="text" default="#F5F5F5" label="CONFIG_TEMP_BACKGROUND_TAB2" description="CONFIG_TEMP_BACKGROUND_TAB2_HINT"></field>
+		<field name="clm_zeile1" type="text" default="#FFFFFF" label="CONFIG_TEMP_BACKGROUND_UNG" description="CONFIG_TEMP_BACKGROUND_UNG_HINT"></field>
+		<field name="clm_zeile2" type="text" default="#F3F3F3" label="CONFIG_TEMP_BACKGROUND_G" description="CONFIG_TEMP_BACKGROUND_G_HINT"></field>
+		<field name="clm_re_col" type="text" default="#FFFFCC" label="CONFIG_TEMP_BACKGROUND_RCOL" description="CONFIG_TEMP_BACKGROUND_RCOL_HINT"></field>
+
+	</fieldset>
+	
+	<fieldset name="template_text">
+		<field name="clm_tableth_s1" type="text" default="#FFFFFF" label="CONFIG_TEMP_TEXT1" description="CONFIG_TEMP_TEXT1_HINT"></field>
+		<field name="clm_tableth_s2" type="text" default="#666666" label="CONFIG_TEMP_TEXT2" description="CONFIG_TEMP_TEXT2_HINT"></field>
+	</fieldset>
+		
+	<fieldset name="template_aufab">
+		<field name="clm_rang_auf" type="text" default="#C0DF82" label="CONFIG_TEMP_UP" description="CONFIG_TEMP_UP_HINT"></field>
+		<field name="clm_rang_auf_evtl" type="text" default="#DCEDBA" label="CONFIG_TEMP_MAYBEUP" description="CONFIG_TEMP_MAYBEUP_HINT"></field>
+		<field name="clm_rang_ab" type="text" default="#E7A9A9" label="CONFIG_TEMP_DOWN" description="CONFIG_TEMP_DOWN_HINT"></field>
+		<field name="clm_rang_ab_evtl" type="text" default="#F3D6D6" label="CONFIG_TEMP_MAYBEDOWN" description="CONFIG_TEMP_MAYBEDOWN_HINT"></field>
+		
+	</fieldset>
+		
+	<fieldset name="template_wrong">
+		<field name="clm_wrong1" type="text" default="#FFFF99" label="CONFIG_TEMP_WRONGBG" description="CONFIG_TEMP_WRONGBG_HINT"></field>
+		<field name="clm_wrong2" type="text" default="1px solid #FFCC66" label="CONFIG_TEMP_WRONG_BORDER" description="CONFIG_TEMP_WRONG_BORDER_HINT"></field>
+	</fieldset>
+	
+	
+	<fieldset name="template_mannschaften">
+		<field name="clm_msch_nr" type="text" default="45px" label="CONFIG_TEMP_MSCH_NR" description="CONFIG_TEMP_MSCH_NR_HINT"></field>
+		<field name="clm_msch_dwz" type="text" default="30px" label="CONFIG_TEMP_MSCH_DWZ" description="CONFIG_TEMP_MSCH_DWZ_HINT"></field>
+		<field name="clm_msch_rnd" type="text" default="20px" label="CONFIG_TEMP_MSCH_RND" description="CONFIG_TEMP_MSCH_RND_HINT"></field>
+		<field name="clm_msch_punkte" type="text" default="20px" label="CONFIG_TEMP_MSCH_PKT" description="CONFIG_TEMP_MSCH_PKT_HINT"></field>
+		<field name="clm_msch_spiele" type="text" default="20px" label="CONFIG_TEMP_MSCH_SPI" description="CONFIG_TEMP_MSCH_SPI_HINT"></field>
+		<field name="clm_msch_prozent" type="text" default="20px" label="CONFIG_TEMP_MSCH_PRO" description="CONFIG_TEMP_MSCH_PRO_HINT"></field>
+	</fieldset>
+	
+	<fieldset name="fe_display">
+	
+		<field name="fe_display_lose_by_default" type="list" default="0" label="CONFIG_FRONTEND_DISPLAY_LOSE_BY_DEFAULT" description="CONFIG_FRONTEND_DISPLAY_LOSE_BY_DEFAULT_HINT">
+			<option value="0">CONFIG_FRONTEND_DISPLAY_LOSE_BY_DEFAULT_MINUS</option>
+			<option value="1">CONFIG_FRONTEND_DISPLAY_LOSE_BY_DEFAULT_0KL</option>
+		</field>
+		
+	</fieldset>
+	
+	<fieldset name="googlemaps">
+		<field name="googlemaps" type="list" default="0" label="CONFIG_FRONTEND_MAPS" description="CONFIG_FRONTEND_MAPS_HINT">
+			<option value="0">CONFIG_FRONTEND_MAPS_DEACTIVE</option>
+			<option value="1">CONFIG_FRONTEND_MAPS_ACTIVE</option>
+		</field>
+		<field name="googlemaps_api" type="text" default="" label="CONFIG_FRONTEND_MAPS_API" description="CONFIG_FRONTEND_MAPS_API_HINT"></field>
+		<field name="googlemaps_rtype" type="list" default="0" label="CONFIG_FRONTEND_READ_TYPE" description="CONFIG_FRONTEND_READ_TYPE_HINT">
+			<option value="0">CONFIG_FRONTEND_READ_TYPE_ALL</option>
+			<option value="1">CONFIG_FRONTEND_READ_TYPE_123</option>
+			<option value="2">CONFIG_FRONTEND_READ_TYPE_23</option>
+			<option value="3">CONFIG_FRONTEND_READ_TYPE_12</option>
+		</field>
+		
+		<field name="googlemaps_ver" type="radio" default="1" label="CONFIG_FRONTEND_VEREIN_ACTIVE" description="CONFIG_FRONTEND_VEREIN_ACTIVE_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="googlemaps_vrout" type="radio" default="1" label="CONFIG_FRONTEND_VROUT_ACTIVE" description="CONFIG_FRONTEND_VROUT_ACTIVE_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="googlemaps_msch" type="radio" default="1" label="CONFIG_FRONTEND_MSCH_ACTIVE" description="CONFIG_FRONTEND_MSCH_ACTIVE_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="googlemaps_mrout" type="radio" default="1" label="CONFIG_FRONTEND_MROUT_ACTIVE" description="CONFIG_FRONTEND_MROUT_ACTIVE_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+	</fieldset>
+	
+	<fieldset name="charts">
+	
+		<field name="googlecharts" type="radio" default="0" label="CONFIG_FRONTEND_LIGASTATS_CHARTS" description="CONFIG_FRONTEND_LIGASTATS_CHARTS_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+	</fieldset>
+	
+	<fieldset name="tournaments">
+		
+		<field name="tourn_linkclub" type="radio" default="1" label="CONFIG_TOURN_LINKCLUB" description="CONFIG_TOURN_LINKCLUB_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+		<field name="tourn_showtlok" type="radio" default="0" label="CONFIG_TOURN_SHOWTLOK" description="CONFIG_TOURN_SHOWTLOK_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+		<field name="tourn_comment_parse" type="radio" default="0" label="CONFIG_TOURN_COMMENT_PARSE" description="CONFIG_TOURN_COMMENT_PARSE_HINT">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+	</fieldset>
+
+		<fieldset
+		name="permissions"
+		label="JCONFIG_PERMISSIONS_LABEL"
+		description="JCONFIG_PERMISSIONS_DESC"
+		>
+
+		<field
+			name="rules"
+			type="rules"
+			label="JCONFIG_PERMISSIONS_LABEL"
+			class="inputbox"
+			filter="rules"
+			validate="rules"
+			component="com_clm"
+			section="component" />
+	</fieldset>
+	
+</config>
+

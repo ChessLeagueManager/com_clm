@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+        <layout title="COM_CLM_RANGLISTE_VIEW_DEFAULT_TITLE">
+                <message>
+                        <![CDATA[COM_CLM_RANGLISTE_VIEW_DEFAULT_DESC]]>
+                </message>
+        </layout>
+        <fields name="request">
+			<fieldset name="request" >
+				<field name="liga" type="sql" default="1" label="Liga auswählen" query="
+						SELECT a.id AS value, concat(  s.name, ' -- ', a.name ) AS lname 
+						FROM #__clm_liga AS a LEFT JOIN #__clm_saison as s ON s.id = a.sid " value_field="lname" >
+                </field>
+            </fieldset>
+        </fields>
+</metadata>
