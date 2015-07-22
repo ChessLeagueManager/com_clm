@@ -1,0 +1,69 @@
+/********************/
+/******* reset ******/
+/********************/
+/* abgewandelt */
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+#clm .clm * {
+	webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	word-wrap: break-word;
+}
+
+#clm .clm {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	vertical-align: baseline;
+	font: 12px Arial, Helvetica, sans-serif;
+	line-height: 1;
+	color: #000;
+	font-weight:normal;
+}
+/* HTML5 display-role reset for older browsers */
+#clm .clm article, #clm .clm aside, #clm .clm details, #clm .clm figcaption, #clm .clm figure, #clm .clm 
+#clm .clm footer, #clm .clm header, #clm .clm hgroup, #clm .clm menu, #clm .clm nav, #clm .clm section {
+	display: block;
+}
+#clm .clm ol, #clm .clm ul {
+	list-style: none;
+}
+#clm .clm blockquote, #clm .clm q {
+	quotes: none;
+}
+#clm .clm blockquote:before, #clm .clm blockquote:after,
+#clm .clm q:before, #clm .clm q:after {
+	content: '';
+	content: none;
+}
+#clm .clm table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+#clm .clm .clm_view_report .home select, #clm .clm .clm_view_report .guest select {
+    text-indent: 1%;
+}
+#clm .clm .clm_view_report .element select {
+    border: 0 none;
+    height: 100%;
+    line-height: normal;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+#clm .clm * {
+    box-sizing: border-box;
+    word-wrap: break-word;
+}
+#clm .clm select {
+    background-color: #fff;
+}
+#clm .clm input[disabled], #clm .clm select[disabled], #clm .clm textarea[disabled], #clm .clm input[readonly], #clm .clm select[readonly], #clm .clm textarea[readonly] {
+    background-color: #eee;
+    cursor: not-allowed;
+}

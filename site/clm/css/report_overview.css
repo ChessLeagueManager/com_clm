@@ -1,0 +1,27 @@
+/*****************************/
+/****** report_overview ******/
+/*****************************/
+
+#clm .clm .clm_view_report_overview { 
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+}
+
+#clm .clm .clm_view_report_overview .element { 
+	margin:auto;
+}
+
+#clm .clm .clm_view_report_overview .clm_view_notification {
+	width:100%;
+}
+
+#clm .clm .clm_view_report_overview a { 
+	text-decoration: none; 
+	display:block;
+}
+#clm .clm .clm_view_report_overview a:hover{ 
+	text-decoration: underline; 
+}

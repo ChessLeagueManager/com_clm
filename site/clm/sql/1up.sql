@@ -1,0 +1,16 @@
+--
+-- Eine inoffizielle Auswertung für mehr als ein spezifisches Turnier macht keinen Sinn!
+--
+-- ALTER TABLE `#__clm_dwz_spieler`
+--  DROP `DWZ_neu`,
+--  DROP `I0`,
+--  DROP `Punkte`,
+--  DROP `Partien`,
+--  DROP `We`,
+--  DROP `Leistung`,
+--  DROP `EFaktor`,
+--  DROP `Niveau`;
+--
+-- Die Mitgliedsnummer wird überall als Zahl behandelt
+--
+ALTER TABLE `#__clm_dwz_spieler` CHANGE `Mgl_Nr` `Mgl_Nr` MEDIUMINT(5) NULL DEFAULT NULL;

@@ -1,0 +1,522 @@
+CHANGELOG com_clm ab 1.0.0
+------------
+
+Legend:
+* -> Security Fix
+# -> Bug Fix
+$ -> Language fix or change
++ -> Addition
+^ -> Change
+% -> Performance Fix
+> -> Compatibility
+- -> Removed
+! -> Note
+
+- - - - - 1.5.3 - [xx-xx-2014] - - - - - - - - - - - - - - - - - - - -
+# views: Codebereinigung e.g. raw->'raw'
+# Einzelturniere: Geburtsjahr bei DWZ-Berechnung
+# SWT-Import: Erhalten der Reihenfolgenummer bei Liga-Update
+# SWT-Import: Spielgemeinschaften von 3 und mehr Vereinen
++ SWT-Import: Hinweis, wenn Summe der Brettergebnisse nicht gleich Mannschaftsergebnis 
+
+- - - - - 1.5.2a - [07-09-2014] - - - - - - - - - - - - - - - - - - - -
+# Meldelisten: Bugfix beim Löschen
+# Ranglisten: Bugfix beim Sichern mit alphanumerischen ZPS
+# Rundenbericht: Bugfix keine Einzelergebnisse bei Rangliste
+
+- - - - - 1.5.2 - [02-08-2014] - - - - - - - - - - - - - - - - - - - -
+# Submenue: Aktivierung Sortierung Sonderranglisten
+^ Ligen: Inoff. DWZ-Auswertung Umstellung Basis-DWZ
++ M-Turniere: Sperrung der Aufstellung möglich
++ M-Turniere: neue Feinwertung Ordering
+
+- - - - - 1.5.1 - [09-07-2014] - - - - - - - - - - - - - - - - - - - -
+# Korrektur DWZ-Berechnung für Sonderfall: keine StartDWZ, 0Pkt aus 5 oder mehr Partien
++ Einzelturniere: gleicher Ranglistenplatz bei gleichen Feinwertungen
++ Rundenbericht: Ranglistenüberschrift mit vor/nach Runde X
+# SWT-Import Einzel: Übernahme von ZPS korrigiert
+# SWT-Import Einzel: Übernahme des Kennzeichen TWZ-Ermittlung
++ Liga: Punktabzug für Mannschaft ermöglicht
+# SWT-Import: keine Übernahme der Parameter für CH-System bei Vollturnieren
++ Einzelturniere: Inoffizielle DWZ-Berechnung
+# Submenue: Bugfix Links für Sonderranglisten
++ Ligen/M-Turniere: Farbfolge-Parameter mit SWSW.., SWWS.., u.a.
++ Sonderrangliste: 3 neue Wertzahlauswahlen
++ SWT-Import Liga/M-Turniere: Farbfolge-Parameter mit SWSW.., SWWS.., u.a.
+
+- - - - - 1.5.0 - [04-05-2014] - - - - - - - - - - - - - - - - - - - -
+- - - - - 1.4.8 - [26-04-2014] - - - - - - - - - - - - - - - - - - - -
+# View Mannschaft: Bugfix bei spielfrei
+^ Umbau Submenue im Frontend Teil 2 (Marcel)
+
+- - - - - 1.4.7 - [26-03-2014] - - - - - - - - - - - - - - - - - - - -
+# Rundenbericht: pdf-Nachbesserung bei Rangliste 
+# Rundenbericht: Nachbesserung Rundennamen bei mehreren Durchgängen
++ Turnierspieler: Ergänzung durch DWZ, Elo und Verein der Gegner
+^ Daten-Export zur DWZ-Auswertung nach DeWIS (ersetzt Elobase) 
+# Turnierdaten: Enddatum nicht vor Startdatum
+# Termine: Löschen eines Termins wieder möglich
+# BE: Turnierrunde check auf gültige Startzeit
++ BE CLMText: neue Klasse isTime()
++ Rundenbericht: Ergänzung durch Meldepositionen und Farbe
+# Grafiken PDF und PGN vereinheitlicht [Größe]
+- Admin-View Elobase
+^ Umbau Submenue im Frontend (Marcel)
+# pdf-Ausgaben: 2 bugfix bzgl. Uhrzeit
+# BE: Turnierteilnehmer und -runden Anazeige bei Filter 'alle'
++ FE-View Rangliste Ergebnisse linken auf Runden, neuer Parameter regelt Einbeldnung von DWZ-Schnitt, Code überarbeitet
+
+- - - - - 1.4.6 - [05-03-2014] - - - - - - - - - - - - - - - - - - - -
+# View aktuell_runde: ItemID
++ Admin-View Turnierliste: Sortierung nach Datum, Tooltips ergänzt
+^ Admin-View Turnierteilnehmer: Titel und Verband ausgeblendet, wenn Option
+> Backend: DS > DIRECTORY_SEPARATOR, JHTML > JHtml, + id="adminForm"
+# Ligen DWZ-Durschnitte gleich gerundet in Rang-, Paarungsliste und Rundenbericht
++ Termine Start- und Endzeit eingebaut
+# DWZ-Auswertung direkt bei Ergebniseingabe im FE aktualisiert
+$ nicht übersetzte Texte im Turniermodul
++ Einzelturniere: neuer Modus 'freies System'
+# admin.clm.php: Warning, wenn noch kein User angelegt war.
+# FE Ligastatistiken: Anzeigefehler bei kampflosen Ergebnissen
++ Einzelturniere: Veranstalter/Ausrichter jetzt auch Verbände auswählbar
+^ Änderung der Ergebnismeldung im FE bis Stichtag/-zeit möglich
++ Ergebnismeldung: Test auf Spieler mehrfach
++ Google Routenplaner abschaltbar
+
+- - - - - 1.4.5 - [30-01-2014] - - - - - - - - - - - - - - - - - - - -
+# DWZ-Direkt-Update mit oder ohne passive Mitglieder wählbar
+^ Änderung der Aufstellung im FE bis Stichtag möglich
+^ Turnier: Auswahl Kategorie nur, wenn Kategorien existieren
++ Turnier-Kategorien: Auflistung mit mehr Informationen
++ Ligen, Mannschafts- und Einzelturniere: Startzeit der Runden eingebbar
+# Liga anlegen: Korrektur bei Liga mit nur 1 Runde
+# Spieler-View: Bereinigung um nicht freigegebene Ligen und M-Turniere
+# Turnierfeinwertung BuchholzSumme mit Streichresultat korrigiert
++ Admin-Datenbank-View: neuer Sub-View mit Funktionen zur DeWIS-DB
+
+- - - - - 1.4.4 - [13-01-2014] - - - - - - - - - - - - - - - - - - - -
++ Einzelturniere: neue Feinwertung Summenwertung
+^ Admin-View Datenbank Umstellung von section-->view
++ Admin-View Datenbank Ergänzung durch DWZ-Direkt-Update Verbände
+^ KO-Einzelturniere: Umstellung Rundennummerierung
++ KO-Einzelturniere: neu - KO-Turnier mit kleinen Finale
++ Admin-View Saison Kopieren des aktiven User in eine neu angelegte Saison
+# View Turnierspieler Verbesserung der Bilddarstellung
+^ CLM Konfiguration Anzeige via com_config
+
+- - - - - 1.4.3 - [23-12-2013] - - - - - - - - - - - - - - - - - - - -
+^ SWT-Import Liga: Behandlung von Einzelergebnissen ohne Paarungsnummer (meist kampflose Siege)
+^ pgn-Vorlagedatei: Anpassung an neueste Chessbase-Produkte (CB12)
++ DWZ-Daten: Online-Direkt-Übernahme für Vereine, Einzelturniere, Ligen und Mannschaftsturniere
+# Termine: kleine Bugfixes auf Eingabe-View und pdf-Ausgabe
++ pgn-Vorlagedatei für Einzelturniere
+# Admin Runden Manager: Anzeige DWZ-Status bei Ligen mit ungerader Teilnehmerzahl
+# pdf-Rundenbericht: Zeilenumbruch bei Kommentar zur Paarung
+^ Google-Routenplaner: auch hier Verwendung der Parameter der Google-Kartenanzeige
+^ Termin-Detail: Zuordung zu aktueller Saison anstelle Saison 1
++ KO-Mannschaftsturniere: Bemerkung zum Turnier wird auf Paarungsliste angezeigt
+^ KO-Einzelturniere: Rundenbericht und Paarungsliste ohne erreichte Punkte
+  
+- - - - - 1.4.2 - [14-11-2013] - - - - - - - - - - - - - - - - - - - -
+# Mannschaftsturniere im KO-System Ergänzung durch Text bei kampflos und fehlender Entscheidung
+# SWT-Import: Anz Spieler in Liga > 256 und alphanum. ZPS
+# Einzelturniere: Anlegen von KO- und Voll-Turnieren
+# Admin-View Turniere: Anzahl der anzuzeigenden Turniere
+^ SWT-Import Liga: Umstellung Datumsbehandlung
+^ DWZ-Liste/Paarungsliste: kleine Layoutänderungen
+# Mannschaftsturniere: Runden Erstellen bei CH-Turnier
+# Rundenbericht: Bugfix bei vollrundigen Mannschaftsturnier
+# Einzelturniere: Cancel während Hinzufügen Nachzügler
+# Ergebnismeldung im FE bei KO-Mannschaftsturnieren
+^ Ligen/Mannschaftsturniere: Erweiterung Anz. Partnervereine
+
+- - - - - 1.4.1 - [13-10-2013] - - - - - - - - - - - - - - - - - - - -
++ Einzelturniere: Add Feinwertung mittlere Buchholz
+# Admin-View Termine: Anzahl der anzuzeigenden Veranstaltungen
+# Ergebniseingabe: Mannschaftsnummern/Spielgemeinschaften (FE)
++ Mannschaftsmanager: Erweiterung der Funktion -spielfrei setzen-
+# Site-View Runde: Erstellen pgn-Vorlagedatei
+# clm_xml: Schreibfehler bei Sprachfiles
++ DB: neues Feld gemeldet in table clm_turniere_rnd_spl
++ Site-View Rangliste: Bei Extern-Zugriff auf KO-Turnier --> Weiterleitung auf Paarungsliste
+# Sprachfiles English: Techn. Anpassung
+# Mannschaftsturniere im KO-System
+
+- - - - - 1.4.0 - [26-09-2013] - - - - - - - - - - - - - - - - - - - -
+# SWT-Liga-Import: Spielerliste mit Abfrage Saison
+# Termine: Veranstalterliste Vereinsteil mit Abfrage Saison
+
+- - - - - 1.3.7 - [23-09-2013] - - - - - - - - - - - - - - - - - - - -
+^ Einzelturniere: TL-Angabe ist keine Pflicht mehr
+# Admin-View Benutzer: Prüfung der Eingabefelder
+# Import DWZ-Dateien: Hochkomma in Namen
+^ DeWIS-Anpassung: Links in FE und BE
+
+- - - - - 1.3.6 - [17-09-2013] - - - - - - - - - - - - - - - - - - - -
+# SWT-Import: Vermeidung von Speicherproblemen bei großer Dateien 
+# View Turnierrunden: Bugfix Pagination
++ Erweiterung pdf-Standard-Header
++ Einzelturniere: Add Feinwertung Elo-Schnitt
+# Mannschaftsmanager: Überprüfung der Mannschaftsnummern
+# Ergebniseingabe: Mannschaftsnummern/Spielgemeinschaften (FE und BE)
++ Turnierpaarungsliste/-runde: Punktestand vor der Runde
++ Schnellmenü-Turnier: Runden als Unterpunkte der Paarungsliste
+# Edit Einzelturniere / SWT-Import Einzelturniere: Eingabe und Prüfung von Start- und Enddatum
+# CLM-Benutzer anlegen: Joomla-Benutzer ohne CLM-Account in akt. Saison
+ 
+- - - - - 1.3.5 - [07-09-2013] - - - - - - - - - - - - - - - - - - - -
++ SWT-Import Ligen: Update-Funktion
+# Terminliste: Linkaufbau bei Ligen mit mehreren Durchgängen
+# Vereinsview: Nachbesserung Google-Maps-Anzeige 
+^ Anpassung an DeWIS-Downloaddateien
+
+- - - - - 1.3.4 - [17-08-2013] - - - - - - - - - - - - - - - - - - - -
+# Mini-Bugfix pdf-view Rangliste
+# DWZ-Berechnung bei 2 Vereinsmannschaften in einer Staffel
+# Update Liga-Parameter
++ Admin-View Mannschaft: kleine Eingabehilfe für Name und Spiellokal
+^ Admin-View TurnierForm: Umstellung Feldprüfungen auf JavaScript
++ Admin-View User: Anpassung wegen leistungsschwacher Provider
++ Ligen mit 3 oder 4 Durchgängen zugelassen
+
+- - - - - 1.3.3 - [01-08-2013] - - - - - - - - - - - - - - - - - - - -
+# Übername der Sonderranglistennamen in die pdf-Ausgaben
+# Eingabe Meldeliste im FE bei gerader Anzahl Vereinsmitglieder 
+# Berechnung von Turnier-Feinwertung bei verspäterer Anreise, Aussetzen, ...
++ Ergänzung SWT-Import um Rundentermine 
+
+- - - - - 1.3.2 - [11-07-2013] - - - - - - - - - - - - - - - - - - - -
++ Email-Bestätigung bei Meldelisteneingabe im FE
++ Button CLM-Optionen auf info view
++ SWT-Import von Einzelturnieren mit Update
+^ Umstellung SWT-Import von Ligen (nur Neuanlage)
+^ DB-Update bei Installation einer neuen CLM-Version ab 1.2.0 rückwirkend
+^ programmtechnische Auslagerung von Code-Teilen von install.clm.php in includes
+# Mannschaftsliste bei doppelrundigen Ligen, Zeile Gesamt
+
+- - - - - 1.3.1 - [28-05-2013] - - - - - - - - - - - - - - - - - - - -
+Code-Bereinigung
+
+- - - - - 1.3.0 - [01-05-2013] - - - - - - - - - - - - - - - - - - - -
+- - - - - 1.2.6 - [25-04-2013] - - - - - - - - - - - - - - - - - - - -
++ Erstellen pgn-Vorlagedatei
+^ Weglassen des ENGINE-Parameter beim Anlegen von Tabellen
+
+- - - - - 1.2.5 - [22-04-2013] - - - - - - - - - - - - - - - - - - - -
+# pdf-Rundenbericht mit 2 Durchgängen
+# Felder für Feinwertungen in clm_turniere_tlnr erweitert
+^ DWZ-Auswertung: techn. Umstellung auf JDatabase
++ Teilnehmerstatus und Partienanzahl bei Einzelturnieren
+
+- - - - - 1.2.4 - [10-04-2013] - - - - - - - - - - - - - - - - - - - -
++ Brettbeste als pdf-Ausgabe
+^ Copyright auf 2008-2013 gesetzt
+# Einzelturniere: Darstellung der Stichkampfergebnisse in pdf-Listen
++ Vorbereitung Benutzerverwaltung mit Joomla-ACL Ordner admin/helpers mit clm.php (Thorsten) 
+^ Einbau Definition DS für J!3.0 (Fred)
+# NaviMenü: keine gesperrten Ligen anzeigen, aktuelle Runde ergänzt
+# Bestenliste Anzeige Leistung
+^ Liga/M.turnier: Mannschaftsnr. auf Basis 2-stelliger Teilnehmernr.
+^ Admin: Termine jetzt zeitlich absteigend
+# Brettbeste
+^ Termine event_link auf VARCHAR(500) erweitert 
+# Siegbedingungen
+# Monatsnamen mit Umlaut in 2 pdf-Ausgaben
++ Vorbereitung Erweiterte Rechte-Verwaltung (Tabellen, Routinen, neue views)
++ Neue Benutzerverwaltung
+^ Parameterübergabe bei Versionsupdate in scriptfile verlagert
+# Saison-Statistikview Prozente bei Mannschaften
+
+- - - - - 1.2.3 - [03-01-2013] - - - - - - - - - - - - - - - - - - - -
+# Admin-Toolbars: Textanpassungen (Fred)
+# Edit Verein: Vorschau 
++ Brettbeste für Ligen und Mannschaftsturniere
+# kein Veranstalter im Termin (Fred)
+# Verhindern SQL-Exception in debug-Modus (Fred)
+# Verbesserung Site-Name (Fred)
+^ Löschen nur von direkt eingegebenen Meldelisten möglich 
+# Brettbeste: ein Spieler in 2 Mannschaften einer Liga
+# Liga DWZ-Mannschaften: mehrere Meldelisten pro Mannschaften
+# clm.xml access.xml nachgetragen (Thorsten)
+# admin controller users überarbeitet (Fred)
+
+- - - - - 1.2.2 - [03-12-2012] - - - - - - - - - - - - - - - - - - - -
++ Einbau einiger CLM-Menüeintragstypen
+# optische Verbesserung einiger admin-views (ligen,mturnier,turform,...)
+# Minikorrektur view runde type=raw
+# Vereinsliste: Auswahlfeld Verein
++ Einbau CLM-Menüeintragstyp Terminliste
+^ Ergänzungen zum Update der DWZ-Datenbank
++ Mitgliedsnummer in Benutzerverwaltung
+# Joomla! Gruppenrechte werden nicht angetastet, wenn clm-User geändert wird
+ 
+- - - - - 1.2.1 - [29-10-2012] - - - - - - - - - - - - - - - - - - - -
+# Manuelle Eingabe erstes Vereinsmitglied
+# Ersetzen einiger vergessener Anweisungen vom Typ: global $mainframe;
+# Ausblenden deaktivierter Sonderranglisten
+# Sortierung Mitgliederliste nach Mitgl.nr
++ Flexibilität des Google-Zugriffs
++ Liga einschl. Termine kopieren
+# Ergebnismeldung: ML im alten und neuen Verein bei Vereinswechsel
++ Termine: Erweiterung Auswahlbasis Veranstalter
+
+- - - - - 1.2.0 - [05-10-2012] - - - - - - - - - - - - - - - - - - - -
+# Setzen fehlender Model-Funktionen (views spieler,mannschaft,runde; type raw)
+# pdf-Rundenbericht und Bestätigungsmail Anzeige langer Kommentare
+^ Copyright auf 2008-2012 gesetzt
+
+- - - - - 1.1.20 - [19-09-2012] - - - - - - - - - - - - - - - - - - - -
++ Ergänzung Mannschaftsturniere: KO-Turnier mit kleinen Finale
+# Meldelisteneingabe im FE (Saisonparameter)
++ Index sid_zps_spieler für Tabelle clm_rnd_spl
+# Ligaheft (2 Durchgänge mit je mind. 5 Runden)
+^ Ligaheft für Rangl.-system (Spielerliste analog pdf-Mannschaftsliste)
+# Vereinsmanager: Filter zur Ranglistenbearbeitung
+# DWZ-Berechnung: kein Programmstopp, falls keine Ergebnisse vorliegen
+^ Einzelturniere technisch: Class JParameterOLD verfügbar in 2.5
++ install.clm.php um Hinweise zu Modulen ergänzt
++ Icons für Mannschaftsturniere
+^ apply_f2.png, cancel_f2.png, ... verfügbar im CLM
++ Ergänzung der Bestätigungsmails um Spielbericht und Umstellung auf html-Format
+# Entfernen ungültiger Model-Funktionen (view statistik, type raw)
+# pdf-Rundenbericht Überschrift zu Nächste Runde
+# Anpassungen wegen Externer Komponente
+^ Versionsanzeige für Jooomla 2.5 Lösung
+
+- - - - - 1.1.19 - [30-05-2012] - - - - - - - - - - - - - - - - - - - -
+# Bugfix für Hinttexte mit Umlaut im Monatsnamen
++ Erg.Meldung auch durch Spieler des 2.Vereins bei SG möglich
+# Bugfix in Ligastatistik für Anzahl kampflos
++ Parameter für Ersatzregel bei Ranglisten
++ Zeitweise Sperrung der Aufstellungsanzeige bei Ligen
+^ Neuer Defaultwert für Ergebnis
+# Bugfix pdf Rundenbericht
++ Erweiterung Termine-Modul
+
+- - - - - 1.1.18 - [17-04-2012] - - - - - - - - - - - - - - - - - - - -
++ Sonderranglisten nach TWZ, Alter, Geschlecht und Verein(ZPS)
+# Mannschaftsliste bei Ranglistensystem
+^ Verbesserung Rundenname bei Liga mit 2 Durchgängen
+# Einzelturnier - Zuordnung von Teilnehmer ohne DWZ
+# Liga/Mannschaftsturnier - Sonderspielsystem
+^ Verwendung der Rundenbezeichnungen für views Paarungsliste u. Runde
++ Externer Link für Termin/Veranstaltung 
+# View Turnier_Player vor Turnierbeginn ohne Partien
++ Parameterabfrage bzgl. Anzeige Email und Telefon in pdf-view mannschaft und Ligaheft
+# Nachbesserung zu Ranglistenkorrektur nach FIDE
+
+- - - - - 1.1.17 - [01-03-2012] - - - - - - - - - - - - - - - - - - - -
+# Ausgabe der Partien eines Turnier-Teilnehmers
++ neue Turnier-Optionen: Ranglistenkorrektur nach FIDE
++ Turniere: im Backend neue Toolbarlinks auf Turnierformular
+° Turniere: Meldungstexte im Runden-Controller optimiert
+# Statistik Bestenliste
+# DWZ-Liste bei Spielgemeinschaften
+# Liga mit 2 Durchgängen (Markierung DWZ ausgewertet)
++ Darstellung von Mannschaftsturniere
+
+- - - - - 1.1.16 - [04-01-2012] - - - - - - - - - - - - - - - - - - - -
+^ Vereine saisonabhängig
++ Liga mit variablen Spielsystem, mehr Spieltage als nötig
+# Liga mit 2 Durchgängen (Meldung, Termine)
+^ Liga geprüft/nicht geprüft wird nicht gezeigt, wenn SL nicht gesetzt
+
+- - - - - 1.1.15 - [06-11-2011] - - - - - - - - - - - - - - - - - - - -
+# Turniere: Januar Bugfix
++ PDF-Ausgaben für Einzelturniere
++ PDF-Ausgaben für Termine
+^ verbesserte Darstellung pdf-Rundenbericht
++ Aufnahme "Bemerkungen zur Mannschaft" in pdf-Ligaheft
++ Verwendung der Email-Parameter für Info-Mails nach Ergebniseingabe
+# Bugfixing Ergebniseingabe (Meldung ohne Brettergebnisse, Email-Adressen der akt. Saison)
+
+- - - - - 1.1.14 - [07-09-2011] - - - - - - - - - - - - - - - - - - - -
+# Remis-Darstellung in pdf-Ausgabe geändert
+# Datum der DWZ-Übernahme wieder in Mannschaftsliste
+
+
+- - - - - 1.1.13 - [28-08-2011] - - - - - - - - - - - - - - - - - - - -
+- ToDo entfernt, dafür
++ Terminkalender
++ Turniere: Spielerfotos aus Joomgallery
+
+
+- - - - - 1.1.12 - [23-08-2011] - - - - - - - - - - - - - - - - - - - -
++ Spieleransicht: Spielerliste im Drop & Menü
++ Spieleransicht: DWZ Differenz
+# Ligastatistik: Bugfix Leere Anzeige in Zeile 73 und 213
+
+
+- - - - - 1.1.11 - [22-08-2011] - - - - - - - - - - - - - - - - - - - -
++ DWZ Liste und Vereinsliste: Sortierbare Spalten
+# Submenu Turniere: ItemID
+^ Bestenliste: Sortierbare Spalten + Leistungsspalte
++ DWZ Mannschaften: DWZ Differenz
+
+
+- - - - - 1.1.10 - [06-08-2011] - - - - - - - - - - - - - - - - - - - -
+# fehlende Itemids
++ Frontend: CLM Admins können Vereinsdaten ändern
+
+
+- - - - - 1.1.9 - [04-08-2011] - - - - - - - - - - - - - - - - - - - -
+^ Vereine von Saison unabhängig ( Code an Stellen geändert: //-HACK)
++ DWZ: verbesserte Saisonschnellauswahl
+^ Vereinsliste unabhängig von Saison
+^ Vereinsansicht: verbesserte Schnellauswahl
++ Angewählte Vereine/Saison wird in der Drop & Down Liste angezeigt
++ Vereinsliste Passive Mitglieder
++ Vereinsdaten über Vereinsansicht änderbar
+^ Vereinsliste: Verbands- / Bezirksanzeige
+
+
+- - - - - 1.1.8 - [01-08-2011] - - - - - - - - - - - - - - - - - - - -
++ Termine: Listenansicht mit Monats- und Jahresangabe
++ Termine: Schnellauswahl
+# Quickmenu: Reihenfolge Ligen
+# Submenu: Itemid
+
+
+- - - - - 1.1.7 - [30-07-2011] - - - - - - - - - - - - - - - - - - - -
+^ Vereinsleiter Schnellauswahl
+^ Termine: Ligen und Turniere in gemeinsamer Liste
+^ Termine: Kalender Vorbereitung, Extern Komponente
+# Bug Fix Submenu
+
+
+- - - - - 1.1.6 - [22-07-2011] - - - - - - - - - - - - - - - - - - - -
+^ Verlagerungen in den Admin-Sprachdateien
+^ Quickmenu: überflüssiges entfernt
++ Saison frei wählbar im Navigationsmenu
+
+
+- - - - - 1.1.5 - [13-07-2011] - - - - - - - - - - - - - - - - - - - -
+# Bugfixing Mannschaftsaufstellung
+^ Admin-Infoscreen Versionscheck von andere Adresse. Code aufgeräumt
+^ Backend-Zugangskontrolle über Matrix geregelt
++ Freigabedatum Rundenbericht eingebaut
+
+
+- - - - - 1.1.4 - [05-07-2011] - - - - - - - - - - - - - - - - - - - -
+# Bugfixing Voreinstellung
+# CSS Listentyp
++ DWZ Liste: DWZ und ELO verlinkt
++ neue Parameter bei Mannschaftsansicht: Mannschaftsführer, Spiellokal, Spielplan
+# Bugfixing Submenu
+# Bugfixing Account-Remind-Mail
+# Bugfixing Neues Feld Wertpunkte
+$ Alle Sprachfiles kompatibel zu Joomla 1.6+
+^ install/uninstall kompatibel zu Joomla 1.6+
+
+
+- - - - - 1.1.3 - [30-06-2011] - - - - - - - - - - - - - - - - - - - -
+# Bugfixing Liga-Heft
++ Berliner Wertung pro Liga möglich
+^ Turnier-Info ohne Nachkommastellen bei TWZ-Schnitt
++ Backend: Turnier-Kategorien mit Kategorie-Dropdown
+
+
+- - - - - 1.1.2 - [29-06-2011] - - - - - - - - - - - - - - - - - - - -
++ Turnieradministration: Matches zu Rundenansetzungen hinzufügen
++ Frontend Turnier-Info: Partienstatistiken verfeinert; Teilnerhmerzahl vs. registrierte Spieler; TWZ-Schnitt 
+^ Frontend Turnier-Seiten: Anzeige der Wertungszahlen vereinheitlicht
++ neuer Turnier-Parameter, ob Vereinsnamen auf Vereinsseite verlinkt werden
+
+
+- - - - - 1.1.1 - [26-06-2011] - - - - - - - - - - - - - - - - - - - -
++ neuer Turnier-Parameter, ob Anzeige der TL-Bestätigung im Frontend
+- altes Changelog entfernt
+- überflüssige install/uninstall-Dateien entfernt
+# Turniere: Frontend-Bezeichnungen DWZ/TWZ angeglichen
++ neuer Turnier-Parameter, ob Kategoriename zum Turniernamen hinzugefügt werden soll
++ Komplette Bestenliste in Ligastatistik
+$ Suckerfish-Menu mehrsprachig
+
+
+- - - - - 1.1.0 - [17-06-2011] - - - - - - - - - - - - - - - - - - - -
+
++ PDF-Auswertung Ligaheft im view Rangliste
++ sämtliche Tooltips
+^ Backend/Frontend: autoload der Klassenbibliotheken geändert (für Joomla 1.6/7)
+^ Backend: Klassen an zukünftige Joomla-Versionen angepasst
+
+
+- - - - - 1.0.6 - [01-05-2011] - - - - - - - - - - - - - - - - - - - -
+
++ Saison-Tabelle jetzt mit Eingabefeld für Stand DSB-Daten
++ Logfile-Tabelle jetzt mit Feld Aktionsnummer für ausgew. Einträge
+^ DWZ-Auswertung zur Liga mit Datum alte DWZ (DSB) und Datum neue inoffz. DWZ (CLM)
+^ Views Spieler, Mannschaft und Saison-Info mit Datum alte DWZ (DSB) und Datum neue inoffz. DWZ (CLM)
++ Vereinsliste: Mitglieder verlinkt
++ DWZ Liste: Drop&Down Vereinsliste
+
+
+- - - - - 1.0.5 - [09-04-2011] - - - - - - - - - - - - - - - - - - - -
+
+^ Spiellokale Backend/Frontend
++ Backend: Vorschau Vereinsansicht
++ Terminkalender mit Turnierevents
+
+
+- - - - - 1.0.4 - [19-03-2011] - - - - - - - - - - - - - - - - - - - -
+
++ Spieleransicht: Runden verlinkt | Vereinsansicht: Hinweisbox
++ Mehr Platz für Vereinsdetails: Termine, Adresse, Hinweise
++ neue Feinwertung: Buchholz mit 1 Streichresultat
++ Neuer View: Termine
++ Ligastatistik: Google Charts mit Parameter
+# wichtiger Bugfix bei Vereinsfilter
+^ Email-Konfiguration aus Sprachfile in Einstellungen verlagert
+^ Turniere: Feinwertungen der Spieler flexibler gespeichert
+^ Backend: Layout, active-Klassen
+
+
+- - - - - 1.0.3 - [11-03-2011] - - - - - - - - - - - - - - - - - - - -
+
++ Turnier-Seiten mit Vereins-Link
++ Vereinsliste in der Vereinsansicht
++ Vereinsliste: Parameter
++ Neuer View: Gesamte Vereinsliste
++ Turniere: Navigationsmenu + Parameter
++ Turnier-Option: PGN öffentlich
++ Routenplaner
++ Vereinansicht: Mannschaften über Saisonfilter selektierbar
++ Liga: Navigationsmenu + Parameter
+% DWZ Datenbank updaten performanter durch neue Indices
+% Installer: DB-Upgrade überarbeitet
+# Installer: Bei Änderung der Tabelle clm_swt_liga
+^ Einstellungen: Update/Upgrade auf neuen Reiter ausgelagert - Erläuterungstext
+^ Installer beim Anlegen der DB-Tabellen überarbeitet
+
+
+- - - - - 1.0.2 - [05-03-2011] - - - - - - - - - - - - - - - - - - - -
+
++ PGN bei Turnier-Partien eintragen
++ PGN Einstellungen
++ PGN-Viewer für Turniere im Frontend
++ Fixierter Header bei Turniertabelle, Turnierteilnehmer, Mannschaftsaufstellung, DWZ Liste
++ Parameter für Fixierter Header
++ Parametertemplate für Turniere
++ Google Maps bei Vereinsansicht und Mannschaftsaufstellung inklusive Parameter
++ Turnier-Parameter für Anzeige der Startnummer
+^ DWZ Liste überarbeitet
+^ Backend-Controller auf CLMLog umgestellt
+# DWZ Liga: Hinweis am Ende
+# Turnier-Partien - kein Zurgiff auf Speichern/Anwenden/löschen, wenn Bestätigung gesetzt
+
+
+- - - - - 1.0.1 - [27-02-2011] - - - - - - - - - - - - - - - - - - - -
+
++ Turniere: Auf- und Absteiger
++ Neuer Parameter: Teilnehmernummer bei Runde ein/ausschalten
++ Neue Parameter: Spaltenbreite bei Mannschaftsübersicht
+$ Backend-Sprachdateien für Einstellungen abgespalten
+% Einlesen der DWZ-Daten optimiert
+# Meldungsausgabe beim Einlesen der SQL-Ausführen un/-abhängig vom Logfile
+* SQL-Ausführen im Controller nur erlauben, wenn in config erlaubt
+^ Logfile-Schreiben im db-Controller auf CLMLog umgestellt
+
+
+- - - - - 1.0.0a - [25-02-2011] - - - - - - - - - - - - - - - - - - - -
+
+# SQL-Import der LV-Daten

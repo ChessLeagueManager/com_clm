@@ -1,0 +1,44 @@
+/********************/
+/**  notification  **/
+/********************/
+// from http://www.cssportal.com/blog/css-notification-boxes/ by Rene Spronk
+
+#clm .clm .clm_view_notification {
+	font-size: 11px; text-align: center; 
+	border-top: 1px solid #CCC; 
+	padding: 10px 0 5px 0; 
+	color:#999999
+}
+
+#clm .clm .clm_view_notification .error, 
+#clm .clm .clm_view_notification .success,
+#clm .clm .clm_view_notification .warning,
+#clm .clm .clm_view_notification .notice {
+	color:#555;
+	border-radius:10px;
+	padding:10px 36px;
+	margin:10px;
+	text-align:justify;
+}
+#clm .clm .clm_view_notification .error span, 
+#clm .clm .clm_view_notification .success span,
+#clm .clm .clm_view_notification .warning span,
+#clm .clm .clm_view_notification .notice span {
+	font-weight:bold;
+}
+#clm .clm .clm_view_notification .error {
+	background:#ffecec url('../images/notification/error.png') no-repeat 10px 50%;
+	border:1px solid #f5aca6;
+}
+#clm .clm .clm_view_notification .success {
+	background:#e9ffd9 url('../images/notification/success.png') no-repeat 10px 50%;
+	border:1px solid #a6ca8a;
+}
+#clm .clm .clm_view_notification .warning {
+	background:#fff8c4 url('../images/notification/warning.png') no-repeat 10px 50%;
+	border:1px solid #f2c779;
+}
+#clm .clm .clm_view_notification .notice {
+	background:#e3f7fc url('../images/notification/notice.png') no-repeat 10px 50%;
+	border:1px solid #8ed9f6;
+}

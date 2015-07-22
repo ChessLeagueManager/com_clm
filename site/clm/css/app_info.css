@@ -1,0 +1,84 @@
+/**********************/
+/****** app_info ******/
+/**********************/
+
+#clm .clm .clm_view_app_info .clm_title {
+	text-align:center;
+	font-size:2em;
+	font-weight:bold;
+	padding-bottom:10px;
+}
+
+#clm .clm .clm_view_app_info .clm_title_sub {
+	text-align:left;
+	font-size:1.3em;
+	font-weight:bold;
+	padding:10px 0;
+}
+
+#clm .clm .clm_view_app_info p {
+	text-align:justify;
+	font-size:1.2em;
+	margin-bottom:10px;
+}
+
+#clm .clm .clm_view_app_info b {
+	font-weight:bold;
+}
+
+#clm .clm .clm_view_app_info .clm_around {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-flow: row wrap;
+	-moz-flex-flow: row wrap;
+	-ms-flex-flow: row wrap;
+	flex-flow: row wrap;
+	width:100%;
+}
+
+#clm .clm .clm_view_app_info .clm_info {
+	max-width:300px;
+}
+
+#clm .clm .clm_view_app_info .clm_qrcode {
+	margin: 0 auto;
+	padding:10px 0 10px 10px;
+	
+}
+#clm .clm .clm_view_app_info .clm_qrcode a {
+	margin-top:5px;
+	display: block;
+	text-align:center;
+}
+
+#clm .clm .clm_view_app_info input {
+	margin:0;
+	padding:0 !important;
+	width:150px;
+	text-align:center;
+	display: inline;
+}
+
+#clm .clm .clm_view_app_info span {
+	display: inline-block;
+	width:120px;
+}
+
+#clm .clm .clm_view_app_info .clm_button {
+	width:100%;
+	display:block;
+}
+#clm .clm .clm_view_app_info .clm_qrcode_gen {
+	width:200px;
+	height:200px;
+	background-color:gray;
+}
+
+#clm .clm .clm_view_app_info .clm_disabled {
+   pointer-events: none;
+   cursor: default;
+   color:black;
+}

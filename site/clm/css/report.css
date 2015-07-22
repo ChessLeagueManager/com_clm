@@ -1,0 +1,188 @@
+/********************/
+/****** report ******/
+/********************/
+
+#clm .clm .clm_view_report .flex {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-flow: row wrap;
+	-moz-flex-flow: row wrap;
+	-ms-flex-flow: row wrap;
+	flex-flow: row wrap;
+	width:100%;
+	overflow:hidden;
+}
+
+#clm .clm .clm_view_report .element {
+	border: 1px solid #cccccc;
+	text-align:center;
+	text-align:-moz-center;
+	text-align:-webkit-center;
+	margin:0;
+	height:33px;
+}
+
+#clm .clm .clm_view_report .element select {
+	width:100%;
+	padding:0;
+	margin:0;
+	line-height:normal;
+	height:100%;
+	border: 0;
+}
+
+#clm .clm .clm_view_report .title1 .element, #clm .clm .clm_view_report .title2 .element, #clm .clm .clm_view_report .board {
+	font-size: 110%;
+	font-weight:bold;
+	padding-top:10px;
+	padding-bottom:10px;
+}
+
+#clm .clm .clm_view_report .title1 .element{
+	background-color: #f5f5f5;
+	color: #666666;
+}
+
+#clm .clm .clm_view_report .board {
+	background-color: #f5f5f5;	
+	width:10%;
+}
+
+#clm .clm .clm_view_report .result {
+	width:16%;
+}
+
+#clm .clm .clm_view_report .home, #clm .clm .clm_view_report .guest {
+	width:37%;
+}
+
+#clm .clm .clm_view_report .result select{
+	text-align:center;
+	text-align:-moz-center;
+	text-align:-webkit-center;
+}
+
+#clm .clm .clm_view_report .home select, #clm .clm .clm_view_report .guest select {
+	text-indent:1%;
+}
+
+#clm .clm .clm_view_report select option{
+	text-align:left;
+	text-align:-moz-left;
+	text-align:-webkit-left;
+}
+
+/* KO System */
+
+#clm .clm .clm_view_report .ko {
+	width:100%;
+	margin-top: 20px;
+	border: 1px solid #cccccc;
+	text-align:center;
+	text-align:-moz-center;
+	text-align:-webkit-center;
+}
+
+#clm .clm .clm_view_report .ko .info {
+	font-size: 110%;
+	font-weight:bold;
+	padding:5px;
+	word-wrap: break-word;
+}
+
+#clm .clm .clm_view_report .ko .choice {
+	border: 1px solid #cccccc;
+}
+
+#clm .clm .clm_view_report .ko .choice select {
+	border: 0;
+	padding:0;
+	margin:0;
+	width:100%;
+	height:22px;
+}
+
+/* Notiz */
+
+#clm .clm .clm_view_report .outer_comment {
+	width:100%;
+	margin-top:20px;
+	border: 1px solid #cccccc;
+	text-align:center;
+	text-align:-moz-center;
+	text-align:-webkit-center;
+}
+
+#clm .clm .clm_view_report .outer_comment .info {
+	font-size: 110%;
+	font-weight:bold;
+	padding:5px;
+	word-wrap: break-word;
+}
+
+#clm .clm .clm_view_report .outer_comment .text {
+	border: 1px solid #cccccc;
+}
+
+#clm .clm .clm_view_report .outer_comment .text textarea {
+	width:100%;
+	height:50px;
+	padding:0;
+	margin:0;
+	resize:vertical;
+}
+
+#clm .clm .clm_view_report .clm_view_notification .notice {
+	margin-top:20px;
+}
+
+/* Für kleine Browser Fenster oder Handys */
+
+@media all and (max-width: 480px) {
+ 
+	#clm .clm .clm_view_report .flex {
+		-webkit-flex-direction: column;
+		-ms-flex-direction: column;
+		-webkit-box-orient: vertical;
+		flex-direction: column;
+	}
+	
+	#clm .clm .clm_view_report .home, #clm .clm .clm_view_report .guest {
+		min-width:0;
+		width:100%;
+	}
+ 
+	#clm .clm .clm_view_report .board {
+		width:100%;
+		margin-top:1.5em;
+	}
+
+	#clm .clm .clm_view_report .result {
+		width:100%;
+	}
+ 
+ }
+ 
+ /* Anpassung für die Buttons */
+ 
+#clm .clm .clm_view_report .button_container {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-flow: row wrap;
+	-moz-flex-flow: row wrap;
+	-ms-flex-flow: row wrap;
+	flex-flow: row wrap;
+	width:100%;
+}
+
+#clm .clm .clm_view_report .button_container .clm_button {
+	-webkit-flex: 1 0 auto;
+	-ms-flex: 1 0 auto; 
+	flex: 1 0 auto; 
+}

@@ -1,0 +1,32 @@
+/*********************/
+/** config_elements **/
+/*********************/
+
+#clm .clm .clm_view_config_element {
+	margin: 5px;
+	max-width: 450px;
+	width: 100%;
+}
+
+#clm .clm .clm_view_config_element .clm_view_config_text {
+	display:inline-block;
+	margin: 7px 10px 0 2px;
+}
+
+#clm .clm .clm_view_config_element .clm_view_config_text p a{
+	color:#000000;
+}
+
+#clm .clm .clm_view_config_element .clm_view_config_text p {
+	color:#777777;
+	text-decoration: underline;
+	margin:0;
+}
+
+#clm .clm .clm_view_config_element select, #clm .clm .clm_view_config_element input { 
+	margin: 0;
+	height: 28px;
+	max-width: 200px;
+	width: 100%;
+	float:right;
+}
