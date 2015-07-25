@@ -59,6 +59,11 @@ class CLMViewMTurniere
 		$row->params['anz_sgp'] = 1; }
 	if (!isset($row->params['color_order']))  {   //Standardbelegung
 		$row->params['color_order'] = '1'; }
+	if (!isset($row->params['incl_to_season']))  {   //Standardbelegung
+		if ($row->liga_mt == 0) 
+			$row->params['incl_to_season'] = '1'; 
+		else 
+			$row->params['incl_to_season'] = '0'; }
 	?>
 	
 	<script language="javascript" type="text/javascript">
@@ -566,6 +571,22 @@ class CLMViewMTurniere
    <legend><?php echo JText::_( 'LEAGUE_PREFERENCES' ); ?></legend>
       <table class="adminlist">
 
+      <tr>
+		<td colspan="1" class="paramlist_key">
+			<?php echo JText::_('OPTION_INCL_TO_SEASON'); ?>:
+		</td>
+		<td colspan="4" class="paramlist_value">
+			<?php 
+			$options = array();
+			$options[0] = JText::_('JNO');
+			$options[1] = JText::_('JYES');
+			$optionlist = array();
+			foreach ($options as $key => $val) {
+				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
+			}
+			echo JHtml::_('select.genericlist', $optionlist, 'params[incl_to_season]', 'class="inputbox"', 'id', 'name', $row->params['incl_to_season']); ?>
+		</td>
+	  </tr>
       <tr>
 	<td nowrap="nowrap">
 	<label for="anzeige_ma"><?php echo JText::_( 'LEAGUE_SHOW_PLAYERLIST' ); ?></label>

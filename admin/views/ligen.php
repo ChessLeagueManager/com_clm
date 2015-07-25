@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -68,6 +68,11 @@ class CLMViewLigen
 		$row->params['deadline_roster'] = '0000-00-00'; }
 	if (!isset($row->params['color_order']))  {   //Standardbelegung
 		$row->params['color_order'] = '1'; }
+	if (!isset($row->params['incl_to_season']))  {   //Standardbelegung
+		if ($row->liga_mt == 0) 
+			$row->params['incl_to_season'] = '1'; 
+		else 
+			$row->params['incl_to_season'] = '0'; }
 	?>
 	
 	<script language="javascript" type="text/javascript">
@@ -497,6 +502,22 @@ class CLMViewLigen
    <legend><?php echo JText::_( 'LEAGUE_PREFERENCES' ); ?></legend>
       <table class="adminlist">
 
+      <tr>
+		<td colspan="2" class="paramlist_key">
+			<?php echo JText::_('OPTION_INCL_TO_SEASON'); ?>:
+		</td>
+		<td colspan="4" class="paramlist_value">
+			<?php 
+			$options = array();
+			$options[0] = JText::_('JNO');
+			$options[1] = JText::_('JYES');
+			$optionlist = array();
+			foreach ($options as $key => $val) {
+				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
+			}
+			echo JHtml::_('select.genericlist', $optionlist, 'params[incl_to_season]', 'class="inputbox"', 'id', 'name', $row->params['incl_to_season']); ?>
+		</td>
+	  </tr>
       <tr>
 	<td nowrap="nowrap" colspan="2">
 	<label for="anzeige_ma"><?php echo JText::_( 'LEAGUE_SHOW_PLAYERLIST' ); ?></label>
