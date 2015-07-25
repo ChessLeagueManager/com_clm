@@ -74,7 +74,8 @@ class CLMModelRangliste extends JModelLegacy
 		$db->setQuery($query);
  		$order = $db->loadObjectList();
  			if ($order[0]->order == 1) { $ordering = " , m.ordering ASC";}
-			else { $ordering =', a.tln_nr ASC ';} 
+			//else { $ordering =', a.tln_nr ASC ';} 
+			else { $ordering =' ';} 
 		//$query = " SELECT a.tln_nr as tln_nr,m.name as name, SUM(a.manpunkte) as mp, "
 		$query = " SELECT a.tln_nr as tln_nr,m.name as name, (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
 			." SUM(a.brettpunkte) as bp, SUM(a.wertpunkte) as wp, m.published, m.man_nr, COUNT(DISTINCT a.runde, a.dg) as spiele, "
@@ -95,7 +96,7 @@ class CLMModelRangliste extends JModelLegacy
 			." ORDER BY mp DESC, bp DESC, wp DESC".$ordering; }
 		if ($order[0]->b_wertung == 4 AND $order[0]->liga_mt == 0) { 
 			$query = $query
-			." ORDER BY mp DESC, bp DESC, ".$ordering.", wp DESC"; }
+			." ORDER BY mp DESC, bp DESC".$ordering.", wp DESC"; }
 		if ($order[0]->liga_mt == 1) {                       //mtmt
 			$query = $query
 			." ORDER BY rankingpos ASC"; }
