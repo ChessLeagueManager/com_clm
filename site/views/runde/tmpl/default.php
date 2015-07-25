@@ -71,6 +71,8 @@ if ($detail == 0) $detailp = '1'; else $detailp = '0';
 		}
 	}
   if (($pgn == 1) OR ($pgn == 2)) { 
+	$config		= clm_core::$db->config();
+	$name_subuml	= $config->fe_runde_subuml;
 	$clmuser = $this->clmuser;
 	$nl = "\n";
 	$file_name = utf8_decode($liga[0]->name).'_'.utf8_decode($liga[$runde-1]->rname);
@@ -105,6 +107,10 @@ if ($detail == 0) $detailp = '1'; else $detailp = '0';
 		fputs($pdatei, '[Date "'.JHTML::_('date',  $liga[$runde-1]->datum, JText::_('Y.m.d')).'"]'.$nl);
 		fputs($pdatei, '[Round "'.$runde.'.'.$einz->paar.'"]'.$nl);
 		fputs($pdatei, '[Board "'.$einz->brett.'"]'.$nl);
+		if ($name_subuml == 1) {
+			$einz->hname = clm_core::$load->sub_umlaute($einz->hname);
+			$einz->gname = clm_core::$load->sub_umlaute($einz->gname);
+		}
 		if ($einz->weiss == "0") {
 			fputs($pdatei, '[White "'.utf8_decode($einz->gname).'"]'.$nl);
 			fputs($pdatei, '[Black "'.utf8_decode($einz->hname).'"]'.$nl);

@@ -20,8 +20,8 @@ class CLMModelInfo extends JModelLegacy
 	public static function CLMSid()
 	{
 	$db			= JFactory::getDBO();
-	$sid = JRequest::getInt('saison','0');     	//klkl
-	If ($sid == 0) {							//klkl
+	$sid = JRequest::getInt('saison','0');     	
+	If ($sid == 0) {							
 		$query = " SELECT id,name FROM #__clm_saison"
 			." WHERE published = 1 "
 			." AND archiv = 0 "
@@ -31,8 +31,50 @@ class CLMModelInfo extends JModelLegacy
 		$db->setQuery( $query);
 		$saison	= $db->loadObjectList();
 		$sid	= $saison[0]->id;
-	}											//klkl 
+	}											 
 		return $sid;
+	}
+
+	public static function CLMLigen()
+	{
+	$sid = CLMModelInfo::CLMSid();				
+		$db			= JFactory::getDBO();
+		$query 	= " SELECT id, liga_mt, params FROM #__clm_liga"
+			." WHERE published = 1 "
+			." AND sid = ".$sid
+			;
+ 
+		$liga = clm_core::$db->loadObjectList($query);
+		if(count($liga)==0) {
+			return ""; }	
+		$liga_a = array();
+		foreach($liga as $liga1){
+			//Liga-Parameter aufbereiten
+			$paramsStringArray = explode("\n", $liga1->params);
+			$liga1->params = array();
+			foreach ($paramsStringArray as $value) {
+				$ipos = strpos ($value, '=');
+				if ($ipos !==false) {
+					$key = substr($value,0,$ipos);
+					if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
+					if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
+					$liga1->params[$key] = substr($value,$ipos+1);
+				}
+			}	
+			if (!isset($liga1->params['incl_to_season'])) {
+				if ($liga1->liga_mt == 0) 
+					$liga1->params['incl_to_season'] = '1';
+				else 
+					$liga1->params['incl_to_season'] = '0'; }
+			if ($liga1->params['incl_to_season'] == '1') {
+				$liga_a[] = $liga1->id; }
+		}
+		if(count($liga_a)==0) {
+			return ""; }	
+		$ligen = '';
+		$ligen = implode(',',$liga_a);
+											 
+		return $ligen;
 	}
 
 	function _getCLMSaison( &$options )
@@ -61,12 +103,14 @@ class CLMModelInfo extends JModelLegacy
 	function _getCLMRemis( &$options )
 	{
 	$sid = CLMModelInfo::CLMSid();
+	$ligen = CLMModelInfo::CLMLigen();
 	
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
 		$query = " SELECT COUNT(id) as remis FROM #__clm_rnd_spl"
-			." WHERE weiss = 1 AND ergebnis = 2 AND sid = ".$sid
+			.' WHERE FIND_IN_SET(lid,"'.$ligen.'") != 0'
+			." AND weiss = 1 AND ergebnis = 2 AND sid = ".$sid
 			;
 		return $query;
 	}
@@ -81,12 +125,14 @@ class CLMModelInfo extends JModelLegacy
 	function _getCLMKampflos( &$options )
 	{
 	$sid = CLMModelInfo::CLMSid();
+	$ligen = CLMModelInfo::CLMLigen();
 	
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
 		$query = " SELECT COUNT(id) as kampflos FROM #__clm_rnd_spl"
-			." WHERE weiss = 1 AND ergebnis > 2 AND sid = ".$sid
+			.' WHERE FIND_IN_SET(lid,"'.$ligen.'") != 0'
+			." AND weiss = 1 AND ergebnis > 2 AND sid = ".$sid
 			;
 		return $query;
 	}
@@ -101,12 +147,14 @@ class CLMModelInfo extends JModelLegacy
 	function _getCLMHeim( &$options )
 	{
 	$sid = CLMModelInfo::CLMSid();
+	$ligen = CLMModelInfo::CLMLigen();
 	
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
 		$query = " SELECT brett,SUM(punkte) as sum FROM #__clm_rnd_spl "
-			." WHERE sid = $sid AND heim = 1"
+			.' WHERE FIND_IN_SET(lid,"'.$ligen.'") != 0'
+			." AND sid = $sid AND heim = 1"
 			." GROUP BY sid "
 			;
 		return $query;
@@ -122,12 +170,14 @@ class CLMModelInfo extends JModelLegacy
 	function _getCLMGast( &$options )
 	{
 	$sid = CLMModelInfo::CLMSid();
+	$ligen = CLMModelInfo::CLMLigen();
 	
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
 		$query = " SELECT brett,SUM(punkte) as sum FROM #__clm_rnd_spl "
-			." WHERE sid = $sid AND heim = 0"
+			.' WHERE FIND_IN_SET(lid,"'.$ligen.'") != 0'
+			." AND sid = $sid AND heim = 0"
 			." GROUP BY sid "
 			;
 		return $query;
@@ -143,12 +193,14 @@ class CLMModelInfo extends JModelLegacy
 	function _getCLMGesamt( &$options )
 	{
 	$sid = CLMModelInfo::CLMSid();
+	$ligen = CLMModelInfo::CLMLigen();
 	
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
 		$query = " SELECT COUNT(id) as gesamt FROM #__clm_rnd_spl"
-			." WHERE weiss = 1 AND sid = ".$sid
+			.' WHERE FIND_IN_SET(lid,"'.$ligen.'") != 0'
+			." AND weiss = 1 AND sid = ".$sid
 			;
 		return $query;
 	}
@@ -206,6 +258,7 @@ class CLMModelInfo extends JModelLegacy
 	function _getCLMMannschaft( &$options )
 	{
 	$sid = CLMModelInfo::CLMSid();
+	$ligen = CLMModelInfo::CLMLigen();
 
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
@@ -215,8 +268,9 @@ class CLMModelInfo extends JModelLegacy
 			." FROM #__clm_rnd_man as a "
 			." LEFT JOIN #__clm_liga as l ON  l.id = a.lid AND l.sid = a.sid "
 			." LEFT JOIN #__clm_mannschaften as m ON  m.liga = a.lid AND m.tln_nr = a.tln_nr AND m.sid = a.sid "
+			.' WHERE FIND_IN_SET(a.lid,"'.$ligen.'") != 0'
 			//." WHERE a.heim = 1 "
-			." WHERE a.manpunkte > -1 "
+			." AND a.manpunkte > -1 "
 			." AND a.sid = ".$sid
 			." GROUP BY a.lid,a.tln_nr "
 			." ORDER BY mp DESC, bp DESC "
@@ -235,13 +289,15 @@ class CLMModelInfo extends JModelLegacy
 	public static function Bretter()
 	{
 	$sid = CLMModelInfo::CLMSid();
+	$ligen = CLMModelInfo::CLMLigen();
 	
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
 		$query = " SELECT stamm FROM #__clm_liga "
-			." WHERE sid =".$sid
-			." ORDER BY stamm DESC LIMIT 1"
+			.' WHERE FIND_IN_SET(id,"'.$ligen.'") != 0'
+			." AND sid =".$sid
+			." ORDER BY stamm DESC "
 			;
 		$db->setQuery( $query);
 		$count	= $db->loadObjectList();
@@ -253,12 +309,14 @@ class CLMModelInfo extends JModelLegacy
 	function _getCLMBrett( &$options )
 	{
 	$sid = CLMModelInfo::CLMSid();
+	$ligen = CLMModelInfo::CLMLigen();
 
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
 		$query = " SELECT brett,SUM(punkte) as sum, COUNT(id) as count FROM #__clm_rnd_spl "
-			." WHERE sid = $sid AND heim = 1"
+			.' WHERE FIND_IN_SET(lid,"'.$ligen.'") != 0'
+			." AND sid = $sid AND heim = 1"
 			." GROUP BY brett "
 			." ORDER BY brett ASC  "
 			;
@@ -275,12 +333,14 @@ class CLMModelInfo extends JModelLegacy
 	function _getCLMWBrett( &$options )
 	{
 	$sid = CLMModelInfo::CLMSid();
+	$ligen = CLMModelInfo::CLMLigen();
 
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
 		$query = " SELECT brett,COUNT(id) as sum FROM #__clm_rnd_spl "
-			." WHERE sid = $sid AND heim = 1"
+			.' WHERE FIND_IN_SET(lid,"'.$ligen.'") != 0'
+			." AND sid = $sid AND heim = 1"
 			." AND ergebnis = 0"
 			." GROUP BY brett "
 			." ORDER BY brett ASC  "
@@ -298,12 +358,14 @@ class CLMModelInfo extends JModelLegacy
 	function _getCLMSBrett( &$options )
 	{
 	$sid = CLMModelInfo::CLMSid();
+	$ligen = CLMModelInfo::CLMLigen();
 
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
 		$query = " SELECT brett,COUNT(id) as sum FROM #__clm_rnd_spl "
-			." WHERE sid = $sid AND heim = 1"
+			.' WHERE FIND_IN_SET(lid,"'.$ligen.'") != 0'
+			." AND sid = $sid AND heim = 1"
 			." AND ergebnis = 1"
 			." GROUP BY brett "
 			." ORDER BY brett ASC  "
@@ -321,12 +383,14 @@ class CLMModelInfo extends JModelLegacy
 	function _getCLMRBrett( &$options )
 	{
 	$sid = CLMModelInfo::CLMSid();
+	$ligen = CLMModelInfo::CLMLigen();
 
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
 		$query = " SELECT brett,COUNT(id) as sum FROM #__clm_rnd_spl "
-			." WHERE sid = $sid AND heim = 1"
+			.' WHERE FIND_IN_SET(lid,"'.$ligen.'") != 0'
+			." AND sid = $sid AND heim = 1"
 			." AND ergebnis = 2"
 			." GROUP BY brett "
 			." ORDER BY brett ASC  "
@@ -344,12 +408,14 @@ class CLMModelInfo extends JModelLegacy
 	function _getCLMKBrett( &$options )
 	{
 	$sid = CLMModelInfo::CLMSid();
+	$ligen = CLMModelInfo::CLMLigen();
 
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
 		$query = " SELECT brett,COUNT(id) as sum FROM #__clm_rnd_spl "
-			." WHERE sid = $sid AND heim = 1"
+			.' WHERE FIND_IN_SET(lid,"'.$ligen.'") != 0'
+			." AND sid = $sid AND heim = 1"
 			." AND ergebnis > 2"
 			." GROUP BY brett "
 			." ORDER BY brett ASC  "

@@ -20,6 +20,8 @@ defined('clm') or die('Restricted access');
 $rights["db_season_save"]=array(0,"BE_season_general",true);
 $rights["db_season_enable"]=array(0,"BE_season_general",true);
 $rights["db_season_delete"]=array(0,"BE_season_general",true);
+$rights["db_season_delDWZ"]=array(0,"BE_season_general",true);
+$rights["db_season_genDWZ"]=array(0,"BE_season_general",true);
 $rights["db_season_array"]=array();
 $rights["view_dates_display"]=array();
 $rights["view_database"]=array();

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component
- * @Copyright (C) 2008 - 2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -365,5 +365,82 @@ class CLMControllerSaisons extends JControllerLegacy {
 		$table->store();
 		$msg = JText::_('SAISON_MSG_STATUS');
 		$mainframe->redirect('index.php?option=' . $option . '&section=' . $section, $msg, "message");
+	}
+ 
+function dwz_start()          
+	{
+	$mainframe	= JFactory::getApplication();
+
+	// Check for request forgeries
+	JRequest::checkToken() or die( 'Invalid Token' );
+
+	$db 		= JFactory::getDBO();
+	$cid 		= JRequest::getVar('cid', array(), '', 'array');
+	$option 	= JRequest::getCmd('option');
+	$section	= JRequest::getVar('section');
+	JArrayHelper::toInteger($cid);
+
+	// keine Saison gewählt
+	if ($cid[0] < 1 ) {
+	JError::raiseWarning( 500, JText::_( 'SAISON_NO_AUSWERTEN' ) );
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+		}
+	//Saison wird durch User im Screen bestimmt
+	$row = JTable::getInstance( 'saisons', 'TableCLM' );
+	$row->load( $cid[0] );
+	// load the row from the db table
+		$sid= $row->id;
+	
+	// Starten der DWZ-Auswertung zur Saison
+	$result = clm_core::$api->db_season_genDWZ($sid,true);
+
+	// Log schreiben
+	$clmLog = new CLMLog();
+	$clmLog->aktion = JText::_( 'SAISON_LOG_DWZ');
+	$clmLog->nr_aktion = 102;	
+	if (isset($result[2])) $clmLog->params = array('sid' => $sid, 'lid' => $result[2]);
+	else $clmLog->params = array('sid' => $sid, 'lid' => 0);  
+	$clmLog->write();
+
+	$msg = JText::_( 'SAISON_DWZ_IST');
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
+ 
+}
+
+function dwz_del()
+	{
+	$mainframe	= JFactory::getApplication();
+	// Check for request forgeries
+	JRequest::checkToken() or die( 'Invalid Token' );
+
+	$db 		= JFactory::getDBO();
+	$cid 		= JRequest::getVar('cid', array(), '', 'array');
+	$option 	= JRequest::getCmd('option');
+	$section	= JRequest::getVar('section');
+	JArrayHelper::toInteger($cid);
+
+	// keine Saison gewählt
+	if ($cid[0] < 1 ) {
+	JError::raiseWarning( 500, JText::_( 'SAISON_NO_LOESCH' ) );
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+		}
+	//Saison wird durch User im Screen bestimmt
+	$row = JTable::getInstance( 'saisons', 'TableCLM' );
+	$row->load( $cid[0] );
+	// load the row from the db table
+		$sid= $row->id;
+	
+	// Löschen der DWZ-Auswertung zur Saison
+	$result = clm_core::$api->db_season_delDWZ($sid,true);
+
+	// Log schreiben
+	$clmLog = new CLMLog();
+	$clmLog->aktion = JText::_( 'SAISON_LOG_DWZ_DEL');
+	$clmLog->nr_aktion = 102;	
+	$clmLog->params = array('sid' => $sid, 'lid' => 0);  
+	$clmLog->write();
+
+	$msg = JText::_( 'SAISON_DWZ_IST_LOESCH');
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
 	}
 }

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -420,7 +420,8 @@ echo CLMContent::clmWarning(JText::_('LEAGUE_NO_GAMES'));
 		$stat_kampflos[$kgmannschaft1->tln_nr]->kg_sum = $kgmannschaft1->kg_sum;
 	}
 	foreach($kvmannschaft as $kvmannschaft1) {
-		$stat_kampflos[$kvmannschaft1->tln_nr]->kv_sum = $kvmannschaft1->kv_sum;
+		if (isset($stat_kampflos[$kvmannschaft1->tln_nr]))
+			$stat_kampflos[$kvmannschaft1->tln_nr]->kv_sum = $kvmannschaft1->kv_sum;
 	}
 ?>
 <table cellpadding="0" cellspacing="0" class="statistik">
@@ -431,10 +432,14 @@ echo CLMContent::clmWarning(JText::_('LEAGUE_NO_GAMES'));
 		<th><?php echo JText::_('LEAGUE_STAT_UNCONTESTED_VERL') ?></th>
 	</tr>
 <?php for ($x=0; $x < count($stat_kampflos); $x++) {
-		if ($x%2 == 0) { $zeilenr = 'zeile1'; }
+		if ($x == 0) $xx = 0; 
+		if (!isset($stat_kampflos[$x+1])) continue;
+		if ($stat_kampflos[$x+1]->name == 'spielfrei') continue;
+		$xx++;
+		if ($xx%2 == 0) { $zeilenr = 'zeile1'; }
 			else { $zeilenr = 'zeile2'; } ?>
 	<tr class="<?php echo $zeilenr; ?>">
-		<td><?php echo $x+1; ?></td>
+		<td><?php echo $xx; ?></td>
 		<td><a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $sid; ?>&liga=<?php echo $lid; ?>&tlnr=<?php echo $stat_kampflos[$x+1]->tln_nr; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $stat_kampflos[$x+1]->name; ?></a></td>
 		<td><?php echo $stat_kampflos[$x+1]->kg_sum; ?></td>
 		<td><?php echo $stat_kampflos[$x+1]->kv_sum; ?></td>
