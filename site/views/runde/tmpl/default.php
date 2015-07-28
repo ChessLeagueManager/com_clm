@@ -110,6 +110,8 @@ if ($detail == 0) $detailp = '1'; else $detailp = '0';
 		if ($name_subuml == 1) {
 			$einz->hname = clm_core::$load->sub_umlaute($einz->hname);
 			$einz->gname = clm_core::$load->sub_umlaute($einz->gname);
+			$einz->name = clm_core::$load->sub_umlaute($einz->name);
+			$einz->mgname = clm_core::$load->sub_umlaute($einz->mgname);
 		}
 		if ($einz->weiss == "0") {
 			fputs($pdatei, '[White "'.utf8_decode($einz->gname).'"]'.$nl);
