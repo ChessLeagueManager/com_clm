@@ -113,13 +113,13 @@ class CLMViewLigen
   <div class="width-60 fltlft">
   <fieldset class="adminform">
    <legend><?php echo JText::_( 'LEAGUE_DATA' ); ?></legend>
-      <table class="adminlist">
+      <table class="paramlist admintable">
 
 	<tr>
 	<td width="20%" nowrap="nowrap">
 	<label for="name"><?php echo JText::_( 'LEAGUE_NAME' ); ?></label>
 	</td><td colspan="2">
-	<input class="inputbox" type="text" name="name" id="name" size="30" maxlength="30" value="<?php echo $row->name; ?>" />
+	<input class="inputbox" type="text" name="name" id="name" size="20" maxlength="30" value="<?php echo $row->name; ?>" />
 	</td>
 	<td nowrap="nowrap">
 	<label for="sl"><?php echo JText::_( 'LEAGUE_CHIEF' ); ?></label>
@@ -210,13 +210,13 @@ class CLMViewLigen
 	</td><td colspan="2">
 	<input class="inputbox" type="text" name="teil" id="teil" size="4" maxlength="4" value="<?php echo $row->teil; ?>" />
 	</td>
-        <td width="100" class="key" title="<?php echo JText::_( 'LEAGUE_DEADLINE_ROSTER_HINT' ); ?>">
+        <td width="40" class="key" title="<?php echo JText::_( 'LEAGUE_DEADLINE_ROSTER_HINT' ); ?>">
            	<label for="params['deadline_roster']">
                	<?php echo JText::_( 'LEAGUE_DEADLINE_ROSTER' ); ?> 
            	</label>
         </td>
         <td>
-           	<?php echo JHtml::_('calendar', $row->params['deadline_roster'], "params['deadline_roster']", "params['deadline_roster']", '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
+           	<?php echo JHtml::_('calendar', $row->params['deadline_roster'], "params['deadline_roster']", "params['deadline_roster']", '%Y-%m-%d', array('class'=>'text_area', 'size'=>'19',  'maxlength'=>'19')); ?>
         </td>
 	</tr>
 	
@@ -338,7 +338,7 @@ class CLMViewLigen
   
   <fieldset class="adminform">
    <legend><?php echo JText::_( 'LEAGUE_VALUATION' ); ?></legend>
-      <table class="adminlist">
+      <table class="paramlist admintable">
 
 	<tr>
 	<td nowrap="nowrap">&nbsp;</td>
@@ -392,13 +392,13 @@ class CLMViewLigen
 	<td nowrap="nowrap">
 	<label for="auf"><?php echo JText::_( 'LEAGUE_UP' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
-	<input class="inputbox" type="text" name="auf" id="auf" size="10" maxlength="10" value="<?php echo $row->auf; ?>" />
+	<input class="inputbox" type="text" name="auf" id="auf" size="4" maxlength="10" value="<?php echo $row->auf; ?>" />
 	</td>
 
 	<td nowrap="nowrap">
 	<label for="color_auf"><?php echo JText::_( 'LEAGUE_UP_POSSIBLE' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
-	<input class="inputbox" type="text" name="auf_evtl" id="auf_evtl" size="10" maxlength="10" value="<?php echo $row->auf_evtl; ?>" />
+	<input class="inputbox" type="text" name="auf_evtl" id="auf_evtl" size="4" maxlength="10" value="<?php echo $row->auf_evtl; ?>" />
 	</td>
 	</tr>
 
@@ -406,13 +406,13 @@ class CLMViewLigen
 	<td nowrap="nowrap">
 	<label for="ab"><?php echo JText::_( 'LEAGUE_DOWN' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
-	<input class="inputbox" type="text" name="ab" id="ab" size="10" maxlength="10" value="<?php echo $row->ab; ?>" />
+	<input class="inputbox" type="text" name="ab" id="ab" size="4" maxlength="10" value="<?php echo $row->ab; ?>" />
 	</td>
 
 	<td nowrap="nowrap">
 	<label for="color_ab"><?php echo JText::_( 'LEAGUE_DOWN_POSSIBILE' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
-	<input class="inputbox" type="text" name="ab_evtl" id="ab_evtl" size="10" maxlength="10" value="<?php echo $row->ab_evtl; ?>" />
+	<input class="inputbox" type="text" name="ab_evtl" id="ab_evtl" size="4" maxlength="10" value="<?php echo $row->ab_evtl; ?>" />
 	</td>
 	</tr>
       </table>
@@ -420,7 +420,7 @@ class CLMViewLigen
   
   <fieldset class="adminform">
    <legend><?php echo JText::_( 'LEAGUE_BOARD_VALUATION' ); ?></legend>
-      <table class="adminlist">
+      <table class="paramlist admintable">
 	<tr>
 	<td nowrap="nowrap">
 	<label for="params['btiebr1']"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION1' ); ?></label>
@@ -500,25 +500,15 @@ class CLMViewLigen
   
   <fieldset class="adminform">
    <legend><?php echo JText::_( 'LEAGUE_PREFERENCES' ); ?></legend>
-      <table class="adminlist">
+      <table class="paramlist admintable">
 
       <tr>
-		<td colspan="2" class="paramlist_key">
-			<?php echo JText::_('OPTION_INCL_TO_SEASON'); ?>:
-		</td>
-		<td colspan="4" class="paramlist_value">
-			<?php 
-			$options = array();
-			$options[0] = JText::_('JNO');
-			$options[1] = JText::_('JYES');
-			$optionlist = array();
-			foreach ($options as $key => $val) {
-				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
-			}
-			echo JHtml::_('select.genericlist', $optionlist, 'params[incl_to_season]', 'class="inputbox"', 'id', 'name', $row->params['incl_to_season']); ?>
-		</td>
-	  </tr>
-      <tr>
+	<td nowrap="nowrap" colspan="2">
+	<label for="params[incl_to_season]"><?php echo JText::_( 'OPTION_INCL_TO_SEASON' ); ?></label>
+	</td><td colspan="4"><fieldset class="radio">
+		<?php echo JHtml::_('select.booleanlist', 'params[incl_to_season]', 'class="inputbox"', $row->params['incl_to_season']); ?>
+	</fieldset></td>
+	</tr>
 	<td nowrap="nowrap" colspan="2">
 	<label for="anzeige_ma"><?php echo JText::_( 'LEAGUE_SHOW_PLAYERLIST' ); ?></label>
 	</td><td colspan="4"><fieldset class="radio">
