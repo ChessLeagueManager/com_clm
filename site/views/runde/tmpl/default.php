@@ -79,7 +79,8 @@ if ($detail == 0) $detailp = '1'; else $detailp = '0';
 	if ($pgn == 1) $file_name .= '_'.utf8_decode($clmuser[0]->zps);
 	$file_name .= '.pgn'; 
 	$file_name = strtr($file_name,' ','_');
-	$pdatei = fopen($file_name,"wt");
+	if (!file_exists('components'.DS.'com_clm'.DS.'pgn'.DS)) mkdir('components'.DS.'com_clm'.DS.'pgn'.DS);
+	$pdatei = fopen('components'.DS.'com_clm'.DS.'pgn'.DS.$file_name,"wt");
 	foreach ($einzel as $einz) {
 	  if (($einz->zps == $clmuser[0]->zps) OR ($einz->gzps == $clmuser[0]->zps) OR ($pgn == 2)) {
 		  $gtmarker = "*";

@@ -125,7 +125,7 @@ class CLMViewMTurniere
   <div class="width-60 fltlft">
   <fieldset class="adminform">
    <legend><?php echo JText::_( 'MTURN_DATA' ); ?></legend>
-      <table class="adminlist">
+      <table class="paramlist admintable">
 
 	<tr>
 	<td width="20%" nowrap="nowrap">
@@ -407,7 +407,7 @@ class CLMViewMTurniere
   
   <fieldset class="adminform">
    <legend><?php echo JText::_( 'LEAGUE_VALUATION' ); ?></legend>
-      <table class="adminlist">
+      <table class="paramlist admintable">
 
 	<tr>
 	<td nowrap="nowrap">&nbsp;</td>
@@ -489,7 +489,7 @@ class CLMViewMTurniere
   
   <fieldset class="adminform">
    <legend><?php echo JText::_( 'LEAGUE_BOARD_VALUATION' ); ?></legend>
-      <table class="adminlist">
+      <table class="paramlist admintable">
 	<tr>
 	<td nowrap="nowrap">
 	<label for="params['btiebr1']"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION1' ); ?></label>
@@ -569,23 +569,14 @@ class CLMViewMTurniere
   
   <fieldset class="adminform">
    <legend><?php echo JText::_( 'LEAGUE_PREFERENCES' ); ?></legend>
-      <table class="adminlist">
+      <table class="paramlist admintable">
 
       <tr>
-		<td colspan="1" class="paramlist_key">
-			<?php echo JText::_('OPTION_INCL_TO_SEASON'); ?>:
-		</td>
-		<td colspan="4" class="paramlist_value">
-			<?php 
-			$options = array();
-			$options[0] = JText::_('JNO');
-			$options[1] = JText::_('JYES');
-			$optionlist = array();
-			foreach ($options as $key => $val) {
-				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
-			}
-			echo JHtml::_('select.genericlist', $optionlist, 'params[incl_to_season]', 'class="inputbox"', 'id', 'name', $row->params['incl_to_season']); ?>
-		</td>
+	<td nowrap="nowrap">
+	<label for="params[incl_to_season]"><?php echo JText::_( 'OPTION_INCL_TO_SEASON' ); ?></label>
+	</td><td colspan="4"><fieldset class="radio">
+		<?php echo JHtml::_('select.booleanlist', 'params[incl_to_season]', 'class="inputbox"', $row->params['incl_to_season']); ?>
+	</fieldset></td>
 	  </tr>
       <tr>
 	<td nowrap="nowrap">
