@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -83,7 +83,8 @@ class CLMModelSpieler extends JModelLegacy
 		." LEFT JOIN #__clm_rangliste_id AS r ON r.gid = l.rang AND r.sid = a.sid AND r.zps = a.ZPS "
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 		." WHERE a.ZPS ='$zps' AND a.Mgl_Nr='$mgl' AND m.id IS NOT NULL "
-		." AND s.published = 1 AND s.archiv = 0 AND m.published = 1 AND l.published = 1 AND r.published = 1 "
+//		." AND s.published = 1 AND s.archiv = 0 AND m.published = 1 AND l.published = 1 AND r.published = 1 "
+		." AND a.sid = '$sid' AND m.published = 1 AND l.published = 1 AND r.published = 1 "
 		;
 	$db->setQuery($query);
 	$rang_count = $db->loadObjectList();

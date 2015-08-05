@@ -18,6 +18,8 @@ $ -> Language fix or change
 + pgn-Vorlage-datei mit Internationalisierung der Namen
 # Ligen: Berliner Wertung als 4.Ranglistenkriterium
 # Ligastatistik: Auflistung mit Anz kampfloser Partien
+# Spieler-View: Mannschaften mit Ranglisten
+^ Admin-Liga-View: kleine Designänderungen
 
 - - - - - 3.2.0 - [16-07-2015] - - - - - - - - - - - - - - - - - - - -
 Startpunkt des changelog
