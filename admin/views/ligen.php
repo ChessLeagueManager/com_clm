@@ -509,6 +509,7 @@ class CLMViewLigen
 		<?php echo JHtml::_('select.booleanlist', 'params[incl_to_season]', 'class="inputbox"', $row->params['incl_to_season']); ?>
 	</fieldset></td>
 	</tr>
+	<tr>
 	<td nowrap="nowrap" colspan="2">
 	<label for="anzeige_ma"><?php echo JText::_( 'LEAGUE_SHOW_PLAYERLIST' ); ?></label>
 	</td><td colspan="4"><fieldset class="radio">
@@ -539,7 +540,7 @@ class CLMViewLigen
 	</tr>
 
     <tr>
-	<td nowrap="nowrap"colspan="2">
+	<td nowrap="nowrap" colspan="2">
 	<label for="mail"><?php echo JText::_( 'LEAGUE_MAIL' ); ?></label>
 	</td><td colspan="4"><fieldset class="radio">
 	<?php echo $lists['mail']; ?>
@@ -547,7 +548,7 @@ class CLMViewLigen
 	</tr>
 <?php if ($sl_mail == "1") { ?>
 	<tr>
-	<td nowrap="nowrap"colspan="2">
+	<td nowrap="nowrap" colspan="2">
 	<label for="sl_mail"><?php echo JText::_( 'LEAGUE_MAIL_CHIEF' ); ?></label>
 	</td><td colspan="4"><fieldset class="radio">
 	<?php echo $lists['sl_mail']; ?>
@@ -637,7 +638,8 @@ class CLMViewLigen
   	<?php echo JText::_( 'LEAGUE_HINTS_34' ); ?>
   	<?php echo JText::_( 'LEAGUE_HINTS_35' ); ?>
 	<?php echo JText::_( 'LEAGUE_HINTS_36' ); ?>
-  	</legend>
+  	</fieldset>
+
 
   </div>
 

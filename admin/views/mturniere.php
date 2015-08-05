@@ -588,7 +588,6 @@ class CLMViewMTurniere
 
      <tr>
 	<td nowrap="nowrap">
- 	<label for="mail">
 	<label for="mail"><?php echo JText::_( 'LEAGUE_MAIL' ); ?></label>
 	</td><td colspan="4"><fieldset class="radio">
 	<?php echo $lists['mail']; ?>
@@ -683,7 +682,7 @@ class CLMViewMTurniere
   	<?php echo JText::_( 'LEAGUE_HINTS_27' ); ?>
   	<?php echo JText::_( 'LEAGUE_HINTS_28' ); ?>
 
-  	</legend>
+  	</fieldset>
 
   </div>
 
