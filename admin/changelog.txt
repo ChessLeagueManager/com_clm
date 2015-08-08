@@ -20,6 +20,7 @@ $ -> Language fix or change
 # Ligastatistik: Auflistung mit Anz kampfloser Partien
 # Spieler-View: Mannschaften mit Ranglisten
 ^ Admin-Liga-View: kleine Designänderungen
+# Ergebnismeldung: Mannschaftsturnier im KO-System
 
 - - - - - 3.2.0 - [16-07-2015] - - - - - - - - - - - - - - - - - - - -
 Startpunkt des changelog

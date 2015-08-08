@@ -248,7 +248,7 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 			$query = "UPDATE #__clm_mannschaften" . " SET rankingpos = " . $ko_heim . " WHERE liga = " . $lid . " AND tln_nr = " . $out["paar"][0]->htln;
 			clm_core::$db->query($query);
 			// Für Gastmannschaft updaten
-			$query = "UPDATE #__clm_mannschaften" . " SET rankingpos = " . $ko_gast . " WHERE AND liga = " . $lid . " AND tln_nr = " . $out["paar"][0]->gtln;
+			$query = "UPDATE #__clm_mannschaften" . " SET rankingpos = " . $ko_gast . " WHERE liga = " . $lid . " AND tln_nr = " . $out["paar"][0]->gtln;
 			clm_core::$db->query($query);
 		}
 		// Für Heimmannschaft updaten
