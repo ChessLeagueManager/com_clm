@@ -1,4 +1,10 @@
 <?php
+// ToDO Funktion fest integrieren
+function mb_str_pad( $input, $pad_length, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
+{
+    $diff = strlen( $input ) - mb_strlen( $input );
+    return str_pad( $input, $pad_length + $diff, $pad_string, $pad_type );
+}
 // Eingang: Verband
 // Ausgang: Alle Vereine in diesem
 function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decision, $homes, $guests, $results) {
@@ -270,6 +276,7 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 	if ( $out["liga"][0]->mail == 0 ) {
 			return array(true, "m_reportSaveSuccess");
 	}
+	
 	$gast = array();
 	for ($i = 0;$i < count($out["gast"]);$i++) {
 		$gast[] = $out["gast"][$i]->mgl_nr . ':' . $out["gast"][$i]->zps;
@@ -328,9 +335,14 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 		$gemeldet = false;
 	}
 	
-	$body = clm_core::$load->load_view("liga_mail_body", array($player, $hmpunkte . " - " . $gmpunkte, date('Y-m-d H:i:s'), $date, $out["paar"][0]->hname, $out["paar"][0]->gname, $hmf, $gmf, $comment, $ko, clm_core::$access->getName(), $out["liga"][0]->name, $gemeldet),false);
+	$body = clm_core::$load->load_view("liga_mail_body_text", array($player, $hmpunkte . " - " . $gmpunkte, date('Y-m-d H:i:s'), $date, $out["paar"][0]->hname, $out["paar"][0]->gname, $hmf, $gmf, $comment, $ko, clm_core::$access->getName(), $out["liga"][0]->name, $gemeldet),false);
+	$htmlMail = 0;
+	
+	//$body = clm_core::$load->load_view("liga_mail_body_html", array($player, $hmpunkte . " - " . $gmpunkte, date('Y-m-d H:i:s'), $date, $out["paar"][0]->hname, $out["paar"][0]->gname, $hmf, $gmf, $comment, $ko, clm_core::$access->getName(), $out["liga"][0]->name, $gemeldet),false);
+	//$htmlMail = 1;
+	
 	$body = $body[1];
-
+	
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
 	$from = $config->email_from;
@@ -362,9 +374,9 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 	foreach($mf as $element) {
 		$recipient[] = $element->email;
 	}
-	
+
 	for($i=0;$i<count($recipient);$i++) {
-		clm_core::$cms->sendMail($from, $fromname, $recipient[$i], $subject, $body);
+		clm_core::$cms->sendMail($from, $fromname, $recipient[$i], $subject, $body, $htmlMail);
 	}
 	return array(true, "m_reportSaveSuccess");
 }

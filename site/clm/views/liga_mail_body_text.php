@@ -1,5 +1,5 @@
 <?php
-function clm_view_liga_mail_body($player, $result, $dateNow, $dateGame, $hname, $gname, $hmf, $gmf, $comment, $ko, $sender, $liga, $gemeldet) {
+function clm_view_liga_mail_body_text($player, $result, $dateNow, $dateGame, $hname, $gname, $hmf, $gmf, $comment, $ko, $sender, $liga, $gemeldet) {
 	$lang = clm_core::$lang->liga_mail_body;
 	$header = $lang->raw("header1")."\n".$lang->raw("header11");
 	$header.= " " . $hname . " - " . $gname . "\n";
