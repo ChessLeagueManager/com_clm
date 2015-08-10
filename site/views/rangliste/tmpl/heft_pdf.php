@@ -397,7 +397,7 @@ $ic = 0;
 $ie = 0;
 $ib = 0;
 for ($m=0; $m<$liga[0]->teil; $m++) {
-	if ($mannschaft[$m]->name == "spielfrei") break;
+	if ($mannschaft[$m]->name == "spielfrei") continue;
 $pdf->AddPage();
 
 $pdf->SetFont('Times','',$date_font);
