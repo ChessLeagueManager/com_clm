@@ -335,49 +335,61 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 		$gemeldet = false;
 	}
 	
-	$body = clm_core::$load->load_view("liga_mail_body_text", array($player, $hmpunkte . " - " . $gmpunkte, date('Y-m-d H:i:s'), $date, $out["paar"][0]->hname, $out["paar"][0]->gname, $hmf, $gmf, $comment, $ko, clm_core::$access->getName(), $out["liga"][0]->name, $gemeldet),false);
-	$htmlMail = 0;
-	
-	//$body = clm_core::$load->load_view("liga_mail_body_html", array($player, $hmpunkte . " - " . $gmpunkte, date('Y-m-d H:i:s'), $date, $out["paar"][0]->hname, $out["paar"][0]->gname, $hmf, $gmf, $comment, $ko, clm_core::$access->getName(), $out["liga"][0]->name, $gemeldet),false);
-	//$htmlMail = 1;
-	
-	$body = $body[1];
-	
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
 	$from = $config->email_from;
 	$fromname = $config->email_fromname;
-	$recipient = array();
-	$recipient[]	= $config->email_bcc;
+	$htmlMail = $config->email_type;
 	$lang = clm_core::$lang->liga_mail_body;
 	$subject = $lang->service." ".$out["liga"][0]->name.': '.$out["paar"][0]->hname." - ".$out["paar"][0]->gname."  ".$hmpunkte.' : '.$gmpunkte;
 	
-	if($config->sl_mail =="1" && $out["liga"][0]->sl>0) {
-		$query	= "SELECT sl,sl_mail,u.email FROM #__clm_liga a"
-			." LEFT JOIN #__clm_user as u ON u.sid = a.sid AND u.jid = a.sl"
-			." WHERE a.sid = ".$sid
-			." AND a.id = ".$lid
-			;
-		$slmail = clm_core::$db->loadObjectList($query);
-		$recipient[] = $slmail[0]->email;	
+	if ($htmlMail == 0) {  // im txt-Format bekommen alle die gleiche Mail
+		$body_txt = clm_core::$load->load_view("liga_mail_body_text", array($player, $hmpunkte . " - " . $gmpunkte, date('Y-m-d H:i:s'), $date, $out["paar"][0]->hname, $out["paar"][0]->gname, $hmf, $gmf, $comment, $ko, clm_core::$access->getName(), $out["liga"][0]->name, $gemeldet),false);
 	}
 	
-	$query	= "SELECT u.email as email FROM #__clm_mannschaften as a "
-		." LEFT JOIN #__clm_user as u ON u.jid = a.mf AND u.sid = a.sid"  //klkl
-		." WHERE a.sid =".$sid
-		." AND a.liga =".$lid
-		." AND (tln_nr = ".$out["paar"][0]->htln." OR tln_nr = ".$out["paar"][0]->gtln." )"
-		." AND u.jid > 0 "
-		;
-	$mf = clm_core::$db->loadObjectList($query);
-	
-	foreach($mf as $element) {
-		$recipient[] = $element->email;
+	// Mail an Admin	
+	if ($config->email_bcc != "") {
+		if ($htmlMail == 0) {
+			$body = $body_txt[1];
+		} else {
+			$body = clm_core::$load->load_view("liga_mail_body_html", array($player, $hmpunkte . " - " . $gmpunkte, date('Y-m-d H:i:s'), $date, $out["paar"][0]->hname, $out["paar"][0]->gname, $hmf, $gmf, $comment, $ko, clm_core::$access->getName(), $out["liga"][0]->name, $gemeldet, $out, 'Admin'),false);
+			$body = $body[1];
+		}
+		clm_core::$cms->sendMail($from, $fromname, $config->email_bcc, $subject, $body, $htmlMail);
 	}
+	// Email an SL	
+	if ($config->sl_mail =="1" && isset($out["sl"][0]->email) && $out["sl"][0]->email != "") {
+		if ($htmlMail == 0) {
+			$body = $body_txt[1];
+		} else {
+			$body = clm_core::$load->load_view("liga_mail_body_html", array($player, $hmpunkte . " - " . $gmpunkte, date('Y-m-d H:i:s'), $date, $out["paar"][0]->hname, $out["paar"][0]->gname, $hmf, $gmf, $comment, $ko, clm_core::$access->getName(), $out["liga"][0]->name, $gemeldet, $out, 'SL'),false);
+			$body = $body[1];
+		}
+		clm_core::$cms->sendMail($from, $fromname, $out["sl"][0]->email, $subject, $body, $htmlMail);
+	}
+	
+	// Email an ML Heim
+	if (isset($out["hmf"][0]->email) AND $out["hmf"][0]->email != "") {
+		if ($htmlMail == 0) {
+			$body = $body_txt[1];
+		} else {
+			$body = clm_core::$load->load_view("liga_mail_body_html", array($player, $hmpunkte . " - " . $gmpunkte, date('Y-m-d H:i:s'), $date, $out["paar"][0]->hname, $out["paar"][0]->gname, $hmf, $gmf, $comment, $ko, clm_core::$access->getName(), $out["liga"][0]->name, $gemeldet, $out, 'Home'),false);
+			$body = $body[1];
+		}
+		clm_core::$cms->sendMail($from, $fromname, $out["hmf"][0]->email, $subject, $body, $htmlMail);
+	}
+		
+	// Email an ML Gast
+	if (isset($out["gmf"][0]->email) AND $out["gmf"][0]->email != "") {
+		if ($htmlMail == 0) {
+			$body = $body_txt[1];
+		} else {
+			$body = clm_core::$load->load_view("liga_mail_body_html", array($player, $hmpunkte . " - " . $gmpunkte, date('Y-m-d H:i:s'), $date, $out["paar"][0]->hname, $out["paar"][0]->gname, $hmf, $gmf, $comment, $ko, clm_core::$access->getName(), $out["liga"][0]->name, $gemeldet, $out, 'Guest'),false);
+			$body = $body[1];
+		}
+		clm_core::$cms->sendMail($from, $fromname, $out["gmf"][0]->email, $subject, $body, $htmlMail);
+	}	
 
-	for($i=0;$i<count($recipient);$i++) {
-		clm_core::$cms->sendMail($from, $fromname, $recipient[$i], $subject, $body, $htmlMail);
-	}
 	return array(true, "m_reportSaveSuccess");
 }
 ?>

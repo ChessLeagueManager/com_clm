@@ -132,5 +132,6 @@ $config["log_info"]=array(117,9,1,array(0,1));
 $config["log"]=array(118,9,1,array(0,1));
 $config["database_safe"]=array(119,9,1,array(0,1));
 $config["fe_runde_subuml"]=array(120,9,0,array(0,1));
+$config["email_type"]=array(121,9,1,array(0,1));
 
 ?>

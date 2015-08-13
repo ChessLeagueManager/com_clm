@@ -52,6 +52,30 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 		return array(false, "e_reportError");
 	}	
  
+	// Namen und Email der Mannschaftsleiter
+	if (isset($out["paar"][0]->heim_mf) AND $out["paar"][0]->heim_mf > 0) {
+		$hmfModel = " SELECT name, email "
+			." FROM #__users "
+			." WHERE id = ".$out["paar"][0]->heim_mf 
+			;
+		$out["hmf"] = clm_core::$db->loadObjectList($hmfModel);
+		// Kein Ergebnis -> Daten Inkonsistent oder falsche Eingabe
+		if (!isset($out["hmf"][0])) {
+			return array(false, "e_reportError");
+		}	
+	}
+	if (isset($out["paar"][0]->gast_mf) AND $out["paar"][0]->gast_mf > 0) {
+		$gmfModel = " SELECT name, email "
+			." FROM #__users "
+			." WHERE id = ".$out["paar"][0]->gast_mf 
+			;
+		$out["gmf"] = clm_core::$db->loadObjectList($gmfModel);
+		// Kein Ergebnis -> Daten Inkonsistent oder falsche Eingabe
+		if (!isset($out["gmf"][0])) {
+			return array(false, "e_reportError");
+		}	
+	}
+	
  	$zps = clm_core::$db->user->get($id)->zps;
 	 
 	// Ist der Benutzer auch wirklich ein Spieler der beteiligten Mannschaften?
@@ -154,7 +178,7 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 	}
 	
 	$ligaModel = "SELECT a.*,t.datum as datum FROM #__clm_liga as a"
-		." LEFT JOIN #__clm_runden_termine AS t ON t.liga = a.id AND t.nr = ($runde + ($dg -1) * a.runden)"  //klkl
+		." LEFT JOIN #__clm_runden_termine AS t ON t.liga = a.id AND t.nr = ($runde + ($dg -1) * a.runden)"  
 		." WHERE a.id = ".$liga
 		;
 
@@ -164,6 +188,18 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 	if (!isset($out["liga"][0])) {
 		return array(false, "e_reportError");
 	}		
+	// Namen und Email des Staffelleiters
+	if (isset($out["liga"][0]->sl) AND $out["liga"][0]->sl > 0) {
+		$slModel = " SELECT name, email "
+			." FROM #__users "
+			." WHERE id = ".$out["liga"][0]->sl 
+			;
+		$out["sl"] = clm_core::$db->loadObjectList($slModel);
+		// Kein Ergebnis -> Daten Inkonsistent oder falsche Eingabe
+		if (!isset($out["sl"][0])) {
+			return array(false, "e_reportError");
+		}	
+	}
 	
 	$Access	= "SELECT gemeldet "
 		." FROM #__clm_rnd_man "

@@ -22,6 +22,7 @@ $ -> Language fix or change
 ^ Admin-Liga-View: kleine Designänderungen
 # Ergebnismeldung: Mannschaftsturnier im KO-System
 # Ligaheft: Spielfrei nicht letzte Mannschaft
++ Aktivierung der html-Mails bei Ergebniseingabe
 
 - - - - - 3.2.0 - [16-07-2015] - - - - - - - - - - - - - - - - - - - -
 Startpunkt des changelog
