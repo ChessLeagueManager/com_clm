@@ -12,8 +12,10 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.2.2 - [xx-xx-2015] - - - - - - - - - - - - - - - - - - - -
+# Config: Email-Adressen mit Umlauten erlauben
 
-- - - - - 3.2.1 - [xx-xx-2015] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.2.1 - [19-08-2015] - - - - - - - - - - - - - - - - - - - -
 + Aktivierung Saisonstatistik
 + pgn-Vorlage-datei mit Internationalisierung der Namen
 # Ligen: Berliner Wertung als 4.Ranglistenkriterium
