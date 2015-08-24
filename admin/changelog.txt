@@ -14,6 +14,7 @@ $ -> Language fix or change
 
 - - - - - 3.2.2 - [xx-xx-2015] - - - - - - - - - - - - - - - - - - - -
 # Config: Email-Adressen mit Umlauten erlauben
+# Config: Ergebnisdienst-Name mit Umlauten möglich
 
 - - - - - 3.2.1 - [19-08-2015] - - - - - - - - - - - - - - - - - - - -
 + Aktivierung Saisonstatistik
