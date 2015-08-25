@@ -121,12 +121,14 @@ else {
 	$db->query();
 	}
 // Log
-	$date =JFactory::getDate();
-	$now = $date->toSQL();
-	$user 		=JFactory::getUser();
-	$jid_aktion =  ($user->get('id'));
 	$aktion = "Vereinsdaten FE";
-
+	$callid = uniqid ( "", false );
+	$userid = clm_core::$access->getId ();	
+	$parray = array('sid' => $sid, 'zps' => $zps);
+	$query	= "INSERT INTO #__clm_logging "
+		." ( `callid`, `userid`, `timestamp` , `type` ,`name`, `content`) "
+		." VALUES ('".$callid."','".$userid."',".time().",5,'".$aktion."','".json_encode($parray)."') "
+		;
 	$db->setQuery($query);
 	$db->query();
 

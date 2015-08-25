@@ -127,11 +127,17 @@ for ($y=1; $y< (1+$stamm+$ersatz) ; $y++){
 	}
 
 // Log
-	$date 		=JFactory::getDate();
-	$now 		= $date->toSQL();
-	$user 		=JFactory::getUser();
-	$jid_aktion 	=  ($user->get('id'));
+	$jid_aktion =  ($user->get('id'));
 	$aktion 	= "Meldeliste FE";
+	$callid = uniqid ( "", false );
+	$userid = clm_core::$access->getId ();	
+	$parray = array('sid' => $sid, 'lid' => $lid, 'zps' => $zps, 'man' => $man);
+	$query	= "INSERT INTO #__clm_logging "
+		." ( `callid`, `userid`, `timestamp` , `type` ,`name`, `content`) "
+		." VALUES ('".$callid."','".$userid."',".time().",5,'".$aktion."','".json_encode($parray)."') "
+		;
+	$db->setQuery($query);
+	$db->query();
 
 // Mails verschicken ?
 	$query	= "SELECT l.*, u.email as sl_email, u.name as sl_name FROM #__clm_liga as l "
