@@ -16,6 +16,7 @@ $ -> Language fix or change
 # Config: Email-Adressen mit Umlauten erlauben
 # Config: Ergebnisdienst-Name mit Umlauten möglich
 # Logging: Einträge bei Meldelistenabgabe und Vereinspflege im FE aktiviert
+# Admin-View Datenbank: Text-Korrektur
  
 - - - - - 3.2.1 - [19-08-2015] - - - - - - - - - - - - - - - - - - - -
 + Aktivierung Saisonstatistik
