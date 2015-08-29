@@ -17,6 +17,7 @@ $ -> Language fix or change
 # Config: Ergebnisdienst-Name mit Umlauten möglich
 # Logging: Einträge bei Meldelistenabgabe und Vereinspflege im FE aktiviert
 # Admin-View Datenbank: Text-Korrektur
+# Meldeliste in FE: vollständige Vorbelegung bei Korrektur
  
 - - - - - 3.2.1 - [19-08-2015] - - - - - - - - - - - - - - - - - - - -
 + Aktivierung Saisonstatistik
