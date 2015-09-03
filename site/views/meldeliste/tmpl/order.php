@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -240,7 +240,7 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
 			<textarea class="inputbox" name="lokal" id="lokal" cols="40" rows="3" style="width:90%"><?php echo $liga_lokal; ?></textarea>
 			</td>
 			<td>
-			<?php  echo JText::_( 'CLM_KOMMA' ) . "<br><br>"; ?>( max. 3 Zeilen werden im Frontend dargestellt)
+			<?php  echo JText::_( 'CLM_KOMMA' )."<br>".JText::_( 'CLM_ADDRESS1' ); ?>
 			</td>
 		</tr>
 		</table>

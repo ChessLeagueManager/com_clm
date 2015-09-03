@@ -251,7 +251,7 @@ echo "<br>published ".$clmuser[0]->published;
 			<textarea class="inputbox" name="lokal" id="lokal" cols="40" rows="3" style="width:90%"><?php echo $liga[0]->lokal; ?></textarea>
 			</td>
 			<td>
-			<?php  echo JText::_( 'CLM_KOMMA' ) . "<br><br>"; ?>( max. 3 Zeilen werden im Frontend dargestellt)
+			<?php  echo JText::_( 'CLM_KOMMA' )."<br>".JText::_( 'CLM_ADDRESS1' ); ?>
 			</td>
 		</tr>
 	</table>
