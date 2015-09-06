@@ -19,6 +19,7 @@ $ -> Language fix or change
 # Admin-View Datenbank: Text-Korrektur
 # Meldeliste in FE: vollständige Vorbelegung bei Korrektur
 # Meldeliste in FE: kleine Text-Korrektur
+# Mannschaftsaufstellung (pdf): korrektes Ignorieren von Null-Sätzen
  
 - - - - - 3.2.1 - [19-08-2015] - - - - - - - - - - - - - - - - - - - -
 + Aktivierung Saisonstatistik

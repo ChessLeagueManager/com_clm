@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -231,6 +231,7 @@ $pdf->SetFont('Times','',$font);
 
 // Teilnehmerschleife 	
 	$ie = 0;
+	$y = 0;
 	$sumspl = 0;
 	$sumgespielt = 0;
 for ($x=0; $x< 100; $x++){
@@ -240,7 +241,9 @@ for ($x=0; $x< 100; $x++){
 	if (!isset($count[$x])) break;
 	if (!isset($count[$x]->rrang)) {
 		$pdf->Cell($breite1,4,' ',0,0);
-		$pdf->Cell(12,4,($x+1),0,0,'C');
+		$y++;
+		$pdf->Cell(12,4,($y),0,0,'C');
+		//$pdf->Cell(12,4,($x+1),0,0,'C');
 	} else {
 		if ($count[$x]->rmnr > $mannschaft[0]->man_nr) {
 		  if (($count[$x]->zps !== $einzel[$ie]->zps)||($count[$x]->mgl_nr !== $einzel[$ie]->spieler)) {
