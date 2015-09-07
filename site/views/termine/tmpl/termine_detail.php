@@ -25,8 +25,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 // Browsertitelzeile setzen
 $doc =JFactory::getDocument();
-$daten['title'] = JText::_('TERMINE_HEAD');
-$doc->setHeadData($daten);
+$doc->setTitle(JText::_('TERMINE_HEAD'));
            
  // Datumsberechnungen
 $startdate[0] = strtotime($termine_detail[0]->startdate);

@@ -29,8 +29,7 @@ $fixth_dwz = $config->fixth_dwz;
 
 	// Browsertitelzeile setzen
 	$doc =JFactory::getDocument();
-	$daten['title'] = JText::_('CLUB_RATING').' '.$liga[0]->Vereinname;
-	if ($doc->_type != "raw") $doc->setHeadData($daten);
+	$doc->setTitle(JText::_('CLUB_RATING').' '.$liga[0]->Vereinname);
 	
 ?>
 <Script language="JavaScript">

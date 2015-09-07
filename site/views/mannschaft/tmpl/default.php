@@ -95,8 +95,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 	// Browsertitelzeile setzen
 	$doc =JFactory::getDocument();
-	$daten['title'] = $mannschaft[0]->name.' - '.$mannschaft[0]->liga_name;
-	if ($doc->_type != "raw") $doc->setHeadData($daten);
+	$doc->setTitle($mannschaft[0]->name.' - '.$mannschaft[0]->liga_name);
 
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();

@@ -186,8 +186,8 @@ $doc =JFactory::getDocument();
 $daten['title'] = $liga[0]->name.', '.$liga[$runde-1]->rname;      // JText::_('ROUND').' '.$runde; 
 if(isset($liga[$runde-1]->datum)) { $daten['title'] .= ' '.JText::_('ON_DAY').' '.JHTML::_('date',  $liga[$runde-1]->datum, JText::_('DATE_FORMAT_CLM_F'));
 	if(isset($liga[$runde-1]->startzeit)) { $daten['title'] .= '  '.substr($liga[$runde-1]->startzeit,0,5).' Uhr'; } }
-if ($doc->_type != "raw") $doc->setHeadData($daten);
-	
+$doc->setTitle($daten['title']);
+
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 

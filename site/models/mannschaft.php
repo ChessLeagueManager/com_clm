@@ -70,6 +70,10 @@ class CLMModelMannschaft extends JModelLegacy
 		$zps	=$man[0]->zps;
 		$sgzps	=$man[0]->sgzps;
 		$mnr	=$man[0]->man_nr;
+		
+		if(!$mnr) {
+			$mnr = 0;	
+		}
 		$rang	=$man[0]->rang;
 		$ersatz_regel	=$man[0]->ersatz_regel;
 	if ($rang > 0) {
@@ -92,6 +96,7 @@ class CLMModelMannschaft extends JModelLegacy
 						." AND aa.man_nr <> a.mnr )";
 		$query .= " ORDER BY rmnr ASC, rrang ASC ";
 	} else {
+
 		$query = " SELECT a.start_dwz,a.mgl_nr,a.zps, d.Spielername as name,d.DWZ as dwz "
 			." FROM #__clm_meldeliste_spieler as a "
 			." LEFT JOIN #__clm_dwz_spieler as d on d.zps = a.zps AND d.mgl_nr = a.mgl_nr AND d.sid = a.sid"

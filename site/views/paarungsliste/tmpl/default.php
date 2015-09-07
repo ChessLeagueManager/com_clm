@@ -49,8 +49,7 @@ if ($liga[0]->durchgang > 1) {
 
 // Browsertitelzeile setzen
 $doc =JFactory::getDocument();
-$daten['title'] = JText::_('PAAR_OVERVIEW').' '.$liga[0]->name;
-if ($doc->_type != "raw") $doc->setHeadData($daten);
+$doc->setTitle(JText::_('PAAR_OVERVIEW').' '.$liga[0]->name);
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');

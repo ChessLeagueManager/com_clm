@@ -49,8 +49,7 @@ $config = clm_core::$db->config();
 
 // Browsertitelzeile setzen
 $doc =JFactory::getDocument();
-$daten['title'] = JText::_('LEAGUE_STATISTIK').' '.$liga[0]->name;
-$doc->setHeadData($daten);
+$doc->setTitle(JText::_('LEAGUE_STATISTIK').' '.$liga[0]->name);
 	
 ?>
 

@@ -61,8 +61,7 @@ if (!isset($row[0]->name)) { ?>
 
 	// Browsertitelzeile setzen
 	$doc =JFactory::getDocument();
-	$daten['title'] = JText::_('CLUB_DATA_EDIT').' '.$row[0]->name;
-	$doc->setHeadData($daten);
+	$doc->setTitle(JText::_('CLUB_DATA_EDIT').' '.$row[0]->name);
  ?>
 <div class="componentheading"><?php echo JText::_('CLUB_DATA_EDIT') . '&nbsp;:'; ?> <?php echo $row[0]->name; ?></div>
 <br>
