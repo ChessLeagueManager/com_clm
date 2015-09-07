@@ -63,8 +63,7 @@ if (!$liga OR $liga[0]->published == "0") {
 
 	// Browsertitelzeile setzen
 	$doc =JFactory::getDocument();
-	$daten['title'] = JText::_('RANGLISTE').' '.$liga[0]->name;
-	if ($doc->_type != "raw") $doc->setHeadData($daten);
+	$doc->setTitle(JText::_('RANGLISTE').' '.$liga[0]->name);
 
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();

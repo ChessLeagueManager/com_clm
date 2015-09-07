@@ -40,8 +40,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 	// Browsertitelzeile setzen
 	$doc =JFactory::getDocument();
-	$daten['title'] = JText::_('DWZ_LIGA').' '.(isset($dwz[0]) ? $dwz[0]->name : ""); 
-	if ($doc->_type != "raw") $doc->setHeadData($daten);
+	$doc->setTitle(JText::_('DWZ_LIGA').' '.(isset($dwz[0]) ? $dwz[0]->name : ""));
 	
 ?>
 

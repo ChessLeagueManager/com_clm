@@ -32,8 +32,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 	// Browsertitelzeile setzen
 	$doc =JFactory::getDocument();
-	$daten['title'] = JText::_('SEASON_STATISTIK').' '.$saison[0]->name;
-	$doc->setHeadData($daten);
+	$doc->setTitle(JText::_('SEASON_STATISTIK').' '.$saison[0]->name);
 
 ?>
 
