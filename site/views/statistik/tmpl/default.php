@@ -62,7 +62,8 @@ $googlecharts   = $config->googlecharts;
 
 // Browsertitelzeile setzen
 $doc =JFactory::getDocument();
-$doc->setTitle(JText::_('LEAGUE_STATISTIK').' '.$liga[0]->name);
+$daten['title'] = JText::_('LEAGUE_STATISTIK').' '.$liga[0]->name;
+if ($doc->_type != "raw") $doc->setHeadData($daten);
 	
 ?>
 <div class="componentheading">

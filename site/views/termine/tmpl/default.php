@@ -26,7 +26,8 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 // Browsertitelzeile setzen
 $doc =JFactory::getDocument();
-$doc->setTitle(JText::_('TERMINE_HEAD'));
+$daten['title'] = JText::_('TERMINE_HEAD');
+$doc->setHeadData($daten);
 
 ?>
 <div >

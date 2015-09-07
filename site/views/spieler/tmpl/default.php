@@ -45,10 +45,10 @@ echo "<div id=\"clm\"><div id=\"spieler\">";
 $doc =JFactory::getDocument();
 if (isset($spieler[0]->Spielername)){ 
 $daten['title'] = $spieler[0]->Spielername.' - '.$spieler[0]->Vereinname;
-$doc->setTitle($spieler[0]->Spielername.' - '.$spieler[0]->Vereinname);
+if ($doc->_type != "raw") $doc->setHeadData($daten);
 } else {
 $daten['title'] = JText::_('PLAYER_UNKNOWN_TITLE');
-$doc->setTitle($spieler[0]->Spielername.' - '.$spieler[0]->Vereinname);
+if ($doc->_type != "raw") $doc->setHeadData($daten);
 }
 
 // Konfigurationsparameter auslesen

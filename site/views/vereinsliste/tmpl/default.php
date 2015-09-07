@@ -29,7 +29,8 @@ $fe_vereinsliste_elo 	= $config->fe_vereinsliste_elo;
 
 // Browsertitelzeile setzen
 $doc =JFactory::getDocument();
-$doc->setTitle(JText::_('CLUBS_LIST'));
+$daten['title'] = JText::_('CLUBS_LIST');
+if ($doc->_type != "raw") $doc->setHeadData($daten);
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');

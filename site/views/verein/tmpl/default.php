@@ -38,7 +38,7 @@ $googlemaps_vrout   		= $config->googlemaps_vrout;
 $doc =JFactory::getDocument();
 if (isset($verein[0])) { $daten['title'] = $verein[0]->name; }
 else $daten['title'] = '';
-$doc->setTitle($daten['title']);
+if ($doc->_type != "raw") $doc->setHeadData($daten);
 
 // Aufbereitung Googledaten 1. Spiellokal
 if (isset($verein[0])) {
