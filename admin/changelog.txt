@@ -20,6 +20,7 @@ $ -> Language fix or change
 # Meldeliste in FE: vollständige Vorbelegung bei Korrektur
 # Meldeliste in FE: kleine Text-Korrektur
 # Mannschaftsaufstellung (pdf): korrektes Ignorieren von Null-Sätzen
++ Funktion zum nochmaligen Einspielen aller DB Änderungen seit DB Version 0 (CLM 3)
  
 - - - - - 3.2.1 - [19-08-2015] - - - - - - - - - - - - - - - - - - - -
 + Aktivierung Saisonstatistik
