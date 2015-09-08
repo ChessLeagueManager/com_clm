@@ -20,8 +20,8 @@ if(isset($_GET["view"]) && $_GET["view"]=="forceUpdate") {
 	}
 } else if(isset($_GET["view"]) && $_GET["view"]=="forceFullUpdate") {
 	JToolBarHelper::title('forceFullUpdate');
-	clm_core::$db->config()->db_config = 0; // eingetragene Version zurücksetzen
 	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR."components".DIRECTORY_SEPARATOR."com_clm".DIRECTORY_SEPARATOR."installer.php");
+	clm_core::$db->config()->db_config = 0; // eingetragene Version zurücksetzen
 	$installer = new com_clmInstallerScript();
 	if($installer->preflight("install", null)) {
 		if($installer->install(null)) {
