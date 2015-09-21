@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -129,6 +129,8 @@ $sum_schwarz = 0;
 		
 		
 <?php if (isset($wbrett[$w]->brett) AND $wbrett[$w]->brett == $x+1) {
+		if (!isset($sbrett[$w]))  { $sbrett[$w] = new StdClass;
+									$sbrett[$w]->sum = 0; }
 		if  ($x%2 !=0) { ?>
 		<td class="white border"><?php echo $sbrett[$w]->sum; ?></td>
 		<td class="white"><?php echo round((($sbrett[$w]->sum*100)/$brett[$x]->count),1); ?></td>
@@ -141,6 +143,8 @@ $sum_schwarz = 0;
 		<td class="white">0</td>
 <?php } ?>
 <?php if (isset($sbrett[$s]->brett) AND $sbrett[$s]->brett == $x+1) {
+		if (!isset($wbrett[$s]))  { $wbrett[$s] = new StdClass;
+									$wbrett[$s]->sum = 0; }
 		if  ($x%2 !=0) { ?>
 		<td class="black border"><?php echo $wbrett[$s]->sum; ?></td>
 		<td class="black"><?php echo round((($wbrett[$s]->sum*100)/$brett[$x]->count),1); ?></td>
