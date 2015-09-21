@@ -160,7 +160,7 @@ if ($detail == 0) $detailp = '1'; else $detailp = '0';
 		header('Content-type: text/html');
 		header('Cache-Control:');
 		header('Pragma:');
-		readfile($file_name);
+		readfile('components'.DS.'com_clm'.DS.'pgn'.DS.$file_name);
 		flush();
 		JFactory::getApplication()->close();
   }	
