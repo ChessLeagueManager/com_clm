@@ -30,7 +30,8 @@ class CLMModelSpieler extends JModelLegacy
 		." FROM #__clm_dwz_spieler as a "
 		." LEFT JOIN #__clm_dwz_vereine as d ON a.ZPS = d.ZPS AND d.sid = a.sid"
 		." LEFT JOIN #__clm_meldeliste_spieler as m ON m.zps = a.ZPS AND m.mgl_nr = a.Mgl_Nr AND m.sid = a.sid "
-		." LEFT JOIN #__clm_mannschaften as n ON n.zps = a.ZPS AND n.man_nr = m.mnr AND n.liga = m.lid AND n.sid = a.sid"
+		." LEFT JOIN #__clm_mannschaften as n ON ( (n.zps = a.ZPS) OR (FIND_IN_SET(a.ZPS, n.sg_zps) != 0)) AND n.man_nr = m.mnr AND n.liga = m.lid AND n.sid = a.sid"
+
 		." LEFT JOIN #__clm_liga l ON l.id = n.liga AND l.sid = n.sid "
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 		." WHERE a.ZPS = '$zps'"

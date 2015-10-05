@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.2.2 - [xx-xx-2015] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.2.2 - [05-10-2015] - - - - - - - - - - - - - - - - - - - -
 # Config: Email-Adressen mit Umlauten erlauben
 # Config: Ergebnisdienst-Name mit Umlauten möglich
 # Logging: Einträge bei Meldelistenabgabe und Vereinspflege im FE aktiviert
@@ -24,6 +24,7 @@ $ -> Language fix or change
 # Ligatabelle: Berücksichtigung von Antrittspunkte bei SRV-Spalten 
 # Saisonstatistik: Codebereinigung zur Vermeidung von Warnungen
 # pgn-Vorlage-Datei: Ablage im Pfad 'pgn'
+# Spieler-View: Anzeige bei Spielgemeinschaften
  
 - - - - - 3.2.1 - [19-08-2015] - - - - - - - - - - - - - - - - - - - -
 + Aktivierung Saisonstatistik
