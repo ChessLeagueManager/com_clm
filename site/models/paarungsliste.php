@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -48,7 +48,7 @@ class CLMModelPaarungsliste extends JModelLegacy
  
 		$query = "SELECT nr, name, datum, startzeit, bemerkungen, published FROM #__clm_runden_termine "
 			." WHERE liga = ".$liga
-			." AND sid = ".$sid
+			//." AND sid = ".$sid
 			." ORDER BY nr "
 			;
 		return $query;
@@ -69,7 +69,7 @@ class CLMModelPaarungsliste extends JModelLegacy
  
 		$query = " SELECT * FROM #__clm_mannschaften "
 			." WHERE liga = ".$liga
-			." AND sid = ".$sid
+			//." AND sid = ".$sid
 			." AND published = 1 "
 			." ORDER BY tln_nr "
 			;
@@ -91,7 +91,7 @@ class CLMModelPaarungsliste extends JModelLegacy
 
 		$query = " SELECT teil FROM #__clm_liga "
 			." WHERE id = ".$liga
-			." AND sid = ".$sid
+			//." AND sid = ".$sid
 			;
 		$db->setQuery( $query);
 		$row_tln=$db->loadObjectList();
@@ -105,10 +105,10 @@ class CLMModelPaarungsliste extends JModelLegacy
 			." LEFT JOIN #__clm_mannschaften AS h ON h.tln_nr = a.tln_nr"
 			." LEFT JOIN #__clm_rnd_man AS b ON b.sid = ".$sid." AND b.lid = ".$liga." AND b.runde = a.runde AND b.dg = a.dg AND b.paar = a.paar AND b.heim = 0 "
 			." WHERE g.liga = ".$liga
-			." AND g.sid = ".$sid
+			//." AND g.sid = ".$sid
 			." AND h.liga = ".$liga
-			." AND h.sid = ".$sid
-			." AND a.sid = ".$sid
+			//." AND h.sid = ".$sid
+			//." AND a.sid = ".$sid
 			." AND a.lid = ".$liga
 			." AND a.heim = 1 "
 			." ORDER BY a.dg ASC,a.runde ASC, a.paar ASC"
@@ -141,7 +141,7 @@ class CLMModelPaarungsliste extends JModelLegacy
 			." LEFT JOIN #__clm_dwz_spieler AS d ON (d.Mgl_Nr = a.mgl_nr AND d.ZPS = a.zps AND d.sid = a.sid AND d.DWZ !=0)"
 			." LEFT JOIN #__clm_mannschaften AS e ON (e.sid=a.sid AND e.liga= a.lid AND (e.zps=a.zps OR e.sg_zps=a.zps) AND e.man_nr = a.mnr AND e.man_nr !=0 AND e.liste !=0) "
 			." WHERE a.lid = ".$liga
-			." AND a.sid = ".$sid
+			//." AND a.sid = ".$sid
 			." AND e.tln_nr IS NOT NULL "
 			." AND a.snr < ".($tln+1)
 			." GROUP BY e.tln_nr"
@@ -176,7 +176,8 @@ class CLMModelPaarungsliste extends JModelLegacy
 		." LEFT JOIN #__clm_dwz_spieler AS g ON (g.ZPS = r.gzps AND g.Mgl_Nr = r.gegner AND g.sid = r.sid) "
 		." LEFT JOIN #__clm_meldeliste_spieler AS dm ON ( dm.lid = a.lid AND dm.zps = r.zps AND dm.mgl_nr = r.spieler )"
 		." LEFT JOIN #__clm_meldeliste_spieler AS gm ON ( gm.lid = a.lid AND gm.zps = r.gzps AND gm.mgl_nr = r.gegner )"
-		." WHERE a.lid = $liga  AND a.sid = $sid AND a.heim = 1 AND r.heim = 1 "
+		//." WHERE a.lid = $liga  AND a.sid = $sid AND a.heim = 1 AND r.heim = 1 "
+		." WHERE a.lid = $liga AND a.heim = 1 AND r.heim = 1 "
 		." GROUP BY a.dg ASC, a.runde ASC, a.paar ASC"
 		;
 		return $query;
@@ -199,7 +200,7 @@ class CLMModelPaarungsliste extends JModelLegacy
 	$query = " SELECT a.dg,a.paar as paarung,a.runde as runde,a.brettpunkte as sum "
 		." FROM #__clm_rnd_man as a "
 			." WHERE a.lid = ".$liga
-			." AND a.sid = ".$sid
+			//." AND a.sid = ".$sid
 			." ORDER BY a.dg ASC ,a.runde ASC, a.paar ASC, a.heim DESC "
 			;
 		return $query;
@@ -221,7 +222,7 @@ class CLMModelPaarungsliste extends JModelLegacy
 	$query = " SELECT a.nr, a.sl_ok as sl_ok "
 		." FROM #__clm_runden_termine as a"
 			." WHERE a.liga = ".$liga
-			." AND a.sid = ".$sid
+			//." AND a.sid = ".$sid
 			." ORDER BY a.nr ASC"
 			;
 		return $query;

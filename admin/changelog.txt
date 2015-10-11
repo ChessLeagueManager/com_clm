@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.2.3 - [xx-xx-2015] - - - - - - - - - - - - - - - - - - - -
++ Menüeintagstyp für Liga-Paarungsliste
+
 - - - - - 3.2.2 - [05-10-2015] - - - - - - - - - - - - - - - - - - - -
 # Config: Email-Adressen mit Umlauten erlauben
 # Config: Ergebnisdienst-Name mit Umlauten möglich
