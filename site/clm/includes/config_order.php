@@ -2,7 +2,7 @@
 defined('clm') or die('Restricted access');
 
 $config_order = array(
-			array("basics", 0, "language", "lv", "menue", "dropdown", "vereineliste", "verein_sort", "liga_saison", "meldeliste", "rangliste","fe_submenu","fe_submenu_t","fe_display_lose_by_default","database_safe"),
+			array("basics", 0, "countryversion", "lv", "menue", "dropdown", "vereineliste", "verein_sort", "liga_saison", "meldeliste", "rangliste","fe_submenu","fe_submenu_t","fe_display_lose_by_default","database_safe"),
 			array("mail", 0,"email_from", "email_bcc", "email_fromname", "org_logo", "sl_mail", "email_type"),
 			array("results", 0,"conf_ergebnisse", "meldung_heim", "meldung_verein", "kommentarfeld", "app_security"),
 			array("register", 0, "conf_meldeliste", "pdf_meldelisten"),

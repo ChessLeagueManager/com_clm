@@ -224,10 +224,11 @@ function clm_view_be_menu($access, $status)
     } else {
         $lang2          = clm_core::$lang->stringArray(explode("\n", $status["content"]));
         $currentVersion = $lang2->currentVersion;
-        $nextVersion    = $lang2->nextVersion;
+        $nextVersion    = $lang2->nextVersion;      // aktuelle Beta!
 
         $aktuell        = explode(".", $status["version"]);
-        $install        = explode(".", $lang2->currentVersion);
+        //$install        = explode(".", $lang2->currentVersion);
+        $install        = explode(".", $lang2->nextVersion);
         $information    = "information_" . $aktuell[0] . "." . $aktuell[1];
         $information    = $lang2->$information;
         $upgrade        = "clm_good_version";

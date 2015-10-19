@@ -45,7 +45,9 @@ function clm_api_db_be_menu() {
    			)
 			));
 
-			if (!$fp = @file_get_contents("http://www.chessleaguemanager.de/clm/updateServer/status." . clm_core::$db->config()->language, false, $ctx)) {
+			$jlang = JFactory::getLanguage();
+			//if (!$fp = @file_get_contents("http://www.chessleaguemanager.de/clm/updateServer/status." . clm_core::$db->config()->language, false, $ctx)) {
+			if (!$fp = @file_get_contents("http://www.chessleaguemanager.de/clm/updateServer/status." . $jlang->getTag(), false, $ctx)) {
 				$status["content"] = "";
 			} else {
 				$status["content"] = $fp;
