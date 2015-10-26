@@ -15,6 +15,7 @@ $ -> Language fix or change
 - - - - - 3.2.3 - [xx-xx-2015] - - - - - - - - - - - - - - - - - - - -
 + Menüeintagstyp für Liga-Paarungsliste
 ^ Sprachfilezuordnung für umgestellte Views
+# raw-View Verein für Extern-Zugriff
 
 - - - - - 3.2.2 - [05-10-2015] - - - - - - - - - - - - - - - - - - - -
 # Config: Email-Adressen mit Umlauten erlauben
