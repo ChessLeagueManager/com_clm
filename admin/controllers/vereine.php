@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -366,7 +366,7 @@ function publish()
 	}
 
 	$clmAccess = clm_core::$access;      
-	if ($clmAccess->access('BE_club_edit') === false) {
+	if ($clmAccess->access('BE_club_create') === false) {
 	//if ( clm_core::$access->getType() !== 'admin') {
 		JError::raiseWarning( 500, JText::_( 'VEREINE_NO_PUBLIZIEREN' ) );
 		$link = 'index.php?option='.$option.'&section='.$section;
