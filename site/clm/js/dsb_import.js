@@ -112,7 +112,7 @@
 	    command[1][0] = "db_dsb_player";
 	    command[1][1][0] = clm_dsb_import_file[i];
 	    command[1][1][1] = p;
-	    xmlhttp.send('command=' + JSON.stringify(command));
+	    xmlhttp.send('command=' + encodeURIComponent(JSON.stringify(command)));
 	}
 
 	function clm_dsb_import_club(object, i, club) {
@@ -161,7 +161,7 @@
 	    command[0] = 0;
 	    command[1][0] = "db_dsb_club";
 	    command[1][1][0] = clm_dsb_import_file[i];
-	    xmlhttp.send('command=' + JSON.stringify(command));
+	    xmlhttp.send('command=' + encodeURIComponent(JSON.stringify(command)));
 	}
 
 	function clm_dsb_import_button_update(object) {
