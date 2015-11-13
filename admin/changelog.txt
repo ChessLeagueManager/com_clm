@@ -18,6 +18,7 @@ $ -> Language fix or change
 # raw-View Verein für Extern-Zugriff
 # Manuelle Aktualisierung von Vereinen und Spielern: Behandlung von Sonderzeichen
 # Admin-View Vereine: Berechtigung für FreigebenSperren
+# DWZ-Übersicht pdf-Liste
 
 - - - - - 3.2.2 - [05-10-2015] - - - - - - - - - - - - - - - - - - - -
 # Config: Email-Adressen mit Umlauten erlauben

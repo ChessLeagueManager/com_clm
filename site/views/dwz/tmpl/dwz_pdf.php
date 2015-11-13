@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -94,7 +94,7 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(80,$zelle,utf8_decode(JText::_('CLUB_MEMBER_NAME')),1,0,'C');
 	$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER_RATING')),1,0,'C');
 	$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER_RATINGS')),1,0,'C');
-	$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER_ELO')).$i,1,0,'C');
+	$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER_ELO')),1,0,'C');
 	// Zeilenumbruch
 	$pdf->Ln();
 
