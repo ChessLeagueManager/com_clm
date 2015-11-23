@@ -30,6 +30,9 @@ $cid 		= JRequest::getVar('cid', array(), '', 'array');
 $man_name 	= JRequest::getVar('man_name');
 $liga_lokal	= JRequest::getVar('lokal');
 $liga_mf 	= JRequest::getVar('mf');
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
  
 $cid_sql = array();
 foreach($cid as $cid_a) {
@@ -167,6 +170,19 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
           tmp6 = hiddenA.value;
           hiddenA.value = hiddenB.value;
           hiddenB.value = tmp6;
+          // PKZ tauschen
+          var mglnrA = document.getElementById ( "PKZ" + idA );
+          var mglnrB = document.getElementById ( "PKZ" + idB );
+          tmp7 = mglnrA.innerHTML;
+          mglnrA.innerHTML = mglnrB.innerHTML;
+          mglnrB.innerHTML = tmp7;
+          // (hidden) PKZ tauschen
+          var hiddenA = document.getElementById ( "hidden_PKZ" + idA );
+          var hiddenB = document.getElementById ( "hidden_PKZ" + idB );
+          tmp8 = hiddenA.value;
+          hiddenA.value = hiddenB.value;
+          hiddenB.value = tmp8;
+
         }
 
         function NachUnten ( $id, $nofocus )
@@ -197,8 +213,13 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
 		<th class="anfang" width="5%"><?php echo JText::_('CLUB_LIST_NR') ?></th>
 		<th class="anfang"><?php echo JText::_('CLUB_LIST_NAME') ?></th>
 		<th class="anfang" width="8%"><?php echo JText::_('CLUB_LIST_DWZ') ?></th>
-		<th class="anfang" width="35%"><?php echo JText::_('CLUBS_LIST_NAME') ?></th>
-		<th class="anfang" width="8%"><?php echo JText::_('CLUB_LIST_MGL') ?></th>
+		<?php if ($countryversion =="de") { ?>
+			<th class="anfang" width="35%"><?php echo JText::_('CLUBS_LIST_NAME') ?></th>
+			<th class="anfang" width="8%"><?php echo JText::_('CLUB_LIST_MGL') ?></th>
+		<?php } else { ?>
+			<th class="anfang" width="28%"><?php echo JText::_('CLUBS_LIST_NAME') ?></th>
+			<th class="anfang" width="15%"><?php echo JText::_('CLUB_LIST_PKZ') ?></th>
+		<?php } ?>
 		<th class="anfang" width="12%"><?php echo JText::_('CLUB_LIST_SORT_DIR') ?></th>
 	</tr>
 
@@ -211,7 +232,19 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
 		<td><span id="name<?php echo $i+1; ?>"><?php echo $sort[$i]->name; ?></span><input type="hidden" name="hidden_zps<?php echo $i+1; ?>" id="hidden_zps<?php echo $i+1; ?>" value="<?php echo $sort[$i]->zps; ?>" /></td>
 		<td id="dwz<?php echo $i+1; ?>"><?php echo $sort[$i]->dwz; ?></td>
 		<td id="zpsname<?php echo $i+1; ?>"><?php echo $sort[$i]->Vereinname; ?></td>
-		<td id="mglnr<?php echo $i+1; ?>"><?php echo $sort[$i]->Mgl_Nr; ?><input type="hidden" name="hidden_mglnr<?php echo $i+1; ?>" id="hidden_mglnr<?php echo $i+1; ?>" value="<?php echo $sort[$i]->Mgl_Nr; ?>" /></td>
+		<?php if ($countryversion =="de") { ?>
+		  <td id="mglnr<?php echo $i+1; ?>"><?php echo $sort[$i]->Mgl_Nr; ?>
+			<input type="hidden" name="hidden_mglnr<?php echo $i+1; ?>" id="hidden_mglnr<?php echo $i+1; ?>" value="<?php echo $sort[$i]->Mgl_Nr; ?>" />
+			<input type="hidden" name="PKZ<?php echo $i+1; ?>" id="PKZ<?php echo $i+1; ?>" value="<?php echo $sort[$i]->PKZ; ?>" />
+			<input type="hidden" name="hidden_PKZ<?php echo $i+1; ?>" id="hidden_PKZ<?php echo $i+1; ?>" value="<?php echo $sort[$i]->PKZ; ?>" />
+			</td>
+		<?php } else { ?>
+		  <td id="PKZ<?php echo $i+1; ?>"><?php echo $sort[$i]->PKZ; ?>
+			<input type="hidden" name="hidden_PKZ<?php echo $i+1; ?>" id="hidden_PKZ<?php echo $i+1; ?>" value="<?php echo $sort[$i]->PKZ; ?>" /></td>
+			<input type="hidden" name="mglnr<?php echo $i+1; ?>" id="mglnr<?php echo $i+1; ?>" value="<?php echo $sort[$i]->Mgl_Nr; ?>" />
+			<input type="hidden" name="hidden_mglnr<?php echo $i+1; ?>" id="hidden_mglnr<?php echo $i+1; ?>" value="<?php echo $sort[$i]->Mgl_Nr; ?>" />
+			</td>
+		<?php } ?>
 		<td>&nbsp;&nbsp;
 		<?php if ($i == 0) { ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php } else { ?>
 		<a href="javascript:NachOben(<?php echo $i+1; ?>);" id="hoch<?php echo $i+1; ?>"><img  src="components/com_clm/images/uparrow.png" alt="NachOben" /></a>

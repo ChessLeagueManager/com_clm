@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -38,6 +38,9 @@ static function DWZ( $spieler,$verein,$lists, $pageNav, $option )
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 		
 	$clmAccess = clm_core::$access;      
+	// Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion= $config->countryversion;	
 		?>
 
 <script language="javascript" type="text/javascript">
@@ -111,12 +114,17 @@ static function DWZ( $spieler,$verein,$lists, $pageNav, $option )
 		<tr>
 			<th width="4%" class="key" nowrap="nowrap"><?php echo JText::_( 'MEMBER_TABLE_2' ); ?></th>
 			<th width="20%" class="key" nowrap="nowrap"><?php echo JText::_( 'MEMBER_TABLE_3' ); ?></th>
-			<th width="4%" class="key" nowrap="nowrap"><?php echo JText::_( 'MEMBER_TABLE_4' ); ?></th>
-			<th width="5%" class="key" nowrap="nowrap"><?php echo JText::_( 'MEMBER_TABLE_5' ); ?></th>
-			<th width="5%" class="key" nowrap="nowrap"><?php echo JText::_( 'PKZ' ); ?></th>
+			<?php if ($countryversion == "de") { ?>
+				<th width="4%" class="key" nowrap="nowrap"><?php echo JText::_( 'MEMBER_TABLE_4' ); ?></th>
+				<th width="5%" class="key" nowrap="nowrap"><?php echo JText::_( 'MEMBER_TABLE_5' ); ?></th>
+				<th width="5%" class="key" nowrap="nowrap"><?php echo JText::_( 'MEMBER_TABLE_51' ); ?></th>
+			<?php } else { ?>
+				<th width="5%" class="key" nowrap="nowrap"><?php echo JText::_( 'MEMBER_TABLE_5E' ); ?></th>
+				<th width="5%" class="key" nowrap="nowrap"><?php echo JText::_( 'MEMBER_TABLE_51E' ); ?></th>
+			<?php } ?>
 			<th width="3%" class="key" nowrap="nowrap"><?php echo JText::_( 'St' ); ?></th>
-			<th width="4%" class="key" nowrap="nowrap"><?php echo JText::_( 'G.jahr' ); ?></th>
-			<th width="3%" class="key" nowrap="nowrap"><?php echo JText::_( 'w' ); ?></th>
+			<th width="4%" class="key" nowrap="nowrap"><?php echo JText::_( 'MEMBER_TABLE_53' ); ?></th>
+			<th width="3%" class="key" nowrap="nowrap"><?php echo JText::_( 'MEMBER_TABLE_54' ); ?></th>
 		</tr>
 	<?php	for ($x=0; $x <count($verein);$x++) { ?>
 		<tr>
@@ -126,12 +134,18 @@ static function DWZ( $spieler,$verein,$lists, $pageNav, $option )
 			<td class="key" width="25%" nowrap="nowrap">
 				<?php echo $verein[$x]->Spielername; ?>
 			</td>
-			<td class="key" nowrap="nowrap">
-				<?php echo $verein[$x]->Mgl_Nr; ?>
-			</td>
-			<td class="key" nowrap="nowrap">
-				<?php echo $verein[$x]->DWZ." - ".$verein[$x]->DWZ_Index; ?>
-			</td>
+			<?php if ($countryversion == "de") { ?>
+				<td class="key" nowrap="nowrap">
+					<?php echo $verein[$x]->Mgl_Nr; ?>
+				</td>
+				<td class="key" nowrap="nowrap">
+					<?php echo $verein[$x]->DWZ." - ".$verein[$x]->DWZ_Index; ?>
+				</td>
+			<?php } else { ?>
+				<td class="key" nowrap="nowrap">
+					<?php echo $verein[$x]->DWZ; ?>
+				</td>
+			<?php } ?>
 			<td class="key" nowrap="nowrap">
 				<?php echo $verein[$x]->PKZ; ?>
 			</td>
@@ -139,7 +153,7 @@ static function DWZ( $spieler,$verein,$lists, $pageNav, $option )
 				<?php echo $verein[$x]->Status; ?>
 			</td>
 			<td class="key" nowrap="nowrap">
-				<?php echo $verein[$x]->Geburtsjahr; ?>
+				<?php if ($verein[$x]->Geburtsjahr != '0000') echo $verein[$x]->Geburtsjahr; ?>
 			</td>
 			<td class="key" nowrap="nowrap">
 				<?php if ($verein[$x]->Geschlecht != 'M') echo $verein[$x]->Geschlecht; ?>
@@ -174,6 +188,7 @@ static function DWZ( $spieler,$verein,$lists, $pageNav, $option )
 			</td>
 			<td><?php echo JText::_( 'MEMBER_TABLE_11' ); ?></td>
 		</tr>
+	  <?php if ($countryversion == "de") { ?>
 		<tr>
 			<td class="key" nowrap="nowrap">
 			<label for="mglnr"><?php echo JText::_( 'MEMBER_TABLE_12' ); ?></label>
@@ -182,6 +197,15 @@ static function DWZ( $spieler,$verein,$lists, $pageNav, $option )
 			<input class="inputbox" type="text" name="mglnr" id="mglnr" size="7" maxlength="7" <?php if (isset($filter_mgl) AND $filter_mgl !="0") {?> value="<?php echo $spieler[0]->Mgl_Nr ?>"<?php }?>/>
 			</td>
 			<td><?php echo JText::_( 'MEMBER_TABLE_13' ); ?></td>
+		</tr>
+		<tr>
+			<td class="key" nowrap="nowrap">
+			<label for="mglnr"><?php echo JText::_( 'MEMBER_TABLE_121' ); ?></label>
+			</td>
+			<td>
+			<input class="inputbox" type="text" name="PKZ" id="PKZ" size="10" maxlength="10" <?php if (isset($filter_mgl) AND $filter_mgl !="0") {?> value="<?php echo $spieler[0]->PKZ ?>"<?php }?>/>
+			</td>
+			<td><?php echo JText::_( 'MEMBER_TABLE_131' ); ?></td>
 		</tr>
 		<tr>
 			<td class="key" nowrap="nowrap">
@@ -201,6 +225,35 @@ static function DWZ( $spieler,$verein,$lists, $pageNav, $option )
 			</td>
 			<td><?php echo JText::_( 'MEMBER_TABLE_17' ); ?></td>
 		</tr>
+	  <?php } else { ?>
+		<tr>
+			<td class="key" nowrap="nowrap">
+			<label for="mglnr"><?php echo JText::_( 'MEMBER_TABLE_12E' ); ?></label>
+			</td>
+			<td>
+			<input class="inputbox" type="text" name="mglnr" id="mglnr" size="7" maxlength="7" <?php if (isset($filter_mgl) AND $filter_mgl !="0") {?> value="<?php echo $spieler[0]->Mgl_Nr ?>"<?php }?>/>
+			</td>
+			<td><?php echo JText::_( 'MEMBER_TABLE_13E' ); ?></td>
+		</tr>
+		<tr>
+			<td class="key" nowrap="nowrap">
+			<label for="mglnr"><?php echo JText::_( 'MEMBER_TABLE_121E' ); ?></label>
+			</td>
+			<td>
+			<input class="inputbox" type="text" name="PKZ" id="PKZ" size="10" maxlength="10" <?php if (isset($filter_mgl) AND $filter_mgl !="0") {?> value="<?php echo $spieler[0]->PKZ ?>"<?php }?>/>
+			</td>
+			<td><?php echo JText::_( 'MEMBER_TABLE_131E' ); ?></td>
+		</tr>
+		<tr>
+			<td class="key" nowrap="nowrap">
+			<label for="dwz"><?php echo JText::_( 'MEMBER_TABLE_14E' ); ?></label>
+			</td>
+			<td>
+			<input class="inputbox" type="text" name="dwz" id="dwz" size="7" maxlength="4" <?php if (isset($filter_mgl) AND $filter_mgl !="0") {?> value="<?php echo $spieler[0]->DWZ ?>"<?php }?>/>
+			</td>
+			<td><?php echo JText::_( 'MEMBER_TABLE_15E' ); ?></td>
+		</tr>
+	  <?php } ?>
 		<tr>
 			<td class="key" nowrap="nowrap">
 			<label for="geschlecht"><?php echo JText::_( 'MEMBER_TABLE_18' ); ?></label>
@@ -255,8 +308,11 @@ $zps = $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,
 	  			<select size="1" name="spieler">
 					<option value="0"><?php echo JText::_( 'MEMBER_TABLE_28' ); ?></option>
 				<?php for ($x=0; $x < count($spl); $x++) { ?>
-		 		<option value="<?php echo $spl[$x]->Mgl_Nr; ?>"><?php echo $spl[$x]->Spielername; ?></option> 
-				<?php }	?>
+		 		<?php if ($countryversion == "de") { ?>
+				  <option value="<?php echo $spl[$x]->Mgl_Nr; ?>"><?php echo $spl[$x]->Spielername; ?></option> 
+		 		<?php } else { ?>
+				  <option value="<?php echo $spl[$x]->PKZ; ?>"><?php echo $spl[$x]->Spielername; ?></option> 
+				<?php }}	?>
 	  			</select>
 			</tr>
 		</table>
@@ -277,8 +333,11 @@ $zps = $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,
 	  			<select size="1" name="del_spieler">
 					<option value="0"><?php echo JText::_( 'MEMBER_TABLE_28' ); ?></option>
 				<?php for ($x=0; $x < count($verein); $x++) { ?>
-		 		<option value="<?php echo $verein[$x]->Mgl_Nr; ?>"><?php echo $verein[$x]->Mgl_Nr.' - '.$verein[$x]->Spielername; ?></option> 
-				<?php }	?>
+		 		<?php if ($countryversion == "de") { ?>
+		 		  <option value="<?php echo $verein[$x]->Mgl_Nr; ?>"><?php echo $verein[$x]->Mgl_Nr.' - '.$verein[$x]->Spielername; ?></option> 
+		 		<?php } else { ?>
+		 		  <option value="<?php echo $verein[$x]->PKZ; ?>"><?php echo $verein[$x]->PKZ.' - '.$verein[$x]->Spielername; ?></option> 
+				<?php }}	?>
 	  			</select>
 			</tr>
 		</table>

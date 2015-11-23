@@ -21,22 +21,34 @@ class CLMModelSpieler extends JModelLegacy
 	$sid	= JRequest::getInt('saison','1');
 	$zps	= clm_escape(JRequest::getVar('zps'));
 	$mgl	= JRequest::getInt('mglnr');
+	$PKZ	= JRequest::getVar('PKZ');
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
+
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 
-	$query = "SELECT a.Spielername,l.name as liga_name,l.id as liga,a.ZPS,a.Mgl_Nr,"
+	$query = "SELECT a.Spielername,l.name as liga_name,l.id as liga,a.ZPS,a.Mgl_Nr,a.PKZ,"
 		." a.DWZ as dsbDWZ,a.DWZ_Index,a.FIDE_ELO,a.FIDE_ID,"
 		." d.Vereinname, n.name,n.tln_nr, m.*, s.datum as dsb_datum, s.name as s_name"      
 		." FROM #__clm_dwz_spieler as a "
-		." LEFT JOIN #__clm_dwz_vereine as d ON a.ZPS = d.ZPS AND d.sid = a.sid"
-		." LEFT JOIN #__clm_meldeliste_spieler as m ON m.zps = a.ZPS AND m.mgl_nr = a.Mgl_Nr AND m.sid = a.sid "
-		." LEFT JOIN #__clm_mannschaften as n ON ( (n.zps = a.ZPS) OR (FIND_IN_SET(a.ZPS, n.sg_zps) != 0)) AND n.man_nr = m.mnr AND n.liga = m.lid AND n.sid = a.sid"
-
+		." LEFT JOIN #__clm_dwz_vereine as d ON a.ZPS = d.ZPS AND d.sid = a.sid";
+	if ($countryversion =="de") {
+		$query .= " LEFT JOIN #__clm_meldeliste_spieler as m ON m.zps = a.ZPS AND m.mgl_nr = a.Mgl_Nr AND m.sid = a.sid ";
+	} else {
+		$query .= " LEFT JOIN #__clm_meldeliste_spieler as m ON m.zps = a.ZPS AND m.PKZ = a.PKZ AND m.sid = a.sid ";
+	}
+	$query .= " LEFT JOIN #__clm_mannschaften as n ON ( (n.zps = a.ZPS) OR (FIND_IN_SET(a.ZPS, n.sg_zps) != 0)) AND n.man_nr = m.mnr AND n.liga = m.lid AND n.sid = a.sid"
 		." LEFT JOIN #__clm_liga l ON l.id = n.liga AND l.sid = n.sid "
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
-		." WHERE a.ZPS = '$zps'"
-		." AND a.Mgl_Nr = ".$mgl
-		." AND a.sid = ".$sid
+		." WHERE a.ZPS = '$zps'";
+	if ($countryversion =="de") {
+		$query .= " AND a.Mgl_Nr = ".$mgl;
+	} else {
+		$query .= " AND a.PKZ = '".$PKZ."'";
+	}
+	$query .= " AND a.sid = ".$sid
 		." AND s.published = 1"
 		." AND l.published = 1"
 		." ORDER BY l.id ASC "
@@ -57,6 +69,11 @@ class CLMModelSpieler extends JModelLegacy
 	$sid	= JRequest::getInt('saison','1');
 	$zps	= clm_escape(JRequest::getVar('zps'));
 	$mgl	= JRequest::getInt('mglnr');
+	$PKZ	= JRequest::getVar('PKZ');
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
+
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 
@@ -65,12 +82,16 @@ class CLMModelSpieler extends JModelLegacy
 
 	// Mannschaften mit Aufstellung nach Meldeliste suchen
 	$query = " SELECT a.lid as lid, l.name as liga_name, m.tln_nr as tln_nr, m.name as name FROM #__clm_meldeliste_spieler as a "
-		//." LEFT JOIN #__clm_mannschaften as m ON ( m.zps = a.zps OR m.sg_zps = a.zps) AND m.man_nr = a.mnr AND m.sid = a.sid "						//alt
 		." LEFT JOIN #__clm_mannschaften as m ON ( (m.zps = a.zps) OR (FIND_IN_SET(a.zps, m.sg_zps) != 0)) AND m.man_nr = a.mnr AND m.sid = a.sid "		//neu
-		//." LEFT JOIN #__clm_mannschaften as m ON ( m.zps = a.zps OR a.zps LIKE CONCAT('%', m.sg_zps, '%')) AND m.man_nr = a.mnr AND m.sid = a.sid "   //denkbar
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 		." LEFT JOIN #__clm_liga AS l ON l.id = a.lid AND l.sid = a.sid "
-		." WHERE a.zps = '$zps' AND a.mgl_nr = $mgl AND s.published = 1 AND m.published = 1 AND l.published = 1 AND s.id = $sid AND status = 0 "
+		." WHERE a.zps = '$zps' ";
+	if ($countryversion =="de") {
+		$query .= "	AND a.mgl_nr = $mgl ";
+	} else {
+		$query .= "	AND a.PKZ = '$PKZ' ";
+	}
+	$query .= "	AND s.published = 1 AND m.published = 1 AND l.published = 1 AND s.id = $sid AND status = 0 "
 		." ORDER BY a.mnr ASC "
 		;
 	$db->setQuery($query);
@@ -83,8 +104,13 @@ class CLMModelSpieler extends JModelLegacy
 		." LEFT JOIN #__clm_mannschaften AS m ON m.man_nr = a.man_nr AND ( a.ZPS = m.zps OR a.ZPS = m.sg_zps) AND m.liga = l.id "
 		." LEFT JOIN #__clm_rangliste_id AS r ON r.gid = l.rang AND r.sid = a.sid AND r.zps = a.ZPS "
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
-		." WHERE a.ZPS ='$zps' AND a.Mgl_Nr='$mgl' AND m.id IS NOT NULL "
-//		." AND s.published = 1 AND s.archiv = 0 AND m.published = 1 AND l.published = 1 AND r.published = 1 "
+		." WHERE a.ZPS ='$zps' ";
+	if ($countryversion =="de") {
+		$query .= "	AND a.mgl_nr = $mgl ";
+	} else {
+		$query .= "	AND a.PKZ = '$PKZ' ";
+	}
+	$query .= " AND m.id IS NOT NULL "
 		." AND a.sid = '$sid' AND m.published = 1 AND l.published = 1 AND r.published = 1 "
 		;
 	$db->setQuery($query);
@@ -100,19 +126,32 @@ class CLMModelSpieler extends JModelLegacy
 	$sid	= JRequest::getInt('saison','1');
 	$zps	= clm_escape(JRequest::getVar('zps'));
 	$mgl	= JRequest::getInt('mglnr');
+	$PKZ	= JRequest::getVar('PKZ');
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
+
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 
-	$query = " SELECT l.name as league, s.gegner as Mgl_Nr,s.gzps,s.lid,s.runde,s.heim,s.weiss,s.brett,"
+	$query = " SELECT l.name as league, s.gegner as Mgl_Nr,s.gPKZ,s.gzps,s.lid,s.runde,s.heim,s.weiss,s.brett,"
 		." s.kampflos,s.punkte,d.Spielername,m.name,d.DWZ,a.dg,a.gegner as tln"
 		." FROM #__clm_rnd_spl as s "
-		." LEFT JOIN #__clm_rnd_man as a ON s.sid = a.sid AND s.lid = a.lid AND s.runde = a.runde AND s.paar = a.paar AND s.dg = a.dg AND s.tln_nr = a.tln_nr "
-		." LEFT JOIN #__clm_dwz_spieler as d ON d.ZPS = s.gzps AND d.Mgl_Nr = s.gegner AND d.sid = a.sid "
-		." LEFT JOIN #__clm_mannschaften as m ON m.liga = a.lid AND m.tln_nr = a.gegner "//AND m.zps = s.gzps
-		." LEFT JOIN #__clm_liga as l ON l.id = s.lid AND l.sid = s.sid "//neu
-		." WHERE s.zps = '$zps'"
-		." AND s.spieler =".$mgl
-		." AND a.sid =".$sid
+		." LEFT JOIN #__clm_rnd_man as a ON s.sid = a.sid AND s.lid = a.lid AND s.runde = a.runde AND s.paar = a.paar AND s.dg = a.dg AND s.tln_nr = a.tln_nr ";
+	if ($countryversion =="de") {
+		$query .= " LEFT JOIN #__clm_dwz_spieler as d ON d.ZPS = s.gzps AND d.Mgl_Nr = s.gegner AND d.sid = a.sid ";
+	} else {	
+		$query .= " LEFT JOIN #__clm_dwz_spieler as d ON d.ZPS = s.gzps AND d.PKZ = s.gPKZ AND d.sid = a.sid ";
+	} 	
+	$query .= " LEFT JOIN #__clm_mannschaften as m ON m.liga = a.lid AND m.tln_nr = a.gegner "//AND m.zps = s.gzps
+		." LEFT JOIN #__clm_liga as l ON l.id = s.lid AND l.sid = s.sid "
+		." WHERE s.zps = '$zps'";
+	if ($countryversion =="de") {
+		$query .= " AND s.spieler =".$mgl;
+	} else {	
+		$query .= " AND s.PKZ = '".$PKZ."'";
+	} 	
+	$query .= " AND a.sid =".$sid
 		." AND l.published = 1 "
 		." ORDER BY a.lid, a.dg ASC, a.runde ASC "
 		;
@@ -176,7 +215,7 @@ class CLMModelSpieler extends JModelLegacy
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 
-	$query  = " SELECT DISTINCT a.Spielername, a.ZPS, a.Mgl_Nr, a.sid FROM #__clm_dwz_spieler AS a"
+	$query  = " SELECT DISTINCT a.Spielername, a.ZPS, a.Mgl_Nr, a.PKZ, a.sid FROM #__clm_dwz_spieler AS a"
 		." WHERE a.sid= '$sid'"
 		." AND ZPS= '$zps'"
 		." GROUP BY Spielername"

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -121,7 +121,7 @@ $ex = 0; $ey = 0;
 			else { $zeilenr = 'zeile2'; } ?>
 	<tr class="<?php echo $zeilenr; ?>">
 		<td><?php echo $x+1; ?></td>
-		<td><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $bestenliste[$x]->zps; ?>&mglnr=<?php echo $bestenliste[$x]->mgl_nr; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $bestenliste[$x]->Spielername; ?></a></td>
+		<td><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $bestenliste[$x]->zps; ?>&mglnr=<?php echo $bestenliste[$x]->mgl_nr; ?>&PKZ=<?php echo $bestenliste[$x]->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $bestenliste[$x]->Spielername; ?></a></td>
 		<td><?php echo $bestenliste[$x]->DWZ; ?></td>
 		<td><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $bestenliste[$x]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $bestenliste[$x]->Vereinname; ?></a></td>
 		<td><?php echo $bestenliste[$x]->snr; ?></td>

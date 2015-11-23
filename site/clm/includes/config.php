@@ -17,7 +17,7 @@ defined('clm') or die('Restricted access');
 //13 -> Länge
 //14 -> URL
 // Bei ungültigen Typ wird stets der Standardwert zurückgegeben!
-$config["countryversion"]=array(0,9,"de",array("de"));
+$config["countryversion"]=array(0,9,"de",array("de","en"));
 $config["lv"]=array(1,11,"000",array("db_units",array(true,true)));
 $config["menue"]=array(2,9,1,array(0,1));
 $config["dropdown"]=array(3,9,1,array(0,1));

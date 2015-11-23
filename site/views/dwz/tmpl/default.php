@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -26,6 +26,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 // Konfigurationsparameter auslesen
 $config = clm_core::$db->config();
 $fixth_dwz = $config->fixth_dwz;
+$countryversion = $config->countryversion;
 
 	// Browsertitelzeile setzen
 	$doc =JFactory::getDocument();
@@ -108,7 +109,11 @@ echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
 
     <tr>
     <th class="dwz_1"><?php echo JText::_('CLUB_NR') ?></th>
+  <?php if ($countryversion =="de") { ?>
     <th class="dwz_2"><a href="javascript:tableOrdering('Mgl_Nr','asc','');"><?php echo JText::_('CLUB_MEMBER') ?></a></th>
+   <?php } else { ?>
+    <th class="dwz_2"><a href="javascript:tableOrdering('PKZ','asc','');"><?php echo JText::_('CLUB_MEMBER_PKZ') ?></a></th>
+   <?php } ?>
     <th class="dwz_3"><a href="javascript:tableOrdering('Spielername','asc','');"><?php echo JText::_('CLUB_MEMBER_NAME') ?></a></th>
     <th class="dwz_4"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_STATUS', 'Status', $this->lists['order_Dir'], $this->lists['order']); ?></th>
     <th class="dwz_5"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_GESCHL', 'Geschlecht', $this->lists['order_Dir'], $this->lists['order']); ?></th>
@@ -126,11 +131,19 @@ echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
 	else { $zeilenr = 'zeile1'; } ?>
     <tr class="<?php echo $zeilenr; ?>">
     <td class="dwz_1"><?php echo $x; ?></td>
+   <?php if ($countryversion =="de") { ?>
     <td class="dwz_2"><?php echo $zps->Mgl_Nr; ?></td>
-    <td class="dwz_3"><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $zps->ZPS; ?>&mglnr=<?php echo $zps->Mgl_Nr; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php  echo $zps->Spielername; ?></a></td>
+   <?php } else { ?>
+    <td class="dwz_2"><?php echo $zps->PKZ; ?></td>
+   <?php } ?>
+    <td class="dwz_3"><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $zps->ZPS; ?>&mglnr=<?php echo $zps->Mgl_Nr; ?>&PKZ=<?php echo $zps->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php  echo $zps->Spielername; ?></a></td>
     <td class="dwz_4"><?php echo $zps->Status; ?></td>
     <td class="dwz_5"><?php echo $zps->Geschlecht; ?></td>
+   <?php if ($countryversion =="de") { ?>	
     <td class="dwz_6"><a href="http://schachbund.de/spieler.html?zps=<?php echo $zps->ZPS; ?>-<?php echo $zps->Mgl_Nr; ?>" target="_blank"><?php echo $zps->DWZ; ?></a> - <?php echo $zps->DWZ_Index; ?></td>
+   <?php } else { ?>
+    <td class="dwz_6"><?php echo $zps->DWZ; if ($countryversion == "en") echo '<font size="1"><br>('.(600 + ($zps->DWZ * 8)).')</font>'; ?></td>
+   <?php } ?>
     <td class="dwz_7"><?php if ( $zps->FIDE_Elo == 0 ) { echo "-"; } else { echo '<a href="http://ratings.fide.com/card.phtml?event=' . $zps->FIDE_ID . '" target="_blank">' . $zps->FIDE_Elo .'</a>'; } ?></td>
     <td class="dwz_8"><?php echo $zps->FIDE_Titel; ?></td>
     </tr>

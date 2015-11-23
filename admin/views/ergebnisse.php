@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -229,6 +229,9 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 		CLMViewErgebnisse::setErgebnisToolbar($runde);
 		JRequest::setVar( 'hidemainmenu', 1 );
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 	?>
 
 	<form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -279,17 +282,29 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 			 </option>
 			<?php }}
 			else { ?>
-			 <option value="<?php echo $heim[$x]->mgl_nr.'-'.$heim[$x]->zps; ?>"
-			 	<?php if (($bretter AND ((int)$heim[$x]->mgl_nr) == ((int)$bretter[$i]->spieler) AND $heim[$x]->zps == $bretter[$i]->zps)
+			  <?php if ($countryversion == "de") { ?>
+				<option value="<?php echo $heim[$x]->mgl_nr.'-'.$heim[$x]->zps; ?>"
+			 	  <?php if (($bretter AND ((int)$heim[$x]->mgl_nr) == ((int)$bretter[$i]->spieler) AND $heim[$x]->zps == $bretter[$i]->zps)
 			 		// Bedingungen Voreinstellung
 			 			OR (!$bretter AND $x == $i AND isset($bretter[$i]) AND $bretter[$i]->zps !="ZZZZZ")
 			 			OR (!$bretter AND isset($hvoraufstellung[$i]) AND ($hvoraufstellung[$i]->snr-1) == $x AND isset($bretter[$i]) AND $bretter[$i]->zps !="ZZZZZ"))
 			 				{ ?> selected="selected" <?php } ?>>
-			 	<?php echo $heim[$x]->mnr.'&nbsp;-&nbsp;'.$heim[$x]->snr.'&nbsp;&nbsp;';
+			 	  <?php echo $heim[$x]->mnr.'&nbsp;-&nbsp;'.$heim[$x]->snr.'&nbsp;&nbsp;';
 			 		if($heim[$x]->snr < 10) { echo "&nbsp;&nbsp;";}; 
-			 	echo $heim[$x]->name; ?>
-			 </option> 
-			<?php }} ?>
+			 	  echo $heim[$x]->name; ?>
+				</option> 
+			  <?php } else { ?>
+				<option value="<?php echo $heim[$x]->PKZ.'-'.$heim[$x]->zps; ?>"
+			 	  <?php if (($bretter AND ($heim[$x]->PKZ) == ($bretter[$i]->PKZ) AND $heim[$x]->zps == $bretter[$i]->zps)
+			 		// Bedingungen Voreinstellung
+			 			OR (!$bretter AND $x == $i AND isset($bretter[$i]) AND $bretter[$i]->zps !="ZZZZZ")
+			 			OR (!$bretter AND isset($hvoraufstellung[$i]) AND ($hvoraufstellung[$i]->snr-1) == $x AND isset($bretter[$i]) AND $bretter[$i]->zps !="ZZZZZ"))
+			 				{ ?> selected="selected" <?php } ?>>
+			 	  <?php echo $heim[$x]->mnr.'&nbsp;-&nbsp;'.$heim[$x]->snr.'&nbsp;&nbsp;';
+			 		if($heim[$x]->snr < 10) { echo "&nbsp;&nbsp;";}; 
+			 	  echo $heim[$x]->name; ?>
+				</option> 			  
+			<?php }}} ?>
 		 <option value="99999-ZZZZZ"<?php if (!isset($bretter[$i]) OR $bretter[$i]->zps =="ZZZZZ"){ ?> selected="selected"<?php } ?>>&nbsp;&nbsp;&nbsp;---&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo JText::_('RESULTS_DETAILS_NOT_NOMINATED'); ?></option>
 		  </select>
 		</td>
@@ -313,17 +328,29 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 			</option> 
 			<?php }}
 			else { ?>
-			<option value="<?php echo $gast[$x]->mgl_nr.'-'.$gast[$x]->zps; ?>" 
-			 	<?php if (($bretter AND ((int)$gast[$x]->mgl_nr) == ((int)$bretter[$i]->gegner) AND $gast[$x]->zps == $bretter[$i]->gzps)
+			  <?php if ($countryversion == "de") { ?>
+				<option value="<?php echo $gast[$x]->mgl_nr.'-'.$gast[$x]->zps; ?>" 
+			 	  <?php if (($bretter AND ((int)$gast[$x]->mgl_nr) == ((int)$bretter[$i]->gegner) AND $gast[$x]->zps == $bretter[$i]->gzps)
 			 		// Bedingungen Voreinstellung
 			 			OR (!$bretter AND $x == $i AND isset($bretter[$i]) AND $bretter[$i]->gzps !="ZZZZZ")
 			 			OR (!$bretter AND isset($gvoraufstellung[$i]) AND ($gvoraufstellung[$i]->snr-1) == $x AND isset($bretter[$i]) AND $bretter[$i]->gzps !="ZZZZZ"))
 			 			{ ?> selected="selected" <?php } ?>>
-			 	<?php echo $gast[$x]->mnr.'&nbsp;-&nbsp;'.$gast[$x]->snr.'&nbsp;&nbsp;';
+			 	  <?php echo $gast[$x]->mnr.'&nbsp;-&nbsp;'.$gast[$x]->snr.'&nbsp;&nbsp;';
 			 		if($gast[$x]->snr < 10) { echo "&nbsp;&nbsp;";};
 			 			echo $gast[$x]->name; ?>
-			 </option> 
-			 <?php }} ?>
+			    </option> 
+			  <?php } else { ?>
+				<option value="<?php echo $gast[$x]->PKZ.'-'.$gast[$x]->zps; ?>"
+			 	  <?php if (($bretter AND ($gast[$x]->PKZ) == ($bretter[$i]->gPKZ) AND $gast[$x]->zps == $bretter[$i]->gzps)
+			 		// Bedingungen Voreinstellung
+			 			OR (!$bretter AND $x == $i AND isset($bretter[$i]) AND $bretter[$i]->gzps !="ZZZZZ")
+			 			OR (!$bretter AND isset($hvoraufstellung[$i]) AND ($hvoraufstellung[$i]->snr-1) == $x AND isset($bretter[$i]) AND $bretter[$i]->gzps !="ZZZZZ"))
+			 				{ ?> selected="selected" <?php } ?>>
+			 	  <?php echo $gast[$x]->mnr.'&nbsp;-&nbsp;'.$gast[$x]->snr.'&nbsp;&nbsp;';
+			 		if($gast[$x]->snr < 10) { echo "&nbsp;&nbsp;";}; 
+						echo $gast[$x]->name; ?>
+				</option> 			  
+			<?php }}} ?>
 			 <option value="99999-ZZZZZ"<?php if (!isset($bretter[$i]) OR $bretter[$i]->gzps =="ZZZZZ"){ ?> selected="selected"<?php } ?>>&nbsp;&nbsp;&nbsp;---&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo JText::_('RESULTS_DETAILS_NOT_NOMINATED'); ?></option>
 		  </select>
 		</td>
@@ -480,7 +507,7 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 		<?php
 	}
 
-function setWertungToolbar($row)
+public static function setWertungToolbar($row)
 	{
 		JToolBarHelper::title(  JText::_( 'TITLE_EDIT_EVALUATION' ));
 		JToolBarHelper::custom('save_wertung','save.png','save_f2.png',JText::_( 'EVALUATION_CHANGE'),false);
@@ -489,7 +516,7 @@ function setWertungToolbar($row)
 		JToolBarHelper::help( 'screen.clm.edit' );
 	}
 		
-function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $lists)
+public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $lists)
 	{
 		CLMViewErgebnisse::setWertungToolbar($row);
 		JRequest::setVar( 'hidemainmenu', 1 );

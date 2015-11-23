@@ -395,7 +395,7 @@ function save()
 		$mainframe->redirect( $link );
 		}
 	// Automatisches Ergänzen
-	if ($row->name == 'Mannschaft '.$row->tln_nr AND $row->lokal == '' AND $task = 'apply')
+	if ($row->name == JText::_( 'MANNSCHAFT' ).' '.$row->tln_nr AND $row->lokal == '' AND $task = 'apply')
 	{ 	$query = " SELECT id, name, lokal, adresse FROM #__clm_vereine "
 			." WHERE zps = '".$row->zps."'"
 			." AND sid =".$row->sid
@@ -405,6 +405,7 @@ function save()
 		$club=$db->loadObjectList();
 		if (isset($club[0])) {
 			if ($row->name == 'Mannschaft '.$row->tln_nr) { $row->name = $club[0]->name; }
+			if ($row->name == JText::_( 'MANNSCHAFT' ).' '.$row->tln_nr) { $row->name = $club[0]->name; }
 			if ($row->lokal == '') { $row->lokal = $club[0]->lokal; }
 			if ($task == 'save') { $task = 'apply'; }
 		} else {
@@ -1072,6 +1073,11 @@ public static function save_meldeliste()
 	// Datum und Uhrzeit für Meldung
 	$date =JFactory::getDate();
 	$now = $date->toSQL();
+	
+	// Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion=$config->countryversion;
+	
 	// Liste wurde bereits abgegeben
 	if ($row->liste > 0) {
 	$aktion = JText::_( 'MANNSCHAFT_LOG_LIST_EDIT');
@@ -1113,13 +1119,19 @@ public static function save_meldeliste()
 	$block	= JRequest::getInt( 'check'.$y);
 
 	$teil	= explode("-", $spl);
-	$mgl_nr	= $teil[0];
-	$tzps	= $teil[1];
+		if ($countryversion == "de") {
+			$mgl_nr	= $teil[0];
+			$PKZ    = '';
+		} else {
+			$mgl_nr	= 0;
+			$PKZ    = $teil[0];
+		}
+		$tzps	= $teil[1];
 
-	if($spl >0){
-	$query	= "REPLACE INTO #__clm_meldeliste_spieler"
-		." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`, `ordering`, `gesperrt`) "
-		. " VALUES ('$sid','$liga','$mnr','$y','$mgl_nr','$tzps','','$block')";
+		if ($spl >0) {
+			$query	= "REPLACE INTO #__clm_meldeliste_spieler"
+				." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `PKZ`, `zps`, `ordering`, `gesperrt`) "
+				. " VALUES ('$sid','$liga','$mnr','$y','$mgl_nr','$PKZ','$tzps','','$block')";
 	$db->setQuery($query);
 	$db->query();
 	}

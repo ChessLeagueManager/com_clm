@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -38,7 +38,7 @@ public static function vereine_filter($override)
 	$lv	= $config->lv;
 	$vl	= $config->vereineliste;
 	$vs	= $config->verein_sort;
-	$version= $config->version;
+	$countryversion= $config->countryversion;
 	$dat	= substr($lv, 1);
 	$dat2	= substr($lv, 2);
 
@@ -80,14 +80,23 @@ public static function vereine_filter($override)
 		}
 		}
 	*/
-
-		$out = clm_core::$load->unit_range($lv);
-		$sql = "SELECT ZPS as zps, Vereinname as name FROM #__clm_dwz_vereine as a "
-			." LEFT JOIN #__clm_saison as s ON s.id= a.sid "
-			." WHERE a.Verband >= '$out[0]' AND a.Verband <= '$out[1]' "
-			." AND s.archiv = 0 AND s.published = 1 ORDER BY ";
-				if($vs =="1") { $sql =$sql."a.ZPS ASC";}
-				else {  $sql =$sql." a.Vereinname ASC";}
+		if($countryversion =="de") {
+			$out = clm_core::$load->unit_range($lv);
+			$sql = "SELECT ZPS as zps, Vereinname as name FROM #__clm_dwz_vereine as a "
+				." LEFT JOIN #__clm_saison as s ON s.id= a.sid "
+				." WHERE a.Verband >= '$out[0]' AND a.Verband <= '$out[1]' "
+				." AND s.archiv = 0 AND s.published = 1 ORDER BY ";
+			if($vs =="1") { $sql =$sql."a.ZPS ASC";}
+			else {  $sql =$sql." a.Vereinname ASC";}
+		}
+		if($countryversion =="en") {				// nur für Chess Association geeignet
+			$sql = "SELECT ZPS as zps, Vereinname as name FROM #__clm_dwz_vereine as a "
+				." LEFT JOIN #__clm_saison as s ON s.id= a.sid "
+				." WHERE a.Verband = '$lv' "
+				." AND s.archiv = 0 AND s.published = 1 ORDER BY ";
+			if($vs =="1") { $sql =$sql."a.ZPS ASC";}
+			else {  $sql =$sql." a.Vereinname ASC";}
+		}
 	/*
 	if($version =="2"){
 		$sql = " SELECT ZPS FROM #__clm_dwz_vereine WHERE LV ='".$lv."'";

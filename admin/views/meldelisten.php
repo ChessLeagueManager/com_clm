@@ -196,6 +196,10 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		CLMViewMeldelisten::setMeldelisteToolbar($row);
 		JRequest::setVar( 'hidemainmenu', 1 );
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
+		
+		// Konfigurationsparameter auslesen
+		$config = clm_core::$db->config();
+		$countryversion=$config->countryversion;
 		?>
 
 		<form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -230,7 +234,11 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 			<?php for ($x=0; $x < $max[0]->max; $x++) { ?>
 	<!---		 <option value="<?php //echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps; ?>" <?php //if (((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php //} ?>><?php //echo $row_spl[$x]->id.'&nbsp;';if((int)$row_spl[$x]->id < 1000) {echo "&nbsp;&nbsp;";} echo "-&nbsp;&nbsp;".$row_spl[$x]->name; ?></option> ---> 
 			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps; ?>" <?php
+			  if ($countryversion == "de") {
 				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php } ?>><?php 
+			  } else {
+				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ($row_sel[$i]->PKZ) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php } ?>><?php 
+			  }
 				echo $row_spl[$x]->name.'&nbsp;-&nbsp;&nbsp;'.$row_spl[$x]->id; ?></option> 
 			<?php }	?>
 		  </select>
@@ -310,7 +318,11 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 			<?php for ($x=0; $x < $max[0]->max; $x++) { ?>
 	<!---	 <option value="<?php //echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps; ?>" <?php //if (((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php //} ?>><?php //echo $row_spl[$x]->id.'&nbsp;';if((int)$row_spl[$x]->id < 1000) {echo "&nbsp;&nbsp;";} echo "-&nbsp;&nbsp;".$row_spl[$x]->name; ?></option> ---> 
 			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps; ?>" <?php 
+			  if ($countryversion == "de") {
 				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php } ?>><?php 
+			  } else {			
+				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ($row_sel[$i]->PKZ) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php } ?>><?php 
+			  }
 				echo $row_spl[$x]->name.'&nbsp;-&nbsp;&nbsp;'.$row_spl[$x]->id; ?></option> 
 			<?php }	?>
 		  </select>

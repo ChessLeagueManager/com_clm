@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -91,6 +91,7 @@ $clmAccess = clm_core::$access;
 // Parameter auslesen 
 $config = clm_core::$db->config();
 $val=$config->menue;
+$countryversion = $config->countryversion;
 
 JSubMenuHelper::addEntry(JText::_('INFO'), 'index.php?option=com_clm&view=info', (JRequest::getVar('view')) == 'info'?true:false);
 
@@ -103,9 +104,10 @@ if($clmAccess->access('BE_season_general')) {
 if($clmAccess->access('BE_event_general')) {
 	JSubMenuHelper::addEntry(JText::_('TERMINE'), 'index.php?option=com_clm&view=terminemain', (JRequest::getVar('view')) == 'terminemain'?true:false);
 }
+if ($countryversion =="de") {
 if($clmAccess->access('BE_tournament_general')) {
 	JSubMenuHelper::addEntry(JText::_('TURNIERE'), 'index.php?option=com_clm&view=view_tournament', (JRequest::getVar('view')) == 'turmain'?true:false);
-}
+}}
 if($clmAccess->access('BE_league_general')) {
 	JSubMenuHelper::addEntry(JText::_('LIGEN'), 'index.php?option=com_clm&view=view_tournament_group&liga=1', (JRequest::getVar('section')) == 'ligen'?true:false);
 }
@@ -124,12 +126,14 @@ if($clmAccess->access('BE_team_general')) {
 if($clmAccess->access('BE_user_general')) {
 	JSubMenuHelper::addEntry(JText::_('USER'), 'index.php?option=com_clm&section=users', (JRequest::getVar('section')) == 'users'?true:false);
 }
+if ($countryversion =="de") {
 if($clmAccess->access('BE_swt_general')) {
 	JSubMenuHelper::addEntry(JText::_('SWT'), 'index.php?option=com_clm&view=swt', (JRequest::getVar('view')) == 'swt'?true:false);
-}
+}}
+if ($countryversion =="de") {
 if($clmAccess->access('BE_dewis_general')) {
 	JSubMenuHelper::addEntry(JText::_('DeWIS'), 'index.php?option=com_clm&view=auswertung', (JRequest::getVar('view')) == 'auswertung'?true:false);
-}
+}}
 if($clmAccess->access('BE_database_general')) {
 	JSubMenuHelper::addEntry(JText::_('DATABASE'), 'index.php?option=com_clm&view=db', (JRequest::getVar('view')) == 'db'?true:false);
 }

@@ -215,10 +215,10 @@ echo "<br>published ".$clmuser[0]->published;
 		<?php echo $spieler[$i]->dwz; ?>
 	</td>
 	<?php $j = $i + (count($spieler)/2) + (count($spieler) % 2); // +1; 
-		//if (isset($spieler[$j])) $checked = JHTML::_('grid.checkedout',   $spieler[$j], $j );
-		if ($spieler[$j]->snr > "0" AND $spieler[$j]->snr < "999") { $checked_marker = ' checked="checked"'; $spieler[$j]->checked_out = "1"; }
+		if (isset($spieler[$j]) AND $spieler[$j]->snr > "0" AND $spieler[$j]->snr < "999") { $checked_marker = ' checked="checked"'; $spieler[$j]->checked_out = "1"; }
 		else $checked_marker = '';
-		$checked = '<input type="checkbox" id="cb'.$j.'"'.$checked_marker.' name="cid[]" value="'.$spieler[$j]->id.'" onclick="Joomla.isChecked(this.checked);" title="JGRID_CHECKBOX_ROW_N" />';
+		if (isset($spieler[$j])) $spieler_id = $spieler[$j]->id; else $spieler_id = '';
+		$checked = '<input type="checkbox" id="cb'.$j.'"'.$checked_marker.' name="cid[]" value="'.$spieler_id.'" onclick="Joomla.isChecked(this.checked);" title="JGRID_CHECKBOX_ROW_N" />';
 	?>
 	<td id="cb<?php echo $j; ?>" name="cb<?php echo $j; ?>" ><?php if (isset($spieler[$j])) echo $checked; ?>
 	</td>

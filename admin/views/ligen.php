@@ -33,6 +33,7 @@ class CLMViewLigen
 	$config = clm_core::$db->config();
 	$rang	= $config->rangliste;
 	$sl_mail= $config->sl_mail;
+	$countryversion= $config->countryversion;
 	?>
 	<?php 
 	//Liga-Parameter aufbereiten
@@ -308,15 +309,25 @@ class CLMViewLigen
 		<td colspan="2" class="paramlist_value">
 			<?php 
 			$options = array();
-			$options[0] = JText::_('OPTION_AUTODWZ_0');
-			$options[1] = JText::_('OPTION_AUTODWZ_1');
-			$options[2] = JText::_('OPTION_AUTODWZ_2');
-			$options[3] = JText::_('OPTION_AUTODWZ_3');
+			if ($countryversion == "de") {
+				$options[0] = JText::_('OPTION_AUTODWZ_0');
+				$options[1] = JText::_('OPTION_AUTODWZ_1');
+				$options[2] = JText::_('OPTION_AUTODWZ_2');
+				$options[3] = JText::_('OPTION_AUTODWZ_3');
+			} else {
+				$options[2] = JText::_('OPTION_AUTODWZ_9');
+			}
 			$optionlist = array();
 			foreach ($options as $key => $val) {
 				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
 			}
-			echo JHtml::_('select.genericlist', $optionlist, 'params[autoDWZ]', 'class="inputbox"', 'id', 'name', (isset($row->params['autoDWZ']) ? $row->params['autoDWZ'] : "0")); ?>
+
+			if ($countryversion == "de") 
+				echo JHtml::_('select.genericlist', $optionlist, 'params[autoDWZ]', 'class="inputbox"', 'id', 'name', (isset($row->params['autoDWZ']) ? $row->params['autoDWZ'] : "0")); 
+			else
+				echo JHtml::_('select.genericlist', $optionlist, 'params[autoDWZ]', 'class="inputbox"', 'id', 'name', "2"); 
+			?>
+
 		</td>
 		<td class="paramlist_key">
 			<?php echo JText::_('OPTION_AUTORANKING'); ?>:

@@ -7,6 +7,9 @@ function clm_view_be_menu($access, $status)
     clm_core::$load->load_css("modal");
     clm_core::$load->load_js("be_menu");
     $lang = clm_core::$lang->be_menu;
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 ?>
 
 	<div  class="clm-menu">
@@ -46,6 +49,7 @@ function clm_view_be_menu($access, $status)
 	</div>
 	<?php
     }
+	if ($countryversion =="de") {
     if ($access['BE_tournament_general']) {
 ?>	
 	<div class="clm_icon"> 
@@ -56,7 +60,7 @@ function clm_view_be_menu($access, $status)
 ?></span></a> 
 	</div>
 	<?php
-    }
+    } 
     //Nur Admin
     if ($access['BE_tournament_create']) {
 ?>
@@ -68,7 +72,7 @@ function clm_view_be_menu($access, $status)
 ?></span></a> 
 	</div>
 	<?php
-    }
+    } }
     if ($access['BE_league_general']) {
 ?>
 	<div class="clm_icon"> <a href="index.php?option=com_clm&view=view_tournament_group&liga=1" title=""> <img src="<?php
@@ -171,6 +175,7 @@ function clm_view_be_menu($access, $status)
 ?></span></a> </div>
 	<?php
     }
+	if ($countryversion =="de") {
     if ($access['BE_dewis_general']) {
 ?>		
 		<div class="clm_icon"> <a href="index.php?option=com_clm&view=auswertung" title=""> <img src="<?php
@@ -179,7 +184,7 @@ function clm_view_be_menu($access, $status)
         echo $lang->dewis;
 ?></span></a> </div>
 	<?php
-    }
+    } }
     if ($access['BE_database_general']) {
 ?>		
 		<div class="clm_icon"> <a href="index.php?option=com_clm&view=db" title=""> <img src="<?php
@@ -189,6 +194,7 @@ function clm_view_be_menu($access, $status)
 ?></span></a> </div>
 	<?php
     }
+	if ($countryversion =="de") {
     if ($access['BE_swt_general']) {
 ?>		
 		<div class="clm_icon"> <a href="index.php?option=com_clm&view=swt" title=""> <img src="<?php
@@ -197,7 +203,7 @@ function clm_view_be_menu($access, $status)
         echo $lang->swt;
 ?></span></a> </div>
 	<?php
-    }
+    } }
     if ($access['BE_config_general']) {
 ?>
 		<div class="clm_icon"> <a href="index.php?option=com_clm&view=view_config" title=""> <img src="<?php

@@ -16,6 +16,7 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 	$config		= clm_core::$db->config();
 	$meldung_verein	= $config->meldung_verein;
 	$meldung_heim	= $config->meldung_heim;
+	$countryversion = $config->countryversion;
 
 	// Ist die Ergebniss Eingabe im Frontend erlaubt?
 	if ($config->conf_ergebnisse != 1) {
@@ -113,8 +114,12 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 	$Heim = "SELECT a.*, d.Spielername as name ";
 		if($someData[0]->rang !="0") {$Heim = $Heim.",r.rang ,r.man_nr as rmnr";}
 		$Heim = $Heim
-		." FROM #__clm_meldeliste_spieler as a "
-		." LEFT JOIN #__clm_dwz_spieler as d ON ( d.ZPS = a.zps AND d.Mgl_Nr= a.mgl_nr AND d.sid = a.sid) ";
+		." FROM #__clm_meldeliste_spieler as a ";
+		if ($countryversion =="de") {
+			$Heim .= " LEFT JOIN #__clm_dwz_spieler as d ON ( d.ZPS = a.zps AND d.Mgl_Nr= a.mgl_nr AND d.sid = a.sid) ";
+		} else {
+			$Heim .= " LEFT JOIN #__clm_dwz_spieler as d ON ( d.ZPS = a.zps AND d.PKZ= a.PKZ AND d.sid = a.sid) ";
+		}
 		if($someData[0]->rang !="0") {
 			$Heim = $Heim
 		." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) ";
@@ -123,15 +128,18 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 		." WHERE a.sid = ".$someData[0]->sid
 		." AND (( a.zps = '".$someData[0]->hzps."' AND a.mnr = ".$someData[0]->hmnr." )"
 		." OR ( FIND_IN_SET(a.zps,'".$someData[0]->sgh_zps."') != 0 AND a.mnr = ".$someData[0]->hmnr." )) ";
+		if ($countryversion =="de") {
+			$Heim .= " AND a.mgl_nr <> '0' ";
+		} else {
+			$Heim .= " AND a.PKZ <> '' ";
+		}
 		if($someData[0]->rang !="0") {
 			$Heim = $Heim
 				." AND a.status = ".$someData[0]->rang
 				." AND a.lid = ".$someData[0]->lid
-				." AND a.mgl_nr <> '0' "
 				." ORDER BY r.man_nr,r.Rang"; }
 		else { $Heim = $Heim
 				." AND a.lid = ".$someData[0]->lid
-				." AND a.mgl_nr <> '0' "
 				." ORDER BY a.snr"; }
 				
 	$out["heim"] = clm_core::$db->loadObjectList($Heim);	
@@ -149,8 +157,12 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 	$Gast = "SELECT a.*, d.Spielername as name";
 		if($someData[0]->rang !="0") {$Gast = $Gast.",r.rang,r.man_nr as rmnr ";}
 		$Gast = $Gast
-		." FROM #__clm_meldeliste_spieler as a "
-		." LEFT JOIN #__clm_dwz_spieler as d ON ( d.ZPS = a.zps AND d.Mgl_Nr= a.mgl_nr AND d.sid = a.sid) ";
+		." FROM #__clm_meldeliste_spieler as a ";
+		if ($countryversion =="de") {
+			$Gast .= " LEFT JOIN #__clm_dwz_spieler as d ON ( d.ZPS = a.zps AND d.Mgl_Nr= a.mgl_nr AND d.sid = a.sid) ";
+		} else {
+			$Gast .= " LEFT JOIN #__clm_dwz_spieler as d ON ( d.ZPS = a.zps AND d.PKZ= a.PKZ AND d.sid = a.sid) ";
+		}
 		if($someData[0]->rang !="0") {
 			$Gast = $Gast
 		." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) ";
@@ -159,15 +171,18 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 		." WHERE a.sid = ".$someData[0]->sid
 		." AND (( a.zps = '".$someData[0]->gzps."' AND a.mnr = ".$someData[0]->gmnr." ) "
 		." OR ( FIND_IN_SET(a.zps,'".$someData[0]->sgg_zps."') AND a.mnr = ".$someData[0]->gmnr." )) ";
+		if ($countryversion =="de") {
+			$Gast .= " AND a.mgl_nr <> '0' ";
+		} else {
+			$Gast .= " AND a.PKZ <> '' ";
+		}
 		if($someData[0]->rang !="0") {
 			$Gast = $Gast
 				." AND a.status = ".$someData[0]->rang
 				." AND a.lid = ".$someData[0]->lid
-				." AND a.mgl_nr > 0 "
 				." ORDER BY r.man_nr,r.Rang"; }
 		else { $Gast = $Gast
 				." AND a.lid = ".$someData[0]->lid
-				." AND a.mgl_nr > 0 "
 				." ORDER BY a.snr"; }
 
 	$out["gast"] = clm_core::$db->loadObjectList($Gast);	

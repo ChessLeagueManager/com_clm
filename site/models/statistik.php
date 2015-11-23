@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -159,6 +159,10 @@ class CLMModelStatistik extends JModelLegacy
 
 	$sid = JRequest::getInt('saison','1');
 	$lid = JRequest::getInt('liga','1');	
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
+
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
@@ -198,28 +202,44 @@ class CLMModelStatistik extends JModelLegacy
 			elseif ($params['btiebr'.$x] == 9) $sort_string .= " ebrett ASC ";
 		}
 	} 
-		$query = " SELECT a.lid, a.mnr, a.snr, a.mgl_nr, a.zps, a.Punkte, a.Partien, a.Niveau, a.Leistung, d.ZPS, d.DWZ "
+		$query = " SELECT a.lid, a.mnr, a.snr, a.mgl_nr, a.PKZ, a.zps, a.Punkte, a.Partien, a.Niveau, a.Leistung, d.ZPS, d.DWZ "
 			.", d.Spielername, v.Vereinname, m.tln_nr, a.Punkte*100/a.Partien as Prozent, 0 as leistung100 "
 			.", e.epunkte, e.epartien, e.epunkte*100/e.epartien as eprozent, e.ebrett "
 			.", g.gpunkte, g.gpartien, g.gpunkte*100/g.gpartien as gprozent, g.gbrett "
-			." FROM #__clm_meldeliste_spieler as a"
-			." LEFT JOIN #__clm_dwz_spieler as d ON d.ZPS = a.zps AND d.Mgl_Nr = a.mgl_nr AND d.sid = a.sid"
-			." LEFT JOIN #__clm_dwz_vereine as v ON v.ZPS = a.zps  AND v.sid = a.sid"
-			//." LEFT JOIN #__clm_mannschaften as m ON m.liga = a.lid AND m.sid = a.sid AND (m.zps = a.zps OR m.sg_zps = a.zps) AND m.man_nr = a.mnr"			
+			." FROM #__clm_meldeliste_spieler as a";
+		if ($countryversion =="de") {
+			$query .= " LEFT JOIN #__clm_dwz_spieler as d ON d.ZPS = a.zps AND d.Mgl_Nr = a.mgl_nr AND d.sid = a.sid";
+		} else {
+			$query .= " LEFT JOIN #__clm_dwz_spieler as d ON d.ZPS = a.zps AND d.PKZ = a.PKZ AND d.sid = a.sid";
+		}
+		$query .= " LEFT JOIN #__clm_dwz_vereine as v ON v.ZPS = a.zps  AND v.sid = a.sid"
 			." LEFT JOIN #__clm_mannschaften as m ON m.liga = a.lid AND m.sid = a.sid AND (m.zps = a.zps OR FIND_IN_SET(a.zps,m.sg_zps) != 0) AND m.man_nr = a.mnr"			
 			." LEFT JOIN ( SELECT *, SUM(punkte) as gpunkte, COUNT(punkte) as gpartien, SUM(brett) as gbrett FROM #__clm_rnd_spl "
-			."  WHERE ergebnis < 3 "
-			."  GROUP BY lid, tln_nr, zps, spieler) g "
-			."  ON g.lid = a.lid AND g.sid = a.sid AND g.zps = a.zps AND g.spieler = a.mgl_nr AND g.tln_nr = m.tln_nr"
-			." LEFT JOIN ( SELECT *, SUM(punkte) as epunkte, COUNT(punkte) as epartien, SUM(brett) as ebrett FROM #__clm_rnd_spl "
-			."  WHERE ergebnis < 7 "
-			."  GROUP BY lid, tln_nr, zps, spieler) e "
-			."  ON e.lid = a.lid AND e.sid = a.sid AND e.zps = a.zps AND e.spieler = a.mgl_nr AND e.tln_nr = m.tln_nr"
-			." WHERE a.lid = $lid AND epartien > 0"
+			."  WHERE ergebnis < 3 ";
+		if ($countryversion =="de") {
+			$query .= "  GROUP BY lid, tln_nr, zps, spieler) g "
+					."  ON g.lid = a.lid AND g.sid = a.sid AND g.zps = a.zps AND g.spieler = a.mgl_nr AND g.tln_nr = m.tln_nr";
+		} else {
+			$query .= "  GROUP BY lid, tln_nr, zps, PKZ) g "
+					."  ON g.lid = a.lid AND g.sid = a.sid AND g.zps = a.zps AND g.PKZ = a.PKZ AND g.tln_nr = m.tln_nr";
+		}	
+		$query .= " LEFT JOIN ( SELECT *, SUM(punkte) as epunkte, COUNT(punkte) as epartien, SUM(brett) as ebrett FROM #__clm_rnd_spl "
+			."  WHERE ergebnis < 7 ";
+		if ($countryversion =="de") {
+			$query .= "  GROUP BY lid, tln_nr, zps, spieler) e "
+					."  ON e.lid = a.lid AND e.sid = a.sid AND e.zps = a.zps AND e.spieler = a.mgl_nr AND e.tln_nr = m.tln_nr";
+		} else {
+			$query .= "  GROUP BY lid, tln_nr, zps, PKZ) e "
+					."  ON e.lid = a.lid AND e.sid = a.sid AND e.zps = a.zps AND e.PKZ = a.PKZ AND e.tln_nr = m.tln_nr";
+		}
+		$query .= " WHERE a.lid = $lid AND epartien > 0"
 			." AND a.sid = ".$sid
-			." AND a.status = ".$rang
-			." GROUP BY a.zps, a.mgl_nr, a.snr "
-			;
+			." AND a.status = ".$rang;
+		if ($countryversion =="de") {
+			$query .= " GROUP BY a.zps, a.mgl_nr, a.snr ";
+		} else {
+			$query .= " GROUP BY a.zps, a.PKZ, a.snr ";
+		}
 
 		$filter_order     = $mainframe->getUserStateFromRequest( $option.'filter_order_bl', 'filter_order', 'Punkte', 'cmd' );
 		$filter_order_Dir = $mainframe->getUserStateFromRequest( $option.'filter_order_Dir_bl', 'filter_order_Dir', '', 'word' );

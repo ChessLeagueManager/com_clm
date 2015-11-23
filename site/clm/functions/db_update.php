@@ -25,7 +25,11 @@ function clm_function_db_update($status) {
 				clm_core::$db->config()->db_config++;
 		}
 		// Bei jedem Update die Verbände aktualisieren
-		clm_core::$load->db_import_sql(clm_core::$db, clm_core::$path . DS . "sql" . DS . "verband.sql");
+		//CLM parameter auslesen
+		$config = clm_core::$db->config();
+		if ($config->countryversion =="de") {
+			clm_core::$load->db_import_sql(clm_core::$db, clm_core::$path . DS . "sql" . DS . "verband.sql");
+		}
 		clm_core::$db->config()->cl_config = $version[0];
 		clm_core::$db->config()->db_config = $version[2];
 		return true;

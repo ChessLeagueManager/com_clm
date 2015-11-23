@@ -195,12 +195,15 @@ function edit()
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
 	$val=$config->meldeliste;
+	$countryversion=$config->countryversion;
 	
 	if ($val == 1) { $order = "Spielername ASC";}
 		else { $order = "DWZ DESC"; }
-
-	$sql = "SELECT mgl_nr as id, Spielername as name, DWZ as dwz, ZPS as zps FROM #__clm_dwz_spieler"
-		//." WHERE ( ZPS ='".$row->zps."' OR ZPS ='".$row->sg_zps."')"
+	if ($countryversion == "de") 
+		$sql = "SELECT mgl_nr as id, ";
+	else
+		$sql = "SELECT PKZ as id, ";
+	$sql .= "Spielername as name, DWZ as dwz, ZPS as zps FROM #__clm_dwz_spieler"
 		." WHERE ( ZPS ='".$row->zps."' OR FIND_IN_SET(ZPS,'".$row->sg_zps."') != 0 )"
 		." AND sid =".$row->sid
 		." ORDER BY ".$order
@@ -221,7 +224,7 @@ function edit()
 	$abgabe=$db->loadObjectList();
 
 	//Stammspieler
-	$selsql = "SELECT mgl_nr,snr,zps, gesperrt FROM #__clm_meldeliste_spieler"
+	$selsql = "SELECT mgl_nr,snr,zps,PKZ, gesperrt FROM #__clm_meldeliste_spieler"
 		//." WHERE ( zps = '".$row->zps."' OR zps='".$row->sg_zps."')"
 		." WHERE ( ZPS ='".$row->zps."' OR FIND_IN_SET(ZPS,'".$row->sg_zps."') != 0 )"
 		." AND mnr = ".$row->man_nr

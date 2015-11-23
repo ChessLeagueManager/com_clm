@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -22,6 +22,7 @@ $tln 			= JRequest::getInt('tlnr');
 $itemid 		= JRequest::getInt('Itemid','1');
 $zps			= JRequest::getVar('zps');
 $mgl			= JRequest::getInt('mglnr');
+$PKZ			= JRequest::getInt('PKZ');
 
 $erg 			= CLMModelSpieler::getCLMLink();
 
@@ -53,6 +54,7 @@ $doc->setTitle($spieler[0]->Spielername.' - '.$spieler[0]->Vereinname);
 
 // Konfigurationsparameter auslesen
 $config = clm_core::$db->config();
+$countryversion = $config->countryversion;
 ?>
 
 <script language="JavaScript">
@@ -68,8 +70,13 @@ location=form.select.options[index].value;}}
             <form name="form1">
                 <select name="select" onchange="goto(this.form)" class="selectteam">
                 <?php  $cnt = 0;   foreach ($spielerliste as $spielerliste) { $cnt++;?>
+				  <?php if ($countryversion =="de") { ?>
                      <option value="<?php echo JURI::base(); ?>index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $spielerliste->ZPS; ?>&mglnr=<?php echo $spielerliste->Mgl_Nr; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
                     <?php if ($spielerliste->Mgl_Nr == $mgl) { echo 'selected="selected"'; } ?>><?php echo $spielerliste->Spielername; ?></option>
+				  <?php } else { ?>
+                     <option value="<?php echo JURI::base(); ?>index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $spielerliste->ZPS; ?>&PKZ=<?php echo $spielerliste->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+                    <?php if ($spielerliste->PKZ == $PKZ) { echo 'selected="selected"'; } ?>><?php echo $spielerliste->Spielername; ?></option>
+                  <?php } ?>
                 <?php } ?>
                 </select>
             </form>
@@ -79,7 +86,7 @@ location=form.select.options[index].value;}}
         	<form name="form1">
             	<select name="select" onchange="goto(this.form)" class="selectteam">
                 	<?php foreach ($saisons as $saisons) { ?>
-                    	<option value="<?php echo JURI::base(); ?>index.php?option=com_clm&view=spieler&saison=<?php echo $saisons->id; ?>&zps=<?php echo $zps; ?>&mglnr=<?php echo $mgl; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+                    	<option value="<?php echo JURI::base(); ?>index.php?option=com_clm&view=spieler&saison=<?php echo $saisons->id; ?>&zps=<?php echo $zps; ?>&mglnr=<?php echo $mgl; ?>&PKZ=<?php echo $PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
                         <?php if ($saisons->id == $sid) { echo 'selected="selected"'; } ?>><?php echo $saisons->name; ?> </option>
                     <?php } ?>
                 </select>
@@ -127,8 +134,12 @@ else {  ?>
             <tr>
             <td class="det_col1"><?php echo JText::_('PLAYER_DWZ') ?></td>
             <!---td class="det_col2"><a href="http://schachbund.de/dwz/db/spieler.html?zps=<?php echo $zps; ?>-<?php echo $mgl; ?>" target="_blank"><?php echo $spieler[0]->dsbDWZ; ?></a> - <?php echo $spieler[0]->DWZ_Index; ?></td--->
-            <?php  $mgl4 = ''.$mgl; while (strlen($mgl4) < 4) { $mgl4 = '0'.$mgl4; } ?>
-			<td class="det_col2"><a href="http://schachbund.de/spieler.html?zps=<?php echo $zps; ?>-<?php echo $mgl4; ?>" target="_blank"><?php echo $spieler[0]->dsbDWZ; ?></a> - <?php echo $spieler[0]->DWZ_Index; ?></td>
+        	<?php if ($countryversion =="de") { ?>
+				<?php  $mgl4 = ''.$mgl; while (strlen($mgl4) < 4) { $mgl4 = '0'.$mgl4; } ?>
+				<td class="det_col2"><a href="http://schachbund.de/spieler.html?zps=<?php echo $zps; ?>-<?php echo $mgl4; ?>" target="_blank"><?php echo $spieler[0]->dsbDWZ; ?></a> - <?php echo $spieler[0]->DWZ_Index; ?></td>
+            <?php } else { ?>
+				<td class="det_col2"><?php echo $spieler[0]->dsbDWZ; ?></td>
+            <?php } ?>			
             </tr>
             <tr>
             <td class="det_col1"><?php if ($spieler[0]->FIDE_ELO > 0) { ?><?php echo JText::_('PLAYER_ELO') ?><?php } ?></td>
@@ -202,7 +213,7 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
         <td class="gsp">G</td>
     <?php } ?>
         <td class="gsp"><?php echo $runden->brett; ?></td>
-        <td align="left"><?php if($runden->gzps=="ZZZZZ"){ ?>N.N.<?php } else { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $runden->gzps; ?>&mglnr=<?php echo $runden->Mgl_Nr; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $runden->Spielername ?></a><?php } ?></td>
+        <td align="left"><?php if($runden->gzps=="ZZZZZ"){ ?>N.N.<?php } else { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $runden->gzps; ?>&mglnr=<?php echo $runden->Mgl_Nr; ?>&PKZ=<?php echo $runden->gPKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $runden->Spielername ?></a><?php } ?></td>
         <td class="gsp2"><?php echo $runden->DWZ ?></td>
         <td align="left"><a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $sid; ?>&liga=<?php echo $runden->lid; ?>&tlnr=<?php echo $runden->tln; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $runden->name ?></a></td>
     <?php	$delta= $runden->DWZ - $spieler[0]->dsbDWZ;

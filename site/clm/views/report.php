@@ -19,6 +19,9 @@ function clm_view_report($out) {
 	$access		= $out["access"];
 	$erg_text	= $out["punkteText"];
 	$jid = clm_core::$access->getJid();
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 
 	echo "<h4>".$liga[0]->name.', '.$lang->round.' '.$runde;
 	if ($liga[0]->durchgang > 1) {
@@ -56,8 +59,11 @@ function clm_view_report($out) {
 			  <option value="<?php echo $heim[$x]->mgl_nr.':'.$heim[$x]->zps; ?>"<?php if (isset($oldresult[$i]) AND $heim[$x]->mgl_nr == $oldresult[$i]->spieler AND $heim[$x]->zps == $oldresult[$i]->zps) echo ' selected="selected" '; ?>><?php echo $heim[$x]->rmnr.' - '.$heim[$x]->rang.' &nbsp;&nbsp;';if($heim[$x]->rang < 1000) { echo "&nbsp;&nbsp;&nbsp;&nbsp;";};if($heim[$x]->rang < 10) { echo "&nbsp;&nbsp;";}; echo $heim[$x]->name; ?></option> 
 			<?php }
 			else { ?>
+			<?php if ($countryversion =="de") { ?>
 			  <option value="<?php echo $heim[$x]->mgl_nr.':'.$heim[$x]->zps; ?>"<?php if (isset($oldresult[$i]) AND $heim[$x]->mgl_nr == $oldresult[$i]->spieler AND $heim[$x]->zps == $oldresult[$i]->zps) echo ' selected="selected" '; ?>><?php echo $heim[$x]->snr;if($heim[$x]->snr < 10) {echo "&nbsp;&nbsp;";} echo ' - '.$heim[$x]->name; ?></option> 
-			<?php }} ?>
+			<?php } else { ?>
+			  <option value="<?php echo $heim[$x]->PKZ.':'.$heim[$x]->zps; ?>"<?php if (isset($oldresult[$i]) AND $heim[$x]->PKZ == $oldresult[$i]->PKZ AND $heim[$x]->zps == $oldresult[$i]->zps) echo ' selected="selected" '; ?>><?php echo $heim[$x]->snr;if($heim[$x]->snr < 10) {echo "&nbsp;&nbsp;";} echo ' - '.$heim[$x]->name; ?></option> 
+			<?php }}} ?>
 			<option value="-1"<?php if ($heim[$i]->zps =="ZZZZZ"){ ?> selected="selected"<?php } ?>>--&nbsp;<?php echo $lang->no_player; ?>&nbsp;--</option>
 		  </select>
 </div>
@@ -77,8 +83,11 @@ function clm_view_report($out) {
 			 <option value="<?php echo $gast[$x]->mgl_nr.':'.$gast[$x]->zps; ?>"<?php if (isset($oldresult[$i]) AND $gast[$x]->mgl_nr == $oldresult[$i]->gegner AND $gast[$x]->zps == $oldresult[$i]->gzps) echo ' selected="selected" '; ?>><?php echo $gast[$x]->rmnr.' - '.$gast[$x]->rang.' &nbsp;&nbsp;';if($gast[$x]->rang < 1000) { echo "&nbsp;&nbsp;&nbsp;&nbsp;";};if($gast[$x]->rang < 10) { echo "&nbsp;&nbsp;";}; echo $gast[$x]->name; ?></option> 
 			<?php }
 			else { ?>
+			<?php if ($countryversion =="de") { ?>
 			 <option value="<?php echo $gast[$x]->mgl_nr.':'.$gast[$x]->zps; ?>"<?php if (isset($oldresult[$i]) AND $gast[$x]->mgl_nr == $oldresult[$i]->gegner AND $gast[$x]->zps == $oldresult[$i]->gzps) echo ' selected="selected" '; ?>><?php echo $gast[$x]->snr;if($gast[$x]->snr <10) {echo "&nbsp;&nbsp;";} echo ' - '.$gast[$x]->name; ?></option> 
-			<?php }} ?>
+			<?php } else { ?>
+			 <option value="<?php echo $gast[$x]->PKZ.':'.$gast[$x]->zps; ?>"<?php if (isset($oldresult[$i]) AND $gast[$x]->PKZ == $oldresult[$i]->gPKZ AND $gast[$x]->zps == $oldresult[$i]->gzps) echo ' selected="selected" '; ?>><?php echo $gast[$x]->snr;if($gast[$x]->snr <10) {echo "&nbsp;&nbsp;";} echo ' - '.$gast[$x]->name; ?></option> 
+			<?php }}} ?>
 			<option value="-1"<?php if ($gast[$i]->zps =="ZZZZZ"){ ?> selected="selected"<?php } ?>>--&nbsp;<?php echo $lang->no_player; ?>&nbsp;--</option>
 		  </select>
 </div>
@@ -87,7 +96,6 @@ function clm_view_report($out) {
 <?php } ?>
 
 <?php 
-	$config = clm_core::$db->config();
 	if (($config->kommentarfeld == 1) OR ($config->kommentarfeld == 2 AND ($liga[0]->runden_modus == 4 OR $liga[0]->runden_modus == 5))) {    // Kommentarfeld ?>			
 	<div class="outer_comment">
 			<div class="info">

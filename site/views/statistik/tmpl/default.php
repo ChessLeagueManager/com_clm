@@ -303,7 +303,7 @@ if ($count < 10) { $a = $count; }
 			else { $zeilenr = 'zeile2'; } ?>
 	<tr class="<?php echo $zeilenr; ?>">
 		<td><?php echo $x+1; ?></td>
-		<td><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $bestenliste[$x]->zps; ?>&mglnr=<?php echo $bestenliste[$x]->mgl_nr; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $bestenliste[$x]->Spielername; ?></a></td>
+		<td><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $bestenliste[$x]->zps; ?>&mglnr=<?php echo $bestenliste[$x]->mgl_nr; ?>&PKZ=<?php echo $bestenliste[$x]->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $bestenliste[$x]->Spielername; ?></a></td>
 		<td><?php echo $bestenliste[$x]->DWZ; ?></td>
 		<td><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $bestenliste[$x]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $bestenliste[$x]->Vereinname; ?></a></td>
 		<?php for ($xx=1; $xx < 7; $xx++) {   //max. 6 Spalten
@@ -376,7 +376,7 @@ echo CLMContent::clmWarning(JText::_('LEAGUE_NO_GAMES'));
 			($spielerbrett->snr > $liga[0]->stamm AND $x >= $liga[0]->stamm)) { $xb++; ?>
 	<tr class="<?php echo $zeilenr; ?>">
 		<td><?php echo $spielerbrett->snr; ?></td>
-		<td><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $spielerbrett->zps; ?>&mglnr=<?php echo $spielerbrett->mgl_nr; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $spielerbrett->Spielername; ?></a></td>
+		<td><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $spielerbrett->zps; ?>&mglnr=<?php echo $spielerbrett->mgl_nr; ?>&PKZ=<?php echo $spielerbrett->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $spielerbrett->Spielername; ?></a></td>
 		<td><?php echo $spielerbrett->DWZ; ?></td>
 		<td><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $spielerbrett->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $spielerbrett->Vereinname; ?></a></td>
 		<?php for ($xx=1; $xx < 7; $xx++) {   //max. 6 Spalten

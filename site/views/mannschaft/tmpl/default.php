@@ -99,6 +99,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
+	$countryversion   = $config->countryversion;
 	$telefon= $config->man_tel;
 	$mobil	= $config->man_mobil;
 	$mail	= $config->man_mail;
@@ -287,7 +288,7 @@ $clm_zeile2D			= RGB($clm_zeile2);
 	$sumgespielt = 0;
 for ($x=0; $x< 100; $x++){
 	// Überlesen von Null-Sätzen 
-	while (isset($count[$x]) and $count[$x]->mgl_nr == "0")  {
+	while (isset($count[$x]) and $count[$x]->mgl_nr == "0" AND $countryversion == "de")  {
 		$x++; }
 	if (!isset($count[$x])) break;
 	if ($x%2 != 0) { $zeilenr = 'zeile1'; 
@@ -299,12 +300,13 @@ for ($x=0; $x< 100; $x++){
     <tr class="<?php echo $zeilenr; ?>">
     <?php if($mannschaft[0]->lrang > 0) { ?><td class="nr" ><?php echo $count[$x]->rmnr.' - '.$count[$x]->rrang; ?></td><?php }
         else { ?><td class="nr" ><?php echo $y; ?></td><?php } ?>
-    <td class="name"><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $count[$x]->zps; ?>&mglnr=<?php echo $count[$x]->mgl_nr; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $count[$x]->name; ?></a></td>
+    <td class="name"><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $count[$x]->zps; ?>&mglnr=<?php echo $count[$x]->mgl_nr; ?>&PKZ=<?php echo $count[$x]->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $count[$x]->name; ?></a></td>
     <td class="dwz"><?php if ($mannschaft[0]->params['dwz_date'] == '0000-00-00') { if ($count[$x]->dwz >0) echo $count[$x]->dwz;} 
 						  else { if ($count[$x]->start_dwz >0) echo $count[$x]->start_dwz;} ?></td>
     <?php
 	//keine Ergebnisse zum Spieler
-    if (!isset($einzel[$ie]) OR ($count[$x]->zps !== $einzel[$ie]->zps) OR ($count[$x]->mgl_nr !== $einzel[$ie]->spieler)) {
+	if (isset($einzel[$ie]) AND ($einzel[$ie]->PKZ === NULL) ) { $einzel[$ie]->PKZ = ""; }
+    if (!isset($einzel[$ie]) OR ($count[$x]->zps !== $einzel[$ie]->zps) OR ($count[$x]->mgl_nr !== $einzel[$ie]->spieler) OR ($count[$x]->PKZ !== $einzel[$ie]->PKZ)) {
         for ($z=0; $z< $mannschaft[0]->dg*$mannschaft[0]->runden; $z++)
         { ?>
         <td class="rnd">&nbsp;</td>

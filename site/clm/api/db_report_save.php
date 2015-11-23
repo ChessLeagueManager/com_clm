@@ -8,6 +8,9 @@ function mb_str_pad( $input, $pad_length, $pad_string = ' ', $pad_type = STR_PAD
 // Eingang: Verband
 // Ausgang: Alle Vereine in diesem
 function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decision, $homes, $guests, $results) {
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 	// Zu den Angaben gibt es ein Mannschaftsturnier/Liga
 	$out = clm_core::$api->db_report($liga, $runde, $dg, $paar);
 	if (!$out[0]) {
@@ -21,11 +24,19 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 	/* Start: Kontrolle der Daten */
 	$gast = array();
 	for ($i = 0;$i < count($out["gast"]);$i++) {
+	 if ($countryversion =="de") {
 		$gast[] = $out["gast"][$i]->mgl_nr . ':' . $out["gast"][$i]->zps;
+	 } else {
+		$gast[] = $out["gast"][$i]->PKZ . ':' . $out["gast"][$i]->zps;
+	 }
 	}
 	$heim = array();
 	for ($i = 0;$i < count($out["heim"]);$i++) {
+	 if ($countryversion =="de") {
 		$heim[] = $out["heim"][$i]->mgl_nr . ':' . $out["heim"][$i]->zps;
+	 } else {
+		$heim[] = $out["heim"][$i]->PKZ . ':' . $out["heim"][$i]->zps;
+	 }
 	}
 	for ($i = 0;$i < count($results);$i++) {
 		if (!is_numeric($results[$i]) || $results[$i] < 0 || $results[$i] > 8) {
@@ -111,10 +122,19 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 		$gast = $guests[$y];
 		$ergebnis = $results[$y];
 		$teil_heim = explode(":", $heim);
-		$hmgl = $teil_heim[0];
-		$hzps = $teil_heim[1];
 		$teil_gast = explode(":", $gast);
-		$gmgl = $teil_gast[0];
+		if ($countryversion =="de") {
+			$hmgl = $teil_heim[0];
+			$gmgl = $teil_gast[0];
+			$hPKZ = '';
+			$gPKZ = '';
+		} else {
+			$hmgl = 0;
+			$gmgl = 0;
+			$hPKZ = $teil_heim[0];
+			$gPKZ = $teil_gast[0];
+		}
+		$hzps = $teil_heim[1];
 		$gzps = $teil_gast[1];
 		if ($ergebnis > 2) {
 			$kampflos = 1;
@@ -164,7 +184,9 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 		if ($y1 >= strlen($colorstr)) $y1 = 0;
 		// $sid macht hier keinen Sinn, die ID der Liga ist bereits eindeutig!
 		$sid = $out["liga"][0]->sid;
-		$query = "INSERT INTO #__clm_rnd_spl " . " ( `sid`, `lid`, `runde`, `paar`, `dg`, `tln_nr`, `brett`, `heim`, `weiss`, `spieler` " . " , `zps`, `gegner`, `gzps`, `ergebnis` , `kampflos`, `punkte`, `gemeldet`) " . " VALUES ('$sid','$lid','$rnd','$paarung','$dg','" . $out["paar"][0]->htln . "','" . ($y + 1) . "',1,'$weiss','$hmgl','$hzps'," . " '$gmgl','$gzps','$ergebnis', '$kampflos','$erg_h','$jid') " . " , ('$sid','$lid','$rnd','$paarung','$dg','" . $out["paar"][0]->gtln . "','" . ($y + 1) . "','0','$schwarz','$gmgl','$gzps'," . " '$hmgl','$hzps','$ergebnis', '$kampflos','$erg_g','$jid') ";
+		$query = "INSERT INTO #__clm_rnd_spl " . " ( `sid`, `lid`, `runde`, `paar`, `dg`, `tln_nr`, `brett`, `heim`, `weiss`, `spieler`, `PKZ` " . " , `zps`, `gegner`, `gPKZ`, `gzps`, `ergebnis` , `kampflos`, `punkte`, `gemeldet`) " 
+				." VALUES ('$sid','$lid','$rnd','$paarung','$dg','" . $out["paar"][0]->htln . "','" . ($y + 1) . "',1,'$weiss','$hmgl','$hPKZ','$hzps'," . " '$gmgl','$gPKZ','$gzps','$ergebnis', '$kampflos','$erg_h','$jid') "
+				.	  " , ('$sid','$lid','$rnd','$paarung','$dg','" . $out["paar"][0]->gtln . "','" . ($y + 1) . "','0','$schwarz','$gmgl','$gPKZ','$gzps'," . " '$hmgl','$hPKZ','$hzps','$ergebnis', '$kampflos','$erg_g','$jid') ";
 		clm_core::$db->query($query);
 		$hmpunkte+= $erg_h;
 		$gmpunkte+= $erg_g;
@@ -279,23 +301,47 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 	
 	$gast = array();
 	for ($i = 0;$i < count($out["gast"]);$i++) {
-		$gast[] = $out["gast"][$i]->mgl_nr . ':' . $out["gast"][$i]->zps;
+		if ($countryversion == "de")
+			$gast[] = $out["gast"][$i]->mgl_nr . ':' . $out["gast"][$i]->zps;
+		else
+			$gast[] = $out["gast"][$i]->PKZ . ':' . $out["gast"][$i]->zps;
 	}
 	$heim = array();
 	for ($i = 0;$i < count($out["heim"]);$i++) {
-		$heim[] = $out["heim"][$i]->mgl_nr . ':' . $out["heim"][$i]->zps;
+		if ($countryversion == "de")
+			$heim[] = $out["heim"][$i]->mgl_nr . ':' . $out["heim"][$i]->zps;
+		else
+			$heim[] = $out["heim"][$i]->PKZ . ':' . $out["heim"][$i]->zps;
 	}
 	$player = array();
 	for ($i = 0;$i < count($results);$i++) {
 		$p = array_search($homes[$i], $heim);
+	  if ($p === false) {
+		$player[$i][0] = '';
+		$player[$i][1] = '';
+		$player[$i][2] = '';
+	  } else {
 		$player[$i][0] = $out["heim"][$p]->snr;
-		$player[$i][1] = $out["heim"][$p]->mgl_nr;
+		if ($countryversion == "de")
+			$player[$i][1] = $out["heim"][$p]->mgl_nr;
+		else
+			$player[$i][1] = $out["heim"][$p]->PKZ;
 		$player[$i][2] = $out["heim"][$p]->name;
-		$player[$i][3] = $out["punkteText"][$results[$i]]->erg_text;
-		$q = array_search($guests[$i], $gast);
+	  }
+	  $player[$i][3] = $out["punkteText"][$results[$i]]->erg_text;
+	  $q = array_search($guests[$i], $gast);
+	  if ($q === false) {
+		$player[$i][4] = '';
+		$player[$i][5] = '';
+		$player[$i][6] = '';
+	  } else {
 		$player[$i][4] = $out["gast"][$q]->snr;
-		$player[$i][5] = $out["gast"][$q]->mgl_nr;
+		if ($countryversion == "de")
+			$player[$i][5] = $out["gast"][$q]->mgl_nr;
+		else
+			$player[$i][5] = $out["gast"][$q]->PKZ;
 		$player[$i][6] = $out["gast"][$q]->name;
+	  }
 	}
 	if (!isset($out["liga"][0]->datum)) {
 		$date = - 1;

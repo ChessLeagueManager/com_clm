@@ -258,6 +258,9 @@ function edit()
 		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_ARCHIV' ));
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
 				}
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 
 	$data = "SELECT a.gemeldet,a.editor, a.id,a.sid, a.lid, a.runde, a.dg, a.tln_nr, a.ko_decision, a.comment," //mtmt
 		." a.gegner,a.paar, a.dwz_zeit, a.dwz_editor, w.name as dwz_editor, "
@@ -303,12 +306,17 @@ function edit()
 		JError::raiseNotice( 6000, JText::_( 'ERGEBNISSE_MANNSCHAFTNUMMER' ) );
 		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_MN_HEIM').' '.$runde[0]->hmnr.JText::_('ERGEBNISSE_MN_GAST').' '.$runde[0]->gmnr.' !' );
 	}
+	
 	// Spieler Heim
 	$sql = "SELECT a.*, d.Spielername as name ";
 		if($runde[0]->rang !="0") {$sql = $sql.",r.Rang as snr,r.man_nr as rmnr";}
 		$sql = $sql
-		." FROM #__clm_meldeliste_spieler as a "
-		." LEFT JOIN #__clm_dwz_spieler as d ON ( d.ZPS = a.zps AND d.Mgl_Nr= a.mgl_nr AND d.sid = a.sid) ";
+		." FROM #__clm_meldeliste_spieler as a ";
+		if ($countryversion =="de") {
+			$sql .= " LEFT JOIN #__clm_dwz_spieler as d ON ( d.ZPS = a.zps AND d.Mgl_Nr= a.mgl_nr AND d.sid = a.sid) ";
+		} else {
+			$sql .= " LEFT JOIN #__clm_dwz_spieler as d ON ( d.ZPS = a.zps AND d.PKZ= a.PKZ AND d.sid = a.sid) ";
+		}
 		if($runde[0]->rang !="0") {
 			$sql = $sql
 		." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) ";
@@ -325,7 +333,7 @@ function edit()
 				." ORDER BY r.man_nr,r.Rang"; }
 		else { $sql = $sql
 				." AND a.lid = ".$runde[0]->lid
-				." AND a.mgl_nr <> '0' "
+				." AND (a.mgl_nr <> '0' OR a.PKZ <> '') "
 				." ORDER BY a.snr"; }
 
 	$db->setQuery( $sql );
@@ -334,7 +342,7 @@ function edit()
 	// Anzahl Spieler Heim
 	$sql = "SELECT COUNT(a.snr) as hcount"
 		." FROM #__clm_meldeliste_spieler as a "
-		." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) "
+		//." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) "
 		." WHERE a.sid = ".$runde[0]->sid
 		." AND (( a.zps = '".$runde[0]->hzps."' AND a.mnr = ".$runde[0]->hmnr." ) "
 		." OR ( FIND_IN_SET(a.zps, '".$runde[0]->sgh_zps."') != 0 AND a.mnr = ".$runde[0]->hmnr." )) ";
@@ -344,14 +352,13 @@ function edit()
 		else { $sql = $sql
 				." AND a.lid = ".$runde[0]->lid; }
 		$sql = $sql
-		." AND a.mgl_nr <> '0' "
+		." AND (a.mgl_nr <> '0' OR a.PKZ <> '') "
 		;
 	$db->setQuery( $sql );
 	$hcount		= $db->loadObjectList();
 
 	// Bretter / Spieler ermitteln
-	$sql = "SELECT a.spieler, a.gegner, a.ergebnis, a.zps, a.gzps "
-		." FROM #__clm_rnd_spl as a "
+	$sql = "SELECT * FROM #__clm_rnd_spl as a "
 		." WHERE a.sid = ".$runde[0]->sid
 		." AND a.lid = ".$runde[0]->lid
 		." AND a.runde = ".$runde[0]->runde
@@ -406,8 +413,12 @@ function edit()
 	$sql = "SELECT a.*, d.Spielername as name";
 		if($runde[0]->rang !="0") {$sql = $sql.",r.Rang as snr,r.man_nr as rmnr ";}
 		$sql = $sql
-		." FROM #__clm_meldeliste_spieler as a "
-		." LEFT JOIN #__clm_dwz_spieler as d ON ( d.ZPS = a.zps AND d.Mgl_Nr= a.mgl_nr AND d.sid = a.sid) ";
+		." FROM #__clm_meldeliste_spieler as a ";
+		if ($countryversion =="de") {
+			$sql .= " LEFT JOIN #__clm_dwz_spieler as d ON ( d.ZPS = a.zps AND d.Mgl_Nr= a.mgl_nr AND d.sid = a.sid) ";
+		} else {
+			$sql .= " LEFT JOIN #__clm_dwz_spieler as d ON ( d.ZPS = a.zps AND d.PKZ= a.PKZ AND d.sid = a.sid) ";
+		}
 		if($runde[0]->rang !="0") {
 			$sql = $sql
 		." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) ";
@@ -425,7 +436,7 @@ function edit()
 				." ORDER BY r.man_nr,r.Rang"; }
 		else { $sql = $sql
 				." AND a.lid = ".$runde[0]->lid
-				." AND a.mgl_nr > 0 "
+				." AND (a.mgl_nr > 0 OR a.PKZ > '')"
 				." ORDER BY a.snr"; }
 
 	$db->setQuery( $sql );
@@ -434,7 +445,7 @@ function edit()
 	// Anzahl Spieler Gast
 	$sql = "SELECT COUNT(a.snr) as gcount"
 		." FROM #__clm_meldeliste_spieler as a "
-		." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) "
+		//." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) "
 		." WHERE a.sid = ".$runde[0]->sid
 		." AND (( a.zps = '".$runde[0]->gzps."' AND a.mnr = ".$runde[0]->gmnr." ) "
 		//." OR ( a.zps ='".$runde[0]->sgg_zps."' AND a.mnr = ".$runde[0]->gmnr." )) ";
@@ -445,7 +456,7 @@ function edit()
 		else { $sql = $sql
 				." AND a.lid = ".$runde[0]->lid; }
 		$sql = $sql
-		." AND a.mgl_nr > 0 "
+		." AND (a.mgl_nr <> 0 OR a.PKZ <> '') "
 		;
 	$db->setQuery( $sql );
 	$gcount		= $db->loadObjectList();
@@ -637,6 +648,9 @@ function save()
 	$gzps		= JRequest::getVar( 'gzps');
 	$ko_decision = JRequest::getVar( 'ko_decision');
 	$comment = JRequest::getVar( 'comment');
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 	// Überprüfen ob Runde schon gemeldet ist
 	$query	= "SELECT gemeldet, tln_nr, gegner "
 		." FROM #__clm_rnd_man "
@@ -703,11 +717,19 @@ function save()
 		$ergebnis	= JRequest::getVar( 'ergebnis'.$y);
 
 	$theim	= explode("-", $heim);
-	$thmgl	= $theim[0];
-	$thzps	= $theim[1];
-
 	$tgast	= explode("-", $gast);
-	$tgmgl	= $tgast[0];
+	if ($countryversion == "de") {
+		$thmgl	= $theim[0];
+		$tgmgl	= $tgast[0];
+		$thPKZ  = '';
+		$tgPKZ  = '';
+	} else {
+		$thmgl	= 0;
+		$tgmgl	= 0;
+		$thPKZ  = $theim[0];
+		$tgPKZ  = $tgast[0];
+	}
+	$thzps	= $theim[1];
 	$tgzps	= $tgast[1];
 
 	if ($ergebnis > 3) { $kampflos = 1; }
@@ -761,12 +783,12 @@ function save()
 	if ($y1 >= strlen($colorstr)) $y1 = 0;
 
 	$query	= "INSERT INTO #__clm_rnd_spl "
-		." ( `sid`, `lid`, `runde`, `paar`, `dg`, `tln_nr`, `brett`, `heim`, `weiss`, `spieler` "
-		." , `zps`, `gegner`, `gzps`, `ergebnis` , `kampflos`, `punkte`, `gemeldet`) "
-		." VALUES ('$sid','$lid','$rnd','$paarung','$dg','$id_tln','$y',1,'$weiss','$thmgl','$thzps',"
-		." '$tgmgl','$tgzps','$ergebnis', '$kampflos','$erg_h','$meldung') "
-		." , ('$sid','$lid','$rnd','$paarung','$dg','$id_geg','$y','0','$schwarz','$tgmgl','$tgzps',"
-		." '$thmgl','$thzps','$ergebnis', '$kampflos','$erg_g','$meldung') "
+		." ( `sid`, `lid`, `runde`, `paar`, `dg`, `tln_nr`, `brett`, `heim`, `weiss`, `spieler`, `PKZ` "
+		." , `zps`, `gegner`, `gPKZ`, `gzps`, `ergebnis` , `kampflos`, `punkte`, `gemeldet`) "
+		." VALUES ('$sid','$lid','$rnd','$paarung','$dg','$id_tln','$y',1,'$weiss','$thmgl','$thPKZ','$thzps',"
+		." '$tgmgl','$tgPKZ','$tgzps','$ergebnis', '$kampflos','$erg_h','$meldung') "
+		." , ('$sid','$lid','$rnd','$paarung','$dg','$id_geg','$y','0','$schwarz','$tgmgl','$tgPKZ','$tgzps',"
+		." '$thmgl','$thPKZ','$thzps','$ergebnis', '$kampflos','$erg_g','$meldung') "
 		;
 	$db->setQuery($query);
 	$db->query();
@@ -985,18 +1007,28 @@ function save()
 	$ergebnis--;
 
 	$theim	= explode("-", $heim);
-	$thmgl	= $theim[0];
-	$thzps	= $theim[1];
-
 	$tgast	= explode("-", $gast);
-	$tgmgl	= $tgast[0];
+	if ($countryversion == "de") {
+		$thmgl	= $theim[0];
+		$tgmgl	= $tgast[0];
+		$thPKZ  = '';
+		$tgPKZ  = '';
+	} else {
+		$thmgl	= 0;
+		$tgmgl	= 0;
+		$thPKZ  = $theim[0];
+		$tgPKZ  = $tgast[0];
+	}
+	$thzps	= $theim[1];
 	$tgzps	= $tgast[1];
 
 	// Heim updaten
 	$query	= "UPDATE #__clm_rnd_spl "
 		." SET spieler = ".$thmgl
+		." , PKZ = '$thPKZ'"
 		." , zps = '$thzps'"
 		." , gegner = ".$tgmgl
+		." , gPKZ = '$tgPKZ'"
 		." , gzps = '$tgzps'"
 		." , ergebnis = ".$ergebnis
 		." , kampflos = ".$kampflos
@@ -1016,8 +1048,10 @@ function save()
 	// Gast updaten
 	$query	= "UPDATE #__clm_rnd_spl "
 		." SET spieler = ".$tgmgl
+		." , PKZ = '$tgPKZ'"
 		." , zps = '$tgzps'"
 		." , gegner = ".$thmgl
+		." , gPKZ = '$thPKZ'"
 		." , gzps = '$thzps'"
 		." , ergebnis = ".$ergebnis
 		." , kampflos = ".$kampflos
@@ -1420,12 +1454,20 @@ function wertung()
 					}
 	$row->checkout( clm_core::$access->getJid() );
 
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 	// Bretter / Spieler ermitteln
-	$sql = "SELECT a.spieler, a.gegner, a.ergebnis, a.dwz_edit, d.Spielername as hname, e.Spielername as gname "
-		." FROM #__clm_rnd_spl as a "
-		." LEFT JOIN #__clm_dwz_spieler as d ON d.ZPS = a.zps AND d.Mgl_Nr = a.spieler AND d.sid = a.sid "
-		." LEFT JOIN #__clm_dwz_spieler as e ON e.ZPS = a.gzps AND e.Mgl_Nr = a.gegner AND e.sid = a.sid "
-		." WHERE a.sid = ".$runde[0]->sid
+	$sql = "SELECT a.spieler, a.PKZ, a.gegner, a.gPKZ, a.ergebnis, a.dwz_edit, d.Spielername as hname, e.Spielername as gname "
+		." FROM #__clm_rnd_spl as a ";
+	if ($countryversion =="de") {
+		$sql .= " LEFT JOIN #__clm_dwz_spieler as d ON d.ZPS = a.zps AND d.Mgl_Nr = a.spieler AND d.sid = a.sid "
+				." LEFT JOIN #__clm_dwz_spieler as e ON e.ZPS = a.gzps AND e.Mgl_Nr = a.gegner AND e.sid = a.sid ";
+	} else {
+		$sql .= " LEFT JOIN #__clm_dwz_spieler as d ON d.ZPS = a.zps AND d.PKZ = a.PKZ AND d.sid = a.sid "
+				." LEFT JOIN #__clm_dwz_spieler as e ON e.ZPS = a.gzps AND e.PKZ = a.gPKZ AND e.sid = a.sid ";
+	} 
+	$sql .= " WHERE a.sid = ".$runde[0]->sid
 		." AND a.lid = ".$runde[0]->lid
 		." AND a.runde = ".$runde[0]->runde
 		." AND a.paar = ".$runde[0]->paar
@@ -1497,11 +1539,20 @@ function wertung()
 	$wlist[]	= JHTML::_('select.option',  $x-(0.5), $x-(0.5), 'jid', 'name' );
 	$wlist[]	= JHTML::_('select.option',  $x, $x, 'jid', 'name' );
 			}
-	$lists['weiss']		= JHTML::_('select.genericlist',   $wlist, 'w_erg', 'class="inputbox" size="1"', 'jid', 'name', $list_heim[0]->bp );
-	$lists['schwarz']	= JHTML::_('select.genericlist',   $wlist, 's_erg', 'class="inputbox" size="1"', 'jid', 'name', $list_gast[0]->bp );
-	$lists['weiss_w']	= $list_heim[0]->wp;
-	$lists['schwarz_w']	= $list_gast[0]->wp;
-
+	if (isset($list_heim[0])) {
+		$lists['weiss']		= JHTML::_('select.genericlist',   $wlist, 'w_erg', 'class="inputbox" size="1"', 'jid', 'name', $list_heim[0]->bp );
+		$lists['weiss_w']	= $list_heim[0]->wp;
+	} else {
+		$lists['weiss']		= JHTML::_('select.genericlist',   $wlist, 'w_erg', 'class="inputbox" size="1"', 'jid', 'name', -1 );
+		$lists['weiss_w']	= -1;
+	}
+	if (isset($list_heim[0])) {
+		$lists['schwarz']	= JHTML::_('select.genericlist',   $wlist, 's_erg', 'class="inputbox" size="1"', 'jid', 'name', $list_gast[0]->bp );
+		$lists['schwarz_w']	= $list_gast[0]->wp;
+	} else {
+		$lists['schwarz']	= JHTML::_('select.genericlist',   $wlist, 's_erg', 'class="inputbox" size="1"', 'jid', 'name', -1 );
+		$lists['schwarz_w']	= -1;
+	}
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'ergebnisse.php');
 	CLMViewErgebnisse::wertung( $row, $runde,$bretter,$ergebnis, $option, $lists);
 	}
@@ -2158,8 +2209,13 @@ function kampflos($gast)
 	$section	= JRequest::getVar('section');
 	$db 		= JFactory::getDBO();
 	$link		= 'index.php?option='.$option.'&section='.$section;
-	$cid 		= JRequest::getVar( 'cid', array(0), '', 'array' );
+	$cid 		= JRequest::getVar( 'cid', array(), '', 'array' );
 	JArrayHelper::toInteger($cid);
+ 
+ if (count($cid) < 1) {
+		JError::raiseWarning(500, JText::_( 'ERGEBNISSE_SELECT', true ) );
+		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+	}
 
 	// load the row from the db table
 	$row =JTable::getInstance( 'ergebnisse', 'TableCLM' );

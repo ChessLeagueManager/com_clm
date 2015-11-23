@@ -109,9 +109,9 @@ CREATE TABLE IF NOT EXISTS `#__clm_dwz_spieler` (
 --
 
 CREATE TABLE IF NOT EXISTS `#__clm_dwz_verbaende` (
-  `Verband` char(3) NOT NULL DEFAULT '',
+  `Verband` char(4) NOT NULL DEFAULT '',
   `LV` char(1) NOT NULL DEFAULT '',
-  `Uebergeordnet` char(3) NOT NULL DEFAULT '',
+  `Uebergeordnet` char(4) NOT NULL DEFAULT '',
   `Verbandname` varchar(45) NOT NULL DEFAULT '',
   PRIMARY KEY (`Verband`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_dwz_vereine` (
   `sid` mediumint(6) unsigned default NULL, 
   `ZPS` varchar(5) NOT NULL DEFAULT '',
   `LV` char(1) NOT NULL DEFAULT '',
-  `Verband` varchar(3) NOT NULL DEFAULT '',
+  `Verband` varchar(4) NOT NULL DEFAULT '',
   `Vereinname` varchar(40) NOT NULL DEFAULT '',
   UNIQUE KEY `sid_ZPS` (`sid`,`ZPS`),
   PRIMARY KEY  (`id`)
@@ -260,6 +260,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_meldeliste_spieler` (
   `mnr` mediumint(5) unsigned NOT NULL DEFAULT '0',
   `snr` mediumint(5) unsigned DEFAULT NULL,
   `mgl_nr` mediumint(5) unsigned NOT NULL DEFAULT '0',
+  `PKZ` varchar(9) DEFAULT NULL,
   `zps` varchar(5) NOT NULL DEFAULT '0',
   `status` mediumint(5) NOT NULL DEFAULT '0',
   `ordering` int(11) NOT NULL DEFAULT '0',
@@ -398,8 +399,10 @@ CREATE TABLE IF NOT EXISTS `#__clm_rnd_spl` (
   `heim` tinyint(1) unsigned DEFAULT NULL,
   `weiss` tinyint(1) unsigned DEFAULT NULL,
   `spieler` mediumint(5) unsigned DEFAULT NULL,
+  `PKZ` varchar(9) DEFAULT NULL,
   `zps` varchar(5) DEFAULT NULL,
   `gegner` mediumint(5) unsigned DEFAULT NULL,
+  `gPKZ` varchar(9) DEFAULT NULL,
   `gzps` varchar(5) DEFAULT NULL,
   `ergebnis` mediumint(5) unsigned DEFAULT NULL,
   `kampflos` tinyint(1) unsigned DEFAULT NULL,

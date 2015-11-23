@@ -61,6 +61,9 @@ class CLMModelMeldeliste extends JModelLegacy
 	$man	= JRequest::getInt('man','1');
 	$layout	= clm_escape(JRequest::getVar('layout'));
 	$gid	= JRequest::getInt('gid');
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 		// TODO: Cache on the fingerprint of the arguments
 		$db	= JFactory::getDBO();
 		$id	= @$options['id'];
@@ -117,10 +120,19 @@ class CLMModelMeldeliste extends JModelLegacy
 			$db->setQuery($query);
 			$team = $db->loadObjectList();
 			$liga = $team[0]->liga;
-		$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.Mgl_Nr) as id, a.zps, a.Mgl_Nr, a.DWZ as dwz, 0 as checked_out, IFNULL(l.snr,999) as snr " 
-			." FROM #__clm_dwz_spieler as a "
+		if ($countryversion =="de") {
+			$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.Mgl_Nr) as id, a.zps, a.Mgl_Nr, a.PKZ, a.DWZ as dwz, 0 as checked_out, IFNULL(l.snr,999) as snr "; 
+		} else {
+			$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.PKZ) as id, a.zps, a.Mgl_Nr, a.PKZ, a.DWZ as dwz, 0 as checked_out, IFNULL(l.snr,999) as snr "; 
+		}
+		$query .= " FROM #__clm_dwz_spieler as a "
 			." LEFT JOIN #__clm_meldeliste_spieler as l ON l.lid = $liga AND l.sid = $sid AND l.mnr = $man "
-					." AND (l.zps = '$zps' OR FIND_IN_SET(l.zps,'".$team[0]->sg_zps."') != 0 ) AND l.mgl_nr = a.Mgl_Nr  ";
+			." AND (l.zps = '$zps' OR FIND_IN_SET(l.zps,'".$team[0]->sg_zps."') != 0 ) ";
+		if ($countryversion =="de") {
+			$query .= "AND l.mgl_nr = a.Mgl_Nr  ";
+		} else {
+			$query .= "AND l.PKZ = a.PKZ  ";
+		}
 		if ($team[0]->sg_zps > '0') {
 			$query .= " WHERE (a.zps = '$zps' OR FIND_IN_SET(a.zps,'".$team[0]->sg_zps."') != 0 )"; }
 		else {
@@ -160,7 +172,6 @@ class CLMModelMeldeliste extends JModelLegacy
 		else $team_sg_zps = '';
 		$query = "SELECT COUNT(ZPS) as zps " 
 			." FROM #__clm_dwz_spieler "
-			//." WHERE (zps = '$zps' OR FIND_IN_SET(zps,'".$team[0]->sg_zps."') != 0 )"
 			." WHERE (zps = '$zps' OR FIND_IN_SET(zps,'".$team_sg_zps."') != 0 )"
 			;
 	return $query;
@@ -270,6 +281,10 @@ class CLMModelMeldeliste extends JModelLegacy
 	$zps 	= clm_escape(JRequest::getVar('zps'));
 	$man	= JRequest::getInt('man','1');
 	$sid	= JRequest::getInt('saison','1');      
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
+
 	$db	= JFactory::getDBO();
 	$query = "SELECT a.zps, a.sg_zps, a.liga "
 		." FROM #__clm_mannschaften as a"
@@ -279,20 +294,32 @@ class CLMModelMeldeliste extends JModelLegacy
 	$team = $db->loadObjectList();
 	$liga = $team[0]->liga;
 
-	$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.Mgl_Nr) as id, a.zps, a.Mgl_Nr, a.DWZ as dwz, IFNULL(l.snr,999) as snr " 
-		." ,v.Vereinname "
+	if ($countryversion =="de") {
+		$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.Mgl_Nr) as id, a.zps, a.Mgl_Nr, a.PKZ, a.DWZ as dwz, IFNULL(l.snr,999) as snr "; 
+	} else {
+		$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.PKZ) as id, a.zps, a.Mgl_Nr, a.PKZ, a.DWZ as dwz, IFNULL(l.snr,999) as snr "; 
+	}
+	$query .= " ,v.Vereinname "
 		." FROM #__clm_dwz_spieler as a "
 		." LEFT JOIN #__clm_dwz_vereine as v ON v.ZPS = a.zps AND v.sid = a.sid"
 		." LEFT JOIN #__clm_meldeliste_spieler as l ON l.lid = $liga AND l.sid = $sid AND l.mnr = $man "
-				." AND (l.zps = '$zps' OR FIND_IN_SET(l.zps,'".$team[0]->sg_zps."') != 0 ) AND l.mgl_nr = a.Mgl_Nr  ";
+				." AND (l.zps = '$zps' OR FIND_IN_SET(l.zps,'".$team[0]->sg_zps."') != 0 ) ";
+		if ($countryversion =="de") {
+			$query .= " AND l.mgl_nr = a.Mgl_Nr  ";
+		} else {
+			$query .= " AND l.PKZ = a.PKZ  ";
+		}
 		if ($team[0]->sg_zps > '0') {
-			//$query .= " WHERE (a.zps = '$zps' OR a.zps = '".$team[0]->sg_zps."' ) "; }
 			$query .= " WHERE (a.zps = '$zps' OR FIND_IN_SET(a.zps,'".$team[0]->sg_zps."') != 0 ) "; }
 		else {
 			$query .= " WHERE a.zps = '$zps' "; }
-		$query  .= " AND a.sid = ".$sid              
-		." AND CONCAT(a.zps,a.Mgl_Nr) IN ($cids) "
-		." ORDER BY IFNULL(l.snr,999), a.DWZ DESC, a.Spielername ASC "
+		$query  .= " AND a.sid = ".$sid;              
+		if ($countryversion =="de") {
+			$query .= " AND CONCAT(a.zps,a.Mgl_Nr) IN ($cids) ";
+		} else {
+			$query .= " AND CONCAT(a.zps,a.PKZ) IN ($cids) ";
+		}
+		$query .= " ORDER BY IFNULL(l.snr,999), a.DWZ DESC, a.Spielername ASC ";
 		;
 	$db->setQuery( $query );
 	$sort = $db->loadObjectList();

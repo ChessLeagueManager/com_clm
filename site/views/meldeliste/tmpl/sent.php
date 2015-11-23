@@ -29,7 +29,9 @@ $liga_mf 	= JRequest::getVar('mf');
 $user 		=JFactory::getUser();
 $meldung 	= $user->get('id');
 $clmuser 	= $this->clmuser;
-//$access		= $this->access;
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 
 // Prüfen ob Datensatz schon vorhanden ist
 	$db			= JFactory::getDBO();
@@ -66,7 +68,7 @@ $abgabe		= $this->abgabe;
 			$abgabe[0]->params[$key] = substr($value,$ipos+1);
 			}
 	}	
-	if (!isset($abgabe[0]->params['deadline_roster']))  {   //Standardbelegung
+	if (!isset($abgabe[0]->params['deadline_roster']) OR $abgabe[0]->params['deadline_roster'] == '')  {   //Standardbelegung
 		$abgabe[0]->params['deadline_roster'] = '0000-00-00'; }
 
 if ($abgabe[0]->liste > 0 AND $abgabe[0]->params['deadline_roster'] == '0000-00-00') {
@@ -116,11 +118,16 @@ for ($y=1; $y< (1+$stamm+$ersatz) ; $y++){
 	$stm		= JRequest::getInt( 'name'.$y);
 	$dwz		= JRequest::getInt( 'dwz'.$y);
 	$mgl		= JRequest::getInt( 'hidden_mglnr'.$y);
+	$PKZ		= JRequest::getVar( 'hidden_PKZ'.$y);
 	$hidden_zps		= JRequest::getVar( 'hidden_zps'.$y);
-
+	if ($countryversion =="de") {
+		if ($mgl == 0) break;
+	} else {
+		if ($PKZ == '' OR $PKZ == NULL) break;
+	}
 	$query	= "INSERT INTO #__clm_meldeliste_spieler "
-		." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`, `ordering`) "
-		." VALUES ('$sid','$lid','$man','$y','$mgl','$hidden_zps','0') "
+		." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `PKZ`, `zps`, `ordering`) "
+		." VALUES ('$sid','$lid','$man','$y','$mgl','$PKZ','$hidden_zps','0') "
 		;
 	$db->setQuery($query);
 	$db->query();
@@ -161,6 +168,7 @@ if ( $liga[0]->mail > 0 ) {
 	$bcc	= $config->email_bcc;
 	$bcc_mail	= $config->bcc;
 	$sl_mail	= $config->sl_mail;
+	$countryversion = $config->countryversion;
 	
 // nur wegen sehr leistungsschwachen Providern
 	$query	= " SET SQL_BIG_SELECTS=1";
@@ -195,9 +203,13 @@ if ( $liga[0]->mail > 0 ) {
 	$mannschaft = $db->loadObjectList();
 
 // Meldeliste
-	$query	= "SELECT a.*, p.DWZ as pDWZ, Spielername, Vereinname FROM #__clm_meldeliste_spieler as a"
-		." LEFT JOIN #__clm_dwz_spieler as p ON (p.sid = a.sid AND p.ZPS = a.zps AND p.Mgl_Nr = a.mgl_nr) "
-		." LEFT JOIN #__clm_dwz_vereine as v ON (v.sid = a.sid AND v.ZPS = a.zps) "
+	$query	= "SELECT a.*, p.DWZ as pDWZ, Spielername, Vereinname FROM #__clm_meldeliste_spieler as a";
+	if ($countryversion =="de") {
+		$query .= " LEFT JOIN #__clm_dwz_spieler as p ON (p.sid = a.sid AND p.ZPS = a.zps AND p.Mgl_Nr = a.mgl_nr) ";
+	} else{
+		$query .= " LEFT JOIN #__clm_dwz_spieler as p ON (p.sid = a.sid AND p.ZPS = a.zps AND p.PKZ = a.PKZ) ";
+	}
+	$query .= " LEFT JOIN #__clm_dwz_vereine as v ON (v.sid = a.sid AND v.ZPS = a.zps) "
 		." WHERE a.sid = ".$sid
 		." AND a.lid = ".$lid
 		." AND a.status = 0 "
@@ -294,17 +306,32 @@ if ( $liga[0]->mail > 0 ) {
 		</tr>
 	';
 	foreach ($meldeliste as $meldepos) {
-	  if ($meldepos->mgl_nr > 0) {
-  	  $body_html .=   '
-		<tr>
-			<td width="50" style="border-bottom: solid 1px #999999;"><div align="center"><strong>'.$meldepos->snr.'</strong></div></td>
-			<td width="210" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->Spielername. '&nbsp;</div></td>
-			<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->pDWZ. '&nbsp;</div></td>
-			<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .str_pad($meldepos->mgl_nr,3,"0",STR_PAD_LEFT). '&nbsp;</div></td>
-			<td width="210" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->Vereinname. '&nbsp;</div></td>
-		</tr>
-	  ';
-	} }
+		if ($countryversion =="de") {	  
+			if ($meldepos->mgl_nr > 0) {
+			$body_html .=   '
+			<tr>
+				<td width="50" style="border-bottom: solid 1px #999999;"><div align="center"><strong>'.$meldepos->snr.'</strong></div></td>
+				<td width="210" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->Spielername. '&nbsp;</div></td>
+				<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->pDWZ. '&nbsp;</div></td>
+				<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .str_pad($meldepos->mgl_nr,3,"0",STR_PAD_LEFT). '&nbsp;</div></td>
+				<td width="210" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->Vereinname. '&nbsp;</div></td>
+			</tr>
+			';
+			} 
+		} else {
+			if ($meldepos->PKZ > '') {
+			$body_html .=   '
+			<tr>
+				<td width="50" style="border-bottom: solid 1px #999999;"><div align="center"><strong>'.$meldepos->snr.'</strong></div></td>
+				<td width="210" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->Spielername. '&nbsp;</div></td>
+				<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->pDWZ. '&nbsp;</div></td>
+				<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->PKZ. '&nbsp;</div></td>
+				<td width="210" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->Vereinname. '&nbsp;</div></td>
+			</tr>
+			';
+			} 
+		}
+	}
 	$body_html .= 	  '
 		<tr>
 			<td>&nbsp;</td>

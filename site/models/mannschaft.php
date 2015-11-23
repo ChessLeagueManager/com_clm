@@ -54,6 +54,9 @@ class CLMModelMannschaft extends JModelLegacy
 	$sid	= JRequest::getInt('saison','1');
 	$liga	= JRequest::getInt('liga','1');
 	$tln	= JRequest::getInt('tlnr');
+	// Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion=$config->countryversion;
 
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
@@ -97,11 +100,14 @@ class CLMModelMannschaft extends JModelLegacy
 		$query .= " ORDER BY rmnr ASC, rrang ASC ";
 	} else {
 
-		$query = " SELECT a.start_dwz,a.mgl_nr,a.zps, d.Spielername as name,d.DWZ as dwz "
-			." FROM #__clm_meldeliste_spieler as a "
-			." LEFT JOIN #__clm_dwz_spieler as d on d.zps = a.zps AND d.mgl_nr = a.mgl_nr AND d.sid = a.sid"
-			." WHERE a.sid = ".$sid
-//			." AND (( a.zps = '$zps' AND a.mnr = $mnr) OR ( a.zps='$sgzps' AND a.mnr = $mnr )) "                        //alt
+		$query = " SELECT a.start_dwz,a.mgl_nr,a.zps,a.PKZ, d.Spielername as name,d.DWZ as dwz "
+			." FROM #__clm_meldeliste_spieler as a ";
+		if ($countryversion == "de") {
+			$query .= " LEFT JOIN #__clm_dwz_spieler as d on d.zps = a.zps AND d.mgl_nr = a.mgl_nr AND d.sid = a.sid";
+		} else {
+			$query .= " LEFT JOIN #__clm_dwz_spieler as d on d.zps = a.zps AND d.PKZ = a.PKZ AND d.sid = a.sid";
+		}
+		$query .= " WHERE a.sid = ".$sid
 			." AND (( a.zps = '$zps' AND a.mnr = $mnr) OR ( '$sgzps' LIKE CONCAT('%', a.zps, '%') AND a.mnr = $mnr )) " //neu
 //			." AND (( a.zps = '$zps' AND a.mnr = $mnr) OR ( FIND_IN_SET(a.zps, '$sgzps') != 0  AND a.mnr = $mnr )) "    //neu2: wäre auch möglich
 			." AND a.lid = ".$liga
@@ -221,12 +227,15 @@ class CLMModelMannschaft extends JModelLegacy
 		return @$result;
 	}
 	
-	//neu: Einzelergebnisse (klkl)
+	//Einzelergebnisse 
 	function _getCLMEinzel ( &$options )
 	{
 	$sid = JRequest::getInt('saison','1');
 	$liga = JRequest::getInt('liga','1');
 	$tln = JRequest::getInt('tlnr');
+	// Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion=$config->countryversion;
 
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
@@ -261,9 +270,13 @@ class CLMModelMannschaft extends JModelLegacy
 		$query = " SELECT a.*, "
 			." m.snr as snr "
 			." FROM #__clm_rnd_spl as a "
-			." LEFT JOIN #__clm_mannschaften as m1 ON m1.sid = a.sid AND m1.liga = a.lid AND m1.tln_nr = a.tln_nr"
-			." LEFT JOIN #__clm_meldeliste_spieler as m ON m.sid = a.sid AND m.lid = a.lid AND m.mgl_nr = a.spieler AND m.zps = a.zps AND m.mnr = m1.man_nr"
-			." WHERE m.lid = ".$liga
+			." LEFT JOIN #__clm_mannschaften as m1 ON m1.sid = a.sid AND m1.liga = a.lid AND m1.tln_nr = a.tln_nr";
+		if ($countryversion == "de") {
+			$query .= " LEFT JOIN #__clm_meldeliste_spieler as m ON m.sid = a.sid AND m.lid = a.lid AND m.mgl_nr = a.spieler AND m.zps = a.zps AND m.mnr = m1.man_nr";
+		} else {
+			$query .= " LEFT JOIN #__clm_meldeliste_spieler as m ON m.sid = a.sid AND m.lid = a.lid AND m.PKZ = a.PKZ AND m.zps = a.zps AND m.mnr = m1.man_nr";
+		}
+		$query .= " WHERE m.lid = ".$liga
 			." AND m.sid =".$sid
 			." AND a.lid =".$liga
 			." AND a.sid =".$sid
@@ -280,7 +293,7 @@ class CLMModelMannschaft extends JModelLegacy
 		$result = $this->_getList( $query );
 		return @$result;
 	}
-	//neu: Saison (klkl)
+	//Saison
 	function _getCLMSaison ( &$options )
 	{
 	$sid = JRequest::getInt('saison','1');
