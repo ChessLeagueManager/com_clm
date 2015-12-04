@@ -29,7 +29,7 @@ if($base)
 		echo $part;
 	} else {
 		$name_info = $elements[0]."_info";
-		$fix = clm_core::$load->load_view("spoiler", array($lang->$elements[0], ($lang->exist($name_info) ? '<div class="clm_view_config_info">'.$lang->$name_info."</div>" : "").$part,$elements[1]));
+		$fix = clm_core::$load->load_view("spoiler", array($lang->{$elements[0]}, ($lang->exist($name_info) ? '<div class="clm_view_config_info">'.$lang->$name_info."</div>" : "").$part,$elements[1]));
 		echo $fix[1]; // array dereferencing fix php 5.3
 	}
 } 

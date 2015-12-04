@@ -21,7 +21,7 @@ function clm_api_db_config_get($array,$base=false) {
 		if (!is_array($array[$i]) && isset($config[$array[$i]])) {
 			$out[$p][0] = $config[$array[$i]][1];
 			$out[$p][1] = $array[$i];
-			$out[$p][2] = clm_core::$db->config()->$array[$i];
+			$out[$p][2] = clm_core::$db->config()->{$array[$i]};
 			if ($out[$p][0] == 11) {
 				$out[$p][3] = clm_core::$api->direct($config[$array[$i]][3][0],$config[$array[$i]][3][1]);
 			} else {
