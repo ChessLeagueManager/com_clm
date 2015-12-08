@@ -916,7 +916,8 @@ function save()
 	if ( $stamm > $gman_kl_punkte ) { $gman_punkte = $gman_punkte + $man_antritt;}
 
 	// Datum und Uhrzeit für Meldung
-	$now = $date->toSQL();
+	//$now = $date->toSQL();
+	$now = clm_core::$cms->getNowDate();
 	// Für Heimmannschaft updaten
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET gemeldet = ".$meldung
@@ -2274,8 +2275,9 @@ function kampflos($gast)
 	$now		= $date->toSQL();
 	$user		=JFactory::getUser();
 	$meldung	= $user->get('id');
-	if ($gast=="heim") { $comment = 'Heimmannschaft gewinnt kampflos'; }
-		else { $comment = 'Gastmannschaft gewinnt kampflos'; }
+	if ($gast=="heim") { $comment = JText::_( 'ERGEBNISSE_COMMENT_HOME_KL' ); }
+		else { $comment = JText::_( 'ERGEBNISSE_COMMENT_GUEST_KL' ); }
+
 	$brett_punkte	= $bretter * ($sieg + $antritt);
 	$man_punkte	= $man_sieg + $man_antritt;
 

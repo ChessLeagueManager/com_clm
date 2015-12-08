@@ -244,7 +244,8 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 		$gman_punkte = $gman_punkte + $out["liga"][0]->man_antritt;
 	}
 	// Datum und Uhrzeit für Meldung
-	$now = date('Y-m-d H:i:s');
+	//$now = date('Y-m-d H:i:s');
+	$now = clm_core::$cms->getNowDate();
 	// Für Heimmannschaft updaten
 	$query = "UPDATE #__clm_rnd_man" . " SET gemeldet = " . $jid . " , zeit = '$now'" . " , brettpunkte = " . $hmpunkte . " , manpunkte = " . $hman_punkte . " , wertpunkte = " . $hwpunkte . " , comment = '" . $comment . "'" . " WHERE lid = " . $lid . " AND runde = " . $rnd . " AND paar = " . $paarung . " AND dg = " . $dg . " AND heim = 1 ";
 	clm_core::$db->query($query);

@@ -35,6 +35,9 @@ if(isset($_GET["view"]) && $_GET["view"]=="forceUpdate") {
 defined('_JEXEC') or die('Restricted access');
 // Bei Standalone Verbindung wird das Backend Login verwendet
 $_GET["clm_backend"]=1;
+// Bei Standalone Verbindung wird die Anmeldesprache aus Joomla verwendet ?!?
+$jlang = JFactory::getLanguage(); 
+$_GET["session_language"] = $jlang->getTag();
 
 if(substr(JVERSION,0,1)>2) {
 	$GLOBALS["clm"]["grid.checkall"] = JHtml::_('grid.checkall');
@@ -402,6 +405,9 @@ if ($viewName = JRequest::getCmd('view')) {
 	
 	
 } else {
+	//Sprachfile
+	$language = JFactory::getLanguage();
+	if (JRequest::getCmd('section') == "users")	$language->load('com_clm.accessgroup');
 	
 	// bisherige CLM-Architektur
 	require_once( JPATH_COMPONENT.DS.'controllers'.DS.$controllerName.'.php' );

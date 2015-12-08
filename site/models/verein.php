@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -26,7 +26,7 @@ class CLMModelVerein extends JModelLegacy
 	$query = " SELECT a.ZPS, a.sid, a.Geschlecht, a.DWZ, a.FIDE_Elo, a.FIDE_ID,"
 		." COUNT(Geschlecht) as Mgl,"
 		." COUNT(case Geschlecht when 'M' then 1 else NULL end) as Mgl_m," // Männliche Mitglieder
-		." COUNT(case Geschlecht when 'W' then 1 else NULL end) as Mgl_w," // Weibliche Miglieder
+		." COUNT(case Geschlecht when 'W' then 1 when 'F' then 1 else NULL end) as Mgl_w," // Weibliche Miglieder
 		." avg(case DWZ when 0 then NULL else DWZ end) as DWZ," // DWZ Durchschnitt
 		." avg(case FIDE_Elo when 0 then NULL else FIDE_Elo end) as FIDE_Elo," // ELO Durchschnitt
 		." COUNT(case DWZ when 0 then NULL else DWZ end) as DWZ_SUM," // ELO Spieler

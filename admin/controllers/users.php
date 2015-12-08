@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -134,13 +134,17 @@ function display($cachable = false, $urlparams = array())
 
 
 	// Funktionsliste
-	$sql = 'SELECT usertype, name FROM #__clm_usertype ';
+	$sql = 'SELECT usertype, name, kind FROM #__clm_usertype ';
 	if($usertypestring!=""){ $sql.=	' WHERE usertype OUT ('.$usertypestring.' ) '; }
 	$sql.=	' ORDER BY ordering ASC ';
 	$db->setQuery($sql);
+	$utlist = $db->loadObjectList();
+	for ($i = 0; $i < count($utlist); $i++) { 
+		if ($utlist[$i]->kind == "CLM") $utlist[$i]->name = JText::_( 'ACCESSGROUP_NAME_'.$utlist[$i]->usertype );  
+	}
 	$usertypelist[]	= JHTML::_('select.option',  '0', JText::_( 'USERS_BENUTZER_DD' ), 'usertype', 'name' );
-	$usertypelist		= array_merge( $usertypelist, $db->loadObjectList() );
-
+	//$usertypelist		= array_merge( $usertypelist, $db->loadObjectList() );
+	$usertypelist		= array_merge( $usertypelist, $utlist );
 	$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'filter_usertype', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','usertype', 'name', intval ($filter_usertype) );
 	// Ordering
 	$lists['order_Dir']	= $filter_order_Dir;
@@ -273,13 +277,18 @@ function edit()
 	$lists['jid']	= JHTML::_('select.genericlist',   $jid_list, 'pid', 'class="inputbox" size="1"','id', 'name', $row->jid );
 
 	// Funktionsliste
-	$sql = 'SELECT usertype, name FROM #__clm_usertype ';
+	$sql = 'SELECT usertype, name, kind FROM #__clm_usertype ';
 	$sql .= ' WHERE published = 1 ';
 	if($usertypestring!=""){ $sql .= 'AND usertype OUT ('.$usertypestring.' ) '; }
 	$sql .= ' ORDER BY ordering ';
 	$db->setQuery($sql);
+	$utlist = $db->loadObjectList();
+	for ($i = 0; $i < count($utlist); $i++) { 
+		if ($utlist[$i]->kind == "CLM") $utlist[$i]->name = JText::_( 'ACCESSGROUP_NAME_'.$utlist[$i]->usertype );  
+	}
 	$usertypelist[]		= JHTML::_('select.option',  '', JText::_( 'USERS_TYP' ), 'usertype', 'name' );
-	$usertypelist		= array_merge( $usertypelist, $db->loadObjectList() );
+	//$usertypelist		= array_merge( $usertypelist, $db->loadObjectList() );
+	$usertypelist		= array_merge( $usertypelist, $utlist );
 	$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'usertype', 'class="inputbox" size="1"','usertype', 'name', $row->usertype );
 
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'users.php');

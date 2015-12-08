@@ -6,7 +6,8 @@ class clm_class_log {
 	}
 	private function add($type, $name, $content) {
 		$userid = clm_core::$access->getId ();
-		$sql = 'INSERT INTO #__clm_logging (`callid`, `userid`,`timestamp`,`type`,`name`,`content`) VALUES ("' . $this->callid . '", ' . $userid . ', ' . time () . ', ' . $type . ',  "' . clm_core::$db->escape ( htmlspecialchars ( trim(preg_replace('/\s+/', ' ', $name)), ENT_QUOTES, "UTF-8" ) ) . '", "' . clm_core::$db->escape ( htmlspecialchars ( trim(preg_replace('/\s+/', ' ', $content)), ENT_QUOTES, "UTF-8" ) ) . '")';
+		$sql = 'INSERT INTO #__clm_logging (`callid`, `userid`,`timestamp`,`type`,`name`,`content`)'
+			.' VALUES ("' . $this->callid . '", ' . $userid . ', ' . time () . ', ' . $type . ',  "' . clm_core::$db->escape ( htmlspecialchars ( trim(preg_replace('/\s+/', ' ', $name)), ENT_QUOTES, "UTF-8" ) ) . '", "' . clm_core::$db->escape ( htmlspecialchars ( trim(preg_replace('/\s+/', ' ', $content)), ENT_QUOTES, "UTF-8" ) ) . '")';
 		clm_core::$db->query ( $sql );
 	}
 	

@@ -70,6 +70,24 @@ class clm_class_cms_standalone extends clm_class_cms {
 		}
 		return array(0);
 	}
+	public function getLanguage() {
+		$this->initJoomla();
+		if (isset($_GET["session_language"])) $slang = $_GET["session_language"];
+		else $slang = "xx-XX";
+		return $slang;
+	}
+	public function getNowDate($format = "Y-m-d H:i:s") {
+		$this->initJoomla();
+		$date = JFactory::getDate(); 
+		$now = date( $format, strtotime( $date->toSQL() ) );
+		return $now;
+	}
+	public function showDate($date_time, $format = "") {
+		$this->initJoomla();
+		if ($format == "") $format = JText::_('DATE_FORMAT_LC2');
+		$output = JHtml::_('date',  $date_time, $format);
+		return $output;
+	}
 	public function isRoot() {
 		$this->initJoomla();
 		if (JFactory::getUser()->get('isRoot')) {

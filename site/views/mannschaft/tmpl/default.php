@@ -291,6 +291,7 @@ for ($x=0; $x< 100; $x++){
 	while (isset($count[$x]) and $count[$x]->mgl_nr == "0" AND $countryversion == "de")  {
 		$x++; }
 	if (!isset($count[$x])) break;
+	if ($count[$x]->PKZ === NULL) { $count[$x]->PKZ = ""; }
 	if ($x%2 != 0) { $zeilenr = 'zeile1'; 
 		$zeiled = $clm_zeile1D; }
 	else { $zeilenr = 'zeile2';
@@ -470,7 +471,7 @@ for ($x=0; $x< 100; $x++){
     foreach ($plan as $plan) { 
 		//$datum =JFactory::getDate($plan->datum);?>
     <tr>
-    <td><a href="index.php?option=com_clm&view=runde&saison=<?php echo $sid; ?>&liga=<?php echo $liga; ?>&runde=<?php echo $plan->runde; ?>&dg=<?php echo $plan->dg; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $plan->runde; ?></a></td>
+    <td><a href="index.php?option=com_clm&view=runde&saison=<?php echo $sid; ?>&liga=<?php echo $liga; ?>&runde=<?php echo $plan->runde; ?>&dg=<?php echo $plan->dg; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php if ($mannschaft[0]->dg > 1) echo $plan->dg." / "; echo $plan->runde; ?></a></td>
     <td><?php echo $plan->paar; ?></td>
     <td><?php while (isset($termin[$cnt]->nr) AND ($plan->runde + $mannschaft[0]->runden*($plan->dg -1)) > $termin[$cnt]->nr) { 
 			$cnt++; }

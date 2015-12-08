@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -333,11 +333,15 @@ else {	?>
 </td>
 <tr>
 	<th class="paar"><?php echo JText::_('PAAR') ?></th>
+	<?php if ($fe_runde_tln =="1") { ?>
 	<th class="tln"><?php echo JText::_('TLN') ?></th>
+    <?php } ?>
 	<th class="heim"><?php echo JText::_('HOME') ?></th>
 	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
 	<th class="erg"><?php echo JText::_('RESULT') ?></th>
+	<?php if ($fe_runde_tln =="1") { ?>
 	<th class="tln"><?php echo JText::_('TLN') ?></th>
+    <?php } ?>
 	<th class="gast"><?php echo JText::_('GUEST') ?></th>
 	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
 </tr>
@@ -352,7 +356,9 @@ if ($y%2 != 0) { $zeilenr = 'zeile1'; }
 
 <tr class="<?php echo $zeilenr; ?>">
 <td class="paar"><?php echo $paar[$z]->paar; ?></td>
-<td class="tln"><?php echo $paar[$z]->tln_nr; ?></td>
+	<?php if ($fe_runde_tln =="1") { ?>
+    <td class="tln"><?php echo $paar[$z]->tln_nr; ?></td>
+    <?php } ?>
 <td class="heim">
 <?php if ($paar[$z]->hpublished == 1) { ?>
 <a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $liga[0]->sid; ?>&amp;liga=<?php echo $liga[0]->id; ?>&amp;tlnr=<?php echo $paar[$z]->htln; ?>"><?php echo $paar[$z]->hname; ?></a><?php }
@@ -374,7 +380,9 @@ if ( $summe[$sum_paar]->runde == ($x+1) AND $summe[$sum_paar]->paarung == ($y+1)
 else { ?><td class="erg"> : </td><?php }
 /////////////////////////////
 ?>
-<td class="tln"><?php echo $paar[$z]->gtln; ?></td>
+		<?php if ($fe_runde_tln =="1") { ?>
+			<td class="tln"><?php echo $paar[$z]->gtln; ?></td>
+		<?php } ?>
 <td class="gast">
 <?php if ($paar[$z]->gpublished == 1) { ?>
 <a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $liga[0]->sid; ?>&amp;liga=<?php echo $liga[0]->id; ?>&amp;tlnr=<?php echo $paar[$z]->gtln; ?>"><?php echo $paar[$z]->gname; ?></a><?php }
@@ -457,11 +465,15 @@ else {	?>
 </td>
 <tr>
 	<th class="paar"><?php echo JText::_('PAAR') ?></th>
+	<?php if ($fe_runde_tln =="1") { ?>
 	<th class="tln"><?php echo JText::_('TLN') ?></th>
+    <?php } ?>
 	<th class="heim"><?php echo JText::_('HOME') ?></th>
 	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
 	<th class="erg"><?php echo JText::_('RESULT') ?></th>
+	<?php if ($fe_runde_tln =="1") { ?>
 	<th class="tln"><?php echo JText::_('TLN') ?></th>
+    <?php } ?>
 	<th class="gast"><?php echo JText::_('GUEST') ?></th>
 	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
 </tr>
@@ -476,7 +488,9 @@ if ($y%2 != 0) { $zeilenr = 'zeile1'; }
 
 <tr class="<?php echo $zeilenr; ?>">
 <td class="paar"><?php echo $paar[$z]->paar; ?></td>
-<td class="tln"><?php echo $paar[$z]->tln_nr; ?></td>
+	<?php if ($fe_runde_tln =="1") { ?>
+    <td class="tln"><?php echo $paar[$z]->tln_nr; ?></td>
+    <?php } ?>
 <td class="heim">
 <?php if ($paar[$z]->hpublished == 1) { ?>
 <a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $liga[0]->sid; ?>&amp;liga=<?php echo $liga[0]->id; ?>&amp;tlnr=<?php echo $paar[$z]->htln; ?>"><?php echo $paar[$z]->hname; ?></a><?php }
@@ -498,7 +512,9 @@ if ( $summe[$sum_paar]->runde == ($x+1) AND $summe[$sum_paar]->paarung == ($y+1)
 else { ?><td class="erg"> : </td><?php }
 /////////////////////////////
 ?>
-<td class="tln"><?php echo $paar[$z]->gtln; ?></td>
+		<?php if ($fe_runde_tln =="1") { ?>
+			<td class="tln"><?php echo $paar[$z]->gtln; ?></td>
+		<?php } ?>
 <td class="gast">
 <?php if ($paar[$z]->gpublished == 1) { ?>
 <a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $liga[0]->sid; ?>&amp;liga=<?php echo $liga[0]->id; ?>&amp;tlnr=<?php echo $paar[$z]->gtln; ?>"><?php echo $paar[$z]->gname; ?></a><?php }
@@ -581,11 +597,15 @@ else {	?>
 </td>
 <tr>
 	<th class="paar"><?php echo JText::_('PAAR') ?></th>
+	<?php if ($fe_runde_tln =="1") { ?>
 	<th class="tln"><?php echo JText::_('TLN') ?></th>
+    <?php } ?>
 	<th class="heim"><?php echo JText::_('HOME') ?></th>
 	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
 	<th class="erg"><?php echo JText::_('RESULT') ?></th>
+	<?php if ($fe_runde_tln =="1") { ?>
 	<th class="tln"><?php echo JText::_('TLN') ?></th>
+    <?php } ?>
 	<th class="gast"><?php echo JText::_('GUEST') ?></th>
 	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
 </tr>
@@ -600,7 +620,9 @@ if ($y%2 != 0) { $zeilenr = 'zeile1'; }
 
 <tr class="<?php echo $zeilenr; ?>">
 <td class="paar"><?php echo $paar[$z]->paar; ?></td>
-<td class="tln"><?php echo $paar[$z]->tln_nr; ?></td>
+	<?php if ($fe_runde_tln =="1") { ?>
+    <td class="tln"><?php echo $paar[$z]->tln_nr; ?></td>
+    <?php } ?>
 <td class="heim">
 <?php if ($paar[$z]->hpublished == 1) { ?>
 <a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $liga[0]->sid; ?>&amp;liga=<?php echo $liga[0]->id; ?>&amp;tlnr=<?php echo $paar[$z]->htln; ?>"><?php echo $paar[$z]->hname; ?></a><?php }
@@ -622,7 +644,9 @@ if ( $summe[$sum_paar]->runde == ($x+1) AND $summe[$sum_paar]->paarung == ($y+1)
 else { ?><td class="erg"> : </td><?php }
 /////////////////////////////
 ?>
-<td class="tln"><?php echo $paar[$z]->gtln; ?></td>
+		<?php if ($fe_runde_tln =="1") { ?>
+			<td class="tln"><?php echo $paar[$z]->gtln; ?></td>
+		<?php } ?>
 <td class="gast">
 <?php if ($paar[$z]->gpublished == 1) { ?>
 <a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $liga[0]->sid; ?>&amp;liga=<?php echo $liga[0]->id; ?>&amp;tlnr=<?php echo $paar[$z]->gtln; ?>"><?php echo $paar[$z]->gname; ?></a><?php }

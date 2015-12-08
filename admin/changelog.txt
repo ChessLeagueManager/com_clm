@@ -17,9 +17,15 @@ $ -> Language fix or change
 ^ Sprachfilezuordnung für umgestellte Views
 # raw-View Verein für Extern-Zugriff
 # Manuelle Aktualisierung von Vereinen und Spielern: Behandlung von Sonderzeichen
-# Admin-View Vereine: Berechtigung für FreigebenSperren
+# Admin-View Vereine: Berechtigung für Freigeben u. Sperren
 # DWZ-Übersicht pdf-Liste
 + Einbau engl. Version insb. Ref.-No anstelle Mitgliedsnummer sowie Datenübernahme
++ Englische Sprachfiles
+# Datumbehandlung in umgestellten Views
+# Datumsdarstellung bei englischer Sprache
+# Sprachsteuerung in umgestellten Views insb. Tabellenanzeigen
++ CLM-Benutzergruppen sprachabhängig
+# Paarungsliste falls Teilnehmernummer nicht gewünscht
 
 - - - - - 3.2.2 - [05-10-2015] - - - - - - - - - - - - - - - - - - - -
 # Config: Email-Adressen mit Umlauten erlauben

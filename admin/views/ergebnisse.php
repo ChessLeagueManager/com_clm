@@ -441,7 +441,9 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 			<label for="name"><?php echo JText::_( 'RESULTS_DETAILS_DATE' ); ?></label>
 			</td>
 			<td>
-			<?php if ($runde[0]->zeit != "0000-00-00 00:00:00") {echo JHtml::_('date',  $runde[0]->zeit, JText::_('DATE_FORMAT_LC2'));} 
+			<?php if ($runde[0]->zeit != "0000-00-00 00:00:00") {
+				//echo JHtml::_('date',  $runde[0]->zeit, JText::_('DATE_FORMAT_LC2'));} 
+				echo clm_core::$cms->showDate($runde[0]->zeit);} 
 			else { echo JText::_('RESULTS_DETAILS_NOTHING'); } ?>
 
 			</td>
@@ -460,7 +462,9 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 			<label for="name"><?php echo JText::_( 'RESULTS_DETAILS_DATE' ); ?></label>
 			</td>
 			<td>
-			<?php if ($runde[0]->edit_zeit != "0000-00-00 00:00:00") {echo JHtml::_('date',  $runde[0]->edit_zeit, JText::_('DATE_FORMAT_LC2'));} 
+			<?php if ($runde[0]->edit_zeit != "0000-00-00 00:00:00") {
+				//echo JHtml::_('date',  $runde[0]->edit_zeit, JText::_('DATE_FORMAT_LC2'));} 
+				echo clm_core::$cms->showDate($runde[0]->edit_zeit);} 
 			else { echo "---"; } ?>
 			</td>
 		</tr>

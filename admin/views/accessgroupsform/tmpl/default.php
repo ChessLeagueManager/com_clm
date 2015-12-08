@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -65,7 +65,8 @@ defined('_JEXEC') or die('Restricted access');
 							<td> 
 								<input class="inputbox" type="text" name="name" 
 								id="name" size="48" maxlength="255" 
-								value="<?php echo $this->accessgroup->name;?>" /> 
+								value="<?php if ($this->accessgroup->kind == "CLM") echo JText::_( 'ACCESSGROUP_NAME_'.$this->accessgroup->usertype );
+												else echo $this->accessgroup->name; ?>" /> 
 							</td> 
 						</tr> 
 						<tr> 

@@ -63,6 +63,20 @@ class clm_class_cms_joomla extends clm_class_cms {
 		}
 		return array(0);
 	}
+	public function getLanguage() {
+		$jlang = JFactory::getLanguage(); 
+		return $jlang->getTag();
+	}
+	public function getNowDate($format = "Y-m-d H:i:s") {
+		$date = JFactory::getDate('now'); 
+		$now = date( $format, strtotime( $date->toSQL() ) );
+		return $now;
+	}
+	public function showDate($date_time, $format = "") {
+		if ($format == "") $format = JText::_('DATE_FORMAT_LC2');
+		$output = JHtml::_('date',  $date_time, $format);
+		return $output;
+	}
 	public function isRoot() {
 		return JFactory::getUser()->get('isRoot');
 	}

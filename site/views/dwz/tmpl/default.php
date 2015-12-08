@@ -64,7 +64,7 @@ echo CLMContent::createPDFLink('dwz', JText::_('PDF_CLUBRATING'), array('layout'
 <div class="clr"></div>
 
     <div class="clmbox">
-        <a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $urlzps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('TEAM_DETAILS') ?></a> | <a href="index.php?option=com_clm&view=vereinsliste&saison=<?php echo $sid; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('CLUBS_LIST') ?></a>
+        <a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $urlzps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('CLUB_DETAILS') ?></a> | <a href="index.php?option=com_clm&view=vereinsliste&saison=<?php echo $sid; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('CLUBS_LIST') ?></a>
     	
         <span class="right">
         	<form name="form1">
@@ -142,7 +142,7 @@ echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
    <?php if ($countryversion =="de") { ?>	
     <td class="dwz_6"><a href="http://schachbund.de/spieler.html?zps=<?php echo $zps->ZPS; ?>-<?php echo $zps->Mgl_Nr; ?>" target="_blank"><?php echo $zps->DWZ; ?></a> - <?php echo $zps->DWZ_Index; ?></td>
    <?php } else { ?>
-    <td class="dwz_6"><?php echo $zps->DWZ; if ($countryversion == "en") echo '<font size="1"><br>('.(600 + ($zps->DWZ * 8)).')</font>'; ?></td>
+    <td class="dwz_6"><?php echo $zps->DWZ; if ($countryversion == "en") echo '<font size="1"> ('.(600 + ($zps->DWZ * 8)).')</font>'; ?></td>
    <?php } ?>
     <td class="dwz_7"><?php if ( $zps->FIDE_Elo == 0 ) { echo "-"; } else { echo '<a href="http://ratings.fide.com/card.phtml?event=' . $zps->FIDE_ID . '" target="_blank">' . $zps->FIDE_Elo .'</a>'; } ?></td>
     <td class="dwz_8"><?php echo $zps->FIDE_Titel; ?></td>
@@ -155,7 +155,11 @@ echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
 <input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />
 </form>
 
-<div class="hint">DWZ Liste: <a href="http://schachbund.de/verein.html?zps=<?php echo $urlzps; ?>" target="_blank">http://schachbund.de/verein.html?zps=<?php echo $urlzps; ?></a></div>   
+   <?php if ($countryversion =="de") { ?>
+	<div class="hint">DWZ Liste: <a href="http://schachbund.de/verein.html?zps=<?php echo $urlzps; ?>" target="_blank">http://schachbund.de/verein.html?zps=<?php echo $urlzps; ?></a></div>   
+   <?php } elseif ($countryversion =="en") { ?>
+	<div class="hint">The ECF Grading Database: <a href="http://www.ecfgrading.org.uk/new/menu.php" target="_blank">http://www.ecfgrading.org.uk/new/menu.php</a></div>   
+   <?php } ?>
 <br>
 
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); ?>

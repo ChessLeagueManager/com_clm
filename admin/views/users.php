@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -145,7 +145,7 @@ public static function users( &$rows, &$lists, &$pageNav, $option )
 					</td>
 
 					<td align="center">
-						<?php echo $rows[$i]->funktion;?>
+						<?php if ($rows[$i]->kind == "CLM") echo JText::_('ACCESSGROUP_NAME_'.$rows[$i]->usertype); else echo $rows[$i]->funktion;?>
 					</td>
 
 					<td align="center">

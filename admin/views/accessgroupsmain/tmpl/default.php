@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -83,6 +83,7 @@ defined('_JEXEC') or die('Restricted access');
 						$adminLink->more = array('task' => 'edit', 'hidemainmenu' => 1, 'cid' => $row->id);
 						$adminLink->makeURL();
 					
+						if ($row->kind == "CLM") $row->name = JText::_( 'ACCESSGROUP_NAME_'.$row->usertype );
 						?>
 						<span class="editlinktip hasTip" title="<?php echo JText::_( 'ACCESSGROUP_EDIT' );?>::<?php echo $row->name; ?>">
 							<a href="<?php echo $adminLink->url; ?>">

@@ -24,6 +24,9 @@ abstract class clm_class_cms {
 	abstract public function addScriptDeclaration($content, $type = "text/javascript");
 	abstract public function getStyleScriptHead();
 	abstract public function getUserData();
+	abstract public function getLanguage();
+	abstract public function getNowDate($format = "Y-m-d H:i:s");
+	abstract public function showDate($date_time, $format = "");
 	abstract public function isRoot();
 	
 	// Die Rechteverwaltung muss nach einem login/logout stets neu gestartet werden.

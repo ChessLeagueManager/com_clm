@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -15,6 +15,10 @@ class CLMViewVereine
 {
 public static function setVereineToolbar()
 	{
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
+	
 	$clmAccess = clm_core::$access;
 	// Menubilder laden
 		clm_core::$load->load_css("icons_images");
@@ -24,10 +28,11 @@ public static function setVereineToolbar()
 	//if (clm_core::$access->getType() === 'admin') {
 		JToolBarHelper::custom('copy_saison','copy.png','copy_f2.png','VEREIN_BUTTON_COPY_LAST_YEAR',false);
 	}
-
-	if($clmAccess->access('BE_club_general') === true) {
-		JToolBarHelper::custom('gruppen','send.png','send_f2.png','VEREIN_BUTTON_GROUP_EDIT',false);
-		JToolBarHelper::custom('rangliste','send.png','send_f2.png','VEREIN_BUTTON_RANG_EDIT',false);
+	if ($countryversion =="de") {
+		if($clmAccess->access('BE_club_general') === true) {
+			JToolBarHelper::custom('gruppen','send.png','send_f2.png','VEREIN_BUTTON_GROUP_EDIT',false);
+			JToolBarHelper::custom('rangliste','send.png','send_f2.png','VEREIN_BUTTON_RANG_EDIT',false);
+		} 
 	}
 	if($clmAccess->access('BE_club_edit_member') === true) {
 	//if (clm_core::$access->getType() === 'admin' OR clm_core::$access->getType() === 'dv' OR clm_core::$access->getType() === 'dwz') {

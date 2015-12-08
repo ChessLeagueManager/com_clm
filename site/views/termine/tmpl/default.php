@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Fjodor Sch�fer
@@ -69,7 +69,8 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
 				echo "</ul></li>\n<li><ul><li>\n".'<a href="index.php?option=com_clm&amp;view=termine&amp;saison='. $sid .'&amp;Itemid='. $itemid .'&amp;start='.$schnellmenu_arr[$x][0].'-01-01">'. $schnellmenu_arr[$x][0] ."</a>&nbsp;:&nbsp;</li>\n"; }
             else $new_year = false;    
             if ( !isset($schnellmenu_arr[$x-1]) OR  $schnellmenu_arr[$x][1] > $schnellmenu_arr[$x-1][1]  OR ($new_year)) { 
-                echo '<li><a href="index.php?option=com_clm&amp;view=termine&amp;saison='. $sid .'&amp;Itemid='. $itemid .'&amp;start='.$schnellmenu_arr[$x][0].'-'.$schnellmenu_arr[$x][1].'-01">'. $arrMonth[date('F',$schnellmenu_monat)] ."</a></li>\n"; }
+                //echo '<li><a href="index.php?option=com_clm&amp;view=termine&amp;saison='. $sid .'&amp;Itemid='. $itemid .'&amp;start='.$schnellmenu_arr[$x][0].'-'.$schnellmenu_arr[$x][1].'-01">'. $arrMonth[date('F',$schnellmenu_monat)] ."</a></li>\n"; }
+                echo '<li><a href="index.php?option=com_clm&amp;view=termine&amp;saison='. $sid .'&amp;Itemid='. $itemid .'&amp;start='.$schnellmenu_arr[$x][0].'-'.$schnellmenu_arr[$x][1].'-01">'. date('F',$schnellmenu_monat) ."</a></li>\n"; }
             		
             } ?>
             </ul></td>
@@ -120,13 +121,16 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
                 if ( !isset($datum_arr[$t-1]) OR $datum_arr[$t][0] > $datum_arr[$t-1][0] ) { 
                 echo '<tr><th colspan="3"><a name="'. $datum_arr[$t][0] .'">'. $datum_arr[$t][0] .'</a></th></tr>'; }
                 
-                echo '<tr class="anfang"><td colspan="3"><a name="'. $datum_arr[$t][0] .'-'. $datum_arr[$t][1] .'">'. $arrMonth[date('F',$monatsausgabe)] . '</a></td></tr>';  
+                //echo '<tr class="anfang"><td colspan="3"><a name="'. $datum_arr[$t][0] .'-'. $datum_arr[$t][1] .'">'. $arrMonth[date('F',$monatsausgabe)] . '</a></td></tr>';  
+                echo '<tr class="anfang"><td colspan="3"><a name="'. $datum_arr[$t][0] .'-'. $datum_arr[$t][1] .'">'. date('F',$monatsausgabe) . '</a></td></tr>';  
             } ?>
             <tr>
                 <td width="150" align="right" class="date">
                 <?php if (isset($datum[$t-1]) AND $datum[$t] == $datum[$t-1]) { echo ''; }
-                else { echo $arrWochentag[date("l",$datum[$t])]. ",&nbsp;" . $datum_arr[$t][2].".".$datum_arr[$t][1].".".$datum_arr[$t][0]; }
-				if (isset($datum[$t]) AND $datum[$t] != '0000-00-00') { if ($termine[$t]->starttime != '00:00:00') echo '&nbsp;&nbsp;&nbsp;'.substr($termine[$t]->starttime,0,5).'&nbsp;Uhr';} ?>
+                //else { echo $arrWochentag[date("l",$datum[$t])]. ",&nbsp;" . $datum_arr[$t][2].".".$datum_arr[$t][1].".".$datum_arr[$t][0]; }
+				else { echo JHTML::_('date',  $termine[$t]->datum, JText::_('DATE_FORMAT_CLM_F')); }
+				//if (isset($datum[$t]) AND $datum[$t] != '0000-00-00') { if ($termine[$t]->starttime != '00:00:00') echo '&nbsp;&nbsp;&nbsp;'.substr($termine[$t]->starttime,0,5).'&nbsp;Uhr';} 
+				if (isset($datum[$t]) AND $datum[$t] != '0000-00-00') { if ($termine[$t]->starttime != '00:00:00') echo '&nbsp;&nbsp;&nbsp;'.substr($termine[$t]->starttime,0,5).'&nbsp;';} ?>
                 </td>
                 <td class="title"><a href="<?php echo $linkname; if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php  echo $termine[$t]->name; ?></a></td>
                 <td class="typ"><?php echo $linktyp; ?></td>

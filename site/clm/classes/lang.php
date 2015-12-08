@@ -4,18 +4,17 @@ class clm_class_lang {
 	public function __construct() {
 		$this->data = array();
 	}
-	public function __get($string) {
-		$jlang = JFactory::getLanguage();
+	public function __get($string) {		
 		if (!isset($this->data[$string])) {
-//			$url = clm_core::$path . DS . "languages" . DS . clm_core::$db->config()->language . DS . $string . ".ini";
-			$url = clm_core::$path . DS . "languages" . DS . $jlang->getTag() . DS . $jlang->getTag().".".$string . ".ini";
+			$url = clm_core::$path . DS . "languages" . DS . clm_core::$cms->getLanguage() . DS . clm_core::$cms->getLanguage().".".$string . ".ini";
 			if (!is_file($url)) {
 				$url = clm_core::$path . DS . "languages" . DS . "de-DE" . DS . "de-DE.".$string . ".ini";
-//				$this->data[$string] = new clm_class_lang_object(array());
-//			} else {
 			}
+			if (!is_file($url)) {
+				$this->data[$string] = new clm_class_lang_object(array());
+			} else {
 				$this->data[$string] = self::stringArray(file($url));
-//			}
+			}
 		}
 		return $this->data[$string];
 	}
