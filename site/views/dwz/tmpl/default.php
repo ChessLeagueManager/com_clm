@@ -30,8 +30,11 @@ $countryversion = $config->countryversion;
 
 	// Browsertitelzeile setzen
 	$doc =JFactory::getDocument();
-	$doc->setTitle(JText::_('CLUB_RATING').' '.$liga[0]->Vereinname);
-	
+	if ($countryversion == "de") {
+		$doc->setTitle(JText::_('CLUB_RATING').' '.$liga[0]->Vereinname);
+	} else {
+		$doc->setTitle(JText::_('CLUB_RATING_EN').' '.$liga[0]->Vereinname);
+	}
 ?>
 <Script language="JavaScript">
 <!-- Vereinsliste
@@ -53,7 +56,9 @@ function tableOrdering( order, dir, task )
 <div >
 <div id="dwz">
 <div class="componentheading">
-<?php echo JText::_('CLUB_RATING') ?> ::: <?php echo $liga[0]->Vereinname; ?>
+<?php 	if ($countryversion == "de") echo JText::_('CLUB_RATING'); 
+		else echo JText::_('CLUB_RATING_EN'); 
+		echo " ::: ".$liga[0]->Vereinname; ?>
 <div id="pdf">
 
 <?php
@@ -109,15 +114,19 @@ echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
 
     <tr>
     <th class="dwz_1"><?php echo JText::_('CLUB_NR') ?></th>
-  <?php if ($countryversion =="de") { ?>
-    <th class="dwz_2"><a href="javascript:tableOrdering('Mgl_Nr','asc','');"><?php echo JText::_('CLUB_MEMBER') ?></a></th>
+   <?php if ($countryversion =="de") { ?>
+    <th class="dwz_2"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER', 'Mgl_Nr', $this->lists['order_Dir'], $this->lists['order']); ?></a></th>
    <?php } else { ?>
-    <th class="dwz_2"><a href="javascript:tableOrdering('PKZ','asc','');"><?php echo JText::_('CLUB_MEMBER_PKZ') ?></a></th>
+    <th class="dwz_2"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_PKZ', 'PKZ', $this->lists['order_Dir'], $this->lists['order']); ?></a></th>
    <?php } ?>
-    <th class="dwz_3"><a href="javascript:tableOrdering('Spielername','asc','');"><?php echo JText::_('CLUB_MEMBER_NAME') ?></a></th>
+	<th class="dwz_3"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_NAME', 'Spielername', $this->lists['order_Dir'], $this->lists['order']); ?></a></th>
     <th class="dwz_4"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_STATUS', 'Status', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-    <th class="dwz_5"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_GESCHL', 'Geschlecht', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-    <th class="dwz_6"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_RATING', 'DWZ', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+    <th class="dwz_5"><?php echo JHtml::_( 'grid.sort', 'CLUB_MEMBER_GESCHL', 'Geschlecht', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+    <?php if ($countryversion == "de") { ?>
+		<th class="dwz_6"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_RATING', 'DWZ', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+    <?php } else { ?>
+		<th class="dwz_6"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_RATING_EN', 'DWZ', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+    <?php } ?>
     <th class="dwz_7"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_ELO', 'FIDE_Elo', $this->lists['order_Dir'], $this->lists['order']); ?></th>
     <th class="dwz_8"><?php echo JText::_('CLUB_MEMBER_TITEL') ?></th>
     </tr>

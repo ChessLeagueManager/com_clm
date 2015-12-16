@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -91,7 +91,8 @@ function tableOrdering( order, dir, task )
 <form id="adminForm" action="<?php echo JRoute::_( 'index.php?option=com_clm&view=vereinsliste' . $plink ) ;?>" method="post" name="adminForm">
 <table cellpadding="0" cellspacing="0" class="vereinsliste">
 	<tr class="anfang">
-        <th rowspan="2" class="col_1"><a href="javascript:tableOrdering('name','asc','');"><?php echo JText::_('CLUBS_LIST_NAME') ?></a></th>
+ <!--       <th rowspan="2" class="col_1"><a href="javascript:tableOrdering('name','asc','');"><?php echo JText::_('CLUBS_LIST_NAME') ?></a></th> -->
+        <th rowspan="2" class="col_1"><?php echo JHTML::_( 'grid.sort', 'CLUBS_LIST_NAME', 'NAME', $this->lists['order_Dir'], $this->lists['order']); ?></th>
         <?php if ($fe_vereinsliste_vs == 1) { ?><th rowspan="2" class="col_2"><?php echo JText::_('CLUB_CHIEF') ?></th><?php } ?>
         <?php if ($fe_vereinsliste_hpage == 1) { ?><th rowspan="2" class="col_3"><?php echo JText::_('CLUB_HOMEPAGE') ?></th><?php } ?>
         <th colspan="4" class="col"><?php echo JHTML::_( 'grid.sort', 'CLUBS_LIST_MEMBER', 'MGL_SUM', $this->lists['order_Dir'], $this->lists['order']); ?></th>

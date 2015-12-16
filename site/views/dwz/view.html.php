@@ -37,11 +37,17 @@ class CLMViewDWZ extends JViewLegacy
 		$document->addScript(JURI::base().'components/com_clm/javascript/updateTableHeaders.js');
 		 
 		/* Call the state object */
-		$state = $this->get( 'state' );
+//		$state = $this->get( 'state' );
+		$mainframe =JFactory::getApplication();
+		global $option;
+		$lists['state'] = $mainframe->getUserStateFromRequest( "$option.filter_state",'filter_state','','word' );
  
 		/* Get the values from the state object that were inserted in the model's construct function */
-		$lists['order']     = $state->get( 'filter_order_dwz' );
-		$lists['order_Dir'] = $state->get( 'filter_order_Dir_dwz' );
+		$lists['order'] = $mainframe->getUserStateFromRequest( "$option.filter_order", 'filter_order', 'DWZ', 'cmd' ); // JRequest::getString('filter_order', 'a.id');
+		$lists['order_Dir'] = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",'filter_order_Dir','desc','word' );
+		//$lists['order']     = $state->get( 'filter_order_dwz' );
+		//$lists['order_Dir'] = $state->get( 'filter_order_Dir_dwz' );
+
  
 		$this->assignRef( 'lists', $lists );
 		

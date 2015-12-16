@@ -63,6 +63,7 @@ $antritt = $ligapunkte->antritt;
 
 // Konfigurationsparameter auslesen
 $config = clm_core::$db->config();
+$countryversion = $config->countryversion;
 	$telefon= $config->man_tel;
 	$mobil	= $config->man_mobil;
 	$mail	= $config->man_mail;
@@ -207,7 +208,10 @@ $pdf->SetFont('Times','',$font);
 		$pdf->Cell(40,8,JText::_('DWZ_NAME'),0,0);
 	else
 		$pdf->Cell(48,8,JText::_('DWZ_NAME'),0,0);
-	$pdf->Cell(10,8,JText::_('LEAGUE_STAT_DWZ'),0,0,'R');
+	if ($countryversion == "de")
+		$pdf->Cell(10,8,JText::_('LEAGUE_STAT_DWZ'),0,0,'R');
+	else
+		$pdf->Cell(10,8,JText::_('LEAGUE_STAT_DWZ_EN'),0,0,'R');
 	//if (!$count) 
 	for ($b=0; $b<$mannschaft[0]->runden; $b++) {
 		$pdf->Cell($breite,8,$b+1,0,0,'C');
@@ -236,9 +240,10 @@ $pdf->SetFont('Times','',$font);
 	$sumgespielt = 0;
 for ($x=0; $x< 100; $x++){
 	// Überlesen von Null-Sätzen 
-	while (isset($count[$x]) and ($count[$x]->mgl_nr == "0"))  {
+	while (isset($count[$x]) and $countryverssion == "de" and ($count[$x]->mgl_nr == "0"))  {
 		$x++; }
 	if (!isset($count[$x])) break;
+	if ($count[$x]->PKZ === NULL) { $count[$x]->PKZ = ""; }
 	if (!isset($count[$x]->rrang)) {
 		$pdf->Cell($breite1,4,' ',0,0);
 		$y++;
@@ -273,7 +278,9 @@ for ($x=0; $x< 100; $x++){
 	$gespielt = 0;
   for ($c=0; $c<$mannschaft[0]->dg; $c++) {
 	for ($b=0; $b<$mannschaft[0]->runden; $b++) {
-	    if (isset($einzel[$ie])&&($einzel[$ie]->dg==$c+1)&&($einzel[$ie]->runde==$b+1)&&($count[$x]->zps==$einzel[$ie]->zps)&&($count[$x]->mgl_nr==$einzel[$ie]->spieler)) {
+	    if (isset($einzel[$ie])&&($einzel[$ie]->dg==$c+1)&&($einzel[$ie]->runde==$b+1)&&($count[$x]->zps==$einzel[$ie]->zps)&&
+			(($countryversion == "de" AND $count[$x]->mgl_nr==$einzel[$ie]->spieler) || ($countryversion == "en" AND $count[$x]->PKZ==$einzel[$ie]->PKZ))) {
+
 
 			$search = array ('.0', '0.5');
 			$replace = array ('', chr(189));
@@ -326,7 +333,7 @@ for ($x=0; $x< 100; $x++){
 	while (isset($einzel[$ie])) {
 		$pdf->Cell($breite1,4,' ',0,0);
 		$ztext = utf8_decode("Ergebnis übersprungen, da Spieler nicht in Aufstellung ");
-		$ztext .= ' Verein:'.$einzel[$ie]->zps.' Mitglied:'.$einzel[$ie]->spieler;
+		$ztext .= ' Verein:'.$einzel[$ie]->zps.' Mitglied:'.$einzel[$ie]->spieler.' PKZ:'.$einzel[$ie]->PKZ;
 		$ztext .= ' Durchgang:'.$einzel[$ie]->dg.' Runde:'.$einzel[$ie]->runde;
 		$ztext .= ' Brett:'.$einzel[$ie]->brett.' Erg:'.$einzel[$ie]->punkte; 	
 		$pdf->Cell(50,4,$ztext,0,1,'L');

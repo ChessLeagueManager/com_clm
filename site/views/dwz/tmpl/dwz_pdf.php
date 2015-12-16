@@ -26,6 +26,10 @@ $liga	= $this->liga;
 <div class="componentheading"><?php echo utf8_decode(JText::_('CLUB_UNKNOWN')) ?></div>
 <?php	} else {
 
+// Konfigurationsparameter auslesen
+$config = clm_core::$db->config();
+$countryversion = $config->countryversion;
+
 // FPDF Klasse einbinden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'fpdf.php');
 
@@ -68,8 +72,11 @@ $pdf->SetFont('Times','',5);
 // Überschrift
 $pdf->SetFont('Times','',16);
 	$pdf->Cell(10,15,' ',0,0);
-	$pdf->Cell(80,15,utf8_decode(JText::_('CLUB_RATING')).' '.utf8_decode($liga[0]->Vereinname),0,1,'L');
-
+	if ($countryversion =="de") {
+		$pdf->Cell(80,15,utf8_decode(JText::_('CLUB_RATING')).' '.utf8_decode($liga[0]->Vereinname),0,1,'L');
+	} else {
+		$pdf->Cell(80,15,utf8_decode(JText::_('CLUB_RATING_EN')).' '.utf8_decode($liga[0]->Vereinname),0,1,'L');
+	}
 // Kopfzeile der Tabelle
 $pdf->SetFont('Times','',$font);
 	///////////////////////////////////////////////////////////////
@@ -90,9 +97,17 @@ $pdf->SetFont('Times','',$font);
 
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(7,$zelle,utf8_decode(JText::_('CLUB_NR')),1,0,'C');
-	$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER')),1,0,'C');
+	if ($countryversion =="de") {
+		$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER')),1,0,'C');
+	} else {
+		$pdf->Cell(18,$zelle,utf8_decode(JText::_('CLUB_MEMBER_PKZ')),1,0,'C');
+	}
 	$pdf->Cell(80,$zelle,utf8_decode(JText::_('CLUB_MEMBER_NAME')),1,0,'C');
-	$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER_RATING')),1,0,'C');
+	if ($countryversion =="de") {
+		$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER_RATING')),1,0,'C');
+	} else {
+		$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER_RATING_EN')),1,0,'C');
+	}
 	$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER_RATINGS')),1,0,'C');
 	$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER_ELO')),1,0,'C');
 	// Zeilenumbruch
@@ -105,12 +120,26 @@ $pdf->SetFont('Times','',$font);
 
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(7,$zelle,$x,1,0,'C');
-	$pdf->Cell(16,$zelle,$zps->Mgl_Nr,1,0,'C');
+	if ($countryversion =="de") {
+		$pdf->Cell(16,$zelle,$zps->Mgl_Nr,1,0,'C');
+	} else {
+		$pdf->Cell(18,$zelle,$zps->PKZ,1,0,'C');
+	}
 	$pdf->Cell(2,$zelle,' ','B', 0,'L');
 	$pdf->Cell(78,$zelle,utf8_decode($zps->Spielername),'BT',0,'L');
 	$pdf->Cell(16,$zelle,$zps->DWZ,1,0,'C');
-	$pdf->Cell(16,$zelle,$zps->DWZ_Index,1,0,'C');
-	$pdf->Cell(16,$zelle,$zps->FIDE_Elo,1,0,'C');
+	if ($countryversion =="de") {
+		$pdf->Cell(16,$zelle,$zps->DWZ_Index,1,0,'C');
+	} else {
+		$pdf->SetFont('Times','',$font-2);
+		$pdf->Cell(16,$zelle,'('.(600 + ($zps->DWZ * 8)).')',1,0,'C');
+		$pdf->SetFont('Times','',$font);
+	}
+	if ($zps->FIDE_Elo > 0) {
+		$pdf->Cell(16,$zelle,$zps->FIDE_Elo,1,0,'C');
+	} else {
+		$pdf->Cell(16,$zelle,'',1,0,'C');
+	}
 	// Zeilenumbruch
 	$pdf->Ln();
 

@@ -58,6 +58,7 @@ function Footer()
 
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 	$telefon= $config->man_tel;
 	$mobil	= $config->man_mobil;
 	$mail	= $config->man_mail;
@@ -101,7 +102,7 @@ for ($x=0; $x< ($liga[0]->teil); $x++){
 //Anzahl gemeldetet Spieler
 	$xx1 = 0;
 	$xx2 = 0;
-	while ((isset($count[$xx1])) AND ($count[$xx1]->mgl_nr == "0")) {     //mtmt!!!
+	while ((isset($count[$xx1])) AND ($countryversion == "de") AND ($count[$xx1]->mgl_nr == "0")) {     //mtmt!!!
 		if ($count[$xx1]->tln_nr==$mannschaft[$x]->tln_nr) $xx2++;
 		$xx1++;
 		if ($xx1 > 10) die($xx1."FF");
@@ -144,7 +145,7 @@ $pdf->SetFont('Times','',$font);
 // Test auf Mannschaft spielfrei
 	if ($mannschaft[$x]->name == "spielfrei") continue;
 // Anzahl der Mannschaften durchlaufen
-	while (isset($count[$zz+1]) AND $count[$zz+1]->mgl_nr == '0') {
+	while (isset($count[$zz+1]) AND $countryversion == "de" AND $count[$zz+1]->mgl_nr == '0') {
 		$zz++; }
 	$zl = $zz + 1;
 	$yl = $zl + $liga[0]->stamm - 1;
@@ -161,7 +162,8 @@ $pdf->SetFont('Times','',$font);
 	if ($liga[0]->anzeige_ma == 1) {
 		$pdf->Cell(80,8,utf8_decode(JText::_('TEAM_FORMATION_BLOCKED')),0,0,'C');
 	}
-	if (isset($count[$zl]) AND ($count[$zl]->mgl_nr !== '0')&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
+		&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$zl]->rrang))
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
@@ -180,7 +182,8 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(10,$zelle,'',0,0,'R');
 	$yn++;
 	$yl++;
-	if (isset($count[$yl]) AND ($count[$yl]->mgl_nr !== '0')&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$yl]) AND (($countryversion == "de" AND $count[$yl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$yl]->PKZ > ''))
+		&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$yl]->rrang))
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
@@ -201,7 +204,8 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(60,$zelle,'',0,0,'L');
 	$zn++;
 	$zl++;
-	if (isset($count[$zl]) AND ($count[$zl]->mgl_nr !== '0')&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
+		&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$zl]->rrang))
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
@@ -220,7 +224,8 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(10,$zelle,'',0,0,'R');
 	$yn++;
 	$yl++;
-	if (isset($count[$yl]) AND ($count[$yl]->mgl_nr !== '0')&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$yl]) AND (($countryversion == "de" AND $count[$yl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$yl]->PKZ > ''))
+		&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$yl]->rrang))
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
@@ -243,7 +248,8 @@ $pdf->SetFont('Times','',$font);
 	else $pdf->Cell(46,$zelle,JText::_('MELDELISTE_NOT_YET'),0,0,'L');
 	$zn++;
 	$zl++;
-	if (isset($count[$zl]) AND ($count[$zl]->mgl_nr !== '0')&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
+		&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$zl]->rrang))
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
@@ -262,7 +268,8 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(10,$zelle,'',0,0,'R');
 	$yn++;
 	$yl++;
-	if (isset($count[$yl]) AND ($count[$yl]->mgl_nr !== '0')&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$yl]) AND (($countryversion == "de" AND $count[$yl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$yl]->PKZ > ''))
+		&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$yl]->rrang))
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
@@ -289,7 +296,8 @@ $pdf->SetFont('Times','',$font);
 	else $pdf->Cell(46,$zelle,'',0,0,'L');
 	$zn++;
 	$zl++;
-	if (isset($count[$zl]) AND ($count[$zl]->mgl_nr !== '0')&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
+		&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$zl]->rrang))
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
@@ -308,7 +316,8 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(10,$zelle,'',0,0,'R');
 	$yn++;
 	$yl++;
-	if (isset($count[$yl]) AND ($count[$yl]->mgl_nr !== '0')&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$yl]) AND (($countryversion == "de" AND $count[$yl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$yl]->PKZ > ''))
+		&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$yl]->rrang))
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
@@ -335,7 +344,8 @@ $pdf->SetFont('Times','',$font);
 	else $pdf->Cell(46,$zelle,'',0,0,'L');
 	$zn++;
 	$zl++;
-	if (isset($count[$zl]) AND ($count[$zl]->mgl_nr !== '0')&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
+		&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$zl]->rrang))
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
@@ -354,7 +364,8 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(10,$zelle,'',0,0,'R');
 	$yn++;
 	$yl++;
-	if (isset($count[$yl]) AND ($count[$yl]->mgl_nr !== '0')&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$yl]) AND (($countryversion == "de" AND $count[$yl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$yl]->PKZ > ''))
+		&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$yl]->rrang))
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
@@ -383,7 +394,8 @@ $pdf->SetFont('Times','',$font);
 	else $pdf->Cell(46,$zelle,'',0,0,'L');
 	$zn++;
 	$zl++;
-	if (isset($count[$zl]) AND ($count[$zl]->mgl_nr !== '0')&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
+		&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$zl]->rrang))
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
@@ -402,7 +414,8 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(10,$zelle,'',0,0,'R');
 	$yn++;
 	$yl++;
-	if (isset($count[$yl]) AND ($count[$yl]->mgl_nr !== '0')&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$yl]) AND (($countryversion == "de" AND $count[$yl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$yl]->PKZ > ''))
+		&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$yl]->rrang))
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
@@ -423,7 +436,8 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(60,$zelle,'',0,0,'L');
 	$zn++;
 	$zl++;
-	if (isset($count[$zl]) AND ($count[$zl]->mgl_nr !== '0')&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
+	&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$zl]->rrang))
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
@@ -442,7 +456,8 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(10,$zelle,'',0,0,'R');
 	$yn++;
 	$yl++;
-	if (isset($count[$yl]) AND ($count[$yl]->mgl_nr !== '0')&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$yl]) AND (($countryversion == "de" AND $count[$yl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$yl]->PKZ > ''))
+		&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$yl]->rrang))
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
@@ -466,7 +481,8 @@ $pdf->SetFont('Times','',$font);
 	else $pdf->Cell(46,$zelle,'',0,0);
 	$zn++;
 	$zl++;
-	if (isset($count[$zl]) AND ($count[$zl]->mgl_nr !== '0')&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
+		&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$zl]->rrang))
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
@@ -485,7 +501,8 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(10,$zelle,'',0,0,'R');
 	$yn++;
 	$yl++;
-	if (isset($count[$yl]) AND ($count[$yl]->mgl_nr !== '0')&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$yl]) AND (($countryversion == "de" AND $count[$yl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$yl]->PKZ > ''))
+		&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$yl]->rrang))
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
@@ -507,7 +524,8 @@ $pdf->SetFont('Times','',$font);
 	else $pdf->Cell(46,$zelle,'',0,0);
 	$zn++;
 	$zl++;
-	if (isset($count[$zl]) AND ($count[$zl]->mgl_nr !== '0')&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
+		&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$zl]->rrang))
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
@@ -526,7 +544,8 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(10,$zelle,'',0,0,'R');
 	$yn++;
 	$yl++;
-	if (isset($count[$yl]) AND ($count[$yl]->mgl_nr !== '0') AND ($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$yl]) AND (($countryversion == "de" AND $count[$yl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$yl]->PKZ > '')) 
+		AND ($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$yl]->rrang))
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
@@ -548,7 +567,8 @@ $pdf->SetFont('Times','',$font);
 	else $pdf->Cell(46,$zelle,'',0,0);
 	$zn++;
 	$zl++;
-	if (isset($count[$zl]) AND ($count[$zl]->mgl_nr !== '0')&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
+		&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$zl]->rrang))
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
@@ -567,7 +587,8 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(10,$zelle,'',0,0,'R');
 	$yn++;
 	$yl++;
-	if (isset($count[$yl]) AND ($count[$yl]->mgl_nr !== '0') AND ($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$yl]) AND (($countryversion == "de" AND $count[$yl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$yl]->PKZ > '')) 
+		AND ($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$yl]->rrang))
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
@@ -589,7 +610,8 @@ $pdf->SetFont('Times','',$font);
 	else $pdf->Cell(46,$zelle,'',0,0);
 	$zn++;
 	$zl++;
-	if (isset($count[$zl]) AND ($count[$zl]->mgl_nr !== '0')&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
+		&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$zl]->rrang))
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
@@ -608,7 +630,8 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(10,$zelle,'',0,0,'R');
 	$yn++;
 	$yl++;
-	if (isset($count[$yl]) AND ($count[$yl]->mgl_nr !== '0')&&($count[$yl]->tln_nr == $mannschaft[$x]->tln_nr)) {
+	if (isset($count[$yl]) AND (($countryversion == "de" AND $count[$yl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$yl]->PKZ > ''))
+		&&($count[$yl]->tln_nr == $mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$yl]->rrang))
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
@@ -630,7 +653,8 @@ $pdf->SetFont('Times','',$font);
 	else $pdf->Cell(46,$zelle,'',0,0);
 	$zn++;
 	$zl++;
-	if (isset($count[$zl]) AND ($count[$zl]->mgl_nr !== '0')&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
+		&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$zl]->rrang))
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
@@ -649,7 +673,8 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(10,$zelle,'',0,0,'R');
 	$yn++;
 	$yl++;
-	if (isset($count[$yl]) AND ($count[$yl]->mgl_nr !== '0')&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$yl]) AND (($countryversion == "de" AND $count[$yl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$yl]->PKZ > ''))
+		&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$yl]->rrang))
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
@@ -666,13 +691,14 @@ $pdf->SetFont('Times','',$font);
 		$pdf->Cell(50,$zelle,'',0,1,'C');
 	}
 //Zeile 13ff
-	while ((isset($count[$zl+1]) AND ($count[$zl+1]->mgl_nr !== '0') AND (($zn+1) <= $liga[0]->stamm)) OR
-		   (isset($count[$yl+1]) AND ($count[$yl+1]->mgl_nr !== '0') AND ($count[$yl+1]->tln_nr==$mannschaft[$x]->tln_nr))) {	
+	while ((isset($count[$zl+1]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > '')) AND (($zn+1) <= $liga[0]->stamm)) OR
+		   (isset($count[$yl+1]) AND (($countryversion == "de" AND $count[$yl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$yl]->PKZ > '')) AND ($count[$yl+1]->tln_nr==$mannschaft[$x]->tln_nr))) {	
 	$pdf->Cell(10,$zelle,'',0,0,'C');
 	$pdf->Cell(60,$zelle,'',0,0,'L');
 	$zn++;
 	$zl++;
-	if (isset($count[$zl]) AND ($count[$zl]->mgl_nr !== '0')&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
+		&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$zl]->rrang))
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
@@ -691,7 +717,8 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(10,$zelle,'',0,0,'R');
 	$yn++;
 	$yl++;
-	if (($count[$yl]->mgl_nr !== '0')&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+	if ((($countryversion == "de" AND $count[$yl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$yl]->PKZ > ''))
+		&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
 		$zzc++;
 		if (!isset($count[$yl]->rrang))
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');

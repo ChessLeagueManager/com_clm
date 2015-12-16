@@ -26,6 +26,8 @@ $ -> Language fix or change
 # Sprachsteuerung in umgestellten Views insb. Tabellenanzeigen
 + CLM-Benutzergruppen sprachabhängig
 # Paarungsliste falls Teilnehmernummer nicht gewünscht
+# Frontend-Mitgliederliste: Sortiermöglichkeiten
++ Einbau engl. Version insb. Ref.-No anstelle Mitgliedsnummer in den PDF-Views
 
 - - - - - 3.2.2 - [05-10-2015] - - - - - - - - - - - - - - - - - - - -
 # Config: Email-Adressen mit Umlauten erlauben

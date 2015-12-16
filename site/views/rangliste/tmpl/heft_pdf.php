@@ -74,6 +74,7 @@ function Footer()
 
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 	$telefon= $config->man_tel;
 	$mobil	= $config->man_mobil;
 	$mail	= $config->man_mail;
@@ -525,7 +526,8 @@ $pdf->SetFont('Times','',$font);
 		$pdf->Cell(40,8,JText::_('DWZ_NAME'),0,0);
 	else
 		$pdf->Cell(48,8,JText::_('DWZ_NAME'),0,0);
-	$pdf->Cell(10,8,JText::_('LEAGUE_STAT_DWZ'),0,0,'R');
+	if ($countryversion == "de") $pdf->Cell(10,8,JText::_('LEAGUE_STAT_DWZ'),0,0,'R');
+	else $pdf->Cell(10,8,JText::_('LEAGUE_STAT_DWZ_EN'),0,0,'R');
 	//if (!$count) 
 	for ($b=0; $b<$mannschaft[$m]->runden; $b++) {
 		$pdf->Cell($breite,8,$b+1,0,0,'C');
@@ -544,7 +546,7 @@ $pdf->SetFont('Times','',$font);
 	$sumspl = 0;
 for ($x=0; $x< $anz_player; $x++){
 	// Überlesen von Null-Sätzen 
-	while (isset($count[$ic]) and $count[$ic]->mgl_nr == "0")  {
+	while (isset($count[$ic]) and $countryversion == "de" and $count[$ic]->mgl_nr == "0")  {
 		$ic++; }
 	if (!isset($count[$ic])) break;
 	if ($count[$ic]->tln_nr != $mannschaft[$m]->tln_nr) break;
@@ -582,7 +584,9 @@ for ($x=0; $x< $anz_player; $x++){
 	$spl = 0;
   for ($c=0; $c<$mannschaft[$m]->dg; $c++) {
 	for ($b=0; $b<$mannschaft[$m]->runden; $b++) {
-		if ((isset($einzel[$ie]) AND $einzel[$ie])&&($einzel[$ie]->dg==$c+1)&&($einzel[$ie]->runde==$b+1)&&($einzel[$ie]->tln_nr==$mannschaft[$m]->tln_nr)&&($count[$ic]->zps==$einzel[$ie]->zps)&&($count[$ic]->mgl_nr==$einzel[$ie]->spieler)) {
+	if ((isset($einzel[$ie]) AND $einzel[$ie])&&($einzel[$ie]->dg==$c+1)&&($einzel[$ie]->runde==$b+1)&&
+			($einzel[$ie]->tln_nr==$mannschaft[$m]->tln_nr)&&($count[$ic]->zps==$einzel[$ie]->zps)&&
+			((($countryversion == "de")&&($count[$ic]->mgl_nr==$einzel[$ie]->spieler))||(($countryversion == "en")&&($count[$ic]->PKZ==$einzel[$ie]->PKZ)))) {
 		$dr_einzel = "?";
 		if (($einzel[$ie]->punkte==0)&&($einzel[$ie]->kampflos==0)) $dr_einzel = "0";
 		if (($einzel[$ie]->punkte==0)&&($einzel[$ie]->kampflos==1)) $dr_einzel = "-";
@@ -618,7 +622,7 @@ for ($x=0; $x< $anz_player; $x++){
 	while (isset($count[$ic]) and isset($einzel[$ie]) and $count[$ic]->tln_nr > $einzel[$ie]->tln_nr) {
 		$pdf->Cell($breite1,4,' ',0,0);
 		$ztext = utf8_decode("Ergebnis übersprungen, da Spieler nicht in Aufstellung ");
-		$ztext .= ' Verein:'.$einzel[$ie]->zps.' Mitglied:'.$einzel[$ie]->spieler;
+		$ztext .= ' Verein:'.$einzel[$ie]->zps.' Mitglied:'.$einzel[$ie]->spieler.' PKZ:'.$einzel[$ie]->PKZ;
 		$ztext .= ' Durchgang:'.$einzel[$ie]->dg.' Runde:'.$einzel[$ie]->runde;
 		$ztext .= ' Brett:'.$einzel[$ie]->brett.' Erg:'.$einzel[$ie]->punkte; 	
 		$pdf->Cell(50,4,$ztext,0,1,'L');

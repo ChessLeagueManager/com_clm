@@ -407,13 +407,14 @@ else { echo $paar[$z]->gname; } ?>
 <?php
 if ($rundensumme[$rund_sum]->nr == ($x+1+$liga[0]->runden) ) { $rund_sum++; }
 if ($termin[$term]->datum AND $termin[$term]->nr == ($x+1+$liga[0]->runden)) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); $term++;} ?>
-</div><div style="text-align: right; padding: 0 10px 0 0;"> <?php echo $termin[$x]->name; ?></div></b>
+</div><div style="text-align: right; padding: 0 10px 0 0;"> <?php echo $termin[$x+$liga[0]->runden]->name; ?></div></b>
 </td>
 </tr>
 <?php
 for ($y=0; $y< ($liga[0]->teil)/2; $y++){
-	if ( $summe[$sum_paar]->runde == ($x+1) AND $summe[$sum_paar]->paarung == ($y+1)) { $sum_paar = $sum_paar+2; }
-	if ($dwzgespielt[$z2]->dwz AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 2 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0) { $z2++; }
+	if (!isset($summe[$sum_paar])) break;
+	if ( $summe[$sum_paar]->runde == ($x+1+$liga[0]->runden) AND $summe[$sum_paar]->paarung == ($y+1)) { $sum_paar = $sum_paar+2; }
+	if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->dwz AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 2 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0) { $z2++; }
 	$z++;
 	} ?>
 <tr><td><?php echo CLMContent::clmWarning(JText::_('PAAR_UNPUBLISHED')); ?></td></tr>

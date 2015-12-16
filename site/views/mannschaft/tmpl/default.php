@@ -178,7 +178,7 @@ $clm_zeile2D			= RGB($clm_zeile2);
         </div>
         <div id="rightalign">
     <?php if ($man_spiellokal =="1") { ?>
-        <?php echo JText::_('TEAM_LOCATION'); ?>
+        <b><?php echo JText::_('TEAM_LOCATION'); ?></b>
         <?php if ( ($mannschaft[0]->lokal ==! false) and ($googlemaps_msch == "1") and ($googlemaps == "1") ) { ?>&nbsp;(&nbsp;
         <a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $mannschaft[0]->sid ?>&liga=<?php echo $mannschaft[0]->liga ?>&tlnr=<?php echo $mannschaft[0]->tln_nr ?>#google"><?php echo JText::_('TEAM_KARTE') ?></a>&nbsp;)<?php } ?>
         <br />
@@ -251,7 +251,7 @@ $clm_zeile2D			= RGB($clm_zeile2);
     <?php if($mannschaft[0]->lrang > 0) { ?><th class="nr"><?php echo JText::_('TEAM_RANK') ?></th><?php }
         else { ?><th class="nr"><?php echo JText::_('DWZ_NR') ?></th><?php } ?>
         <th class="name"><?php echo JText::_('DWZ_NAME') ?></th>
-        <th class="dwz"><a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php echo JText::_('LEAGUE_STAT_DWZ') ?></a></th>
+        <th class="dwz"><a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php if ($countryversion == "de") echo JText::_('LEAGUE_STAT_DWZ'); else echo JText::_('LEAGUE_STAT_DWZ_EN')?></a></th>
 	 <?php 
     // erster Durchgang
     for ($b=0; $b<$mannschaft[0]->runden; $b++) { ?>
