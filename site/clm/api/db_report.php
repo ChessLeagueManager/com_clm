@@ -126,6 +126,7 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 		}
 		$Heim = $Heim
 		." WHERE a.sid = ".$someData[0]->sid
+		." AND a.gesperrt != 1"
 		." AND (( a.zps = '".$someData[0]->hzps."' AND a.mnr = ".$someData[0]->hmnr." )"
 		." OR ( FIND_IN_SET(a.zps,'".$someData[0]->sgh_zps."') != 0 AND a.mnr = ".$someData[0]->hmnr." )) ";
 		if ($countryversion =="de") {
@@ -169,6 +170,7 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 		}
 		$Gast = $Gast
 		." WHERE a.sid = ".$someData[0]->sid
+		." AND a.gesperrt != 1"
 		." AND (( a.zps = '".$someData[0]->gzps."' AND a.mnr = ".$someData[0]->gmnr." ) "
 		." OR ( FIND_IN_SET(a.zps,'".$someData[0]->sgg_zps."') AND a.mnr = ".$someData[0]->gmnr." )) ";
 		if ($countryversion =="de") {
