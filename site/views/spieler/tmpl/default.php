@@ -208,9 +208,9 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
     <tr>
         <td class="gsp"><a href="index.php?option=com_clm&view=runde&saison=<?php echo $sid; ?>&liga=<?php echo $runden->lid; ?>&runde=<?php echo $runden->runde; ?>&dg=<?php echo $runden->dg; ?>"><?php echo $runden->runde ?></a></td>
     <?php if ($runden->heim > 0) { ?>
-        <td class="gsp">H</td>
+        <td class="gsp"><?php echo JText::_('PLAYER_HOME') ?></td>
     <?php } else { ?>
-        <td class="gsp">G</td>
+        <td class="gsp"><?php echo JText::_('PLAYER_AWAY') ?></td>
     <?php } ?>
         <td class="gsp"><?php echo $runden->brett; ?></td>
         <td align="left"><?php if($runden->gzps=="ZZZZZ"){ ?>N.N.<?php } else { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $runden->gzps; ?>&mglnr=<?php echo $runden->Mgl_Nr; ?>&PKZ=<?php echo $runden->gPKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $runden->Spielername ?></a><?php } ?></td>
@@ -307,7 +307,11 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
 	</tr>
     
     <tr>
-        <td><?php echo $spielerl->dsbDWZ.'-'.$spielerl->DWZ_Index;?></td>
+        <?php if ($spielerl->start_dwz < 1) { 
+			$spielerl->start_dwz = $spielerl->dsbDWZ;
+			$spielerl->start_I0  = $spielerl->DWZ_Index;
+        } ?>
+		<td><?php echo $spielerl->start_dwz.'-'.$spielerl->start_I0;?></td>
         <td><?php echo $spielerl->Punkte;?></td>
         <td><?php echo $spielerl->We;?></td>
         <td><?php echo $spielerl->EFaktor;?></td>
@@ -327,13 +331,13 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
         <?php if ($spielerl->DWZ > 0) { ?>
         <td><?php echo $spielerl->DWZ.'-'.$spielerl->I0;?></td>
         <?php }
-            if ($spielerl->dsbDWZ >0 AND $spielerl->DWZ == 0) { ?>
-                <td><?php echo $spieler->dsbDWZ.'-'.$spieler->DWZ_Index;?></td>
+           if ($spielerl->start_dwz >0 AND $spielerl->DWZ == 0) { ?>
+                <td><?php echo $spieler->start_dwz.'-'.$spieler->start_I0;?></td>
                 <?php }
-            if ($spielerl->dsbDWZ  == 0 AND $spielerl->DWZ == 0) { ?>
+            if ($spielerl->start_dwz  == 0 AND $spielerl->DWZ == 0) { ?>
                 <td><?php echo JText::_('PLAYER_REST') ?></td>
                 <?php } ?>
-        <td><?php $dwzdifferenz = $spielerl->DWZ - $spielerl->dsbDWZ; 
+        <td><?php $dwzdifferenz = $spielerl->DWZ - $spielerl->start_dwz; 
 		 if ( $dwzdifferenz > 0 ) { echo "+&nbsp;" . $dwzdifferenz; } else { echo $dwzdifferenz; } ?></td>
     </tr>
     </table>

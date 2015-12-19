@@ -266,7 +266,7 @@ $count = count($bestenliste);
 ?>
 <br>
 
-<a title="<?php echo JText::_('LEAGUE_STAT_PLAYERLIST') ?>" href="index.php?option=com_clm&amp;view=statistik&amp;saison=<?php echo $sid; ?>&amp;liga=<?php echo $lid; ?>&amp;layout=bestenliste<?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><h4>Die besten <?php if ($count < 10 AND $count >0) { echo $count; } else { ?> 10<?php } ?> Spieler der <?php echo $liga[0]->name; ?></h4></a>
+<a title="<?php echo JText::_('LEAGUE_STAT_PLAYERLIST') ?>" href="index.php?option=com_clm&amp;view=statistik&amp;saison=<?php echo $sid; ?>&amp;liga=<?php echo $lid; ?>&amp;layout=bestenliste<?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><h4><?php echo JText::_('LEAGUE_RATING_BEST_PLAYER_I') ?> <?php if ($count < 10 AND $count >0) { echo $count; } else { ?> 10<?php } ?> <?php echo JText::_('LEAGUE_RATING_BEST_PLAYER_II') ?> <?php echo $liga[0]->name; ?></h4></a>
 <?php if (!$bestenliste) {
 echo CLMContent::clmWarning(JText::_('LEAGUE_NO_GAMES'));
 } else { ?>
