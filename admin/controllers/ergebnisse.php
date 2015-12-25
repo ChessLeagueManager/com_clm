@@ -323,9 +323,9 @@ function edit()
 		}
 		$sql = $sql
 		." WHERE a.sid = ".$runde[0]->sid
-		." AND a.gesperrt != 1"
+		." AND (a.gesperrt = 0 OR a.gesperrt IS NULL )"
 		." AND (( a.zps = '".$runde[0]->hzps."' AND a.mnr = ".$runde[0]->hmnr." )"
-		." OR ( FIND_IN_SET(a.zps, '".$runde[0]->sgh_zps."') != 0 AND a.mnr = ".$runde[0]->hmnr." )) ";
+			." OR ( FIND_IN_SET(a.zps, '".$runde[0]->sgh_zps."') != 0 AND a.mnr = ".$runde[0]->hmnr." )) ";
 		if($runde[0]->rang !="0") {
 			$sql = $sql
 				." AND a.status = ".$runde[0]->rang
@@ -345,7 +345,7 @@ function edit()
 		." FROM #__clm_meldeliste_spieler as a "
 		//." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) "
 		." WHERE a.sid = ".$runde[0]->sid
-		." AND a.gesperrt != 1"
+		." AND (a.gesperrt = 0 OR a.gesperrt IS NULL )"
 		." AND (( a.zps = '".$runde[0]->hzps."' AND a.mnr = ".$runde[0]->hmnr." ) "
 		." OR ( FIND_IN_SET(a.zps, '".$runde[0]->sgh_zps."') != 0 AND a.mnr = ".$runde[0]->hmnr." )) ";
 		if($runde[0]->rang !="0") {
@@ -427,7 +427,7 @@ function edit()
 		}
 		$sql = $sql
 		." WHERE a.sid = ".$runde[0]->sid
-		." AND a.gesperrt != 1"
+		." AND (a.gesperrt = 0 OR a.gesperrt IS NULL )"
 		." AND (( a.zps = '".$runde[0]->gzps."' AND a.mnr = ".$runde[0]->gmnr." ) "
 		//." OR ( a.zps ='".$runde[0]->sgg_zps."' AND a.mnr = ".$runde[0]->gmnr." ))";
 		." OR ( FIND_IN_SET(a.zps, '".$runde[0]->sgg_zps."') != 0 AND a.mnr = ".$runde[0]->gmnr." )) ";
@@ -450,7 +450,7 @@ function edit()
 		." FROM #__clm_meldeliste_spieler as a "
 		//." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) "
 		." WHERE a.sid = ".$runde[0]->sid
-		." AND a.gesperrt != 1"
+		." AND (a.gesperrt = 0 OR a.gesperrt IS NULL )"
 		." AND (( a.zps = '".$runde[0]->gzps."' AND a.mnr = ".$runde[0]->gmnr." ) "
 		//." OR ( a.zps ='".$runde[0]->sgg_zps."' AND a.mnr = ".$runde[0]->gmnr." )) ";
 		." OR ( FIND_IN_SET(a.zps, '".$runde[0]->sgg_zps."') != 0 AND a.mnr = ".$runde[0]->gmnr." )) ";
