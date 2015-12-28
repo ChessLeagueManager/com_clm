@@ -280,7 +280,9 @@ class CLMControllerSaisons extends JControllerLegacy {
 		for ($i = 0;$i < $total;$i++) {
 			$row->load((int)$cid[$i]);
 			// track categories
-			$groupings[] = $row->id;
+			//$groupings[] = $row->id;
+			$groupings[] = 0;
+
 			if ($row->ordering != $order[$i]) {
 				$row->ordering = $order[$i];
 				if (!$row->store()) {

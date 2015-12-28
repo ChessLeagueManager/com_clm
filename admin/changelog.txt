@@ -29,6 +29,7 @@ $ -> Language fix or change
 # Frontend-Mitgliederliste: Sortiermöglichkeiten
 + Einbau engl. Version insb. Ref.-No anstelle Mitgliedsnummer in den PDF-Views
 # Ergebnismeldung: Reaktivierung 'gesperrt'-Markierung
+# Admin-View Saisons: Sortierung nach Reihenfolge
 
 - - - - - 3.2.2 - [05-10-2015] - - - - - - - - - - - - - - - - - - - -
 # Config: Email-Adressen mit Umlauten erlauben
