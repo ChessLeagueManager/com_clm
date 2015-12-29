@@ -425,8 +425,10 @@ $controller->execute( JRequest::getCmd('task') );
 $controller->redirect();
 
 } else {
-	$fix = clm_core::$load->load_sub_view("notification", array("e_noSeasonBackend"));
-	echo $fix[1]; // array dereferencing fix php 5.3
+	$fix = clm_core::$load->load_view("notification", array("e_noSeasonBackend"));
+	echo '<div id="clm">';
+	echo "<div class='clm'>".$fix[1]."</div>";
+	echo "</div>";
 }
 echo "</div></div>";
 }

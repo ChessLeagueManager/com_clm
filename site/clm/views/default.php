@@ -11,7 +11,7 @@ clm_core::$db->config()->erstauswerter=119;
 
 
 clm_core::$load->load_css("box-menu");
-$fix = clm_core::$load->load_sub_view("config_overview",array());
+$fix = clm_core::$load->load_view("config_overview",array());
 echo $fix[1]; // array dereferencing fix php 5.3
 }
 ?>

@@ -94,7 +94,7 @@ if (clm_core::$access->getSeason() != -1) {
 } else {
 	if((!isset($_GET["format"]) || $_GET["format"]!="clm_pdf") &&
 		(!isset($_GET["pgn"]) || $_GET["pgn"]==0)) { echo '<div class="clm">'; }	
-	$fix = clm_core::$load->load_sub_view("notification", array("e_noSeason"));
+	$fix = clm_core::$load->load_view("notification", array("e_noSeason"));
 	echo $fix[1];
 	if((!isset($_GET["format"]) || $_GET["format"]!="clm_pdf") &&
 		(!isset($_GET["pgn"]) || $_GET["pgn"]==0)) { echo '</div>'; }
