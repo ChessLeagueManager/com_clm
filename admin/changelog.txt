@@ -30,6 +30,7 @@ $ -> Language fix or change
 + Einbau engl. Version insb. Ref.-No anstelle Mitgliedsnummer in den PDF-Views
 # Ergebnismeldung: Reaktivierung 'gesperrt'-Markierung
 # Admin-View Saisons: Sortierung nach Reihenfolge
+# SWT-Import Liga: Paarungsnummer aus Einzelergebnis ignorieren
 
 - - - - - 3.2.2 - [05-10-2015] - - - - - - - - - - - - - - - - - - - -
 # Config: Email-Adressen mit Umlauten erlauben

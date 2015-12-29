@@ -683,8 +683,9 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 			//	$gegner -= 230;
 			//}
 			$ergebnis	= CLMSWT::readInt ($swt, $offset + 11);
-			$paarung	= CLMSWT::readInt ($swt, $offset + 13);
-
+			//$paarung	= CLMSWT::readInt ($swt, $offset + 13);
+			$paarung	= 0; 	// leider war die Paarungsnummer in Einzelergebnissen nicht immer korrekt auch wenn eingetragen
+								// deshalb wird diese ignoriert und die Paarung aus den Mannschaftsergebnissen verwendet
 			if ($paarung > 0) {
 				$tln_paarung[$spieler[$s-1]->tln_nr] = $paarung;
 			} else {
