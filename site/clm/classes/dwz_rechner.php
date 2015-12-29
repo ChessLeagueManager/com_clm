@@ -371,7 +371,7 @@ class clm_class_dwz_rechner {
 					// Für alle bisher ungewerteten Spieler, die nach 4.7.3.1 und 4.7.3.2 in der ersten bzw.
 					// zweiten Zusatzstufe eine erste DWZ erhalten können wird zum Abschluss nach dem Einbeziehen
 					// aller verwendbaren Partieresultate eine Gesamtiteration bis zur Konstanz der Einerstellen durchgeführt.
-					// --> Interpretation: abs(W-W_e)>0.001 ||
+					// --> Interpretation: abs(W-W_e)>0.01 ||
 					if (abs($W - $W_e) > 0.01) {
 						// P(D) - Durchschnitt = (W - We) / n + 0,500
 						// Kann negativ werden !!!!
@@ -385,15 +385,13 @@ class clm_class_dwz_rechner {
 						// aber ungenauer als 0.01 so ist dies ebenfalls ausreichend
 						if ($D == 0) {
 							$perfect++; // Tabelle zu ungenau
-							
 						}
 					} else {
 						$perfect++; // Abweichungsbestimmung
 						
 					}
 				} else {
-					$perfect++; // Spieler die keine DWZ sind immer korrekt
-					
+					$perfect++; // Spieler die keine DWZ haben sind immer korrekt
 				}
 			}
 		} while ($perfect != count($players));
@@ -560,7 +558,7 @@ class clm_class_dwz_rechner {
 			$Vorzeichen = 1;
 		}
 		$i = 50 - round($P * 100);
-		// 100% Erwarteter Sieg sind durch die Iterationsschritte manschmal vorhanden
+		// 100% Erwarteter Sieg sind durch die Iterationsschritte manchmal vorhanden
 		if ($i == 50) {
 			$i = 49;
 		}

@@ -216,10 +216,8 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
         <td align="left"><?php if($runden->gzps=="ZZZZZ"){ ?>N.N.<?php } else { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $runden->gzps; ?>&mglnr=<?php echo $runden->Mgl_Nr; ?>&PKZ=<?php echo $runden->gPKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $runden->Spielername ?></a><?php } ?></td>
         <td class="gsp2"><?php echo $runden->DWZ ?></td>
         <td align="left"><a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $sid; ?>&liga=<?php echo $runden->lid; ?>&tlnr=<?php echo $runden->tln; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $runden->name ?></a></td>
-    <?php	$delta= $runden->DWZ - $spieler[0]->dsbDWZ;
-        if ($delta > 400) { $delta=400; }
-        $potenz = pow(10,($delta/400));
-        $ea = round((1/(1+ $potenz)),3);
+    <?php	
+	$ea = clm_class_dwz_rechner::P($spieler[0]->dsbDWZ, $runden->DWZ);
         if ($runden->kampflos == 0) { $sum_ea = $sum_ea + $ea; }
     ?>
         <td class="gsp2"><?php if ($runden->kampflos == 0) { echo $ea;} else { echo "-";} ?></td>
@@ -232,7 +230,7 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
 		
 		if ($runden->kampflos == 0) {
 			$erg_text = $punkte_text;
-    		$sum_partien++;
+    			$sum_partien++;
 		}
 		else {
 			if ($config->fe_display_lose_by_default == 0) {
