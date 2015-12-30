@@ -916,7 +916,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere_rnd_spl` (
   `tiebrG` decimal(2,1) unsigned NOT NULL DEFAULT '0.0',
   `kampflos` tinyint(1) unsigned DEFAULT NULL,
   `gemeldet` mediumint(3) unsigned DEFAULT NULL,
-  `pgn` text NOT NULL,
+  `pgn` text,
   `ordering` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

@@ -2,29 +2,12 @@
 // CLM als aktiv markieren, Major.Minor.Patch:Datenbankversion
 // WICHTIG: Gibt es eine neue Datenbankversion,
 // müssen die Änderungen auch in der install.sql eingebracht werden.
-define("clm", "3.2.2:16");
+define("clm", "3.2.2:17");
 if (!defined("DS")) {
 	define('DS', DIRECTORY_SEPARATOR);
 }
 // Absoluter Pfad zum Einbinden weiterer Dateien
 $path = dirname(__FILE__);
-
-// Die Installation kann unter Linux nur symbolisch in Joomla abgelegt werden, 
-// die folgenden Zeilen korrigieren die entsprechenden Pfade
-
-if(substr($path, -21)=="/clm/com_clm/site/clm") {
-	$url = strpos($_SERVER['PHP_SELF'], "components/com_clm/clm/index.php");
-	if(!$url) {
-		$url = strpos($_SERVER['PHP_SELF'], "administrator/index.php");
-		if (!$url) {
-			$url = strpos($_SERVER['PHP_SELF'], "index.php");
-			if (!$url) {
-				$url = -1;
-			}
-		}
-	}
-	$path = substr($path, 0,-21).substr($_SERVER['PHP_SELF'], 0,$url)."components/com_clm/clm";
-}
 
 // URL zum Einbinden von CSS, JS und Bildern
 $url = strpos($_SERVER['PHP_SELF'], "administrator/index.php");
@@ -36,6 +19,8 @@ if (!$url) {
 }
 $url = ((empty($_SERVER['HTTPS'])) ? 'http://' : 'https://') . $_SERVER['HTTP_HOST'] . substr($_SERVER['PHP_SELF'], 0, $url) . ((defined('_JEXEC')) ? 'components/com_clm/clm/' : '');
 
+//$path = "/home/mlink/.owncloud/www/schachbezirk-siegerland/components/com_clm/clm/";
+//$url = "http://localhost/~mlink/schachbezirk-siegerland/components/com_clm/clm/";
 
 // CLM - Core initialisieren
 require ("core.php");
