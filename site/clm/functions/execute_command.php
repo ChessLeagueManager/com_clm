@@ -35,7 +35,7 @@ function clm_function_execute_command() {
 			if(!isset($out[$i][2])) {
 				$out[$i][2] = "";
 			}
-			$out[$i][3] = $lang->$out[$i][1];
+			$out[$i][3] = $lang->{$out[$i][1]};
 		}
 	}
 	return json_encode($out);
