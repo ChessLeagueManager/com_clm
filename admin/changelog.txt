@@ -31,6 +31,8 @@ $ -> Language fix or change
 # Ergebnismeldung: Reaktivierung 'gesperrt'-Markierung
 # Admin-View Saisons: Sortierung nach Reihenfolge
 # SWT-Import Liga: Paarungsnummer aus Einzelergebnis ignorieren
+# Default Werte nun bei neuen Tabelleneinträgen setzen
+# SWT-Import Turnier: Prüfung Start- und Enddatum
 
 - - - - - 3.2.2 - [05-10-2015] - - - - - - - - - - - - - - - - - - - -
 # Config: Email-Adressen mit Umlauten erlauben

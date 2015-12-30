@@ -21,7 +21,7 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 	
 	function getTurnier(){
 	
-		function check_date($date,$format,$sep) {
+/*		function check_date($date,$format,$sep) {
     
 			$pos1    = strpos($format, 'd');
 			$pos2    = strpos($format, 'm');
@@ -30,6 +30,24 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 			$check    = explode($sep,$date);
     
 			return checkdate($check[$pos2],$check[$pos1],$check[$pos3]);
+
+		}
+*/
+		function check_date($date,$format,$sep) {
+    
+			$pos1    = strpos($format, 'd');  		// 0
+			$pos2    = strpos($format, 'm');		// 1
+			$pos3    = strpos($format, 'Y'); 		// 2
+    
+			$check    = explode($sep,$date);
+			if (count($check) != 3) return false;
+			if (!is_numeric($check[0]) OR !is_numeric($check[1]) OR !is_numeric($check[2])) return false; 
+			$check[$pos1] = str_pad($check[$pos1],2,"0",STR_PAD_LEFT);
+			$check[$pos2] = str_pad($check[$pos2],2,"0",STR_PAD_LEFT);
+			$check[$pos3] = str_pad($check[$pos3],4,"20",STR_PAD_LEFT);
+   
+			if (!checkdate($check[$pos2],$check[$pos1],$check[$pos3])) return false;
+			return $check[$pos3]."-".$check[$pos2]."-".$check[$pos1];
 
 		}
 
@@ -107,14 +125,20 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 			
 			//Turnierdatum
 			if(($tdatum = CLMSWT::readName($swt,1055,20)) != '') {
-				$hdatum = substr($tdatum,6,4).'-'.substr($tdatum,3,2).'-'.substr($tdatum,0,2);
-				if(check_date($hdatum,"Ymd","-"))
-					$this->_turnier->set('dateStart', $hdatum);
+//				$hdatum = substr($tdatum,6,4).'-'.substr($tdatum,3,2).'-'.substr($tdatum,0,2);
+//				if(check_date($hdatum,"Ymd","-"))
+//					$this->_turnier->set('dateStart', $hdatum);
+				if (check_date($tdatum,"dmY",".") != false)
+					$this->_turnier->set('dateStart', check_date($tdatum,"dmY","."));
+				else $this->_turnier->set('dateStart', "");		
 			}	
 			if(($tdatum = CLMSWT::readName($swt,1076,20)) != '') {
-				$hdatum = substr($tdatum,6,4).'-'.substr($tdatum,3,2).'-'.substr($tdatum,0,2);
-				if(check_date($hdatum,"Ymd","-"))
-					$this->_turnier->set('dateEnd', $hdatum);
+//				$hdatum = substr($tdatum,6,4).'-'.substr($tdatum,3,2).'-'.substr($tdatum,0,2);
+//				if(check_date($hdatum,"Ymd","-"))
+//					$this->_turnier->set('dateEnd', $hdatum);
+				if (check_date($tdatum,"dmY",".") != false)
+					$this->_turnier->set('dateEnd', check_date($tdatum,"dmY","."));
+				else $this->_turnier->set('dateEnd', "");		
 			}	
 			
 			//Feinwertung
