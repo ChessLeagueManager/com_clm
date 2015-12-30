@@ -95,7 +95,7 @@ function display($cachable = false, $urlparams = array())
 
 	// get the subset (based on limits) of required records
 	$query = 'SELECT a.*, c.name AS saison, b.Vereinname as verein, u.name AS editor, d.name as funktion'
-		.' , d.ordering as ut_ordering, u.lastvisitDate as date'
+		.' , d.ordering as ut_ordering, u.lastvisitDate as date, d.kind'
 		. ' FROM #__clm_user AS a'
 		. ' LEFT JOIN #__clm_saison AS c ON c.id = a.sid'
 		. ' LEFT JOIN #__users AS u ON u.id = a.jid'
