@@ -3,7 +3,7 @@ class clm_class_db_table {
 	private $db; // array ( db verbindung, db prefix)
 	private $data; // enthält bereits gelesene Anfragen
 	private $table; // enthält den Tabellennamen
-	private $columns; // die verschiedenen Spalten der Tabelle
+	private $columns; // die verschiedenen Spalten und Default Werte der Tabelle
 	private $columnsReady = false; // sind diese bereits gesetzt
 	private $id; // array ( unique Tabellen Spalte, string oder int)
 	private $delete; // zu löschende Einträge
@@ -117,7 +117,7 @@ class clm_class_db_table {
 			foreach ($resultArray as $key => $value) {
 				if ($key != $this->id[0]) {
 					if (!$this->columnsReady) {
-						$this->columns[] = $key;
+						$this->columns[$key] = $value;
 					}
 					$resultObject->$key = $value;
 				}
@@ -135,7 +135,7 @@ class clm_class_db_table {
 			$this->findColumns();
 		}
 		foreach ($this->columns as $key => $value) {
-			$resultObject->$value = '';
+			$resultObject->$key = $value;
 		}
 		$resultObject->setFinish(true);
 		$resultObject->setNew(true);
@@ -169,30 +169,35 @@ class clm_class_db_table {
 	private function findColumns() {
 		$query = $this->db[0]->query('SHOW COLUMNS FROM ' . $this->db[1] . $this->table);
 		while ($value = $query->fetch_array()) {
-			if ($value[0] != $this->id[0]) {
-				$this->columns[] = $value[0];
+			if ($value["Field"] != $this->id[0]) {
+				$this->columns[$value["Field"]] = $value["Default"];
 			}
 		}
 		$this->columnsReady = true;
 	}
 	// stmt --> lesen
 	private function stmtRead() {
-		$this->stmtRead = $this->db[0]->prepare("SELECT * FROM " . $this->db[1] . $this->table . " WHERE " . $this->id[0] . "=?");
+		$this->stmtRead = $this->db[0]->prepare("SELECT * FROM " . $this->db[1] . $this->table . " WHERE `" . $this->id[0] . "`=?");
 		$this->stmtReadReady = true;
 	}
 	// stmt --> delete
 	private function stmtDel() {
-		$this->stmtDel = $this->db[0]->prepare("DELETE FROM " . $this->db[1] . $this->table . " WHERE " . $this->id[0] . "=?");
+		$this->stmtDel = $this->db[0]->prepare("DELETE FROM " . $this->db[1] . $this->table . " WHERE `" . $this->id[0] . "`=?");
 		$this->stmtDelReady = true;
 	}
 	// stmt --> create
 	private function stmtCreate() {
-		$sql = "INSERT INTO " . $this->db[1] . $this->table . " (" . $this->id[0] . ", ";
-		for ($i = 0;$i < count($this->columns) - 1;$i++) {
-			$sql.= "`".$this->columns[$i] . "`, ";
+		$sql = "INSERT INTO " . $this->db[1] . $this->table . " (`" . $this->id[0] . "`, ";
+		$first = true;
+		foreach ($this->columns as $key => $value) {
+			if($first) {
+				$first=false;
+			} else {
+				$sql.= ", ";	
+			}
+			$sql.= "`". $key . "`";
 		}
-		$sql.= "`".$this->columns[count($this->columns) - 1] . "`) VALUES (";
-		$type = $this->id[1];
+		$sql.= ") VALUES (";
 		for ($i = 0;$i < count($this->columns);$i++) {
 			$sql.= "?, ";
 		}
@@ -203,10 +208,16 @@ class clm_class_db_table {
 	// stmt --> update
 	private function stmtUpdate() {
 		$sql = "UPDATE " . $this->db[1] . $this->table . " SET ";
-		for ($i = 0;$i < count($this->columns) - 1;$i++) {
-			$sql.= "`".$this->columns[$i] . "`=?, ";
+		$first = true;
+		foreach ($this->columns as $key => $value) {
+			if($first) {
+				$first=false;
+			} else {
+				$sql.= ", ";	
+			}
+			$sql.= "`". $key . "`=?";
 		}
-		$sql.= "`".$this->columns[count($this->columns) - 1] . "`=? " . "WHERE " . $this->id[0] . "=?";
+		$sql.= " WHERE `" . $this->id[0] . "`=?";
 		$this->stmtUpdate = $this->db[0]->prepare($sql);
 		$this->stmtUpdateReady = true;
 	}
