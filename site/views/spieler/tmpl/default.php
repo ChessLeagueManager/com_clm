@@ -194,7 +194,7 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
         <th><?php echo JText::_('PLAYER_OPONENT') ?></th>
         <th class="gsp"><a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php echo JText::_('PLAYER_RATING') ?></a></th>
         <th><?php echo JText::_('PLAYER_TEAM') ?></th>
-        <th class="gsp2"><?php echo JText::_('PLAYER_EA').' &sup1;'; ?></th>
+        <th class="gsp2"><?php echo JText::_('DWZ_WE').' &sup1;'; ?></th>
         <th class="gsp2"><?php echo JText::_('PLAYER_RESULT') ?></th>
     </tr>
     <?php 
@@ -214,10 +214,17 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
     <?php } ?>
         <td class="gsp"><?php echo $runden->brett; ?></td>
         <td align="left"><?php if($runden->gzps=="ZZZZZ"){ ?>N.N.<?php } else { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $runden->gzps; ?>&mglnr=<?php echo $runden->Mgl_Nr; ?>&PKZ=<?php echo $runden->gPKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $runden->Spielername ?></a><?php } ?></td>
-        <td class="gsp2"><?php echo $runden->DWZ ?></td>
+       <?php if ($runden->start_dwz < 1) {    // start_dwz des gegners
+			$runden->start_dwz = $runden->DWZ;
+        } 
+        if ($spieler[0]->start_dwz < 1) {    // start_dwz des spielers
+			$spieler[0]->start_dwz = $spieler[0]->dsbDWZ;
+        } ?>
+        <td class="gsp2"><?php echo $runden->start_dwz ?></td>
         <td align="left"><a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $sid; ?>&liga=<?php echo $runden->lid; ?>&tlnr=<?php echo $runden->tln; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $runden->name ?></a></td>
     <?php	
-	$ea = clm_class_dwz_rechner::P($spieler[0]->dsbDWZ, $runden->DWZ);
+		//$ea = clm_class_dwz_rechner::P($spieler[0]->dsbDWZ, $runden->DWZ);
+		$ea = clm_class_dwz_rechner::P($spieler[0]->start_dwz, $runden->start_dwz);
         if ($runden->kampflos == 0) { $sum_ea = $sum_ea + $ea; }
     ?>
         <td class="gsp2"><?php if ($runden->kampflos == 0) { echo $ea;} else { echo "-";} ?></td>
@@ -305,13 +312,13 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
 	</tr>
     
     <tr>
-        <?php if ($spielerl->start_dwz < 1) { 
+       <?php if ($spielerl->start_dwz < 1) { 
 			$spielerl->start_dwz = $spielerl->dsbDWZ;
 			$spielerl->start_I0  = $spielerl->DWZ_Index;
         } ?>
 		<td><?php echo $spielerl->start_dwz.'-'.$spielerl->start_I0;?></td>
         <td><?php echo $spielerl->Punkte;?></td>
-        <td><?php echo $spielerl->We;?></td>
+        <td><?php echo number_format($spielerl->We,2);?></td>
         <td><?php echo $spielerl->EFaktor;?></td>
         <td><?php  if($spielerl->Punkte == $spielerl->Partien AND $spielerl->Niveau == $spielerl->Leistung AND $spielerl->Punkte != 0) { echo 667+$spielerl->Leistung.' &sup2;'; $ex=1;$pt=$spielerl->liga_name;} else { if ( $spielerl->Leistung == 0 ) { echo "-";} else { echo $spielerl->Leistung; } } ?></td>
         <td><?php echo $spielerl->Niveau;?></td>

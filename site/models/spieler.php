@@ -135,13 +135,15 @@ class CLMModelSpieler extends JModelLegacy
 	$id	= @$options['id'];
 
 	$query = " SELECT l.name as league, s.gegner as Mgl_Nr,s.gPKZ,s.gzps,s.lid,s.runde,s.heim,s.weiss,s.brett,"
-		." s.kampflos,s.punkte,d.Spielername,m.name,d.DWZ,a.dg,a.gegner as tln"
+		." s.kampflos,s.punkte,d.Spielername,m.name,d.DWZ,a.dg,a.gegner as tln, ml.start_dwz"
 		." FROM #__clm_rnd_spl as s "
 		." LEFT JOIN #__clm_rnd_man as a ON s.sid = a.sid AND s.lid = a.lid AND s.runde = a.runde AND s.paar = a.paar AND s.dg = a.dg AND s.tln_nr = a.tln_nr ";
 	if ($countryversion =="de") {
-		$query .= " LEFT JOIN #__clm_dwz_spieler as d ON d.ZPS = s.gzps AND d.Mgl_Nr = s.gegner AND d.sid = a.sid ";
+		$query .= " LEFT JOIN #__clm_dwz_spieler as d ON d.ZPS = s.gzps AND d.Mgl_Nr = s.gegner AND d.sid = a.sid "
+			." LEFT JOIN #__clm_meldeliste_spieler as ml ON ml.zps = s.gzps AND ml.mgl_nr = s.gegner AND ml.sid = s.sid AND ml.lid = s.lid ";
 	} else {	
-		$query .= " LEFT JOIN #__clm_dwz_spieler as d ON d.ZPS = s.gzps AND d.PKZ = s.gPKZ AND d.sid = a.sid ";
+		$query .= " LEFT JOIN #__clm_dwz_spieler as d ON d.ZPS = s.gzps AND d.PKZ = s.gPKZ AND d.sid = a.sid "
+			." LEFT JOIN #__clm_meldeliste_spieler as ml ON ml.zps = s.gzps AND ml.PKZ = s.gPKZ AND ml.sid = s.sid AND ml.lid = s.lid ";
 	} 	
 	$query .= " LEFT JOIN #__clm_mannschaften as m ON m.liga = a.lid AND m.tln_nr = a.gegner "//AND m.zps = s.gzps
 		." LEFT JOIN #__clm_liga as l ON l.id = s.lid AND l.sid = s.sid "
@@ -153,6 +155,7 @@ class CLMModelSpieler extends JModelLegacy
 	} 	
 	$query .= " AND a.sid =".$sid
 		." AND l.published = 1 "
+		." GROUP BY a.lid, a.runde "
 		." ORDER BY a.lid, a.dg ASC, a.runde ASC "
 		;
 		return $query;

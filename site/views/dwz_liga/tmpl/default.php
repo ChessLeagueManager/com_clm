@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -124,7 +124,7 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 		<td><?php echo $liga->start_dwz.'-'.$liga->start_I0;?></td>	
 	<?php } ?>
     <td><?php echo $liga->Punkte;?></td>
-    <td><?php echo $liga->We;?></td>
+    <td><?php echo number_format($liga->We,2);?></td>
     <td><?php echo $liga->EFaktor;?></td>
     <td><?php if ( $liga->Leistung == 0 ) { echo "-";}else { echo $liga->Leistung; }?></td>
     <td><?php echo $liga->Niveau;?></td>
