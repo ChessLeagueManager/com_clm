@@ -62,8 +62,7 @@ class CLMContent {
 		$imageTag = '<img src="'.CLMImage::imageURL('pdf_button.png').'" width="16" height="19" title="'.JText::_('PDF_PRINT').$title.'" alt="PDF" class="CLMTooltip" />';
 		
 		// Format ergänzen
-		$params['format'] = 'clm_pdf';
-		
+		$params = array_merge(array('format' => 'clm_pdf'), $params);
 		$string .= CLMText::createCLMLink($imageTag, $view, $params);
 		
 		// close div
