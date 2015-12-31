@@ -25,7 +25,9 @@ function clm_api_view_tournament_group($liga=2) {
 		$table->add_button($lang->del,$lang->del_title,json_encode(array("db_tournament_del",array("",true))),"clm_table_event clm_button clm_button_del clm_table_confirm clm_button_big clm_button_big_delete");	
 	}
 	if(clm_core::$access->access('BE_league_edit_detail' ) !== false || clm_core::$access->access('BE_teamtournament_edit_detail') !== false) {
-		$table->add_button($lang->edit,$lang->edit_title,clm_core::$load->gen_url(array("view"=>"ligen","task"=>"edit"),array("id"))."&id=","clm_table_multi clm_button clm_button_edit clm_button_big clm_button_big_edit");			
+/* Erst wenn Ligen und Mannschaftsturniere mit der selben Ansicht bearbeitet werden können, kann dies hier angepasst wieder aktiviert werden.
+		$table->add_button($lang->edit,$lang->edit_title,clm_core::$load->gen_url(array("view"=>"ligen","task"=>"edit"),array("id"))."&id=","clm_table_multi clm_button clm_button_edit clm_button_big clm_button_big_edit");
+*/
 		$table->add_button($lang->ranking,$lang->ranking_title,json_encode(array("db_tournament_ranking",array("",true))),"clm_table_event clm_button clm_button_new clm_button_big clm_button_big_default");				
 		$table->add_button($lang->sort,$lang->sort_title,json_encode(array("db_tournament_sortByTWZ",array("",true))),"clm_table_event clm_button clm_button_new clm_button_big clm_button_big_default");
 	}
