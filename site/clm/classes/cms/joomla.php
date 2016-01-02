@@ -8,7 +8,7 @@ class clm_class_cms_joomla extends clm_class_cms {
 		$config = clm_core::$db->config();
 		if ($config->template == 1 && $config->div == 1) {
 			// Diese Operation zerstört PDF Dateien, daher nur Aufrufen wenn solche nicht generiert werden.
-			if ((!isset($_GET["clm_backend"]) || $_GET["clm_backend"]!=1) && (!isset($_GET["format"]) || $_GET["format"] != "clm_pdf")) {
+			if ((!isset($_GET["clm_backend"]) || $_GET["clm_backend"]!=1) && (!isset($_GET["format"]) || $_GET["format"] != "pdf")) {
 				clm_core::$cms->addScriptDeclaration("
 				function clmCreateMasterDiv (e) {
 					var newChildNodes = document.body.childNodes;  
