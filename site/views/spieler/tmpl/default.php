@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -49,7 +49,8 @@ $daten['title'] = $spieler[0]->Spielername.' - '.$spieler[0]->Vereinname;
 $doc->setTitle($spieler[0]->Spielername.' - '.$spieler[0]->Vereinname);
 } else {
 $daten['title'] = JText::_('PLAYER_UNKNOWN_TITLE');
-$doc->setTitle($spieler[0]->Spielername.' - '.$spieler[0]->Vereinname);
+//$doc->setTitle($spieler[0]->Spielername.' - '.$spieler[0]->Vereinname);
+$doc->setTitle(JText::_('PLAYER_UNKNOWN_TITLE'));
 }
 
 // Konfigurationsparameter auslesen
