@@ -342,7 +342,7 @@ class clm_class_access {
 			} else {
 				$right = $right[3];
 			}
-			if (clm_core::$access->access($right)===true) {
+			if (clm_core::$access->access($right)===false) {
 				return false;
 			}
 		} else {
@@ -350,7 +350,7 @@ class clm_class_access {
 				//return array(false,"e_tournamentNotExisting");
 				return false;
 			}
-			if (clm_core::$access->access($right[1])===true) {
+			if (clm_core::$access->access($right[1])===false) {
 				return false;
 			}
 		}
