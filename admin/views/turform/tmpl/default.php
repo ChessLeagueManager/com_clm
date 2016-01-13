@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -198,7 +198,7 @@ $turParams = new clm_class_params($this->turnier->params);
 		<td class="paramlist_value">
 			<?php
 			// nur, wenn Runden noch nicht erstellt
-			if ($this->turnier->rnd == NULL) {
+			if (IS_NULL($this->turnier->rnd) OR $this->turnier->rnd == 0) {
 				echo $this->form['modus'];
 			} else {
 				echo JText::_('MODUS_TYP_'.$this->turnier->typ)." (".JText::_('ROUNDS_CREATED')."!)";
@@ -218,7 +218,7 @@ $turParams = new clm_class_params($this->turnier->params);
 			<span id="formRoundscountValue">
 			<?php
 			// nur, wenn Runden noch nicht erstellt
-			if ($this->turnier->rnd == NULL) {
+			if (IS_NULL($this->turnier->rnd) OR $this->turnier->rnd == 0) {
 				if ($this->turnier->typ != 2 AND $this->turnier->typ != 3 AND $this->turnier->typ != 5) {
 					echo '<input class="inputbox" type="text" name="runden" id="runden" size="10" maxlength="5" value="'.$this->turnier->runden.'" />';
 				}
@@ -231,7 +231,7 @@ $turParams = new clm_class_params($this->turnier->params);
 			<span id="formRoundscountText">
 			<?php
 			// nur, wenn Runden noch nicht erstellt
-			if ($this->turnier->rnd == NULL) {
+			if (IS_NULL($this->turnier->rnd) OR $this->turnier->rnd == 0) {
 				if ($this->turnier->typ == 2 OR $this->turnier->typ == 3 OR $this->turnier->typ == 5) {
 					echo $this->turnier->runden." (".JText::_('ROUNDS_COUNT_GENERATED').")";
 				}
@@ -251,7 +251,7 @@ $turParams = new clm_class_params($this->turnier->params);
 		<td class="paramlist_value" id="formStagecount">
 			<?php
 			// nur, wenn Runden noch nicht erstellt
-			if ($this->turnier->rnd == NULL) {
+			if (IS_NULL($this->turnier->rnd) OR $this->turnier->rnd == 0) {
 				if ($this->turnier->typ != 1 AND $this->turnier->typ != 3 AND $this->turnier->typ != 5) {
 					echo $this->form['dg'];
 				} else {
@@ -274,7 +274,7 @@ $turParams = new clm_class_params($this->turnier->params);
 		</td>
 		<td class="paramlist_value">
 			<?php
-			if ($this->turnier->rnd == NULL) {
+			if (IS_NULL($this->turnier->rnd) OR $this->turnier->rnd == 0) {
 			?>
 				<input class="inputbox" onchange="showFormRoundscount();" type="text" name="teil" id="teil" size="10" maxlength="5" value="<?php echo $this->turnier->teil; ?>" />
 			<?php
