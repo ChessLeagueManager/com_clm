@@ -12,6 +12,10 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.2.4 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
+^ Überarbeitung Textfiles für CLM-Benutzergruppen
+# Ligen: Rundenturnier mit zusätzlichen Runden wieder möglich
+
 - - - - - 3.2.3 - [13-01-2016] - - - - - - - - - - - - - - - - - - - -
 + Menüeintagstyp für Liga-Paarungsliste
 ^ Sprachfilezuordnung für umgestellte Views

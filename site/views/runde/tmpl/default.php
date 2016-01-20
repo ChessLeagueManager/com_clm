@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -517,6 +517,7 @@ echo JText::_('RANGLISTE').' '.JText::_('BEFORE').' '.$liga[$runde-1]->rname;
 <?php
 // Anzahl der Teilnehmer durchlaufen
 for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
+	if (!isset($punkte[$x])) break;
 // Farbgebung der Zeilen //
 if ($x%2 != 0) { $zeilenr	= "zeile2";
 		$zeilenr_dg2	= "zeile2_dg2";}

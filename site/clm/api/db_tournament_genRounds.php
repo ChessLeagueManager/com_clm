@@ -194,6 +194,22 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 							}
 						}
 					}
+					//Anlegen leerer Runden, 
+					//wenn die Rundenanzahl im Ligastammsatz die nötige Rundenzahl entspr. Teilnehmerzahl überschreitet
+					//Das ermöglicht das manuelle Nachpflegen, was auch zwingend in einen solchen Fall notwendig ist
+					if (($dg == 1) AND ($rnd_mode == "1")) {     //nur für Ligen mit einem Durchgängen zugelassen
+																 //nur für Standardmodus nach FIDE-Tabelle zugelassen	 
+						while ($rnd_cnt < $runden) {
+							$rnd_cnt++;
+							for ($z = 1; $z < ($n/2)+1; $z++) {
+								$query	= "INSERT INTO #__clm_rnd_man "
+									." ( `sid`, `lid`, `runde`, `paar`, `dg`, `heim`, `tln_nr`, `gegner` ) "
+									." VALUES ('$sid','$id','$rnd_cnt','$z','$dg_dg','$dgh',0,0), "
+									." ('$sid','$id','$rnd_cnt','$z','$dg_dg','$dgg',0,0 )";
+								clm_core::$db->query($query);
+							}
+						}	
+					}
 				break;
 				case 3: //Schweizer System mtmt
 					$rnd_cnt = 1;
