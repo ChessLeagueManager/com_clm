@@ -13,10 +13,8 @@ $ -> Language fix or change
 ! -> Note
 
 - - - - - 3.2.4 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
-^ Überarbeitung Textfiles für CLM-Benutzergruppen
-# Ligen: Rundenturnier mit zusätzlichen Runden wieder möglich
 
-- - - - - 3.2.3 - [13-01-2016] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.2.3 - [22-01-2016] - - - - - - - - - - - - - - - - - - - -
 + Menüeintagstyp für Liga-Paarungsliste
 ^ Sprachfilezuordnung für umgestellte Views
 # raw-View Verein für Extern-Zugriff
@@ -41,6 +39,8 @@ $ -> Language fix or change
 ^ PDF-Ausgaben: Umstellung Format von clm_pdf auf pdf
 # Admin-View MTurniere: Kopieren bei ausreichenden Rechten wurde verweigert
 # Admin-View Einzelturniere: Detailpflege nach 'Runden löschen' war nicht möglich
+^ Überarbeitung Textfiles für CLM-Benutzergruppen
+# Ligen: Rundenturnier mit zusätzlichen Runden wieder möglich
 
 - - - - - 3.2.2 - [05-10-2015] - - - - - - - - - - - - - - - - - - - -
 # Config: Email-Adressen mit Umlauten erlauben
