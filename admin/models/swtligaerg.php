@@ -693,7 +693,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 			}
 
 			$attribut	= CLMSWT::readInt ($swt, $offset + 15);
-			if ($attribut == 34) $kampflos	= 2; else $kampflos = 0;
+			if ($attribut == 34 OR $attribut == 2) $kampflos	= 2; else $kampflos = 0;
 			$spielfrei	= ($attribut == 3 || $attribut == 51);
 			$brett		= CLMSWT::readInt ($swt, $offset + 18);
 			
@@ -818,8 +818,11 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				elseif	($ergebnis == 13 && $kampflos == 0) { $teil_erg = '0';		$trenn = '-';  	$teil_ergk = '';		$trennk = ''; }
 				elseif	($ergebnis == 14 && $kampflos == 0) { $teil_erg = '0,5';	$trenn = '-';  	$teil_ergk = '';		$trennk = ''; }
 				elseif	($ergebnis == 15 && $kampflos == 0) { $teil_erg = '1';		$trenn = '-';  	$teil_ergk = '';		$trennk = ''; }
+				elseif	($ergebnis == 1  && $kampflos == 2) { $teil_erg = '-';		$trenn = '/';  	$teil_ergk = '';		$trennk = ''; }
+				elseif	($ergebnis == 3  && $kampflos == 2) { $teil_erg = '+';		$trenn = '/';  	$teil_ergk = '';		$trennk = ''; }
 				elseif	($ergebnis == 5  && $kampflos == 2) { $teil_erg = '-';		$trenn = '/';  	$teil_ergk = '';		$trennk = ''; }
 				elseif	($ergebnis == 10 && $kampflos == 2) { $teil_erg = '-';		$trenn = '/';  	$teil_ergk = '';		$trennk = ''; }
+				elseif	($ergebnis == 13 && $kampflos == 2) { $teil_erg = '-';		$trenn = '/';  	$teil_ergk = '';		$trennk = ''; }
 				elseif	($ergebnis == 15 && $kampflos == 2) { $teil_erg = '+';		$trenn = '/';  	$teil_ergk = '';		$trennk = ''; }
 				else										{ $teil_erg = '?';		$trenn = '';  	$teil_ergk = '';		$trennk = ''; }
 				// Mannschaftsergebnis speichern
@@ -830,7 +833,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				elseif	($ergebnis == 3  && $kampflos == 0) { $teil_ergk = '';		$trennk = ''; }
 				elseif	($ergebnis == 4  && $kampflos == 0) { $teil_ergk = '0';		$trennk = '-'; }
 				elseif	($ergebnis == 5  && $kampflos == 0) { $teil_ergk = '0';		$trennk = '-'; }
-				elseif	($ergebnis == 6  && $kampflos == 0) { $teil_ergk = '0';		$trennk = '-'; }
+				elseif	($ergebnis == 6  && $kampflos == 0) { $teil_ergk = '0.5';		$trennk = '-'; }
 				elseif	($ergebnis == 7  && $kampflos == 0) { $teil_ergk = '0';		$trennk = '-'; }
 				elseif	($ergebnis == 8  && $kampflos == 0) { $teil_ergk = '0,5';		$trennk = '-'; }
 				elseif	($ergebnis == 9  && $kampflos == 0) { $teil_ergk = '0,5';		$trennk = '-'; }
@@ -840,18 +843,21 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				elseif	($ergebnis == 13 && $kampflos == 0) { $teil_ergk = '1';		$trennk = '-'; }
 				elseif	($ergebnis == 14 && $kampflos == 0) { $teil_ergk = '1';		$trennk = '-'; }
 				elseif	($ergebnis == 15 && $kampflos == 0) { $teil_ergk = '1';		$trennk = '-'; }
+				elseif	($ergebnis == 1  && $kampflos == 2) { $teil_ergk = '-';		$trennk = '/'; }
+				elseif	($ergebnis == 3  && $kampflos == 2) { $teil_ergk = '';		$trennk = '/'; }
 				elseif	($ergebnis == 5  && $kampflos == 2) { $teil_ergk = '-';		$trennk = '/'; }
 				elseif	($ergebnis == 10 && $kampflos == 2) { $teil_ergk = '-';		$trennk = '/'; }
+				elseif	($ergebnis == 13 && $kampflos == 2) { $teil_ergk = '';		$trennk = '/'; }
 				elseif	($ergebnis == 15 && $kampflos == 2) { $teil_ergk = '+';		$trennk = '/'; }
 				else										{ $teil_ergk = '';		$trennk = ''; }
-				if		($ergebnis >= 8 AND $ergebnis <=11) $emsum = .5;
-				elseif	($ergebnis >= 12 AND $ergebnis <=15) $emsum = 1;
-				else	$emsum = 0;
-				} else {
+				//if		($ergebnis >= 8 AND $ergebnis <=11) $emsum = .5;
+				//elseif	($ergebnis >= 12 AND $ergebnis <=15) $emsum = 1;
+				//else	$emsum = 0;
+				} //else {
 				if		($ergebnis == 2 OR $ergebnis == 6 OR $ergebnis == 10 OR $ergebnis == 14) $emsum = .5;
 				elseif	($ergebnis == 3 OR $ergebnis == 7 OR $ergebnis == 11 OR $ergebnis == 15) $emsum = 1;
 				else	$emsum = 0;
-				}
+				//}
 				if		($ergebnis >= 8 AND $ergebnis <=11) $mmsum = .5;
 				elseif	($ergebnis >= 12 AND $ergebnis <=15) $mmsum = 1;
 				else	$mmsum = 0;

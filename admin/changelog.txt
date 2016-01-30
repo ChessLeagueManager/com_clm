@@ -13,7 +13,8 @@ $ -> Language fix or change
 ! -> Note
 
 - - - - - 3.2.4 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
-
+# SWT-Import Liga: Nachbesserung bei kampflos und Erg.korrektur nach TO
+ 
 - - - - - 3.2.3 - [22-01-2016] - - - - - - - - - - - - - - - - - - - -
 + Menüeintagstyp für Liga-Paarungsliste
 ^ Sprachfilezuordnung für umgestellte Views
