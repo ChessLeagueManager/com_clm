@@ -1,5 +1,5 @@
 --
--- 3.2.4  DB-Erweiterung für Englische Version
+-- 3.2.3  DB-Erweiterung für Englische Version
 --
 -- Erweiterung Stammtabellen - !! Spalte Allocation wird später hinzugefügt 
 ALTER TABLE `#__clm_dwz_verbaende` CHANGE `Verband` `Verband` varchar(4) NOT NULL DEFAULT '';

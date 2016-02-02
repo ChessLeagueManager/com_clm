@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -11,7 +11,6 @@
 */
 
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip', $params);
 JHtml::_('behavior.tooltip', '.CLMTooltip');
 
 $lid		= JRequest::getInt('liga','1'); 
@@ -28,6 +27,8 @@ $liga		= $this->liga;
 		}
 	}	
 	if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
+	if (!isset($params['round_date'])) $params['round_date'] = '0';
+
 $termin		= $this->termin;
 $dwzschnitt	= $this->dwzschnitt;
 $dwzgespielt= $this->dwzgespielt;
@@ -84,7 +85,7 @@ else {
 	else {
 		$ohne_tln = "6";
 	}
-
+	if ($params['round_date'] == '1') $ohne_tln++;
 	$item		= JRequest::getInt('Itemid','1');
 
 	// Array für DWZ Schnitt setzen
@@ -145,17 +146,19 @@ if ($termin[$term]->published =="1") { ?>
 	//echo "_!_".$rundensumme[$rund_sum]->nr.'__!__'.($x+1);
 	// Wenn Rundensumme existiert dann  Rundensymbol (Lupe) anzeigen
 	if ($rundensumme[$rund_sum]->nr == ($x+1) ) { ?>
-		<div class="left">
+		<div class="left" style="width: 70%;">
 		<?php 
 		if ($termin[$term]->bemerkungen <> "") { ?>
 			<span class="editlinktip hasTip"><img src="<?php echo CLMImage::imageURL('con_info.png'); ?>" class="CLMTooltip" title="<?php echo JText::_( 'CHIEF_NOTE') ?>" /></span><?php }
 		// Wenn SL_OK dann Haken anzeigen
 		if ($rundensumme[$rund_sum]->sl_ok > 0) { ?>
 			<span class="editlinktip hasTip"><img  src="<?php echo CLMImage::imageURL('accept.png'); ?>" class="CLMTooltip" title="<?php echo JText::_( 'CHIEF_OK') ?>" /></span><?php } ?>
-			<b>&nbsp;<?php if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1)) { 
-				if ($termin[$term]->datum > 0) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); 
-					if(isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { echo '  '.substr($termin[$term]->startzeit,0,5).' Uhr'; }
-					} $term++;  }
+		<b>&nbsp;<?php if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1)) { 
+			if ($termin[$term]->datum > 0) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); 
+			if($params['round_date'] == '0' and isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { echo '  '.substr($termin[$term]->startzeit,0,5); }
+			if($params['round_date'] == '1' and isset($termin[$term]->enddatum) and $termin[$term]->enddatum > '1970-01-01' and $termin[$term]->enddatum != $termin[$term]->datum) { 
+						echo ' - '.JHTML::_('date',  $termin[$term]->enddatum, JText::_('DATE_FORMAT_CLM_F')); }
+			} $term++;  }
 			else {  }?></b>
 		</div>
 
@@ -181,6 +184,9 @@ if ($termin[$term]->published =="1") { ?>
     <?php } ?>
 	<th class="gast"><?php echo JText::_('GUEST') ?></th>
 	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
+	<?php if ($params['round_date'] == '1') { ?>
+	<th class="heim"><?php echo JText::_('FIXTURE_DATE') ?></th>
+	<?php } ?>
 </tr>
 <?php
 // Teilnehmerschleife
@@ -233,7 +239,17 @@ else { echo $paar[$z]->gname; } ?>
 			$z2++;
 		}
 		else { if (isset($dwz[$paar[$z]->gtln])) echo round($dwz[($paar[$z]->gtln)]); } ?></td>
-</td></tr>
+</td>
+	<?php if ($params['round_date'] == '1') { ?>
+	<td class="heim">
+	<?php 
+			if (isset($paar[$z]->pdate) AND $paar[$z]->pdate > '1970-01-01') {
+			echo JHTML::_('date',  $paar[$z]->pdate, JText::_('DATE_FORMAT_CLM_Y2')); 
+			if($paar[$z]->ptime > '00:00:00') { echo '  '.substr($paar[$z]->ptime,0,5); } }
+	?>
+	</td>
+	<?php } ?>
+</tr>
 <?php //echo "paar: "; var_dump($paar[$z]); 
 //die(); 
 if ($remis_com == 1) { $remis_com = 0; ?>
@@ -306,16 +322,19 @@ if ($termin[$term]->published =="1") {
 // Wenn Rundensumme existiert dann  Rundensymbol (Lupe) anzeigen
 if ($rundensumme[$rund_sum]->nr == ($x+1+$liga[0]->runden) ) { ?>
 <div>
-<div class="left">
+<div class="left" style="width: 70%;">
 <?php 
 if ($termin[$term]->bemerkungen <> "") { ?>
 	<span class="editlinktip hasTip"><img src="<?php echo CLMImage::imageURL('con_info.png'); ?>" class="CLMTooltip" title="<?php echo JText::_( 'CHIEF_NOTE') ?>" /></span><?php }
 // Wenn SL_OK dann Haken anzeigen
 if ($rundensumme[$rund_sum]->sl_ok > 0) { ?>
 	<span class="editlinktip hasTip"><img  src="<?php echo CLMImage::imageURL('accept.png'); ?>" class="CLMTooltip" title="<?php echo JText::_( 'CHIEF_OK') ?>" /></span><?php } ?>
-	<b>&nbsp;<?php if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1+$liga[0]->runden)) { if ($termin[$term]->datum > 0) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); 
-			if(isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { echo '  '.substr($termin[$term]->startzeit,0,5).' Uhr'; }
-			} $term++; }		
+	<b>&nbsp;<?php if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1+$liga[0]->runden)) { 
+		if ($termin[$term]->datum > 0) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); 
+		if($params['round_date'] == '0' and isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { echo '  '.substr($termin[$term]->startzeit,0,5); }
+		if($params['round_date'] == '1' and isset($termin[$term]->enddatum) and $termin[$term]->enddatum > '1970-01-01' and $termin[$term]->enddatum != $termin[$term]->datum) { 
+						echo ' - '.JHTML::_('date',  $termin[$term]->enddatum, JText::_('DATE_FORMAT_CLM_F')); }
+		} $term++; }		
 else {  }?></b>	
 </div>
 
@@ -344,6 +363,9 @@ else {	?>
     <?php } ?>
 	<th class="gast"><?php echo JText::_('GUEST') ?></th>
 	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
+	<?php if ($params['round_date'] == '1') { ?>
+	<th class="heim"><?php echo JText::_('FIXTURE_DATE') ?></th>
+	<?php } ?>
 </tr>
 <?php
 
@@ -395,6 +417,15 @@ else { echo $paar[$z]->gname; } ?>
 		}
 		else { if (isset($dwz[($paar[$z]->gtln)])) echo round($dwz[($paar[$z]->gtln)]); } ?></td>
 </td>
+	<?php if ($params['round_date'] == '1') { ?>
+	<td class="heim">
+	<?php 
+			if (isset($paar[$z]->pdate) AND $paar[$z]->pdate > '1970-01-01') {
+			echo JHTML::_('date',  $paar[$z]->pdate, JText::_('DATE_FORMAT_CLM_Y2')); 
+			if($paar[$z]->ptime > '00:00:00') { echo '  '.substr($paar[$z]->ptime,0,5); } }
+	?>
+	</td>
+	<?php } ?>
 </tr>
 <?php $z++; } ?>
 </table>

@@ -209,13 +209,16 @@ class CLMModelMannschaft extends JModelLegacy
 	{
 	$sid = JRequest::getInt('saison','1');
 	$liga = JRequest::getInt('liga','1');
+	$tln = JRequest::getInt('tlnr');
 	
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
-		$query = "SELECT nr, datum FROM #__clm_runden_termine "
-			." WHERE liga = ".$liga
-			." AND sid = ".$sid
+		$query = "SELECT a.nr, a.datum, a.startzeit, m.pdate, m.ptime FROM #__clm_runden_termine as a "
+			." LEFT JOIN #__clm_liga as l ON l.id = a.liga "
+			." LEFT JOIN #__clm_rnd_man as m ON m.tln_nr = ".$tln." AND m.sid = a.sid AND m.lid = a.liga AND (m.runde + ((m.dg - 1) * l.runden)) = a.nr "
+			." WHERE a.liga = ".$liga
+			." AND a.sid = ".$sid
 			." ORDER BY nr "
 			;
 		return $query;

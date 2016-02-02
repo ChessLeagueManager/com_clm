@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -13,7 +13,7 @@
 
 class CLMViewRunden
 {
-public static function setRundenToolbar()
+public static function setRundenToolbar($params_round_date)
 	{
 	$clmAccess = clm_core::$access;
 
@@ -22,6 +22,9 @@ public static function setRundenToolbar()
 		JToolBarHelper::title( JText::_( 'TITLE_RUNDE' ), 'clm_settings.png' );
 		if($clmAccess->access('BE_league_edit_fixture') !== false) {
 			JToolBarHelper::custom('paarung','edit.png','edit_f2.png',JText::_( 'LEAGUE_BUTTON_1' ),false);
+			if  ($params_round_date == '1') {
+				JToolBarHelper::custom('pairingdates','edit.png','edit_f2.png',JText::_( 'ROUND_EDIT_PAIRING_DATES' ),false);
+			}
 		}
 		JToolBarHelper::custom('check','preview.png','upload_f2.png','RUNDE_CHECK',false);
 		// Nur CLM-Admin hat Zugriff auf Toolbar
@@ -39,7 +42,30 @@ public static function setRundenToolbar()
 public static function runden( $rows, $lists, $pageNav, $option )
 	{
 		$mainframe	= JFactory::getApplication();
-		CLMViewRunden::setRundenToolbar();
+		$cliga 		= intval(JRequest::getVar( 'liga' ));
+
+		// Liga-Parameter holen 
+		$db 		=JFactory::getDBO();
+		$sql = "SELECT params FROM #__clm_liga as l"
+			." WHERE l.id = ".$rows[0]->liga;
+		$db->setQuery( $sql );
+		$tparams = $db->loadObjectList();
+		//Liga-Parameter aufbereiten
+		$paramsStringArray = explode("\n", $tparams[0]->params);
+		$lparams = array();
+		foreach ($paramsStringArray as $value) {
+			$ipos = strpos ($value, '=');
+			if ($ipos !==false) {
+				$key = substr($value,0,$ipos);
+				if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
+				if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
+				$lparams[$key] = substr($value,$ipos+1);
+			}
+		}	
+		if (!isset($lparams['round_date']))  {   //Standardbelegung
+			$lparams['round_date'] = '0'; }
+
+		CLMViewRunden::setRundenToolbar($lparams['round_date']);
 		$user =JFactory::getUser();
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
@@ -97,9 +123,16 @@ public static function runden( $rows, $lists, $pageNav, $option )
 					<th width="7%">
 						<?php echo JHtml::_('grid.sort',   'JDATE', 'a.datum', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
+				<?php if ($lparams['round_date'] == '0')  { ?>
 					<th width="4%">
 						<?php echo JHtml::_('grid.sort',   'RUNDE_STARTTIME', 'a.startzeit', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
+				<?php }
+					if ($lparams['round_date'] == '1')  { ?>
+					<th width="7%">
+						<?php echo JHtml::_('grid.sort',   'RUNDE_ENDDATUM', 'a.enddatum', @$lists['order_Dir'], @$lists['order'] ); ?>
+					</th>
+				<?php } ?>
 					<th width="8%">
 						<?php echo JHtml::_('grid.sort',   'ERGEBNISSE', 'e.name', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
@@ -174,7 +207,7 @@ public static function runden( $rows, $lists, $pageNav, $option )
 					<td>
 	
 								<span class="editlinktip hasTip" title="<?php echo JText::_( 'Edit Runde' );?>::<?php echo $row->name; ?>">
-							<a href="index.php?option=com_clm&section=runden&task=edit&cid[]=<?php echo $row->id; ?>">
+							<a href="index.php?option=com_clm&section=runden&task=edit&cid[]=<?php echo $row->id; ?>&liga=<?php echo $cliga; ?>">
 								<?php echo $row->name; ?></a></span>
 	
 					</td>
@@ -185,9 +218,16 @@ public static function runden( $rows, $lists, $pageNav, $option )
 					<td align="center">
 						<?php echo $row->datum;?>
 					</td>
+				<?php if ($lparams['round_date'] == '0')  { ?>
 					<td align="center">
 						<?php echo substr($row->startzeit,0,5);?>
 					</td>
+				<?php } 
+					if ($lparams['round_date'] == '1')  { ?>
+					<td align="center">
+						<?php echo $row->enddatum;?>
+					</td>
+				<?php } ?>
 					<td align="center">
 						<a href="<?php echo $link; ?>"><?php echo JText::_( 'ERGEBNISSE' );?></a>
 					</td>
@@ -264,6 +304,28 @@ public static function runde( &$row,$lists, $option )
 		CLMViewRunden::setRundeToolbar();
 		JRequest::setVar( 'hidemainmenu', 1 );
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
+		$cliga 		= intval(JRequest::getVar( 'liga' ));
+		// Liga-Parameter holen 
+		$db 	=JFactory::getDBO();
+		$sql = "SELECT params FROM #__clm_liga as l"
+			." WHERE l.id = ".$row->liga;
+		$db->setQuery( $sql );
+		$tparams = $db->loadObjectList();
+		//Liga-Parameter aufbereiten
+		$paramsStringArray = explode("\n", $tparams[0]->params);
+		$lparams = array();
+		foreach ($paramsStringArray as $value) {
+			$ipos = strpos ($value, '=');
+			if ($ipos !==false) {
+				$key = substr($value,0,$ipos);
+				if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
+				if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
+				$lparams[$key] = substr($value,$ipos+1);
+			}
+		}	
+		if (!isset($lparams['round_date']))  {   //Standardbelegung
+			$lparams['round_date'] = '0'; }
+
 		?>
 	<script language="javascript" type="text/javascript">
 
@@ -302,7 +364,7 @@ public static function runde( &$row,$lists, $option )
 			<label for="name"><?php echo JText::_( 'RUNDE' ).' : '; ?></label>
 			</td>
 			<td>
-			<input class="inputbox" type="text" name="name" id="name" size="50" maxlength="60" value="<?php echo $row->name; ?>" />
+			<input class="inputbox" type="text" name="name" id="name" size="30" maxlength="60" value="<?php echo $row->name; ?>" />
 			</td>
 		</tr>
 
@@ -311,7 +373,7 @@ public static function runde( &$row,$lists, $option )
 			<label for="nr"><?php echo JText::_( 'RUNDE_NR' ).' : '; ?></label>
 			</td>
 			<td>
-			<input class="inputbox" type="text" name="nr" id="nr" size="50" maxlength="60" value="<?php echo $row->nr; ?>" />
+			<input class="inputbox" type="text" name="nr" id="nr" size="5" maxlength="5" value="<?php echo $row->nr; ?>" />
 			</td>
 		</tr>
 
@@ -322,9 +384,10 @@ public static function runde( &$row,$lists, $option )
                 	</label>
             		</td>
             		<td>
-                	<?php echo JHtml::_('calendar', $row->datum, 'datum', 'datum', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
+                	<?php echo JHtml::_('calendar', $row->datum, 'datum', 'datum', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
             		</td>
         	</tr>
+	<?php if ($lparams['round_date'] == '0')  { ?>
 		<tr>
 			<td class="key" nowrap="nowrap">
 				<label for="startzeit" >
@@ -336,19 +399,32 @@ public static function runde( &$row,$lists, $option )
 			<input class="inputbox" type="time" name="startzeit" id="startzeit" size="8" maxlength="10" value="<?php echo substr($row->startzeit,0,5); ?>"  />
 			</td>
         </tr>
-		   <tr>
-            	<td width="100" class="key">
-                	<label for="deadlineday">
-						<span class="editlinktip hasTip" title="<?php echo JText::_( 'RUNDE_DEADLINEDAY_HINT' );?>">
-                    	<?php echo JText::_( 'RUNDE_DEADLINEDAY' ).' : '; ?>
-                	</label>
-            	</td>
-            	<td>
-                	<?php echo JHtml::_('calendar', $row->deadlineday, 'deadlineday', 'deadlineday', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
-					<input class="inputbox" type="time" name="deadlinetime" id="deadlinetime" size="8" maxlength="10" value="<?php echo substr($row->deadlinetime,0,5); ?>"  />
+	<?php }
+		if ($lparams['round_date'] == '1')  { ?>
+	   <tr>
+           	<td width="100" class="key">
+               	<label for="enddatum">
+                  	<?php echo JText::_( 'RUNDE_ENDDATUM' ).' : '; ?>
+               	</label>
+           	</td>
+           	<td>
+				<?php if ($row->enddatum < '1970-01-02' and $row->datum > '1970-01-01') $row->enddatum = $row->datum; ?>
+               	<?php echo JHtml::_('calendar', $row->enddatum, 'enddatum', 'enddatum', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
 			</td>
-        		</tr>
-				
+   		</tr>
+	<?php } ?>
+		<tr>
+       		<td width="100" class="key">
+               	<label for="deadlineday">
+					<span class="editlinktip hasTip" title="<?php echo JText::_( 'RUNDE_DEADLINEDAY_HINT' );?>">
+                   	<?php echo JText::_( 'RUNDE_DEADLINEDAY' ).' : '; ?>
+               	</label>
+       		</td>
+       		<td>
+               	<?php echo JHtml::_('calendar', $row->deadlineday, 'deadlineday', 'deadlineday', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
+				<input class="inputbox" type="time" name="deadlinetime" id="deadlinetime" size="8" maxlength="10" value="<?php echo substr($row->deadlinetime,0,5); ?>"  />
+       		</td>
+       	</tr>
 		<tr>
 			<td class="key" nowrap="nowrap"><label for="sid"><?php echo JText::_( 'RUNDE_SAISON' ).' : '; ?></label>
 			</td>

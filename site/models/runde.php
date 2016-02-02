@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -23,7 +23,7 @@ class CLMModelRunde extends JModelLegacy
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
  
-		$query = " SELECT a.*, r.datum, r.startzeit, r.name as rname, r.bemerkungen as comment, r.published as pub,"
+		$query = " SELECT a.*, r.datum, r.startzeit, r.enddatum, r.name as rname, r.bemerkungen as comment, r.published as pub,"
 			." s.name as saison_name,"
 			." u.name as mf_name,u.email as email FROM #__clm_liga as a"      
 			." LEFT JOIN #__clm_runden_termine as r ON r.liga = a.id AND r.sid = a.sid "

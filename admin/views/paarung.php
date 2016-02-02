@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -36,6 +36,20 @@ public static function paarung( &$row, $paarung, $man, $count_man, $option, $cid
 	CLMViewPaarung::setPaarungToolbar($row);
 	JRequest::setVar( 'hidemainmenu', 1 );
 	JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
+	//Liga-Parameter aufbereiten
+	$paramsStringArray = explode("\n", $row->params);
+	$lparams = array();
+	foreach ($paramsStringArray as $value) {
+		$ipos = strpos ($value, '=');
+		if ($ipos !==false) {
+			$key = substr($value,0,$ipos);
+			if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
+			if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
+			$lparams[$key] = substr($value,$ipos+1);
+		}
+	}	
+	if (!isset($lparams['round_date']))  {   //Standardbelegung
+		$lparams['round_date'] = '0'; }
 		?>
 	<h1><?php echo JText::_( 'PAARUNG_WARNING_LINE1' ); ?></h1>
 	<h1><?php echo JText::_( 'PAARUNG_WARNING_LINE2' ); ?></h1>
@@ -52,12 +66,12 @@ public static function paarung( &$row, $paarung, $man, $count_man, $option, $cid
 	<br>
 
 	<form action="index.php" method="post" name="adminForm" id="adminForm">
-	<div class="width-50 fltlft">
+	<div class="width-40 fltlft">
 
 	<fieldset class="adminform">
 	<legend><?php echo JText::_( 'PAARUNG_AKTUELL' ); ?></legend>
 
-	<table class="admintable">
+	<table class="paramlist admintable">
 
 <?php $count = 0; 
 if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
@@ -70,7 +84,7 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 		      else $pairings = $row->teil / 2; ?>
  
 	<tr>
-		<td class="key" nowrap="nowrap" colspan="7" height="24"><?php echo $paarung[$count]->rname; //JText::_( 'PAARUNG_RUNDE' ).' '.$paarung[$count]->runde; ?></td>
+		<td class="key" nowrap="nowrap" colspan="7" height="24"><b><br><?php echo $paarung[$count]->rname; ?></b></td>
 	</tr>
 	<tr>
 		<td class="key" nowrap="nowrap" height="24"><?php echo JText::_( 'PAARUNG_DG' ); ?></td>
@@ -80,17 +94,25 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_GAST' ); ?></td>
 		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_HEIM' ); ?></td>
 		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_GAST' ); ?></td>
+		<?php if ($lparams['round_date'] == '1') { ?>
+			<td class="key" nowrap="nowrap">&nbsp;&nbsp;<?php echo JText::_( 'PAARUNG_DATE' ); ?></td>
+			<td class="key" nowrap="nowrap">&nbsp;&nbsp;<?php echo JText::_( 'PAARUNG_TIME' ); ?></td>
+		<?php } ?>
 	</tr>
 
 	<?php for ($y = 0; $y < $pairings; $y++ ) { ?>
 	<tr>
-		<td class="key" nowrap="nowrap" height="24"><?php echo $paarung[$count]->dg; ?></td>
+		<td class="key" nowrap="nowrap" height="37"><?php echo $paarung[$count]->dg; ?></td>
 		<td class="key" nowrap="nowrap"><?php echo $paarung[$count]->runde; ?></td>
 		<td class="key" nowrap="nowrap"><?php echo $paarung[$count]->paar; ?></td>
 		<td class="key" nowrap="nowrap"><?php echo $paarung[$count]->tln_nr; ?></td>
 		<td class="key" nowrap="nowrap"><?php echo $paarung[$count]->gegner; ?></td>
 		<td class="key" nowrap="nowrap"><?php echo $paarung[$count]->hname; ?></td>
 		<td class="key" nowrap="nowrap"><?php echo $paarung[$count]->gname; ?></td>
+		<?php if ($lparams['round_date'] == '1') { ?>
+			<td class="key" nowrap="nowrap">&nbsp;&nbsp;<?php echo $paarung[$count]->pdate; ?></td>
+			<td class="key" nowrap="nowrap">&nbsp;&nbsp;<?php echo substr($paarung[$count]->ptime,0,5); ?></td>
+		<?php } ?>
 	</tr>
 <?php $count++; }} ?>
 
@@ -98,12 +120,12 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 	</fieldset>
 	</div>
 
-	<div class="width-40 fltrt">
+	<div class="width-60 fltrt">
 
 	<fieldset class="adminform">
 	<legend><?php echo JText::_( 'PAARUNG_CHANGED' ); ?></legend>
 
-	<table class="admintable">
+	<table class="paramlist admintable">
 
 <?php $count = 0;
 if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
@@ -130,11 +152,15 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 	?>
 
 	<tr>
-		<td class="key" nowrap="nowrap" colspan="7" height="24"><?php echo $paarung[$count]->rname; // JText::_( 'PAARUNG_RUNDE' ).' '.$paarung[$count]->runde; ?></td>
+		<td class="key" nowrap="nowrap" colspan="7" height="24"><b><br><?php echo $paarung[$count]->rname; ?></b></td>
 	</tr>
 	<tr>
 		<td class="key" nowrap="nowrap" height="24"><?php echo JText::_( 'PAARUNG_HEIM' ); ?></td>
 		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_GAST' ); ?></td>
+		<?php if ($lparams['round_date'] == '1') { ?>
+			<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_DATE' ); ?></td>
+			<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_TIME' ); ?></td>
+		<?php } ?>
 	</tr>
 
 	<?php for ($y = 0; $y < $pairings; $y++ ) { ?>
@@ -163,8 +189,21 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 			 <option value="<?php echo $man[$z]->tln_nr; ?>" <?php if (((int)$paarung[$count]->gegner) == ((int)$z+1)) { ?> selected="selected" <?php } ?>><?php echo $man[$z]->name; ?></option> 
 			<?php }}	?>
 		  </select>
-
 		</td>
+		<?php if ($lparams['round_date'] == '1') { 
+			$ndate = 'D'.$paarung[$count]->dg.'R'.$paarung[$count]->runde.'P'.$paarung[$count]->paar.'Date'; 
+			$ntime = 'D'.$paarung[$count]->dg.'R'.$paarung[$count]->runde.'P'.$paarung[$count]->paar.'Time';
+			if ($paarung[$count]->pdate < '1970-01-02' AND $paarung[$count]->datum > '1970-01-01') {
+				$paarung[$count]->pdate = $paarung[$count]->datum;
+				$paarung[$count]->ptime = $paarung[$count]->startzeit;
+			} ?>
+			<td>
+				<?php echo JHtml::_('calendar', $paarung[$count]->pdate, $ndate, $ndate, '%Y-%m-%d', array('class'=>'text_area', 'size'=>'8',  'maxlength'=>'12')); ?>
+			</td>
+			<td>
+				<input class="inputbox" type="time" name="<?php echo $ntime; ?>" id="<?php echo $ntime; ?>" size="3" maxlength="5" value="<?php echo substr($paarung[$count]->ptime,0,5); ?>"  />
+			</td>
+		<?php } ?>
 
 	</tr>
 <?php $count++; }} ?>

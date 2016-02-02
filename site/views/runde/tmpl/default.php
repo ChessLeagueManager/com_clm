@@ -53,6 +53,7 @@ $liga		= $this->liga;
 	}	
 	if (!isset($liga[0]->params['pgntype'])) $liga[0]->params['pgntype']= 0;
 	if (!isset($liga[0]->params['dwz_date'])) $liga[0]->params['dwz_date'] = '0000-00-00';
+	if (!isset($liga[0]->params['round_date'])) $liga[0]->params['round_date'] = '0';
 $einzel		= $this->einzel;
 $pgn		= JRequest::getInt('pgn','0'); 
 $detail		= JRequest::getInt('detail','0');
@@ -220,7 +221,9 @@ if (isset($liga[$runde-1]->datum) AND $liga[$runde-1]->datum =='0000-00-00') {
 <div class="componentheading">
 	<?php echo $liga[0]->name.', '.$liga[$runde-1]->rname;      // JText::_('ROUND').' '.$runde; 
 	if(isset($liga[$runde-1]->datum)) { echo ' '.JText::_('ON_DAY').' '.JHTML::_('date',  $liga[$runde-1]->datum, JText::_('DATE_FORMAT_CLM_F')); 
-		if(isset($liga[$runde-1]->startzeit) and $liga[$runde-1]->startzeit != '00:00:00') { echo '  '.substr($liga[$runde-1]->startzeit,0,5).' Uhr'; } }
+		if($liga[0]->params['round_date'] == '0' and isset($liga[$runde-1]->startzeit) and $liga[$runde-1]->startzeit != '00:00:00') { echo '  '.substr($liga[$runde-1]->startzeit,0,5); } 
+		if($liga[0]->params['round_date'] == '1' and isset($liga[$runde-1]->enddatum) and $liga[$runde-1]->enddatum > '1970-01-01' and $liga[$runde-1]->enddatum != $liga[$runde-1]->datum) { 
+			echo ' - '.JHTML::_('date',  $liga[$runde-1]->enddatum, JText::_('DATE_FORMAT_CLM_F'));} }
     ?>
     
     <?php } ?>
@@ -319,7 +322,15 @@ $z2=0;
 $zz=0;
 for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 
-if (isset($paar[$y]->htln)) {  // Leere Begegnungen ausblenden ?>
+if (isset($paar[$y]->htln)) {  // Leere Begegnungen ausblenden 
+	if ($liga[0]->params['round_date'] == '1' AND $paar[$y]->pdate > '1970-01-01') { ?>
+		<tr><th colspan="8" class="paarung2" style="text-align: right;">
+			<?php 
+			echo JHTML::_('date',  $paar[$y]->pdate, JText::_('DATE_FORMAT_CLM_F')); 
+			if ($paar[$y]->ptime > '00:00:00') echo '  '.substr($paar[$y]->ptime,0,5); 
+			?>
+		</th></tr>
+	<?php } ?>
     <tr>
         <th colspan="3" class="paarung2">
         <?php

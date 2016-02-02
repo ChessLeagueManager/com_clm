@@ -376,6 +376,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_rnd_man` (
   `wertpunkte` decimal(5,1) DEFAULT NULL,
   `ko_decision` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `comment` text NOT NULL,
+  `pdate` date NOT NULL DEFAULT '0000-00-00',
+  `ptime` time NOT NULL DEFAULT '00:00:00',
   PRIMARY KEY (`id`),
   KEY `published` (`published`),
   KEY `lid_sid` (`lid`,`sid`)
@@ -442,6 +444,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_runden_termine` (
   `checked_out` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `ordering` int(11) NOT NULL DEFAULT '0',
+  `enddatum` date NOT NULL DEFAULT '0000-00-00',
   PRIMARY KEY (`id`),
   KEY `published` (`published`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

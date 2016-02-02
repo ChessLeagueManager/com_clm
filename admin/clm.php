@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -187,6 +187,12 @@ switch ($controllerName) {
 		}
 		break;
 	case 'paarung';
+		if(!$clmAccess->access('BE_league_edit_fixture')) {		
+			JError::raiseWarning( 500, JText::_( 'NO_PERMISSION' ) );
+			$controllerName = 'info';
+		}
+		break;
+	case 'pairingdates';
 		if(!$clmAccess->access('BE_league_edit_fixture')) {		
 			JError::raiseWarning( 500, JText::_( 'NO_PERMISSION' ) );
 			$controllerName = 'info';

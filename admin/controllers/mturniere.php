@@ -150,9 +150,9 @@ function saveIt($apply=false)
 	$row->params['anz_sgp'] = JRequest::getVar('anz_sgp');
 	$paramsStringArray = array();
 	foreach ($row->params as $key => $value) {
-		//$paramsStringArray[] = $key.'='.intval($value);
-		if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
-		if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
+		////$paramsStringArray[] = $key.'='.intval($value);
+		//if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
+		//if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
 		$paramsStringArray[] = $key.'='.$value;
 	}
 	$row->params = implode("\n", $paramsStringArray);

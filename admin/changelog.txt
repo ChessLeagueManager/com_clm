@@ -13,7 +13,9 @@ $ -> Language fix or change
 ! -> Note
 
 - - - - - 3.2.4 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
+^ Überarbeitung engl. Textfiles für Backend
 # SWT-Import Liga: Nachbesserung bei kampflos und Erg.korrektur nach TO
++ Ligen: Rundendaten von-bis sowie Termin pro Paarung möglich
  
 - - - - - 3.2.3 - [22-01-2016] - - - - - - - - - - - - - - - - - - - -
 + Menüeintagstyp für Liga-Paarungsliste

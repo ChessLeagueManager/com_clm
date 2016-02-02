@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -268,6 +268,8 @@ function save()
 	// Check for request forgeries
 	JRequest::checkToken() or die( 'Invalid Token' );
 
+	$cliga 		= intval(JRequest::getVar( 'liga' ));
+
 	$option		= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
 	$slok_old	= JRequest::getVar('slok_old');
@@ -341,12 +343,12 @@ function save()
 	{
 		case 'apply':
 			$msg = JText::_( 'RUNDE_AENDERUNG').$row->nr.JText::_( 'RUNDE_GESPEICHERT' );
-			$link = 'index.php?option='.$option.'&section='.$section.'&task=edit&cid[]='. $row->id ;
+			$link = 'index.php?option='.$option.'&section='.$section.'&task=edit&cid[]='.$row->id.'&liga='.$cliga;
 			break;
 		case 'save':
 		default:
 			$msg = JText::_( 'RUNDE ').$row->nr.JText::_( 'RUNDE_GESPEICHERT' );
-			$link = 'index.php?option='.$option.'&section='.$section;
+			$link = 'index.php?option='.$option.'&section='.$section.'&liga='.$cliga;
 			break;
 	}
 	
@@ -380,6 +382,7 @@ function cancel()
 	$mainframe	= JFactory::getApplication();
 	// Check for request forgeries
 	JRequest::checkToken() or die( 'Invalid Token' );
+	$cliga 		= intval(JRequest::getVar( 'liga' ));
 	
 	$option		= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
@@ -387,7 +390,7 @@ function cancel()
 	$row 		=JTable::getInstance( 'runden', 'TableCLM' );
 
 	$msg = JText::_( 'RUNDE_AKTION');
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg , "message");
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cliga, $msg , "message");
 	}
 
 
@@ -634,6 +637,43 @@ function saveOrder(  )
 
 	// Link MUSS hardcodiert sein !!!
 	$mainframe->redirect( 'index.php?option='.$option.'&section=paarung&task=edit&cid[]='.$cid);
+	}
+
+	public static function pairingdates()
+	{
+	JRequest::checkToken() or die( 'Invalid Token' );
+	$mainframe	= JFactory::getApplication();
+
+	$db 		=JFactory::getDBO();
+	$user 		=JFactory::getUser();
+	$cid 		= intval(JRequest::getVar( 'liga' ));
+
+	$option 	= JRequest::getCmd( 'option' );
+	$section 	= JRequest::getVar( 'section' );
+
+	// keine Liga gewählt
+	if ($cid < 1) {
+		$msg = JText::_( 'LIGEN_PA_AENDERN');
+		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid, $msg , "message");
+	}
+	// Ligadaten und Paarungsdaten holen
+	$query	= "SELECT a.id as lid, a.sid, a.sl "
+		." FROM #__clm_liga as a"
+		." WHERE a.id = ".$cid
+		;
+	$db->setQuery($query);
+	$liga=$db->loadObjectList();
+
+	$clmAccess = clm_core::$access;      
+
+	// Prüfen ob User Berechtigung hat
+	if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
+		$msg = JText::_( 'LIGEN_NO_FIXTURE');
+		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid, $msg , "message");
+	}
+
+	// Link MUSS hardcodiert sein !!!
+	$mainframe->redirect( 'index.php?option='.$option.'&section=pairingdates&task=edit&cid[]='.$cid);
 	}
 
 	function copy()

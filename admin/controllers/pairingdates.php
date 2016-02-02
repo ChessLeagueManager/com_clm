@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
@@ -14,7 +13,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-class CLMControllerPaarung extends JControllerLegacy
+class CLMControllerPairingDates extends JControllerLegacy
 {
 	/**
 	 * Constructor
@@ -110,8 +109,8 @@ function display($cachable = false, $urlparams = array())
 		}
 	}
 
-	require_once(JPATH_COMPONENT.DS.'views'.DS.'paarung.php');
-	CLMViewPaarung::paarung( $row, $paarung, $man, $count_man, $option, $cid, $lists );
+	require_once(JPATH_COMPONENT.DS.'views'.DS.'pairingdates.php');
+	CLMViewPairingDates::pairingdates( $row, $paarung, $man, $count_man, $option, $cid, $lists );
 	}
 
 function cancel()
@@ -145,20 +144,6 @@ function save()
 	$row 		=JTable::getInstance( 'ligen', 'TableCLM' );
 	$cid		=JRequest::getVar( 'id');
 	$row->load( $cid);
-	//Liga-Parameter aufbereiten
-	$paramsStringArray = explode("\n", $row->params);
-	$lparams = array();
-	foreach ($paramsStringArray as $value) {
-		$ipos = strpos ($value, '=');
-		if ($ipos !==false) {
-			$key = substr($value,0,$ipos);
-			if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
-			if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
-			$lparams[$key] = substr($value,$ipos+1);
-		}
-	}	
-	if (!isset($lparams['round_date']))  {   //Standardbelegung
-		$lparams['round_date'] = '0'; }
 
 	$sid		= $row->sid;
 	$lid		= $row->id;
@@ -184,20 +169,15 @@ function save()
 			$cnt = $x;
 			}
 	for ($y = 0; $y < $pairings; $y++ ) {
-	$heim	= JRequest::getVar( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Heim');
-	$gast	= JRequest::getVar( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Gast');
-	if ($lparams['round_date'] == '1') {
+		//$heim	= JRequest::getVar( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Heim');
+		//$gast	= JRequest::getVar( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Gast');
 		$ndate	= JRequest::getVar( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Date');
 		$ntime	= JRequest::getVar( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Time');
-	}
+
 		$query	= "UPDATE #__clm_rnd_man"
-			." SET tln_nr = ".$heim
-			." , gegner = ".$gast;
-		if ($lparams['round_date'] == '1') {
-			$query .= " , pdate = '".$ndate."'"
-					." , ptime = '".$ntime."'";
-		}
-		$query .= " WHERE sid = ".$sid
+			." SET pdate = '".$ndate."'"
+			." , ptime = '".$ntime."'"
+			." WHERE sid = ".$sid
 			." AND lid = ".$lid
 			." AND runde = ".($cnt+1)
 			." AND paar = ".($y+1)
@@ -208,13 +188,9 @@ function save()
 		$db->query();
 
 		$query	= "UPDATE #__clm_rnd_man"
-			." SET tln_nr = ".$gast
-			." , gegner = ".$heim;
-		if ($lparams['round_date'] == '1') {
-			$query .= " , pdate = '".$ndate."'"
-					." , ptime = '".$ntime."'";
-		}
-		$query .= " WHERE sid = ".$sid
+			." SET pdate = '".$ndate."'"
+			." , ptime = '".$ntime."'"
+			." WHERE sid = ".$sid
 			." AND lid = ".$lid
 			." AND runde = ".($cnt+1)
 			." AND paar = ".($y+1)
@@ -246,7 +222,7 @@ function save()
 
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'PAARUNG_LOG');
+	$clmLog->aktion = JText::_( 'PAARUNG_DT_LOG');
 	$clmLog->params = array('sid' => $sid, 'lid' => $lid, 'cids' => $cid);
 	$clmLog->write();
 

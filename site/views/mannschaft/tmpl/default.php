@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -475,7 +475,12 @@ for ($x=0; $x< 100; $x++){
     <td><?php echo $plan->paar; ?></td>
     <td><?php while (isset($termin[$cnt]->nr) AND ($plan->runde + $mannschaft[0]->runden*($plan->dg -1)) > $termin[$cnt]->nr) { 
 			$cnt++; }
-		    if (isset($termin[$cnt]->nr) AND ($plan->runde + $mannschaft[0]->runden*($plan->dg -1))== $termin[$cnt]->nr AND $termin[$cnt]->datum != '0000-00-00') { echo JHTML::_('date',  $termin[$cnt]->datum, JText::_('DATE_FORMAT_CLM')); $cnt++ ;} ?></td>
+		    if (isset($termin[$cnt]->nr) AND ($plan->runde + $mannschaft[0]->runden*($plan->dg -1))== $termin[$cnt]->nr ) {
+				if ($termin[$cnt]->pdate > '1970-01-01') { echo JHTML::_('date',  $termin[$cnt]->pdate, JText::_('DATE_FORMAT_CLM'));
+					if ($termin[$cnt]->ptime != '00:00:00') echo '  '.substr($termin[$cnt]->ptime,0,5); }
+				else if ($termin[$cnt]->datum > '1970-01-01') { echo JHTML::_('date',  $termin[$cnt]->datum, JText::_('DATE_FORMAT_CLM')); 
+					if ($termin[$cnt]->startzeit != '00:00:00') echo '  '.substr($termin[$cnt]->startzeit,0,5); }
+			$cnt++; } ?></td>
     <?php if ($plan->tln_nr == $tln) { ?>
         <td><?php echo $plan->hname; ?></td>
         <td>

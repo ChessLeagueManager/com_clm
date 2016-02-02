@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -64,6 +64,8 @@ class CLMViewMTurniere
 			$row->params['incl_to_season'] = '1'; 
 		else 
 			$row->params['incl_to_season'] = '0'; }
+	if (!isset($row->params['round_date']))  {   //Standardbelegung
+		$row->params['round_date'] = '0'; }
 	?>
 	
 	<script language="javascript" type="text/javascript">
@@ -255,9 +257,9 @@ class CLMViewMTurniere
 
 	<tr>
 	<td nowrap="nowrap">
-<label for="params['color_order']"><?php echo JText::_( 'LEAGUE_COLOR_ORDER' ); ?></label>
+<label for="params[color_order]"><?php echo JText::_( 'LEAGUE_COLOR_ORDER' ); ?></label>
 	</td><td colspan="2">
-		<select name="params['color_order']" id="params['color_order']" value="<?php echo $row->params['color_order']; ?>" size="1">
+		<select name="params[color_order]" id="params[color_order]" value="<?php echo $row->params['color_order']; ?>" size="1">
 		<!--<option>- wählen -</option>-->
 		<option value="1" <?php if ($row->params['color_order'] == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_COLOR_ORDER_1' );?></option>
 		<option value="2" <?php if ($row->params['color_order'] == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_COLOR_ORDER_2' );?></option>
@@ -267,7 +269,14 @@ class CLMViewMTurniere
 		<option value="6" <?php if ($row->params['color_order'] == 6) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_COLOR_ORDER_6' );?></option>
 		</select>
 	</td>
-	<td nowrap="nowrap"></td><td colspan="2"></td>
+	<td nowrap="nowrap">
+	<label for="params[round_date]"><?php echo JText::_( 'LEAGUE_ROUND_DATE' ); ?></label>
+	</td><td colspan="2">
+		<select name="params[round_date]" id="params[round_date]" value="<?php echo $row->params['round_date']; ?>" size="1">
+		<option value="0" <?php if ($row->params['round_date'] == 0) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_ROUND_DATE_0' );?></option>
+		<option value="1" <?php if ($row->params['round_date'] == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_ROUND_DATE_1' );?></option>
+		</select>
+	</td>
 	</tr>
 
 	<tr>
@@ -492,18 +501,18 @@ class CLMViewMTurniere
       <table class="paramlist admintable">
 	<tr>
 	<td nowrap="nowrap">
-	<label for="params['btiebr1']"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION1' ); ?></label>
+	<label for="params[btiebr1]"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION1' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
-		<select name="params['btiebr1']" id="params['btiebr1']" value="<?php echo $row->params['btiebr1']; ?>" size="1">
+		<select name="params[btiebr1]" id="params[btiebr1]" value="<?php echo $row->params['btiebr1']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
 		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr1'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
 		</select>
 	</td>	
 	<td nowrap="nowrap">
-	<label for="params['btiebr2']"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION2' ); ?></label>
+	<label for="params[btiebr2]"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION2' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
-		<select name="params['btiebr2']" id="params['btiebr2']" value="<?php echo $row->params['btiebr2']; ?>" size="1">
+		<select name="params[btiebr2]" id="params[btiebr2]" value="<?php echo $row->params['btiebr2']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
 		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr2'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
@@ -512,18 +521,18 @@ class CLMViewMTurniere
 	</tr>
 	<tr>
 	<td nowrap="nowrap">
-	<label for="params['btiebr3']"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION3' ); ?></label>
+	<label for="params[btiebr3]"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION3' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
-		<select name="params['btiebr3']" id="params['btiebr3']" value="<?php echo $row->params['btiebr3']; ?>" size="1">
+		<select name="params[btiebr3]" id="params[btiebr3]" value="<?php echo $row->params['btiebr3']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
 		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr3'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
 		</select>
 	</td>	
 	<td nowrap="nowrap">
-	<label for="params['btiebr4']"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION4' ); ?></label>
+	<label for="params[btiebr4]"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION4' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
-		<select name="params['btiebr4']" id="params['btiebr4']" value="<?php echo $row->params['btiebr4']; ?>" size="1">
+		<select name="params[btiebr4]" id="params[btiebr4]" value="<?php echo $row->params['btiebr4']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
 		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr4'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
@@ -534,16 +543,16 @@ class CLMViewMTurniere
 	<td nowrap="nowrap">
 	<label for="params[btiebr5]"><?php echo JText::_( 'LEAGUE_BOARD_COLUMN5' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
-		<select name="params['btiebr5']" id="params['btiebr5']" value="<?php echo $row->params['btiebr5']; ?>" size="1">
+		<select name="params[btiebr5]" id="params[btiebr5]" value="<?php echo $row->params['btiebr5']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
 		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr5'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
 		</select>
 	</td>	
 	<td nowrap="nowrap">
-	<label for="params['btiebr6']"><?php echo JText::_( 'LEAGUE_BOARD_COLUMN6' ); ?></label>
+	<label for="params[btiebr6]"><?php echo JText::_( 'LEAGUE_BOARD_COLUMN6' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
-		<select name="params['btiebr6']" id="params['btiebr6']" value="<?php echo $row->params['btiebr6']; ?>" size="1">
+		<select name="params[btiebr6]" id="params[btiebr6]" value="<?php echo $row->params['btiebr6']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
 		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr6'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
@@ -553,14 +562,14 @@ class CLMViewMTurniere
 	
 	<tr>
 	<td nowrap="nowrap">
-	<label for="params['bnhtml']"><?php echo JText::_( 'LEAGUE_BOARD_POSITIONS_LIST' ); ?></label>
+	<label for="params[bnhtml]"><?php echo JText::_( 'LEAGUE_BOARD_POSITIONS_LIST' ); ?></label>
 	</td><td colspan="2">
-	<input class="inputbox" type="text" name="params['bnhtml']" id="params['bnhtml']" size="2" maxlength="2" value="<?php echo $row->params['bnhtml']; ?>" />
+	<input class="inputbox" type="text" name="params[bnhtml]" id="params[bnhtml]" size="2" maxlength="2" value="<?php echo $row->params['bnhtml']; ?>" />
 	</td>
 	<td nowrap="nowrap">
-	<label for="params['bnpdf']"><?php echo JText::_( 'LEAGUE_BOARD_POSITIONS_PDF' ); ?></label>
+	<label for="params[bnpdf]"><?php echo JText::_( 'LEAGUE_BOARD_POSITIONS_PDF' ); ?></label>
 	</td><td colspan="2">
-	<input class="inputbox" type="text" name="params['bnpdf']" id="params['bnpdf']" size="2" maxlength="2" value="<?php echo $row->params['bnpdf']; ?>" />
+	<input class="inputbox" type="text" name="params[bnpdf]" id="params[bnpdf]" size="2" maxlength="2" value="<?php echo $row->params['bnpdf']; ?>" />
 	</td>
 	</tr>
 	
