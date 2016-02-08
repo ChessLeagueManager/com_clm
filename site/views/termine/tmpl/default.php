@@ -92,6 +92,8 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
 				elseif ($termine[$t]->nr <= (3 * $termine[$t]->ligarunde)) { $runde = ($termine[$t]->nr - (2 * $termine[$t]->ligarunde)); $dg = 3;}
 				else { $runde = ($termine[$t]->nr - (3 * $termine[$t]->ligarunde)); $dg = 4;}
 				$linkname = "index.php?option=com_clm&amp;view=runde&amp;saison=". $termine[$t]->sid ."&amp;liga=".  $termine[$t]->typ_id ."&amp;runde=". $runde ."&amp;dg=". $dg; 
+			} elseif ($termine[$t]->source == 'lpaar') { 
+				$linkname = "index.php?option=com_clm&amp;view=runde&amp;saison=". $termine[$t]->sid ."&amp;liga=".  $termine[$t]->typ_id ."&amp;runde=". $termine[$t]->nr ."&amp;dg=". $termine[$t]->dg; 
 			} else {
 				$linkname = "index.php?option=com_clm&amp;view=turnier_runde&amp;runde=". $termine[$t]->nr ."&amp;turnier=". $termine[$t]->typ_id; }
                 

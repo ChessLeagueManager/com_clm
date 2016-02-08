@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,6 +10,8 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+$today = date("Y-m-d");
+
 
 ?>
 
@@ -31,6 +33,8 @@ defined('_JEXEC') or die('Restricted access');
 			alert( jserror['dont_starttime'] );
 		} else if (form.startdate.value == "0000-00-00" && form.enddate.value != "0000-00-00") {
 			alert( jserror['dont_enddate'] );
+		} else if (form.startdate.value > form.enddate.value) {
+			alert( jserror['enddate_wrong'] );
 		} else if (form.starttime.value == "00:00" && form.endtime.value != "00:00") {
 			alert( jserror['dont_endtime'] );
 		} else if (form.endtime.value != "00:00" && form.allday.checked == true) {
@@ -46,11 +50,11 @@ defined('_JEXEC') or die('Restricted access');
 
 			
 <form action="index.php" method="post" name="adminForm" id="adminForm">
-
+  <div class="width-60 fltlft">
 	<fieldset class="adminform">
 		<legend><?php echo JText::_( 'JDETAILS' ); ?></legend>
 
-		<table class="admintable">
+		<table class="paramlist admintable">
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
 			<label for="name"><?php echo JText::_( 'TERMINE_TASK' ); ?>:</label>
@@ -107,13 +111,14 @@ defined('_JEXEC') or die('Restricted access');
 			</label>
 			</td>
 			<td>
-				<?php echo JHtml::_('calendar', $this->termine->startdate, 'startdate', 'startdate', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
+				<?php if ($this->termine->startdate < '1970-01-01') $this->termine->startdate = $today;
+				echo JHtml::_('calendar', $this->termine->startdate, 'startdate', 'startdate', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
 				<span >  </span>
 			</td><td>
 				<input class="inputbox" type="time" name="starttime" id="starttime" size="6" maxlength="6" value="<?php echo substr($this->termine->starttime,0,5); ?>"  />
-				<span >  Uhr   </span>
+				<span > <?php echo JText::_( 'TERMINE_UHR' ); ?> </span>
 			</td><td>
-				<span><input type="checkbox" id='allday' name='allday' <?php if ($this->termine->allday == 1) echo " checked='checked' "; ?> value="<?php echo $this->termine->allday; ?>" />
+				<span><input type="checkbox" id='allday' name='allday' <?php if ($this->termine->allday == 1) echo " checked='checked' "; ?> value="<?php echo $this->termine->allday; ?>" /></span>
 				<span ><?php echo JText::_( 'TERMINE_ALLDAY' ); ?></span>
 			</td>
 		</tr>
@@ -125,13 +130,14 @@ defined('_JEXEC') or die('Restricted access');
 			</label>
 			</td>
 			<td>
-				<?php echo JHtml::_('calendar', $this->termine->enddate, 'enddate', 'enddate', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
+				<?php if ($this->termine->enddate < '1970-01-01') $this->termine->enddate = $today; 
+				echo JHtml::_('calendar', $this->termine->enddate, 'enddate', 'enddate', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
 				<span >  </span>
 			</td><td>
 				<input class="inputbox" type="time" name="endtime" id="endtime" size="6" maxlength="6" value="<?php echo substr($this->termine->endtime,0,5); ?>"  />
-				<span >  Uhr   </span>
+				<span > <?php echo JText::_( 'TERMINE_UHR' ); ?> </span>
 			</td><td>
-				<span><input type="checkbox" id='noendtime' name='noendtime' <?php if ($this->termine->noendtime == 1) echo " checked='checked' "; ?> value="<?php echo $this->termine->noendtime; ?>" />
+				<span><input type="checkbox" id='noendtime' name='noendtime' <?php if ($this->termine->noendtime == 1) echo " checked='checked' "; ?> value="<?php echo $this->termine->noendtime; ?>" /></span>
 				<span ><?php echo JText::_( 'TERMINE_NOENDTIME' ); ?></span>
 			</td>
 		</tr>
@@ -150,7 +156,8 @@ defined('_JEXEC') or die('Restricted access');
 		<legend><?php echo JText::_( 'TERMINE_DESCRIPTION' ); ?></legend>
 		<textarea class="inputbox" name="beschreibung" id="beschreibung" cols="50" rows="10" style="width:99%"><?php echo str_replace('&','&amp;',$this->termine->beschreibung);?></textarea>
 	</fieldset>
-	
+	</div>
+
 	<div class="clr"></div>
 
 	<input type="hidden" name="option" value="com_clm" />

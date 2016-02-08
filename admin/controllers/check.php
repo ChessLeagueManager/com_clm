@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -46,6 +46,9 @@ function edit()
 	$section 	= JRequest::getVar( 'section' );
 	$liga 		= JRequest::getVar( 'liga');
 	JArrayHelper::toInteger($cid, array(0));
+	// Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion= $config->countryversion;
 
 	// Rundendaten ermitteln
 	$query = " SELECT a.nr,a.sid,a.datum,l.teil,l.id, l.stamm, l.name, l.runden, l.rang "
@@ -75,14 +78,21 @@ function edit()
 		$runde = $rnd[0]->nr;
 		}
 	// Daten der Paarungen ermitteln
-	$query = " SELECT a.paar,a.brett,a.spieler,a.gegner,a.ergebnis,a.kampflos, m.name as man_heim, m.zps as hzps, d.Spielername as hname,  ";
+	$query = " SELECT a.paar,a.brett,a.spieler,a.PKZ,a.gegner,a.gPKZ,a.ergebnis,a.kampflos, m.name as man_heim, m.zps as hzps, d.Spielername as hname,  ";
 		if ($rnd[0]->rang =="0" ) { $query = $query.' s.snr as hnr , s.mnr as rmnr'; }
-			else { $query = $query.' s.Rang as hnr,s.man_nr as rmnr '; }
+		else { $query = $query.' s.Rang as hnr,s.man_nr as rmnr '; }
 		$query = $query
-	 	." FROM #__clm_rnd_spl as a "
-	 	." LEFT JOIN #__clm_mannschaften AS m ON ( m.tln_nr = a.tln_nr AND m.liga = a.lid) "
-         	." LEFT JOIN #__clm_dwz_spieler AS d ON ( d.Mgl_Nr = a.spieler AND d.ZPS = m.zps AND d.sid = a.sid) ";
- 		if ($rnd[0]->rang =="0" ) { $query = $query." LEFT JOIN #__clm_meldeliste_spieler AS s ON ( s.mnr = m.man_nr AND s.zps = a.zps AND s.mgl_nr = a.spieler AND s.sid = a.sid AND s.lid = a.lid)  "; }
+			." FROM #__clm_rnd_spl as a "
+			." LEFT JOIN #__clm_mannschaften AS m ON ( m.tln_nr = a.tln_nr AND m.liga = a.lid) ";
+        if ($countryversion == "de")
+			$query .= " LEFT JOIN #__clm_dwz_spieler AS d ON ( d.Mgl_Nr = a.spieler AND d.ZPS = m.zps AND d.sid = a.sid) ";
+        else
+			$query .= " LEFT JOIN #__clm_dwz_spieler AS d ON ( d.PKZ = a.PKZ AND d.ZPS = m.zps AND d.sid = a.sid) ";
+ 		if ($rnd[0]->rang =="0" ) { 
+			if ($countryversion == "de")
+				$query .= " LEFT JOIN #__clm_meldeliste_spieler AS s ON ( s.mnr = m.man_nr AND s.zps = a.zps AND s.mgl_nr = a.spieler AND s.sid = a.sid AND s.lid = a.lid)  "; 
+			else
+				$query .= " LEFT JOIN #__clm_meldeliste_spieler AS s ON ( s.mnr = m.man_nr AND s.zps = a.zps AND s.PKZ = a.PKZ AND s.sid = a.sid AND s.lid = a.lid)  "; }
 			else { $query = $query." LEFT JOIN #__clm_rangliste_spieler AS s ON ( s.ZPS = a.zps AND s.Mgl_Nr = a.spieler AND s.sid = a.sid) "; }
 		$query = $query
 			." WHERE a.runde =".$runde
@@ -98,7 +108,7 @@ function edit()
 	CLMViewCheck::check( $row, $dat, $rnd, $liga,$dg,$runde );
 	}
 
-function check_d_spl($zps,$spieler,$runde,$dg,$rnd)    
+public static function check_d_spl($zps,$spieler,$PKZ,$runde,$dg,$rnd)    
 	// Durchzählen wie oft Spieler am Spieltag eingesetzt ist
 	{
 	$sid = $rnd[0]->sid;
@@ -110,10 +120,12 @@ function check_d_spl($zps,$spieler,$runde,$dg,$rnd)
 		." LEFT JOIN #__clm_liga as l ON a.lid = l.id "
 	 	." LEFT JOIN #__clm_runden_termine AS rt ON ( a.lid = rt.liga AND (a.runde + (a.dg - 1) * l.runden) = rt.nr ) "  
 		." WHERE a.zps = '$zps'"
-		." AND a.spieler = ".$spieler
 		." AND a.sid = ".$sid
-		." AND rt.datum = '$rt_date'"
-		;
+		." AND rt.datum = '$rt_date'";
+	if ($spieler > 0)
+		$query .= " AND a.spieler = ".$spieler;
+	else
+		$query .= " AND a.PKZ = '".$PKZ."'";
 	$db->setQuery( $query);
 	$data=$db->loadObjectList();
 	$count = $data[0]->count;
@@ -121,7 +133,7 @@ function check_d_spl($zps,$spieler,$runde,$dg,$rnd)
 	return $count;
 	}
 
-function show_d_spl($zps,$spieler,$runde,$dg,$rnd)    
+public static function show_d_spl($zps,$spieler,$PKZ,$runde,$dg,$rnd)    
    	// Wo wurde Spieler eingesetzt ?
 	{
 	$sid = $rnd[0]->sid;
@@ -133,17 +145,19 @@ function show_d_spl($zps,$spieler,$runde,$dg,$rnd)
 		." LEFT JOIN #__clm_liga as l ON a.lid = l.id "
 		." LEFT JOIN #__clm_runden_termine AS rt ON ( a.lid = rt.liga AND (a.runde + (a.dg - 1) * l.runden) = rt.nr ) "  
 		." WHERE a.zps = '$zps'"
-		." AND a.spieler = ".$spieler
 		." AND a.sid = ".$sid      
 		." AND rt.datum = '$rt_date'"  
-		." ORDER BY a.lid ASC, a.brett ASC "
-		;
+		." ORDER BY a.lid ASC, a.brett ASC ";
+	if ($spieler > 0)
+		$query .= " AND a.spieler = ".$spieler;
+	else
+		$query .= " AND a.PKZ = '".$PKZ."'";
 	$db->setQuery( $query);
 	$liga=$db->loadObjectList();
 	return $liga;
 	}
 
-function check_r_spl($zps,$spieler,$runde,$dg,$rnd)    
+public static function check_r_spl($zps,$spieler,$PKZ,$runde,$dg,$rnd)    
 	// Durchzählen wie oft Spieler in der Runde eingesetzt ist
 	{
 	$sid = $rnd[0]->sid;
@@ -152,18 +166,20 @@ function check_r_spl($zps,$spieler,$runde,$dg,$rnd)
 	$query = " SELECT COUNT(*) as count "
 		." FROM #__clm_rnd_spl as a "
 		." WHERE a.zps = '$zps'"
-		." AND a.spieler = ".$spieler
 		." AND a.runde = ".$runde
 		." AND a.dg = ".$dg
-		." AND a.sid = ".$sid       
-		;
+		." AND a.sid = ".$sid;       
+	if ($spieler > 0)
+		$query .= " AND a.spieler = ".$spieler;
+	else
+		$query .= " AND a.PKZ = '".$PKZ."'";
 	$db->setQuery( $query);
 	$data=$db->loadObjectList();
 	$count = $data[0]->count;
 	return $count;
 	}
 
-function show_r_spl($zps,$spieler,$runde,$dg,$rnd)    
+public static function show_r_spl($zps,$spieler,$PKZ,$runde,$dg,$rnd)    
    	// Wo wurde Spieler eingesetzt ?
 	{
 	$sid = $rnd[0]->sid;
@@ -174,12 +190,14 @@ function show_r_spl($zps,$spieler,$runde,$dg,$rnd)
 		." LEFT JOIN #__clm_liga as l ON a.lid = l.id "
 		." LEFT JOIN #__clm_runden_termine AS rt ON ( a.lid = rt.liga AND (a.runde + (a.dg - 1) * l.runden) = rt.nr ) "  
 		." WHERE a.zps = '$zps'"
-		." AND a.spieler = ".$spieler
 		." AND a.runde = ".$runde
 		." AND a.dg = ".$dg
 		." AND a.sid = ".$sid      
-		." ORDER BY a.lid ASC, a.brett ASC "
-		;
+		." ORDER BY a.lid ASC, a.brett ASC ";
+	if ($spieler > 0)
+		$query .= " AND a.spieler = ".$spieler;
+	else
+		$query .= " AND a.PKZ = '".$PKZ."'";
 	$db->setQuery( $query);
 	$liga=$db->loadObjectList();
 	return $liga;

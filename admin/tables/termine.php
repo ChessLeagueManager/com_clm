@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -23,11 +23,11 @@ class TableCLMTermine extends JTable
 	var $address			= '';
 	var $category			= '';
 	var $host				= '';
-	var $startdate			= '';
-	var $starttime			= '';
+	var $startdate			= '0000-00-00';
+	var $starttime			= '00:00:00';
 	var $allday				= 0;
-	var $enddate			= '';
-	var $endtime			= '';
+	var $enddate			= '0000-00-00';
+	var $endtime			= '00:00:00';
 	var $noendtime			= 0;
 	var $published			= 0;
 	var $checked_out		= 0;

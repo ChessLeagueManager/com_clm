@@ -147,7 +147,8 @@ function save()
 
 	$sid		= $row->sid;
 	$lid		= $row->id;
-
+	$n1time = '00:00:00';
+ 
 	if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
   		else { $runden_counter = $row->runden; }
 	for ($x = 0; $x < $runden_counter; $x++ ) {
@@ -169,11 +170,10 @@ function save()
 			$cnt = $x;
 			}
 	for ($y = 0; $y < $pairings; $y++ ) {
-		//$heim	= JRequest::getVar( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Heim');
-		//$gast	= JRequest::getVar( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Gast');
 		$ndate	= JRequest::getVar( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Date');
 		$ntime	= JRequest::getVar( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Time');
-
+		if ($ntime != '00:00:00' AND $n1time == '00:00:00') $n1time = $ntime;
+		
 		$query	= "UPDATE #__clm_rnd_man"
 			." SET pdate = '".$ndate."'"
 			." , ptime = '".$ntime."'"
@@ -199,7 +199,17 @@ function save()
 			;
 		$db->setQuery($query);
 		$db->query();
-	}}
+	 }
+		$query	= "UPDATE #__clm_rnd_man"
+			." SET ptime = '".$n1time."'"
+			." WHERE sid = ".$sid
+			." AND lid = ".$lid
+			." AND pdate > '1970-01-01' "
+			." AND ptime = '00:00:00' "
+			;
+		$db->setQuery($query);
+		$db->query();
+	}
 
 	switch ($task)
 	{

@@ -350,7 +350,7 @@ for ($x=0; $x< 100; $x++){
 			}
 
 			?>
-				<td class="rnd" style="white-space: nowrap"<?php if ($einzel[$ie]->weiss == 0) echo ' bgcolor="'.$zeiled.'"'; ?>><?php echo $dr_einzel; ?></td>
+				<td class="rnd" style="white-space: nowrap;<?php if ($einzel[$ie]->weiss == 0) echo ' background-color:'.$zeiled.';';?>"><?php echo $dr_einzel; ?></td>
 			<?php
 			if ($einzel[$ie]->kampflos == 0) {
     	    	$gespielt++;
@@ -387,7 +387,7 @@ for ($x=0; $x< 100; $x++){
                     }
 	while (isset($einzel[$ie])) {
 		$ztext = "    "."Ergebnis übersprungen, da Spieler nicht in Aufstellung ";
-		$ztext .= ' Verein:'.$einzel[$ie]->zps.' Mitglied:'.$einzel[$ie]->spieler;
+		$ztext .= ' Verein:'.$einzel[$ie]->zps.' Mitglied:'.$einzel[$ie]->spieler.' PKZ:'.$einzel[$ie]->PKZ;
 		$ztext .= ' Durchgang:'.$einzel[$ie]->dg.' Runde:'.$einzel[$ie]->runde;
 		$ztext .= ' Brett:'.$einzel[$ie]->brett.' Erg:'.$einzel[$ie]->punkte; 	
 		$zcolspan = 6 + ($mannschaft[0]->dg * $mannschaft[0]->runden);

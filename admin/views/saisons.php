@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -13,15 +13,17 @@
 
 class CLMViewSaisons
 {
-public static function setSaisonsToolbar()
+public static function setSaisonsToolbar($countryversion)
 	{
 	
 	// Menubilder laden
 		clm_core::$load->load_css("icons_images");
 
 		JToolBarHelper::title( JText::_( 'Saison Manager' ), 'clm_headmenu_saison.png' );
+	  if ($countryversion =="de") {
 		JToolBarHelper::custom('dwz_del','cancel.png','unarchive_f2.png','RUNDE_DWZ_DELETE',false);	
 		JToolBarHelper::custom('dwz_start','default.png','apply_f2.png','RUNDE_DWZ_APPLY',false);			
+	  }
 	/* Debugging / Testing
 		JToolBarHelper::custom( 'change', 'upload.png', 'upload_f2.png', 'Status ändern' , false);
 	*/
@@ -43,7 +45,10 @@ public static function saisons ( &$rows, &$lists, &$pageNav, $option )
 	 }
 	 
 		$mainframe	= JFactory::getApplication();
-		CLMViewSaisons::setSaisonsToolbar();
+		//CLM parameter auslesen
+		$config = clm_core::$db->config();
+		$countryversion = $config->countryversion;
+		CLMViewSaisons::setSaisonsToolbar($countryversion);
 		$user =JFactory::getUser();
 		//Ordering allowed ?
 		$ordering = ($lists['order'] == 'a.ordering');

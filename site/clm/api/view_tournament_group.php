@@ -12,6 +12,10 @@ function clm_api_view_tournament_group($liga=2) {
    
 	$lang = clm_core::$lang->tournament_group;
 
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
+
 	if(clm_core::$access->access('BE_league_create') !== false) {
 		$table->add_button($lang->newLeague,$lang->newLeague_title,clm_core::$load->gen_url(array("section"=>"ligen"),array("view")),"clm_table_url clm_button clm_button_new clm_button_big clm_button_big_new");
 	}
@@ -32,16 +36,14 @@ function clm_api_view_tournament_group($liga=2) {
 		$table->add_button($lang->sort,$lang->sort_title,json_encode(array("db_tournament_sortByTWZ",array("",true))),"clm_table_event clm_button clm_button_new clm_button_big clm_button_big_default");
 	}
 
-/*	if(clm_core::$access->access('BE_league_edit_round') !== false || clm_core::$access->access('BE_teamtournament_edit_round') !== false) {
-		$table->add_button($lang->newRounds,$lang->newRounds_title,json_encode(array("db_tournament_genRounds",array("",true))),"clm_table_event clm_button clm_button_new clm_button_big clm_button_big_back");
-		$table->add_button($lang->delRounds,$lang->delRounds_title,json_encode(array("db_tournament_delRounds",array("",true))),"clm_table_event clm_button clm_button_del clm_table_confirm clm_button_big clm_button_big_cancel");
-	} */
 	if(clm_core::$access->access('BE_league_edit_round') !== false || clm_core::$access->access('BE_teamtournament_edit_round') !== false) {
 		$table->add_button($lang->newRounds,$lang->newRounds_title,json_encode(array("db_tournament_genRounds",array("",true))),"clm_table_event clm_button clm_button_new clm_button_big clm_button_big_back");
 		$table->add_button($lang->delRounds,$lang->delRounds_title,json_encode(array("db_tournament_delRounds",array("",true))),"clm_table_event clm_button clm_button_del clm_table_confirm clm_button_big clm_button_big_cancel");
+	  if ($countryversion =="de") {
 		$table->add_button($lang->dwzUpdate,$lang->dwzUpdate_title,json_encode(array("db_tournament_updateDWZ",array("",true))),"clm_table_event clm_button clm_button_edit clm_table_confirm clm_button_big clm_button_big_default");
 		$table->add_button($lang->dwzGen,$lang->dwzGen_title,json_encode(array("db_tournament_genDWZ",array("",true))),"clm_table_event clm_button clm_button_new clm_button_big clm_button_big_refresh");
 		$table->add_button($lang->dwzDel,$lang->dwzDel_title,json_encode(array("db_tournament_delDWZ",array("",true))),"clm_table_event clm_button clm_button_del clm_button_big clm_button_big_cancel");
+	  }
 	}
 	if(clm_core::$access->access('BE_league_edit_detail') !== false || clm_core::$access->access('BE_teamtournament_edit_detail') !== false) {
 		$table->add_button($lang->public,$lang->public_title,json_encode(array("db_tournament_publish",array("",true,true))),"clm_table_event clm_button clm_button_edit clm_button_big clm_button_big_publish");

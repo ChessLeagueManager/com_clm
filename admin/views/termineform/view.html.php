@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -40,13 +40,14 @@ class CLMViewTermineForm extends JViewLegacy {
 
 		// JS-Array jtext -> Fehlertexte
 		$document->addScriptDeclaration("var jserror = new Array();");
-		$document->addScriptDeclaration("jserror['enter_name'] = '".JText::_('TERMINE_ERROR_NAME')."';");
-		$document->addScriptDeclaration("jserror['enter_startdate'] = '".JText::_('TERMINE_ERROR_STARTDATE')."';");
-		$document->addScriptDeclaration("jserror['dont_starttime'] = '".JText::_('TERMINE_ERROR_STARTTIME')."';");
-		$document->addScriptDeclaration("jserror['dont_endtime'] = '".JText::_('TERMINE_ERROR_ENDTIME')."';");
-		$document->addScriptDeclaration("jserror['dont_enddate'] = '".JText::_('TERMINE_ERROR_ENDDATE')."';");
-		$document->addScriptDeclaration("jserror['dont_allday'] = '".JText::_('TERMINE_ERROR_ALLDAY')."';");
-		$document->addScriptDeclaration("jserror['dont_noendtime'] = '".JText::_('TERMINE_ERROR_NOENDTIME')."';");
+		$document->addScriptDeclaration('jserror["enter_name"] = "'.JText::_("TERMINE_ERROR_NAME").'";');
+		$document->addScriptDeclaration('jserror["enter_startdate"] = "'.JText::_("TERMINE_ERROR_STARTDATE").'";');
+		$document->addScriptDeclaration('jserror["dont_starttime"] = "'.JText::_("TERMINE_ERROR_STARTTIME").'";');
+		$document->addScriptDeclaration('jserror["dont_endtime"] = "'.JText::_("TERMINE_ERROR_ENDTIME").'";');
+		$document->addScriptDeclaration('jserror["dont_enddate"] = "'.JText::_("TERMINE_ERROR_ENDDATE").'";');
+		$document->addScriptDeclaration('jserror["enddate_wrong"] = "'.JText::_("TERMINE_ERROR_ENDDATE_WRONG").'";');
+		$document->addScriptDeclaration('jserror["dont_allday"] = "'.JText::_("TERMINE_ERROR_ALLDAY").'";');
+		$document->addScriptDeclaration('jserror["dont_noendtime"] = "'.JText::_("TERMINE_ERROR_NOENDTIME").'";');
 		
 		// Daten an Template übergeben
 		$this->assignRef('user', $model->user);

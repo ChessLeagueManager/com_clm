@@ -240,7 +240,7 @@ $pdf->SetFont('Times','',$font);
 	$sumgespielt = 0;
 for ($x=0; $x< 100; $x++){
 	// Überlesen von Null-Sätzen 
-	while (isset($count[$x]) and $countryverssion == "de" and ($count[$x]->mgl_nr == "0"))  {
+	while (isset($count[$x]) and $countryversion == "de" and ($count[$x]->mgl_nr == "0"))  {
 		$x++; }
 	if (!isset($count[$x])) break;
 	if ($count[$x]->PKZ === NULL) { $count[$x]->PKZ = ""; }

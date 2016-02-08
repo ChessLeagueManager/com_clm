@@ -23,21 +23,31 @@ class CLMModelTermine extends JModelLegacy
 		if ($start == '1') $date = date("Y-m-d");
 		else $date = $start;
 	
-		$query = " (SELECT 'liga' AS source, li.datum AS datum, li.sid, li.name, li.nr, li.liga AS typ_id, t.id, t.name AS typ, t.durchgang AS durchgang, t.published, t.runden AS ligarunde"
+		$query = " (SELECT 'liga' AS source, li.datum AS datum, li.sid, li.name, li.nr, '1' as dg, li.liga AS typ_id, t.id, t.name AS typ, t.durchgang AS durchgang, t.published, t.runden AS ligarunde"
 				." , t.ordering, li.startzeit AS starttime "
 				." FROM #__clm_runden_termine AS li LEFT JOIN #__clm_liga AS t ON t.id = li.liga "
 				." WHERE t.published != '0' AND TO_DAYS(datum)+183 >= TO_DAYS('".$date."') )"
 				
 				." UNION ALL"
 				
-				." (SELECT 'termin', e.startdate AS datum, '1', e.name, '1', '', e.id, e.address AS typ, '1', e.published, 'event' AS ligarunde "
+				." (SELECT 'lpaar' AS source, rm.pdate AS datum, rm.sid, CONCAT(heim.name,' - ',gast.name) as name, rm.runde, rm.dg, rm.lid AS typ_id, t.id, t.name AS typ, t.durchgang AS durchgang, t.published, t.runden AS ligarunde"
+				." , t.ordering, rm.ptime AS starttime "
+				." FROM #__clm_rnd_man AS rm LEFT JOIN #__clm_liga AS t ON t.id = rm.lid "
+				." LEFT JOIN #__clm_mannschaften AS heim ON heim.liga = rm.lid AND heim.tln_nr = rm.tln_nr "
+				." LEFT JOIN #__clm_mannschaften AS gast ON gast.liga = rm.lid AND gast.tln_nr = rm.gegner "
+				." WHERE t.published != '0' AND TO_DAYS(pdate)+183 >= TO_DAYS('".$date."') "
+				." AND rm.pdate > '1970-01-01' AND rm.heim = 1 )"
+				
+				." UNION ALL"
+				
+				." (SELECT 'termin', e.startdate AS datum, '1', e.name, '1', '1', '', e.id, e.address AS typ, '1', e.published, 'event' AS ligarunde "
 				." , e.ordering, starttime "
 				." FROM #__clm_termine AS e "
 				." WHERE e.published != '0' AND TO_DAYS(e.startdate)+183 >= TO_DAYS('".$date."') )"
 				
 				." UNION ALL"
 				
-				." (SELECT 'turnier', tu.datum AS datum, tu.sid, tu.name, tu.nr, tu.turnier AS typ_id, b.id, b.name AS typ, tu.dg AS durchgang, b.published, '' "
+				." (SELECT 'turnier', tu.datum AS datum, tu.sid, tu.name, tu.nr, '1', tu.turnier AS typ_id, b.id, b.name AS typ, tu.dg AS durchgang, b.published, '' "
 				." , b.ordering, tu.startzeit AS starttime "
 				." FROM #__clm_turniere_rnd_termine AS tu LEFT JOIN #__clm_turniere AS b ON b.id = tu.turnier "
 				." WHERE b.published != '0' AND TO_DAYS(datum)+183 >= TO_DAYS('".$date."') )"

@@ -399,7 +399,7 @@ for ($x=0; $x<$liga[0]->stamm; $x++) {
     <td class="paarung"><div><?php echo $einzel[$w]->brett; ?></div></td>
 	<?php if ($detail == 1) { 
 		if ($liga[0]->rang > 0) $einzel[$w]->hsnr = $einzel[$w]->tmnr.'-'.$einzel[$w]->trang; ?>
-    <td class="paarung" style="border-right: none" <?php if ($einzel[$w]->weiss == 0) echo 'bgcolor="'.$zeiled.'"'; ?>><div><font size=-2><?php echo $einzel[$w]->hsnr; ?></font></div></td>
+    <td class="paarung" style="border-right: none;<?php if ($einzel[$w]->weiss == 0) echo 'background-color:'.$zeiled.';';?>"><div><font size=-2><?php echo $einzel[$w]->hsnr; ?></font></div></td>
     <td class="paarung2" style="border-left: none" colspan ="1"><div><?php if ($einzel[$w]->zps =="ZZZZZ") {echo "N.N.";} else { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->zps; ?>&mglnr=<?php echo $einzel[$w]->spieler; ?>&PKZ=<?php echo $einzel[$w]->PKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->hname; } ?></div></td>
 	<?php } else { ?>
     <td class="paarung2" colspan ="2"><div><?php if ($einzel[$w]->zps =="ZZZZZ") {echo "N.N.";} else { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->zps; ?>&mglnr=<?php echo $einzel[$w]->spieler; ?>&PKZ=<?php echo $einzel[$w]->PKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->hname; } ?></div></td>
@@ -412,7 +412,7 @@ for ($x=0; $x<$liga[0]->stamm; $x++) {
         <?php } ?>
 	<?php if ($detail == 1) { 
 		if ($liga[0]->rang > 0) $einzel[$w]->gsnr = $einzel[$w]->smnr.'-'.$einzel[$w]->srang; ?>
-    <td class="paarung" style="border-right: none" <?php if ($einzel[$w]->weiss != 0) echo 'bgcolor="'.$zeiled.'"'; ?>><div><font size=-2><?php echo $einzel[$w]->gsnr; ?></font></div></td>
+    <td class="paarung" style="border-right: none;<?php if ($einzel[$w]->weiss != 0) echo 'background-color:'.$zeiled.';';?>"><div><font size=-2><?php echo $einzel[$w]->gsnr; ?></font></div></td>
     <td class="paarung2" style="border-left: none" colspan ="1"><div><?php if ($einzel[$w]->gzps =="ZZZZZ") {echo "N.N.";} else { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->gzps; ?>&mglnr=<?php echo $einzel[$w]->gegner; ?>&PKZ=<?php echo $einzel[$w]->gPKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->gname; } ?></div></td>
 	<?php } else { ?>
     <td class="paarung2" colspan ="2"><div><?php if ($einzel[$w]->gzps =="ZZZZZ") {echo "N.N.";} else { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->gzps; ?>&mglnr=<?php echo $einzel[$w]->gegner; ?>&PKZ=<?php echo $einzel[$w]->gPKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->gname; } ?></div></td>
