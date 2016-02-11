@@ -395,7 +395,7 @@ class CLMTournament {
 			// Elo-Schnitt
 			if (in_array(6, $arrayFW) OR in_array(16, $arrayFW)) { // SoBe als ein TieBreaker gewünscht?
 				if ($value->gegner == 0 ) {
-					$array_PlayerEloOpp[$value->tln_nr][] = 0; 	// Array mit Gegnerwerten - für Streichresultat
+					//$array_PlayerEloOpp[$value->tln_nr][] = 0; 	// Array mit Gegnerwerten - für Streichresultat
 				} else {
 					if ($value->FIDEelo > 0) $array_PlayerEloOpp[$value->tln_nr][] = $value->FIDEelo; 
 					else $array_PlayerEloOpp[$value->tln_nr][] = $value->NATrating; } // Array mit Gegnerwerten - für Streichresultat
@@ -403,7 +403,7 @@ class CLMTournament {
 			// DWZ-Schnitt
 			if (in_array(8, $arrayFW) OR in_array(18, $arrayFW)) { // DWZ-Schnitt als ein TieBreaker gewünscht?
 				if ($value->gegner == 0 ) {
-					$array_PlayerDWZOpp[$value->tln_nr][] = 0; 	// Array mit Gegnerwerten - für Streichresultat
+					//$array_PlayerDWZOpp[$value->tln_nr][] = 0; 	// Array mit Gegnerwerten - für Streichresultat
 				} else {
 					if ($value->NATrating > 0) $array_PlayerDWZOpp[$value->tln_nr][] = $value->NATrating; 
 					else $array_PlayerDWZOpp[$value->tln_nr][] = $value->FIDEelo; } // Array mit Gegnerwerten - für Streichresultat
@@ -411,7 +411,7 @@ class CLMTournament {
 			// TWZ-Schnitt
 			if (in_array(9, $arrayFW) OR in_array(19, $arrayFW)) { // TWZ-Schnitt als ein TieBreaker gewünscht?
 				if ($value->gegner == 0 ) {
-					$array_PlayerTWZOpp[$value->tln_nr][] = 0; 	// Array mit Gegnerwerten - für Streichresultat
+					//$array_PlayerTWZOpp[$value->tln_nr][] = 0; 	// Array mit Gegnerwerten - für Streichresultat
 				} else {
 					if ($value->twz > 0) $array_PlayerTWZOpp[$value->tln_nr][] = $value->twz; 
 					else $array_PlayerTWZOpp[$value->tln_nr][] = $value->NATrating; } // Array mit Gegnerwerten - für Streichresultat
@@ -550,14 +550,14 @@ class CLMTournament {
 		if (in_array(16, $arrayFW)) { // Elo-Schnitt als TieBreaker gewünscht?
 			for ($s=1; $s<= $this->data->teil; $s++) { // alle Startnummern durchgehen
 				if (!isset($array_PlayerEloOpp[$s])) $array_PlayerElo1St[$s] = 0;
-				elseif (count($array_PlayerEloOpp[$s]) == 1) $array_PlayerElo1St[$s] = $array_PlayerEloOpp[$s][0];
+				elseif (count($array_PlayerEloOpp[$s]) == 1) $array_PlayerElo1St[$s] = 0; //$array_PlayerEloOpp[$s][0];
 				else { $c_EloOpp = 0;
 				  foreach($array_PlayerEloOpp[$s] as $EloOpp) { 
 					if ($EloOpp > 0) $c_EloOpp++; }				
 				  if ($c_EloOpp == 0)
 				    $array_PlayerElo1St[$s] = 0; 
 				  else
-				    if (min($array_PlayerEloOpp[$s] == 0))
+				    if (min($array_PlayerEloOpp[$s]) == 0)
 				      $array_PlayerElo1St[$s] = array_sum($array_PlayerEloOpp[$s]) / $c_EloOpp;
 				    elseif ($c_EloOpp == 1)
 				      $array_PlayerElo1St[$s] = array_sum($array_PlayerEloOpp[$s]);
@@ -570,14 +570,14 @@ class CLMTournament {
 		if (in_array(18, $arrayFW)) { // DWZ-Schnitt als TieBreaker gewünscht?
 			for ($s=1; $s<= $this->data->teil; $s++) { // alle Startnummern durchgehen
 				if (!isset($array_PlayerDWZOpp[$s])) $array_PlayerDWZ1St[$s] = 0;
-				elseif (count($array_PlayerDWZOpp[$s]) == 1) $array_PlayerDWZ1St[$s] = $array_PlayerDWZOpp[$s][0];
+				elseif (count($array_PlayerDWZOpp[$s]) == 1) $array_PlayerDWZ1St[$s] = 0; //$array_PlayerDWZOpp[$s][0];
 				else { $c_DWZOpp = 0;
 				  foreach($array_PlayerDWZOpp[$s] as $DWZOpp) { 
 					if ($DWZOpp > 0) $c_DWZOpp++; }				
 				  if ($c_DWZOpp == 0)
 				    $array_PlayerDWZ1St[$s] = 0; 
 				  else
-				    if (min($array_PlayerDWZOpp[$s] == 0))
+				    if (min($array_PlayerDWZOpp[$s]) == 0)
 				      $array_PlayerDWZ1St[$s] = array_sum($array_PlayerDWZOpp[$s]) / $c_DWZOpp;
 				    elseif ($c_DWZOpp == 1)
 				      $array_PlayerDWZ1St[$s] = array_sum($array_PlayerDWZOpp[$s]);
@@ -590,14 +590,14 @@ class CLMTournament {
 		if (in_array(19, $arrayFW)) { // TWZ-Schnitt als TieBreaker gewünscht?
 			for ($s=1; $s<= $this->data->teil; $s++) { // alle Startnummern durchgehen
 				if (!isset($array_PlayerTWZOpp[$s])) $array_PlayerTWZ1St[$s] = 0;
-				elseif (count($array_PlayerTWZOpp[$s]) == 1) $array_PlayerTWZ1St[$s] = $array_PlayerTWZOpp[$s][0];
+				elseif (count($array_PlayerTWZOpp[$s]) == 1) $array_PlayerTWZ1St[$s] = 0; //$array_PlayerTWZOpp[$s][0];
 				else { $c_TWZOpp = 0;
 				  foreach($array_PlayerTWZOpp[$s] as $TWZOpp) { 
 					if ($TWZOpp > 0) $c_TWZOpp++; }				
 				  if ($c_TWZOpp == 0)
 				    $array_PlayerTWZ1St[$s] = 0; 
 				  else
-				    if (min($array_PlayerTWZOpp[$s] == 0))
+				    if (min($array_PlayerTWZOpp[$s]) == 0)
 				      $array_PlayerTWZ1St[$s] = array_sum($array_PlayerTWZOpp[$s]) / $c_TWZOpp;
 				    elseif ($c_TWZOpp == 1)
 				      $array_PlayerTWZ1St[$s] = array_sum($array_PlayerTWZOpp[$s]);

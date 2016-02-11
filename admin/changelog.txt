@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 1.6.1 - [xx-xx-20xx] - - - - - - - - - - - - - - - - - - - -
+# Einzelturniere: Rangliste Elo mit Streichwertung
+
 - - - - - 1.6.0 - [05-07-2015] - - - - - - - - - - - - - - - - - - - -
 - - - - - 1.5.7 - [05-07-2015] - - - - - - - - - - - - - - - - - - - -
 # Einzelturniere: Gegner-Elo-Durchschnitt

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -342,6 +342,8 @@ if (isset($paar[$y]->htln)) {  // Leere Begegnungen ausblenden ?>
         <?php
         // Ergebnis Mannschaft
         $paar_exist = 0;
+        if ($summe[$z2]->dwz_editor =="0") { $summe[$z2]->dwz_editor = NULL; }
+
         if ($summe[$z2]->sum !="" AND $summe[$z2]->paarung == ($y+1)) {
             $paar_exist = 1;
             echo $summe[$z2]->sum.' : '.$summe[$z2+1]->sum;
@@ -373,7 +375,7 @@ if (isset($paar[$y]->htln)) {  // Leere Begegnungen ausblenden ?>
 if (isset($einzel[$w]->paar) AND $einzel[$w]->paar == ($y+1)) {
 // Bretter
 for ($x=0; $x<$liga[0]->stamm; $x++) {
-
+	if ($einzel[$w]->dwz_editor ==0) { $einzel[$w]->dwz_edit = NULL; $einzel[$w]->dwz_editor = NULL; }
 	if ($x%2 != 0) { $zeilenr = 'zeile1'; 
 		$zeiled = $clm_zeile1D; }
 	else { $zeilenr = 'zeile2';
