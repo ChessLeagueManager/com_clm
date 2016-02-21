@@ -429,7 +429,8 @@ function datei() {
 	if(!$et){
 		$sql = " SELECT a.*,v.Vereinname,s.PKZ,s.Geburtsjahr,s.Spielername,s.DWZ FROM `#__clm_rnd_spl` as a "
 			." LEFT JOIN #__clm_dwz_spieler as s ON s.sid = a.sid AND s.ZPS = a.zps AND s.Mgl_Nr = a.spieler "
-			." LEFT JOIN #__clm_dwz_vereine as v ON v.ZPS = a.zps "
+			." LEFT JOIN #__clm_dwz_vereine as v ON v.sid = a.sid AND v.ZPS = a.zps "
+
 			." WHERE a.sid = ".$sid
 			." AND a.lid = ".$liga_name[0]->id
 			." GROUP BY a.zps, a.spieler "
