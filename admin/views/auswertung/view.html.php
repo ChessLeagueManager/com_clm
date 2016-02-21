@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -22,7 +22,7 @@ class CLMViewAuswertung extends JViewLegacy {
 
 		//Toolbar
 		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title( JText::_('Liga- und Turnierauswertung per DeWiS') ,'clm_headmenu_manager.png' );
+		JToolBarHelper::title( JText::_('DB_RATING_TITLE') ,'clm_headmenu_manager.png' );
 		$tpl = null;
 		
 		if($task =='datei'){
@@ -30,12 +30,11 @@ class CLMViewAuswertung extends JViewLegacy {
 			$format	= $jinput->get('filter_format', null, null);
 			$et	= $jinput->get('filter_et', null, null);
 			$mt	= $jinput->get('filter_mt', null, null);
-			//$app->enqueueMessage( 'Format -> '.$format, 'warning');
 			if(!$liga AND !$et AND !$mt){
-				$app->enqueueMessage( 'Sie müssen eine Liga oder ein Turnier auswählen !', 'warning');
+				$app->enqueueMessage( JText::_('DB_RATING_SELECT'), 'warning');
 			}
 			if(!$format AND $liga){
-				$app->enqueueMessage( 'Kein Dateiformat gewählt !', 'warning');
+				$app->enqueueMessage( JText::_('DB_RATING_FORMAT'), 'warning');
 			} 
 			if(($liga !="0" AND $format !="0") OR ($et OR $mt) ){
 
@@ -45,6 +44,9 @@ class CLMViewAuswertung extends JViewLegacy {
 
 		if($task =='delete'){
 			$data	= $model->delete();
+		}
+		if($task =='download'){
+			$data	= $model->download();
 		}
 
 		// Liga und Datei Filter laden

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -108,8 +108,11 @@ function datei() {
 			if (isset($rnd_proof[0])) $rnd_count = $rnd_proof[0]->cnt_runde;
 			else $rnd_count = 0;
 			$fehler	= 0;
-			if($rnd_count < $counter){
-				$app->enqueueMessage( 'Warnung in Runde '.$rnd.', Durchgang '.$dg.'. Vermutlich existieren keine Ergebnisse !', 'warning');
+			if($rnd_count < $counter AND $rnd_count == 0){
+				$app->enqueueMessage(JText::_( 'DB_WTEXT0' ).JText::_( 'DB_ROUND' ).$rnd.JText::_( 'DB_DG' ).$dg, 'warning');
+				$fehler = 1;
+			} elseif($rnd_count < $counter){
+				$app->enqueueMessage(JText::_( 'DB_WTEXT1' ).JText::_( 'DB_ROUND' ).$rnd.JText::_( 'DB_DG' ).$dg, 'warning');
 				$fehler = 1;
 			}
 		  }
@@ -634,19 +637,246 @@ function datei() {
 	// ENDE DEWIS Format //
 	///////////////////////
 
-	// Slashes aus Namen filtern und Namen mit Pfad zusammensetzen
-	$dat_name	= ereg_replace("[/]", "_", $liga_name[0]->name);
+  
+	////////////////////////
+	// XLS Format England //
+	////////////////////////
+
+  if($format =="3"){
+/**
+ * Include the class for creating Excel XML docs
+ */
+include(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'ExcelWriterXML.php');
+
+// Find Players
+	$sql = " SELECT a.*,v.Vereinname,s.Spielername,s.Geschlecht FROM `#__clm_rnd_spl` as a "
+		." LEFT JOIN #__clm_dwz_spieler as s ON s.sid = a.sid AND s.ZPS = a.zps AND s.PKZ = a.PKZ "
+		." LEFT JOIN #__clm_dwz_vereine as v ON v.sid = a.sid AND v.ZPS = a.zps "
+		." WHERE a.sid = ".$sid
+		." AND a.lid = ".$liga_name[0]->id
+		." GROUP BY a.zps, a.PKZ "
+		." ORDER BY a.zps ASC , a.brett ASC, a.PKZ ASC "
+		;
+	$db->setQuery($sql);
+	$spieler=$db->loadObjectList();
+//echo "<br>pl:"; var_dump($spieler); die();
+// Create a new instance of the Excel Writer
+$xmla = new ExcelWriterXML('CLM grading.xml');
+
+/**
+ * Add some general properties to the document
+ */
+$xmla->docTitle('Grading - '.$liga_name[0]->name);
+$user = clm_core::$cms->getUserData();
+$xmla->docAuthor($user[2]);
+$xmla->docCompany('ChessLeagueManager');
+$xmla->docManager('CLM Team');
+
+/**
+ * Choose to show any formatting/input errors on a seperate sheet
+ */
+$xmla->showErrorSheet(true);
+
+/**
+ * Create a new sheet with the XML document
+ */
+$sheet1 = $xmla->addSheet('Header');
+$sheet1->columnWidth(1,'130');
+$sheet1->columnWidth(2,'130');
+$sheet1->columnWidth(3,'440');
+$sheet1->writeString(1,1,'Event Code');
+$sheet1->writeString(1,2,'');
+$sheet1->writeString(1,3,'Max 10 characters.  Your two-letter Grader Code followed by 1 - 8 characters of your choice');
+$sheet1->writeString(2,1,'Submission Number');
+$sheet1->writeString(2,2,'1');
+$sheet1->writeString(2,3,'Use 1 for first submission and increase with each submission');
+$sheet1->writeString(3,1,'Event Name');
+$sheet1->writeString(3,2,$liga_name[0]->name);
+$sheet1->writeString(3,3,'Max 60 characters.  Make the nature and location of the event clear.');
+$sheet1->writeString(4,1,'Event Date');
+$sheet1->writeString(4,2,'');
+$sheet1->writeString(4,3,'Start Date of Event');
+$sheet1->writeString(5,1,'Final Results Date');
+$sheet1->writeString(5,2,'');
+$sheet1->writeString(5,3,"Last Date of Event - same as preceding for one-day events");
+$sheet1->writeString(6,1,"Grader Name");
+$sheet1->writeString(6,2,'');
+$sheet1->writeString(6,3,"Grader's Name");
+$sheet1->writeString(7,1,"Grader Address");
+$sheet1->writeString(7,2,'');
+$sheet1->writeString(7,3,"Grader's email address ONLY. Will be used to return feedback.");
+$sheet1->writeString(8,1,"Treasurer Name");
+$sheet1->writeString(8,2,'');
+$sheet1->writeString(8,3,"Treasurer's Name");
+$sheet1->writeString(9,1,"Treasurer Address");
+$sheet1->writeString(9,2,'');
+$sheet1->writeString(9,3,"Treasurer's postal address - on one line with commas");
+$sheet1->writeString(10,1,"Moves in first session");
+$sheet1->writeString(10,2,'');
+$sheet1->writeString(10,3,"e.g. 36 or 40 (leave blank for rapidplay)");
+$sheet1->writeString(11,1,"Minutes for first session");
+$sheet1->writeString(11,2,'');
+$sheet1->writeString(11,3,"e.g. 90 or 120 (leave blank for rapidplay)");
+$sheet1->writeString(12,1,"Moves in second session");
+$sheet1->writeString(12,2,'');
+$sheet1->writeString(12,3,"e.g. 20 or leave blank if immediate quickplay finish");
+$sheet1->writeString(13,1,"Minutes in second session");
+$sheet1->writeString(13,2,'');
+$sheet1->writeString(13,3,"e.g. 60 or leave blank if preceding cell is blank");
+$sheet1->writeString(14,1,"Minutes in final session");
+$sheet1->writeString(14,2,'');
+$sheet1->writeString(14,3,"e.g. 15 or leave blank if no quickplay finish");
+$sheet1->writeString(15,1,"Minutes for game");
+$sheet1->writeString(15,2,'');
+$sheet1->writeString(15,3,"Minutes for rapidplay or all-in-one-session standardplay");
+$sheet1->writeString(16,1,"Seconds added per move");
+$sheet1->writeString(16,2,'');
+$sheet1->writeString(16,3,"Seconds per move added in Fischer mode else blank");
+$sheet1->writeString(17,1,"Grand Prix");
+$sheet1->writeString(17,2,'');
+$sheet1->writeString(17,3,"Enter Y if results from event are to be included in ECF Grand Prix");
+$sheet1->writeString(18,1,"FIDE rated");
+$sheet1->writeString(18,2,'');
+$sheet1->writeString(18,3,"Enter Y if event is to be FIDE rated");
+
+// Second sheet - player_list
+$sheet2 = $xmla->addSheet('Player_List');
+$sheet2->columnWidth(1,'40');
+$sheet2->writeString(1,1,'PIN');
+$sheet2->columnWidth(2,'50');
+$sheet2->writeString(1,2,'BCFCode');
+$sheet2->columnWidth(3,'120');
+$sheet2->writeString(1,3,'Name');
+$sheet2->columnWidth(4,'30');
+$sheet2->writeString(1,4,'Gender');
+$sheet2->columnWidth(5,'50');
+$sheet2->writeString(1,5,'DOB');
+$sheet2->columnWidth(6,'30');
+$sheet2->writeString(1,6,'ClubCode');
+$sheet2->columnWidth(7,'100');
+$sheet2->writeString(1,7,'ClubName');
+$sheet2->columnWidth(8,'60');
+$sheet2->writeString(1,8,'BCFMemNo');
+$sheet2->columnWidth(9,'60');
+$sheet2->writeString(1,9,'FIDEName');
+$sheet2->columnWidth(10,'200');
+$sheet2->writeString(1,10,'Comment');
+$sheet2->columnWidth(11,'20');
+$sheet2->writeString(1,11,'Title');
+$sheet2->columnWidth(12,'30');
+$sheet2->writeString(1,12,'Initials');
+$sheet2->columnWidth(13,'60');
+$sheet2->writeString(1,13,'Forename');
+$sheet2->columnWidth(14,'60');
+$sheet2->writeString(1,14,'Surname');
+
+$ccode = 0;
+$crow = 1;
+$pl_array = array();
+foreach($spieler as $player){
+	if ($ccode != $player->zps) {
+		$ccode = $player->zps;
+		$ccount = 0;
+	}
+	$ccount++;
+	$scount = sprintf("%'.02d\n", $ccount);
+	$crow++;
+	$sheet2->writeString($crow,1,$player->zps.$scount);
+	$sheet2->writeString($crow,2,$player->PKZ);
+	$sheet2->writeString($crow,3,$player->Spielername);
+	$sheet2->writeString($crow,4,$player->Geschlecht);
+	$sheet2->writeString($crow,6,$player->zps);
+	$sheet2->writeString($crow,7,$player->Vereinname);
+	$pl_array[$player->zps.$player->PKZ] = new stdClass();
+	$pl_array[$player->zps.$player->PKZ]->Spielername = $player->Spielername;
+	$pl_array[$player->zps.$player->PKZ]->Vereinname = $player->Vereinname;
+	$pl_array[$player->zps.$player->PKZ]->PIN = $player->zps.$scount;
+}
+
+// Third sheet - results_list
+$sheet3 = $xmla->addSheet('Results_List');
+$sheet3->columnWidth(1,'50');
+$sheet3->writeString(1,1,'PIN1');
+$sheet3->columnWidth(2,'50');
+$sheet3->writeString(1,2,'PIN2');
+$sheet3->columnWidth(3,'40');
+$sheet3->writeString(1,3,'Result');
+$sheet3->columnWidth(4,'40');
+$sheet3->writeString(1,4,'Colour1');
+$sheet3->columnWidth(5,'60');
+$sheet3->writeString(1,5,'Date');
+$sheet3->columnWidth(6,'30');
+$sheet3->writeString(1,6,'Board');
+$sheet3->columnWidth(7,'40');
+$sheet3->writeString(1,7,'Round');
+$sheet3->columnWidth(8,'200');
+$sheet3->writeString(1,8,'Comment');
+
+// Find games
+		$sql = " SELECT a.*, hm.name as hmname, gm.name as gmname, m.pdate FROM `#__clm_rnd_spl` as a "
+			." LEFT JOIN #__clm_rnd_man as m ON m.sid = a.sid AND m.lid = a.lid AND m.dg = a.dg AND m.runde = a.runde AND m.tln_nr = a.tln_nr "
+			." LEFT JOIN #__clm_mannschaften as hm ON hm.sid = a.sid AND hm.liga = a.lid AND hm.tln_nr = a.tln_nr "
+			." LEFT JOIN #__clm_mannschaften as gm ON gm.sid = a.sid AND gm.liga = a.lid AND gm.tln_nr = m.gegner "
+			." WHERE a.sid = ".$sid
+			." AND a.lid = ".$liga_name[0]->id
+			." AND a.ergebnis < 3 "
+			." AND a.heim = 1 "
+			." ORDER BY a.dg ASC, a.runde ASC, a.paar ASC, a.brett ASC "
+			;
+	$db->setQuery($sql);
+	$partien =$db->loadObjectList();
+//echo "<br>par:"; var_dump($partien); die();
+
+$crow = 1;
+foreach($partien as $games){
+	$crow++;
+	if (isset($pl_array[$games->zps.$games->PKZ])) {
+		$sheet3->writeString($crow,1,$pl_array[$games->zps.$games->PKZ]->PIN);
+	}
+	if (isset($pl_array[$games->gzps.$games->gPKZ])) {
+		$sheet3->writeString($crow,2,$pl_array[$games->gzps.$games->gPKZ]->PIN);
+	}
+	if ($games->ergebnis == 0) {
+		$sheet3->writeString($crow,3,'01');
+	} elseif ($games->ergebnis == 1) {
+		$sheet3->writeString($crow,3,'10');
+	} elseif ($games->ergebnis == 2) {
+		$sheet3->writeString($crow,3,'55');
+	}
+	if ($games->weiss == 0) {
+		$sheet3->writeString($crow,4,'b');
+	} elseif ($games->weiss == 1) {
+		$sheet3->writeString($crow,4,'w');
+	}
+	$sheet3->writeString($crow,5,clm_core::$cms->showDate($games->pdate, "d M Y"));
+	$sheet3->writeString($crow,6,$games->brett);
+	$sheet3->writeString($crow,7,$games->runde);
+	$sheet3->writeString($crow,8,$games->hmname." - ".$games->gmname);
+}
+	
+/**
+ * Send the headers, then output the data
+ */
+$xmla->sendHeaders();
+$xml = $xmla->writeData();
+	
+  }
+
+	// Slashes und Spaces aus Namen filtern und Namen mit Pfad zusammensetzen
+	$dat_name	= ereg_replace(" ", "_", $liga_name[0]->name);
+	$dat_name	= ereg_replace("[/]", "_", $dat_name);
 	$file		= $dat_name.'__'.$datum;
 	$path		= JPath::clean(JPATH_ADMINISTRATOR.DS.'components'.DS.$option.DS.'dewis');
 	if($format =="1"){ $datei_endung = "txt";}
 	if($format =="2"){ $datei_endung = "xml";}
+	if($format =="3"){ $datei_endung = "xml";}
 	$write		= $path.DS.$file.'.'.$datei_endung;
 
 	// Datei schreiben ggf. Fehlermeldung absetzen
 	jimport('joomla.filesystem.file');
 	if (!JFile::write( $write, $xml )) { JError::raiseWarning( 500, JText::_( 'DB_FEHLER_SCHREIB' ) ); }
-
-	$app->enqueueMessage( 'Datei "'.$file.'" wurde geschrieben !', 'warning');
+  
+	$app->enqueueMessage(JText::_( 'DB_FILE_SUCCESS' ).$file, 'warning');
 	$app->redirect( $adminLink->url);
 	}
 
@@ -660,18 +890,26 @@ function xml_dateien()
 	$ex_dbf[]	= 'index.html';
 	$files		= JFolder::files( $filesDir, '',true, false, $ex_dbf );
 	$count		= count($files);
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 	
 	if($count > 0){
 	$dateien = '<table style="width:100%;">';
 		for ($x=0; $x< $count; $x++ ) {
-			$dateien.='<tr>'
-				.'<td width="70%"><a href="components/com_clm/dewis/'.$files[$x].'" target="_blank">'.$files[$x].'</a></td>'
+			$dateien .= '<tr>'
+				.'<td width="60%"><a href="components/com_clm/dewis/'.$files[$x].'" target="_blank">'.$files[$x].'</a></td>'
 				.'<td width="10%">&nbsp;&nbsp;</td>'
-				.'<td width="20%"><a href="index.php?option=com_clm&view=auswertung&task=delete&datei='.$files[$x].'" '
+				.'<td width="15%"><a href="index.php?option=com_clm&view=auswertung&task=delete&datei='.$files[$x].'" '
 				//.'onClick="submitform();"'
-				.'>Löschen</a></td>'
-				.'</tr>';
-			//$dateien .= '<a href="components/com_clm/dewis/'.$files[$x].'" target="_blank">'.$files[$x].'</a><br>';
+				.'>'.JText::_( 'DELETE').'</a></td>';
+			if ($countryversion =="en") {
+				$dateien .= '<td width="15%"><a href="index.php?option=com_clm&view=auswertung&task=download&datei='.$files[$x].'" '
+							.'>'.JText::_( 'DB_DOWNLOAD').'</a></td>';
+			} else { 
+				$dateien .= '<td width="15%">  </td>';
+			}
+			$dateien .= '</tr>';
 		}
 	$dateien .= '</table>';
 	} else { $dateien = 'Keine Dateien vorhanden !'; }
@@ -679,6 +917,37 @@ function xml_dateien()
 	return $dateien;
 	}
 
+function download()
+	{
+	// Check for request forgeries
+	//JRequest::checkToken() or die( 'Invalid Token' );
+	$option		= JRequest::getCmd('option');
+	$datei		= JRequest::getVar('datei');
+	$app		= JFactory::getApplication();
+	
+	if($datei){
+		$file 	= JPATH_ADMINISTRATOR.DS.'components'.DS.$option.DS.'dewis'.DS.$datei;	
+		header ( 'Content-Description: File Transfer' );
+		header ( 'Content-Type: application/octet-stream' );
+		header ( 'Content-Disposition: attachment; filename=' . $datei );
+		header ( 'Expires: 0' );
+		header ( 'Cache-Control: must-revalidate' );
+		header ( 'Pragma: public' );
+		header ( 'Content-Length: ' . filesize ( $file ) );
+		ob_clean(); 
+		flush();
+		readfile ( $file );
+
+		$msg =JText::_( 'DB_DWL_SUCCESS');
+	}else{	$msg =JText::_( 'Keine Datei gefunden !');}
+
+	$app->enqueueMessage( $msg, 'warning');	
+
+	$adminLink = new AdminLink();
+	$adminLink->view = "auswertung";
+	$adminLink->makeURL();
+	$app->redirect( $adminLink->url);
+	}	
 function delete()
 	{
 	// Check for request forgeries

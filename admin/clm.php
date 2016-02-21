@@ -137,6 +137,10 @@ if ($countryversion =="de") {
 if($clmAccess->access('BE_dewis_general')) {
 	JSubMenuHelper::addEntry(JText::_('DeWIS'), 'index.php?option=com_clm&view=auswertung', (JRequest::getVar('view')) == 'auswertung'?true:false);
 }}
+if ($countryversion =="en") {
+if($clmAccess->access('BE_dewis_general')) {
+	JSubMenuHelper::addEntry(JText::_('GRADING_EXPORT'), 'index.php?option=com_clm&view=auswertung', (JRequest::getVar('view')) == 'auswertung'?true:false);
+}}
 if($clmAccess->access('BE_database_general')) {
 	JSubMenuHelper::addEntry(JText::_('DATABASE'), 'index.php?option=com_clm&view=db', (JRequest::getVar('view')) == 'db'?true:false);
 }

@@ -18,6 +18,7 @@ $ -> Language fix or change
 + Ligen: Rundendaten von-bis sowie Termin pro Paarung möglich
 + Ergänzung Engl. Anwendung: Check-Routine, Termine, Runden-Details 
 # Einzelturniere: Rangliste Elo mit Streichwertung
++ Ergänzung Engl. Anwendung: Export Grading File einschl. ExcelWriterXML
 
 - - - - - 3.2.3 - [22-01-2016] - - - - - - - - - - - - - - - - - - - -
 + Menüeintagstyp für Liga-Paarungsliste

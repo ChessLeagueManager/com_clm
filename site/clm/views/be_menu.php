@@ -175,16 +175,16 @@ function clm_view_be_menu($access, $status)
 ?></span></a> </div>
 	<?php
     }
-	if ($countryversion =="de") {
     if ($access['BE_dewis_general']) {
 ?>		
 		<div class="clm_icon"> <a href="index.php?option=com_clm&view=auswertung" title=""> <img src="<?php
         echo clm_core::$load->gen_image_url("icons/clm_dewis2");
 ?>" align="middle" border="0" alt="" /> <span><?php
-        echo $lang->dewis;
+        	if ($countryversion =="de") echo $lang->dewis;
+        	if ($countryversion =="en") echo $lang->grading_export;
 ?></span></a> </div>
 	<?php
-    } }
+    }
     if ($access['BE_database_general']) {
 ?>		
 		<div class="clm_icon"> <a href="index.php?option=com_clm&view=db" title=""> <img src="<?php
