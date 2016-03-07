@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -16,17 +16,16 @@ defined('_JEXEC') or die('Restricted access');
 $mannschaft	=$this->mannschaft;
 	//Liga-Parameter aufbereiten
 	$paramsStringArray = explode("\n", $mannschaft[0]->params);
-	$mannschaft[0]->params = array();
+	$lparams = array();
 	foreach ($paramsStringArray as $value) {
 		$ipos = strpos ($value, '=');
 		if ($ipos !==false) {
 			$key = substr($value,0,$ipos);
-			if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
-			if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
-				$mannschaft[0]->params[$key] = substr($value,$ipos+1);
+				$lparams[$key] = substr($value,$ipos+1);
 		}
 	}
-	if (!isset($mannschaft[0]->params['dwz_date'])) $mannschaft[0]->params['dwz_date'] = '0000-00-00';
+	if (!isset($lparams['dwz_date'])) $lparams['dwz_date'] = '0000-00-00';
+	if (!isset($lparams['noOrgReference'])) $lparams['noOrgReference'] = '0';
 $count		=$this->count;
 $bp			=$this->bp;
 $sumbp		=$this->sumbp;
@@ -147,6 +146,7 @@ $pdf->SetFont('Times','B',$head_font);
 $pdf->SetFont('Times','B',$head_font-2);
 	$pdf->Cell(10,10,' ',0,0);
 	$pdf->Cell(100,10,utf8_decode(JText::_('LEAGUE')).' : '.utf8_decode($mannschaft[0]->liga_name)." ".$saison[0]->name,0,1,'L');
+if ($lparams['noOrgReference'] == '0') {
 $pdf->SetFont('Times','B',$font);
 	$pdf->Cell(10,6,' ',0,0);
 	$pdf->Cell(80,6,utf8_decode(Jtext::_('TEAM_LEADER')),0,0);
@@ -185,7 +185,7 @@ $pdf->SetFont('Times','',$font);
 	else $pdf->Cell(80,4,utf8_decode(Jtext::_('TEAM_MOBILE')." ".JText::_('TEAM_REGISTERED')),0,0,'L'); 
 	if (isset($man[3])) $pdf->Cell(80,4,utf8_decode($man[3]),0,1);
 	else $pdf->Cell(80,4,'',0,1);
-	
+}	
 $pdf->SetFont('Times','B',$font);
 	$pdf->Ln();
 	$pdf->Cell(10,8,' ',0,0);
@@ -271,7 +271,7 @@ for ($x=0; $x< 100; $x++){
 		$pdf->Cell(7,4,"(".$count[$x]->mgl_nr.")",0,0);
 		$pdf->SetFont('Times','',8);
 	}
-    if ($mannschaft[0]->params['dwz_date'] == '0000-00-00') { $pdf->Cell(10,4,$count[$x]->dwz,0,0,'R'); } 
+    if ($lparams['dwz_date'] == '0000-00-00') { $pdf->Cell(10,4,$count[$x]->dwz,0,0,'R'); } 
 	else { $pdf->Cell(10,4,$count[$x]->start_dwz,0,0,'R'); } 
 	$pkt = 0;
 	$spl = 0;

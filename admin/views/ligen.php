@@ -43,8 +43,8 @@ class CLMViewLigen
 		$ipos = strpos ($value, '=');
 		if ($ipos !==false) {
 			$key = substr($value,0,$ipos);
-			if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
-			if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
+			//if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
+			//if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
 			$row->params[$key] = substr($value,$ipos+1);
 		}
 	}	
@@ -76,6 +76,11 @@ class CLMViewLigen
 			$row->params['incl_to_season'] = '0'; }
 	if (!isset($row->params['round_date']))  {   //Standardbelegung
 		$row->params['round_date'] = '0'; }
+	if (!isset($row->params['noOrgReference']))  {   //Standardbelegung
+		$row->params['noOrgReference'] = '0'; }
+	if (!isset($row->params['noBoardResults']))  {   //Standardbelegung
+		$row->params['noBoardResults'] = '0'; }
+
 	?>
 	
 	<script language="javascript" type="text/javascript">
@@ -673,6 +678,9 @@ class CLMViewLigen
 	<input type="hidden" name="client_id" value="<?php echo $row->cid; ?>" />
 	<input type="hidden" name="rnd" value="<?php echo $row->rnd; ?>" />
 	<input type="hidden" name="task" value="" />
+	<input type="hidden" name="params[noOrgReference]" value="<?php echo $row->params['noOrgReference']; ?>" />
+	<input type="hidden" name="params[noBoardResults]" value="<?php echo $row->params['noBoardResults']; ?>" />
+
 	<?php echo JHtml::_( 'form.token' ); ?>
 	</form>
 	<?php }}

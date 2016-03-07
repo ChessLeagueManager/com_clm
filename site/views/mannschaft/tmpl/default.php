@@ -38,17 +38,16 @@ return '#'.$R.$G.$B;
 $mannschaft	=$this->mannschaft;
 	//Liga-Parameter aufbereiten
 	$paramsStringArray = explode("\n", $mannschaft[0]->params);
-	$mannschaft[0]->params = array();
+	$lparams = array();
 	foreach ($paramsStringArray as $value) {
 		$ipos = strpos ($value, '=');
 		if ($ipos !==false) {
 			$key = substr($value,0,$ipos);
-			if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
-			if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
-				$mannschaft[0]->params[$key] = substr($value,$ipos+1);
+				$lparams[$key] = substr($value,$ipos+1);
 		}
 	}
-	if (!isset($mannschaft[0]->params['dwz_date'])) $mannschaft[0]->params['dwz_date'] = '0000-00-00';
+	if (!isset($lparams['dwz_date'])) $lparams['dwz_date'] = '0000-00-00';
+	if (!isset($lparams['noOrgReference'])) $lparams['noOrgReference'] = '0';
 $count		=$this->count;
 $bp			=$this->bp;
 $sumbp		=$this->sumbp;
@@ -72,7 +71,7 @@ $db =JFactory::getDBO ();
 $db->setQuery ($sql);
 $ligapunkte = $db->loadObject ();
 
-if ($mannschaft[0]->params['dwz_date'] == '0000-00-00') {
+if ($lparams['dwz_date'] == '0000-00-00') {
 	if ($saison[0]->dsb_datum  > 0) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $saison[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F'));  
 	if (($saison[0]->dsb_datum == 0) || (!isset($saison))) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_UNCLEAR'); 
 } else {
@@ -139,8 +138,12 @@ $clm_zeile2D			= RGB($clm_zeile2);
     <div class="componentheading"><?php echo $mannschaft[0]->name; ?> - <?php echo $mannschaft[0]->liga_name; ?></div>
 
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
-    
-	<div class="clmbox"><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $mannschaft[0]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('TEAM_DETAILS') ?></a> | <a href="index.php?option=com_clm&view=dwz&saison=<?php echo $sid; ?>&zps=<?php echo $mannschaft[0]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('TEAM_OVERVIEW') ?></a>
+    <?php if ($mannschaft[0]->zps != "0") { ?>
+		<div class="clmbox"><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $mannschaft[0]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('TEAM_DETAILS') ?></a> | <a href="index.php?option=com_clm&view=dwz&saison=<?php echo $sid; ?>&zps=<?php echo $mannschaft[0]->zps; ?>
+						<?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('TEAM_OVERVIEW') ?></a>
+    <?php } else { ?>
+		<div class="clmbox"><?php echo "|  " ?>
+    <?php }  ?>
 	<div id="pdf">
 	
 	<?php 
@@ -153,6 +156,7 @@ $clm_zeile2D			= RGB($clm_zeile2);
 	</div></div>
     <div class="clr"></div>
     
+    <?php if ($lparams['noOrgReference'] == '0') { ?>
     <div class="teamdetails">
         <div id="leftalign">
     <?php if ($man_manleader =="1") { ?>
@@ -235,6 +239,7 @@ $clm_zeile2D			= RGB($clm_zeile2);
     <?php echo $mannschaft[0]->bemerkungen; ?>
     <?php	} ?>
     </div>
+    <?php } ?>
     
     <?php
 	if ($mannschaft[0]->anzeige_ma == 1){ ?>
@@ -301,8 +306,12 @@ for ($x=0; $x< 100; $x++){
     <tr class="<?php echo $zeilenr; ?>">
     <?php if($mannschaft[0]->lrang > 0) { ?><td class="nr" ><?php echo $count[$x]->rmnr.' - '.$count[$x]->rrang; ?></td><?php }
         else { ?><td class="nr" ><?php echo $y; ?></td><?php } ?>
-    <td class="name"><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $count[$x]->zps; ?>&mglnr=<?php echo $count[$x]->mgl_nr; ?>&PKZ=<?php echo $count[$x]->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $count[$x]->name; ?></a></td>
-    <td class="dwz"><?php if ($mannschaft[0]->params['dwz_date'] == '0000-00-00') { if ($count[$x]->dwz >0) echo $count[$x]->dwz;} 
+	<?php if($count[$x]->zps != "-2") { ?>
+		<td class="name"><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $count[$x]->zps; ?>&mglnr=<?php echo $count[$x]->mgl_nr; ?>&PKZ=<?php echo $count[$x]->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $count[$x]->name; ?></a></td>
+	<?php } else { ?>
+		<td class="name"><?php echo $count[$x]->name; ?></td>
+	<?php } ?>
+    <td class="dwz"><?php if ($lparams['dwz_date'] == '0000-00-00') { if ($count[$x]->dwz >0) echo $count[$x]->dwz;} 
 						  else { if ($count[$x]->start_dwz >0) echo $count[$x]->start_dwz;} ?></td>
     <?php
 	//keine Ergebnisse zum Spieler

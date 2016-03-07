@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -42,6 +42,27 @@ class CLMControllerSWTLiga extends JControllerLegacy
 		} else {
 		JRequest::setVar('view', 'swtligainfo');
 		JRequest::setVar('update' , 1);
+			$db		=JFactory::getDBO ();
+			$select_query = '  SELECT * FROM #__clm_liga '
+							.' WHERE id = '.$lid.'; ';
+			$db->setQuery ($select_query);
+			$liga = $db->loadObject();
+			//Liga-Parameter aufbereiten
+			$paramsStringArray = explode("\n", $liga->params);
+			$params = array();
+			foreach ($paramsStringArray as $value) {
+				$ipos = strpos ($value, '=');
+				if ($ipos !==false) {
+					$key = substr($value,0,$ipos);
+					$params[$key] = substr($value,$ipos+1);
+				}
+			}	
+			if (!isset($params['noOrgReference']))  {   //Standardbelegung
+				$params['noOrgReference'] = '0'; }
+			if (!isset($params['noBoardResults']))  {   //Standardbelegung
+				$params['noBoardResults'] = '0'; }
+			JRequest::setVar('noOrgReference', $params['noOrgReference']);
+			JRequest::setVar('noBoardResults', $params['noBoardResults']);
 		
 		parent::display(); 		
 		}

@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -148,6 +148,9 @@ function saveIt($apply=false)
 	}
 	//Liga-Parameter zusammenfassen
 	$row->params['anz_sgp'] = JRequest::getVar('anz_sgp');
+	if ($row->params['noBoardResults'] == '1') $row->params['noOrgReference'] = '1';
+	if ($row->params['noOrgReference'] == '1') $row->params['incl_to_season'] = '0';
+
 	$paramsStringArray = array();
 	foreach ($row->params as $key => $value) {
 		////$paramsStringArray[] = $key.'='.intval($value);

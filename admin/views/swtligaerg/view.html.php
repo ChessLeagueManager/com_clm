@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -65,7 +65,7 @@ class CLMViewSWTLigaerg extends JViewLegacy {
 		$spielertables = array ();
 		$model = $this->getModel ('swtligaerg');
 		for ($p = 1; $p <= $anz_paarungen; $p++) {
-
+			if (!isset($swt_data[$p])) break;
 			$heim = $swt_data[$p]['heim'];
 			$gast = $swt_data[$p]['gast'];
 		
@@ -87,7 +87,7 @@ class CLMViewSWTLigaerg extends JViewLegacy {
 				$gsplist = array_merge( $gsplist, $db_splist[$gast] );
 				$ablist = JHtml::_('select.genericlist', $gsplist, 'gbrett_'.$p.'_'.$b, 'class="inputbox" size="1"', 'id', 'text', $gspieler);
 
-				$ergebnis = $swt_data[$p]['erg_'.$b];
+				if (isset($swt_data[$p]['erg_'.$b])) $ergebnis = $swt_data[$p]['erg_'.$b]; else $ergebnis = 0;
 /*				echo "<br/> erg_str: " . $swt_data[$p]['ergstr_'.$b]; //DBG
 				echo " erg_$p"."_$b: " . $ergebnis; //DBG*/
 				$erglist = array ();
@@ -95,7 +95,7 @@ class CLMViewSWTLigaerg extends JViewLegacy {
 				$erglist = array_merge( $erglist, $db_erglist );
 				$results = JHtml::_('select.genericlist', $erglist, 'erg_'.$p.'_'.$b, 'class="inputbox" size="1"', 'ergid', 'text', $ergebnis);
 
-				$ergebnisk = $swt_data[$p]['ergk_'.$b];
+				if (isset($swt_data[$p]['ergk_'.$b])) $ergebnisk = $swt_data[$p]['ergk_'.$b]; else $ergebnisk = 0;
 				$erglistk = array ();
 				$erglistk[] = JHtml::_('select.option', 'NULL', JText::_( 'SWT_LEAGUE_RESULT_SELECT' ), 'ergid', 'text');
 				$erglistk = array_merge( $erglistk, $db_erglistk );

@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -310,6 +310,7 @@ function edit()
 	// Spieler Heim
 	$sql = "SELECT a.*, d.Spielername as name ";
 		if($runde[0]->rang !="0") {$sql = $sql.",r.Rang as snr,r.man_nr as rmnr";}
+	if ($runde[0]->hzps != '0') { //normal
 		$sql = $sql
 		." FROM #__clm_meldeliste_spieler as a ";
 		if ($countryversion =="de") {
@@ -336,11 +337,22 @@ function edit()
 				." AND a.lid = ".$runde[0]->lid
 				." AND (a.mgl_nr <> '0' OR a.PKZ <> '') "
 				." ORDER BY a.snr"; }
-
+	} else {  //Schulschach u.ä.
+		$zps = "-1";
+		$sql .= " FROM #__clm_meldeliste_spieler as a ";
+		$sql .= " LEFT JOIN #__clm_dwz_spieler as d ON ( d.ZPS = a.zps AND d.Mgl_Nr= a.mgl_nr AND d.sid = a.sid) ";
+		$sql = $sql
+			." WHERE a.sid = ".$runde[0]->sid
+			." AND (a.gesperrt = 0 OR a.gesperrt IS NULL )"
+			." AND ( a.zps = '".$zps."' AND a.mnr = ".$runde[0]->hmnr." )"
+			." AND a.lid = ".$runde[0]->lid
+			." AND (a.mgl_nr <> '0') "
+			." ORDER BY a.snr"; 
+	}
 	$db->setQuery( $sql );
 	$heim		= $db->loadObjectList();
 
-	// Anzahl Spieler Heim
+/*	// Anzahl Spieler Heim
 	$sql = "SELECT COUNT(a.snr) as hcount"
 		." FROM #__clm_meldeliste_spieler as a "
 		//." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) "
@@ -358,6 +370,8 @@ function edit()
 		;
 	$db->setQuery( $sql );
 	$hcount		= $db->loadObjectList();
+*/	
+	$hcount = count($heim);
 
 	// Bretter / Spieler ermitteln
 	$sql = "SELECT * FROM #__clm_rnd_spl as a "
@@ -395,11 +409,6 @@ function edit()
 		$antritt	= $liga[0]->antritt;
 ////
 ////
-////
-////
-////
-////
-////
 
 	// Ergebnistexte nach Modus setzen
 	$ergebnis[0]->erg_text = ($nieder+$antritt)." - ".($sieg+$antritt);
@@ -414,6 +423,7 @@ function edit()
 	// Spieler Gast
 	$sql = "SELECT a.*, d.Spielername as name";
 		if($runde[0]->rang !="0") {$sql = $sql.",r.Rang as snr,r.man_nr as rmnr ";}
+	if ($runde[0]->hzps != '0') { //normal
 		$sql = $sql
 		." FROM #__clm_meldeliste_spieler as a ";
 		if ($countryversion =="de") {
@@ -429,7 +439,6 @@ function edit()
 		." WHERE a.sid = ".$runde[0]->sid
 		." AND (a.gesperrt = 0 OR a.gesperrt IS NULL )"
 		." AND (( a.zps = '".$runde[0]->gzps."' AND a.mnr = ".$runde[0]->gmnr." ) "
-		//." OR ( a.zps ='".$runde[0]->sgg_zps."' AND a.mnr = ".$runde[0]->gmnr." ))";
 		." OR ( FIND_IN_SET(a.zps, '".$runde[0]->sgg_zps."') != 0 AND a.mnr = ".$runde[0]->gmnr." )) ";
 		if($runde[0]->rang !="0") {
 			$sql = $sql
@@ -441,12 +450,24 @@ function edit()
 				." AND a.lid = ".$runde[0]->lid
 				." AND (a.mgl_nr > 0 OR a.PKZ > '')"
 				." ORDER BY a.snr"; }
+	} else {  //Schulschach u.ä.
+		$zps = "-1";
+		$sql .= " FROM #__clm_meldeliste_spieler as a ";
+		$sql .= " LEFT JOIN #__clm_dwz_spieler as d ON ( d.ZPS = a.zps AND d.Mgl_Nr= a.mgl_nr AND d.sid = a.sid) ";
+		$sql = $sql
+			." WHERE a.sid = ".$runde[0]->sid
+			." AND (a.gesperrt = 0 OR a.gesperrt IS NULL )"
+			." AND ( a.zps = '".$zps."' AND a.mnr = ".$runde[0]->gmnr." )"
+			." AND a.lid = ".$runde[0]->lid
+			." AND (a.mgl_nr <> '0') "
+			." ORDER BY a.snr"; 
+	}
 
 	$db->setQuery( $sql );
 	$gast		= $db->loadObjectList();
 
 	// Anzahl Spieler Gast
-	$sql = "SELECT COUNT(a.snr) as gcount"
+/*	$sql = "SELECT COUNT(a.snr) as gcount"
 		." FROM #__clm_meldeliste_spieler as a "
 		//." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) "
 		." WHERE a.sid = ".$runde[0]->sid
@@ -464,6 +485,8 @@ function edit()
 		;
 	$db->setQuery( $sql );
 	$gcount		= $db->loadObjectList();
+*/	
+	$gcount = count($gast);
 
 	//if ($runde[0]->runde > 1) {
 		$sql = "SELECT me.snr"

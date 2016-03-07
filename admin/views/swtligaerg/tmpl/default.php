@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -22,6 +22,9 @@ $runde	= JRequest::getVar('runde', 0, 'default', 'int');
 $dgang	= JRequest::getVar('dgang', 0, 'default', 'int');
 $mturnier = JRequest::getVar('mturnier', 0, 'default', 'int');
 $ungerade = JRequest::getVar('ungerade', false, 'default', 'bool');
+$noOrgReference = JRequest::getVar('noOrgReference', '0', 'default', 'string');
+$noBoardResults = JRequest::getVar('noBoardResults', '0', 'default', 'string');
+
 
 ?>
 
@@ -59,6 +62,7 @@ $ungerade = JRequest::getVar('ungerade', false, 'default', 'bool');
     <div class="col width-50">
     	<?php $sw_prelims = false;
     		for ($p = 1; $p <= $this->anz_paarungen; $p++) { 
+				if (!isset($this->swt_data[$p])) break;
 				if (($this->swt_data[$p]['gast_mannschaft'] != "spielfrei") AND (isset($this->swt_data[$p]['hemsum'])) AND ($this->swt_data[$p]['hemsum'] != $this->swt_data[$p]['hmmsum']))  $sw_prelims = true;
 				if (($this->swt_data[$p]['heim_mannschaft'] != "spielfrei") AND (isset($this->swt_data[$p]['gemsum'])) AND ($this->swt_data[$p]['gemsum'] != $this->swt_data[$p]['gmmsum']))  $sw_prelims = true;
     		}	
@@ -66,7 +70,7 @@ $ungerade = JRequest::getVar('ungerade', false, 'default', 'bool');
 				<fieldset class="adminform">
 				    <legend><?php echo $this->swt_db_data['liga_name'] . ' ' . JText::_( 'SWT_LEAGUE_DG' ) . ' ' . ($dgang+1) . ' ' . JText::_( 'SWT_LEAGUE_ROUND' ) . ' ' . ($runde+1) . ', ' . JText::_( 'SWT_LEAGUE_PRELIMS' ) ; ?></legend>
 				    <table  class="adminlist">
-						<?php for ($p = 1; $p <= $this->anz_paarungen; $p++) { ?>
+						<?php for ($p = 1; $p <= $this->anz_paarungen; $p++) { if (!isset($this->swt_data[$p])) break; ?>
 							<?php if ($this->swt_data[$p]['hemsum'] != $this->swt_data[$p]['hmmsum'])  { ?>
 							<tr>
 								<th widhth="90%" nowrap="nowrap">
@@ -74,7 +78,7 @@ $ungerade = JRequest::getVar('ungerade', false, 'default', 'bool');
 								</th>
 							</tr>	
 							<?php } ?>
-							<?php if ($this->swt_data[$p]['gemsum'] != $this->swt_data[$p]['gmmsum'])  { ?>
+							<?php if ($this->swt_data[$p]['gemsum'] != $this->swt_data[$p]['gmmsum'])  { if (!isset($this->swt_data[$p])) break; ?>
 							<tr>
 								<th widhth="90%" nowrap="nowrap">
 				    			<label><?php echo JText::_( 'SWT_LEAGUE_PAIRING' ).' '.$p.' '.$this->swt_data[$p]['gast_mannschaft'].':'.JText::_( 'SWT_LEAGUE_PRELIM01' ).'('.$this->swt_data[$p]['gmmsum'].') '.JText::_( 'SWT_LEAGUE_PRELIM02' ); ?></label>
@@ -85,13 +89,14 @@ $ungerade = JRequest::getVar('ungerade', false, 'default', 'bool');
 				    </table>
 				</fieldset>
 			<?php }	
-    		for ($p = 1; $p <= $this->anz_paarungen; $p++) {
+    		for ($p = 1; $p <= $this->anz_paarungen; $p++) { if (!isset($this->swt_data[$p])) break;
     			?>
 				<fieldset class="adminform">
-				    <legend><?php echo $this->swt_db_data['liga_name'] . ' ' . JText::_( 'SWT_LEAGUE_DG' ) . ' ' . ($dgang+1) . ' ' . JText::_( 'SWT_LEAGUE_ROUND' ) . ' ' . ($runde+1) . ', ' . JText::_( 'SWT_LEAGUE_PAIRING' ) . ' ' . $p; ?></legend>
+				    <legend <?php if ($noBoardResults == '1') { echo 'style="font-size:120%;"'; } ?>><?php echo $this->swt_db_data['liga_name'] . ' ' . JText::_( 'SWT_LEAGUE_DG' ) . ' ' . ($dgang+1) . ' ' . JText::_( 'SWT_LEAGUE_ROUND' ) . ' ' . ($runde+1) . ', ' . JText::_( 'SWT_LEAGUE_PAIRING' ) . ' ' . $p; ?></legend>
 				    <table  class="adminlist">
+					  <?php if ($noBoardResults == '0') { ?>  
 				    	<tr>
-				    		<th widhth="10%" nowrap="nowrap">
+				    		<th width="10%" nowrap="nowrap">
 				    			<label><?php echo JText::_( 'SWT_LEAGUE_BOARD' ); ?></label>
 				    		</th>
 				    		<th nowrap="nowrap">
@@ -108,6 +113,19 @@ $ungerade = JRequest::getVar('ungerade', false, 'default', 'bool');
 				    		</th>
 				   		</tr>
 						<?php echo $this->tables['auswahl'][$p]; ?>
+					  <?php } elseif ($noBoardResults == '1') { ?>  
+						<tr>
+				    		<th width="20%" nowrap="nowrap">
+				    			<label><?php echo $this->swt_data[$p]['heim_mannschaft']; ?></label>
+				    		</th>
+				    		<th width="20%" nowrap="nowrap">
+				    			<label><?php echo $this->swt_data[$p]['gast_mannschaft']; ?></label>
+				    		</th>
+				    		<th width="20%" nowrap="nowrap">
+				    			<label><?php echo $this->swt_data[$p]['hmmsum']." : ".$this->swt_data[$p]['gmmsum']; ?></label>
+				    		</th>
+				   		</tr>
+					  <?php } ?>  
 				    </table>
 				</fieldset>
 				<?php
@@ -139,6 +157,8 @@ $ungerade = JRequest::getVar('ungerade', false, 'default', 'bool');
     <input type="hidden" name="runde" value="<?php echo $runde; ?>" />
     <input type="hidden" name="dgang" value="<?php echo $dgang; ?>" />
 	<input type="hidden" name="mturnier" value="<?php echo $mturnier; ?>" />
+	<input type="hidden" name="noOrgReference" value="<?php echo $noOrgReference; ?>" />
+	<input type="hidden" name="noBoardResults" value="<?php echo $noBoardResults; ?>" />
 	<input type="hidden" name="ungerade" value="<?php echo $ungerade; ?>" />
     <?php echo $this->hidden['farbe']; ?>
 	<?php echo JHtml::_( 'form.token' ); ?>

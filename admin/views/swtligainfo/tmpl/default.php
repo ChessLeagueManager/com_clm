@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -15,6 +15,8 @@ defined('_JEXEC') or die('Restricted access');
 $swt = JRequest::getVar('swt', '', 'default', 'string');
 $update = JRequest::getVar('update', 0, 'default', 'int');
 $mturnier = JRequest::getVar('mturnier', 0, 'default', 'int');
+$noOrgReference = JRequest::getVar('noOrgReference', '0', 'default', 'string');
+$noBoardResults = JRequest::getVar('noBoardResults', '0', 'default', 'string');
 $lid = JRequest::getVar('liga', 0, 'default', 'int');
 $ordering = $this->default['ordering'];
 ?>
@@ -57,14 +59,14 @@ $ordering = $this->default['ordering'];
 	<div class="width-60 fltlft">
 		<fieldset class="adminform">
 			<legend><?php echo JText::_( 'LEAGUE_DATA' ); ?></legend>
-			<table class="adminlist">
+			<table class="paramlist admintable">
 			
 				<tr>
 					<td width="20%" nowrap="nowrap">
 						<label for="name"><?php echo JText::_( 'LEAGUE_NAME' ); ?></label>
 					</td>
 					<td colspan="2">
-						<input class="inputbox" type="text" name="name" id="name" size="30" maxlength="30" value="<?php echo $this->swt_data['liga_name']; ?>" />
+						<input class="inputbox" type="text" name="name" id="name" size="20" maxlength="30" value="<?php echo $this->swt_data['liga_name']; ?>" />
                     </td>
                     <td nowrap="nowrap">
                         <label for="sl"><?php echo JText::_( 'LEAGUE_CHIEF' ); ?></label>
@@ -108,7 +110,7 @@ $ordering = $this->default['ordering'];
 				<tr>
 					<td nowrap="nowrap">
 						<label for="teil"><?php echo JText::_( 'LEAGUE_TEAMS' ); ?></label>
-						</td><td colspan="5">
+						</td><td colspan="2">
 						<input class="inputbox" type="text" name="teil" id="teil" size="4" maxlength="4" value="<?php echo $this->swt_data['anz_mannschaften']; ?>" />
 					</td>
 				</tr>
@@ -144,7 +146,7 @@ $ordering = $this->default['ordering'];
 				<tr>
 					<td nowrap="nowrap">
 						<label for="anz_sgp"><?php echo JText::_( 'LEAGUE_ANZ_SGP' ); ?></label>
-						</td><td colspan="5">
+						</td><td colspan="2">
 						<input class="inputbox" type="text" name="anz_sgp" id="anz_sgp" size="4" maxlength="4" value="<?php echo $this->default['params']['anz_sgp'] ?>" />
 					</td>
 				</tr>
@@ -182,9 +184,9 @@ $ordering = $this->default['ordering'];
 					</td>
 					<td nowrap="nowrap">
 						<label for="heim"><?php echo JText::_( 'LEAGUE_HOME' ); ?></label>
-						</td><td colspan="2">
+					</td><td colspan="2"><fieldset class="radio">
 						<?php echo $this->lists['heim']; ?>
-					</td>
+					</fieldset></td>
 				</tr>
 
 				<tr>
@@ -276,7 +278,7 @@ $ordering = $this->default['ordering'];
 
 		<fieldset class="adminform">
 			<legend><?php echo JText::_( 'LEAGUE_VALUATION' ); ?></legend>
-			<table class="adminlist">
+			<table class="paramlist admintable">
 				<tr>
 					<td nowrap="nowrap">&nbsp;</td>
 					<td><?php echo JText::_( 'LEAGUE_VALUATION_1' );?></td>
@@ -389,7 +391,7 @@ $ordering = $this->default['ordering'];
 
 		<fieldset class="adminform">
 			<legend><?php echo JText::_( 'LEAGUE_PREFERENCES' ); ?></legend>
-			<table class="adminlist">
+			<table class="paramlist admintable">
 
 				<tr>
 					<td nowrap="nowrap">
@@ -438,7 +440,7 @@ $ordering = $this->default['ordering'];
 	<div class="width-40 fltrt">
 		<fieldset class="adminform">
 			<legend><?php echo JText::_( 'REMARKS' ); ?></legend>
-			<table class="adminlist">
+			<table class="paramlist admintable">
 				<legend><?php echo JText::_( 'REMARKS_PUBLIC' ); ?></legend>
 				<tr>
 					<td width="100%" valign="top">
@@ -503,6 +505,8 @@ $ordering = $this->default['ordering'];
 	<input type="hidden" name="swt" value="<?php echo $swt; ?>" />
 	<input type="hidden" name="update" value="<?php echo $update; ?>" />
 	<input type="hidden" name="mturnier" value="<?php echo $mturnier; ?>" />
+	<input type="hidden" name="noOrgReference" value="<?php echo $noOrgReference; ?>" />
+	<input type="hidden" name="noBoardResults" value="<?php echo $noBoardResults; ?>" />
 	<input type="hidden" name="lid" value="<?php echo $lid; ?>" />
 	<input type="hidden" name="ordering" value="<?php echo $ordering; ?>" />
 	<?php echo JHtml::_( 'form.token' ); ?>

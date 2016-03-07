@@ -45,11 +45,12 @@ echo "<div id=\"clm\"><div id=\"spieler\">";
 // Browsertitelzeile setzen
 $doc =JFactory::getDocument();
 if (isset($spieler[0]->Spielername)){ 
-$daten['title'] = $spieler[0]->Spielername.' - '.$spieler[0]->Vereinname;
-$doc->setTitle($spieler[0]->Spielername.' - '.$spieler[0]->Vereinname);
+	$daten['title'] = $spieler[0]->Spielername;
+	if (isset($spieler[0]->Vereinname)){ 
+		$daten['title'] .= ' - '.$spieler[0]->Vereinname; }
+	$doc->setTitle($daten['title']);
 } else {
 $daten['title'] = JText::_('PLAYER_UNKNOWN_TITLE');
-//$doc->setTitle($spieler[0]->Spielername.' - '.$spieler[0]->Vereinname);
 $doc->setTitle(JText::_('PLAYER_UNKNOWN_TITLE'));
 }
 
@@ -116,7 +117,7 @@ echo CLMContent::clmWarning(JText::_('PLAYER_UNKNOWN'))."<br>";
 }
 else {  ?>
 
-<div class="componentheading"><?php echo $spieler[0]->Spielername; ?> - <?php echo $spieler[0]->Vereinname; ?></div>
+<div class="componentheading"><?php echo $spieler[0]->Spielername; ?><?php if (isset($spieler[0]->Vereinname)) echo ' - '.$spieler[0]->Vereinname; ?></div>
 
 <!-- /// Spielerdetails /// -->
 <br>
@@ -155,7 +156,9 @@ else {  ?>
     	<table cellpadding="0" cellspacing="0" class="details">
             <tr>
             <td class="det_col3"><?php echo JText::_('PLAYER_CLUB') ?></td>
-            <td class="det_col4"><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $spieler[0]->Vereinname; ?></a></td>
+            <?php if (isset($spieler[0]->Vereinname)) { ?>
+				<td class="det_col4"><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $spieler[0]->Vereinname; ?></a></td>
+            <?php } ?>
             </tr>
             <tr>
             <td class="det_col3" valign="top"><?php echo JText::_('PLAYER_TEAMS') ?></td>

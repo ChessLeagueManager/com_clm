@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -18,6 +18,8 @@ $swt_id = JRequest::getVar('swt_id', 0, 'default', 'int');
 $man	= JRequest::getVar('man', 0, 'default', 'int');
 $sid	= $this->swt_db_data['sid'];
 $mturnier = JRequest::getVar('mturnier', 0, 'default', 'int');
+$noOrgReference = JRequest::getVar('noOrgReference', '0', 'default', 'string');
+$noBoardResults = JRequest::getVar('noBoardResults', '0', 'default', 'string');
 $ungerade = JRequest::getVar('ungerade', false, 'default', 'bool');
 
 $spielerid = JRequest::getVar ('spielerid');
@@ -58,28 +60,34 @@ $lid = JRequest::getVar('lid', 0, 'default', 'int');
     <div class="col width-50">
         <fieldset class="adminform">
             <legend><?php echo JText::_( 'SWT_LEAGUE_TEAM_DATA' ); ?></legend>
-            <table class="adminlist">
+            <table class="admintable">
                 <tr>
                     <td width="20%" nowrap="nowrap">
                         <label for="name"><?php echo JText::_( 'SWT_LEAGUE_TEAM_NAME' ); ?></label>
                     </td>
                     <td colspan="2">
-                        <input class="inputbox" type="text" name="name" id="name" size="32" maxlength="32" value="<?php echo $this->swt_data['man_name']; ?>" />
+                        <input class="inputbox" type="text" name="name" id="name" size="22" maxlength="32" value="<?php echo $this->swt_data['man_name']; ?>" />
                     </td>
-                    <td nowrap="nowrap">
-                        <label for="man_nr"><?php echo JText::_( 'SWT_LEAGUE_TEAM_ID' ); ?></label>
-                    </td>
-                    <td colspan="2">
-                        <?php if (isset($this->db_man_nr)) echo $this->db_man_nr; else echo ''; ?>
-                    </td>
+                    <?php if (isset($this->db_man_nr)) { ?>
+						<td nowrap="nowrap">
+							<label for="man_nr"><?php echo JText::_( 'SWT_LEAGUE_TEAM_ID' ); ?></label>
+						</td>
+						<td colspan="2">
+							<?php if (isset($this->db_man_nr)) echo $this->db_man_nr; else echo ''; ?>
+						</td>
+					<?php } ?>
                 </tr>
                 <tr>
+				  <?php if ($noOrgReference == '0') { ?>
                     <td nowrap="nowrap">
                         <label for="verein"><?php echo JText::_( 'SWT_LEAGUE_TEAM_CLUB' ); ?></label>
                     </td>
                     <td colspan="2">
                         <?php echo $this->lists['vereine']; ?>
                     </td>
+                  <?php } else { ?>
+					<input type="hidden" name="zps" value="<?php echo '0'; ?>" />
+				  <?php } ?>
                     <td nowrap="nowrap">
                         <label for="tln_nr"><?php echo JText::_( 'SWT_LEAGUE_TEAM_NUMBER' ); ?></label>
                     </td>
@@ -87,8 +95,9 @@ $lid = JRequest::getVar('lid', 0, 'default', 'int');
                         <?php echo $this->lists['tln_nr']; ?>
                     </td>
                 </tr>
-				<?php for ($i = 0; $i < $this->swt_db_data['anz_sgp']; $i++) { ?>
-				<tr>
+				 <?php if ($noOrgReference == '0') { ?>
+				  <?php for ($i = 0; $i < $this->swt_db_data['anz_sgp']; $i++) { ?>
+				  <tr>
 					<td class="key" nowrap="nowrap"><label for="<?php echo 'sg_zps'.$i; ?>"><?php echo JText::_( 'SWT_LEAGUE_TEAM_SG_CLUB' )." : "; ?></label>
 					</td>
                     <td colspan="2">
@@ -96,21 +105,26 @@ $lid = JRequest::getVar('lid', 0, 'default', 'int');
 					</td>
                     <td colspan="3">
                     </td>
-                </tr>
-				<?php } ?>
+                  </tr>
+				 <?php } } ?>
+
             </table>
         </fieldset>
 
         <fieldset class="adminform">
+		  <?php  if ($noBoardResults == '0') { ?>
             <legend><?php echo JText::_( 'SWT_LEAGUE_PLAYERS_1' ); ?></legend>
+	      <?php  } ?>
             <table  class="adminlist">
                 <?php echo $this->tables['stammspieler']; ?>
             </table>
         </fieldset>
-    </div>
+   </div>
     <div class="col width-50">
         <fieldset class="adminform">
+		  <?php  if ($noBoardResults == '0') { ?>
             <legend><?php echo JText::_( 'SWT_LEAGUE_PLAYERS_2' ); ?></legend>
+	      <?php  } ?>
             <table class="adminlist">
                 <?php echo $this->tables['ersatzspieler']; ?>
             </table>
@@ -130,6 +144,8 @@ $lid = JRequest::getVar('lid', 0, 'default', 'int');
    	<input type="hidden" name="man" value="<?php echo $man; ?>" />
    	<input type="hidden" name="sid" value="<?php echo $sid; ?>" />
 	<input type="hidden" name="mturnier" value="<?php echo $mturnier; ?>" />
+	<input type="hidden" name="noOrgReference" value="<?php echo $noOrgReference; ?>" />
+	<input type="hidden" name="noBoardResults" value="<?php echo $noBoardResults; ?>" />
 	<input type="hidden" name="ungerade" value="<?php echo $ungerade; ?>" />
    	<?php
    		for ($i = 1; $i <= $this->swt_db_data['anz_spieler']; $i++) {

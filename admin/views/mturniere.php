@@ -66,6 +66,11 @@ class CLMViewMTurniere
 			$row->params['incl_to_season'] = '0'; }
 	if (!isset($row->params['round_date']))  {   //Standardbelegung
 		$row->params['round_date'] = '0'; }
+	if (!isset($row->params['noOrgReference']))  {   //Standardbelegung
+		$row->params['noOrgReference'] = '0'; }
+	if (!isset($row->params['noBoardResults']))  {   //Standardbelegung
+		$row->params['noBoardResults'] = '0'; }
+
 	?>
 	
 	<script language="javascript" type="text/javascript">
@@ -705,6 +710,8 @@ class CLMViewMTurniere
 	<input type="hidden" name="client_id" value="<?php echo $row->cid; ?>" />
 	<input type="hidden" name="rnd" value="<?php echo $row->rnd; ?>" />
 	<input type="hidden" name="task" value="" />
+	<input type="hidden" name="params[noOrgReference]" value="<?php echo $row->params['noOrgReference']; ?>" />
+	<input type="hidden" name="params[noBoardResults]" value="<?php echo $row->params['noBoardResults']; ?>" />
 	<?php $row->liga_mt = 1; //mtmt ?>
 	<?php echo JHtml::_( 'form.token' ); ?>
 	</form>

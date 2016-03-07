@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -351,19 +351,26 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 			$ipos = strpos ($value, '=');
 			if ($ipos !==false) {
 				$key = substr($value,0,$ipos);
-				if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
-				if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
+				//if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
+				//if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
 				$default_params[$key] = substr($value,$ipos+1);
 			}
 		}	
 		//Liga-Parameter aktualisieren
 		$default_params['anz_sgp'] = JRequest::getVar('anz_sgp');
 		$default_params['color_order'] = JRequest::getVar('color_order');
+		$default_params['noOrgReference'] = JRequest::getVar('noOrgReference', '0', 'default', 'string');
+		$default_params['noBoardResults'] = JRequest::getVar('noBoardResults', '0', 'default', 'string');
+		if 	($default_params['noBoardResults'] == '1' AND $default_params['noOrgReference'] == '0') {
+			$default_params['noOrgReference'] = '1';
+			JRequest::setVar ('noOrgReference', '1');	
+		}
+		if 	($default_params['noOrgReference'] == '1') $default_params['incl_to_season'] = '0';
 		//Liga-Parameter zusammenfassen
 		$paramsStringArray = array();
 		foreach ($default_params as $key => $value) {
-			if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
-			if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
+			//if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
+			//if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
 			$paramsStringArray[] = $key.'='.$value;
 		}
 		$default['params'] = implode("\n", $paramsStringArray);

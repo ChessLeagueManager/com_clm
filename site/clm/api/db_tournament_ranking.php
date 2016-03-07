@@ -265,7 +265,9 @@
 		foreach ($matchData as $key => $value) {
 			// Buchholz
 			if (in_array(1, $arrayFW) OR in_array(2, $arrayFW) OR in_array(11, $arrayFW)) { // beliebige Buchholz als TieBreaker gewünscht?
-				$array_PlayerBuchOpp[$value->tln_nr][] = $array_PlayerBPunkte[$value->gegner]; // Array mit Gegnerwerten - für Streichresultat
+				//$array_PlayerBuchOpp[$value->tln_nr][] = $array_PlayerBPunkte[$value->gegner]; // Array mit Gegnerwerten - für Streichresultat
+				$array_PlayerBuchOpp[$value->tln_nr][] = $array_PlayerMPunkte[$value->gegner]; // Array mit Gegnerwerten - für Streichresultat
+
 			}
 			
 			// Sonneborn-Berger alt

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -31,16 +31,21 @@ class CLMModelSpieler extends JModelLegacy
 
 	$query = "SELECT a.Spielername,l.name as liga_name,l.id as liga,a.ZPS,a.Mgl_Nr,a.PKZ,"
 		." a.DWZ as dsbDWZ,a.DWZ_Index,a.FIDE_ELO,a.FIDE_ID,"
-		." d.Vereinname, n.name,n.tln_nr, m.*, s.datum as dsb_datum, s.name as s_name"      
-		." FROM #__clm_dwz_spieler as a "
-		." LEFT JOIN #__clm_dwz_vereine as d ON a.ZPS = d.ZPS AND d.sid = a.sid";
+		." n.name,n.tln_nr, m.*, s.datum as dsb_datum, s.name as s_name";      
+	if ($zps != '-1') $query .= ", d.Vereinname";     
+	$query .= " FROM #__clm_dwz_spieler as a ";
 	if ($countryversion =="de") {
 		$query .= " LEFT JOIN #__clm_meldeliste_spieler as m ON m.zps = a.ZPS AND m.mgl_nr = a.Mgl_Nr AND m.sid = a.sid ";
 	} else {
 		$query .= " LEFT JOIN #__clm_meldeliste_spieler as m ON m.zps = a.ZPS AND m.PKZ = a.PKZ AND m.sid = a.sid ";
 	}
-	$query .= " LEFT JOIN #__clm_mannschaften as n ON ( (n.zps = a.ZPS) OR (FIND_IN_SET(a.ZPS, n.sg_zps) != 0)) AND n.man_nr = m.mnr AND n.liga = m.lid AND n.sid = a.sid"
-		." LEFT JOIN #__clm_liga l ON l.id = n.liga AND l.sid = n.sid "
+	if ($zps != '-1') {
+		$query .= " LEFT JOIN #__clm_dwz_vereine as d ON a.ZPS = d.ZPS AND d.sid = a.sid";
+		$query .= " LEFT JOIN #__clm_mannschaften as n ON ( (n.zps = a.ZPS) OR (FIND_IN_SET(a.ZPS, n.sg_zps) != 0)) AND n.man_nr = m.mnr AND n.liga = m.lid AND n.sid = a.sid";
+	} else {
+		$query .= " LEFT JOIN #__clm_mannschaften as n ON n.zps = '0' AND n.man_nr = m.mnr AND n.liga = m.lid AND n.sid = a.sid";
+	}
+	$query .= " LEFT JOIN #__clm_liga l ON l.id = n.liga AND l.sid = n.sid "
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 		." WHERE a.ZPS = '$zps'";
 	if ($countryversion =="de") {

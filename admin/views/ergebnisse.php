@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -266,7 +266,7 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 		  <select size="1" name="<?php echo 'heim'.($i+1); ?>" id="<?php echo 'heim'.($i+1); ?>">
  		<option value="0"><?php echo JText::_('RESULTS_DETAILS_DD_1');?></option>
 
-			<?php for ($x=0; $x < $hcount[0]->hcount; $x++){
+			<?php for ($x=0; $x < $hcount; $x++){
 			if ($runde[0]->rang !="0") {
 				if (($heim[$x]->mnr >= $runde[0]->hmnr AND $heim[$x]->Rang < 1000 ) OR ($heim[$x]->mnr == $runde[0]->hmnr)){ ?>
 			 <option value="<?php echo $heim[$x]->mgl_nr.'-'.$heim[$x]->zps; ?>"
@@ -312,7 +312,7 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 		<td class="key" nowrap="nowrap">
 		  <select size="1" name="<?php echo 'gast'.($i+1); ?>" id="<?php echo 'gast'.($i+1); ?>">
  		<option value="0"><?php echo JText::_('RESULTS_DETAILS_DD_2');?></option>
-			<?php for ($x=0; $x < $gcount[0]->gcount; $x++) {
+			<?php for ($x=0; $x < $gcount; $x++) {
 			if ($runde[0]->rang !="0") {
 				if (($gast[$x]->mnr >= $runde[0]->gmnr AND $gast[$x]->Rang < 1000 ) OR ($gast[$x]->mnr == $runde[0]->gmnr)){ ?>
 			<option value="<?php echo $gast[$x]->mgl_nr.'-'.$gast[$x]->zps; ?>" 

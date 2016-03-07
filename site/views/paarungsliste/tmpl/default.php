@@ -28,6 +28,7 @@ $liga		= $this->liga;
 	}	
 	if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
 	if (!isset($params['round_date'])) $params['round_date'] = '0';
+	if (!isset($params['noBoardResults'])) $params['noBoardResults'] = '0';
 
 $termin		= $this->termin;
 $dwzschnitt	= $this->dwzschnitt;
@@ -202,7 +203,7 @@ if ($y%2 != 0) { $zeilenr = 'zeile2'; }
     <td class="tln"><?php echo $paar[$z]->tln_nr; ?></td>
     <?php } ?>
 	<td class="heim">
-	<?php if ($paar[$z]->hpublished == 1) { ?>
+	<?php if ($paar[$z]->hpublished == 1 AND $params['noBoardResults'] == '0') { ?>
 		<a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $liga[0]->sid; ?>&liga=<?php echo $liga[0]->id; ?>&tlnr=<?php echo $paar[$z]->htln; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $paar[$z]->hname; ?></a><?php }
 	else { echo $paar[$z]->hname; } ?>
 	</td>
@@ -227,7 +228,7 @@ if ($y%2 != 0) { $zeilenr = 'zeile2'; }
 			<td class="tln"><?php echo $paar[$z]->gtln; ?></td>
 		<?php } ?>
 <td class="gast">
-<?php if ($paar[$z]->gpublished == 1) { ?>
+<?php if ($paar[$z]->gpublished == 1 AND $params['noBoardResults'] == '0') { ?>
 <a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $liga[0]->sid; ?>&liga=<?php echo $liga[0]->id; ?>&tlnr=<?php echo $paar[$z]->gtln; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $paar[$z]->gname; ?></a><?php }
 else { echo $paar[$z]->gname; } ?>
 </td>

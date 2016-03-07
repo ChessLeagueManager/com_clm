@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -23,7 +23,8 @@ $modus = CLMSWT::readInt ($path.$swt, 596);
 if (empty ($liga_mannschaften) || $modus != 1) { // keine Liga oder nicht vollrundig
 	$mturnier = 1;
 } */
-
+$noOrgReference = '0';
+$noBoardResults = '0';
 $liga = JRequest::getVar('liga', 0, 'default', 'int');
 ?>
 
@@ -52,23 +53,23 @@ $liga = JRequest::getVar('liga', 0, 'default', 'int');
 <form action="index.php" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data" >
 	<table width="100%" class="admintable"> 
 		<tr>
-			<td width="50%" style="vertical-align: top;">
+			<td width="35%" style="vertical-align: top;">
 				<fieldset class="adminform"> 
 					<legend><?php echo JText::_( 'SWT_LEAGUE_OVERWRITE_HINTS_TAB' ); ?></legend> 
 					<?php echo JText::_( 'SWT_LEAGUE_OVERWRITE_HINTS_TEXT' ); ?>
 				</fieldset>
 			</td>
-			<td width="50%" style="vertical-align: top;">
+			<td width="65%" style="vertical-align: top;">
 				<fieldset class="adminform"> 
 					<legend><?php echo JText::_( 'SWT_LEAGUE_OVERWRITE_TAB' ); ?></legend> 
 					<table width="100%">
 						<tr>
-							<td width="50%"><?php echo $this->lists['saisons'] ?></td>
-							<td width="50%"><?php echo JText::_( 'SWT_LEAGUE_OVERWRITE_SEASONS_TEXT' ); ?></td>
+							<td width="40%"><?php echo $this->lists['saisons'] ?></td>
+							<td width="60%"><?php echo JText::_( 'SWT_LEAGUE_OVERWRITE_SEASONS_TEXT' ); ?></td>
 						</tr>
 						<tr>
-							<td width="50%"><?php echo $this->lists['ligen'] ?></td>
-							<td width="50%"><?php echo JText::_( 'SWT_LEAGUE_OVERWRITE_LEAGUE_TEXT' ); ?></td>
+							<td width="40%"><?php echo $this->lists['ligen'] ?></td>
+							<td width="60%"><?php echo JText::_( 'SWT_LEAGUE_OVERWRITE_LEAGUE_TEXT' ); ?></td>
 						</tr>
 					</table>
 				</fieldset>
@@ -76,13 +77,43 @@ $liga = JRequest::getVar('liga', 0, 'default', 'int');
 					<legend><?php echo JText::_( 'SWT_LEAGUE_MODE_TAB' ); ?></legend> 
 					<table width="100%">
 						<tr>
-							<td width="50%">
+							<td width="40%">
 								<select name="mturnier" id="mturnier" value="0" size="1">
 									<option value="0" <?php if ($mturnier != 1) { echo 'selected="selected"'; } ?>><?php echo JText::_( 'SWT_MODE_LEAGUE' );?></option>
 									<option value="1" <?php if ($mturnier == 1) { echo 'selected="selected"'; } ?>><?php echo JText::_( 'SWT_MODE_MTURN' );?></option>
 								</select>
 							</td>
-							<td width="50%"><?php echo JText::_( 'SWT_MODE_TEXT' ); ?></td>
+							<td width="60%"><?php echo JText::_( 'SWT_MODE_TEXT' ); ?></td>
+						</tr>
+					</table>
+				</fieldset>
+				<br><br><br><br>
+				<fieldset class="adminform"> 
+					<legend style="font-size:120%;"><?php //echo JText::_( 'SWT_LEAGUE_NOORGREFERENCE_TAB' ); 
+						echo JText::_( 'SWT_LEAGUE_OPTIONS' ); ?><span style="font-size:70%";><?php echo JText::_( 'SWT_LEAGUE_OPTIONS_HINT' ); ?></span></legend> 
+					<table width="100%">
+						<tr>
+							<td width="40%">
+								<select name="noOrgReference" id="noOrgReference" value="0" size="1">
+									<option value="0" <?php if ($noOrgReference == '0') { echo 'selected="selected"'; } ?>><?php echo JText::_( 'SWT_NOORGREFERENCE_0' );?></option>
+									<option value="1" <?php if ($noOrgReference == '1') { echo 'selected="selected"'; } ?>><?php echo JText::_( 'SWT_NOORGREFERENCE_1' );?></option>
+								</select>
+							</td>
+							<td width="60%"><?php echo JText::_( 'SWT_NOORGREFERENCE_T0' )."<br>".JText::_( 'SWT_NOORGREFERENCE_T1' ); ?></td>
+						</tr>
+					</table>
+				</fieldset>
+				<fieldset class="adminform"> 
+					<legend><?php //echo JText::_( 'SWT_LEAGUE_NOBOARDRESULTS_TAB' ); ?></legend> 
+					<table width="100%">
+						<tr>
+							<td width="40%">
+								<select name="noBoardResults" id="noBoardResults" value="0" size="1">
+									<option value="0" <?php if ($noBoardResults == '0') { echo 'selected="selected"'; } ?>><?php echo JText::_( 'SWT_NOBOARDRESULTS_0' );?></option>
+									<option value="1" <?php if ($noBoardResults == '1') { echo 'selected="selected"'; } ?>><?php echo JText::_( 'SWT_NOBOARDRESULTS_1' );?></option>
+								</select>
+							</td>
+							<td width="60%"><?php echo JText::_( 'SWT_NOBOARDRESULTS_T0' )."<br>".JText::_( 'SWT_NOBOARDRESULTS_T1' ); ?></td>
 						</tr>
 					</table>
 				</fieldset>

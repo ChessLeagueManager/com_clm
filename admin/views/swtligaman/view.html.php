@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -33,6 +33,8 @@ class CLMViewSWTLigaman extends JViewLegacy {
 
 		// Der nächste Task ist von der aktuell bearbeiteten Mannschaft abhängig
 		$man = JRequest::getVar ('man', 0, 'default', 'int');		
+		$noOrgReference = JRequest::getVar ('noOrgReference', '0', 'default', 'string');		
+		$noBoardResults = JRequest::getVar ('noBoardResults', '0', 'default', 'string');		
 		$anz_mannschaften = $swt_db_data['anz_mannschaften'];
 
 		// Toolbar
@@ -90,7 +92,10 @@ class CLMViewSWTLigaman extends JViewLegacy {
 			$splist		= array ();
 			$splist[]	= JHtml::_('select.option', '0', JText::_( 'SWT_LEAGUE_PLAYER_SELECT' ), 'id', 'name');
 			$splist		= array_merge( $splist, $db_splist );
-			$splist[]	= JHtml::_('select.option', '-1', $swt_data['spieler_'.$i]['name'] . " " . JText::_( 'SWT_LEAGUE_NEW' ), 'id', 'name');
+			if ($noOrgReference == '0')
+				$splist[]	= JHtml::_('select.option', '-1', $swt_data['spieler_'.$i]['name'] . " " . JText::_( 'SWT_LEAGUE_NEW' ), 'id', 'name');
+			else
+				$splist[]	= JHtml::_('select.option', '-1', $swt_data['spieler_'.$i]['name'], 'id', 'name');
 			$blist		= JHtml::_('select.genericlist', $splist, 'dwzid_'.$i, 'class="inputbox" size="1"', 'id', 'name', $dwzid);
 			
 			$swt_spieler = $swt_data['spieler_'.$i]['name'];
@@ -98,6 +103,7 @@ class CLMViewSWTLigaman extends JViewLegacy {
 				$swt_spieler = '<b style="color: #f00">' . $swt_spieler . '</b>';
 				$swt_spieler .= '<br>'.$swt_data['spieler_'.$i]['zps'].($swt_data['spieler_'.$i]['mgl_nr']!="" ? "/".$swt_data['spieler_'.$i]['mgl_nr'] : "");
 			}
+			if ($noOrgReference == '0')
 			$tablerow = '<tr>'
 					  . '<td nowrap="nowrap">'
 					  . '<label for="dwzid_'.$i.'">' . JText::_( 'SWT_LEAGUE_PLAYER_NR' ).' '.$i.'</label>'
@@ -105,7 +111,17 @@ class CLMViewSWTLigaman extends JViewLegacy {
 					  . '<td>' . $blist . '</td>'
 					  . '<td>' . $swt_spieler . '</td>'
 					  . '</tr>';
-
+			elseif ($noBoardResults == '0')
+				$tablerow = '<tr>'
+					  . '<td nowrap="nowrap">'
+					  . '<label for="dwzid_'.$i.'">' . JText::_( 'SWT_LEAGUE_PLAYER_NR' ).' '.$i.'</label>'
+					  . '</td>'
+					  . '<td>' . $blist . '</td>'
+					  . '</tr>';
+			else
+				$tablerow = '<tr>'
+					  . '<td style="display:none;">' . $blist . '</td>'
+					  . '</tr>';
 			$stammtable .= $tablerow;
 		}
 		$tables['stammspieler'] = $stammtable;
@@ -121,7 +137,10 @@ class CLMViewSWTLigaman extends JViewLegacy {
 			$splist		= array ();
 			$splist[]	= JHtml::_('select.option', '0', JText::_( 'SWT_LEAGUE_PLAYER_SELECT' ), 'id', 'name');
 			$splist		= array_merge( $splist, $db_splist );
-			$splist[]	= JHtml::_('select.option', '-1', $swt_data['spieler_'.$i]['name'] . " " . JText::_( 'SWT_LEAGUE_NEW' ), 'id', 'name');
+			if ($noOrgReference == '0')
+				$splist[]	= JHtml::_('select.option', '-1', $swt_data['spieler_'.$i]['name'] . " " . JText::_( 'SWT_LEAGUE_NEW' ), 'id', 'name');
+			else
+				$splist[]	= JHtml::_('select.option', '-1', $swt_data['spieler_'.$i]['name'], 'id', 'name');
 			$blist		= JHtml::_('select.genericlist', $splist, 'dwzid_'.$i, 'class="inputbox" size="1"', 'id', 'name', $dwzid);
 
 			$swt_spieler = $swt_data['spieler_'.$i]['name'];
@@ -129,6 +148,7 @@ class CLMViewSWTLigaman extends JViewLegacy {
 				$swt_spieler = '<b style="color: #f00">' . $swt_spieler . '</b>';
 				$swt_spieler .= '<br>'.$swt_data['spieler_'.$i]['zps'].($swt_data['spieler_'.$i]['mgl_nr']!="" ? "/".$swt_data['spieler_'.$i]['mgl_nr'] : "");
 			}
+			if ($noOrgReference == '0')
 			$tablerow = '<tr>'
 					  . '<td nowrap="nowrap">'
 					  . '<label for="dwzid_'.$i.'">' . JText::_( 'SWT_LEAGUE_PLAYER_NR' ).' '.$i.'</label>'
@@ -136,7 +156,17 @@ class CLMViewSWTLigaman extends JViewLegacy {
 					  . '<td>' . $blist . '</td>'
 					  . '<td>' . $swt_spieler . '</td>'
 					  . '</tr>';
-
+			elseif ($noBoardResults == '0')
+				$tablerow = '<tr>'
+					  . '<td nowrap="nowrap">'
+					  . '<label for="dwzid_'.$i.'">' . JText::_( 'SWT_LEAGUE_PLAYER_NR' ).' '.$i.'</label>'
+					  . '</td>'
+					  . '<td>' . $blist . '</td>'
+					  . '</tr>';
+			else
+				$tablerow = '<tr>'
+					  . '<td style="display:none;">' . $blist . '</td>'
+					  . '</tr>';
 			$ersatztable .= $tablerow;
 		}
 		$tables['ersatzspieler'] = $ersatztable;

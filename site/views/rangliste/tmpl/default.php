@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -30,6 +30,7 @@ foreach ($paramsStringArray as $value) {
 	}
 }	
 if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
+if (!isset($params['noBoardResults'])) $params['noBoardResults'] = '0';
 
 $punkte		= $this->punkte;
 $spielfrei	= $this->spielfrei;
@@ -236,7 +237,7 @@ if (!$liga OR $liga[0]->published == "0") {
 			
 				echo '<td class="team">';
 			
-					if ($punkte[$x]->published == 1) {
+					if ($punkte[$x]->published == 1 AND $params['noBoardResults'] == '0') {
 						$link = new CLMcLink();
 						$link->view = 'mannschaft';
 						$link->more = array('saison' => $sid, 'liga' => $lid, 'tlnr' => $punkte[$x]->tln_nr, 'Itemid' => $item);

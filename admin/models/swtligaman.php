@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -131,6 +131,8 @@ class CLMModelSWTLigaman extends JModelLegacy {
 		$sid	= JRequest::getVar ('sid', 0, 'default', 'int' );
 		$lid	= JRequest::getVar ('lid', 0, 'default', 'int' );
         $zps    = JRequest::getVar( 'filter_zps', '0', 'default', 'string' );
+		$noOrgReference = JRequest::getVar ('noOrgReference', '0', 'default', 'string');		
+		$noBoardResults = JRequest::getVar ('noBoardResults', '0', 'default', 'string');		
 		
 		$swt_data		= $this->getDataSWT ();
 		$swt_db_data	= $this->getDataSWTdb ();

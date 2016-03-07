@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -184,6 +184,9 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 		$sid	= JRequest::getVar ('sid', 0, 'default', 'int');
 		$runde	= 1 + JRequest::getVar ('runde', 0, 'default', 'int');
 		$dgang	= 1 + JRequest::getVar ('dgang', 0, 'default', 'int');
+		$noOrgReference = JRequest::getVar('noOrgReference', '0', 'default', 'string');
+		$noBoardResults = JRequest::getVar('noBoardResults', '0', 'default', 'string');
+
 		
 		// zuvor in der DB gespeicherte Daten und (allgemeine) SWT-Daten
 		$swt_data		= $this->getDataSWT (1);
@@ -239,7 +242,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 					. '`heim`, `tln_nr`, `gegner`, `brettpunkte`, `manpunkte`, `published`';
 		
 		for ($p = 1; $p <= $anz_paarungen; $p++) {
-			
+			if (!isset($swt_data[$p])) break;
 			$htln_nr = $swt_data[$p]['heim']; // tln_nr der Heimmannschaft
 			$gtln_nr = $swt_data[$p]['gast']; // tln_nr der Gastmannschaft
 			
@@ -251,7 +254,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 			
 			$keine_ergebnisse = true;
 			$y1 = 0;
-
+		  if ($noBoardResults == '0') {
 			for ($b = 1; $b <= $anz_bretter; $b++) {
 			
 				// Einzelergebnisse 
@@ -350,6 +353,10 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				}
 				
 			} // for-Schleife Bretter
+		  } elseif ($noBoardResults == '1') {
+				$hbrettpunkte = $swt_data[$p]['hmmsum'];
+				$gbrettpunkte = $swt_data[$p]['gmmsum'];
+		  }
 			
 			// Mannschaftsergebnisse
 			$sieg_bed = $swt_db_data['sieg_bed'];
@@ -411,7 +418,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				$gmanpunkte = 0;
 			}
 			
-			if ($keine_ergebnisse) {
+			if ($keine_ergebnisse AND $noBoardResults == '0') {
 				$hbrettpunkte = null;
 				$gbrettpunkte = null;
 				$hmanpunkte = null;
@@ -478,7 +485,8 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				if ($this->debug_ausgaben > 1) {
 					echo "paarung: $p<br/>";
 				}
-				$swt_data[$p] = array_merge ($swt_data_man[$p], $swt_data_spl[$p]);	
+				if (isset($swt_data_man[$p]) AND isset($swt_data_spl[$p])) {
+				$swt_data[$p] = array_merge ($swt_data_man[$p], $swt_data_spl[$p]);	}
 			}
 			$this->_swt_data = $swt_data;
 			
@@ -618,6 +626,8 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 		$dgang	= JRequest::getVar ('dgang', 0, 'default', 'int');
 		$mturnier = JRequest::getVar ('mturnier', 0, 'default', 'int');
 		$ungerade = JRequest::getVar ('ungerade', false, 'default', 'bool');
+		$noOrgReference = JRequest::getVar('noOrgReference', '0', 'default', 'string');
+		$noBoardResults = JRequest::getVar('noBoardResults', '0', 'default', 'string');
 		
 		// schon gespeicherte SWT-Daten aus der DB holen
 		$swt_db_data = $this->getDataSWTdb ();
@@ -647,11 +657,6 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 		
 		$abstand		= $anz_durchgaenge * $anz_runden * 19;
 		
-/*		$sql = ' SELECT name FROM #__clm_swt_mannschaften'
-				. ' WHERE swt_id = '. $swt_id
-				. ' ORDER BY tln_nr ASC';
-		$mannschaftsname = $this->_getList ($sql);*/
-
 		// SWT-Mannschaftsdaten
 		$swt_man = $this->_getDataSWTman ();
 		
@@ -691,7 +696,18 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 			} else {
 				if (isset($tln_paarung[$spieler[$s-1]->tln_nr])) $paarung = $tln_paarung[$spieler[$s-1]->tln_nr];
 			}
-
+			if ($paarung == 0 AND 
+				isset($spieler[$s-1]->tln_nr) AND  
+				$spieler[$s-1]->tln_nr > 0) {
+				for ($ip = 1; $ip <= count($swt_man); $ip++) {
+					if (!isset($swt_man[$ip]['heim']) OR !isset($swt_man[$ip]['gast'])) break; 
+					if ($spieler[$s-1]->tln_nr == $swt_man[$ip]['heim'] OR $spieler[$s-1]->tln_nr == $swt_man[$ip]['gast']) {
+						$paarung = $ip;
+					}
+					if ($paarung > 0) break;
+				}
+			}
+		if ($paarung != 0) {
 			$attribut	= CLMSWT::readInt ($swt, $offset + 15);
 			if ($attribut == 34 OR $attribut == 2) $kampflos	= 2; else $kampflos = 0;
 			$spielfrei	= ($attribut == 3 || $attribut == 51);
@@ -744,7 +760,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 			}
 			
 			if ($this->debug_ausgaben > 2) {
-				echo "<pre>paarung, brett, spieler: $paarung, $brett, $s<br/>";
+				echo "<pre>paarung, brett, spieler, mannschaft, ergebnis: $paarung, $brett, $s, $mannschaft, $ergebnis<br/>";
 				echo "offset: $offset";
 				for ($ofi = 0; $ofi <= 18; $ofi++) {
 					$byte_value = CLMSWT::readInt ($swt, $offset + $ofi);
@@ -790,7 +806,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 //				echo "heim: $heim, gast: $gast, "; //DBG
 //				echo "mannschaft: $mannschaft"; //DBG
 			} */
-			
+			}
 
 
 			if ($paarung != 0) {
@@ -800,7 +816,10 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				// Heim- und Gastmannschaft setzen
 				$heim = $swt_man[$paarung]['heim'];
 				$gast = $swt_man[$paarung]['gast'];
-			
+			if ($this->debug_ausgaben > 2) {
+				echo "<pre>paarung, brett, spieler: $paarung, $brett, $s -- ergebnis, attribut, kampflos: $ergebnis, $attribut, $kampflos<br/>"; echo "</pre>";
+			}
+			  if ($noBoardResults == '0') {
 				// Einzelergebnis speichern				
 				if		($ergebnis == 0)					{ $teil_erg = '?';		$trenn = '';  	$teil_ergk = '';		$trennk = ''; }
 				elseif	($ergebnis == 1  && $kampflos == 0) { $teil_erg = '0';		$trenn = '-';  	$teil_ergk = '';		$trennk = ''; }
@@ -858,10 +877,11 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				elseif	($ergebnis == 3 OR $ergebnis == 7 OR $ergebnis == 11 OR $ergebnis == 15) $emsum = 1;
 				else	$emsum = 0;
 				//}
+			  }
 				if		($ergebnis >= 8 AND $ergebnis <=11) $mmsum = .5;
 				elseif	($ergebnis >= 12 AND $ergebnis <=15) $mmsum = 1;
 				else	$mmsum = 0;
-			
+			  if ($noBoardResults == '0') {
 				$tmp_erg[$paarung][$brett][] = $teil_erg;
 				if (!isset ($tmp_trenn[$paarung][$brett]) OR $tmp_trenn[$paarung][$brett] == '-') {
 					$tmp_trenn[$paarung][$brett] = $trenn;
@@ -931,14 +951,23 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 //						echo "offset: $offset"; //DBG
 //					} //DBG
 				}
-				
+			  }
+			  if ($noBoardResults == '1') {
+					if ($mannschaft == $heim) {
+						if (!isset($swt_data[$paarung]['hmmsum'])) $swt_data[$paarung]['hmmsum'] = 0;
+						$swt_data[$paarung]['hmmsum'] += $mmsum;
+					} elseif ($mannschaft == $gast) {
+						if (!isset($swt_data[$paarung]['gmmsum'])) $swt_data[$paarung]['gmmsum'] = 0;
+						$swt_data[$paarung]['gmmsum'] += $mmsum;
+					}
+			  }
 			} // ENDE if ($paarung != 0)
 			
 		  }
 			$offset += $abstand;
 
 		}
-		
+	  if ($noBoardResults == '0') {
 		for ($p = 1; $p <= $anz_paarungen; $p++) {
 		
 			// bei ungerader Mannschaftsanzahl: spielfreie Paarung korrigieren
@@ -1152,6 +1181,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				//echo "<br>swt_data[$p][ergstrk_$b] ".$swt_data[$p]['ergstrk_'.$b]."  "."swt_data[$p][ergk_$b] ".$swt_data[$p]['ergk_'.$b];
 			}
 		}
+	  }
 		if ($this->debug_ausgaben > 2) {
 			echo "<pre>swt_data in getDataSWTspl (): ";
 			print_r ($swt_data);
@@ -1181,7 +1211,8 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				echo "<td>".$swt_man[$p]['heim']."</td><td>".$heim_name."</td>";
 				echo "<td>".$swt_man[$p]['gast']."</td><td>".$gast_name."</td>";
 				echo "<td>Ergebnis</td></tr>";
-				
+				echo "<br><br>p $p:"; var_dump($swt_man[$p]);
+				if ($noBoardResults == '0') {
 				for ($b = 1; $b <=  $anz_bretter; $b++) {
 					foreach ($tmp_spl as $spl) {
 						if ($spl->id == $swt_data[$p]['hbrett_'.$b]) {
@@ -1208,7 +1239,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 					echo "</tr>";
 					unset ($hname);
 					unset ($gname);
-				}
+			  } }
 				echo "</table>";
 				echo "<br/><br/>";
 			}
