@@ -904,7 +904,7 @@ function xml_dateien()
 				.'<td width="15%"><a href="index.php?option=com_clm&view=auswertung&task=delete&datei='.$files[$x].'" '
 				//.'onClick="submitform();"'
 				.'>'.JText::_( 'DELETE').'</a></td>';
-			if ($countryversion =="en") {
+			if ($countryversion =="en-out") {  //download funktioniert so nicht, deshalb deaktiviert für 3.2.4
 				$dateien .= '<td width="15%"><a href="index.php?option=com_clm&view=auswertung&task=download&datei='.$files[$x].'" '
 							.'>'.JText::_( 'DB_DOWNLOAD').'</a></td>';
 			} else { 

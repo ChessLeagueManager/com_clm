@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -128,11 +128,11 @@ $pdf->SetTextColor(255);
 			$pdf->Cell(10-$breite,$zelle,JText::_('WP'),1,0,'C',1); }
 	} else {
 		if ( $liga[0]->tiebr1 > 0 AND $liga[0]->tiebr1 < 50) { 
-			$pdf->Cell(10-$breite,$zelle,JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr1),1,0,'C',1); }
+			$pdf->Cell(13-$breite,$zelle,JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr1),1,0,'C',1); }
 		if ( $liga[0]->tiebr2 > 0 AND $liga[0]->tiebr2 < 50) { 
-			$pdf->Cell(10-$breite,$zelle,JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr2),1,0,'C',1); }
+			$pdf->Cell(13-$breite,$zelle,JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr2),1,0,'C',1); }
 		if ( $liga[0]->tiebr3 > 0 AND $liga[0]->tiebr3 < 50) { 
-			$pdf->Cell(10-$breite,$zelle,JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr3),1,0,'C',1); }
+			$pdf->Cell(13-$breite,$zelle,JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr3),1,0,'C',1); }
 	}
 	$pdf->Ln();
 
@@ -160,11 +160,11 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 			$pdf->Cell(10-$breite,$zelle,$punkte[$x]->wp,1,0,'C',$fc); } 
 	} else {
 		if ( $liga[0]->tiebr1 > 0 AND $liga[0]->tiebr1 < 50) {  
-			$pdf->Cell(10-$breite,$zelle,CLMText::tiebrFormat($liga[0]->tiebr1, $punkte[$x]->sumtiebr1),1,0,'C',$fc); }
+			$pdf->Cell(13-$breite,$zelle,CLMText::tiebrFormat($liga[0]->tiebr1, $punkte[$x]->sumtiebr1),1,0,'C',$fc); }
 		if ( $liga[0]->tiebr2 > 0 AND $liga[0]->tiebr2 < 50) {  
-			$pdf->Cell(10-$breite,$zelle,CLMText::tiebrFormat($liga[0]->tiebr2, $punkte[$x]->sumtiebr2),1,0,'C',$fc); }
+			$pdf->Cell(13-$breite,$zelle,CLMText::tiebrFormat($liga[0]->tiebr2, $punkte[$x]->sumtiebr2),1,0,'C',$fc); }
 		if ( $liga[0]->tiebr3 > 0 AND $liga[0]->tiebr3 < 50) {  
-			$pdf->Cell(10-$breite,$zelle,CLMText::tiebrFormat($liga[0]->tiebr3, $punkte[$x]->sumtiebr3),1,0,'C',$fc); }
+			$pdf->Cell(13-$breite,$zelle,CLMText::tiebrFormat($liga[0]->tiebr3, $punkte[$x]->sumtiebr3),1,0,'C',$fc); }
 	}
 	$pdf->Ln();
 	}

@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.2.4 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.2.4 - [08-03-2016] - - - - - - - - - - - - - - - - - - - -
 ^ Überarbeitung engl. Textfiles für Backend
 # SWT-Import Liga: Nachbesserung bei kampflos und Erg.korrektur nach TO
 + Ligen: Rundendaten von-bis sowie Termin pro Paarung möglich
@@ -23,6 +23,7 @@ $ -> Language fix or change
 # Liga-Ranking: Buchholz-Wertung auf Mannschaftspunkte umgestellt
 + SWT-Import: erweitert auf Schul- und Freizeitturniere ohne DSB-Bezug
 + SWT-Import: erweitert auf M-turniere ohne Erfassung der Einzelergebnissen
+# M-Turnier: Erweiterung Wertebereich Feinwertungen auf decimal(7,3)
 
 - - - - - 3.2.3 - [22-01-2016] - - - - - - - - - - - - - - - - - - - -
 + Menüeintagstyp für Liga-Paarungsliste
