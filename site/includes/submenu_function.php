@@ -8,13 +8,26 @@ function clm_submenu($array) {
 	}
 	$out = '<div class="clm-navigator"><ul>';
 	for ($i = 0;$i < count($array);$i++) {
-		$out.= clm_submenu_href($array[$i],(count($array[$i][3]) > 0));
+		$ph = count($array[$i][3])/2;
+
+ 		$out.= clm_submenu_href($array[$i],(count($array[$i][3]) > 0));
 		if (count($array[$i][3]) > 0) {
 			$out.= '<ul>';
+		  if (!isset($array[2][3][0][2][1][1]) OR $array[2][3][0][2][1][1] != 'mannschaft' OR count($array[$i][3]) < (count($array[2][3]) + 8)) {
 			for ($p = 0;$p < count($array[$i][3]);$p++) {
 				$out.= clm_submenu_href($array[$i][3][$p],false) . '</li>';
 			}
 			$out.= '</ul>';
+		  } else {	  
+			for ($p = 0;$p < count($array[$i][3])/2;$p++) {
+				$p1 = $p + $ph;
+				$out.= '<li>';
+				$out.= str_replace('<li','<span style="display:inline-block; text-align:center; font-weight:500 !important; width:50%;" ',clm_submenu_href($array[$i][3][$p],false)) . '</span>';
+				$out.= str_replace('<li','<span style="display:inline-block; text-align:center; font-weight:500; width:50%;" ',clm_submenu_href($array[$i][3][($p1)],false)) . '</span>';
+				$out.= '</li>';
+			}
+			$out.= '</ul>';
+		  }
 		}
 		$out.= '</li>';
 	}

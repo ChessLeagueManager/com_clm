@@ -24,6 +24,7 @@ $ -> Language fix or change
 + SWT-Import: erweitert auf Schul- und Freizeitturniere ohne DSB-Bezug
 + SWT-Import: erweitert auf M-turniere ohne Erfassung der Einzelergebnissen
 # M-Turnier: Erweiterung Wertebereich Feinwertungen auf decimal(7,3)
+# Liga-Submenü bei Bedarf 2-spaltig
 
 - - - - - 3.2.3 - [22-01-2016] - - - - - - - - - - - - - - - - - - - -
 + Menüeintagstyp für Liga-Paarungsliste
