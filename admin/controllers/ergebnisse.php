@@ -577,6 +577,8 @@ function remove()
 			." , editor = NULL"
 			." , zeit = '0000-00-00 00:00:00'"
 			." , edit_zeit = '0000-00-00 00:00:00'"
+			." , ergebnis = NULL"
+			." , kampflos = NULL"
 			." , brettpunkte = NULL"
 			." , manpunkte = NULL"
 			." , ko_decision = 0"          //mtmt
@@ -596,6 +598,8 @@ function remove()
 			." , editor = NULL"
 			." , zeit = '0000-00-00 00:00:00'"
 			." , edit_zeit = '0000-00-00 00:00:00'"
+			." , ergebnis = NULL"
+			." , kampflos = NULL"
 			." , brettpunkte = NULL"
 			." , manpunkte = NULL"
 			." , ko_decision = 0"          //mtmt
@@ -920,28 +924,63 @@ function save()
 	$tlnr=$db->loadObjectList();
 	$tln_nr	= $tlnr[0]->tln_nr;
 	$gegner	= $tlnr[0]->gegner;
+	$hkampflos = 0;
+	$gkampflos = 0;
 
 	// Mannschaftspunkte Heim / Gast verteilen
 	// Standard : Mehrheit der BP gewinnt, BP gleich -> Punkteteilung
 	if ($sieg_bed == 1) {
-		if ( $hmpunkte >  $gmpunkte ) { $hman_punkte = $man_sieg; $gman_punkte = $man_nieder;}
-		if ( $hmpunkte == $gmpunkte ) { $hman_punkte = $man_remis; $gman_punkte = $man_remis;}
-		if ( $hmpunkte <  $gmpunkte ) { $hman_punkte = $man_nieder; $gman_punkte = $man_sieg;}
+		if ( $hmpunkte >  $gmpunkte ) { 
+			$hman_punkte = $man_sieg; 
+			$gman_punkte = $man_nieder;
+			$hergebnis = 1;
+			$gergebnis = 0;
+		}
+		if ( $hmpunkte == $gmpunkte ) { 
+			$hman_punkte = $man_remis; 
+			$gman_punkte = $man_remis;
+			$hergebnis = 2;
+			$gergebnis = 2;
+		}
+		if ( $hmpunkte <  $gmpunkte ) { 
+			$hman_punkte = $man_nieder; 
+			$gman_punkte = $man_sieg;
+			$hergebnis = 1;
+			$gergebnis = 0;
+		}
 	}
 	// erweiterter Standard : mehr als die H�lfte der BP -> Sieg, H�lfte der BP -> halbe MP Zahl
 	if ($sieg_bed == 2) {
-		if ( $hmpunkte >  (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_sieg;}
-		if ( $hmpunkte == (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_remis;}
-		if ( $hmpunkte <  (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_nieder;}
+		if ( $hmpunkte >  (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_sieg; $hergebnis = 1;}
+		if ( $hmpunkte == (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_remis; $hergebnis = 2;}
+		if ( $hmpunkte <  (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_nieder; $hergebnis = 0;}
 		
-		if ( $gmpunkte >  (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_sieg;}
-		if ( $gmpunkte == (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_remis;}
-		if ( $gmpunkte <  (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_nieder;}
+		if ( $gmpunkte >  (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_sieg; $gergebnis = 1;}
+		if ( $gmpunkte == (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_remis; $gergebnis = 2;}
+		if ( $gmpunkte <  (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_nieder; $gergebnis = 0;}
 	}
 	// Antrittspunkte addieren falls angetreten
 	if ( $stamm > $man_kl_punkte ) { $hman_punkte = $hman_punkte + $man_antritt;}
+	else { 
+		$hkampflos = 1;
+		$gkampflos = 1;
+	}
 	if ( $stamm > $gman_kl_punkte ) { $gman_punkte = $gman_punkte + $man_antritt;}
-
+	else { 
+		$hkampflos = 1;
+		$gkampflos = 1;
+	}
+			if ($hkampflos == 1) {
+				if ($hergebnis == 0) $hergebnis = 4;
+				if ($hergebnis == 1) $hergebnis = 5;
+				if ($hergebnis == 2) $hergebnis = 6;
+			}
+			if ($gkampflos == 1) {
+				if ($gergebnis == 0) $gergebnis = 4;
+				if ($gergebnis == 1) $gergebnis = 5;
+				if ($gergebnis == 2) $gergebnis = 6;
+			}
+ 
 	// Datum und Uhrzeit für Meldung
 	//$now = $date->toSQL();
 	$now = clm_core::$cms->getNowDate();
@@ -949,6 +988,8 @@ function save()
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET gemeldet = ".$meldung
 		." , zeit = '$now'"
+		." , ergebnis = ".$hergebnis
+		." , kampflos = ".$hkampflos
 		." , brettpunkte = ".$hmpunkte
 		." , manpunkte = ".$hman_punkte
 		." , wertpunkte = ".$hwpunkte
@@ -967,6 +1008,8 @@ function save()
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET gemeldet = ".$meldung
 		." , zeit = '$now'"
+		." , ergebnis = ".$gergebnis
+		." , kampflos = ".$gkampflos
 		." , brettpunkte = ".$gmpunkte
 		." , manpunkte = ".$gman_punkte
 		." , wertpunkte = ".$gwpunkte
@@ -1216,6 +1259,8 @@ function save()
 	$tlnr=$db->loadObjectList();
 	$tln_nr	= $tlnr[0]->tln_nr;
 	$gegner	= $tlnr[0]->gegner;
+	$hkampflos = 0;
+	$gkampflos = 0;
 
 	// Mannschaftspunkte Heim / Gast
 	$hman_punkte = 0;
@@ -1224,30 +1269,65 @@ function save()
 		// Mannschaftspunkte Heim / Gast
 	// Standard : Mehrheit der BP gewinnt, BP gleich -> Punkteteilung
 	if ($sieg_bed == 1) {
-		if ( $hmpunkte >  $gmpunkte ) { $hman_punkte = $man_sieg; $gman_punkte = $man_nieder;}
-		if ( $hmpunkte == $gmpunkte ) { $hman_punkte = $man_remis; $gman_punkte = $man_remis;}
-		if ( $hmpunkte <  $gmpunkte ) { $hman_punkte = $man_nieder; $gman_punkte = $man_sieg;}
+		if ( $hmpunkte >  $gmpunkte ) { 
+			$hman_punkte = $man_sieg; 
+			$gman_punkte = $man_nieder;
+			$hergebnis = 1;
+			$gergebnis = 0;
+		}
+		if ( $hmpunkte == $gmpunkte ) { 
+			$hman_punkte = $man_remis; 
+			$gman_punkte = $man_remis;
+			$hergebnis = 2;
+			$gergebnis = 2;
+		}
+		if ( $hmpunkte <  $gmpunkte ) { 
+			$hman_punkte = $man_nieder; 
+			$gman_punkte = $man_sieg;
+			$hergebnis = 0;
+			$gergebnis = 1;
+		}
 	}
-	// erweiterter Standard : mehr als die Hälfte der BP -> Sieg, Hälfte der BP -> halbe MP Zahl
+	// erweiterter Standard : mehr als die H�lfte der BP -> Sieg, H�lfte der BP -> halbe MP Zahl
 	if ($sieg_bed == 2) {
-		if ( $hmpunkte >  (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_sieg;}
-		if ( $hmpunkte == (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_remis;}
-		if ( $hmpunkte <  (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_nieder;}
+		if ( $hmpunkte >  (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_sieg; $hergebnis = 1;}
+		if ( $hmpunkte == (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_remis; $hergebnis = 2;}
+		if ( $hmpunkte <  (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_nieder; $hergebnis = 0;}
 		
-		if ( $gmpunkte >  (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_sieg;}
-		if ( $gmpunkte == (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_remis;}
-		if ( $gmpunkte <  (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_nieder;}
+		if ( $gmpunkte >  (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_sieg; $gergebnis = 1;}
+		if ( $gmpunkte == (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_remis; $gergebnis = 2;}
+		if ( $gmpunkte <  (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_nieder; $gergebnis = 0;}
 	}
 	// Antrittspunkte addieren falls angetreten
 	if ( $stamm > $man_kl_punkte ) { $hman_punkte = $hman_punkte + $man_antritt;}
+	else { 
+		$hkampflos = 1;
+		$gkampflos = 1;
+	}
 	if ( $stamm > $gman_kl_punkte ) { $gman_punkte = $gman_punkte + $man_antritt;}
+	else { 
+		$hkampflos = 1;
+		$gkampflos = 1;
+	}
+			if ($hkampflos == 1) {
+				if ($hergebnis == 0) $hergebnis = 4;
+				if ($hergebnis == 1) $hergebnis = 5;
+				if ($hergebnis == 2) $hergebnis = 6;
+			}
+			if ($gkampflos == 1) {
+				if ($gergebnis == 0) $gergebnis = 4;
+				if ($gergebnis == 1) $gergebnis = 5;
+				if ($gergebnis == 2) $gergebnis = 6;
+			}
 	}
 	// Datum und Uhrzeit für Editorzeit
 	$now = $date->toSQL();
 	// Für Heimmannschaft updaten
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET editor = ".$meldung
-		." , edit_zeit = '$now'";
+		." , edit_zeit = '$now'"
+		." , ergebnis = ".$hergebnis
+		." , kampflos = ".$hkampflos;
 		if($counter =="0") {
 			$query = $query
 			." , brettpunkte = ".$hmpunkte
@@ -1270,7 +1350,9 @@ function save()
 	// Für Gastmannschaft updaten
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET editor = ".$meldung
-		." , edit_zeit = '$now'";
+		." , edit_zeit = '$now'"
+		." , ergebnis = ".$hergebnis
+		." , kampflos = ".$hkampflos;
 		if($counter =="0") {
 			$query = $query
 			." , brettpunkte = ".$gmpunkte
@@ -2261,6 +2343,18 @@ function kampflos($gast)
 		$antritt	= $liga_sl->antritt;
 		$man_sieg	= $liga_sl->man_sieg;
 		$man_antritt	= $liga_sl->man_antritt;
+	//Liga-Parameter aufbereiten
+		$paramsStringArray = explode("\n", $liga_sl->params);
+		$params = array();
+		foreach ($paramsStringArray as $value) {
+			$ipos = strpos ($value, '=');
+			if ($ipos !==false) {
+				$key = substr($value,0,$ipos);
+				$params[$key] = substr($value,$ipos+1);
+			}
+		}	
+		if (!isset($params['noOrgReference']))  {   //Standardbelegung
+			$params['noOrgReference'] = '0'; }
 
 	// Prüfen ob User Berechtigung zum editieren hat
 	$clmAccess = clm_core::$access;      
@@ -2293,7 +2387,7 @@ function kampflos($gast)
 	$data	= $db->loadObjectList();
 
 	// Wenn "Spielfrei" kampflos gesetzt wurde
-	if ( ($data[0]->hzps =="0" AND $gast == "heim") OR ( $data[0]->gzps =="0" AND $gast == "gast")) {
+	if ((($data[0]->hzps =="0" AND $gast == "heim") OR ( $data[0]->gzps =="0" AND $gast == "gast")) AND $params['noOrgReference'] == '0') {
 		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_SPIELFREI' ) );
 		$mainframe->redirect( $link);
 					}
@@ -2311,6 +2405,8 @@ function kampflos($gast)
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET brettpunkte = '".$brett_punkte."'"
 		." , manpunkte = '".$man_punkte."'"
+		." , ergebnis = 5 "
+		." , kampflos = 1 "
 		." , zeit = '$now'"
 		." , gemeldet = '$meldung'"
 		." , comment = '$comment'"
@@ -2328,6 +2424,8 @@ function kampflos($gast)
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET brettpunkte = '0'"
 		." , manpunkte = '0'"
+		." , ergebnis = 4 "
+		." , kampflos = 1 "
 		." , zeit = '$now'"
 		." , gemeldet = '$meldung'"
 		." , comment = '$comment'"
@@ -2363,6 +2461,9 @@ function kampflos($gast)
 		$db->setQuery($query);
 		$db->query();	
 	}
+
+	// errechnte/aktualisiere Rangliste 
+	clm_core::$api->db_tournament_ranking($data[0]->lid,true); 
 
 	// Log schreiben
 	$clmLog = new CLMLog();

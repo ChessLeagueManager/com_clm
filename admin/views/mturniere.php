@@ -70,6 +70,8 @@ class CLMViewMTurniere
 		$row->params['noOrgReference'] = '0'; }
 	if (!isset($row->params['noBoardResults']))  {   //Standardbelegung
 		$row->params['noBoardResults'] = '0'; }
+	if (!isset($row->params['optionTiebreakersFideCorrect']))  {   //Standardbelegung
+		$row->params['optionTiebreakersFideCorrect'] = '0'; }
 
 	?>
 	
@@ -362,8 +364,12 @@ class CLMViewMTurniere
 		<option value="51" <?php if ($row->tiebr3 == 51) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_51' );?></option>
 		</select>
 	</td>
-	<td colspan="2">
-	</td>
+					<td class="paramlist_key">
+						<?php echo JText::_('MTURN_TIEBREAKERSFIDECORRECT'); ?>:
+					</td>
+					<td class="paramlist_value"><fieldset class="radio">
+						<?php echo JHtml::_('select.booleanlist', 'params[optionTiebreakersFideCorrect]', 'class="inputbox"', $row->params['optionTiebreakersFideCorrect']); ?>
+					</fieldset></td>
 	</tr>
 	
 	<tr>

@@ -12,6 +12,10 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.2.4 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
++ Feinwertung MTurnier: Buchholz mit FIDE-Ranglistenkorrektur
+# SWT-Import MTurnier: Marker FIDE-Ranglistenkorrektur
+
 - - - - - 3.2.4 - [08-03-2016] - - - - - - - - - - - - - - - - - - - -
 ^ Überarbeitung engl. Textfiles für Backend
 # SWT-Import Liga: Nachbesserung bei kampflos und Erg.korrektur nach TO

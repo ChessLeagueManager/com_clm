@@ -239,7 +239,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 		$anz_paarungen = ceil ($anz_mannschaften / 2);
 		
 		$m_fields = '`sid`, `swt_id`, `runde`, `paar`, `dg`, '
-					. '`heim`, `tln_nr`, `gegner`, `brettpunkte`, `manpunkte`, `published`';
+					. '`heim`, `tln_nr`, `gegner`, `ergebnis`, `kampflos`, `brettpunkte`, `manpunkte`, `published`';
 		
 		for ($p = 1; $p <= $anz_paarungen; $p++) {
 			if (!isset($swt_data[$p])) break;
@@ -360,29 +360,42 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 			
 			// Mannschaftsergebnisse
 			$sieg_bed = $swt_db_data['sieg_bed'];
+			$hkampflos = 0;
+			$gkampflos = 0;
 			
 			if ($swt_data[$p]['heim_kampflos'] != 2) { // Heimmannschaft ist angetreten
 				$hmanpunkte = $man_antritt;
+			} else {
+				$hkampflos = 1;
+				$gkampflos = 1;
 			}
 			
 			if ($swt_data[$p]['gast_kampflos'] != 2) { // Gastmannschaft ist angetreten
 				$gmanpunkte = $man_antritt;
+			} else {
+				$hkampflos = 1;
+				$gkampflos = 1;
 			}
-			
 			
 			if ($sieg_bed == 1) { // Standard: Mannschaft mit mehr Brettpunkten gewinnt, bei BP-Gleichheit wird geteilt
 			
 				if ($hbrettpunkte > $gbrettpunkte) {
 					$hmanpunkte += $man_sieg;
 					$gmanpunkte += $man_nieder;
+					$hergebnis = 1;
+					$gergebnis = 0;
 				}
 				elseif ($hbrettpunkte == $gbrettpunkte) {
 					$hmanpunkte += $man_remis;
 					$gmanpunkte += $man_remis;
+					$hergebnis = 2;
+					$gergebnis = 2;
 				}
 				else { // $hbrettpunkte < $gbrettpunkte
 					$hmanpunkte += $man_nieder;
 					$gmanpunkte += $man_sieg;
+					$hergebnis = 0;
+					$gergebnis = 1;
 				}
 			
 			}
@@ -393,22 +406,24 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				
 				if ($hbrettpunkte > $haelfte) {
 					$hmanpunkte += $man_sieg;
-				}
-				elseif ($hbrettpunkte == $haelfe) {
+					$hergebnis = 1;				
+				} elseif ($hbrettpunkte == $haelfe) {
 					$hmanpunkte += $man_remis;
-				}
-				else { // $hbrettpunkte < $haelfte
+					$hergebnis = 2;				
+				} else { // $hbrettpunkte < $haelfte
 					$hmanpunkte += $man_nieder;
+					$hergebnis = 0;				
 				}
 				
 				if ($gbrettpunkte > $haelfte) {
 					$gmanpunkte += $man_sieg;
-				}
-				elseif ($gbrettpunkte == $haelfe) {
+					$gergebnis = 1;
+				} elseif ($gbrettpunkte == $haelfe) {
 					$gmanpunkte += $man_remis;
-				}
-				else { // $gbrettpunkte < $haelfte
+					$gergebnis = 2;
+				} else { // $gbrettpunkte < $haelfte
 					$gmanpunkte += $man_nieder;
+					$gergebnis = 0;
 				}
 				
 			}
@@ -416,6 +431,8 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 			if ($hbrettpunkte == 0 && $gbrettpunkte == 0) { // Kampf hat (noch) nicht stattgefunden
 				$hmanpunkte = 0;
 				$gmanpunkte = 0;
+				$hergebnis = null;
+				$gergebnis = null;
 			}
 			
 			if ($keine_ergebnisse AND $noBoardResults == '0') {
@@ -423,13 +440,28 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				$gbrettpunkte = null;
 				$hmanpunkte = null;
 				$gmanpunkte = null;
+				$hergebnis = null;
+				$gergebnis = null;
+			}
+			
+			if ($hkampflos == 1) {
+				if ($hergebnis == 0) $hergebnis = 4;
+				if ($hergebnis == 1) $hergebnis = 5;
+				if ($hergebnis == 2) $hergebnis = 6;
+			}
+			if ($gkampflos == 1) {
+				if ($gergebnis == 0) $gergebnis = 4;
+				if ($gergebnis == 1) $gergebnis = 5;
+				if ($gergebnis == 2) $gergebnis = 6;
 			}
 			
 			$m_hvalues = '"'.$sid.'", "'.$swt_id.'", "'.$runde.'", "'.$p.'", "'.$dgang.'", '
-						. '"1", "'.$htln_nr.'", "'.$gtln_nr.'", "'.$hbrettpunkte.'", "'.$hmanpunkte . '", "1"';
+						. '"1", "'.$htln_nr.'", "'.$gtln_nr.'", "'.$hergebnis.'", "'.$hkampflos.'", "'
+						.$hbrettpunkte.'", "'.$hmanpunkte . '", "1"';
 						
 			$m_gvalues = '"'.$sid.'", "'.$swt_id.'", "'.$runde.'", "'.$p.'", "'.$dgang.'", '
-						. '"0", "'.$gtln_nr.'", "'.$htln_nr.'", "'.$gbrettpunkte.'", "'.$gmanpunkte . '", "1"';
+						. '"0", "'.$gtln_nr.'", "'.$htln_nr.'", "'.$gergebnis.'", "'.$gkampflos.'", "'
+						.$gbrettpunkte.'", "'.$gmanpunkte . '", "1"';
 						
 			$query = ' INSERT IGNORE INTO #__clm_swt_rnd_man'
 					. ' ( ' . $m_fields . ' ) '
@@ -557,10 +589,16 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				echo "offset: $offset<br/>";
 			}
 			$farbe		= CLMSWT::readInt ($swt, $offset + 8);
+			if ($farbe == 2 OR $farbe == 4) { 
+				$farbe = $farbe - 1;
+				$kampflos = 2;
+			} else {
+				$kampflos = 0;
+			}
 			$heimrecht	= ($farbe == 1);
 			$gegner		= CLMSWT::readInt ($swt, $offset + 9) - 230;
 			$paarung	= CLMSWT::readInt ($swt, $offset + 13);
-			$kampflos	= CLMSWT::readInt ($swt, $offset + 15);			
+			//$kampflos	= CLMSWT::readInt ($swt, $offset + 15);			
 
 			$swt_data[$paarung]['farbe'] = $farbe;
 			

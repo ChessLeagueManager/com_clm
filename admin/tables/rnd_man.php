@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -26,6 +26,8 @@ class TableCLMRnd_man extends JTable
 	var $heim		= null;
 	var $tln_nr		= null;
 	var $gegner		= null;
+	var $ergebnis	= null;
+	var $kampflos	= null;
 	var $brettpunkte	= null;
 	var $manpunkte		= null;
 	var $bp_sum		= null;

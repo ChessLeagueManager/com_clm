@@ -276,6 +276,11 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		$swt_data['tiebr2'] = $clm_fein[$man_dritt];
 		$swt_data['tiebr3'] = 0;
 		
+		//Ranglistenkorrektur
+		//$swt_data['optionTiebreakersFideCorrect'] = $this->_SWTReadBool($swt,675);
+		if ($this->_SWTReadInt($swt,675) == 0) $swt_data['optionTiebreakersFideCorrect'] = false; 
+		else $swt_data['optionTiebreakersFideCorrect'] = true;
+
 		// Berliner Wertung
 		
 		if ($man_zweit == 16 || $man_dritt == 16) { // Berliner Wertung
@@ -359,6 +364,7 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		//Liga-Parameter aktualisieren
 		$default_params['anz_sgp'] = JRequest::getVar('anz_sgp');
 		$default_params['color_order'] = JRequest::getVar('color_order');
+		$default_params['optionTiebreakersFideCorrect'] = JRequest::getVar('optionTiebreakersFideCorrect');
 		$default_params['noOrgReference'] = JRequest::getVar('noOrgReference', '0', 'default', 'string');
 		$default_params['noBoardResults'] = JRequest::getVar('noBoardResults', '0', 'default', 'string');
 		if 	($default_params['noBoardResults'] == '1' AND $default_params['noOrgReference'] == '0') {

@@ -244,10 +244,12 @@ $ordering = $this->default['ordering'];
 							<option value="25" <?php if ($this->swt_data['tiebr3'] == 25) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_25' );?></option>
 						</select>
 					</td>
-					<td nowrap="nowrap">
+					<td class="paramlist_key">
+						<?php echo JText::_('MTURN_TIEBREAKERSFIDECORRECT'); ?>:
 					</td>
-					<td colspan="2">
-					</td>
+					<td class="paramlist_value"><fieldset class="radio">
+						<?php echo JHtml::_('select.booleanlist', 'optionTiebreakersFideCorrect', 'class="inputbox"', $this->swt_data['optionTiebreakersFideCorrect']); ?>
+					</fieldset></td>
 				</tr>
 <?php } ?>
 <!-- bis hier MTurniere-Eingabemaske -->

@@ -199,58 +199,94 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 			$hkl++;
 		}
 	}
+	
+	$hkampflos = 0;
+	$gkampflos = 0;	
 	// Mannschaftspunkte Heim / Gast verteilen
 	// Standard : Mehrheit der BP gewinnt, BP gleich -> Punkteteilung
 	if ($out["liga"][0]->sieg_bed == 1) {
 		if ($hmpunkte > $gmpunkte) {
 			$hman_punkte = $out["liga"][0]->man_sieg;
 			$gman_punkte = $out["liga"][0]->man_nieder;
+			$hergebnis = 1;
+			$gergebnis = 0;
 		}
 		if ($hmpunkte == $gmpunkte) {
 			$hman_punkte = $out["liga"][0]->man_remis;
 			$gman_punkte = $out["liga"][0]->man_remis;
+			$hergebnis = 2;
+			$gergebnis = 2;
 		}
 		if ($hmpunkte < $gmpunkte) {
 			$hman_punkte = $out["liga"][0]->man_nieder;
 			$gman_punkte = $out["liga"][0]->man_sieg;
+			$hergebnis = 0;
+			$gergebnis = 1;
 		}
 	}
 	// erweiterter Standard : mehr als die Hälfte der BP -> Sieg, Hälfte der BP -> halbe MP Zahl
 	if ($out["liga"][0]->sieg_bed == 2) {
 		if ($hmpunkte > (($out["liga"][0]->stamm * ($out["liga"][0]->sieg + $out["liga"][0]->antritt)) / 2)) {
 			$hman_punkte = $out["liga"][0]->man_sieg;
+			$hergebnis = 1;
 		}
 		if ($hmpunkte == (($out["liga"][0]->stamm * ($out["liga"][0]->sieg + $out["liga"][0]->antritt)) / 2)) {
 			$hman_punkte = $out["liga"][0]->man_remis;
+			$hergebnis = 2;
 		}
 		if ($hmpunkte < (($out["liga"][0]->stamm * ($out["liga"][0]->sieg + $out["liga"][0]->antritt)) / 2)) {
 			$hman_punkte = $out["liga"][0]->man_nieder;
+			$hergebnis = 0;
 		}
 		if ($gmpunkte > (($out["liga"][0]->stamm * ($out["liga"][0]->sieg + $out["liga"][0]->antritt)) / 2)) {
 			$gman_punkte = $out["liga"][0]->man_sieg;
+			$gergebnis = 1;
 		}
 		if ($gmpunkte == (($out["liga"][0]->stamm * ($out["liga"][0]->sieg + $out["liga"][0]->antritt)) / 2)) {
 			$gman_punkte = $out["liga"][0]->man_remis;
+			$gergebnis = 2;
 		}
 		if ($gmpunkte < (($out["liga"][0]->stamm * ($out["liga"][0]->sieg + $out["liga"][0]->antritt)) / 2)) {
 			$gman_punkte = $out["liga"][0]->man_nieder;
+			$gergebnis = 0;
 		}
 	}
 	// Antrittspunkte addieren falls angetreten
 	if ($out["liga"][0]->stamm > $hkl) {
 		$hman_punkte = $hman_punkte + $out["liga"][0]->man_antritt;
+	} else { 
+		$hkampflos = 1;
+		$gkampflos = 1;
 	}
 	if ($out["liga"][0]->stamm > $gkl) {
 		$gman_punkte = $gman_punkte + $out["liga"][0]->man_antritt;
+	} else { 
+		$hkampflos = 1;
+		$gkampflos = 1;
 	}
+	if ($hkampflos == 1) {
+		if ($hergebnis == 0) $hergebnis = 4;
+		if ($hergebnis == 1) $hergebnis = 5;
+		if ($hergebnis == 2) $hergebnis = 6;
+	}
+	if ($gkampflos == 1) {
+		if ($gergebnis == 0) $gergebnis = 4;
+		if ($gergebnis == 1) $gergebnis = 5;
+		if ($gergebnis == 2) $gergebnis = 6;
+	}
+	
 	// Datum und Uhrzeit für Meldung
 	//$now = date('Y-m-d H:i:s');
 	$now = clm_core::$cms->getNowDate();
 	// Für Heimmannschaft updaten
-	$query = "UPDATE #__clm_rnd_man" . " SET gemeldet = " . $jid . " , zeit = '$now'" . " , brettpunkte = " . $hmpunkte . " , manpunkte = " . $hman_punkte . " , wertpunkte = " . $hwpunkte . " , comment = '" . $comment . "'" . " WHERE lid = " . $lid . " AND runde = " . $rnd . " AND paar = " . $paarung . " AND dg = " . $dg . " AND heim = 1 ";
+	$query = "UPDATE #__clm_rnd_man" . " SET gemeldet = " . $jid . " , zeit = '$now'" . " , ergebnis = " . $hergebnis . " , kampflos = " . $hkampflos
+		. " , brettpunkte = " . $hmpunkte . " , manpunkte = " . $hman_punkte . " , wertpunkte = " . $hwpunkte . " , comment = '" . $comment . "'" 
+		. " WHERE lid = " . $lid . " AND runde = " . $rnd . " AND paar = " . $paarung . " AND dg = " . $dg . " AND heim = 1 ";
 	clm_core::$db->query($query);
 	// Für Gastmannschaft updaten
-	$query = "UPDATE #__clm_rnd_man" . " SET gemeldet = " . $jid . " , zeit = '$now'" . " , brettpunkte = " . $gmpunkte . " , manpunkte = " . $gman_punkte . " , wertpunkte = " . $gwpunkte . " , comment = '" . $comment . "'" . " WHERE lid = " . $lid . " AND runde = " . $rnd . " AND paar = " . $paarung . " AND dg = " . $dg . " AND heim = 0 ";
+	$query = "UPDATE #__clm_rnd_man" . " SET gemeldet = " . $jid . " , zeit = '$now'" . " , ergebnis = " . $gergebnis . " , kampflos = " . $gkampflos
+		. " , brettpunkte = " . $gmpunkte . " , manpunkte = " . $gman_punkte . " , wertpunkte = " . $gwpunkte . " , comment = '" . $comment . "'" 
+		. " WHERE lid = " . $lid . " AND runde = " . $rnd . " AND paar = " . $paarung . " AND dg = " . $dg . " AND heim = 0 ";
 	clm_core::$db->query($query);
 	//mtmt start
 	if ($out["liga"][0]->runden_modus == 4 OR $out["liga"][0]->runden_modus == 5) { // KO Turnier
