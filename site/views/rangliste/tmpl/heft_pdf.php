@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -283,17 +283,28 @@ if ($liga[0]->runden_modus == 3) {
 				$pdf->Cell(8-$breite,$zelle,$runden_dg4[($punkte[$y]->tln_nr)-1]->brettpunkte,1,0,'C');
 		}}}}
 // Ende Runden
-	$pdf->Cell(8-$rbreite,$zelle,$punkte[$x]->mp,1,0,'C');
+	if ($punkte[$x]->abzug > 0) $pdf->Cell(8-$rbreite,$zelle,$punkte[$x]->mp.'*',1,0,'C');
+	else $pdf->Cell(8-$rbreite,$zelle,$punkte[$x]->mp,1,0,'C');
 	if ( $liga[0]->liga_mt == 0) {
-	$pdf->Cell(10-$breite,$zelle,$punkte[$x]->bp,1,0,'C'); 
+		if ($punkte[$x]->bpabzug > 0) $pdf->Cell(10-$rbreite,$zelle,$punkte[$x]->bp.'*',1,0,'C');
+		else $pdf->Cell(10-$breite,$zelle,$punkte[$x]->bp,1,0,'C'); 
 		if ($liga[0]->b_wertung > 0) {
 			$pdf->Cell(10-$breite,$zelle,$punkte[$x]->wp,1,0,'C'); }
 	} else {
-		if ( $liga[0]->tiebr1 > 0 AND $liga[0]->tiebr1 < 50) {  
+		if ( $liga[0]->tiebr1 == 5 ) { // Brettpunkte
+			if ($punkte[$x]->bpabzug > 0) $pdf->Cell(10-$breite,$zelle,CLMText::tiebrFormat($liga[0]->tiebr1, $punkte[$x]->sumtiebr1).'*',1,0,'C'); 
+			else $pdf->Cell(10-$breite,$zelle,CLMText::tiebrFormat($liga[0]->tiebr1, $punkte[$x]->sumtiebr1),1,0,'C'); 
+		} elseif ( $liga[0]->tiebr1 > 0 AND $liga[0]->tiebr1 < 50) {  
 			$pdf->Cell(10-$breite,$zelle,CLMText::tiebrFormat($liga[0]->tiebr1, $punkte[$x]->sumtiebr1),1,0,'C'); }
-		if ( $liga[0]->tiebr2 > 0 AND $liga[0]->tiebr2 < 50) {  
+		if ( $liga[0]->tiebr2 == 5 ) { // Brettpunkte
+			if ($punkte[$x]->bpabzug > 0) $pdf->Cell(10-$breite,$zelle,CLMText::tiebrFormat($liga[0]->tiebr2, $punkte[$x]->sumtiebr2).'*',1,0,'C'); 
+			else $pdf->Cell(10-$breite,$zelle,CLMText::tiebrFormat($liga[0]->tiebr2, $punkte[$x]->sumtiebr2),1,0,'C'); 
+		} elseif ( $liga[0]->tiebr2 > 0 AND $liga[0]->tiebr2 < 50) {  
 			$pdf->Cell(10-$breite,$zelle,CLMText::tiebrFormat($liga[0]->tiebr2, $punkte[$x]->sumtiebr2),1,0,'C'); }
-		if ( $liga[0]->tiebr3 > 0 AND $liga[0]->tiebr3 < 50) {  
+		if ( $liga[0]->tiebr3 == 5 ) { // Brettpunkte
+			if ($punkte[$x]->bpabzug > 0) $pdf->Cell(10-$breite,$zelle,CLMText::tiebrFormat($liga[0]->tiebr3, $punkte[$x]->sumtiebr3).'*',1,0,'C'); 
+			else $pdf->Cell(10-$breite,$zelle,CLMText::tiebrFormat($liga[0]->tiebr3, $punkte[$x]->sumtiebr3),1,0,'C'); 
+		} elseif ( $liga[0]->tiebr3 > 0 AND $liga[0]->tiebr3 < 50) {  
 			$pdf->Cell(10-$breite,$zelle,CLMText::tiebrFormat($liga[0]->tiebr3, $punkte[$x]->sumtiebr3),1,0,'C'); }
 	}
 	$pdf->Ln();

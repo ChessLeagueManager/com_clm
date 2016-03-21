@@ -384,7 +384,7 @@ class CLMModelRunde extends JModelLegacy
 			else { $ordering =' ';} 
 		// $query = " SELECT a.tln_nr as tln_nr,m.name as name, SUM(a.manpunkte) as mp, "
 		$query = " SELECT a.tln_nr as tln_nr,m.name as name, (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
-			." SUM(a.brettpunkte) as bp, SUM(a.wertpunkte) as wp, m.published, m.man_nr, "  
+			." (SUM(a.brettpunkte) - m.bpabzug) as bp, m.bpabzug, SUM(a.wertpunkte) as wp, m.published, m.man_nr, "  
 			." COUNT(DISTINCT case when a.gemeldet > 1 then CONCAT(a.dg,' ',a.runde) else null end) as spiele, "  
 			." m.sumtiebr1, m.sumtiebr2, m.sumtiebr3 "
 			." FROM #__clm_rnd_man as a "

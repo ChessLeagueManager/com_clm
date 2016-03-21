@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -439,6 +439,9 @@ function save()
 		$db->setQuery($query);
 		$db->query();
 	}
+
+	// Ranking der Liga/MTurniers
+	clm_core::$api->db_tournament_ranking($row->liga,true); 
 
 	switch ($task)
 	{

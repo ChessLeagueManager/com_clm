@@ -137,7 +137,7 @@
 				foreach ($spielfreiData as $key => $value) {
 					// Paarungen mit "spielfrei" Mannschaft updaten in clm_rnd_man
 					$query = "UPDATE `#__clm_rnd_man`"
-						. " SET manpunkte = 0, brettpunkte = 0, gemeldet = 62, zeit = '$now'";
+						. " SET ergebnis = 4, kampflos = 1, manpunkte = 0, brettpunkte = 0, gemeldet = 62, zeit = '$now'";
 					if (($runden_modus == 4) OR ($runden_modus == 5)) 
 						$query .= " , ko_decision = 1";	
 					$query .= " WHERE lid = ".$id
@@ -147,7 +147,7 @@
 				   clm_core::$db->query($query);
 					
 					$query = "UPDATE `#__clm_rnd_man`"
-						. " SET manpunkte = ".$man_sieg.", brettpunkte = ".$id_stamm.", gemeldet = 62, zeit = '$now'";
+						. " SET ergebnis = 5, kampflos = 1, manpunkte = ".$man_sieg.", brettpunkte = ".$id_stamm.", gemeldet = 62, zeit = '$now'";
 					if (($runden_modus == 4) OR ($runden_modus == 5)) 
 						$query .= " , ko_decision = 1";	
 					$query .= " WHERE lid = ".$id
@@ -377,14 +377,15 @@
 		}
 	
 		// Buchholz
-		if (in_array(1, $arrayFW)) { // normale Buchholz als TieBreaker gewünscht?
+		if ((in_array(1, $arrayFW)) OR (in_array(2, $arrayFW))) { // normale Buchholz als TieBreaker gewünscht?
 			for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
 				//$array_PlayerBuch[$s] = array_sum($array_PlayerBuchOpp[$s]);
 				if (!isset($array_PlayerBuchOpp[$s])) $array_PlayerBuch[$s] = 0;
 				elseif (count($array_PlayerBuchOpp[$s]) == 1) $array_PlayerBuch[$s] = $array_PlayerBuchOpp[$s][0];
 				else $array_PlayerBuch[$s] = array_sum($array_PlayerBuchOpp[$s]);
 			}
-		} elseif (in_array(11, $arrayFW)) { // Buchholz mit Streichresultat
+		} 
+		if (in_array(11, $arrayFW)) { // Buchholz mit Streichresultat
 			for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
 				//$array_PlayerBuch[$s] = array_sum($array_PlayerBuchOpp[$s]) - min($array_PlayerBuchOpp[$s]);
 				if (!isset($array_PlayerBuchOpp[$s])) 
@@ -403,15 +404,18 @@
 		if (in_array(2, $arrayFW)) { // Buchholz-Summe als TieBreaker gewünscht?
 			// erneut alle Matches durchgehen -> Spieler erhalten Buchholzsummen
 			foreach ($matchData as $key => $value) {
-				//echo "<br>matchdata: "; var_dump($value);
-				//echo "<br>BuSum: "; var_dump($array_PlayerBuSum);
-				//echo "<br>Buch: "; var_dump($array_PlayerBuch);
 				$array_PlayerBuSum[$value->tln_nr] += $array_PlayerBuch[$value->gegner];
 			}
 		}
 		
 		// alle Spieler durchgehen und updaten (kein vorheriges Löschen notwendig)
 		for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
+			// Korrektur Mannschaftspunkte
+			$query = "SELECT liga, tln_nr, abzug, bpabzug FROM `#__clm_mannschaften`"
+				. " WHERE liga = ".$id
+				. " AND tln_nr = ".$s;
+			$abzug = clm_core::$db->loadObjectList($query);
+			if (isset($abzug[0])) $array_PlayerMPunkte[$s] = $array_PlayerMPunkte[$s] - $abzug[0]->abzug;
 			// den TiebrSummen ihre Werte zuordnen
 			for ($tb=1; $tb<=3; $tb++) {
 				$sumTiebr[$tb] = 0;
@@ -430,12 +434,13 @@
 						break;
 					case 5: // brettpunkte
 						$sumTiebr[$tb] = $array_PlayerBPunkte[$s];
+						if (isset($abzug[0])) $sumTiebr[$tb] = $sumTiebr[$tb] - $abzug[0]->bpabzug;
 						break;
 					case 6: // berliner wertung
 						$sumTiebr[$tb] = $array_PlayerBerlWertung[$s];
 						break;
 					case 11: // bhhlz mit 1 streichresultat
-						$sumTiebr[$tb] = $array_PlayerBuch[$s];
+						$sumTiebr[$tb] = $array_PlayerBuch1St[$s];
 						break;
 					case 23: // sobe 
 						$sumTiebr[$tb] = $array_PlayerSoBe[$s];

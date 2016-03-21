@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -78,7 +78,7 @@ class CLMModelTabelle extends JModelLegacy
 			else { $ordering =' ';} 
 		$query = " SELECT a.tln_nr as tln_nr,m.name as name, "
 			." (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
-			." SUM(a.brettpunkte) as bp, SUM(a.wertpunkte) as wp, m.published, m.man_nr, COUNT(DISTINCT a.runde, a.dg) as spiele, "
+			." (SUM(a.brettpunkte) - m.bpabzug) as bp, m.bpabzug, SUM(a.wertpunkte) as wp, m.published, m.man_nr, COUNT(DISTINCT a.runde, a.dg) as spiele, "
 			." SUM(case when a.manpunkte IS NULL then 0 else 1 end) as count_G, "
 			." SUM(case when a.manpunkte = ".($order[0]->man_sieg+$order[0]->man_antritt)." then 1 else 0 end) as count_S, "
 			." SUM(case when a.manpunkte = ".($order[0]->man_remis+$order[0]->man_antritt)." then 1 else 0 end) as count_R, "

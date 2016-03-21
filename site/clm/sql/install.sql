@@ -241,6 +241,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_mannschaften` (
   `rankingpos` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `sname` varchar(20) DEFAULT '',
   `abzug` tinyint(2) NOT NULL default '0',
+  `bpabzug` decimal(3,1) DEFAULT '0.0',
   PRIMARY KEY (`id`),
   KEY `published` (`published`),
   KEY `sid` (`sid`),

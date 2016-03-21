@@ -660,12 +660,24 @@ if ($liga[0]->runden_modus == 3) {
 ?>
 	<td class="mp"><div><?php echo $punkte[$x]->mp; if ($punkte[$x]->abzug > 0) echo '*'; ?></div></td>
 	<?php if ( $liga[0]->liga_mt == 0) { // Liga ?>				
-		<td class="bp"><div><?php echo $punkte[$x]->bp; ?></div></td>
+		<td class="bp"><div><?php echo $punkte[$x]->bp; if ($punkte[$x]->bpabzug > 0) echo '*'; ?></div></td>
 		<?php if ( $liga[0]->b_wertung > 0) { ?><td class="bp"><div><?php echo $punkte[$x]->wp; ?></div></td><?php } ?>
 	<?php } else { 								// Turniere ?>
-		<?php if ( $liga[0]->tiebr1 > 0 AND $liga[0]->tiebr1 < 50) { ?><td class="bp"><div><?php echo CLMText::tiebrFormat($liga[0]->tiebr1, $punkte[$x]->sumtiebr1); ?></div></td><?php } ?>
-		<?php if ( $liga[0]->tiebr2 > 0 AND $liga[0]->tiebr2 < 50) { ?><td class="bp"><div><?php echo CLMText::tiebrFormat($liga[0]->tiebr2, $punkte[$x]->sumtiebr2); ?></div></td><?php } ?>
-		<?php if ( $liga[0]->tiebr3 > 0 AND $liga[0]->tiebr3 < 50) { ?><td class="bp"><div><?php echo CLMText::tiebrFormat($liga[0]->tiebr3, $punkte[$x]->sumtiebr3); ?></div></td><?php } ?>
+		<?php if ( $liga[0]->tiebr1 == 5 ) { // Brettpunkte
+				echo '<td class="bp"><div>'.CLMText::tiebrFormat($liga[0]->tiebr1, $punkte[$x]->sumtiebr1); if ($punkte[$x]->bpabzug > 0) echo '*'; echo '</div></td>';
+			  } elseif ( $liga[0]->tiebr1 > 0 AND $liga[0]->tiebr1 < 50) { 
+				echo '<td class="bp"><div>'.CLMText::tiebrFormat($liga[0]->tiebr1, $punkte[$x]->sumtiebr1).'</div></td>';
+			  } ?>
+		<?php if ( $liga[0]->tiebr2 == 5 ) { // Brettpunkte
+				echo '<td class="bp"><div>'.CLMText::tiebrFormat($liga[0]->tiebr2, $punkte[$x]->sumtiebr2); if ($punkte[$x]->bpabzug > 0) echo '*'; echo '</div></td>';
+			  } elseif ( $liga[0]->tiebr2 > 0 AND $liga[0]->tiebr2 < 50) { 
+				echo '<td class="bp"><div>'.CLMText::tiebrFormat($liga[0]->tiebr2, $punkte[$x]->sumtiebr2).'</div></td>';
+			  } ?>
+		<?php if ( $liga[0]->tiebr3 == 5 ) { // Brettpunkte
+				echo '<td class="bp"><div>'.CLMText::tiebrFormat($liga[0]->tiebr3, $punkte[$x]->sumtiebr3); if ($punkte[$x]->bpabzug > 0) echo '*'; echo '</div></td>';
+			  } elseif ( $liga[0]->tiebr3 > 0 AND $liga[0]->tiebr3 < 50) { 
+				echo '<td class="bp"><div>'.CLMText::tiebrFormat($liga[0]->tiebr3, $punkte[$x]->sumtiebr3).'</div></td>';
+			  } ?>
 	<?php } ?>
 </tr>
 <?php }

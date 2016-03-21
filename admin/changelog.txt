@@ -15,6 +15,8 @@ $ -> Language fix or change
 - - - - - 3.2.4 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
 + Feinwertung MTurnier: Buchholz mit FIDE-Ranglistenkorrektur
 # SWT-Import MTurnier: Marker FIDE-Ranglistenkorrektur
++ Mannschaft: Abzug von Brettpunkten
+# Mannschaft: Abzug von Mannschaftspunkten
 
 - - - - - 3.2.4 - [08-03-2016] - - - - - - - - - - - - - - - - - - - -
 ^ Überarbeitung engl. Textfiles für Backend

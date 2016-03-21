@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -210,20 +210,26 @@ if (!$liga OR $liga[0]->published == 0) {
 				
 				// BP
 				if ( $liga[0]->liga_mt == 0) {
-					echo '<td class="bp"><div>'.$punkte[$x]->bp.'</div></td>';
+					echo '<td class="bp"><div>'.$punkte[$x]->bp; if ($punkte[$x]->bpabzug > 0) echo '*'; echo '</div></td>';
 					// B-Wertung
 					if ( $liga[0]->b_wertung > 0) { 
 						echo '<td class="bp"><div>'.$punkte[$x]->wp.'</div></td>';
 					}
 				} else {
 					// TBs
-					if ( $liga[0]->tiebr1 > 0 AND $liga[0]->tiebr1 < 50) { 
+					if ( $liga[0]->tiebr1 == 5 ) { // Brettpunkte
+						echo '<td class="bp"><div>'.CLMText::tiebrFormat($liga[0]->tiebr1, $punkte[$x]->sumtiebr1); if ($punkte[$x]->bpabzug > 0) echo '*'; echo '</div></td>';
+					} elseif ( $liga[0]->tiebr1 > 0 AND $liga[0]->tiebr1 < 50) { 
 						echo '<td class="bp"><div>'.CLMText::tiebrFormat($liga[0]->tiebr1, $punkte[$x]->sumtiebr1).'</div></td>';
 					}
-					if ( $liga[0]->tiebr2 > 0 AND $liga[0]->tiebr2 < 50) { 
+					if ( $liga[0]->tiebr2 == 5 ) { // Brettpunkte
+						echo '<td class="bp"><div>'.CLMText::tiebrFormat($liga[0]->tiebr2, $punkte[$x]->sumtiebr2); if ($punkte[$x]->bpabzug > 0) echo '*'; echo '</div></td>';
+					} elseif ( $liga[0]->tiebr2 > 0 AND $liga[0]->tiebr2 < 50) { 
 						echo '<td class="bp"><div>'.CLMText::tiebrFormat($liga[0]->tiebr2, $punkte[$x]->sumtiebr2).'</div></td>';
 					}
-					if ( $liga[0]->tiebr3 > 0 AND $liga[0]->tiebr3 < 50) { 
+					if ( $liga[0]->tiebr3 == 5 ) { // Brettpunkte
+						echo '<td class="bp"><div>'.CLMText::tiebrFormat($liga[0]->tiebr3, $punkte[$x]->sumtiebr3); if ($punkte[$x]->bpabzug > 0) echo '*'; echo '</div></td>';
+					} elseif ( $liga[0]->tiebr3 > 0 AND $liga[0]->tiebr3 < 50) { 
 						echo '<td class="bp"><div>'.CLMText::tiebrFormat($liga[0]->tiebr3, $punkte[$x]->sumtiebr3).'</div></td>';
 					}
 				}

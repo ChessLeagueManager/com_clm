@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -353,10 +353,17 @@ public static function mannschaft( &$row,$lists, $option )
 			</fieldset></td>
 		</tr>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="abzug"><?php echo JText::_( 'MANNSCHAFT_ABZUG' )." : "; ?></label>
+			<td class="key" nowrap="nowrap"><label for="abzug"><?php echo JText::_( 'MANNSCHAFT_MPABZUG' )." : "; ?></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="abzug" id="abzug" size="10" maxlength="10" value="<?php echo $row->abzug; ?>" />
+			</td>
+		</tr>
+		<tr>
+			<td class="key" nowrap="nowrap"><label for="bpabzug"><?php echo JText::_( 'MANNSCHAFT_BPABZUG' )." : "; ?></label>
+			</td>
+			<td>
+			<input class="inputbox" type="text" name="bpabzug" id="bpabzug" size="10" maxlength="10" value="<?php echo $row->bpabzug; ?>" />
 			</td>
 		</tr>
 <tr><td colspan="2"><hr></td></tr>

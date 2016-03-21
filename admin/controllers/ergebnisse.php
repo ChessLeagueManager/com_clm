@@ -945,8 +945,8 @@ function save()
 		if ( $hmpunkte <  $gmpunkte ) { 
 			$hman_punkte = $man_nieder; 
 			$gman_punkte = $man_sieg;
-			$hergebnis = 1;
-			$gergebnis = 0;
+			$hergebnis = 0;
+			$gergebnis = 1;
 		}
 	}
 	// erweiterter Standard : mehr als die H�lfte der BP -> Sieg, H�lfte der BP -> halbe MP Zahl
@@ -1351,8 +1351,8 @@ function save()
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET editor = ".$meldung
 		." , edit_zeit = '$now'"
-		." , ergebnis = ".$hergebnis
-		." , kampflos = ".$hkampflos;
+		." , ergebnis = ".$gergebnis
+		." , kampflos = ".$gkampflos;
 		if($counter =="0") {
 			$query = $query
 			." , brettpunkte = ".$gmpunkte
