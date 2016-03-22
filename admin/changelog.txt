@@ -17,6 +17,7 @@ $ -> Language fix or change
 # SWT-Import MTurnier: Marker FIDE-Ranglistenkorrektur
 + Mannschaft: Abzug von Brettpunkten
 # Mannschaft: Abzug von Mannschaftspunkten
+# Nachbesserung Mehrsprachigkeit (einf. Tabelle, pdf-Footer)
 
 - - - - - 3.2.4 - [08-03-2016] - - - - - - - - - - - - - - - - - - - -
 ^ Überarbeitung engl. Textfiles für Backend

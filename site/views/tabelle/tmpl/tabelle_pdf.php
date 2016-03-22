@@ -117,10 +117,10 @@ $pdf->SetTextColor(255);
 	$pdf->Cell(7-$rbreite,$zelle,JText::_('TLN'),1,0,'C',1);
 	$pdf->Cell(60-$nbreite-$breite,$zelle,JText::_('TEAM'),1,0,'L',1);
  
-	$pdf->Cell(7-$rbreite,$zelle,JText::_('G'),1,0,'C',1);
-	$pdf->Cell(7-$rbreite,$zelle,JText::_('S'),1,0,'C',1);
-	$pdf->Cell(7-$rbreite,$zelle,JText::_('R'),1,0,'C',1);
-	$pdf->Cell(7-$rbreite,$zelle,JText::_('V'),1,0,'C',1);
+	$pdf->Cell(7-$rbreite,$zelle,JText::_('TABELLE_GAMES_PLAYED'),1,0,'C',1);
+	$pdf->Cell(7-$rbreite,$zelle,JText::_('TABELLE_WINS'),1,0,'C',1);
+	$pdf->Cell(7-$rbreite,$zelle,JText::_('TABELLE_DRAW'),1,0,'C',1);
+	$pdf->Cell(7-$rbreite,$zelle,JText::_('TABELLE_LOST'),1,0,'C',1);
 	$pdf->Cell(8-$rbreite,$zelle,JText::_('MP'),1,0,'C',1);
 	if ( $liga[0]->liga_mt == 0) { 
 		$pdf->Cell(10-$breite,$zelle,JText::_('BP'),1,0,'C',1); 

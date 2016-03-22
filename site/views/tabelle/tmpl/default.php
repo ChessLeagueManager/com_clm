@@ -107,7 +107,7 @@ if (!$liga OR $liga[0]->published == 0) {
 	<!--<img src="printButton.png" alt="drucken"  /></a>-->
 
 	<?php
-	echo CLMContent::createPDFLink('tabelle', JText::_('einfache Tabelle'), array('saison' => $sid, 'layout' => 'tabelle', 'liga' => $lid));
+	echo CLMContent::createPDFLink('tabelle', JText::_('TABELLE_PDF'), array('saison' => $sid, 'layout' => 'tabelle', 'liga' => $lid));
 	echo CLMContent::createViewLink('rangliste', JText::_('TABELLE_GOTO_RANGLISTE'), array('saison' => $sid, 'liga' => $lid) );
 	?>
 
@@ -123,10 +123,10 @@ if (!$liga OR $liga[0]->published == 0) {
 			<th class="rang"><div><?php echo JText::_('RANG') ?></div></th>
 			<th class="team"><div><?php echo JText::_('TEAM') ?></div></th>
 				
-			<th class="gsrv"><div><?php echo JText::_('G') ?></div></th>
-			<th class="gsrv"><div><?php echo JText::_('S') ?></div></th>
-			<th class="gsrv"><div><?php echo JText::_('R') ?></div></th>
-			<th class="gsrv"><div><?php echo JText::_('V') ?></div></th>
+			<th class="gsrv"><div><?php echo JText::_('TABELLE_GAMES_PLAYED') ?></div></th>
+			<th class="gsrv"><div><?php echo JText::_('TABELLE_WINS') ?></div></th>
+			<th class="gsrv"><div><?php echo JText::_('TABELLE_DRAW') ?></div></th>
+			<th class="gsrv"><div><?php echo JText::_('TABELLE_LOST') ?></div></th>
 			<th class="mp"><div><?php echo JText::_('MP') ?></div></th>
 			
 			<?php 
