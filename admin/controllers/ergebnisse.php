@@ -541,6 +541,7 @@ function remove()
 		JError::raiseWarning(500, JText::_( 'ERGEBNISSE_SELECT', true ) );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
+	
 	// Daten sammeln
 	$data = "SELECT a.gemeldet,l.sl as sl,a.sid, a.lid, a.runde, a.dg, a.paar, l.liga_mt "
 		." FROM #__clm_rnd_man as a "
@@ -1495,8 +1496,14 @@ function wertung()
 	$task 		= JRequest::getVar( 'task');
 	$option 	= JRequest::getCmd( 'option' );
 	$section 	= JRequest::getVar( 'section' );
-	$cid 		= JRequest::getVar( 'cid', array(0), '', 'array' );
+	$cid 		= JRequest::getVar( 'cid', array(), '', 'array' );
 	JArrayHelper::toInteger($cid);
+
+	if (count($cid) < 1) {
+		JError::raiseWarning(500, JText::_( 'ERGEBNISSE_SELECT', true ) );
+		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+	}
+
 	// load the row from the db table
 	$row =JTable::getInstance( 'ergebnisse', 'TableCLM' );
 	$row->load( $cid[0] );
