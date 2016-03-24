@@ -237,9 +237,11 @@
 		// für alle Spieler Datensätze mit Summenwert 0 anlegen
 		// TODO: da gab es einen eigenen PHP-Befehl für?!
 		$array_PlayerMPunkte = array();
+		$array_PlayerMPunkteTB = array();
 		$array_PlayerBPunkte = array();
 		$array_PlayerBerlWertung = array();
 		$array_PlayerBuch = array();
+		$array_PlayerBuch1St = array();
 		$array_PlayerBuchOpp = array();
 		$array_PlayeraSoBe = array();
 		$array_PlayerSoBe = array();
@@ -252,6 +254,7 @@
 			$array_PlayerBPunkte[$s] = 0;
 			$array_PlayerBerlWertung[$s] = 0;
 			$array_PlayerBuch[$s] = 0;
+			$array_PlayerBuch1St[$s] = 0;
 			$array_PlayeraSoBe[$s] = 0;
 			$array_PlayerSoBe[$s] = 0;
 			$array_PlayerBuSum[$s] = 0;
@@ -260,7 +263,7 @@
 		
 		// alle Matches in DatenArray schreiben
 		$query = "SELECT dg, runde, tln_nr, gegner, ergebnis, brettpunkte, manpunkte FROM `#__clm_rnd_man`"
-				. " WHERE lid = ".$id; //" AND brettpunkte IS NOT NULL"
+				. " WHERE lid = ".$id." AND brettpunkte IS NOT NULL";
 				//;
 		$matchData = clm_core::$db->loadObjectList($query);
 		$z = count($matchData);
