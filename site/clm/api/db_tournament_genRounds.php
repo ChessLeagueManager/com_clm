@@ -27,9 +27,12 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 			for ($x = 1;$x < 1 + $runden;$x++) {
 				$nr = $x + ($y - 1) * $runden;
 				$name = $lang->LIGEN_STD_ROUND . " " . $x;
-				if ($dg > 1) {
+				if ($dg == 2) {
 					if ($y == 1) $name.= " (" . $lang->LIGEN_STD_HIN . ")";
 					if ($y == 2) $name.= " (" . $lang->LIGEN_STD_RUECK. ")";
+				}
+				if ($dg > 2) {
+					$name .= " (".$lang->LIGEN_STD_DG." ".$y.")";
 				}
 				if ($rnd_mode == 4) { // KO System
 					$langString = 'ROUND_KO_' . ($runden - $x + 1);

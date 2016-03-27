@@ -12,13 +12,14 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.2.4 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.2.5 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
 + Feinwertung MTurnier: Buchholz mit FIDE-Ranglistenkorrektur
 # SWT-Import MTurnier: Marker FIDE-Ranglistenkorrektur
 + Mannschaft: Abzug von Brettpunkten
 # Mannschaft: Abzug von Mannschaftspunkten
 # Nachbesserung Mehrsprachigkeit (einf. Tabelle, pdf-Footer)
 # Admin Ergebnisse: Verbesserung Fehlermeldung bei Nichtauswahl
++ MTurniere: auch 3 bzw. 4 Durchgänge möglich
 
 - - - - - 3.2.4 - [08-03-2016] - - - - - - - - - - - - - - - - - - - -
 ^ Überarbeitung engl. Textfiles für Backend

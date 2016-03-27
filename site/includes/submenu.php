@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -145,12 +145,26 @@ if ($fe_submenu == 1) {
 		}
 		// Alle Runden
 		for ($i = 0;$i < count($sub_runden);$i++) {
-			if ($sub_runden[$i]->nr > $sub_runden[$i]->runden) { //klkl
+/*			if ($sub_runden[$i]->nr > $sub_runden[$i]->runden) { //klkl
 				$sub_liga_durchgang = "2";
 				$sub_runden_nr = $sub_runden[$i]->nr - $sub_runden[$i]->runden;
 			} else {
 				$sub_liga_durchgang = "1"; //klkl
 				$sub_runden_nr = $sub_runden[$i]->nr;
+			}
+*/
+			if ($sub_runden[$i]->nr < ($sub_runden[$i]->runden + 1)) { 
+				$sub_liga_durchgang = "1";
+				$sub_runden_nr = $sub_runden[$i]->nr;
+			} elseif ($sub_runden[$i]->nr < ((2 * $sub_runden[$i]->runden) + 1)) { 
+				$sub_liga_durchgang = "2"; 
+				$sub_runden_nr = $sub_runden[$i]->nr - $sub_runden[$i]->runden;
+			} elseif ($sub_runden[$i]->nr < ((3 * $sub_runden[$i]->runden) + 1)) { 
+				$sub_liga_durchgang = "3"; 
+				$sub_runden_nr = $sub_runden[$i]->nr - (2 * $sub_runden[$i]->runden);
+			} else { 
+				$sub_liga_durchgang = "4"; 
+				$sub_runden_nr = $sub_runden[$i]->nr - (3 * $sub_runden[$i]->runden);
 			}
 			$array[3][3][$i + 1][0] = $sub_runden[$i]->name;
 			if (JRequest::getVar('view', -1) != "runde" || JRequest::getVar('runde', -1) != $sub_runden_nr || JRequest::getVar('dg', -1) != $sub_liga_durchgang) {

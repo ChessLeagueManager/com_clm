@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -145,8 +145,8 @@ if ($pdf->GetY() > $lspalte_paar) {
 
 if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1)) { if ($termin[$term]->datum > 0) {
 	$datum = ', '.JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); 
-	if(isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { $datum .= '  '.substr($termin[$term]->startzeit,0,5).' Uhr'; } 		
-	else $datum = ''; }
+	if(isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { $datum .= '  '.substr($termin[$term]->startzeit,0,5).' Uhr'; } }		
+	else $datum = ''; 
 	$term++; } 
 	$pdf->SetFont('Times','',$head_font-1);
 	$pdf->Cell(10,15,' ',0,0);

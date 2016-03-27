@@ -484,7 +484,7 @@ if ($rundensumme[$rund_sum]->sl_ok > 0) { ?>
 else {  }?></b>	
 </div>
 
-<div class="paa_titel"><a href="index.php?option=com_clm&amp;view=runde&amp;liga=<?php echo $liga[0]->id ?>&amp;runde=<?php echo $x+1; ?>&amp;saison=<?php echo $liga[0]->sid; ?>&amp;dg=2&amp;Itemid=<?php echo $item; ?>"> <?php echo $termin[$term-1]->name; ?><img width="16" height="16" src="<?php echo CLMImage::imageURL('lupe.png'); ?>" /></a></div> <?php
+<div class="paa_titel"><a href="index.php?option=com_clm&amp;view=runde&amp;liga=<?php echo $liga[0]->id ?>&amp;runde=<?php echo $x+1; ?>&amp;saison=<?php echo $liga[0]->sid; ?>&amp;dg=3&amp;Itemid=<?php echo $item; ?>"> <?php echo $termin[$term-1]->name; ?><img width="16" height="16" src="<?php echo CLMImage::imageURL('lupe.png'); ?>" /></a></div> <?php
 $rund_sum++; }
 
 else {	?>
@@ -616,7 +616,7 @@ if ($rundensumme[$rund_sum]->sl_ok > 0) { ?>
 else {  }?></b>	
 </div>
 
-<div class="paa_titel"><a href="index.php?option=com_clm&amp;view=runde&amp;liga=<?php echo $liga[0]->id ?>&amp;runde=<?php echo $x+1; ?>&amp;saison=<?php echo $liga[0]->sid; ?>&amp;dg=2&amp;Itemid=<?php echo $item; ?>"> <?php echo $termin[$term-1]->name; ?><img width="16" height="16" src="<?php echo CLMImage::imageURL('lupe.png'); ?>" /></a></div> <?php
+<div class="paa_titel"><a href="index.php?option=com_clm&amp;view=runde&amp;liga=<?php echo $liga[0]->id ?>&amp;runde=<?php echo $x+1; ?>&amp;saison=<?php echo $liga[0]->sid; ?>&amp;dg=4&amp;Itemid=<?php echo $item; ?>"> <?php echo $termin[$term-1]->name; ?><img width="16" height="16" src="<?php echo CLMImage::imageURL('lupe.png'); ?>" /></a></div> <?php
 $rund_sum++; }
 
 else {	?>

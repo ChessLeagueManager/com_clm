@@ -258,6 +258,8 @@ class CLMViewMTurniere
 		<select name="durchgang" id="durchgang" value="<?php echo $row->durchgang; ?>" size="1">
 		<option <?php if ($row->durchgang < 2) {echo 'selected="selected"';} ?>>1</option>
 		<option <?php if ($row->durchgang == 2) {echo 'selected="selected"';} ?>>2</option>
+		<option <?php if ($row->durchgang == 3) {echo 'selected="selected"';} ?>>3</option>
+		<option <?php if ($row->durchgang == 4) {echo 'selected="selected"';} ?>>4</option>
 		</select>
 	</td>
 	</tr>

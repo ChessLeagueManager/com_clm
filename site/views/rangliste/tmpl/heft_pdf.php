@@ -271,7 +271,7 @@ if ($liga[0]->runden_modus == 3) {
 		}}}}
 // Anzahl der Runden durchlaufen 4.Durchgang
 	if ($liga[0]->durchgang > 3) {
-			$runden_dg2 = CLMModelRangliste::punkte_tlnr($sid,$lid,$punkte[$x]->tln_nr,4,$liga[0]->runden_modus);
+			$runden_dg4 = CLMModelRangliste::punkte_tlnr($sid,$lid,$punkte[$x]->tln_nr,4,$liga[0]->runden_modus);
 	for ($y=0; $y< $liga[0]->teil-$diff; $y++) {
 		if ($y == $x) {
 			$pdf->Cell(8-$breite,$zelle,'X',1,0,'C'); }
