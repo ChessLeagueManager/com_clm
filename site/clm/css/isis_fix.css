@@ -2,6 +2,11 @@
 /***** isis_fix *****/
 /********************/
 
+body .sidebar-nav .nav-list > li > a {
+    margin-left: 0;
+    margin-right: 0;
+}
+
 body .nav-list > li > a, body .nav-list .nav-header {
     margin-left: 0;
     margin-right: 0;
@@ -10,6 +15,7 @@ body .nav-list > li > a, body .nav-list .nav-header {
 
 body .sidebar-nav .nav-list > li.active > a {
     margin-right: 0;
+    margin-left: 0;
 }
 
 body .nav-list {
