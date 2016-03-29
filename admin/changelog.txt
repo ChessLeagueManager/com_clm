@@ -20,6 +20,7 @@ $ -> Language fix or change
 # Nachbesserung Mehrsprachigkeit (einf. Tabelle, pdf-Footer)
 # Admin Ergebnisse: Verbesserung Fehlermeldung bei Nichtauswahl
 + MTurniere: auch 3 bzw. 4 Durchgänge möglich
+# SWT-Import Liga: Übernahme Mannschaftsergebnisse
 
 - - - - - 3.2.4 - [08-03-2016] - - - - - - - - - - - - - - - - - - - -
 ^ Überarbeitung engl. Textfiles für Backend

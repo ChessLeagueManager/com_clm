@@ -604,27 +604,32 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 			
 			if ($heimrecht) {
 				$swt_data[$paarung]['heim_kampflos'] = $kampflos;
-				$swt_data[$paarung]['gast_kampflos'] = 0;
+				$swt_data[$paarung]['gast_kampflos'] = $kampflos;
 				$heim = $m;
-				$gast = $gegner;
+				$swt_data[$paarung]['heim'] = $heim;
+				if(isset($mannschaft[$heim-1])) {
+					$swt_data[$paarung]['heim_mannschaft'] = $mannschaft[$heim-1]->name; }
+				if ($gegner >= 0) {
+					$gast = $gegner;
+					$swt_data[$paarung]['gast'] = $gast;
+					if(isset($mannschaft[$gast-1])) {
+						$swt_data[$paarung]['gast_mannschaft'] = $mannschaft[$gast-1]->name; }
+				}
 			}
 			else {
 				$swt_data[$paarung]['gast_kampflos'] = $kampflos;
-				$swt_data[$paarung]['heim_kampflos'] = 0;
-				$heim = $gegner;
+				$swt_data[$paarung]['heim_kampflos'] = $kampflos;
 				$gast = $m;
+				$swt_data[$paarung]['gast'] = $gast;
+				if(isset($mannschaft[$gast-1])) {
+					$swt_data[$paarung]['gast_mannschaft'] = $mannschaft[$gast-1]->name; }
+				if ($gegner >= 0) {
+					$heim = $gegner;
+					$swt_data[$paarung]['heim'] = $heim;
+					if(isset($mannschaft[$heim-1])) {
+						$swt_data[$paarung]['heim_mannschaft'] = $mannschaft[$heim-1]->name; }
+				}
 			}
-			$swt_data[$paarung]['heim'] = $heim;
-			$swt_data[$paarung]['gast'] = $gast;
-			
-			// Es scheint das $gegner in der ersten Hälfte immer ungültig ist.
-			if(isset($mannschaft[$heim-1])) {
-				$swt_data[$paarung]['heim_mannschaft'] = $mannschaft[$heim-1]->name;
-			}
-			if(isset($mannschaft[$gast-1])) {
-				$swt_data[$paarung]['gast_mannschaft'] = $mannschaft[$gast-1]->name;
-			}
-
 			$offset += $abstand;
 			
 		}
