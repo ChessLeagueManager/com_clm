@@ -5,6 +5,7 @@
 body .sidebar-nav .nav-list > li > a {
     margin-left: 0;
     margin-right: 0;
+    padding: 3px 10px;
 }
 
 body .nav-list > li > a, body .nav-list .nav-header {
