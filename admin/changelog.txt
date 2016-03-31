@@ -24,6 +24,7 @@ $ -> Language fix or change
 ^ CLM-Admin-Menü: Anpassung an J!3.5.0
 + View Mannschaft: Spielplan auch wenn kein DSB-Bezug
 + View Mannschaft: Spielplan mit Ergebnis 
+# Class CLMForm: SelectVerein
 
 - - - - - 3.2.4 - [08-03-2016] - - - - - - - - - - - - - - - - - - - -
 ^ Überarbeitung engl. Textfiles für Backend
