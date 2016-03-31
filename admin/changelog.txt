@@ -21,6 +21,9 @@ $ -> Language fix or change
 # Admin Ergebnisse: Verbesserung Fehlermeldung bei Nichtauswahl
 + MTurniere: auch 3 bzw. 4 Durchgänge möglich
 # SWT-Import Liga: Übernahme Mannschaftsergebnisse
+^ CLM-Admin-Menü: Anpassung an J!3.5.0
++ View Mannschaft: Spielplan auch wenn kein DSB-Bezug
++ View Mannschaft: Spielplan mit Ergebnis 
 
 - - - - - 3.2.4 - [08-03-2016] - - - - - - - - - - - - - - - - - - - -
 ^ Überarbeitung engl. Textfiles für Backend

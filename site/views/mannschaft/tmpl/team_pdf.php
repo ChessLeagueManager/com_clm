@@ -26,6 +26,7 @@ $mannschaft	=$this->mannschaft;
 	}
 	if (!isset($lparams['dwz_date'])) $lparams['dwz_date'] = '0000-00-00';
 	if (!isset($lparams['noOrgReference'])) $lparams['noOrgReference'] = '0';
+	if (!isset($lparams['noBoardResults'])) $lparams['noBoardResults'] = '0';
 $count		=$this->count;
 $bp			=$this->bp;
 $sumbp		=$this->sumbp;
@@ -186,6 +187,7 @@ $pdf->SetFont('Times','',$font);
 	if (isset($man[3])) $pdf->Cell(80,4,utf8_decode($man[3]),0,1);
 	else $pdf->Cell(80,4,'',0,1);
 }	
+if ($lparams['noBoardResults'] == '0') {
 $pdf->SetFont('Times','B',$font);
 	$pdf->Ln();
 	$pdf->Cell(10,8,' ',0,0);
@@ -380,7 +382,7 @@ for ($x=0; $x< 100; $x++){
 	$pdf->Cell($breite,4,'',0,1,'C');
 }
 	$pdf->Ln();
-
+}
 $pdf->SetFont('Times','B',$font);
 	$pdf->Ln();
 	$pdf->Cell(10,8,' ',0,0);

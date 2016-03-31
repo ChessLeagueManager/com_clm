@@ -140,30 +140,6 @@ if (!$liga OR $liga[0]->published == "0") {
 						echo '<th class="rnd" '.$estyle.'><div>'.($rnd+1).'</div></th>';
 					}
 				}
-				/*
-				// erster Durchgang 
-				for ($rnd=0; $rnd < $liga[0]->teil-$diff ; $rnd++) { 
-					echo '<th class="rnd"><div>'.($rnd+1).'</div></th>';
-				}
-				// zweiter Durchgang 
-				if ($liga[0]->durchgang > 1) { 
-					for ($rnd=0; $rnd < $liga[0]->teil-$diff ; $rnd++) {
-						echo '<th class="rnd"><div>'.($rnd+1).'</div></th>';
-					}
-					// dritter Durchgang 
-					if ($liga[0]->durchgang > 2) { 
-						for ($rnd=0; $rnd < $liga[0]->teil-$diff ; $rnd++) {
-							echo '<th class="rnd"><div>'.($rnd+1).'</div></th>';
-						}
-						// vierter Durchgang 
-						if ($liga[0]->durchgang > 3) {
-							for ($rnd=0; $rnd < $liga[0]->teil-$diff ; $rnd++) {
-								echo '<th class="rnd"><div>'.($rnd+1).'</div></th>';
-							}
-						}
-					}
-				}
-				*/
 			}
 	
 			// Schweizer System
@@ -237,7 +213,8 @@ if (!$liga OR $liga[0]->published == "0") {
 			
 				echo '<td class="team">';
 			
-					if ($punkte[$x]->published == 1 AND $params['noBoardResults'] == '0') {
+					//if ($punkte[$x]->published == 1 AND $params['noBoardResults'] == '0') {
+					if ($punkte[$x]->published == 1) {
 						$link = new CLMcLink();
 						$link->view = 'mannschaft';
 						$link->more = array('saison' => $sid, 'liga' => $lid, 'tlnr' => $punkte[$x]->tln_nr, 'Itemid' => $item);

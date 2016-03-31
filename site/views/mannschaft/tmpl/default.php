@@ -48,6 +48,7 @@ $mannschaft	=$this->mannschaft;
 	}
 	if (!isset($lparams['dwz_date'])) $lparams['dwz_date'] = '0000-00-00';
 	if (!isset($lparams['noOrgReference'])) $lparams['noOrgReference'] = '0';
+	if (!isset($lparams['noBoardResults'])) $lparams['noBoardResults'] = '0';
 $count		=$this->count;
 $bp			=$this->bp;
 $sumbp		=$this->sumbp;
@@ -65,6 +66,15 @@ $itemid 	= JRequest::getInt('Itemid','1');
 $option 	= JRequest::getCmd( 'option' );
 $mainframe	= JFactory::getApplication();
  
+function vergleich($wert_a,$wert_b) {
+	$a = 1000*($wert_a->dg) + 50*($wert_a->runde) + 2*($wert_a->paar) + $wert_a->heim;
+	$b = 1000*($wert_b->dg) + 50*($wert_b->runde) + 2*($wert_b->paar) + $wert_b->heim;
+	if ($a == $b) { return 0; }
+	return ($a < $b) ? -1 : +1; 
+}
+$bpr = $bp;
+usort($bpr, 'vergleich');
+  
 $sql = ' SELECT `sieg`, `remis`, `nieder`, `antritt` FROM #__clm_liga'
 		. ' WHERE `id` = "' . $liga . '"';
 $db =JFactory::getDBO ();
@@ -75,7 +85,7 @@ if ($lparams['dwz_date'] == '0000-00-00') {
 	if ($saison[0]->dsb_datum  > 0) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $saison[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F'));  
 	if (($saison[0]->dsb_datum == 0) || (!isset($saison))) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_UNCLEAR'); 
 } else {
-	$hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_LEAGUE').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $mannschaft[0]->params['dwz_date'], JText::_('DATE_FORMAT_CLM_F'));  
+	$hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_LEAGUE').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $lparams['dwz_date'], JText::_('DATE_FORMAT_CLM_F'));  
 }
 if ( !$mannschaft OR $mannschaft[0]->lpublished == 0) {
 	$msg = JText::_('NOT_PUBLISHED').JText::_('GEDULD');
@@ -241,6 +251,7 @@ $clm_zeile2D			= RGB($clm_zeile2);
     </div>
     <?php } ?>
     
+  <?php if ($lparams['noBoardResults'] == '0') { ?>    
     <?php
 	if ($mannschaft[0]->anzeige_ma == 1){ ?>
     <div id="wrong"><?php echo JText::_('TEAM_FORMATION_BLOCKED') ?></div><br>
@@ -463,6 +474,7 @@ for ($x=0; $x< 100; $x++){
     
     </table><br>
     <?php } ?>
+  <?php } ?>
     
     <?php if ($man_spielplan =="1") { ?>
     <h4><?php echo JText::_('TEAM_PLAN') ?></h4>
@@ -474,9 +486,11 @@ for ($x=0; $x< 100; $x++){
         <th><?php echo JText::_('TEAM_DATE') ?></th>
         <th><?php echo JText::_('TEAM_HOME') ?></th>
         <th><?php echo JText::_('TEAM_GUEST') ?></th>
-    </tr>
+        <th><?php echo JText::_('TEAM_RESULT') ?></th>
+   </tr>
     <?php 
     $cnt = 0;
+	$ibpr = 0;
     foreach ($plan as $plan) { 
 		//$datum =JFactory::getDate($plan->datum);?>
     <tr>
@@ -507,6 +521,15 @@ for ($x=0; $x< 100; $x++){
         </td>
         <td><?php echo $plan->gname; ?></td>
     <?php } ?>
+		<?php	while (isset($bpr[$ibpr]) AND $bpr[$ibpr]->runde < $plan->runde) { $ibpr++; }
+			$hpkt = ''; $gpkt = '';
+			for ($b=0; $b<2; $b++) {
+				if ((!isset($bpr[$ibpr])) OR ($bpr[$ibpr]->runde > $plan->runde)) break;
+				if (($bpr[$ibpr]->runde == $plan->runde) AND ($bpr[$ibpr]->tln_nr == $plan->gegner)) $gpkt = $bpr[$ibpr]->brettpunkte;
+				if (($bpr[$ibpr]->runde == $plan->runde) AND ($bpr[$ibpr]->tln_nr == $plan->tln_nr)) $hpkt = $bpr[$ibpr]->brettpunkte;
+				$ibpr++; 
+			} ?>
+		<td><?php if ($hpkt != '' AND $gpkt != '') echo $hpkt.' : '.$gpkt; ?></td	
     </tr>
     <?php } ?>
     </table>
