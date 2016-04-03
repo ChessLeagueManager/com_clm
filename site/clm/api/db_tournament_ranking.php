@@ -246,6 +246,8 @@
 		$array_PlayeraSoBe = array();
 		$array_PlayerSoBe = array();
 		$array_PlayerBuSum = array();
+		$array_PlayerBuSum1St = array();
+		$array_PlayerBuSumMin = array();
 		$array_PlayerWins = array();
 		for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
 			$array_PlayerSpiele[$s] = 0;
@@ -258,6 +260,8 @@
 			$array_PlayeraSoBe[$s] = 0;
 			$array_PlayerSoBe[$s] = 0;
 			$array_PlayerBuSum[$s] = 0;
+			$array_PlayerBuSum1St[$s] = 0;
+			$array_PlayerBuSumMin[$s] = 9999;
 			$array_PlayerWins[$s] = 0;
 		}
 		
@@ -380,7 +384,7 @@
 		}
 	
 		// Buchholz
-		if ((in_array(1, $arrayFW)) OR (in_array(2, $arrayFW))) { // normale Buchholz als TieBreaker gewünscht?
+		if ((in_array(1, $arrayFW)) OR (in_array(2, $arrayFW)) OR (in_array(12, $arrayFW))) { // normale Buchholz als TieBreaker gewünscht?
 			for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
 				//$array_PlayerBuch[$s] = array_sum($array_PlayerBuchOpp[$s]);
 				if (!isset($array_PlayerBuchOpp[$s])) $array_PlayerBuch[$s] = 0;
@@ -404,10 +408,22 @@
 		}
 	
 		// BuchholzSumme
-		if (in_array(2, $arrayFW)) { // Buchholz-Summe als TieBreaker gewünscht?
+		if ((in_array(2, $arrayFW)) OR (in_array(12, $arrayFW))) { // Buchholz-Summe als TieBreaker gewünscht?
 			// erneut alle Matches durchgehen -> Spieler erhalten Buchholzsummen
 			foreach ($matchData as $key => $value) {
 				$array_PlayerBuSum[$value->tln_nr] += $array_PlayerBuch[$value->gegner];
+				// und Min-Buchholz setzen
+				if ($array_PlayerBuSumMin[$value->tln_nr] > $array_PlayerBuch[$value->gegner]) {
+					$array_PlayerBuSumMin[$value->tln_nr] = $array_PlayerBuch[$value->gegner];
+				}
+			}
+		}
+		if (in_array(12, $arrayFW)) { // Buchholz-Summe mit Streichresultat als TieBreaker gewünscht?
+			for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
+				if ($array_PlayerBuSumMin[$s] == 9999) {
+					$array_PlayerBuSumMin[$s] = 0;
+				}
+				$array_PlayerBuSum1St[$s] = $array_PlayerBuSum[$s] - $array_PlayerBuSumMin[$s];
 			}
 		}
 		
@@ -444,6 +460,9 @@
 						break;
 					case 11: // bhhlz mit 1 streichresultat
 						$sumTiebr[$tb] = $array_PlayerBuch1St[$s];
+						break;
+					case 12: // bhhlz-sum mit 1 streichresultat
+						$sumTiebr[$tb] = $array_PlayerBuSum1St[$s];
 						break;
 					case 23: // sobe 
 						$sumTiebr[$tb] = $array_PlayerSoBe[$s];

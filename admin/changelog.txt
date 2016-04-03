@@ -12,7 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.2.5 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.2.6 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
+
+- - - - - 3.2.5 - [02-04-2016] - - - - - - - - - - - - - - - - - - - -
 + Feinwertung MTurnier: Buchholz mit FIDE-Ranglistenkorrektur
 # SWT-Import MTurnier: Marker FIDE-Ranglistenkorrektur
 + Mannschaft: Abzug von Brettpunkten
@@ -25,6 +27,7 @@ $ -> Language fix or change
 + View Mannschaft: Spielplan auch wenn kein DSB-Bezug
 + View Mannschaft: Spielplan mit Ergebnis 
 # Class CLMForm: SelectVerein
++ MTurniere: Feinwertung Buchholzsumme mit Streichwertung
 
 - - - - - 3.2.4 - [08-03-2016] - - - - - - - - - - - - - - - - - - - -
 ^ Überarbeitung engl. Textfiles für Backend

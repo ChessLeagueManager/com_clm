@@ -318,6 +318,7 @@ class CLMViewMTurniere
 		<option value="1" <?php if ($row->tiebr1 == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_1' );?></option>
 		<option value="11" <?php if ($row->tiebr1 == 11) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_11' );?></option>
 		<option value="2" <?php if ($row->tiebr1 == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_2' );?></option>
+		<option value="12" <?php if ($row->tiebr1 == 12) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_12' );?></option>
 		<option value="23" <?php if ($row->tiebr1 == 23) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_23' );?></option>
 		<option value="4" <?php if ($row->tiebr1 == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_4' );?></option>
 		<option value="5" <?php if ($row->tiebr1 == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_5' );?></option>
@@ -337,6 +338,7 @@ class CLMViewMTurniere
 		<option value="1" <?php if ($row->tiebr2 == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_1' );?></option>
 		<option value="11" <?php if ($row->tiebr2 == 11) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_11' );?></option>
 		<option value="2" <?php if ($row->tiebr2 == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_2' );?></option>
+		<option value="12" <?php if ($row->tiebr2 == 12) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_12' );?></option>
 		<option value="23" <?php if ($row->tiebr2 == 23) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_23' );?></option>
 		<option value="4" <?php if ($row->tiebr2 == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_4' );?></option>
 		<option value="5" <?php if ($row->tiebr2 == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_5' );?></option>
@@ -357,6 +359,7 @@ class CLMViewMTurniere
 		<option value="1" <?php if ($row->tiebr3 == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_1' );?></option>
 		<option value="11" <?php if ($row->tiebr3 == 11) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_11' );?></option>
 		<option value="2" <?php if ($row->tiebr3 == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_2' );?></option>
+		<option value="12" <?php if ($row->tiebr3 == 12) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_12' );?></option>
 		<option value="23" <?php if ($row->tiebr3 == 23) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_23' );?></option>
 		<option value="4" <?php if ($row->tiebr3 == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_4' );?></option>
 		<option value="5" <?php if ($row->tiebr3 == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_5' );?></option>
