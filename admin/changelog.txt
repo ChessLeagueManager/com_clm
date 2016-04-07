@@ -13,6 +13,7 @@ $ -> Language fix or change
 ! -> Note
 
 - - - - - 3.2.6 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
+# Korrektur englischer Texte / Mehrsprachigkeit
 
 - - - - - 3.2.5 - [02-04-2016] - - - - - - - - - - - - - - - - - - - -
 + Feinwertung MTurnier: Buchholz mit FIDE-Ranglistenkorrektur

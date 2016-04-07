@@ -334,10 +334,14 @@ for ($x=0; $x< 100; $x++){
 }
 	while (isset($einzel[$ie])) {
 		$pdf->Cell($breite1,4,' ',0,0);
-		$ztext = utf8_decode("Ergebnis übersprungen, da Spieler nicht in Aufstellung ");
-		$ztext .= ' Verein:'.$einzel[$ie]->zps.' Mitglied:'.$einzel[$ie]->spieler.' PKZ:'.$einzel[$ie]->PKZ;
-		$ztext .= ' Durchgang:'.$einzel[$ie]->dg.' Runde:'.$einzel[$ie]->runde;
-		$ztext .= ' Brett:'.$einzel[$ie]->brett.' Erg:'.$einzel[$ie]->punkte; 	
+//		$ztext = utf8_decode("Ergebnis übersprungen, da Spieler nicht in Aufstellung ");
+//		$ztext .= ' Verein:'.$einzel[$ie]->zps.' Mitglied:'.$einzel[$ie]->spieler.' PKZ:'.$einzel[$ie]->PKZ;
+//		$ztext .= ' Durchgang:'.$einzel[$ie]->dg.' Runde:'.$einzel[$ie]->runde;
+//		$ztext .= ' Brett:'.$einzel[$ie]->brett.' Erg:'.$einzel[$ie]->punkte; 	
+		$ztext = utf8_decode(JText::_( 'TEAM_WARNING' ));
+		$ztext .= JText::_( 'TEAM_CLUB' ).$einzel[$ie]->zps.JText::_( 'TEAM_MEMBER' ).$einzel[$ie]->spieler.JText::_( 'TEAM_PKZ' ).$einzel[$ie]->PKZ;
+		$ztext .= JText::_( 'TEAM_DG' ).$einzel[$ie]->dg.JText::_( 'TEAM_ROUND' ).$einzel[$ie]->runde;
+		$ztext .= JText::_( 'TEAM_BOARD' ).$einzel[$ie]->brett.JText::_( 'TEAM_RESULT2' ).$einzel[$ie]->punkte; 	
 		$pdf->Cell(50,4,$ztext,0,1,'L');
 		$ie++;
 	}

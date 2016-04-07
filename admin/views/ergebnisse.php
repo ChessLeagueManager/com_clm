@@ -77,12 +77,12 @@ static function ergebnisse ( $rows, $lists, $pageNav, $option )
 			if ($rows[0]->durchgang >1) { ?>
 			<select name="filter_dg" id="filter_dg" class="inputbox" size="1" onchange="document.adminForm.submit();">
 			<option value="- DG -" <?php if ( $f_dg == 0) { ?> selected="selected" <?php } ?>><?php echo JText::_( 'RESULTS_FILTER_DG' );?></option>
-			<option value="1"  <?php if ( $f_dg == 1) { ?> selected="selected" <?php } ?>>DG 1</option>
-			<option value="2" <?php if ( $f_dg == 2) { ?> selected="selected" <?php } ?>>DG 2</option>
+			<option value="1"  <?php if ( $f_dg == 1) { ?> selected="selected" <?php } ?>><?php echo JText::_( 'RESULTS_FILTER_DG1' );?></option>
+			<option value="2" <?php if ( $f_dg == 2) { ?> selected="selected" <?php } ?>><?php echo JText::_( 'RESULTS_FILTER_DG2' );?></option>
 			<?php if ($rows[0]->durchgang >2) { ?>
-				<option value="3" <?php if ( $f_dg == 3) { ?> selected="selected" <?php } ?>>DG 3</option>
+				<option value="3" <?php if ( $f_dg == 3) { ?> selected="selected" <?php } ?>><?php echo JText::_( 'RESULTS_FILTER_DG3' );?></option>
 			<?php } if ($rows[0]->durchgang >3) { ?>
-				<option value="4" <?php if ( $f_dg == 4) { ?> selected="selected" <?php } ?>>DG 4</option>
+				<option value="4" <?php if ( $f_dg == 4) { ?> selected="selected" <?php } ?>><?php echo JText::_( 'RESULTS_FILTER_DG4' );?></option>
 			<?php } ?>
 			</select>
 		<?php } ?>
