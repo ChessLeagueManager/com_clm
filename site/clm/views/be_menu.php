@@ -49,7 +49,7 @@ function clm_view_be_menu($access, $status)
 	</div>
 	<?php
     }
-	if ($countryversion =="de") {
+	//if ($countryversion =="de") {
     if ($access['BE_tournament_general']) {
 ?>	
 	<div class="clm_icon"> 
@@ -72,7 +72,7 @@ function clm_view_be_menu($access, $status)
 ?></span></a> 
 	</div>
 	<?php
-    } }
+    } //}
     if ($access['BE_league_general']) {
 ?>
 	<div class="clm_icon"> <a href="index.php?option=com_clm&view=view_tournament_group&liga=1" title=""> <img src="<?php

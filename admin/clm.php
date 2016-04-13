@@ -107,10 +107,10 @@ if($clmAccess->access('BE_season_general')) {
 if($clmAccess->access('BE_event_general')) {
 	JSubMenuHelper::addEntry(JText::_('TERMINE'), 'index.php?option=com_clm&view=terminemain', (JRequest::getVar('view')) == 'terminemain'?true:false);
 }
-if ($countryversion =="de") {
+//if ($countryversion =="de") {
 if($clmAccess->access('BE_tournament_general')) {
 	JSubMenuHelper::addEntry(JText::_('TURNIERE'), 'index.php?option=com_clm&view=view_tournament', (JRequest::getVar('view')) == 'turmain'?true:false);
-}}
+}  //}
 if($clmAccess->access('BE_league_general')) {
 	JSubMenuHelper::addEntry(JText::_('LIGEN'), 'index.php?option=com_clm&view=view_tournament_group&liga=1', (JRequest::getVar('section')) == 'ligen'?true:false);
 }
