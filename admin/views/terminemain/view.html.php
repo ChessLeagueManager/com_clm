@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -23,6 +23,8 @@ class CLMViewTermineMain extends JViewLegacy {
 		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( JText::_( 'TITLE_TERMINE' ), 'clm_headmenu_termine.png' );
 	
+		JToolBarHelper::custom('catmain','forward.png','forward_f2.png', JText::_('JCATEGORIES'), false);
+
 		JToolBarHelper::addNew();
 		JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', JText::_('TERMINE_COPY'));
 		

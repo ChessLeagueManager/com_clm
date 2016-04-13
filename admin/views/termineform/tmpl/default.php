@@ -95,14 +95,50 @@ $today = date("Y-m-d");
 			</td>
 		</tr>
 
+	<?php
+	// Kategorien
+	list($parentArray, $parentKeys) = CLMCategoryTree::getTree();
+	if (count($parentArray) > 0)  { // nur, wenn Kategorien existieren
+		$parentlist[]	= JHtml::_('select.option',  '0', CLMText::selectOpener(JText::_( 'NO_PARENT' )), 'id', 'name' );
+		foreach ($parentArray as $key => $value) {
+			$parentlist[]	= JHtml::_('select.option',  $key, $value, 'id', 'name' );
+		}
+		$catidAlltime = JHtml::_('select.genericlist', $parentlist, 'catidAlltime', 'class="inputbox" size="1" style="max-width: 250px;"', 'id', 'name', intval($this->termine->catidAlltime));
+		$catidEdition = JHtml::_('select.genericlist', $parentlist, 'catidEdition', 'class="inputbox" size="1" style="max-width: 250px;"', 'id', 'name', intval($this->termine->catidEdition));
+	}
+	if (isset($catidAlltime)) { ?>
+		<tr>
+			<td colspan="1" class="paramlist_key">
+				<label for="category">
+					<?php echo JText::_( 'CATEGORY_ALLTIME' ); ?>:
+				</label>
+			</td>
+			<td colspan="2" class="paramlist_value">
+				<?php echo $catidAlltime; ?>
+			</td>
+			<td colspan="1" class="paramlist_key">
+				<label for="category">
+					<?php echo JText::_( 'CATEGORY_EDITION' ); ?>:
+				</label>
+			</td>
+			<td colspan="2" class="paramlist_value">
+				<?php echo $catidEdition; ?>
+			</td>
+		</tr>
+	<?php } ?>
+
+	<?php if (isset($this->termine->category) AND $this->termine->category != '') { ?>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'TERMINE_KATEGORIE' ); ?>:</label>
+				<label for="name">
+				<span class="editlinktip hasTip" title="<?php echo JText::_( 'TERMINE_KATEGORIE_HINT' );?>">
+				<?php echo JText::_( 'TERMINE_KATEGORIE' ); ?></span></label>
 			</td>
 			<td colspan="2" >
 			<input class="inputbox" type="text" name="category" id="category" size="32" maxlength="60" value="<?php echo $this->termine->category; ?>" />
 			</td>
 		</tr>
+	<?php } ?>
         
 		<tr>
 			<td width="100" align="right" class="key">

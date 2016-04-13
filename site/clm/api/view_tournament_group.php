@@ -16,6 +16,9 @@ function clm_api_view_tournament_group($liga=2) {
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
 
+	if(clm_core::$access->access('BE_teamtournament_create') !== false OR clm_core::$access->access('BE_league_create') !== false) {
+		$table->add_button($lang->categories,$lang->categories_title,clm_core::$load->gen_url(array("view"=>"catmain")),"clm_table_url clm_button clm_button_big clm_button_big_article");
+	}
 	if(clm_core::$access->access('BE_league_create') !== false) {
 		$table->add_button($lang->newLeague,$lang->newLeague_title,clm_core::$load->gen_url(array("section"=>"ligen"),array("view")),"clm_table_url clm_button clm_button_new clm_button_big clm_button_big_new");
 	}

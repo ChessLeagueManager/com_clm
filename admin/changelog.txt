@@ -14,6 +14,8 @@ $ -> Language fix or change
 
 - - - - - 3.2.6 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
 # Korrektur englischer Texte / Mehrsprachigkeit
++ Einzelturniere: Aktivierung für Anwendung England
+^ Termine: Umstellung auf CLM-Kategorien 
 
 - - - - - 3.2.5 - [02-04-2016] - - - - - - - - - - - - - - - - - - - -
 + Feinwertung MTurnier: Buchholz mit FIDE-Ranglistenkorrektur

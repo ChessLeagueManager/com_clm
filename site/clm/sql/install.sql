@@ -842,6 +842,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_termine` (
   `name` varchar(100) NOT NULL DEFAULT '',
   `beschreibung` text,
   `address` varchar(100) NOT NULL DEFAULT '',
+  `catidAlltime` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `catidEdition` smallint(6) unsigned NOT NULL DEFAULT '0',
   `category` varchar(33) NOT NULL DEFAULT '',
   `host` varchar(5) DEFAULT NULL,
   `startdate` date NOT NULL DEFAULT '0000-00-00',
