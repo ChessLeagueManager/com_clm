@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -175,7 +175,7 @@ defined('_JEXEC') or die('Restricted access');
 	<input type="hidden" name="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $this->param['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->param['order_Dir']; ?>" />
-	<input type="hidden" name="id" value="<?php echo $this->param['id']; ?>" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+<!---	<input type="hidden" name="id" value="<?php //echo $this->param['id']; ?>" />
+--->	<?php echo JHtml::_( 'form.token' ); ?>
 
 </form>

@@ -2276,7 +2276,8 @@ function back()
 
 	$option		= JRequest::getCmd('option');
 	$link = 'index.php?option='.$option.'&section=runden';
-	$mainframe->redirect( $link, $msg );
+	//$mainframe->redirect( $link, $msg );
+	$mainframe->redirect( $link );
 	}
 
 function gast_kampflos()

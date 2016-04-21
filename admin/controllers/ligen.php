@@ -183,13 +183,13 @@ function saveIt($apply=false)
 	// if new item, order last in appropriate group
 	$aktion = JText::_( 'LIGEN_AKTION_LEAGUE_EDIT' );
 	$neu_id = 0;
+	$ungerade_id = 0;
 	if (!$row->id) {
 	$neu_id = 1;
 	$aktion = JText::_( 'LIGEN_AKTION_NEW_LEAGUE' );
 		$where = "sid = " . (int) $row->sid;
 		$row->ordering = $row->getNextOrder( $where );
 	
-	$ungerade_id = 0;
 	// Bei ungerader Anzahl Mannschaften Teilnehmerzahl um 1 erhöhen
 	if (($row->teil)%2 != 0) {
 		$ungerade_id	= 1;

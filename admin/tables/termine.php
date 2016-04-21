@@ -22,6 +22,8 @@ class TableCLMTermine extends JTable
 	var $beschreibung		= '';
 	var $address			= '';
 	var $category			= '';
+	var $catidAlltime		= 0;
+	var $catidEdition		= 0;
 	var $host				= '';
 	var $startdate			= '0000-00-00';
 	var $starttime			= '00:00:00';

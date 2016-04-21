@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -502,9 +502,9 @@ public static function verein( &$row, $lists, $option )
 		<input type="hidden" name="section" value="vereine" />
 		<input type="hidden" name="option" value="com_clm" />
 		<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
-		<input type="hidden" name="cid" value="<?php echo $row->cid; ?>" />
-		<input type="hidden" name="client_id" value="<?php echo $row->cid; ?>" />
-		<input type="hidden" name="task" value="" />
+<!---		<input type="hidden" name="cid" value="<?php //echo $row->cid; ?>" />
+		<input type="hidden" name="client_id" value="<?php //echo $row->cid; ?>" />
+--->		<input type="hidden" name="task" value="" />
 		<?php echo JHtml::_( 'form.token' ); ?>
 		</form>
 		<?php

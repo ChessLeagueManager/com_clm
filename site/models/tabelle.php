@@ -133,7 +133,7 @@ class CLMModelTabelle extends JModelLegacy
 			." LEFT JOIN #__clm_liga as l ON l.id =".$liga
 			." WHERE a.liga = ".$liga
 			//." AND a.sid = ".$sid
-			." AND a.tln_nr = ".$tln
+			//." AND a.tln_nr = ".$tln
 			;
 		$db->setQuery($query);
 		$man	=$db->loadObjectList();

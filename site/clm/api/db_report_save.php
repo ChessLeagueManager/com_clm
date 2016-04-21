@@ -336,6 +336,18 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 			return array(true, "m_reportSaveSuccess");
 	}
 	
+	// Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$from = $config->email_from;
+	$fromname = $config->email_fromname;
+	$htmlMail = $config->email_type;
+	if ( $from == '' ) {
+			return array(true, "m_reportSaveSuccessNoMailsEmail");
+	}
+	if ( $fromname == '' ) {
+			return array(true, "m_reportSaveSuccessNoMailsName");
+	}
+
 	$gast = array();
 	for ($i = 0;$i < count($out["gast"]);$i++) {
 		if ($countryversion == "de")
@@ -418,11 +430,6 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 		$gemeldet = false;
 	}
 	
-	// Konfigurationsparameter auslesen
-	$config = clm_core::$db->config();
-	$from = $config->email_from;
-	$fromname = $config->email_fromname;
-	$htmlMail = $config->email_type;
 	$lang = clm_core::$lang->liga_mail_body;
 	$subject = $lang->service." ".$out["liga"][0]->name.': '.$out["paar"][0]->hname." - ".$out["paar"][0]->gname."  ".$hmpunkte.' : '.$gmpunkte;
 	

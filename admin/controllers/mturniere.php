@@ -169,6 +169,7 @@ function saveIt($apply=false)
 	$aktion = JText::_( 'LIGEN_AKTION_LEAGUE_EDIT' );
 	$neu_id = 0;
 	$ungerade_id = 0;
+	$ko_id = 0;
 	if (!$row->id) {
 	$neu_id = 1;
 	$aktion = JText::_( 'LIGEN_AKTION_NEW_LEAGUE' );

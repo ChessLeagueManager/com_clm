@@ -717,9 +717,9 @@ class CLMViewMTurniere
 	<input type="hidden" name="option" value="com_clm" />
 	<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
 	<input type="hidden" name="sid_alt" value="<?php echo $row->sid; ?>" />
-	<input type="hidden" name="cid" value="<?php echo $row->cid; ?>" />
-	<input type="hidden" name="client_id" value="<?php echo $row->cid; ?>" />
-	<input type="hidden" name="rnd" value="<?php echo $row->rnd; ?>" />
+<!---	<input type="hidden" name="cid" value="<?php //echo $row->cid; ?>" />
+	<input type="hidden" name="client_id" value="<?php //echo $row->cid; ?>" />
+--->	<input type="hidden" name="rnd" value="<?php echo $row->rnd; ?>" />
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="params[noOrgReference]" value="<?php echo $row->params['noOrgReference']; ?>" />
 	<input type="hidden" name="params[noBoardResults]" value="<?php echo $row->params['noBoardResults']; ?>" />

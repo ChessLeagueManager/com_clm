@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -280,7 +280,8 @@ function save()
 	// Log schreiben
 	$clmLog = new CLMLog();
 	$clmLog->aktion = $aktion;
-	$clmLog->params = array('sid' => $row->sid, 'lid' => $row->liga, 'zps' => $row->zps);
+	//$clmLog->params = array('sid' => $row->sid, 'lid' => $row->liga, 'zps' => $row->zps);
+	$clmLog->params = array('sid' => $row->sid, 'zps' => $row->zps);
 	$clmLog->write();
 	
 	$mainframe->redirect( $link, $msg ,"message");

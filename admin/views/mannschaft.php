@@ -438,9 +438,9 @@ public static function mannschaft( &$row,$lists, $option )
 		<input type="hidden" name="option" value="com_clm" />
 		<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
 		<input type="hidden" name="pre_man" value="<?php echo $row->man_nr; ?>" />
-		<input type="hidden" name="cid" value="<?php echo $row->cid; ?>" />
-		<input type="hidden" name="client_id" value="<?php echo $row->cid; ?>" />
-		<input type="hidden" name="liste" value="<?php echo $row->liste; ?>" />
+<!---		<input type="hidden" name="cid" value="<?php //echo $row->cid; ?>" />
+		<input type="hidden" name="client_id" value="<?php //echo $row->cid; ?>" />
+--->		<input type="hidden" name="liste" value="<?php echo $row->liste; ?>" />
 		<input type="hidden" name="task" value="" />
 		<?php echo JHtml::_( 'form.token' ); ?>
 		</form>

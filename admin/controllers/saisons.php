@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -151,7 +151,7 @@ class CLMControllerSaisons extends JControllerLegacy {
 		}
 		// Log schreiben
 		$clmLog = new CLMLog();
-		$clmLog->aktion = $aktion;
+		$clmLog->aktion = JText::_('SAISON_SAISON_GESPEI');
 		$clmLog->params = array('sid' => $out[2]);
 		$clmLog->write();
 		$message = clm_core::$load->load_view("notification", array($out[1], false));

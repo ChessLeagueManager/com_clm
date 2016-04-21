@@ -268,7 +268,8 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 
 			<?php for ($x=0; $x < $hcount; $x++){
 			if ($runde[0]->rang !="0") {
-				if (($heim[$x]->mnr >= $runde[0]->hmnr AND $heim[$x]->Rang < 1000 ) OR ($heim[$x]->mnr == $runde[0]->hmnr)){ ?>
+				//if (($heim[$x]->mnr >= $runde[0]->hmnr AND $heim[$x]->Rang < 1000 ) OR ($heim[$x]->mnr == $runde[0]->hmnr)){ 
+				if (($heim[$x]->mnr >= $runde[0]->hmnr AND $heim[$x]->snr < 1000 ) OR ($heim[$x]->mnr == $runde[0]->hmnr)){ ?>
 			 <option value="<?php echo $heim[$x]->mgl_nr.'-'.$heim[$x]->zps; ?>"
 			 	<?php if (($bretter AND ((int)$heim[$x]->mgl_nr) == ((int)$bretter[$i]->spieler) AND $heim[$x]->zps == $bretter[$i]->zps)
 			 		// Bedingungen Voreinstellung
@@ -314,7 +315,8 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
  		<option value="0"><?php echo JText::_('RESULTS_DETAILS_DD_2');?></option>
 			<?php for ($x=0; $x < $gcount; $x++) {
 			if ($runde[0]->rang !="0") {
-				if (($gast[$x]->mnr >= $runde[0]->gmnr AND $gast[$x]->Rang < 1000 ) OR ($gast[$x]->mnr == $runde[0]->gmnr)){ ?>
+				//if (($gast[$x]->mnr >= $runde[0]->gmnr AND $gast[$x]->Rang < 1000 ) OR ($gast[$x]->mnr == $runde[0]->gmnr)){ 
+				if (($gast[$x]->mnr >= $runde[0]->gmnr AND $gast[$x]->snr < 1000 ) OR ($gast[$x]->mnr == $runde[0]->gmnr)){ ?>
 			<option value="<?php echo $gast[$x]->mgl_nr.'-'.$gast[$x]->zps; ?>" 
 				 <?php if (($bretter AND ((int)$gast[$x]->mgl_nr) == ((int)$bretter[$i]->gegner) AND $gast[$x]->zps == $bretter[$i]->gzps)
 				 	 // Bedingungen Voreinstellung

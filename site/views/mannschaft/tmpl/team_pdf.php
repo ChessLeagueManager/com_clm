@@ -253,6 +253,7 @@ for ($x=0; $x< 100; $x++){
 		//$pdf->Cell(12,4,($x+1),0,0,'C');
 	} else {
 		if ($count[$x]->rmnr > $mannschaft[0]->man_nr) {
+		  if (!isset($einzel[$ie])) continue;
 		  if (($count[$x]->zps !== $einzel[$ie]->zps)||($count[$x]->mgl_nr !== $einzel[$ie]->spieler)) {
 			continue;
 		  }	

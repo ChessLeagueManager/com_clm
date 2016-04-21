@@ -500,9 +500,9 @@ public static function runde( &$row,$lists, $option )
 		<input type="hidden" name="section" value="runden" />
 		<input type="hidden" name="option" value="com_clm" />
 		<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
-		<input type="hidden" name="cid" value="<?php echo $row->cid; ?>" />
-		<input type="hidden" name="client_id" value="<?php echo $row->cid; ?>" />
-		<input type="hidden" name="task" value="" />
+<!---		<input type="hidden" name="cid" value="<?php //echo $row->cid; ?>" />
+		<input type="hidden" name="client_id" value="<?php //echo $row->cid; ?>" />
+--->		<input type="hidden" name="task" value="" />
 		<input type="hidden" name="slok_old" value="<?php echo $row->sl_ok; //klkl ?>" /> 
 		<?php echo JHtml::_( 'form.token' ); ?>
 		</form>
