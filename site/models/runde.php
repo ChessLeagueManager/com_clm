@@ -561,5 +561,25 @@ class CLMModelRunde extends JModelLegacy
 		return @$result;
 	}
 
+	public static function team_tlnr ( $lid, $tlnr )
+	{
+	$db	= JFactory::getDBO();
+	$query = " SELECT a.tln_nr, a.man_nr, m.snr, m.mgl_nr, m.zps, d.Spielername, IF(m.start_dwz IS NULL, d.DWZ, m.start_dwz) as dwz "
+		." FROM #__clm_mannschaften as a "
+		." LEFT JOIN #__clm_meldeliste_spieler AS m ON m.lid = a.liga AND m.mnr = a.man_nr "
+				." AND ( m.zps = a.zps OR FIND_IN_SET(m.zps, a.sg_zps))	"	
+		." LEFT JOIN #__clm_dwz_spieler AS d ON d.sid = a.sid AND d.ZPS = m.zps AND d.Mgl_Nr = m.mgl_nr "
+		." WHERE a.liga = ".$lid
+		." AND a.tln_nr = ".$tlnr
+		." ORDER BY m.snr "
+		;
+	$db 	=JFactory::getDBO();
+	$db->setQuery( $query );
+	$team	=$db->loadObjectList();
+	
+	return $team;
+	}
+
+
 }
 ?>
