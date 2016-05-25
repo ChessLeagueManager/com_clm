@@ -5,4 +5,13 @@
                         <![CDATA[COM_CLM_TERMINE_VIEW_DEFAULT_DESC]]>
                 </message>
         </layout>
+        <fields name="request">
+			<fieldset name="request" >
+				<field name="categoryid" type="sql" default="0" label="COM_CLM_TERMINE_VIEW_LABEL_CATEGORY" query="
+						SELECT a.id AS value, a.name AS tname 
+						FROM #__clm_categories AS a " value_field="tname" >
+					<option value="0">COM_CLM_TERMINE_VIEW_DEFAULT_CATEGORY</option>
+				</field>
+            </fieldset>
+        </fields>
 </metadata>

@@ -15,6 +15,7 @@ $ -> Language fix or change
 - - - - - 3.3.1 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
 + View Runde: pdf-Formular Spielbericht
 # Englisch: Minitextkorrektur
++ Menüeintragstyp Terminliste mit Selektion CLM-Kategorie
 
 - - - - - 3.3.0 - [27-04-2016] - - - - - - - - - - - - - - - - - - - -
 # Korrektur englischer Texte / Mehrsprachigkeit

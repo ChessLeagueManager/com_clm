@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Fjodor Schäfer
@@ -17,6 +17,7 @@ defined('_JEXEC') or die('Restricted access');
 	$sid = $db->loadObject()->id;
 $nr			= JRequest::getVar('nr');
 $itemid		= JRequest::getInt('Itemid');
+$categoryid	= JRequest::getInt('categoryid',0);
 
 $termine_detail	= $this->termine_detail;
 
@@ -105,7 +106,7 @@ $arrWochentag = array( "Monday" => "Montag", "Tuesday" => "Dienstag", "Wednesday
 		<?php  } ?>
     <?php  } ?>
     
-    <a href="index.php?option=com_clm&amp;view=termine&amp;saison=<?php echo $sid; if ($itemid <>'') { echo "&Itemid=". $itemid; } ?>"><?php echo JText::_('TERMINE_BACK') ?></a>
+    <a href="index.php?option=com_clm&amp;view=termine&amp;categoryid=<?php echo $categoryid; ?>&amp;saison=<?php echo $sid; if ($itemid <>'') { echo "&Itemid=". $itemid; } ?>"><?php echo JText::_('TERMINE_BACK') ?></a>
     
     <br>
     <br>
