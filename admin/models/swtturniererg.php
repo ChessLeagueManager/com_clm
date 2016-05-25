@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -788,6 +788,22 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	function _copyPaarungen($swt_tid, $update, $tid) {
 		$db		=JFactory::getDBO ();
 	
+		$select_query = " SELECT * FROM #__clm_turniere_rnd_spl "
+						." WHERE turnier = ".$tid
+						." AND pgn != '' ;";
+		$db->setQuery($select_query);
+		$pgn_daten = $db->loadObjectList();
+
+		$pgn_array = array();
+		foreach($pgn_daten as $pgn_dat) {
+			$pgn_key = ($pgn_dat->spieler * 10000) + ($pgn_dat->gegner * 10) + $pgn_dat->heim;
+			$pgn_array[$pgn_key] = new stdClass();
+			$pgn_array[$pgn_key]->spieler = $pgn_dat->spieler; 
+			$pgn_array[$pgn_key]->gegner = $pgn_dat->gegner; 
+			$pgn_array[$pgn_key]->heim = $pgn_dat->heim; 
+			$pgn_array[$pgn_key]->pgn = $pgn_dat->pgn; 
+		}
+
 		$delete_query = "	DELETE FROM
 								#__clm_turniere_rnd_spl
 							WHERE
@@ -813,6 +829,11 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			//$paarung->set('turnier',$tid);					ab Joomla 1.6
 			$paarung->turnier = $tid;
 			
+			$pgn_key = ($paarung->spieler * 10000) + ($paarung->gegner * 10) + $paarung->heim;
+			if (isset($pgn_array[$pgn_key])) {
+					$paarung->pgn = $pgn_array[$pgn_key]->pgn;
+			}
+
 			if(!$db->insertObject('#__clm_turniere_rnd_spl',$paarung,'id')) {
 				return false;
 			}

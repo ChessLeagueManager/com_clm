@@ -16,6 +16,7 @@ $ -> Language fix or change
 + View Runde: pdf-Formular Spielbericht
 # Englisch: Minitextkorrektur
 + Menüeintragstyp Terminliste mit Selektion CLM-Kategorie
+# SWT-Import Einzel: pgn bleibt erhalten bei Update
 
 - - - - - 3.3.0 - [27-04-2016] - - - - - - - - - - - - - - - - - - - -
 # Korrektur englischer Texte / Mehrsprachigkeit
