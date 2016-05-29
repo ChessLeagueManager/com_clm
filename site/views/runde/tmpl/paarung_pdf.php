@@ -39,6 +39,9 @@ else $ms = false;
 		case '6': $colorstr = '11'; break;
 		default: $colorstr = '01';	
 	}
+	if (!isset($params['ReportForm']))  {   // sollte nicht vorkommen!Standardbelegung
+		$params['ReportForm'] = '1'; }
+
 $paar=$this->paar;
 $ok=$this->ok;
 // Variblen aus URL holen
@@ -194,21 +197,27 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 			if ($schwarz == 1) $weiss = 0; else $weiss = 1;
 			$y1++;
 			if ($y1 >= strlen($colorstr)) $y1 = 0;
-		$breite2 = 7;
-		$breite1 = 44;
-		if ($x == 0) {
-			$pdf->SetX($xxm-5);
-			$pdf->SetFont('Times','',$font-3);
-			$zelle1 = 4;
-			$pdf->Cell(5,$zelle1,'Brett',1,0,'C');
-			$pdf->Cell($breite2,$zelle1,'St-Nr',1,0,'C');
-			$pdf->Cell($breite1,$zelle1,'Name',1,0,'C');		
+			if ($params['ReportForm'] == '1') { 	//mit Melde-Nr.
+				$breite2 = 7;
+				$breite1 = 44;
+				$htext = JText::_('PAIRING_ST_NO');
+			} else {								// 2 mit Mitgl.Nr.
+				$breite2 = 11;
+				$breite1 = 40;
+				$htext = JText::_('PAIRING_PA_NO');
+			}
+			if ($x == 0) {
+				$pdf->SetX($xxm-5);
+				$pdf->SetFont('Times','',$font-3);
+				$zelle1 = 4;
+				$pdf->Cell(5,$zelle1,JText::_('PAIRING_BOARD'),1,0,'C');
+				$pdf->Cell($breite2,$zelle1,$htext,1,0,'C');
+				$pdf->Cell($breite1,$zelle1,JText::_('PAIRING_NAME'),1,0,'C');		
 
-			$pdf->Cell(10,$zelle1,'Ergebnis',1,0,'C');
-			//$pdf->Cell(5,$zelle1,'',1,0,'C',$fc);
+				$pdf->Cell(10,$zelle1,JText::_('PAIRING_RESULT'),1,0,'C');
 
-			$pdf->Cell($breite1,$zelle1,'Name',1,0,'C');	
-			$pdf->Cell($breite2,$zelle1,'St-Nr',1,1,'C');	
+				$pdf->Cell($breite1,$zelle1,JText::_('PAIRING_NAME'),1,0,'C');	
+				$pdf->Cell($breite2,$zelle1,$htext,1,1,'C');	
 			$pdf->SetFont('Times','',$font);
 		}
 		$pdf->SetX($xxm-5);
@@ -270,8 +279,13 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 	for ($i = 0; $i < count($team); $i++) {
 		if ($i > 30) break;
 		$pdf->SetX($xxl);
-		$pdf->Cell(3,$zelle/2,$team[$i]->snr,0,0,'C');
-		$pdf->Cell(30,$zelle/2,utf8_decode($team[$i]->Spielername),0,0,'L');	
+		if ($params['ReportForm'] == '1') { 	//mit Melde-Nr.
+			$pdf->Cell(3,$zelle/2,$team[$i]->snr,0,0,'C');
+			$pdf->Cell(30,$zelle/2,utf8_decode($team[$i]->Spielername),0,0,'L');	
+		} else {								// 2 mit Mitgl.Nr.
+			$pdf->Cell(5,$zelle/2,$team[$i]->mgl_nr,0,0,'C');
+			$pdf->Cell(28,$zelle/2,utf8_decode($team[$i]->Spielername),0,0,'L');	
+		}
 		$pdf->Cell(5,$zelle/2,$team[$i]->dwz,0,1,'C');	
 	}
 
@@ -281,8 +295,13 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 	for ($i = 0; $i < count($team); $i++) {
 		if ($i > 30) break;
 		$pdf->SetX($xxr);
-		$pdf->Cell(3,$zelle/2,$team[$i]->snr,0,0,'C');
-		$pdf->Cell(30,$zelle/2,utf8_decode($team[$i]->Spielername),0,0,'L');	
+		if ($params['ReportForm'] == '1') { 	//mit Melde-Nr.
+			$pdf->Cell(3,$zelle/2,$team[$i]->snr,0,0,'C');
+			$pdf->Cell(30,$zelle/2,utf8_decode($team[$i]->Spielername),0,0,'L');	
+		} else {								// 2 mit Mitgl.Nr.
+			$pdf->Cell(5,$zelle/2,$team[$i]->mgl_nr,0,0,'C');
+			$pdf->Cell(28,$zelle/2,utf8_decode($team[$i]->Spielername),0,0,'L');	
+		}
 		$pdf->Cell(5,$zelle/2,$team[$i]->dwz,0,1,'C');	
 	}
   }

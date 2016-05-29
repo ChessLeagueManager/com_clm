@@ -55,6 +55,7 @@ $liga		= $this->liga;
 	if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
 	if (!isset($params['round_date'])) $params['round_date'] = '0';
 	if (!isset($params['noBoardResults'])) $params['noBoardResults'] = '0';
+	if (!isset($params['ReportForm'])) $params['ReportForm'] = '0';
 $einzel		= $this->einzel;
 $pgn		= JRequest::getInt('pgn','0'); 
 $detail		= JRequest::getInt('detail','0');
@@ -337,7 +338,7 @@ if (isset($paar[$y]->htln)) {  // Leere Begegnungen ausblenden
         <?php
         $edit=0;
         $medit=0;
-		?> <div class=paarung> <?php	if ($liga[0]->rang == 0 AND $paar[$y]->hname != 'spielfrei' AND $paar[$y]->gname != 'spielfrei') {   // $jid != 0 AND 
+		?> <div class=paarung> <?php	if ($liga[0]->rang == 0 AND $paar[$y]->hname != 'spielfrei' AND $paar[$y]->gname != 'spielfrei' AND $params['ReportForm'] != '0') {   // $jid != 0 AND 
 		?>
             <div class="run_admit"><a href="index.php?option=com_clm&view=runde&saison=<?php echo $liga[0]->sid; ?>&liga=<?php echo $liga[0]->id; ?>&amp;layout=paarung&amp;runde=<?php echo $runde_orig; ?>&amp;dg=<?php echo $dg; ?>&amp;paarung=<?php echo ($y + 1); ?>&amp;format=pdf"><label for="name" class="hasTip"><img  src="<?php echo CLMImage::imageURL('pdf_button.png'); ?>"  class="CLMTooltip" title="<?php echo JText::_('PAIRING_PDF'); ?>" /></label></a>
 			<?php } ?>

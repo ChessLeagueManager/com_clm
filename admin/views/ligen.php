@@ -80,6 +80,8 @@ class CLMViewLigen
 		$row->params['noOrgReference'] = '0'; }
 	if (!isset($row->params['noBoardResults']))  {   //Standardbelegung
 		$row->params['noBoardResults'] = '0'; }
+	if (!isset($row->params['ReportForm']))  {   //Standardbelegung
+		$row->params['ReportForm'] = '0'; }
 
 	?>
 	
@@ -530,16 +532,27 @@ class CLMViewLigen
       <tr>
 	<td nowrap="nowrap" colspan="2">
 	<label for="params[incl_to_season]"><?php echo JText::_( 'OPTION_INCL_TO_SEASON' ); ?></label>
-	</td><td colspan="4"><fieldset class="radio">
+	</td><td colspan="1"><fieldset class="radio">
 		<?php echo JHtml::_('select.booleanlist', 'params[incl_to_season]', 'class="inputbox"', $row->params['incl_to_season']); ?>
 	</fieldset></td>
-	</tr>
-	<tr>
+	<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 	<td nowrap="nowrap" colspan="2">
 	<label for="anzeige_ma"><?php echo JText::_( 'LEAGUE_SHOW_PLAYERLIST' ); ?></label>
-	</td><td colspan="4"><fieldset class="radio">
+	</td><td colspan="1"><fieldset class="radio">
 	<?php echo $lists['anzeige_ma']; ?>
 	</fieldset></td>
+	</tr>
+
+    <tr>
+	<td nowrap="nowrap">
+	<label for="params[ReportForm]"><?php echo JText::_( 'LEAGUE_REPORT_FORM' ); ?></label>
+	</td><td colspan="5">
+		<select name="params[ReportForm]" id="params[ReportForm]" value="<?php echo $row->params['ReportForm']; ?>" size="1">
+		<option value="0" <?php if ($row->params['ReportForm'] == 0) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FORM_NO' );?></option>
+		<option value="1" <?php if ($row->params['ReportForm'] == 1) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FORM_LINEUP_NO' );?></option>
+		<option value="2" <?php if ($row->params['ReportForm'] == 2) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FORM_MEMBER_NO' );?></option>
+		</select>
+	</td>
 	</tr>
 
     <tr>
@@ -567,32 +580,31 @@ class CLMViewLigen
     <tr>
 	<td nowrap="nowrap" colspan="2">
 	<label for="mail"><?php echo JText::_( 'LEAGUE_MAIL' ); ?></label>
-	</td><td colspan="4"><fieldset class="radio">
+	</td><td colspan="1"><fieldset class="radio">
 	<?php echo $lists['mail']; ?>
 	</fieldset></td>
-	</tr>
+	<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <?php if ($sl_mail == "1") { ?>
-	<tr>
 	<td nowrap="nowrap" colspan="2">
 	<label for="sl_mail"><?php echo JText::_( 'LEAGUE_MAIL_CHIEF' ); ?></label>
-	</td><td colspan="4"><fieldset class="radio">
+	</td><td colspan="1"><fieldset class="radio">
 	<?php echo $lists['sl_mail']; ?>
 	</fieldset></td>
 	</tr>
 <?php } else { ?>
 	<input type="hidden" name="sl_mail" value="0" />
 <?php } ?>
-	<tr>
-	<td nowrap="nowrap" colspan="2">
-	<label for="order"><?php echo JText::_( 'LEAGUE_ORDERING' ); ?></label>
-	</td><td colspan="4"><fieldset class="radio">
-	<?php echo $lists['order']; ?>
-	</fieldset></td>
 	</tr>
 	<tr>
 	<td nowrap="nowrap" colspan="2">
+	<label for="order"><?php echo JText::_( 'LEAGUE_ORDERING' ); ?></label>
+	</td><td colspan="1"><fieldset class="radio">
+	<?php echo $lists['order']; ?>
+	</fieldset></td>
+	<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+	<td nowrap="nowrap" colspan="2">
 	<label for="published"><?php echo JText::_( 'LEAGUE_PUBLISHED' ); ?></label>
-	</td><td colspan="4"><fieldset class="radio">
+	</td><td colspan="1"><fieldset class="radio">
 	<?php echo $lists['published']; ?>
 	</fieldset></td>
 	</tr>
