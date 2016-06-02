@@ -88,50 +88,69 @@ function Footer()
 }
 }
 
-// Überschrift Fontgröße Standard = 14
-$head_font = 14;
-// Fontgröße Standard = 9
-$font = 9;
-// Fontgröße Datum = 8
-$date_font = 8;
-
 // Datum der Erstellung
 $date =JFactory::getDate();
 $now = $date->toSQL();
 
 $pdf=new PDF();
 $pdf->AliasNbPages();
-$pdf->AddPage();
-
-$pdf->SetFont('Times','',$date_font);
-	$pdf->Cell(10,3,' ',0,0);
-	$pdf->Cell(175,4,utf8_decode(JText::_('WRITTEN')).' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
 	
 if ( $mannschaft[0]->published == 0) {
-	$pdf->SetFont('Times','',$head_font+2);
+	$pdf->AddPage();
+	$pdf->SetFont('Times','',16);
 	$pdf->Cell(10,15,utf8_decode(JText::_('TEAM')).' '.utf8_decode($mannschaft[0]->name),0,1);
 	$pdf->Cell(10,15,utf8_decode(JText::_('NOT_PUBLISHED')),0,0);
 	$pdf->Ln();
 	$pdf->Cell(10,15,utf8_decode(JText::_('GEDULD')),0,0);
-} elseif (($mannschaft[0]->runden * $mannschaft[0]->dg) > 18) {
-	$pdf->SetFont('Times','',$head_font+2);
+} elseif (($mannschaft[0]->runden * $mannschaft[0]->dg) > 30) {
+	$pdf->AddPage();
+	$pdf->SetFont('Times','',16);
 	$pdf->Cell(10,15,utf8_decode(JText::_('TEAM_PDF_LIMIT')),0,1);
 	$pdf->Ln();
 	$pdf->Cell(10,15,utf8_decode(JText::_('TEAM_PDF_ADVICE')),0,0);
 } else {
 $anzspl = $mannschaft[0]->runden * $mannschaft[0]->dg;
+
+// Überschrift Fontgröße Standard = 14
+$head_font = 14;
+// Fontgröße Standard = 9
+$font = 9;
+// Fontgröße Datum = 8
+$date_font = 8;
 // Zellenhöhe -> Standard 6
-$zelle = 7;
+$zelle = 6;
 // Wert von Zellenbreite abziehen
 // Bspl. für Standard (Null) für Liga mit 7 Runden und 1 Durchgang
+$breite1 = 10;
+$breite = 8;
+$pdf_orientation = 'P';
 if ($anzspl > 11) {
-	$breite1 = 1;
-	$breite = 6;
-} else {
 	$breite1 = 10;
-	$breite = 8;
-}
+	$breite = 6;
+} 
+if ($anzspl > 20) {
+	$breite1 = 8;
+	$breite = 6;
+	$font = 8; 
+	$zelle = 5; 
+	$pdf_orientation = 'L'; }
+JRequest::setVar( 'pdf_orientation', $pdf_orientation);
+// Orientation Portrait/Landscape
+	if (!isset($pdf_orientation) OR (strpos('PpLl', $pdf_orientation) === false)) $pdf_orientation = 'P';
+	if ($pdf_orientation == 'L' OR $pdf_orientation == 'l') {
+		$pdf_width = 285;
+		$pdf_length	= 190;
+} else {
+		$pdf_width = 195;
+		$pdf_length	= 240;
+	}
 
+$pdf->AddPage($pdf_orientation);
+
+$pdf->SetFont('Times','',$date_font);
+	$pdf->Cell(10,3,' ',0,0);
+	$pdf->Cell($pdf_width-20,4,utf8_decode(JText::_('WRITTEN')).' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
+	
 $pdf->SetFont('Times','B',$head_font);
 	$pdf->Cell(10,10,' ',0,0);
 	if ($o_nr == 0) 
@@ -204,53 +223,58 @@ $pdf->SetFont('Times','B',$font);
 	else {
 
 $pdf->SetFont('Times','',$font);
-	$pdf->Cell($breite1,8,' ',0,0);
-	$pdf->Cell(12,8,JText::_('DWZ_NR'),0,0,'C');
+$pdf->SetFillColor(120);
+$pdf->SetTextColor(255);
+	$pdf->Cell($breite1,$zelle,' ',0,0);
+	$pdf->Cell(12,$zelle,JText::_('DWZ_NR'),0,0,'C',1);
 	if (($o_nr == 0) or ($mannschaft[0]->sg_zps <= "0"))
-		$pdf->Cell(40,8,JText::_('DWZ_NAME'),0,0);
+		$pdf->Cell(40,$zelle,JText::_('DWZ_NAME'),0,0,'L',1);
 	else
-		$pdf->Cell(48,8,JText::_('DWZ_NAME'),0,0);
+		$pdf->Cell(48,$zelle,JText::_('DWZ_NAME'),0,0,'L',1);
 	if ($countryversion == "de")
-		$pdf->Cell(10,8,JText::_('LEAGUE_STAT_DWZ'),0,0,'R');
+		$pdf->Cell(10,$zelle,JText::_('LEAGUE_STAT_DWZ'),0,0,'R',1);
 	else
-		$pdf->Cell(10,8,JText::_('LEAGUE_STAT_DWZ_EN'),0,0,'R');
+		$pdf->Cell(10,$zelle,JText::_('LEAGUE_STAT_DWZ_EN'),0,0,'R',1);
 	//if (!$count) 
 	for ($b=0; $b<$mannschaft[0]->runden; $b++) {
-		$pdf->Cell($breite,8,$b+1,0,0,'C');
+		$pdf->Cell($breite,$zelle,$b+1,0,0,'C',1);
 	}
 	if ($mannschaft[0]->dg >1) {
 		for ($b=0; $b<$mannschaft[0]->runden; $b++) {
-			$pdf->Cell($breite,8,$b+1,0,0,'C');
+			$pdf->Cell($breite,$zelle,$b+1,0,0,'C',1);
 	} }
 	if ($mannschaft[0]->dg >2) {
 		for ($b=0; $b<$mannschaft[0]->runden; $b++) {
-			$pdf->Cell($breite,8,$b+1,0,0,'C');
+			$pdf->Cell($breite,$zelle,$b+1,0,0,'C',1);
 	} }
 	if ($mannschaft[0]->dg >3) {
 		for ($b=0; $b<$mannschaft[0]->runden; $b++) {
-			$pdf->Cell($breite,8,$b+1,0,0,'C');
+			$pdf->Cell($breite,$zelle,$b+1,0,0,'C',1);
 	} }
-	$pdf->Cell($breite,8,JText::_('TEAM_POINTS'),0,0,'C');
-	$pdf->Cell($breite,8,JText::_('TEAM_GAMES'),0,0,'C');
-	$pdf->Cell($breite,8,JText::_('LEAGUE_STAT_PERCENT'),0,1,'C');
+	$pdf->Cell($breite,$zelle,JText::_('TEAM_POINTS'),0,0,'C',1);
+	$pdf->Cell($breite,$zelle,JText::_('TEAM_GAMES'),0,0,'C',1);
+	$pdf->Cell($breite+2,$zelle,JText::_('LEAGUE_STAT_PERCENT'),0,1,'C',1);
 	
 
 // Teilnehmerschleife 	
+$pdf->SetFont('Times','',$font);
+$pdf->SetFillColor(240);
+$pdf->SetTextColor(0);
 	$ie = 0;
 	$y = 0;
 	$sumspl = 0;
 	$sumgespielt = 0;
 for ($x=0; $x< 100; $x++){
+	if ($x%2 != 0) { $fc = 1; } else { $fc = 0; }
 	// Überlesen von Null-Sätzen 
 	while (isset($count[$x]) and $countryversion == "de" and ($count[$x]->mgl_nr == "0"))  {
 		$x++; }
 	if (!isset($count[$x])) break;
 	if ($count[$x]->PKZ === NULL) { $count[$x]->PKZ = ""; }
 	if (!isset($count[$x]->rrang)) {
-		$pdf->Cell($breite1,4,' ',0,0);
+		$pdf->Cell($breite1,$zelle,' ',0,0,'C');
 		$y++;
-		$pdf->Cell(12,4,($y),0,0,'C');
-		//$pdf->Cell(12,4,($x+1),0,0,'C');
+		$pdf->Cell(12,$zelle,($y),1,0,'C',$fc);
 	} else {
 		if ($count[$x]->rmnr > $mannschaft[0]->man_nr) {
 		  if (!isset($einzel[$ie])) continue;
@@ -258,24 +282,24 @@ for ($x=0; $x< 100; $x++){
 			continue;
 		  }	
 		}
-		$pdf->Cell($breite1,4,' ',0,0);
-		$pdf->Cell(12,4,($count[$x]->rmnr.'-'.$count[$x]->rrang),0,0,'C');
+		$pdf->Cell($breite1,$zelle,' ',0,0,'C');
+		$pdf->Cell(12,$zelle,($count[$x]->rmnr.'-'.$count[$x]->rrang),1,0,'C',$fc);
 	}
 	if ($o_nr == 0) 
-		$pdf->Cell(40,4,utf8_decode($count[$x]->name),0,0);
+		$pdf->Cell(40,$zelle,utf8_decode($count[$x]->name),1,0,'L',$fc);
 	elseif ($mannschaft[0]->sg_zps > "0") {
-		$pdf->Cell(33,4,utf8_decode($count[$x]->name),0,0);
+		$pdf->Cell(33,$zelle,utf8_decode($count[$x]->name),1,0,'L',$fc);
 		$pdf->SetFont('Times','',7);
-		$pdf->Cell(15,4,"(".$count[$x]->zps."-".$count[$x]->mgl_nr.")",0,0);
+		$pdf->Cell(15,$zelle,"(".$count[$x]->zps."-".$count[$x]->mgl_nr.")",1,0,'L',$fc);
 		$pdf->SetFont('Times','',8);
 	} else {
-		$pdf->Cell(33,4,utf8_decode($count[$x]->name),0,0);
+		$pdf->Cell(33,$zelle,utf8_decode($count[$x]->name),1,0,'L',$fc);
 		$pdf->SetFont('Times','',7);
-		$pdf->Cell(7,4,"(".$count[$x]->mgl_nr.")",0,0);
+		$pdf->Cell(7,$zelle,"(".$count[$x]->mgl_nr.")",1,0,'L',$fc);
 		$pdf->SetFont('Times','',8);
 	}
-    if ($lparams['dwz_date'] == '0000-00-00') { $pdf->Cell(10,4,$count[$x]->dwz,0,0,'R'); } 
-	else { $pdf->Cell(10,4,$count[$x]->start_dwz,0,0,'R'); } 
+    if ($lparams['dwz_date'] == '0000-00-00') { $pdf->Cell(10,$zelle,$count[$x]->dwz,1,0,'R',$fc); } 
+	else { $pdf->Cell(10,$zelle,$count[$x]->start_dwz,1,0,'R',$fc); } 
 	$pkt = 0;
 	$spl = 0;
 	$gespielt = 0;
@@ -305,7 +329,7 @@ for ($x=0; $x< 100; $x++){
 				}
 			}
 		
-		$pdf->Cell($breite,4,$dr_einzel,1,0,'C');
+		$pdf->Cell($breite,$zelle,$dr_einzel,1,0,'C',$fc);
 			if ($einzel[$ie]->kampflos == 0) {
 				$gespielt++;
 				$sumgespielt++;
@@ -315,26 +339,26 @@ for ($x=0; $x< 100; $x++){
 			$pkt += $einzel[$ie]->punkte;
 		$ie++;
 	  }
-	  else $pdf->Cell($breite,4,'',1,0,'C');
+	  else $pdf->Cell($breite,$zelle,'',1,0,'C',$fc);
 	}
   }
  
 	if ($spl>0) {
-		$pdf->Cell($breite,4,$pkt,1,0,'C');
-		$pdf->Cell($breite,4,$spl,1,0,'C');
+		$pdf->Cell($breite,$zelle,$pkt,1,0,'C',$fc);
+		$pdf->Cell($breite,$zelle,$spl,1,0,'C',$fc);
 		$prozent = round(100*($pkt - $spl * $ligapunkte->antritt)/($spl * $ligapunkte->sieg), 1);
-		$pdf->Cell($breite,4,$prozent,1,0,'C');
+		$pdf->Cell($breite+2,$zelle,$prozent,1,0,'C',$fc);
 	}
 	else {
-		$pdf->Cell($breite,4,"",1,0,'C');
-		$pdf->Cell($breite,4,"",1,0,'C');
-		$pdf->Cell($breite,4,"",1,0,'C');
+		$pdf->Cell($breite,$zelle,"",1,0,'C',$fc);
+		$pdf->Cell($breite,$zelle,"",1,0,'C',$fc);
+		$pdf->Cell($breite+2,$zelle,"",1,0,'C',$fc);
 	
 	}
-	$pdf->Cell($breite,4,'',0,1,'C');
+	$pdf->Cell($breite,$zelle,'',0,1,'C');
 }
 	while (isset($einzel[$ie])) {
-		$pdf->Cell($breite1,4,' ',0,0);
+		$pdf->Cell($breite1,$zelle-1,' ',0,0);
 //		$ztext = utf8_decode("Ergebnis übersprungen, da Spieler nicht in Aufstellung ");
 //		$ztext .= ' Verein:'.$einzel[$ie]->zps.' Mitglied:'.$einzel[$ie]->spieler.' PKZ:'.$einzel[$ie]->PKZ;
 //		$ztext .= ' Durchgang:'.$einzel[$ie]->dg.' Runde:'.$einzel[$ie]->runde;
@@ -343,51 +367,53 @@ for ($x=0; $x< 100; $x++){
 		$ztext .= JText::_( 'TEAM_CLUB' ).$einzel[$ie]->zps.JText::_( 'TEAM_MEMBER' ).$einzel[$ie]->spieler.JText::_( 'TEAM_PKZ' ).$einzel[$ie]->PKZ;
 		$ztext .= JText::_( 'TEAM_DG' ).$einzel[$ie]->dg.JText::_( 'TEAM_ROUND' ).$einzel[$ie]->runde;
 		$ztext .= JText::_( 'TEAM_BOARD' ).$einzel[$ie]->brett.JText::_( 'TEAM_RESULT2' ).$einzel[$ie]->punkte; 	
-		$pdf->Cell(50,4,$ztext,0,1,'L');
+		$pdf->Cell(50,$zelle-1,$ztext,0,1,'L',$fc);
 		$ie++;
 	}
 
 	$x = $pdf->GetX();
 	$y = $pdf->GetY();
 	if (($o_nr == 0) or ($mannschaft[0]->sg_zps <= "0"))
-		$pdf->Line($x+$breite1,$y+2,$x+170,$y+2);
+		$pdf->Line($x+$breite1,$y+2,$x+$pdf_width-8,$y+2);
 	else
-		$pdf->Line($x+$breite1,$y+2,$x+178,$y+2);
-	$pdf->Cell(8,4,'',0,1,'C');
+		$pdf->Line($x+$breite1,$y+2,$x+$pdf_width,$y+2);
+	$pdf->Cell(8,$zelle,'',0,1,'C');
 	
-	$pdf->Cell($breite1,4,' ',0,0);
-	$pdf->Cell(12,4,JText::_('TEAM_TOTAL'),0,0,'C');
+	$pdf->Cell($breite1,$zelle,' ',0,0);
+	$pdf->Cell(12,$zelle,JText::_('TEAM_TOTAL'),1,0,'C',1);
 	if (($o_nr == 0) or ($mannschaft[0]->sg_zps <= "0"))
-		$pdf->Cell(40,4,'',0,0);
+		$pdf->Cell(40,$zelle,'',0,0,'C',0);
 	else
-		$pdf->Cell(48,4,'',0,0);
-	$pdf->Cell(10,4,'',0,0,'R');
+		$pdf->Cell(48,$zelle,'',0,0,'C',0);
+	$pdf->Cell(10,$zelle,'',0,0,'R');
 	$pkt = 0;
 	$spl = 0;
   for ($c=0; $c<$mannschaft[0]->dg; $c++) {
 	for ($b=0; $b<$mannschaft[0]->runden; $b++) {
 		while (isset($bp[$spl]) AND $bp[$spl]->tln_nr != $mannschaft[0]->tln_nr) { $spl++; }
 		if (isset($bp[$spl]->runde) AND $bp[$spl]->runde == $b+1) { 
-			$pdf->Cell($breite,4,str_replace ('.0', '', $bp[$spl]->brettpunkte),1,0,'C');
+			$pdf->Cell($breite,$zelle,str_replace ('.0', '', $bp[$spl]->brettpunkte),1,0,'C');
 			$spl++;
 		}
-		else $pdf->Cell($breite,4,'',1,0,'C');
+		else $pdf->Cell($breite,$zelle,'',1,0,'C');
 	}
   }
 	if ($sumspl>0) {
-		$pdf->Cell($breite,4,str_replace ('.0', '', $sumbp[0]->summe),1,0,'C');
-		$pdf->Cell($breite,4,$sumspl,1,0,'C');
+		$pdf->Cell($breite,$zelle,str_replace ('.0', '', $sumbp[0]->summe),1,0,'C');
+		$pdf->Cell($breite,$zelle,$sumspl,1,0,'C');
 		$prozent = round (100 * ($sumbp[0]->summe - $sumgespielt * $antritt) / ($sumgespielt * $sieg), 1);
-		$pdf->Cell($breite,4,$prozent,1,0,'C');
+		$pdf->Cell($breite+2,$zelle,$prozent,1,0,'C');
 	} else {
-		$pdf->Cell($breite,4,"",1,0,'C');
-		$pdf->Cell($breite,4,"",1,0,'C');
-		$pdf->Cell($breite,4,"",1,0,'C');
+		$pdf->Cell($breite,$zelle,"",1,0,'C');
+		$pdf->Cell($breite,$zelle,"",1,0,'C');
+		$pdf->Cell($breite+2,$zelle,"",1,0,'C');
 	}	
-	$pdf->Cell($breite,4,'',0,1,'C');
+	$pdf->Cell($breite,$zelle,'',0,1,'C');
 }
 	$pdf->Ln();
 }
+
+// Spielplan
 $pdf->SetFont('Times','B',$font);
 	$pdf->Ln();
 	$pdf->Cell(10,8,' ',0,0);
@@ -404,12 +430,6 @@ $pdf->SetFont('Times','',$font);
 	
 	$cnt = 0;
 	$ibpr = 0;
-	foreach ($bpr as $bpr1) {
-//		echo "<br>bpr: "; var_dump($bpr1);
-	}
-	foreach ($plan as $planl) {
-//		echo "<br>pl: "; var_dump($planl);
-	}
 	foreach ($plan as $planl) { 
 		//$datum =JFactory::getDate($planl->datum);
 		$hpkt = "";

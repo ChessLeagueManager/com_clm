@@ -17,6 +17,7 @@ $ -> Language fix or change
 # Englisch: Minitextkorrektur
 + Menüeintragstyp Terminliste mit Selektion CLM-Kategorie
 # SWT-Import Einzel: pgn bleibt erhalten bei Update
+# pdf-Listen: Nachbesserung insb. für große Mannschaftsturniere
 
 - - - - - 3.3.0 - [27-04-2016] - - - - - - - - - - - - - - - - - - - -
 # Korrektur englischer Texte / Mehrsprachigkeit
