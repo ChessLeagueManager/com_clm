@@ -10,7 +10,9 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-//$sid		= JRequest::getInt('saison','1');
+// Vorbereitung Rücksprung
+$referer = $_SERVER['HTTP_REFERER']; 
+$sreferer = strpos($referer, 'termine_detail');
 // current season
 	$db = JFactory::getDbo();
 	$db->setQuery("SELECT id FROM #__clm_saison WHERE published = 1 AND archiv = 0 ORDER BY name DESC LIMIT 1 ");
@@ -107,7 +109,10 @@ $arrWochentag = array( "Monday" => "Montag", "Tuesday" => "Dienstag", "Wednesday
     <?php  } ?>
     
     <a href="index.php?option=com_clm&amp;view=termine&amp;categoryid=<?php echo $categoryid; ?>&amp;saison=<?php echo $sid; if ($itemid <>'') { echo "&Itemid=". $itemid; } ?>"><?php echo JText::_('TERMINE_BACK') ?></a>
-    
+	<br>
+	<?php  if ($sreferer === false) { ?>
+    <a href="<?php echo $referer; ?>"><?php echo JText::_('TERMINE_BACK_TOTAL') ?></a>
+	<?php  } ?>	
     <br>
     <br>
     <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); ?>
