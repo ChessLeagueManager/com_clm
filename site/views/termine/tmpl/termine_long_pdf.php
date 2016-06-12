@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -52,28 +52,27 @@ $date_font = 9;
 $page_length = 375;
 
 $arrMonth = array(
-    "January" => "Januar",
-    "February" => "Februar",
-    "March" => "März",
-    "April" => "April",
-    "May" => "Mai",
-    "June" => "Juni",
-    "July" => "Juli",
-    "August" => "August",
-    "September" => "September",
-    "October" => "Oktober",
-    "November" => "November",
-    "December" => "Dezember"
+ 		"January" => JText::_('MOD_CLM_TERMINE_M01'),
+		"February" => JText::_('MOD_CLM_TERMINE_M02'),
+		"March" => JText::_('MOD_CLM_TERMINE_M03'),
+		"April" => JText::_('MOD_CLM_TERMINE_M04'),
+		"May" => JText::_('MOD_CLM_TERMINE_M05'),
+		"June" => JText::_('MOD_CLM_TERMINE_M06'),
+		"July" => JText::_('MOD_CLM_TERMINE_M07'),
+		"August" => JText::_('MOD_CLM_TERMINE_M08'),
+		"September" => JText::_('MOD_CLM_TERMINE_M09'),
+		"October" => JText::_('MOD_CLM_TERMINE_M10'),
+		"November" => JText::_('MOD_CLM_TERMINE_M11'),
+		"December" => JText::_('MOD_CLM_TERMINE_M12')
 	);
 $arrWochentag = array( 
-	"Monday" => "Montag", 
-	"Tuesday" => "Dienstag", 
-	"Wednesday" => "Mittwoch", 
-	"Thursday" => "Donnerstag", 
-	"Friday" => "Freitag", 
-	"Saturday" => "Samstag", 
-	"Sunday" => "Sonntag", 
-	);
+		"Monday" => JText::_('MOD_CLM_TERMINE_T01'), 
+		"Tuesday" => JText::_('MOD_CLM_TERMINE_T02'), 
+		"Wednesday" => JText::_('MOD_CLM_TERMINE_T03'), 
+		"Thursday" => JText::_('MOD_CLM_TERMINE_T04'), 
+		"Friday" => JText::_('MOD_CLM_TERMINE_T05'), 
+		"Saturday" => JText::_('MOD_CLM_TERMINE_T06'), 
+		"Sunday" => JText::_('MOD_CLM_TERMINE_T07') );
             
 // Datum der Erstellung
 $date =JFactory::getDate();

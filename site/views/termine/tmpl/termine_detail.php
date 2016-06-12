@@ -34,7 +34,14 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
 $startdate[0] = strtotime($termine_detail[0]->startdate);
 $enddate[0] = strtotime($termine_detail[0]->enddate);
     
-$arrWochentag = array( "Monday" => "Montag", "Tuesday" => "Dienstag", "Wednesday" => "Mittwoch", "Thursday" => "Donnerstag", "Friday" => "Freitag", "Saturday" => "Samstag", "Sunday" => "Sonntag", );
+    $arrWochentag = array( 
+		"Monday" => JText::_('MOD_CLM_TERMINE_T01'), 
+		"Tuesday" => JText::_('MOD_CLM_TERMINE_T02'), 
+		"Wednesday" => JText::_('MOD_CLM_TERMINE_T03'), 
+		"Thursday" => JText::_('MOD_CLM_TERMINE_T04'), 
+		"Friday" => JText::_('MOD_CLM_TERMINE_T05'), 
+		"Saturday" => JText::_('MOD_CLM_TERMINE_T06'), 
+		"Sunday" => JText::_('MOD_CLM_TERMINE_T07') );
        
 ?>
 <div >
