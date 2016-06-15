@@ -13,13 +13,14 @@
 
 class CLMViewRunden
 {
-public static function setRundenToolbar($params_round_date)
-	{
+public static function setRundenToolbar($sid, $params_round_date)
+  {
 	$clmAccess = clm_core::$access;
 
 	// Menubilder laden
-		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title( JText::_( 'TITLE_RUNDE' ), 'clm_settings.png' );
+	clm_core::$load->load_css("icons_images");
+	JToolBarHelper::title( JText::_( 'TITLE_RUNDE' ), 'clm_settings.png' );
+	if (clm_core::$db->saison->get($sid)->published == 1 AND clm_core::$db->saison->get($sid)->archiv == 0) {
 		if($clmAccess->access('BE_league_edit_fixture') !== false) {
 			JToolBarHelper::custom('paarung','edit.png','edit_f2.png',JText::_( 'LEAGUE_BUTTON_1' ),false);
 			if  ($params_round_date == '1') {
@@ -28,13 +29,14 @@ public static function setRundenToolbar($params_round_date)
 		}
 		JToolBarHelper::custom('check','preview.png','upload_f2.png','RUNDE_CHECK',false);
 		// Nur CLM-Admin hat Zugriff auf Toolbar
-	if($clmAccess->access('BE_league_edit_round') !== false) {
+	  if($clmAccess->access('BE_league_edit_round') !== false) {
 		JToolBarHelper::publishList();
 		JToolBarHelper::unpublishList();
 		JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', 'Copy' );
 		JToolBarHelper::deleteList();
 		// JToolBarHelper::editList();
 		JToolBarHelper::addNew();
+	  }
 	}
 		JToolBarHelper::help( 'screen.clm.runde' );
 	}
@@ -65,7 +67,7 @@ public static function runden( $rows, $lists, $pageNav, $option )
 		if (!isset($lparams['round_date']))  {   //Standardbelegung
 			$lparams['round_date'] = '0'; }
 
-		CLMViewRunden::setRundenToolbar($lparams['round_date']);
+		CLMViewRunden::setRundenToolbar($rows[0]->sid, $lparams['round_date']);
 		$user =JFactory::getUser();
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
@@ -285,7 +287,7 @@ public static function runden( $rows, $lists, $pageNav, $option )
 		<?php
 	}
 
-public static function setRundeToolbar()
+public static function setRundeToolbar($sid)
 	{
 
 		$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
@@ -293,15 +295,17 @@ public static function setRundeToolbar()
 		if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
 			else { $text = JText::_( 'New' );}
 		JToolBarHelper::title(  JText::_( 'RUNDE' ).': [ '. $text.' ]' );
-		JToolBarHelper::save();
-		JToolBarHelper::apply();
+		if (clm_core::$db->saison->get($sid)->published == 1 AND clm_core::$db->saison->get($sid)->archiv == 0) {
+			JToolBarHelper::save();
+			JToolBarHelper::apply();
+		}
 		JToolBarHelper::cancel();
 		JToolBarHelper::help( 'screen.clm.edit' );
 	}
 		
 public static function runde( &$row,$lists, $option )
 	{
-		CLMViewRunden::setRundeToolbar();
+		CLMViewRunden::setRundeToolbar($row->sid);
 		JRequest::setVar( 'hidemainmenu', 1 );
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 		$cliga 		= intval(JRequest::getVar( 'liga' ));

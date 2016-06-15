@@ -19,7 +19,7 @@ $ -> Language fix or change
 # SWT-Import Einzel: pgn bleibt erhalten bei Update
 # pdf-Listen: Nachbesserung insb. für große Mannschaftsturniere
 # pdf-Terminlisten: Mehrsprachigkeit
-# Backend-Rundenübersicht: Abbruchfehler bei archivierten Ligen 
+# Backend-Rundenübersicht: Abbruchfehler bei archivierten Ligen
 
 - - - - - 3.3.0 - [27-04-2016] - - - - - - - - - - - - - - - - - - - -
 # Korrektur englischer Texte / Mehrsprachigkeit

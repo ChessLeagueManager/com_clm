@@ -58,7 +58,7 @@ function display($cachable = false, $urlparams = array())
 	$limitstart		= $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
 
 	$where = array();
-	$where[]=' c.archiv = 0';
+	//$where[]=' c.archiv = 0';
 	if ( $filter_catid ) {	$where[] = 'a.published = '.(int) $filter_catid; }
 	if ( $filter_sid ) {	$where[] = 'a.sid = '.(int) $filter_sid; }
 	if ( $filter_lid ) {	$where[] = 'a.liga = '.(int) $filter_lid; }

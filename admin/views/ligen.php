@@ -13,20 +13,22 @@
 
 class CLMViewLigen
 {
-	public static function setLigaToolbar($new)
+	public static function setLigaToolbar($new, $sid)
 	{
 		if (!$new) { $text = JText::_( 'Edit' );}
 		else { $text = JText::_( 'New' );}
 		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( JText::_( 'LEAGUE_BUTTON_7' ).': [ '. $text.' ]', 'clm_headmenu_liga.png' );
-		JToolBarHelper::save( 'save' );
-		JToolBarHelper::apply( 'apply' );
+		if ($new OR (clm_core::$db->saison->get($sid)->published == 1 AND clm_core::$db->saison->get($sid)->archiv == 0)) {
+			JToolBarHelper::save( 'save' );
+			JToolBarHelper::apply( 'apply' );
+		}
 		JToolBarHelper::cancel();
 	}
 
 	public static function liga(&$row, $lists, $option, $new )
 	{
-	CLMViewLigen::setLigaToolbar($new);
+	CLMViewLigen::setLigaToolbar($new, $row->sid);
 	JRequest::setVar( 'hidemainmenu', 1 );
 
 	// Konfigurationsparameter auslesen

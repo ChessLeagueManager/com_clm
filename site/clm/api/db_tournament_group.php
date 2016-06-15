@@ -80,7 +80,8 @@ function clm_api_db_tournament_group() {
 					$out["data"][$i][4]=clm_core::$db->liga->get($out["data"][$i][14])->durchgang." x ".$out["data"][$i][4];
 		}
 		
-		if (!(($out["data"][$i][7] != $clmAccess->getJid() AND $clmAccess->access('BE_'.$right.'_edit_detail') !== true ) OR ($clmAccess->access('BE_'.$right.'_edit_detail') === false))) {
+		if (!(($out["data"][$i][7] != $clmAccess->getJid() AND $clmAccess->access('BE_'.$right.'_edit_detail') !== true ) 
+			OR ($clmAccess->access('BE_'.$right.'_edit_detail') === false)) AND ($out["data"][$i][11] == 1)) {
 			$out["data"][$i][4] = '<a href="'.clm_core::$load->gen_url(array("section"=>"runden","liga"=>$out["data"][$i][14]),array("view")).'">' . $out["data"][$i][4] . " " .$lang->rounds.'</a>'."<br/>".$lang->open.clm_core::$db->count($query)." ".$lang->confirmed.$lang->close;
 		} else {
 			$out["data"][$i][4] = $out["data"][$i][4] . " " .$lang->rounds. "<br/>".$lang->open.clm_core::$db->count($query)." ".$lang->confirmed.$lang->close;
