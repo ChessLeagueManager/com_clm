@@ -346,7 +346,9 @@ for ($x=0; $x< 100; $x++){
     $gespielt = 0;
   for ($c=0; $c<$mannschaft[0]->dg; $c++) {
 	for ($b=0; $b<$mannschaft[0]->runden; $b++) {
-	    if (isset($einzel[$ie])&&($einzel[$ie]->dg==$c+1)&&($einzel[$ie]->runde==$b+1)&&($count[$x]->zps==$einzel[$ie]->zps)&&($count[$x]->mgl_nr==$einzel[$ie]->spieler)) {
+	    //if (isset($einzel[$ie])&&($einzel[$ie]->dg==$c+1)&&($einzel[$ie]->runde==$b+1)&&($count[$x]->zps==$einzel[$ie]->zps)&&($count[$x]->mgl_nr==$einzel[$ie]->spieler)) {
+	    if (isset($einzel[$ie])&&($einzel[$ie]->dg==$c+1)&&($einzel[$ie]->runde==$b+1)&&($count[$x]->zps==$einzel[$ie]->zps)
+			&&(($countryversion == "de" AND $count[$x]->mgl_nr==$einzel[$ie]->spieler) OR ($countryversion == "en" AND $count[$x]->PKZ==$einzel[$ie]->PKZ))) {
 		
 			$search = array ('.0', '0.5');
 			$replace = array ('', '&frac12;');

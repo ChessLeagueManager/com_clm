@@ -22,6 +22,7 @@ $ -> Language fix or change
 # Backend-Rundenübersicht: Abbruchfehler bei archivierten Ligen
 # Vereindatenpflege: Mehrsprachigkeit
 # View Spieler: Gespielte Partien vollständig
+# View Mannschaft: Zuordnung Ergebnisse (nur engl. Anwendung)
 
 - - - - - 3.3.0 - [27-04-2016] - - - - - - - - - - - - - - - - - - - -
 # Korrektur englischer Texte / Mehrsprachigkeit
