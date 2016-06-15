@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -241,7 +241,7 @@ if (!isset($row[0]->name)) { ?>
 
 <br>
 <input type="submit" value=" <?php echo JText::_('CLUB_DATA_SEND_BUTTON') ?> ">
-<input type="button" value="Zurück" onClick="history.back()">
+<input type="button" value=" <?php echo JText::_('CLUB_DATA_BACK_BUTTON') ?> " onClick="history.back()">
 <?php 
 // Keine Vereinsdaten eingegeben
 if (!$row[0]->name) { 
