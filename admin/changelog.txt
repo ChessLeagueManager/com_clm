@@ -23,6 +23,7 @@ $ -> Language fix or change
 # Vereindatenpflege: Mehrsprachigkeit
 # View Spieler: Gespielte Partien vollständig
 # View Mannschaft: Zuordnung Ergebnisse (nur engl. Anwendung)
+- View Spieler: Link zur DSB-Karteikarte entfernt
 
 - - - - - 3.3.0 - [27-04-2016] - - - - - - - - - - - - - - - - - - - -
 # Korrektur englischer Texte / Mehrsprachigkeit

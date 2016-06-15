@@ -134,9 +134,12 @@ else {  ?>
             <td class="det_col2"><?php echo $spieler[0]->Spielername; ?></td>
             </tr>
             <tr>
-            <td class="det_col1"><?php echo JText::_('PLAYER_DWZ') ?></td>
-            <!---td class="det_col2"><a href="http://schachbund.de/dwz/db/spieler.html?zps=<?php echo $zps; ?>-<?php echo $mgl; ?>" target="_blank"><?php echo $spieler[0]->dsbDWZ; ?></a> - <?php echo $spieler[0]->DWZ_Index; ?></td--->
-        	<?php if ($countryversion =="de") { ?>
+          	<?php if ($countryversion =="de") { ?>
+				<td class="det_col1"><?php echo JText::_('PLAYER_DWZ') ?></td>
+            <?php } else { ?>
+				<td class="det_col1"><?php echo JText::_('PLAYER_GRADE') ?></td>
+            <?php } ?>			
+        	<?php if ($countryversion =="out") { ?>
 				<?php  $mgl4 = ''.$mgl; while (strlen($mgl4) < 4) { $mgl4 = '0'.$mgl4; } ?>
 				<td class="det_col2"><a href="http://schachbund.de/spieler.html?zps=<?php echo $zps; ?>-<?php echo $mgl4; ?>" target="_blank"><?php echo $spieler[0]->dsbDWZ; ?></a> - <?php echo $spieler[0]->DWZ_Index; ?></td>
             <?php } else { ?>
