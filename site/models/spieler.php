@@ -160,7 +160,7 @@ class CLMModelSpieler extends JModelLegacy
 	} 	
 	$query .= " AND a.sid =".$sid
 		." AND l.published = 1 "
-		." GROUP BY a.lid, a.runde "
+		." GROUP BY a.lid, a.dg, a.runde "
 		." ORDER BY a.lid, a.dg ASC, a.runde ASC "
 		;
 		return $query;
