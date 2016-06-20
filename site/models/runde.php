@@ -91,6 +91,7 @@ class CLMModelRunde extends JModelLegacy
 			." AND a.runde = ".$runde
 			." AND a.dg = ".$dg
 			." AND a.heim = 1 "
+			." AND (g.man_nr > 0 OR h.man_nr > 0) "
 			." ORDER BY a.paar ASC"
 			;
 

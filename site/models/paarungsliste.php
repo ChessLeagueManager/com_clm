@@ -111,6 +111,7 @@ class CLMModelPaarungsliste extends JModelLegacy
 			//." AND a.sid = ".$sid
 			." AND a.lid = ".$liga
 			." AND a.heim = 1 "
+			." AND (g.man_nr > 0 OR h.man_nr > 0) "
 			." ORDER BY a.dg ASC,a.runde ASC, a.paar ASC"
 			;
 		return $query;
