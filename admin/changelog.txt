@@ -26,7 +26,7 @@ $ -> Language fix or change
 - View Spieler: Link zur DSB-Karteikarte entfernt
 # Englisch: überarbeitete Sprachfiles
 ^ Views Paarungsliste/Runde: keine Anzeige bei spielfrei vs. spielfrei
-
+^ Admin-View Ergebniskorrektur: erhöhter Wertebereich wegen JRCup
 
 - - - - - 3.3.0 - [27-04-2016] - - - - - - - - - - - - - - - - - - - -
 # Korrektur englischer Texte / Mehrsprachigkeit

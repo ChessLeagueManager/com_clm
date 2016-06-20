@@ -1529,7 +1529,7 @@ function wertung()
 		." a.zeit, a.edit_zeit, u.name as melder, v.name as name_editor, "
 		." m.name as hname,m.zps as hzps,m.man_nr as hmnr, "
 		." n.name as gname, n.zps as gzps, n.man_nr as gmnr, "
-		." l.name as lname, l.stamm, l.ersatz, l.sl as sl, l.b_wertung, l.liga_mt "
+		." l.name as lname, l.stamm, l.ersatz, l.sl as sl, l.b_wertung, l.liga_mt, l.runden_modus "
 		." FROM #__clm_rnd_man as a "
 		." LEFT JOIN #__clm_user as u ON u.jid = a.gemeldet AND u.sid = a.sid "
 		." LEFT JOIN #__clm_user as v ON v.jid = a.editor AND v.sid = a.sid "
@@ -1652,10 +1652,15 @@ function wertung()
 
 	$wlist[]	= JHTML::_('select.option',  '-1', JText::_( 'ERGEBNISSE_WAHL' ), 'jid', 'name' );
 	$wlist[]	= JHTML::_('select.option',  '0', JText::_( '0' ), 'jid', 'name' );
-	for($x=1; $x< (1+(($sieg+$antritt)*$runde[0]->stamm)); $x++) {
-	$wlist[]	= JHTML::_('select.option',  $x-(0.5), $x-(0.5), 'jid', 'name' );
-	$wlist[]	= JHTML::_('select.option',  $x, $x, 'jid', 'name' );
-			}
+	$until = 1+(($sieg+$antritt)*$runde[0]->stamm);
+	if ($countryversion =="en" AND ($runde[0]->runden_modus == 4 OR $runde[0]->runden_modus == 5)) {
+		$until = $until * 2;
+	}
+	//for($x=1; $x< (1+(($sieg+$antritt)*$runde[0]->stamm)); $x++) {
+	for($x=1; $x< $until; $x++) {
+		$wlist[]	= JHTML::_('select.option',  $x-(0.5), $x-(0.5), 'jid', 'name' );
+		$wlist[]	= JHTML::_('select.option',  $x, $x, 'jid', 'name' );
+	}
 	if (isset($list_heim[0])) {
 		$lists['weiss']		= JHTML::_('select.genericlist',   $wlist, 'w_erg', 'class="inputbox" size="1"', 'jid', 'name', $list_heim[0]->bp );
 		$lists['weiss_w']	= $list_heim[0]->wp;
