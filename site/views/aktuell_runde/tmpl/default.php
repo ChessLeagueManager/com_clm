@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -12,7 +12,7 @@
 
 defined('_JEXEC') or die('Restricted access'); 
 
-$liga		= $this->liga;
+//$liga		= $this->liga;
 $rnd_dg = CLMModelAktuell_Runde::Runden();
 $runde	= $rnd_dg[0];
 $dg	= $rnd_dg[1];
