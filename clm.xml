@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5.0" method="upgrade">
 	<name>CLM</name>
-	<creationDate>15.06.2016</creationDate>
+	<creationDate>09.07.2016</creationDate>
 	<author>CLM Team</author>
 	<copyright>(C) Copyright 2008-2016 by CLM Project</copyright>
 	<license>GNU/GPL</license>
 	<authorEmail>fishpoke@fishpoke.de</authorEmail>
 	<authorUrl>www.chessleaguemanager.de</authorUrl>
-	<version>3.3.0</version>
+	<version>3.3.1</version>
  	<scriptfile>installer.php</scriptfile>
 	<description>
 		<![CDATA[
@@ -46,6 +46,13 @@
 	</languages>
 	<administration>
 		<menu img="components/com_clm/images/CLM_Logo_mini.png" link="option=com_clm&amp;section=info&amp;">COM_CHESSLEAGUEMANAGER</menu>
+		<submenu>
+			<!--
+				Note that all & must be escaped to &amp; for the file to be valid
+				XML and be parsed by the installer
+			-->
+			<menu link="option=com_clm" view="clm" img="class:clm">com_clm_clm</menu>
+		</submenu>
 		<files folder="admin">
 			<filename>changelog.txt</filename>
 			<filename>clm.php</filename>
