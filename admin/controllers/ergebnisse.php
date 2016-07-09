@@ -1524,7 +1524,7 @@ function wertung()
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
 				}
 
-	$data = "SELECT a.gemeldet,a.editor, a.id,a.sid, a.lid, a.runde, a.dg, a.tln_nr,"
+	$data = "SELECT a.gemeldet,a.editor, a.id,a.sid, a.lid, a.runde, a.dg, a.tln_nr, a.ko_decision, a.comment, "
 		." a.gegner,a.paar, a.dwz_zeit, a.dwz_editor as dwz_edit, w.name as dwz_editor, "
 		." a.zeit, a.edit_zeit, u.name as melder, v.name as name_editor, "
 		." m.name as hname,m.zps as hzps,m.man_nr as hmnr, "
@@ -1654,7 +1654,7 @@ function wertung()
 	$wlist[]	= JHTML::_('select.option',  '0', JText::_( '0' ), 'jid', 'name' );
 	$until = 1+(($sieg+$antritt)*$runde[0]->stamm);
 	if ($countryversion =="en" AND ($runde[0]->runden_modus == 4 OR $runde[0]->runden_modus == 5)) {
-		$until = $until * 2;
+		$until = 1+(($sieg+$antritt)*$runde[0]->stamm*2);
 	}
 	//for($x=1; $x< (1+(($sieg+$antritt)*$runde[0]->stamm)); $x++) {
 	for($x=1; $x< $until; $x++) {
@@ -1706,6 +1706,8 @@ function save_wertung()
 	$s_erg		= JRequest::getVar('s_erg');
 	$ww_erg		= JRequest::getVar('ww_erg');
 	$sw_erg		= JRequest::getVar('sw_erg');
+	$ko_decision = JRequest::getVar( 'ko_decision');
+	$comment = JRequest::getVar( 'comment');
 	
 	// Punktemodus aus #__clm_liga holen
 	$query = " SELECT a.stamm, a.sieg, a.sieg_bed, a.remis, a.nieder, a.antritt, a.runden_modus, "
@@ -1725,6 +1727,7 @@ function save_wertung()
 		$man_remis 	= $liga[0]->man_remis;
 		$man_nieder	= $liga[0]->man_nieder;
 		$man_antritt	= $liga[0]->man_antritt;
+		$runden_modus	= $liga[0]->runden_modus;
 
 	// Arrays zur Punktevergabe
 	$heim_erg = array();
@@ -1866,8 +1869,13 @@ function save_wertung()
 	$db->query();
 	}
 
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 	// Optionales Mannschaftsergebnis prüfen ggf. Nachricht absetzen
-	if($w_erg + $s_erg > $stamm ) {
+	if ($countryversion == "en" AND ($runden_modus == 4 OR $runden_modus == 5)) $limit = $stamm * 2;
+	else $limit = $stamm;
+	if($w_erg + $s_erg > $limit ) {
 	JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_ME_HOCH' ) );
 	$err=1;
 	}
@@ -2025,6 +2033,78 @@ function save_wertung()
 		;
 	$db->setQuery($query);
 	$db->query();
+
+		if (($runden_modus == 4) OR ($runden_modus == 5)) {    // KO Turnier
+		if (($runden_modus == 4) OR ($runden_modus == 5 and $rnd < $runden)) {    // KO Turnierif ($ko_decision == 1) {
+			if ($ko_decision == 1) {
+				if ($hmpunkte > $gmpunkte) $ko_par = 2;			// Sieger Heim nach Brettpunkte
+				elseif ($hmpunkte < $gmpunkte) $ko_par = 3;		// Sieger Gast nach Brettpunkte
+				elseif ($hwpunkte > $gwpunkte) $ko_par = 2;		// Sieger Heim nach Wertpunkte
+				elseif ($hwpunkte < $gwpunkte) $ko_par = 3;		// Sieger Gast nach Wertpunkte
+				else { $ko_par = 3;								// Sieger Gast nach Computer --> Nacharbeit durch TL
+				     $comment = '<b>Keine KO-Entscheidung eingegeben, Gast als Sieger angenommen, Nacharbeit durch Turnierleiter nötig</b><br>'.$comment; }
+			}
+			elseif ($ko_decision == 2) $ko_par = 2;				// Sieger Heim nach Blitz-Entscheid
+			elseif ($ko_decision == 4) $ko_par = 2;				// Sieger Heim nach Los-Entscheid
+			else $ko_par = 3;									// Sieger Gast nach Blitz-,Los-Entscheid
+			if ($ko_par == 2) { $ko_heim = $rnd; $ko_gast = $rnd -1; }
+			else { $ko_heim = $rnd -1; $ko_gast = $rnd; }
+
+	// Teilnehmer ID bestimmen 
+	$query = " SELECT a.tln_nr,a.gegner "
+		." FROM #__clm_rnd_man as a"
+		." WHERE a.id = ".$id_id
+			;
+	$db->setQuery( $query);
+	$tlnr=$db->loadObjectList();
+	$tln_nr	= $tlnr[0]->tln_nr;
+	$gegner	= $tlnr[0]->gegner;
+			// Für Heimmannschaft updaten
+			$query	= "UPDATE #__clm_mannschaften"
+				." SET rankingpos = ".$ko_heim
+				." WHERE sid = ".$sid
+				." AND liga = ".$lid
+				." AND tln_nr = ".$tln_nr
+				;
+			$db->setQuery($query);
+			$db->query();
+
+			$query	= "UPDATE #__clm_mannschaften"
+				." SET rankingpos = ".$ko_gast
+				." WHERE sid = ".$sid
+				." AND liga = ".$lid
+				." AND tln_nr = ".$gegner
+				;
+			$db->setQuery($query);
+			$db->query();	
+		}	
+			// Für Heimmannschaft updaten
+		$query	= "UPDATE #__clm_rnd_man"
+			." SET ko_decision = ".$ko_decision
+			." , comment = '".$comment."'"
+			." WHERE sid = ".$sid
+			." AND lid = ".$lid
+			." AND runde = ".$rnd
+			." AND paar = ".$paarung
+			." AND dg = ".$dg
+			." AND heim = 1 "
+		;
+		$db->setQuery($query);
+		$db->query();
+		// Für Gastmannschaft updaten
+		$query	= "UPDATE #__clm_rnd_man"
+			." SET ko_decision = ".$ko_decision
+			." , comment = '".$comment."'"
+			." WHERE sid = ".$sid
+			." AND lid = ".$lid
+			." AND runde = ".$rnd
+			." AND paar = ".$paarung
+			." AND dg = ".$dg
+		." AND heim = 0 "
+		;
+	$db->setQuery($query);
+	$db->query();
+	}
 
 	$msg = JText::_( 'ERGEBNISSE_AW' );
 	$link = 'index.php?option='.$option.'&section='.$section;

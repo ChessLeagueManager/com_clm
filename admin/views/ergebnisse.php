@@ -541,7 +541,7 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 	<form action="index.php" method="post" name="adminForm" id="adminForm">
 
 	<div>
-	<div class="width-100">
+	<div class="width-60 fltlft">
 	<fieldset class="adminform">
 	<legend><?php 
 	if ($runde[0]->dg == 1) {
@@ -626,6 +626,55 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 		</table>
 		</fieldset>
 		</div>
+
+	<?php if (($runde[0]->runden_modus == 4) OR ($runde[0]->runden_modus == 5)) {    // KO System ?>	
+	<div class="width-40 fltrt">
+	<fieldset class="adminform">
+	<legend><?php 
+		echo JText::_( 'RESULTS_MT_KO_LEGEND' ); //" KO-System: Feinwertung ";
+	 ?>
+	</legend>
+	<table class="admintable">
+		<tr>
+			<td class="key" nowrap="nowrap">
+			<label for="ko_decision"><?php echo JText::_( 'RESULTS_MT_KO_DECISION' ); ?></label>
+			</td>
+			<td class="key" nowrap="nowrap">
+			<select name="ko_decision" id="ko_decision" value="<?php echo $runde[0]->ko_decision; ?>" size="1">
+			<!--<option>- wählen -</option>-->
+			<option value="1" <?php if ($runde[0]->ko_decision == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_BW' );?></option>
+			<option value="2" <?php if ($runde[0]->ko_decision == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_BLITZ' ).$runde[0]->hname;?></option>
+			<option value="3" <?php if ($runde[0]->ko_decision == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_BLITZ' ).$runde[0]->gname;?></option>
+			<option value="4" <?php if ($runde[0]->ko_decision == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_LOS' ).$runde[0]->hname;?></option>
+			<option value="5" <?php if ($runde[0]->ko_decision == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_LOS' ).$runde[0]->gname;?></option>
+			</select>
+			</td>
+		</tr>
+	</table>
+	</fieldset>
+	</div>		
+<?php } ?> 
+
+<?php // Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$pcomment = $config->kommentarfeld;
+	if (($pcomment == 1) OR ($pcomment == 2 AND ($runde[0]->runden_modus == 4 OR $runde[0]->runden_modus == 5))) {    // Kommentarfeld ?>			
+	<div class="width-40 fltrt">
+	  <fieldset class="adminform">
+		<legend><?php echo JText::_( 'RESULTS_COMMENT_LEGEND' ); ?></legend>
+		<table class="admintable">
+		<tr>
+			<td class="key" nowrap="nowrap">
+			<label for="comment"><?php echo JText::_( 'RESULTS_COMMENT' ); ?></label>
+			</td>
+			<td class="inputbox" nowrap="nowrap" width="100%" valign="top">
+			<textarea name="comment" id="comment" cols="40" rows="3" style="width:90%"><?php echo str_replace('&','&amp;',$runde[0]->comment);?></textarea>
+			</td>
+		</tr>
+		</table>
+	  </fieldset>	
+	</div>		
+<?php } ?> 		
 
 		<div class="width-100">
 		<fieldset class="adminform">

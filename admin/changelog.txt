@@ -28,6 +28,7 @@ $ -> Language fix or change
 ^ Views Paarungsliste/Runde: keine Anzeige bei spielfrei vs. spielfrei
 ^ Admin-View Ergebniskorrektur: erhöhter Wertebereich wegen JRCup
 # View aktuelle Runde: sql bei engl. Anwendung
++ Admin-View Ergebniskorrektur: Erweiterung für KO-Turniere
 
 - - - - - 3.3.0 - [27-04-2016] - - - - - - - - - - - - - - - - - - - -
 # Korrektur englischer Texte / Mehrsprachigkeit
