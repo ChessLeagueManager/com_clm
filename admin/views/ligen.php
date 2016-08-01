@@ -91,6 +91,7 @@ class CLMViewLigen
 
 		 Joomla.submitbutton = function (pressbutton) { 		
 			var form = document.adminForm;
+			var rteil = Math.round(form.teil.value / 2) * 2;
 			if (pressbutton == 'cancel') {
 				submitform( pressbutton );
 				return;
@@ -114,6 +115,8 @@ class CLMViewLigen
 				alert( "<?php echo JText::_( 'LEAGUE_HINT_8', true ); ?>" );
 			} else if (form.anz_sgp.value > 20 ) {
 				alert( "<?php echo JText::_( 'LEAGUE_HINT_8', true ); ?>" );
+			} else if (form.runden.value <  (rteil - 1)) {
+				alert( "<?php echo JText::_( 'LEAGUE_HINT_9', true ); ?>" );
 			} else {
 				submitform( pressbutton );
 			}
