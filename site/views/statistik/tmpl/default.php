@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -93,7 +93,7 @@ $gesamt		= $this->gesamt;
 $mannschaft	= $this->mannschaft;
 $brett		= $this->brett;
 //$wbrett		= $this->wbrett;
-//$sbrett		= $this->sbrett;
+$gbrett		= $this->gbrett;
 $rbrett		= $this->rbrett;
 $kbrett		= $this->kbrett;
 $bestenliste = $this->bestenliste;
@@ -162,14 +162,10 @@ $sum_schwarz = 0;
 		<td align="center"><?php echo $x+1; ?></td>
 		<td class="punkte border"><?php echo $brett[$x]->count; ?></td>
 		<td class="punkte"><?php echo str_replace ('.0', '', $brett[$x]->sum); ?></td>
-<!--		<td class="punkte"><?php echo round((($brett[$x]->sum *100)/($brett[$x]->count)),1); ?></td>-->
 		<td class="punkte"><?php echo round (100 * ($brett[$x]->sum - $brett[$x]->count * $ligapunkte->antritt) / ($brett[$x]->count * $ligapunkte->sieg), 1); ?></td>
 
-<!--		<td class="punkte"><?php echo $brett[$x]->count-$brett[$x]->sum; ?></td>-->		
-		<td class="punkte"><?php echo str_replace ('.0', '', $brett[$x]->count * ($ligapunkte->sieg + $ligapunkte->antritt) - $brett[$x]->sum); ?></td>
-		
-<!--		<td class="punkte"><?php echo 100 -round((($brett[$x]->sum *100)/($brett[$x]->count)),1); ?></td>-->
-		<td class="punkte"><?php echo 100 - round (100 * ($brett[$x]->sum - $brett[$x]->count * $ligapunkte->antritt) / ($brett[$x]->count * $ligapunkte->sieg), 1); ?></td>
+		<td class="punkte"><?php echo str_replace ('.0', '', $gbrett[$x]->sum); ?></td>
+		<td class="punkte"><?php echo round (100 * ($gbrett[$x]->sum - $gbrett[$x]->count * $ligapunkte->antritt) / ($brett[$x]->count * $ligapunkte->sieg), 1); ?></td>
 
 		<td class="white border"><?php echo $brett_all[$x]['w']; $sum_weiss += $brett_all[$x]['w']; ?></td>
 		<td class="white"><?php echo round((($brett_all[$x]['w']*100)/$brett[$x]->count),1); ?></td>

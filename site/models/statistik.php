@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -53,7 +53,7 @@ class CLMModelStatistik extends JModelLegacy
 		$id			= @$options['id'];
  
 		$query = " SELECT COUNT(id) as remis FROM #__clm_rnd_spl"
-			." WHERE weiss = 1 AND ergebnis = 2 AND sid = $sid AND lid = $lid "
+			." WHERE weiss = 1 AND (ergebnis = 2 OR ergebnis > 8) AND sid = $sid AND lid = $lid "
 			;
 
 		return $query;
@@ -74,7 +74,7 @@ class CLMModelStatistik extends JModelLegacy
 		$id			= @$options['id'];
  
 		$query = " SELECT COUNT(id) as kampflos FROM #__clm_rnd_spl"
-			." WHERE weiss = 1 AND ergebnis > 2 AND sid = $sid AND lid = $lid "
+			." WHERE weiss = 1 AND ergebnis > 2 AND ergebnis < 9 AND sid = $sid AND lid = $lid "
 			;
 
 		return $query;
@@ -215,7 +215,7 @@ class CLMModelStatistik extends JModelLegacy
 		$query .= " LEFT JOIN #__clm_dwz_vereine as v ON v.ZPS = a.zps  AND v.sid = a.sid"
 			." LEFT JOIN #__clm_mannschaften as m ON m.liga = a.lid AND m.sid = a.sid AND (m.zps = a.zps OR FIND_IN_SET(a.zps,m.sg_zps) != 0) AND m.man_nr = a.mnr"			
 			." LEFT JOIN ( SELECT *, SUM(punkte) as gpunkte, COUNT(punkte) as gpartien, SUM(brett) as gbrett FROM #__clm_rnd_spl "
-			."  WHERE ergebnis < 3 ";
+			."  WHERE (ergebnis < 3 OR ergebnis > 8) ";
 		if ($countryversion =="de") {
 			$query .= "  GROUP BY lid, tln_nr, zps, spieler) g "
 					."  ON g.lid = a.lid AND g.sid = a.sid AND g.zps = a.zps AND g.spieler = a.mgl_nr AND g.tln_nr = m.tln_nr";
@@ -224,7 +224,7 @@ class CLMModelStatistik extends JModelLegacy
 					."  ON g.lid = a.lid AND g.sid = a.sid AND g.zps = a.zps AND g.PKZ = a.PKZ AND g.tln_nr = m.tln_nr";
 		}	
 		$query .= " LEFT JOIN ( SELECT *, SUM(punkte) as epunkte, COUNT(punkte) as epartien, SUM(brett) as ebrett FROM #__clm_rnd_spl "
-			."  WHERE ergebnis < 7 ";
+			."  WHERE (ergebnis < 7 OR ergebnis > 8) ";
 		if ($countryversion =="de") {
 			$query .= "  GROUP BY lid, tln_nr, zps, spieler) e "
 					."  ON e.lid = a.lid AND e.sid = a.sid AND e.zps = a.zps AND e.spieler = a.mgl_nr AND e.tln_nr = m.tln_nr";
@@ -347,21 +347,28 @@ class CLMModelStatistik extends JModelLegacy
 		return @$result;
 	}
 
-	function _getCLMWBrett( &$options )
+	function _getCLMGBrett( &$options )
 	{
 	$sid = JRequest::getInt('saison','1');
 	$lid = JRequest::getInt('liga','1');
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
-		$query = " SELECT brett,COUNT(id) as sum FROM #__clm_rnd_spl "
-			." WHERE sid = $sid AND heim = 1 AND lid = $lid "
-			." AND ergebnis = 0"
+		$query = " SELECT brett,SUM(punkte) as sum, COUNT(id) as count FROM #__clm_rnd_spl "
+			." WHERE sid = $sid AND heim = 0 AND lid = $lid AND `gemeldet` != 0"
+
 			." GROUP BY brett "
 			." ORDER BY brett ASC  "
 			;
 
 		return $query;
+	}
+
+	function getCLMGBrett( $options=array() )
+	{
+		$query	= $this->_getCLMGBrett( $options );
+		$result = $this->_getList( $query );
+		return @$result;
 	}
 
 	public static function CLMBrett_all( $bretter )
@@ -449,7 +456,7 @@ class CLMModelStatistik extends JModelLegacy
  
 		$query = " SELECT brett,COUNT(id) as sum FROM #__clm_rnd_spl "
 			." WHERE sid = $sid AND heim = 1 AND lid = $lid "
-			." AND ergebnis = 2"
+			." AND (ergebnis = 2 OR ergebnis > 8)"
 			." GROUP BY brett "
 			." ORDER BY brett ASC  "
 			;
@@ -474,7 +481,7 @@ class CLMModelStatistik extends JModelLegacy
 		$query = " SELECT brett,COUNT(id) as sum FROM #__clm_rnd_spl "
 			." WHERE sid = $sid AND weiss = 1 AND lid = $lid "
 			//." WHERE sid = $sid AND heim = 1 AND lid = $lid "
-			." AND `ergebnis` > 2"
+			." AND (ergebnis > 2 AND ergebnis < 9)"
 			//." AND `kampflos` != 0"
 			." GROUP BY brett "
 			." ORDER BY brett ASC  "

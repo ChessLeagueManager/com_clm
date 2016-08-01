@@ -233,6 +233,8 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 		if ($einzel[$w]->ergebnis==6) $dr_einzel = "-/-";
 		if ($einzel[$w]->ergebnis==7) $dr_einzel = "---";
 		if ($einzel[$w]->ergebnis==8) $dr_einzel = "spf";
+		if ($einzel[$w]->ergebnis==9) $dr_einzel = "0-".chr(189);
+		if ($einzel[$w]->ergebnis==10) $dr_einzel = chr(189)."-0";
 		//
 		if ($einzel[$w]->dwz_edit == "") { 
 			$pdf->Cell(5,$zelle,$dr_einzel,'LR',0,'C');
@@ -247,6 +249,8 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 			if ($einzel[$w]->dwz_edit==6) $dr1_einzel = "-/-";
 			if ($einzel[$w]->dwz_edit==7) $dr1_einzel = "---";
 			if ($einzel[$w]->dwz_edit==8) $dr1_einzel = "spf";
+			if ($einzel[$w]->dwz_edit==9) $dr1_einzel = "0-".chr(189);
+			if ($einzel[$w]->dwz_edit==10) $dr1_einzel = chr(189)."-0";
 			$pdf->Cell(5,$zelle,$dr1_einzel,'LR',0,'C');
 		}
 		//

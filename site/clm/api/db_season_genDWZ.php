@@ -102,12 +102,12 @@ function clm_api_db_season_genDWZ($id,$group=true) {
 	for ($i=0;$i < count($partien);$i++)
  	{
 		
-		$punkte = clm_core::$load->gen_result($partien[$i]->ergebnis,0);
+		list ($punkte, $gpunkte) = clm_core::$load->gen_result($partien[$i]->ergebnis,0);
 		if($punkte==-1) {
 			continue;		
 		}
 		if($group) {
- 			$dwz->addMatch($partien[$i]->zps.":".$partien[$i]->spieler,$partien[$i]->gzps.":".$partien[$i]->gegner,$punkte);
+ 			$dwz->addMatch($partien[$i]->zps.":".$partien[$i]->spieler,$partien[$i]->gzps.":".$partien[$i]->gegner,$punkte, $gpunkte);
 		} 
 		$someMatch = true;
 	}

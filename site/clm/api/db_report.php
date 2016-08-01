@@ -287,6 +287,8 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 		$ergebnis[5]->erg_text = round($antritt+$sieg)." - 0 (kl)";
 		$ergebnis[6]->erg_text = "0 - 0 (kl)";
 	}
+	$ergebnis[9]->erg_text = ($nieder+$antritt)." - ".($remis+$antritt);
+	$ergebnis[10]->erg_text = ($remis+$antritt)." - ".($nieder+$antritt);
 	
 	$out["punkteText"] = $ergebnis;
 

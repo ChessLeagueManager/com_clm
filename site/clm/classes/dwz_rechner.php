@@ -53,26 +53,30 @@ class clm_class_dwz_rechner {
 		$this->result = null; // Bisheriges Ergebnis ist nun ungültig
 		return true;
 	}
-	public function addMatch($id1, $id2, $result) {
-		if (!isset($this->link[$id1]) || !isset($this->link[$id2]) || !in_array($result, array(0, 0.5, 1))) {
+	public function addMatch($id1, $id2, $result, $gresult) {
+		if (!isset($this->link[$id1]) || !isset($this->link[$id2]) || !in_array($result, array(0, 0.5, 1)) || !in_array($gresult, array(0, 0.5, 1))) {
 			return false;
 		}
 		if ($this->link[$id1][0] && $this->link[$id2][0]) { // Beide haben DWZ
 			$this->tournament[0][$this->link[$id1][1]][3]+= $result;
 			$this->tournament[0][$this->link[$id1][1]][4][] = $this->tournament[0][$this->link[$id2][1]][2];
-			$this->tournament[0][$this->link[$id2][1]][3]+= 1 - $result;
+			//$this->tournament[0][$this->link[$id2][1]][3]+= 1 - $result;
+			$this->tournament[0][$this->link[$id2][1]][3]+= $gresult;
 			$this->tournament[0][$this->link[$id2][1]][4][] = $this->tournament[0][$this->link[$id1][1]][2];
 		} else if (!$this->link[$id1][0] && $this->link[$id2][0]) { // Nur $id2 hat DWZ
-			$this->tournament[1][] = array($this->link[$id2][1], $this->link[$id1][1], 1 - $result);
+			//$this->tournament[1][] = array($this->link[$id2][1], $this->link[$id1][1], 1 - $result);
+			$this->tournament[1][] = array($this->link[$id2][1], $this->link[$id1][1], $gresult);
 			$this->tournament[2][$this->link[$id1][1]][0]+= $result;
 			$this->tournament[2][$this->link[$id1][1]][1][] = $this->tournament[0][$this->link[$id2][1]][2];
 		} else if ($this->link[$id1][0] && !$this->link[$id2][0]) { // Nur $id1 hat DWZ
 			$this->tournament[1][] = array($this->link[$id1][1], $this->link[$id2][1], $result);
-			$this->tournament[2][$this->link[$id2][1]][0]+= 1 - $result;
+			//$this->tournament[2][$this->link[$id2][1]][0]+= 1 - $result;
+			$this->tournament[2][$this->link[$id2][1]][0]+= $gresult;
 			$this->tournament[2][$this->link[$id2][1]][1][] = $this->tournament[0][$this->link[$id1][1]][2];
 		} else if (!$this->link[$id1][0] && !$this->link[$id2][0]) { // Keiner hat DWZ
 			$this->tournament[2][$this->link[$id1][1]][2][] = array($this->link[$id2][1], $result);
-			$this->tournament[2][$this->link[$id2][1]][2][] = array($this->link[$id1][1], 1 - $result);
+			//$this->tournament[2][$this->link[$id2][1]][2][] = array($this->link[$id1][1], 1 - $result);
+			$this->tournament[2][$this->link[$id2][1]][2][] = array($this->link[$id1][1], $gresult);
 		}
 		$this->result = null; // Bisheriges Ergebnis ist nun ungültig
 		return true;

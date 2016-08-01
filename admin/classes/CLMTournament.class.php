@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -259,7 +259,7 @@ class CLMTournament {
 		$maxround = 0;
 		$matrix = array();
 		foreach ($matchData as $key => $value) {
-			if ($value->ergebnis < 3 AND ((($value->dg - 1) * $runden) + $value->runde) > $maxround) $maxround = (($value->dg - 1) * $runden) + $value->runde;
+			if (($value->ergebnis < 3 OR $value->ergebnis > 8) AND ((($value->dg - 1) * $runden) + $value->runde) > $maxround) $maxround = (($value->dg - 1) * $runden) + $value->runde;
 			$matrix[$value->tln_nr][$value->dg][$value->runde] = 1;
 		}
 			
@@ -288,7 +288,7 @@ class CLMTournament {
 			if ($value->tln_nr == 0) continue;    //techn. Teilnehmer bei ungerader Teilnehmerzahl
 			//if ($value->ergebnis == 8) continue;  //spielfrei
 			if ($value->ergebnis != 8) $array_PlayerSpiele[$value->tln_nr] += 1;
-			if ($value->ergebnis == 2) { // remis
+			if ($value->ergebnis == 2 OR $value->ergebnis == 10) { // remis
 				$array_PlayerPunkte[$value->tln_nr] += .5;
 				$array_PlayerPunkteTB[$value->tln_nr] += .5;
 				$array_PlayerSumWert[$value->tln_nr] += (.5 * ($maxround - $value->runde +1));
@@ -319,7 +319,7 @@ class CLMTournament {
 			//if ($value->tln_nr == 0) continue;  // Ignorieren von techn. Spielern
 			// Buchholz
 			if (in_array(1, $arrayFW) OR in_array(2, $arrayFW) OR in_array(11, $arrayFW) OR in_array(12, $arrayFW) OR in_array(5, $arrayFW) OR in_array(15, $arrayFW)) { // beliebige Buchholz als TieBreaker gewünscht?
-				if ($value->ergebnis < 3 OR $paramTBFideCorrect == 0) {
+				if ($value->ergebnis < 3 OR $value->ergebnis > 8 OR $paramTBFideCorrect == 0) {
 					$array_PlayerBuchOpp[$value->tln_nr][] = $array_PlayerPunkteTB[$value->gegner]; // Array mit Gegnerwerten - für Streichresultat
 				} else { //Ranglistenkorrektur nach FIDE (Teil 2) nur für CH-Turniere
 					$query = "SELECT tln_nr, gegner, dg, runde, ergebnis FROM `#__clm_turniere_rnd_spl`"
@@ -335,7 +335,7 @@ class CLMTournament {
 						if ($maxround < ((($valuesnr->dg - 1) * $runden) + $valuesnr->runde)) continue;  // Ignorieren von bereits gesetzten kampflos oder spielfrei in Folgerunden
 						if (($valuesnr->dg < $value->dg) OR ($valuesnr->dg == $value->dg AND $valuesnr->runde < $value->runde)) {
 							if ($valuesnr->ergebnis == 1) $PlayerPunkteKOR += 1; // Sieg
-							elseif ($valuesnr->ergebnis == 2) $PlayerPunkteKOR += .5; // remis
+							elseif ($valuesnr->ergebnis == 2 OR $valuesnr->ergebnis == 10) $PlayerPunkteKOR += .5; // remis
 							elseif ($valuesnr->ergebnis == 5) $PlayerPunkteKOR += 1; // Sieg kampflos
 						}
 					}	
@@ -349,11 +349,11 @@ class CLMTournament {
 			
 			// Sonneborn-Berger
 			if (in_array(3, $arrayFW) OR in_array(13, $arrayFW)) { // SoBe als ein TieBreaker gewünscht?
-				if ($value->ergebnis == 0 ) {
+				if ($value->ergebnis == 0 OR $value->ergebnis == 9) {
 					$array_PlayerSoBeOpp[$value->tln_nr][] = 0; 	// Array mit Gegnerwerten - für Streichresultat
 				} elseif ($value->ergebnis == 1) {
 					$array_PlayerSoBeOpp[$value->tln_nr][] = $array_PlayerPunkteTB[$value->gegner]; // Array mit Gegnerwerten - für Streichresultat
-				} elseif ($value->ergebnis == 2) {
+				} elseif ($value->ergebnis == 2 OR $value->ergebnis == 10) {
 					$array_PlayerSoBeOpp[$value->tln_nr][] = (.5 * $array_PlayerPunkteTB[$value->gegner]); // Array mit Gegnerwerten - für Streichresultat
 				} elseif ($value->ergebnis == 5 AND $paramTBFideCorrect == 0) {
 					$array_PlayerSoBeOpp[$value->tln_nr][] = $array_PlayerPunkteTB[$value->gegner]; // Array mit Gegnerwerten - für Streichresultat
@@ -714,7 +714,7 @@ class CLMTournament {
 						$matchesdirect = $this->_db->loadObjectList();
 						$zdirect = count($matchesdirect);
 						foreach ($matchesdirect as $mdvalue) {
-							if ($mdvalue->ergebnis == 2) $sum_erg += 1;
+							if ($mdvalue->ergebnis == 2 OR $mdvalue->ergebnis == 10) $sum_erg += 1;
 							elseif ($mdvalue->ergebnis == 1 OR $mdvalue->ergebnis == 5) $sum_erg += 2;
 						}
 					}

@@ -39,7 +39,7 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 	 }
 	}
 	for ($i = 0;$i < count($results);$i++) {
-		if (!is_numeric($results[$i]) || $results[$i] < 0 || $results[$i] > 8) {
+		if (!is_numeric($results[$i]) || $results[$i] < 0 || $results[$i] > 10) {
 			return array(false, "e_reportSaveInconsistent");
 		}
 		if ($guests[$i] != "-1") {
@@ -136,7 +136,7 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 		}
 		$hzps = $teil_heim[1];
 		$gzps = $teil_gast[1];
-		if ($ergebnis > 2) {
+		if ($ergebnis > 2 AND $ergebnis < 9) {
 			$kampflos = 1;
 		} else {
 			$kampflos = 0;
@@ -177,6 +177,14 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 			$erg_h = 0;
 			$erg_g = 0;
 		}
+		if ($ergebnis == 9) {
+			$erg_h = $out["liga"][0]->nieder + $out["liga"][0]->antritt;
+			$erg_g = $out["liga"][0]->remis + $out["liga"][0]->antritt;
+		}
+		if ($ergebnis == 10) {
+			$erg_h = $out["liga"][0]->remis + $out["liga"][0]->antritt;
+			$erg_g = $out["liga"][0]->nieder + $out["liga"][0]->antritt;
+		}
 		$weiss = substr($colorstr, $y1, 1);
 		if ($weiss == 1) $schwarz = 0;
 		else $schwarz = 1;
@@ -196,7 +204,7 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 			$hkl++;
 		}
 		if ($erg_g == 0 && $kampflos == 1) {
-			$hkl++;
+			$gkl++;
 		}
 	}
 	

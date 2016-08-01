@@ -360,7 +360,7 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 		<td class="key" nowrap="nowrap">
 		  <select size="1" name="<?php echo 'ergebnis'.($i+1); ?>" id="<?php echo 'ergebnis'.($i+1); ?>">
 			<option value="8"><?php echo JText::_('RESULTS_DETAILS_DD_3');?></option>
-			<?php for ($x=0; $x < 9; $x++) { ?>
+			<?php for ($x=0; $x < 11; $x++) { ?>
 			 <option value="<?php echo ($ergebnis[$x]->id); ?>" 
 			 <?php if ($runde[0]->gemeldet > 0 AND isset($bretter[$i]->ergebnis) AND (((int)$ergebnis[$x]->id)-1) == ((int)$bretter[$i]->ergebnis)) { ?> selected="selected" <?php } ?>>
 			 <?php echo $ergebnis[$x]->erg_text; ?></option> 
@@ -575,14 +575,14 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 		</td>
 
 		<td class="key" nowrap="nowrap">
-			<?php for ($x=0; $x < 9; $x++) { ?>
+			<?php for ($x=0; $x < 11; $x++) { ?>
 			<?php if ($runde[0]->gemeldet > 0 AND (((int)$ergebnis[$x]->id)-1) == ((int)$bretter[$i]->ergebnis)) { echo $ergebnis[$x]->erg_text;}    }	?>
 		</td>
 
 		<td class="key" nowrap="nowrap">
 		  <select size="1" name="<?php echo 'ergebnis'.($i+1); ?>" id="<?php echo 'ergebnis'.($i+1); ?>">
 			<option value="-1" selected="selected"><?php echo JText::_( 'RESULTS_DETAILS_DD_3'); ?></option>
-			<?php for ($x=0; $x < 9; $x++) { ?>
+			<?php for ($x=0; $x < 11; $x++) { ?>
 			 <option value="<?php echo ($ergebnis[$x]->eid); ?>" <?php if ($runde[0]->dwz_edit > 0 AND isset($bretter[$i]->dwz_edit) AND (($ergebnis[$x]->id)-1) == ((int)$bretter[$i]->dwz_edit)) { ?> selected="selected" <?php } ?>><?php echo $ergebnis[$x]->erg_text; ?></option>
 			<?php } ?>
 		  </select>

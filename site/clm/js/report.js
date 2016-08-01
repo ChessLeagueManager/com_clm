@@ -46,6 +46,10 @@ function clm_report_change_result(box,mother) {
 		} else if (r == "2") {
 			h=h+0.5;
 			g=g+0.5;
+		} else if (r == "9") {
+			g=g+0.5;
+		} else if (r == "10") {
+			h=h+0.5;
 		} else if (r == "-2") {
 			nothing++;
 		}

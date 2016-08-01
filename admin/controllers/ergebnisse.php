@@ -1036,7 +1036,7 @@ function save()
 		$ergebnis	= JRequest::getVar( 'ergebnis'.$y);
 	$kampflos = 0;
 	
-	if ($ergebnis > 3) { $kampflos = 1; }
+	if ($ergebnis > 3 AND $ergebnis < 10) { $kampflos = 1; }
 		else { $kampflos = 0; }
 		
 	if ($ergebnis == 1)
@@ -1074,6 +1074,14 @@ function save()
 	if ($ergebnis == 9)
 		{ 	$erg_h = 0;
 			$erg_g = 0;
+		}
+	if ($ergebnis == 10)
+		{ 	$erg_h = $nieder+$antritt;
+			$erg_g = $remis+$antritt;
+		}
+	if ($ergebnis == 11)
+		{ 	$erg_h = $remis+$antritt;
+			$erg_g = $nieder+$antritt;
 		}
 	// WICHTIG wegen NULL / SELECTED Problem
 	$ergebnis--;
@@ -1741,6 +1749,8 @@ function save_wertung()
 		$heim_erg[6]="0";
 		$heim_erg[7]="0";
 		$heim_erg[8]="0";
+		$heim_erg[9]=$nieder+$antritt;
+		$heim_erg[10]=$remis+$antritt;
 
 	$gast_erg = array();
 		$gast_erg[-1]="NULL";
@@ -1753,6 +1763,8 @@ function save_wertung()
 		$gast_erg[6]="0";
 		$gast_erg[7]="0";
 		$gast_erg[8]="0";
+		$gast_erg[9]=$remis+$antritt;
+		$gast_erg[10]=$nieder+$antritt;
 
 	// Anzahl kampflose Partien (Heim) z�hlen
 	$query	= "SELECT COUNT(kampflos) as kl "
@@ -1789,7 +1801,7 @@ function save_wertung()
 	for ($y=1; $y< (1+$stamm) ; $y++){
 		$ergebnis	= JRequest::getVar( 'ergebnis'.$y);
 
-	if ($ergebnis > 3) { $kampflos = 1; }
+	if ($ergebnis > 3 AND $ergebnis < 9) { $kampflos = 1; }
 	else { $kampflos = 0; }
 
 	// Wenn Ergebnis nicht verändert dann Original verwenden

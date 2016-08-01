@@ -324,7 +324,7 @@ class CLMForm {
 		$resultlist[] = JHTML::_('select.option', '-1', CLMText::selectOpener(JText::_( 'SELECT_RESULT' ) ), 'eid', 'ergebnis' );
 		$resultlist[] = JHTML::_('select.option', '-2', JText::_( ' ---------------- ' ), 'eid', 'ergebnis');
 		
-		for ($r=0; $r<=8; $r++) {
+		for ($r=0; $r<=10; $r++) {
 			$resultlist[] = JHTML::_('select.option', $r, JText::_( 'RESULT_EID_'.$r ), 'eid', 'ergebnis' );
 		}
 	

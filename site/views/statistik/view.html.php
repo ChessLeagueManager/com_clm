@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -55,6 +55,10 @@ class CLMViewStatistik extends JViewLegacy
 		$model		= $this->getModel();
 		$brett		= $model->getCLMBrett();
 		$this->assignRef('brett'  , $brett);
+
+		$model		= $this->getModel();
+		$gbrett		= $model->getCLMGBrett();
+		$this->assignRef('gbrett'  , $gbrett);
 
 		$model		= $this->getModel();
 		$rbrett		= $model->getCLMRBrett();

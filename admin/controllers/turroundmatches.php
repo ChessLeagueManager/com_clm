@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -196,7 +196,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 	
 		// Datensätze in Spielertabelle schreiben
 		// convert Array nur für SCHWARZ !!
-		$convert = array(0 => 1, 0, 2, 3, 5, 4, 6, 7, 8);
+		$convert = array(0 => 1, 0, 2, 3, 5, 4, 6, 7, 8, 10, 9);
 		// andere Matrix für eid
 	
 		// daten ermitteln

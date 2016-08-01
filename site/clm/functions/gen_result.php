@@ -8,6 +8,8 @@
 // 6 -> - / -
 // 7 -> ---
 // 8 -> spielfrei
+// 9 -> 0 - 0,5
+//10 -> 0,5 - 0
 // Umwandeln des Spielergebnis (Nummer) in die passende Punktzahl
 function clm_function_gen_result($result,$kind) {
 if(is_null($result)) {
@@ -18,13 +20,17 @@ switch ($kind) {
 	// enstprechende Punktzahl wird zurückgegeben oder Fehler (-2)
    case 0:
 			if($result==0) {
-				return 0;
-			}else if($result==1) {
-				return 1;
+				return array(0,1);
+			} else if($result==1) {
+				return array(1,0);
 			} else if($result==2) {
-				return 0.5;
+				return array(0.5,0.5);
+			} else if($result==9) {
+				return array(0,0.5);
+			} else if($result==10) {
+				return array(0.5,0);
 			} else {
-				return -1;
+				return array(-1,-1);
 			}
 }
 

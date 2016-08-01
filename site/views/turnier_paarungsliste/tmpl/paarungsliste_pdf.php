@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -132,6 +132,8 @@ if ($value->published == 1) {
 			$pdf->Cell($br05,$zelle,$this->players[$matches->gegner]->twz,1,0,'C',1); 
 			if ($matches->ergebnis != NULL) {
 				if ($matches->ergebnis == 2) { $ergebnis = chr(189).":".chr(189); }
+				elseif ($matches->ergebnis == 9) { $ergebnis = "0:".chr(189); }
+				elseif ($matches->ergebnis == 10) { $ergebnis = chr(189).":0"; }
 				else { $ergebnis = CLMText::getResultString($matches->ergebnis); }
 				if (($this->turnier->typ == 3 OR $this->turnier->typ == 5) AND ($matches->tiebrS > 0 OR $matches->tiebrG > 0)) {
 						$ergebnis .= '  ('.$matches->tiebrS.':'.$matches->tiebrG.')'; 

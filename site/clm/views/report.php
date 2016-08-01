@@ -71,7 +71,7 @@ function clm_view_report($out) {
 <div class="element result">
 		  <select class="result_select" onchange="clm_report_change_result(this,false);" size="1" name="<?php echo "ergebnis".($i+1); ?>" id="<?php echo "ergebnis".($i+1); ?>">
 			<option value="-2"><?php echo $lang->choose_result; ?></option>
-			<?php for ($x=0; $x < 9; $x++) { ?>
+			<?php for ($x=0; $x < 11; $x++) { ?>
 			 <option value="<?php echo $ergebnis[$x]->eid; ?>"<?php if (isset($oldresult[$i]) AND $ergebnis[$x]->eid == $oldresult[$i]->ergebnis) echo ' selected="selected" '; ?>><?php echo $erg_text[$x]->erg_text ; ?></option> 
 			<?php } ?>
 		  </select>

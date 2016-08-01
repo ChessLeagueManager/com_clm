@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.3.2 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
++ Ergebnis 0-0,5 bzw. 0,5-0 eingebaut
+
 - - - - - 3.3.1 - [09-07-2016] - - - - - - - - - - - - - - - - - - - -
 + View Runde: pdf-Formular Spielbericht über Liga-Parameter
 # Englisch: Minitextkorrektur
