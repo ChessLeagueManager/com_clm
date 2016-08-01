@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -36,7 +36,7 @@ class CLMModelSWT extends JModelLegacy {
 		
 		//Dateiname wird bereinigt
 		$filename = JFile::makeSafe($file['name']);
-		
+		JRequest::setVar('filename',$filename);	
 		//Tempor�rer Name und Ziel werden festgesetzt
 		$src = $file['tmp_name'];
 		$dest = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR . $filename;

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -78,7 +78,7 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 			$this->_turnier->set('bezirkTur'		, 1);
 			$this->_turnier->set('vereinZPS'		, 0);
 			$this->_turnier->set('published'		, 1);
-			$this->_turnier->set('bem_int'			, '');
+			$this->_turnier->set('bem_int'			, 'SWT-Importfile:'.$filename.';');
 			$this->_turnier->set('bemerkungen'		, '');
 			$this->_turnier->set('started'			, 0);
 			$this->_turnier->set('finished'			, 0);

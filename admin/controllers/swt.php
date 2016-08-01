@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -28,8 +28,10 @@ class CLMControllerSWT extends JControllerLegacy
 	function upload() {
 		$model = $this->getModel('swt');
 		$msg = $model->upload();
+		$filename = JRequest::getVar('filename', '');
 		
 		$adminLink = new AdminLink();
+		$adminLink->more = array('filename' => $filename);
 		$adminLink->view = "swt";
 		$adminLink->makeURL();
 			

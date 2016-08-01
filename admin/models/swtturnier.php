@@ -36,9 +36,7 @@ class CLMModelSWTTurnier extends JModelLegacy {
 	
 	function getTurniere() {
 		if (empty( $this->_turniere )) { 
-			$query =  ' SELECT 
-							id,
-							name
+			$query =  ' SELECT id, name, bem_int
 						FROM 
 							#__clm_turniere 
 						WHERE 
