@@ -17,6 +17,7 @@ $ -> Language fix or change
 # Admin View Liga/MTurniere: Prüfung Rundenanzahl
 + SWT-Import: Hochgeladene Datei Standard für Import
 + SWT-Import: Zuordnung SWT-Dateiname zu Liga/Turnier
+# DeWIS-Dateiausgabe: Anpassung PHP7
 
 - - - - - 3.3.1 - [09-07-2016] - - - - - - - - - - - - - - - - - - - -
 + View Runde: pdf-Formular Spielbericht über Liga-Parameter

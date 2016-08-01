@@ -203,7 +203,10 @@ function datei() {
 		;
 	$db->setQuery($sql);
 	$spieler=$db->loadObjectList();
-
+	if (count($spieler) == 0) { JError::raiseWarning( 500, JText::_( 'DB_NO_PLAYER' ) ); 
+		$app->enqueueMessage(JText::_( 'DB_FILE_NOSUCCESS' ), 'warning');
+		$app->redirect( $adminLink->url);
+	}
 	// Dateikopf
 	$xml = utf8_decode($liga_name[0]->name)."\n"; // Turnierbezeichnung
 	$xml .= "Erstellt mit CLM - ChessLeagueManager\n"; // Details zum Turnier oder Leerzeile
@@ -265,10 +268,8 @@ function datei() {
 	$erg[7]=":";	// --- 
 	$erg[8]=":";	// spielfrei 
 	// NEUE ErgebnisID's
-	$erg[9]="R";	// ½:0 
-	$erg[10]="0";	// 0:½
-	$erg[11]="0";	// 0:-
-	$erg[12]=":";	// -:0
+	$erg[9]="0";	// 0:0,5 
+	$erg[10]="R";	// 0,5:0
 
 	// Umgekehrte Ergebnisse wegen Sortierung nach "Weiss"
 	$erg_bl[0]="1"; // 0 - 1
@@ -281,10 +282,8 @@ function datei() {
 	$erg_bl[7]=":";	  // --- 
 	$erg_bl[8]=":";	  // spielfrei 
 	// NEUE ErgebnisID's
-	$erg_bl[9]="0"; // ½:0 
-	$erg_bl[10]="R";// 0:½
-	$erg_bl[11]=":";// 0:-
-	$erg_bl[12]="0";// -:0
+	$erg_bl[9]="R";   // 0:0,5 
+	$erg_bl[10]="0";  // 0,5:0
 
 	foreach($runden_daten as $rnd_data){
 		$addy_1 = $fill[(3-strlen($player[$rnd_data->gzps][$rnd_data->gegner]))].$player[$rnd_data->gzps][$rnd_data->gegner];
@@ -427,7 +426,7 @@ function datei() {
 		;
 
 	if(!$et){
-		$sql = " SELECT a.*,v.Vereinname,s.PKZ,s.Geburtsjahr,s.Spielername,s.DWZ FROM `#__clm_rnd_spl` as a "
+		$sql = " SELECT a.*,v.Vereinname,s.PKZ,s.Geburtsjahr,s.Spielername,s.DWZ,s.FIDE_ID FROM `#__clm_rnd_spl` as a "
 			." LEFT JOIN #__clm_dwz_spieler as s ON s.sid = a.sid AND s.ZPS = a.zps AND s.Mgl_Nr = a.spieler "
 			." LEFT JOIN #__clm_dwz_vereine as v ON v.sid = a.sid AND v.ZPS = a.zps "
 
@@ -459,7 +458,8 @@ function datei() {
 			$player[$spl->zps][$spl->spieler] = $cnt;
 			$cnt++;
 		
-		$name = explode(",", $spl->Spielername);
+		if (is_null($spl->Spielername)) $name = explode(",", ',');
+		else $name = explode(",", $spl->Spielername);
 
 		$xml .= '<player>'
 			.'<noPlayer>'.$player[$spl->zps][$spl->spieler].'</noPlayer>'
@@ -864,9 +864,11 @@ $xml = $xmla->writeData();
   }
 
 	// Slashes und Spaces aus Namen filtern und Namen mit Pfad zusammensetzen
-	$dat_name	= ereg_replace(" ", "_", $liga_name[0]->name);
-	$dat_name	= ereg_replace("[/]", "_", $dat_name);
-	$file		= $dat_name.'__'.$datum;
+	//$dat_name	= ereg_replace(" ", "_", $liga_name[0]->name);
+	$dat_name	= str_replace(' ', '_', $liga_name[0]->name);
+	//$dat_name	= ereg_replace("[/]", "_", $dat_name);
+	$dat_name	= str_replace('/', '_', $dat_name);
+	$file		= utf8_decode($dat_name).'__'.$datum;
 	$path		= JPath::clean(JPATH_ADMINISTRATOR.DS.'components'.DS.$option.DS.'dewis');
 	if($format =="1"){ $datei_endung = "txt";}
 	if($format =="2"){ $datei_endung = "xml";}
@@ -877,7 +879,7 @@ $xml = $xmla->writeData();
 	jimport('joomla.filesystem.file');
 	if (!JFile::write( $write, $xml )) { JError::raiseWarning( 500, JText::_( 'DB_FEHLER_SCHREIB' ) ); }
   
-	$app->enqueueMessage(JText::_( 'DB_FILE_SUCCESS' ).$file, 'warning');
+	$app->enqueueMessage(JText::_( 'DB_FILE_SUCCESS' ).utf8_encode($file), 'warning');
 	$app->redirect( $adminLink->url);
 	}
 
@@ -899,7 +901,7 @@ function xml_dateien()
 	$dateien = '<table style="width:100%;">';
 		for ($x=0; $x< $count; $x++ ) {
 			$dateien .= '<tr>'
-				.'<td width="60%"><a href="components/com_clm/dewis/'.$files[$x].'" target="_blank">'.$files[$x].'</a></td>'
+				.'<td width="60%"><a href="components/com_clm/dewis/'.utf8_encode($files[$x]).'" target="_blank">'.utf8_encode($files[$x]).'</a></td>'
 				.'<td width="10%">&nbsp;&nbsp;</td>'
 				.'<td width="15%"><a href="index.php?option=com_clm&view=auswertung&task=delete&datei='.$files[$x].'" '
 				//.'onClick="submitform();"'
