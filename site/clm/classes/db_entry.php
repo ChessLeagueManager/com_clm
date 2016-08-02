@@ -57,7 +57,7 @@ class clm_class_db_entry {
 		$this->new = false;
 	}
 	// Hilfsfunktion zum verwenden von prepared statements
-	private function refValues($arr) {
+	private function refValues(& $arr) {
 		$refs = array();
 		foreach ($arr as $key => $value) $refs[$key] = & $arr[$key];
 		return $refs;
