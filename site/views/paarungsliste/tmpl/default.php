@@ -478,8 +478,11 @@ if ($termin[$term]->bemerkungen <> "") { ?>
 // Wenn SL_OK dann Haken anzeigen
 if ($rundensumme[$rund_sum]->sl_ok > 0) { ?>
 	<span class="editlinktip hasTip"><img  src="<?php echo CLMImage::imageURL('accept.png'); ?>" class="CLMTooltip" title="<?php echo JText::_( 'CHIEF_OK') ?>" /></span><?php } ?>
-	<b>&nbsp;<?php if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1+(2 * $liga[0]->runden))) { if ($termin[$term]->datum > 0) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); 
-			if(isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { echo '  '.substr($termin[$term]->startzeit,0,5).' Uhr'; }
+	<b>&nbsp;<?php if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1+(2 * $liga[0]->runden))) { 
+		if ($termin[$term]->datum > 0) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); 
+		if($params['round_date'] == '0' and isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { echo '  '.substr($termin[$term]->startzeit,0,5); }
+		if($params['round_date'] == '1' and isset($termin[$term]->enddatum) and $termin[$term]->enddatum > '1970-01-01' and $termin[$term]->enddatum != $termin[$term]->datum) { 
+						echo ' - '.JHTML::_('date',  $termin[$term]->enddatum, JText::_('DATE_FORMAT_CLM_F')); }
 			} $term++; }		
 else {  }?></b>	
 </div>
@@ -509,6 +512,9 @@ else {	?>
     <?php } ?>
 	<th class="gast"><?php echo JText::_('GUEST') ?></th>
 	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
+	<?php if ($params['round_date'] == '1') { ?>
+	<th class="heim"><?php echo JText::_('FIXTURE_DATE') ?></th>
+	<?php } ?>
 </tr>
 <?php
 
@@ -560,6 +566,15 @@ else { echo $paar[$z]->gname; } ?>
 		}
 		else { if (isset($dwz[($paar[$z]->gtln)])) echo round($dwz[($paar[$z]->gtln)]); } ?></td>
 </td>
+	<?php if ($params['round_date'] == '1') { ?>
+	<td class="heim">
+	<?php 
+			if (isset($paar[$z]->pdate) AND $paar[$z]->pdate > '1970-01-01') {
+			echo JHTML::_('date',  $paar[$z]->pdate, JText::_('DATE_FORMAT_CLM_Y2')); 
+			if($paar[$z]->ptime > '00:00:00') { echo '  '.substr($paar[$z]->ptime,0,5); } }
+	?>
+	</td>
+	<?php } ?>
 </tr>
 <?php $z++; } ?>
 </table>
@@ -570,14 +585,15 @@ else { echo $paar[$z]->gname; } ?>
 <td colspan="<?php echo $ohne_tln; ?>"><b>
 <div><div class="left">
 <?php
-if ($rundensumme[$rund_sum]->nr == ($x+1+$liga[0]->runden) ) { $rund_sum++; }
+if ($rundensumme[$rund_sum]->nr == ($x+1+(2 * $liga[0]->runden)) ) { $rund_sum++; }
 if ($termin[$term]->datum AND $termin[$term]->nr == ($x+1+(2 * $liga[0]->runden))) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); $term++;} ?>
 </div><div style="text-align: right; padding: 0 10px 0 0;"> <?php echo $termin[$x]->name; ?></div></b>
 </td>
 </tr>
 <?php
 for ($y=0; $y< ($liga[0]->teil)/2; $y++){
-	if ( $summe[$sum_paar]->runde == ($x+1) AND $summe[$sum_paar]->paarung == ($y+1)) { $sum_paar = $sum_paar+2; }
+	if (!isset($summe[$sum_paar])) break;
+	if ( $summe[$sum_paar]->runde == ($x+1+(2 * $liga[0]->runden)) AND $summe[$sum_paar]->paarung == ($y+1)) { $sum_paar = $sum_paar+2; }
 	if ($dwzgespielt[$z2]->dwz AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 3 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0) { $z2++; }
 	$z++;
 	} ?>
@@ -610,8 +626,11 @@ if ($termin[$term]->bemerkungen <> "") { ?>
 // Wenn SL_OK dann Haken anzeigen
 if ($rundensumme[$rund_sum]->sl_ok > 0) { ?>
 	<span class="editlinktip hasTip"><img  src="<?php echo CLMImage::imageURL('accept.png'); ?>" class="CLMTooltip" title="<?php echo JText::_( 'CHIEF_OK') ?>" /></span><?php } ?>
-	<b>&nbsp;<?php if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1+(3 * $liga[0]->runden))) { if ($termin[$term]->datum > 0) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); 
-			if(isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { echo '  '.substr($termin[$term]->startzeit,0,5).' Uhr'; }
+	<b>&nbsp;<?php if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1+(3 * $liga[0]->runden))) { 
+		if ($termin[$term]->datum > 0) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); 
+		if($params['round_date'] == '0' and isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { echo '  '.substr($termin[$term]->startzeit,0,5); }
+		if($params['round_date'] == '1' and isset($termin[$term]->enddatum) and $termin[$term]->enddatum > '1970-01-01' and $termin[$term]->enddatum != $termin[$term]->datum) { 
+						echo ' - '.JHTML::_('date',  $termin[$term]->enddatum, JText::_('DATE_FORMAT_CLM_F')); }
 			} $term++; }		
 else {  }?></b>	
 </div>
@@ -641,6 +660,9 @@ else {	?>
     <?php } ?>
 	<th class="gast"><?php echo JText::_('GUEST') ?></th>
 	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
+	<?php if ($params['round_date'] == '1') { ?>
+	<th class="heim"><?php echo JText::_('FIXTURE_DATE') ?></th>
+	<?php } ?>
 </tr>
 <?php
 
@@ -692,6 +714,15 @@ else { echo $paar[$z]->gname; } ?>
 		}
 		else { if (isset($dwz[($paar[$z]->gtln)])) echo round($dwz[($paar[$z]->gtln)]); } ?></td>
 </td>
+	<?php if ($params['round_date'] == '1') { ?>
+	<td class="heim">
+	<?php 
+			if (isset($paar[$z]->pdate) AND $paar[$z]->pdate > '1970-01-01') {
+			echo JHTML::_('date',  $paar[$z]->pdate, JText::_('DATE_FORMAT_CLM_Y2')); 
+			if($paar[$z]->ptime > '00:00:00') { echo '  '.substr($paar[$z]->ptime,0,5); } }
+	?>
+	</td>
+	<?php } ?>
 </tr>
 <?php $z++; } ?>
 </table>
@@ -702,14 +733,15 @@ else { echo $paar[$z]->gname; } ?>
 <td colspan="<?php echo $ohne_tln; ?>"><b>
 <div><div class="left">
 <?php
-if ($rundensumme[$rund_sum]->nr == ($x+1+$liga[0]->runden) ) { $rund_sum++; }
+if ($rundensumme[$rund_sum]->nr == ($x+1+(3 * $liga[0]->runden)) ) { $rund_sum++; }
 if ($termin[$term]->datum AND $termin[$term]->nr == ($x+1+(3 * $liga[0]->runden))) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); $term++;} ?>
 </div><div style="text-align: right; padding: 0 10px 0 0;"> <?php echo $termin[$x]->name; ?></div></b>
 </td>
 </tr>
 <?php
 for ($y=0; $y< ($liga[0]->teil)/2; $y++){
-	if ( $summe[$sum_paar]->runde == ($x+1) AND $summe[$sum_paar]->paarung == ($y+1)) { $sum_paar = $sum_paar+2; }
+	if (!isset($summe[$sum_paar])) break;
+	if ( $summe[$sum_paar]->runde == ($x+1+(3 * $liga[0]->runden)) AND $summe[$sum_paar]->paarung == ($y+1)) { $sum_paar = $sum_paar+2; }
 	if ($dwzgespielt[$z2]->dwz AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 4 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0) { $z2++; }
 	$z++;
 	} ?>
