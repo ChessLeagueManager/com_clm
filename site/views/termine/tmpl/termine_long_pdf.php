@@ -49,7 +49,7 @@ $head_font = 14;
 $font = 10;
 // Fontgröße Standard = 9
 $date_font = 9;
-$page_length = 375;
+$page_length = 360; //375
 
 $arrMonth = array(
  		"January" => JText::_('MOD_CLM_TERMINE_M01'),
@@ -80,11 +80,11 @@ $now = $date->toSQL();
 
 $pdf=new PDF();
 $pdf->AliasNbPages();
+$date = date("Y-m-d");
 
 // START : Terminschleife
 	$tt = 0;  $t1 = 0;
 	$pp = 0;
-	$date = date("Y-m-d");
 	for ($t = 0 ; $t < count ($termine); $t++) {
       if ( $date <= $termine[$t]->datum ) {
 		$t1++;
@@ -153,8 +153,17 @@ $pdf->AliasNbPages();
 			$ttext = utf8_decode($arrWochentag[date("l",$datum[$t])]). ", " . $datum_arr[$t][2].".".$datum_arr[$t][1].".".$datum_arr[$t][0]; 
 			if ($termine[$t]->starttime != '00:00:00') $ttext .= '  '.substr($termine[$t]->starttime,0,5); 
 			$pdf->Cell($br01,$zelle,$ttext,1,0,'L',1); 
-			$pdf->Cell($br02,$zelle,$content_termin,1,0,'L',1);        
+			//$pdf->Cell($br02,$zelle,$content_termin,1,0,'L',1);        
+			$yy1 = $pdf->GetY();
+			$xx1 = $pdf->GetX() + $br02;
+			$pdf->Multicell($br02,$zelle,$content_termin,1,1,'L',1);        
+			$yy3 = $pdf->GetY();
+			$pdf->SetY($yy1);
+			$pdf->SetX($xx1);
+			//$pdf->Multicell($br03,$zelle,$content_detail,1,1,'L',1);        
 			$pdf->Multicell($br03,$zelle,$content_detail,1,1,'L',1);        
+			$yy4 = $pdf->GetY();
+			if ($yy4 < $yy3) $pdf->SetY($yy3);
 			   
 		}
 		}

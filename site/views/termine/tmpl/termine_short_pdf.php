@@ -48,7 +48,7 @@ $head_font = 14;
 $font = 10;
 // Fontgröße Standard = 9
 $date_font = 9;
-$page_length = 375;
+$page_length = 290; //375
 
 $arrMonth = array(
 		"January" => JText::_('MOD_CLM_TERMINE_M01'),
@@ -87,8 +87,9 @@ $date = date("Y-m-d");
         if ( $date <= $termine[$t]->datum ) {
 			$t1++;
         //Anzahl Termine pro Seite
-		if ($tt > 42) $tt = 0;
-		if ($tt == 0) {
+		//if ($tt > 42) $tt = 0;
+		//if ($tt == 0) {
+		if (($pdf->GetY() > ($page_length - 25)) or ($tt == 0)) {
 			$pdf->AddPage();
 			$pdf->SetFont('Times','',$date_font);
 			$pdf->Cell(10,3,' ',0,0);
@@ -130,8 +131,16 @@ $date = date("Y-m-d");
 			$ttext = utf8_decode($arrWochentag[date("l",$datum[$t])]). ", " . $datum_arr[$t][2].".".$datum_arr[$t][1].".".$datum_arr[$t][0]; }
 			if ($termine[$t]->starttime != '00:00:00') $ttext .= '  '.substr($termine[$t]->starttime,0,5); 
 			$pdf->Cell($br01,$zelle,$ttext,1,0,'R',1); 
-			$pdf->Cell($br02,$zelle,utf8_decode($termine[$t]->name),1,0,'L',1);        
+			//$pdf->Cell($br02,$zelle,utf8_decode($termine[$t]->name),1,0,'L',1);        
+			$yy1 = $pdf->GetY();
+			$xx1 = $pdf->GetX() + $br02;
+			$pdf->Multicell($br02,$zelle,utf8_decode($termine[$t]->name),1,1,'L',1);        
+			$yy3 = $pdf->GetY();
+			$pdf->SetY($yy1);
+			$pdf->SetX($xx1);
 			$pdf->Multicell($br03,$zelle,utf8_decode($termine[$t]->typ),1,1,'L',1);        
+			$yy4 = $pdf->GetY();
+			if ($yy4 < $yy3) $pdf->SetY($yy3);
         }   
 		}
         // ENDE : Terminschleife 
