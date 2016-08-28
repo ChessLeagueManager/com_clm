@@ -9,6 +9,7 @@ function clm_api_db_tournament_copy($id, $group=true) {
 
 	$sql = "SELECT * FROM ".$table_list." WHERE id=".$id;
 	$table = clm_core::$db->loadAssocList($sql);
+	$before_ID = $id;
 	
 	$lang = clm_core::$lang->tournament;
 	$table[0]["name"]=$lang->copy2." ".$table[0]["name"];
@@ -38,6 +39,48 @@ function clm_api_db_tournament_copy($id, $group=true) {
 	$new = "INSERT INTO ".$table_list." (".$keyS.") VALUES (".$valueS.")";
 
 	clm_core::$db->query($new);
-	return array(true,"");
+	$after_ID = clm_core::$db->insert_id();
+	
+	if(!$group) return array(true,"");
+	
+	if ($after_ID !== false AND $after_ID != 0 AND $after_ID != $before_ID) {
+		// Runden und Rundentermine für neuen Mannschaftswettbewerb anlegen
+		clm_core::$api->db_tournament_genRounds($after_ID,true); 
+	
+	// copy Rundentermine für Mannschaftswettbewerbe
+		$sql = "SELECT * FROM #__clm_runden_termine WHERE liga=".$id
+			." ORDER BY nr ASC";
+		$runden = clm_core::$db->loadAssocList($sql);
+ 
+		// alle Runden durchgehen
+		foreach ($runden as $runde) {	
+			$new = "UPDATE #__clm_runden_termine "
+				." SET name = '".$runde["name"]."'"
+				.", datum = '".$runde["datum"]."'"
+				.", startzeit = '".$runde["startzeit"]."'"
+				.", deadlineday = '".$runde["deadlineday"]."'"
+				.", deadlinetime = '".$runde["deadlinetime"]."'"
+				.", published = ".$runde["published"]
+				.", ordering = ".$runde["ordering"]
+				.", enddatum = '".$runde["enddatum"]."'"
+				." WHERE liga = ".$after_ID
+				." AND nr = ".$runde["nr"]
+				;
+			clm_core::$db->query($new);
+		}
+
+		// Mannschaften anlegen
+		for($x=1; $x< 1+$table[0]['teil']; $x++) {
+			$man_name = $lang->LIGEN_STD_TEAM." ".$x;
+			if ($x < 10) $man_nr = $after_ID.'0'.$x; else $man_nr = $after_ID.$x;
+			$newt = " INSERT INTO #__clm_mannschaften "
+				." (`sid`,`name`,`liga`,`zps`,`liste`,`edit_liste`,`man_nr`,`tln_nr`,`mf`,`published`) "
+				." VALUES ('".$table[0]['sid']."','$man_name','$after_ID','1','0','0','$man_nr','$x','0','0') "
+				;
+			clm_core::$db->query($newt);
+		}
+	}
+
+	return array(true,"before_ID:".$before_ID."  after_ID:".$after_ID);
 }
 ?>

@@ -21,6 +21,7 @@ $ -> Language fix or change
 # DB-Update (u.a. Saison): Anpassung PHP7
 # View Paarungliste: Datum pro Paarung bei 3/4 Durchgängen
 # pdf-Terminliste: lange Namen in Spalte 2
+# Admin-View Liga: Kopieren von Ligen
 
 - - - - - 3.3.1 - [09-07-2016] - - - - - - - - - - - - - - - - - - - -
 + View Runde: pdf-Formular Spielbericht über Liga-Parameter

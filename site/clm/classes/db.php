@@ -64,7 +64,7 @@ class clm_class_db {
 		return $this->db[0]->prepare(clm_core::$load->db_add_prefix($query, $this->db[1]));
 	}
 	public function insert_id() {
-		return $this->db[0]->insert_id();
+		return $this->db[0]->insert_id;
 	}
 	// gibt die Ergebnisse als Objekte in einem Array zurück
 	public function loadObjectList($query) {

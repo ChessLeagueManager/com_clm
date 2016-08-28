@@ -21,4 +21,5 @@ $logs[]="db_tournament_delDWZ";
 $logs[]="db_tournament_updateDWZ";
 $logs[]="db_tournament_genRounds";
 $logs[]="db_tournament_delRounds";
+$logs[]="db_tournament_copy";
 ?>
