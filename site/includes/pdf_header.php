@@ -20,7 +20,11 @@ $pdf_orientation = JRequest::getVar( 'pdf_orientation');
 	$this->Cell($pdf_width-15,2,utf8_decode($fromname),0,1,'C');
 	$this->SetFont('Arial','B',8);
 // Include the class
-	include_once('idna_convert.class.php');
+	//include_once('idna_convert.class.php');
+	if (!class_exists('idna_convert')) {
+		$path = clm_core::$path . DS . "includes" . DS . "idna_convert.class" . '.php';
+		require_once ($path);
+	}
 // Instantiate it (depending on the version you are using) with
 	$IDN = new idna_convert();
 // The input string
