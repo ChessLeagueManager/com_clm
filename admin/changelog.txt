@@ -23,6 +23,8 @@ $ -> Language fix or change
 # pdf-Terminliste: lange Namen in Spalte 2
 # Admin-View Liga: Kopieren von Ligen
 # class idna_convert Mehrfachverwendung
+# Admin-View Mitglieder: Nachmeldung 1.Spieler
+# View Mannschaft: Anzeige von organisierten Spieler beim Schulschach
 
 - - - - - 3.3.1 - [09-07-2016] - - - - - - - - - - - - - - - - - - - -
 + View Runde: pdf-Formular Spielbericht über Liga-Parameter

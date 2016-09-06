@@ -117,7 +117,8 @@ class CLMModelMannschaft extends JModelLegacy
 			." FROM #__clm_meldeliste_spieler as a ";
 		$query .= " LEFT JOIN #__clm_dwz_spieler as d on d.zps = a.zps AND d.mgl_nr = a.mgl_nr AND d.sid = a.sid";
 		$query .= " WHERE a.sid = ".$sid
-			." AND a.zps = '".$zps."' AND a.mnr = $mnr"
+			//." AND a.zps = '".$zps."' AND a.mnr = $mnr"
+			." AND a.mnr = $mnr"
 			." AND a.lid = ".$liga
 			." ORDER BY a.mnr ASC, a.snr ASC ";
 		} }
