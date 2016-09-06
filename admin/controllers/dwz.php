@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -80,6 +80,11 @@ function display($cachable = false, $urlparams = array())
 	$db->setQuery( $sql );
 	$verein=$db->loadObjectList();
 	}
+	// Saison
+	$sql = 'SELECT id, name FROM #__clm_saison WHERE published = 1 AND archiv = 0';
+	$db->setQuery($sql);
+	$lists['saison']=$db->loadObjectList();
+
 	// Vereinefilter laden
 	$vlist = CLMFilterVerein::vereine_filter(0);
 	$lists['vid']	= JHTML::_('select.genericlist', $vlist, 'filter_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );

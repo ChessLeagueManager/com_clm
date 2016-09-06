@@ -117,7 +117,8 @@ echo CLMContent::clmWarning(JText::_('LEAGUE_NO_GAMES'));
 <table cellpadding="0" cellspacing="0" class="statistik">
 	<tr>
 		<th><?php echo JText::_('LEAGUE_STAT_BRETT') ?></th>
-		<th colspan="5"><?php echo JText::_('LEAGUE_STAT_POINTS') ?></th>
+		<th colspan="1"><?php echo JText::_('LEAGUE_STAT_PLAYERGAMES') ?></th>
+		<th colspan="4"><?php echo JText::_('LEAGUE_STAT_POINTS') ?></th>
 		<th colspan="2"><?php echo JText::_('LEAGUE_STAT_WHITE') ?></th>
 		<th colspan="2"><?php echo JText::_('LEAGUE_STAT_BLACK') ?></th>
 		<th colspan="2"><?php echo JText::_('LEAGUE_STAT_REMIS') ?></th>
@@ -305,11 +306,14 @@ if ($count < 10) { $a = $count; }
 		<?php for ($xx=1; $xx < 7; $xx++) {   //max. 6 Spalten
 			$str_btiebr = 'btiebr'.$xx;
 			if (!isset($params[$str_btiebr])) continue;
-			if ($params[$str_btiebr] == 1) $hstring = $bestenliste[$x]->gpunkte;
-			elseif ($params[$str_btiebr] == 2) $hstring = $bestenliste[$x]->gpartien;
+			//if ($params[$str_btiebr] == 1) $hstring = $bestenliste[$x]->gpunkte;
+			if ($params[$str_btiebr] == 1) $hstring = $bestenliste[$x]->Punkte;
+			//elseif ($params[$str_btiebr] == 2) $hstring = $bestenliste[$x]->gpartien;
+			elseif ($params[$str_btiebr] == 2) $hstring = $bestenliste[$x]->Partien;
 			elseif ($params[$str_btiebr] == 3) $hstring = $bestenliste[$x]->Niveau;
 			elseif ($params[$str_btiebr] == 4) if (($bestenliste[$x]->Punkte == $bestenliste[$x]->Partien) AND ($bestenliste[$x]->Leistung > 0)) { $hstring = (($bestenliste[$x]->Niveau)+667).' &sup2;'; $ex = 1; } else { $hstring = $bestenliste[$x]->Leistung;}
-			elseif ($params[$str_btiebr] == 5) $hstring = round($bestenliste[$x]->gprozent,1);
+			//elseif ($params[$str_btiebr] == 5) $hstring = round($bestenliste[$x]->gprozent,1);
+			elseif ($params[$str_btiebr] == 5) $hstring = round($bestenliste[$x]->Prozent,1);
 			elseif ($params[$str_btiebr] == 6) { $hstring = $bestenliste[$x]->epunkte; $ey = 1; }
 			elseif ($params[$str_btiebr] == 7) { $hstring = $bestenliste[$x]->epartien; $ey = 1; }
 			elseif ($params[$str_btiebr] == 8) { $hstring = round($bestenliste[$x]->eprozent,1); $ey = 1; }
@@ -378,11 +382,14 @@ echo CLMContent::clmWarning(JText::_('LEAGUE_NO_GAMES'));
 		<?php for ($xx=1; $xx < 7; $xx++) {   //max. 6 Spalten
 			$str_btiebr = 'btiebr'.$xx;
 			if (!isset($params[$str_btiebr])) continue;
-			if ($params[$str_btiebr] == 1) $hstring = $spielerbrett->gpunkte;
-			elseif ($params[$str_btiebr] == 2) $hstring = $spielerbrett->gpartien;
+			//if ($params[$str_btiebr] == 1) $hstring = $spielerbrett->gpunkte;
+			if ($params[$str_btiebr] == 1) $hstring = $spielerbrett->Punkte;
+			//elseif ($params[$str_btiebr] == 2) $hstring = $spielerbrett->gpartien;
+			elseif ($params[$str_btiebr] == 2) $hstring = $spielerbrett->Partien;
 			elseif ($params[$str_btiebr] == 3) $hstring = $spielerbrett->Niveau;
 			elseif ($params[$str_btiebr] == 4) if (($spielerbrett->Punkte == $spielerbrett->Partien) AND ($spielerbrett->Leistung > 0)) { $hstring = (($spielerbrett->Niveau)+667).' &sup2;'; $ex = 1; } else { $hstring = $spielerbrett->Leistung;}
-			elseif ($params[$str_btiebr] == 5) $hstring = round($spielerbrett->gprozent,1);
+			//elseif ($params[$str_btiebr] == 5) $hstring = round($spielerbrett->gprozent,1);
+			elseif ($params[$str_btiebr] == 5) $hstring = round($spielerbrett->Prozent,1);
 			elseif ($params[$str_btiebr] == 6) $hstring = $spielerbrett->epunkte;
 			elseif ($params[$str_btiebr] == 7) $hstring = $spielerbrett->epartien;
 			elseif ($params[$str_btiebr] == 8) $hstring = round($spielerbrett->eprozent,1);

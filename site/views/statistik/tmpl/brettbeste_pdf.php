@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -144,11 +144,14 @@ $pdf->SetFont('Times','',$date_font);
 			$pdf->Cell(45,$zelle,utf8_decode($spielerbrett->Vereinname),1,0,'L',1);
 			for ($xx=1; $xx < 7; $xx++) {   //max. 6 Spalten
 				$en = 0;
-				if ($params['btiebr'.$xx] == 1) { $hstring = $spielerbrett->gpunkte; $width = 9; }
-				elseif ($params['btiebr'.$xx] == 2) { $hstring = $spielerbrett->gpartien; $width = 9; }
+				//if ($params['btiebr'.$xx] == 1) { $hstring = $spielerbrett->gpunkte; $width = 9; }
+				if ($params['btiebr'.$xx] == 1) { $hstring = $spielerbrett->Punkte; $width = 9; }
+				//elseif ($params['btiebr'.$xx] == 2) { $hstring = $spielerbrett->gpartien; $width = 9; }
+				elseif ($params['btiebr'.$xx] == 2) { $hstring = $spielerbrett->Partien; $width = 9; }
 				elseif ($params['btiebr'.$xx] == 3) { $hstring = $spielerbrett->Niveau; $width = 12; }
 				elseif ($params['btiebr'.$xx] == 4) { if (($spielerbrett->Punkte == $spielerbrett->Partien) AND ($spielerbrett->Leistung > 0)) { $hstring = ($spielerbrett->Niveau)+667; $en = 2; $ex = 1; } else { $hstring = $spielerbrett->Leistung;} $width = 13; }
-				elseif ($params['btiebr'.$xx] == 5) { $hstring = round($spielerbrett->gprozent,1); $width = 9; }
+				//elseif ($params['btiebr'.$xx] == 5) { $hstring = round($spielerbrett->gprozent,1); $width = 9; }
+				elseif ($params['btiebr'.$xx] == 5) { $hstring = round($spielerbrett->Prozent,1); $width = 9; }
 				elseif ($params['btiebr'.$xx] == 6) { $hstring = $spielerbrett->epunkte; $width = 11; }
 				elseif ($params['btiebr'.$xx] == 7) { $hstring = $spielerbrett->epartien; $width = 11; }
 				elseif ($params['btiebr'.$xx] == 8) { $hstring = round($spielerbrett->eprozent,1); $width = 9; }

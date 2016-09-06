@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -348,13 +348,16 @@ $zps = $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,
 	</div>
 
 		<div class="clr"></div>
+		<?php if (isset($verein[0]->sid)) $sid = $verein[0]->sid;
+			  elseif (isset($lists['saison'][0]->id)) $sid = $lists['saison'][0]->id; 
+			  else $sid = false; ?>
 		<input type="hidden" name="section" value="dwz" />
 		<input type="hidden" name="option" value="com_clm" />
 		<input type="hidden" name="zps" value="<?php echo $filter_vid; ?>" />
 <?php if (isset($filter_mgl)) { ?>
 		<input type="hidden" name="mgl" value="<?php echo $filter_mgl; ?>" />
 <?php } ?>
-		<?php if(isset($verein[0])){ echo '<input type="hidden" name="sid" value="'.$verein[0]->sid.'" />'; } ?>
+		<?php if(!($sid === false)) { echo '<input type="hidden" name="sid" value="'.$sid.'" />'; } ?>
 		<input type="hidden" name="task" value="" />
 		<input type="hidden" name="pre_task" value="" />
 		<?php echo JHtml::_( 'form.token' ); ?>

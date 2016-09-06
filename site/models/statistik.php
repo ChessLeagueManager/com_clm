@@ -191,11 +191,14 @@ class CLMModelStatistik extends JModelLegacy
 	else {
 		for ($x=1; $x<5; $x++) {
 			if ($x != 1 AND $params['btiebr'.$x] > 0) $sort_string .= ",";
-			if ($params['btiebr'.$x] == 1) $sort_string .= " g.gpunkte DESC ";
-			elseif ($params['btiebr'.$x] == 2) $sort_string .= " g.gpartien ASC ";
+			//if ($params['btiebr'.$x] == 1) $sort_string .= " g.gpunkte DESC ";
+			if ($params['btiebr'.$x] == 1) $sort_string .= " a.Punkte DESC ";
+			//elseif ($params['btiebr'.$x] == 2) $sort_string .= " g.gpartien ASC ";
+			elseif ($params['btiebr'.$x] == 2) $sort_string .= " a.Partien ASC ";
 			elseif ($params['btiebr'.$x] == 3) $sort_string .= " a.Niveau DESC ";
 			elseif ($params['btiebr'.$x] == 4) $sort_string .= " a.Leistung DESC ";
-			elseif ($params['btiebr'.$x] == 5) $sort_string .= " gprozent DESC ";
+			//elseif ($params['btiebr'.$x] == 5) $sort_string .= " gprozent DESC ";
+			elseif ($params['btiebr'.$x] == 5) $sort_string .= " Prozent DESC ";
 			elseif ($params['btiebr'.$x] == 6) $sort_string .= " e.epunkte DESC ";
 			elseif ($params['btiebr'.$x] == 7) $sort_string .= " e.epartien ASC ";
 			elseif ($params['btiebr'.$x] == 8) $sort_string .= " eprozent ASC ";

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -100,11 +100,14 @@ else { $plink = '&saison=' . $sid . '&liga='. $lid .'&layout=bestenliste' ;  } ?
 		<th><a href="javascript:tableOrdering('snr','asc','');"><?php echo JText::_('LEAGUE_STAT_TEAMRANKING') ?></a></th>
 <!---		<th><?php echo JHTML::_( 'grid.sort', 'LEAGUE_STAT_TEAMRANKING', 'snr', $this->lists['order_Dir'], $this->lists['order']); ?></th> -->
 		<?php for ($xx=1; $xx < 7; $xx++) {   //max. 6 Spalten
-			if ($params['btiebr'.$xx] == 1) { $hstring = 'LEAGUE_STAT_PLAYERPOINTS'; $vstring = 'gpunkte'; }
-			elseif ($params['btiebr'.$xx] == 2) { $hstring = 'LEAGUE_STAT_PLAYERGAMES'; $vstring = 'gpartien'; }
+			//if ($params['btiebr'.$xx] == 1) { $hstring = 'LEAGUE_STAT_PLAYERPOINTS'; $vstring = 'gpunkte'; }
+			if ($params['btiebr'.$xx] == 1) { $hstring = 'LEAGUE_STAT_PLAYERPOINTS'; $vstring = 'Punkte'; }
+			//elseif ($params['btiebr'.$xx] == 2) { $hstring = 'LEAGUE_STAT_PLAYERGAMES'; $vstring = 'gpartien'; }
+			elseif ($params['btiebr'.$xx] == 2) { $hstring = 'LEAGUE_STAT_PLAYERGAMES'; $vstring = 'Partien'; }
 			elseif ($params['btiebr'.$xx] == 3) { $hstring = 'LEAGUE_STAT_PLAYERLEVEL'; $vstring = 'Niveau'; }
 			elseif ($params['btiebr'.$xx] == 4) { $hstring = 'LEAGUE_STAT_RATING'; $vstring = 'Leistung'; }
-			elseif ($params['btiebr'.$xx] == 5) { $hstring = 'LEAGUE_STAT_PERCENT'; $vstring = 'gprozent'; }
+			//elseif ($params['btiebr'.$xx] == 5) { $hstring = 'LEAGUE_STAT_PERCENT'; $vstring = 'gprozent'; }
+			elseif ($params['btiebr'.$xx] == 5) { $hstring = 'LEAGUE_STAT_PERCENT'; $vstring = 'Prozent'; }
 			elseif ($params['btiebr'.$xx] == 6) { $hstring = 'LEAGUE_STAT_POINTS_K'; $vstring = 'epunkte'; $ey = 1; }
 			elseif ($params['btiebr'.$xx] == 7) { $hstring = 'LEAGUE_STAT_GAMES_K'; $vstring = 'epartien'; $ey = 1; }
 			elseif ($params['btiebr'.$xx] == 8) { $hstring = 'LEAGUE_STAT_PERCENT_K'; $vstring = 'eprozent'; $ey = 1; }
@@ -126,8 +129,10 @@ $ex = 0; $ey = 0;
 		<td><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $bestenliste[$x]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $bestenliste[$x]->Vereinname; ?></a></td>
 		<td><?php echo $bestenliste[$x]->snr; ?></td>
 		<?php for ($xx=1; $xx < 7; $xx++) {   //max. 6 Spalten
-			if ($params['btiebr'.$xx] == 1) $hstring = $bestenliste[$x]->gpunkte;
-			elseif ($params['btiebr'.$xx] == 2) $hstring = $bestenliste[$x]->gpartien;
+			//if ($params['btiebr'.$xx] == 1) $hstring = $bestenliste[$x]->gpunkte;
+			if ($params['btiebr'.$xx] == 1) $hstring = $bestenliste[$x]->Punkte;
+			//elseif ($params['btiebr'.$xx] == 2) $hstring = $bestenliste[$x]->gpartien;
+			elseif ($params['btiebr'.$xx] == 2) $hstring = $bestenliste[$x]->Partien;
 			elseif ($params['btiebr'.$xx] == 3) $hstring = $bestenliste[$x]->Niveau;
 			elseif ($params['btiebr'.$xx] == 4) { 
 				if (($bestenliste[$x]->Punkte == $bestenliste[$x]->Partien) AND ($bestenliste[$x]->Leistung > 0)) { 
@@ -136,7 +141,8 @@ $ex = 0; $ey = 0;
 					$hstring = $bestenliste[$x]->Leistung; 
 				}
 			}
-			elseif ($params['btiebr'.$xx] == 5) $hstring = round($bestenliste[$x]->gprozent,1);
+//			elseif ($params['btiebr'.$xx] == 5) $hstring = round($bestenliste[$x]->gprozent,1);
+			elseif ($params['btiebr'.$xx] == 5) $hstring = round($bestenliste[$x]->Prozent,1);
 			elseif ($params['btiebr'.$xx] == 6) { $hstring = $bestenliste[$x]->epunkte; }
 			elseif ($params['btiebr'.$xx] == 7) { $hstring = $bestenliste[$x]->epartien; }
 			elseif ($params['btiebr'.$xx] == 8) { $hstring = round($bestenliste[$x]->eprozent,1); }

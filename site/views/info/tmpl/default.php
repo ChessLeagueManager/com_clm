@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -237,7 +237,7 @@ if ($count < 10) { $a = $count; }
 		<td class="verein" align="left"><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $spieler[$x]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $spieler[$x]->Vereinname; ?></a></td>
 		<td class="punkte" align="center"><?php echo $spieler[$x]->Punkte; ?></td>
 		<td class="niveau"><?php echo $spieler[$x]->Niveau; ?></td>
-		<td class="leistung"><?php if ($spieler[$x]->Leistung == $spieler[$x]->Niveau) { echo (($spieler[$x]->Leistung)+667).' &sup2'; $ex = 1; } else { echo $spieler[$x]->Leistung;} ?></td>
+		<td class="leistung"><?php if ($spieler[$x]->Punkte == $spieler[$x]->Partien AND $spieler[$x]->Leistung > 0) { echo (($spieler[$x]->Leistung)+667).' &sup2'; $ex = 1; } else { echo $spieler[$x]->Leistung;} ?></td>
 
 	</tr>
 <?php } ?>
@@ -288,8 +288,7 @@ if ($punkte == 11) {
 <?php } ?>
 </table>
 
-<?php }
-$count = 0;
+<?php $count = 0;
 	for ($x=5; $x < 20; $x++) {
 		if (isset($mannschaft[$x]->mp) AND $mannschaft[$x]->mp == $mannschaft[4]->mp) { $count++; }
 		else { break; }
@@ -298,7 +297,7 @@ if ($count == 1) { ?>
 <div class="hint">* <?php echo JText::_('SEASON_RATING_MORE_TEAM_I') ?> <?php echo $mannschaft[4]->mp; ?>  <?php echo JText::_('SEASON_RATING_MORE_TEAM_II') ?></div>
 <?php } if ($count > 1) { ?>
 <div class="hint">* <?php echo JText::_('SEASON_RATING_MORE_I') ?> <?php echo $count; ?> <?php echo JText::_('SEASON_RATING_MORE_TEAMS') ?> <?php echo $mannschaft[4]->mp; ?>  <?php echo JText::_('SEASON_RATING_MORE_TEAM_II') ?></div>
-<?php } ?> 
+<?php } } ?> 
 
 <br>
 <?php echo '<div class="hint">'.$hint_dwzdsb.'</div>'; ?>
