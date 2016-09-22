@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.3.3 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
+# View Mannschaft: deutsche Meldeliste mit PKZ-Angaben
+
 - - - - - 3.3.2 - [06-09-2016] - - - - - - - - - - - - - - - - - - - -
 + Ergebnis 0-0,5 bzw. 0,5-0 eingebaut
 # Admin View Liga/MTurniere: Prüfung Rundenanzahl

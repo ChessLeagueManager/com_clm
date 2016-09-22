@@ -327,7 +327,9 @@ for ($x=0; $x< 100; $x++){
     <?php
 	//keine Ergebnisse zum Spieler
 	if (isset($einzel[$ie]) AND ($einzel[$ie]->PKZ === NULL) ) { $einzel[$ie]->PKZ = ""; }
-    if (!isset($einzel[$ie]) OR ($count[$x]->zps !== $einzel[$ie]->zps) OR ($count[$x]->mgl_nr !== $einzel[$ie]->spieler) OR ($count[$x]->PKZ !== $einzel[$ie]->PKZ)) {
+    if (!isset($einzel[$ie]) OR ($count[$x]->zps !== $einzel[$ie]->zps) 
+		OR (($countryversion == "de" AND $count[$x]->mgl_nr !== $einzel[$ie]->spieler) 
+		OR ($countryversion == "en" AND $count[$x]->PKZ !== $einzel[$ie]->PKZ))) {
         for ($z=0; $z< $mannschaft[0]->dg*$mannschaft[0]->runden; $z++)
         { ?>
         <td class="rnd">&nbsp;</td>
