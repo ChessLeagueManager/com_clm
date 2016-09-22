@@ -352,25 +352,7 @@ function edit()
 	$db->setQuery( $sql );
 	$heim		= $db->loadObjectList();
 
-/*	// Anzahl Spieler Heim
-	$sql = "SELECT COUNT(a.snr) as hcount"
-		." FROM #__clm_meldeliste_spieler as a "
-		//." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) "
-		." WHERE a.sid = ".$runde[0]->sid
-		." AND (a.gesperrt = 0 OR a.gesperrt IS NULL )"
-		." AND (( a.zps = '".$runde[0]->hzps."' AND a.mnr = ".$runde[0]->hmnr." ) "
-		." OR ( FIND_IN_SET(a.zps, '".$runde[0]->sgh_zps."') != 0 AND a.mnr = ".$runde[0]->hmnr." )) ";
-		if($runde[0]->rang !="0") {
-			$sql = $sql
-				." AND a.status = ".$runde[0]->rang; }
-		else { $sql = $sql
-				." AND a.lid = ".$runde[0]->lid; }
-		$sql = $sql
-		." AND (a.mgl_nr <> '0' OR a.PKZ <> '') "
-		;
-	$db->setQuery( $sql );
-	$hcount		= $db->loadObjectList();
-*/	
+	// Anzahl Spieler Heim
 	$hcount = count($heim);
 
 	// Bretter / Spieler ermitteln
@@ -467,25 +449,6 @@ function edit()
 	$gast		= $db->loadObjectList();
 
 	// Anzahl Spieler Gast
-/*	$sql = "SELECT COUNT(a.snr) as gcount"
-		." FROM #__clm_meldeliste_spieler as a "
-		//." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) "
-		." WHERE a.sid = ".$runde[0]->sid
-		." AND (a.gesperrt = 0 OR a.gesperrt IS NULL )"
-		." AND (( a.zps = '".$runde[0]->gzps."' AND a.mnr = ".$runde[0]->gmnr." ) "
-		//." OR ( a.zps ='".$runde[0]->sgg_zps."' AND a.mnr = ".$runde[0]->gmnr." )) ";
-		." OR ( FIND_IN_SET(a.zps, '".$runde[0]->sgg_zps."') != 0 AND a.mnr = ".$runde[0]->gmnr." )) ";
-		if($runde[0]->rang !="0") {
-			$sql = $sql
-				." AND a.status = ".$runde[0]->rang; }
-		else { $sql = $sql
-				." AND a.lid = ".$runde[0]->lid; }
-		$sql = $sql
-		." AND (a.mgl_nr <> 0 OR a.PKZ <> '') "
-		;
-	$db->setQuery( $sql );
-	$gcount		= $db->loadObjectList();
-*/	
 	$gcount = count($gast);
 
 	//if ($runde[0]->runde > 1) {
@@ -2492,7 +2455,7 @@ function kampflos($gast)
 	$data	= $db->loadObjectList();
 
 	// Wenn "Spielfrei" kampflos gesetzt wurde
-	if ((($data[0]->hzps =="0" AND $gast == "heim") OR ( $data[0]->gzps =="0" AND $gast == "gast")) AND $params['noOrgReference'] == '0') {
+	if ((($data[0]->hzps =="0" AND ($gast == "heim" OR $gast=="home")) OR ( $data[0]->gzps =="0" AND ($gast == "gast" OR $gast=="away"))) AND $params['noOrgReference'] == '0') {
 		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_SPIELFREI' ) );
 		$mainframe->redirect( $link);
 					}
@@ -2501,8 +2464,8 @@ function kampflos($gast)
 	$now		= $date->toSQL();
 	$user		=JFactory::getUser();
 	$meldung	= $user->get('id');
-	if ($gast=="heim") { $comment = JText::_( 'ERGEBNISSE_COMMENT_HOME_KL' ); }
-		else { $comment = JText::_( 'ERGEBNISSE_COMMENT_GUEST_KL' ); }
+	if ($gast=="heim" OR $gast=="home") { $comment = JText::_( 'ERGEBNISSE_COMMENT_HOME_KL' ); }
+	else { $comment = JText::_( 'ERGEBNISSE_COMMENT_GUEST_KL' ); }
 
 	$brett_punkte	= $bretter * ($sieg + $antritt);
 	$man_punkte	= $man_sieg + $man_antritt;
@@ -2520,7 +2483,7 @@ function kampflos($gast)
 		." AND runde = ".$rnd
 		." AND paar = ".$paar
 		." AND dg = ".$dg;
-	if ($gast=="heim") { $query = $query." AND heim = 1 ";}
+	if ($gast=="heim" OR $gast=="home") { $query = $query." AND heim = 1 ";}
 		else { $query = $query." AND heim = 0 ";}
 
 	$db->setQuery($query);
@@ -2539,14 +2502,14 @@ function kampflos($gast)
 		." AND runde = ".$rnd
 		." AND paar = ".$paar
 		." AND dg = ".$dg;
-	if($gast=="heim") { $query = $query." AND heim = 0 ";}
+	if($gast=="heim" OR $gast=="home") { $query = $query." AND heim = 0 ";}
 		else { $query = $query." AND heim = 1 ";}
 
 	$db->setQuery($query);
 	$db->query();
 
 	if (($liga_sl->runden_modus == 4) OR ($liga_sl->runden_modus == 5 and $rnd < $liga_sl->runden)) {    // KO Turnier
-		if ($gast=="heim") { $ko_heim = $rnd; $ko_gast = $rnd -1; }
+		if ($gast=="heim" OR $gast=="home") { $ko_heim = $rnd; $ko_gast = $rnd -1; }
 		else { $ko_heim = $rnd -1; $ko_gast = $rnd; }
 		// Für Heimmannschaft updaten
 		$query	= "UPDATE #__clm_mannschaften"
