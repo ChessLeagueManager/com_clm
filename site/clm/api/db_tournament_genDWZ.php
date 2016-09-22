@@ -102,6 +102,7 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
 	$query='SELECT ergebnis, spieler, gegner'
 		 	. ' FROM '.$table_round
 			. ' WHERE '.$table_round_id.'='.$id
+			. ' AND ergebnis IS NOT NULL'
 			. ' AND heim = 1';
 	}
 	$partien = clm_core::$db->loadObjectList($query);

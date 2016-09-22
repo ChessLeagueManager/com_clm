@@ -16,6 +16,7 @@ $ -> Language fix or change
 # View Mannschaft: deutsche Meldeliste mit PKZ-Angaben
 # Admin-View Auswertung: Turniername mit Umlaut bei DeWIS-Export
 # Admin-View Ergebnisse: Kampflossetzen in endlischer Anwendung
+# DWZ-Routine: Ausschluss von angesetzten aber noch nicht gespielten Paarungen
 
 - - - - - 3.3.2 - [06-09-2016] - - - - - - - - - - - - - - - - - - - -
 + Ergebnis 0-0,5 bzw. 0,5-0 eingebaut
