@@ -1174,10 +1174,11 @@ public static function apply_meldeliste()
 
 	$option		= JRequest::getCmd('option');
 	$section	= JRequest::getVar('section');
-	$db 		= JFactory::getDBO();
-	$task 		= JRequest::getVar( 'task');
 	$user		= JFactory::getUser();
 	$meldung	= $user->get('id');
+
+	$db 		= JFactory::getDBO();
+	$task 		= JRequest::getVar( 'task');
 	$row 		= JTable::getInstance( 'mannschaften', 'TableCLM' );
 	$cid		= JRequest::getVar( 'id');
 	$row->load( $cid);
@@ -1195,6 +1196,11 @@ public static function apply_meldeliste()
 	// Datum und Uhrzeit für Meldung
 	$date =JFactory::getDate();
 	$now = $date->toSQL();
+	
+	// Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion=$config->countryversion;
+
 	// Liste wurde bereits abgegeben
 	if ($row->liste > 0) {
 	$aktion = JText::_( 'MANNSCHAFT_LOG_LIST_EDIT');
@@ -1227,6 +1233,7 @@ public static function apply_meldeliste()
 		//."  AND ( zps = '$zps' OR zps='$sg_zps')"
 		. " AND ( zps ='".$zps."' OR FIND_IN_SET(zps,'".$sg_zps."') != 0 )"
 		;
+		
 	$db->setQuery($query);
 	$db->query();
 
@@ -1235,17 +1242,23 @@ public static function apply_meldeliste()
 	$block	= JRequest::getInt( 'check'.$y);
 
 	$teil	= explode("-", $spl);
-	$mgl_nr	= $teil[0];
-	$tzps	= $teil[1];
+		if ($countryversion == "de") {
+			$mgl_nr	= $teil[0];
+			$PKZ    = '';
+		} else {
+			$mgl_nr	= 0;
+			$PKZ    = $teil[0];
+		}
+		$tzps	= $teil[1];
 
 	if($spl >0){
 	$query	= "REPLACE INTO #__clm_meldeliste_spieler"
-		." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`, `ordering`, `gesperrt`) "
-		. " VALUES ('$sid','$liga','$mnr','$y','$mgl_nr','$tzps','','$block')";
-		;
+				." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `PKZ`, `zps`, `ordering`, `gesperrt`) "
+				. " VALUES ('$sid','$liga','$mnr','$y','$mgl_nr','$PKZ','$tzps','','$block')";
 	$db->setQuery($query);
 	$db->query();
-	}}
+	}
+	}
 
 	// Log schreiben
 	$clmLog = new CLMLog();
@@ -1253,7 +1266,7 @@ public static function apply_meldeliste()
 	$clmLog->params = array('sid' => $sid, 'lid' => $liga, 'zps' => $zps, 'cids' => $cid);
 	$clmLog->write();
 	
-	$msg = JText::_( 'MANNSCHAFTEN_AENDERUNGN' );
+	$msg = JText::_( 'MANNSCHAFTEN_AENDERUNGN' ).$tzps;
 	// Link MUSS hardcodiert sein !!!
 	$link = 'index.php?option=com_clm&section=meldelisten&task=edit&cid[]='. $cid ;
 	$mainframe->redirect( $link, $msg ,"message");
