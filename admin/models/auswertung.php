@@ -864,10 +864,9 @@ $xml = $xmla->writeData();
   }
 
 	// Slashes und Spaces aus Namen filtern und Namen mit Pfad zusammensetzen
-	//$dat_name	= ereg_replace(" ", "_", $liga_name[0]->name);
 	$dat_name	= str_replace(' ', '_', $liga_name[0]->name);
-	//$dat_name	= ereg_replace("[/]", "_", $dat_name);
 	$dat_name	= str_replace('/', '_', $dat_name);
+	$dat_name 	= clm_core::$load->sub_umlaute($dat_name); 
 	$file		= utf8_decode($dat_name).'__'.$datum;
 	$path		= JPath::clean(JPATH_ADMINISTRATOR.DS.'components'.DS.$option.DS.'dewis');
 	if($format =="1"){ $datei_endung = "txt";}
