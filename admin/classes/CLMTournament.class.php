@@ -684,6 +684,8 @@ class CLMTournament {
 
 			$this->_db->setQuery($query);
 			$this->_db->query();
+	// nur zur Verzögerung, damit UPDATE fertig ist bevor unten SELECT startet
+	$wzeit = "e: ".mysql_errno().": ".mysql_error();
 		}
 	
 		if ($this->data->tiebr1 == 25 OR $this->data->tiebr2 == 25 OR $this->data->tiebr3 == 25) {
