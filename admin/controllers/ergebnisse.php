@@ -1974,6 +1974,7 @@ function save_wertung()
 		." , brettpunkte = '".$hmpunkte."'"
 		." , manpunkte = '".$hman_punkte."'"
 		." , wertpunkte = '".$hwpunkte."'"
+		." , comment = '".$comment."'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd
@@ -1999,6 +2000,7 @@ function save_wertung()
 		." , brettpunkte = '".$gmpunkte."'"
 		." , manpunkte = '".$gman_punkte."'"
 		." , wertpunkte = '".$gwpunkte."'"
+		." , comment = '".$comment."'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd
