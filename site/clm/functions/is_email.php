@@ -2,8 +2,10 @@
 function clm_function_is_email($email)
 {
 // Include the class
-	$path = clm_core::$path . DS . "includes" . DS . "idna_convert.class" . '.php';
-	require_once ($path);
+	if (!class_exists('idna_convert')) {
+		$path = clm_core::$path . DS . "includes" . DS . "idna_convert.class" . '.php';
+		require_once ($path);
+	}
 	$parts = explode('@', $email);
 	if (count($parts) != 2) return false;
 // Instantiate it (depending on the version you are using) with
