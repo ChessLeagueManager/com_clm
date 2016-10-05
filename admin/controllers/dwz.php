@@ -35,6 +35,9 @@ function display($cachable = false, $urlparams = array())
 	$countryversion = $config->countryversion;
 	
 	$filter_vid		= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
+	$filder_vid_to 	= "0";
+	$filter_vid_from	= $mainframe->getUserStateFromRequest( "$option.filter_vid_from",'filter_vid_from',0,'var' );
+
 	$filter_sort		= $mainframe->getUserStateFromRequest( "$option.filter_sort",'filter_sort',0,'string' );
 	if ($countryversion == "de") {
 		$filter_mgl		= $mainframe->getUserStateFromRequest( "$option.filter_mgl",'filter_mgl',0,'int' );
@@ -80,6 +83,21 @@ function display($cachable = false, $urlparams = array())
 	$db->setQuery( $sql );
 	$verein=$db->loadObjectList();
 	}
+	// Wenn FROM-Verein gewählt wurden dann Daten für Anzeige laden
+	if($filter_vid_from !="0" ){
+	$sql = 'SELECT * FROM #__clm_dwz_spieler as a'
+		.' LEFT JOIN #__clm_saison AS s ON s.id = a.sid'
+		." WHERE s.archiv = 0"
+		." AND ZPS ='$filter_vid_from'";
+	if($filter_sort !="0") {
+		$sql = $sql. " ORDER BY ".$filter_sort;
+		}
+	else {
+		$sql = $sql. " ORDER BY Spielername ASC ";
+		}
+	$db->setQuery( $sql );
+	$verein_from=$db->loadObjectList();
+	}
 	// Saison
 	$sql = 'SELECT id, name FROM #__clm_saison WHERE published = 1 AND archiv = 0';
 	$db->setQuery($sql);
@@ -88,6 +106,8 @@ function display($cachable = false, $urlparams = array())
 	// Vereinefilter laden
 	$vlist = CLMFilterVerein::vereine_filter(0);
 	$lists['vid']	= JHTML::_('select.genericlist', $vlist, 'filter_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
+	$lists['vid_to']	= JHTML::_('select.genericlist', $vlist, 'filter_vid_to', 'class="inputbox" size="1" ','zps', 'name', $filter_vid_to );
+	$lists['vid_from']	= JHTML::_('select.genericlist', $vlist, 'filter_vid_from', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid_from );
 	
 
 	// Spielerfilter
@@ -119,8 +139,9 @@ function display($cachable = false, $urlparams = array())
 	}
 
 	if (!isset($verein)) $verein = array();
+	if (!isset($verein_from)) $verein_from = array();
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'dwz.php');
-	CLMViewDWZ::DWZ( $spieler,$verein, $lists, '', $option );
+	CLMViewDWZ::DWZ( $spieler,$verein,$verein_from, $lists, '', $option );
 	}
 
 
@@ -469,6 +490,226 @@ static function spieler_delete()
 	$clmLog->write();
 	
 	$msg = JText::_( 'DWZ_SPIELER_MITGLIED').' '.$spieler.' '.JText::_('DWZ_LOESCH' );
+	$link = 'index.php?option='.$option.'&section='.$section;
+	$mainframe->redirect( $link, $msg);
+	}
+
+static function player_move_to()
+	{
+	$mainframe	= JFactory::getApplication();
+	// Check for request forgeries
+	JRequest::checkToken() or die( 'Invalid Token' );
+
+	$db 		= JFactory::getDBO();
+	$option		= JRequest::getCmd('option');
+	$section	= JRequest::getVar('section');
+	$spieler	= JRequest::getVar('spieler_to');
+	$newclub	= JRequest::getVar('filter_vid_to');
+	$sid		= JRequest::getVar('sid');
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
+
+	// SL nicht zulassen !
+	$clmAccess = clm_core::$access;
+	if($clmAccess->access('BE_database_general') === false) {
+		JError::raiseWarning( 500, JText::_( 'DWZ_REFERENT').clm_core::$access->getType());
+		$link = 'index.php?option='.$option.'&section='.$section;
+		$mainframe->redirect( $link, $msg );
+	}
+
+	// Spieler muß ausgewählt sein
+	if ( $spieler == 0 OR $spieler == '') {
+		JError::raiseWarning( 500, JText::_( 'DWZ_PLAYER_MISSING') );
+		$link = 'index.php?option='.$option.'&section='.$section;
+		$mainframe->redirect( $link, $msg );
+	}
+	// neuer Verein muß ausgewählt sein
+	if ( $newclub == 0 OR $newclub == '') {
+		JError::raiseWarning( 500, JText::_( 'DWZ_NEWCLUB_MISSING') );
+		$link = 'index.php?option='.$option.'&section='.$section;
+		$mainframe->redirect( $link, $msg );
+	}
+
+	$zps	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
+	// Player auslesen alter Verein
+	$query	= "SELECT * FROM #__clm_dwz_spieler "
+			." WHERE ZPS ='$zps'"
+			." AND sid = '$sid'"
+			." AND PKZ = '$spieler'"
+			;
+	$db->setQuery($query);
+	$pl_data = $db->loadObjectList();
+	if (!$pl_data) {
+			JError::raiseWarning( 500, JText::_( 'DWZ_PLAYER_CLUB') );
+			$link = 'index.php?option='.$option.'&section='.$section;
+			$mainframe->redirect( $link, $msg );
+	}
+	// Player bereits im neuen Verein
+	$query	= "SELECT * FROM #__clm_dwz_spieler "
+			." WHERE ZPS ='$newclub'"
+			." AND sid = '$sid'"
+			." AND PKZ = '$spieler'"
+			;
+	$db->setQuery($query);
+	$pl_check = $db->loadObjectList();
+	if ($pl_check) {
+			JError::raiseWarning( 500, JText::_( 'DWZ_PLAYER_CLUB_TO') );
+			$link = 'index.php?option='.$option.'&section='.$section;
+			$mainframe->redirect( $link, $msg );
+	}
+	// Player check gespielt in alten Verein
+	$query	= "SELECT * FROM #__clm_meldeliste_spieler "
+			." WHERE ZPS ='$zps'"
+			." AND sid = '$sid'"
+			." AND PKZ = '$spieler'"
+			;
+	$db->setQuery($query);
+	$pl_check = $db->loadObjectList();
+	if ($pl_check) {
+			JError::raiseWarning( 500, JText::_( 'DWZ_PLAYER_CLUB_PLAIED') );
+			$link = 'index.php?option='.$option.'&section='.$section;
+			$mainframe->redirect( $link, $msg );
+	}
+	
+	// Übernehmen in neuen Verein
+	$query	= "INSERT INTO #__clm_dwz_spieler"
+		." ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Status`, `Spielername`, `Geschlecht`, `Geburtsjahr`, `DWZ`) "
+		." VALUES ('".$pl_data[0]->sid."', '".$newclub."', 0 ,'".$spieler."','".$pl_data[0]->Status."','".$pl_data[0]->Spielername."','".$pl_data[0]->Geschlecht."',"
+		." '".$pl_data[0]->Geburtsjahr."','".$pl_data[0]->DWZ."')"
+		;
+
+	$db->setQuery($query);
+	$db->query();
+
+	$query	= "DELETE FROM #__clm_dwz_spieler"
+		." WHERE ZPS = '$zps'"
+		." AND sid =".$sid;
+	if ($countryversion =="de") {
+		$query	.= " AND Mgl_Nr = ".$spieler;
+	} else {
+		$query	.= " AND PKZ = '".$spieler."'";
+	}
+	$db->setQuery($query);
+	$db->query();
+
+	// Log schreiben
+	$clmLog = new CLMLog();
+	$clmLog->aktion = JText::_( 'DWZ_PLAYER_MOVE_OUT');
+	$clmLog->params = array('sid' => $sid, 'zps' => $zps, 'mgl_nr' => $spieler, 'to' => $newclub);
+	$clmLog->write();
+	
+	$msg = JText::_( 'DWZ_PLAYER_MOVE_OUT').' '.$spieler;
+	$link = 'index.php?option='.$option.'&section='.$section;
+	$mainframe->redirect( $link, $msg);
+}
+
+static function player_move_from()
+	{
+	$mainframe	= JFactory::getApplication();
+	// Check for request forgeries
+	JRequest::checkToken() or die( 'Invalid Token' );
+
+	$db 		= JFactory::getDBO();
+	$option		= JRequest::getCmd('option');
+	$section	= JRequest::getVar('section');
+	$spieler	= JRequest::getVar('spieler_from');
+	$oldclub	= JRequest::getVar('filter_vid_from');
+	$sid		= JRequest::getVar('sid');
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
+
+	// SL nicht zulassen !
+	$clmAccess = clm_core::$access;
+	if($clmAccess->access('BE_database_general') === false) {
+		JError::raiseWarning( 500, JText::_( 'DWZ_REFERENT').clm_core::$access->getType());
+		$link = 'index.php?option='.$option.'&section='.$section;
+		$mainframe->redirect( $link, $msg );
+	}
+
+	// Spieler muß ausgewählt sein
+	if ( $spieler == 0 OR $spieler == '') {
+		JError::raiseWarning( 500, JText::_( 'DWZ_PLAYER_MISSING') );
+		$link = 'index.php?option='.$option.'&section='.$section;
+		$mainframe->redirect( $link, $msg );
+	}
+	// alter Verein muß ausgewählt sein
+	if ( $oldclub == 0 OR $oldclub == '') {
+		JError::raiseWarning( 500, JText::_( 'DWZ_OLDCLUB_MISSING') );
+		$link = 'index.php?option='.$option.'&section='.$section;
+		$mainframe->redirect( $link, $msg );
+	}
+
+	$zps	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
+	// Player auslesen im alten Verein
+	$query	= "SELECT * FROM #__clm_dwz_spieler "
+			." WHERE ZPS ='$oldclub'"
+			." AND sid = '$sid'"
+			." AND PKZ = '$spieler'"
+			;
+	$db->setQuery($query);
+	$pl_data = $db->loadObjectList();
+	if (!$pl_data) {
+			JError::raiseWarning( 500, JText::_( 'DWZ_PLAYER_CLUB_FROM') );
+			$link = 'index.php?option='.$option.'&section='.$section;
+			$mainframe->redirect( $link, $msg );
+	}
+	// Player bereits im neuen Verein
+	$query	= "SELECT * FROM #__clm_dwz_spieler "
+			." WHERE ZPS ='$zps'"
+			." AND sid = '$sid'"
+			." AND PKZ = '$spieler'"
+			;
+	$db->setQuery($query);
+	$pl_check = $db->loadObjectList();
+	if ($pl_check) {
+			JError::raiseWarning( 500, JText::_( 'DWZ_PLAYER_CLUB_ALREADY') );
+			$link = 'index.php?option='.$option.'&section='.$section;
+			$mainframe->redirect( $link, $msg );
+	}
+	// Player check gespielt in alten Verein
+	$query	= "SELECT * FROM #__clm_meldeliste_spieler "
+			." WHERE ZPS ='$oldclub'"
+			." AND sid = '$sid'"
+			." AND PKZ = '$spieler'"
+			;
+	$db->setQuery($query);
+	$pl_check = $db->loadObjectList();
+	if ($pl_check) {
+			JError::raiseWarning( 500, JText::_( 'DWZ_PLAYER_CLUB_PLAIED') );
+			$link = 'index.php?option='.$option.'&section='.$section;
+			$mainframe->redirect( $link, $msg );
+	}
+	
+	// Übernehmen in neuen Verein
+	$query	= "INSERT INTO #__clm_dwz_spieler"
+		." ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Status`, `Spielername`, `Geschlecht`, `Geburtsjahr`, `DWZ`) "
+		." VALUES ('".$pl_data[0]->sid."', '".$zps."', 0 ,'".$spieler."','".$pl_data[0]->Status."','".$pl_data[0]->Spielername."','".$pl_data[0]->Geschlecht."',"
+		." '".$pl_data[0]->Geburtsjahr."','".$pl_data[0]->DWZ."')"
+		;
+
+	$db->setQuery($query);
+	$db->query();
+
+	$query	= "DELETE FROM #__clm_dwz_spieler"
+		." WHERE ZPS = '$oldclub'"
+		." AND sid =".$sid;
+	if ($countryversion =="de") {
+		$query	.= " AND Mgl_Nr = ".$spieler;
+	} else {
+		$query	.= " AND PKZ = '".$spieler."'";
+	}
+	$db->setQuery($query);
+	$db->query();
+
+	// Log schreiben
+	$clmLog = new CLMLog();
+	$clmLog->aktion = JText::_( 'DWZ_PLAYER_MOVE_IN');
+	$clmLog->params = array('sid' => $sid, 'zps' => $zps, 'mgl_nr' => $spieler, 'from' => $oldclub);
+	$clmLog->write();
+	
+	$msg = JText::_( 'DWZ_PLAYER_MOVE_IN').' '.$spieler;
 	$link = 'index.php?option='.$option.'&section='.$section;
 	$mainframe->redirect( $link, $msg);
 	}

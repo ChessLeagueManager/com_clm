@@ -14,7 +14,7 @@
 class CLMViewDWZ
 {
 
-static function setDWZToolbar()
+static function setDWZToolbar($countryversion)
 	{
 	$clmAccess = clm_core::$access;      
 	// Menubilder laden
@@ -27,20 +27,24 @@ static function setDWZToolbar()
 		JToolBarHelper::custom( 'nachmeldung_delete', 'trash.png', 'trash_f2.png', JText::_( 'MEMBER_BUTTON_DEL_NACH'),false );
 		JToolBarHelper::custom( 'nachmeldung', 'apply.png', 'apply_f2.png', JText::_( 'MEMBER_BUTTON_NACH'),false );
 		JToolBarHelper::custom( 'daten_edit', 'apply.png', 'apply_f2.png', JText::_( 'MEMBER_BUTTON_EDIT'),false );
-		JToolBarHelper::cancel();
+	if ($clmAccess->access('BE_database_general') === true AND $countryversion == 'en') { 
+		JToolBarHelper::custom( 'player_move_to', 'apply.png', 'apply_f2.png', JText::_( 'MEMBER_BUTTON_MOVE_TO'),false );
+		JToolBarHelper::custom( 'player_move_from', 'apply.png', 'apply_f2.png', JText::_( 'MEMBER_BUTTON_MOVE_FROM'),false );
+	}
+	JToolBarHelper::cancel();
 		JToolBarHelper::help( 'screen.clm.edit' );
 	}
 
-static function DWZ( $spieler,$verein,$lists, $pageNav, $option )
+static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 	{
-		CLMViewDWZ::setDWZToolbar();
+	// Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion= $config->countryversion;	
+		CLMViewDWZ::setDWZToolbar($countryversion);
 		JRequest::setVar( 'hidemainmenu', 1 );
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 		
 	$clmAccess = clm_core::$access;      
-	// Konfigurationsparameter auslesen
-	$config = clm_core::$db->config();
-	$countryversion= $config->countryversion;	
 		?>
 
 <script language="javascript" type="text/javascript">
@@ -295,9 +299,7 @@ static function DWZ( $spieler,$verein,$lists, $pageNav, $option )
 	</div>
 
 	<div>
-	<?php 	
-$zps = $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
-
+	<?php 	$zps = $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
 		$spl = CLMControllerDWZ::spieler($zps); ?>
 	<fieldset class="adminform">
 	<legend><?php echo JText::_( 'MEMBER_TABLE_27' ); ?></legend>
@@ -345,6 +347,65 @@ $zps = $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,
 	</fieldset>
 	</div>
 <?php } ?>
+
+<?php if($clmAccess->access('BE_database_general') === true AND $countryversion == "en") { ?>
+	<div>
+	<?php 	$zps = $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
+		$spl = CLMControllerDWZ::spieler($zps); ?>
+	<fieldset class="adminform">
+	<legend><?php echo JText::_( 'MEMBER_TABLE_MOVE_0' ); ?></legend>
+	<?php if ($filter_vid !="0") { ?>
+		<table class="admintable">
+			<tr>
+				<td class="key" nowrap="nowrap">
+	  			<select size="1" name="spieler_to">
+					<option value="0"><?php echo JText::_( 'MEMBER_TABLE_28' ); ?></option>
+				<?php for ($x=0; $x < count($verein); $x++) { ?>
+		 		<?php if ($countryversion == "de") { ?>
+		 		  <option value="<?php echo $verein[$x]->Mgl_Nr; ?>"><?php echo $verein[$x]->Mgl_Nr.' - '.$verein[$x]->Spielername; ?></option> 
+		 		<?php } else { ?>
+		 		  <option value="<?php echo $verein[$x]->PKZ; ?>"><?php echo $verein[$x]->PKZ.' - '.$verein[$x]->Spielername; ?></option> 
+				<?php }}	?>
+	  			</select>
+				</td>
+				<td><?php echo JText::_( 'MEMBER_TABLE_MOVE_TO' ); ?></td>
+				<td><?php echo $lists['vid_to'];  ?></td>
+			</tr>
+		</table>
+	<?php } else { echo JText::_( 'MEMBER_TABLE_29' ); } ?>
+	</fieldset>
+	</div>
+<?php } ?>
+<?php if($clmAccess->access('BE_database_general') === true AND $countryversion == "en") { ?>
+	<div>
+	<?php 	//$zps = $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
+		//$spl = CLMControllerDWZ::spieler($filter_vid_from); ?>
+	<fieldset class="adminform">
+	<legend><?php echo JText::_( 'MEMBER_TABLE_MOVE_1' ); ?></legend>
+<!---	<?php if ($filter_vid_from !="0") { ?>  -->
+		<table class="admintable">
+			<tr>
+				<td><?php echo JText::_( 'MEMBER_TABLE_MOVE_FROM' ); ?></td>
+				<td><?php echo $lists['vid_from'];  ?></td>
+				<td><?php echo '&nbsp;&nbsp;'; ?></td>
+				<td class="key" nowrap="nowrap">
+	  			<select size="1" name="spieler_from">
+					<option value="0"><?php echo JText::_( 'MEMBER_TABLE_28' ); ?></option>
+				<?php for ($x=0; $x < count($verein_from); $x++) { ?>
+		 		<?php if ($countryversion == "de") { ?>
+		 		  <option value="<?php echo $verein_from[$x]->Mgl_Nr; ?>"><?php echo $verein_from[$x]->Mgl_Nr.' - '.$verein_from[$x]->Spielername; ?></option> 
+		 		<?php } else { ?>
+		 		  <option value="<?php echo $verein_from[$x]->PKZ; ?>"><?php echo $verein_from[$x]->PKZ.' - '.$verein_from[$x]->Spielername; ?></option> 
+				<?php }}	?>
+	  			</select>
+				</td>
+			</tr>
+		</table>
+<!---	<?php } else { echo JText::_( 'MEMBER_TABLE_29' ); } ?> -->
+	</fieldset>
+	</div>
+<?php } ?>
+
 	</div>
 
 		<div class="clr"></div>

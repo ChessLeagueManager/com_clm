@@ -20,7 +20,8 @@ $ -> Language fix or change
 # Admin-View Meldeliste: Apply-Button bei englischer Anwendung
 # Einzelturniere: Ranglistenermittlung bei wenig Teilnehmern
 # Admin-View Ergebnisse: Übernahme Bemerkung bei 'Turnierwertung ändern'
- 
++ Admin-View Verein Mitgliederverwaltung: Umsetzen von Spieler, nur englische Anwendung
+
 - - - - - 3.3.2 - [06-09-2016] - - - - - - - - - - - - - - - - - - - -
 + Ergebnis 0-0,5 bzw. 0,5-0 eingebaut
 # Admin View Liga/MTurniere: Prüfung Rundenanzahl
