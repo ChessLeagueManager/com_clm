@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -21,6 +21,9 @@ $mannschaft		= $this->mannschaft;
 $vereinsliste 	= $this->vereinsliste;
 $saisons	 	= $this->saisons;
 $turniere	 	= $this->turniere;
+$session_lang = clm_core::$cms->getLanguage();
+if ($session_lang == 'en-GB') $google_lang = 'en';
+else $google_lang = 'de';
 
 // Login Status prüfen
 $clmuser= $this->clmuser;
@@ -201,19 +204,19 @@ if ($conf_vereinsdaten == 1) {
 					if ($googlemaps_rtype == 1 AND isset($spiellokal1[2])) {
 						echo str_replace ( "," , "<br />", $verein[0]->lokal);
 						if ( $googlemaps_vrout == 1)
-							echo '<br><a href="http://maps.google.com/maps?hl=de&saddr=&daddr='. $spiellokal1[0].','. $spiellokal1[1].','.$spiellokal1[2] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal1[0].','. $spiellokal1[1].','.$spiellokal1[2] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
 					} elseif ($googlemaps_rtype == 2 AND isset($spiellokal1[2])) {
 						echo str_replace ( "," , "<br />", $verein[0]->lokal);
 						if ( $googlemaps_vrout == 1)
-							echo '<br><a href="http://maps.google.com/maps?hl=de&saddr=&daddr='. $spiellokal1[1].','.$spiellokal1[2] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal1[1].','.$spiellokal1[2] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
 					} elseif ($googlemaps_rtype == 3 AND isset($spiellokal1[1])) {
 						echo str_replace ( "," , "<br />", $verein[0]->lokal);
 						if ( $googlemaps_vrout == 1)
-							echo '<br><a href="http://maps.google.com/maps?hl=de&saddr=&daddr='. $spiellokal1[0].','.$spiellokal1[1] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal1[0].','.$spiellokal1[1] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
 					} else {
 						echo str_replace ( "," , "<br />", $verein[0]->lokal); 
 						if ( $googlemaps_vrout == 1)
-							echo '<br><a href="http://maps.google.com/maps?hl=de&saddr=&daddr='. $verein[0]->lokal .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $verein[0]->lokal .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
 					}
 				} ?>
                 </div>
@@ -223,19 +226,19 @@ if ($conf_vereinsdaten == 1) {
 					if ($googlemaps_rtype == 1 AND isset($spiellokal2[2])) {
 						echo  str_replace ( "," , "<br />", $verein[0]->adresse ); 
 						if ( $googlemaps_vrout == 1)
-							echo '<br><a href="http://maps.google.com/maps?hl=de&saddr=&daddr='. $spiellokal2[0].','. $spiellokal2[1].','.$spiellokal2[2] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal2[0].','. $spiellokal2[1].','.$spiellokal2[2] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
 					} elseif ($googlemaps_rtype == 2 AND isset($spiellokal2[2])) {
 						echo  str_replace ( "," , "<br />", $verein[0]->adresse );
 						if ( $googlemaps_vrout == 1)
-							echo '<br><a href="http://maps.google.com/maps?hl=de&saddr=&daddr='. $spiellokal2[1].','.$spiellokal2[2] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal2[1].','.$spiellokal2[2] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
 					} elseif ($googlemaps_rtype == 3 AND isset($spiellokal2[1])) {
 						echo  str_replace ( "," , "<br />", $verein[0]->adresse );
 						if ( $googlemaps_vrout == 1)
-							echo '<br><a href="http://maps.google.com/maps?hl=de&saddr=&daddr='. $spiellokal2[0].','.$spiellokal2[1] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal2[0].','.$spiellokal2[1] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
 					} else {
 						echo  str_replace ( "," , "<br />", $verein[0]->adresse ); 
 						if ( $googlemaps_vrout == 1)
-							echo '<br><a href="http://maps.google.com/maps?hl=de&saddr=&daddr='. $verein[0]->adresse .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $verein[0]->adresse .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
 					}
 			    } ?>
                 </div>

@@ -49,6 +49,7 @@ $mannschaft	=$this->mannschaft;
 	if (!isset($lparams['dwz_date'])) $lparams['dwz_date'] = '0000-00-00';
 	if (!isset($lparams['noOrgReference'])) $lparams['noOrgReference'] = '0';
 	if (!isset($lparams['noBoardResults'])) $lparams['noBoardResults'] = '0';
+$vereine	=$this->vereine;
 $count		=$this->count;
 $bp			=$this->bp;
 $sumbp		=$this->sumbp;
@@ -56,6 +57,9 @@ $plan		=$this->plan;
 $termin		=$this->termin;
 $einzel		=$this->einzel;
 $saison 	=$this->saison;
+$session_lang = clm_core::$cms->getLanguage();
+if ($session_lang == 'en-GB') $google_lang = 'en';
+else $google_lang = 'de';
  
 // Variblen aus URL holen
 $sid 		= JRequest::getInt('saison','1');
@@ -149,8 +153,20 @@ $clm_zeile2D			= RGB($clm_zeile2);
 
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
     <?php if ($mannschaft[0]->zps != "0") { ?>
-		<div class="clmbox"><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $mannschaft[0]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('TEAM_DETAILS') ?></a> | <a href="index.php?option=com_clm&view=dwz&saison=<?php echo $sid; ?>&zps=<?php echo $mannschaft[0]->zps; ?>
-						<?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('TEAM_OVERVIEW') ?></a>
+		<div class="clmbox">
+		<a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $mannschaft[0]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('TEAM_DETAILS') ?></a>
+		| <a href="index.php?option=com_clm&view=dwz&saison=<?php echo $sid; ?>&zps=<?php echo $mannschaft[0]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('TEAM_OVERVIEW') ?></a>
+		<?php $isg = 0; $isgn = 0;
+		  while (isset($vereine[$isg]) AND $isg <= 10) :
+			if ($vereine[$isg]->zps != "0" AND  $vereine[$isg]->zps != "" AND $vereine[$isg]->vzps != "0" AND  $vereine[$isg]->vzps != "" AND $vereine[$isg]->zps != $vereine[$isg]->vzps ) { 
+				while (strlen($vereine[$isg]->name) < 40) :
+					$vereine[$isg]->name .= '&nbsp';
+				endwhile;  ?>
+				<br><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $vereine[$isg]->vzps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $vereine[$isg]->name.' &nbsp '.JText::_('TEAM_DETAILS'); ?></a>
+				<?php echo ($isgn + 1); ?>
+				<a href="index.php?option=com_clm&view=dwz&saison=<?php echo $sid; ?>&zps=<?php echo $vereine[$isg]->vzps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('TEAM_OVERVIEW') ?></a>
+		<?php $isgn++; } $isg++;
+		  endwhile; ?>
     <?php } else { ?>
 		<div class="clmbox"><?php echo "|  " ?>
     <?php }  ?>
@@ -209,16 +225,16 @@ $clm_zeile2D			= RGB($clm_zeile2);
             // Routenplaner
             if($spiellokal1[0] ==! false AND $googlemaps_mrout == 1 ) { 
 				if ($googlemaps_rtype == 1 AND isset($spiellokal1[2])) {
-					echo '<br><a href="http://maps.google.com/maps?hl=de&saddr=&daddr=' . $spiellokal1[0].','. $spiellokal1[1].','.$spiellokal1[2].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+					echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[0].','. $spiellokal1[1].','.$spiellokal1[2].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
 				} elseif ($googlemaps_rtype == 2 AND isset($spiellokal1[2])) {
-					echo '<br><a href="http://maps.google.com/maps?hl=de&saddr=&daddr=' . $spiellokal1[1].','.$spiellokal1[2].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+					echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[1].','.$spiellokal1[2].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
 				} elseif ($googlemaps_rtype == 3 AND isset($spiellokal1[1])) {
-					echo '<br><a href="http://maps.google.com/maps?hl=de&saddr=&daddr=' . $spiellokal1[0].','.$spiellokal1[1].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+					echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[0].','.$spiellokal1[1].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
 				} elseif (isset($spiellokal1[2])) {
-					echo '<br><a href="http://maps.google.com/maps?hl=de&saddr=&daddr=' . $spiellokal1[0].','.$spiellokal1[1].','.$spiellokal1[2].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+					echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[0].','.$spiellokal1[1].','.$spiellokal1[2].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
 				} elseif (isset($spiellokal1[1])) {
-					echo '<br><a href="http://maps.google.com/maps?hl=de&saddr=&daddr=' . $spiellokal1[0].','.$spiellokal1[1].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
-				} else { echo '<br><a href="http://maps.google.com/maps?hl=de&saddr=&daddr=' . $spiellokal1[0].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+					echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[0].','.$spiellokal1[1].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+				} else { echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[0].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
 				}
             } ?>
             </div>

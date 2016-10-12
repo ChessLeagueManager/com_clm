@@ -22,6 +22,8 @@ $ -> Language fix or change
 # Admin-View Ergebnisse: Übernahme Bemerkung bei 'Turnierwertung ändern'
 + Admin-View Verein Mitgliederverwaltung: Umsetzen von Spieler, nur englische Anwendung
 # class idna_convert Mehrfachverwendung Email-Adressen-Check
++ View Mannschaft: Anzeige der Partnervereine
++ Routenplaner sprachabhängig
 
 - - - - - 3.3.2 - [06-09-2016] - - - - - - - - - - - - - - - - - - - -
 + Ergebnis 0-0,5 bzw. 0,5-0 eingebaut

@@ -48,6 +48,33 @@ class CLMModelMannschaft extends JModelLegacy
 		return @$result;
 	}
 
+	function _getCLMVereine( &$options )
+	{
+	$sid = JRequest::getInt('saison','1');
+	$liga = JRequest::getInt('liga','1');
+	$tln = JRequest::getInt('tlnr');
+	
+		$db			= JFactory::getDBO();
+		$id			= @$options['id'];
+ 
+		$query = "SELECT a.zps,a.sg_zps,v.zps as vzps,v.name "
+			." FROM #__clm_mannschaften as a "
+			." LEFT JOIN #__clm_vereine AS v ON (a.zps = v.zps OR FIND_IN_SET(v.zps,a.sg_zps) != 0 ) AND  v.sid = a.sid "
+			." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
+			." WHERE a.liga = ".$liga
+			." AND a.sid = ".$sid
+			." AND a.tln_nr = ".$tln
+			." AND s.published = 1"
+			;
+		return $query;
+	}
+
+	function getCLMVereine( $options=array() )
+	{
+		$query	= $this->_getCLMVereine( $options );
+		$result = $this->_getList( $query );
+		return @$result;
+	}
 
 	function _getCLMCount ( &$options )
 	{
