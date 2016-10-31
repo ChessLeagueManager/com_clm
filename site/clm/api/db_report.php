@@ -151,7 +151,8 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 	}
 	
 	// Dürfen nur Heimspieler melden?
-	if ($zps != $out["heim"][0]->zps && $meldung_heim == 0) {
+	if ($meldung_heim == 0 && $zps != $someData[0]->hzps && (!isset($someData[0]->sgh_zps) || strpos($someData[0]->sgh_zps,$zps) === false)) {
+	//if ($zps != $out["heim"][0]->zps && $meldung_heim == 0) {
 		return array(false, "e_reportOnlyHome");
 	}
  

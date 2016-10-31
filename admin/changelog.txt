@@ -14,6 +14,7 @@ $ -> Language fix or change
 
 - - - - - 3.3.4 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
 + SWT-Import: Engl. Sprachfile 
+# Ergebnismeldung: Berechtigung nur für Heimspiele bei Spielgemeinschaft
 
 - - - - - 3.3.3 - [13-10-2016] - - - - - - - - - - - - - - - - - - - -
 # View Mannschaft: deutsche Meldeliste mit PKZ-Angaben
