@@ -6,16 +6,16 @@
 		$date = strtotime($date);
 		if($short) {
 			if($long) {
-				$date = date("d.m.y, H:i", $date);
+				$date = date($lang->format_month_num.", H:i", $date);
 			} else {
-				$date = date("d.m.y", $date);
+				$date = date($lang->format_month_num, $date);
 			}
 			return $date;
 		} else {
 			if($long) {
-				$date = date("d. F Y, H:i", $date);
+				$date = date($lang->format_month_txt.", H:i", $date);
 			} else {
-				$date = date("d. F Y", $date);
+				$date = date($lang->format_month_txt, $date);
 			}
 			return strtr($date, $trans);
 		}

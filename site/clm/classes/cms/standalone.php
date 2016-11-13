@@ -71,10 +71,14 @@ class clm_class_cms_standalone extends clm_class_cms {
 		return array(0);
 	}
 	public function getLanguage() {
-		$this->initJoomla();
-		if (isset($_GET["session_language"])) $slang = $_GET["session_language"];
-		else $slang = "xx-XX";
-		return $slang;
+		//CLM parameter auslesen
+		$config = clm_core::$db->config();
+		$countryversion = $config->countryversion;
+		if ($countryversion =="de") {
+			return 'de-DE'; }
+		if ($countryversion =="en") {
+			return 'en-GB'; }
+		return 'xx-XX'; 
 	}
 	public function getNowDate($format = "Y-m-d H:i:s") {
 		$this->initJoomla();

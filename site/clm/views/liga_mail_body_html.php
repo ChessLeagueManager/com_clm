@@ -58,7 +58,7 @@ function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hn
 	$body_html =	'
 		<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px;">
 		<tr>
-			<td bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;" colspan="6"><div align="center" style="font-size: 12px;"><strong>Online Spielbericht vom ' .$dateNow. '</strong></div></td>
+			<td bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;" colspan="6"><div align="center" style="font-size: 12px;"><strong>'.$lang->raw("report").' ' .$dateNow. '</strong></div></td>
 		</tr>
 		<tr>
 			<td width="120">&nbsp;</td>
@@ -155,8 +155,10 @@ function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hn
 		</tr>
 	';
 	if ($comment != "") { 
-		$comment = ereg_replace('
-','<br>',$comment);
+		$comment = preg_replace('/\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s/','<br>',$comment);
+
+//		$comment = ereg_replace('
+//','<br>',$comment);
 
       $body_html .= 	'
 		<tr>
@@ -187,7 +189,7 @@ function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hn
 		$body_html_sp= '<br>'
 			.$lang->raw('RESULT_ADMIN_COPY1')
 			.'<br>'.$lang->raw('RESULT_ADMIN_COPY2')." ".$hname." - ".$gname
-			.'<br>'.$lang->raw('RESULT_ADMIN_COPY3_1').$fromname;
+			.'<br>'.$lang->raw('RESULT_ADMIN_COPY3_1')." ".$fromname;
 		if ($gemeldet) $body_html_sp .= $lang->raw('RESULT_ADMIN_COPY3_2A'); 
 		else $body_html_sp .= $lang->raw('RESULT_ADMIN_COPY3_2');
 		$body_html_sp .= '<br>'.'<br>';
@@ -198,7 +200,7 @@ function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hn
 		$body_html_sp = '<br>'
 			.$lang->raw('RESULT_SL_COPY1')
 			.'<br>'.$lang->raw('RESULT_ADMIN_COPY2')." ".$hname." - ".$gname
-			.'<br>'.$lang->raw('RESULT_ADMIN_COPY3_1').$fromname;
+			.'<br>'.$lang->raw('RESULT_ADMIN_COPY3_1')." ".$fromname;
 		if ($gemeldet) $body_html_sp .= $lang->raw('RESULT_ADMIN_COPY3_2A'); 
 		else $body_html_sp .= $lang->raw('RESULT_ADMIN_COPY3_2');
 		$body_html_sp .= '<br>'.'<br>';
@@ -210,10 +212,10 @@ function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hn
 			<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px;">
 			  <tr>
 				<td>'.$lang->raw('RESULT_DATA_BODY1')." ".$hname." - ".$gname
-					.$lang->raw('RESULT_DATA_BODY2_1').$fromname;
+					.$lang->raw('RESULT_DATA_BODY2_1')." ".$fromname;
 		if ($gemeldet) $body_html_sp .= $lang->raw('RESULT_DATA_BODY2_2A'); 
 		else $body_html_sp .= $lang->raw('RESULT_DATA_BODY2_2');
-		$body_html_sp .= ' siehe unten oder <a href="'.$pfad.'/index.php?option=com_clm&view=runde&saison='.$sid.'&liga='.$lid.'&runde='.$rnd.'&dg='.$dg.'">hier</a>
+		$body_html_sp .= $lang->raw('RESULT_DATA_BODY2B').' <a href="'.$pfad.'/index.php?option=com_clm&view=runde&saison='.$sid.'&liga='.$lid.'&runde='.$rnd.'&dg='.$dg.'">'.$lang->raw('RESULT_DATA_BODY2B').'</a>
 				</td>
 			  </tr><tr>
 				<td><a href="mailto:'.$sl_email.'">'.$lang->raw('RESULT_DATA_BODY3').'</a></td>
