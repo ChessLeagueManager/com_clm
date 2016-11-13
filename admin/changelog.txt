@@ -17,6 +17,7 @@ $ -> Language fix or change
 # Ergebnismeldung: Berechtigung nur für Heimspiele bei Spielgemeinschaft
 ^ Einzelturniere: mysql_errno ersetzt in calculateRanking
 # pdf View Turnierteilnehmer: Clublink unnötig
+# SWT-Import Liga: gesp. Runden und gesp. Durchgänge
 
 - - - - - 3.3.3 - [13-10-2016] - - - - - - - - - - - - - - - - - - - -
 # View Mannschaft: deutsche Meldeliste mit PKZ-Angaben

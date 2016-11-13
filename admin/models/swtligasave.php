@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -35,7 +35,16 @@ class CLMModelSWTLigasave extends JModelLegacy {
 		$update	= JRequest::getVar ('update', 0, 'default', 'int');
 		
 		$swt_data		= $this->getDataSWT ();
-		$gesp_runden	= $swt_data['gesp_runden'];
+		$swt_db_data	= $this->getDataSWTdb ();		
+		
+		$anz_durchgaenge	= $swt_db_data['anz_durchgaenge'];
+		if ($anz_durchgaenge == 1) {
+			$gesp_runden		= $swt_data['gesp_runden'];
+			$gesp_dgang		= 1;
+		} else {
+			$gesp_runden		= $swt_db_data['gesp_runden'];
+			$gesp_dgang		= $swt_db_data['gesp_dgang'];
+		}
 				
 		$clm_prefix = $db->getPrefix () . "clm_";
 		$swt_prefix = $db->getPrefix () . "clm_swt_";
@@ -199,7 +208,7 @@ class CLMModelSWTLigasave extends JModelLegacy {
 			
 			// gemeldet nur für bereits gespielte Runden setzen
 			if ($table == 'rnd_man' || $table == 'rnd_spl') {
-				$where_add = ' AND `runde` <= "' . $gesp_runden . '"';
+				$where_add = ' AND ((`runde` <= "'.$gesp_runden.'" AND `dg` = "'.$gesp_dgang.'") OR `dg` < "'.$gesp_dgang.'")';
 			}
 			else {
 				$where_add = '';
@@ -220,7 +229,8 @@ class CLMModelSWTLigasave extends JModelLegacy {
 			if ($table == 'rnd_man') { // Brett- und Mannschaftspunkte für noch nicht gespielte Runden löschen
 				$upd_query2 = ' UPDATE ' . $clm_prefix . $table
 								. ' SET `brettpunkte` = NULL, `manpunkte` = NULL'
-								. ' WHERE `'.$liga_col[$table] .'` = "' . $liga_id . '" AND `runde` > "' . $gesp_runden . '"';
+								. ' WHERE `'.$liga_col[$table] .'` = "' . $liga_id . '" AND ((`runde` > "'.$gesp_runden.'" AND `dg` = "'.$gesp_dgang.'") OR `dg` > "'.$gesp_dgang.'")';
+
 				$db->setQuery ($upd_query2);
 				if (!$db->query ()) {
 					print $db->getErrorMsg ();
@@ -230,7 +240,8 @@ class CLMModelSWTLigasave extends JModelLegacy {
 		
 			if ($table == 'rnd_spl') { // Brettergebnisse für noch nicht gespielte Runden löschen
 				$upd_query2 = ' DELETE FROM ' . $clm_prefix . $table
-								. ' WHERE `'.$liga_col[$table] .'` = "' . $liga_id . '" AND `runde` > "' . $gesp_runden . '"';
+								. ' WHERE `'.$liga_col[$table] .'` = "' . $liga_id . '" AND ((`runde` > "'.$gesp_runden.'" AND `dg` = "'.$gesp_dgang.'") OR `dg` > "'.$gesp_dgang.'")';
+
 				$db->setQuery ($upd_query2);
 				if (!$db->query ()) {
 					print $db->getErrorMsg ();
@@ -350,7 +361,13 @@ class CLMModelSWTLigasave extends JModelLegacy {
 		
 		$anz_runden			= $swt_db_data['anz_runden'];
 		$anz_durchgaenge	= $swt_db_data['anz_durchgaenge'];
-		$gesp_runden		= $swt_data['gesp_runden'];
+		if ($anz_durchgaenge == 1) {
+			$gesp_runden		= $swt_data['gesp_runden'];
+			$gesp_dgang		= 1;
+		} else {
+			$gesp_runden		= $swt_db_data['gesp_runden'];
+			$gesp_dgang		= $swt_db_data['gesp_dgang'];
+		}
 		$termineFromDatabase = array();
 		if ($update == 1 AND $liga_id > 0) {
 			
@@ -377,7 +394,7 @@ class CLMModelSWTLigasave extends JModelLegacy {
 		
 			for ($r = 1; $r <= $anz_runden; $r++) {
 		
-				if ($r <= $gesp_runden) {
+				if (($r <= $gesp_runden AND $d == $gesp_dgang) OR $d < $gesp_dgang ) {
 					$published = 1;
 				}
 				else {
@@ -494,6 +511,17 @@ class CLMModelSWTLigasave extends JModelLegacy {
 		
 		$objs = $this->_getList ($sql);
 		$swt_db_data['spieler'] = $objs;
+		
+		$sql = ' SELECT MAX(runde) as gesp_runden, MAX(dg) as gesp_dgang '
+				. ' FROM #__clm_swt_rnd_man as s'
+				. ' WHERE s.swt_id = '.$swt_id
+				. ' AND s.manpunkte > 0 '
+				;
+		$objs = $this->_getList ($sql);
+		$max = $objs;
+ 
+		$swt_db_data['gesp_runden'] = $max[0]->gesp_runden;
+		$swt_db_data['gesp_dgang'] = $max[0]->gesp_dgang;
 		
 		$this->_swt_db_data = $swt_db_data;
 		return $swt_db_data;
