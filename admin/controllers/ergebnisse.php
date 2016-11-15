@@ -1233,6 +1233,8 @@ function save()
 	$gegner	= $tlnr[0]->gegner;
 	$hkampflos = 0;
 	$gkampflos = 0;
+	$hergebnis = 0;
+	$gergebnis = 0;
 
 	// Mannschaftspunkte Heim / Gast
 	$hman_punkte = 0;
