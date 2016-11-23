@@ -43,6 +43,12 @@ class TableCLMTurniere extends JTable
 	var $checked_out_time	= 0;
 	var $ordering		= null;
 	var $params 		= null;
+	var $sieg			= 1.0;
+	var $siegs			= 1.0;
+	var $remis 			= 0.5;
+	var $remiss			= 0.5;
+	var $nieder			= 0.0;
+	var $niederk 		= 0.0;
 
 	function __construct( &$_db ) {
 		parent::__construct( '#__clm_turniere', 'id', $_db );

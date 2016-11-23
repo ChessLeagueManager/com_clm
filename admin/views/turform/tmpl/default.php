@@ -113,7 +113,7 @@ $turParams = new clm_class_params($this->turnier->params);
       <table class="paramlist admintable">
 
 	<tr>
-		<td width="40%" class="paramlist_key">
+		<td width="30%" class="paramlist_key">
 			<label for="name"><?php echo JText::_( 'TOURNAMENT_NAME' ); ?>:</label>
 		</td>
 		<td class="paramlist_value">
@@ -125,7 +125,7 @@ $turParams = new clm_class_params($this->turnier->params);
 	if (isset($this->form['catidAlltime'])) {
 	?>
 		<tr>
-			<td width="40%" class="paramlist_key">
+			<td width="30%" class="paramlist_key">
 				<label for="category">
 					<?php echo JText::_( 'CATEGORY_ALLTIME' ); ?>:
 				</label>
@@ -142,7 +142,7 @@ $turParams = new clm_class_params($this->turnier->params);
 	if (isset($this->form['catidEdition'])) {
 	?>
 		<tr>
-			<td width="40%" class="paramlist_key">
+			<td width="30%" class="paramlist_key">
 				<label for="category">
 					<?php echo JText::_( 'CATEGORY_EDITION' ); ?>:
 				</label>
@@ -156,7 +156,7 @@ $turParams = new clm_class_params($this->turnier->params);
 	?>
 	
 	<tr>
-		<td width="40%" class="paramlist_key">
+		<td width="30%" class="paramlist_key">
 			<label for="saison">
 				<?php echo JText::_( 'SEASON' ); ?>:
 			</label>
@@ -168,7 +168,7 @@ $turParams = new clm_class_params($this->turnier->params);
 	
 	
 	<tr>
-		<td width="40%" class="paramlist_key">
+		<td width="30%" class="paramlist_key">
 			<label for="dateStart">
 				<?php echo JText::_( 'TOURNAMENT_DAYSTART' ); ?>:
 			</label>
@@ -179,7 +179,7 @@ $turParams = new clm_class_params($this->turnier->params);
 	</tr>
 	
 	<tr>
-		<td width="40%" class="paramlist_key">
+		<td width="30%" class="paramlist_key">
 			<label for="dateEnd">
 				<?php echo JText::_( 'TOURNAMENT_DAYEND' ); ?>:
 			</label>
@@ -190,7 +190,7 @@ $turParams = new clm_class_params($this->turnier->params);
 	</tr>
 	
 	<tr>
-		<td width="40%" class="paramlist_key">
+		<td width="30%" class="paramlist_key">
 			<label for="modus">
 				<?php echo JText::_( 'MODUS' ); ?>:
 			</label>
@@ -209,7 +209,7 @@ $turParams = new clm_class_params($this->turnier->params);
 	</tr>
 	
 	<tr>
-		<td width="40%" class="paramlist_key">
+		<td width="30%" class="paramlist_key">
 			<label for="runden">
 				<?php echo JText::_( 'ROUNDS_COUNT' ); ?>:
 			</label>
@@ -243,7 +243,7 @@ $turParams = new clm_class_params($this->turnier->params);
 
 
 	<tr>
-		<td width="40%" class="paramlist_key">
+		<td width="30%" class="paramlist_key">
 			<label for="dg">
 				<?php echo JText::_( 'STAGE_COUNT' ); ?>:
 			</label>
@@ -267,7 +267,7 @@ $turParams = new clm_class_params($this->turnier->params);
 	</tr>
 
 	<tr>
-		<td width="40%" class="paramlist_key">
+		<td width="30%" class="paramlist_key">
 			<label for="teil">
 				<?php echo JText::_( 'PARTICIPANT_COUNT' ); ?>:
 			</label>
@@ -287,7 +287,7 @@ $turParams = new clm_class_params($this->turnier->params);
 	</tr>
 
 	<tr>
-		<td width="40%" class="paramlist_key">
+		<td width="30%" class="paramlist_key">
 			<label for="tiebreakers">
 				<?php echo JText::_( 'TIEBREAKERS' ); ?>:
 			</label>
@@ -314,7 +314,19 @@ $turParams = new clm_class_params($this->turnier->params);
 	</tr>
 
 	<tr>
-		<td width="40%" class="paramlist_key">
+		<td nowrap="nowrap">
+			<label for="punkte_modus"><?php echo JText::_( 'LEAGUE_MATCH_VALUATION' ); ?></label>
+		</td>
+		<td><?php echo JText::_( 'LEAGUE_VALUATION_1' );?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="sieg" id="sieg" size="4" maxlength="4" value="<?php echo $this->turnier->sieg ?>" /><br>
+			<?php echo JText::_( 'LEAGUE_VALUATION_2' );?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="remis" id="remis" size="4" maxlength="4" value="<?php echo $this->turnier->remis ?>" /><br>
+			<?php echo JText::_( 'LEAGUE_VALUATION_3' );?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="nieder" id="nieder" size="4" maxlength="4" value="<?php echo $this->turnier->nieder ?>" /></td>
+		<td><?php echo JText::_( 'LEAGUE_VALUATION_1S' );?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="siegs" id="siegs" size="4" maxlength="4" value="<?php echo $this->turnier->siegs ?>" /><br>
+			<?php echo JText::_( 'LEAGUE_VALUATION_2S' );?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="remiss" id="remiss" size="4" maxlength="4" value="<?php echo $this->turnier->remiss ?>" /><br>
+			<?php echo JText::_( 'LEAGUE_VALUATION_3K' );?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="niederk" id="niederk" size="4" maxlength="4" value="<?php echo $this->turnier->niederk ?>" /></td>
+	</tr>
+
+	<tr>
+		<td width="30%" class="paramlist_key">
 			<?php echo JText::_('OPTION_USEASTWZ'); ?>:
 		</td>
 		<td class="paramlist_value">
@@ -331,7 +343,7 @@ $turParams = new clm_class_params($this->turnier->params);
 		</td>
 	</tr>
 	<tr>
-		<td width="40%" class="paramlist_key">
+		<td width="30%" class="paramlist_key">
 			<?php echo JText::_('OPTION_AUTODWZ'); ?>:
 		</td>
 		<td class="paramlist_value">

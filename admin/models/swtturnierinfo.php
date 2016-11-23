@@ -85,6 +85,12 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 			$this->_turnier->set('invitationText'	, '');
 			$this->_turnier->set('ordering'			, 0);
 			$this->_turnier->set('params'			, '');
+			$this->_turnier->set('sieg'				, '1');
+			$this->_turnier->set('siegs'			, '1');
+			$this->_turnier->set('remis'			, '0.5');
+			$this->_turnier->set('remiss'			, '0.5');
+			$this->_turnier->set('nieder'			, '0');
+			$this->_turnier->set('niederk'			, '0');
 			
 			//Name
 			if(($name = CLMSWT::readName($swt,245,60)) != '') {
@@ -243,6 +249,39 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 			//Ranglistenkorrektur
 			$this->_turnier->set('optionTiebreakersFideCorrect', CLMSWT::readBool($swt,675));
 			
+			//Partiewertung
+			$pwertung = CLMSWT::readInt($swt,582,1);
+			if ($pwertung > 3) $pwertung = 0;
+			if ($pwertung == 0) {
+				$this->_turnier->set('sieg'				, 1);
+				$this->_turnier->set('siegs'			, 1);
+				$this->_turnier->set('remis'			, .5);
+				$this->_turnier->set('remiss'			, .5);
+				$this->_turnier->set('nieder'			, 0);
+				$this->_turnier->set('niederk'			, 0);
+			} elseif ($pwertung == 1) {
+				$this->_turnier->set('sieg'				, 3);
+				$this->_turnier->set('siegs'			, 3);
+				$this->_turnier->set('remis'			, 1);
+				$this->_turnier->set('remiss'			, 1);
+				$this->_turnier->set('nieder'			, 0);
+				$this->_turnier->set('niederk'			, 0);
+			} elseif ($pwertung == 2) {
+				$this->_turnier->set('sieg'				, 3);
+				$this->_turnier->set('siegs'			, 3);
+				$this->_turnier->set('remis'			, 1);
+				$this->_turnier->set('remiss'			, 1.5);
+				$this->_turnier->set('nieder'			, 0);
+				$this->_turnier->set('niederk'			, 0);
+			} else {
+				$this->_turnier->set('sieg'				, CLMSWT::readInt($swt,5494,1));
+				$this->_turnier->set('siegs'			, CLMSWT::readInt($swt,5496,1));
+				$this->_turnier->set('remis'			, CLMSWT::readInt($swt,5498,1));
+				$this->_turnier->set('remiss'			, CLMSWT::readInt($swt,5500,1));
+				$this->_turnier->set('nieder'			, CLMSWT::readInt($swt,5502,1));
+				$this->_turnier->set('niederk'			, CLMSWT::readInt($swt,5506,1));
+			}
+
 			//TWZ-Einstellung
 			$twz = CLMSWT::readInt($swt,582,1);
 			if($twz == 0){
@@ -253,31 +292,6 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 				$this->_turnier->set('useAsTWZ',0);
 			}
 						
-			/*Parameter
-			$turParams->get('optionTiebreakersFideCorrect',0);
-			$turParams->get('useAsTWZ', 0);
-			$turParams->get('qualiUp', 0);
-			$turParams->get('qualiUpPoss', 0);
-			$turParams->get('qualiDown', 0);
-			$turParams->get('qualiDownPoss', 0);
-			$turParams->get('addCatToName', 0);
-			$turParams->get('displayRoundDate', 1);
-			$turParams->get('displayPlayerSnr', 1);
-			$turParams->get('displayPlayerTitle', 1);
-			$turParams->get('displayPlayerClub', 1);
-			$turParams->get('displayPlayerRating', 0);
-			$turParams->get('displayPlayerElo', 0);
-			$turParams->get('displayPlayerFideLink', 0);
-			$turParams->get('displayPlayerFederation', 0);
-			$turParams->get('displayTlOK', $this->params['tourn_showtlok']);
-			$turParams->get('pgnInput', 1);
-			$turParams->get('pgnPublic', 1);
-			$turParams->get('playerViewDisplaySex', 1);
-			$turParams->get('playerViewDisplayBirthYear', 1);
-			$turParams->get('joomGalleryDisplayPlayerPhotos', 0);
-			$turParams->get('joomGalleryCatId', '');
-			$turParams->get('joomGalleryPhotosWidth', '');
-			*/
 		}
 		return $this->_turnier;
 	}
@@ -286,8 +300,11 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 		$db		=JFactory::getDBO ();
 	
 		//Namen aller Formularfelder als Array
-		$spalten = array ( "tid", "name", "sid", "dateStart", "dateEnd", "catidAlltime", "catidEdition", "typ", "tiebr1", "tiebr2", "tiebr3",
-		                   "rnd", "teil", "runden", "dg", "tl", "bezirk", "bezirkTur", "vereinZPS", "published", "started", "finished", "invitationText", "bemerkungen", "bem_int", "ordering" );
+		$spalten = array ( "tid", "name", "sid", "dateStart", "dateEnd", "catidAlltime", "catidEdition",
+						   "typ", "tiebr1", "tiebr2", "tiebr3",
+		                   "rnd", "teil", "runden", "dg", "tl", "bezirk", "bezirkTur", "vereinZPS", 
+						   "published", "started", "finished", "invitationText", "bemerkungen", "bem_int",
+						   "ordering", "sieg", "siegs", "remis", "remiss", "nieder", "niederk" );
 		
 		//Strings f�r Felder und Werte erstellen
 		$fields = '';
@@ -358,6 +375,12 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 			$this->_turnier->set('invitationText'	, $turnierFromDatabase->invitationText);
 			$this->_turnier->set('ordering'			, $turnierFromDatabase->ordering);
 			$this->_turnier->set('params'			, $turnierFromDatabase->params);			
+			$this->_turnier->set('sieg'				, $turnierFromDatabase->sieg);
+			$this->_turnier->set('siegs'			, $turnierFromDatabase->siegs);
+			$this->_turnier->set('remis'			, $turnierFromDatabase->remis);
+			$this->_turnier->set('remiss'			, $turnierFromDatabase->remiss);
+			$this->_turnier->set('nieder'			, $turnierFromDatabase->nieder);
+			$this->_turnier->set('niederk'			, $turnierFromDatabase->niederk);
 		}
 	}
 	

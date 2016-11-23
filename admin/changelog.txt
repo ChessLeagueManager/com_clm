@@ -20,6 +20,7 @@ $ -> Language fix or change
 # SWT-Import Liga: gesp. Runden und gesp. Durchgänge
 # Ergebnismeldung: Erstellung der Bestätigungsmails Sprache entsprechend Land
 # Admin-View Ergebnisse: Rücksetzen durch Löschen aller Eingabenwerte
++ Einzelturniere: 3-Punkte-Wertung u. ä.
 
 - - - - - 3.3.3 - [13-10-2016] - - - - - - - - - - - - - - - - - - - -
 # View Mannschaft: deutsche Meldeliste mit PKZ-Angaben

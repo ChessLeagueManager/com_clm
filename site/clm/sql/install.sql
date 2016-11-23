@@ -712,6 +712,12 @@ CREATE TABLE IF NOT EXISTS `#__clm_swt_turniere` (
   `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `ordering` int(11) NOT NULL DEFAULT '0',
   `params` text NOT NULL,
+  `sieg` decimal(2,1) unsigned DEFAULT '1.0',
+  `siegs` decimal(2,1) unsigned DEFAULT '1.0',
+  `remis` decimal(2,1) unsigned DEFAULT '0.5',
+  `remiss` decimal(2,1) unsigned DEFAULT '0.5',
+  `nieder` decimal(2,1) unsigned DEFAULT '0.0',
+  `niederk` decimal(2,1) unsigned DEFAULT '0.0',
   PRIMARY KEY (`swt_tid`),
   KEY `published` (`published`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -899,6 +905,12 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere` (
   `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `ordering` int(11) NOT NULL DEFAULT '0',
   `params` text NOT NULL,
+  `sieg` decimal(2,1) unsigned DEFAULT '1.0',
+  `siegs` decimal(2,1) unsigned DEFAULT '1.0',
+  `remis` decimal(2,1) unsigned DEFAULT '0.5',
+  `remiss` decimal(2,1) unsigned DEFAULT '0.5',
+  `nieder` decimal(2,1) unsigned DEFAULT '0.0',
+  `niederk` decimal(2,1) unsigned DEFAULT '0.0',
   PRIMARY KEY (`id`),
   KEY `published` (`published`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
