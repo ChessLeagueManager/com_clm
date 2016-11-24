@@ -595,9 +595,10 @@ class CLMViewLigen
 	</td><td colspan="1"><fieldset class="radio">
 	<?php echo $lists['sl_mail']; ?>
 	</fieldset></td>
-	</tr>
 <?php } else { ?>
+	<td nowrap="nowrap" colspan="3">
 	<input type="hidden" name="sl_mail" value="0" />
+	</td>
 <?php } ?>
 	</tr>
 	<tr>
@@ -632,7 +633,8 @@ class CLMViewLigen
 	</table>
 
 	<table class="adminlist">
-	<tr><legend><?php echo JText::_( 'REMARKS_INTERNAL' ); ?></legend>
+	<legend><?php echo JText::_( 'REMARKS_INTERNAL' ); ?></legend>
+	<tr>
 	<td width="100%" valign="top">
 	<textarea class="inputbox" name="bem_int" id="bem_int" cols="40" rows="4" style="width:90%"><?php echo str_replace('&','&amp;',$row->bem_int);?></textarea>
 	</td>
