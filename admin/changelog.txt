@@ -14,6 +14,7 @@ $ -> Language fix or change
 
 - - - - - 3.3.5 - [xx-xx-2016] - - - - - - - - - - - - - - - - - - - -
 # Admin-View Runden: kleine Code-Bereinigung
+# Admin-View Turnier: Veranstalter/Ausrichter wählen
   
 - - - - - 3.3.4 - [24-11-2016] - - - - - - - - - - - - - - - - - - - -
 + SWT-Import: Engl. Sprachfile 
