@@ -77,9 +77,11 @@ function display($cachable = false, $urlparams = array())
 	} else {
 	if ($filter_order =='a.name' OR $filter_order == 'a.nr' OR $filter_order == 'a.datum' OR $filter_order == 'd.name' OR $filter_order == 'c.name' OR $filter_order == 'a.meldung' OR $filter_order == 'a.sl_ok' OR $filter_order == 'a.published' OR $filter_order == 'a.ordering') { 
 		$orderby 	= ' ORDER BY '. $filter_order .' '. $filter_order_Dir .', a.id';
-			}
-		else { $filter_order = 'a.id'; }
+		} else { 
+			$filter_order = 'a.id'; 
+			$orderby 	= ' ORDER BY id';
 		}
+	}
 	// get the total number of records
 	$query = ' SELECT COUNT(*) '
 		.' FROM #__clm_runden_termine AS a'
