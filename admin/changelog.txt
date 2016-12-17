@@ -16,6 +16,7 @@ $ -> Language fix or change
 # Admin-View Runden: kleine Code-Bereinigung
 # Admin-View Turnier: Veranstalter/Ausrichter wählen
 # Ligastatistik: Kriterien kampflos + Gegner ohne DWZ
+# Admin-Views Turniere: Darstellung leeres Datum
   
 - - - - - 3.3.4 - [24-11-2016] - - - - - - - - - - - - - - - - - - - -
 + SWT-Import: Engl. Sprachfile 

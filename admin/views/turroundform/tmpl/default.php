@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -43,7 +43,8 @@ defined('_JEXEC') or die('Restricted access');
 			<label for="datum"><?php echo JText::_( 'JDATE' ); ?>:</label>
 			</td>
 			<td>
-			<?php echo JHtml::_('calendar', $this->roundData->datum, 'datum', 'datum', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
+			<?php if ($this->roundData->datum == '0000-00-00') $this->roundData->datum .= ' 00:00:00';
+			echo JHtml::_('calendar', $this->roundData->datum, 'datum', 'datum', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
 			</td>
 		</tr>
 
