@@ -98,6 +98,10 @@ $turParams = new clm_class_params($this->turnier->params);
 			alert( jserror['select_tiebreakers_13'] );
 		} else if (form.typ.value != 3 && form.typ.value != 5 && form.tiebr3.value != 0 && form.tiebr3.value == form.tiebr2.value) {
 			alert( jserror['select_tiebreakers_23'] );
+		} else if (form.dateEnd.value != "" && form.dateStart.value == "") {
+			alert( jserror['nostartdate'] );
+		} else if (form.dateEnd.value != "" && form.dateStart.value > form.dateEnd.value) {
+			alert( jserror['enddatetoolow'] );
 		} else {
 			submitform( pressbutton );
 		}
@@ -174,8 +178,9 @@ $turParams = new clm_class_params($this->turnier->params);
 			</label>
 		</td>
 		<td class="paramlist_value">
-			<?php if ($this->turnier->dateStart == '0000-00-00') $this->turnier->dateStart .= ' 00:00:00';
-			echo JHtml::_('calendar', $this->turnier->dateStart, 'dateStart', 'dateStart', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
+			<?php //if ($this->turnier->dateStart == '0000-00-00') $this->turnier->dateStart .= ' 00:00:00';
+			//echo JHtml::_('calendar', $this->turnier->dateStart, 'dateStart', 'dateStart', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); 
+			echo CLMForm::calendar($this->turnier->dateStart, 'dateStart', 'dateStart', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
 		</td>
 	</tr>
 	
@@ -186,8 +191,9 @@ $turParams = new clm_class_params($this->turnier->params);
 			</label>
 		</td>
 		<td class="paramlist_value">
-			<?php if ($this->turnier->dateEnd == '0000-00-00') $this->turnier->dateEnd .= ' 00:00:00';
-			echo JHtml::_('calendar', $this->turnier->dateEnd, 'dateEnd', 'dateEnd', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
+			<?php //if ($this->turnier->dateEnd == '0000-00-00') $this->turnier->dateEnd .= ' 00:00:00';
+			//echo JHtml::_('calendar', $this->turnier->dateEnd, 'dateEnd', 'dateEnd', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); 
+			echo CLMForm::calendar($this->turnier->dateEnd, 'dateEnd', 'dateEnd', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
 		</td>
 	</tr>
 	

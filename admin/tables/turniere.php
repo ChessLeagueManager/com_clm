@@ -2,9 +2,9 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -136,7 +136,7 @@ class TableCLMTurniere extends JTable
 		}
 
 		// Endtag gegegeben und Datum geändert?
-		if ($this->dateEnd != '0000-00-00' AND ($this->dateStart != $tournament->data->dateStart OR $this->dateEnd != $tournament->data->dateEnd) ) {
+		if ($this->dateEnd != '0000-00-00' AND $this->dateEnd != '' AND ($this->dateStart != $tournament->data->dateStart OR $this->dateEnd != $tournament->data->dateEnd) ) {
 			// zerlegen
 			list($startY, $startM, $startD) = explode("-", $this->dateStart);
 			list($endY, $endM, $endD) = explode("-", $this->dateEnd);

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -63,7 +63,9 @@ class CLMViewTurForm extends JViewLegacy {
 		$document->addScriptDeclaration("jserror['select_tiebreakers_12'] = '".JText::_('PLEASE_SELECT')." ".JText::_('TIEBREAKERS')." 1 & 2';");
 		$document->addScriptDeclaration("jserror['select_tiebreakers_13'] = '".JText::_('PLEASE_SELECT')." ".JText::_('TIEBREAKERS')." 1 & 3';");
 		$document->addScriptDeclaration("jserror['select_tiebreakers_23'] = '".JText::_('PLEASE_SELECT')." ".JText::_('TIEBREAKERS')." 2 & 3';");
-
+		$document->addScriptDeclaration("jserror['enddatetoolow'] = '".JText::_('ENDDATE_TOOLOW')."';");
+		$document->addScriptDeclaration("jserror['nostartdate'] = '".JText::_('NO_STARTDATE')."';");
+ 
 		$document->addScriptDeclaration("var jstext = new Array();");
 		$document->addScriptDeclaration("jstext['roundscountgenerated'] = '(".JText::_('ROUNDS_COUNT_GENERATED').")';");
 

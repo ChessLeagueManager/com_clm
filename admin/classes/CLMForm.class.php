@@ -357,5 +357,12 @@ class CLMForm {
 	
 	}
 
+ 
+	public static function calendar($value, $name, $id, $format = '%Y-%m-%d', $attribs = null) {
+		if ($value == '0000-00-00') $value = '';
+	
+		return JHTML::_('calendar', $value, $name, $id, $format, $attribs);
+	}	
+
 }
 ?>
