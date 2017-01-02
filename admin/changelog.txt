@@ -18,6 +18,7 @@ $ -> Language fix or change
 # Ligastatistik: Kriterien kampflos + Gegner ohne DWZ
 # Admin-Views Turniere: Darstellung leeres Datum
 # Admin-View Turnier: Datumsprüfung von-bis
+# Admin-ET-Ranking: Notice wegen Tippfehler verhindern
   
 - - - - - 3.3.4 - [24-11-2016] - - - - - - - - - - - - - - - - - - - -
 + SWT-Import: Engl. Sprachfile 
