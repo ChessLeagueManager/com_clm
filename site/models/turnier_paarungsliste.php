@@ -87,6 +87,7 @@ class CLMModelTurnier_Paarungsliste extends JModel {
 		$this->players = $this->_db->loadObjectList('snr');
 	
 		// Default für Leereinträge
+		$this->players[0] = new stdClass();
 		$this->players[0]->name = "";
 		$this->players[0]->twz = "";
 	
