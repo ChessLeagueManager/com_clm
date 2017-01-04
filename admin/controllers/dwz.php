@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -35,7 +35,7 @@ function display($cachable = false, $urlparams = array())
 	$countryversion = $config->countryversion;
 	
 	$filter_vid		= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
-	$filder_vid_to 	= "0";
+	$filter_vid_to 	= "0";
 	$filter_vid_from	= $mainframe->getUserStateFromRequest( "$option.filter_vid_from",'filter_vid_from',0,'var' );
 
 	$filter_sort		= $mainframe->getUserStateFromRequest( "$option.filter_sort",'filter_sort',0,'string' );
