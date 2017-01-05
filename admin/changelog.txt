@@ -20,6 +20,10 @@ $ -> Language fix or change
 # Admin-View Turnier: Datumsprüfung von-bis
 # Admin-ET-Ranking: Notice wegen Tippfehler verhindern
 # Admin-Mitgliederverwaltung: Notice wegen Tippfehler verhindern
++ PGN-Import: Team- und Single-Wettbewerbe
++ PGN-Anzeige Frontend für Team-Wettbewerbe
+^ PGN-Anzeige Frontend für Single-Wettbewerbe
++ PGN-Download Frontend für Team- und Single-Wettbewerbe
   
 - - - - - 3.3.4 - [24-11-2016] - - - - - - - - - - - - - - - - - - - -
 + SWT-Import: Engl. Sprachfile 

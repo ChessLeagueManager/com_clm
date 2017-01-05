@@ -36,6 +36,7 @@ class CLMViewLigen
 	$rang	= $config->rangliste;
 	$sl_mail= $config->sl_mail;
 	$countryversion= $config->countryversion;
+	$import_pgn = $config->import_pgn;
 	?>
 	<?php 
 	//Liga-Parameter aufbereiten
@@ -84,7 +85,10 @@ class CLMViewLigen
 		$row->params['noBoardResults'] = '0'; }
 	if (!isset($row->params['ReportForm']))  {   //Standardbelegung
 		$row->params['ReportForm'] = '0'; }
-
+	if (!isset($row->params['pgnInput']))  {   //Standardbelegung
+		$row->params['pgnInput'] = '0'; }
+	if (!isset($row->params['pgnPublic']))  {   //Standardbelegung
+		$row->params['pgnPublic'] = '0'; }
 	?>
 	
 	<script language="javascript" type="text/javascript">
@@ -582,7 +586,22 @@ class CLMViewLigen
 	</td>
 	</tr>
 
-    <tr>
+	<?php if ($import_pgn == 1) { ?>
+	<tr>
+		<td nowrap="nowrap" colspan="2">
+			<label for="pgninput"><?php echo JText::_( 'OPTION_PGNINPUT' ); ?></label>
+		</td><td class="paramlist_value"><fieldset class="radio">
+			<?php echo JHtml::_('select.booleanlist', 'params[pgnInput]', 'class="inputbox"', $row->params['pgnInput']); ?>
+		</fieldset></td>
+		<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+		<td nowrap="nowrap" colspan="2">
+			<label for="pgnpublic"><?php echo JText::_( 'OPTION_PGNPUBLIC' ); ?></label>
+		</td><td colspan="1"><fieldset class="radio">
+			<?php echo JHtml::_('select.booleanlist', 'params[pgnPublic]', 'class="inputbox"', $row->params['pgnPublic']); ?>
+		</fieldset></td>
+	</tr>
+	<?php } ?>
+    <tr>	
 	<td nowrap="nowrap" colspan="2">
 	<label for="mail"><?php echo JText::_( 'LEAGUE_MAIL' ); ?></label>
 	</td><td colspan="1"><fieldset class="radio">

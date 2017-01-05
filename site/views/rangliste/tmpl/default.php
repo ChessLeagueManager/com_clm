@@ -11,14 +11,28 @@
 */
 
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip', $params);
 JHtml::_('behavior.tooltip', '.CLMTooltip');
  
 $lid		= JRequest::getInt('liga','1'); 
 $sid		= JRequest::getInt('saison',0);
 $runde		= JRequest::getInt('runde');
-$item		= JRequest::getInt('Itemid','1');
+$item		= JRequest::getInt('Itemid',0);
+$typeid		= JRequest::getInt('typeid',0);
 $liga		= $this->liga;
+$option 	= JRequest::getCmd( 'option' );
+$mainframe	= JFactory::getApplication();
+
+$pgn		= JRequest::getInt('pgn','0'); 
+if ($pgn == 1) { 
+	$result = clm_core::$api->db_pgn_export($lid,true);
+	JRequest::setVar('pgn',0);
+	if (!$result[1]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
+	$link = 'index.php?option='.$option.'&view=rangliste&liga='.$lid.'&pgn=0';
+	if ($item != 0) $link .= '&Itemid='.$item;
+	if ($typeid != 0) $link .= '&typeid='.$typeid;
+	$mainframe->redirect( $link, $msg );
+	//JFactory::getApplication()->close();
+}
 
 //Liga-Parameter aufbereiten
 $paramsStringArray = explode("\n", $liga[0]->params);
@@ -31,6 +45,7 @@ foreach ($paramsStringArray as $value) {
 }	
 if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
 if (!isset($params['noBoardResults'])) $params['noBoardResults'] = '0';
+if (!isset($params['pgnPublic'])) $params['pgnPublic'] = '0';
 
 $punkte		= $this->punkte;
 $spielfrei	= $this->spielfrei;
@@ -115,6 +130,10 @@ if (!$liga OR $liga[0]->published == "0") {
 		
 	}
 	echo CLMContent::createViewLink('tabelle', JText::_('RANGLISTE_GOTO_TABELLE'), array('saison' => $sid, 'liga' => $lid, 'Itemid' => $item));
+	// PGN gesamtes Turnier
+	if ($jid != 0 AND $params['pgnPublic'] == '1') {
+		echo CLMContent::createPGNLink('rangliste', JText::_('RANGLISTE_PGN_ALL'), array('liga' => $liga[0]->id), 1 );
+	} 
 	?>
 	</div></div>
 	<div class="clr"></div>
@@ -348,114 +367,7 @@ if (!$liga OR $liga[0]->published == "0") {
 				}
 				// Ende Durchgänge
 
-/*
-				// Anzahl der Runden durchlaufen 1.Durchgang
-				$runden = CLMModelRangliste::punkte_tlnr($sid,$lid,$punkte[$x]->tln_nr,1,$liga[0]->runden_modus);
-				// $count = 0;
 
-				if ($liga[0]->runden_modus == 1 OR $liga[0]->runden_modus == 2) {
-					for ($y=0; $y< $liga[0]->teil-$diff; $y++) {
-						if ($y == $x) { 
-							echo '<td class="trenner">X</td>';
-						} else { 
-							echo '<td class="'.$zeilenr.'">';
-							if ($punkte[$y]->tln_nr > $runden[0]->tln_nr) {
-								if (isset($runden[($punkte[$y]->tln_nr)-2]) AND $runde != "" AND $runden[($punkte[$y]->tln_nr)-2]->runde <= $runde) {
-									echo $runden[($punkte[$y]->tln_nr)-2]->brettpunkte; 
-								}
-								if (isset($runden[($punkte[$y]->tln_nr)-2]) AND $runde == "") { 
-									echo $runden[($punkte[$y]->tln_nr)-2]->brettpunkte; 
-								}
-							}
-							if ($punkte[$y]->tln_nr < $runden[0]->tln_nr) {
-								if (isset($runden[($punkte[$y]->tln_nr)-1]) AND $runde != "" AND $runden[($punkte[$y]->tln_nr)-1]->runde <= $runde) {
-									echo $runden[($punkte[$y]->tln_nr)-1]->brettpunkte; 
-								}
-								if (isset($runden[($punkte[$y]->tln_nr)-1]) AND $runde == "") { 
-									echo $runden[($punkte[$y]->tln_nr)-1]->brettpunkte; 
-								}
-							} 
-							echo '</td>';
-						}
-					}
-				}
-				// 
-
-				if ($liga[0]->runden_modus == 3) {
-					for ($y=0; $y< $liga[0]->runden; $y++) {
-						echo '<td class="'.$zeilenr.'">';
-						if ($runden[$y]->name == "spielfrei") {
-							echo "  +";
-						} elseif (!isset($runden[$y])) {
-							echo " ";
-						} else {
-							echo $runden[$y]->brettpunkte." (".$runden[$y]->rankingpos.")";
-						}
-					echo '</td>';
-					}
-					// Ende Schleife
-				}
-				// Ende Modus 3
-				
-				// Anzahl der Runden durchlaufen 2.Durchgang
-				if ($liga[0]->durchgang > 1) {
-					$runden_dg2 = CLMModelRangliste::punkte_tlnr($sid,$lid,$punkte[$x]->tln_nr,2,$liga[0]->runden_modus);
-					for ($y=0; $y< $liga[0]->teil-$diff; $y++) {
-						if ($y == $x) { 
-							echo '<td class="trenner">X</td>';
-						} else { 
-							echo '<td class="'.$zeilenr_dg2.'">';
-							if (isset($runden_dg2[($punkte[$y]->tln_nr)-2]) AND isset($runden_dg2[0]) AND $punkte[$y]->tln_nr > $runden_dg2[0]->tln_nr) {
-								echo $runden_dg2[($punkte[$y]->tln_nr)-2]->brettpunkte;
-							}
-							if (isset($runden_dg2[($punkte[$y]->tln_nr)-1]) AND isset($runden_dg2[0]) AND $punkte[$y]->tln_nr < $runden_dg2[0]->tln_nr) {
-								echo $runden_dg2[($punkte[$y]->tln_nr)-1]->brettpunkte;
-							} 
-							echo '</td>';
-			 			}
-					}
-				}
-
-				// Anzahl der Runden durchlaufen 3.Durchgang
-				if ($liga[0]->durchgang > 2) {
-					$runden_dg3 = CLMModelRangliste::punkte_tlnr($sid,$lid,$punkte[$x]->tln_nr,3,$liga[0]->runden_modus);
-					for ($y=0; $y< $liga[0]->teil-$diff; $y++) {
-						if ($y == $x) { 
-							echo '<td class="trenner">X</td>';
-						} else { 
-							echo '<td class="'.$zeilenr.'">';
-							if (isset($runden_dg3[($punkte[$y]->tln_nr)-2]) AND isset($runden_dg3[0]) AND $punkte[$y]->tln_nr > $runden_dg3[0]->tln_nr) {
-								echo $runden_dg3[($punkte[$y]->tln_nr)-2]->brettpunkte;
-							}
-							if (isset($runden_dg3[($punkte[$y]->tln_nr)-1]) AND isset($runden_dg3[0]) AND $punkte[$y]->tln_nr < $runden_dg3[0]->tln_nr) {
-								echo $runden_dg3[($punkte[$y]->tln_nr)-1]->brettpunkte;
-							} 
-							echo '</td>';
-			 			}
-					}
-				}
-
-				// Anzahl der Runden durchlaufen 4.Durchgang
-				if ($liga[0]->durchgang > 3) {
-					$runden_dg4 = CLMModelRangliste::punkte_tlnr($sid,$lid,$punkte[$x]->tln_nr,4,$liga[0]->runden_modus);
-					for ($y=0; $y< $liga[0]->teil-$diff; $y++) {
-						if ($y == $x) { 
-							echo '<td class="trenner">X</td>';
-						} else { 
-							echo '<td class="'.$zeilenr_dg2.'">';
-							if (isset($runden_dg4[($punkte[$y]->tln_nr)-2]) AND isset($runden_dg4[0]) AND $punkte[$y]->tln_nr > $runden_dg4[0]->tln_nr) {
-								echo $runden_dg4[($punkte[$y]->tln_nr)-2]->brettpunkte;
-							}
-							if (isset($runden_dg4[($punkte[$y]->tln_nr)-1]) AND isset($runden_dg4[0]) AND $punkte[$y]->tln_nr < $runden_dg4[0]->tln_nr) {
-								echo $runden_dg4[($punkte[$y]->tln_nr)-1]->brettpunkte;
-							} 
-							echo '</td>';
-			 			}
-					}
-				}
-				// Ende Runden
-				*/
-				
 				// MP
 				//echo '<td class="mp"><div>'.$punkte[$x]->mp.'</div></td>';
 				echo '<td class="mp"><div>'.$punkte[$x]->mp; if ($punkte[$x]->abzug > 0) echo '*'; echo '</div></td>';

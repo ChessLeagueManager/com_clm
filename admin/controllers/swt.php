@@ -69,5 +69,74 @@ class CLMControllerSWT extends JControllerLegacy
 			$this->setRedirect($adminLink->url,$msg);
 		}				
 	}
+	
+	function pgn_upload() {
+		$model = $this->getModel('swt');
+		$msg = $model->pgn_upload();
+		$pgn_filename = JRequest::getVar('pgn_filename', '');
+		
+		$adminLink = new AdminLink();
+		$adminLink->more = array('pgn_filename' => $pgn_filename);
+		$adminLink->view = "swt";
+		$adminLink->makeURL();
+			
+		$this->setRedirect($adminLink->url,$msg); 		
+	}
+	
+	function pgn_delete(){
+		$model = $this->getModel('swt');
+		$msg = $model->pgn_delete();
+		
+		$adminLink = new AdminLink();
+		$adminLink->view = "swt";
+		$adminLink->makeURL();
+			
+		$this->setRedirect($adminLink->url,$msg);
+	}
+	
+	function pgn_import() {
+		$model = $this->getModel('swt');
+		$type = $model->pgn_import();
+		$type = 0;
+		if($type == 0) {
+			JRequest::setVar('task', 'import');
+			JRequest::setVar('view', 'pgnimport');
+			parent::display();
+		} elseif($type == 255){
+			JRequest::setVar('view', 'swtliga');
+			parent::display();
+		} else {
+			$adminLink = new AdminLink();
+			$adminLink->view = "swt";
+			$adminLink->makeURL();
+			
+			$msg = JText::_( 'PGN_FILE_ERROR!' ); 
+			
+			$this->setRedirect($adminLink->url,$msg);
+		}				
+	}
+	
+	function pgn_service() {
+		$model = $this->getModel('swt');
+		$type = $model->pgn_import();
+		$type = 0;
+		if($type == 0) {
+			JRequest::setVar('task', 'service');
+			JRequest::setVar('view', 'pgnimport');
+			parent::display();
+		} elseif($type == 255){
+			JRequest::setVar('view', 'swtliga');
+			parent::display();
+		} else {
+			$adminLink = new AdminLink();
+			$adminLink->view = "swt";
+			$adminLink->makeURL();
+			
+			$msg = JText::_( 'PGN_FILE_ERROR!' ); 
+			
+			$this->setRedirect($adminLink->url,$msg);
+		}				
+	}
+	
 }
 ?>

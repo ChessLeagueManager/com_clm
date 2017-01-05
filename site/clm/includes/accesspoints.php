@@ -44,6 +44,7 @@ $accesspoints["BE_user_general"]=0;
 $accesspoints["BE_user_copy"]=0;
 $accesspoints["BE_accessgroup_general"]=0;
 $accesspoints["BE_swt_general"]=0;
+$accesspoints["BE_pgn_general"]=0;
 $accesspoints["BE_elobase_general"]=0;
 $accesspoints["BE_database_general"]=0;
 $accesspoints["BE_logfile_general"]=0;

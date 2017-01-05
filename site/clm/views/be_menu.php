@@ -194,8 +194,7 @@ function clm_view_be_menu($access, $status)
 ?></span></a> </div>
 	<?php
     }
-	if ($countryversion =="de") {
-    if ($access['BE_swt_general']) {
+    if (($access['BE_swt_general'] AND $countryversion =="de") OR $access['BE_pgn_general']) {
 ?>		
 		<div class="clm_icon"> <a href="index.php?option=com_clm&view=swt" title=""> <img src="<?php
         echo clm_core::$load->gen_image_url("icons/clm_generic");
@@ -203,7 +202,7 @@ function clm_view_be_menu($access, $status)
         echo $lang->swt;
 ?></span></a> </div>
 	<?php
-    } }
+    } 
     if ($access['BE_config_general']) {
 ?>
 		<div class="clm_icon"> <a href="index.php?option=com_clm&view=view_config" title=""> <img src="<?php

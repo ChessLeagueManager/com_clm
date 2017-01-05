@@ -66,6 +66,9 @@ class clm_class_db {
 	public function insert_id() {
 		return $this->db[0]->insert_id;
 	}
+	public function affected_rows() {
+		return $this->db[0]->affected_rows;
+	}
 	// gibt die Ergebnisse als Objekte in einem Array zurück
 	public function loadObjectList($query) {
 		// echo $query . "<br/><br/>";

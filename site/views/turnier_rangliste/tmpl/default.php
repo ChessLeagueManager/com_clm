@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -13,13 +13,27 @@
 defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip', '.CLMTooltip');
 
-// Stylesheet laden
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-
-	
 // Konfigurationsparameter auslesen
 $itemid 		= JRequest::getVar( 'Itemid' );
 $spRang		= JRequest::getVar( 'spRang' ,0);	//Sonderranglisten
+		// Userkennung holen
+	$user	=JFactory::getUser();
+	$jid	= $user->get('id');
+
+$pgn		= JRequest::getInt('pgn','0'); 
+if ($pgn == 1 AND $spRang == 0) { 
+	$result = clm_core::$api->db_pgn_export($this->turnier->id,false);
+	JRequest::setVar('pgn',0);
+	if (!$result[1]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
+	$link = 'index.php?option='.$option.'&view=turnier_rangliste&turnier='.$this->turnier->id.'&pgn=0';
+	if ($itemid != 0) $link .= '&Itemid='.$itemid;
+	$mainframe->redirect( $link, $msg );
+	//JFactory::getApplication()->close();
+}
+
+// Stylesheet laden
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
+
 
 // $turnierid		= JRequest::getInt('turnier','1');
 $config = clm_core::$db->config();
@@ -51,6 +65,7 @@ if ( $this->turnier->published == 0) {
 	echo CLMContent::clmWarning(JText::_('TOURNAMENT_SPECIALRANKING_NOPLAYERS'));
 
 } else {
+	$turParams = new clm_class_params($this->turnier->params);
 // PDF-Link
 	echo CLMContent::createPDFLink('turnier_rangliste', JText::_('TOURNAMENT_RANKING'), array('turnier' => $this->turnier->id, 'layout' => 'rangliste', 'spRang' => $spRang));
 	if($spRang != 0){			//Sonderranglisten
@@ -58,9 +73,13 @@ if ( $this->turnier->published == 0) {
 	} else {
 	  echo CLMContent::createViewLink('turnier_tabelle', JText::_('RANGLISTE_GOTO_TABELLE'), array('turnier' => $this->turnier->id, 'Itemid' => $itemid) );
 	}
+// PGN-Download gesamtes Turnier
+	if ($jid != 0 AND $turParams->get('pgnPublic', 0) == '1') {
+		echo CLMContent::createPGNLink('turnier_rangliste', JText::_('RANGLISTE_PGN_ALL'), array('turnier' => $this->turnier->id), 1 );
+	} 
+	
 	echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	$turParams = new clm_class_params($this->turnier->params);
 
 	$heim = array(1 => "W", 0 => "S");
 	$fwFieldNames = array(1 => 'sum_bhlz', 'sum_busum', 'sum_sobe', 'sum_wins');

@@ -6,7 +6,7 @@ $config_order = array(
 			array("mail", 0,"email_from", "email_bcc", "email_fromname", "org_logo", "sl_mail", "email_type"),
 			array("results", 0,"conf_ergebnisse", "meldung_heim", "meldung_verein", "kommentarfeld", "app_security"),
 			array("register", 0, "conf_meldeliste", "pdf_meldelisten"),
-			array("database", 0, "execute_swt", "upload_swt","dsb_import_amount"),
+			array("database", 0, "execute_swt", "upload_swt","import_pgn", "upload_pgn","dsb_import_amount"),
 			array("clubs", 0, "conf_vereinsdaten",
 				array("club_list", 0, "fe_vereinsliste_vs","fe_vereinsliste_hpage","fe_vereinsliste_dwz","fe_vereinsliste_elo")),
 			array("tournaments", 0, "tourn_linkclub", "tourn_showtlok"),

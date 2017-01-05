@@ -56,6 +56,7 @@ $liga		= $this->liga;
 	if (!isset($params['round_date'])) $params['round_date'] = '0';
 	if (!isset($params['noBoardResults'])) $params['noBoardResults'] = '0';
 	if (!isset($params['ReportForm'])) $params['ReportForm'] = '0';
+	if (!isset($params['pgnPublic'])) $params['pgnPublic'] = '0';
 $einzel		= $this->einzel;
 $pgn		= JRequest::getInt('pgn','0'); 
 $detail		= JRequest::getInt('detail','0');
@@ -73,8 +74,8 @@ if ($detail == 0) $detailp = '1'; else $detailp = '0';
 				$club_jid = true; }
 		}
 	}
-  if (($pgn == 1) OR ($pgn == 2)) { 
 	$config		= clm_core::$db->config();
+  if (($pgn == 1) OR ($pgn == 2)) { 
 	$name_subuml	= $config->fe_runde_subuml;
 	$clmuser = $this->clmuser;
 	$nl = "\n";
@@ -190,6 +191,31 @@ $daten['title'] = $liga[0]->name.', '.$liga[$runde-1]->rname;      // JText::_('
 if(isset($liga[$runde-1]->datum)) { $daten['title'] .= ' '.JText::_('ON_DAY').' '.JHTML::_('date',  $liga[$runde-1]->datum, JText::_('DATE_FORMAT_CLM_F'));
 	if(isset($liga[$runde-1]->startzeit)) { $daten['title'] .= '  '.substr($liga[$runde-1]->startzeit,0,5).' Uhr'; } }
 $doc->setTitle($daten['title']);
+
+			$doc->addScript(JURI::base().'components/com_clm/javascript/jsPgnViewer.js');
+			$doc->addScript(JURI::base().'components/com_clm/javascript/showPgnViewer.js');
+			
+			// Zufallszahl
+			$now = time()+mt_rand();
+			$doc->addScriptDeclaration("var randomid = $now;");
+			// pgn-params
+			$doc->addScriptDeclaration("var param = new Array();");
+			$doc->addScriptDeclaration("param['fe_pgn_moveFont'] = '".$config->fe_pgn_moveFont."'");
+			$doc->addScriptDeclaration("param['fe_pgn_commentFont'] = '".$config->fe_pgn_commentFont."'");
+			$doc->addScriptDeclaration("param['fe_pgn_style'] = '".$config->fe_pgn_style."'");
+			// Tooltip-Texte
+			$doc->addScriptDeclaration("var text = new Array();");
+			$doc->addScriptDeclaration("text['altRewind'] = '".JText::_('PGN_ALT_REWIND')."';");
+			$doc->addScriptDeclaration("text['altBack'] = '".JText::_('PGN_ALT_BACK')."';");
+			$doc->addScriptDeclaration("text['altFlip'] = '".JText::_('PGN_ALT_FLIP')."';");
+			$doc->addScriptDeclaration("text['altShowMoves'] = '".JText::_('PGN_ALT_SHOWMOVES')."';");
+			$doc->addScriptDeclaration("text['altComments'] = '".JText::_('PGN_ALT_COMMENTS')."';");
+			$doc->addScriptDeclaration("text['altPlayMove'] = '".JText::_('PGN_ALT_PLAYMOVE')."';");
+			$doc->addScriptDeclaration("text['altFastForward'] = '".JText::_('PGN_ALT_FASTFORWARD')."';");
+			$doc->addScriptDeclaration("text['pgnClose'] = '".JText::_('PGN_CLOSE')."';");
+			// Pfad
+			$doc->addScriptDeclaration("var imagepath = '".JURI::base()."components/com_clm/images/pgnviewer/'");
+
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
@@ -413,27 +439,39 @@ for ($x=0; $x<$liga[0]->stamm; $x++) {
 		else echo $einzel[$w]->hname; } ?></div></td>
 	<?php } else { ?>
     <td class="paarung2" colspan ="2"><div><?php if ($einzel[$w]->zps =="ZZZZZ") {echo "N.N.";} else { 
-		if ($einzel[$w]->zps != "-1") { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->zps; ?>&mglnr=<?php echo $einzel[$w]->spieler; ?>&PKZ=<?php echo $einzel[$w]->PKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->hname; } 
+		if ($einzel[$w]->zps != "-1") { ?>
+			<a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->zps; ?>&mglnr=<?php echo $einzel[$w]->spieler; ?>&PKZ=<?php echo $einzel[$w]->PKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->hname; } 
 		else echo $einzel[$w]->hname; } ?></div></td>
 	<?php } ?>
-    <td class="paarung"><div><?php if ($params['dwz_date'] == '0000-00-00') echo $einzel[$w]->hdwz; else echo $einzel[$w]->hstart_dwz;?></a></div></td>
+    <td class="paarung"><div><?php if ($params['dwz_date'] == '0000-00-00') echo $einzel[$w]->hdwz; else echo $einzel[$w]->hstart_dwz;?></div></td>
         <?php if ($einzel[$w]->dwz_edit !="") { $edit++; ?>
     <td class="paarung"><div><b><?php echo $einzel[$w]->dwz_text; ?><font size="1"><br>( <?php echo $erg_text[$einzel[$w]->ergebnis]->erg_text; ?> )</font></b></div></td>
         <?php } else { ?>
-    <td class="paarung"><div><b><?php echo $erg_text[$einzel[$w]->ergebnis]->erg_text; ?></b></div></td>
+		
+		<?php if ($einzel[$w]->pgnnr == 0 OR $params['pgnPublic'] == 0) { ?>
+		<td class="paarung"><div><b><?php echo $erg_text[$einzel[$w]->ergebnis]->erg_text; ?></b></div></td>
+		<?php } else { ?>
+ 		<td class="paarung"><span class="editlinktip hasTip" title="<?php echo JText::_('PGN_SHOWMATCH'); //echo $erg_text[$einzel[$w]->ergebnis]->erg_text; ?>">
+			<a onclick="startPgnMatch(<?php echo $w; ?>, 'pgnArea<?php echo $y ?>');" class="pgn"><?php echo $erg_text[$einzel[$w]->ergebnis]->erg_text; ?></a>
+			</span>
+			<input type='hidden' name='pgn[<?php echo $w; ?>]' id='pgnhidden<?php echo $w; ?>' value='<?php echo $einzel[$w]->text; ?>'>
+		</td>
+       <?php } ?>
+		
         <?php } ?>
 	<?php if ($detail == 1) { 
 		if ($liga[0]->rang > 0) $einzel[$w]->gsnr = $einzel[$w]->smnr.'-'.$einzel[$w]->srang; ?>
     <td class="paarung" style="border-right: none;<?php if ($einzel[$w]->weiss != 0) echo 'background-color:'.$zeiled.';';?>"><div><font size=-2><?php echo $einzel[$w]->gsnr; ?></font></div></td>
     <td class="paarung2" style="border-left: none" colspan ="1"><div><?php if ($einzel[$w]->gzps =="ZZZZZ") {echo "N.N.";} else { 
-		if ($einzel[$w]->zps != "-1") { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->gzps; ?>&mglnr=<?php echo $einzel[$w]->gegner; ?>&PKZ=<?php echo $einzel[$w]->gPKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->gname; } 
+		if ($einzel[$w]->zps != "-1") { ?>
+			<a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->gzps; ?>&mglnr=<?php echo $einzel[$w]->gegner; ?>&PKZ=<?php echo $einzel[$w]->gPKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->gname; } 
 		else echo $einzel[$w]->gname; } ?></div></td>
 	<?php } else { ?>
     <td class="paarung2" colspan ="2"><div><?php if ($einzel[$w]->gzps =="ZZZZZ") {echo "N.N.";} else { 
 		if ($einzel[$w]->gzps != "-1") { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->gzps; ?>&mglnr=<?php echo $einzel[$w]->gegner; ?>&PKZ=<?php echo $einzel[$w]->gPKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->gname; } 
 		else echo $einzel[$w]->gname; } ?></div></td>
 	<?php } ?>
-    <td class="paarung"><div><?php if ($params['dwz_date'] == '0000-00-00') echo $einzel[$w]->gdwz; else echo $einzel[$w]->gstart_dwz; ?></a></div></td>
+    <td class="paarung"><div><?php if ($params['dwz_date'] == '0000-00-00') echo $einzel[$w]->gdwz; else echo $einzel[$w]->gstart_dwz; ?></div></td>
     </tr>
 <?php }
 $w++; }
@@ -460,14 +498,16 @@ if ($edit > 0 OR $medit >0) { ?>
 	</td></tr>
 <?php } ?>
 
+	<!--Bereich für pgn-Viewer-->
+<tr><td colspan ="8" class="noborder"><span id="pgnArea<?php echo $y ?>"></span></td></tr>
 <tr><td colspan ="8" class="noborder">&nbsp;</td></tr>
 <?php } elseif ((isset($paar[$y]->gpublished) AND $paar[$y]->gpublished == 1 AND $paar[$y]->hpublished == 1) AND ($paar_exist== 0)) { ?>
     <tr><td colspan ="8" align="left"><?php echo JText::_('NO_RESULT_YET'); $NO_RESULT_YET++; ?></td></tr>
     <?php } elseif (isset($paar[$y]) AND $paar[$y]->comment != "") { ?>
 	<tr><td colspan ="8"><?php  echo JText::_('PAAR_COMMENT').$paar[$y]->comment; ?></td></tr>
-	<?php } else { ?><tr><td colspan ="8" class="noborder">&nbsp;</td></tr><?php }
-}
-?>
+	<?php } else { ?><tr><td colspan ="8" class="noborder">&nbsp;</td></tr><?php } ?>
+
+<?php } ?>
 </table>
 
 <div class="legend">
@@ -690,6 +730,8 @@ if ($liga[0]->runden_modus == 3) {
 // Ende Teilnehmer
 ?>
 </table>
+
+
 <?php if ($diff == 1 AND $liga[0]->ab ==1 ) 
 	{echo JText::_(ROUND_NO_RELEGATED_TEAM); }
 	if ($diff == 1 AND $liga[0]->ab >1 ) 

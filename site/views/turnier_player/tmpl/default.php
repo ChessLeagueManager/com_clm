@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 - 2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008 - 2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -155,8 +155,9 @@ if ($this->playerPhoto != '') { ?>
 		
 		<?php
 		// alle Matches...
+		$ia = -1;
 		foreach ($this->matches as $value) {
-			
+			$ic = 0;
 			// Zeile
 			echo '<tr>';
 				
@@ -215,11 +216,14 @@ if ($this->playerPhoto != '') { ?>
 						if ($value->pgn == '' OR !$this->pgnShow) {
 							echo CLMText::getResultString($value->ergebnis, 0);
 						} else {
+							if (is_numeric($value->pgn)) $pgntext = $value->text; else $pgntext = $value->pgn;
+							$ia++; $ic = 1;
 							echo '<span class="editlinktip hasTip" title="'.JText::_( 'PGN_SHOWMATCH' ).'">';
-								echo '<a onclick="startPgnMatch('.$value->id.', \'pgnArea\');" class="pgn">'.CLMText::getResultString($value->ergebnis, 0).'</a>';
+								echo '<a onclick="startPgnMatch('.$value->id.', \'pgnArea'.$ia.'\');" class="pgn">'.CLMText::getResultString($value->ergebnis, 0).'</a>';
 							echo '</span>';
 							?>
-							<input type='hidden' name='pgn[<?php echo $value->id; ?>]' id='pgnhidden<?php echo $value->id; ?>' value='<?php echo $value->pgn; ?>'>
+							<input type='hidden' name='pgn[<?php echo $value->id; ?>]' id='pgnhidden<?php echo $value->id; ?>' value='<?php echo $pgntext; //$value->pgn;?>'>
+						<input type='hidden' name='pgn[<?php echo $value->id; ?>]' id='pgnhidden<?php echo $value->id; ?>' value='<?php echo $pgntext; //$value->pgn; ?>'>
 							<?php
 						}
 						
@@ -236,8 +240,11 @@ if ($this->playerPhoto != '') { ?>
 				}
 			
 			echo '</tr>';
-			// Ende der Zeile
-		
+			if ($value->pgn != '' AND $this->pgnShow AND $ic == 1) { ?>
+				<!--Bereich für pgn-Viewer-->
+				<tr><td colspan="9"><span id="pgnArea<?php echo $ia; ?>"></span></td></tr>
+			<?php }
+			// Ende der Zeile		
 		}
 		
 		// Abschlußzeile

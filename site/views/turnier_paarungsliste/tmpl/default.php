@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -109,7 +109,7 @@ if ( $this->turnier->published == 0) {
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
 
 	$turParams = new clm_class_params($this->turnier->params);
-
+	$ia = -1;
 	// alle Runden durchgehen
 	foreach ($this->rounds as $value) {
 		
@@ -161,7 +161,7 @@ if ( $this->turnier->published == 0) {
 				
 				if ( ($matches->spieler != 0 AND $matches->gegner != 0) OR $matches->ergebnis != NULL) {
 					echo '<tr class="'.$zeilenr.'">';
-						$nb++;
+						$nb++; $ic = 0;
 						echo '<td align="center">'.$nb.'</td>';
 						echo '<td>';
 						if (isset($this->points[$value->nr + (($value->dg - 1) * $this->turnier->runden)][$matches->spieler])) { 
@@ -213,11 +213,13 @@ if ( $this->turnier->published == 0) {
 							if ($matches->pgn == '' OR !$this->pgnShow) {
 								echo CLMText::getResultString($matches->ergebnis);
 							} else {
+								if (is_numeric($matches->pgn)) $pgntext = $matches->text; else $pgntext = $matches->pgn;
+								$ia++; $ic = 1;
 								echo '<span class="editlinktip hasTip" title="'.JText::_( 'PGN_SHOWMATCH' ).'">';
-									echo '<a onclick="startPgnMatch('.$matches->id.', \'pgnArea'.$value->nr.'\');" class="pgn">'.CLMText::getResultString($matches->ergebnis).'</a>';
+									echo '<a onclick="startPgnMatch('.$matches->id.', \'pgnArea'.$ia.'\');" class="pgn">'.CLMText::getResultString($matches->ergebnis).'</a>';
 								echo '</span>';
 								?>
-								<input type='hidden' name='pgn[<?php echo $matches->id; ?>]' id='pgnhidden<?php echo $matches->id; ?>' value='<?php echo $matches->pgn; ?>'>
+								<input type='hidden' name='pgn[<?php echo $matches->id; ?>]' id='pgnhidden<?php echo $matches->id; ?>' value='<?php echo $pgntext; //$matches->pgn; ?>'>
 								<?php
 							}
 							
@@ -230,6 +232,10 @@ if ( $this->turnier->published == 0) {
 							echo '<td align="center"></td>';
 						}
 					echo '</tr>';
+					if ($matches->pgn != '' AND $this->pgnShow AND $ic == 1) { ?>
+						<!--Bereich für pgn-Viewer-->
+						<tr><td colspan="9"><span id="pgnArea<?php echo $ia; ?>"></span></td></tr>
+					<?php }
 				}
 				
 			}
@@ -244,8 +250,8 @@ if ( $this->turnier->published == 0) {
 			
 			echo '</table>';
 		
-			// Bereich für pgn-Viewer
-			echo '<span id="pgnArea'.$value->nr.'"></span>';
+			// Bereich für pgn-Viewer alt
+			//echo '<span id="pgnArea'.$value->nr.'"></span>';
 		
 			echo '<br>';
 		

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -103,9 +103,10 @@ class CLMModelTurnier_Player extends JModelLegacy {
 	
 	function _getPlayerMatches() {
 	
-		$query = "SELECT s.*, r.name as roundName"
+		$query = "SELECT s.*, r.name as roundName, pg.text"
 			." FROM #__clm_turniere_rnd_spl AS s"
 			." LEFT JOIN #__clm_turniere_rnd_termine AS r ON s.dg = r.dg AND s.runde = r.nr"
+			." LEFT JOIN #__clm_pgn as pg ON s.pgn = pg.id "
 			." WHERE s.turnier = ".$this->turnierid." AND s.turnier = r.turnier AND spieler = '".$this->snr."'"
 			." ORDER BY r.dg ASC, r.nr ASC"
 			;

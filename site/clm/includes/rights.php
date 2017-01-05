@@ -74,4 +74,5 @@ $rights["db_tournament_auto"]=array(1,"BE_tournament_edit_detail","BE_league_edi
 $rights["db_tournament_player_del"]=array(2,"BE_tournament_edit_detail",0); // Entfernen von unbenutzten Spielern
 
 $rights["db_ordering"]=array(); // Ordering ändern
+$rights["db_pgn_export"]=array(); // pgn-Datei erstellen
 ?>

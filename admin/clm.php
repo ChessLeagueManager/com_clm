@@ -129,10 +129,10 @@ if($clmAccess->access('BE_team_general')) {
 if($clmAccess->access('BE_user_general')) {
 	JSubMenuHelper::addEntry(JText::_('USER'), 'index.php?option=com_clm&section=users', (JRequest::getVar('section')) == 'users'?true:false);
 }
-if ($countryversion =="de") {
+//if ($countryversion =="de") {
 if($clmAccess->access('BE_swt_general')) {
 	JSubMenuHelper::addEntry(JText::_('SWT'), 'index.php?option=com_clm&view=swt', (JRequest::getVar('view')) == 'swt'?true:false);
-}}
+} //}
 if ($countryversion =="de") {
 if($clmAccess->access('BE_dewis_general')) {
 	JSubMenuHelper::addEntry(JText::_('DeWIS'), 'index.php?option=com_clm&view=auswertung', (JRequest::getVar('view')) == 'auswertung'?true:false);
@@ -389,7 +389,7 @@ if ($viewName = JRequest::getCmd('view')) {
 	//	$language->load('com_clm.config');
 	}
 	if ( in_array($viewName, array('swt', 'swtturnier', 'swtturnierinfo', 'swtturniertlnr', 'swtturniererg',
-						'swtliga', 'swtligainfo', 'swtligaman', 'swtligaerg', 'swtligasave'))) {
+						'swtliga', 'swtligainfo', 'swtligaman', 'swtligaerg', 'swtligasave', 'pgnimport', 'pgndata'))) {
 		$language->load('com_clm.swtimport');
 		clm_core::$load->load_js("submit");
 	}

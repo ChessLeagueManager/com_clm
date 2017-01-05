@@ -1,4 +1,16 @@
 	function startPgnMatch(id, areaname) {
+		var p = 0;
+		Ende: while ( p < 500 ) {
+			var old_name = 'pgnArea' + p;
+			var element = document.getElementById(old_name);
+			if (element != null) {
+				document.getElementById(old_name).innerHTML = '';
+				p++;
+			} else {
+				break Ende;
+			}
+		}
+		document.getElementById(areaname).innerHTML = '';
 		var tableStart = '<table><TR><TD align="right"><span class="editlinktip hasTip" title="' + text['pgnClose'] + '"><a onclick="closePgnMatch(\'' + areaname + '\');" class="pgn">x</a></span></TD></TR><tr><TD>';
 		var tableEnd = '</TD></tr>';
 		var div1 = '<div id="' + randomid + '_board" width="100%"></div>';

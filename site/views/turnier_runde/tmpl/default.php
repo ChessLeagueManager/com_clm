@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -148,7 +148,7 @@ if ( $this->turnier->published == 0) {
 	<?php
 	
 	// alle Matches durchgehen
-
+	$ia = -1;
 	foreach ($this->matches as $value) {
 	
 		// Farbe
@@ -160,7 +160,7 @@ if ( $this->turnier->published == 0) {
 		}
 
 		if ( ($value->spieler != 0 AND $value->gegner != 0) OR $value->ergebnis != NULL) {
-
+			$ic = 0;
 			echo '<tr class="'.$zeilenr.'">';
 				echo '<td align="center">'.$value->brett.'</td>';
 				echo '<td>';
@@ -199,11 +199,13 @@ if ( $this->turnier->published == 0) {
 					if ($value->pgn == '' OR !$this->pgnShow) {
 						echo CLMText::getResultString($value->ergebnis);
 					} else {
+						if (is_numeric($value->pgn)) $pgntext = $value->text; else $pgntext = $value->pgn;
+						$ia++; $ic = 1;
 						echo '<span class="editlinktip hasTip" title="'.JText::_( 'PGN_SHOWMATCH' ).'">';
-							echo '<a onclick="startPgnMatch('.$value->id.', \'pgnArea\');" class="pgn">'.CLMText::getResultString($value->ergebnis).'</a>';
+							echo '<a onclick="startPgnMatch('.$value->id.', \'pgnArea'.$ia.'\');" class="pgn">'.CLMText::getResultString($value->ergebnis).'</a>';
 						echo '</span>';
 						?>
-						<input type='hidden' name='pgn[<?php echo $value->id; ?>]' id='pgnhidden<?php echo $value->id; ?>' value='<?php echo $value->pgn; ?>'>
+						<input type='hidden' name='pgn[<?php echo $value->id; ?>]' id='pgnhidden<?php echo $value->id; ?>' value='<?php echo $pgntext; //$value->pgn; ?>'>
 						<?php
 					}
 					if (($this->turnier->typ == 3 OR $this->turnier->typ == '5') AND ($value->tiebrS > 0 OR $value->tiebrG > 0)) {
@@ -217,6 +219,10 @@ if ( $this->turnier->published == 0) {
 				}
 				
 			echo '</tr>';
+			if ($value->pgn != '' AND $this->pgnShow AND $ic == 1) { ?>
+				<!--Bereich für pgn-Viewer-->
+				<tr><td colspan="9"><span id="pgnArea<?php echo $ia; ?>"></span></td></tr>
+			<?php }
 		}
 	
 	}
