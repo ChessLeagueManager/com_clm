@@ -25,6 +25,7 @@ $ -> Language fix or change
 ^ PGN-Anzeige Frontend für Single-Wettbewerbe
 + PGN-Download Frontend für Team- und Single-Wettbewerbe
 # SWT-Import Einzel: Partiewertung
+^ DeWIS-Export: Geburtsjahr als Pflichtfeld
   
 - - - - - 3.3.4 - [24-11-2016] - - - - - - - - - - - - - - - - - - - -
 + SWT-Import: Engl. Sprachfile 

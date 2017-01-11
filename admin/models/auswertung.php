@@ -443,7 +443,7 @@ function datei() {
 			." LEFT JOIN #__clm_dwz_spieler as s ON s.sid = a.sid AND s.ZPS = t.zps AND s.Mgl_Nr = t.mgl_nr "
 			." WHERE a.sid = ".$sid
 			." AND a.turnier = ".$liga_name[0]->id
-			." GROUP BY t.zps, t.mgl_nr "
+			." GROUP BY t.snr, t.zps, t.mgl_nr "
 			." ORDER BY t.snr ASC "
 			;
 	}
@@ -453,7 +453,8 @@ function datei() {
 	$cnt	= 1;
 	$player	= array();
 	foreach($spieler as $spl){
-		if($spl->zps !="" AND $spl->spieler !=""){
+		//if($spl->zps !="" AND $spl->spieler !=""){   
+		if((!$et AND $spl->zps !="" AND $spl->spieler !="") OR ($et AND $spl->Geburtsjahr > '0000')){   //bei Einzelturnieren auch vereinslose Spieler zulassen
 			// laufende Nummer für Spieler erzeugen
 			$player[$spl->zps][$spl->spieler] = $cnt;
 			$cnt++;
