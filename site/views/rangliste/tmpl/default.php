@@ -46,6 +46,7 @@ foreach ($paramsStringArray as $value) {
 if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
 if (!isset($params['noBoardResults'])) $params['noBoardResults'] = '0';
 if (!isset($params['pgnPublic'])) $params['pgnPublic'] = '0';
+if (!isset($params['pgnDownload'])) $params['pgnDownload'] = '0';
 
 $punkte		= $this->punkte;
 $spielfrei	= $this->spielfrei;
@@ -131,7 +132,7 @@ if (!$liga OR $liga[0]->published == "0") {
 	}
 	echo CLMContent::createViewLink('tabelle', JText::_('RANGLISTE_GOTO_TABELLE'), array('saison' => $sid, 'liga' => $lid, 'Itemid' => $item));
 	// PGN gesamtes Turnier
-	if ($jid != 0 AND $params['pgnPublic'] == '1') {
+	if (($jid != 0 AND $params['pgnPublic'] == '1') OR $params['pgnDownload'] == '1') {
 		echo CLMContent::createPGNLink('rangliste', JText::_('RANGLISTE_PGN_ALL'), array('liga' => $liga[0]->id), 1 );
 	} 
 	?>

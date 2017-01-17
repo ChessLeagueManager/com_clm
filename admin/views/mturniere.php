@@ -81,6 +81,8 @@ class CLMViewMTurniere
 		$row->params['pgnInput'] = '0'; }
 	if (!isset($row->params['pgnPublic']))  {   //Standardbelegung
 		$row->params['pgnPublic'] = '0'; }
+	if (!isset($row->params['pgnDownload']))  {   //Standardbelegung
+		$row->params['pgnDownload'] = '0'; }
 	?>
 	
 	<script language="javascript" type="text/javascript">
@@ -645,6 +647,13 @@ class CLMViewMTurniere
 			<label for="pgnpublic"><?php echo JText::_( 'OPTION_PGNPUBLIC' ); ?></label>
 		</td><td colspan="1"><fieldset class="radio">
 			<?php echo JHtml::_('select.booleanlist', 'params[pgnPublic]', 'class="inputbox"', $row->params['pgnPublic']); ?>
+		</fieldset></td>
+	</tr>
+	<tr>
+		<td nowrap="nowrap">
+			<label for="pgndownload"><?php echo JText::_( 'OPTION_PGNDOWNLOAD' ); ?></label>
+		</td><td colspan="1"><fieldset class="radio">
+			<?php echo JHtml::_('select.booleanlist', 'params[pgnDownload]', 'class="inputbox"', $row->params['pgnDownload']); ?>
 		</fieldset></td>
 	</tr>
 	<?php } ?>

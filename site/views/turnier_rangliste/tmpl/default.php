@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -21,14 +21,16 @@ $spRang		= JRequest::getVar( 'spRang' ,0);	//Sonderranglisten
 	$jid	= $user->get('id');
 
 $pgn		= JRequest::getInt('pgn','0'); 
+$option 	= JRequest::getCmd( 'option' );
 if ($pgn == 1 AND $spRang == 0) { 
 	$result = clm_core::$api->db_pgn_export($this->turnier->id,false);
+	JFactory::getApplication()->close();
 	JRequest::setVar('pgn',0);
-	if (!$result[1]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
+	if (!$result[0]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
 	$link = 'index.php?option='.$option.'&view=turnier_rangliste&turnier='.$this->turnier->id.'&pgn=0';
 	if ($itemid != 0) $link .= '&Itemid='.$itemid;
+	$mainframe	= JFactory::getApplication();
 	$mainframe->redirect( $link, $msg );
-	//JFactory::getApplication()->close();
 }
 
 // Stylesheet laden
@@ -74,7 +76,7 @@ if ( $this->turnier->published == 0) {
 	  echo CLMContent::createViewLink('turnier_tabelle', JText::_('RANGLISTE_GOTO_TABELLE'), array('turnier' => $this->turnier->id, 'Itemid' => $itemid) );
 	}
 // PGN-Download gesamtes Turnier
-	if ($jid != 0 AND $turParams->get('pgnPublic', 0) == '1') {
+	if (($jid != 0 AND $turParams->get('pgnPublic', 0) == '1') OR $turParams->get('pgnDownload', 0) == '1') {
 		echo CLMContent::createPGNLink('turnier_rangliste', JText::_('RANGLISTE_PGN_ALL'), array('turnier' => $this->turnier->id), 1 );
 	} 
 	
@@ -302,6 +304,7 @@ if ( $this->turnier->published == 0) {
 			// alle Spieler durchgehen
 
 			for ($p=0; $p<$this->turnier->teil; $p++) {
+				if (!isset($this->players[$p])) break;
 				if ($p%2 != 0) { 
 					$zeilenr = "zeile1"; 
 				} else { 
@@ -350,6 +353,7 @@ if ( $this->turnier->published == 0) {
 			// alle Spieler durchgehen
 
 			for ($p=0; $p<$this->turnier->teil; $p++) {
+				if (!isset($this->players[$p])) break;
 				if ($p%2 != 0) { 
 					$zeilenr = "zeile1"; 
 				} else { 
@@ -383,6 +387,7 @@ if ( $this->turnier->published == 0) {
 				// alle Durchgänge
 				for ($dg=1; $dg<=$this->turnier->dg; $dg++) {
 				for ($rnd=1; $rnd<=$this->turnier->teil; $rnd++) {
+						if (!isset($this->players[$rnd-1])) break;
 						echo '<th class="erg"><div>'.$rnd.'</div></th>';
 					}
 				}
@@ -392,6 +397,7 @@ if ( $this->turnier->published == 0) {
 			// alle Spieler durchgehen
 
 			for ($p=0; $p<$this->turnier->teil; $p++) {
+				if (!isset($this->players[$p])) break;
 				if ($p%2 != 0) { $zeilenr = "zeile1"; 
 				} else { $zeilenr = "zeile2"; 
 				}
@@ -402,6 +408,7 @@ if ( $this->turnier->published == 0) {
 				for ($dg=1; $dg<=$this->turnier->dg; $dg++) {
 
 					for ($rnd=1; $rnd<=$this->turnier->teil; $rnd++) {
+						if (!isset($this->players[$rnd-1])) break;
 						if ($rnd == ($p+1)) {
 							echo'<td class="trenner"><div>X</div></td>';
 						} else {

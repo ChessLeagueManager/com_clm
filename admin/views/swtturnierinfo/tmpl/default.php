@@ -486,20 +486,26 @@ $turParams = new clm_class_params($this->turnier->params);
 						<td class="paramlist_key">
 							<?php echo JText::_('OPTION_PGNINPUT'); ?>:
 						</td>
-					<td class="paramlist_value"><fieldset class="radio">
-						<?php echo JHtml::_('select.booleanlist', 'params[pgnInput]', 'class="inputbox"', $turParams->get('pgnInput', 1)); ?>
-					</fieldset></td>
-				</tr>
-			
-				<tr>
-					<td class="paramlist_key">
-						<?php echo JText::_('OPTION_PGNPUBLIC'); ?>:
-					</td>
-					<td class="paramlist_value"><fieldset class="radio">
-						<?php echo JHtml::_('select.booleanlist', 'params[pgnPublic]', 'class="inputbox"', $turParams->get('pgnPublic', 1)); ?>
-					</fieldset></td>
-				</tr>
-			
+						<td class="paramlist_value"><fieldset class="radio">
+							<?php echo JHtml::_('select.booleanlist', 'params[pgnInput]', 'class="inputbox"', $turParams->get('pgnInput', 1)); ?>
+						</fieldset></td>
+					</tr>
+					<tr>
+						<td class="paramlist_key">
+							<?php echo JText::_('OPTION_PGNPUBLIC'); ?>:
+						</td>
+						<td class="paramlist_value"><fieldset class="radio">
+							<?php echo JHtml::_('select.booleanlist', 'params[pgnPublic]', 'class="inputbox"', $turParams->get('pgnPublic', 1)); ?>
+						</fieldset></td>
+					</tr>
+					<tr>
+						<td class="paramlist_key">
+							<?php echo JText::_('OPTION_PGNDOWNLOAD'); ?>:
+						</td>
+						<td class="paramlist_value"><fieldset class="radio">
+							<?php echo JHtml::_('select.booleanlist', 'params[pgnDownload]', 'class="inputbox"', $turParams->get('pgnDownload', 1)); ?>
+						</fieldset></td>
+					</tr>
 			
 			</table>
 	
