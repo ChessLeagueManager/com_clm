@@ -27,7 +27,8 @@ $ -> Language fix or change
 # SWT-Import Einzel: Partiewertung
 ^ DeWIS-Export: Geburtsjahr als Pflichtfeld
 + PGN-Download: Schalter pro Wettbewerb
-  
++ Menüeintragstyp für die Teilnehmerliste eines Turnieres
+ 
 - - - - - 3.3.4 - [24-11-2016] - - - - - - - - - - - - - - - - - - - -
 + SWT-Import: Engl. Sprachfile 
 # Ergebnismeldung: Berechtigung nur für Heimspiele bei Spielgemeinschaft
