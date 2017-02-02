@@ -205,7 +205,7 @@ if ( $this->turnier->published == 0) {
 							echo '<a onclick="startPgnMatch('.$value->id.', \'pgnArea'.$ia.'\');" class="pgn">'.CLMText::getResultString($value->ergebnis).'</a>';
 						echo '</span>';
 						?>
-						<input type='hidden' name='pgn[<?php echo $value->id; ?>]' id='pgnhidden<?php echo $value->id; ?>' value='<?php echo $pgntext; //$value->pgn; ?>'>
+						<input type='hidden' name='pgn[<?php echo $value->id; ?>]' id='pgnhidden<?php echo $value->id; ?>' value='<?php echo str_replace("'","&#039", $pgntext); ?>'>
 						<?php
 					}
 					if (($this->turnier->typ == 3 OR $this->turnier->typ == '5') AND ($value->tiebrS > 0 OR $value->tiebrG > 0)) {

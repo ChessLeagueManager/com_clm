@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.3.6 - [xx-xx-2017] - - - - - - - - - - - - - - - - - - - -
+# PGN-Anzeige: Nachbesserung
+
 - - - - - 3.3.5 - [21-01-2017] - - - - - - - - - - - - - - - - - - - -
 # Admin-View Runden: kleine Code-Bereinigung
 # Admin-View Turnier: Veranstalter/Ausrichter wählen

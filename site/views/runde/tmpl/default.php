@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -127,7 +127,7 @@ if ($detail == 0) $detailp = '1'; else $detailp = '0';
 			fputs($pdatei, '[BlackElo "'.$einz->helo.'"]'.$nl);
 			fputs($pdatei, '[WhiteDWZ "'.$einz->gdwz.'"]'.$nl);
 			fputs($pdatei, '[BlackDWZ "'.$einz->hdwz.'"]'.$nl);
-			if ($einz->erg_text == "0,5-0,5") { fputs($pdatei, '[Result "1/2-1/2"]'.$nl); $gtmarker = "1/2-1/2"; }
+			if ($einz->ergebnis == 2) { fputs($pdatei, '[Result "1/2-1/2"]'.$nl); $gtmarker = "1/2-1/2"; }
 			elseif ($einz->erg_text == "1-0") { fputs($pdatei, '[Result "0-1"]'.$nl); $gtmarker = "0-1"; }
 			elseif ($einz->erg_text == "0-1") { fputs($pdatei, '[Result "1-0"]'.$nl); $gtmarker = "1-0"; }
 			elseif ($einz->erg_text == "-/+") { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".utf8_decode('Weiß gewinnt kampflos')."}"; $gtmarker = "1-0"; }
@@ -143,7 +143,7 @@ if ($detail == 0) $detailp = '1'; else $detailp = '0';
 			fputs($pdatei, '[BlackElo "'.$einz->gelo.'"]'.$nl);
 			fputs($pdatei, '[WhiteDWZ "'.$einz->hdwz.'"]'.$nl);
 			fputs($pdatei, '[BlackDWZ "'.$einz->gdwz.'"]'.$nl);
-			if ($einz->erg_text == "0,5-0,5") { fputs($pdatei, '[Result "1/2-1/2"]'.$nl); $gtmarker = "1/2-1/2"; }
+			if ($einz->ergebnis == 2) { fputs($pdatei, '[Result "1/2-1/2"]'.$nl); $gtmarker = "1/2-1/2"; }
 			elseif ($einz->erg_text == "1-0") { fputs($pdatei, '[Result "1-0"]'.$nl); $gtmarker = "1-0"; }
 			elseif ($einz->erg_text == "0-1") { fputs($pdatei, '[Result "0-1"]'.$nl); $gtmarker = "0-1"; }
 			elseif ($einz->erg_text == "-/+") { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{Schwarz gewinnt kampflos}"; $gtmarker = "0-1"; }
@@ -454,7 +454,7 @@ for ($x=0; $x<$liga[0]->stamm; $x++) {
  		<td class="paarung"><span class="editlinktip hasTip" title="<?php echo JText::_('PGN_SHOWMATCH'); //echo $erg_text[$einzel[$w]->ergebnis]->erg_text; ?>">
 			<a onclick="startPgnMatch(<?php echo $w; ?>, 'pgnArea<?php echo $y ?>');" class="pgn"><?php echo $erg_text[$einzel[$w]->ergebnis]->erg_text; ?></a>
 			</span>
-			<input type='hidden' name='pgn[<?php echo $w; ?>]' id='pgnhidden<?php echo $w; ?>' value='<?php echo $einzel[$w]->text; ?>'>
+			<input type='hidden' name='pgn[<?php echo $w; ?>]' id='pgnhidden<?php echo $w; ?>' value='<?php echo str_replace("'","&#039", $einzel[$w]->text); ?>'>
 		</td>
        <?php } ?>
 		

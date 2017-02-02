@@ -222,8 +222,7 @@ if ($this->playerPhoto != '') { ?>
 								echo '<a onclick="startPgnMatch('.$value->id.', \'pgnArea'.$ia.'\');" class="pgn">'.CLMText::getResultString($value->ergebnis, 0).'</a>';
 							echo '</span>';
 							?>
-							<input type='hidden' name='pgn[<?php echo $value->id; ?>]' id='pgnhidden<?php echo $value->id; ?>' value='<?php echo $pgntext; //$value->pgn;?>'>
-						<input type='hidden' name='pgn[<?php echo $value->id; ?>]' id='pgnhidden<?php echo $value->id; ?>' value='<?php echo $pgntext; //$value->pgn; ?>'>
+							<input type='hidden' name='pgn[<?php echo $value->id; ?>]' id='pgnhidden<?php echo $value->id; ?>' value='<?php echo str_replace("'","&#039", $pgntext); ?>'>
 							<?php
 						}
 						

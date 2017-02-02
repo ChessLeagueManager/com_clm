@@ -219,7 +219,7 @@ if ( $this->turnier->published == 0) {
 									echo '<a onclick="startPgnMatch('.$matches->id.', \'pgnArea'.$ia.'\');" class="pgn">'.CLMText::getResultString($matches->ergebnis).'</a>';
 								echo '</span>';
 								?>
-								<input type='hidden' name='pgn[<?php echo $matches->id; ?>]' id='pgnhidden<?php echo $matches->id; ?>' value='<?php echo $pgntext; //$matches->pgn; ?>'>
+								<input type='hidden' name='pgn[<?php echo $matches->id; ?>]' id='pgnhidden<?php echo $matches->id; ?>' value='<?php echo str_replace("'","&#039", $pgntext); ?>'>
 								<?php
 							}
 							

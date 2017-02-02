@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -47,6 +47,49 @@ class CLMModelPGNdata extends JModelLegacy {
 		$turnier	= clm_core::$db->loadObjectList($query);
 //echo "<br>turnier: "; var_dump($turnier); //die(); 
 		return $turnier;
+	}
+	
+	function getMainPGN () {
+		
+		$task = JRequest::getVar ('task', '', 'default', 'string');
+		$stask = JRequest::getVar ('stask', '', 'default', 'string');
+//echo "<br>md-main-pgndata: task $task  stask $stask "; //die();
+		
+		$liga = JRequest::getVar('liga', '', 'default', 'string');
+		$liga_arr = explode('.', $liga, 2);
+		$tkz = $liga_arr[0];
+		$tid = $liga_arr[1];
+//echo "<br>main-liga: $liga  tid: $tid  tkz: $tkz"; //die();
+		
+		// offene Notationen auslesen
+		$query = "SELECT * FROM #__clm_pgn "
+			.' WHERE tkz = "'.$tkz.'"'
+			.' AND tid = '.$tid
+			.' AND runde = 0 ';
+//echo "<br>query: "; var_dump($query); //die(); 
+		$gameslist	= clm_core::$db->loadObjectList($query);
+//echo "<br>md-count-gameslist:".count($gameslist); var_dump($gameslist); //die();
+		$zz = 0;
+		$pgn_arr = array();
+		foreach($gameslist as $gl) {
+//echo "<br>pgnnr_arr: "; var_dump($pgnnr_arr); //die(); 
+			$return_arr = array();
+			$return_arr['pgnnr'] = $gl->id;
+			$return_arr['tkz'] = $gl->tkz;
+			$return_arr['tid'] = $gl->tid;
+			$return_arr['dg'] = $gl->dg;
+			$return_arr['runde'] = $gl->runde;
+			if ($tkz == 't') { $return_arr['paar'] = $gl->paar; }
+			else { $return_arr['paar'] = 0; }
+			$return_arr['brett'] = $gl->brett;
+			$return_arr['text'] = $gl->text;
+			$return_arr['error'] = $gl->error;
+			$pgn_arr[] = $return_arr;
+//echo "<br>return:"; var_dump($return_arr);
+		}
+//echo "<br><br>return:"; var_dump($pgn_arr);
+
+		return $pgn_arr;		
 	}
 	
 	function store () {
