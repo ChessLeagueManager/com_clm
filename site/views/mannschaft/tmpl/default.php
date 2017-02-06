@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -282,6 +282,7 @@ $clm_zeile2D			= RGB($clm_zeile2);
     <tr>
     <?php if($mannschaft[0]->lrang > 0) { ?><th class="nr"><?php echo JText::_('TEAM_RANK') ?></th><?php }
         else { ?><th class="nr"><?php echo JText::_('DWZ_NR') ?></th><?php } ?>
+        <th class="nr"><?php echo JText::_('CLUB_LIST_TITEL') ?></th>
         <th class="name"><?php echo JText::_('DWZ_NAME') ?></th>
         <th class="dwz"><a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php if ($countryversion == "de") echo JText::_('LEAGUE_STAT_DWZ'); else echo JText::_('LEAGUE_STAT_DWZ_EN')?></a></th>
 	 <?php 
@@ -333,6 +334,7 @@ for ($x=0; $x< 100; $x++){
     <tr class="<?php echo $zeilenr; ?>">
     <?php if($mannschaft[0]->lrang > 0) { ?><td class="nr" ><?php echo $count[$x]->rmnr.' - '.$count[$x]->rrang; ?></td><?php }
         else { ?><td class="nr" ><?php echo $y; ?></td><?php } ?>
+	<td class="dwz"><?php echo $count[$x]->attr; ?></td>
 	<?php if($count[$x]->zps != "-2") { ?>
 		<td class="name"><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $count[$x]->zps; ?>&mglnr=<?php echo $count[$x]->mgl_nr; ?>&PKZ=<?php echo $count[$x]->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $count[$x]->name; ?></a></td>
 	<?php } else { ?>
@@ -426,10 +428,6 @@ for ($x=0; $x< 100; $x++){
     $y++;
                     }
 	while (isset($einzel[$ie])) {
-//		$ztext = "    "."Ergebnis übersprungen, da Spieler nicht in Aufstellung ";
-//		$ztext .= ' Verein:'.$einzel[$ie]->zps.' Mitglied:'.$einzel[$ie]->spieler.' PKZ:'.$einzel[$ie]->PKZ;
-//		$ztext .= ' Durchgang:'.$einzel[$ie]->dg.' Runde:'.$einzel[$ie]->runde;
-//		$ztext .= ' Brett:'.$einzel[$ie]->brett.' Erg:'.$einzel[$ie]->punkte; 	
 		$ztext = "    ".JText::_( 'TEAM_WARNING' );
 		$ztext .= JText::_( 'TEAM_CLUB' ).$einzel[$ie]->zps.JText::_( 'TEAM_MEMBER' ).$einzel[$ie]->spieler.JText::_( 'TEAM_PKZ' ).$einzel[$ie]->PKZ;
 		$ztext .= JText::_( 'TEAM_DG' ).$einzel[$ie]->dg.JText::_( 'TEAM_ROUND' ).$einzel[$ie]->runde;
@@ -444,7 +442,7 @@ for ($x=0; $x< 100; $x++){
 	
     ?>
     <tr class="ende">
-    <td colspan="3">Gesamt</td>
+    <td colspan="4"><?php echo JText::_('TEAM_TOTAL'); ?></td>
     <?php	$spl = 0; $gespielt = 0;
     // erster Durchgang
         for ($z=0; $z< $mannschaft[0]->runden; $z++) { 			

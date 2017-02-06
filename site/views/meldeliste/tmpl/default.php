@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -190,9 +190,11 @@ echo "<br>published ".$clmuser[0]->published;
 <tr> 
 	<th class="anfang"><b><input type="hidden" name="toggle" value=""  /></b></th> 
 	<th class="anfang"><?php echo JText::_('CLUB_LIST_NAME') ?></th>
+	<th class="anfang"><?php echo JText::_('CLUB_LIST_TITEL') ?></th>
 	<th class="anfang"><?php echo JText::_('CLUB_LIST_DWZ') ?></th>
 	<th class="anfang"><b><input type="hidden" name="toggle" value=""  /></b></th> 
 	<th class="anfang"><?php echo JText::_('CLUB_LIST_NAME') ?></th>
+	<th class="anfang"><?php echo JText::_('CLUB_LIST_TITEL') ?></th>
 	<th class="anfang"><?php echo JText::_('CLUB_LIST_DWZ') ?></th>
 </tr>
 
@@ -212,6 +214,9 @@ echo "<br>published ".$clmuser[0]->published;
 		<?php echo $spieler[$i]->name; ?>
 	</td>
 	<td>
+		<input class="inputbox" type="text" name="attr[<?php echo $spieler[$i]->id; ?>]" id="attr<?php echo $i+1; ?>" size="1" maxlength="5" value="<?php echo $spieler[$i]->attr; ?>" />
+	</td>
+	<td>
 		<?php echo $spieler[$i]->dwz; ?>
 	</td>
 	<?php $j = $i + (count($spieler)/2) + (count($spieler) % 2); // +1; 
@@ -225,6 +230,9 @@ echo "<br>published ".$clmuser[0]->published;
 	<td>
 		<input type="hidden" name="mglnr<?php echo $j+1; ?>" value="<?php if (isset($spieler[$j])) echo $spieler[$j]->id; ?>" />
 		<?php if (isset($spieler[$j])) echo $spieler[$j]->name; ?>
+	</td>
+	<td>
+		<input class="inputbox" type="text" name="attr[<?php if (isset($spieler[$j])) echo $spieler[$j]->id; ?>]" id="attr<?php echo $j+1; ?>" size="1" maxlength="5" value="<?php if (isset($spieler[$j])) echo $spieler[$j]->attr; ?>" />
 	</td>
 	<td>
 		<?php if (isset($spieler[$j])) echo $spieler[$j]->dwz; ?>

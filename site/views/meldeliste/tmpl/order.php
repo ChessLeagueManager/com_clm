@@ -27,6 +27,7 @@ $man 		= JRequest::getInt('man');
 $stamm 		= JRequest::getInt('stamm');
 $ersatz		= JRequest::getInt('ersatz');
 $cid 		= JRequest::getVar('cid', array(), '', 'array');
+$attr 		= JRequest::getVar('attr', array(), '', 'array');
 $man_name 	= JRequest::getVar('man_name');
 $liga_lokal	= JRequest::getVar('lokal');
 $liga_mf 	= JRequest::getVar('mf');
@@ -142,6 +143,18 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
           tmp2 = dwzA.innerHTML;
           dwzA.innerHTML = dwzB.innerHTML;
           dwzB.innerHTML = tmp2;
+          // (hidden) DWZ tauschen
+          var hiddendwzA = document.getElementById ( "hidden_dwz" + idA );
+          var hiddendwzB = document.getElementById ( "hidden_dwz" + idB );
+          tmp51 = hiddendwzA.value;
+          hiddendwzA.value = hiddendwzB.value;
+          hiddendwzB.value = tmp51;
+          // (hidden) DWZ Index tauschen
+          var hiddendwzI0A = document.getElementById ( "hidden_dwz_I0" + idA );
+          var hiddendwzI0B = document.getElementById ( "hidden_dwz_I0" + idB );
+          tmp52 = hiddendwzI0A.value;
+          hiddendwzI0A.value = hiddendwzI0B.value;
+          hiddendwzI0B.value = tmp52;
 
           // club tauschen
           var zpsnameA = document.getElementById ( "zpsname" + idA );
@@ -182,6 +195,18 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
           tmp8 = hiddenA.value;
           hiddenA.value = hiddenB.value;
           hiddenB.value = tmp8;
+          // Attribut tauschen
+          var attrA = document.getElementById ( "attr" + idA );
+          var attrB = document.getElementById ( "attr" + idB );
+          tmp9 = attrA.innerHTML;
+          attrA.innerHTML = attrB.innerHTML;
+          attrB.innerHTML = tmp9;
+          // (hidden) Attribut tauschen
+          var hiddenattrA = document.getElementById ( "hidden_attr" + idA );
+          var hiddenattrB = document.getElementById ( "hidden_attr" + idB );
+          tmp91 = hiddenattrA.value;
+          hiddenattrA.value = hiddenattrB.value;
+          hiddenattrB.value = tmp91;
 
         }
 
@@ -210,8 +235,9 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
 <center>
 <table class="adminlist" cellpadding="0" cellspacing="0">
 	<tr> 
-		<th class="anfang" width="5%"><?php echo JText::_('CLUB_LIST_NR') ?></th>
+		<th class="anfang" width="4%"><?php echo JText::_('CLUB_LIST_NR') ?></th>
 		<th class="anfang"><?php echo JText::_('CLUB_LIST_NAME') ?></th>
+		<th class="anfang" width="8%"><?php echo JText::_('CLUB_LIST_TITEL') ?></th>
 		<th class="anfang" width="8%"><?php echo JText::_('CLUB_LIST_DWZ') ?></th>
 		<?php if ($countryversion =="de") { ?>
 			<th class="anfang" width="35%"><?php echo JText::_('CLUBS_LIST_NAME') ?></th>
@@ -229,8 +255,13 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
 	?>
 	<tr>
 		<td><?php echo $i+1; ?></td>
-		<td><span id="name<?php echo $i+1; ?>"><?php echo $sort[$i]->name; ?></span><input type="hidden" name="hidden_zps<?php echo $i+1; ?>" id="hidden_zps<?php echo $i+1; ?>" value="<?php echo $sort[$i]->zps; ?>" /></td>
-		<td id="dwz<?php echo $i+1; ?>"><?php echo $sort[$i]->dwz; ?></td>
+		<td><span id="name<?php echo $i+1; ?>"><?php echo $sort[$i]->name; ?></span>
+			<input type="hidden" name="hidden_zps<?php echo $i+1; ?>" id="hidden_zps<?php echo $i+1; ?>" value="<?php echo $sort[$i]->zps; ?>" /></td>
+		<td id="attr<?php echo $i+1; ?>" name="attr<?php echo $i+1; ?>"><?php echo $attr[$sort[$i]->id]; ?>
+			<input type="hidden" name="hidden_attr<?php echo $i+1; ?>" id="hidden_attr<?php echo $i+1; ?>" value="<?php echo $attr[$sort[$i]->id];; ?>" /></td>
+		<td id="dwz<?php echo $i+1; ?>" id="dwz<?php echo $i+1; ?>"><?php echo $sort[$i]->dwz; ?>
+			<input type="hidden" name="hidden_dwz<?php echo $i+1; ?>" id="hidden_dwz<?php echo $i+1; ?>" value="<?php echo $sort[$i]->dwz;; ?>" />
+			<input type="hidden" name="hidden_dwz_I0<?php echo $i+1; ?>" id="hidden_dwz_I0<?php echo $i+1; ?>" value="<?php echo $sort[$i]->dwz_I0;; ?>" /></td>
 		<td id="zpsname<?php echo $i+1; ?>"><?php echo $sort[$i]->Vereinname; ?></td>
 		<?php if ($countryversion =="de") { ?>
 		  <td id="mglnr<?php echo $i+1; ?>"><?php echo $sort[$i]->Mgl_Nr; ?>
@@ -245,10 +276,10 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
 			<input type="hidden" name="hidden_mglnr<?php echo $i+1; ?>" id="hidden_mglnr<?php echo $i+1; ?>" value="<?php echo $sort[$i]->Mgl_Nr; ?>" />
 			</td>
 		<?php } ?>
-		<td>&nbsp;&nbsp;
-		<?php if ($i == 0) { ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php } else { ?>
+		<td>&nbsp;
+		<?php if ($i == 0) { ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php } else { ?>
 		<a href="javascript:NachOben(<?php echo $i+1; ?>);" id="hoch<?php echo $i+1; ?>"><img  src="components/com_clm/images/uparrow.png" alt="NachOben" /></a>
-		<?php } ?>&nbsp;&nbsp;&nbsp;
+		<?php } ?>&nbsp;&nbsp;
 		<?php if ($i == ($stamm+$ersatz-1)) echo "   "; else { ?>
 		<a href="javascript:NachUnten(<?php echo $i+1; ?>);" id="runter<?php echo $i+1; ?>"><img  src="components/com_clm/images/downarrow.png" alt="NachUnten" /></a>
 		<?php } ?></td>

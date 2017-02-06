@@ -278,6 +278,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_meldeliste_spieler` (
   `Niveau` smallint(4) NOT NULL DEFAULT '0',
   `sum_saison` decimal(5,1) NOT NULL DEFAULT '0.0',
   `gesperrt` tinyint(1) unsigned DEFAULT NULL,
+  `attr` varchar(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `sid_zps_mglnr` (`sid`,`zps`,`mgl_nr`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -619,6 +620,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_swt_meldeliste_spieler` (
   `Niveau` smallint(4) NOT NULL DEFAULT '0',
   `sum_saison` decimal(5,1) NOT NULL DEFAULT '0.0',
   `gesperrt` tinyint(1) unsigned DEFAULT NULL,
+  `attr` varchar(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sid_swtid_manid_zps_mglnr` (`sid`,`swt_id`,`man_id`,`zps`,`mgl_nr`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

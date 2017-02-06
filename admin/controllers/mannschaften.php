@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -1120,8 +1120,9 @@ public static function save_meldeliste()
 	for ($y=1; $y< 1+($stamm+$ersatz); $y++){
 	$spl	= JRequest::getVar( 'spieler'.$y);
 	$block	= JRequest::getInt( 'check'.$y);
-
-	$teil	= explode("-", $spl);
+	$attr	= JRequest::getVar( 'attr'.$y);
+		if ($attr == '') $attr = NULL;
+		$teil	= explode("-", $spl);
 		if ($countryversion == "de") {
 			$mgl_nr	= $teil[0];
 			$PKZ    = '';
@@ -1130,14 +1131,20 @@ public static function save_meldeliste()
 			$PKZ    = $teil[0];
 		}
 		$tzps	= $teil[1];
+		$dwz	= $teil[2];
+		$dwz_I0	= $teil[3];
 
 		if ($spl >0) {
 			$query	= "REPLACE INTO #__clm_meldeliste_spieler"
-				." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `PKZ`, `zps`, `ordering`, `gesperrt`) "
-				. " VALUES ('$sid','$liga','$mnr','$y','$mgl_nr','$PKZ','$tzps','','$block')";
-	$db->setQuery($query);
-	$db->query();
-	}
+				." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `PKZ`, `zps`, `ordering`, `gesperrt`, `start_dwz`, `start_I0`, `attr`) "
+				. " VALUES ('$sid','$liga','$mnr','$y','$mgl_nr','$PKZ','$tzps','','$block','$dwz','$dwz_I0'";
+			if (!is_null($attr))
+				$query	.= ",'$attr') ";
+			else
+				$query	.= ", NULL) ";
+			$db->setQuery($query);
+			$db->query();
+		}
 	}
 
 	$msg = $editor;
@@ -1240,7 +1247,8 @@ public static function apply_meldeliste()
 	for ($y=1; $y< 1+($stamm+$ersatz); $y++){
 	$spl	= JRequest::getVar( 'spieler'.$y);
 	$block	= JRequest::getInt( 'check'.$y);
-
+	$attr	= JRequest::getVar( 'attr'.$y);
+		if ($attr == '') $attr = NULL;
 	$teil	= explode("-", $spl);
 		if ($countryversion == "de") {
 			$mgl_nr	= $teil[0];
@@ -1250,14 +1258,20 @@ public static function apply_meldeliste()
 			$PKZ    = $teil[0];
 		}
 		$tzps	= $teil[1];
+		$dwz	= $teil[2];
+		$dwz_I0	= $teil[3];
 
-	if($spl >0){
-	$query	= "REPLACE INTO #__clm_meldeliste_spieler"
-				." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `PKZ`, `zps`, `ordering`, `gesperrt`) "
-				. " VALUES ('$sid','$liga','$mnr','$y','$mgl_nr','$PKZ','$tzps','','$block')";
-	$db->setQuery($query);
-	$db->query();
-	}
+		if($spl >0){
+			$query	= "REPLACE INTO #__clm_meldeliste_spieler"
+				." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `PKZ`, `zps`, `ordering`, `gesperrt`, `start_dwz`, `start_I0`, `attr`) "
+				. " VALUES ('$sid','$liga','$mnr','$y','$mgl_nr','$PKZ','$tzps','','$block','$dwz','$dwz_I0'";
+			if (!is_null($attr))
+				$query	.= ",'$attr') ";
+			else
+				$query	.= ", NULL) ";
+			$db->setQuery($query);
+			$db->query();
+		}
 	}
 
 	// Log schreiben

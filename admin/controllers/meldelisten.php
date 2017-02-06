@@ -203,7 +203,7 @@ function edit()
 		$sql = "SELECT mgl_nr as id, ";
 	else
 		$sql = "SELECT PKZ as id, ";
-	$sql .= "Spielername as name, DWZ as dwz, ZPS as zps FROM #__clm_dwz_spieler"
+	$sql .= "Spielername as name, DWZ as dwz, DWZ_Index as dwz_I0, ZPS as zps FROM #__clm_dwz_spieler"
 		." WHERE ( ZPS ='".$row->zps."' OR FIND_IN_SET(ZPS,'".$row->sg_zps."') != 0 )"
 		." AND sid =".$row->sid
 		." ORDER BY ".$order
@@ -224,7 +224,7 @@ function edit()
 	$abgabe=$db->loadObjectList();
 
 	//Stammspieler
-	$selsql = "SELECT mgl_nr,snr,zps,PKZ, gesperrt FROM #__clm_meldeliste_spieler"
+	$selsql = "SELECT mgl_nr,snr,zps,PKZ, gesperrt, attr FROM #__clm_meldeliste_spieler"
 		//." WHERE ( zps = '".$row->zps."' OR zps='".$row->sg_zps."')"
 		." WHERE ( ZPS ='".$row->zps."' OR FIND_IN_SET(ZPS,'".$row->sg_zps."') != 0 )"
 		." AND mnr = ".$row->man_nr

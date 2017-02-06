@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -214,8 +214,11 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 			<th width="10">
 				<?php echo JText::_( 'MELDELISTE_BRETT' ); ?>
 			</th>
-			<th width="10">
+			<th width="25">
 				<?php echo JText::_( 'MELDELISTE_SPIELERNAME' ); ?>
+			</th>
+			<th width="5">
+				<?php echo JText::_( 'MELDELISTE_ATTRIBUT' ); ?>
 			</th>
 			<th width="10">
 				<?php echo JText::_( 'MELDELISTE_BLOCK' ); ?>
@@ -233,7 +236,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 			<option value="0"><?php echo JText::_( 'MELDELISTE_SPIELER_AUSWAEHLEN'); ?></option>
 			<?php for ($x=0; $x < $max[0]->max; $x++) { ?>
 	<!---		 <option value="<?php //echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps; ?>" <?php //if (((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php //} ?>><?php //echo $row_spl[$x]->id.'&nbsp;';if((int)$row_spl[$x]->id < 1000) {echo "&nbsp;&nbsp;";} echo "-&nbsp;&nbsp;".$row_spl[$x]->name; ?></option> ---> 
-			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps; ?>" <?php
+			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps.'-'.$row_spl[$x]->dwz.'-'.$row_spl[$x]->dwz_I0; ?>" <?php
 			  if ($countryversion == "de") {
 				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php } ?>><?php 
 			  } else {
@@ -242,6 +245,9 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 				echo $row_spl[$x]->name.'&nbsp;-&nbsp;&nbsp;'.$row_spl[$x]->id; ?></option> 
 			<?php }	?>
 		  </select>
+		</td>
+		<td align="center">
+		  <input type="text" name="attr<?php echo $i+1; ?>" value="<?php if(isset($row_sel[$i])) echo $row_sel[$i]->attr; else echo '';  ?>" size="1" maxlength="3">
 		</td>
 		<td align="center">
 		  <input type="checkbox" name="check<?php echo $i+1; ?>" value="1" <?php if(isset($row_sel[$i]) AND $row_sel[$i]->gesperrt =="1") { echo 'checked="checked"'; }?>>
@@ -298,8 +304,11 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 			<th width="10">
 				<?php echo JText::_( 'MELDELISTE_BRETT' ); ?>
 			</th>
-			<th width="10">
+			<th width="25">
 				<?php echo JText::_( 'MELDELISTE_SPIELERNAME' ); ?>
+			</th>
+			<th width="5">
+				<?php echo JText::_( 'MELDELISTE_ATTRIBUT' ); ?>
 			</th>
 			<th width="10">
 				<?php echo JText::_( 'MELDELISTE_BLOCK' ); ?>
@@ -317,7 +326,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 			<option value="0"><?php echo JText::_( 'MELDELISTE_SPIELER_AUSWAEHLEN'); ?></option>
 			<?php for ($x=0; $x < $max[0]->max; $x++) { ?>
 	<!---	 <option value="<?php //echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps; ?>" <?php //if (((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php //} ?>><?php //echo $row_spl[$x]->id.'&nbsp;';if((int)$row_spl[$x]->id < 1000) {echo "&nbsp;&nbsp;";} echo "-&nbsp;&nbsp;".$row_spl[$x]->name; ?></option> ---> 
-			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps; ?>" <?php 
+			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps.'-'.$row_spl[$x]->dwz.'-'.$row_spl[$x]->dwz_I0; ?>" <?php
 			  if ($countryversion == "de") {
 				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php } ?>><?php 
 			  } else {			
@@ -326,6 +335,9 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 				echo $row_spl[$x]->name.'&nbsp;-&nbsp;&nbsp;'.$row_spl[$x]->id; ?></option> 
 			<?php }	?>
 		  </select>
+		</td>
+		<td align="center">
+		  <input type="text" name="attr<?php echo $i+1; ?>" value="<?php if(isset($row_sel[$i])) echo $row_sel[$i]->attr; else echo '';  ?>" size="1" maxlength="3">
 		</td>
 		<td align="center">
 		  <input type="checkbox" name="check<?php echo $i+1; ?>" value="1" <?php if(isset($row_sel[$i]) AND $row_sel[$i]->gesperrt =="1") { echo 'checked="checked"'; }?>>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -127,7 +127,7 @@ class CLMModelMannschaft extends JModelLegacy
 		$query .= " ORDER BY rmnr ASC, rrang ASC ";
 	} else {
 	  if ($zps != "0") { //normal
-		$query = " SELECT a.start_dwz,a.mgl_nr,a.zps,a.PKZ, d.Spielername as name,d.DWZ as dwz "
+		$query = " SELECT a.start_dwz,a.mgl_nr,a.zps,a.PKZ,a.attr, d.Spielername as name,d.DWZ as dwz "
 			." FROM #__clm_meldeliste_spieler as a ";
 		if ($countryversion == "de") {
 			$query .= " LEFT JOIN #__clm_dwz_spieler as d on d.zps = a.zps AND d.mgl_nr = a.mgl_nr AND d.sid = a.sid";
@@ -140,7 +140,7 @@ class CLMModelMannschaft extends JModelLegacy
 			." ORDER BY a.mnr ASC, a.snr ASC ";
 	  } else {	//Schulschach u.ä.
 		$zps = "-1";
-		$query = " SELECT a.start_dwz,a.mgl_nr,a.zps,a.PKZ, d.Spielername as name,d.DWZ as dwz "
+		$query = " SELECT a.start_dwz,a.mgl_nr,a.zps,a.PKZ,a.attr, d.Spielername as name,d.DWZ as dwz "
 			." FROM #__clm_meldeliste_spieler as a ";
 		$query .= " LEFT JOIN #__clm_dwz_spieler as d on d.zps = a.zps AND d.mgl_nr = a.mgl_nr AND d.sid = a.sid";
 		$query .= " WHERE a.sid = ".$sid

@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -35,6 +35,7 @@ class TableCLMMeldelisten extends JTable
 	var $Niveau		= '';
 	var $sum_saison		= '';
 	var $gesperrt		= '';
+	var $attr		= '';
 
 	function __construct( &$_db ) {
 		parent::__construct( '#__clm_meldeliste_spieler', 'sid', $_db );

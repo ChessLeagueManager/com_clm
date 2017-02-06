@@ -42,6 +42,8 @@ $runde		= JRequest::getInt( 'runde', '1' );
 $dg			= JRequest::getInt('dg','1');
 $item		= JRequest::getInt('Itemid','1');
 $liga		= $this->liga;
+$attr = clm_core::$api->db_lineup_attr($lid);
+
 	//Liga-Parameter aufbereiten
 	$paramsStringArray = explode("\n", $liga[0]->params);
 	$params = array();
@@ -308,7 +310,7 @@ $paar		=$this->paar;
 $summe		=$this->summe;
 //$ok=$this->ok;
 
-// Ergebnistext f�r flexibele Punktevergabe holen
+// Ergebnistext für flexibele Punktevergabe holen
 $erg_text = CLMModelRunde::punkte_text($liga[0]->id);
 
 // Array für DWZ Schnitt setzen
@@ -322,12 +324,18 @@ for ($y=1; $y< ($liga[0]->teil)+1; $y++){
 		$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; }
 	}
 }
+// Anzahl Spalten für Mannschaftsnamen
+if ($detail == 1) $col_m = 2; else $col_m = 1;
+if ($attr) $col_m++;
+$col_m1 = $col_m + 1;
+$col_h = (2 * $col_m) + 4;
+
 // Rundenschleife
 ?>
 <br>
 
 <table cellpadding="0" cellspacing="0" class="runde">
-    <tr><td colspan="9">
+    <tr><td colspan="<?php echo $col_h; ?>">
     <div>
         <?php // Wenn SL_OK dann Haken anzeigen (nur wenn Staffelleiter eingegeben ist)
          if (isset($liga[0]->mf_name)) {
@@ -343,7 +351,6 @@ for ($y=1; $y< ($liga[0]->teil)+1; $y++){
     </div>
     </td></tr>
 <?php
-//$z=(($liga[0]->teil)/2)*($runde-1);
 // Teilnehmerschleife
 $w=0;
 $z2=0;
@@ -352,7 +359,7 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 
 if (isset($paar[$y]->htln)) {  // Leere Begegnungen ausblenden 
 	if ($params['round_date'] == '1' AND $paar[$y]->pdate > '1970-01-01') { ?>
-		<tr><th colspan="8" class="paarung2" style="text-align: right;">
+		<tr><th colspan="<?php echo $col_h; ?>" class="paarung2" style="text-align: right;">
 			<?php 
 			echo JHTML::_('date',  $paar[$y]->pdate, JText::_('DATE_FORMAT_CLM_F')); 
 			if ($paar[$y]->ptime > '00:00:00') echo '  '.substr($paar[$y]->ptime,0,5); 
@@ -360,7 +367,7 @@ if (isset($paar[$y]->htln)) {  // Leere Begegnungen ausblenden
 		</th></tr>
 	<?php } ?>
     <tr>
-        <th colspan="3" class="paarung2">
+        <th class="paarung2" colspan="<?php echo $col_m1; ?>">
         <?php
         $edit=0;
         $medit=0;
@@ -399,7 +406,7 @@ if (isset($paar[$y]->htln)) {  // Leere Begegnungen ausblenden
         else { ?> : <?php }
         $z2=$z2+2; ?>
         </th>
-        <th class="paarung2" colspan ="2">
+        <th class="paarung" colspan="<?php echo $col_m; ?>">
         <?php // Name Gastmannschaft
         if (isset($paar[$y]->gpublished) AND $paar[$y]->gpublished == 1 AND $params['noBoardResults'] == '0') { ?>
         <a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $liga[0]->sid; ?>&liga=<?php echo $liga[0]->id; ?>&tlnr=<?php echo $paar[$y]->gtln; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $paar[$y]->gname; ?></a>
@@ -433,17 +440,16 @@ for ($x=0; $x<$liga[0]->stamm; $x++) {
 	<?php if ($detail == 1) { 
 		if ($liga[0]->rang > 0) $einzel[$w]->hsnr = $einzel[$w]->tmnr.'-'.$einzel[$w]->trang; ?>
     <td class="paarung" style="border-right: none;<?php if ($einzel[$w]->weiss == 0) echo 'background-color:'.$zeiled.';';?>"><div><font size=-2><?php echo $einzel[$w]->hsnr; ?></font></div></td>
-    <td class="paarung2" style="border-left: none" colspan ="1">
-	  <div><?php if ($einzel[$w]->zps =="ZZZZZ") {echo "N.N.";} else { 
-		if ($einzel[$w]->zps != "-1") { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->zps; ?>&mglnr=<?php echo $einzel[$w]->spieler; ?>&PKZ=<?php echo $einzel[$w]->PKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->hname; } 
-		else echo $einzel[$w]->hname; } ?></div></td>
-	<?php } else { ?>
-    <td class="paarung2" colspan ="2"><div><?php if ($einzel[$w]->zps =="ZZZZZ") {echo "N.N.";} else { 
+	<?php } ?>
+	<?php if ($attr) { ?>
+		<td class="paarung" ><div><?php echo $einzel[$w]->hattr; ?></div></td>
+	<?php } ?>
+    <td class="paarung2" colspan ="1"><div><?php if ($einzel[$w]->zps =="ZZZZZ") {echo "N.N.";} else { 
 		if ($einzel[$w]->zps != "-1") { ?>
 			<a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->zps; ?>&mglnr=<?php echo $einzel[$w]->spieler; ?>&PKZ=<?php echo $einzel[$w]->PKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->hname; } 
 		else echo $einzel[$w]->hname; } ?></div></td>
-	<?php } ?>
-    <td class="paarung"><div><?php if ($params['dwz_date'] == '0000-00-00') echo $einzel[$w]->hdwz; else echo $einzel[$w]->hstart_dwz;?></div></td>
+ 
+ <td class="paarung"><div><?php if ($params['dwz_date'] == '0000-00-00') echo $einzel[$w]->hdwz; else echo $einzel[$w]->hstart_dwz;?></div></td>
         <?php if ($einzel[$w]->dwz_edit !="") { $edit++; ?>
     <td class="paarung"><div><b><?php echo $einzel[$w]->dwz_text; ?><font size="1"><br>( <?php echo $erg_text[$einzel[$w]->ergebnis]->erg_text; ?> )</font></b></div></td>
         <?php } else { ?>
@@ -462,28 +468,26 @@ for ($x=0; $x<$liga[0]->stamm; $x++) {
 	<?php if ($detail == 1) { 
 		if ($liga[0]->rang > 0) $einzel[$w]->gsnr = $einzel[$w]->smnr.'-'.$einzel[$w]->srang; ?>
     <td class="paarung" style="border-right: none;<?php if ($einzel[$w]->weiss != 0) echo 'background-color:'.$zeiled.';';?>"><div><font size=-2><?php echo $einzel[$w]->gsnr; ?></font></div></td>
-    <td class="paarung2" style="border-left: none" colspan ="1"><div><?php if ($einzel[$w]->gzps =="ZZZZZ") {echo "N.N.";} else { 
-		if ($einzel[$w]->zps != "-1") { ?>
-			<a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->gzps; ?>&mglnr=<?php echo $einzel[$w]->gegner; ?>&PKZ=<?php echo $einzel[$w]->gPKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->gname; } 
-		else echo $einzel[$w]->gname; } ?></div></td>
-	<?php } else { ?>
-    <td class="paarung2" colspan ="2"><div><?php if ($einzel[$w]->gzps =="ZZZZZ") {echo "N.N.";} else { 
+	<?php } ?>
+	<?php if ($attr) { ?>
+		<td class="paarung" ><div><?php echo $einzel[$w]->gattr; ?></div></td>
+	<?php } ?>
+    <td class="paarung2" colspan ="1"><div><?php if ($einzel[$w]->gzps =="ZZZZZ") {echo "N.N.";} else { 
 		if ($einzel[$w]->gzps != "-1") { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->gzps; ?>&mglnr=<?php echo $einzel[$w]->gegner; ?>&PKZ=<?php echo $einzel[$w]->gPKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->gname; } 
 		else echo $einzel[$w]->gname; } ?></div></td>
-	<?php } ?>
     <td class="paarung"><div><?php if ($params['dwz_date'] == '0000-00-00') echo $einzel[$w]->gdwz; else echo $einzel[$w]->gstart_dwz; ?></div></td>
     </tr>
 <?php }
 $w++; }
  
 if ($edit > 0 OR $medit >0) { ?>
-	<tr><td colspan ="8"><?php if ($medit >0 AND $edit =="0"){ echo JText::_('CHIEF_EDIT_TEAM'); }
+	<tr><td colspan ="<?php echo $col_h; ?>"><?php if ($medit >0 AND $edit =="0"){ echo JText::_('CHIEF_EDIT_TEAM'); }
 	else { echo JText::_('CHIEF_EDIT_SINGLE'); }
 		echo JText::_('BREACH_TO') ?>
 	<?php if($edit >0) { ?><br><?php echo JText::_('CHIEF_EDIT_DWZ') ?></b><?php } ?>
 	</td></tr>
 <?php } elseif ($remis_com == 1) { ?>
-	<tr><td colspan ="8"><?php  if ($paar[$y]->ko_decision == 1) { //1
+	<tr><td colspan ="<?php echo $col_h; ?>"><?php  if ($paar[$y]->ko_decision == 1) { //1
 									if ($paar[$y]->wertpunkte > $paar[$y]->gwertpunkte) echo JText::_('ROUND_DECISION_WP_HEIM')." ".$paar[$y]->wertpunkte." : ".$paar[$y]->gwertpunkte." für ".$paar[$y]->hname; 
 									else echo JText::_('ROUND_DECISION_WP_GAST')." ".$paar[$y]->gwertpunkte." : ".$paar[$y]->wertpunkte." für ".$paar[$y]->gname; } 
 								if ($paar[$y]->ko_decision == 2) echo JText::_('ROUND_DECISION_BLITZ_HEIM')." ".$paar[$y]->hname;
@@ -494,18 +498,18 @@ if ($edit > 0 OR $medit >0) { ?>
 <?php } ?>
 
 <?php if ($paar[$y]->comment != "") { ?>
-<tr><td colspan ="8"><?php  echo JText::_('PAAR_COMMENT').$paar[$y]->comment; ?>		
+<tr><td colspan ="<?php echo $col_h; ?>"><?php  echo JText::_('PAAR_COMMENT').$paar[$y]->comment; ?>		
 	</td></tr>
 <?php } ?>
 
 	<!--Bereich für pgn-Viewer-->
-<tr><td colspan ="8" class="noborder"><span id="pgnArea<?php echo $y ?>"></span></td></tr>
-<tr><td colspan ="8" class="noborder">&nbsp;</td></tr>
+<tr><td colspan ="<?php echo $col_h; ?>" class="noborder"><span id="pgnArea<?php echo $y ?>"></span></td></tr>
+<tr><td colspan ="<?php echo $col_h; ?>" class="noborder">&nbsp;</td></tr>
 <?php } elseif ((isset($paar[$y]->gpublished) AND $paar[$y]->gpublished == 1 AND $paar[$y]->hpublished == 1) AND ($paar_exist== 0)) { ?>
-    <tr><td colspan ="8" align="left"><?php echo JText::_('NO_RESULT_YET'); $NO_RESULT_YET++; ?></td></tr>
+    <tr><td colspan ="<?php echo $col_h; ?>" align="left"><?php echo JText::_('NO_RESULT_YET'); $NO_RESULT_YET++; ?></td></tr>
     <?php } elseif (isset($paar[$y]) AND $paar[$y]->comment != "") { ?>
-	<tr><td colspan ="8"><?php  echo JText::_('PAAR_COMMENT').$paar[$y]->comment; ?></td></tr>
-	<?php } else { ?><tr><td colspan ="8" class="noborder">&nbsp;</td></tr><?php } ?>
+	<tr><td colspan ="<?php echo $col_h; ?>"><?php  echo JText::_('PAAR_COMMENT').$paar[$y]->comment; ?></td></tr>
+	<?php } else { ?><tr><td colspan ="<?php echo $col_h; ?>" class="noborder">&nbsp;</td></tr><?php } ?>
 
 <?php } ?>
 </table>

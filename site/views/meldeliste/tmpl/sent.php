@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -116,7 +116,11 @@ if ($abgabe[0]->liste > 0 AND $abgabe[0]->params['deadline_roster'] < $today) {
 // neue Meldeliste schreiben
 for ($y=1; $y< (1+$stamm+$ersatz) ; $y++){ 
 	$stm		= JRequest::getInt( 'name'.$y);
-	$dwz		= JRequest::getInt( 'dwz'.$y);
+	$attr		= JRequest::getVar( 'hidden_attr'.$y);
+	if ($attr == '') $attr = NULL;
+
+	$dwz		= JRequest::getInt( 'hidden_dwz'.$y);
+	$dwz_I0		= JRequest::getInt( 'hidden_dwz_I0'.$y);
 	$mgl		= JRequest::getInt( 'hidden_mglnr'.$y);
 	$PKZ		= JRequest::getVar( 'hidden_PKZ'.$y);
 	$hidden_zps		= JRequest::getVar( 'hidden_zps'.$y);
@@ -126,9 +130,12 @@ for ($y=1; $y< (1+$stamm+$ersatz) ; $y++){
 		if ($PKZ == '' OR $PKZ == NULL) break;
 	}
 	$query	= "INSERT INTO #__clm_meldeliste_spieler "
-		." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `PKZ`, `zps`, `ordering`) "
-		." VALUES ('$sid','$lid','$man','$y','$mgl','$PKZ','$hidden_zps','0') "
-		;
+		." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `PKZ`, `zps`, `ordering`, `start_dwz`, `start_I0`, `attr`) "
+		." VALUES ('$sid','$lid','$man','$y','$mgl','$PKZ','$hidden_zps','0','$dwz','$dwz_I0'";
+	if (!is_null($attr))
+		$query	.= ",'$attr') ";
+	else
+		$query	.= ", NULL) ";
 	$db->setQuery($query);
 	$db->query();
 	}
@@ -226,7 +233,7 @@ if ( $liga[0]->mail > 0 ) {
 			<html>
 			<head>
 			<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-			<title>Online Mannschaftsmeldung</title>
+			<title>'.JText::_( 'CLUB_LIST_MAIL_HEADLINE' ).'</title>
 			</head>
 			<body>';
 	$body_html_footer = '
@@ -236,7 +243,7 @@ if ( $liga[0]->mail > 0 ) {
 	$body_html =	'
 		<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px;">
 		<tr>
-			<td bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;" colspan="6"><div align="center" style="font-size: 12px;"><strong>Online Mannschaftsmeldung vom ' .JHTML::_('date', date("Y-m-d"), JText::_('DATE_FORMAT_CLM_F')). '</strong></div></td>
+			<td bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;" colspan="6"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_HEADLINE' ).' '.JText::_( 'OF_DAY' ).JHTML::_('date', date("Y-m-d"), JText::_('DATE_FORMAT_CLM_F')). '</strong></div></td>
 		</tr>
 		<tr>
 			<td width="120">&nbsp;</td>
@@ -247,39 +254,39 @@ if ( $liga[0]->mail > 0 ) {
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<td width="120" style="border-bottom: solid 1px #999999;"><strong>Liga:</strong></td>
+			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_LEAGUE' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$liga[0]->name. '&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
-			<td width="80" style="border-bottom: solid 1px #999999;"><strong>Saison:</strong></td>
+			<td width="80" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_SEASON' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$saison[0]->name. '&nbsp;</td>
 		</tr>
 		<tr>
-			<td width="120" style="border-bottom: solid 1px #999999;"><strong>Staffelleiter:</strong></td>
+			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_CONTROLLER' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$liga[0]->sl_name. '&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
-			<td width="80" style="border-bottom: solid 1px #999999;"><strong>email:</strong></td>
+			<td width="80" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_EMAIL' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$liga[0]->sl_email. '&nbsp;</td>
 		</tr>
 		<tr>
-			<td width="120" style="border-bottom: solid 1px #999999;"><strong>Mannschaft:</strong></td>
+			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_TEAM' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$mannschaft[0]->name. '&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
-			<td width="80" style="border-bottom: solid 1px #999999;"><strong>Verein:</strong></td>
+			<td width="80" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_CLUB' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$mannschaft[0]->Vereinname. '&nbsp;</td>
 		</tr>
 		<tr>
-			<td width="120" style="border-bottom: solid 1px #999999;"><strong>Mannschaftsleiter:</strong></td>
+			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_CAPTAIN' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$mannschaft[0]->mf_name. '&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
-			<td width="80" style="border-bottom: solid 1px #999999;"><strong>email:</strong></td>
+			<td width="80" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_EMAIL' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$mannschaft[0]->mf_email. '&nbsp;</td>
 		</tr>
 		<tr>
-			<td width="120" style="border-bottom: solid 1px #999999;"><strong>Spiellokal:</strong></td>
+			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_LOCATION' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$mannschaft[0]->lokal. '&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
@@ -298,11 +305,11 @@ if ( $liga[0]->mail > 0 ) {
 		
 		<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px;">
 		<tr>
-			<td width="50" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>Nr</strong></div></td>
-			<td width="210" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>Name </strong></div></td>
-			<td width="75" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>DWZ </strong></div></td>
-			<td width="75" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>Mgl.Nr.</strong></div></td>
-			<td width="210" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>Verein</strong></div></td>
+			<td width="50" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_NO' ).'</strong></div></td>
+			<td width="210" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_NAME' ).'</strong></div></td>
+			<td width="75" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_RATING' ).'</strong></div></td>
+			<td width="75" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_NUMBER' ).'</strong></div></td>
+			<td width="210" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_CLUBL' ).'</strong></div></td>
 		</tr>
 	';
 	foreach ($meldeliste as $meldepos) {
@@ -338,7 +345,7 @@ if ( $liga[0]->mail > 0 ) {
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<td width="80" valign="top"><strong>Melder:</strong></td>
+			<td width="80" valign="top"><strong>'.JText::_( 'CLUB_LIST_MAIL_SENDER' ).'</strong></td>
 			<td>' .$melder[0]->name. '&nbsp;</td>
 		</tr>
 	
