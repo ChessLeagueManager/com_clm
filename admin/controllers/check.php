@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -146,12 +146,13 @@ public static function show_d_spl($zps,$spieler,$PKZ,$runde,$dg,$rnd)
 		." LEFT JOIN #__clm_runden_termine AS rt ON ( a.lid = rt.liga AND (a.runde + (a.dg - 1) * l.runden) = rt.nr ) "  
 		." WHERE a.zps = '$zps'"
 		." AND a.sid = ".$sid      
-		." AND rt.datum = '$rt_date'"  
-		." ORDER BY a.lid ASC, a.brett ASC ";
+		." AND rt.datum = '$rt_date'";  
 	if ($spieler > 0)
-		$query .= " AND a.spieler = ".$spieler;
+		$query .= " AND a.spieler = ".$spieler
+			   ." ORDER BY a.lid ASC, a.brett ASC ";
 	else
-		$query .= " AND a.PKZ = '".$PKZ."'";
+		$query .= " AND a.PKZ = '".$PKZ."'"
+			   ." ORDER BY a.lid ASC, a.brett ASC ";
 	$db->setQuery( $query);
 	$liga=$db->loadObjectList();
 	return $liga;
@@ -192,12 +193,13 @@ public static function show_r_spl($zps,$spieler,$PKZ,$runde,$dg,$rnd)
 		." WHERE a.zps = '$zps'"
 		." AND a.runde = ".$runde
 		." AND a.dg = ".$dg
-		." AND a.sid = ".$sid      
-		." ORDER BY a.lid ASC, a.brett ASC ";
+		." AND a.sid = ".$sid;      
 	if ($spieler > 0)
-		$query .= " AND a.spieler = ".$spieler;
+		$query .= " AND a.spieler = ".$spieler
+			   ." ORDER BY a.lid ASC, a.brett ASC ";
 	else
-		$query .= " AND a.PKZ = '".$PKZ."'";
+		$query .= " AND a.PKZ = '".$PKZ."'"
+			   ." ORDER BY a.lid ASC, a.brett ASC ";
 	$db->setQuery( $query);
 	$liga=$db->loadObjectList();
 	return $liga;

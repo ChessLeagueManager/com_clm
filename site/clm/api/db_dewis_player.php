@@ -15,7 +15,7 @@ function clm_api_db_dewis_player($zps = - 1, $incl_pd = 0, $mgl_nr = array()) {
 
 		// VKZ des Vereins --> Vereinsliste
 		$unionRatingList = $client->unionRatingList($zps);
-		$sql = "REPLACE INTO #__clm_dwz_spieler ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Spielername`, `DWZ`, `DWZ_Index`, `Spielername_G`, `Geschlecht`, `Geburtsjahr`, `FIDE_Elo`, `FIDE_Land`, `FIDE_ID`, `Status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		$sql = "REPLACE INTO #__clm_dwz_spieler ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Spielername`, `DWZ`, `DWZ_Index`, `Spielername_G`, `Geschlecht`, `Geburtsjahr`, `FIDE_Elo`, `FIDE_Land`, `FIDE_ID`, `Status`, FIDE_Titel) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		$stmt = clm_core::$db->prepare($sql);
 		// Detaildaten zu Mitgliedern lesen
 		foreach ($unionRatingList->members as $m) {
@@ -41,7 +41,7 @@ function clm_api_db_dewis_player($zps = - 1, $incl_pd = 0, $mgl_nr = array()) {
 			$rating = ($m->rating != '0' ? $m->rating : "NULL");
 			$rating_index = ($m->rating != '0' ? $m->ratingIndex : "NULL");
 			$state = ($m->state != '' ? $m->state : "A");
-			$stmt->bind_param('isssssssssssss', $sid, $zps, $out[0], $m->pid, $out[1], $rating, $rating_index, $out[2], $out[3], $m->yearOfBirth, $m->elo, $out[4], $m->idfide, $state);
+			$stmt->bind_param('issssssssssssss', $sid, $zps, $out[0], $m->pid, $out[1], $rating, $rating_index, $out[2], $out[3], $m->yearOfBirth, $m->elo, $out[4], $m->idfide, $state, $m->fideTitle);
 			$stmt->execute();
 			$counter++;
 			unset($tcard);
