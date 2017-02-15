@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -10,6 +10,10 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 
 ?>
 
@@ -113,8 +117,11 @@ defined('_JEXEC') or die('Restricted access');
 							<td align="center">
 								<?php 
 									if ($row->snr == "" ) { 
+										if ($countryversion =="de") { $hcid = $row->ZPS.$row->Mgl_Nr; }
+										else { $hcid = $row->ZPS.$row->PKZ; }
+
 								?>
-									<input type="checkbox" id="cb<?php echo $i; ?>" name="cid[]" value="<?php echo $row->ZPS.$row->Mgl_Nr; ?>" onclick="isChecked(this.checked);" />
+									<input type="checkbox" id="cb<?php echo $i; ?>" name="cid[]" value="<?php echo $hcid; ?>" onclick="isChecked(this.checked);" />
 								<?php 
 									} else {
 										echo '-';

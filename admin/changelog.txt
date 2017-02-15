@@ -18,6 +18,7 @@ $ -> Language fix or change
 + Mannschaftsaufstellung: freies Attributsfeld pro Spieler
 # Rundencheck: Abbruchfehler bei Anzeige
 # Datenbank: direkte Aktualisierung mit FIDE-Titel
++ Einzelturniere: Einbau der engl. Anwendung
 
 - - - - - 3.3.5 - [21-01-2017] - - - - - - - - - - - - - - - - - - - -
 # Admin-View Runden: kleine Code-Bereinigung

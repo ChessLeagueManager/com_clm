@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -49,6 +49,9 @@ class CLMModelTurPlayerForm extends JModelLegacy {
 			$mainframe = JFactory::getApplication();
 			$option = $mainframe->scope;
 		}
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 	
 		// turnierid
 		$this->param['id'] = JRequest::getInt('id');
@@ -68,17 +71,18 @@ class CLMModelTurPlayerForm extends JModelLegacy {
 		// verein
 		$this->param['vid'] = $mainframe->getUserStateFromRequest( "$option.filter_vid", 'filter_vid', 0, 'string' );
 		// prüfen, ob Verband gewählt und gewählter Verein zu Verband gehört!
-		if ($this->param['verband'] != '000') {
-			$verband = $this->param['verband'];
-			WHILE (substr($verband, -1) == '0') {
-				$verband = substr_replace($verband, "", -1);
-			}
-			if (!strstr($this->param['vid'], $verband)) {
-				$this->param['vid'] = 0;
+		if ($countryversion =="de") {		// so wie hier nur für deutsche Anwendung sinnvoll 
+			if ($this->param['verband'] != '000') {
+				$verband = $this->param['verband'];
+				WHILE (substr($verband, -1) == '0') {
+					$verband = substr_replace($verband, "", -1);
+				}
+				if (!strstr($this->param['vid'], $verband)) {
+					$this->param['vid'] = 0;
+				}
 			}
 		}
-		
-	
+
 		// Order
 		$this->param['order'] = $mainframe->getUserStateFromRequest( "$option.filter_order", 'filter_order', 'DWZ', 'cmd' );
 		$this->param['order_Dir'] = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",'filter_order_Dir', '', 'word' );
@@ -105,6 +109,9 @@ class CLMModelTurPlayerForm extends JModelLegacy {
 	}
 
 	function _getPlayerList() {
+		//CLM parameter auslesen
+		$config = clm_core::$db->config();
+		$countryversion = $config->countryversion;
 		
 		if ($this->param['vid'] != '0') {
 		
@@ -130,27 +137,30 @@ class CLMModelTurPlayerForm extends JModelLegacy {
 			$sqlName = '';
 		}
 		
-		if ($this->param['dwz'] == 28) { // > 2600
+		if ($this->param['dwz'] == 56) { // > 2600
 			$sqlDWZ = ' AND ds.DWZ >= 2600';
 		} elseif ($this->param['dwz'] != 0) {
-			//$sqlDWZ = ' AND ds.DWZ < '.($this->param['dwz']*100);  //klkl
-			$sqlDWZ = ' AND ( ds.DWZ < '.($this->param['dwz']*100).' OR ds.DWZ IS NULL )';
+			$sqlDWZ = ' AND ( ds.DWZ < '.($this->param['dwz']*50).' OR ds.DWZ IS NULL )';
 		} else {
 			$sqlDWZ = '';
 		}
 		
 		// SELECT 
 		$query = 'SELECT ds.*, dv.Vereinname, tt.snr '
-				. ' FROM #__clm_dwz_spieler AS ds'
-				. ' LEFT JOIN #__clm_dwz_vereine AS dv ON dv.ZPS = ds.ZPS AND dv.sid = ds.sid'
-				. ' LEFT JOIN #__clm_turniere_tlnr AS tt ON tt.zps = ds.ZPS AND tt.sid = ds.sid AND tt.mgl_nr = ds.Mgl_Nr AND tt.turnier ='.$this->param['id']
-				. ' WHERE ds.sid = '.$this->turnier->sid
-				. $sqlZPS
-				. $sqlName
-				. $sqlDWZ
-				. " AND ds.sid = ".clm_core::$access->getSeason()
-				. $this->_sqlOrder()
-				;
+			. ' FROM #__clm_dwz_spieler AS ds'
+			. ' LEFT JOIN #__clm_dwz_vereine AS dv ON dv.ZPS = ds.ZPS AND dv.sid = ds.sid'
+			. ' LEFT JOIN #__clm_turniere_tlnr AS tt ON tt.zps = ds.ZPS AND tt.sid = ds.sid AND tt.turnier ='.$this->param['id'];
+		if ($countryversion == 'de') 
+			$query .= ' AND tt.mgl_nr = ds.Mgl_Nr ';
+		else   // en 
+			$query .= ' AND tt.PKZ = ds.PKZ ';
+		$query .= ' WHERE ds.sid = '.$this->turnier->sid
+			. $sqlZPS
+			. $sqlName
+			. $sqlDWZ
+			. " AND ds.sid = ".clm_core::$access->getSeason()
+			. $this->_sqlOrder()
+			;
 
 		$this->_db->setQuery($query);
 		$this->PlayersCount = $this->_getListCount($query);
@@ -182,7 +192,6 @@ class CLMModelTurPlayerForm extends JModelLegacy {
 			$this->pagination = new JPagination($this->PlayersCount, $this->limitstart, $this->limit );
 		}
 	}
-
 
 }
 

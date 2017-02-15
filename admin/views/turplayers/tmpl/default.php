@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -27,7 +27,7 @@ $turParams = new clm_class_params($this->turnier->params);
 			</td>
 			<td nowrap="nowrap">
 				<?php
-					echo "&nbsp;&nbsp;&nbsp;".CLMForm::selectVerein('filter_vid', $this->param['vid'], TRUE);
+					echo "&nbsp;&nbsp;&nbsp;".CLMForm::selectVereinTournament('filter_vid', $this->param['vid'], $this->turnier->id, TRUE);
 				?>
 			</td>
 		</tr>

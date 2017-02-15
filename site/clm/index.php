@@ -2,7 +2,7 @@
 // CLM als aktiv markieren, Major.Minor.Patch:Datenbankversion
 // WICHTIG: Gibt es eine neue Datenbankversion,
 // müssen die Änderungen auch in der install.sql eingebracht werden.
-define("clm", "3.3.5d:27");
+define("clm", "3.3.5:28");
 if (!defined("DS")) {
 	define('DS', DIRECTORY_SEPARATOR);
 }

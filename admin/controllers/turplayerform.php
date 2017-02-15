@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -66,6 +66,9 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 	function _saveDo() {
 	
 		JRequest::checkToken() or die( 'Invalid Token' );
+		//CLM parameter auslesen
+		$config = clm_core::$db->config();
+		$countryversion = $config->countryversion;
 	
 		// Instanz der Tabelle
 		$row = JTable::getInstance( 'turniere', 'TableCLM' );
@@ -144,28 +147,44 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 			if ($this->_checkTournamentOpen($playersIn, $tournament->data->teil)) {
 			
 				// ausgelesene Daten
-				$mgl	= substr($id, 5);
-				if(!is_numeric($mgl)) { $mgl = -1; }
-				$zps	= substr($id, 0, 5);
-				
+				if ($countryversion =="de") {
+					$PKZ = '';
+					$mgl	= substr($id, 5);
+					if(!is_numeric($mgl)) { $mgl = -1; }
+					$zps	= substr($id, 0, 5);
+				} else {  // engl. Anwendung
+					$mgl = 0;
+					$PKZ	= substr($id, 4);
+					//if(!is_numeric($PKZ)) { $PKZ = -1; }
+					$zps	= substr($id, 0, 4);
+				}
 				// weitere Daten des Spielers ermitteln
 				// in CLM DB suchen
-				$query = "SELECT a.Spielername, a.Geburtsjahr, a.Geschlecht, a.FIDE_Titel, a.FIDE_Elo, a.FIDE_ID, FIDE_Land, a.DWZ, v.Vereinname"
+				$query = "SELECT a.Spielername, a.Geburtsjahr, a.Geschlecht, a.FIDE_Titel, a.FIDE_Elo, a.FIDE_ID, FIDE_Land, a.DWZ, v.Vereinname, a.PKZ"
 						. " FROM `#__clm_dwz_spieler` as a"
 						. " LEFT JOIN #__clm_dwz_vereine as v ON v.ZPS = a.ZPS"
 						. " LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 						. " WHERE a.ZPS = '$zps'"
-						. " AND a.Mgl_Nr = ".$mgl
 						. " AND s.archiv = 0 "
 						. " AND a.sid = ".clm_core::$access->getSeason();
+				if ($countryversion =="de") {
+					$query .= " AND a.Mgl_Nr = ".$mgl;
+				} else {
+					$query .= " AND a.PKZ = '".$PKZ."'";
+				}
 
 				$this->_db->setQuery($query);
 				$data	= $this->_db->loadObject();
 				if (isset($data->Spielername)) {
-				
+					if ($PKZ == '') $PKZ = $data->PKZ;
 					// checken ob Spieler schon eingetragen, um Doppelungen zu vermeiden
 					$query = "SELECT COUNT(*) FROM #__clm_turniere_tlnr"
-							. " WHERE `turnier` = '".$this->turnierid."' AND `mgl_nr` = '$mgl' AND `zps` = '$zps'";
+							. " WHERE `turnier` = '".$this->turnierid."' AND `zps` = '$zps'";
+					if ($countryversion =="de") {
+						$query .= " AND mgl_nr = ".$mgl;
+					} else {
+						$query .= " AND PKZ = '".$PKZ."'";
+					}
 					$this->_db->setQuery($query);
 					if ($this->_db->loadResult() > 0) {
 						JError::raiseWarning( 500, JText::_('PLAYER')." ".$data->Spielername." ".JText::_('ALREADYIN') );
@@ -174,9 +193,9 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 						$twz = clm_core::$load->gen_twz($param_useastwz, $data->DWZ, $data->FIDE_Elo);
 						
 						$query = " INSERT INTO #__clm_turniere_tlnr"
-								. " (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `FIDEid`, `FIDEcco`, `titel`,`mgl_nr` ,`zps`) "
+								. " (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `FIDEid`, `FIDEcco`, `titel`,`mgl_nr` ,`PKZ` ,`zps`) "
 								. " VALUES"
-								. " ('".$tournament->data->sid."','".$this->turnierid."', '".$maxSnr++."', '".clm_escape( $data->Spielername )."', '".$data->Geburtsjahr."', '".$data->Geschlecht."','".clm_escape( $data->Vereinname )."', '".$twz."', '".$data->DWZ."', '".$data->FIDE_Elo."', '".$data->FIDE_ID."', '".$data->FIDE_Land."', '".$data->FIDE_Titel."', '$mgl', '$zps')";
+								. " ('".$tournament->data->sid."','".$this->turnierid."', '".$maxSnr++."', '".clm_escape( $data->Spielername )."', '".$data->Geburtsjahr."', '".$data->Geschlecht."','".clm_escape( $data->Vereinname )."', '".$twz."', '".$data->DWZ."', '".$data->FIDE_Elo."', '".$data->FIDE_ID."', '".$data->FIDE_Land."', '".$data->FIDE_Titel."', '$mgl', '$PKZ', '$zps')";
 						$this->_db->setQuery($query);
 						
 						if ($this->_db->query()) {

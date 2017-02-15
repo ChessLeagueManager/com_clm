@@ -130,11 +130,11 @@ if ($detail == 0) $detailp = '1'; else $detailp = '0';
 			fputs($pdatei, '[WhiteDWZ "'.$einz->gdwz.'"]'.$nl);
 			fputs($pdatei, '[BlackDWZ "'.$einz->hdwz.'"]'.$nl);
 			if ($einz->ergebnis == 2) { fputs($pdatei, '[Result "1/2-1/2"]'.$nl); $gtmarker = "1/2-1/2"; }
-			elseif ($einz->erg_text == "1-0") { fputs($pdatei, '[Result "0-1"]'.$nl); $gtmarker = "0-1"; }
-			elseif ($einz->erg_text == "0-1") { fputs($pdatei, '[Result "1-0"]'.$nl); $gtmarker = "1-0"; }
-			elseif ($einz->erg_text == "-/+") { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".utf8_decode('Weiß gewinnt kampflos')."}"; $gtmarker = "1-0"; }
-			elseif ($einz->erg_text == "+/-") { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{Schwarz gewinnt kampflos}"; $gtmarker = "0-1"; }
-			elseif ($einz->erg_text == "-/-") { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{beide verlieren kampflos}"; $gtmarker = "*"; }
+			elseif ($einz->ergebnis == 1) { fputs($pdatei, '[Result "0-1"]'.$nl); $gtmarker = "0-1"; }
+			elseif ($einz->ergebnis == 0) { fputs($pdatei, '[Result "1-0"]'.$nl); $gtmarker = "1-0"; }
+			elseif ($einz->ergebnis == 4) { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".utf8_decode('Weiß gewinnt kampflos')."}"; $gtmarker = "1-0"; }
+			elseif ($einz->ergebnis == 5) { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{Schwarz gewinnt kampflos}"; $gtmarker = "0-1"; }
+			elseif ($einz->ergebnis == 6) { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{beide verlieren kampflos}"; $gtmarker = "*"; }
 			else fputs($pdatei, '[Result "'.$einz->erg_text.'"]'.$nl);		
 		} else {
 			fputs($pdatei, '[White "'.utf8_decode($einz->hname).'"]'.$nl);
@@ -146,11 +146,11 @@ if ($detail == 0) $detailp = '1'; else $detailp = '0';
 			fputs($pdatei, '[WhiteDWZ "'.$einz->hdwz.'"]'.$nl);
 			fputs($pdatei, '[BlackDWZ "'.$einz->gdwz.'"]'.$nl);
 			if ($einz->ergebnis == 2) { fputs($pdatei, '[Result "1/2-1/2"]'.$nl); $gtmarker = "1/2-1/2"; }
-			elseif ($einz->erg_text == "1-0") { fputs($pdatei, '[Result "1-0"]'.$nl); $gtmarker = "1-0"; }
-			elseif ($einz->erg_text == "0-1") { fputs($pdatei, '[Result "0-1"]'.$nl); $gtmarker = "0-1"; }
-			elseif ($einz->erg_text == "-/+") { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{Schwarz gewinnt kampflos}"; $gtmarker = "0-1"; }
-			elseif ($einz->erg_text == "+/-") { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".utf8_decode('Weiß gewinnt kampflos')."}"; $gtmarker = "1-0"; }
-			elseif ($einz->erg_text == "-/-") { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{beide verlieren kampflos}"; $gtmarker = "*"; }
+			elseif ($einz->ergebnis == 1) { fputs($pdatei, '[Result "1-0"]'.$nl); $gtmarker = "1-0"; }
+			elseif ($einz->ergebnis == 0) { fputs($pdatei, '[Result "0-1"]'.$nl); $gtmarker = "0-1"; }
+			elseif ($einz->ergebnis == 4) { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{Schwarz gewinnt kampflos}"; $gtmarker = "0-1"; }
+			elseif ($einz->ergebnis == 5) { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".utf8_decode('Weiß gewinnt kampflos')."}"; $gtmarker = "1-0"; }
+			elseif ($einz->ergebnis == 6) { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{beide verlieren kampflos}"; $gtmarker = "*"; }
 			else fputs($pdatei, '[Result "'.$einz->erg_text.'"]'.$nl);		
 		}
 		fputs($pdatei, '[PlyCount "0"]'.$nl);

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -239,7 +239,6 @@ class CLMForm {
 	
 	}
 
-
 	// ersetzt CLMFilterVerein::filter_vereine, aber ohne Option von $vl = 1, also nur DB-Auswahl
 	public static function selectVerein ($name, $value = 0, $filter = FALSE) {
 		
@@ -256,35 +255,6 @@ class CLMForm {
 			$out = clm_core::$load->unit_range($lv);
 		}
 
-			/*
-			if ($version == "0") {
-				if ($dat == "00") {
-					$ug = (substr($lv, 0, 1)).'0000';
-					$og = (substr($lv, 0, 1)).'9999';
-				}
-				if ($dat2 =="0" AND $dat !="00") {
-					$ug = (substr($lv, 0, 2)).'000';
-					$og = (substr($lv, 0, 2)).'999';
-				}
-				if ($dat2 !="0" AND $dat !="00") {
-					$ug =$lv.'00';
-					$og =$lv.'99';
-				}
-			}
-			*/
-			/*
-			$version = $config->version;
-			if($version == "1"){
-				if($lv=="00") {
-					$ug =$lv;
-					$og ="99";
-				} else {
-					$ug =$lv;
-					$og =$lv;
-				}
-			}
-			*/
-
 			$sql = "SELECT ZPS as zps, Vereinname as name FROM #__clm_dwz_vereine as a "
 				." LEFT JOIN #__clm_saison as s ON s.id= a.sid "
 				." WHERE a.Verband >= '$out[0]' AND a.Verband <= '$out[1]' "
@@ -298,6 +268,24 @@ class CLMForm {
 		$_db->setQuery($sql);
 		$vereine = $_db->loadObjectList();
 	
+		$vlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_CLUB' )), 'zps', 'name' );
+		$vlist		= array_merge( $vlist, $vereine);
+	
+		return JHTML::_('select.genericlist', $vlist, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
+	
+	}
+
+
+	// neu
+	public static function selectVereinTournament ($name, $value = 0, $turnier, $filter = FALSE) {
+		
+			$sql = "SELECT a.zps, v.Vereinname as name FROM #__clm_turniere_tlnr as a "
+				." LEFT JOIN #__clm_dwz_vereine as v ON v.sid= a.sid AND v.ZPS = a.zps"
+				." WHERE a.turnier = '$turnier'"
+				." GROUP BY a.zps";
+
+		$vereine = clm_core::$db->loadObjectList($sql);
+
 		$vlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_CLUB' )), 'zps', 'name' );
 		$vlist		= array_merge( $vlist, $vereine);
 	
@@ -334,10 +322,21 @@ class CLMForm {
 
 	public static function selectDWZRanges ($name, $value = 0, $filter = FALSE) {
 	
-		$dwzlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_RATING' )), 'id', 'name' );
-		$dwzlist[]	= JHTML::_('select.option',  '28', 'DWZ >= 2600', 'id', 'name' );
-		for ($r=26; $r>=10; $r-=2) {
-			$dwzlist[]	= JHTML::_('select.option',  $r, 'DWZ < '.($r*100), 'id', 'name' );
+		//CLM parameter auslesen
+		$config = clm_core::$db->config();
+		$countryversion = $config->countryversion;
+		if ($countryversion =="de") {
+			$dwzlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_RATING' )), 'id', 'name' );
+			$dwzlist[]	= JHTML::_('select.option',  '56', 'DWZ >= 2600', 'id', 'name' );
+			for ($r=52; $r>=20; $r-=4) {
+				$dwzlist[]	= JHTML::_('select.option',  $r, 'DWZ < '.($r*50), 'id', 'name' );
+			}
+		} else {	// engl.Anwendung
+			$dwzlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_RATING_GRADE' )), 'id', 'name' );
+			//$dwzlist[]	= JHTML::_('select.option',  '6', 'grade >= 250', 'id', 'name' );
+			for ($r=5; $r>=1; $r-=1) {
+				$dwzlist[]	= JHTML::_('select.option',  $r, 'grade < '.($r*50), 'id', 'name' );
+			}
 		}
 	
 		return JHTML::_('select.genericlist', $dwzlist, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
