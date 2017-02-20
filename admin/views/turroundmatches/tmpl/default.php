@@ -206,7 +206,7 @@ $pgnInput = $turParams->get('pgnInput', 1);
 			<label for="name"><?php echo JText::_( 'DATE_AT' ); ?>:</label>
 			</td>
 			<td>
-			<?php if ($this->round->zeit != "0000-00-00 00:00:00") {echo JHtml::_('date',  $this->round->zeit, JText::_('DATE_FORMAT_LC2'));} 
+			<?php if ($this->round->zeit != "0000-00-00 00:00:00" AND $this->round->zeit != "1970-01-01 00:00:00") {echo JHtml::_('date',  $this->round->zeit, JText::_('DATE_FORMAT_LC2'));} 
 			else { echo "---"; } ?>
 
 			</td>
@@ -225,7 +225,7 @@ $pgnInput = $turParams->get('pgnInput', 1);
 			<label for="name"><?php echo JText::_( 'DATE_AT' ); ?>:</label>
 			</td>
 			<td>
-			<?php if ($this->round->edit_zeit != "0000-00-00 00:00:00") {echo JHtml::_('date',  $this->round->edit_zeit, JText::_('DATE_FORMAT_LC2'));} 
+			<?php if ($this->round->edit_zeit != "0000-00-00 00:00:00" AND $this->round->edit_zeit != "1970-01-01 00:00:00") {echo JHtml::_('date',  $this->round->edit_zeit, JText::_('DATE_FORMAT_LC2'));} 
 			else { echo "---"; } ?>
 			</td>
 		</tr>

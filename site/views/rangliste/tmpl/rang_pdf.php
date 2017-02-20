@@ -42,7 +42,7 @@ $lid = JRequest::getInt( 'liga', '1' );
 			$params[substr($value,0,$ipos)] = substr($value,$ipos+1);
 		}
 	}	
-	if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
+	if (!isset($params['dwz_date'])) $params['dwz_date'] = '1970-01-01';
 $sid = JRequest::getInt( 'saison','1');
 $view = JRequest::getVar( 'view');
 // Variablen ohne foreach setzen
@@ -57,7 +57,7 @@ $name_liga = $liga[0]->name;
 	// Array für DWZ Schnitt setzen
 	$dwz = array();
 	for ($y=1; $y< ($liga[0]->teil)+1; $y++){
-		if ($params['dwz_date'] == '0000-00-00') {
+		if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
 			if(isset($dwzschnitt[($y-1)]->dwz)) {
 			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->dwz; }
 		} else {

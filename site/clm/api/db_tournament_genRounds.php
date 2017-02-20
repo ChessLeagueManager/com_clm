@@ -321,10 +321,10 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 		}
 		$publish = $row->published; // für Runden-Termine
 		// Startdatum gegeben UND (kein ODER gleiches Enddatum) - also Eintagesturnier!
-		if ($row->dateStart != '0000-00-00' AND ($row->dateEnd == '0000-00-00' OR $row->dateEnd == $row->dateStart)) {
+		if ($row->dateStart != '0000-00-00' AND $row->dateStart != '1970-01-01' AND ($row->dateEnd == '0000-00-00' OR $row->dateEnd == '1970-01-01' OR $row->dateEnd == $row->dateStart)) {
 			$datum = $row->dateStart;
 		} else {
-			$datum = '0000-00-00';
+			$datum = '1970-01-01';
 		}
 		// Anzahl Spieler
 		$n = $row->teil;

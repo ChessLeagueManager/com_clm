@@ -28,7 +28,7 @@ $liga		= $this->liga;
 			$params[substr($value,0,$ipos)] = substr($value,$ipos+1);
 		}
 	}	
-	if (!isset($params['dwz_date'])) { $params['dwz_date'] = '0000-00-00'; $old=true; } else { $old=false; }
+	if (!isset($params['dwz_date'])) { $params['dwz_date'] = '1970-01-01'; $old=true; } else { $old=false; }
 $dwz		= $this->dwz;
 $spieler	= $this->spieler;
 $sid		= JRequest::getInt( 'saison','1');
@@ -51,7 +51,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
 
 <?php
-if (!isset($dwz_date) || $params[$dwz_date] == '0000-00-00') {
+if (!isset($dwz_date) OR $params[$dwz_date] == '0000-00-00' OR $params[$dwz_date] == '1970-01-01') {
 	if (isset($dwz[0]) && $dwz[0]->dsb_datum  > 0) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $dwz[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F')); 
 	if (!isset($dwz[0]) || $dwz[0]->dsb_datum == 0) {$hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_UNCLEAR');  }
 } else {

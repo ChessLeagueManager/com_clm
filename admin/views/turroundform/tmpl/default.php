@@ -43,8 +43,7 @@ defined('_JEXEC') or die('Restricted access');
 			<label for="datum"><?php echo JText::_( 'JDATE' ); ?>:</label>
 			</td>
 			<td>
-			<?php //if ($this->roundData->datum == '0000-00-00') $this->roundData->datum .= ' 00:00:00';
-			//echo JHtml::_('calendar', $this->roundData->datum, 'datum', 'datum', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); 
+			<?php
 			echo CLMForm::calendar($this->roundData->datum, 'datum', 'datum', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
 			</td>
 		</tr>

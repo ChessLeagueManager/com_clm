@@ -163,11 +163,14 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
             } ?>
             <tr>
                 <td width="110" align="right" class="date">
-                <?php if (isset($datum[$t-1]) AND $datum[$t] == $datum[$t-1]) { echo ''; }
-                //else { echo $arrWochentag[date("l",$datum[$t])]. ",&nbsp;" . $datum_arr[$t][2].".".$datum_arr[$t][1].".".$datum_arr[$t][0]; }
-				else { echo JHTML::_('date',  $termine[$t]->datum, JText::_('DATE_FORMAT_CLM_F')); }
-				//if (isset($datum[$t]) AND $datum[$t] != '0000-00-00') { if ($termine[$t]->starttime != '00:00:00') echo '&nbsp;&nbsp;&nbsp;'.substr($termine[$t]->starttime,0,5).'&nbsp;Uhr';} 
-				if (isset($datum[$t]) AND $datum[$t] != '0000-00-00') { if ($termine[$t]->starttime != '00:00:00') echo '&nbsp;&nbsp;&nbsp;'.substr($termine[$t]->starttime,0,5).'&nbsp;';} ?>
+                <?php if (isset($datum[$t-1]) AND $datum[$t] == $datum[$t-1]) {
+			echo '';
+		      } else {
+			 echo JHTML::_('date',  $termine[$t]->datum, JText::_('DATE_FORMAT_CLM_F'));i
+		      }
+		      if (isset($datum[$t]) AND $datum[$t] != '0000-00-00' AND $datum[$t] != '1970-01-01') {
+			if ($termine[$t]->starttime != '00:00:00') echo '&nbsp;&nbsp;&nbsp;'.substr($termine[$t]->starttime,0,5).'&nbsp;';
+                      } ?>
                 </td>
                 <td width="120" class="title"><a href="<?php echo $linkname; if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php  echo $termine[$t]->name; ?></a></td>
                 <td width="120" class="typ"><?php echo $linktyp; ?></td>

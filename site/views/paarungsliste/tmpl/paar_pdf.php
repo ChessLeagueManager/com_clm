@@ -22,7 +22,7 @@ $liga		= $this->liga;
 			$params[substr($value,0,$ipos)] = substr($value,$ipos+1);
 		}
 	}	
-	if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
+	if (!isset($params['dwz_date'])) $params['dwz_date'] = '1971-01-01';
 $termin		= $this->termin;
 $dwzschnitt	= $this->dwzschnitt;
 $dwzgespielt	= $this->dwzgespielt;
@@ -73,7 +73,7 @@ if ( $liga[0]->published == 0) {
 //Array für DWZ Schnitt setzen
 $dwz = array();
 for ($y=1; $y< ($liga[0]->teil)+1; $y++){ 
-		if ($params['dwz_date'] == '0000-00-00') {
+		if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
 			if(isset($dwzschnitt[($y-1)]->dwz)) {
 			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->dwz; }
 		} else {
@@ -177,7 +177,7 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 	$pdf->Cell(50-$breite,$zelle,utf8_decode($paar[$z]->hname),1,0,'C');
 
 	if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 1 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
-		{ if ($params['dwz_date'] == '0000-00-00') $pdf->Cell(12-$breite,$zelle,round($dwzgespielt[$z2]->dwz),1,0,'C'); 
+		{ if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') $pdf->Cell(12-$breite,$zelle,round($dwzgespielt[$z2]->dwz),1,0,'C'); 
 			else $pdf->Cell(12-$breite,$zelle,round($dwzgespielt[$z2]->start_dwz),1,0,'C'); }
 
 		elseif (isset($dwz[($paar[$z]->htln)])) { $pdf->Cell(12-$breite,$zelle,round($dwz[($paar[$z]->htln)]),1,0,'C');}
@@ -195,7 +195,7 @@ else { $pdf->Cell(25-$breite,$zelle,' --- ',1,0,'C'); }
 	$pdf->Cell(50-$breite,$zelle,utf8_decode($paar[$z]->gname),1,0,'C');
 
 	if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 1 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
-		{ 	if ($params['dwz_date'] == '0000-00-00') $pdf->Cell(12-$breite,$zelle,round($dwzgespielt[$z2]->gdwz),1,0,'C');
+		{ 	if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') $pdf->Cell(12-$breite,$zelle,round($dwzgespielt[$z2]->gdwz),1,0,'C');
 			else $pdf->Cell(12-$breite,$zelle,round($dwzgespielt[$z2]->gstart_dwz),1,0,'C'); 
 			$z2++;
 		}

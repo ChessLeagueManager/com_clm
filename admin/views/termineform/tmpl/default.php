@@ -27,11 +27,11 @@ $today = date("Y-m-d");
 		// do field validation
 		if (form.name.value == "") {
 			alert( jserror['enter_name'] );
-		} else if (form.startdate.value == "0000-00-00") {
+		} else if (form.startdate.value == "0000-00-00" || form.startdate.value == "1970-01-01") {
 			alert( jserror['enter_startdate'] );
-		} else if (form.startdate.value == "0000-00-00" && form.starttime.value != "00:00") {
+		} else if (form.startdate.value == "0000-00-00" && form.startdate.value == "1970-01-01" && form.starttime.value != "00:00") {
 			alert( jserror['dont_starttime'] );
-		} else if (form.startdate.value == "0000-00-00" && form.enddate.value != "0000-00-00") {
+		} else if ((form.startdate.value == "0000-00-00" || form.startdate.value == "1970-01-01") && (form.enddate.value != "0000-00-00" && form.enddate.value != "1970-01-01)) {
 			alert( jserror['dont_enddate'] );
 		} else if (form.startdate.value > form.enddate.value) {
 			alert( jserror['enddate_wrong'] );

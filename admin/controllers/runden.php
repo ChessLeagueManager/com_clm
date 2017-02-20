@@ -313,7 +313,7 @@ function save()
 		$db->query();
 	}
 
-	if ($row->datum != '0000-00-00' AND $row->deadlineday != '0000-00-00' AND $row->deadlineday >= $row->datum) {
+	if ($row->datum != '0000-00-00' AND $row->datum != '1970-01-01' AND $row->deadlineday != '0000-00-00' AND $row->deadlineday != '1970-01-01' AND $row->deadlineday >= $row->datum) {
 		$ts1 = strtotime($row->deadlineday);
 		$ts2 = strtotime($row->datum);
 		$seconds_diff = $ts1 - $ts2;
@@ -323,7 +323,7 @@ function save()
 			." SET deadlineday = ADDDATE(datum,'".$day_diff."') "
 			." WHERE liga = ".$row->liga
 			." AND sid = ".$row->sid
-			." AND deadlineday = '0000-00-00' "
+			." AND (deadlineday = '0000-00-00' OR deadlineday = '1970-01-01') "
 		;
 		$db->setQuery($query);
 		$db->query();

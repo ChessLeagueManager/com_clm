@@ -54,7 +54,7 @@ $attr = clm_core::$api->db_lineup_attr($lid);
 		}
 	}	
 	if (!isset($params['pgntype'])) $params['pgntype']= 0;
-	if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
+	if (!isset($params['dwz_date'])) $params['dwz_date'] = '1970-01-01';
 	if (!isset($params['round_date'])) $params['round_date'] = '0';
 	if (!isset($params['noBoardResults'])) $params['noBoardResults'] = '0';
 	if (!isset($params['ReportForm'])) $params['ReportForm'] = '0';
@@ -242,7 +242,7 @@ if ((isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok > 0)) $hint_freenew = JText::_('CH
 if ((isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok == 0)) $hint_freenew = JText::_('CHIEF_NOK');  
 if ((!isset($ok[0]->sl_ok))) $hint_freenew = JText::_('CHIEF_NOK');  
 
-if (isset($liga[$runde-1]->datum) AND $liga[$runde-1]->datum =='0000-00-00') {
+if (isset($liga[$runde-1]->datum) AND ($liga[$runde-1]->datum =='0000-00-00' OR $liga[$runde-1]->datum =='1970-01-01' )) {
 ?>
 
 <div class="componentheading"><?php echo $liga[0]->name.', '.$liga[$runde-1]->rname;      // JText::_('ROUND').' '.$runde; 
@@ -316,7 +316,7 @@ $erg_text = CLMModelRunde::punkte_text($liga[0]->id);
 // Array für DWZ Schnitt setzen
 $dwz = array();
 for ($y=1; $y< ($liga[0]->teil)+1; $y++){
-	if ($params['dwz_date'] == '0000-00-00') {
+	if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
 		if(isset($dwzschnitt[($y-1)]->dwz)) {
 		$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->dwz; }
 	} else {
@@ -449,7 +449,7 @@ for ($x=0; $x<$liga[0]->stamm; $x++) {
 			<a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->zps; ?>&mglnr=<?php echo $einzel[$w]->spieler; ?>&PKZ=<?php echo $einzel[$w]->PKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->hname; } 
 		else echo $einzel[$w]->hname; } ?></div></td>
  
- <td class="paarung"><div><?php if ($params['dwz_date'] == '0000-00-00') echo $einzel[$w]->hdwz; else echo $einzel[$w]->hstart_dwz;?></div></td>
+ <td class="paarung"><div><?php if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') echo $einzel[$w]->hdwz; else echo $einzel[$w]->hstart_dwz;?></div></td>
         <?php if ($einzel[$w]->dwz_edit !="") { $edit++; ?>
     <td class="paarung"><div><b><?php echo $einzel[$w]->dwz_text; ?><font size="1"><br>( <?php echo $erg_text[$einzel[$w]->ergebnis]->erg_text; ?> )</font></b></div></td>
         <?php } else { ?>
@@ -475,7 +475,7 @@ for ($x=0; $x<$liga[0]->stamm; $x++) {
     <td class="paarung2" colspan ="1"><div><?php if ($einzel[$w]->gzps =="ZZZZZ") {echo "N.N.";} else { 
 		if ($einzel[$w]->gzps != "-1") { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->gzps; ?>&mglnr=<?php echo $einzel[$w]->gegner; ?>&PKZ=<?php echo $einzel[$w]->gPKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->gname; } 
 		else echo $einzel[$w]->gname; } ?></div></td>
-    <td class="paarung"><div><?php if ($params['dwz_date'] == '0000-00-00') echo $einzel[$w]->gdwz; else echo $einzel[$w]->gstart_dwz; ?></div></td>
+    <td class="paarung"><div><?php if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') echo $einzel[$w]->gdwz; else echo $einzel[$w]->gstart_dwz; ?></div></td>
     </tr>
 <?php }
 $w++; }

@@ -50,13 +50,13 @@ if ( $this->turnier->published == 0) {
 	</tr>
 
 	<?php
-	if ($this->turnier->dateStart != '0000-00-00') {
+	if ($this->turnier->dateStart != '0000-00-00' and $this->turnier->dateStart != '1970-01-01') {
 	?>
 
 		<tr>
 			<td align="left" width="100">
 				<?php
-				if ($this->turnier->dateEnd != '0000-00-00') {
+				if ($this->turnier->dateEnd != '0000-00-00' and $this->turnier->dateEnd != '1970-01-01') {
 					echo JText::_('TOURNAMENT_TIMEFRAME');
 				} else {
 					echo JText::_('TOURNAMENT_DATE');
@@ -66,7 +66,7 @@ if ( $this->turnier->published == 0) {
 			<td>
 				<?php 
 				echo JHTML::_( 'date', $this->turnier->dateStart, JText::_('DATE_FORMAT_LC3')); 
-				if ($this->turnier->dateEnd != '0000-00-00') {
+				if ($this->turnier->dateEnd != '0000-00-00' and $this->turnier->dateEnd != '1970-01-01') {
 					echo '&nbsp;'.JText::_('TOURNAMENT_TO').'&nbsp;'.JHTML::_( 'date', $this->turnier->dateEnd, JText::_('DATE_FORMAT_LC3'));
 				}
 				?>

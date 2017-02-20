@@ -118,10 +118,10 @@ defined('_JEXEC') or die('Restricted access');
 
 			<td align="center">
 				<?php 
-				if ($row->dateStart != '0000-00-00') {
+				if ($row->dateStart != '0000-00-00' AND $row->dateStart != '1970-01-01') {
 					echo JHtml::_( 'date', $row->dateStart, JText::_('DATE_FORMAT_CLM')) ;
 				}
-				if ($row->dateEnd != '0000-00-00') {
+				if ($row->dateEnd != '0000-00-00' AND $row->dateEnd != '1970-01-01') {
 					echo '<br />'.JHtml::_( 'date', $row->dateEnd, JText::_('DATE_FORMAT_CLM'));
 				}
 				

@@ -443,7 +443,7 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 			<label for="name"><?php echo JText::_( 'RESULTS_DETAILS_DATE' ); ?></label>
 			</td>
 			<td>
-			<?php if ($runde[0]->zeit != "0000-00-00 00:00:00") {
+			<?php if ($runde[0]->zeit != "0000-00-00 00:00:00" AND $runde[0]->zeit != "1970-01-01 00:00:00") {
 				//echo JHtml::_('date',  $runde[0]->zeit, JText::_('DATE_FORMAT_LC2'));} 
 				echo clm_core::$cms->showDate($runde[0]->zeit);} 
 			else { echo JText::_('RESULTS_DETAILS_NOTHING'); } ?>
@@ -464,7 +464,7 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 			<label for="name"><?php echo JText::_( 'RESULTS_DETAILS_DATE' ); ?></label>
 			</td>
 			<td>
-			<?php if ($runde[0]->edit_zeit != "0000-00-00 00:00:00") {
+			<?php if ($runde[0]->edit_zeit != "0000-00-00 00:00:00" AND $runde[0]->edit_zeit != "1970-01-01 00:00:00") {
 				//echo JHtml::_('date',  $runde[0]->edit_zeit, JText::_('DATE_FORMAT_LC2'));} 
 				echo clm_core::$cms->showDate($runde[0]->edit_zeit);} 
 			else { echo "---"; } ?>
@@ -484,7 +484,7 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 			<label for="name"><?php echo JText::_( 'RESULTS_DETAILS_DATE' ); ?></label>
 			</td>
 			<td>
-			<?php if ($runde[0]->dwz_zeit != "0000-00-00 00:00:00") {echo JHtml::_('date',  $runde[0]->dwz_zeit, JText::_('DATE_FORMAT_LC2'));} 
+			<?php if ($runde[0]->dwz_zeit != "0000-00-00 00:00:00" AND $runde[0]->dwz_zeit != "1970-01-01 00:00:00") {echo JHtml::_('date',  $runde[0]->dwz_zeit, JText::_('DATE_FORMAT_LC2'));} 
 			else { echo JText::_('RESULTS_DETAILS_NOTHING'); } ?>
 			</td>
 		</tr>
@@ -695,7 +695,7 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 			<label for="name"><?php echo JText::_( 'RESULTS_DETAILS_DATE' ); ?></label>
 			</td>
 			<td>
-			<?php if ($runde[0]->zeit != "0000-00-00 00:00:00") {echo JHtml::_('date',  $runde[0]->zeit, JText::_('DATE_FORMAT_LC2'));} 
+			<?php if ($runde[0]->zeit != "0000-00-00 00:00:00" AND $runde[0]->zeit != "1970-01-01 00:00:00") {echo JHtml::_('date',  $runde[0]->zeit, JText::_('DATE_FORMAT_LC2'));} 
 			else {  echo JText::_( 'RESULTS_DETAILS_NOTHING'); } ?>
 
 			</td>
@@ -714,7 +714,7 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 			<label for="name"><?php echo JText::_( 'am : ' ); ?></label>
 			</td>
 			<td>
-			<?php if ($runde[0]->edit_zeit != "0000-00-00 00:00:00") {echo JHtml::_('date',  $runde[0]->edit_zeit, JText::_('DATE_FORMAT_LC2'));} 
+			<?php if ($runde[0]->edit_zeit != "0000-00-00 00:00:00" AND $runde[0]->edit_zeit != "1970-01-01 00:00:00") {echo JHtml::_('date',  $runde[0]->edit_zeit, JText::_('DATE_FORMAT_LC2'));} 
 			else { echo "---"; } ?>
 			</td>
 		</tr>
@@ -732,7 +732,7 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 			<label for="name"><?php echo JText::_( 'RESULTS_DETAILS_DATE' ); ?></label>
 			</td>
 			<td>
-			<?php if ($runde[0]->dwz_zeit != "0000-00-00 00:00:00") {echo JHtml::_('date',  $runde[0]->dwz_zeit, JText::_('DATE_FORMAT_LC2'));} 
+			<?php if ($runde[0]->dwz_zeit != "0000-00-00 00:00:00" AND $runde[0]->dwz_zeit != "1970-01-01 00:00:00") {echo JHtml::_('date',  $runde[0]->dwz_zeit, JText::_('DATE_FORMAT_LC2'));} 
 			else { echo JText::_( 'RESULTS_DETAILS_NOTHING'); } ?>
 			</td>
 		</tr>

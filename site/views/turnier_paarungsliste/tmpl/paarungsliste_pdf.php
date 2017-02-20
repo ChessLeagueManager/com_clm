@@ -78,7 +78,7 @@ if ($value->published == 1) {
 	$pdf->Cell(1,$zelle," ",0,1,'C');
 	$pdf->Cell($br00,$zelle,' ',0,0);
 	$heading = utf8_decode($value->name);
-	if ($value->datum != "0000-00-00" AND $turParams->get('displayRoundDate', 1) == 1) {
+	if ($value->datum != "0000-00-00" AND $value->datum != "1970-01-01" AND $turParams->get('displayRoundDate', 1) == 1) {
 		$heading .= ', '.utf8_decode(JHTML::_('date',  $value->datum, JText::_('DATE_FORMAT_CLM_F'))); 
 		if(isset($value->startzeit) and $value->startzeit != '00:00:00') { $heading .= '  '.substr($value->startzeit,0,5).' Uhr'; } 		
 	}

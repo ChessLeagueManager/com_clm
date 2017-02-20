@@ -178,8 +178,7 @@ $turParams = new clm_class_params($this->turnier->params);
 			</label>
 		</td>
 		<td class="paramlist_value">
-			<?php //if ($this->turnier->dateStart == '0000-00-00') $this->turnier->dateStart .= ' 00:00:00';
-			//echo JHtml::_('calendar', $this->turnier->dateStart, 'dateStart', 'dateStart', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); 
+			<?php
 			echo CLMForm::calendar($this->turnier->dateStart, 'dateStart', 'dateStart', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
 		</td>
 	</tr>
@@ -191,8 +190,7 @@ $turParams = new clm_class_params($this->turnier->params);
 			</label>
 		</td>
 		<td class="paramlist_value">
-			<?php //if ($this->turnier->dateEnd == '0000-00-00') $this->turnier->dateEnd .= ' 00:00:00';
-			//echo JHtml::_('calendar', $this->turnier->dateEnd, 'dateEnd', 'dateEnd', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); 
+			<?php
 			echo CLMForm::calendar($this->turnier->dateEnd, 'dateEnd', 'dateEnd', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
 		</td>
 	</tr>
