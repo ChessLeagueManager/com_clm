@@ -18,6 +18,7 @@ function clm_api_db_be_menu() {
 	$access["BE_team_create"] = $clmAccess->access('BE_team_create');
 	$access["BE_config_general"] = $clmAccess->access('BE_config_general');
 	$access["BE_swt_general"] = $clmAccess->access('BE_swt_general');
+	$access["BE_pgn_general"] = $clmAccess->access('BE_pgn_general');
 	$access["BE_database_general"] = $clmAccess->access('BE_database_general');
 	$access["BE_dewis_general"] = $clmAccess->access('BE_dewis_general');
 	$access["BE_teamtournament_general"] = $clmAccess->access('BE_teamtournament_general');

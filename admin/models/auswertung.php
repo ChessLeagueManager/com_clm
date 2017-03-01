@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -33,6 +33,9 @@ function datei() {
 	$et	= $jinput->get('filter_et', null, null);
 	$format	= $jinput->get('filter_format', null, null);
 	$sid	= clm_core::$access->getSeason();
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 
 	// Link zum redirect generieren
 	$adminLink = new AdminLink();
@@ -135,7 +138,10 @@ function datei() {
 	
 	// Unterscheidung Einzel- und Mannschaftsturnier mit verschiedenen Ausgabemodi
 	if($et !=null) {
-		$format = 2;  // Nur XML für Einzelturniere
+		if ($countryversion == "de")
+			$format = 2;  // Nur XML für deutsche Einzelturniere
+		else
+			$format = 3;  // Nur XLS für englische Einzelturniere
 		$typ	= $liga_name[0]->typ;
 		if($typ =="1"){ $turnier_typ = 'SR'; } // SR: Einzelturnier; jeder gegen jeden
 		if($typ =="2"){ $turnier_typ = 'SR'; }
@@ -651,6 +657,14 @@ function datei() {
 include(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'ExcelWriterXML.php');
 
 // Find Players
+  if($et !=null) 
+	$sql = " SELECT a.PKZ,a.zps,a.verein as Vereinname,a.name as Spielername,a.geschlecht as Geschlecht FROM `#__clm_turniere_tlnr` as a "
+		." LEFT JOIN #__clm_dwz_spieler as s ON s.sid = a.sid AND s.ZPS = a.zps AND s.PKZ = a.PKZ "
+		." LEFT JOIN #__clm_dwz_vereine as v ON v.sid = a.sid AND v.ZPS = a.zps "
+		." WHERE a.turnier = ".$liga_name[0]->id
+		." ORDER BY a.zps ASC , a.PKZ ASC "
+		;
+  else 
 	$sql = " SELECT a.*,v.Vereinname,s.Spielername,s.Geschlecht FROM `#__clm_rnd_spl` as a "
 		." LEFT JOIN #__clm_dwz_spieler as s ON s.sid = a.sid AND s.ZPS = a.zps AND s.PKZ = a.PKZ "
 		." LEFT JOIN #__clm_dwz_vereine as v ON v.sid = a.sid AND v.ZPS = a.zps "
@@ -661,7 +675,7 @@ include(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR
 		;
 	$db->setQuery($sql);
 	$spieler=$db->loadObjectList();
-//echo "<br>pl:"; var_dump($spieler); die();
+
 // Create a new instance of the Excel Writer
 $xmla = new ExcelWriterXML('CLM grading.xml');
 
@@ -760,7 +774,7 @@ $sheet2->writeString(1,7,'ClubName');
 $sheet2->columnWidth(8,'60');
 $sheet2->writeString(1,8,'BCFMemNo');
 $sheet2->columnWidth(9,'60');
-$sheet2->writeString(1,9,'FIDEName');
+$sheet2->writeString(1,9,'FIDECode');
 $sheet2->columnWidth(10,'200');
 $sheet2->writeString(1,10,'Comment');
 $sheet2->columnWidth(11,'20');
@@ -815,7 +829,18 @@ $sheet3->columnWidth(8,'200');
 $sheet3->writeString(1,8,'Comment');
 
 // Find games
-		$sql = " SELECT a.*, hm.name as hmname, gm.name as gmname, m.pdate FROM `#__clm_rnd_spl` as a "
+  if($et !=null) 
+    $sql = " SELECT a.*, a.heim as weiss, h.zps, h.PKZ, g.zps as gzps, g.PKZ as gPKZ, m.datum as pdate FROM `#__clm_turniere_rnd_spl` as a "
+			." LEFT JOIN #__clm_turniere_rnd_termine as m ON m.turnier = a.turnier AND m.dg = a.dg AND m.nr = a.runde "
+			." LEFT JOIN #__clm_turniere_tlnr as h ON h.turnier = a.turnier AND h.snr = a.spieler "
+			." LEFT JOIN #__clm_turniere_tlnr as g ON g.turnier = a.turnier AND g.snr = a.gegner "
+			." WHERE a.turnier = ".$liga_name[0]->id
+			." AND a.ergebnis < 3 "
+			." AND a.heim = 1 "
+			." ORDER BY a.dg ASC, a.runde ASC, a.paar ASC, a.brett ASC "
+			;
+  else
+	$sql = " SELECT a.*, hm.name as hmname, gm.name as gmname, m.pdate FROM `#__clm_rnd_spl` as a "
 			." LEFT JOIN #__clm_rnd_man as m ON m.sid = a.sid AND m.lid = a.lid AND m.dg = a.dg AND m.runde = a.runde AND m.tln_nr = a.tln_nr "
 			." LEFT JOIN #__clm_mannschaften as hm ON hm.sid = a.sid AND hm.liga = a.lid AND hm.tln_nr = a.tln_nr "
 			." LEFT JOIN #__clm_mannschaften as gm ON gm.sid = a.sid AND gm.liga = a.lid AND gm.tln_nr = m.gegner "
@@ -827,7 +852,6 @@ $sheet3->writeString(1,8,'Comment');
 			;
 	$db->setQuery($sql);
 	$partien =$db->loadObjectList();
-//echo "<br>par:"; var_dump($partien); die();
 
 $crow = 1;
 foreach($partien as $games){
@@ -853,7 +877,10 @@ foreach($partien as $games){
 	$sheet3->writeString($crow,5,clm_core::$cms->showDate($games->pdate, "d M Y"));
 	$sheet3->writeString($crow,6,$games->brett);
 	$sheet3->writeString($crow,7,$games->runde);
-	$sheet3->writeString($crow,8,$games->hmname." - ".$games->gmname);
+  if($et !=null) {
+	if ($crow == 2) $sheet3->writeString($crow,8,$liga_name[0]->name); }
+  else {
+	$sheet3->writeString($crow,8,$games->hmname." - ".$games->gmname); }
 }
 	
 /**
@@ -995,7 +1022,7 @@ function turnier_filter() {
 		." LEFT JOIN #__clm_saison as s ON s.id = d.sid"
 		." WHERE s.archiv = 0 ";
 	$db->setQuery($sql);
-	$ligalist[]	= JHTML::_('select.option',  '0', JText::_( 'Einzelturnier auswählen' ), 'cid', 'name' );
+	$ligalist[]	= JHTML::_('select.option',  '0', JText::_( 'DB_FILE_TOURNAMENT_0' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
 	$lists['lid']	= JHTML::_('select.genericlist', $ligalist, 'filter_et', 'class="inputbox" size="1" onchange=""','cid', 'name', '' );
 	

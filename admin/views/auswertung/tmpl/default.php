@@ -55,14 +55,14 @@ defined('_JEXEC') or die('Restricted access');
 		<?php echo JHTML::_( 'form.token' ); ?>
 		</form>
 		
-	<?php if ($countryversion =="de") { ?>	
+	<?php //if ($countryversion =="de") { ?>	
 		<form action="index.php?option=com_clm&view=auswertung" method="post" id="auswertung_dewis" name="adminForm"  enctype="multipart/form-data" >
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'DB_EXPORT_TOURNAMENT' ); ?></legend> 
 			<table width="100%">
 				<tr>
 				<td width="50%"><?php echo $this->lists['et_lid'] ?></td>
-				<td width="50%"><input type="submit" value=" Datei erstellen "></td>	
+				<td width="50%"><input type="submit" value="<?php echo JText::_( 'DB_FILE_CREATE' ); ?>"></td>	
 				</tr>
 			</table>
 		</fieldset>
@@ -71,7 +71,7 @@ defined('_JEXEC') or die('Restricted access');
 		<?php echo JHTML::_( 'form.token' ); ?>
 		</form>
 	
-	<?php } ?>
+	<?php //} ?>
 	<?php if ($countryversion =="de") { ?>		
 		<form action="index.php?option=com_clm&view=auswertung" method="post" id="auswertung_dewis" name="adminForm"  enctype="multipart/form-data" >
 		<fieldset class="adminform">

@@ -19,6 +19,7 @@ $ -> Language fix or change
 # Rundencheck: Abbruchfehler bei Anzeige
 # Datenbank: direkte Aktualisierung mit FIDE-Titel
 + View Mannschaft: neu mit FIDE-Titel
++ Einzelturniere: Einbau der engl. Anwendung einschl. Grading Export
 
 - - - - - 3.3.5 - [21-01-2017] - - - - - - - - - - - - - - - - - - - -
 # Admin-View Runden: kleine Code-Bereinigung
