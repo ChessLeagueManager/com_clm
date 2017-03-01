@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -227,14 +227,15 @@ $pdf->SetFillColor(120);
 $pdf->SetTextColor(255);
 	$pdf->Cell($breite1,$zelle,' ',0,0);
 	$pdf->Cell(12,$zelle,JText::_('DWZ_NR'),0,0,'C',1);
+	$pdf->Cell(10,$zelle,JText::_('CLUB_LIST_TITEL'),0,0,'C',1);
 	if (($o_nr == 0) or ($mannschaft[0]->sg_zps <= "0"))
 		$pdf->Cell(40,$zelle,JText::_('DWZ_NAME'),0,0,'L',1);
 	else
 		$pdf->Cell(48,$zelle,JText::_('DWZ_NAME'),0,0,'L',1);
 	if ($countryversion == "de")
-		$pdf->Cell(10,$zelle,JText::_('LEAGUE_STAT_DWZ'),0,0,'R',1);
+		$pdf->Cell(10,$zelle,JText::_('LEAGUE_STAT_DWZ'),0,0,'C',1);
 	else
-		$pdf->Cell(10,$zelle,JText::_('LEAGUE_STAT_DWZ_EN'),0,0,'R',1);
+		$pdf->Cell(10,$zelle,JText::_('LEAGUE_STAT_DWZ_EN'),0,0,'C',1);
 	//if (!$count) 
 	for ($b=0; $b<$mannschaft[0]->runden; $b++) {
 		$pdf->Cell($breite,$zelle,$b+1,0,0,'C',1);
@@ -285,6 +286,7 @@ for ($x=0; $x< 100; $x++){
 		$pdf->Cell($breite1,$zelle,' ',0,0,'C');
 		$pdf->Cell(12,$zelle,($count[$x]->rmnr.'-'.$count[$x]->rrang),1,0,'C',$fc);
 	}
+	$pdf->Cell(10,$zelle,$count[$x]->FIDE_Titel,1,0,'C',$fc);
 	if ($o_nr == 0) 
 		$pdf->Cell(40,$zelle,utf8_decode($count[$x]->name),1,0,'L',$fc);
 	elseif ($mannschaft[0]->sg_zps > "0") {
@@ -298,8 +300,8 @@ for ($x=0; $x< 100; $x++){
 		$pdf->Cell(7,$zelle,"(".$count[$x]->mgl_nr.")",1,0,'L',$fc);
 		$pdf->SetFont('Times','',8);
 	}
-    if ($lparams['dwz_date'] == '0000-00-00') { $pdf->Cell(10,$zelle,$count[$x]->dwz,1,0,'R',$fc); } 
-	else { $pdf->Cell(10,$zelle,$count[$x]->start_dwz,1,0,'R',$fc); } 
+    if ($lparams['dwz_date'] == '0000-00-00') { $pdf->Cell(10,$zelle,$count[$x]->dwz,1,0,'C',$fc); } 
+	else { $pdf->Cell(10,$zelle,$count[$x]->start_dwz,1,0,'C',$fc); } 
 	$pkt = 0;
 	$spl = 0;
 	$gespielt = 0;

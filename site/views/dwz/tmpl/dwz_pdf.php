@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -125,8 +125,8 @@ $pdf->SetFont('Times','',$font);
 	} else {
 		$pdf->Cell(18,$zelle,$zps->PKZ,1,0,'C');
 	}
-	$pdf->Cell(2,$zelle,' ','B', 0,'L');
-	$pdf->Cell(78,$zelle,utf8_decode($zps->Spielername),'BT',0,'L');
+	$pdf->Cell(8,$zelle,utf8_decode($zps->FIDE_Titel),'BT',0,'L');
+	$pdf->Cell(72,$zelle,utf8_decode($zps->Spielername),'BT',0,'L');
 	$pdf->Cell(16,$zelle,$zps->DWZ,1,0,'C');
 	if ($countryversion =="de") {
 		$pdf->Cell(16,$zelle,$zps->DWZ_Index,1,0,'C');
