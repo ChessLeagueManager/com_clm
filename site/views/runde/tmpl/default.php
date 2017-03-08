@@ -40,8 +40,31 @@ $lid		= JRequest::getInt('liga','1');
 $sid		= JRequest::getInt('saison','1');
 $runde		= JRequest::getInt( 'runde', '1' );
 $dg			= JRequest::getInt('dg','1');
-$item		= JRequest::getInt('Itemid','1');
+$item		= JRequest::getInt('Itemid',0);
+$typeid		= JRequest::getInt('typeid',0);
 $liga		= $this->liga;
+$option 	= JRequest::getCmd( 'option' );
+$mainframe	= JFactory::getApplication();
+$pgn		= JRequest::getInt('pgn','0'); 
+  if (($pgn == 1) OR ($pgn == 2)) { 
+//echo "<br>lid:"; var_dump($lid); 	
+//echo "<br>runde:"; var_dump($runde); 	
+//echo "<br>dg:"; var_dump($dg); 	
+//echo "<br>pgn:"; var_dump($pgn); 	
+	$result = clm_core::$api->db_pgn_template($lid,$dg,$runde,$pgn,true);
+//echo '<br>result:'; var_dump($result);	
+//die();
+	JRequest::setVar('pgn',0);
+	if (!$result[1]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
+	$link = 'index.php?option='.$option.'&view=runde&saison='.$sid.'&liga='.$lid.'&dg='.$dg.'&runde='.$runde.'&pgn=0';
+	if ($item != 0) $link .= '&Itemid='.$item;
+	if ($typeid != 0) $link .= '&typeid='.$typeid;
+	$mainframe->redirect( $link, $msg );
+
+//		JFactory::getApplication()->close();
+  }	
+
+
 $attr = clm_core::$api->db_lineup_attr($lid);
 
 	//Liga-Parameter aufbereiten
@@ -60,7 +83,6 @@ $attr = clm_core::$api->db_lineup_attr($lid);
 	if (!isset($params['ReportForm'])) $params['ReportForm'] = '0';
 	if (!isset($params['pgnPublic'])) $params['pgnPublic'] = '0';
 $einzel		= $this->einzel;
-$pgn		= JRequest::getInt('pgn','0'); 
 $detail		= JRequest::getInt('detail','0');
 if ($detail == 0) $detailp = '1'; else $detailp = '0';
 
@@ -77,99 +99,6 @@ if ($detail == 0) $detailp = '1'; else $detailp = '0';
 		}
 	}
 	$config		= clm_core::$db->config();
-  if (($pgn == 1) OR ($pgn == 2)) { 
-	$name_subuml	= $config->fe_runde_subuml;
-	$clmuser = $this->clmuser;
-	$nl = "\n";
-	$file_name = utf8_decode($liga[0]->name).'_'.utf8_decode($liga[$runde-1]->rname);
-	if ($pgn == 1) $file_name .= '_'.utf8_decode($clmuser[0]->zps);
-	$file_name .= '.pgn'; 
-	$file_name = strtr($file_name,' ','_');
-	if (!file_exists('components'.DS.'com_clm'.DS.'pgn'.DS)) mkdir('components'.DS.'com_clm'.DS.'pgn'.DS);
-	$pdatei = fopen('components'.DS.'com_clm'.DS.'pgn'.DS.$file_name,"wt");
-	foreach ($einzel as $einz) {
-	  if (($einz->zps == $clmuser[0]->zps) OR ($einz->gzps == $clmuser[0]->zps) OR ($pgn == 2)) {
-		  $gtmarker = "*";
-		  $resulthint = "";
-		switch ($params['pgntype']) {
-		  case 1:
-			fputs($pdatei, '[Event "'.utf8_decode($liga[0]->name).'"]'.$nl);
-			break;
-		  case 2:
-			fputs($pdatei, '[Event "'.utf8_decode($params['pgnlname']).'"]'.$nl);
-			break;
-		  case 3:
-			fputs($pdatei, '[Event "'.utf8_decode($einz->name).' - '.utf8_decode($einz->mgname).'"]'.$nl);
-			break;
-		  case 4:
-			fputs($pdatei, '[Event "'.utf8_decode($einz->sname).' - '.utf8_decode($einz->smgname).'"]'.$nl);
-			break;
-		  case 5:
-			fputs($pdatei, '[Event "'.utf8_decode($params['pgnlname']).': '.utf8_decode($einz->sname).' - '.utf8_decode($einz->smgname).'"]'.$nl);
-			break;
-		  default:
-		 	fputs($pdatei, '[Event "'.'"]'.$nl);
-		}
-		fputs($pdatei, '[Site "?"]'.$nl);
-		fputs($pdatei, '[Date "'.JHTML::_('date',  $liga[$runde-1]->datum, JText::_('Y.m.d')).'"]'.$nl);
-		fputs($pdatei, '[Round "'.$runde.'.'.$einz->paar.'"]'.$nl);
-		fputs($pdatei, '[Board "'.$einz->brett.'"]'.$nl);
-		if ($name_subuml == 1) {
-			$einz->hname = clm_core::$load->sub_umlaute($einz->hname);
-			$einz->gname = clm_core::$load->sub_umlaute($einz->gname);
-			$einz->name = clm_core::$load->sub_umlaute($einz->name);
-			$einz->mgname = clm_core::$load->sub_umlaute($einz->mgname);
-		}
-		if ($einz->weiss == "0") {
-			fputs($pdatei, '[White "'.utf8_decode($einz->gname).'"]'.$nl);
-			fputs($pdatei, '[Black "'.utf8_decode($einz->hname).'"]'.$nl);
-			fputs($pdatei, '[WhiteTeam "'.utf8_decode($einz->mgname).'"]'.$nl);
-			fputs($pdatei, '[BlackTeam "'.utf8_decode($einz->name).'"]'.$nl);
-			fputs($pdatei, '[WhiteElo "'.$einz->gelo.'"]'.$nl);
-			fputs($pdatei, '[BlackElo "'.$einz->helo.'"]'.$nl);
-			fputs($pdatei, '[WhiteDWZ "'.$einz->gdwz.'"]'.$nl);
-			fputs($pdatei, '[BlackDWZ "'.$einz->hdwz.'"]'.$nl);
-			if ($einz->ergebnis == 2) { fputs($pdatei, '[Result "1/2-1/2"]'.$nl); $gtmarker = "1/2-1/2"; }
-			elseif ($einz->ergebnis == 1) { fputs($pdatei, '[Result "0-1"]'.$nl); $gtmarker = "0-1"; }
-			elseif ($einz->ergebnis == 0) { fputs($pdatei, '[Result "1-0"]'.$nl); $gtmarker = "1-0"; }
-			elseif ($einz->ergebnis == 4) { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".utf8_decode('Weiß gewinnt kampflos')."}"; $gtmarker = "1-0"; }
-			elseif ($einz->ergebnis == 5) { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{Schwarz gewinnt kampflos}"; $gtmarker = "0-1"; }
-			elseif ($einz->ergebnis == 6) { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{beide verlieren kampflos}"; $gtmarker = "*"; }
-			else fputs($pdatei, '[Result "'.$einz->erg_text.'"]'.$nl);		
-		} else {
-			fputs($pdatei, '[White "'.utf8_decode($einz->hname).'"]'.$nl);
-			fputs($pdatei, '[Black "'.utf8_decode($einz->gname).'"]'.$nl);
-			fputs($pdatei, '[WhiteTeam "'.utf8_decode($einz->name).'"]'.$nl);
-			fputs($pdatei, '[BlackTeam "'.utf8_decode($einz->mgname).'"]'.$nl);
-			fputs($pdatei, '[WhiteElo "'.$einz->helo.'"]'.$nl);
-			fputs($pdatei, '[BlackElo "'.$einz->gelo.'"]'.$nl);
-			fputs($pdatei, '[WhiteDWZ "'.$einz->hdwz.'"]'.$nl);
-			fputs($pdatei, '[BlackDWZ "'.$einz->gdwz.'"]'.$nl);
-			if ($einz->ergebnis == 2) { fputs($pdatei, '[Result "1/2-1/2"]'.$nl); $gtmarker = "1/2-1/2"; }
-			elseif ($einz->ergebnis == 1) { fputs($pdatei, '[Result "1-0"]'.$nl); $gtmarker = "1-0"; }
-			elseif ($einz->ergebnis == 0) { fputs($pdatei, '[Result "0-1"]'.$nl); $gtmarker = "0-1"; }
-			elseif ($einz->ergebnis == 4) { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{Schwarz gewinnt kampflos}"; $gtmarker = "0-1"; }
-			elseif ($einz->ergebnis == 5) { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".utf8_decode('Weiß gewinnt kampflos')."}"; $gtmarker = "1-0"; }
-			elseif ($einz->ergebnis == 6) { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{beide verlieren kampflos}"; $gtmarker = "*"; }
-			else fputs($pdatei, '[Result "'.$einz->erg_text.'"]'.$nl);		
-		}
-		fputs($pdatei, '[PlyCount "0"]'.$nl);
-		fputs($pdatei, '[EventDate "'.JHTML::_('date',  $liga[$runde-1]->datum, JText::_('Y.m.d')).'"]'.$nl);
-		fputs($pdatei, '[SourceDate "'.JHTML::_('date',  $liga[$runde-1]->datum, JText::_('Y.m.d')).'"]'.$nl);
-		fputs($pdatei, ' '.$nl);
-		fputs($pdatei, $resulthint.' '.$gtmarker.$nl);
-		fputs($pdatei, ' '.$nl);
-	  }
-	}
-	fclose($pdatei);
-    header('Content-Disposition: attachment; filename='.$file_name);
-		header('Content-type: text/html');
-		header('Cache-Control:');
-		header('Pragma:');
-		readfile('components'.DS.'com_clm'.DS.'pgn'.DS.$file_name);
-		flush();
-		JFactory::getApplication()->close();
-  }	
 
 $runde_t = $runde + (($dg - 1) * $liga[0]->runden);  
 // Test alte/neue Standardrundenname bei 2 Durchgängen, nur bei Ligen/Turniere vor 2013 (Archiv!)
@@ -264,12 +193,12 @@ if (isset($liga[$runde-1]->datum) AND $liga[$runde-1]->datum =='0000-00-00') {
 	
 	// PGN eigene Paarung
 	if (($params['pgntype'] > 0) AND ($jid != 0) AND ($club_jid == true)) { 
-		echo CLMContent::createPGNLink('runde', JText::_('ROUND_PGN_CLUB'), array('saison' => $liga[0]->sid, 'liga' => $liga[0]->id, 'runde' => $runde, 'dg' => $dg) );
+		echo CLMContent::createPGNLink('runde', JText::_('ROUND_PGN_CLUB'), array('saison' => $liga[0]->sid, 'liga' => $liga[0]->id, 'runde' => $runde_orig, 'dg' => $dg) );
 	} 
 	
 	// PGN gesamte Runde
 	if (($params['pgntype'] > 0) AND ($jid != 0)) {
-		echo CLMContent::createPGNLink('runde', JText::_('ROUND_PGN_ALL'), array('saison' => $liga[0]->sid, 'liga' => $liga[0]->id, 'runde' => $runde, 'dg' => $dg), 2 );
+		echo CLMContent::createPGNLink('runde', JText::_('ROUND_PGN_ALL'), array('saison' => $liga[0]->sid, 'liga' => $liga[0]->id, 'runde' => $runde_orig, 'dg' => $dg), 2 );
    } 
     
 	// PDF

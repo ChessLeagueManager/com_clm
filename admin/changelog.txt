@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.3.6 - [xx-xx-2017] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.3.6 - [xx-03-2017] - - - - - - - - - - - - - - - - - - - -
 # PGN-Anzeige: Nachbesserung
 ^ Eingabe Aufstellung: Einbau Mehrsprachigkeit
 + Mannschaftsaufstellung: freies Attributsfeld pro Spieler
@@ -20,6 +20,7 @@ $ -> Language fix or change
 # Datenbank: direkte Aktualisierung mit FIDE-Titel
 + View Mannschaft: neu mit FIDE-Titel
 + Einzelturniere: Einbau der engl. Anwendung einschl. Grading Export
+# Ligen/Mannschaftsturniere: pgn-Templateerstellung für Runden des 2.Durchgangs
 
 - - - - - 3.3.5 - [21-01-2017] - - - - - - - - - - - - - - - - - - - -
 # Admin-View Runden: kleine Code-Bereinigung

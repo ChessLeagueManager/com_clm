@@ -7,6 +7,7 @@ class clm_class_access {
 	private $jid;
 	private $name;
 	private $username;
+	private $zps;
 	private $type;
 	private $typeId;
 	private $season;
@@ -42,6 +43,7 @@ class clm_class_access {
 		$this->jid = $jid;
 		$this->username = clm_core::$db->user->get($this->id)->username;
 		$this->name = clm_core::$db->user->get($this->id)->name;
+		$this->zps = clm_core::$db->user->get($this->id)->zps;
 		$this->type = clm_core::$db->user->get($this->id)->usertype;
 		$this->typeId = clm_class_access::getUsertypeId($this->type);
 	}
@@ -294,6 +296,9 @@ class clm_class_access {
 	}
 	public function getName() {
 		return $this->name;
+	}
+	public function getUserZPS() {
+		return $this->zps;
 	}
 	public function getSeason() {
 		return $this->season;
