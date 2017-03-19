@@ -76,4 +76,5 @@ $rights["db_tournament_player_del"]=array(2,"BE_tournament_edit_detail",0); // E
 
 $rights["db_ordering"]=array(); // Ordering ändern
 $rights["db_pgn_export"]=array(); // pgn-Datei erstellen
+$rights["db_pgn_template"]=array(); // pgn-Template erstellen
 ?>

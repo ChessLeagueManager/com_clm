@@ -23,4 +23,5 @@ $logs[]="db_tournament_genRounds";
 $logs[]="db_tournament_delRounds";
 $logs[]="db_tournament_copy";
 $logs[]="db_pgn_export";
+$logs[]="db_pgn_template";
 ?>

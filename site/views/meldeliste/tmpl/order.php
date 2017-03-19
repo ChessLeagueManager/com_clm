@@ -237,7 +237,7 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
 	<tr> 
 		<th class="anfang" width="4%"><?php echo JText::_('CLUB_LIST_NR') ?></th>
 		<th class="anfang"><?php echo JText::_('CLUB_LIST_NAME') ?></th>
-		<th class="anfang" width="8%"><?php echo JText::_('CLUB_LIST_TITEL') ?></th>
+		<th class="anfang" width="8%"><?php echo JText::_('CLUB_LIST_ATTR') ?></th>
 		<th class="anfang" width="8%"><?php echo JText::_('CLUB_LIST_DWZ') ?></th>
 		<?php if ($countryversion =="de") { ?>
 			<th class="anfang" width="35%"><?php echo JText::_('CLUBS_LIST_NAME') ?></th>

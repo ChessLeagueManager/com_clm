@@ -144,6 +144,7 @@ $clm_zeile1			= $config->zeile1;
 $clm_zeile2			= $config->zeile2;
 $clm_zeile1D			= RGB($clm_zeile1);
 $clm_zeile2D			= RGB($clm_zeile2);
+$attr = clm_core::$api->db_lineup_attr($lid);
 ?>
 
 <div >
@@ -282,7 +283,10 @@ $clm_zeile2D			= RGB($clm_zeile2);
     <tr>
     <?php if($mannschaft[0]->lrang > 0) { ?><th class="nr"><?php echo JText::_('TEAM_RANK') ?></th><?php }
         else { ?><th class="nr"><?php echo JText::_('DWZ_NR') ?></th><?php } ?>
-        <th class="nr"><?php echo JText::_('CLUB_LIST_TITEL') ?></th>
+    <?php if ($attr) { ?>
+		<th class="nr"><?php echo JText::_('CLUB_LIST_ATTR') ?></th>
+    <?php } ?>
+		<th class="nr"><?php echo JText::_('CLUB_LIST_TITEL') ?></th>
         <th class="name"><?php echo JText::_('DWZ_NAME') ?></th>
         <th class="dwz"><a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php if ($countryversion == "de") echo JText::_('LEAGUE_STAT_DWZ'); else echo JText::_('LEAGUE_STAT_DWZ_EN')?></a></th>
 	 <?php 
@@ -334,7 +338,10 @@ for ($x=0; $x< 100; $x++){
     <tr class="<?php echo $zeilenr; ?>">
     <?php if($mannschaft[0]->lrang > 0) { ?><td class="nr" ><?php echo $count[$x]->rmnr.' - '.$count[$x]->rrang; ?></td><?php }
         else { ?><td class="nr" ><?php echo $y; ?></td><?php } ?>
-	<td class="dwz"><?php echo $count[$x]->attr; ?></td>
+    <?php if ($attr) { ?>
+		<td class="dwz"><?php echo $count[$x]->attr; ?></td>
+    <?php } ?>
+		<td class="dwz"><?php echo $count[$x]->FIDE_Titel; ?></td>
 	<?php if($count[$x]->zps != "-2") { ?>
 		<td class="name"><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $count[$x]->zps; ?>&mglnr=<?php echo $count[$x]->mgl_nr; ?>&PKZ=<?php echo $count[$x]->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $count[$x]->name; ?></a></td>
 	<?php } else { ?>

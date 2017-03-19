@@ -190,11 +190,11 @@ echo "<br>published ".$clmuser[0]->published;
 <tr> 
 	<th class="anfang"><b><input type="hidden" name="toggle" value=""  /></b></th> 
 	<th class="anfang"><?php echo JText::_('CLUB_LIST_NAME') ?></th>
-	<th class="anfang"><?php echo JText::_('CLUB_LIST_TITEL') ?></th>
+	<th class="anfang"><?php echo JText::_('CLUB_LIST_ATTR') ?></th>
 	<th class="anfang"><?php echo JText::_('CLUB_LIST_DWZ') ?></th>
 	<th class="anfang"><b><input type="hidden" name="toggle" value=""  /></b></th> 
 	<th class="anfang"><?php echo JText::_('CLUB_LIST_NAME') ?></th>
-	<th class="anfang"><?php echo JText::_('CLUB_LIST_TITEL') ?></th>
+	<th class="anfang"><?php echo JText::_('CLUB_LIST_ATTR') ?></th>
 	<th class="anfang"><?php echo JText::_('CLUB_LIST_DWZ') ?></th>
 </tr>
 
