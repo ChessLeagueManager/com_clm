@@ -42,7 +42,7 @@ class clm_core {
 			if (self::$access->getId() == - 1 && self::$access->getType() == "admin") {
 				if (self::$access->getSeason() == - 1) {
 					$lang = self::$lang->designation;
-					self::$api->direct("db_season_save", array(-1, 1, 0, $lang->ExampleSeason, "", "", "0000-00-00 00:00:00"));
+					self::$api->direct("db_season_save", array(-1, 1, 0, $lang->ExampleSeason, "", "", "1970-01-01 00:00:00"));
 				} else {
 					self::$api->direct("db_season_enable", array(self::$access->getSeason()));
 				}

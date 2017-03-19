@@ -539,8 +539,8 @@ function remove()
 		$query	=" UPDATE #__clm_rnd_man"
 			." SET gemeldet = NULL"
 			." , editor = NULL"
-			." , zeit = '0000-00-00 00:00:00'"
-			." , edit_zeit = '0000-00-00 00:00:00'"
+			." , zeit = '1970-01-01 00:00:00'"
+			." , edit_zeit = '1970-01-01 00:00:00'"
 			." , ergebnis = NULL"
 			." , kampflos = NULL"
 			." , brettpunkte = NULL"
@@ -560,8 +560,8 @@ function remove()
 		$query	= "UPDATE #__clm_rnd_man"
 			." SET gemeldet = NULL"
 			." , editor = NULL"
-			." , zeit = '0000-00-00 00:00:00'"
-			." , edit_zeit = '0000-00-00 00:00:00'"
+			." , zeit = '1970-01-01 00:00:00'"
+			." , edit_zeit = '1970-01-01 00:00:00'"
 			." , ergebnis = NULL"
 			." , kampflos = NULL"
 			." , brettpunkte = NULL"
@@ -1966,7 +1966,7 @@ function save_wertung()
 			JError::raiseNotice( 6000,  JText::_( 'ERGEBNISSE_TW_GELOESCHT' ));
 			$query = $query
 			." SET dwz_editor = NULL"
-			." , dwz_zeit = '0000-00-00 00:00:00'";
+			." , dwz_zeit = '1970-01-01 00:00:00'";
 		} else {
 			$query = $query
 			." SET dwz_editor = ".$meldung
@@ -1992,7 +1992,7 @@ function save_wertung()
 		if($w_erg =="-1" AND $s_erg =="-1" AND $count_einzel =="0") {
 			$query = $query
 			." SET dwz_editor = NULL"
-			." , dwz_zeit = '0000-00-00 00:00:00'";
+			." , dwz_zeit = '1970-01-01 00:00:00'";
 		} else {
 			$query = $query
 			." SET dwz_editor = ".$meldung
@@ -2274,7 +2274,7 @@ function delete_wertung()
 	// Für Heimmannschaft updaten
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET dwz_editor = NULL"
-		." , dwz_zeit = '0000-00-00 00:00:00'"
+		." , dwz_zeit = '1970-01-01 00:00:00'"
 		." , brettpunkte = '".$hmpunkte."'"
 		." , manpunkte = '".$hman_punkte."'"
 		." , wertpunkte = '".$hwpunkte."'"
@@ -2292,7 +2292,7 @@ function delete_wertung()
 	// Für Gastmannschaft updaten
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET dwz_editor = NULL"
-		." , dwz_zeit = '0000-00-00 00:00:00'"
+		." , dwz_zeit = '1970-01-01 00:00:00'"
 		." , brettpunkte = '".$gmpunkte."'"
 		." , manpunkte = '".$gman_punkte."'"
 		." , wertpunkte = '".$gwpunkte."'"

@@ -25,10 +25,10 @@ class TableCLMTermine extends JTable
 	var $catidAlltime		= 0;
 	var $catidEdition		= 0;
 	var $host				= '';
-	var $startdate			= '0000-00-00';
+	var $startdate			= '1970-01-01';
 	var $starttime			= '00:00:00';
 	var $allday				= 0;
-	var $enddate			= '0000-00-00';
+	var $enddate			= '1970-01-01';
 	var $endtime			= '00:00:00';
 	var $noendtime			= 0;
 	var $published			= 0;

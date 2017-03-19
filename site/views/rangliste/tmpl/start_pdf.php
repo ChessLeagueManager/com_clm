@@ -26,14 +26,14 @@ $liga=$this->liga;
 			$params[substr($value,0,$ipos)] = substr($value,$ipos+1);
 		}
 	}	
-	if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
+	if (!isset($params['dwz_date'])) $params['dwz_date'] = '1970-01-01';
 $punkte=$this->punkte;
 $spielfrei=$this->spielfrei;
 $dwzschnitt=$this->dwzschnitt;
 $mannschaft	=$this->mannschaft; 
 $mleiter	=$this->mleiter; 
 $count		=$this->count;  
-	if ($params['dwz_date'] != '0000-00-00') {
+	if ($params['dwz_date'] != '0000-00-00' AND $params['dwz_date'] != '1970-01-01') {
 		for ($i=0; $i < (count($count)); $i++){
 			$count[$i]->dwz = $count[$i]->start_dwz; }
 	}    

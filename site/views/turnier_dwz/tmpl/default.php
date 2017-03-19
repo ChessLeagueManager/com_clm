@@ -32,7 +32,7 @@ $heading =  $this->turnier->name.": ".JText::_('TOURNAMENT_DWZ');
 
 $params = new clm_class_params($this->turnier->params);
 $inofDWZ = $params->get("inofDWZ","0");
-$dwz_date = $params->get("dwz_date","0000-00-00");
+$dwz_date = $params->get("dwz_date","1970-01-01");
 
 if ( $this->turnier->published == 0) { 
    echo CLMContent::componentheading($heading);
@@ -185,7 +185,7 @@ echo CLMContent::createPDFLink('turnier_dwz', JText::_('TOURNAMENT_DWZ'), array(
 
 	echo '</table>';
 
-	if($dwz_date == "0000-00-00") { 
+	if($dwz_date == "0000-00-00" OR $dwz_date == "1970-01-01") { 
 		echo '<div class="hint">'.JText::_('TOURNAMENT_DWZ_DATE_NO').'</div><br/>';
 	} else {
 		echo '<div class="hint">'.JText::_('TOURNAMENT_DWZ_DATE').clm_core::$load->date_to_string($dwz_date,false,false).'.</div><br/>';

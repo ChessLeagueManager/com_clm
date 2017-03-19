@@ -73,9 +73,9 @@ $abgabe		= $this->abgabe;
 			}
 	}	
 	if (!isset($abgabe[0]->params['deadline_roster']))  {   //Standardbelegung
-		$abgabe[0]->params['deadline_roster'] = '0000-00-00'; }
+		$abgabe[0]->params['deadline_roster'] = '1970-01-01'; }
 
-if ($abgabe[0]->liste > 0 AND $abgabe[0]->params['deadline_roster'] == '0000-00-00') {
+if ($abgabe[0]->liste > 0 AND ($abgabe[0]->params['deadline_roster'] == '0000-00-00' OR $abgabe[0]->params['deadline_roster'] == '1970-01-01')) {
 	$msg = JText::_( 'CLUB_LIST_ALREADY_EXIST' ).'XX';
 	$link = "index.php?option=com_clm&view=info";
 	$mainframe->redirect( $link, $msg );

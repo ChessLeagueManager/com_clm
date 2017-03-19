@@ -136,7 +136,7 @@ class TableCLMTurniere extends JTable
 		}
 
 		// Endtag gegegeben und Datum geändert?
-		if ($this->dateEnd != '0000-00-00' AND $this->dateEnd != '' AND ($this->dateStart != $tournament->data->dateStart OR $this->dateEnd != $tournament->data->dateEnd) ) {
+		if ($this->dateEnd != '0000-00-00' AND $this->dateEnd != '1970-01-01' AND $this->dateEnd != '' AND ($this->dateStart != $tournament->data->dateStart OR $this->dateEnd != $tournament->data->dateEnd) ) {
 			// zerlegen
 			list($startY, $startM, $startD) = explode("-", $this->dateStart);
 			list($endY, $endM, $endD) = explode("-", $this->dateEnd);

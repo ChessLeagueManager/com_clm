@@ -42,7 +42,7 @@ $lid = JRequest::getInt( 'liga', '1' );
 			$params[substr($value,0,$ipos)] = substr($value,$ipos+1);
 		}
 	}	
-	if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
+	if (!isset($params['dwz_date'])) $params['dwz_date'] = '1970-01-01';
 $sid = JRequest::getInt( 'saison','1');
 $view = JRequest::getVar( 'view');
 $o_nr = JRequest::getVar( 'o_nr');
@@ -88,7 +88,7 @@ usort($bpr, 'vergleich');
 // Array für DWZ Schnitt setzen
 $dwz = array();
 	for ($y=1; $y< ($liga[0]->teil)+1; $y++) {
-		if ($params['dwz_date'] == '0000-00-00') {
+		if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
 			if(isset($dwzschnitt[($y-1)]->dwz)) {
 			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->dwz; }
 		} else {
@@ -417,7 +417,7 @@ $pdf->SetFont('Times','',8);
 				$pdf->Cell(10,4,' ',0,0);
 				$pdf->Cell(12,4,$planl->runde,0,0,'C');
 				$pdf->Cell(12,4,$planl->paar,0,0,'C');
-				if ($termin[$cnt]->datum == '0000-00-00') $pdf->Cell(30,4,'    ',0,0,'L');
+				if ($termin[$cnt]->datum == '0000-00-00' OR $termin[$cnt]->datum == '1970-01-01') $pdf->Cell(30,4,'    ',0,0,'L');
 				else $pdf->Cell(30,4,JHTML::_('date',  $termin[$cnt]->datum, JText::_('DATE_FORMAT_CLM')),0,0,'L');
 				$pdf->Cell(40,4,utf8_decode($planl->hname),0,0,'L');
 				$pdf->Cell(40,4,utf8_decode($planl->gname),0,0,'L');
@@ -665,7 +665,7 @@ for ($x=0; $x< $anz_player; $x++){
 		$pdf->Cell(7,$zelle,"(".$count[$ic]->mgl_nr.")",1,0,'L',$fc);
 		$pdf->SetFont('Times','',8);
 	}
-	if ($params['dwz_date'] == '0000-00-00') $pdf->Cell(10,$zelle,$count[$ic]->dwz,1,0,'C',$fc);
+	if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') $pdf->Cell(10,$zelle,$count[$ic]->dwz,1,0,'C',$fc);
 	else $pdf->Cell(10,$zelle,$count[$ic]->start_dwz,1,0,'C',$fc);
 	$pkt = 0;
 	$spl = 0;
@@ -789,7 +789,7 @@ $pdf->SetFont('Times','',$font);
 		while (isset($termin[$cnt]->nr) AND ($planl->runde + $mannschaft[$m]->runden*($planl->dg -1)) > $termin[$cnt]->nr) { 
 			$cnt++; }
 		if (isset($termin[$cnt]->nr) AND ($planl->runde + $mannschaft[$m]->runden*($planl->dg -1))== $termin[$cnt]->nr) { 
-			if ($termin[$cnt]->datum == '0000-00-00') $pdf->Cell(30,4,'    ',0,0,'L');
+			if ($termin[$cnt]->datum == '0000-00-00' OR $termin[$cnt]->datum == '1970-01-01') $pdf->Cell(30,4,'    ',0,0,'L');
 			else $pdf->Cell(30,4,JHTML::_('date',  $termin[$cnt]->datum, JText::_('DATE_FORMAT_CLM')),0,0,'L');
 			//$pdf->Cell(30,4,JHTML::_('date',  $termin[$cnt]->datum, JText::_('DATE_FORMAT_CLM')),0,0,'L');
 			$cnt++;

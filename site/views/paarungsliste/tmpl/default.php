@@ -26,7 +26,7 @@ $liga		= $this->liga;
 			$params[substr($value,0,$ipos)] = substr($value,$ipos+1);
 		}
 	}	
-	if (!isset($params['dwz_date'])) $params['dwz_date'] = '0000-00-00';
+	if (!isset($params['dwz_date'])) $params['dwz_date'] = '1970-01-01';
 	if (!isset($params['round_date'])) $params['round_date'] = '0';
 	if (!isset($params['noBoardResults'])) $params['noBoardResults'] = '0';
 
@@ -92,7 +92,7 @@ else {
 	// Array für DWZ Schnitt setzen
 	$dwz = array();
 	for ($y=1; $y< ($liga[0]->teil)+1; $y++){
-		if ($params['dwz_date'] == '0000-00-00') {
+		if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
 			if(isset($dwzschnitt[($y-1)]->dwz)) {
 			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->dwz; }
 		} else {
@@ -209,7 +209,7 @@ if ($y%2 != 0) { $zeilenr = 'zeile2'; }
 	</td>
 	<td class="dwz">
 		<?php if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 1 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
-			{ if ($params['dwz_date'] == '0000-00-00') echo round($dwzgespielt[$z2]->dwz); 
+			{ if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') echo round($dwzgespielt[$z2]->dwz); 
 				else echo round($dwzgespielt[$z2]->start_dwz); }
 			else { if (isset($dwz[$paar[$z]->htln])) echo round($dwz[($paar[$z]->htln)]); } ?></td>
 		<?php
@@ -235,7 +235,7 @@ else { echo $paar[$z]->gname; } ?>
 
 <td class="dwz">
 	<?php if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 1 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
-			{ if ($params['dwz_date'] == '0000-00-00') echo round($dwzgespielt[$z2]->gdwz); 
+			{ if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') echo round($dwzgespielt[$z2]->gdwz); 
 				else echo round($dwzgespielt[$z2]->gstart_dwz); 
 			$z2++;
 		}

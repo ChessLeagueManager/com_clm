@@ -124,7 +124,7 @@ if ( $this->turnier->published == 0) {
 				echo '<div style="text-align:left; padding-left:1%">';
 					echo '<b>';
 					echo $value->name;
-					if ($value->datum != "0000-00-00" AND $turParams->get('displayRoundDate', 1) == 1) {
+					if ($value->datum != "0000-00-00" AND $value->datum != "1970-01-01" AND $turParams->get('displayRoundDate', 1) == 1) {
 						echo ',&nbsp;'.JHTML::_('date',  $value->datum, JText::_('DATE_FORMAT_CLM_F'));
 						if(isset($value->startzeit) and $value->startzeit != '00:00:00') { echo '  '.substr($value->startzeit,0,5).' Uhr'; }
 					}

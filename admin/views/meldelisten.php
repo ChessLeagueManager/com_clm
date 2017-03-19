@@ -269,7 +269,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		</td>
 	</tr>
 		<td class="key" nowrap="nowrap"><?php echo JText::_( 'JDATE' ).' : '; ?></td>
-		<td class="key" nowrap="nowrap"><?php if (!isset($abgabe[0]->datum) OR $abgabe[0]->datum=="0000-00-00 00:00:00") {echo  "---";} 
+		<td class="key" nowrap="nowrap"><?php if (!isset($abgabe[0]->datum) OR $abgabe[0]->datum=="0000-00-00 00:00:00" OR $abgabe[0]->datum=="1970-01-01 00:00:00") {echo  "---";} 
 			else { echo JHtml::_('date',  $abgabe[0]->datum, JText::_('DATE_FORMAT_LC2')); } ?>
 		</td>
 	</tr>
@@ -281,7 +281,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 	</tr>
 	<tr>
 		<td class="key" nowrap="nowrap"><?php echo JText::_( 'JDATE' ).' : '; ?></td>
-		<td class="key" nowrap="nowrap"><?php if (!isset($abgabe[0]->edit_datum) OR $abgabe[0]->edit_datum =="0000-00-00 00:00:00") {echo  "---";} 
+		<td class="key" nowrap="nowrap"><?php if (!isset($abgabe[0]->edit_datum) OR $abgabe[0]->edit_datum =="0000-00-00 00:00:00" OR $abgabe[0]->edit_datum =="1970-01-01 00:00:00") {echo  "---";} 
 			else { echo JHtml::_('date',  $abgabe[0]->edit_datum, JText::_('DATE_FORMAT_LC2')); } ?>
 		</td>
 	</tr>
@@ -326,7 +326,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 			<option value="0"><?php echo JText::_( 'MELDELISTE_SPIELER_AUSWAEHLEN'); ?></option>
 			<?php for ($x=0; $x < $max[0]->max; $x++) { ?>
 	<!---	 <option value="<?php //echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps; ?>" <?php //if (((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php //} ?>><?php //echo $row_spl[$x]->id.'&nbsp;';if((int)$row_spl[$x]->id < 1000) {echo "&nbsp;&nbsp;";} echo "-&nbsp;&nbsp;".$row_spl[$x]->name; ?></option> ---> 
-			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps.'-'.$row_spl[$x]->dwz.'-'.$row_spl[$x]->dwz_I0; ?>" <?php
+			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps.'-'.$row_spl[$x]->dwz.'-'.$row_spl[$x]->dwz_I0;; ?>" <?php 
 			  if ($countryversion == "de") {
 				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php } ?>><?php 
 			  } else {			

@@ -156,7 +156,7 @@ public static function users( &$rows, &$lists, &$pageNav, $option )
 					</td>
 
 					<td align="center">
-						<?php if ($rows[$i]->date=='0000-00-00 00:00:00' OR !$rows[$i]->date) 
+						<?php if ($rows[$i]->date=='0000-00-00 00:00:00' OR $rows[$i]->date=='1970-01-01 00:00:00' OR !$rows[$i]->date) 
 							{ ?><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /> <?php }
 						else 	{ ?><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /> <?php }?>
 					</td>

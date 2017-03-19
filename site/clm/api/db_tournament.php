@@ -35,9 +35,11 @@ function clm_api_db_tournament() {
 		$sid = intval($out["data"][$i][2]);		
 		$out["data"][$i][2] = clm_core::$db->saison->get($sid)->name;
 		// dateStart durch dateStart und dateEnd ersetzen
-		if (clm_core::$db->turniere->get($out["data"][$i][14])->dateStart != '0000-00-00') {
+		if (clm_core::$db->turniere->get($out["data"][$i][14])->dateStart != '0000-00-00' AND
+                    clm_core::$db->turniere->get($out["data"][$i][14])->dateStart != '1970-01-01') {
 			$out["data"][$i][3] = clm_core::$load->date_to_string(clm_core::$db->turniere->get($out["data"][$i][14])->dateStart,false,true);
-			if (clm_core::$db->turniere->get($out["data"][$i][14])->dateEnd != '0000-00-00') {
+			if (clm_core::$db->turniere->get($out["data"][$i][14])->dateEnd != '0000-00-00' AND
+                            clm_core::$db->turniere->get($out["data"][$i][14])->dateEnd != '1970-01-01') {
 				$out["data"][$i][3] .= " ".$lang->until." ". clm_core::$load->date_to_string(clm_core::$db->turniere->get($out["data"][$i][14])->dateEnd,false,true);
 			}
 		} else {

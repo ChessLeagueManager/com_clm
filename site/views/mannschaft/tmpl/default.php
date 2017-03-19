@@ -46,7 +46,7 @@ $mannschaft	=$this->mannschaft;
 				$lparams[$key] = substr($value,$ipos+1);
 		}
 	}
-	if (!isset($lparams['dwz_date'])) $lparams['dwz_date'] = '0000-00-00';
+	if (!isset($lparams['dwz_date'])) $lparams['dwz_date'] = '1970-01-01';
 	if (!isset($lparams['noOrgReference'])) $lparams['noOrgReference'] = '0';
 	if (!isset($lparams['noBoardResults'])) $lparams['noBoardResults'] = '0';
 $vereine	=$this->vereine;
@@ -85,7 +85,7 @@ $db =JFactory::getDBO ();
 $db->setQuery ($sql);
 $ligapunkte = $db->loadObject ();
 
-if ($lparams['dwz_date'] == '0000-00-00') {
+if ($lparams['dwz_date'] == '0000-00-00' OR $lparams['dwz_date'] == '1970-01-01') {
 	if ($saison[0]->dsb_datum  > 0) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $saison[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F'));  
 	if (($saison[0]->dsb_datum == 0) || (!isset($saison))) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_UNCLEAR'); 
 } else {
@@ -347,7 +347,7 @@ for ($x=0; $x< 100; $x++){
 	<?php } else { ?>
 		<td class="name"><?php echo $count[$x]->name; ?></td>
 	<?php } ?>
-    <td class="dwz"><?php if ($lparams['dwz_date'] == '0000-00-00') { if ($count[$x]->dwz >0) echo $count[$x]->dwz;} 
+    <td class="dwz"><?php if ($lparams['dwz_date'] == '0000-00-00' OR $lparams['dwz_date'] == '1970-01-01' ) { if ($count[$x]->dwz >0) echo $count[$x]->dwz;} 
 						  else { if ($count[$x]->start_dwz >0) echo $count[$x]->start_dwz;} ?></td>
     <?php
 	//keine Ergebnisse zum Spieler

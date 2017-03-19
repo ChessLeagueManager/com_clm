@@ -94,7 +94,7 @@ class CLMControllerTermineForm extends JControllerLegacy {
 		if ($row->noendtime === 0) $row->noendtime = 0; else $row->noendtime = 1;
 		
 		// handling dates
-		if ($row->startdate != '0000-00-00' AND $row->enddate == '0000-00-00') $row->enddate = $row->startdate;
+		if ($row->startdate != '0000-00-00' AND $row->startdate != '1970-01-01' AND $row->enddate == '0000-00-00' AND $row->enddate != '1970-01-01') $row->enddate = $row->startdate;
 		
 		// save the changes
 		if (!$row->store()) {

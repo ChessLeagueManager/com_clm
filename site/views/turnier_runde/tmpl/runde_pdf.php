@@ -71,7 +71,7 @@ $pdf->SetFont('Times','',14);
 	$pdf->Cell(10,15,' ',0,0);
 	//$heading = utf8_decode($this->turnier->name).": ".utf8_decode(JText::_('TOURNAMENT_ROUND'))." ".$this->round->nr;
 	$heading = utf8_decode($this->turnier->name).": ".utf8_decode($this->round->name);
-	if ($this->round->datum != "0000-00-00" AND $turParams->get('displayRoundDate', 1) == 1) {
+	if ($this->round->datum != "0000-00-00" AND $this->round->datum != "1970-01-01" AND $turParams->get('displayRoundDate', 1) == 1) {
 		$heading .=  ", ".utf8_decode(JHTML::_('date',  $this->round->datum, JText::_('DATE_FORMAT_CLM_F'))); 
 		if(isset($this->round->startzeit) and $this->round->startzeit != '00:00:00') { $heading .= '  '.substr($this->round->startzeit,0,5).' Uhr'; }
 	}

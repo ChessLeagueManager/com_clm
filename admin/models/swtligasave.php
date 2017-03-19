@@ -409,14 +409,14 @@ class CLMModelSWTLigasave extends JModelLegacy {
 				else {
 					$name = 'Durchgang ' . $d . ', Runde ' . $r;
 				}
-				if (isset($swt_data['runden_datum'][$rt]) AND $swt_data['runden_datum'][$rt] != "0000-00-00") {
+				if (isset($swt_data['runden_datum'][$rt]) AND $swt_data['runden_datum'][$rt] != "0000-00-00" AND $swt_data['runden_datum'][$rt] != "1970-01-01") {
 					$values .= ' ( "'.$sid.'", "'.$name.'", "'.$liga_id.'", "'.$rt.'", "'.$swt_data['runden_datum'][$rt].'", "'.$swt_data['runden_beginn'][$rt].'", "'.$published.'", '
 							. '"Import durch SWT Datei.", "9997", "'.$zeit.'" ), ';
-				} elseif (isset($termineFromDatabase[$rt]) AND $termineFromDatabase[$rt]->datum != "0000-00-00") {
+				} elseif (isset($termineFromDatabase[$rt]) AND $termineFromDatabase[$rt]->datum != "0000-00-00" AND $termineFromDatabase[$rt]->datum != "1970-01-01") {
 					$values .= ' ( "'.$sid.'", "'.$name.'", "'.$liga_id.'", "'.$rt.'", "'.$termineFromDatabase[$rt]->datum.'", "'.$termineFromDatabase[$rt]->startzeit.'", "'.$published.'", '
 							. '"Import durch SWT Datei.", "9997", "'.$zeit.'" ), ';
 				} else {
-					$values .= ' ( "'.$sid.'", "'.$name.'", "'.$liga_id.'", "'.$rt.'", "0000-00-00", "00:00:00", "'.$published.'", '
+					$values .= ' ( "'.$sid.'", "'.$name.'", "'.$liga_id.'", "'.$rt.'", "1970-01-01", "00:00:00", "'.$published.'", '
 							. '"Import durch SWT Datei.", "9997", "'.$zeit.'" ), ';
 				}
 			}

@@ -27,7 +27,7 @@ function clm_view_report($out) {
 	if ($liga[0]->durchgang > 1) {
 		 echo " (".$dg.". ".$lang->dg.")";
 	}
-	if ($liga[0]->datum != '0000-00-00' && $liga[0]->datum) { 
+	if ($liga[0]->datum != '0000-00-00' && $liga[0]->datum != '1970-01-01' && $liga[0]->datum) { 
 		//echo ', am '.	clm_core::$load->date_to_string($liga[0]->datum,false); 
 		echo '  '.$lang->date_on.' '.clm_core::$cms->showDate($liga[0]->datum, $lang->date_format_clm_f);
 	}

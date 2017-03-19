@@ -105,7 +105,7 @@ if ( $this->turnier->published == 0) {
 // Turnier/Runde kann ausgegeben werden
 } else {
 	$turParams = new clm_class_params($this->turnier->params);
-	if ($this->round->datum != "0000-00-00" AND $turParams->get('displayRoundDate', 1) == 1) {
+	if ($this->round->datum != "0000-00-00" AND $this->round->datum != "1970-01-01" AND $turParams->get('displayRoundDate', 1) == 1) {
 		$heading .=  ',&nbsp;'.JHTML::_('date',  $this->round->datum, JText::_('DATE_FORMAT_CLM_F')); 
 		if(isset($this->round->startzeit) and $this->round->startzeit != '00:00:00') { $heading .= '  '.substr($this->round->startzeit,0,5).' Uhr'; }
 	}
