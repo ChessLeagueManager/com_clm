@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -72,14 +72,14 @@ defined('_JEXEC') or die('Restricted access');
 		</form>
 	
 	<?php //} ?>
-	<?php if ($countryversion =="de") { ?>		
+	<?php //if ($countryversion =="de") { ?>		
 		<form action="index.php?option=com_clm&view=auswertung" method="post" id="auswertung_dewis" name="adminForm"  enctype="multipart/form-data" >
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'DB_EXPORT_TEAMTOURNAMENT' ); ?></legend> 
 			<table width="100%">
 				<tr>
 				<td width="50%"><?php echo $this->lists['mt_lid'] ?></td>
-				<td width="50%"><input type="submit" value=" Datei erstellen "></td>	
+				<td width="50%"><input type="submit" value="<?php echo JText::_( 'DB_FILE_CREATE' ); ?>"></td>	
 				</tr>
 			</table>
 		</fieldset>
@@ -87,6 +87,6 @@ defined('_JEXEC') or die('Restricted access');
 		<input type="hidden" name="task" value="datei" />
 		<?php echo JHTML::_( 'form.token' ); ?>
 		</form>
-	<?php } ?>
+	<?php //} ?>
 <div class="clr"></div>
 </div>

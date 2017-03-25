@@ -32,6 +32,7 @@ DROP TABLE IF EXISTS #__clm_liga;
 DROP TABLE IF EXISTS #__clm_logging;
 DROP TABLE IF EXISTS #__clm_mannschaften;
 DROP TABLE IF EXISTS #__clm_meldeliste_spieler;
+DROP TABLE IF EXISTS #__clm_pgn;
 DROP TABLE IF EXISTS #__clm_rangliste_id;
 DROP TABLE IF EXISTS #__clm_rangliste_name;
 DROP TABLE IF EXISTS #__clm_rangliste_spieler;

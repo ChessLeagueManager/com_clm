@@ -12,6 +12,11 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.4.1 - [xx-xx-2017] - - - - - - - - - - - - - - - - - - - -
+^ Anpassungen an date,datetime mit '0000-00-00' (MySQL 5.7)
+^ Anpassungen PHP7
++ Grading Export für Mannschaftsturniere (engl.Anwendung)
+
 - - - - - 3.4.0 - [08-03-2017] - - - - - - - - - - - - - - - - - - - -
 # PGN-Anzeige: Nachbesserung
 ^ Eingabe Aufstellung: Einbau Mehrsprachigkeit

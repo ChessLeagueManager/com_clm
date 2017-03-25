@@ -150,8 +150,12 @@ function datei() {
 		if($typ =="5"){ $turnier_typ = 'SC'; } // SC: Einzelturnier; K.O. System (Pokal)
 	}
 	if($liga !=null) {
-		if($mt !=null){ $format	= 2; } // Nur XML für Mannschaftsturniere. KEINE LIGA !
-		
+		if($mt !=null){ 
+			if ($countryversion == "de")
+				$format	= 2;  // Nur XML für deutsche Mannschaftsturniere. KEINE LIGA !
+			else
+				$format = 3;  // Nur XLS für englische Mannschaftsturniere
+		}
 		$typ	= $liga_name[0]->runden_modus;
 		if($typ =="1"){ $turnier_typ = 'TR'; } // TR: Mannschaftsturnier; jeder gegen jeden
 		if($typ =="2"){ $turnier_typ = 'TR'; }
@@ -1036,7 +1040,7 @@ function mannschaftsturnier_filter() {
 		." LEFT JOIN #__clm_saison as s ON s.id = d.sid"
 		." WHERE s.archiv = 0 AND d.liga_mt = 1 ";
 	$db->setQuery($sql);
-	$ligalist[]	= JHTML::_('select.option',  '0', JText::_( 'Mannschaftsturnier auswählen' ), 'cid', 'name' );
+	$ligalist[]	= JHTML::_('select.option',  '0', JText::_( 'DB_FILE_TEAMTOURNAMENT_0' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
 	$lists['lid']	= JHTML::_('select.genericlist', $ligalist, 'filter_mt', 'class="inputbox" size="1" onchange=""','cid', 'name', '' );
 	
