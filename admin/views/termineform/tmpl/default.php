@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -148,7 +148,7 @@ $today = date("Y-m-d");
 			</td>
 			<td>
 				<?php if ($this->termine->startdate < '1970-01-01') $this->termine->startdate = $today;
-				echo JHtml::_('calendar', $this->termine->startdate, 'startdate', 'startdate', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
+				echo CLMForm::calendar($this->termine->startdate, 'startdate', 'startdate', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
 				<span >  </span>
 			</td><td>
 				<input class="inputbox" type="time" name="starttime" id="starttime" size="6" maxlength="6" value="<?php echo substr($this->termine->starttime,0,5); ?>"  />
@@ -167,7 +167,7 @@ $today = date("Y-m-d");
 			</td>
 			<td>
 				<?php if ($this->termine->enddate < '1970-01-01') $this->termine->enddate = $today; 
-				echo JHtml::_('calendar', $this->termine->enddate, 'enddate', 'enddate', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
+				echo CLMForm::calendar($this->termine->enddate, 'enddate', 'enddate', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
 				<span >  </span>
 			</td><td>
 				<input class="inputbox" type="time" name="endtime" id="endtime" size="6" maxlength="6" value="<?php echo substr($this->termine->endtime,0,5); ?>"  />

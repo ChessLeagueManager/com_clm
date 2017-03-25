@@ -22,11 +22,15 @@ class TableCLMMeldelisten extends JTable
 	var $mnr		= '';
 	var $snr		= '';
 	var $mgl_nr		= '';
+	var $PKZ		= '';
 	var $zps		= '';
 	var $status		= '';
 	var $ordering		= '';
 	var $DWZ		= '';
 	var $I0			= '';
+	var $start_dwz	= '';
+	var $start_I0	= '';
+	var $FIDEelo	= '';
 	var $Punkte		= '';
 	var $Partien		= '';
 	var $We			= '';

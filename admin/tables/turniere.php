@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -19,8 +19,8 @@ class TableCLMTurniere extends JTable
 	var $id			= null;
 	var $name		= '';
 	var $sid		= '';
-	var $dateStart 	= '';
-	var $dateEnd 	= '';
+	var $dateStart 	= '1970-01-01';
+	var $dateEnd 	= '1970-01-01';
 	var $catidAlltime = 0;
 	var $catidEdition = 0;
 	var $typ		= '';
@@ -40,7 +40,7 @@ class TableCLMTurniere extends JTable
 	var $bemerkungen	= '';
 	var $bem_int		= '';
 	var $checked_out	= 0;
-	var $checked_out_time	= 0;
+	var $checked_out_time	= '1970-01-01 00:00:00';
 	var $ordering		= null;
 	var $params 		= null;
 	var $sieg			= 1.0;

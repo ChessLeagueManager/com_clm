@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -233,7 +233,7 @@ public static function gruppe( &$row,$lists, $option, $jid)
 			<label for="Meldeschluss"><?php echo JText::_( 'GROUPS_OVERVIEW_END' ); ?></label>
 			</td>
             		<td>
-                	<?php echo JHtml::_('calendar', $row->Meldeschluss, JText::_( 'GROUPS_OVERVIEW_END_CALENDAR' ), JText::_( 'GROUPS_OVERVIEW_END_CALENDAR' ), '%Y-%m-%d', array('class'=>'text_area', 'size'=>'10',  'maxlength'=>'10')); ?>
+					<?php echo CLMForm::calendar($row->Meldeschluss, JText::_( 'GROUPS_OVERVIEW_END_CALENDAR' ), JText::_( 'GROUPS_OVERVIEW_END_CALENDAR' ), '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
             		</td>
 
 		</tr>
@@ -347,9 +347,7 @@ public static function gruppe( &$row,$lists, $option, $jid)
 		<input type="hidden" name="section" value="gruppen" />
 		<input type="hidden" name="option" value="com_clm" />
 		<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
-		<input type="hidden" name="cid" value="<?php echo $row->cid; ?>" />
 		<input type="hidden" name="user" value="<?php echo $jid; ?>" />
-		<input type="hidden" name="liste" value="<?php echo $row->liste; ?>" />
 		<input type="hidden" name="task" value="" />
 		<?php echo JHtml::_( 'form.token' ); ?>
 		</form>

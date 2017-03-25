@@ -23,19 +23,19 @@ class TableCLMTurnier_Runden extends JTable
 	var $turnier		= '';
 	var $dg			= '';
 	var $nr			= '';
-	var $datum		= '';
-	var $startzeit		= '';
+	var $datum		= '1970-01-01';
+	var $startzeit		= '00:00:00';
 	var $abgeschlossen	= '';
 	var $tl_ok		= '';
 	var $published		= 0;
 	var $bemerkungen	= '';
 	var $bem_int		= '';
 	var $gemeldet		= '';
-	var $editor		= '';
-	var $zeit		= '';
-	var $edit_zeit		= '';
+	var $editor			= '';
+	var $zeit			= '1970-01-01 00:00:00';
+	var $edit_zeit		= '1970-01-01 00:00:00';
 	var $checked_out	= 0;
-	var $checked_out_time	= 0;
+	var $checked_out_time	= '1970-01-01 00:00:00';
 	var $ordering		= null;
 
 	function __construct( &$_db ) {

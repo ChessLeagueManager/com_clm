@@ -18,15 +18,15 @@ class TableCLMJos_users extends JTable
 {
 	var $id			= null;
 	var $name		= '';
-	var $username		= '';
+	var $username	= '';
 	var $email		= '';
-	var $password		= '';
-	var $usertype		= '';
+	var $password	= '';
+	var $usertype	= '';
 	var $block		= '';
-	var $sendEmail		= '';
+	var $sendEmail	= '';
 	var $gid		= '';
-	var $registerDate	= '';
-	var $lastvisitDate	= '';
+	var $registerDate	= '1970-01-01 00:00:00';
+	var $lastvisitDate	= '1970-01-01 00:00:00';
 	var $activation		= '';
 	var $params		= '';
 

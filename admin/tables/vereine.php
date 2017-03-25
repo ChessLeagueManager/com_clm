@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -48,7 +48,7 @@ class TableCLMVereine extends JTable
 	var $bemerkungen	= '';
 	var $bem_int		= '';
 	var $checked_out	= 0;
-	var $checked_out_time	= 0;
+	var $checked_out_time	= '1970-01-01 00:00:00';
 	var $ordering		= null;
 
 	function __construct( &$_db ) {

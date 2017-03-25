@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -18,28 +18,28 @@ class TableCLMMannschaften extends JTable
 {
 
 	var $id			= null;
-	var $sid		= null;
+	var $sid		= 0;
 	var $name		= '';
-	var $liga		= '';
+	var $liga		= 0;
 	var $zps		= '';
-	var $liste		= '';
-	var $edit_liste		= '';
-	var $man_nr		= '';
-	var $tln_nr		= '';
-	var $mf			= '';
+	var $liste		= 0;
+	var $edit_liste	= 0;
+	var $man_nr		= 0;
+	var $tln_nr		= 0;
+	var $mf			= 0;
 	var $sg_zps		= '';
-	var $datum		= '';
-	var $edit_datum		= '';
+	var $datum		= '1970-01-01 00:00:00';
+	var $edit_datum	= '1970-01-01 00:00:00';
 	var $lokal		= '';
-	var $homepage		= '';
-	var $adresse		= '';
 	var $termine		= '';
+	var $adresse		= '';
+	var $homepage		= '';
 	var $bemerkungen	= '';
 	var $bem_int		= '';
 	var $published		= 0;
 	var $checked_out	= 0;
-	var $checked_out_time	= 0;
-	var $ordering		= null;
+	var $checked_out_time	= '1970-01-01 00:00:00';
+	var $ordering		= 0;
 	var $summanpunkte		= 0;
 	var $sumbrettpunkte		= 0;
 	var $sumwins		= 0;
@@ -48,6 +48,8 @@ class TableCLMMannschaften extends JTable
 	var $sumtiebr3		= 0;
 	var $rankingpos		= 0;
 	var $sname		= '';
+	var $abzug		= 0;
+	var $bpabzug	= 0;
  
 	function __construct( &$_db ) {
 		parent::__construct( '#__clm_mannschaften', 'id', $_db );

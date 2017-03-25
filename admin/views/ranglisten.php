@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -750,8 +750,8 @@ if (JRequest::getVar( 'task') == 'edit' ) {
 		<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
 
 		<input type="hidden" name="count" value="<?php echo count($spieler); ?>" />
-		<input type="hidden" name="zps" value="<?php echo $spieler[0]->ZPS; ?>" />
-		<input type="hidden" name="sid" value="<?php echo $spieler[0]->sid; ?>" />
+		<input type="hidden" name="zps" value="<?php if (isset($spieler[0])) echo $spieler[0]->ZPS; ?>" />
+		<input type="hidden" name="sid" value="<?php if (isset($spieler[0])) echo $spieler[0]->sid; ?>" />
 		<input type="hidden" name="gid" value="<?php echo $row->gid; ?>" />
 		<input type="hidden" name="exist" value="<?php echo $exist; ?>" />
 

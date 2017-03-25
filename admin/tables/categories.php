@@ -19,9 +19,9 @@ class TableCLMCategories extends JTable
 	var $id				= null;
 	var $parentid		= null;
 	var $name		= '';
-	var $sid		= '';
-	var $dateStart = '';
-	var $dateEnd = '';
+	var $sid		= 0;
+	var $dateStart = '1970-01-01';
+	var $dateEnd   = '1970-01-01';
 	var $tl			= '';
 	var $bezirk		= '';
 	var $bezirkTur = '1';
@@ -31,7 +31,7 @@ class TableCLMCategories extends JTable
 	var $bemerkungen	= '';
 	var $bem_int		= '';
 	var $checked_out	= 0;
-	var $checked_out_time	= 0;
+	var $checked_out_time	= '1970-01-01 00:00:00';
 	var $ordering		= null;
 	var $params 		= null;
 

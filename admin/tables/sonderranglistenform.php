@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -38,7 +38,7 @@ class TableCLMSonderranglistenform extends JTable
 	var $zps_lower_than 		= 'ZZZZZ';
 	var $published				= 0;
 	var $checked_out			= 0;
-	var $checked_out_time		= 0;
+	var $checked_out_time		= '1970-01-01 00:00:00';
 	var $ordering				= null;
 
 	function __construct( &$_db ) {

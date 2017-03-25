@@ -282,7 +282,7 @@ class CLMForm {
 			$sql = "SELECT a.zps, v.Vereinname as name FROM #__clm_turniere_tlnr as a "
 				." LEFT JOIN #__clm_dwz_vereine as v ON v.sid= a.sid AND v.ZPS = a.zps"
 				." WHERE a.turnier = '$turnier'"
-				." GROUP BY a.zps";
+				." GROUP BY v.Vereinname, a.zps";
 
 		$vereine = clm_core::$db->loadObjectList($sql);
 

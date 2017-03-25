@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -59,7 +59,7 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
  
 	<tr>
 	<td class="key" nowrap="nowrap" colspan="7" height="24"><h3><?php echo $paarung[$count]->rname;
-		if (isset($paarung[$count]->datum) AND $paarung[$count]->datum > '1900-01-01') {
+		if (isset($paarung[$count]->datum) AND $paarung[$count]->datum > '1970-01-01') {
 			echo '  '.JText::_('ON_DAY').' '.JHTML::_('date',  $paarung[$count]->datum, JText::_('DATE_FORMAT_CLM_F')); 
 			if(isset($paarung[$count]->enddatum) and $paarung[$count]->enddatum > '1970-01-01' and $paarung[$count]->enddatum != $paarung[$count]->datum) { 
 			echo ' - '.JHTML::_('date',  $paarung[$count]->enddatum, JText::_('DATE_FORMAT_CLM_F')); } }?>
@@ -98,7 +98,7 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 		}
 		?>
 		<td>
-            <?php echo JHtml::_('calendar', $paarung[$count]->pdate, $ndate, $ndate, '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'12')); ?>
+			<?php echo CLMForm::calendar($paarung[$count]->pdate, $ndate, $ndate, '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'12')); ?>
         </td>
 		<td>
 			<input class="inputbox" type="time" name="<?php echo $ntime; ?>" id="<?php echo $ntime; ?>" size="6" maxlength="6" value="<?php echo substr($paarung[$count]->ptime,0,5); ?>"  />

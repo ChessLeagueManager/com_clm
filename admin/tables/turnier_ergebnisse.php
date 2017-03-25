@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -29,8 +29,11 @@ class TableCLMTurnier_Ergebnisse extends JTable
 	var $spieler		= '';
 	var $gegner			= '';
 	var $ergebnis		= '';
+	var $tiebrS		= 0;
+	var $tiebrG		= 0;
 	var $kampflos		= '';
-	var $pgn				= '';
+	var $gemeldet		= 0;
+	var $pgn			= '';
 	var $ordering		= null;
 
 	function __construct( &$_db ) {

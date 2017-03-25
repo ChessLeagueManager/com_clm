@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -332,8 +332,7 @@ function save() {
  		if ($jid_clm == "0") {
 			// prüfen ob Email schon vergeben wurde
 			$query = "SELECT COUNT(email) as countmail FROM #__users WHERE email = '$email'";
-			$db->setQuery($query);
-			$count_mail=$db->loadObjectList();
+			$count_mail	= clm_core::$db->loadObjectList($query);
 			if ($count_mail[0]->countmail > 0) {
 				JError::raiseWarning( 500, JText::_( 'USERS_MAIL') );
 				$link = 'index.php?option='.$option.'&section='.$section;
@@ -341,8 +340,7 @@ function save() {
 			}
 			// prüfen ob Username schon vergeben wurde
 			$query = "SELECT COUNT(username) as username FROM #__users WHERE username = '$username'";
-			$db->setQuery($query);
-			$count_uname=$db->loadObjectList();
+			$count_uname = clm_core::$db->loadObjectList($query);
 			if ($count_uname[0]->username > 0) {
 				JError::raiseWarning( 500, JText::_( 'USERS_NAME_IST') );
 				$link = 'index.php?option='.$option.'&section='.$section;

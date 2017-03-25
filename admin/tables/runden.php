@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -20,22 +20,25 @@ class TableCLMRunden extends JTable
 	var $id			= null;
 	var $sid		= null;
 	var $name		= '';
-	var $liga		= '';
-	var $nr			= '';
-	var $datum		= '';
-	var $startzeit  = '';
-	var $meldung		= '0';
-	var $sl_ok		= '';
-	var $published		= 0;
+	var $liga		= 0;
+	var $nr			= 0;
+	var $datum		= '1970-01-01';
+	var $startzeit  = '00:00:00';
+	var $deadlineday   = '1970-01-01';
+	var $deadlinetime  = '24:00:00';
+	var $meldung	= 0;
+	var $sl_ok		= 0;
+	var $published	= 0;
 	var $bemerkungen	= '';
 	var $bem_int		= '';
-	var $gemeldet		= '';
-	var $editor		= '';
-	var $zeit		= '';
-	var $edit_zeit		= '';
+	var $gemeldet		= 0;
+	var $editor		= 0;
+	var $zeit		= '1970-01-01 00:00:00';
+	var $edit_zeit	= '1970-01-01 00:00:00';
 	var $checked_out	= 0;
-	var $checked_out_time	= 0;
-	var $ordering		= null;
+	var $checked_out_time	= '1970-01-01 00:00:00';
+	var $ordering		= 0;
+	var $enddatum		= '1970-01-01';
 
 	function __construct( &$_db ) {
 		parent::__construct( '#__clm_runden_termine', 'id', $_db );

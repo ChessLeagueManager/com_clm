@@ -19,7 +19,7 @@ class TableCLMRanggruppe extends JTable
 
 	var $id			= null;
 	var $Gruppe		= '';
-	var $Meldeschluss	= '';
+	var $Meldeschluss	= '1970-01-01';
 	var $geschlecht		= '';
 	var $alter_grenze	= '';
 	var $alter		= '';
@@ -29,7 +29,7 @@ class TableCLMRanggruppe extends JTable
 	var $bem_int		= '';
 	var $published		= 0;
 	var $checked_out	= 0;
-	var $checked_out_time	= 0;
+	var $checked_out_time	= '1970-01-01 00:00:00';
 	var $ordering		= null;
 
 	function __construct( &$_db ) {

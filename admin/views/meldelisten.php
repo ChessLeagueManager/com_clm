@@ -4,7 +4,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -235,13 +235,12 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		  <select size="1" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo $i+1; ?>">
 			<option value="0"><?php echo JText::_( 'MELDELISTE_SPIELER_AUSWAEHLEN'); ?></option>
 			<?php for ($x=0; $x < $max[0]->max; $x++) { ?>
-	<!---		 <option value="<?php //echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps; ?>" <?php //if (((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php //} ?>><?php //echo $row_spl[$x]->id.'&nbsp;';if((int)$row_spl[$x]->id < 1000) {echo "&nbsp;&nbsp;";} echo "-&nbsp;&nbsp;".$row_spl[$x]->name; ?></option> ---> 
 			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps.'-'.$row_spl[$x]->dwz.'-'.$row_spl[$x]->dwz_I0; ?>" <?php
 			  if ($countryversion == "de") {
-				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php } ?>><?php 
+				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php }  
 			  } else {
-				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ($row_sel[$i]->PKZ) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php } ?>><?php 
-			  }
+				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ($row_sel[$i]->PKZ) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php }  
+			  } ?>><?php
 				echo $row_spl[$x]->name.'&nbsp;-&nbsp;&nbsp;'.$row_spl[$x]->id; ?></option> 
 			<?php }	?>
 		  </select>
@@ -352,7 +351,6 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		<input type="hidden" name="section" value="mannschaften" />
 		<input type="hidden" name="option" value="com_clm" />
 		<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
-		<input type="hidden" name="cid" value="<?php echo $row->cid; ?>" />
 		<input type="hidden" name="liga" value="<?php echo $row->liga; ?>" />
 		<input type="hidden" name="zps" value="<?php echo $row->zps; ?>" />
 		<input type="hidden" name="sid" value="<?php echo $row->sid; ?>" />
@@ -360,7 +358,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		<input type="hidden" name="stamm" value="<?php echo $liga[0]->stamm; ?>" />
 		<input type="hidden" name="ersatz" value="<?php echo $liga[0]->ersatz; ?>" />
 		<input type="hidden" name="max" value="<?php echo $max[0]->max; ?>" />
-		<input type="hidden" name="editor" value="<?php echo $abgabe[0]->name; ?>" />
+		<input type="hidden" name="editor" value="<?php if (isset($abgabe[0]->name)) echo $abgabe[0]->name; ?>" />
 
 		<input type="hidden" name="task" value="" />
 		<?php echo JHtml::_( 'form.token' ); ?>

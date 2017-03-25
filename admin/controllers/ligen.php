@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -272,8 +272,10 @@ function saveIt($apply=false)
 			$man_name = JText::_( 'LIGEN_STD_TEAM' )." ".$x;
 			if ($x < 10) $man_nr = $liga_man.'0'.$x; else $man_nr = $liga_man.$x;
 			$query = " INSERT INTO #__clm_mannschaften "
-				." (`sid`,`name`,`liga`,`zps`,`liste`,`edit_liste`,`man_nr`,`tln_nr`,`mf`,`published`) "
-				." VALUES ('$sid','$man_name','$liga_man','1','0','0','$man_nr','$x','0','$publish') "
+				." (`sid`,`name`,`liga`,`zps`,`liste`,`edit_liste`,`man_nr`,`tln_nr`,`mf` "
+				." ,`sg_zps`,`datum`,`edit_datum`,`lokal`,`bemerkungen`,`bem_int`,`published`,`checked_out_time`) "
+				." VALUES ('$sid','$man_name','$liga_man','1','0','0','$man_nr','$x','0' "
+				." ,'','1970-01-01 00:00:00','1970-01-01 00:00:00','','','','$publish','1970-01-01 00:00:00') "
 				;
 			$db->setQuery($query);
 			$db->query();

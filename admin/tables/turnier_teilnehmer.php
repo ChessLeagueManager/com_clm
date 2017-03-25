@@ -27,6 +27,7 @@ class TableCLMTurnier_Teilnehmer extends JTable
 	var $verein     = '';
 	var $twz        = '';
 	var $start_dwz  = '';
+	var $start_I0   = '';
 	var $FIDEelo    = '';
 	var $FIDEid     = '';
 	var $FIDEcco    = '';
@@ -58,7 +59,7 @@ class TableCLMTurnier_Teilnehmer extends JTable
 	var $Niveau		= 0;
 	var $published		= 0;
 	var $checked_out	= 0;
-	var $checked_out_time	= 0;
+	var $checked_out_time	= '1970 00:00:00';
 	var $ordering		= null;
 
 

@@ -27,7 +27,7 @@ function clm_api_db_season_save($id = - 1, $published = null, $archiv = null, $n
 	$name = clm_core::$load->make_valid($name, 8, "");
 	$bemerkungen = clm_core::$load->make_valid($bemerkungen, 8, "");
 	$bem_int = clm_core::$load->make_valid($bem_int, 8, "");
-	$datum = clm_core::$load->make_valid($datum, 8, "1970-01-01 00:00:00");
+	$datum = clm_core::$load->make_valid($datum, 8, "1970-01-01");
 	$notice = "m_changeSeasonSuccess";
 	$enableSeason = false;
 	if ($name == "") {
@@ -58,13 +58,16 @@ function clm_api_db_season_save($id = - 1, $published = null, $archiv = null, $n
 	clm_core::$db->saison->get($id)->bemerkungen = $bemerkungen;
 	clm_core::$db->saison->get($id)->bem_int = $bem_int;
 	clm_core::$db->saison->get($id)->datum = $datum;
+	clm_core::$db->saison->get($id)->checked_out_time = '1970-01-01 00:00:00';
 	if ($enableSeason) {
+		// Erneuere die Rechteverwaltung
 		$out = clm_core::$api->db_season_enable($id);
 		$out[2] = $id;
 		return $out;
 	} else {
 		clm_core::$db->saison->get($id)->published = $published;
 		clm_core::$db->saison->get($id)->archiv = $archiv;
+		clm_core::$db->saison->get($id)->checked_out_time = '1970-01-01 00:00:00';
 		clm_core::$db->saison->write();
 		// Erneuere die Rechteverwaltung
 		clm_core::$access = new clm_class_access();

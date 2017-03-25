@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -237,7 +237,7 @@ class CLMViewLigen
            	</label>
         </td>
         <td>
-           	<?php echo JHtml::_('calendar', $row->params['deadline_roster'], "params[deadline_roster]", "params[deadline_roster]", '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
+			<?php echo CLMForm::calendar($row->params['deadline_roster'], "params[deadline_roster]", "params[deadline_roster]", '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
         </td>
 	</tr>
 	

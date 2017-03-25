@@ -31,9 +31,11 @@ class TableCLMTermine extends JTable
 	var $enddate			= '1970-01-01';
 	var $endtime			= '00:00:00';
 	var $noendtime			= 0;
+	var $attached_file		= '';
+	var $attached_file_description	= '';
 	var $published			= 0;
 	var $checked_out		= 0;
-	var $checked_out_time	= 0;
+	var $checked_out_time	= '1970-01-01 00:00:00';
 	var $ordering			= null;
 	var $event_link			= '';
 

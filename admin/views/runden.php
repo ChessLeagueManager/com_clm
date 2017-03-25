@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -388,7 +388,7 @@ public static function runde( &$row,$lists, $option )
                 	</label>
             		</td>
             		<td>
-                	<?php echo JHtml::_('calendar', $row->datum, 'datum', 'datum', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
+					<?php echo CLMForm::calendar($row->datum, 'datum', 'datum', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
             		</td>
         	</tr>
 	<?php if ($lparams['round_date'] == '0')  { ?>
@@ -413,7 +413,7 @@ public static function runde( &$row,$lists, $option )
            	</td>
            	<td>
 				<?php if ($row->enddatum < '1970-01-02' and $row->datum > '1970-01-01') $row->enddatum = $row->datum; ?>
-               	<?php echo JHtml::_('calendar', $row->enddatum, 'enddatum', 'enddatum', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
+				<?php echo CLMForm::calendar($row->enddatum, 'enddatum', 'enddatum', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
 			</td>
    		</tr>
 	<?php } ?>
@@ -425,7 +425,7 @@ public static function runde( &$row,$lists, $option )
                	</label>
        		</td>
        		<td>
-               	<?php echo JHtml::_('calendar', $row->deadlineday, 'deadlineday', 'deadlineday', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
+				<?php echo CLMForm::calendar($row->deadlineday, 'deadlineday', 'deadlineday', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
 				<input class="inputbox" type="time" name="deadlinetime" id="deadlinetime" size="8" maxlength="10" value="<?php echo substr($row->deadlinetime,0,5); ?>"  />
        		</td>
        	</tr>
