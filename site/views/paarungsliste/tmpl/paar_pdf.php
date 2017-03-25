@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -30,8 +30,8 @@ $paar		= $this->paar;
 $summe		= $this->summe;
 $rundensumme	= $this->rundensumme;
 $runden_modus = $liga[0]->runden_modus;
-$a_html = array('<b>','</b>');
-$a_pdf  = array('','');
+$a_html = array('<b>','</b>','<br>');
+$a_pdf  = array('','','/n');
  
 $runde_t = $liga[0]->runden + 1;  
 // Test alte/neue Standardrundenname bei 2 Durchgängen
@@ -220,21 +220,23 @@ if ($remis_com == 1) {
 }
 if ($paar[$z]->comment != "") { 
 	$paar[$z]->comment = str_replace($a_html,$a_pdf,$paar[$z]->comment);
-	$a_comment = explode('<br>',$paar[$z]->comment);
-	foreach ($a_comment as $comment) { 
-		$pdf->Cell(1,$zelle,'',0,1);
-		$pdf->Cell(10,$zelle,' ',0,0);
-		$pdf->Cell(8-$breite,$zelle,$paar[$z]->paar,1,0,'C');
-		$ztext = JText::_('PAAR_COMMENT').$comment; 		
-		$pdf->SetFont('Times','',$font);
-		$pdf->Cell($tbreite,$zelle,utf8_decode($ztext),'TBR',0,'C');
-		$pdf->SetFont('Times','',$font); }
+	$pdf->Cell(1,$zelle,'',0,1);
+	$pdf->Cell(10,$zelle,' ',0,0);
+	$xx = $pdf->GetX(); $yy = $pdf->GetY();
+	$pdf->SetXY(($xx+8-$breite),$yy);
+	$ztext = JText::_('PAAR_COMMENT').$paar[$z]->comment; 		
+	$pdf->SetFont('Times','',$font);
+	$pdf->MultiCell($tbreite,$zelle,utf8_decode($ztext),'LTBR','L');
+	$pdf->SetFont('Times','',$font);
+	$yy1 = $pdf->GetY();
+	$pdf->SetXY($xx,$yy);
+	$pdf->Cell(8-$breite,($yy1-$yy),$paar[$z]->paar,1,0,'C');
+
 }
 $z++;
 	$pdf->Ln();
 }
-	//$pdf->Ln();
-	$pdf->Ln();
+	$pdf->Ln($zelle);
 }
 }
 ////////////////////
