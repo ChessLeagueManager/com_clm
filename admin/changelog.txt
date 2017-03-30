@@ -18,6 +18,7 @@ $ -> Language fix or change
 + Grading Export für Mannschaftsturniere (engl.Anwendung)
 # pdf-Paarungsliste: Behandlung langer Kommentare
 + Mannschaftsturniere: Erstellung pgn-Templatedatei
+# Einzelturniere: Text Freies System
 
 - - - - - 3.4.0 - [08-03-2017] - - - - - - - - - - - - - - - - - - - -
 # PGN-Anzeige: Nachbesserung
