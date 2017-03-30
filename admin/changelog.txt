@@ -17,6 +17,7 @@ $ -> Language fix or change
 ^ Anpassungen PHP7
 + Grading Export für Mannschaftsturniere (engl.Anwendung)
 # pdf-Paarungsliste: Behandlung langer Kommentare
++ Mannschaftsturniere: Erstellung pgn-Templatedatei
 
 - - - - - 3.4.0 - [08-03-2017] - - - - - - - - - - - - - - - - - - - -
 # PGN-Anzeige: Nachbesserung
