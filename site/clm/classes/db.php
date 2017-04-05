@@ -81,6 +81,18 @@ class clm_class_db {
 		$result->close();
 		return $array;
 	}
+	// gibt das Ergebnis als Objekte zurück
+	public function loadObject($query) {
+		// echo $query . "<br/><br/>";
+		$result = $this->query($query);
+		// printf("Errorcode: %d\n", $this->db[0]->errno);
+		while ($row = $result->fetch_object()) {
+			$result->close();
+			return $row;
+		}
+		$result->close();
+		return null;
+	}
 	// gibt die Ergebnisse als Objekte in einem Array zurück
 	public function loadAssocList($query) {
 		// echo $query . "<br/><br/>";

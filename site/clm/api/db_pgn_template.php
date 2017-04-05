@@ -3,7 +3,7 @@
 * erstellt pgn-Template einer Runde eines Mannschafts- oder Einzelturniers
 */
 function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true) {
-//echo "<br>id:"; var_dump($id); //die();	
+ 	$lang = clm_core::$lang->pgn;
 	$id = clm_core::$load->make_valid($id, 0, -1);
 	$dg = clm_core::$load->make_valid($dg, 0, -1);
 	$round = clm_core::$load->make_valid($round, 0, -1);
@@ -14,28 +14,22 @@ function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true) {
 	$countryversion	= $config->countryversion;
 	// Verein des aktiven Benutzers
 	$user_zps = clm_core::$access->getUserZPS();
-//echo "<br>user_zps:"; var_dump($user_zps); //die();	
 	
 	if($group) {
 		// Liga auslesen
 		$query = 'SELECT * FROM #__clm_liga'
 			. ' WHERE id = '.$id;
-		$turnier	= clm_core::$db->loadObjectList($query);
-//echo "<br>turnier:"; var_dump($turnier); //die();
- 		$params = new clm_class_params($turnier[0]->params);
-//echo "<br>params:"; var_dump($params); //die();
-//echo "<br>pgntype:"; var_dump($params->get("pgntype","0")); 
-//echo "<br>pgnlname:"; var_dump($params->get("pgnlname","")); 
+		$turnier	= clm_core::$db->loadObject($query);
+ 		$params = new clm_class_params($turnier->params);
 		
 		// Rundentermin auslesen
-		$nr = (($dg - 1) * $turnier[0]->runden) + $round;
+		$nr = (($dg - 1) * $turnier->runden) + $round;
 		$query = " SELECT * FROM #__clm_runden_termine "
 			." WHERE liga = ".$id
 			." AND nr = ".$nr;
-		$runde = clm_core::$db->loadObjectList($query);
-//echo "<br>runde:"; var_dump($runde);	
+		$runde = clm_core::$db->loadObject($query);
 		// Ergebnisse auslesen
-		if ($turnier[0]->rang == 0) 
+		if ($turnier->rang == 0) 
 		{	$query = "  SELECT a.zps, a.gzps, a.paar,a.brett,a.spieler,a.PKZ,a.gegner,a.gPKZ,a.ergebnis,a.kampflos, a.dwz_edit, a.dwz_editor, a.weiss,"
 				." m.name, n.name as mgname, m.sname, n.sname as smgname, d.Spielername as hname, d.DWZ as hdwz, d.FIDE_Elo as helo,"
 				." p.erg_text as erg_text, e.Spielername as gname, e.DWZ as gdwz, e.FIDE_Elo as gelo, q.erg_text as dwz_text,"
@@ -88,43 +82,63 @@ function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true) {
 			." AND a.heim = 1"
 			." ORDER BY a.paar ASC, a.brett ASC"
 			;
-		$einzel = clm_core::$db->loadObjectList($query);
-//echo "<br>einzel:"; var_dump($einzel);	//die();
+		$matches = clm_core::$db->loadObjectList($query);
 		
 	} else {
 		// Turnier auslesen
 		$query = 'SELECT * FROM #__clm_turniere'
 			.' WHERE id = '.$id;
-		$turnier	= clm_core::$db->loadObjectList($query);
+		$turnier	= clm_core::$db->loadObject($query);
 	
-		// pgn-Notationen auslesen
-		$query = " SELECT * FROM #__clm_pgn as a "
-			." WHERE a.tkz = 's' "
-			." AND a.tid = ".$id
-			." AND a.dg > 0 "
-			." ORDER BY a.dg, a.runde, a.paar, a.brett ";
-		$pgn = clm_core::$db->loadObjectList($query);
+		// Rundentermin auslesen
+		$query = "SELECT * FROM #__clm_turniere_rnd_termine"
+			.' WHERE turnier = '.$id." AND dg = ".$dg." AND nr = ".$round;
+		$runde = clm_core::$db->loadObject($query);
+		// Ergebnisse auslesen
+		$query = " SELECT a.*, "
+			." t.name as wname, t.twz as wtwz, t.verein as wverein, t.start_dwz as wdwz, t.FIDEelo as welo, "
+			." u.name as sname, u.twz as stwz, u.verein as sverein, u.start_dwz as sdwz, u.FIDEelo as selo, "
+			." pg.text "
+			." FROM #__clm_turniere_rnd_spl as a"
+			." LEFT JOIN #__clm_turniere_tlnr as t ON t.snr = a.spieler AND t.turnier = a.turnier "
+			." LEFT JOIN #__clm_turniere_tlnr as u ON u.snr = a.gegner AND u.turnier = a.turnier "
+			." LEFT JOIN #__clm_pgn as pg ON a.pgn = pg.id "
+			." WHERE a.turnier = ".$id
+			." AND a.runde = ".$round." AND a.dg = ".$dg
+			." AND a.heim = 1 "
+			." ORDER BY a.brett ASC ";
+		$matches = clm_core::$db->loadObjectList($query);
+
 		
 	}
  		
-	if(count($einzel)==0) {
+	if(count($matches)==0) {
 		return array(false, "e_PgnNoDataError");
 	}
-//die();		
+ 	
 	$nl = "\n";
-	$file_name = utf8_decode($turnier[0]->name).'_'.utf8_decode($runde[0]->name);
+	$file_name = utf8_decode($turnier->name).'_'.utf8_decode($runde->name);
 	if ($type == 1) $file_name .= '_'.utf8_decode($user_zps);
 	$file_name .= '.pgn'; 
 	$file_name = strtr($file_name,' ','_');
 	if (!file_exists('components'.DS.'com_clm'.DS.'pgn'.DS)) mkdir('components'.DS.'com_clm'.DS.'pgn'.DS);
 	$pdatei = fopen('components'.DS.'com_clm'.DS.'pgn'.DS.$file_name,"wt");
-	foreach ($einzel as $einz) {
+	if($group) {
+	 foreach ($matches as $einz) {
 	  if (($einz->zps == $user_zps) OR ($einz->gzps == $user_zps) OR ($type == 2)) {
 		  $gtmarker = "*";
 		  $resulthint = "";
+		if ($name_subuml == 1) {
+			$einz->hname = clm_core::$load->sub_umlaute($einz->hname);
+			$einz->gname = clm_core::$load->sub_umlaute($einz->gname);
+			$einz->name = clm_core::$load->sub_umlaute($einz->name);
+			$einz->mgname = clm_core::$load->sub_umlaute($einz->mgname);
+			$einz->sname = clm_core::$load->sub_umlaute($einz->sname);
+			$einz->smgname = clm_core::$load->sub_umlaute($einz->smgname);
+		}
 		switch ($params->get("pgntype","0")) {
 		  case 1:
-			fputs($pdatei, '[Event "'.utf8_decode($turnier[0]->name).'"]'.$nl);
+			fputs($pdatei, '[Event "'.utf8_decode($turnier->name).'"]'.$nl);
 			break;
 		  case 2:
 			fputs($pdatei, '[Event "'.utf8_decode($params->get("pgnlname","")).'"]'.$nl);
@@ -143,15 +157,9 @@ function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true) {
 		}
 		fputs($pdatei, '[Site "?"]'.$nl);
 //		fputs($pdatei, '[Date "'.JHTML::_('date',  $liga[$runde-1]->datum, JText::_('Y.m.d')).'"]'.$nl);
-		fputs($pdatei, '[Date "'.clm_core::$cms->showDate($runde[0]->datum, 'Y.m.d').'"]'.$nl);
+		fputs($pdatei, '[Date "'.clm_core::$cms->showDate($runde->datum, 'Y.m.d').'"]'.$nl);
 		fputs($pdatei, '[Round "'.$round.'.'.$einz->paar.'"]'.$nl);
 		fputs($pdatei, '[Board "'.$einz->brett.'"]'.$nl);
-		if ($name_subuml == 1) {
-			$einz->hname = clm_core::$load->sub_umlaute($einz->hname);
-			$einz->gname = clm_core::$load->sub_umlaute($einz->gname);
-			$einz->name = clm_core::$load->sub_umlaute($einz->name);
-			$einz->mgname = clm_core::$load->sub_umlaute($einz->mgname);
-		}
 		if ($einz->weiss == "0") {
 			fputs($pdatei, '[White "'.utf8_decode($einz->gname).'"]'.$nl);
 			fputs($pdatei, '[Black "'.utf8_decode($einz->hname).'"]'.$nl);
@@ -164,9 +172,9 @@ function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true) {
 			if ($einz->ergebnis == 2) { fputs($pdatei, '[Result "1/2-1/2"]'.$nl); $gtmarker = "1/2-1/2"; }
 			elseif ($einz->ergebnis == 1) { fputs($pdatei, '[Result "0-1"]'.$nl); $gtmarker = "0-1"; }
 			elseif ($einz->ergebnis == 0) { fputs($pdatei, '[Result "1-0"]'.$nl); $gtmarker = "1-0"; }
-			elseif ($einz->ergebnis == 4) { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".utf8_decode('Weiß gewinnt kampflos')."}"; $gtmarker = "1-0"; }
-			elseif ($einz->ergebnis == 5) { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{Schwarz gewinnt kampflos}"; $gtmarker = "0-1"; }
-			elseif ($einz->ergebnis == 6) { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{beide verlieren kampflos}"; $gtmarker = "*"; }
+			elseif ($einz->ergebnis == 4) { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".utf8_decode($lang->white)."}"; $gtmarker = "1-0"; }
+			elseif ($einz->ergebnis == 5) { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{".utf8_decode($lang->black)."}"; $gtmarker = "0-1"; }
+			elseif ($einz->ergebnis == 6) { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{".utf8_decode($lang->nobody)."}"; $gtmarker = "*"; }
 			else fputs($pdatei, '[Result "'.$einz->erg_text.'"]'.$nl);		
 		} else {
 			fputs($pdatei, '[White "'.utf8_decode($einz->hname).'"]'.$nl);
@@ -180,17 +188,60 @@ function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true) {
 			if ($einz->ergebnis == 2) { fputs($pdatei, '[Result "1/2-1/2"]'.$nl); $gtmarker = "1/2-1/2"; }
 			elseif ($einz->ergebnis == 1) { fputs($pdatei, '[Result "1-0"]'.$nl); $gtmarker = "1-0"; }
 			elseif ($einz->ergebnis == 0) { fputs($pdatei, '[Result "0-1"]'.$nl); $gtmarker = "0-1"; }
-			elseif ($einz->ergebnis == 4) { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{Schwarz gewinnt kampflos}"; $gtmarker = "0-1"; }
-			elseif ($einz->ergebnis == 5) { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".utf8_decode('Weiß gewinnt kampflos')."}"; $gtmarker = "1-0"; }
-			elseif ($einz->ergebnis == 6) { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{beide verlieren kampflos}"; $gtmarker = "*"; }
+			elseif ($einz->ergebnis == 4) { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{".utf8_decode($lang->black)."}"; $gtmarker = "0-1"; }
+			elseif ($einz->ergebnis == 5) { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".utf8_decode($lang->white)."}"; $gtmarker = "1-0"; }
+			elseif ($einz->ergebnis == 6) { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{".utf8_decode($lang->nobody)."}"; $gtmarker = "*"; }
 			else fputs($pdatei, '[Result "'.$einz->erg_text.'"]'.$nl);		
 		}
 		fputs($pdatei, '[PlyCount "0"]'.$nl);
-		fputs($pdatei, '[EventDate "'.clm_core::$cms->showDate($runde[0]->datum, 'Y.m.d').'"]'.$nl);
-		fputs($pdatei, '[SourceDate "'.clm_core::$cms->showDate($runde[0]->datum, 'Y.m.d').'"]'.$nl);
+		fputs($pdatei, '[EventDate "'.clm_core::$cms->showDate($runde->datum, 'Y.m.d').'"]'.$nl);
+		fputs($pdatei, '[SourceDate "'.clm_core::$cms->showDate($runde->datum, 'Y.m.d').'"]'.$nl);
 		fputs($pdatei, ' '.$nl);
 		fputs($pdatei, $resulthint.' '.$gtmarker.$nl);
 		fputs($pdatei, ' '.$nl);
+	  }
+	}
+	} else {
+	 foreach ($matches as $value) {
+		if ( ($value->spieler != 0 AND $value->gegner != 0) OR $value->ergebnis != NULL) {
+			$gtmarker = "*";
+			$resulthint = "";
+			fputs($pdatei, '[Event "'.utf8_decode($turnier->name).'"]'.$nl);
+			fputs($pdatei, '[Site "?"]'.$nl);
+			//fputs($pdatei, '[Date "'.JHTML::_('date',  $runde->datum, JText::_('Y.m.d')).'"]'.$nl);
+			fputs($pdatei, '[Date "'.clm_core::$cms->showDate($runde->datum, 'Y.m.d').'"]'.$nl);
+			fputs($pdatei, '[Round "'.$runde->nr.'"]'.$nl);
+			fputs($pdatei, '[Board "'.$value->brett.'"]'.$nl);
+			if ($name_subuml == 1) {
+				$value->wname = clm_core::$load->sub_umlaute($value->wname);
+				$value->sname = clm_core::$load->sub_umlaute($value->sname);
+				$value->wverein = clm_core::$load->sub_umlaute($value->wverein);
+				$value->sverein = clm_core::$load->sub_umlaute($value->sverein);
+			}
+			fputs($pdatei, '[White "'.utf8_decode($value->wname).'"]'.$nl);
+			fputs($pdatei, '[Black "'.utf8_decode($value->sname).'"]'.$nl);
+			fputs($pdatei, '[WhiteTeam "'.utf8_decode($value->wverein).'"]'.$nl);
+			fputs($pdatei, '[BlackTeam "'.utf8_decode($value->sverein).'"]'.$nl);
+			fputs($pdatei, '[WhiteElo "'.$value->welo.'"]'.$nl);
+			fputs($pdatei, '[BlackElo "'.$value->selo.'"]'.$nl);
+			fputs($pdatei, '[WhiteDWZ "'.$value->wdwz.'"]'.$nl);
+			fputs($pdatei, '[BlackDWZ "'.$value->sdwz.'"]'.$nl);
+			if ($value->ergebnis == "2") { fputs($pdatei, '[Result "1/2-1/2"]'.$nl); $gtmarker = "1/2-1/2"; }
+			elseif ($value->ergebnis == "0") { fputs($pdatei, '[Result "0-1"]'.$nl); $gtmarker = "0-1"; }
+			elseif ($value->ergebnis == "1") { fputs($pdatei, '[Result "1-0"]'.$nl); $gtmarker = "1-0"; }
+			elseif ($value->ergebnis == "5") { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".utf8_decode($lang->white)."}"; $gtmarker = "1-0"; }
+			elseif ($value->ergebnis == "4") { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{".utf8_decode($lang->black)."}"; $gtmarker = "0-1"; }
+			elseif ($value->ergebnis == "6") { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{".utf8_decode($lang->nobody)."}"; $gtmarker = "*"; }
+			else fputs($pdatei, '[Result "'.$value->ergebnis.'"]'.$nl);		
+			fputs($pdatei, '[PlyCount "0"]'.$nl);
+			//fputs($pdatei, '[EventDate "'.JHTML::_('date',  $turnier->dateStart, JText::_('Y.m.d')).'"]'.$nl);
+			//fputs($pdatei, '[SourceDate "'.JHTML::_('date',  $runde->datum, JText::_('Y.m.d')).'"]'.$nl);
+			fputs($pdatei, '[EventDate "'.clm_core::$cms->showDate($turnier->dateStart, 'Y.m.d').'"]'.$nl);
+			fputs($pdatei, '[SourceDate "'.clm_core::$cms->showDate($runde->datum, 'Y.m.d').'"]'.$nl);
+			fputs($pdatei, ' '.$nl);
+			fputs($pdatei, $resulthint.' '.$gtmarker.$nl);
+			fputs($pdatei, ' '.$nl);
+		}
 	  }
 	}
 	fclose($pdatei);
