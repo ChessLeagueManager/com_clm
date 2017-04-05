@@ -19,6 +19,7 @@ $ -> Language fix or change
 # pdf-Paarungsliste: Behandlung langer Kommentare
 + Mannschaftsturniere: Erstellung pgn-Templatedatei
 # Einzelturniere: Text Freies System
+# Termine: Tippfehler bei date-Anpassung und kleine Designkorrektur
 
 - - - - - 3.4.0 - [08-03-2017] - - - - - - - - - - - - - - - - - - - -
 # PGN-Anzeige: Nachbesserung

@@ -1,10 +1,10 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
- * @author Fjodor Sch�fer
+ * @author Fjodor Schäfer
  * @email ich@vonfio.de
 */
 
@@ -166,7 +166,7 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
                 <?php if (isset($datum[$t-1]) AND $datum[$t] == $datum[$t-1]) {
 			echo '';
 		      } else {
-			 echo JHTML::_('date',  $termine[$t]->datum, JText::_('DATE_FORMAT_CLM_F'));i
+			 echo JHTML::_('date',  $termine[$t]->datum, JText::_('DATE_FORMAT_CLM_F'));
 		      }
 		      if (isset($datum[$t]) AND $datum[$t] != '0000-00-00' AND $datum[$t] != '1970-01-01') {
 			if ($termine[$t]->starttime != '00:00:00') echo '&nbsp;&nbsp;&nbsp;'.substr($termine[$t]->starttime,0,5).'&nbsp;';

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -39,9 +39,9 @@ $zelle = 5;
 // Zellenbreiten je Spalte
 $breite = 0;
 $br00 = 10;
-$br01 = 43;
+$br01 = 45;
 $br02 = 50;
-$br03 = 82;
+$br03 = 80;
 $br99 = 175;
 // Überschrift Fontgröße Standard = 14
 $head_font = 14;

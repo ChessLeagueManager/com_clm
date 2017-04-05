@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Fjodor Schäfer
@@ -63,6 +63,7 @@ class CLMModelTermine extends JModelLegacy
 				." LEFT JOIN #__clm_mannschaften AS heim ON heim.liga = rm.lid AND heim.tln_nr = rm.tln_nr "
 				." LEFT JOIN #__clm_mannschaften AS gast ON gast.liga = rm.lid AND gast.tln_nr = rm.gegner "
 				." WHERE t.published != '0' AND TO_DAYS(pdate)+183 >= TO_DAYS('".$date."')".$addWhere_t." "
+				." AND rm.tln_nr > 0 AND rm.gegner > 0 "
 				." AND rm.pdate > '1970-01-01' AND rm.heim = 1 )"
 				
 				." UNION ALL"
