@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -294,7 +294,7 @@ class CLMModelRangliste extends JModelLegacy
 		$ersatz_regel	=$man[0]->ersatz_regel;
 		
 	if ($rang > 0) {
-		$query = " SELECT m.tln_nr as tln_nr,a.snr,a.dwz,a.mgl_nr,a.zps, d.Spielername as name,d.DWZ as dwz,a.start_dwz "
+		$query = " SELECT m.tln_nr as tln_nr,a.snr,a.dwz,a.mgl_nr,a.PKZ,a.zps, d.Spielername as name,d.DWZ as dwz,a.start_dwz "
 			.",r.man_nr as rmnr, r.Rang as rrang "
 			." FROM #__clm_meldeliste_spieler as a "
 			." LEFT JOIN #__clm_rangliste_spieler as r on r.ZPS = a.zps AND r.Mgl_Nr = a.mgl_nr AND r.sid = a.sid "

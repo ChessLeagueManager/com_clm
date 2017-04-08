@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -99,7 +99,7 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 <table cellpadding="0" cellspacing="0" class="dwz_liga">
 <tr>
 <th><?php echo $liga->tln_nr;?></th>
-<th colspan="10"><a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $sid; ?>&amp;liga=<?php echo $lid; ?>&amp;tlnr=<?php echo $liga->tln_nr; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $liga->name;?></a></th>
+<th colspan="11"><a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $sid; ?>&amp;liga=<?php echo $lid; ?>&amp;tlnr=<?php echo $liga->tln_nr; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $liga->name;?></a></th>
 </tr>
 <tr>
 	<td><?php echo JText::_('DWZ_NR') ?></td>
@@ -111,7 +111,8 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 	<td><?php echo JText::_('DWZ_RATING') ?></td>
 	<td><?php echo JText::_('DWZ_LEVEL') ?></td>
 	<td><?php echo JText::_('DWZ_POINTS') ?></td>
-	<td colspan="2"><a title="<?php echo $hint_dwznew; ?>" class="CLMTooltip"><?php echo JText::_('DWZ_NEW') //klkl ?></a></td>
+	<td colspan="2"><?php echo JText::_('DWZ_NEW'); //klkl ?></td>
+
 </tr>
 
 <?php } ?>
