@@ -4,7 +4,7 @@
 ALTER TABLE `#__clm_rnd_spl` ADD `pgnnr` int(11) unsigned DEFAULT '0' AFTER `dwz_editor`;
 
 --
--- Tabellenstruktur für Tabelle `#__clm_pgn`
+-- Tabellenstruktur fÃ¼r Tabelle `#__clm_pgn`
 --
 CREATE TABLE IF NOT EXISTS `#__clm_pgn` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

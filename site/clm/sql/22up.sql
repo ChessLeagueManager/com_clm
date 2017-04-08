@@ -1,5 +1,5 @@
 --
--- 3.3.2  Daten für Tabelle `#__clm_ergebnis`
+-- 3.3.2  Daten fÃ¼r Tabelle `#__clm_ergebnis`
 --
 REPLACE INTO `#__clm_ergebnis` (`id`, `eid`, `erg_text`) VALUES
 (10, 9, '0-0,5'),

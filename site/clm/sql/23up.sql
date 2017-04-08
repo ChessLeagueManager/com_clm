@@ -1,5 +1,5 @@
 --
--- 3.3.4  Einzelturniere: Einbau 3-Punkte-Wertung u. ä.
+-- 3.3.4  Einzelturniere: Einbau 3-Punkte-Wertung u. a.
 --
 ALTER TABLE `#__clm_turniere` ADD `sieg` decimal(2,1) unsigned DEFAULT '1.0' AFTER `params`;
 ALTER TABLE `#__clm_turniere` ADD `siegs` decimal(2,1) unsigned DEFAULT '1.0' AFTER `sieg`;
