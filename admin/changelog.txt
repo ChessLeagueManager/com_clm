@@ -23,6 +23,7 @@ $ -> Language fix or change
 ^ Rundenbericht: pgn-Template als API und mit Mehrsprachigkeit
 # DWZ-Liste: Sortierung mit DWZ-Index
 # Ergebniskorrektur: kleine engl. Textänderungen
++ View Spieler: Link zu ECF Grading Database (engl. Anwendung)
 
 - - - - - 3.4.0 - [08-03-2017] - - - - - - - - - - - - - - - - - - - -
 # PGN-Anzeige: Nachbesserung

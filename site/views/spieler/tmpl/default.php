@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -142,6 +142,9 @@ else {  ?>
         	<?php if ($countryversion =="out") { ?>
 				<?php  $mgl4 = ''.$mgl; while (strlen($mgl4) < 4) { $mgl4 = '0'.$mgl4; } ?>
 				<td class="det_col2"><a href="http://schachbund.de/spieler.html?zps=<?php echo $zps; ?>-<?php echo $mgl4; ?>" target="_blank"><?php echo $spieler[0]->dsbDWZ; ?></a> - <?php echo $spieler[0]->DWZ_Index; ?></td>
+        	<?php } elseif ($countryversion =="en") { ?> 
+				<td class="det_col2"><a href="http://www.ecfgrading.org.uk/new/player.php?PlayerCode=<?php echo $spieler[0]->PKZ.'#top'; ?>" target="_self"><?php echo $spieler[0]->dsbDWZ; ?></a></td>
+<!--- http://www.ecfgrading.org.uk/new/player.php?PlayerCode=227560A#top --->
             <?php } else { ?>
 				<td class="det_col2"><?php echo $spieler[0]->dsbDWZ; ?></td>
             <?php } ?>			
