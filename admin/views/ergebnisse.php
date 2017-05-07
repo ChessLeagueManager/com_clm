@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -540,7 +540,7 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 
 	<form action="index.php" method="post" name="adminForm" id="adminForm">
 
-	<div>
+<!--	<div> -->
 	<div class="width-60 fltlft">
 	<fieldset class="adminform">
 	<legend><?php 
@@ -553,7 +553,7 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 	</legend>
 	<table class="admintable">
 	<tr>
-		<td class="key" nowrap="nowrap" width="25">Brett</td>
+		<td class="key" nowrap="nowrap"><?php echo JText::_( 'RESULTS_DETAILS_BOARD' ); ?></td>
 		<td class="key" nowrap="nowrap"><?php echo $runde[0]->hname; ?></td>
 		<td class="key" nowrap="nowrap"><?php echo $runde[0]->gname; ?></td>
 		<td class="key" nowrap="nowrap"><?php echo JText::_( 'EVALUATION_RESULT'); ?></td>
@@ -598,9 +598,11 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 		<td class="key" nowrap="nowrap"><?php echo JText::_( 'EVALUATION_BRETTPUNKTE_MANUALLY'); //klkl ?>
 		</td>
 		<td class="key" nowrap="nowrap">
-		<?php echo $lists['weiss'].' - '.$lists['schwarz']; ?>
+		<?php //echo $lists['weiss'].' - '.$lists['schwarz']; ?>
+		<?php echo $lists['weiss']; ?>
 		</td>
 		<td class="key" nowrap="nowrap">
+		<?php echo ' - '.$lists['schwarz']; ?>
 		</td>
 	</tr>
 	<?php if ($runde[0]->b_wertung > 0) { 
@@ -740,7 +742,7 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 		</table>
 		</fieldset>
 		</div>
-		</div>
+<!--		</div> -->
 	<div class="clr"></div>
 
 		<input type="hidden" name="section" value="ergebnisse" />

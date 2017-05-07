@@ -22,6 +22,7 @@ $ -> Language fix or change
 # Termine: Tippfehler bei date-Anpassung und kleine Designkorrektur
 ^ Rundenbericht: pgn-Template als API und mit Mehrsprachigkeit
 # DWZ-Liste: Sortierung mit DWZ-Index
+# Ergebniskorrektur: kleine engl. Textänderungen
 
 - - - - - 3.4.0 - [08-03-2017] - - - - - - - - - - - - - - - - - - - -
 # PGN-Anzeige: Nachbesserung
