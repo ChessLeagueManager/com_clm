@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -24,7 +24,7 @@ class CLMModelAktuell_Runde extends JModelLegacy
 	
 		// Konfigurationsparameter auslesen
 		$config = clm_core::$db->config();
-		$datum_sl = $config->runde_aktuell;
+		$datum_sl = $config->fe_runde_aktuell;
 
 		// Aktuelle Runde aus SL OK (= 0) oder Datum (= 1) errechnen
 		if($datum_sl == 0) {

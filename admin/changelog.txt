@@ -24,6 +24,7 @@ $ -> Language fix or change
 # DWZ-Liste: Sortierung mit DWZ-Index
 # Ergebniskorrektur: kleine engl. Textänderungen
 + View Spieler: Link zu ECF Grading Database (engl. Anwendung)
+# View akt. Runde: fehlerhafte Parameterabfrage
 
 - - - - - 3.4.0 - [08-03-2017] - - - - - - - - - - - - - - - - - - - -
 # PGN-Anzeige: Nachbesserung
