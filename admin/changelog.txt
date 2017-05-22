@@ -25,6 +25,7 @@ $ -> Language fix or change
 # Ergebniskorrektur: kleine engl. Textänderungen
 + View Spieler: Link zu ECF Grading Database (engl. Anwendung)
 # View akt. Runde: fehlerhafte Parameterabfrage
+# View Spieler: Summierung Punkte bei kampflosen Partien
 
 - - - - - 3.4.0 - [08-03-2017] - - - - - - - - - - - - - - - - - - - -
 # PGN-Anzeige: Nachbesserung

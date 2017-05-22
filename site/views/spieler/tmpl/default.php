@@ -144,7 +144,6 @@ else {  ?>
 				<td class="det_col2"><a href="http://schachbund.de/spieler.html?zps=<?php echo $zps; ?>-<?php echo $mgl4; ?>" target="_blank"><?php echo $spieler[0]->dsbDWZ; ?></a> - <?php echo $spieler[0]->DWZ_Index; ?></td>
         	<?php } elseif ($countryversion =="en") { ?> 
 				<td class="det_col2"><a href="http://www.ecfgrading.org.uk/new/player.php?PlayerCode=<?php echo $spieler[0]->PKZ.'#top'; ?>" target="_self"><?php echo $spieler[0]->dsbDWZ; ?></a></td>
-<!--- http://www.ecfgrading.org.uk/new/player.php?PlayerCode=227560A#top --->
             <?php } else { ?>
 				<td class="det_col2"><?php echo $spieler[0]->dsbDWZ; ?></td>
             <?php } ?>			
@@ -248,6 +247,7 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
 		if ($runden->kampflos == 0) {
 			$erg_text = $punkte_text;
     			$sum_partien++;
+				$sum_punkte=$sum_punkte + $runden->punkte;											  
 		}
 		else {
 			if ($config->fe_display_lose_by_default == 0) {
@@ -275,8 +275,7 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
     	}
     ?>
     </tr>
-    <?php $sum_punkte=$sum_punkte + $runden->punkte; 
-         } ?>
+    <?php } ?>
     <tr><td class='noBorder' colspan='8'></td></tr>
     <tr class="ende">
         <td colspan="6"><?php echo JText::_('PLAYER_SUM') ?></td>
