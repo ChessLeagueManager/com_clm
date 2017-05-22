@@ -183,6 +183,7 @@ if ( $liga[0]->mail > 0 ) {
 	$db->query();
 
 // Daten für Email sammeln
+$attr = clm_core::$api->db_lineup_attr($lid);
 // Melder
 	$query	= "SELECT a.* FROM #__clm_user as a "
 		." WHERE a.sid =".$sid
@@ -306,6 +307,11 @@ if ( $liga[0]->mail > 0 ) {
 		<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px;">
 		<tr>
 			<td width="50" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_NO' ).'</strong></div></td>
+	';
+	if ($attr) { $body_html .=  '
+			<td width="75" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_ATTR' ).'</strong></div></td>';
+	}
+	$body_html .=  '
 			<td width="210" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_NAME' ).'</strong></div></td>
 			<td width="75" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_RATING' ).'</strong></div></td>
 			<td width="75" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_NUMBER' ).'</strong></div></td>
@@ -315,27 +321,35 @@ if ( $liga[0]->mail > 0 ) {
 	foreach ($meldeliste as $meldepos) {
 		if ($countryversion =="de") {	  
 			if ($meldepos->mgl_nr > 0) {
-			$body_html .=   '
-			<tr>
-				<td width="50" style="border-bottom: solid 1px #999999;"><div align="center"><strong>'.$meldepos->snr.'</strong></div></td>
-				<td width="210" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->Spielername. '&nbsp;</div></td>
-				<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->pDWZ. '&nbsp;</div></td>
-				<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .str_pad($meldepos->mgl_nr,3,"0",STR_PAD_LEFT). '&nbsp;</div></td>
-				<td width="210" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->Vereinname. '&nbsp;</div></td>
-			</tr>
-			';
+				$body_html .=   '
+					<tr>
+					<td width="50" style="border-bottom: solid 1px #999999;"><div align="center"><strong>'.$meldepos->snr.'</strong></div></td>';
+				if ($attr) { $body_html .=  '
+					<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->attr. '&nbsp;</div></td>';
+				}
+				$body_html .=  '
+					<td width="210" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->Spielername. '&nbsp;</div></td>
+					<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->pDWZ. '&nbsp;</div></td>
+					<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .str_pad($meldepos->mgl_nr,3,"0",STR_PAD_LEFT). '&nbsp;</div></td>
+					<td width="210" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->Vereinname. '&nbsp;</div></td>
+					</tr>
+				';
 			} 
 		} else {
 			if ($meldepos->PKZ > '') {
-			$body_html .=   '
-			<tr>
-				<td width="50" style="border-bottom: solid 1px #999999;"><div align="center"><strong>'.$meldepos->snr.'</strong></div></td>
-				<td width="210" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->Spielername. '&nbsp;</div></td>
-				<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->pDWZ. '&nbsp;</div></td>
-				<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->PKZ. '&nbsp;</div></td>
-				<td width="210" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->Vereinname. '&nbsp;</div></td>
-			</tr>
-			';
+				$body_html .=   '
+					<tr>
+					<td width="50" style="border-bottom: solid 1px #999999;"><div align="center"><strong>'.$meldepos->snr.'</strong></div></td>';
+				if ($attr) { $body_html .=  '
+					<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->attr. '&nbsp;</div></td>';
+				}
+				$body_html .=  '
+					<td width="210" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->Spielername. '&nbsp;</div></td>
+					<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->pDWZ. '&nbsp;</div></td>
+					<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->PKZ. '&nbsp;</div></td>
+					<td width="210" style="border-bottom: solid 1px #999999;"><div align="center">' .$meldepos->Vereinname. '&nbsp;</div></td>
+					</tr>
+				';
 			} 
 		}
 	}

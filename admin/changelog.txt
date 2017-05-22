@@ -27,6 +27,7 @@ $ -> Language fix or change
 # View akt. Runde: fehlerhafte Parameterabfrage
 # View Spieler: Summierung Punkte bei kampflosen Partien
 # View Mannschaft: Anzeige Zeile Gesamt
+^ Mannschaftsaufstellung: Attributsfeld erweitert
 
 - - - - - 3.4.0 - [08-03-2017] - - - - - - - - - - - - - - - - - - - -
 # PGN-Anzeige: Nachbesserung

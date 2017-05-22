@@ -214,7 +214,7 @@ echo "<br>published ".$clmuser[0]->published;
 		<?php echo $spieler[$i]->name; ?>
 	</td>
 	<td>
-		<input class="inputbox" type="text" name="attr[<?php echo $spieler[$i]->id; ?>]" id="attr<?php echo $i+1; ?>" size="1" maxlength="5" value="<?php echo $spieler[$i]->attr; ?>" />
+		<input class="inputbox" type="text" name="attr[<?php echo $spieler[$i]->id; ?>]" id="attr<?php echo $i+1; ?>" size="1" maxlength="4" value="<?php echo $spieler[$i]->attr; ?>" />
 	</td>
 	<td>
 		<?php echo $spieler[$i]->dwz; ?>
@@ -232,7 +232,7 @@ echo "<br>published ".$clmuser[0]->published;
 		<?php if (isset($spieler[$j])) echo $spieler[$j]->name; ?>
 	</td>
 	<td>
-		<input class="inputbox" type="text" name="attr[<?php if (isset($spieler[$j])) echo $spieler[$j]->id; ?>]" id="attr<?php echo $j+1; ?>" size="1" maxlength="5" value="<?php if (isset($spieler[$j])) echo $spieler[$j]->attr; ?>" />
+		<input class="inputbox" type="text" name="attr[<?php if (isset($spieler[$j])) echo $spieler[$j]->id; ?>]" id="attr<?php echo $j+1; ?>" size="1" maxlength="4" value="<?php if (isset($spieler[$j])) echo $spieler[$j]->attr; ?>" />
 	</td>
 	<td>
 		<?php if (isset($spieler[$j])) echo $spieler[$j]->dwz; ?>
