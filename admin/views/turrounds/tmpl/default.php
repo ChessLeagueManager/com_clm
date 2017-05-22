@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -119,7 +119,7 @@ $clmAccess = clm_core::$access;
 				</td>
 				
 				<td align="center">
-					<?php if ($row->datum != 0) echo JHtml::_( 'date', $row->datum, JText::_('DATE_FORMAT_CLM'));?>
+					<?php if ($row->datum != '0000-00-00' AND $row->datum != '1970-01-01') echo JHtml::_( 'date', $row->datum, JText::_('DATE_FORMAT_CLM'));?>
 				</td>
 				<td align="center">
 					<?php if ($row->startzeit != 0) echo substr($row->startzeit,0,5);?>

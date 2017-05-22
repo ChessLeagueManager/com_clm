@@ -65,7 +65,8 @@ defined('_JEXEC') or die('Restricted access');
 					</label>
 				</td>
 				<td class="paramlist_value">
-					<?php echo JHtml::_('calendar', $this->category->dateStart, 'dateStart', 'dateStart', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
+					<?php //echo JHtml::_('calendar', $this->category->dateStart, 'dateStart', 'dateStart', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
+					<?php echo CLMForm::calendar($this->category->dateStart, 'dateStart', 'dateStart', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
 				</td>
 			</tr>
 			
@@ -76,7 +77,8 @@ defined('_JEXEC') or die('Restricted access');
 					</label>
 				</td>
 				<td class="paramlist_value">
-					<?php echo JHtml::_('calendar', $this->category->dateEnd, 'dateEnd', 'dateEnd', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
+					<?php //echo JHtml::_('calendar', $this->category->dateEnd, 'dateEnd', 'dateEnd', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
+					<?php echo CLMForm::calendar($this->category->dateEnd, 'dateEnd', 'dateEnd', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
 				</td>
 			</tr>
 			
