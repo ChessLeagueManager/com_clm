@@ -449,7 +449,11 @@ for ($x=0; $x< 100; $x++){
 	
     ?>
     <tr class="ende">
-    <td colspan="4"><?php echo JText::_('TEAM_TOTAL'); ?></td>
+    <?php if ($attr) { ?>
+		<td colspan="5"><?php echo JText::_('TEAM_TOTAL'); ?></td>
+    <?php } else { ?>
+		<td colspan="4"><?php echo JText::_('TEAM_TOTAL'); ?></td>
+    <?php } ?>
     <?php	$spl = 0; $gespielt = 0;
     // erster Durchgang
         for ($z=0; $z< $mannschaft[0]->runden; $z++) { 			
