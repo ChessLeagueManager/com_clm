@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -20,12 +20,17 @@ class CLMViewMannschaft extends JViewLegacy
 		$googlemaps_api = $config->googlemaps_api;
 		$googlemaps     = $config->googlemaps;
 		
+		if (isset($_SERVER['HTTPS']) AND $_SERVER['HTTPS'] != 'off') {
+			$prot = 'https';
+		} else {
+			$prot = 'http';
+		}
 		$document =JFactory::getDocument();
 		if ($googlemaps == 1) {
-		$document->addScript('http://maps.google.com/maps?file=api&v=2&key='.$googlemaps_api.'');
+			$document->addScript($prot.'://maps.google.com/maps?file=api&v=2&key='.$googlemaps_api.'');
 		}
 		
-		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
+		$document->addScript($prot.'://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
 		$document->addScript(JURI::base().'components/com_clm/javascript/updateTableHeaders.js');
 		
 		$model	  = $this->getModel();
