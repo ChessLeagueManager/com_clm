@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -71,6 +71,7 @@ $countryversion = $config->countryversion;
 	// Userkennung holen
 	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
+$attr = clm_core::$api->db_lineup_attr($liga);
 
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'fpdf.php');
 
@@ -227,6 +228,9 @@ $pdf->SetFillColor(120);
 $pdf->SetTextColor(255);
 	$pdf->Cell($breite1,$zelle,' ',0,0);
 	$pdf->Cell(12,$zelle,JText::_('DWZ_NR'),0,0,'C',1);
+    if ($attr) {
+		$pdf->Cell(10,$zelle,JText::_('CLUB_LIST_ATTR'),0,0,'C',1);
+    } 
 	$pdf->Cell(10,$zelle,JText::_('CLUB_LIST_TITEL'),0,0,'C',1);
 	if (($o_nr == 0) or ($mannschaft[0]->sg_zps <= "0"))
 		$pdf->Cell(40,$zelle,JText::_('DWZ_NAME'),0,0,'L',1);
@@ -286,6 +290,9 @@ for ($x=0; $x< 100; $x++){
 		$pdf->Cell($breite1,$zelle,' ',0,0,'C');
 		$pdf->Cell(12,$zelle,($count[$x]->rmnr.'-'.$count[$x]->rrang),1,0,'C',$fc);
 	}
+    if ($attr) { 
+		$pdf->Cell(10,$zelle,$count[$x]->attr,1,0,'C',$fc);
+    } 
 	$pdf->Cell(10,$zelle,$count[$x]->FIDE_Titel,1,0,'C',$fc);
 	if ($o_nr == 0) 
 		$pdf->Cell(40,$zelle,utf8_decode($count[$x]->name),1,0,'L',$fc);
@@ -383,10 +390,12 @@ for ($x=0; $x< 100; $x++){
 	
 	$pdf->Cell($breite1,$zelle,' ',0,0);
 	$pdf->Cell(12,$zelle,JText::_('TEAM_TOTAL'),1,0,'C',1);
+	if ($attr)
+		$pdf->Cell(10,$zelle,'',0,0,'C',0);
 	if (($o_nr == 0) or ($mannschaft[0]->sg_zps <= "0"))
-		$pdf->Cell(40,$zelle,'',0,0,'C',0);
+		$pdf->Cell(50,$zelle,'',0,0,'C',0);
 	else
-		$pdf->Cell(48,$zelle,'',0,0,'C',0);
+		$pdf->Cell(58,$zelle,'',0,0,'C',0);
 	$pdf->Cell(10,$zelle,'',0,0,'R');
 	$pkt = 0;
 	$spl = 0;
