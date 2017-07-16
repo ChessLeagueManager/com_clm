@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -45,6 +45,7 @@ class CLMViewSonderranglistenMain extends JViewLegacy {
 			JToolBarHelper::deleteList();
 			JToolBarHelper::editList(); 
 			JToolBarHelper::addNew(); 
+			JToolBarHelper::custom( 'copy_set', 'copy.png', 'copy_f2.png', JText::_( 'SP_RANKING_COPY' ), false );
 		}
 		
 		JHtml::_('behavior.tooltip');

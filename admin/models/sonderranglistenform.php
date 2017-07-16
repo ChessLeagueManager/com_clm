@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -189,10 +189,10 @@ class CLMModelSonderranglistenForm extends JModelLegacy {
 				} 
 			} 
 		} 
-		if(!$row->reorderAll()) {
-			$this->setError( $this->_db->getErrorMsg() );
-			return false;
-		}
+//		if(!$row->reorderAll()) {
+//			$this->setError( $this->_db->getErrorMsg() );
+//			return false;
+//		}
 		return true; 
 	} 
 	
