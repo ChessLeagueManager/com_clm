@@ -64,7 +64,7 @@ class CLMViewSonderranglistenMain extends JViewLegacy {
 		
 		
 		//Filter 
-		$options_filter_tur[]		= JHtml::_('select.option', '', JText::_( 'SPECIALRANKINGS_TOURNEMENTS' ));
+		$options_filter_tur[]		= JHtml::_('select.option', '', JText::_( 'SPECIALRANKINGS_TOURNAMENTS' ));
 		foreach($filter_turniere as $tur)	{
 			$options_filter_tur[]		= JHtml::_('select.option', $tur->id, $tur->name);
 		}

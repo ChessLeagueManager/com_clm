@@ -142,7 +142,7 @@ if ($conf_vereinsdaten == 1) {
 					<tr><td><?php echo $verein[0]->vs_tel; ?></td></tr>         
 
 					<?php if ( ($verein[0]->tl ==! false) or ($verein[0]->tl_mail ==! false) or ($verein[0]->tl_tel ==! false) ) { ?>
-						<tr><td><h4><?php echo JText::_('CLUB_TOURNEMENTS'); ?></h4></td></tr>
+						<tr><td><h4><?php echo JText::_('CLUB_TOURNAMENTS'); ?></h4></td></tr>
 						<tr><td><?php echo $verein[0]->tl; ?></td></tr>
 						<?php if ($verein[0]->tl_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->tl_mail ).'</td></tr>'; } ?>
 						<tr><td><?php echo $verein[0]->tl_tel; ?></td></tr>            

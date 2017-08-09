@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -37,7 +37,8 @@ class CLMModelSonderranglistenMain extends JModelLegacy {
 		
 		//Suche und Filter
 		$filter_saison	= JRequest::getVar( 'filter_saison' , $this->_getAktuelleSaison() , 'default' , 'int' );
-		$filter_turnier	= JRequest::getVar( 'filter_turnier' , '' , 'default' , 'int' );
+		//$filter_turnier	= JRequest::getVar( 'filter_turnier' , '' , 'default' , 'int' );
+		$filter_turnier	= $mainframe->getUserStateFromRequest( "$option.filter_turnier",'filter_turnier','','int' );
 		$search 		= JRequest::getVar( 'search' , '' , 'default' , 'string' );
 		$search 		= JString::strtolower( $search );
 		
@@ -124,7 +125,8 @@ class CLMModelSonderranglistenMain extends JModelLegacy {
 		$mainframe	= JFactory::getApplication();
 		$option 	= JRequest::getCmd( 'option' );
 
-		$filter_turnier	= JRequest::getVar( 'filter_turnier' , '' , 'default' , 'int' );
+		//$filter_turnier	= JRequest::getVar( 'filter_turnier' , '' , 'default' , 'int' );
+		$filter_turnier	= $mainframe->getUserStateFromRequest( "$option.filter_turnier",'filter_turnier','','int' );
 		$search 		= JRequest::getVar( 'search' , '' , 'default' , 'string' );
 		$search 		= JString::strtolower( $search );
 

@@ -30,7 +30,7 @@ defined('_JEXEC') or die('Restricted access');
 	</tbody>
 </table>
 <?php if( !$this->accessgroupExists ) {
-	JError::raiseWarning( 500, $row->name.": ".JText::_( 'ACCESSGROUP_WARNING_NO_TOURNEMENT' ) );
+	JError::raiseWarning( 500, $row->name.": ".JText::_( 'ACCESSGROUP_WARNING_NO_TOURNAMENT' ) );
 } ?>
 <div id="editcell"> 
 	<table class="adminlist">

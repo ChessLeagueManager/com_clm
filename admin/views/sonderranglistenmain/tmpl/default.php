@@ -29,7 +29,7 @@ defined('_JEXEC') or die('Restricted access');
 	</tbody>
 </table>
 <?php if( !$this->turnierExists ) {
-	JError::raiseWarning( 500, $row->name.": ".JText::_( 'SPECIALRANKINGS_WARNING_NO_TOURNEMENT' ) );
+	JError::raiseWarning( 500, $row->name.": ".JText::_( 'SPECIALRANKINGS_WARNING_NO_TOURNAMENT' ) );
 } ?>
 <div id="editcell"> 
 	<table class="adminlist">
@@ -40,7 +40,7 @@ defined('_JEXEC') or die('Restricted access');
 					<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 				</th>
 				<th width="" class="title"><?php echo JHtml::_('grid.sort',   JText::_('SPECIALRANKINGS_NAME'), 'name', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
-				<th width="" class="title"><?php echo JHtml::_('grid.sort',   JText::_('SPECIALRANKINGS_TOURNEMENT_NAME'), 'turnier', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
+				<th width="" class="title"><?php echo JHtml::_('grid.sort',   JText::_('SPECIALRANKINGS_TOURNAMENT_NAME'), 'turnier', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
 				<th width="20"><?php echo JHtml::_('grid.sort',   JText::_('CLM_PUBLISHED'), 'a.published', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
 				<th width="100" nowrap="nowrap">
 					<?php echo JHtml::_('grid.sort',   JText::_('JGRID_HEADING_ORDERING'), 'ordering', $this->lists['order_Dir'], $this->lists['order'] ); ?>

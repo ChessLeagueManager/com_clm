@@ -104,7 +104,7 @@ function showTournaments(){
 						</tr>
 						<tr> 
 							<td width="100" align="right" class="key"> 
-								<label for="turnier"><?php echo JText::_( 'SPECIALRANKING_TOURNEMENT' ); ?></label> 
+								<label for="turnier"><?php echo JText::_( 'SPECIALRANKING_TOURNAMENT' ); ?></label> 
 							</td> 
 							<td> 
 								<?php  echo $this->lists['turnier'];?> 
