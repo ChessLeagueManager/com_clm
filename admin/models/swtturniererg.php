@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -644,12 +644,12 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 		
 		// Turnier kopieren
 		// Nur kopieren, wenn das Turnier noch nicht kopiert wurde (d.h. die tid in der #__swt_turniere noch nicht geupdated wurde bzw. == 0 ist)
-		if($this->_getTid($swt_tid) == 0) {
+//		if($this->_getTid($swt_tid) == 0) {
 			if(!$this->_copyTurnier($swt_tid, $update, $tid)){
 				JFactory::getApplication()->enqueueMessage( JText::_('SWT_STORE_ERROR_COPY_TOURNAMENT'),'error' );
 				return false;
 			}
-		}	
+//		}	
 		
 		// Nachdem das Turnier kopiert wurde existiert auf jeden Fall eine Turnier-ID != 0
 		// Diese soll nun f�r die weiteren Aufgaben benutzt werden
@@ -678,25 +678,31 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	function _copyTurnier($swt_tid, $update, $tid) {
 		$db		=JFactory::getDBO ();
 	
-		$select_query = "	SELECT 
-								*
-							FROM
-								#__clm_swt_turniere
-							WHERE
-								swt_tid = ".$swt_tid.";";
+		$select_query = "	SELECT *
+							FROM #__clm_swt_turniere
+							WHERE swt_tid = ".$swt_tid.";";
 		$db->setQuery($select_query);
-		//$turnier = (JObject) $db->loadObject('JObject');		ab Joomla 1.6
 		$turnier = $db->loadObject();
 		unset($turnier->tid);
 		unset($turnier->swt_tid);
 		
 		if($update == 1 AND $tid != 0) {
-			$turnier->id = $tid;
-			if($db->updateObject('#__clm_turniere',$turnier,'id')) {
-				return true;
+			//$turnier->id = $tid;
+			$select_query = "	SELECT *
+								FROM #__clm_turniere
+								WHERE id = ".$tid.";";
+			$db->setQuery($select_query);
+			$turnier_orig = $db->loadObject();
+			if ($turnier_orig->teil != $turnier->teil) {
+				$turnier_orig->teil = $turnier->teil;
+				if($db->updateObject('#__clm_turniere',$turnier_orig,'id')) {
+					return true;
+				} else {
+					return false;
+				}	
 			} else {
-				return false;
-			}
+				return true;
+			} 
 		} else {
 			if($db->insertObject('#__clm_turniere',$turnier,'id')) {
 				//Turnier-ID in #__clm_swt_turniere updaten, damit die neue turnier-id �ber die swt-id gefunden werden kann 
