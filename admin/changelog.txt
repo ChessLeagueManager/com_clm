@@ -17,6 +17,7 @@ $ -> Language fix or change
 + pdf-View Mannschaft mit Attributsfeld
 + Sonderranglisten kopieren
 # Sonderranglisten: Textkorrekturen
+^ Logging: alle Einträge löschen -> alle älter als 450 Tage
 
 - - - - - 3.4.1 - [22-05-2017] - - - - - - - - - - - - - - - - - - - -
 ^ Anpassungen an date,datetime mit '0000-00-00' (MySQL 5.7)
