@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -29,6 +29,7 @@ function Footer()
 }
 
 $lid = JRequest::getInt( 'liga', '1' ); 
+$liga=$this->liga;
 	//Liga-Parameter aufbereiten
 	if(isset($liga[0])){
 		$paramsStringArray = explode("\n", $liga[0]->params);
@@ -43,11 +44,11 @@ $lid = JRequest::getInt( 'liga', '1' );
 		}
 	}	
 	if (!isset($params['dwz_date'])) $params['dwz_date'] = '1970-01-01';
+	if (!isset($params['round_date'])) $params['round_date'] = '0';
 $sid = JRequest::getInt( 'saison','1');
 $view = JRequest::getVar( 'view');
 $o_nr = JRequest::getVar( 'o_nr');
 // Variablen ohne foreach setzen
-$liga=$this->liga;
 $punkte=$this->punkte;
 $spielfrei=$this->spielfrei;
 $dwzschnitt=$this->dwzschnitt;
@@ -417,8 +418,13 @@ $pdf->SetFont('Times','',8);
 				$pdf->Cell(10,4,' ',0,0);
 				$pdf->Cell(12,4,$planl->runde,0,0,'C');
 				$pdf->Cell(12,4,$planl->paar,0,0,'C');
-				if ($termin[$cnt]->datum == '0000-00-00' OR $termin[$cnt]->datum == '1970-01-01') $pdf->Cell(30,4,'    ',0,0,'L');
-				else $pdf->Cell(30,4,JHTML::_('date',  $termin[$cnt]->datum, JText::_('DATE_FORMAT_CLM')),0,0,'L');
+				if ($params['round_date'] == '0') {
+					if ($termin[$cnt]->datum == '0000-00-00' OR $termin[$cnt]->datum == '1970-01-01') $pdf->Cell(30,4,'    ',0,0,'L');
+					else $pdf->Cell(30,4,JHTML::_('date',  $termin[$cnt]->datum, JText::_('DATE_FORMAT_CLM')),0,0,'L');
+				} else {
+					if ($planl->pdate == '0000-00-00' OR $planl->pdate == '1970-01-01') $pdf->Cell(30,4,'    ',0,0,'L');
+					else $pdf->Cell(30,4,JHTML::_('date',  $planl->pdate, JText::_('DATE_FORMAT_CLM')),0,0,'L');
+				}
 				$pdf->Cell(40,4,utf8_decode($planl->hname),0,0,'L');
 				$pdf->Cell(40,4,utf8_decode($planl->gname),0,0,'L');
 				$pdf->Cell(2,4,'',0,0,'C');
@@ -789,9 +795,13 @@ $pdf->SetFont('Times','',$font);
 		while (isset($termin[$cnt]->nr) AND ($planl->runde + $mannschaft[$m]->runden*($planl->dg -1)) > $termin[$cnt]->nr) { 
 			$cnt++; }
 		if (isset($termin[$cnt]->nr) AND ($planl->runde + $mannschaft[$m]->runden*($planl->dg -1))== $termin[$cnt]->nr) { 
-			if ($termin[$cnt]->datum == '0000-00-00' OR $termin[$cnt]->datum == '1970-01-01') $pdf->Cell(30,4,'    ',0,0,'L');
-			else $pdf->Cell(30,4,JHTML::_('date',  $termin[$cnt]->datum, JText::_('DATE_FORMAT_CLM')),0,0,'L');
-			//$pdf->Cell(30,4,JHTML::_('date',  $termin[$cnt]->datum, JText::_('DATE_FORMAT_CLM')),0,0,'L');
+			if ($params['round_date'] == '0') {
+				if ($termin[$cnt]->datum == '0000-00-00' OR $termin[$cnt]->datum == '1970-01-01') $pdf->Cell(30,4,'    ',0,0,'L');
+				else $pdf->Cell(30,4,JHTML::_('date',  $termin[$cnt]->datum, JText::_('DATE_FORMAT_CLM')),0,0,'L');
+			} else {
+				if ($planl->pdate == '0000-00-00' OR $planl->pdate == '1970-01-01') $pdf->Cell(30,4,'    ',0,0,'L');
+				else $pdf->Cell(30,4,JHTML::_('date',  $planl->pdate, JText::_('DATE_FORMAT_CLM')),0,0,'L');
+			}
 			$cnt++;
 			$pdf->Cell(40,4,utf8_decode($planl->hname),0,0,'L');
 			$pdf->Cell(40,4,utf8_decode($planl->gname),0,0,'L');

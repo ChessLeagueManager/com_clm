@@ -19,6 +19,7 @@ $ -> Language fix or change
 # Sonderranglisten: Textkorrekturen
 ^ Logging: alle Einträge löschen -> alle älter als 450 Tage
 # SWT-Import Turnier: Übernahme Teilnehmerzahl
+# pdf-Views Paarungsliste und Liga-Heft: Datum der Paarung
 
 - - - - - 3.4.1 - [22-05-2017] - - - - - - - - - - - - - - - - - - - -
 ^ Anpassungen an date,datetime mit '0000-00-00' (MySQL 5.7)

@@ -413,7 +413,7 @@ class CLMModelRangliste extends JModelLegacy
 	$sid = JRequest::getInt('saison','1');
 	$liga = JRequest::getInt('liga','1');
 	
-		$query = " SELECT a.dg,a.lid,a.sid,a.runde,a.paar,a.tln_nr,a.gegner "
+		$query = " SELECT a.dg,a.lid,a.sid,a.runde,a.paar,a.tln_nr,a.gegner,a.pdate,a.ptime "
 			//." ,t.name as dat_name, t.datum as datum "
 			." ,m.name as hname, n.name as gname, m.published as hpublished, "
 			." n.published as gpublished "
