@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.4.2 - [xx-xx-2017] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.4.2 - [03-09-2017] - - - - - - - - - - - - - - - - - - - -
 + Views Mannschaft,Verein Google-Maps bei SSL
 + pdf-View Mannschaft mit Attributsfeld
 + Sonderranglisten kopieren
