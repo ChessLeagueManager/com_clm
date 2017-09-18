@@ -127,7 +127,8 @@ class CLMModelMeldeliste extends JModelLegacy
 		}
 		$query .= " FROM #__clm_dwz_spieler as a "
 			." LEFT JOIN #__clm_meldeliste_spieler as l ON l.lid = $liga AND l.sid = $sid AND l.mnr = $man "
-			." AND (l.zps = '$zps' OR FIND_IN_SET(l.zps,'".$team[0]->sg_zps."') != 0 ) ";
+			//." AND (l.zps = '$zps' OR FIND_IN_SET(l.zps,'".$team[0]->sg_zps."') != 0 ) ";
+			." AND l.zps = a.zps ";
 		if ($countryversion =="de") {
 			$query .= "AND l.mgl_nr = a.Mgl_Nr  ";
 		} else {
@@ -146,9 +147,6 @@ class CLMModelMeldeliste extends JModelLegacy
 	{
 		$query	= $this->_getCLMSpieler( $options );
 		$result = $this->_getList( $query );
-//echo "<br>result: "; var_dump($result);
-//echo "<br>query00: ".$query; 
-//echo "<br>error: ".mysql_errno() . ": " . mysql_error(). "\n";
 	return @$result;
 	}
 
