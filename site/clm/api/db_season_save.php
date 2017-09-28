@@ -27,7 +27,7 @@ function clm_api_db_season_save($id = - 1, $published = null, $archiv = null, $n
 	$name = clm_core::$load->make_valid($name, 8, "");
 	$bemerkungen = clm_core::$load->make_valid($bemerkungen, 8, "");
 	$bem_int = clm_core::$load->make_valid($bem_int, 8, "");
-	$datum = clm_core::$load->make_valid($datum, 8, "1970-01-01");
+	$datum = clm_core::$load->make_valid($datum, 10, "1970-01-01");
 	$notice = "m_changeSeasonSuccess";
 	$enableSeason = false;
 	if ($name == "") {
