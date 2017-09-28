@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -23,6 +23,7 @@ $import_pgn	=$config->import_pgn;
 ?>
 <form action="index.php" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data" >
 	<table width="100%" class="admintable"> 
+<!---  Teil swt - Import von Swiss-Chess Dateien ------------------------------------------------------------------------------------------ -->		
 		<tr>
 			<td width="50%" style="vertical-align: top;">
 				<fieldset class="adminform"> 
@@ -71,7 +72,7 @@ $import_pgn	=$config->import_pgn;
 			</td>
 		</tr>		
 		
-		
+<!---  Teil pgn - Import von Partie-Notationen  ------------------------------------------------------------------------------------------- -->		
 		<tr>
 			<td width="50%" style="vertical-align: top;">
 				<br><br><br><br>
@@ -117,6 +118,59 @@ $import_pgn	=$config->import_pgn;
 						<tr>
 							<td width="50%"><?php echo $this->lists['pgn_files'] ?></td>
 							<td width="50%"><?php echo JText::_( 'PGN_EXECUTE_TEXT' ); ?></td>
+						</tr>
+					</table>
+				</fieldset>
+				<?php } ?>
+			</td>
+		</tr>		
+
+<!---  Teil swm - Import von Swiss-Manager Dateien------------------------------------------------------------------------------------------ -->		
+		<tr>
+			<td width="50%" style="vertical-align: top;">
+				<br><br><br><br>
+				<fieldset class="adminform"> 
+					<legend><?php echo JText::_( 'SWT_ATTENTION_TAB' ); ?></legend> 
+					<?php echo JText::_( 'SWM_ATTENTION_TEXT01' ); ?>
+					<?php echo JText::_( 'SWM_ATTENTION_TEXT02' ); ?>
+					<br><br>
+				</fieldset>
+				<fieldset class="adminform"> 
+					<legend><?php echo JText::_( 'SWT_ACTIVATION_TAB' ); ?></legend> 
+						<?php echo JText::_( 'SWM_ACTIVATION_TEXT01' ).' '; ?> <?php if ($upload == 1) { ?><font color="#00ff00"><?php echo JText::_( 'SWT_ACTIVE' ); } 
+						else { ?><font color="#ff0000"><?php echo JText::_( 'SWT_DEACTIVE' ); } ?></font>
+						<?php echo " , ".JText::_( 'SWM_ACTIVATION_TEXT02' ).' '; ?><?php if ($execute == 1) { ?><font color="#00ff00"><?php echo JText::_( 'SWT_ACTIVE' ); } 
+						else { ?><font color="#ff0000"><?php echo JText::_( 'SWT_DEACTIVE' ); } ?></font>
+						<?php echo "<br>".JText::_( 'SWT_ACTIVATION_TEXT03' ); ?>
+						<br><br>
+				</fieldset>
+				<fieldset class="adminform"> 
+					<legend><?php echo JText::_( 'SWT_HINTS_TAB' ); ?></legend> 
+					<?php echo JText::_( 'SWM_HINTS_TEXT01' ); ?>
+					<?php echo JText::_( 'SWM_HINTS_TEXT02' ); ?>
+					<?php echo JText::_( 'SWM_HINTS_TEXT03' ); ?>
+				</fieldset>
+			</td>
+			<td width="50%" style="vertical-align: top;">
+				<br><br><br><br>
+				<?php if ($upload == 1) { ?>
+				<fieldset class="adminform"> 
+					<legend><?php echo JText::_( 'SWM_UPLOAD_TAB' ); ?></legend> 
+					<table width="100%">
+						<tr>
+							<td width="50%"><input type="file" name="swm_datei" /></td>
+							<td width="50%"><?php echo JText::_( 'SWM_UPLOAD_TEXT' ); ?></td>
+						</tr>
+					</table>
+				</fieldset>
+				<?php } ?>
+				<?php if ($execute == 1) { ?>
+				<fieldset class="adminform"> 
+					<legend><?php echo JText::_( 'SWM_EXECUTE_TAB' ); ?></legend> 
+					<table width="100%">
+						<tr>
+							<td width="50%"><?php echo $this->lists['swm_files'] ?></td>
+							<td width="50%"><?php echo JText::_( 'SWM_EXECUTE_TEXT' ); ?></td>
 						</tr>
 					</table>
 				</fieldset>

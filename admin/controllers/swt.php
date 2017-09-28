@@ -2,9 +2,9 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -133,6 +133,51 @@ class CLMControllerSWT extends JControllerLegacy
 			$adminLink->makeURL();
 			
 			$msg = JText::_( 'PGN_FILE_ERROR!' ); 
+			
+			$this->setRedirect($adminLink->url,$msg);
+		}				
+	}
+	
+	function swm_upload() {
+		$model = $this->getModel('swt');
+		$msg = $model->swm_upload();
+		$swm_filename = JRequest::getVar('swm_filename', '');
+		
+		$adminLink = new AdminLink();
+		$adminLink->more = array('swm_filename' => $swm_filename);
+		$adminLink->view = "swt";
+		$adminLink->makeURL();
+			
+		$this->setRedirect($adminLink->url,$msg); 		
+	}
+	
+	function swm_delete(){
+		$model = $this->getModel('swt');
+		$msg = $model->swm_delete();
+		
+		$adminLink = new AdminLink();
+		$adminLink->view = "swt";
+		$adminLink->makeURL();
+			
+		$this->setRedirect($adminLink->url,$msg);
+	}
+	
+	function swm_import() {
+		$model = $this->getModel('swt');
+		//$type = $model->swm_import();
+		$type = 0;
+		if($type == 0) {
+			JRequest::setVar('view', 'swmturnier');
+			parent::display();
+		} elseif($type == 255){
+			JRequest::setVar('view', 'swtliga');
+			parent::display();
+		} else {
+			$adminLink = new AdminLink();
+			$adminLink->view = "swt";
+			$adminLink->makeURL();
+			
+			$msg = JText::_( 'SWM_FILE_ERROR!' ); 
 			
 			$this->setRedirect($adminLink->url,$msg);
 		}				

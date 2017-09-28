@@ -15,6 +15,7 @@ $ -> Language fix or change
 - - - - - 3.4.3 - [xx-xx-2017] - - - - - - - - - - - - - - - - - - - -
 # Meldeliste Eingabe im FE bei Spielgemeinschaften
 # Admin-View Saison: Anpassung MySQL 5.7
++ SWM-Import CH-Turniere (Swiss-Manager Dateityp TUNx)
 
 - - - - - 3.4.2 - [03-09-2017] - - - - - - - - - - - - - - - - - - - -
 + Views Mannschaft,Verein Google-Maps bei SSL
