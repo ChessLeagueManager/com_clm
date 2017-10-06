@@ -323,6 +323,10 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			return 5; // +/-
 		} elseif ($SWTmatchWhite->SWTergebnis == 1 AND $SWTmatchWhite->SWTattribute == 2 AND $SWTmatchBlack->SWTergebnis == 1 AND $SWTmatchBlack->SWTattribute == 2) {
 			return 6; // -/-
+		} elseif ($SWTmatchWhite->SWTergebnis == 1 AND $SWTmatchWhite->SWTattribute != 2 AND $SWTmatchBlack->SWTergebnis == 2 AND $SWTmatchBlack->SWTattribute != 2) {
+			return 9; // 0,5-0
+		} elseif ($SWTmatchWhite->SWTergebnis == 2 AND $SWTmatchWhite->SWTattribute != 2 AND $SWTmatchBlack->SWTergebnis == 1 AND $SWTmatchBlack->SWTattribute != 2) {
+			return 10; // 0-0,5
 		} else {
 			return 7; // noch nicht gespielt
 		}
@@ -343,6 +347,10 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			return 4; // -/+
 		} elseif ($SWTmatchWhite->SWTergebnis == 1 AND $SWTmatchWhite->SWTattribute == 2 AND $SWTmatchBlack->SWTergebnis == 1 AND $SWTmatchBlack->SWTattribute == 2) {
 			return 6; // -/-
+		} elseif ($SWTmatchWhite->SWTergebnis == 1 AND $SWTmatchWhite->SWTattribute != 2 AND $SWTmatchBlack->SWTergebnis == 2 AND $SWTmatchBlack->SWTattribute != 2) {
+			return 10; // 0-0,5
+		} elseif ($SWTmatchWhite->SWTergebnis == 2 AND $SWTmatchWhite->SWTattribute != 2 AND $SWTmatchBlack->SWTergebnis == 1 AND $SWTmatchBlack->SWTattribute != 2) {
+			return 9; // 0,5-0
 		} else {
 			return 7; // noch nicht gespielt
 		}
