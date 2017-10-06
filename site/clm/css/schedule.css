@@ -1,0 +1,120 @@
+/********************/
+/****** schedule ******/
+/********************/
+
+
+#clm .clm .clm_view_schedule .flex {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-flow: row wrap;
+	-moz-flex-flow: row wrap;
+	-ms-flex-flow: row wrap;
+	flex-flow: row wrap;
+	width:100%;
+	overflow:hidden;
+}
+
+#clm .clm .clm_view_schedule .element {
+	padding-left: 0.1em;
+	padding-top: 0.2em;
+	padding-right: 0.1em;
+	padding-bottom: 0.2em; 
+	border: 0.1px solid #CCCCCC; 
+	text-align:center;
+	text-align:-moz-center;
+	text-align:-webkit-center;
+	margin:0;
+}
+
+
+#clm .clm .clm_view_schedule .title .element {
+	font-size: 110%; 
+	font-weight: bold;
+	padding-left: 0.1em;
+	padding-top: 0.2em;
+	padding-right: 0.1em;
+	padding-bottom: 0.2em; 
+	border: 0.1px solid #CCCCCC;
+	background-color: #333333;
+	color: #FFFFFF;
+}
+
+
+
+#clm .clm .clm_view_schedule .date {
+/*	background-color: #f5f5f5;	*/
+	text-align:center; 
+	text-align:-moz-center;
+	text-align:-webkit-center;
+	width:10%;
+}
+
+#clm .clm .clm_view_schedule .result {
+	text-align:center; 
+	text-align:-moz-center;
+	text-align:-webkit-center;
+	width:16%;
+}
+
+#clm .clm .clm_view_schedule .home, #clm .clm .clm_view_schedule .guest {
+	width:25%;
+}
+#clm .clm .clm_view_schedule .league {
+	width:18%;
+}
+#clm .clm .clm_view_schedule .dg, #clm .clm .clm_view_schedule .round {
+	width:3%;
+}
+
+
+
+/* Für kleine Browser Fenster oder Handys */
+
+@media all and (max-width: 480px) {
+ 
+	#clm .clm .clm_view_schedule .flex {
+		-webkit-flex-direction: column;
+		-ms-flex-direction: column;
+		-webkit-box-orient: vertical;
+		flex-direction: column;
+	}
+	
+	#clm .clm .clm_view_schedule .home, #clm .clm .clm_view_report .guest {
+		min-width:0;
+		width:100%;
+	}
+ 
+	#clm .clm .clm_view_schedule .date {
+		width:100%;
+		margin-top:1.5em;
+	}
+
+	#clm .clm .clm_view_schedule .result {
+		width:100%;
+	}
+ 
+ }
+ 
+ /* Anpassung für die Buttons */
+ 
+#clm .clm .clm_view_schedule .button_container {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-flow: row wrap;
+	-moz-flex-flow: row wrap;
+	-ms-flex-flow: row wrap;
+	flex-flow: row wrap;
+	width:100%;
+}
+
+#clm .clm .clm_view_schedule .button_container .clm_button {
+	-webkit-flex: 1 0 auto;
+	-ms-flex: 1 0 auto; 
+	flex: 1 0 auto; 
+}
