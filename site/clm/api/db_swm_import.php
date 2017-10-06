@@ -52,8 +52,8 @@ if ($debug > 1) { echo "<br>tournament2: ";	var_dump($tournament2); }
 	else $name = $tournament['out'][12][0];
 	$tournament["out"][213] = transcode_fidecorrect($tournament2["out"][213]); // optionTiebreakersFideCorrect
 	
-	$keyS = '`sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `name`, `checked_out_time`';
-	$valueS = $season.", 1, 1, 1, 0, 1, '".$name."', '1970-01-01 00:00:00'";
+	$keyS = '`sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `name`, `bezirkTur`, `checked_out_time`';
+	$valueS = $season.", 1, 1, 1, 0, 1, '".$name."', '0', '1970-01-01 00:00:00'";
 	$params_array = array();
 	foreach ($tournament['out'] as $tour) {
 if ($debug > 1) { echo "<br>tour: ";	var_dump($tour); }
