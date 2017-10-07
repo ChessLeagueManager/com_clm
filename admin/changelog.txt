@@ -18,6 +18,7 @@ $ -> Language fix or change
 + SWM-Import CH-Turniere (Swiss-Manager Dateityp TUNx)
 + neuer View: Saisonübersicht pro Verein
 # SWT-Import Turnier: Übernahme der Ergebnissen 0,5-0 und 0-0,5
+# Admin-View Ligen: Änderung Hint-Text
 
 - - - - - 3.4.2 - [03-09-2017] - - - - - - - - - - - - - - - - - - - -
 + Views Mannschaft,Verein Google-Maps bei SSL
