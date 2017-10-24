@@ -63,10 +63,13 @@ if (clm_core::$access->getSeason() != -1) {
 			// View wurde bereits ausgegeben -> wir sind fertig
 			return;
 	} 
-	elseif (JRequest::getCmd('view',"-1") == "schedule"){	
-			$fix = clm_core::$api->callStandalone("view_schedule");
-//echo "<br>clm fix:"; var_dump($fix);
-			echo $fix[2];
+	elseif (JRequest::getCmd('view',"-1") == "schedule") {
+			if (JRequest::getCmd('format',"-1") == "pdf") {
+				clm_core::$api->callStandalone("view_schedule_pdf");
+			} else {
+				$fix = clm_core::$api->callStandalone("view_schedule");
+				echo $fix[2]; 
+			}
 			return;
 	}
 	elseif (JRequest::getCmd('view',"-1") == "app_info"){	

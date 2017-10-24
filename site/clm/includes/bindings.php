@@ -6,4 +6,5 @@ $bindings["view_report"]=array("liga","runde","dg","paar");
 $bindings["view_tournament_group"]=array("liga");
 $bindings["view_logging_new"]=array("ids");
 $bindings["view_schedule"]=array("season","club");
+$bindings["view_schedule_pdf"]=array("season","club");
 ?>
