@@ -35,6 +35,12 @@ defined('clm') or die('Restricted access');
 ?>
 <style type="text/css">
 
+#clm .clm .clmbox { width:100%; margin: 10px 0 0 0; border: 1px solid #CCC; float: none !important; padding: 5px 0; background-color: #F5F5F5; color: #666666 !important;}
+#clm .clm .clmbox a { padding: 0px 10px; text-decoration: none; line-height: 20px;}
+#clm .clm .clmbox a:hover { text-decoration: underline; }
+
+#clm .clm .clmbox select { margin: 2px 2px 2px 2px; border: 1px solid #CCC; float: none !important; padding: 0 0; height: auto; background-color: #FFFFFF; color: #000000 !important;}
+
 #clm .clm .flex {
 	display: -webkit-box;
 	display: -moz-box;

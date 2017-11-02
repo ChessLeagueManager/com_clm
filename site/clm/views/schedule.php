@@ -11,13 +11,42 @@ function clm_view_schedule($out) {
 	// Variablen initialisieren
 	$paar 		= $out["paar"];
 	$club 		= $out["club"];
+	$club_list 		= $out["club_list"];
+//echo "<br>club_list:"; var_dump($club);
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
-
+?>
+<Script language="JavaScript">
+<!-- Vereinsliste
+function goto(form) { var index=form.select.selectedIndex
+if (form.select.options[index].value != "0") {
+location=form.select.options[index].value;}}
+//-->
+</SCRIPT>
+	<div class="clmbox">
+<?php	
+	if (isset($paar[0])) echo clm_core::$load->create_link($lang->title_club_details, 'verein', array('saison' => $paar[0]->sid, 'zps' => $club[0]->zps))
+						.' | '. clm_core::$load->create_link($lang->title_members, 'dwz', array('saison' => $paar[0]->sid, 'zps' => $club[0]->zps))
+						.' | '. clm_core::$load->create_link($lang->title_clubs, 'vereinsliste', array('saison' => $paar[0]->sid));
+?>	
+	<span style="float:right;">
+    <form name="form1">
+        <select name="select" onchange="goto(this.form)" class="selectteam">
+        <option value=""><?php echo JText::_('CLUB_SELECTTEAM') ?></option>
+        <?php  $cnt = 0;   foreach ($club_list as $verein) { $cnt++; ?>
+         <option value="<?php echo clm_core::$load->create_valuelink('schedule', array('season' => $verein->sid, 'club' => $verein->zps)); ?>"
+        <?php if ($verein->zps == $club[0]->zps) { echo 'selected="selected"'; } ?>><?php echo $verein->name; ?></option>
+        <?php } ?>
+        </select>
+    </form>
+</span> 
+</div> 
+<?php	echo '<br />';
+		
 	echo '<table style="width:100%"><tr><th><h4>'.$club[0]->name." - ".$club[0]->season_name; 
 	echo '</h4></th><th style="align:right">';
-	if (isset($paar[0])) echo clm_core::$load->create_link_pdf('schedule', 'pdf-Ausgaabe', array('layout' => 'schedule', 'season' => $paar[0]->sid, 'liga' => $paar[0]->lid, 'club' => $club[0]->zps));
+	if (isset($paar[0])) echo clm_core::$load->create_link_pdf('schedule', $lang->pdf, array('layout' => 'schedule', 'season' => $paar[0]->sid, 'liga' => $paar[0]->lid, 'club' => $club[0]->zps));
 	echo "</th></tr></table>";
 ?>
 <div class="flex title">

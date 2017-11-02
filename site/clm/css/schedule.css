@@ -1,6 +1,9 @@
 /********************/
 /****** schedule ******/
 /********************/
+#clm .clm .clm_view_schedule .clmbox { width:100%; margin: 10px 0 0 0; border: 1px solid #CCC; float: none !important; padding: 5px 0;}
+#clm .clm .clm_view_schedule .clmbox a { padding: 0px 10px; text-decoration: none; line-height: 20px;}
+#clm .clm .clm_view_schedule .clmbox a:hover { text-decoration: underline; }
 
 
 #clm .clm .clm_view_schedule .flex {

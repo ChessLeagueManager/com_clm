@@ -44,6 +44,13 @@ function clm_api_db_schedule($season, $club) {
 		;
 	$out["paar"] = clm_core::$db->loadObjectList($paarModel);
 
+	  	$club_listModel = " SELECT a.* "
+		." FROM #__clm_vereine as a "
+		." WHERE a.sid = ".$season 
+		." ORDER BY a.name "
+		;
+	$out["club_list"] = clm_core::$db->loadObjectList($club_listModel);
+
 	// Kein Ergebnis -> Daten Inkonsistent oder falsche Eingabe
 	if (!isset($out["club"][0])) {
 		return array(false, "e_scheduleError");
