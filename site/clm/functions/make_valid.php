@@ -85,8 +85,14 @@ function clm_function_make_valid($input, $type, $standard, $choose = null) {
 			}
 		break;
 		case 10: // date for mysql
-			if (!clm_core::$load->is_date($input)) {
-				return $standard;
+			if (strlen($input) == 10) {
+				if (!clm_core::$load->is_date($input,'Y-m-d')) {
+					return $standard;
+				}
+			} else {	
+				if (!clm_core::$load->is_date($input)) {
+					return $standard;
+				}
 			}
 		break;
 		case 11: // is $input one of $choose

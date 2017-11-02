@@ -14,7 +14,7 @@ $ -> Language fix or change
 
 - - - - - 3.4.3 - [xx-xx-2017] - - - - - - - - - - - - - - - - - - - -
 # Meldeliste Eingabe im FE bei Spielgemeinschaften
-# Admin-View Saison: Anpassung MySQL 5.7
+# Admin-View Saison: Anpassung MySQL 5.7 / PHP 7
 + SWM-Import CH-Turniere (Swiss-Manager Dateityp TUNx)
 + neuer View: Saisonübersicht pro Verein
 # SWT-Import Turnier: Übernahme der Ergebnissen 0,5-0 und 0-0,5
