@@ -25,9 +25,15 @@ class CLMViewSWMTurnier extends JViewLegacy {
 		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( JText::_('TITLE_SWT_TOURNAMENT') ,'clm_headmenu_manager.png' );
 		
-		//JToolBarHelper::custom('update','refresh.png','refresh_f2.png', JText::_('SWT_TOURNAMENT_UPDATE'), false);
+		JToolBarHelper::custom('update','refresh.png','refresh_f2.png', JText::_('SWT_TOURNAMENT_UPDATE'), false);
 		JToolBarHelper::custom('add','new.png','new_f2.png', JText::_('SWT_TOURNAMENT_NEW'), false);
-		JToolBarHelper::custom('test','delete.png','delete_f2.png', JText::_('SWT_TOURNAMENT_TEST'), false);
+		//CLM parameter auslesen
+		$config = clm_core::$db->config();
+		$test_button = $config->test_button;
+		if ($test_button) {
+			JToolBarHelper::custom('test','delete.png','delete_f2.png', JText::_('SWT_TOURNAMENT_TEST'), false);
+		}
+		JToolBarHelper::cancel();
 		
 		//Saison- und Turnier-Auswahl erstellen
 		$options_saisons[]		= JHtml::_('select.option', '', JText::_( 'SWT_SAISONS' ));

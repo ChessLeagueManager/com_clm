@@ -135,5 +135,6 @@ $config["fe_runde_subuml"]=array(120,9,0,array(0,1));
 $config["email_type"]=array(121,9,1,array(0,1));
 $config["upload_pgn"]=array(122,9,0,array(0,1));
 $config["import_pgn"]=array(123,9,0,array(0,1));
+$config["test_button"]=array(124,9,0,array(0,1)); 
 
 ?>

@@ -2,7 +2,7 @@
 /**
 * Import einer Turnierdatei vom Swiss-Manager ( zur Zeit nur TUNx = Einzelturnier im CH-Modus
 */
-function clm_api_db_swm_import($file,$season,$group=false,$update=false,$test=false) {
+function clm_api_db_swm_import($file,$season,$turnier,$group=false,$update=false,$test=false) {
     $lang = clm_core::$lang->swm_import;
 	if ($test) $debug = 1; else $debug = 0;
 	if ($test)	echo "<br><br>Test - keine Übernahme der Daten ins CLM!"; 
@@ -10,6 +10,7 @@ function clm_api_db_swm_import($file,$season,$group=false,$update=false,$test=fa
 if ($debug > 0) { echo "<br><br>-- allgemeine Daten --";	}
 if ($debug > 0) echo "<br><br>datei: ".$file; 		//echo "<br>end"; //die();
 if ($debug > 0) echo "<br>saison: ".$season; 	//echo "<br>end"; //die();
+if ($debug > 0) echo "<br>turnier: ".$turnier; 	//echo "<br>end"; //die();
 
 	if (!$file) {
 		echo '<p>Please choose a filename! / Bitte wählen Sie einen Dateinamen aus!</p>';
@@ -159,22 +160,31 @@ if ($debug > 1) { echo "<br>tab_record: $i ";	var_dump($tab_record); }
 			if ($runde > $tournament["out"][1][0]) break;
 			$brett = 1;
 		}
+if ($debug > 0) { echo " ( Runde: $runde  Brett: $brett ) ";	}
 		$spieler = $tab_record['out'][4007][0];
 		$gegner = $tab_record['out'][4008][0];
-		if ($gegner > 60000) $gegner = 0;
+		//if ($gegner > 60000) $gegner = 0;
+		if ($gegner > 16000) $gegner = 0;
 		$heim = 1;
 		$ergebnis = transcode_ergebnis($tab_record['out'][4002][0],$heim);
-if ($debug > 1) { echo "<br>runde: $runde  brett: $brett  ergebnis: $ergebnis";	}
+if ($debug > 1) { echo "<br>runde: $runde  brett: $brett  ergebnis: $ergebnis  -- "; var_dump($ergebnis);	}
+		if (($spieler == 0 OR $gegner == 0) AND $ergebnis == 7) continue;
 		if ($ergebnis == 99) continue;
 		$keyS = '`sid`, `swt_tid`, `dg`, `runde`, `brett`, `tln_nr`, `heim`, `spieler`, `gegner`, `ergebnis`, `pgn`';
-		$valueS = $season.", ".$new_swt_tid.", 1,".$runde.", ".$brett.", ".$spieler.", ".$heim.",".$spieler.", ".$gegner.", ".$ergebnis.", ''";
+		if (!is_null($ergebnis))
+			$valueS = $season.", ".$new_swt_tid.", 1,".$runde.", ".$brett.", ".$spieler.", ".$heim.",".$spieler.", ".$gegner.", ".$ergebnis.", ''";
+		else 
+			$valueS = $season.", ".$new_swt_tid.", 1,".$runde.", ".$brett.", ".$spieler.", ".$heim.",".$spieler.", ".$gegner.", NULL, ''";
 		$sql = "INSERT INTO #__clm_swt_turniere_rnd_spl (".$keyS.") VALUES (".$valueS.")";
 if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 		clm_core::$db->query($sql);
 		$heim = 0;
 		$ergebnis = transcode_ergebnis($tab_record['out'][4002][0],$heim);
 		$keyS = '`sid`, `swt_tid`, `dg`, `runde`, `brett`, `tln_nr`, `heim`, `spieler`, `gegner`, `ergebnis`, `pgn`';
-		$valueS = $season.", ".$new_swt_tid.", 1,".$runde.", ".$brett.", ".$gegner.", ".$heim.", ".$gegner.", ".$spieler.", ".$ergebnis.", ''";
+		if (!is_null($ergebnis))
+			$valueS = $season.", ".$new_swt_tid.", 1,".$runde.", ".$brett.", ".$gegner.", ".$heim.", ".$gegner.", ".$spieler.", ".$ergebnis.", ''";
+		else
+			$valueS = $season.", ".$new_swt_tid.", 1,".$runde.", ".$brett.", ".$gegner.", ".$heim.", ".$gegner.", ".$spieler.", NULL, ''";
 		$sql = "INSERT INTO #__clm_swt_turniere_rnd_spl (".$keyS.") VALUES (".$valueS.")";
 if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 		clm_core::$db->query($sql);
@@ -182,7 +192,7 @@ if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 //die('erg');
 	
 	if (!$test) { 
-		$result = clm_core::$api->db_swt_to_clm($new_swt_tid);
+		$result = clm_core::$api->db_swt_to_clm($new_swt_tid,$turnier,$group,$update);
 		if ($debug > 1) { echo "<br>result:"; var_dump($result); }
 		$new_tid = $result[1];
 	} else {
@@ -625,7 +635,7 @@ if ($debug > 0) { echo "<br>feinwertung  swm: $swm  ->  clm: ".$line[0]; }
 
 function transcode_ergebnis($ergebnis, $heim) {
 	/* SWM -> CLM	(Beschreibung)
-		0 ->  0	 nicht gesetzt
+		0 ->  NULL	 Ergebnis offen
 		1 ->  1	 Weißsieg
 		2 ->  2	 Remis
 		3 ->  0	 Schwarzsieg
@@ -635,9 +645,9 @@ function transcode_ergebnis($ergebnis, $heim) {
 		9 ->  8	 spielfrei gewonnen  
 	*/
 	if ($heim == 1) 
-		$clm_array = array (0 => 99, 1 => 1, 2 => 2, 3 => 0, 4 => 5, 5 => 4, 6 => 6, 9 => 5);
+		$clm_array = array (0 => NULL, 1 => 1, 2 => 2, 3 => 0, 4 => 5, 5 => 4, 6 => 6, 9 => 5);
 	else	
-		$clm_array = array (0 => 99, 1 => 0, 2 => 2, 3 => 1, 4 => 4, 5 => 5, 6 => 6, 9 => 4);
+		$clm_array = array (0 => NULL, 1 => 0, 2 => 2, 3 => 1, 4 => 4, 5 => 5, 6 => 6, 9 => 4);
 //echo "<br>ergebnis  swm: $ergebnis  ->  clm: ";  	
 	$ergebnis = $clm_array[$ergebnis];
 //echo $ergebnis;  	

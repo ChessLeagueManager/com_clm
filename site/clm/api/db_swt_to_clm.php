@@ -2,10 +2,10 @@
 /**
 * Import einer Turnierdatei vom Swiss-Manager ( zur Zeit nur TUNx = Einzelturnier im CH-Modus
 */
-function clm_api_db_swt_to_clm($swt_tid,$group=false,$update=false,$tid=0) {
+function clm_api_db_swt_to_clm($swt_tid,$tid,$group=false,$update=false) {
     $lang = clm_core::$lang->swm_import;
 	$debug = 0;
-	$new_ID = 0;
+	$new_ID = $tid;
 	
 	//Copy Turnierdaten
 	$select_query = " SELECT * FROM #__clm_swt_turniere
@@ -16,25 +16,23 @@ function clm_api_db_swt_to_clm($swt_tid,$group=false,$update=false,$tid=0) {
 //echo "<br>stc-turnier:"; var_dump($turnier);  //die();		
 	if($update == 1 AND $tid != 0) {
 if ($debug > 0) { echo "<br>update??"; die(); }
-			//$turnier->id = $tid;
-			$select_query = " SELECT * FROM #__clm_turniere
-								WHERE id = ".$tid.";";
-			$db->setQuery($select_query);
-			$turnier_orig = $db->loadObject();
-			if ($turnier_orig->teil != $turnier->teil) {
-				$turnier_orig->teil = $turnier->teil;
-				if($db->updateObject('#__clm_turniere',$turnier_orig,'id')) {
-					return true;
-				} else {
-					return false;
-				}	
-			} else {
-				return true;
-			} 
+		$select_query = " SELECT * FROM #__clm_turniere
+							WHERE id = ".$tid.";";
+		//$db->setQuery($select_query);
+		//$turnier_orig = $db->loadObject();
+		$turnier_orig	= clm_core::$db->loadObject($select_query);
+		$turnier->id = $turnier_orig->id;
+		$turnier->catidAlltime = $turnier_orig->catidAlltime;
+		$turnier->catidEdition = $turnier_orig->catidEdition;
+		$turnier->ordering = $turnier_orig->ordering;
+		if (!clm_core::$db->updateObject('#__clm_turniere',$turnier,'id')) {
+			return array(false,$turnier->tid);
+		}	
+		$turnier->tid = $turnier_orig->id;
 	} else {
 		if(clm_core::$db->insertObject('#__clm_turniere',$turnier,'id')) {
-			//Turnier-ID in #__clm_swt_turniere updaten, damit die neue turnier-id �ber die swt-id gefunden werden kann 
-			//f�r den Fall, dass mit (F5) die Daten erneut gesendet werden und das Turnier bereits in die CLM-Datenbank kopiert wurde
+			//Turnier-ID in #__clm_swt_turniere updaten, damit die neue turnier-id über die swt-id gefunden werden kann 
+			//für den Fall, dass mit (F5) die Daten erneut gesendet werden und das Turnier bereits in die CLM-Datenbank kopiert wurde
 			$turnier->swt_tid = $swt_tid;
 			$turnier->tid = clm_core::$db->insert_id();
 			unset($turnier->id);

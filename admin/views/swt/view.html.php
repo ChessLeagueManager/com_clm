@@ -29,15 +29,15 @@ class CLMViewSWT extends JViewLegacy {
 		JToolBarHelper::custom( 'upload', 'upload.png', 'upload_f2.png', JText::_('SWT_UPLOAD'), false);
 		
 		JToolBarHelper::spacer();
-		JToolBarHelper::custom( 'pgn_import', 'upload.png', 'upload_f2.png', JText::_('PGN_IMPORT'), false);
-		JToolBarHelper::custom('pgn_delete','delete.png','delete_f2.png', JText::_('PGN_DELETE'), false);
-		JToolBarHelper::custom( 'pgn_upload', 'upload.png', 'upload_f2.png', JText::_('PGN_UPLOAD'), false);
-
-		JToolBarHelper::spacer();
 		JToolBarHelper::custom( 'swm_import', 'upload.png', 'upload_f2.png', JText::_('SWM_IMPORT'), false);
 		JToolBarHelper::custom('swm_delete','delete.png','delete_f2.png', JText::_('SWM_DELETE'), false);
 		JToolBarHelper::custom( 'swm_upload', 'upload.png', 'upload_f2.png', JText::_('SWM_UPLOAD'), false);
 		
+		JToolBarHelper::spacer();
+		JToolBarHelper::custom( 'pgn_import', 'upload.png', 'upload_f2.png', JText::_('PGN_IMPORT'), false);
+		JToolBarHelper::custom('pgn_delete','delete.png','delete_f2.png', JText::_('PGN_DELETE'), false);
+		JToolBarHelper::custom( 'pgn_upload', 'upload.png', 'upload_f2.png', JText::_('PGN_UPLOAD'), false);
+
 		//SWT-File-Auswahl erstellen
 		jimport( 'joomla.filesystem.file' );
 		
