@@ -27,7 +27,7 @@ class CLMModelMannschaft extends JModelLegacy
 		$id			= @$options['id'];
  
 		$query = "SELECT a.zps,a.sg_zps,u.name as mf_name,u.email as email, "
-			." u.tel_mobil,u.tel_fest, l.durchgang as dg, l.rang as lrang, l.params, "
+			." u.tel_mobil,u.tel_fest, l.durchgang as dg, l.rang as lrang, l.params, l.stamm, "
 			." l.name as liga_name, l.runden as runden, l.published as lpublished, l.anzeige_ma as anzeige_ma, a.* "
 			." FROM #__clm_mannschaften as a "
 			." LEFT JOIN #__clm_user AS u ON u.jid = a.mf AND  u.sid = a.sid "

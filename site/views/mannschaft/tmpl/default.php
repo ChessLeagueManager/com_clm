@@ -454,13 +454,14 @@ for ($x=0; $x< 100; $x++){
     <?php } else { ?>
 		<td colspan="4"><?php echo JText::_('TEAM_TOTAL'); ?></td>
     <?php } ?>
-    <?php	$spl = 0; $gespielt = 0;
+    <?php	$spl = 0; $gespielt = 0; $ibe = 0;
     // erster Durchgang
         for ($z=0; $z< $mannschaft[0]->runden; $z++) { 			
 			while ((isset($bp[$spl]->tln_nr)) AND ($bp[$spl]->tln_nr != $mannschaft[0]->tln_nr)) { $spl++; } 
         if (isset($bp[$spl]->runde) AND $bp[$spl]->runde == $z+1) { ?>
     <td class="rnd"><?php echo str_replace ('.0', '', $bp[$spl]->brettpunkte); ?></td>
-    <?php $spl++; }
+    <?php if (!is_null($bp[$spl]->brettpunkte)) $ibe++; 
+		 $spl++; }
          else { ?>
     <td class="rnd">&nbsp;</td>
     <?php 		}
@@ -471,7 +472,8 @@ for ($x=0; $x< 100; $x++){
 			while ((isset($bp[$spl]->tln_nr)) AND ($bp[$spl]->tln_nr != $mannschaft[0]->tln_nr)) { $spl++; } 
         if (isset($bp[$spl]->runde) AND $bp[$spl]->runde == $z+1) { ?>
     <td class="rnd"><?php echo str_replace ('.0', '', $bp[$spl]->brettpunkte); ?></td>
-    <?php 	$spl++;			}
+    <?php if (!is_null($bp[$spl]->brettpunkte)) $ibe++; 
+		 $spl++; }
          else { ?>
     <td class="rnd">&nbsp;</td>
     <?php 		}}}
@@ -481,7 +483,8 @@ for ($x=0; $x< 100; $x++){
 			while ((isset($bp[$spl]->tln_nr)) AND ($bp[$spl]->tln_nr != $mannschaft[0]->tln_nr)) { $spl++; } 
         if (isset($bp[$spl]->runde) AND $bp[$spl]->runde == $z+1) { ?>
     <td class="rnd"><?php echo str_replace ('.0', '', $bp[$spl]->brettpunkte); ?></td>
-    <?php 	$spl++;			}
+    <?php if (!is_null($bp[$spl]->brettpunkte)) $ibe++; 
+		 $spl++; }
          else { ?>
     <td class="rnd">&nbsp;</td>
     <?php 		}}}
@@ -491,13 +494,15 @@ for ($x=0; $x< 100; $x++){
 			while ((isset($bp[$spl]->tln_nr)) AND ($bp[$spl]->tln_nr != $mannschaft[0]->tln_nr)) { $spl++; } 
         if (isset($bp[$spl]->runde) AND $bp[$spl]->runde == $z+1) { ?>
     <td class="rnd"><?php echo str_replace ('.0', '', $bp[$spl]->brettpunkte); ?></td>
-    <?php 	$spl++;			}
+    <?php if (!is_null($bp[$spl]->brettpunkte)) $ibe++; 
+		 $spl++; }
          else { ?>
     <td class="rnd">&nbsp;</td>
     <?php 		}}}
     ?>
     <td class="punkte"><?php echo str_replace ('.0', '', $sumbp[0]->summe); ?></td>
-    <td class="spiele"><?php echo $sumspl; //echo $sumgespielt; ?></td>
+    <td class="spiele"><?php $sumspl = $mannschaft[0]->stamm * $ibe;
+							 echo $sumspl; //echo $sumgespielt; ?></td>
     <?php if ($sumgespielt < 1) { ?>
     <td class="spiele">&nbsp;</td>
     <?php } else { ?>

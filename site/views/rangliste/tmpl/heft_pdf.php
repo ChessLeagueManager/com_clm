@@ -744,18 +744,31 @@ for ($x=0; $x< $anz_player; $x++){
 	$pdf->Cell(10,$zelle,'',0,0,'R');
 	$pktsumme = 0;
 	$spl = 0;
+	$ibe = 0;
   for ($c=0; $c<$mannschaft[$m]->dg; $c++) {
 	for ($b=0; $b<$mannschaft[$m]->runden; $b++) {
-		if (isset($bp[$ib]->runde) AND $bp[$ib]->runde == $b+1 AND $bp[$ib]->tln_nr == $mannschaft[$m]->tln_nr) { 
+/*		if (isset($bp[$ib]->runde) AND $bp[$ib]->runde == $b+1 AND $bp[$ib]->tln_nr == $mannschaft[$m]->tln_nr) { 
 			$pdf->Cell($breite,$zelle,$bp[$ib]->brettpunkte,1,0,'C');
 			$pktsumme = $pktsumme + $bp[$ib]->brettpunkte;
 		}
 		else $pdf->Cell($breite,$zelle,'',1,0,'C');
-		$ib++;
+		$ib++; */
+		$ibs = 0;
+		for ($ib=0; $ib<count($bp); $ib++) {
+			if ($bp[$ib]->dg == $c+1 AND $bp[$ib]->runde == $b+1 AND $bp[$ib]->tln_nr == $mannschaft[$m]->tln_nr) { 
+				$pdf->Cell($breite,$zelle,$bp[$ib]->brettpunkte,1,0,'C');
+				$pktsumme = $pktsumme + $bp[$ib]->brettpunkte;
+				$ibs = 1; break;
+			}
+		}
+		if ($ibs == 0) $pdf->Cell($breite,$zelle,'',1,0,'C');
+		elseif (!is_null($bp[$ib]->brettpunkte)) $ibe++;
 	}
   }
-	if ($sumspl>0) {
+//	if ($sumspl>0) {
+	if ($ibe > 0) {
 		$pdf->Cell($breite,$zelle,$pktsumme,1,0,'C');
+		$sumspl = $liga[0]->stamm * $ibe;
 		$pdf->Cell($breite,$zelle,$sumspl,1,0,'C');
 		$prozent = round(100*($pktsumme/$sumspl));
 		$pdf->Cell($breite+2,$zelle,$prozent,1,0,'C');

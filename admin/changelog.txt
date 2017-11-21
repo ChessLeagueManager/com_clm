@@ -20,6 +20,7 @@ $ -> Language fix or change
 # SWT-Import Turnier: Übernahme der Ergebnissen 0,5-0 und 0-0,5
 # Admin-View Ligen: Änderung Hint-Text
 # Admin-View Meldeliste: rechte K-Spalte 4-stellig
+# View Mannschaft und Ligaheft: Prozentfehler bei KO-Turnier
 
 - - - - - 3.4.2 - [03-09-2017] - - - - - - - - - - - - - - - - - - - -
 + Views Mannschaft,Verein Google-Maps bei SSL

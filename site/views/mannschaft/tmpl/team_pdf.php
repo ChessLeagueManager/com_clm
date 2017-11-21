@@ -399,20 +399,24 @@ for ($x=0; $x< 100; $x++){
 	$pdf->Cell(10,$zelle,'',0,0,'R');
 	$pkt = 0;
 	$spl = 0;
+	$ibe = 0;
   for ($c=0; $c<$mannschaft[0]->dg; $c++) {
 	for ($b=0; $b<$mannschaft[0]->runden; $b++) {
 		while (isset($bp[$spl]) AND $bp[$spl]->tln_nr != $mannschaft[0]->tln_nr) { $spl++; }
 		if (isset($bp[$spl]->runde) AND $bp[$spl]->runde == $b+1) { 
 			$pdf->Cell($breite,$zelle,str_replace ('.0', '', $bp[$spl]->brettpunkte),1,0,'C');
+			if (!is_null($bp[$spl]->brettpunkte)) $ibe++;
 			$spl++;
 		}
 		else $pdf->Cell($breite,$zelle,'',1,0,'C');
 	}
   }
-	if ($sumspl>0) {
+	if ($ibe>0) {
 		$pdf->Cell($breite,$zelle,str_replace ('.0', '', $sumbp[0]->summe),1,0,'C');
+		$sumspl = $mannschaft[0]->stamm * $ibe;
 		$pdf->Cell($breite,$zelle,$sumspl,1,0,'C');
-		$prozent = round (100 * ($sumbp[0]->summe - $sumgespielt * $antritt) / ($sumgespielt * $sieg), 1);
+		//$prozent = round (100 * ($sumbp[0]->summe - $sumgespielt * $antritt) / ($sumgespielt * $sieg), 1);
+		$prozent = round (100 * ($sumbp[0]->summe - $sumspl * $antritt) / ($sumspl * $sieg), 1);
 		$pdf->Cell($breite+2,$zelle,$prozent,1,0,'C');
 	} else {
 		$pdf->Cell($breite,$zelle,"",1,0,'C');
