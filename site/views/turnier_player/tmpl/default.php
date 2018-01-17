@@ -20,7 +20,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 // Konfigurationsparameter auslesen
 $itemid 		= JRequest::getVar( 'Itemid' );
 $config = clm_core::$db->config();
-// $pdf_melde = $config->pdf_meldelisten;
+$countryversion = $config->countryversion;
 $turParams = new clm_class_params($this->turnier->params);
 	
 // CLM-Container
@@ -75,8 +75,12 @@ if ($this->playerPhoto != '') { ?>
 			if ($turParams->get('displayPlayerRating', 0) == 1) { ?>
 			<tr>
 				<td align="left" class="tp_col_1"><?php echo JText::_('TOURNAMENT_RATING') ?>:</td>
-				<?php  $mgl4 = ''.$this->player->mgl_nr; while (strlen($mgl4) < 4) { $mgl4 = '0'.$mgl4; } ?>
-				<td class="tp_col_data"><a href="http://schachbund.de/spieler.html?zps=<?php echo $this->player->zps; ?>-<?php echo $mgl4; ?>" target="_blank"><?php echo CLMText::formatRating($this->player->start_dwz) ?></td>
+				<?php 	if ($countryversion =="de") {
+							$mgl4 = ''.$this->player->mgl_nr; while (strlen($mgl4) < 4) { $mgl4 = '0'.$mgl4; } ?>
+					<td class="tp_col_data"><a href="http://schachbund.de/spieler.html?zps=<?php echo $this->player->zps; ?>-<?php echo $mgl4; ?>" target="_blank"><?php echo CLMText::formatRating($this->player->start_dwz) ?></td>
+				<?php 	} else { ?>
+					<td class="tp_col_data"><a href="http://www.ecfgrading.org.uk/new/player.php?PlayerCode=<?php echo $this->player->PKZ; ?>#top" target="_blank"><?php echo CLMText::formatRating($this->player->start_dwz) ?></td>
+				<?php } ?>
 			</tr>
 			<?php } ?>
 			

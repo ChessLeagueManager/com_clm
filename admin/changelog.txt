@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.5.1 - [xx-xx-2018] - - - - - - - - - - - - - - - - - - - -
+# View Turnierplayer: Link zur ECF (engl. Anwendung)
+
 - - - - - 3.5.0 - [13-12-2017] - - - - - - - - - - - - - - - - - - - -
 - - - - - 3.4.3 - [21-11-2017] - - - - - - - - - - - - - - - - - - - -
 # Meldeliste Eingabe im FE bei Spielgemeinschaften
