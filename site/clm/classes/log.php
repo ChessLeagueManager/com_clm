@@ -65,7 +65,8 @@ class clm_class_log {
 	}
 
 	public function errorHandler($errno, $errstr, $errfile = "", $errline = "", $errcontext = "") {
-		$message = "errno:" . $errno . " errstr:" . $errstr . " errfile:" . $errfile . " errline:" . $errline . " errcontext:" . json_encode ( $errcontext ) . " Backtrace: " . clm_core::getBacktrace ();
+		$user = $_SERVER["HTTP_USER_AGENT"];  
+		$message = "errno:" . $errno . " errstr:" . $errstr . " errfile:" . $errfile . " errline:" . $errline . " errcontext:" . json_encode ( $errcontext ) . " Backtrace: " . clm_core::getBacktrace () . " User: " . $user;
 		switch ($errno) {
 			case E_USER_ERROR :
 				$this->addError ( "E_USER_ERROR", $message );
