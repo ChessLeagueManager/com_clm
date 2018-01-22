@@ -153,13 +153,13 @@ class CLMControllerDB extends JControllerLegacy {
 		$info = JRequest::getVar('bem');
 		if ($liga == "all") {
 			JError::raiseWarning(500, JText::_('DB_LOESCH'));
-			//$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
-			$this->setRedirect('index.php?option=com_clm&view=db');
+			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+			//$this->setRedirect('index.php?option=com_clm&view=db');
 		}
 		if ($liga == "0") {
 			JError::raiseWarning(500, JText::_('DB_LIGA_EXPORT'));
-			//$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
-			$this->setRedirect('index.php?option=com_clm&view=db');
+			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+			//$this->setRedirect('index.php?option=com_clm&view=db');
 		}
 		// Konstante definieren für User-jid bei SQL Export
 		// Kontrolle von vorhandenen Usern ist bei SQL Import nicht möglich, daher diese Maßnahme !!
@@ -190,7 +190,7 @@ class CLMControllerDB extends JControllerLegacy {
 			$endung = 'clm';
 		}
 		// Slashes aus Namen filtern
-		$datei_name = ereg_replace("[/]", "_", $liga_name[0]->name);
+		$datei_name = preg_replace("[/]", "_", $liga_name[0]->name);
 		$file = $datei_name . '__' . $var . '__S' . $liga_name[0]->sid . '__L' . $liga . '__' . $datum . '.' . $endung;
 		$path = JPath::clean(JPATH_ADMINISTRATOR . DS . 'components' . DS . $option . DS . 'upload');
 		$write = $path . DS . $file;
@@ -207,31 +207,45 @@ class CLMControllerDB extends JControllerLegacy {
 		// Versionsdaten aus XML holen
 		$Dir = JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_clm';
 		$data = JApplicationHelper::parseXMLInstallFile($Dir . DS . 'clm.xml');
-		$comment = utf8_decode("-- Erstellt mit dem ChessLeagueManager Version " . $data[version] . " \n-- Der CLM ist freie, kostenlose Software veröffentlicht unter der GNU/GPL Lizenz !" . " \n-- Projektseite : http://www.fishpoke.de" . " \n-- Autoren      : Andreas Dorn (webmaster@sbbl.org) und Thomas Schwietert (fishpoke@fishpoke.de)" . " \n\n-- *Datum     * " . $datum . " \n-- *Ersteller * " . $ersteller . " \n-- *Herkunft  * " . JURI::root() . " \n-- *Datei     * " . $variante . " \n-- *Info      * " . $info . " \n\n");
+		$comment = utf8_decode("-- Erstellt mit dem ChessLeagueManager Version " . $data['version']
+			. " \n-- Der CLM ist freie, kostenlose Software veröffentlicht unter der GNU/GPL Lizenz !" . " \n-- Projektseite : https://chessleaguemanager.de" 
+			. " \n-- Autoren      : Andreas Dorn (webmaster@sbbl.org) und Thomas Schwietert (fishpoke@fishpoke.de)" . " \n\n-- *Datum     * " . $datum 
+			. " \n-- *Ersteller * " . $ersteller . " \n-- *Herkunft  * " . JURI::root() . " \n-- *Datei     * " . $variante . " \n-- *Info      * " . $info . " \n\n");
 		// Ligadaten
 		if ($clm_cuser != "1") {
 			$liga_name[0]->sl = JID;
 		}
 		if ($clm_sql == "1") {
-			$ligadaten = "INSERT INTO `#__clm_liga` ( `id`, `name`, `sid`, `teil`, `stamm`, `ersatz`,`rang`, `sl`, `runden`, `durchgang`, `heim`, `mail`, `sl_mail`,`order`, `rnd`, `published`, `bemerkungen`, `bem_int`, `ordering`) VALUES ";
-			$ligadaten = $ligadaten . "\n('" . $liga_name[0]->id . "','" . utf8_decode($liga_name[0]->name) . "','" . $liga_name[0]->sid . "','" . $liga_name[0]->teil . "','" . $liga_name[0]->stamm . "','" . $liga_name[0]->ersatz . "','" . $liga_name[0]->rang . "','" . JID . "','" . $liga_name[0]->runden . "','" . $liga_name[0]->durchgang . "','" . $liga_name[0]->heim . "','" . $liga_name[0]->mail . "','" . $liga_name[0]->sl_mail . "','" . $liga_name[0]->order . "','" . $liga_name[0]->rnd . "','" . $liga_name[0]->published . "','";
+			$ligadaten = "INSERT INTO `#__clm_liga` ( `id`, `name`, `sid`, `teil`, `stamm`, `ersatz`,`rang`, `sl`, `runden`, `durchgang`, `heim`, `mail`, `sl_mail`";
+			$ligadaten .= ", `sieg_bed`, `runden_modus`, `man_sieg`, `man_remis`, `man_nieder`, `man_antritt`, `sieg`, `remis`, `nieder`, `antritt`";
+			$ligadaten .= ", `order`, `rnd`, `published`, `bemerkungen`, `bem_int`, `checked_out_time`, `ordering`, `b_wertung`, `liga_mt`";
+			$ligadaten .= ", `tiebr1`, `tiebr2`, `tiebr3`, `ersatz_regel`, `anzeige_ma`, `params`) VALUES ";
+			$ligadaten = $ligadaten . "\n('" . $liga_name[0]->id . "','" . utf8_decode($liga_name[0]->name) . "','" . $liga_name[0]->sid . "','" . $liga_name[0]->teil . "','" . $liga_name[0]->stamm . "','" . $liga_name[0]->ersatz . "','" . $liga_name[0]->rang . "','" . JID . "','" . $liga_name[0]->runden . "','" . $liga_name[0]->durchgang . "','" . $liga_name[0]->heim . "','" . $liga_name[0]->mail . "','" . $liga_name[0]->sl_mail;
+			$ligadaten .= "','" . $liga_name[0]->sieg_bed . "','" . $liga_name[0]->runden_modus . "','" . $liga_name[0]->man_sieg . $liga_name[0]->man_remis . "','" . $liga_name[0]->man_nieder . "','" . $liga_name[0]->man_antritt . $liga_name[0]->sieg . "','" . $liga_name[0]->remis . "','" . $liga_name[0]->nieder . $liga_name[0]->antritt;
+			$ligadaten .= "','" . $liga_name[0]->order . "','" . $liga_name[0]->rnd . "','" . $liga_name[0]->published . "','";
 			$neu = str_replace($replace, ' ', $liga_name[0]->bemerkungen);
 			$neu = str_replace($_surch, '\r\n', $neu);
 			$ligadaten = $ligadaten . utf8_decode($neu) . "'";
 			$neu = str_replace($replace, ' ', $liga_name[0]->bem_int);
 			$neu = str_replace($_surch, '\r\n', $neu);
-			$ligadaten = $ligadaten . ",'" . utf8_decode($neu) . "','" . $liga_name[0]->ordering . "');";
+			$ligadaten .= ",'" . utf8_decode($neu) . "','1970-01-01 00:00:00','" . $liga_name[0]->ordering . "','" . $liga_name[0]->b_wertung . "','" . $liga_name[0]->liga_mt;
+			$ligadaten .= "','" . $liga_name[0]->tiebr1 . "','" . $liga_name[0]->tiebr2 . "','" . $liga_name[0]->tiebr3 . "','" . $liga_name[0]->ersatz_regel . "','" . $liga_name[0]->anzeige_ma . "','" . $liga_name[0]->params . "');";
 		} else {
 			if ($clm_cuser != "1") {
 				$liga_name[0]->sl = JID;
 			}
-			$ligadaten = "#1#" . "\n('" . utf8_decode($liga_name[0]->name) . "','" . $liga_name[0]->sid . "','" . $liga_name[0]->teil . "','" . $liga_name[0]->stamm . "','" . $liga_name[0]->ersatz . "','" . $liga_name[0]->rang . "','" . $liga_name[0]->sl . "','" . $liga_name[0]->runden . "','" . $liga_name[0]->durchgang . "','" . $liga_name[0]->heim . "','" . $liga_name[0]->mail . "','" . $liga_name[0]->sl_mail . "','" . $liga_name[0]->order . "','" . $liga_name[0]->rnd . "','" . $liga_name[0]->published . "','";
+			$ligadaten = "#1#" . "\n('" . utf8_decode($liga_name[0]->name) . "','" . $liga_name[0]->sid . "','" . $liga_name[0]->teil . "','" . $liga_name[0]->stamm . "','" . $liga_name[0]->ersatz . "','" . $liga_name[0]->rang . "','" . $liga_name[0]->sl . "','" . $liga_name[0]->runden . "','" . $liga_name[0]->durchgang . "','" . $liga_name[0]->heim . "','" . $liga_name[0]->mail . "','" . $liga_name[0]->sl_mail;
+			$ligadaten .= "','" . $liga_name[0]->sieg_bed . "','" . $liga_name[0]->runden_modus . "','" . $liga_name[0]->man_sieg . "','" . $liga_name[0]->man_remis . "','" . $liga_name[0]->man_nieder . "','" . $liga_name[0]->man_antritt . "','" . $liga_name[0]->sieg . "','" . $liga_name[0]->remis . "','" . $liga_name[0]->nieder . "','" . $liga_name[0]->antritt;
+			$ligadaten .= "','" . $liga_name[0]->order . "','" . $liga_name[0]->rnd . "','" . $liga_name[0]->published . "','";
 			$neu = str_replace($replace, ' ', $liga_name[0]->bemerkungen);
 			$neu = str_replace($_surch, '\r\n', $neu);
+			$neu = str_replace(';', ':', $neu);
 			$ligadaten = $ligadaten . utf8_decode($neu) . "'";
 			$neu = str_replace($replace, ' ', $liga_name[0]->bem_int);
 			$neu = str_replace($_surch, '\r\n', $neu);
-			$ligadaten = $ligadaten . ",'" . utf8_decode($neu) . "','" . $liga_name[0]->ordering . "');";
+			$neu = str_replace(';', ':', $neu);
+			$ligadaten .= ",'" . utf8_decode($neu) . "','1970-01-01 00:00:00','" . $liga_name[0]->ordering . "','" . $liga_name[0]->b_wertung . "','" . $liga_name[0]->liga_mt;
+			$ligadaten .= "','" . $liga_name[0]->tiebr1 . "','" . $liga_name[0]->tiebr2 . "','" . $liga_name[0]->tiebr3 . "','" . $liga_name[0]->ersatz_regel . "','" . $liga_name[0]->anzeige_ma . "','" . $liga_name[0]->params . "');";
 		}
 	// DWZ Daten Vereine
 	$sql = " SELECT s.* FROM #__clm_meldeliste_spieler as a"
@@ -298,13 +312,16 @@ class CLMControllerDB extends JControllerLegacy {
 					$mannschaft = $mannschaft . "\n('" . $man[$x]->sid . "','" . utf8_decode($man[$x]->name) . "','" . $man[$x]->liga . "','" . $man[$x]->zps . "','" . $man[$x]->liste . "','" . $man[$x]->edit_liste . "','" . $man[$x]->man_nr . "','" . $man[$x]->tln_nr . "','" . $man[$x]->mf . "','" . $man[$x]->datum . "','" . $man[$x]->edit_datum . "'";
 					$neu = str_replace($replace, ' ', $man[$x]->lokal);
 					$neu = str_replace($_surch, '\r\n', $neu);
+					$neu = str_replace(';', ':', $neu);
 					$mannschaft = $mannschaft . ",'" . utf8_decode($neu) . "'";
 					$neu = str_replace($replace, ' ', $man[$x]->bemerkungen);
 					$neu = str_replace($_surch, '\r\n', $neu);
+					$neu = str_replace(';', ':', $neu);
 					$mannschaft = $mannschaft . ",'" . utf8_decode($neu) . "'";
 					$neu = str_replace($replace, ' ', $man[$x]->bem_int);
 					$neu = str_replace($_surch, '\r\n', $neu);
 					$mannschaft = $mannschaft . ",'" . utf8_decode($neu) . "','" . $man[$x]->published . "','" . $man[$x]->ordering . "');";
+					$neu = str_replace(';', ':', $neu);
 				}
 			}
 		}
@@ -627,9 +644,11 @@ class CLMControllerDB extends JControllerLegacy {
 					$ter_rnd = $ter_rnd . "\n('" . $trnd[$x]->sid . "','" . $trnd[$x]->name . "','" . $trnd[$x]->liga . "','" . $trnd[$x]->nr . "','" . $trnd[$x]->datum . "','" . $trnd[$x]->meldung . "','" . $trnd[$x]->sl_ok . "','" . $trnd[$x]->published . "'";
 					$neu = str_replace($replace, ' ', $trnd[$x]->bemerkungen);
 					$neu = str_replace($_surch, '\r\n', $neu);
+					$neu = str_replace(';', ':', $neu);										
 					$ter_rnd = $ter_rnd . ",'" . utf8_decode($neu) . "'";
 					$neu = str_replace($replace, ' ', $trnd[$x]->bem_int);
 					$neu = str_replace($_surch, '\r\n', $neu);
+					$neu = str_replace(';', ':', $neu);										
 					$ter_rnd = $ter_rnd . ",'" . utf8_decode($neu) . "','" . $gemeldet . "','" . $editor . "','" . $trnd[$x]->zeit . "','" . $trnd[$x]->edit_zeit . "','" . $trnd[$x]->ordering . "');";
 				}
 			}
@@ -666,9 +685,11 @@ class CLMControllerDB extends JControllerLegacy {
 				$clm_user = $clm_user . "\n('" . $clm[$x]->sid . "','" . $clm[$x]->jid . "','" . utf8_decode($clm[$x]->name) . "','" . utf8_decode($clm[$x]->username) . "','" . $clm[$x]->aktive . "','" . utf8_decode($clm[$x]->email) . "','" . $clm[$x]->usertype . "','" . utf8_decode($clm[$x]->tel_fest) . "','" . utf8_decode($clm[$x]->tel_mobil) . "','" . $clm[$x]->user_clm . "','" . $clm[$x]->zps . "','" . $clm[$x]->published . "'";
 				$neu = str_replace($replace, ' ', $clm[$x]->bemerkungen);
 				$neu = str_replace($_surch, '\r\n', $neu);
+				$neu = str_replace(';', ':', $neu);
 				$clm_user = $clm_user . ",'" . utf8_decode($neu) . "'";
 				$neu = str_replace($replace, ' ', $clm[$x]->bem_int);
 				$neu = str_replace($_surch, '\r\n', $neu);
+				$neu = str_replace(';', ':', $neu);
 				$clm_user = $clm_user . ",'" . utf8_decode($neu) . "');";
 			}
 			$clm_user = "\n\n#" . count($juser_jid) . "#" . $clm_user;
@@ -683,6 +704,7 @@ class CLMControllerDB extends JControllerLegacy {
 				// evtl. Standardparameter verwenden -> Sicherheit !!
 				$neu = str_replace($replace, ' ', $clm[$x]->params);
 				$neu = str_replace($_surch, '\r\n', $neu);
+				$neu = str_replace(';', ':', $neu);
 				$juser = $juser . utf8_decode($neu) . "');";
 			}
 			$juser = "\n\n#" . count($clm) . "#" . $juser;
@@ -774,8 +796,8 @@ class CLMControllerDB extends JControllerLegacy {
 		$cnt_rnd_man = $part[17];
 		$cnt_rnd_spl = $part[19];
 		$cnt_rnd_ter = $part[21];
-		$cnt_user = $part[23];
-		$cnt_juser = $part[25];
+		if (isset($part[23])) $cnt_user = $part[23]; else $cnt_user = "0";
+		if (isset($part[25])) $cnt_juser = $part[25]; else $cnt_juser = "0";
 		// Einzeldaten zerlegen
 		$liga_daten = explode("','", $part[2]);
 		$ver_dwz = explode(";", $part[4]);
@@ -788,8 +810,8 @@ class CLMControllerDB extends JControllerLegacy {
 		$man_rnd_daten = explode(";", $part[18]);
 		$spl_rnd_daten = explode(";", $part[20]);
 		$rnd_ter_daten = explode(";", $part[22]);
-		$clm_dat = explode(";", $part[24]);
-		$jos_dat = explode(";", $part[26]);
+		if (isset($part[24])) $clm_dat = explode(";", $part[24]); else $clm_dat = array();
+		if (isset($part[26])) $jos_dat = explode(";", $part[26]); else $jos_dat = array();
 		if ($override != "1") {
 			// Sicherheitscheck ob Datei manipuliert wurde
 			$fehler = 0;
@@ -851,8 +873,8 @@ class CLMControllerDB extends JControllerLegacy {
 			}
 			if ($fehler > 0) {
 				JError::raiseNotice(6000, JText::_('DB_IMPORT'));
-				//$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
-				$this->setRedirect('index.php?option=com_clm&view=db');
+				$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+				//$this->setRedirect('index.php?option=com_clm&view=db');
 			}
 		}
 		// User anlegen
@@ -1013,24 +1035,26 @@ class CLMControllerDB extends JControllerLegacy {
 						$email_josid[$email] = $jos_exist[0]->id;
 					}
 				}
-			}
-			// Update der CLM User mit den richtigen JID
-			$jids = implode(',', $emails);
-			// Array alte_jid => neue_jid
-			$jid_new = array();
-			$jid_new['NULL'] = 'NULL';
-			foreach ($emails as $emails) {
-				$query = "UPDATE #__clm_user " . " SET jid = " . $email_josid[$emails] . " , published = " . $publish . " WHERE email = '" . $emails . "'" . " AND sid =" . $saison . " AND user_clm < 80 ";
-				$db->setQuery($query);
-				$db->query();
-				$query = "UPDATE #__users " . " SET block =" . $block . " WHERE email = '" . $emails . "'" . " AND gid < 24 ";
-				$db->setQuery($query);
-				$db->query();
-				$jid_new[$email_altjid[$emails]] = $email_josid[$emails];
+//			}
+				// Update der CLM User mit den richtigen JID
+				$jids = implode(',', $emails);
+				// Array alte_jid => neue_jid
+				$jid_new = array();
+				$jid_new['NULL'] = 'NULL';
+				foreach ($emails as $emails) {
+					$query = "UPDATE #__clm_user " . " SET jid = " . $email_josid[$emails] . " , published = " . $publish . " WHERE email = '" . $emails . "'" . " AND sid =" . $saison . " AND user_clm < 80 ";
+					$db->setQuery($query);
+					$db->query();
+					$query = "UPDATE #__users " . " SET block =" . $block . " WHERE email = '" . $emails . "'" . " AND gid < 24 ";
+					$db->setQuery($query);
+					$db->query();
+					$jid_new[$email_altjid[$emails]] = $email_josid[$emails];
+				}
 			}
 		}
 		// User "Spielfrei" in Array
 		$jid_new[1] = 1;
+		$import = 0;
 		// Falls keine User in Datei existieren, einen User "CLM-Import" anlegen
 		if (($cnt_user == "0" AND $cnt_juser == "0") OR ($clm_user == "1")) {
 			$sql = " SELECT id,jid FROM #__clm_user " . " WHERE email = 'import@clm.de' " . " AND sid =" . $saison;
@@ -1046,7 +1070,7 @@ class CLMControllerDB extends JControllerLegacy {
 				$row->aktive = "1";
 				$row->email = "import@clm.de";
 				$row->usertype = "sl";
-				$row->user_clm = "70";
+				//$row->user_clm = "70";
 				$row->zps = "1";
 				$row->published = "1";
 				$row->bemerkungen = "Dieser User ist nur für Importzwecke gedacht !";
@@ -1080,17 +1104,37 @@ class CLMControllerDB extends JControllerLegacy {
 		$row->heim = $liga_daten[9];
 		$row->mail = $liga_daten[10];
 		$row->sl_mail = $liga_daten[11];
-		$row->order = $liga_daten[12];
-		$row->rnd = $liga_daten[13];
-		$row->published = $liga_daten[14];
-		$bem = utf8_encode($liga_daten[15]);
+		$row->sieg_bed = $liga_daten[12];
+		$row->runden_modus = $liga_daten[13];
+		$row->man_sieg = $liga_daten[14];
+		$row->man_remis = $liga_daten[15];
+		$row->man_nieder = $liga_daten[16];
+		$row->man_antritt = $liga_daten[17];
+		$row->sieg = $liga_daten[18];
+		$row->remis = $liga_daten[19];
+		$row->nieder = $liga_daten[20];
+		$row->antritt = $liga_daten[21];
+		
+		$row->order = $liga_daten[22];
+		$row->rnd = $liga_daten[23];
+		$row->published = $liga_daten[24];
+		$bem = utf8_encode($liga_daten[25]);
 		$neu = str_replace('\r\n', "\n", $bem);
 		$row->bemerkungen = $neu;
-		$bem = utf8_encode($liga_daten[16]);
+		$bem = utf8_encode($liga_daten[26]);
 		$neu = str_replace('\r\n', "\n", $bem);
 		$row->bem_int = $neu;
-		$row->ordering = substr($liga_daten[17], 0, -4);
-		if (!$row->store()) {
+		$row->checked_out_time = $liga_daten[27];
+		$row->ordering = substr($liga_daten[28], 0, -4);
+		$row->b_wertung = $liga_daten[29];
+		$row->liga_mt = $liga_daten[30];
+		$row->tiebr1 = $liga_daten[31];
+		$row->tiebr2 = $liga_daten[32];
+		$row->tiebr3 = $liga_daten[33];
+		$row->ersatz_regel = $liga_daten[34];
+		$row->anzeige_ma = $liga_daten[35];
+		$row->params = $liga_daten[36];
+ 		if (!$row->store()) {
 			return JError::raiseWarning(500, $row->getError());
 		}
 		// Neue Liga ID holen
@@ -1421,6 +1465,7 @@ class CLMControllerDB extends JControllerLegacy {
 		}
 		// Ranglistengruppe anlegen
 		// Ranglistendaten auslesen
+	  if ($rang_name > "0") {
 		$rang_dat = explode("','", $rang_name_daten[0]);
 		$gruppe = utf8_encode(substr($rang_dat[0], 3));
 		$melde = $rang_dat[1];
@@ -1552,6 +1597,7 @@ class CLMControllerDB extends JControllerLegacy {
 				}
 			}
 		}
+	  }
 		$msg = JText::_('DB_IMPORT') . ' ' . $datei . ' ' . JText::_('DB_ERFOLGREICH');
 		$mainframe->redirect('index.php?option=com_clm&view=db', $msg, "message");
 	}

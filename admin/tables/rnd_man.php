@@ -2,9 +2,9 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -34,7 +34,7 @@ class TableCLMRnd_man extends JTable
 	var $mp_sum		= null;
 	var $gemeldet		= null;
 	var $editor		= null;
-	var $dwz_editor		= 0;
+	var $dwz_editor		= null;
 	var $zeit		= '1970-01-01 00:00:00';
 	var $edit_zeit		= '1970-01-01 00:00:00';
 	var $dwz_zeit		= '1970-01-01 00:00:00';
