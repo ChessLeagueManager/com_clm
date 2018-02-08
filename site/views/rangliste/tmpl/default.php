@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -195,6 +195,7 @@ if (!$liga OR $liga[0]->published == "0") {
 		<?php
 		// Anzahl der Teilnehmer durchlaufen
 		for ($x=0; $x< ($liga[0]->teil)-$diff; $x++) {
+			if (!isset($punkte[$x])) continue; 
 			// Farbgebung der Zeilen //
 			if ($x%2 != 0) { 
 				$zeilenr	= "zeile2";

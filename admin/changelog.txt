@@ -18,6 +18,7 @@ $ -> Language fix or change
 ^ Copyright 2008-2018
 + ErrorHandling: Meldung um HTTP_USER_AGENT erweitert
 # Admin-View Datenbank: Liga Export/Import
+# Views Rangliste und Tabelle: deaktivierte Mannschaften 
 
 - - - - - 3.5.0 - [13-12-2017] - - - - - - - - - - - - - - - - - - - -
 - - - - - 3.4.3 - [21-11-2017] - - - - - - - - - - - - - - - - - - - -

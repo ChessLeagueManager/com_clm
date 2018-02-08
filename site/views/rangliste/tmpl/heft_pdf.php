@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -231,6 +231,7 @@ if ($liga[0]->runden_modus != 4 AND $liga[0]->runden_modus != 5) {
 $pdf->SetFillColor(240);
 $pdf->SetTextColor(0);
 for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
+	if (!isset($punkte[$x])) continue; 
 	if ($x%2 != 0) { $fc = 1; } else { $fc = 0; }
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(6-$rbreite,$zelle,$x+1,1,0,'C',$fc);
