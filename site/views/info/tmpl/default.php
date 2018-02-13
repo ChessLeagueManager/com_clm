@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -22,7 +22,7 @@ $sql = ' SELECT `sieg`, `remis`, `nieder`, `antritt`, `man_sieg`, `man_remis`, `
 $db =JFactory::getDBO ();
 $db->setQuery ($sql);
 $saisonpunkte = $db->loadObjectList ();
-$ligapunkte = $saisonpunkte[0];
+if (isset($saisonpunkte[0])) $ligapunkte = $saisonpunkte[0];
 
 if ($saison[0]->dsb_datum  > 0) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $saison[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F')));  
 if (($saison[0]->dsb_datum == 0) || (!isset($saison))) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_UNCLEAR');  
@@ -66,6 +66,7 @@ $kbrett		= $this->kbrett;
 <?php } ?>
 </div>
 
+<?php if (count($mannschaft) > 0) { ?>
 <h4><?php echo JText::_('SEASON_STAT_ALL') ?></h4>
 <?php if (!$spieler) {
 echo "<div id='wrong'>" . JText::_('SEASON_NO_GAMES') ."</div>";  }
@@ -301,6 +302,9 @@ if ($count == 1) { ?>
 
 <br>
 <?php echo '<div class="hint">'.$hint_dwzdsb.'</div>'; ?>
+<?php } else { 
+//echo "<div id='wrong'>" . JText::_('SEASON_NO_LEAGUES') ."</div>";  } 
+echo "<div>" . ' ' ."</div>";  } ?>
 
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); ?>
 
