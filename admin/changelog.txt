@@ -20,6 +20,7 @@ $ -> Language fix or change
 # Admin-View Datenbank: Liga Export/Import
 # Views Rangliste und Tabelle: deaktivierte Mannschaften 
 ^ Saisonstatistik: ggf.ohne Daten -> keine Anzeige und kein Kommentar
+# Importe: engl. Texte überarbeitet
 
 - - - - - 3.5.0 - [13-12-2017] - - - - - - - - - - - - - - - - - - - -
 - - - - - 3.4.3 - [21-11-2017] - - - - - - - - - - - - - - - - - - - -
