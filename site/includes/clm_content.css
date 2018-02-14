@@ -114,7 +114,7 @@
 #turnier_rangliste table td, #turnier_rangliste table th, .meldung td, #meldeliste table td { padding: 0.3em !important; } 
 #turnier_rangliste table { word-wrap:normal; white-space:nowrap; }
 #rangliste .gsrv{ width: 15px; }
-#rangliste .rndch{ width: 42px; }
+#rangliste .rndch{ width: 45px; } /** 42px **/
 #clm .clm table .anfang, #clm .clm table .ende { font-weight: bold; }
 #clm .clm tr.ende { border-top: 2px solid #999; }
 
