@@ -22,6 +22,7 @@ $ -> Language fix or change
 ^ Saisonstatistik: ggf.ohne Daten -> keine Anzeige und kein Kommentar
 # Importe: engl. Texte überarbeitet
 ^ View Rangliste: Spaltenbreite bei CH-Turnier erweitert
+# Link in Ergebnismail
 
 - - - - - 3.5.0 - [13-12-2017] - - - - - - - - - - - - - - - - - - - -
 - - - - - 3.4.3 - [21-11-2017] - - - - - - - - - - - - - - - - - - - -

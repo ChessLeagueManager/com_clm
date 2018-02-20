@@ -41,7 +41,17 @@ function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hn
 	// Pfad der Application bestimmen für Links
 	$pfad = (empty($_SERVER['HTTPS'])) ? 'http' : 'https';
     $pfad .= '://'.$_SERVER['HTTP_HOST'];
-	
+
+	// Pfad der Application bestimmen für Links
+	$url = strpos($_SERVER['PHP_SELF'], "administrator");
+	if (!$url) {
+		$url = strpos($_SERVER['PHP_SELF'], "components");
+		if (!$url) {
+			$url = - 1;
+		}
+	}
+	$pfad = ((empty($_SERVER['HTTPS'])) ? 'http://' : 'https://') . $_SERVER['HTTP_HOST'] . substr($_SERVER['PHP_SELF'], 0, $url - 1);
+
 // Mailbody HTML Header
 	$body_html_header = '
 			<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
