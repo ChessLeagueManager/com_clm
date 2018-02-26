@@ -23,6 +23,7 @@ $ -> Language fix or change
 # Importe: engl. Texte überarbeitet
 ^ View Rangliste: Spaltenbreite bei CH-Turnier erweitert
 # Link in Ergebnismail
+# View Turnier-Rangliste: Design-Nachbesserung
 
 - - - - - 3.5.0 - [13-12-2017] - - - - - - - - - - - - - - - - - - - -
 - - - - - 3.4.3 - [21-11-2017] - - - - - - - - - - - - - - - - - - - -

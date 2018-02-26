@@ -301,17 +301,17 @@
 
 /** Linke Spalte **/
 .divTableWithFloatingHeader, .tableWithFloatingHeader {width:100%!important; position: relative;}
-.lefttable { float:left; width: 250px; }
-#lefttabletable { width: 250px; border-right:1px solid #DDD;}
+.lefttable { float:left; width: 270px; }
+#lefttabletable { width: 270px; border-right:1px solid #DDD;}
 
 /** Rechte Spalte **/
 .righttable0, .righttable_ch0 { float:right; width: 35px; }
 .righttable1, .righttable_ch1 { float:right; width: 70px; }
-.righttable2, .righttable_ch2 { float:right; width: 115px; }
+.righttable2, .righttable_ch2 { float:right; width: 140px; } /* 115 */
 .righttable3, .righttable_ch3 { float:right; width: 150px; }
 #righttabletable0, #righttabletable_ch0 { width: 35px; border-left:1px solid #DDD; }
 #righttabletable1, #righttabletable_ch1 { width: 70px; border-left:1px solid #DDD; }
-#righttabletable2, #righttabletable_ch2 { width: 115px; border-left:1px solid #DDD; }
+#righttabletable2, #righttabletable_ch2 { width: 140px; border-left:1px solid #DDD; } 
 #righttabletable3, #righttabletable_ch3 { width: 150px; border-left:1px solid #DDD; }
 
 /** Definition Zellen **/
@@ -323,6 +323,7 @@
 #turnier_rangliste .erg_2 div { width: 30px !important; margin: auto; text-align:center !important; }  /* Zwei Durchgaenge */
 #turnier_rangliste .erg_ch div { width: 40px !important; margin: auto; text-align:center !important; } /* Ein Durchgang */
 #turnier_rangliste .trenner { text-align:center !important; } 
+#turnier_rangliste .name { max-width: 150px; margin: auto; }
 
 /* sorgt dafuer, dass die Zellen alle in einer Linie bleiben */
 #tableoverflow th div, #tableoverflow td div { line-height: 1.2em; font-size: 12px !important;}

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -106,7 +106,8 @@ if ( $this->turnier->published == 0) {
 			echo '<div class="lefttable">';
 			
 			echo '<table cellpadding="0" cellspacing="0" id="lefttabletable"';
-			if ($fixth_tkreuz =="1") { echo 'class="tableWithFloatingHeader"'; };
+			if ($fixth_tkreuz =="1") { echo ' class="tableWithFloatingHeader"'; };
+			echo '>';
 
 			// header
 
@@ -169,7 +170,8 @@ if ( $this->turnier->published == 0) {
 			
 			// Table
 			echo '<table cellpadding="0" cellspacing="0" id="righttabletable_ch'.$rightcol.'"';
-			if ($fixth_tkreuz =="1") { echo 'class="tableWithFloatingHeader"'; };
+			if ($fixth_tkreuz =="1") { echo ' class="tableWithFloatingHeader"'; };
+			echo '>';
 			
 			// header
 
@@ -214,7 +216,8 @@ if ( $this->turnier->published == 0) {
 			echo '<div class="midtable_ch">';
 			
 			echo '<table cellpadding="0" cellspacing="0" id="midtabletable_ch"';
-			if ($fixth_tkreuz =="1") { echo 'class="tableWithFloatingHeader"'; };
+			if ($fixth_tkreuz =="1") { echo ' class="tableWithFloatingHeader"'; };
+			echo '>';
 			
 			// header
 
