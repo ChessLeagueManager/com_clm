@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -87,6 +87,8 @@ class CLMViewMTurniere
 		$row->params['pgnPublic'] = '0'; }
 	if (!isset($row->params['pgnDownload']))  {   //Standardbelegung
 		$row->params['pgnDownload'] = '0'; }
+	if (!isset($row->params['firstView']))  {   //Standardbelegung
+		$row->params['firstView'] = '0'; }
 	?>
 	
 	<script language="javascript" type="text/javascript">
@@ -639,6 +641,18 @@ class CLMViewMTurniere
 	</td>
 	</tr>
  
+    <tr>
+	<td nowrap="nowrap">
+	<label for="params[firstView]"><?php echo JText::_( 'LEAGUE_FIRST_VIEW' ); ?></label>
+	</td><td colspan="5">
+		<select name="params[firstView]" id="params[firstView]" value="<?php echo $row->params['firstView']; ?>" size="1">
+		<option value="0" <?php if ($row->params['firstView'] == 0) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FV_RANGLISTE' );?></option>
+		<option value="1" <?php if ($row->params['firstView'] == 1) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FV_TABELLE' );?></option>
+		<option value="2" <?php if ($row->params['firstView'] == 2) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FV_PAARUNGSLISTE' );?></option>
+		</select>
+	</td>
+	</tr>
+
     <tr>
 	<td nowrap="nowrap">
 	<label for="params[pgntype]"><?php echo JText::_( 'LEAGUE_PGN_TYPE' ); ?></label>

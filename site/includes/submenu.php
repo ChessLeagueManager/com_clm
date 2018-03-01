@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -60,6 +60,7 @@ if ($fe_submenu == 1) {
 	$array[1][2] = array();
 	$array[1][3] = array();
 	for ($i = 0;$i < count($sub_liga);$i++) {
+		$params_m = new clm_class_params($sub_liga[$i]->params);
 		$array[1][3][$i][0] = $sub_liga[$i]->name;
 		if (JRequest::getVar('liga', -1) != $sub_liga[$i]->id || JRequest::getVar('view', -1) == "info" || JRequest::getVar('view', -1) == "termine") {
 			$array[1][3][$i][1] = 0;
@@ -72,7 +73,9 @@ if ($fe_submenu == 1) {
 		if ($sub_liga[$i]->runden_modus == 4 OR $sub_liga[$i]->runden_modus == 5) {
 			$viewA = "paarungsliste";
 		} else {
-			$viewA = "rangliste";
+			if ($params_m->get("firstView","0") == "0") { $viewA = "rangliste"; }
+			elseif ($params_m->get("firstView","0") == "1") { $viewA = "tabelle"; }
+			else { $viewA = "paarungsliste"; }
 		}
 		$array[1][3][$i][2][] = array("view", $viewA);
 		$array[1][3][$i][2][] = array("saison", $sid);

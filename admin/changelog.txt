@@ -24,6 +24,7 @@ $ -> Language fix or change
 ^ View Rangliste: Spaltenbreite bei CH-Turnier erweitert
 # Link in Ergebnismail
 # View Turnier-Rangliste: Design-Nachbesserung
++ Ligen/MTurniere: Parameter 'Rangliste/Tabelle' als Standard-View in Submenü und Modulen
 
 - - - - - 3.5.0 - [13-12-2017] - - - - - - - - - - - - - - - - - - - -
 - - - - - 3.4.3 - [21-11-2017] - - - - - - - - - - - - - - - - - - - -
