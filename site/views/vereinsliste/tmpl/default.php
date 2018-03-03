@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,13 +12,14 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+$vereine 		= $this->vereine; // muss erster Model-Aufruf sein, da ggf. sid gestellt wird
 $sid			= JRequest::getInt('saison','1');
 $zps			= JRequest::getVar('zps');
 $itemid			= JRequest::getInt('Itemid','1');
 $vereinsliste 	= $this->vereinsliste;
-$vereine 		= $this->vereine;
+//$vereine 		= $this->vereine;
 $verband 		= $this->verband;
-//$saisonid 		= $this->saisonid;
+//$saisonid 	= $this->saisonid;
 $saisons	 	= $this->saisons;
 
 $config					= clm_core::$db->config();

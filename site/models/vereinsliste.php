@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -23,9 +23,20 @@ class CLMModelVereinsliste extends JModelLegacy
 	$mainframe	= JFactory::getApplication();
 	$option 	= JRequest::getCmd( 'option' );
 
-	$sid	= JRequest::getInt('saison','1');
+	$sid	= JRequest::getInt('saison','0');
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
+ 
+	if ( !$sid OR $sid < 1) { // keine Saison vorgegeben
+		// aktuelle Saison holen
+		$query = 'SELECT id FROM #__clm_saison WHERE archiv=0 AND published=1 ORDER BY id DESC LIMIT 1';
+		$db->setQuery( $query );
+		$sid = $db->loadResult();
+		if ( !$sid OR $sid < 1 ) { // keine Saison aktuell !
+			$sid = 1;
+		}
+		JRequest::setVar('saison', $sid);
+	}
 
 	$query = "SELECT DISTINCT b.ZPS, b.Status, a.zps, a.name, a.homepage, a.vs, a.vs_mail, c.*, d.*, "
 		." COUNT(Geschlecht) as MGL_SUM," // Mitglieder insgesamt

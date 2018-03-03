@@ -7,9 +7,10 @@
         </layout>
         <fields name="request">
 			<fieldset name="request" >
-				<field name="saison" type="sql" default="1" label="Saison auswaehlen" query="
+				<field name="saison" type="sql" default="0" label="Saison auswaehlen" query="
 						SELECT s.id AS value, name AS sname 
 						FROM #__clm_saison as s " value_field="sname" >
+					<option value="0">COM_CLM_VEREINSLISTE_VIEW_DEFAULT_SEASON</option>
                 </field>
             </fieldset>
         </fields>
