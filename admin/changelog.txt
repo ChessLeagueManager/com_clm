@@ -27,6 +27,7 @@ $ -> Language fix or change
 + Ligen/MTurniere: Parameter 'Rangliste/Tabelle' als Standard-View in Submenü und Modulen
 + Menüeintragstyp Vereinsliste: Parameter erweitert
 # Ligen/MTurniere: nach 'Turnierwertung ändern' folgt Ranglisten-Neuberechnung
+# SWT-Import: fehlender Text
 
 - - - - - 3.5.0 - [13-12-2017] - - - - - - - - - - - - - - - - - - - -
 - - - - - 3.4.3 - [21-11-2017] - - - - - - - - - - - - - - - - - - - -
