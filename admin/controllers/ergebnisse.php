@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -2085,6 +2085,9 @@ function save_wertung()
 	$db->query();
 	}
 
+	// errechnet/aktulisiert Rangliste/Punktesummen
+	clm_core::$api->db_tournament_ranking($lid,true); 
+
 	$msg = JText::_( 'ERGEBNISSE_AW' );
 	$link = 'index.php?option='.$option.'&section='.$section;
 
@@ -2320,6 +2323,9 @@ function delete_wertung()
 	$db->setQuery($query);
 	$db->query();
 
+	// errechnet/aktulisiert Rangliste/Punktesummen
+	clm_core::$api->db_tournament_ranking($lid,true); 
+
 	$msg = JText::_( 'ERGEBNISSE_AW_GELOESCHT' );
 	$link = 'index.php?option='.$option.'&section='.$section;
 
@@ -2534,7 +2540,7 @@ function kampflos($gast)
 		$db->query();	
 	}
 
-	// errechnte/aktualisiere Rangliste 
+	// errechnet/aktualisiere Rangliste 
 	clm_core::$api->db_tournament_ranking($data[0]->lid,true); 
 
 	// Log schreiben
