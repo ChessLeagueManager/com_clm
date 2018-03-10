@@ -29,6 +29,7 @@ $ -> Language fix or change
 # Ligen/MTurniere: nach 'Turnierwertung ändern' folgt Ranglisten-Neuberechnung
 # SWT-Import: fehlender Text
 + neuer View 'Liga-Teilnehmer' über Submenü und Menüeintragstyp
++ SWT-Import(Liga): Datei mit 0(0) Runden zur Übernahme der Teilnehmer
 
 - - - - - 3.5.0 - [13-12-2017] - - - - - - - - - - - - - - - - - - - -
 - - - - - 3.4.3 - [21-11-2017] - - - - - - - - - - - - - - - - - - - -
