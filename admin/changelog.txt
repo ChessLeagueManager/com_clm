@@ -28,6 +28,7 @@ $ -> Language fix or change
 + Menüeintragstyp Vereinsliste: Parameter erweitert
 # Ligen/MTurniere: nach 'Turnierwertung ändern' folgt Ranglisten-Neuberechnung
 # SWT-Import: fehlender Text
++ neuer View 'Liga-Teilnehmer' über Submenü und Menüeintragstyp
 
 - - - - - 3.5.0 - [13-12-2017] - - - - - - - - - - - - - - - - - - - -
 - - - - - 3.4.3 - [21-11-2017] - - - - - - - - - - - - - - - - - - - -

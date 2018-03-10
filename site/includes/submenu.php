@@ -196,77 +196,96 @@ if ($fe_submenu == 1) {
 	$array[4][0] = JText::_('SUBMENU_ETC');
 	$array[4][1] = 2;
 	$array[4][2] = array();
-	// DWZ der Liga
-	$array[4][3][0][0] = JText::_('SUBMENU_DWZMSCH');
+	// Liga Teilnehmer
+	$array[4][3][0][0] = JText::_('SUBMENU_TEILNEHMER');
 	if (isset($liga_on)) {
-		if (JRequest::getVar('view', -1) != "dwz_liga") {
+		if (JRequest::getVar('view', -1) != "teilnehmer") {
 			$array[4][3][0][1] = 0;
 		} else {
 			$array[4][3][0][1] = 1;
 		}
 		$array[4][3][0][2][] = array("option", "com_clm");
-		$array[4][3][0][2][] = array("view", "dwz_liga");
+		$array[4][3][0][2][] = array("view", "teilnehmer");
 		$array[4][3][0][2][] = array("saison", $sid);
 		$array[4][3][0][2][] = array("liga", $lid);
 		if ($itemid <> '') {
 			$array[4][3][0][2][] = array("Itemid", $itemid);
 		}
 	} else {
-		$array[4][3][0][1] = 3;
 		$array[4][3][0][2] = array();
+		$array[4][3][0][1] = 3;
 	}
-	// Liga Statistiken
-	$array[4][3][1][0] = JText::_('SUBMENU_STATS');
+	// DWZ der Liga
+	$array[4][3][1][0] = JText::_('SUBMENU_DWZMSCH');
 	if (isset($liga_on)) {
-		if (JRequest::getVar('view', -1) != "statistik") {
+		if (JRequest::getVar('view', -1) != "dwz_liga") {
 			$array[4][3][1][1] = 0;
 		} else {
 			$array[4][3][1][1] = 1;
 		}
 		$array[4][3][1][2][] = array("option", "com_clm");
-		$array[4][3][1][2][] = array("view", "statistik");
+		$array[4][3][1][2][] = array("view", "dwz_liga");
 		$array[4][3][1][2][] = array("saison", $sid);
 		$array[4][3][1][2][] = array("liga", $lid);
 		if ($itemid <> '') {
 			$array[4][3][1][2][] = array("Itemid", $itemid);
 		}
 	} else {
-		$array[4][3][1][2] = array();
 		$array[4][3][1][1] = 3;
+		$array[4][3][1][2] = array();
+	}
+	// Liga Statistiken
+	$array[4][3][2][0] = JText::_('SUBMENU_STATS');
+	if (isset($liga_on)) {
+		if (JRequest::getVar('view', -1) != "statistik") {
+			$array[4][3][2][1] = 0;
+		} else {
+			$array[4][3][2][1] = 1;
+		}
+		$array[4][3][2][2][] = array("option", "com_clm");
+		$array[4][3][2][2][] = array("view", "statistik");
+		$array[4][3][2][2][] = array("saison", $sid);
+		$array[4][3][2][2][] = array("liga", $lid);
+		if ($itemid <> '') {
+			$array[4][3][2][2][] = array("Itemid", $itemid);
+		}
+	} else {
+		$array[4][3][2][2] = array();
+		$array[4][3][2][1] = 3;
 	}
 	// Linie/Abtrennung
-	$array[4][3][2][0] = "";
-	$array[4][3][2][1] = 4;
-	$array[4][3][2][2] = array();
-	$array[4][3][2][3] = array();
-        // Saisonstatistiken
-	$array[4][3][3][0] = JText::_('SUBMENU_SAISTATS');
-	if (JRequest::getVar('view', -1) != "info") {
-		$array[4][3][3][1] = 0;
-	} else {
-		$array[4][3][3][1] = 1;
-	}
-	$array[4][3][3][2][] = array("option", "com_clm");
-	$array[4][3][3][2][] = array("view", "info");
-	$array[4][3][3][2][] = array("saison", $sid);
-	if(isset($liga_on)){$array[4][3][3][2][] = array("liga", $lid);}
-	if ($itemid <> '') {
-		$array[4][3][3][2][] = array("Itemid", $itemid);
-	}
+	$array[4][3][3][0] = "";
+	$array[4][3][3][1] = 4;
+	$array[4][3][3][2] = array();
 	$array[4][3][3][3] = array();
-	// Termine
-	$array[4][3][4][0] = JText::_('SUBMENU_TERMINE');
-	if (JRequest::getVar('view', -1) != "termine") {
+        // Saisonstatistiken
+	$array[4][3][4][0] = JText::_('SUBMENU_SAISTATS');
+	if (JRequest::getVar('view', -1) != "info") {
 		$array[4][3][4][1] = 0;
 	} else {
 		$array[4][3][4][1] = 1;
 	}
 	$array[4][3][4][2][] = array("option", "com_clm");
-	$array[4][3][4][2][] = array("view", "termine");
+	$array[4][3][4][2][] = array("view", "info");
 	$array[4][3][4][2][] = array("saison", $sid);
-	if(isset($liga_on)){$array[4][3][3][2][] = array("liga", $lid);}
+	if(isset($liga_on)){$array[4][3][4][2][] = array("liga", $lid);}
 	if ($itemid <> '') {
 		$array[4][3][4][2][] = array("Itemid", $itemid);
+	}
+	$array[4][3][4][3] = array();
+	// Termine
+	$array[4][3][5][0] = JText::_('SUBMENU_TERMINE');
+	if (JRequest::getVar('view', -1) != "termine") {
+		$array[4][3][5][1] = 0;
+	} else {
+		$array[4][3][5][1] = 1;
+	}
+	$array[4][3][5][2][] = array("option", "com_clm");
+	$array[4][3][5][2][] = array("view", "termine");
+	$array[4][3][5][2][] = array("saison", $sid);
+	if(isset($liga_on)){$array[4][3][5][2][] = array("liga", $lid);}
+	if ($itemid <> '') {
+		$array[4][3][5][2][] = array("Itemid", $itemid);
 	}
 	echo clm_submenu($array);
 }
