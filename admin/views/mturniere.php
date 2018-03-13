@@ -649,6 +649,7 @@ class CLMViewMTurniere
 		<option value="0" <?php if ($row->params['firstView'] == 0) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FV_RANGLISTE' );?></option>
 		<option value="1" <?php if ($row->params['firstView'] == 1) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FV_TABELLE' );?></option>
 		<option value="2" <?php if ($row->params['firstView'] == 2) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FV_PAARUNGSLISTE' );?></option>
+		<option value="3" <?php if ($row->params['firstView'] == 3) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FV_TEILNEHMER' );?></option>
 		</select>
 	</td>
 	</tr>

@@ -30,6 +30,7 @@ $ -> Language fix or change
 # SWT-Import: fehlender Text
 + neuer View 'Liga-Teilnehmer' über Submenü und Menüeintragstyp
 + SWT-Import(Liga): Datei mit 0(0) Runden zur Übernahme der Teilnehmer
++ Ligen/MTurniere: Parameter 'Standard-View' erweitert um Teilnehmerliste
 
 - - - - - 3.5.0 - [13-12-2017] - - - - - - - - - - - - - - - - - - - -
 - - - - - 3.4.3 - [21-11-2017] - - - - - - - - - - - - - - - - - - - -

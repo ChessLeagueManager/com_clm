@@ -75,7 +75,8 @@ if ($fe_submenu == 1) {
 		} else {
 			if ($params_m->get("firstView","0") == "0") { $viewA = "rangliste"; }
 			elseif ($params_m->get("firstView","0") == "1") { $viewA = "tabelle"; }
-			else { $viewA = "paarungsliste"; }
+			elseif ($params_m->get("firstView","0") == "2") { $viewA = "paarungsliste"; }
+			else { $viewA = "teilnehmer"; }
 		}
 		$array[1][3][$i][2][] = array("view", $viewA);
 		$array[1][3][$i][2][] = array("saison", $sid);
