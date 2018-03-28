@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -47,7 +47,7 @@ class CLMModelTurForm extends JModelLegacy {
 		$this->form['sid']	= CLMForm::selectSeason('sid', $this->turnier->sid);
 	
 		// Modus
-		$this->form['modus']	= CLMForm::selectModus('typ', $this->turnier->typ, false, ' onChange="showFormRoundscount()";');
+		$this->form['modus']	= CLMForm::selectModus('typ', $this->turnier->typ, false, ' onChange="showFormRoundscount()"');
 		
 		// Tiebreakers
 		$this->form['tiebr1']	= CLMForm::selectTiebreakers('tiebr1', $this->turnier->tiebr1);
