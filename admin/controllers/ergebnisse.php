@@ -1548,7 +1548,7 @@ function wertung()
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
 	// Bretter / Spieler ermitteln
-	$sql = "SELECT a.spieler, a.PKZ, a.gegner, a.gPKZ, a.ergebnis, a.dwz_edit, d.Spielername as hname, e.Spielername as gname "
+	$sql = "SELECT a.spieler, a.PKZ, a.gegner, a.gPKZ, a.ergebnis, a.punkte, g.punkte as gpunkte, a.dwz_edit, d.Spielername as hname, e.Spielername as gname, a.brett "
 		." FROM #__clm_rnd_spl as a ";
 	if ($countryversion =="de") {
 		$sql .= " LEFT JOIN #__clm_dwz_spieler as d ON d.ZPS = a.zps AND d.Mgl_Nr = a.spieler AND d.sid = a.sid "
@@ -1557,16 +1557,25 @@ function wertung()
 		$sql .= " LEFT JOIN #__clm_dwz_spieler as d ON d.ZPS = a.zps AND d.PKZ = a.PKZ AND d.sid = a.sid "
 				." LEFT JOIN #__clm_dwz_spieler as e ON e.ZPS = a.gzps AND e.PKZ = a.gPKZ AND e.sid = a.sid ";
 	} 
+	$sql .= " LEFT JOIN #__clm_rnd_spl as g ON g.lid = a.lid AND g.runde = a.runde AND g.paar = a.paar AND g.dg = a.dg AND g.brett = a.brett AND g.heim = 0 ";
 	$sql .= " WHERE a.sid = ".$runde[0]->sid
 		." AND a.lid = ".$runde[0]->lid
 		." AND a.runde = ".$runde[0]->runde
 		." AND a.paar = ".$runde[0]->paar
 		." AND a.dg = ".$runde[0]->dg
-		." AND heim = 1"
+		." AND a.heim = 1"
 		." ORDER BY a.brett"
 		;
-	$db->setQuery( $sql );
-	$bretter	= $db->loadObjectList();
+	$bretter	= clm_core::$db->loadObjectList($sql);
+	
+	// Ermittlung der Vergleichswerte;
+	$hpsum = 0; $gpsum = 0; $hwsum = 0; $gwsum = 0;
+	foreach ($bretter as $brett) {
+		$hpsum += $brett->punkte;
+		$hwsum += (($runde[0]->stamm + 1 - $brett->brett) * $brett->punkte);
+		$gpsum += $brett->gpunkte;
+		$gwsum += (($runde[0]->stamm + 1 - $brett->brett) * $brett->gpunkte);
+	}
 
 	// Ergebnisliste laden
 	$sql = "SELECT a.id, a.eid,a.erg_text "
@@ -1608,8 +1617,7 @@ function wertung()
 		." AND a.tln_nr = ".$runde[0]->tln_nr
 		." AND a.dwz_editor > 0"
 		;
-	$db->setQuery( $sql );
-	$list_heim = $db->loadObjectList();
+	$list_heim	= clm_core::$db->loadObjectList($sql);
 
 	$sql = "SELECT a.brettpunkte as bp, a.wertpunkte as wp "
 		." FROM #__clm_rnd_man as a "
@@ -1620,34 +1628,51 @@ function wertung()
 		." AND a.gegner = ".$runde[0]->tln_nr
 		." AND a.dwz_editor > 0"
 		;
-	$db->setQuery( $sql );
-	$list_gast = $db->loadObjectList();
+	$list_gast	= clm_core::$db->loadObjectList($sql);
 
-	$wlist[]	= JHTML::_('select.option',  '-1', JText::_( 'ERGEBNISSE_WAHL' ), 'jid', 'name' );
-	$wlist[]	= JHTML::_('select.option',  '0', JText::_( '0' ), 'jid', 'name' );
+	// Werteliste für Brettpunkte
+	$wlist[]	= JHTML::_('select.option',  '-1', JText::_( 'ERGEBNISSE_SUMME' ), 'jid', 'name' );
+	$wlist[]	= JHTML::_('select.option',  floatval(0), JText::_( '0' ), 'jid', 'name' );
 	$until = 1+(($sieg+$antritt)*$runde[0]->stamm);
 	if ($countryversion =="en" AND ($runde[0]->runden_modus == 4 OR $runde[0]->runden_modus == 5)) {
 		$until = 1+(($sieg+$antritt)*$runde[0]->stamm*2);
 	}
-	//for($x=1; $x< (1+(($sieg+$antritt)*$runde[0]->stamm)); $x++) {
 	for($x=1; $x< $until; $x++) {
-		$wlist[]	= JHTML::_('select.option',  $x-(0.5), $x-(0.5), 'jid', 'name' );
-		$wlist[]	= JHTML::_('select.option',  $x, $x, 'jid', 'name' );
+		$wlist[]	= JHTML::_('select.option',  floatval($x-(0.5)), floatval($x-(0.5)), 'jid', 'name' );
+		$wlist[]	= JHTML::_('select.option',  floatval($x), floatval($x), 'jid', 'name' );
 	}
-	if (isset($list_heim[0])) {
-		$lists['weiss']		= JHTML::_('select.genericlist',   $wlist, 'w_erg', 'class="inputbox" size="1"', 'jid', 'name', $list_heim[0]->bp );
-		$lists['weiss_w']	= $list_heim[0]->wp;
-	} else {
-		$lists['weiss']		= JHTML::_('select.genericlist',   $wlist, 'w_erg', 'class="inputbox" size="1"', 'jid', 'name', -1 );
-		$lists['weiss_w']	= -1;
+	// Werteliste für Wertpunkte (Berliner Wertung)
+	for($x=1; $x<= $runde[0]->stamm; $x++) {
+		if ($x == 1) $bw_max = 0;
+		$bw_max += $x;
 	}
-	if (isset($list_heim[0])) {
-		$lists['schwarz']	= JHTML::_('select.genericlist',   $wlist, 's_erg', 'class="inputbox" size="1"', 'jid', 'name', $list_gast[0]->bp );
-		$lists['schwarz_w']	= $list_gast[0]->wp;
-	} else {
-		$lists['schwarz']	= JHTML::_('select.genericlist',   $wlist, 's_erg', 'class="inputbox" size="1"', 'jid', 'name', -1 );
-		$lists['schwarz_w']	= -1;
+	$bwlist[]	= JHTML::_('select.option',  '-1', JText::_( 'ERGEBNISSE_SUMME' ), 'jid', 'name' );
+	$bwlist[]	= JHTML::_('select.option',  floatval(0), JText::_( '0' ), 'jid', 'name' );
+	for($x=1; $x<= $bw_max; $x++) {
+		$bwlist[]	= JHTML::_('select.option',  floatval($x-(0.5)), floatval($x-(0.5)), 'jid', 'name' );
+		$bwlist[]	= JHTML::_('select.option',  floatval($x), floatval($x), 'jid', 'name' );
 	}
+	
+	// Aufbereitung Eingabefelder für Brett- und Wertpunkte
+	if (isset($list_heim[0]) AND $list_heim[0]->bp != $hpsum) 
+		$lists['weiss']		= JHTML::_('select.genericlist',   $wlist, 'w_erg', 'class="inputbox" size="1"', 'jid', 'name', floatval($list_heim[0]->bp ));
+	else
+		$lists['weiss']		= JHTML::_('select.genericlist',   $wlist, 'w_erg', 'class="inputbox" size="1"', 'jid', 'name', '-1');
+	
+	if (isset($list_heim[0]) AND $list_heim[0]->wp != $hwsum) 
+		$lists['weiss_w']		= JHTML::_('select.genericlist',   $bwlist, 'ww_erg', 'class="inputbox" size="1"', 'jid', 'name', floatval($list_heim[0]->wp ));
+	else
+		$lists['weiss_w']		= JHTML::_('select.genericlist',   $bwlist, 'ww_erg', 'class="inputbox" size="1"', 'jid', 'name', '-1' );
+	
+	if (isset($list_gast[0]) AND $list_gast[0]->bp != $gpsum) 
+		$lists['schwarz']		= JHTML::_('select.genericlist',   $wlist, 's_erg', 'class="inputbox" size="1"', 'jid', 'name', floatval($list_gast[0]->bp ));
+	else
+		$lists['schwarz']		= JHTML::_('select.genericlist',   $wlist, 's_erg', 'class="inputbox" size="1"', 'jid', 'name', '-1');
+	
+	if (isset($list_gast[0]) AND $list_gast[0]->wp != $gwsum) 
+		$lists['schwarz_w']		= JHTML::_('select.genericlist',   $bwlist, 'sw_erg', 'class="inputbox" size="1"', 'jid', 'name', floatval($list_gast[0]->wp ));
+	else
+		$lists['schwarz_w']		= JHTML::_('select.genericlist',   $bwlist, 'sw_erg', 'class="inputbox" size="1"', 'jid', 'name', '-1' );
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'ergebnisse.php');
 	CLMViewErgebnisse::wertung( $row, $runde,$bretter,$ergebnis, $option, $lists);
 	}
@@ -1852,11 +1877,12 @@ function save_wertung()
 	// Optionales Mannschaftsergebnis prüfen ggf. Nachricht absetzen
 	if ($countryversion == "en" AND ($runden_modus == 4 OR $runden_modus == 5)) $limit = $stamm * 2;
 	else $limit = $stamm;
+	$err = 0;
 	if($w_erg + $s_erg > $limit ) {
-	JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_ME_HOCH' ) );
-	$err=1;
+		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_ME_HOCH' ) );
+		$err=1;
 	}
-	if($w_erg =="-1" OR $s_erg =="-1" OR $err =="1") {
+	//if($w_erg =="-1" OR $s_erg =="-1" OR $err =="1") {	//neu: immer
 		if($w_erg =="-1" AND $s_erg !="-1" ) {
 		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_GEAENDERT_HM' ) );
 		}
@@ -1928,17 +1954,18 @@ function save_wertung()
 		$gwpunkte = $gwpunkte + (($stamm + 1 - $man_wp->brett) * $man_wp->punkte);
 	}
 	
-	} else {
-	$hmpunkte = $w_erg;
-	$gmpunkte = $s_erg;
-	$hwpunkte = $ww_erg;
-	$gwpunkte = $sw_erg;
-	}
+	//} else {
+	if ($w_erg != -1) $hmpunkte = $w_erg;
+	if ($s_erg != -1) $gmpunkte = $s_erg;
+	if ($ww_erg != -1) $hwpunkte = $ww_erg;
+	if ($sw_erg != -1) $gwpunkte = $sw_erg;
+	//}
 	// Mannschaftspunkte Heim / Gast
 	// Standard : Mehrheit der BP gewinnt, BP gleich -> Punkteteilung
 	if ($sieg_bed == 1) {
 		if ( $hmpunkte >  $gmpunkte ) { $hman_punkte = $man_sieg; $gman_punkte = $man_nieder;}
-		if ( $hmpunkte == $gmpunkte ) { $hman_punkte = $man_remis; $gman_punkte = $man_remis;}
+		if ( $hmpunkte == $gmpunkte AND $hmpunkte > 0) { $hman_punkte = $man_remis; $gman_punkte = $man_remis;}
+		if ( $hmpunkte == $gmpunkte AND $hmpunkte == 0) { $hman_punkte = $man_nieder; $gman_punkte = $man_nieder;}
 		if ( $hmpunkte <  $gmpunkte ) { $hman_punkte = $man_nieder; $gman_punkte = $man_sieg;}
 	}
 	// erweiterter Standard : mehr als die H�lfte der BP -> Sieg, H�lfte der BP -> halbe MP Zahl
@@ -1962,7 +1989,7 @@ function save_wertung()
 	// Für Heimmannschaft updaten
 	$query	= "UPDATE #__clm_rnd_man";
 		// Wenn nichts geändert wurde (keine Einzelergebnis, keine Mannschaftswertung)
-		if($w_erg =="-1" AND $s_erg =="-1" AND $count_einzel =="0") {
+		if($w_erg =="-1" AND $s_erg =="-1" AND $ww_erg =="-1" AND $sw_erg =="-1" AND $count_einzel =="0") {
 			JError::raiseNotice( 6000,  JText::_( 'ERGEBNISSE_TW_GELOESCHT' ));
 			$query = $query
 			." SET dwz_editor = NULL"
@@ -1984,12 +2011,11 @@ function save_wertung()
 		." AND dg = ".$dg
 		." AND heim = 1 "
 		;
-	$db->setQuery($query);
-	$db->query();
+	clm_core::$db->query($query);
 
 	// Für Gastmannschaft updaten
 	$query	= "UPDATE #__clm_rnd_man";
-		if($w_erg =="-1" AND $s_erg =="-1" AND $count_einzel =="0") {
+		if($w_erg =="-1" AND $s_erg =="-1" AND $ww_erg =="-1" AND $sw_erg =="-1" AND $count_einzel =="0") {
 			$query = $query
 			." SET dwz_editor = NULL"
 			." , dwz_zeit = '1970-01-01 00:00:00'";
@@ -2010,8 +2036,7 @@ function save_wertung()
 		." AND dg = ".$dg
 		." AND heim = 0 "
 		;
-	$db->setQuery($query);
-	$db->query();
+	clm_core::$db->query($query);
 
 		if (($runden_modus == 4) OR ($runden_modus == 5)) {    // KO Turnier
 		if (($runden_modus == 4) OR ($runden_modus == 5 and $rnd < $runden)) {    // KO Turnierif ($ko_decision == 1) {

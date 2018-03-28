@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 	/**
 	* errechnet/aktualisiert Rangliste/Punktesummen eines Mannschaftsturnier
 	*/
@@ -33,36 +39,39 @@
 		$stamm = clm_core::$db->liga->get($id)->stamm;
 	
 		// Mannschaftsdaten sammeln
-		$query = "SELECT a.sid, a.lid, a.runde, a.dg, a.paar, a.heim "
+		$query = "SELECT a.sid, a.lid, a.runde, a.dg, a.paar, a.heim, a.dwz_editor "
 			." FROM #__clm_rnd_man as a "
 			." WHERE a.lid = ".$id;
 		$mdata	= clm_core::$db->loadObjectList($query);
 	
 		foreach ($mdata as $mdata) {
-			// Wertpunkte Heim berechnen
-			$query	= "SELECT punkte, brett "
-				." FROM #__clm_rnd_spl "
-				." WHERE sid = ".$mdata->sid
-				." AND lid = ".$mdata->lid
-				." AND runde = ".$mdata->runde
-				." AND paar = ".$mdata->paar
-				." AND dg = ".$mdata->dg
-				." AND heim = ".$mdata->heim;
-			$sdata	= clm_core::$db->loadObjectList($query);
-			$wpunkte=0;
-			foreach ($sdata as $sdata) {
-				$wpunkte = $wpunkte + (($stamm + 1 - $sdata->brett) * $sdata->punkte);
+			// nur Paarung neu berechnen, wenn nicht korrigiert durch 'Turnierwertung ändern'
+			if (is_null($mdata->dwz_editor) OR $mdata->dwz_editor == 0) {
+				// Wertpunkte Heim berechnen
+				$query	= "SELECT punkte, brett "
+					." FROM #__clm_rnd_spl "
+					." WHERE sid = ".$mdata->sid
+					." AND lid = ".$mdata->lid
+					." AND runde = ".$mdata->runde
+					." AND paar = ".$mdata->paar
+					." AND dg = ".$mdata->dg
+					." AND heim = ".$mdata->heim;
+				$sdata	= clm_core::$db->loadObjectList($query);
+				$wpunkte=0;
+				foreach ($sdata as $sdata) {
+					$wpunkte = $wpunkte + (($stamm + 1 - $sdata->brett) * $sdata->punkte);
+				}
+				// Mannschaftstabelle updaten
+				$query	= "UPDATE #__clm_rnd_man"
+					." SET wertpunkte = ".$wpunkte
+					." WHERE sid = ".$mdata->sid
+					." AND lid = ".$mdata->lid
+					." AND runde = ".$mdata->runde
+					." AND paar = ".$mdata->paar
+					." AND dg = ".$mdata->dg
+					." AND heim = ".$mdata->heim;
+				clm_core::$db->query($query);
 			}
-			// Mannschaftstabelle updaten
-			$query	= "UPDATE #__clm_rnd_man"
-				." SET wertpunkte = ".$wpunkte
-				." WHERE sid = ".$mdata->sid
-				." AND lid = ".$mdata->lid
-				." AND runde = ".$mdata->runde
-				." AND paar = ".$mdata->paar
-				." AND dg = ".$mdata->dg
-				." AND heim = ".$mdata->heim;
-			clm_core::$db->query($query);
 		}
 		// Wertpunkte berechnen (ENDE)
 

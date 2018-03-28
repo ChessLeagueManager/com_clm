@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -616,11 +616,10 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 		<td class="key" nowrap="nowrap"><?php echo JText::_( 'EVALUATION_WERTPUNKTE_MANUALLY'); //klkl ?>
 		</td>
 		<td class="key" nowrap="nowrap">
-		<input class="inputbox" type="text" name="ww_erg" id="ww_erg" size="8" maxlength="8" value="<?php echo $ww_erg; ?>" />
-		<?php echo "   -   "; //klkl ?>
-		<input class="inputbox" type="text" name="sw_erg" id="sw_erg" size="8" maxlength="8" value="<?php echo $sw_erg; ?>" />
+		<?php echo $lists['weiss_w']; ?>
 		</td>
 		<td class="key" nowrap="nowrap">
+		<?php echo ' - '.$lists['schwarz_w']; ?>
 		</td>
 	</tr>
 	<?php } ?>
