@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -196,11 +196,40 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		CLMViewMeldelisten::setMeldelisteToolbar($row);
 		JRequest::setVar( 'hidemainmenu', 1 );
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
+		$number = $liga[0]->stamm + $liga[0]->ersatz;
 		
 		// Konfigurationsparameter auslesen
 		$config = clm_core::$db->config();
 		$countryversion=$config->countryversion;
 		?>
+
+	<script language="javascript" type="text/javascript">
+
+		 Joomla.submitbutton = function (pressbutton) { 		
+			var form = document.adminForm;
+			var number ="<?php echo $number; ?>";
+			var double = 0;
+			if (pressbutton == 'cancel') {
+				submitform( pressbutton );
+				return;
+			}
+			// do field validation
+			for ( var ispieler = 1; ispieler <= number; ispieler++) {
+				var iispieler = "spieler"+ispieler;
+				for ( var jspieler = ispieler + 1; jspieler <= number; jspieler++) {
+					var jjspieler = "spieler"+jspieler;
+					if ((getSelectedValue('adminForm',iispieler) != "0") && (getSelectedValue('adminForm',iispieler) == getSelectedValue('adminForm',jjspieler))) {
+						alert( "<?php echo JText::_( 'MELDELISTE_DOUBLE' ); ?>"+":  "+ispieler+" = "+jspieler );
+						double = 1;
+					}
+				}
+			}
+			if (double == 0) {
+				submitform( pressbutton );
+			}
+		}
+ 
+		</script>
 
 		<form action="index.php" method="post" name="adminForm" id="adminForm">
 
@@ -261,12 +290,12 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
    <legend><?php echo JText::_( 'MELDELISTE_DETAILS' ); ?></legend>
 	<table class="admintable">
 	<tr>
-	<tr>
 		<td class="key" nowrap="nowrap"><?php echo JText::_( 'MELDELISTE_MELDER' ).' : '; ?></td>
 		<td class="key" nowrap="nowrap"><?php if (!isset($abgabe[0]->name)) {echo "---";} 
 			else { echo $abgabe[0]->name; } ?>
 		</td>
 	</tr>
+	<tr>
 		<td class="key" nowrap="nowrap"><?php echo JText::_( 'JDATE' ).' : '; ?></td>
 		<td class="key" nowrap="nowrap"><?php if (!isset($abgabe[0]->datum) OR $abgabe[0]->datum=="0000-00-00 00:00:00" OR $abgabe[0]->datum=="1970-01-01 00:00:00") {echo  "---";} 
 			else { echo JHtml::_('date',  $abgabe[0]->datum, JText::_('DATE_FORMAT_LC2')); } ?>
@@ -324,7 +353,6 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		  <select size="1" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo $i+1; ?>">
 			<option value="0"><?php echo JText::_( 'MELDELISTE_SPIELER_AUSWAEHLEN'); ?></option>
 			<?php for ($x=0; $x < $max[0]->max; $x++) { ?>
-	<!---	 <option value="<?php //echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps; ?>" <?php //if (((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php //} ?>><?php //echo $row_spl[$x]->id.'&nbsp;';if((int)$row_spl[$x]->id < 1000) {echo "&nbsp;&nbsp;";} echo "-&nbsp;&nbsp;".$row_spl[$x]->name; ?></option> ---> 
 			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps.'-'.$row_spl[$x]->dwz.'-'.$row_spl[$x]->dwz_I0;; ?>" <?php 
 			  if ($countryversion == "de") {
 				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php } ?>><?php 

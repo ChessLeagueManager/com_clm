@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.5.2 - [xx-xx-2018] - - - - - - - - - - - - - - - - - - - -
+# Admin-View Meldeliste: Prüfung doppelte Spieler
+
 - - - - - 3.5.1 - [13-03-2018] - - - - - - - - - - - - - - - - - - - -
 # View Turnierplayer: Link zur ECF (engl. Anwendung)
 + View Aktuelle Runde bei ExternZugriff
