@@ -16,6 +16,7 @@ $ -> Language fix or change
 # Admin-View Meldeliste: Prüfung doppelte Spieler
 # Admin-View Ergebnismeldung: Turnierwertung ändern insb. Wertpunkte
 + Admin-View Meldeliste: Einfügen Spieler
++ Admin-View Mannschaft: Mannschaft annullieren
 
 - - - - - 3.5.1 - [13-03-2018] - - - - - - - - - - - - - - - - - - - -
 # View Turnierplayer: Link zur ECF (engl. Anwendung)

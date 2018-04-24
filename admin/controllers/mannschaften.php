@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -1151,7 +1151,7 @@ public static function save_meldeliste()
 	switch ($task)
 	{
 		case 'apply':
-		$msg = JText::_( 'MANNSCHAFTEN_AENDERUNGN').$tzps;
+		$msg = JText::_( 'MANNSCHAFTEN_AENDERUNGN');
 	// Link MUSS hardcodiert sein !!!
 		$link = 'index.php?option='.$option.'&section=meldelisten&task=edit&cid[]='. $cid ;
 		break;
@@ -1280,7 +1280,7 @@ public static function apply_meldeliste()
 	$clmLog->params = array('sid' => $sid, 'lid' => $liga, 'zps' => $zps, 'cids' => $cid);
 	$clmLog->write();
 	
-	$msg = JText::_( 'MANNSCHAFTEN_AENDERUNGN' ).$tzps;
+	$msg = JText::_( 'MANNSCHAFTEN_AENDERUNGN' );
 	// Link MUSS hardcodiert sein !!!
 	$link = 'index.php?option=com_clm&section=meldelisten&task=edit&cid[]='. $cid ;
 	$mainframe->redirect( $link, $msg ,"message");
@@ -1361,6 +1361,68 @@ public static function spielfrei()
 	$clmLog->write();
 	
 	$msg = JText::_( 'MANNSCHAFTEN_MANNSCHAFT_SPIELF' );
+	$mainframe->redirect( 'index.php?option='.$option.'&section='.$section, $msg,"message");
+	}
+
+
+public static function annull()			// Mannschaft annullieren d.h. Brett- und Wertpunkte in alle Begegnungen auf 0 setzen
+	{
+	JRequest::checkToken() or die( 'Invalid Token' );
+	$mainframe	= JFactory::getApplication();
+
+	$db 		=JFactory::getDBO();
+	$user 		=JFactory::getUser();
+	$cid 		= JRequest::getVar( 'cid', array(0), '', 'array' );
+	$option 	= JRequest::getCmd( 'option' );
+	$section 	= JRequest::getVar( 'section' );
+	JArrayHelper::toInteger($cid, array(0));
+	// keine Mannschaft gewählt //
+	if ($cid[0] < 1) {
+	$msg = JText::_( 'MANNSCHAFTEN_MANNSCHAFT_AUS');
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg ,"message");
+		}
+	// load the row from the db table
+	$row =JTable::getInstance( 'mannschaften', 'TableCLM' );
+		$row->load( $cid[0] );
+	$tlnr = $row->tln_nr;
+
+
+	// load the row from the db table
+	$rowliga	= JTable::getInstance( 'ligen', 'TableCLM' );
+	$liga		= $row->liga;
+		$rowliga->load( $liga );
+
+	$link = 'index.php?option='.$option.'&section='.$section;
+
+	// Prüfen ob User Berechtigung zum editieren hat
+	$clmAccess = clm_core::$access;      
+	if ($clmAccess->access('BE_team_edit') === false) {
+		$section = 'info';
+		JError::raiseWarning( 500, JText::_( 'TEAM_NO_ACCESS' ) );
+		$link = 'index.php?option='.$option.'&section='.$section;
+		$mainframe->redirect( $link);
+	}
+	if ( $rowliga->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_edit') !== true) {
+		JError::raiseWarning( 500, JText::_( 'MANNSCHAFTEN_MANNSCHAFT_ANNULL' ) );
+		$mainframe->redirect( $link);
+					}
+
+	$query	= "UPDATE #__clm_rnd_man"
+		." SET brettpunkte = 0, manpunkte = 0, bp_sum = NULL, mp_sum = NULL, gemeldet = 1, wertpunkte = 0 "
+		." WHERE sid = ".$row->sid
+		." AND lid = ".$row->liga
+		." AND ( tln_nr = $tlnr OR gegner = $tlnr) "
+		;
+	$db->setQuery($query);
+	$db->query();
+
+	// Log schreiben
+	$clmLog = new CLMLog();
+	$clmLog->aktion = JText::_( 'MANNSCHAFT_LOG_ANNULL');
+	$clmLog->params = array('sid' => $row->sid, 'lid' => $row->liga, 'man' => $tlnr, 'cids' => $cid[0]);
+	$clmLog->write();
+	
+	$msg = JText::_( 'MANNSCHAFTEN_MANNSCHAFT_ANNULL' );
 	$mainframe->redirect( 'index.php?option='.$option.'&section='.$section, $msg,"message");
 	}
 }
