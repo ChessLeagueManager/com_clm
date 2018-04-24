@@ -197,6 +197,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		JRequest::setVar( 'hidemainmenu', 1 );
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 		$number = $liga[0]->stamm + $liga[0]->ersatz;
+		$insert_key = array();
 		
 		// Konfigurationsparameter auslesen
 		$config = clm_core::$db->config();
@@ -228,7 +229,37 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 				submitform( pressbutton );
 			}
 		}
- 
+		
+
+		function insertPosition (spieler, selvalue) {
+			var selectedText = spieler.options[spieler.selectedIndex].innerHTML;
+			var selectedValue = spieler.value;
+			var selName = spieler.name;
+			var selNumber = selName.substr(7);
+			var number ="<?php echo $number; ?>";
+			if (selectedValue == "9999") {	// wurde einfügen ausgewählt?
+				var spielerlast = 'spieler' + number;
+				var valuelast = getSelectedValue('adminForm',spielerlast);
+				if (getSelectedValue('adminForm',spielerlast) != "0") {  // ist die letzte Meldeposition belegt?
+					alert( "<?php echo JText::_( 'MELDELISTE_LAST_POSITION' ); ?>" );
+					spieler.value = selvalue;
+				} else {
+					for ( var ispieler = number; ispieler > selNumber; ispieler--) {
+						var jspieler = ispieler - 1;
+						var jjspieler = "spieler"+jspieler;
+						if (jspieler == selNumber) 
+							var jjvalue = selvalue;
+						else 
+							var jjvalue = getSelectedValue('adminForm',jjspieler);
+						var iispieler = "spieler"+ispieler;
+						var element = document.getElementById(iispieler);
+						element.value = jjvalue;					
+					}
+					spieler.selectedIndex = 0;
+				}
+			}
+		}
+
 		</script>
 
 		<form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -253,7 +284,22 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 				<?php echo JText::_( 'MELDELISTE_BLOCK' ); ?>
 			</th>
 		</tr>
-<?php if(isset($liga[0])){for ($i=0; $i<$liga[0]->stamm; $i++){ ?>
+<?php //Sammeln der Daten für insertPosition()
+	if(isset($liga[0])) {
+		for ($i=0; $i<$liga[0]->stamm; $i++) { 
+		 for ($x=0; $x < $max[0]->max; $x++) { 
+			 $insert_value = $row_spl[$x]->id.'-'.$row_spl[$x]->zps.'-'.$row_spl[$x]->dwz.'-'.$row_spl[$x]->dwz_I0;
+			 if ($countryversion == "de") {
+				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { $insert_key[$i] = $insert_value; }  
+			 } else {
+				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ($row_sel[$i]->PKZ) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { $insert_key[$i] = $insert_value; }  
+			 } 
+		 }
+		}
+	}
+ ?>
+<?php if(isset($liga[0])){
+	for ($i=0; $i<$liga[0]->stamm; $i++){ ?>
 	<tr>
 		<td class="key" nowrap="nowrap">
 		  <label for="sid">
@@ -261,7 +307,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		  </label>
 		</td>
 		<td>
-		  <select size="1" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo $i+1; ?>">
+		  <select size="1" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo 'spieler'.($i+1); ?>" onChange="insertPosition(this,'<?php echo $insert_key[$i]; ?>') ">
 			<option value="0"><?php echo JText::_( 'MELDELISTE_SPIELER_AUSWAEHLEN'); ?></option>
 			<?php for ($x=0; $x < $max[0]->max; $x++) { ?>
 			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps.'-'.$row_spl[$x]->dwz.'-'.$row_spl[$x]->dwz_I0; ?>" <?php
@@ -272,6 +318,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 			  } ?>><?php
 				echo $row_spl[$x]->name.'&nbsp;-&nbsp;&nbsp;'.$row_spl[$x]->id; ?></option> 
 			<?php }	?>
+			<option value="9999"><?php echo JText::_( 'MELDELISTE_POSITION_EINFUEGEN'); ?></option>
 		  </select>
 		</td>
 		<td align="center">
@@ -342,6 +389,20 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 				<?php echo JText::_( 'MELDELISTE_BLOCK' ); ?>
 			</th>
 		</tr>
+<?php //Sammeln der Daten für insertPosition()
+	if(isset($liga[0])) {
+		for ($i=$liga[0]->stamm; $i<($liga[0]->stamm + $liga[0]->ersatz); $i++) { 
+		 for ($x=0; $x < $max[0]->max; $x++) { 
+			 $insert_value = $row_spl[$x]->id.'-'.$row_spl[$x]->zps.'-'.$row_spl[$x]->dwz.'-'.$row_spl[$x]->dwz_I0;
+			 if ($countryversion == "de") {
+				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { $insert_key[$i] = $insert_value; }  
+			 } else {
+				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ($row_sel[$i]->PKZ) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { $insert_key[$i] = $insert_value; }  
+			 } 
+		 }
+		}
+	}
+ ?>
 <?php
 	// Ersatzspieler
  if(isset($liga[0])){	for ($i=$liga[0]->stamm; $i< ($liga[0]->stamm + $liga[0]->ersatz); $i++){
@@ -350,17 +411,18 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 			<td class="key" nowrap="nowrap"><label for="sid"><?php echo JText::_( 'MELDELISTE_BRETT_NR' ).' '.($i+1).' : '; ?></label>
 			</td>
 		<td>
-		  <select size="1" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo $i+1; ?>">
+		  <select size="1" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo 'spieler'.($i+1); ?>" onChange="insertPosition(this,'<?php echo $insert_key[$i]; ?>') ">
 			<option value="0"><?php echo JText::_( 'MELDELISTE_SPIELER_AUSWAEHLEN'); ?></option>
 			<?php for ($x=0; $x < $max[0]->max; $x++) { ?>
 			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps.'-'.$row_spl[$x]->dwz.'-'.$row_spl[$x]->dwz_I0;; ?>" <?php 
 			  if ($countryversion == "de") {
-				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php } ?>><?php 
+				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ((int)$row_sel[$i]->mgl_nr) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php }  
 			  } else {			
-				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ($row_sel[$i]->PKZ) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php } ?>><?php 
-			  }
+				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ($row_sel[$i]->PKZ) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php }  
+			  } ?>><?php
 				echo $row_spl[$x]->name.'&nbsp;-&nbsp;&nbsp;'.$row_spl[$x]->id; ?></option> 
 			<?php }	?>
+			<option value="9999"><?php echo JText::_( 'MELDELISTE_POSITION_EINFUEGEN'); ?></option>
 		  </select>
 		</td>
 		<td align="center">

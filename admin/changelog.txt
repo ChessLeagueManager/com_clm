@@ -15,6 +15,7 @@ $ -> Language fix or change
 - - - - - 3.5.2 - [xx-xx-2018] - - - - - - - - - - - - - - - - - - - -
 # Admin-View Meldeliste: Prüfung doppelte Spieler
 # Admin-View Ergebnismeldung: Turnierwertung ändern insb. Wertpunkte
++ Admin-View Meldeliste: Einfügen Spieler
 
 - - - - - 3.5.1 - [13-03-2018] - - - - - - - - - - - - - - - - - - - -
 # View Turnierplayer: Link zur ECF (engl. Anwendung)
