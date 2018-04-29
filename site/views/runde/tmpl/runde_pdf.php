@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -287,31 +287,33 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 // Ergebnis Mannschaft
 		$breite1 = 38;
 		if (!$cr) $pdf->SetX($xx1); else $pdf->SetX($xx2);
-		if (($hsum + $gsum) != 0) {
-		$pdf->Cell(4,$zelle+1,'','LTB',0);
-		$pdf->Cell($breite1,$zelle+1,$hsum,'TB',0,'C');
-		$pdf->Cell(5,$zelle+1,' - ',1,0,'C');
-		$pdf->Cell($breite1,$zelle+1,$gsum,'TB',0,'C');
-		$pdf->Cell(4,$zelle+1,'','RTB',1);
-		//$z2+=2;
-		if (($hsum == $gsum) AND ($runden_modus == 4 OR $runden_modus == 5)) {
-			$ztext = "";
-			if ($paar[$y]->ko_decision == 1) {
-				if ($paar[$y]->wertpunkte > $paar[$y]->gwertpunkte) $ztext = JText::_('ROUND_DECISION_WP_HEIM')." ".$paar[$y]->wertpunkte." : ".$paar[$y]->gwertpunkte." für ".$paar[$y]->hname; 
-				else $ztext = JText::_('ROUND_DECISION_WP_GAST')." ".$paar[$y]->gwertpunkte." : ".$paar[$y]->wertpunkte." für ".$paar[$y]->gname; }
-			if ($paar[$y]->ko_decision == 2) $ztext = JText::_('ROUND_DECISION_BLITZ_HEIM')." ".$paar[$y]->hname;
-			if ($paar[$y]->ko_decision == 3) $ztext = JText::_('ROUND_DECISION_BLITZ_GAST')." ".$paar[$y]->gname; 
-			if ($paar[$y]->ko_decision == 4) $ztext = JText::_('ROUND_DECISION_LOS_HEIM')." ".$paar[$y]->hname;
-			if ($paar[$y]->ko_decision == 5) $ztext = JText::_('ROUND_DECISION_LOS_GAST')." ".$paar[$y]->gname; 		
-			if (!$cr) $pdf->SetX($xx1); else $pdf->SetX($xx2);
+		//if (($hsum + $gsum) != 0) {
+		if (!is_null($paar[$y]->brettpunkte)) {
 			$pdf->Cell(4,$zelle+1,'','LTB',0);
-			$pdf->Cell($breite1*2+5,$zelle+1,utf8_decode($ztext),'TB',0,'L');
+			$pdf->Cell($breite1,$zelle+1,$hsum,'TB',0,'C');
+			$pdf->Cell(5,$zelle+1,' - ',1,0,'C');
+			$pdf->Cell($breite1,$zelle+1,$gsum,'TB',0,'C');
 			$pdf->Cell(4,$zelle+1,'','RTB',1);
-		}}
-	else {
-		$pdf->Cell(4,$zelle+1,'','LTB',0);
-		$pdf->Cell($breite1*2+5,$zelle+1,JText::_('NO_RESULT_YET'),'TB',0,'L');
-		$pdf->Cell(4,$zelle+1,'','RTB',1);
+			//$z2+=2;
+			if (($hsum == $gsum) AND ($runden_modus == 4 OR $runden_modus == 5)) {
+				$ztext = "";
+				if ($paar[$y]->ko_decision == 1) {
+					if ($paar[$y]->wertpunkte > $paar[$y]->gwertpunkte) $ztext = JText::_('ROUND_DECISION_WP_HEIM')." ".$paar[$y]->wertpunkte." : ".$paar[$y]->gwertpunkte." für ".$paar[$y]->hname; 
+					else $ztext = JText::_('ROUND_DECISION_WP_GAST')." ".$paar[$y]->gwertpunkte." : ".$paar[$y]->wertpunkte." für ".$paar[$y]->gname; }
+				if ($paar[$y]->ko_decision == 2) $ztext = JText::_('ROUND_DECISION_BLITZ_HEIM')." ".$paar[$y]->hname;
+				if ($paar[$y]->ko_decision == 3) $ztext = JText::_('ROUND_DECISION_BLITZ_GAST')." ".$paar[$y]->gname; 
+				if ($paar[$y]->ko_decision == 4) $ztext = JText::_('ROUND_DECISION_LOS_HEIM')." ".$paar[$y]->hname;
+				if ($paar[$y]->ko_decision == 5) $ztext = JText::_('ROUND_DECISION_LOS_GAST')." ".$paar[$y]->gname; 		
+				if (!$cr) $pdf->SetX($xx1); else $pdf->SetX($xx2);
+				$pdf->Cell(4,$zelle+1,'','LTB',0);
+				$pdf->Cell($breite1*2+5,$zelle+1,utf8_decode($ztext),'TB',0,'L');
+				$pdf->Cell(4,$zelle+1,'','RTB',1);
+			}
+		}
+		else {
+			$pdf->Cell(4,$zelle+1,'','LTB',0);
+			$pdf->Cell($breite1*2+5,$zelle+1,JText::_('NO_RESULT_YET'),'TB',0,'L');
+			$pdf->Cell(4,$zelle+1,'','RTB',1);
 		}
 		if ($paar[$y]->comment != "") { 
 			$paar[$y]->comment = str_replace($a_html,$a_pdf,$paar[$y]->comment);
