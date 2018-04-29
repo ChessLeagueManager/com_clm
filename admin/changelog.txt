@@ -17,6 +17,7 @@ $ -> Language fix or change
 # Admin-View Ergebnismeldung: Turnierwertung ändern insb. Wertpunkte
 + Admin-View Meldeliste: Einfügen Spieler
 + Admin-View Mannschaft: Mannschaft annullieren
+# View Runde / View Info: Code-Nachbesserungen
 
 - - - - - 3.5.1 - [13-03-2018] - - - - - - - - - - - - - - - - - - - -
 # View Turnierplayer: Link zur ECF (engl. Anwendung)

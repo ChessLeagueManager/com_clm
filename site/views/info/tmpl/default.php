@@ -24,7 +24,7 @@ $db->setQuery ($sql);
 $saisonpunkte = $db->loadObjectList ();
 if (isset($saisonpunkte[0])) $ligapunkte = $saisonpunkte[0];
 
-if ($saison[0]->dsb_datum  > 0) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $saison[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F')));  
+if ($saison[0]->dsb_datum  > 0) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $saison[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F'));  
 if (($saison[0]->dsb_datum == 0) || (!isset($saison))) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_UNCLEAR');  
 
 // Stylesheet laden
