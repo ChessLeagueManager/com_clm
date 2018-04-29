@@ -244,7 +244,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 					alert( "<?php echo JText::_( 'MELDELISTE_LAST_POSITION' ); ?>" );
 					spieler.value = selvalue;
 				} else {
-					for ( var ispieler = number; ispieler > selNumber; ispieler--) {
+					for ( var ispieler = Number(number); ispieler > selNumber; ispieler--) {
 						var jspieler = ispieler - 1;
 						var jjspieler = "spieler"+jspieler;
 						if (jspieler == selNumber) 
@@ -295,6 +295,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ($row_sel[$i]->PKZ) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { $insert_key[$i] = $insert_value; }  
 			 } 
 		 }
+		 if (!isset($insert_key[$i])) $insert_key[$i] = '0';
 		}
 	}
  ?>
@@ -400,6 +401,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ($row_sel[$i]->PKZ) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { $insert_key[$i] = $insert_value; }  
 			 } 
 		 }
+		 if (!isset($insert_key[$i])) $insert_key[$i] = '0';
 		}
 	}
  ?>
