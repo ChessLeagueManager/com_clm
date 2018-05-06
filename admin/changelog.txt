@@ -18,6 +18,7 @@ $ -> Language fix or change
 + Admin-View Meldeliste: Einfügen Spieler
 + Admin-View Mannschaft: Mannschaft annullieren
 # View Runde / View Info: Code-Nachbesserungen
+^ pdf-Ausgaben: Klasse FPDF 1.6 durch FPDF 1.81 wegen PHP 7.2 ersetzt
 
 - - - - - 3.5.1 - [13-03-2018] - - - - - - - - - - - - - - - - - - - -
 # View Turnierplayer: Link zur ECF (engl. Anwendung)
