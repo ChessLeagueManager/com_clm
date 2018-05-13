@@ -464,7 +464,7 @@
 						$sumTiebr[$tb] = $array_PlayerBPunkte[$s];
 						if (isset($abzug[0])) $sumTiebr[$tb] = $sumTiebr[$tb] - $abzug[0]->bpabzug;
 						break;
-					case 6: // berliner wertung
+					case 10: // berliner wertung
 						$sumTiebr[$tb] = $array_PlayerBerlWertung[$s];
 						break;
 					case 11: // bhhlz mit 1 streichresultat

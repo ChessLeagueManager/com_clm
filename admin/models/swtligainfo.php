@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -268,9 +268,9 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 			 5 ->  23	 Sonneborn-Berger
 			14 ->  4	 Anzahl der Siege
 			15 -> 25     Direkter Vergleich
-			16 ->  6	 Berliner Wertung
-			18 ->  6	 Berliner Wertung (dir. Vergleich) */
-		$clm_fein = array (0 => 0, 2 => 5, 3 => 1, 4 => 2, 5 => 23, 14 => 4, 15 => 25, 16 => 6, 18 => 6);
+			16 -> 10	 Berliner Wertung    (alt 6)
+			18 -> 10	 Berliner Wertung (dir. Vergleich)   (alt 6) */
+		$clm_fein = array (0 => 0, 2 => 5, 3 => 1, 4 => 2, 5 => 23, 14 => 4, 15 => 25, 16 => 10, 18 => 10);
 		
 		$swt_data['tiebr1'] = $clm_fein[$man_zweit];
 		$swt_data['tiebr2'] = $clm_fein[$man_dritt];

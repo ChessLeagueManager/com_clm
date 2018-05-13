@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -202,7 +202,7 @@ $ordering = $this->default['ordering'];
 							<option value="23" <?php if ($this->swt_data['tiebr1'] == 23) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_23' );?></option>
 							<option value="4" <?php if ($this->swt_data['tiebr1'] == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_4' );?></option>
 							<option value="5" <?php if ($this->swt_data['tiebr1'] == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_5' );?></option>
-							<option value="6" <?php if ($this->swt_data['tiebr1'] == 6) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_6' );?></option>
+							<option value="10" <?php if ($this->swt_data['tiebr1'] == 10) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_10' );?></option>
 							<option value="3" <?php if ($this->swt_data['tiebr1'] == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_3' );?></option>
 							<option value="25" <?php if ($this->swt_data['tiebr1'] == 25) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_25' );?></option>
 						</select>
@@ -220,7 +220,7 @@ $ordering = $this->default['ordering'];
 							<option value="23" <?php if ($this->swt_data['tiebr2'] == 23) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_23' );?></option>
 							<option value="4" <?php if ($this->swt_data['tiebr2'] == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_4' );?></option>
 							<option value="5" <?php if ($this->swt_data['tiebr2'] == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_5' );?></option>
-							<option value="6" <?php if ($this->swt_data['tiebr2'] == 6) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_6' );?></option>
+							<option value="10" <?php if ($this->swt_data['tiebr2'] == 10) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_10' );?></option>
 							<option value="3" <?php if ($this->swt_data['tiebr2'] == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_3' );?></option>
 							<option value="25" <?php if ($this->swt_data['tiebr2'] == 25) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_25' );?></option>
 						</select>
@@ -239,7 +239,7 @@ $ordering = $this->default['ordering'];
 							<option value="23" <?php if ($this->swt_data['tiebr3'] == 23) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_23' );?></option>
 							<option value="4" <?php if ($this->swt_data['tiebr3'] == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_4' );?></option>
 							<option value="5" <?php if ($this->swt_data['tiebr3'] == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_5' );?></option>
-							<option value="6" <?php if ($this->swt_data['tiebr3'] == 6) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_6' );?></option>
+							<option value="10" <?php if ($this->swt_data['tiebr3'] == 10) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_10' );?></option>
 							<option value="3" <?php if ($this->swt_data['tiebr3'] == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_3' );?></option>
 							<option value="25" <?php if ($this->swt_data['tiebr3'] == 25) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_25' );?></option>
 						</select>

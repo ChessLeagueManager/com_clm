@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -161,6 +161,9 @@ class CLMText {
 				break;
 			case 9: // TWZ Schnitt
 				$format = "%01.0f";
+				break;
+			case 10: // Berliner Wertung
+				$format = "%01.1f";
 				break;
 			case 11: // Buchholz 1 Streichresultat
 				$format = "%01.1f";
