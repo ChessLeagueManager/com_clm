@@ -20,6 +20,7 @@ $ -> Language fix or change
 # View Runde / View Info: Code-Nachbesserungen
 ^ pdf-Ausgaben: Klasse FPDF 1.6 durch FPDF 1.81 wegen PHP 7.2 ersetzt
 # MTurnier: Berliner Wertung technisch umgestellt
+^ count-Funktion und PHP 7.2
 
 - - - - - 3.5.1 - [13-03-2018] - - - - - - - - - - - - - - - - - - - -
 # View Turnierplayer: Link zur ECF (engl. Anwendung)
