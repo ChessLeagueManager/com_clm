@@ -1,8 +1,14 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 // CLM als aktiv markieren, Major.Minor.Patch:Datenbankversion
 // WICHTIG: Gibt es eine neue Datenbankversion,
 // müssen die Änderungen auch in der install.sql eingebracht werden.
-define("clm", "3.5.1:29");
+define("clm", "3.5.2:29");
 if (!defined("DS")) {
 	define('DS', DIRECTORY_SEPARATOR);
 }
