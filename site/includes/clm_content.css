@@ -256,7 +256,7 @@
 /** Darstellung der Turnierteilnehmer **/
 /***************************************/
 
-#turnier_player .tp_col_1 { }
+#turnier_player .tp_col_1 { width:100px; }
 #turnier_player .tp_col_2 {  text-align: center;}
 #turnier_player .tp_col_3 { }
 #turnier_player .tp_col_3c { }

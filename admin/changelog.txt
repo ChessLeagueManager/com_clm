@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.6.0 - [xx-xx-2018] - - - - - - - - - - - - - - - - - - - -
+^ View Turnier-Spieler: Mini-Designänderung
+
 - - - - - 3.5.2 - [14-05-2018] - - - - - - - - - - - - - - - - - - - -
 # Admin-View Meldeliste: Prüfung doppelte Spieler
 # Admin-View Ergebnismeldung: Turnierwertung ändern insb. Wertpunkte
