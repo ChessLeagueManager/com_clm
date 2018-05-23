@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.6.0 - [xx-xx-2018] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.6.0 - [23-05-2018] - - - - - - - - - - - - - - - - - - - -
 ^ View Turnier-Spieler: Mini-Designänderung
 # SWM-Import: Feld Typ 
 
