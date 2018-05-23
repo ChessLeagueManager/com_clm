@@ -122,7 +122,9 @@ if ($debug > 0) { echo "<br><br>-- Spielerdaten --";	}
 		} elseif ($paramuseAsTWZ == 2) {
 			if ($tab_record['out'][2003][0]  > 0) { $twz = $tab_record['out'][2003][0]; } //FIDEelo; 
 			else { $twz = $tab_record['out'][2004][0]; } //start_dwz;
-		} else $twz = 0;	
+		} else $twz = 0;
+		// Feld Typ überschreibt Feld Titel, falls dieses leer ist													
+		if ($tab_record['out'][2002][0] == '') $tab_record['out'][2002][0] = $tab_record['out'][2045][0];
 if ($debug > 2) { echo "<br>paramuseAsTWZ: $paramuseAsTWZ  twz: $twz  tab_player: ";	var_dump($tab_record); }
 		$tab_record['out'][2008][0] = substr($tab_record['out'][2008][0],0,4); //Geburtsjahr
 		$name = $tab_record['out'][2040][0].",".$tab_record['out'][2041][0];
