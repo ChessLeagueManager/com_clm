@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -524,7 +524,7 @@ $turParams = new clm_class_params($this->turnier->params);
 						<?php echo JText::_('OPTION_PLAYER_VIEW_DISPLAY_SEX'); ?>:
 					</td>
 					<td class="paramlist_value"><fieldset class="radio">
-						<?php echo JHtml::_('select.booleanlist', 'params[playerViewDisplaySex]', 'class="inputbox"', $turParams->get('playerViewDisplaySex', 1)); ?>
+						<?php echo JHtml::_('select.booleanlist', 'params[playerViewDisplaySex]', 'class="inputbox"', $turParams->get('playerViewDisplaySex', 0)); ?>
 					</fieldset></td>
 				</tr>
 				<tr>
@@ -532,7 +532,7 @@ $turParams = new clm_class_params($this->turnier->params);
 						<?php echo JText::_('OPTION_PLAYER_VIEW_DISPLAY_BIRTH_YEAR'); ?>:
 					</td>
 					<td class="paramlist_value"><fieldset class="radio">
-						<?php echo JHtml::_('select.booleanlist', 'params[playerViewDisplayBirthYear]', 'class="inputbox"', $turParams->get('playerViewDisplayBirthYear', 1)); ?>
+						<?php echo JHtml::_('select.booleanlist', 'params[playerViewDisplayBirthYear]', 'class="inputbox"', $turParams->get('playerViewDisplayBirthYear', 0)); ?>
 					</fieldset></td>
 				</tr>
 				

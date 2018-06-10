@@ -66,6 +66,8 @@ if ($debug > 1) { echo "<br>tour: ";	var_dump($tour); }
 			$valueS .= ",'".clm_core::$db->escape($tour[0])."'";
 		}
 	}
+	$params_array[] = 'playerViewDisplaySex=0';
+	$params_array[] = 'playerViewDisplayBirthYear=0';	
 if ($debug > 2) { echo "<br>params_array: ";	var_dump($params_array); }
 	$params = implode("\n", $params_array);
 	$keyS .= ', `params`';
