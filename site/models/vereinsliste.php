@@ -64,7 +64,7 @@ class CLMModelVereinsliste extends JModelLegacy
 		$query .= ' ORDER BY c.Verband ASC, '.$filter_order.' '.$filter_order_Dir;
 	}
 		
-	$cnt_qry = count ($query);
+	//$cnt_qry = count ($query);
 	
 	return $query;
 	}
