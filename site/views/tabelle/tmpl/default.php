@@ -49,12 +49,30 @@ if ($sid == 0) {
  
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-// require_once(JPATH_COMPONENT.DS.'includes'.DS.'image_path.php');
+	
+	// Browsertitelzeile setzen
+	$doc =JFactory::getDocument();
+	$doc->setTitle(JText::_('Tabelle').' '.$liga[0]->name);
+
+	// Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$pdf_melde = $config->pdf_meldelisten;
+	$man_showdwz = $config->man_showdwz;
+
+		// Userkennung holen
+	$user	=JFactory::getUser();
+	$jid	= $user->get('id');
 
 echo '<div id="clm"><div id="rangliste">';
 
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php');
+
+$archive_check = clm_core::$api->db_check_season_user($sid);
+if (!$archive_check) {
+	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+}
 // schon veröffentlicht
-if (!$liga OR $liga[0]->published == 0) {
+elseif (!$liga OR $liga[0]->published == 0) {
 	
 	echo CLMContent::clmWarning(JText::_('NOT_PUBLISHED')."<br/>".JText::_('GEDULD'));
 
@@ -68,20 +86,6 @@ if (!$liga OR $liga[0]->published == 0) {
 	echo CLMContent::clmWarning(JText::_('TOURNAMENT_TABLENOTAVAILABLE')."<br />".$link->makeLink(JText::_('PAAR_OVERVIEW')));
 
 } else {
-
-	// Browsertitelzeile setzen
-	$doc =JFactory::getDocument();
-	$doc->setTitle(JText::_('Tabelle').' '.$liga[0]->name);
-
-
-	// Konfigurationsparameter auslesen
-	$config = clm_core::$db->config();
-	$pdf_melde = $config->pdf_meldelisten;
-	$man_showdwz = $config->man_showdwz;
-
-		// Userkennung holen
-	$user	=JFactory::getUser();
-	$jid	= $user->get('id');
 
 	// Array für DWZ Schnitt setzen
 	$dwz = array();
@@ -113,8 +117,6 @@ if (!$liga OR $liga[0]->published == 0) {
 
 	</div></div>
 	<div class="clr"></div>
-
-	<?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
 
 	<br>
 

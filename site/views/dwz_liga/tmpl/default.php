@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -11,7 +11,6 @@
 */
 
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip', $params);
 JHtml::_('behavior.tooltip', '.CLMTooltip');
 
 $liga		= $this->liga;
@@ -58,7 +57,11 @@ if (!isset($dwz_date) OR $params[$dwz_date] == '0000-00-00' OR $params[$dwz_date
 	$hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_LEAGUE').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $params[$dwz_date], JText::_('DATE_FORMAT_CLM_F'));  
 }
 
-if ( !$dwz OR $dwz[0]->published == "0") { echo '<br><div class="wrong">'. JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD') .'</div><br>'; } 
+$archive_check = clm_core::$api->db_check_season_user($sid);
+if (!$archive_check) {
+	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+}
+elseif ( !$dwz OR $dwz[0]->published == "0") { echo '<br><div class="wrong">'. JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD') .'</div><br>'; } 
 else {
 
 ?>
@@ -177,10 +180,10 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 </tr>
 <?php } ?>
 </table>
-<?php }} ?>
+<?php } ?>
 
 <?php echo '<div class="hint">'.$hint_dwzdsb.'</div>'; ?>
-
+<?php } ?>
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); ?>
 <div class="clr"></div>
 </div>

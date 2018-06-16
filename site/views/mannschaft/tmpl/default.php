@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -101,7 +101,6 @@ if ( $mannschaft[0]->published == 0) {
 	$link = 'index.php?option='.$option.'&view=info&Itemid='.$itemid;
 	$mainframe->redirect( $link, $msg );
 	}
-if ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) {
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
@@ -149,10 +148,18 @@ $attr = clm_core::$api->db_lineup_attr($lid);
 
 <div >
 <div id="mannschaft">
+<?php
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php');
+
+$archive_check = clm_core::$api->db_check_season_user($sid);
+if (!$archive_check) {
+	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+}
+// Liga schon veröffentlicht
+elseif ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) { ?>
 
     <div class="componentheading"><?php echo $mannschaft[0]->name; ?> - <?php echo $mannschaft[0]->liga_name; ?></div>
 
-<?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
     <?php if ($mannschaft[0]->zps != "0") { ?>
 		<div class="clmbox">
 		<a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $mannschaft[0]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('TEAM_DETAILS') ?></a>
@@ -571,7 +578,7 @@ for ($x=0; $x< 100; $x++){
     </tr>
     <?php } ?>
     </table>
-    <?php }} ?>
+    <?php } ?>
     <br>
     
     <?php if ( ($mannschaft[0]->lokal ==! false) and ($googlemaps_msch == "1")  and ($googlemaps == "1") ) { ?>
@@ -583,8 +590,8 @@ for ($x=0; $x< 100; $x++){
     <?php echo '<div class="hint">'.$hint_dwzdsb.'</div><br>'; ?>
 
     <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); ?>
+  <?php } ?>
 
 <div class="clr"></div>
 </div>
 </div>
- 

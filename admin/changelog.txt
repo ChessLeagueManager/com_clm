@@ -14,6 +14,7 @@ $ -> Language fix or change
 
 - - - - - 3.6.1 - [xx-xx-2018] - - - - - - - - - - - - - - - - - - - -
 ^ Geburtsjahr: Anzeige-Standard nein
+^ Archivdaten: Anzeige der Daten der Vorjahre nur für registrierte Benutzer (optional)
 
 - - - - - 3.6.0 - [23-05-2018] - - - - - - - - - - - - - - - - - - - -
 ^ View Turnier-Spieler: Mini-Designänderung

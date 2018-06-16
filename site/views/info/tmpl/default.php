@@ -43,8 +43,11 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
 
 <?php 
-//$weiss		= $this->weiss;
-//$schwarz	= $this->schwarz;
+$archive_check = clm_core::$api->db_check_season_user($sid);
+if (!$archive_check) {
+	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+}
+else {
 $remis		= $this->remis;
 $kampflos	= $this->kampflos;
 $heim		= $this->heim;
@@ -307,7 +310,7 @@ if ($count == 1) { ?>
 echo "<div>" . ' ' ."</div>";  } ?>
 
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); ?>
-
+<?php } ?>
 <div class="clr"></div>
 </div>
 </div>

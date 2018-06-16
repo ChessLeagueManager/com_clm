@@ -70,14 +70,6 @@ if ($sid == 0) {
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
-echo '<div ><div id="rangliste">';
-
-if (!$liga OR $liga[0]->published == "0") {
-	
-	echo "<div id='wrong'>".JText::_('NOT_PUBLISHED')."<br>".JText::_('GEDULD')."</div>";
-
-} else {
-
 	// Browsertitelzeile setzen
 	$doc =JFactory::getDocument();
 	$doc->setTitle(JText::_('RANGLISTE').' '.$liga[0]->name);
@@ -90,6 +82,21 @@ if (!$liga OR $liga[0]->published == "0") {
 		// Userkennung holen
 	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
+
+echo '<div ><div id="rangliste">';
+
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php');
+
+$archive_check = clm_core::$api->db_check_season_user($sid);
+if (!$archive_check) {
+	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+}
+// schon veröffentlicht
+elseif (!$liga OR $liga[0]->published == "0") {
+	
+	echo "<div id='wrong'>".JText::_('NOT_PUBLISHED')."<br>".JText::_('GEDULD')."</div>";
+
+} else {
 
 	// Array für DWZ Schnitt setzen
 	$dwz = array();
@@ -138,8 +145,6 @@ if (!$liga OR $liga[0]->published == "0") {
 	?>
 	</div></div>
 	<div class="clr"></div>
-
-	<?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
 
 	<br>
 

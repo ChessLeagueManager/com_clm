@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -11,7 +11,6 @@
 */
 
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip', $params);
 JHtml::_('behavior.tooltip', '.CLMTooltip');
 
 // Variblen aus URL holen
@@ -66,6 +65,13 @@ if (form.select.options[index].value != "0") {
 location=form.select.options[index].value;}}
 //-->
 </script>
+
+<?php
+$archive_check = clm_core::$api->db_check_season_user($sid);
+if (!$archive_check) {
+	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+}
+else { ?>
 
 <div class="clmbox">
         <span class="left">
@@ -369,6 +375,7 @@ echo '<div class="hint">'.$hint_dwzdsb.'</div>';
 
 echo '<div class="clr"></div>';
 echo '</div>';
+	}
 echo '</div>';
 
 ?>

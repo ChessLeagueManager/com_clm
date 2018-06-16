@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -87,7 +87,12 @@ echo '<div ><div id="turnier_paarungsliste">';
 // componentheading vorbereiten
 $heading = $this->turnier->name.": ".JText::_('TOURNAMENT_PAIRINGLIST');
 
-if ( $this->turnier->published == 0) { 
+$archive_check = clm_core::$api->db_check_season_user($this->turnier->sid);
+if (!$archive_check) {
+	echo CLMContent::componentheading($heading);
+	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
+	echo CLMContent::clmWarning(JText::_('NO_ACCESS')."<br/>".JText::_('NOT_REGISTERED'));
+} elseif ( $this->turnier->published == 0) { 
 	echo CLMContent::componentheading($heading);
 	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
 

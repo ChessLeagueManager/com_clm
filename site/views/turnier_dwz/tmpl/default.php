@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2018 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -11,7 +11,6 @@
 */
 
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip', $params);
 JHtml::_('behavior.tooltip', '.CLMTooltip');
 
 // Stylesheet laden
@@ -19,9 +18,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 // Konfigurationsparameter auslesen
 $itemid 		= JRequest::getVar( 'Itemid' );
-// $turnierid		= JRequest::getInt('turnier','1');
 $config			= clm_core::$db->config();
-// $pdf_melde 		= $config->pdf_meldelisten;
 $fixth_ttln		= $config->fixth_ttln;
 
 // CLM-Container
@@ -34,8 +31,13 @@ $params = new clm_class_params($this->turnier->params);
 $inofDWZ = $params->get("inofDWZ","0");
 $dwz_date = $params->get("dwz_date","1970-01-01");
 
-if ( $this->turnier->published == 0) { 
-   echo CLMContent::componentheading($heading);
+$archive_check = clm_core::$api->db_check_season_user($this->turnier->sid);
+if (!$archive_check) {
+	echo CLMContent::componentheading($heading);
+	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
+	echo CLMContent::clmWarning(JText::_('NO_ACCESS')."<br/>".JText::_('NOT_REGISTERED'));
+} elseif ( $this->turnier->published == 0) { 
+	echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
 	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
 

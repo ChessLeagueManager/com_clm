@@ -47,23 +47,14 @@ $option 	= JRequest::getCmd( 'option' );
 $mainframe	= JFactory::getApplication();
 $pgn		= JRequest::getInt('pgn','0'); 
   if (($pgn == 1) OR ($pgn == 2)) { 
-//echo "<br>lid:"; var_dump($lid); 	
-//echo "<br>runde:"; var_dump($runde); 	
-//echo "<br>dg:"; var_dump($dg); 	
-//echo "<br>pgn:"; var_dump($pgn); 	
 	$result = clm_core::$api->db_pgn_template($lid,$dg,$runde,$pgn,true);
-//echo '<br>result:'; var_dump($result);	
-//die();
 	JRequest::setVar('pgn',0);
 	if (!$result[1]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
 	$link = 'index.php?option='.$option.'&view=runde&saison='.$sid.'&liga='.$lid.'&dg='.$dg.'&runde='.$runde.'&pgn=0';
 	if ($item != 0) $link .= '&Itemid='.$item;
 	if ($typeid != 0) $link .= '&typeid='.$typeid;
 	$mainframe->redirect( $link, $msg );
-
-//		JFactory::getApplication()->close();
   }	
-
 
 $attr = clm_core::$api->db_lineup_attr($lid);
 
@@ -214,12 +205,17 @@ if (isset($liga[$runde-1]->datum) AND ($liga[$runde-1]->datum =='0000-00-00' OR 
 
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php');
 
-//if (
-if ( !$liga OR $liga[0]->published == "0") { 
+$archive_check = clm_core::$api->db_check_season_user($sid);
+if (!$archive_check) {
+	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+}
+// schon veröffentlicht
+elseif (!$liga OR $liga[0]->published == 0) {
+
 echo "<br>". CLMContent::clmWarning(JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD'))."<br>"; }
-else if ($liga[0]->rnd == 0){ 
+elseif ($liga[0]->rnd == 0){ 
 echo "<br>". CLMContent::clmWarning(JText::_('NO_ROUND_CREATED').'<br>'.JText::_('NO_ROUND_CREATED_HINT'))."<br>"; }
-else if ($liga[$runde - 1]->pub == 0){ 
+elseif ($liga[$runde - 1]->pub == 0){ 
 echo "<br>". CLMContent::clmWarning(JText::_('ROUND_UNPUBLISHED').'<br>'.JText::_('ROUND_UNPUBLISHED_HINT'))."<br>"; } 
 else {   ?>
 
@@ -237,7 +233,6 @@ $dwzgespielt=$this->dwzgespielt;
 $paar		=$this->paar;
  
 $summe		=$this->summe;
-//$ok=$this->ok;
 
 // Ergebnistext für flexibele Punktevergabe holen
 $erg_text = CLMModelRunde::punkte_text($liga[0]->id);
@@ -669,7 +664,7 @@ if ($liga[0]->runden_modus == 3) {
 	if ($diff == 1 AND $liga[0]->ab >1 ) { echo JText::_('ROUND_LESS_RELEGATED_TEAM'); }
 	?>
 </div>
-<?php }} // Ende Rangliste
+<?php } // Ende Rangliste
 ?>
 <?php // Wenn SL_OK dann Erklärung für Haken anzeigen (nur wenn Staffelleiter eingegeben ist)
  if (isset($liga[0]->mf_name)) {
@@ -681,7 +676,7 @@ if ($liga[0]->runden_modus == 3) {
 <br>
 <?php } ?>
 
-
+<?php } ?>
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); ?>
 
 <div class="clr"></div>

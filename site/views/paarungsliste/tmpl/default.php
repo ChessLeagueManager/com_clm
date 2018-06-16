@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -74,9 +74,14 @@ echo CLMContent::createPDFLink('paarungsliste', JText::_('PDF_PAAR'), array('sai
 </div></div>
 <div class="clr"></div>
 
-<?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
-<?php
-if ( !$liga OR $liga[0]->published == "0") {
+<?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); 
+
+$archive_check = clm_core::$api->db_check_season_user($sid);
+if (!$archive_check) {
+	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+}
+// schon veröffentlicht
+elseif (!$liga OR $liga[0]->published == 0) {
 echo "<br>".CLMContent::clmWarning(JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD'))."<br>"; }
 
 else {

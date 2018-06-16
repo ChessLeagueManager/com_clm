@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -11,13 +11,9 @@
 */
 
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip', $params);
 JHtml::_('behavior.tooltip', '.CLMTooltip');
 
 $liga		= $this->liga;
-//$sub_liga	=$this->sub_liga;
-//$sub_msch	=$this->sub_msch;
-//$sub_rnd	=$this->sub_rnd;
 $itemid		= JRequest::getInt('Itemid','1');
 $sid		= JRequest::getInt( 'saison','1');
 $lid		= JRequest::getInt('liga','1');
@@ -78,21 +74,21 @@ echo CLMContent::createPDFLink('statistik', JText::_('LEAGUE_STAT_PDF'), array('
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
 
 <?php
-if ( !$liga OR $liga[0]->published == "0") { echo '<br>'.CLMContent::clmWarning(JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD')); } 
+$archive_check = clm_core::$api->db_check_season_user($sid);
+if (!$archive_check) {
+	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+}
+elseif ( !$liga OR $liga[0]->published == "0") { echo '<br>'.CLMContent::clmWarning(JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD')); } 
 else { ?>
 	<div>
 <?php
-//$weiss		= $this->weiss;
-//$schwarz	= $this->schwarz;
 $remis		= $this->remis;
 $kampflos	= $this->kampflos;
 $heim		= $this->heim;
 $gast		= $this->gast;
 $gesamt		= $this->gesamt;
-//$spieler	= $this->spieler;
 $mannschaft	= $this->mannschaft;
 $brett		= $this->brett;
-//$wbrett		= $this->wbrett;
 $gbrett		= $this->gbrett;
 $rbrett		= $this->rbrett;
 $kbrett		= $this->kbrett;
@@ -102,7 +98,6 @@ $kvmannschaft	= $this->kvmannschaft;
 
 $sid 		= JRequest::getInt('saison','1');
 $lid 		= JRequest::getInt('liga');
-// $itemid 	= JRequest::getInt('Itemid');
 
 // Konfigurationsparameter auslesen
 $config		= clm_core::$db->config();
