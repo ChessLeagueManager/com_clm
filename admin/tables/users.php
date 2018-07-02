@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -28,6 +28,8 @@ class TableCLMUsers extends JTable
 	var $usertype	= '';
 	var $zps		= '';
 	var $mglnr		= '';
+	var $PKZ		= '';
+	var $org_exc		= '0';
 	var $mannschaft		= '';
 	var $published		= '';
 	var $bemerkungen	= '';

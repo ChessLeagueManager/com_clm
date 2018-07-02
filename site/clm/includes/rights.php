@@ -87,5 +87,6 @@ $rights["db_ordering"]=array(); // Ordering ändern
 $rights["db_pgn_export"]=array(); // pgn-Datei erstellen
 $rights["db_pgn_template"]=array(); // pgn-Template erstellen
 $rights["db_swm_import"]=array(); // Swiss-Manager-Datei importieren
+$rights["db_dewis_user"]=array(); // Online Club Check für User
 $rights["db_check_season_user"]=array(); // Online Season Check für Ligen und Turniere
 ?>

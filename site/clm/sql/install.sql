@@ -1105,6 +1105,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_user` (
   `usertype` varchar(75) NOT NULL DEFAULT '',
   `zps` varchar(5) DEFAULT NULL,
   `mglnr` varchar(5) DEFAULT NULL,
+  `PKZ` varchar(9) DEFAULT NULL,
+  `org_exc` enum('0','1') NOT NULL DEFAULT '0',
   `mannschaft` smallint(3) unsigned DEFAULT NULL,
   `published` smallint(3) unsigned DEFAULT NULL,
   `bemerkungen` text NOT NULL,

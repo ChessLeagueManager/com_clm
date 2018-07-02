@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -220,6 +220,11 @@ public static function user( &$row,$lists, $option )
 		CLMViewUsers::setUserToolbar();
 		JRequest::setVar( 'hidemainmenu', 1 );
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
+
+	// Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$conf_user_member	= $config->user_member;
+	$countryversion = $config->countryversion;
 		?>
 
 	<script language="javascript" type="text/javascript">
@@ -229,6 +234,7 @@ public static function user( &$row,$lists, $option )
 				submitform( pressbutton );
 				return;
 			}
+			var conf_user_member ="<?php echo $conf_user_member; ?>";
 			if (form.pid.value =="0") {
 			// do field validation
 			if (form.name.value == "") {
@@ -241,6 +247,10 @@ public static function user( &$row,$lists, $option )
 					alert( "<?php echo JText::_( 'USER_FUNKTION_AUSWAEHLEN', true ); ?>" );  
 				} else if ( getSelectedValue('adminForm','zps') == 0 ) {
 					alert( "<?php echo JText::_( 'USER_VEREIN_AUSWAEHLEN', true ); ?>" );
+				} else if ( conf_user_member == "1" && form.org_exc.value == "0" && form.mglnr.value == "" && form.PKZ.value == "") {
+					alert( "<?php echo JText::_( 'USER_MGLNR_PKZ_ANGEBEN', true ); ?>" );
+				} else if ( conf_user_member == "1" && form.org_exc.value == "1" && form.bem_int.value == "") {
+					alert( "<?php echo JText::_( 'USER_BEM_INT_ANGEBEN', true ); ?>" );
 				} else {
 					submitform( pressbutton );
 				}
@@ -249,13 +259,15 @@ public static function user( &$row,$lists, $option )
 				if ( getSelectedValue('adminForm','usertype') == "" ) {
 					alert( "<?php echo JText::_( 'USER_FUNKTION_AUSWAEHLEN', true ); ?>" );
 				} else if ( getSelectedValue('adminForm','zps') == 0 ) {
-				alert( "<?php echo JText::_( 'USER_VEREIN_AUSWAEHLEN', true ); ?>" );
-			} else if ( getSelectedValue('adminForm','sid') == 0 ) {
-				alert( "<?php echo JText::_( 'USER_SAISON_AUSWAEHLEN', true ); ?>" );
-			} else {
-				submitform( pressbutton );
-			}
+					alert( "<?php echo JText::_( 'USER_VEREIN_AUSWAEHLEN', true ); ?>" );
+				} else if ( getSelectedValue('adminForm','sid') == 0 ) {
+					alert( "<?php echo JText::_( 'USER_SAISON_AUSWAEHLEN', true ); ?>" );
+				} else if ( conf_user_member == "1" && form.org_exc.value == "1" && form.bem_int.value == "") {
+					alert( "<?php echo JText::_( 'USER_BEM_INT_ANGEBEN', true ); ?>" );
+				} else {
+					submitform( pressbutton );
 				}
+			}
 		}
 		 
 		</script>
@@ -333,7 +345,24 @@ public static function user( &$row,$lists, $option )
  			<input class="inputbox" type="text" name="mglnr" id="mglnr" size="30" maxlength="6" value="<?php echo $row->mglnr; ?>" /><?php echo JText::_( 'USER_EXAMPLE_MGNR' );?>
  			</td>
  		</tr>
- 
+
+		<tr>
+			<td class="key" width="20%" nowrap="nowrap">
+ 			<label for="name"><?php if ($countryversion =="de") echo JText::_( 'USER_PKZ' ).' : '; else echo JText::_( 'USER_PKZ_EN' ).' : '; ?></label>
+ 			</td>
+ 			<td>
+ 			<input class="inputbox" type="text" name="PKZ" id="PKZ" size="30" maxlength="9" value="<?php echo $row->PKZ; ?>" /><?php echo JText::_( 'USER_EXAMPLE_PKZ' );?>
+ 			</td>
+ 		</tr>
+	<?php if ($conf_user_member == 1) { ?>
+		<tr>
+			<td class="key" nowrap="nowrap"><label for="org_exc"><?php echo JText::_( 'OPTION_ORG_EXC' ).' : '; ?></label>
+			</td>
+			<td><fieldset class="radio">
+			<?php echo JHtml::_('select.booleanlist', 'org_exc', 'class="inputbox"', $row->org_exc); ?>
+			</fieldset></td>
+		</tr>
+	<?php } ?>
 		<tr>
 			<td class="key" nowrap="nowrap"><label for="sid"><?php echo JText::_( 'SAISON' ).' : '; ?></label>
 			</td>
@@ -349,14 +378,6 @@ public static function user( &$row,$lists, $option )
 			<?php echo $lists['published']; ?>
 			</fieldset></td>
 		</tr>
-		<tr>
-<!--			<td class="key" nowrap="nowrap"><label for="aktive"><?php echo JText::_( 'USER_MAIL' ).' : '; ?></label>
-			</td>
-			<td>
-			<?php //echo $lists['aktive']; ?>
-			</td>
-		</tr>
--->
 
 		</table>
 		</fieldset>

@@ -22,7 +22,7 @@ $config_order = array(
 				array("googlemaps", 0, "googlemaps_api", "googlemaps_rtype", "googlemaps_ver", "googlemaps_vrout", "googlemaps_msch", "googlemaps_mrout"), 
 				array("googlecharts", 0, "googlecharts"),
 				array("exp", 0, "tourn_comment_parse", "tourn_seed")),
-			array("data_protection", 0, "view_archive"),															  
+			array("data_protection", 0, "view_archive", "user_member"),
 			array("template", 0, "template","lesehilfe", "isis", "isis_remove_sidebar", "div", "cellin_top", "cellin_right", "cellin_bottom", "cellin_left", "border_length", "border_style", "border_color", "favicon",
 				array("table", 0, "table_pageLength","table_fontSize", "button_style"),
 				array("fix", 0, "fixth_msch", "fixth_dwz", "fixth_tkreuz", "fixth_ttab", "fixth_ttln"),
