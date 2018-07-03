@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.6.1 - [xx-xx-2018] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.6.1 - [02-07-2018] - - - - - - - - - - - - - - - - - - - -
 ^ Geburtsjahr: Anzeige-Standard nein
 + Archivdaten: Anzeige der Daten der Vorjahre nur für registrierte Benutzer (optional)
 + Benutzercheck auf Vereinszugehörigkeit (optional)
