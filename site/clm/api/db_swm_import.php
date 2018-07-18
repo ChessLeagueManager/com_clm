@@ -1,6 +1,12 @@
 <?php
 /**
-* Import einer Turnierdatei vom Swiss-Manager ( zur Zeit nur TUNx = Einzelturnier im CH-Modus
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+ *
+ * Import einer Turnierdatei vom Swiss-Manager 
+ * zur Zeit nur TUNx = Einzelturnier im CH-Modus und TURx = Einzelturnier als Vollturnier
 */
 function clm_api_db_swm_import($file,$season,$turnier,$group=false,$update=false,$test=false) {
     $lang = clm_core::$lang->swm_import;
@@ -52,9 +58,11 @@ if ($debug > 1) { echo "<br>tournament2: ";	var_dump($tournament2); }
 	if ($tournament['out'][65][0] > '') $name = $tournament['out'][65][0]; // Turniername
 	else $name = $tournament['out'][12][0];
 	$tournament["out"][213] = transcode_fidecorrect($tournament2["out"][213]); // optionTiebreakersFideCorrect
-	
+	$typ = '1';
+	if (strpos($file,'.TUR') > 0 OR strpos($file,'.tur') > 0 ) $typ = '2';
+ 
 	$keyS = '`sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `name`, `bezirkTur`, `checked_out_time`';
-	$valueS = $season.", 1, 1, 1, 0, 1, '".$name."', '0', '1970-01-01 00:00:00'";
+	$valueS = $season.", '".$typ."', 1, 1, 0, 1, '".$name."', '0', '1970-01-01 00:00:00'";
 	$params_array = array();
 	foreach ($tournament['out'] as $tour) {
 if ($debug > 1) { echo "<br>tour: ";	var_dump($tour); }
@@ -274,9 +282,9 @@ if ($debug > 2) { echo "<br>len: $len   substring: $substring"; }
 if ($debug > 2) { echo "<br>len: $len   output: $output  line2: ".$line[2]; }
 			$substring = hexToStr($output);
 			if (($line[2] === 'startzeit') AND (strlen($substring) < 6)) $substring .= ':00';
-			$data['out'][$line[1]][0] = utf8_encode($substring);
+			$data['out'][$line[1]][0] = addslashes(utf8_encode($substring));
 			$tnr = 't'.$line[1];
-if ($debug > 1) echo "<br>".$tnr.'/'.$lang->{$tnr}.'/'.$substring;
+if ($debug > 1) echo "<br>".$tnr.'/'.$lang->{$tnr}.'/'.$substring.'/'.$data['out'][$line[1]][0];
 			break;
 		case 'ign':
 if ($debug > 2) { echo "<br>1ign-istart: $istart"; }
@@ -609,6 +617,10 @@ if ($debug > 1) { echo "<br>streich_schwach: $streich_schwach   streich_stark: $
 	$swm = $line[0];
 	if ($line[0] == 2) {		// Buchholz ohne Parameter
 		$line[0] = 1; }
+	elseif ($line[0] == 11) {		// Direkter Vergleich
+		$line[0] = 25; }
+	elseif ($line[0] == 12) {		// Anzahl Siege
+		$line[0] = 4; }
 	elseif ($line[0] == 36) {		// Elo-Schnitt
 		if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 6; }
 		else { $line[0] = 0; } }
@@ -646,12 +658,13 @@ function transcode_ergebnis($ergebnis, $heim) {
 		4 ->  5  Weißsieg kampflos
 		5 ->  4  Schwarzsieg kampflos
 		6 ->  6  beide verlieren kampflos
-		9 ->  8	 spielfrei gewonnen  
+		8 ->  8	 spielfrei   
+		9 ->  8	 kampflos gewonnen  
 	*/
 	if ($heim == 1) 
-		$clm_array = array (0 => NULL, 1 => 1, 2 => 2, 3 => 0, 4 => 5, 5 => 4, 6 => 6, 9 => 5);
+		$clm_array = array (0 => NULL, 1 => 1, 2 => 2, 3 => 0, 4 => 5, 5 => 4, 6 => 6, 8 => 8, 9 => 5);
 	else	
-		$clm_array = array (0 => NULL, 1 => 0, 2 => 2, 3 => 1, 4 => 4, 5 => 5, 6 => 6, 9 => 4);
+		$clm_array = array (0 => NULL, 1 => 0, 2 => 2, 3 => 1, 4 => 4, 5 => 5, 6 => 6, 8 => 8, 9 => 4);
 //echo "<br>ergebnis  swm: $ergebnis  ->  clm: ";  	
 	$ergebnis = $clm_array[$ergebnis];
 //echo $ergebnis;  	

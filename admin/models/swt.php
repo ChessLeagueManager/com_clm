@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -159,7 +159,7 @@ class CLMModelSWT extends JModelLegacy {
 		jimport( 'joomla.filesystem.folder' );
 		
 		$filesDir = 'components'.DS."com_clm".DS.'swt';
-		$this->swmFiles = JFolder::files( $filesDir, '.TUNx$|.tunx$|.TUNX$', false, true );
+		$this->swmFiles = JFolder::files( $filesDir, '.TUNx$|.tunx$|.TUNX$|.TURx$|.turx$|.TURX$', false, true );
 		
 		return $this->swmFiles;
 	}
@@ -177,7 +177,7 @@ class CLMModelSWT extends JModelLegacy {
 		$src = $file['tmp_name'];
 		$dest = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR . $filename;
 		//Datei wird auf dem Server gespeichert (abfrage auf .pgn Endung)
-		if ( strtolower(JFile::getExt($filename) ) == 'tunx') {
+		if ( strtolower(JFile::getExt($filename) ) == 'tunx' OR strtolower(JFile::getExt($filename) ) == 'turx') {
 			if ( JFile::upload($src, $dest) ) {
 				$msg = JText::_( 'SWT_UPLOAD_SUCCESS' ); 
 			} else {

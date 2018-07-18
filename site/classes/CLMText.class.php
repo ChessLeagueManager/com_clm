@@ -188,7 +188,7 @@ class CLMText {
 				break;
 			case 25: // Direkter Vergleich
 				if ($value == NULL) $format = '';
-				else $format = "%01.0f";
+				else $format = "%01.1f";
 				break;
 			case 29: // Prozentpunkte
 				$format = "%01.2f";

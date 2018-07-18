@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -735,8 +735,8 @@ class CLMTournament {
 						$matchesdirect = $this->_db->loadObjectList();
 						$zdirect = count($matchesdirect);
 						foreach ($matchesdirect as $mdvalue) {
-							if ($mdvalue->ergebnis == 2 OR $mdvalue->ergebnis == 10) $sum_erg += 1;
-							elseif ($mdvalue->ergebnis == 1 OR $mdvalue->ergebnis == 5) $sum_erg += 2;
+							if ($mdvalue->ergebnis == 2 OR $mdvalue->ergebnis == 10) $sum_erg += 0.5;
+							elseif ($mdvalue->ergebnis == 1 OR $mdvalue->ergebnis == 5) $sum_erg += 1;
 						}
 					}
 				}
