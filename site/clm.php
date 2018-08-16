@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -66,6 +66,8 @@ if (clm_core::$access->getSeason() != -1) {
 	elseif (JRequest::getCmd('view',"-1") == "schedule") {
 			if (JRequest::getCmd('format',"-1") == "pdf") {
 				clm_core::$api->callStandalone("view_schedule_pdf");
+			} elseif (JRequest::getCmd('format',"-1") == "xls") {
+				clm_core::$api->callStandalone("view_schedule_xls");
 			} else {
 				$fix = clm_core::$api->callStandalone("view_schedule");
 				echo $fix[2]; 

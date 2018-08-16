@@ -1,18 +1,22 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 function clm_view_schedule($out) {
 	clm_core::$load->load_css("schedule");
 	clm_core::$load->load_css("buttons");
 	clm_core::$load->load_css("notification");
-	//clm_core::$load->load_js("report");
 	$lang = clm_core::$lang->schedule;
-	//clm_core::$cms->setTitle($lang->title.' '.$out["club"][0]->name);
 	clm_core::$cms->setTitle(html_entity_decode($lang->title." ".$out["club"][0]->name));
 
 	// Variablen initialisieren
 	$paar 		= $out["paar"];
 	$club 		= $out["club"];
 	$club_list 		= $out["club_list"];
-//echo "<br>club_list:"; var_dump($club);
+
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
@@ -47,6 +51,7 @@ location=form.select.options[index].value;}}
 	echo '<table style="width:100%"><tr><th><h4>'.$club[0]->name." - ".$club[0]->season_name; 
 	echo '</h4></th><th style="align:right">';
 	if (isset($paar[0])) echo clm_core::$load->create_link_pdf('schedule', $lang->pdf, array('layout' => 'schedule', 'season' => $paar[0]->sid, 'liga' => $paar[0]->lid, 'club' => $club[0]->zps));
+	if (isset($paar[0])) echo clm_core::$load->create_link_xls('schedule', $lang->csv, array('layout' => 'schedule', 'season' => $paar[0]->sid, 'liga' => $paar[0]->lid, 'club' => $club[0]->zps));
 	echo "</th></tr></table>";
 ?>
 <div class="flex title">

@@ -52,6 +52,7 @@ $rights["view_report"]=array();
 $rights["db_schedule"]=array();
 $rights["view_schedule"]=array();
 $rights["view_schedule_pdf"]=array();
+$rights["view_schedule_xls"]=array();
 $rights["db_be_menu"]=array();
 $rights["view_be_menu"]=array();
 $rights["view_app_info"]=array();
