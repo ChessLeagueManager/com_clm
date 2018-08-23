@@ -16,6 +16,7 @@ $ -> Language fix or change
 ^ Einzelturniere: Anzeige Direkter Vergleich
 + SWM-Import Voll-Turniere (Swiss-Manager Dateityp TURx) einschl. Update
 + Verein Saisonübersicht: CSV-Ausgabe
+# Admin-View Runden: Korrektur bis einschl. Uhrzeit
 
 - - - - - 3.6.1 - [02-07-2018] - - - - - - - - - - - - - - - - - - - -
 ^ Geburtsjahr: Anzeige-Standard nein

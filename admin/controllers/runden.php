@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -318,7 +318,6 @@ function save()
 		$ts2 = strtotime($row->datum);
 		$seconds_diff = $ts1 - $ts2;
 		$day_diff = (string) $seconds_diff/3600/24;
-		$deadlinetime = $row->deadlinetime.':00';
 		$query = " UPDATE #__clm_runden_termine "
 			." SET deadlineday = ADDDATE(datum,'".$day_diff."') "
 			." WHERE liga = ".$row->liga
@@ -329,13 +328,13 @@ function save()
 		$db->query();
 	}
 
-	if ($row->deadlinetime != '24:00') {
+	if ($row->deadlinetime != '00:00' AND $row->deadlinetime != '24:00') {
 		$deadlinetime = $row->deadlinetime.':00';
 		$query = " UPDATE #__clm_runden_termine "
 			." SET deadlinetime = '".$deadlinetime."' "
 			." WHERE liga = ".$row->liga
 			." AND sid = ".$row->sid
-			." AND deadlinetime = '24:00:00' "
+			." AND (deadlinetime = '00:00:00' OR deadlinetime = '24:00:00') "
 		;
 		$db->setQuery($query);
 		$db->query();
