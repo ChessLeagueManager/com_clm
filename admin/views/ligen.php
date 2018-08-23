@@ -742,6 +742,7 @@ class CLMViewLigen
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="params[noOrgReference]" value="<?php echo $row->params['noOrgReference']; ?>" />
 	<input type="hidden" name="params[noBoardResults]" value="<?php echo $row->params['noBoardResults']; ?>" />
+	<input type="hidden" name="ordering" value="<?php echo $row->ordering; ?>" />
 
 	<?php echo JHtml::_( 'form.token' ); ?>
 	</form>
