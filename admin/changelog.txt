@@ -18,6 +18,7 @@ $ -> Language fix or change
 + Verein Saisonübersicht: CSV-Ausgabe
 # Admin-View Runden: Korrektur bis einschl. Uhrzeit
 # Admin-View Liga: Reihenfolge-Id
++ Liga Paarungsliste: CSV-Ausgabe zur Planung (nur engl. Anwendung)
 
 - - - - - 3.6.1 - [02-07-2018] - - - - - - - - - - - - - - - - - - - -
 ^ Geburtsjahr: Anzeige-Standard nein

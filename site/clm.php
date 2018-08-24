@@ -63,6 +63,10 @@ if (clm_core::$access->getSeason() != -1) {
 			// View wurde bereits ausgegeben -> wir sind fertig
 			return;
 	} 
+	elseif (JRequest::getCmd('view',"-1") == "paarungsliste" AND JRequest::getCmd('format',"-1") == "xls") {
+			clm_core::$api->callStandalone("view_paarungsliste_xls");
+			return;
+	}
 	elseif (JRequest::getCmd('view',"-1") == "schedule") {
 			if (JRequest::getCmd('format',"-1") == "pdf") {
 				clm_core::$api->callStandalone("view_schedule_pdf");

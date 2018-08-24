@@ -59,6 +59,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 // Konfigurationsparameter auslesen
 $config			= clm_core::$db->config();
 $fe_runde_tln	= $config->fe_runde_tln;
+$countryversion	= $config->countryversion;
 ?>
 
 <div >
@@ -70,6 +71,8 @@ $fe_runde_tln	= $config->fe_runde_tln;
 <div id="pdf">
 <?php
 echo CLMContent::createPDFLink('paarungsliste', JText::_('PDF_PAAR'), array('saison' => $sid, 'layout' => 'paar', 'saison' => $liga[0]->sid, 'liga' => $liga[0]->id));
+if ($countryversion == 'en')
+	echo clm_core::$load->create_link_xls('paarungsliste', JText::_('CSV_PAAR'), array('layout' => 'paarungsliste', 'liga' => $liga[0]->id));
 ?>
 </div></div>
 <div class="clr"></div>
