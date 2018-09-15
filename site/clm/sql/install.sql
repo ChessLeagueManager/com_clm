@@ -1,3 +1,9 @@
+--
+-- @ Chess League Manager (CLM) Component 
+-- @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+-- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+-- @link http://www.chessleaguemanager.de
+--
 -- phpMyAdmin SQL Dump
 -- version 4.1.12
 -- http://www.phpmyadmin.net
@@ -76,8 +82,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_dwz_spieler` (
   `ZPS` varchar(5) NOT NULL DEFAULT '',
   `Mgl_Nr` mediumint(5) unsigned DEFAULT NULL,
   `Status` char(1) DEFAULT NULL,
-  `Spielername` varchar(40) NOT NULL DEFAULT '',
-  `Spielername_G` varchar(40) NOT NULL DEFAULT '',
+  `Spielername` varchar(50) NOT NULL DEFAULT '',
+  `Spielername_G` varchar(50) NOT NULL DEFAULT '',
   `Geschlecht` char(1) DEFAULT NULL,
   `Spielberechtigung` char(1) NOT NULL DEFAULT '',
   `Geburtsjahr` year(4) NOT NULL DEFAULT '0000',
@@ -85,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_dwz_spieler` (
   `DWZ` smallint(4) unsigned DEFAULT NULL,
   `DWZ_Index` smallint(3) unsigned DEFAULT NULL,
   `FIDE_Elo` smallint(4) unsigned DEFAULT NULL,
-  `FIDE_Titel` char(2) DEFAULT NULL,
+  `FIDE_Titel` char(3) DEFAULT NULL,
   `FIDE_ID` int(8) unsigned DEFAULT NULL,
   `FIDE_Land` char(3) DEFAULT NULL,
   `DWZ_neu` smallint(4) unsigned NOT NULL default '0',
@@ -128,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_dwz_vereine` (
   `ZPS` varchar(5) NOT NULL DEFAULT '',
   `LV` char(1) NOT NULL DEFAULT '',
   `Verband` varchar(4) NOT NULL DEFAULT '',
-  `Vereinname` varchar(40) NOT NULL DEFAULT '',
+  `Vereinname` varchar(60) NOT NULL DEFAULT '',
   UNIQUE KEY `sid_ZPS` (`sid`,`ZPS`),
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
