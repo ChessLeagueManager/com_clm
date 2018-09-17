@@ -21,6 +21,7 @@ $ -> Language fix or change
 + Liga Paarungsliste: CSV-Ausgabe zur Planung (nur engl. Anwendung)
 ^ DB-Felder: Vereinsname, Spielername und FIDE-Titel erweitert 
 + Direkt-Update DSB-daten: Prüfung auf Update erfolgreich
+# Rundenmanager: Runden bearbeiten für aktuelle Liga
 
 - - - - - 3.6.1 - [02-07-2018] - - - - - - - - - - - - - - - - - - - -
 ^ Geburtsjahr: Anzeige-Standard nein

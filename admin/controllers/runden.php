@@ -603,7 +603,7 @@ function saveOrder(  )
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
-	public static function paarung()
+public static function paarung()
 	{
 	JRequest::checkToken() or die( 'Invalid Token' );
 	$mainframe	= JFactory::getApplication();
@@ -611,6 +611,8 @@ function saveOrder(  )
 	$db 		=JFactory::getDBO();
 	$user 		=JFactory::getUser();
 	$cid 		= intval(JRequest::getVar( 'liga' ));
+	$filter_lid 		= intval(JRequest::getVar( 'filter_lid' ));
+	if ($filter_lid > 0 AND !is_null($filter_lid)) $cid = $filter_lid;     
 
 	$option 	= JRequest::getCmd( 'option' );
 	$section 	= JRequest::getVar( 'section' );
