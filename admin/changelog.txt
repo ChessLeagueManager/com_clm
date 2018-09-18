@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.6.2 - [xx-xx-2018] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.6.2 - [18-09-2018] - - - - - - - - - - - - - - - - - - - -
 ^ Einzelturniere: Anzeige Direkter Vergleich
 + SWM-Import Voll-Turniere (Swiss-Manager Dateityp TURx) einschl. Update
 + Verein Saisonübersicht: CSV-Ausgabe
