@@ -785,7 +785,7 @@ else {
 
 // Spielplan
 $pdf->SetFont('Times','B',$font);
-	$pdf->Ln();
+	//$pdf->Ln();
 	$pdf->Cell(10,8,' ',0,0);
 	$pdf->Cell(80,8,utf8_decode(JText::_('TEAM_PLAN')),0,1,'L');
 	
