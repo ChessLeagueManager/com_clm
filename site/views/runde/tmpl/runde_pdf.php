@@ -559,5 +559,5 @@ if (isset($liga[$runde-1]->comment) AND $liga[$runde-1]->comment <> "") {
 }
 // Ausgabe
 $pdf->Output(utf8_decode($runde.".".utf8_decode(JText::_('ROUND_LETTER')).' ').utf8_decode($liga[0]->name).'.pdf','D');
-
+exit;
 ?>

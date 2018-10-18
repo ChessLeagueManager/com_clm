@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -149,6 +149,5 @@ if ($value->published == 1) {
 	
 // Ausgabe
 $pdf->Output(utf8_decode(JText::_('TOURNAMENT_PAIRINGLIST'))." ".utf8_decode($this->turnier->name).'.pdf','D');
-
-
+exit;
 ?>

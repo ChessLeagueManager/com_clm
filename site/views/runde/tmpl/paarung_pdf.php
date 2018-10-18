@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -308,5 +308,5 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 }
 // Ausgabe
 $pdf->Output(utf8_decode($runde.".".$paarung.".".utf8_decode(JText::_('PAIRING_FORM')).' ').utf8_decode($liga[0]->name).'.pdf','D');
-
+exit;
 ?>

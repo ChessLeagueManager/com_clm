@@ -205,6 +205,6 @@ $pdf->Ln();
 
 // Ausgabe
 $pdf->Output(JText::_('TEILNEHMER').' '.utf8_decode($liga[0]->name).'.pdf','D');
-
+exit;
 ?>
 

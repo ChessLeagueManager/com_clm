@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -148,5 +148,6 @@ $pdf->SetFont('Times','',$font);
 
 // PDF an Browser senden
 $pdf->Output(utf8_decode(JText::_('CLUB_RATING')).' '.utf8_decode($liga[0]->Vereinname).'.pdf','D');
+exit;
 }
 ?>

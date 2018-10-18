@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -254,5 +254,5 @@ if (isset($this->turnier->spRangName) AND $this->turnier->spRangName > '')
 	$pdf->Output(utf8_decode(JText::_('TOURNAMENT_RANKING')).' '.utf8_decode($this->turnier->name).' '.utf8_decode($this->turnier->spRangName).'.pdf','D');
 else
 	$pdf->Output(utf8_decode(JText::_('TOURNAMENT_RANKING')).' '.utf8_decode($this->turnier->name).'.pdf','D');
-
+exit;
 ?>

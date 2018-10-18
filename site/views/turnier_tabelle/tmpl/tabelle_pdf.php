@@ -129,5 +129,5 @@ if (isset($this->turnier->spRangName) AND $this->turnier->spRangName > '')
 	$pdf->Output(utf8_decode(JText::_('TOURNAMENT_TABLE')).' '.utf8_decode($this->turnier->name).' '.utf8_decode($this->turnier->spRangName).'.pdf','D');
 else
 	$pdf->Output(utf8_decode(JText::_('TOURNAMENT_TABLE')).' '.utf8_decode($this->turnier->name).'.pdf','D');
-
+exit;
 ?>

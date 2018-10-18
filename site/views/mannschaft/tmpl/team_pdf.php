@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -430,7 +430,7 @@ for ($x=0; $x< 100; $x++){
 
 // Spielplan
 $pdf->SetFont('Times','B',$font);
-	$pdf->Ln();
+	//$pdf->Ln();
 	$pdf->Cell(10,8,' ',0,0);
 	$pdf->Cell(80,8,utf8_decode(JText::_('TEAM_PLAN')),0,1,'L');
 	
@@ -479,6 +479,6 @@ $pdf->SetFont('Times','',$font);
  
 // Ausgabe
 $pdf->Output(JText::_('TEAM').' '.utf8_decode($mannschaft[0]->name).'.pdf','D');
-
+exit;
 ?>
  

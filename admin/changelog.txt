@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.6.3 - [17-10-2018] - - - - - - - - - - - - - - - - - - - -
+# pdf-Ausgaben: Zusammenspiel mit Komponente Fabrik
+
 - - - - - 3.6.2 - [18-09-2018] - - - - - - - - - - - - - - - - - - - -
 ^ Einzelturniere: Anzeige Direkter Vergleich
 + SWM-Import Voll-Turniere (Swiss-Manager Dateityp TURx) einschl. Update

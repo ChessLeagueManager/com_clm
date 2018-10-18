@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -135,6 +135,5 @@ if ( ($value->spieler != 0 AND $value->gegner != 0) OR $value->ergebnis != NULL)
 }
 // Ausgabe
 $pdf->Output(utf8_decode(JText::_('TOURNAMENT_ROUND'))." ".$this->round->nr.' '.utf8_decode($this->turnier->name).'.pdf','D');
-
-
+exit;
 ?>

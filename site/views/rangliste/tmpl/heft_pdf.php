@@ -837,5 +837,5 @@ $pdf->SetFont('Times','',$font);
 }}
 // Ausgabe
 $pdf->Output(JText::_('RANGLISTE_LIGAHEFT').' '.utf8_decode($liga[0]->name).'.pdf','D');
-
+exit;
 ?>
