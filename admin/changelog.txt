@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.6.4 - [xx-xx-2018] - - - - - - - - - - - - - - - - - - - -
+# Admin-View Mannschaftsaufstellung: Editorname
+
 - - - - - 3.6.3 - [17-10-2018] - - - - - - - - - - - - - - - - - - - -
 # pdf-Ausgaben: Zusammenspiel mit Komponente Fabrik
 

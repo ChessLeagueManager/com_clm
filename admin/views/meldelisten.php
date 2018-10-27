@@ -352,7 +352,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 	<tr>
 		<td class="key" nowrap="nowrap"><?php echo JText::_( 'MELDELISTE_LAST_UPDATE' ).' : '; ?></td>
 		<td class="key" nowrap="nowrap"><?php if (!isset($abgabe[0]->editor )) {echo "---";} 
-			else { echo $abgabe[0]->name; } ?>
+			else { echo $abgabe[0]->editor; } ?>
 		</td>
 	</tr>
 	<tr>
