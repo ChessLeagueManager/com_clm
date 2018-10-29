@@ -287,10 +287,29 @@ class CLMTournament {
 				}
 			}
 		}
+
+		// prüfen, ob mindestens 50% der Spiele gespielt wurden ab $maxround = 5 und Vollturnier
+		$gamesCount = array();
+		for ($s=0; $s<= $teil; $s++) { 		// alle Startnummern durchgehen, auch der Spieler 0
+			$gamesCount[$s] = new stdClass();
+			$gamesCount[$s]->tab = 1;
+			$gamesCount[$s]->count = 0;
+		}
+		if ($maxround > 4 AND $this->data->typ == 2) {		//nur Vollturniere
+			foreach ($matchData as $key => $value) {
+				if ($maxround < ((($value->dg - 1) * $runden) + $value->runde)) continue;  // Ignorieren von bereits gesetzten kampflos oder spielfrei in Folgerunden
+				if ($value->ergebnis != 4 AND $value->ergebnis != 6 AND $value->ergebnis != 7 AND $value->ergebnis != 8 AND !is_null($value->ergebnis)) $gamesCount[$value->tln_nr]->count++;
+			}
+			for ($s=1; $s<= $teil; $s++) { 		// alle Startnummern durchgehen
+				if ($gamesCount[$s]->count < $maxround/2) $gamesCount[$s]->tab = 0;
+			}
+		}
 		
 		// Punkte/Siege
 		// alle Matches durchgehen -> Spieler erhalten Punkte und Wins
 		foreach ($matchData as $key => $value) {
+			if ($gamesCount[$value->tln_nr]->tab == 0) continue;    //teilnehmer hat weniger als 50% der Partien gespielt
+			if ($gamesCount[$value->gegner]->tab == 0) continue;    //gegner hat weniger als 50% der Partien gespielt
 			if ($maxround < ((($value->dg - 1) * $runden) + $value->runde)) continue;  // Ignorieren von bereits gesetzten kampflos oder spielfrei in Folgerunden
 			if ($value->tln_nr == 0) continue;    //techn. Teilnehmer bei ungerader Teilnehmerzahl
 			if ($value->heim == 1) $vsieg = $sieg; else $vsieg = $siegs;
@@ -325,6 +344,8 @@ class CLMTournament {
 		// Buchholz & Sonneborn-Berger
 		// erneut alle Matches durchgehen -> Spieler erhalten Feinwertungen
 		foreach ($matchData as $key => $value) {
+			if ($gamesCount[$value->tln_nr]->tab == 0) continue;    //teilnehmer hat weniger als 50% der Partien gespielt
+			if ($gamesCount[$value->gegner]->tab == 0) continue;    //gegner hat weniger als 50% der Partien gespielt
 			if ($maxround < ((($value->dg - 1) * $runden) + $value->runde)) continue;  // Ignorieren von bereits gesetzten kampflos oder spielfrei in Folgerunden
 			//if ($value->tln_nr == 0) continue;  // Ignorieren von techn. Spielern
 			// Buchholz
