@@ -1702,8 +1702,8 @@ function save_wertung()
 
 	$w_erg		= JRequest::getVar('w_erg');
 	$s_erg		= JRequest::getVar('s_erg');
-	$ww_erg		= JRequest::getVar('ww_erg');
-	$sw_erg		= JRequest::getVar('sw_erg');
+	$ww_erg		= JRequest::getVar('ww_erg',-1);
+	$sw_erg		= JRequest::getVar('sw_erg',-1);
 	$ko_decision = JRequest::getVar( 'ko_decision');
 	$comment = JRequest::getVar( 'comment');
 	

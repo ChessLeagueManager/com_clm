@@ -15,6 +15,7 @@ $ -> Language fix or change
 - - - - - 3.6.4 - [xx-xx-2018] - - - - - - - - - - - - - - - - - - - -
 # Admin-View Mannschaftsaufstellung: Editorname
 + Einzelturniere: Teilnehmer mit weniger als 50% der Partien (FIDE §12b,c)
+# Admin-View Turnierwertung ändern: bei deaktivierter Berliner Wertung
 
 - - - - - 3.6.3 - [17-10-2018] - - - - - - - - - - - - - - - - - - - -
 # pdf-Ausgaben: Zusammenspiel mit Komponente Fabrik
