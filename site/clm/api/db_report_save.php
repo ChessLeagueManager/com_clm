@@ -121,8 +121,10 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 		$heim = $homes[$y];
 		$gast = $guests[$y];
 		$ergebnis = $results[$y];
-		$teil_heim = explode(":", $heim);
-		$teil_gast = explode(":", $gast);
+		
+		// Heim/Gast Spieler ist bei --kein Spieler-- auf "-1" (String) gesetzt
+		$teil_heim = $heim!="-1" ? explode(":", $heim) : [null,null];
+		$teil_gast = $gast!="-1" ? explode(":", $gast) : [null,null];
 		if ($countryversion =="de") {
 			$hmgl = $teil_heim[0];
 			$gmgl = $teil_gast[0];
