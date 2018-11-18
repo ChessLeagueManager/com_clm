@@ -127,7 +127,7 @@ $pdf->SetFont('Times','',14);
 		
 $pdf->SetFont('Times','',$font);
 	$pdf->Cell(10,$zelle,JText::_('MELDELISTE_NR'),0,0,'C');
-	$pdf->Cell(60,$zelle,JText::_('TEAM')."/".JText::_('CLUB_LOCATION'),0,0,'L');
+	$pdf->Cell(65,$zelle,JText::_('TEAM')."/".JText::_('CLUB_LOCATION'),0,0,'L');
 	$pdf->Cell(10,$zelle,JText::_('MELDELISTE_REGULAR'),0,0,'C');
 	$pdf->Cell($breite1,$zelle,JText::_('MELDELISTE_NAME'),0,0,'L');
 	$pdf->Cell(10,$zelle,JText::_('DWZ'),0,0,'R');
@@ -156,7 +156,7 @@ $pdf->SetFont('Times','',$font);
 //Zeile 01
 	$pdf->SetFont('Times','BU',$font+1);
 	$pdf->Cell(10,$zelle,$x+1,0,0,'C');
-	$pdf->Cell(60,$zelle,utf8_decode($mannschaft[$x]->name),0,0,'L');
+	$pdf->Cell(65,$zelle,utf8_decode($mannschaft[$x]->name),0,0,'L');
 	$pdf->SetFont('Times','',$font);
 	$zn++;
 	if ($liga[0]->anzeige_ma == 1) {
@@ -201,7 +201,7 @@ $pdf->SetFont('Times','',$font);
 	}
 //Zeile 02	
 	$pdf->Cell(10,$zelle,'',0,0,'C');
-	$pdf->Cell(60,$zelle,'',0,0,'L');
+	$pdf->Cell(65,$zelle,'',0,0,'L');
 	$zn++;
 	$zl++;
 	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
@@ -244,8 +244,8 @@ $pdf->SetFont('Times','',$font);
 //Zeile 03	
 	$pdf->Cell(10,$zelle,'',0,0,'C');
 	$pdf->Cell(14,$zelle,JText::_('MELDELISTE_CAPTAIN'),0,0,'L');
-	if ($ml<99) $pdf->Cell(46,$zelle,utf8_decode($mleiter[$ml]->mf_name),0,0,'L');
-	else $pdf->Cell(46,$zelle,JText::_('MELDELISTE_NOT_YET'),0,0,'L');
+	if ($ml<99) $pdf->Cell(51,$zelle,utf8_decode($mleiter[$ml]->mf_name),0,0,'L');
+	else $pdf->Cell(51,$zelle,JText::_('MELDELISTE_NOT_YET'),0,0,'L');
 	$zn++;
 	$zl++;
 	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
@@ -290,10 +290,10 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(14,$zelle,JText::_('MELDELISTE_PHONE'),0,0,'L');
 	if ($ml<99) 
 		if ($telefon =="1" OR ($telefon =="0" AND $jid !="0")) {
-			if (($mleiter[$ml]->tel_fest) <> '') $pdf->Cell(46,$zelle,utf8_decode($mleiter[$ml]->tel_fest),0,0,'L');
-			else $pdf->Cell(46,$zelle,JText::_('MELDELISTE_NO_DATA'),0,0,'L'); }
-		else $pdf->Cell(46,$zelle,utf8_decode(JText::_('TEAM_REGISTERED')),0,0,'L'); 
-	else $pdf->Cell(46,$zelle,'',0,0,'L');
+			if (($mleiter[$ml]->tel_fest) <> '') $pdf->Cell(51,$zelle,utf8_decode($mleiter[$ml]->tel_fest),0,0,'L');
+			else $pdf->Cell(51,$zelle,JText::_('MELDELISTE_NO_DATA'),0,0,'L'); }
+		else $pdf->Cell(51,$zelle,utf8_decode(JText::_('TEAM_REGISTERED')),0,0,'L'); 
+	else $pdf->Cell(51,$zelle,'',0,0,'L');
 	$zn++;
 	$zl++;
 	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
@@ -338,10 +338,10 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(14,$zelle,JText::_('MELDELISTE_MOBIL'),0,0,'L');
 	if ($ml<99)
 		if ($mobil =="1" OR ($mobil =="0" AND $jid !="0")) {
-			if (($mleiter[$ml]->tel_mobil) <> '') $pdf->Cell(46,$zelle,utf8_decode($mleiter[$ml]->tel_mobil),0,0,'L');
-			else $pdf->Cell(46,$zelle,JText::_('MELDELISTE_NO_DATA'),0,0,'L'); }
-		else $pdf->Cell(46,$zelle,utf8_decode(JText::_('TEAM_REGISTERED')),0,0,'L');
-	else $pdf->Cell(46,$zelle,'',0,0,'L');
+			if (($mleiter[$ml]->tel_mobil) <> '') $pdf->Cell(51,$zelle,utf8_decode($mleiter[$ml]->tel_mobil),0,0,'L');
+			else $pdf->Cell(51,$zelle,JText::_('MELDELISTE_NO_DATA'),0,0,'L'); }
+		else $pdf->Cell(51,$zelle,utf8_decode(JText::_('TEAM_REGISTERED')),0,0,'L');
+	else $pdf->Cell(51,$zelle,'',0,0,'L');
 	$zn++;
 	$zl++;
 	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
@@ -387,11 +387,11 @@ $pdf->SetFont('Times','',$font);
 	if (($ml<99)&&($mleiter[$ml]->email <> '')) {
 		if ($mail=="1" OR ($mail =="0" AND $jid !="0")) {
 			$pdf->SetFont('Times','U',$font);
-			$pdf->Cell(46,$zelle,utf8_decode($mleiter[$ml]->email),0,0,'L',0,'mailto:'.utf8_decode($mleiter[$x]->email));
+			$pdf->Cell(51,$zelle,utf8_decode($mleiter[$ml]->email),0,0,'L',0,'mailto:'.utf8_decode($mleiter[$x]->email));
 			$pdf->SetFont('Times','',$font); }
-		else $pdf->Cell(46,$zelle,utf8_decode(JText::_('TEAM_REGISTERED')),0,0,'L');
+		else $pdf->Cell(51,$zelle,utf8_decode(JText::_('TEAM_REGISTERED')),0,0,'L');
 	}
-	else $pdf->Cell(46,$zelle,'',0,0,'L');
+	else $pdf->Cell(51,$zelle,'',0,0,'L');
 	$zn++;
 	$zl++;
 	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
@@ -433,7 +433,7 @@ $pdf->SetFont('Times','',$font);
 	}
 //Zeile 07	
 	$pdf->Cell(10,$zelle,'',0,0,'C');
-	$pdf->Cell(60,$zelle,'',0,0,'L');
+	$pdf->Cell(65,$zelle,'',0,0,'L');
 	$zn++;
 	$zl++;
 	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
@@ -477,8 +477,9 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(10,$zelle,'',0,0,'C');
 	$pdf->Cell(14,$zelle,JText::_('MELDELISTE_LOCATION'),0,0,'L');
 	$man = explode(",", $mannschaft[$x]->lokal);
-	if (isset($man[0])) $pdf->Cell(46,$zelle,utf8_decode($man[0]),0,0);
-	else $pdf->Cell(46,$zelle,'',0,0);
+	//if (isset($man[0])) $pdf->Cell(51,$zelle,utf8_decode($man[0]),0,0);
+	//else 
+	$pdf->Cell(51,$zelle,'',0,0);
 	$zn++;
 	$zl++;
 	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
@@ -519,9 +520,9 @@ $pdf->SetFont('Times','',$font);
 		$pdf->Cell(50,$zelle,'',0,1,'C');
 	}
 //Zeile 09	
-	$pdf->Cell(24,$zelle,'',0,0,'C');
-	if (isset($man[1])) $pdf->Cell(46,$zelle,utf8_decode($man[1]),0,0);
-	else $pdf->Cell(46,$zelle,'',0,0);
+	$pdf->Cell(14,$zelle,'',0,0,'C');
+	if (isset($man[0])) $pdf->Cell(61,$zelle,ltrim(utf8_decode($man[0])),0,0);
+	else $pdf->Cell(61,$zelle,'',0,0);
 	$zn++;
 	$zl++;
 	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
@@ -562,9 +563,9 @@ $pdf->SetFont('Times','',$font);
 		$pdf->Cell(50,$zelle,'',0,1,'C');
 	}
 //Zeile 10	
-	$pdf->Cell(24,$zelle,'',0,0,'C');
-	if (isset($man[2])) $pdf->Cell(46,$zelle,utf8_decode($man[2]),0,0);
-	else $pdf->Cell(46,$zelle,'',0,0);
+	$pdf->Cell(14,$zelle,'',0,0,'C');
+	if (isset($man[1])) $pdf->Cell(61,$zelle,ltrim(utf8_decode($man[1])),0,0);
+	else $pdf->Cell(61,$zelle,'',0,0);
 	$zn++;
 	$zl++;
 	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
@@ -605,9 +606,9 @@ $pdf->SetFont('Times','',$font);
 		$pdf->Cell(50,$zelle,'',0,1,'C');
 	}
 //Zeile 11	
-	$pdf->Cell(24,$zelle,'',0,0,'C');
-	if (isset($man[3])) $pdf->Cell(46,$zelle,utf8_decode($man[3]),0,0);
-	else $pdf->Cell(46,$zelle,'',0,0);
+	$pdf->Cell(14,$zelle,'',0,0,'C');
+	if (isset($man[2])) $pdf->Cell(61,$zelle,ltrim(utf8_decode($man[2])),0,0);
+	else $pdf->Cell(61,$zelle,'',0,0);
 	$zn++;
 	$zl++;
 	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
@@ -648,9 +649,9 @@ $pdf->SetFont('Times','',$font);
 		$pdf->Cell(50,$zelle,'',0,1,'C');
 	}
 //Zeile 12	
-	$pdf->Cell(24,$zelle,'',0,0,'C');
-	if (isset($man[4])) $pdf->Cell(46,$zelle,utf8_decode($man[4]),0,0);
-	else $pdf->Cell(46,$zelle,'',0,0);
+	$pdf->Cell(14,$zelle,'',0,0,'C');
+	if (isset($man[3])) $pdf->Cell(61,$zelle,ltrim(utf8_decode($man[3])),0,0);
+	else $pdf->Cell(61,$zelle,'',0,0);
 	$zn++;
 	$zl++;
 	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
@@ -690,11 +691,54 @@ $pdf->SetFont('Times','',$font);
 		$yl--;
 		$pdf->Cell(50,$zelle,'',0,1,'C');
 	}
-//Zeile 13ff
+//Zeile 13	
+	$pdf->Cell(14,$zelle,'',0,0,'C');
+	if (isset($man[4])) $pdf->Cell(61,$zelle,ltrim(utf8_decode($man[4])),0,0);
+	else $pdf->Cell(61,$zelle,'',0,0);
+	$zn++;
+	$zl++;
+	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
+		&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+		$zzc++;
+		if (!isset($count[$zl]->rrang))
+			$pdf->Cell(10,$zelle,$zn,0,0,'C');
+		else
+			$pdf->Cell(10,$zelle,($count[$zl]->rrang),0,0,'C');
+		if ($pdf->GetStringWidth(utf8_decode($count[$zl]->name)) > $breite1) {
+			$htext = utf8_decode($count[$zl]->name);
+			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
+			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
+		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$zl]->name),0,0,'L');
+		$pdf->Cell(10,$zelle,$count[$zl]->dwz,0,0,'R');
+	} else { 
+		$pdf->Cell(50,$zelle,'',0,0,'C');
+		$zl--; 
+	}
+	$pdf->Cell(10,$zelle,'',0,0,'R');
+	$yn++;
+	$yl++;
+	if (isset($count[$yl]) AND (($countryversion == "de" AND $count[$yl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$yl]->PKZ > ''))
+		&&($count[$yl]->tln_nr==$mannschaft[$x]->tln_nr)) {
+		$zzc++;
+		if (!isset($count[$yl]->rrang))
+			$pdf->Cell(10,$zelle,$yn,0,0,'C');
+		else
+			$pdf->Cell(10,$zelle,($count[$yl]->rrang),0,0,'C');
+		if ($pdf->GetStringWidth(utf8_decode($count[$yl]->name)) > $breite1) {
+			$htext = utf8_decode($count[$yl]->name);
+			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
+			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
+		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$yl]->name),0,0,'L');
+		$pdf->Cell(10,$zelle,$count[$yl]->dwz,0,1,'R');
+	} else {
+		$yl--;
+		$pdf->Cell(50,$zelle,'',0,1,'C');
+	}
+//Zeile 14ff
 	while ((isset($count[$zl+1]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > '')) AND (($zn+1) <= $liga[0]->stamm)) OR
 		   (isset($count[$yl+1]) AND (($countryversion == "de" AND $count[$yl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$yl]->PKZ > '')) AND ($count[$yl+1]->tln_nr==$mannschaft[$x]->tln_nr))) {	
 	$pdf->Cell(10,$zelle,'',0,0,'C');
-	$pdf->Cell(60,$zelle,'',0,0,'L');
+	$pdf->Cell(65,$zelle,'',0,0,'L');
 	$zn++;
 	$zl++;
 	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
@@ -763,7 +807,10 @@ $pdf->SetFont('Times','',$font+1);
 	$pdf->Cell(150,$zelle,JText::_('NOTICE').' :',0,1,'B');
 	$pdf->SetFont('Times','',$font);
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
-	$pdf->MultiCell(150,$zelle,utf8_decode($liga[0]->bemerkungen),0,'L',0);
+	if ($liga[0]->bemerkungen == utf8_decode($liga[0]->bemerkungen))
+		$pdf->MultiCell(150,$zelle,utf8_decode($liga[0]->bemerkungen),0,'L',0);
+	else
+		$pdf->MultiCell(150,$zelle,iconv("UTF-8", "CP1252", $liga[0]->bemerkungen),0,'L',0);
 $pdf->Ln();
 	}
 if (isset($liga[0]->sl)) {
