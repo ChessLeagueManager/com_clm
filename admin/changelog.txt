@@ -16,6 +16,8 @@ $ -> Language fix or change
 # Admin-View Mannschaftsaufstellung: Editorname
 + Einzelturniere: Teilnehmer mit weniger als 50% der Partien (FIDE §12b,c)
 # Admin-View Turnierwertung ändern: bei deaktivierter Berliner Wertung
+# Ergebnismeldung: Handling --kein Spieler-- verbessert zur Vermeidung von Notice (284+285)
+# Mini-Korrekturen zur Vermeidung von Warnungen bei Extern-Lösung
 
 - - - - - 3.6.3 - [17-10-2018] - - - - - - - - - - - - - - - - - - - -
 # pdf-Ausgaben: Zusammenspiel mit Komponente Fabrik

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -19,6 +19,10 @@ class CLMViewMannschaft extends JViewLegacy
 		$model	  = $this->getModel();
   		$mannschaft     = $model->getCLMMannschaft();
 		$this->assignRef('mannschaft'  , $mannschaft);
+
+		$model	  = $this->getModel();
+  		$vereine     = $model->getCLMVereine();
+		$this->assignRef('vereine'  , $vereine);
 
 		$model	  = $this->getModel();
   		$count     = $model->getCLMCount();

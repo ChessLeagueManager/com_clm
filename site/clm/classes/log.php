@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 class clm_class_log {
 	private $callid;
 	public function __construct() {
@@ -65,7 +71,8 @@ class clm_class_log {
 	}
 
 	public function errorHandler($errno, $errstr, $errfile = "", $errline = "", $errcontext = "") {
-		$user = $_SERVER["HTTP_USER_AGENT"];  
+		if (isset($_SERVER["HTTP_USER_AGENT"])) $user = $_SERVER["HTTP_USER_AGENT"]; 
+		else $user = 'UNDEFINED';
 		$message = "errno:" . $errno . " errstr:" . $errstr . " errfile:" . $errfile . " errline:" . $errline . " errcontext:" . json_encode ( $errcontext ) . " Backtrace: " . clm_core::getBacktrace () . " User: " . $user;
 		switch ($errno) {
 			case E_USER_ERROR :
