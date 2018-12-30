@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -149,7 +149,7 @@ class CLMModelTurnier_Paarungsliste extends JModelLegacy {
 			foreach ($this->round_points as $pvalue) {
 			  for ($irunde=($value->nr + (($value->dg -1) * $this->turnier->runden)+ 1); $irunde < (($this->turnier->dg * $this->turnier->runden) + 1); $irunde++) {  
 				if ($pvalue->ergebnis == 1 OR $pvalue->ergebnis == 5) $point = 1;
-				elseif ($pvalue->ergebnis == 2) $point = .5;
+				elseif ($pvalue->ergebnis == 2 OR $pvalue->ergebnis == 10) $point = .5;
 				else $point = 0;
 				if (isset($this->points[$irunde][$pvalue->spieler]))  $this->points[$irunde][$pvalue->spieler] += $point;
 				else $this->points[$irunde][$pvalue->spieler] = $point;

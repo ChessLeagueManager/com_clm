@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -119,7 +119,7 @@ class CLMModelTurnier_Runde extends JModelLegacy {
 		$this->round_points = $this->_db->loadObjectList();
 		foreach ($this->round_points as $pvalue) {
 			if ($pvalue->ergebnis == 1 OR $pvalue->ergebnis == 5) $point = 1;
-			elseif ($pvalue->ergebnis == 2) $point = .5;
+			elseif ($pvalue->ergebnis == 2 OR $pvalue->ergebnis == 10) $point = .5;
 			else $point = 0;
 			if (isset($this->points[$pvalue->spieler]))  $this->points[$pvalue->spieler] += $point;
 			else $this->points[$pvalue->spieler] = $point;
