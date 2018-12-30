@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team. All rights reserved
+ * @Copyright (C) 2008-2018 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -100,6 +100,11 @@ echo CLMContent::createPDFLink('dwz', JText::_('PDF_CLUBRATING'), array('layout'
 <br>
 
 <?php
+$archive_check = clm_core::$api->db_check_season_user($sid);
+if (!$archive_check) {
+	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+}
+else {
 // Prüfen ob ZPS vorhanden ist
  if (!$liga[0]->Vereinname) { 
 echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
@@ -176,3 +181,5 @@ echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
 <div class="clr"></div>
 </div>
 </div>
+<?php } ?>
+		  

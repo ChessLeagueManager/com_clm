@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -77,6 +77,18 @@ $pdf->SetFont('Times','',16);
 	} else {
 		$pdf->Cell(80,15,utf8_decode(JText::_('CLUB_RATING_EN')).' '.utf8_decode($liga[0]->Vereinname),0,1,'L');
 	}
+// User und Saison
+$archive_check = clm_core::$api->db_check_season_user($sid);
+if (!$archive_check) {
+	$pdf->SetFont('Times','',12);
+	$pdf->Cell(10,10,' ',0,0);
+	$pdf->Cell(80,10,utf8_decode(JText::_('NO_ACCESS')),0,1,'L');
+	$pdf->Cell(10,10,' ',0,0);
+	$pdf->Cell(80,10,utf8_decode(JText::_('NOT_REGISTERED')),0,1,'L');
+//	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+}
+else {
+	
 // Kopfzeile der Tabelle
 $pdf->SetFont('Times','',$font);
 	///////////////////////////////////////////////////////////////
@@ -145,7 +157,7 @@ $pdf->SetFont('Times','',$font);
 
 	$x++;
 	}
-
+}
 // PDF an Browser senden
 $pdf->Output(utf8_decode(JText::_('CLUB_RATING')).' '.utf8_decode($liga[0]->Vereinname).'.pdf','D');
 exit;

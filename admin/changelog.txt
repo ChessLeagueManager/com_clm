@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.6.5 - [xx-xx-2018] - - - - - - - - - - - - - - - - - - - -
+# View Mitgliederliste: Anzeige Vorjahre entsprechend Datenschutzparameter
+
 - - - - - 3.6.4 - [22-11-2018] - - - - - - - - - - - - - - - - - - - -
 # Admin-View Mannschaftsaufstellung: Editorname
 + Einzelturniere: Teilnehmer mit weniger als 50% der Partien (FIDE §12b,c)
