@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -14,8 +14,6 @@
 // Klassenbibliothek CLMText für verschiedene textbezogene Funktionalitäten
 class CLMText {
 
-	
-	
 	/**
 	* function sgpl
 	* weist einer vorgegebenen Zahl einen Singular- oder Pluraltext zu
@@ -43,7 +41,7 @@ class CLMText {
 	*
 	*/
 	public static function tiebrFormat ($tiebrID, $value) {
-	
+		$format = "%01.1f";	// standard
 		switch ($tiebrID) {
 			case 1: // buchholz
 				$format = "%01.1f";
@@ -56,6 +54,9 @@ class CLMText {
 				break;
 			case 4: // Anzahl Siege
 				$format = "%01.0f";
+				break;
+			case 5: // mittlere buchholz 2 Streichwertungen
+				$format = "%01.1f";
 				break;
 			case 6: // Elo Schnitt
 				$format = "%01.0f";
