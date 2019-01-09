@@ -17,6 +17,7 @@ $ -> Language fix or change
 # Views Paarungsliste und Runde: Summierung Sonderergebnisse
 # AdminClass CLMText: Format Feinwertungen
 ^ Team-Views: Weglassen des Kommentars bei ungerader Anzahl Mannschaften
+^ Copyright 2008-2019
  
 - - - - - 3.6.4 - [22-11-2018] - - - - - - - - - - - - - - - - - - - -
 # Admin-View Mannschaftsaufstellung: Editorname
