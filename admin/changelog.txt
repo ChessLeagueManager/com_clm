@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.6.5 - [xx-xx-2018] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.6.5 - [15-01-2019] - - - - - - - - - - - - - - - - - - - -
 # View Mitgliederliste: Anzeige Vorjahre entsprechend Datenschutzparameter
 # Views Paarungsliste und Runde: Summierung Sonderergebnisse
 # AdminClass CLMText: Format Feinwertungen
