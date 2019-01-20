@@ -24,7 +24,7 @@ echo '<div class="clm_view_notification"><div class="warning">'.$lang->warning1.
 <p><?php echo $lang->https; ?><b><?php echo ($config["https"]>0 ? $lang->yes : $lang->no); ?></b></p>
 <p><?php echo $lang->certificates; ?><b><?php echo ($config["https"]==1 ? $lang->yes : $lang->no); ?></b></p>
 </div>
-<div class="clm_qrcode"><div class="clm_qrcode_direct"></div><a href="https://play.google.com/store/apps/details?id=com.ChessLeagueManager.main&hl=de"><?php echo $lang->link_android; ?></a></div>
+<div class="clm_qrcode"><div class="clm_qrcode_direct"></div><a href="https://play.google.com/store/apps/details?id=com.CLM"><?php echo $lang->link_android; ?></a></div>
 </div>
 <div class="clm_title_sub"><?php echo $lang->title_other; ?></div>
 <div class="clm_around">
