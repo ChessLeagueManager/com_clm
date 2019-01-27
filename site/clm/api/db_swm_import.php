@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  *
@@ -58,6 +58,10 @@ if ($debug > 1) { echo "<br>tournament2: ";	var_dump($tournament2); }
 	if ($tournament['out'][65][0] > '') $name = $tournament['out'][65][0]; // Turniername
 	else $name = $tournament['out'][12][0];
 	$tournament["out"][213] = transcode_fidecorrect($tournament2["out"][213]); // optionTiebreakersFideCorrect
+	$tournament_fk = transcode_fidecorrect($tournament2["out"][214]); // optionTiebreakersFideCorrect
+	if ($tournament_fk[0] > $tournament["out"][213][0]) $tournament["out"][213][0] = $tournament_fk[0];
+	$tournament_fk = transcode_fidecorrect($tournament2["out"][215]); // optionTiebreakersFideCorrect
+	if ($tournament_fk[0] > $tournament["out"][213][0]) $tournament["out"][213][0] = $tournament_fk[0];
 	$typ = '1';
 	if (strpos($file,'.TUR') > 0 OR strpos($file,'.tur') > 0 ) $typ = '2';
  
@@ -175,10 +179,10 @@ if ($debug > 1) { echo "<br>tab_record: $i ";	var_dump($tab_record); }
 if ($debug > 0) { echo " ( Runde: $runde  Brett: $brett ) ";	}
 		$spieler = $tab_record['out'][4007][0];
 		$gegner = $tab_record['out'][4008][0];
+		$heim = 1;
+		$ergebnis = transcode_ergebnis($tab_record['out'][4002][0],$heim,$gegner);
 		//if ($gegner > 60000) $gegner = 0;
 		if ($gegner > 16000) $gegner = 0;
-		$heim = 1;
-		$ergebnis = transcode_ergebnis($tab_record['out'][4002][0],$heim);
 if ($debug > 1) { echo "<br>runde: $runde  brett: $brett  ergebnis: $ergebnis  -- "; var_dump($ergebnis);	}
 		if (($spieler == 0 OR $gegner == 0) AND $ergebnis == 7) continue;
 		if ($ergebnis == 99) continue;
@@ -191,7 +195,7 @@ if ($debug > 1) { echo "<br>runde: $runde  brett: $brett  ergebnis: $ergebnis  -
 if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 		clm_core::$db->query($sql);
 		$heim = 0;
-		$ergebnis = transcode_ergebnis($tab_record['out'][4002][0],$heim);
+		$ergebnis = transcode_ergebnis($tab_record['out'][4002][0],$heim,$gegner);
 		$keyS = '`sid`, `swt_tid`, `dg`, `runde`, `brett`, `tln_nr`, `heim`, `spieler`, `gegner`, `ergebnis`, `pgn`';
 		if (!is_null($ergebnis))
 			$valueS = $season.", ".$new_swt_tid.", 1,".$runde.", ".$brett.", ".$gegner.", ".$heim.", ".$gegner.", ".$spieler.", ".$ergebnis.", ''";
@@ -649,7 +653,7 @@ if ($debug > 0) { echo "<br>feinwertung  swm: $swm  ->  clm: ".$line[0]; }
     return $line;
 }
 
-function transcode_ergebnis($ergebnis, $heim) {
+function transcode_ergebnis($ergebnis, $heim, $gegner) {
 	/* SWM -> CLM	(Beschreibung)
 		0 ->  NULL	 Ergebnis offen
 		1 ->  1	 Weißsieg
@@ -659,12 +663,18 @@ function transcode_ergebnis($ergebnis, $heim) {
 		5 ->  4  Schwarzsieg kampflos
 		6 ->  6  beide verlieren kampflos
 		8 ->  8	 spielfrei   
-		9 ->  8	 kampflos gewonnen  
+		9 ->  8	 kampflos gewonnen
+		1 + g>16000 -> 11 bye 1.0 (nicht ausgelost)
+		2 + g>16000 -> 12 bye 0.5 (nicht ausgelost)
+		3 + g>16000 -> 13 bye 0.0 (nicht ausgelost)
 	*/
+	if ($gegner > 16000 AND $ergebnis == 1) $ergebnis = 11;
+	if ($gegner > 16000 AND $ergebnis == 2) $ergebnis = 12;
+	if ($gegner > 16000 AND $ergebnis == 3) $ergebnis = 13;
 	if ($heim == 1) 
-		$clm_array = array (0 => NULL, 1 => 1, 2 => 2, 3 => 0, 4 => 5, 5 => 4, 6 => 6, 8 => 8, 9 => 5);
+		$clm_array = array (0 => NULL, 1 => 1, 2 => 2, 3 => 0, 4 => 5, 5 => 4, 6 => 6, 8 => 8, 9 => 5, 11 => 11, 12 => 12, 13 => 13);
 	else	
-		$clm_array = array (0 => NULL, 1 => 0, 2 => 2, 3 => 1, 4 => 4, 5 => 5, 6 => 6, 8 => 8, 9 => 4);
+		$clm_array = array (0 => NULL, 1 => 0, 2 => 2, 3 => 1, 4 => 4, 5 => 5, 6 => 6, 8 => 8, 9 => 4, 11 => 0, 12 => 0, 13 => 0);
 //echo "<br>ergebnis  swm: $ergebnis  ->  clm: ";  	
 	$ergebnis = $clm_array[$ergebnis];
 //echo $ergebnis;  	

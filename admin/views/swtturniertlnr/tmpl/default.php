@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -92,7 +92,8 @@ if(isset($params['useAsTWZ'])) {
 							echo "<td align='center'><input class='inputbox' type='text' name='FIDEelo[".$i."]' id='FIDEelo".$i."' size='4' maxlength='4' value='".$spieler->FIDEelo."' /><input type='hidden' name='twz[".$i."]' id='twz'  value='".$spieler->twz."' /></td>";
 							echo "<td align='center'><input class='inputbox' type='text' name='birthYear[".$i."]' id='birthYear".$i."' size='4' maxlength='4' value='".$spieler->birthYear."' /></td>";
 							echo "<input type='hidden' name='FIDEcco[".$i."]' id='FIDEcco".$i."' value='".$spieler->FIDEcco."' />";
-							echo "<input type='hidden' name='FIDEid[".$i."]' id='FIDEcco".$i."' value='".$spieler->FIDEid."' />";
+							echo "<input type='hidden' name='FIDEid[".$i."]' id='FIDEid".$i."' value='".$spieler->FIDEid."' />";
+							echo "<input type='hidden' name='s_punkte[".$i."]' id='s_punkte".$i."' value='".$spieler->s_punkte."' />";
 						echo "</tr>";
 					$k = 1 - $k;
 					}

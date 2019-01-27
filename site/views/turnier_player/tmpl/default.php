@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 - 2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -136,8 +136,15 @@ if ($this->playerPhoto != '') { ?>
 			<tr>
 				<td align="left" class="tp_col_1"><?php echo JText::_('TOURNAMENT_PLAYER_BIRTH_YEAR') ?>:</td>
 				<td class="tp_col_data"><?php echo $this->player->birthYear; ?></td>
-
-			</tr><?php } ?></table>
+			</tr>
+			<?php } ?>
+			<?php if (isset($this->player->s_punkte) AND $this->player->s_punkte != 0) { ?>
+			<tr>
+				<td align="left" class="tp_col_1"><?php echo JText::_('TOURNAMENT_SPECIAL_POINTS') ?>:</td>
+				<td class="tp_col_data"><?php echo $this->player->s_punkte; ?></td>
+			</tr>
+			<?php } ?>
+			</table>
 </div>
 <?php
 if ($this->playerPhoto != '') { ?>
@@ -191,13 +198,15 @@ if ($this->playerPhoto != '') { ?>
 					echo "</td>";
 					
 					// Gegner
+					if (isset($this->points[$value->gegner])) { $points = $this->points[$value->gegner]; }
+					else { $points = 0; }
 					echo '<td class="tp_col_3">';
 					  if (isset($value->gegner) AND $value->gegner > 0) {
 						$link = new CLMcLink();
 						$link->view = 'turnier_player';
 						$link->more = array('turnier' => $this->turnier->id, 'snr' => $value->gegner, 'Itemid' => $itemid );
 						$link->makeURL();
-						echo $link->makeLink($value->oppName);
+						echo $link->makeLink($value->oppName). " (".$points.")";
 					  }
 					echo "</td>";
 					

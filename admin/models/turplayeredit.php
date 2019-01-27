@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -48,7 +48,7 @@ class CLMModelTurPlayerEdit extends JModelLegacy {
 	
 	function _getPlayerData() {
 	
-		$query = 'SELECT snr, name, birthYear, geschlecht, verein, start_dwz, start_I0, FIDEelo, titel, twz, turnier, sum_punkte, koStatus, sumTiebr1, sumTiebr2, sumTiebr3'
+		$query = 'SELECT snr, name, birthYear, geschlecht, verein, start_dwz, start_I0, FIDEelo, titel, twz, turnier, sum_punkte, koStatus, sumTiebr1, sumTiebr2, sumTiebr3, s_punkte'
 			. ' FROM #__clm_turniere_tlnr'
 			. ' WHERE id = '.$this->param['playerid']
 			;

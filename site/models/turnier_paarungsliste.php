@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -114,7 +114,7 @@ class CLMModelTurnier_Paarungsliste extends JModelLegacy {
 	
 	function _getTurnierMatches() {
 	
-		// alle ermittelten Runden duirchgehen
+		// alle ermittelten Runden durchgehen
 		foreach ($this->rounds as $value) {
 			$query = "SELECT a.*, "
 				." t.name as wname, t.twz as wtwz, t.verein as wverein, t.start_dwz as wdwz, t.FIDEelo as welo, "
@@ -137,7 +137,23 @@ class CLMModelTurnier_Paarungsliste extends JModelLegacy {
 	function _getTurnierPoints() {
 	
 		$this->points = array();
-		// alle ermittelten Runden duirchgehen
+		// Übernehmen der Sonderpunkte als Startpunkt
+		$query = "SELECT snr, s_punkte "
+			." FROM #__clm_turniere_tlnr"
+			." WHERE turnier = ".$this->turnierid
+			;
+		$this->_db->setQuery( $query );
+		$this->s_points = $this->_db->loadObjectList();
+		if (isset($this->s_points)) {
+		  foreach ($this->s_points as $pvalue) {
+			foreach ($this->rounds as $value) {
+				$irunde=($value->nr + (($value->dg -1) * $this->turnier->runden)+ 1);
+				$this->points[$irunde][$pvalue->snr] = $pvalue->s_punkte;
+			}
+		  }
+		}
+		
+		// Matchpunkte hinzufügen, alle ermittelten Runden durchgehen
 		foreach ($this->rounds as $value) {
 			$query = "SELECT spieler, ergebnis "
 				." FROM #__clm_turniere_rnd_spl"
@@ -148,8 +164,8 @@ class CLMModelTurnier_Paarungsliste extends JModelLegacy {
 			$this->round_points = $this->_db->loadObjectList();
 			foreach ($this->round_points as $pvalue) {
 			  for ($irunde=($value->nr + (($value->dg -1) * $this->turnier->runden)+ 1); $irunde < (($this->turnier->dg * $this->turnier->runden) + 1); $irunde++) {  
-				if ($pvalue->ergebnis == 1 OR $pvalue->ergebnis == 5) $point = 1;
-				elseif ($pvalue->ergebnis == 2 OR $pvalue->ergebnis == 10) $point = .5;
+				if ($pvalue->ergebnis == 1 OR $pvalue->ergebnis == 5 OR $pvalue->ergebnis == 11) $point = 1;
+				elseif ($pvalue->ergebnis == 2 OR $pvalue->ergebnis == 10 OR $pvalue->ergebnis == 12) $point = .5;
 				else $point = 0;
 				if (isset($this->points[$irunde][$pvalue->spieler]))  $this->points[$irunde][$pvalue->spieler] += $point;
 				else $this->points[$irunde][$pvalue->spieler] = $point;

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -78,6 +78,12 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 				$teilnehmer->set('tlnrStatus'	, (CLMSWT::readName($swt,$offset+184	,1)=="*" ? "0" : "1"));
 				$teilnehmer->set('FIDEid'   	, CLMSWT::readName($swt,$offset+324	,12));
 
+				$s_points = CLMSWT::readInt($swt,$offset+273,1);
+				$s_sign = CLMSWT::readInt($swt,$offset+274,1);
+				if ($s_sign == 255) $s_points = ($s_points - 256);
+				$s_punkte = strval($s_points / 2);
+				$teilnehmer->set('s_punkte'   	, $s_punkte);
+
 				//TWZ-Bestimmen
 				if($useAsTWZ == 0) { 
 					if ($teilnehmer->FIDEelo >= $teilnehmer->start_dwz) { $teilnehmer->set('twz'	, $teilnehmer->FIDEelo); }
@@ -103,7 +109,6 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 			$i++;
 		}
 		
-		
 		return $this->_teilnehmer;
 	}
 	
@@ -121,7 +126,7 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 		if($anz_teilnehmer > 0){
 			$insert_query = "INSERT IGNORE INTO 
 									#__clm_swt_turniere_tlnr" . " 
-									( `sid`, `turnier`, `swt_tid`, `snr`, `name`, `birthYear`, `geschlecht`, `tlnrStatus`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `titel`, `FIDEcco`, `FIDEid`, `mgl_nr`, `zps`, `status`) "
+									( `sid`, `turnier`, `swt_tid`, `snr`, `name`, `birthYear`, `geschlecht`, `tlnrStatus`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `titel`, `FIDEcco`, `FIDEid`, `mgl_nr`, `zps`, `status`, `s_punkte`) "
 						  . " 	VALUES";
 			
 			print JRequest::getVar('snr[1]');
@@ -154,7 +159,8 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 										".CLMSWT::getFormValue('FIDEid',0,'int',$i).", 
 										".CLMSWT::getFormValue('mgl_nr',0,'int',$i).", 
 										'".$zpscode."', 
-										"."0"." 
+										"."0".", 
+										".CLMSWT::getFormValue('s_punkte','','string',$i)." 
 									),";
 				  }
 				}

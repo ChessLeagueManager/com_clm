@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -81,6 +81,10 @@ defined('_JEXEC') or die('Restricted access');
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_BIRTH_YEAR'); ?>:</td>
 				<td><input class="inputbox" type="text" name="birthYear" id="birthYear" size="4" maxlength="4" value="<?php echo $this->player->birthYear; ?>"/></td>
+			</tr>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo JText::_('TOURNAMENT_SPECIAL_POINTS'); ?>:</td>
+				<td><input class="inputbox" type="text" name="s_punkte" id="s_punkte" size="4" maxlength="4" value="<?php echo $this->player->s_punkte; ?>"/></td>
 			</tr>
 		</table>
 		

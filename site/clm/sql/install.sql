@@ -1,6 +1,6 @@
 --
 -- @ Chess League Manager (CLM) Component 
--- @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+-- @Copyright (C) 2008-2019 CLM Team.  All rights reserved
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 -- @link http://www.chessleaguemanager.de
 --
@@ -840,6 +840,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_swt_turniere_tlnr` (
   `status` mediumint(5) NOT NULL DEFAULT '0',
   `rankingPos` smallint(5) unsigned NOT NULL DEFAULT '0',
   `tlnrStatus` tinyint(1) unsigned NOT NULL,
+  `s_punkte` decimal(3,1) DEFAULT '0.0',
   `sum_punkte` decimal(4,1) DEFAULT NULL,
   `sum_bhlz` decimal(5,2) DEFAULT NULL,
   `sum_busum` decimal(6,2) DEFAULT NULL,
@@ -1065,6 +1066,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere_tlnr` (
   `status` mediumint(5) NOT NULL DEFAULT '0',
   `rankingPos` smallint(5) unsigned NOT NULL DEFAULT '0',
   `tlnrStatus` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `s_punkte` decimal(3,1) DEFAULT '0.0',
   `anz_spiele` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `sum_punkte` decimal(4,1) DEFAULT NULL,
   `sum_bhlz` decimal(5,2) DEFAULT NULL,

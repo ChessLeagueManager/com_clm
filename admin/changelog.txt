@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.6.6 - [xx-xx-2019] - - - - - - - - - - - - - - - - - - - -
++ Einzelturniere: Bye-Regelung einschl. SWT- und TUNx-Import
+
 - - - - - 3.6.5 - [15-01-2019] - - - - - - - - - - - - - - - - - - - -
 # View Mitgliederliste: Anzeige Vorjahre entsprechend Datenschutzparameter
 # Views Paarungsliste und Runde: Summierung Sonderergebnisse
