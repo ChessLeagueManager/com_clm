@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -73,7 +73,21 @@ class clm_class_log {
 	public function errorHandler($errno, $errstr, $errfile = "", $errline = "", $errcontext = "") {
 		if (isset($_SERVER["HTTP_USER_AGENT"])) $user = $_SERVER["HTTP_USER_AGENT"]; 
 		else $user = 'UNDEFINED';
-		$message = "errno:" . $errno . " errstr:" . $errstr . " errfile:" . $errfile . " errline:" . $errline . " errcontext:" . json_encode ( $errcontext ) . " Backtrace: " . clm_core::getBacktrace () . " User: " . $user;
+		$parameter = $_SERVER["REQUEST_URI"];
+		$parameter2 = $_SERVER["QUERY_STRING"];
+		$domain = $_SERVER['HTTP_HOST'];
+		$message = "errno:" . $errno . " errstr:" . $errstr . " errfile:" . $errfile . " errline:" . $errline . " errcontext:" . json_encode ( $errcontext ); 
+		$message .= " Backtrace: " . clm_core::getBacktrace () . " User: " . $user . " Domain: " . $domain . " Parameter: " . $parameter. " Parameter2: " . $parameter2;
+
+
+		$bots = array('crawl', 'metaweb', 'msn.com', 'google', 'archiver', 'firefly', 'msnbo', 'slurp', 'inktomisearch', 'bot', 'AhrefsBot', 'qwant'); // bot erkennung
+		$ist_bot = 0;
+		foreach($bots as $element) {
+			if (stristr(getEnv("HTTP_USER_AGENT"),$element) == TRUE) {
+				$ist_bot = 1; // zur weiteren Verarbeitung 
+			}
+		}
+		if ($ist_bot == 1) $message .= " = Bot";
 		switch ($errno) {
 			case E_USER_ERROR :
 				$this->addError ( "E_USER_ERROR", $message );

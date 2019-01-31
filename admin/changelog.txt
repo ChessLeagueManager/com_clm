@@ -16,7 +16,8 @@ $ -> Language fix or change
 + Einzelturniere: Bye-Regelung einschl. SWT- und TUNx-Import
 # pgn-Dateierstellung
 ^ count-Funktion und PHP 7.3
- 
++ Fehlerbehandlung: Kennzeichnung der durch Bots verursachten Fehler im Fehlertext
+  
 - - - - - 3.6.5 - [15-01-2019] - - - - - - - - - - - - - - - - - - - -
 # View Mitgliederliste: Anzeige Vorjahre entsprechend Datenschutzparameter
 # Views Paarungsliste und Runde: Summierung Sonderergebnisse
