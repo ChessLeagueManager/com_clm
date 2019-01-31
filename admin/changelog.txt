@@ -14,9 +14,8 @@ $ -> Language fix or change
 
 - - - - - 3.6.6 - [xx-xx-2019] - - - - - - - - - - - - - - - - - - - -
 + Einzelturniere: Bye-Regelung einschl. SWT- und TUNx-Import
-+ Indizes zur Leistungssteigerung der DB-Zugriffe
-^ count-Funktion und PHP 7.3
 # pgn-Dateierstellung
+^ count-Funktion und PHP 7.3
  
 - - - - - 3.6.5 - [15-01-2019] - - - - - - - - - - - - - - - - - - - -
 # View Mitgliederliste: Anzeige Vorjahre entsprechend Datenschutzparameter

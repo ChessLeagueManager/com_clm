@@ -160,7 +160,7 @@ if ($this->playerPhoto != '') { ?>
         </div>
  
 	<?php
-	if (count($this->matches) > 0) {
+	if (!is_null($this->matches) AND count($this->matches) > 0) {
 	?>
 	
 		<table cellpadding="0" cellspacing="0" class="turnier_rangliste">
