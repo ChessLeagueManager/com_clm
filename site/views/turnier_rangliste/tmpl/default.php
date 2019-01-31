@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -22,14 +22,14 @@ $spRang		= JRequest::getVar( 'spRang' ,0);	//Sonderranglisten
 
 $pgn		= JRequest::getInt('pgn','0'); 
 $option 	= JRequest::getCmd( 'option' );
+$mainframe	= JFactory::getApplication();
 if ($pgn == 1 AND $spRang == 0) { 
 	$result = clm_core::$api->db_pgn_export($this->turnier->id,false);
-	JFactory::getApplication()->close();
+	//JFactory::getApplication()->close();
 	JRequest::setVar('pgn',0);
 	if (!$result[0]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
 	$link = 'index.php?option='.$option.'&view=turnier_rangliste&turnier='.$this->turnier->id.'&pgn=0';
 	if ($itemid != 0) $link .= '&Itemid='.$itemid;
-	$mainframe	= JFactory::getApplication();
 	$mainframe->redirect( $link, $msg );
 }
 

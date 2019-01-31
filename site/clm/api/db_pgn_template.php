@@ -1,6 +1,11 @@
 <?php
 /**
-* erstellt pgn-Template einer Runde eines Mannschafts- oder Einzelturniers
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+ *
+ * erstellt pgn-Template einer Runde eines Mannschafts- oder Einzelturniers
 */
 function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true) {
  	$lang = clm_core::$lang->pgn;
@@ -74,8 +79,8 @@ function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true) {
 			." LEFT JOIN #__clm_ergebnis AS q ON q.eid = a.dwz_edit "
 			." LEFT JOIN #__clm_meldeliste_spieler as k ON k.sid = a.sid AND k.lid = a.lid AND k.mgl_nr = a.spieler AND k.zps = a.zps AND k.mnr=m.man_nr "  //klkl2
 			." LEFT JOIN #__clm_meldeliste_spieler as l ON l.sid = a.sid AND l.lid = a.lid AND l.mgl_nr = a.gegner AND l.zps = a.gzps AND l.mnr=n.man_nr "  //klkl2
-			." LEFT JOIN #__clm_rangliste_spieler as t on t.ZPS = a.zps AND t.Mgl_Nr = a.spieler AND t.sid = a.sid AND t.Gruppe = ".$rang
-			." LEFT JOIN #__clm_rangliste_spieler as s on s.ZPS = a.gzps AND s.Mgl_Nr = a.gegner AND s.sid = a.sid AND s.Gruppe = ".$rang
+			." LEFT JOIN #__clm_rangliste_spieler as t on t.ZPS = a.zps AND t.Mgl_Nr = a.spieler AND t.sid = a.sid AND t.Gruppe = ".$turnier->rang
+			." LEFT JOIN #__clm_rangliste_spieler as s on s.ZPS = a.gzps AND s.Mgl_Nr = a.gegner AND s.sid = a.sid AND s.Gruppe = ".$turnier->rang
 			." WHERE a.lid = ".$id
 			." AND a.runde = ".$round
 			." AND a.dg = ".$dg
@@ -119,8 +124,8 @@ function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true) {
 	$nl = "\n";
 	$file_name = utf8_decode($turnier->name).'_'.utf8_decode($runde->name);
 	if ($type == 1) $file_name .= '_'.utf8_decode($user_zps);
+	$file_name = strtr($file_name,' ./','___');
 	$file_name .= '.pgn'; 
-	$file_name = strtr($file_name,' ','_');
 	if (!file_exists('components'.DS.'com_clm'.DS.'pgn'.DS)) mkdir('components'.DS.'com_clm'.DS.'pgn'.DS);
 	$pdatei = fopen('components'.DS.'com_clm'.DS.'pgn'.DS.$file_name,"wt");
 	if($group) {
