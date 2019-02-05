@@ -28,7 +28,7 @@ class CLMText {
 		}
 	
 		if ($complete_string == TRUE) { // kompletter String!
-			return $count."&nbsp;".$text_return;
+			return $count.' '.$text_return;
 		} else {
 			return $text_return;
 		}
