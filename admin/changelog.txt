@@ -17,6 +17,7 @@ $ -> Language fix or change
 # pgn-Dateierstellung
 ^ count-Funktion und PHP 7.3
 + Fehlerbehandlung: Kennzeichnung der durch Bots verursachten Fehler im Fehlertext
+^ Leistungssteigerung der DB-Zugriffe durch geänderte/neue Indizes
   
 - - - - - 3.6.5 - [15-01-2019] - - - - - - - - - - - - - - - - - - - -
 # View Mitgliederliste: Anzeige Vorjahre entsprechend Datenschutzparameter

@@ -286,7 +286,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_meldeliste_spieler` (
   `gesperrt` tinyint(1) unsigned DEFAULT NULL,
   `attr` varchar(4) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `sid_zps_mglnr` (`sid`,`zps`,`mgl_nr`)
+  KEY `lid_zps_mglnr` (`lid`,`zps`,`mgl_nr`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -409,7 +409,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_rnd_man` (
   `ptime` time NOT NULL DEFAULT '00:00:00',
   PRIMARY KEY (`id`),
   KEY `published` (`published`),
-  KEY `lid_sid` (`lid`,`sid`)
+  KEY `lid_sid` (`lid`,`sid`),
+  KEY `lid_dg_runde_paar` (`lid`,`dg`,`runde`,`paar`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -443,7 +444,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_rnd_spl` (
   `dwz_editor` mediumint(5) unsigned DEFAULT NULL,
   `pgnnr` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `sid_zps_spieler` (`sid`,`zps`,`spieler`)
+  KEY `lid_zps_spieler` (`lid`,`zps`,`spieler`),
+  KEY `lid_dg_runde_paar` (`lid`,`dg`,`runde`,`paar`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
