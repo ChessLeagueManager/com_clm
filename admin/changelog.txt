@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.6.6 - [xx-xx-2019] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.6.6 - [06-02-2019] - - - - - - - - - - - - - - - - - - - -
 + Einzelturniere: Bye-Regelung einschl. SWT- und TUNx-Import
 # pgn-Dateierstellung
 ^ count-Funktion und PHP 7.3
