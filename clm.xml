@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5.0" method="upgrade">
 	<name>CLM</name>
-	<creationDate>06.02.2019</creationDate>
+	<creationDate>16.02.2019</creationDate>
 	<author>CLM Team</author>
 	<copyright>(C) Copyright 2008-2019 by CLM Project</copyright>
 	<license>GNU/GPL</license>
 	<authorEmail>fishpoke@fishpoke.de</authorEmail>
 	<authorUrl>www.chessleaguemanager.de</authorUrl>
-	<version>3.6.6</version>
+	<version>3.7.0</version>
  	<scriptfile>installer.php</scriptfile>
 	<description>
 		<![CDATA[
