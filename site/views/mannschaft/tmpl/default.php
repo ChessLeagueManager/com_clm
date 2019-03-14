@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -86,8 +86,8 @@ $db->setQuery ($sql);
 $ligapunkte = $db->loadObject ();
 
 if ($lparams['dwz_date'] == '0000-00-00' OR $lparams['dwz_date'] == '1970-01-01') {
-	if ($saison[0]->dsb_datum  > 0) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $saison[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F'));  
-	if (($saison[0]->dsb_datum == 0) || (!isset($saison))) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_UNCLEAR'); 
+	if ($saison[0]->dsb_datum  > '1970-01-01') $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $saison[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F'));  
+	else $hint_dwzdsb = ''; 
 } else {
 	$hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_LEAGUE').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $lparams['dwz_date'], JText::_('DATE_FORMAT_CLM_F'));  
 }
@@ -299,7 +299,13 @@ elseif ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) { ?>
     <?php } ?>
 		<th class="nr"><?php echo JText::_('CLUB_LIST_TITEL') ?></th>
         <th class="name"><?php echo JText::_('DWZ_NAME') ?></th>
-        <th class="dwz"><a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php if ($countryversion == "de") echo JText::_('LEAGUE_STAT_DWZ'); else echo JText::_('LEAGUE_STAT_DWZ_EN')?></a></th>
+        <th class="dwz">
+		<?php if ($hint_dwzdsb != '') { ?>
+			<a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php if ($countryversion == "de") echo JText::_('LEAGUE_STAT_DWZ'); else echo JText::_('LEAGUE_STAT_DWZ_EN')?></a>
+		<?php } else { ?>
+			<?php if ($countryversion == "de") echo JText::_('LEAGUE_STAT_DWZ'); else echo JText::_('LEAGUE_STAT_DWZ_EN')?>
+		<?php } ?>
+		</th>
 	 <?php 
     // erster Durchgang
     for ($b=0; $b<$mannschaft[0]->runden; $b++) { ?>

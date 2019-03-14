@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -33,8 +33,8 @@ $spielerliste 	= $this->spielerliste;
 $ex = 0;
 
 if (isset($spieler[0]->Spielername)){ 
-if ($spieler[0]->dsb_datum  > 0) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $spieler[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F')); 
-if (($spieler[0]->dsb_datum == 0) || (!isset($spieler))) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_UNCLEAR');  
+	if (($spieler[0]->dsb_datum == '0000-00-00') || ($spieler[0]->dsb_datum == '1970-01-01') || (!isset($spieler))) $hint_dwzdsb = '';  
+	else $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $spieler[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F')); 
 }
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
@@ -207,7 +207,12 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
         <th class="gsp"><?php echo JText::_('PLAYER_LOCATION') ?></th>
         <th class="gsp"><?php echo JText::_('PLAYER_BOARD') ?></th>
         <th><?php echo JText::_('PLAYER_OPONENT') ?></th>
-        <th class="gsp"><a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php echo JText::_('PLAYER_RATING') ?></a></th>
+        <th class="gsp">
+		<?php if ($hint_dwzdsb != '') { ?>
+			<a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php echo JText::_('PLAYER_RATING') ?></a>
+		<?php } else { ?>
+			<?php echo JText::_('PLAYER_RATING') ?>
+		<?php } ?>
         <th><?php echo JText::_('PLAYER_TEAM') ?></th>
         <th class="gsp2"><?php echo JText::_('DWZ_WE').' &sup1;'; ?></th>
         <th class="gsp2"><?php echo JText::_('PLAYER_RESULT') ?></th>

@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -369,7 +369,7 @@ for ($x=0; $x<$liga[0]->stamm; $x++) {
 		<td class="paarung" ><div><?php echo $einzel[$w]->hattr; ?></div></td>
 	<?php } ?>
     <td class="paarung2" colspan ="1"><div><?php if ($einzel[$w]->zps =="ZZZZZ") {echo "N.N.";} else { 
-		if ($einzel[$w]->zps != "-1") { ?>
+		if ($einzel[$w]->zps != "-2") { ?>
 			<a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->zps; ?>&mglnr=<?php echo $einzel[$w]->spieler; ?>&PKZ=<?php echo $einzel[$w]->PKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->hname; } 
 		else echo $einzel[$w]->hname; } ?></div></td>
  
@@ -397,7 +397,7 @@ for ($x=0; $x<$liga[0]->stamm; $x++) {
 		<td class="paarung" ><div><?php echo $einzel[$w]->gattr; ?></div></td>
 	<?php } ?>
     <td class="paarung2" colspan ="1"><div><?php if ($einzel[$w]->gzps =="ZZZZZ") {echo "N.N.";} else { 
-		if ($einzel[$w]->gzps != "-1") { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->gzps; ?>&mglnr=<?php echo $einzel[$w]->gegner; ?>&PKZ=<?php echo $einzel[$w]->gPKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->gname; } 
+		if ($einzel[$w]->gzps != "-2") { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->gzps; ?>&mglnr=<?php echo $einzel[$w]->gegner; ?>&PKZ=<?php echo $einzel[$w]->gPKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->gname; } 
 		else echo $einzel[$w]->gname; } ?></div></td>
     <td class="paarung"><div><?php if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') echo $einzel[$w]->gdwz; else echo $einzel[$w]->gstart_dwz; ?></div></td>
     </tr>
