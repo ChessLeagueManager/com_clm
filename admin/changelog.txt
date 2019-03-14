@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.7.1 - [xx-xx-2019] - - - - - - - - - - - - - - - - - - - -
+# Korrektur Komponenten-Text (Bild)
+
 - - - - - 3.7.0 - [16-02-2019] - - - - - - - - - - - - - - - - - - - -
 # SWT-Import: Ignorieren von Verein und Mitgliedsnummer bei Import ohne Org-Bezug
 
