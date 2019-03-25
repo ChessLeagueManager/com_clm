@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link https://www.chessleaguemanager.de
+*/
 // Eingang: Verband
 // Ausgang: Alle Vereine in diesem
 function clm_api_db_be_menu() {
@@ -48,7 +54,7 @@ function clm_api_db_be_menu() {
 
 			$jlang = JFactory::getLanguage();
 			//if (!$fp = @file_get_contents("http://www.chessleaguemanager.de/clm/updateServer/status." . clm_core::$db->config()->language, false, $ctx)) {
-			if (!$fp = @file_get_contents("http://www.chessleaguemanager.de/clm/updateServer/status." . $jlang->getTag(), false, $ctx)) {
+			if (!$fp = @file_get_contents("https://www.chessleaguemanager.de/clm/updateServer/status." . $jlang->getTag(), false, $ctx)) {
 				$status["content"] = "";
 			} else {
 				$status["content"] = $fp;

@@ -15,6 +15,7 @@ $ -> Language fix or change
 - - - - - 3.7.1 - [xx-xx-2019] - - - - - - - - - - - - - - - - - - - -
 # Korrektur Komponenten-Text (Bild)
 ^ View Runde: auch bei Schulschach mit Links zu Spielern
+^ Umstellung Links zu Projektseite auf https
 
 - - - - - 3.7.0 - [16-02-2019] - - - - - - - - - - - - - - - - - - - -
 # SWT-Import: Ignorieren von Verein und Mitgliedsnummer bei Import ohne Org-Bezug

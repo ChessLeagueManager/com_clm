@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link https://www.chessleaguemanager.de
+*/
 function clm_view_be_menu($access, $status)
 {
     clm_core::$load->load_css("be_menu");
@@ -309,9 +315,9 @@ function clm_view_be_menu($access, $status)
 	</tr>
 	</table>
 	<br>
-	<a href="http://www.chessleaguemanager.de" target="blank"><?php
+	<a href="https://www.chessleaguemanager.de" target="blank"><?php
     echo $lang->website;
-?></a>  |  <a href="http://www.chessleaguemanager.de/index.php?option=com_kunena" target="blank"><?php
+?></a>  |  <a href="https://www.chessleaguemanager.de/index.php?option=com_kunena" target="blank"><?php
     echo $lang->support;
 ?></a>
 	<br>
