@@ -1,5 +1,11 @@
 <?php
 /**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
+/**
  * Benutzerrechteverwaltung
  */
 class clm_class_access {
@@ -167,11 +173,13 @@ class clm_class_access {
 	public static function compareWithId($id1, $id2, $onlyPublished = true) {
 		$accesspoints = clm_class_access::getAccesspoints();
 		foreach ($accesspoints as $accesspoint) {
-			$result1 = clm_class_access::accessWithId($id1, $accesspoint, $onlyPublished);
+			if (is_int($accesspoint)) $str_ap = strval($accesspoint);    // verhindert die Deprecated-Meldung; gesamte Funktion ist eventuell inkorrekt!
+			else $str_ap = $accesspoint;
+			$result1 = clm_class_access::accessWithId($id1, $str_ap, $onlyPublished);
 			if ($result1 === true) {
 				continue;
 			} // Recht vorhanden -> ob der andere es auch hat ist egal
-			$result2 = clm_class_access::accessWithId($id2, $accesspoint, $onlyPublished);
+			$result2 = clm_class_access::accessWithId($id2, $str_ap, $onlyPublished);
 			if ($result2 === false) {
 				continue;
 			} // Er hat das Recht nicht -> was ich habe ist egal
