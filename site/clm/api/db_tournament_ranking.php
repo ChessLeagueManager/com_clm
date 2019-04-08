@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -13,7 +13,7 @@
 		if($group) {
 	
 		// Parameter auslesen, für FIDE-Ranglistenkorrektur und ...
-		$query = 'SELECT `params`, `durchgang`, `runden`, `teil`,`runden_modus`'
+		$query = 'SELECT * '
 			. ' FROM #__clm_liga'
 			. ' WHERE id = '.$id
 			;
@@ -33,6 +33,9 @@
 		$dg = $liga[0]->durchgang;
 		$runden = $liga[0]->runden;
 		$teil = $liga[0]->teil;
+		$liga_mt = $liga[0]->liga_mt;
+		$b_wertung = $liga[0]->b_wertung;
+		$order = $liga[0]->order;
 		if ($liga[0]->runden_modus != 3) $params['optionTiebreakersFideCorrect'] = 0;
 	
 		// Wertpunkte berechnen
@@ -443,7 +446,13 @@
 				. " WHERE liga = ".$id
 				. " AND tln_nr = ".$s;
 			$abzug = clm_core::$db->loadObjectList($query);
-			if (isset($abzug[0])) $array_PlayerMPunkte[$s] = $array_PlayerMPunkte[$s] - $abzug[0]->abzug;
+			if (isset($abzug[0])) {
+				$array_PlayerMPunkte[$s] = $array_PlayerMPunkte[$s] - $abzug[0]->abzug;
+				$array_PlayerBPunkte[$s] = $array_PlayerBPunkte[$s] - $abzug[0]->bpabzug;
+			}
+			if ($liga_mt == 0) {	// Liga hat keine Feinwertungen, FW1 wird genutzt, um Berliner Wertung abzuspeichern!
+				$arrayFW[1] = 10;
+			}
 			// den TiebrSummen ihre Werte zuordnen
 			for ($tb=1; $tb<=3; $tb++) {
 				$sumTiebr[$tb] = 0;
@@ -462,7 +471,6 @@
 						break;
 					case 5: // brettpunkte
 						$sumTiebr[$tb] = $array_PlayerBPunkte[$s];
-						if (isset($abzug[0])) $sumTiebr[$tb] = $sumTiebr[$tb] - $abzug[0]->bpabzug;
 						break;
 					case 10: // berliner wertung
 						$sumTiebr[$tb] = $array_PlayerBerlWertung[$s];
@@ -548,9 +556,18 @@
 	
 		$query = "SELECT id, name, tln_nr"
 			." FROM `#__clm_mannschaften`"
-			." WHERE liga = ".$id
-			." ORDER BY summanpunkte DESC, sumtiebr1 DESC, sumtiebr2 DESC, sumtiebr3 DESC, tln_nr ASC"
-			;
+			." WHERE liga = ".$id;
+		if ($liga_mt == 0) {
+			$query .= " ORDER BY summanpunkte DESC, sumbrettpunkte DESC ";
+			if ($b_wertung == 0 AND $order == 1) $query .= ", ordering ASC";
+			if ($b_wertung == 3 AND $order == 1) $query .= ", sumtiebr1 DESC, ordering ASC";
+			if ($b_wertung == 3 AND $order == 0) $query .= ", sumtiebr1 DESC";
+			if ($b_wertung == 4 AND $order == 1) $query .= ", ordering ASC, sumtiebr1 DESC";
+			if ($b_wertung == 4 AND $order == 0) $query .= ", sumtiebr1 DESC";
+			$query .= ", tln_nr ASC";
+		} else {
+			$query .= " ORDER BY summanpunkte DESC, sumtiebr1 DESC, sumtiebr2 DESC, sumtiebr3 DESC, tln_nr ASC";
+		}
 		$players = clm_core::$db->loadObjectList($query); 
 		// rankingPos umsortieren
 		$rankingPos = 0;
