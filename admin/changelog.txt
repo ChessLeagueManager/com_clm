@@ -16,6 +16,7 @@ $ -> Language fix or change
 # Korrektur Komponenten-Text (Bild)
 ^ View Runde: auch bei Schulschach mit Links zu Spielern
 ^ Umstellung Links zu Projektseite auf https
+# View Verein: Vereinsauswahl nur aktuelle Saison
 
 - - - - - 3.7.0 - [16-02-2019] - - - - - - - - - - - - - - - - - - - -
 # SWT-Import: Ignorieren von Verein und Mitgliedsnummer bei Import ohne Org-Bezug
