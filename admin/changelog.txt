@@ -17,6 +17,7 @@ $ -> Language fix or change
 ^ View Runde: auch bei Schulschach mit Links zu Spielern
 ^ Umstellung Links zu Projektseite auf https
 # View Verein: Vereinsauswahl nur aktuelle Saison
+# SWT-Import: Neu nur bei Berechtigung 'Turniere anlegen'
 
 - - - - - 3.7.0 - [16-02-2019] - - - - - - - - - - - - - - - - - - - -
 # SWT-Import: Ignorieren von Verein und Mitgliedsnummer bei Import ohne Org-Bezug
