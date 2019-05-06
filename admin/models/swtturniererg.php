@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -440,6 +440,9 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 		
 		//Rangliste neu berechnen
 		$turnier->setRankingPositions();
+		
+		//inoff. DWZ-Berechnung		
+		clm_core::$api->direct("db_tournament_genDWZ",array($turnier->turnierid,false));	
 		
 		//Import war erfolgreich
 		return true;

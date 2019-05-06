@@ -20,6 +20,7 @@ $ -> Language fix or change
 # SWT-Import: Neu nur bei Berechtigung 'Turniere anlegen'
 # Liga: Teamranking mit Berl. Wertung
 # strpos-Funktion und php 7.3
++ SWT-Import Einzel: einschl. inoff. DWZ-Berechnung
 
 - - - - - 3.7.0 - [16-02-2019] - - - - - - - - - - - - - - - - - - - -
 # SWT-Import: Ignorieren von Verein und Mitgliedsnummer bei Import ohne Org-Bezug
