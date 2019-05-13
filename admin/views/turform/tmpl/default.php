@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -722,6 +722,7 @@ $turParams = new clm_class_params($this->turnier->params);
 	<input type="hidden" name="id" value="<?php echo $this->turnier->id; ?>" />
 	<input type="hidden" name="controller" value="turform" />
 	<input type="hidden" name="task" value="" />
+	<input type="hidden" name="params[inofDWZ]" id="params[inofDWZ]" value="<?php echo $turParams->get('inofDWZ', '0'); ?>" />
 	<?php echo JHtml::_( 'form.token' ); ?>
 
 </form>

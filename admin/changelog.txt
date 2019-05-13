@@ -21,6 +21,7 @@ $ -> Language fix or change
 # Liga: Teamranking mit Berl. Wertung
 # strpos-Funktion und php 7.3
 + SWT-Import Einzel: einschl. inoff. DWZ-Berechnung
+# Turniere: Marker inoff. DWZ-Berechnung bei Update Turnierdetails 
 
 - - - - - 3.7.0 - [16-02-2019] - - - - - - - - - - - - - - - - - - - -
 # SWT-Import: Ignorieren von Verein und Mitgliedsnummer bei Import ohne Org-Bezug
