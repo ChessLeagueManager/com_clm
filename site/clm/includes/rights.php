@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -64,6 +64,7 @@ $rights["view_logging_new"]=array(0,"BE_logfile_general",true);
 $rights["db_logging_new"]=array(0,"BE_logfile_general",true);
 $rights["db_logging_del"]=array(0,"BE_logfile_general",true);
 $rights["db_lineup_attr"]=array();
+$rights["db_xml_data"]=array();
 
 //************************
 // Turniere

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5.0" method="upgrade">
 	<name>CLM</name>
-	<creationDate>16.02.2019</creationDate>
+	<creationDate>13.05.2019</creationDate>
 	<author>CLM Team</author>
 	<copyright>(C) Copyright 2008-2019 by CLM Project</copyright>
 	<license>GNU/GPL</license>
 	<authorEmail>fishpoke@fishpoke.de</authorEmail>
 	<authorUrl>www.chessleaguemanager.de</authorUrl>
-	<version>3.7.0</version>
+	<version>3.7.0e</version>
  	<scriptfile>installer.php</scriptfile>
 	<description>
 		<![CDATA[
 	 	<img src="components/com_clm/images/clm_logo.png" alt="" align="left" />
 		 <h3>CLM - Chess League Manager :</h3>
 		 <p>Die CLM Komponente ist ein Ligamanager für Schachligen.</p>
-		 <a href="http://www.chessleaguemanager.de" target="blank">CLM Projekt Homepage</a>  |  <a href="http://www.chessleaguemanager.de/index.php?option=com_kunena" target="blank">Support Forum</a>
+		 <a href="https://www.chessleaguemanager.de" target="blank">CLM Projekt Homepage</a>  |  <a href="https://www.chessleaguemanager.de/index.php?option=com_kunena" target="blank">Support Forum</a>
 		 <br><br>
 		 <u>CLM Team :</u>
 		 <ul type="square">
