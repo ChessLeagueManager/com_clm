@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.7.1 - [xx-xx-2019] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.7.1 - [20-05-2019] - - - - - - - - - - - - - - - - - - - -
 # Korrektur Komponenten-Text (Bild)
 ^ View Runde: auch bei Schulschach mit Links zu Spielern
 ^ Umstellung Links zu Projektseite auf https
