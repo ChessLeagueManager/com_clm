@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -41,6 +41,8 @@ class CLMModelSWTTurnier extends JModelLegacy {
 							#__clm_turniere 
 						WHERE 
 							sid = '.$this->getState( 'filter_saison' ).'';
+			if (clm_core::$access->access('BE_tournament_edit_detail') === "2")
+				$query .= ' AND tl = '.clm_core::$access->getJid();
 			$this->_turniere = $this->_getList( $query );
 		} 
 		return $this->_turniere;
