@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -316,8 +316,22 @@ if ( $this->turnier->published == 0) {
 	
 	}
 
-}
+	// Online Anmeldung
+	$today = date("Y-m-d");
+ 	if (isset($this->turnier->dateRegistration) AND $this->turnier->dateRegistration >= $today)  { // Online Anmeldung vorgesehen?
+	?>
+		<tr>
+			<td align="left" width="100"><?php echo JText::_(''); ?></td>
+			<td>
+				<?php 
+					echo CLMText::createCLMLink(JText::_('REGISTRATION_TOURNAMENT'), 'turnier_registration', array('turnier' => $this->turnier->id, 'Itemid' => $itemid));
+				?>
+			</td>
+		</tr>
+	<?php
+	}
 
+}
 	
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); 
 echo '</div></div>';

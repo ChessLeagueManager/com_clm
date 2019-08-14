@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -49,6 +49,7 @@ class TableCLMTurniere extends JTable
 	var $remiss			= 0.5;
 	var $nieder			= 0.0;
 	var $niederk 		= 0.0;
+	var $dateRegistration 	= '1970-01-01';
 
 	function __construct( &$_db ) {
 		parent::__construct( '#__clm_turniere', 'id', $_db );

@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2019 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -446,6 +446,36 @@ $turParams = new clm_class_params($this->turnier->params);
 		</td>
 	</tr>
 	
+	<tr>
+		<td width="30%" class="paramlist_key">
+			<label for="dateRegistration">
+				<?php echo JText::_( 'TOURNAMENT_DATE_REGISTRATION' ); ?>:
+			</label>
+		</td>
+		<td class="paramlist_value">
+			<?php
+			echo CLMForm::calendar($this->turnier->dateRegistration, 'dateRegistration', 'dateRegistration', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
+		</td>
+	</tr>
+	
+	<tr>
+		<td width="30%" class="paramlist_key">
+			<?php echo JText::_('OPTION_REGISTRATION'); ?>:
+		</td>
+		<td class="paramlist_value">
+			<?php 
+			$options = array();
+			$options[0] = JText::_('OPTION_REGISTRATION_0');
+			$options[5] = JText::_('OPTION_REGISTRATION_5');
+			//$options[2] = JText::_('OPTION_AUTODWZ_2');
+			$optionlist = array();
+			foreach ($options as $key => $val) {
+				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
+			}
+			echo JHtml::_('select.genericlist', $optionlist, 'params[typeRegistration]', 'class="inputbox"', 'id', 'name', $turParams->get('typeRegistration', 0)); ?>
+		</td>
+	</tr>
+
 			</table>
 		</fieldset>
 	</div>

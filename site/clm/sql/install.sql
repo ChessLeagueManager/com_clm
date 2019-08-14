@@ -299,6 +299,28 @@ CREATE TABLE IF NOT EXISTS `#__clm_meldeliste_spieler` (
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `#__clm_online_registration`
+--
+
+CREATE TABLE IF NOT EXISTS `#__clm_online_registration` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tid` mediumint(5) unsigned DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `vorname` varchar(50) DEFAULT NULL,
+  `club` varchar(60) DEFAULT NULL,
+  `email` varchar(100) NOT NULL DEFAULT '',
+  `elo` smallint(4) unsigned DEFAULT NULL,
+  `dwz` smallint(4) unsigned DEFAULT NULL,
+  `status` mediumint(5) NOT NULL DEFAULT '0',
+  `timestamp` int(11) NOT NULL,
+  `comment` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `#__clm_pgn`
 --
 CREATE TABLE IF NOT EXISTS `#__clm_pgn` (
@@ -950,6 +972,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere` (
   `remiss` decimal(2,1) unsigned DEFAULT '0.5',
   `nieder` decimal(2,1) unsigned DEFAULT '0.0',
   `niederk` decimal(2,1) unsigned DEFAULT '0.0',
+  `dateRegistration` date NOT NULL,
   PRIMARY KEY (`id`),
   KEY `published` (`published`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
