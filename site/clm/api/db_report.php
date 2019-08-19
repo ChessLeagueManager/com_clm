@@ -1,6 +1,10 @@
 <?php
-// Eingang: Verband
-// Ausgang: Alle Vereine in diesem
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 function clm_api_db_report($liga, $runde, $dg, $paar) {
 
 	$liga = clm_core::$load->make_valid($liga, 0, -1);
@@ -29,6 +33,13 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 	// Ist der Benutzer im CLM eingeloggt
 	if ($id==-1) {
 		return array(false, "e_reportLogin");
+	} 
+ 
+	$utype = clm_core::$access->getType();
+
+	// Ist der Benutzer 'nur' Spieler ohne Rechte
+	if ($utype == 'spl') {
+		return array(false, "e_reportRight");
 	} 
  
   	$paarModel = " SELECT a.*,g.id as gid, g.name as gname, g.tln_nr as gtln,"

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -43,7 +43,11 @@ if ($clmuser[0]->published < 1) {
 	$msg = JText::_( 'CLUB_DATA_ACCOUNT' );
 	$mainframe->redirect( $link, $msg );
 				}
-if ( $clmuser[0]->usertype == "spl" OR $clmuser[0]->zps <> $zps ) { 
+if ( $clmuser[0]->usertype == "spl" ) { 
+		$msg = JText::_( 'NO_PERMISSION' );
+		$mainframe->redirect( $link, $msg );
+		}
+if ( $clmuser[0]->zps <> $zps ) { 
 		$msg = JText::_( 'CLUB_DATA_FALSE' );
 		$mainframe->redirect( $link, $msg );
 		}
