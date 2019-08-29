@@ -16,6 +16,7 @@ $ -> Language fix or change
 + Benutzergruppe: Turnierleiter mit Importberechtigung
 + Einzelturniere: Online-Turnieranmeldung einschl. Menüeintragstyp (Teil Frontend)
 # Benutzergruppe Spieler (spl): Korrektur der Berechtigung im Frontend
++ Datenschutz: Möglichkeit neueste Archivsaison offen
 
 - - - - - 3.7.1 - [20-05-2019] - - - - - - - - - - - - - - - - - - - -
 # Korrektur Komponenten-Text (Bild)

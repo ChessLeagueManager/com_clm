@@ -45,7 +45,7 @@ function clm_api_db_xml_data($lid,$dg,$runde,$paar) {
 	
 	$out["aconfig"] = $aconfig;
  
-  	$ligaModel = " SELECT a.*, u.name as sl, u.email, s.name as sname, s.published as spublished, s.archiv as sarchiv FROM #__clm_liga as a"
+  	$ligaModel = " SELECT a.*, u.name as sl, u.email, s.id as sid, s.name as sname, s.published as spublished, s.archiv as sarchiv FROM #__clm_liga as a"
 		." LEFT JOIN #__clm_user as u ON a.sl = u.jid AND u.sid = a.sid"
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 		." WHERE a.id = ".$lid
@@ -59,7 +59,8 @@ function clm_api_db_xml_data($lid,$dg,$runde,$paar) {
 	if ($out["liga"][0]->published == 0 OR $out["liga"][0]->spublished == 0) {
 		return array(false, "PLG_CLM_SHOW_ERR_NOT_PUBLISHED");
 	}
-	if ($conf_view_archive == 1 AND $out["liga"][0]->sarchiv == 1) {
+	$archive_check = clm_core::$api->db_check_season_user($out["liga"][0]->sid);
+	if (!$archive_check) {
 		return array(false, "PLG_CLM_SHOW_ERR_NO_ARCHIVE");
 	}
 	if ($dg > $out["liga"][0]->durchgang) {

@@ -13,18 +13,45 @@ function clm_api_db_check_season_user($sid = - 1) {
 	$config = clm_core::$db->config();
 	$conf_view_archive	= $config->view_archive;
  
-	// Check aktiv?
+	// Check aktiv? Nein, alle Besucher sehen alle Saisons
 	if ($conf_view_archive == 0) {
 		return true;
 	}
-	// Check aktuelle Saison?
-	if (intval($sid) == intval($asid)) {
-		return true;
+	// Check aktiv? Ja, nur angemeldete Benutzer sehen die Saisons im Archiv
+	if ($conf_view_archive == 1) {
+		// Check aktuelle Saison?
+		if (intval($sid) == intval($asid)) {
+			return true;
+		}
+		// Check User angemeldet?
+		if (intval($auser) > 0) {
+			return true;
+		}
+		return false;
 	}
-	// Check User angemeldet?
-	if (intval($auser) > 0) {
-		return true;
+	// Check aktiv? Ja, nur angemeldete Benutzer sehen die Saisons im Archiv
+	// aber die neueste Saison im Archiv ist sichtbar für alle
+	if ($conf_view_archive == 2) {
+		// Check aktuelle Saison?
+		if (intval($sid) == intval($asid)) {
+			return true;
+		}
+		// Bestimmung neueste Saison im Archiv
+		$query = ' SELECT id,name FROM #__clm_saison
+					WHERE published = 1 AND archiv = 1
+					ORDER BY id DESC LIMIT 1;' ;
+		$season	= clm_core::$db->loadObject($query);
+		// Check neueste Saison des Archiv?
+		if (intval($sid) == intval($season->id)) {
+			return true;
+		}
+		// Check User angemeldet?
+		if (intval($auser) > 0) {
+			return true;
+		}
+		return false;
 	}
+	
 	return false;
 }
 ?>

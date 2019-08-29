@@ -142,7 +142,7 @@ $config["email_type"]=array(121,9,1,array(0,1));
 $config["upload_pgn"]=array(122,9,0,array(0,1));
 $config["import_pgn"]=array(123,9,0,array(0,1));
 $config["test_button"]=array(124,9,0,array(0,1)); 
-$config["view_archive"]=array(125,9,0,array(0,1));
+$config["view_archive"]=array(125,9,0,array(0,1,2));
 $config["user_member"]=array(126,9,0,array(0,1)); 
 $config["privacy_notice"]=array(127,14,"",null);
 ?>
