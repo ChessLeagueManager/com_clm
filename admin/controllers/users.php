@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -1122,6 +1122,7 @@ function copy_saison()
 	// Alle User aus Vorsaison ohne Account in der aktuellen Saison laden
 	$sql	=" SELECT id FROM #__clm_user "
 		." WHERE sid = ".$check
+		." AND published = 1 "
 		.' AND jid NOT IN ('.$users.') '
 		." ORDER BY id ASC "
 		;
