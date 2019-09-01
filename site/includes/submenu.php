@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -14,6 +14,9 @@ $document = JFactory::getDocument();
 // Konfigurationsparameter auslesen
 $config = clm_core::$db->config();
 $fe_submenu = $config->fe_submenu;
+$test_button = $config->test_button;
+$mobile = clm_core::$load->is_mobile();
+
 if ($fe_submenu == 1) {
 	$document = JFactory::getDocument();
 	if (!isset($submenu_where[0])) {
@@ -114,40 +117,63 @@ if ($fe_submenu == 1) {
 	}
 	// Paarungsliste
 	$array[3][0] = JText::_('SUBMENU_PAAR');
+	$i33 = 0;
 	if (isset($liga_on)) {
+		if (!$mobile) {
 			if (JRequest::getVar('view', -1) != "paarungsliste") {
 				$array[3][1] = 0;
 			} else {
 				$array[3][1] = 1;
 			}
-		$array[3][2][] = array("option", "com_clm");
-		$array[3][2][] = array("view", "paarungsliste");
-		$array[3][2][] = array("saison", $sid);
-		$array[3][2][] = array("liga", $lid);
-		if ($itemid <> '') {
+			$array[3][2][] = array("option", "com_clm");
+			$array[3][2][] = array("view", "paarungsliste");
+			$array[3][2][] = array("saison", $sid);
+			$array[3][2][] = array("liga", $lid);
+			if ($itemid <> '') {
 			$array[3][2][] = array("Itemid", $itemid);
+			}
+		} else {
+			$array[3][1] = 2;
+			$array[3][2] = array();
 		}
 		$array[3][3] = array();
 
+		if ($mobile) {
+			$array[3][3][0][0] = JText::_('SUBMENU_PAAR');
+			if (JRequest::getVar('view', -1) != "paarungsliste") {
+				$array[3][3][0][1] = 0;
+			} else {
+				$array[3][3][0][1] = 1;
+			}
+			$array[3][3][0][2][] = array("option", "com_clm");
+			$array[3][3][0][2][] = array("view", "paarungsliste");
+			$array[3][3][0][2][] = array("saison", $sid);
+			$array[3][3][0][2][] = array("liga", $lid);
+			if ($itemid <> '') {
+				$array[3][3][0][2][] = array("Itemid", $itemid);
+			}
+			$i33++;
+		}
 		
 		// Aktuelle Runde
 		if(count($sub_runden)>0){		
-		$array[3][3][0][0] = JText::_('ROUND_CURRENT');
+		$array[3][3][$i33][0] = JText::_('ROUND_CURRENT');
 		require_once (JPATH_COMPONENT . DS . 'models' . DS . 'aktuell_runde.php');
 		$rnd_dg = CLMModelAktuell_Runde::Runden();
 		if (JRequest::getVar('view', -1) != "runde" || JRequest::getVar('runde', -1) != $rnd_dg[0] || JRequest::getVar('dg', -1) != $rnd_dg[1]) {
-			$array[3][3][0][1] = 0;
+			$array[3][3][$i33][1] = 0;
 		} else {
-			$array[3][3][0][1] = 1;
+			$array[3][3][$i33][1] = 1;
 		}
-		$array[3][3][0][2][] = array("option", "com_clm");
-		$array[3][3][0][2][] = array("view", "aktuell_runde");
-		$array[3][3][0][2][] = array("saison", $sid);
-		$array[3][3][0][2][] = array("liga", $lid);
+		$array[3][3][$i33][2][] = array("option", "com_clm");
+		$array[3][3][$i33][2][] = array("view", "aktuell_runde");
+		$array[3][3][$i33][2][] = array("saison", $sid);
+		$array[3][3][$i33][2][] = array("liga", $lid);
 		if ($itemid <> '') {
-			$array[3][3][0][2][] = array("Itemid", $itemid);
+			$array[3][3][$i33][2][] = array("Itemid", $itemid);
 		}
 		// Alle Runden
+		$i33++;
 		for ($i = 0;$i < count($sub_runden);$i++) {
 /*			if ($sub_runden[$i]->nr > $sub_runden[$i]->runden) { //klkl
 				$sub_liga_durchgang = "2";
@@ -170,20 +196,20 @@ if ($fe_submenu == 1) {
 				$sub_liga_durchgang = "4"; 
 				$sub_runden_nr = $sub_runden[$i]->nr - (3 * $sub_runden[$i]->runden);
 			}
-			$array[3][3][$i + 1][0] = $sub_runden[$i]->name;
+			$array[3][3][$i + $i33][0] = $sub_runden[$i]->name;
 			if (JRequest::getVar('view', -1) != "runde" || JRequest::getVar('runde', -1) != $sub_runden_nr || JRequest::getVar('dg', -1) != $sub_liga_durchgang) {
-				$array[3][3][$i + 1][1] = 0;
+				$array[3][3][$i + $i33][1] = 0;
 			} else {
-				$array[3][3][$i + 1][1] = 1;
+				$array[3][3][$i + $i33][1] = 1;
 			}
-			$array[3][3][$i + 1][2][] = array("option", "com_clm");
-			$array[3][3][$i + 1][2][] = array("view", "runde");
-			$array[3][3][$i + 1][2][] = array("saison", $sid);
-			$array[3][3][$i + 1][2][] = array("liga", $lid);
-			$array[3][3][$i + 1][2][] = array("runde", $sub_runden_nr);
-			$array[3][3][$i + 1][2][] = array("dg", $sub_liga_durchgang);
+			$array[3][3][$i + $i33][2][] = array("option", "com_clm");
+			$array[3][3][$i + $i33][2][] = array("view", "runde");
+			$array[3][3][$i + $i33][2][] = array("saison", $sid);
+			$array[3][3][$i + $i33][2][] = array("liga", $lid);
+			$array[3][3][$i + $i33][2][] = array("runde", $sub_runden_nr);
+			$array[3][3][$i + $i33][2][] = array("dg", $sub_liga_durchgang);
 			if ($itemid <> '') {
-				$array[3][3][$i + 1][2][] = array("Itemid", $itemid);
+				$array[3][3][$i + $i33][2][] = array("Itemid", $itemid);
 			}
 		}}else{
 		$array[3][3] = array();
@@ -287,6 +313,11 @@ if ($fe_submenu == 1) {
 	if(isset($liga_on)){$array[4][3][5][2][] = array("liga", $lid);}
 	if ($itemid <> '') {
 		$array[4][3][5][2][] = array("Itemid", $itemid);
+	}
+
+if ($test_button) {
+	echo "<b>Ihr HTTP_USER_AGENT lautet:</b> ".$_SERVER['HTTP_USER_AGENT']."<br>";
+	echo "<br>mobile:"; var_dump($mobile);
 	}
 	echo clm_submenu($array);
 }

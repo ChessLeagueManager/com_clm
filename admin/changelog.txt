@@ -18,6 +18,7 @@ $ -> Language fix or change
 # Benutzergruppe Spieler (spl): Korrektur der Berechtigung im Frontend
 + Datenschutz: Möglichkeit neueste Archivsaison offen
 ^ Benutzer-Admin-View: nur freigegebene Benutzer werden aus dem Vorjahr kopiert
++ Submenu: Anpassung Touchscreen
 
 - - - - - 3.7.1 - [20-05-2019] - - - - - - - - - - - - - - - - - - - -
 # Korrektur Komponenten-Text (Bild)
