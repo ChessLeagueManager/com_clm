@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -52,7 +52,7 @@ class CLMModelTurnier_Tabelle extends JModelLegacy {
 	
 	function _getTurnierPlayers() {
 	
-		$query = "SELECT rankingPos, snr, name, birthYear, geschlecht, sid, zps, verein, twz, titel, anz_spiele, sum_punkte, sumTiebr1, sumTiebr2, sumTiebr3"
+		$query = "SELECT rankingPos, snr, name, birthYear, geschlecht, sid, zps, verein, twz, titel, anz_spiele, sum_punkte, sumTiebr1, sumTiebr2, sumTiebr3, '' AS quali"
 			." FROM `#__clm_turniere_tlnr`"
 			." WHERE turnier = ".$this->turnierid
 			.$this->_getSpecialRankingWhere()		//Sonderranglisten
@@ -79,6 +79,28 @@ class CLMModelTurnier_Tabelle extends JModelLegacy {
 				}
 			}
 		}
+		//Auf-Abstieg- bzw. Qualifikationmarker setzen
+			$turParams = new clm_class_params($this->turnier->params);
+			$qualiUp = $turParams->get('qualiUp', 0);
+			$qualiUpPoss = $qualiUp+$turParams->get('qualiUpPoss', 0);
+			$qualiDown = $turParams->get('qualiDown', 0);
+			$qualiDownPoss = $qualiDown+$turParams->get('qualiDownPoss', 0);
+			foreach ($this->players as $key => $value) {
+				if ($qualiUp > 0 AND $value->rankingPos <= $qualiUp) {
+					// Aufsteiger
+					$this->players[$key]->quali = '_auf';
+				} elseif ($qualiUpPoss > 0 AND $value->rankingPos <= $qualiUpPoss) {
+					// mgl. Aufsteiger
+					$this->players[$key]->quali = '_auf_evtl';
+				} elseif ($qualiDown > 0 AND $value->rankingPos > ($this->turnier->teil-$qualiDown)) {
+					// Absteiger
+					$this->players[$key]->quali = '_ab';
+				} elseif ($qualiDownPoss > 0 AND $value->rankingPos > ($this->turnier->teil-$qualiDownPoss)) {
+					// mgl. Absteiger
+					$this->players[$key]->quali = '_ab_evtl';
+				}
+			
+			}
 	}
 	
 	

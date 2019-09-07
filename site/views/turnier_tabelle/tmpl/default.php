@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -109,7 +109,7 @@ if (!$archive_check) {
 			}
 
 			echo '<tr class="'.$zeilenr.'">';
-				echo '<td class="rang">'.CLMText::getPosString($this->players[$p]->rankingPos).'</td>';
+				echo '<td class="rang'.$this->players[$p]->quali.'">'.CLMText::getPosString($this->players[$p]->rankingPos).'</td>';
 				
 				if ($turParams->get('displayPlayerTitle', 1) == 1) {
 					echo '<td align="center" class="name_float">'.$this->players[$p]->titel.'</td>';

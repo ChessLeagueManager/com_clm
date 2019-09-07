@@ -1,6 +1,8 @@
 /**
   * CSS Style for Chess League Manager
-  * www.chessleaguemanager.de
+  * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+  * @link https://www.chessleaguemanager.de
   * Author: Fjodor Schaefer
   * www.vonfio.de
   
@@ -336,7 +338,7 @@
 /** Darstellung der Turniertabelle **/
 /************************************/
 
-#turnier_tabelle .rang { width: 30px; text-align:center; } 
+#turnier_tabelle .rang, #turnier_tabelle .rang_auf, #turnier_tabelle .rang_auf_evtl, #turnier_tabelle .rang_ab, #turnier_tabelle .rang_ab_evtl {width: 30px; text-align: center !important;} 
 #turnier_tabelle .titel { width: 40px; text-align:center; } 
 #turnier_tabelle .name_float {} 
 #turnier_tabelle .verein {} 
