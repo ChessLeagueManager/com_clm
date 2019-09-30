@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 defined('clm') or die('Restricted access');
 // Welche APIs sollen beim Aufruf geloggt werden?
 $logs = array();
@@ -16,6 +22,7 @@ $logs[]="db_season_enable";
 $logs[]="db_season_delete";
 $logs[]="db_tournament_del";
 $logs[]="db_tournament_player_del";
+$logs[]="db_tournament_registration_del";
 $logs[]="db_tournament_genDWZ";
 $logs[]="db_tournament_delDWZ";
 $logs[]="db_tournament_updateDWZ";

@@ -113,6 +113,15 @@ $heading = $this->turnier->name;
 				<input type="hidden" name="<?php echo 'reg_club'.($i); ?>" value="<?php echo $names[$i]->club; ?>" />
 				<input type="hidden" name="<?php echo 'reg_dwz'.($i); ?>" value="<?php echo $names[$i]->rating; ?>" />
 				<input type="hidden" name="<?php echo 'reg_elo'.($i); ?>" value="<?php echo $names[$i]->elo; ?>" />
+				<input type="hidden" name="<?php echo 'reg_PKZ'.($i); ?>" value="<?php echo $names[$i]->pid; ?>" />
+				<input type="hidden" name="<?php echo 'reg_titel'.($i); ?>" value="<?php echo $names[$i]->title; ?>" />
+				<input type="hidden" name="<?php echo 'reg_geschlecht'.($i); ?>" value="<?php echo $names[$i]->gender; ?>" />
+				<input type="hidden" name="<?php echo 'reg_birthYear'.($i); ?>" value="<?php echo $names[$i]->yearOfBirth; ?>" />
+				<input type="hidden" name="<?php echo 'reg_mgl_nr'.($i); ?>" value="<?php echo $names[$i]->membership; ?>" />
+				<input type="hidden" name="<?php echo 'reg_zps'.($i); ?>" value="<?php echo $names[$i]->vkz; ?>" />
+				<input type="hidden" name="<?php echo 'reg_dwz_I0'.($i); ?>" value="<?php echo $names[$i]->ratingIndex; ?>" />
+				<input type="hidden" name="<?php echo 'reg_FIDEid'.($i); ?>" value="<?php echo $names[$i]->idfide; ?>" />
+				<input type="hidden" name="<?php echo 'reg_FIDEcco'.($i); ?>" value="<?php echo $names[$i]->nationfide; ?>" />
 				</tr>
 			<?php } ?>
 		</table>

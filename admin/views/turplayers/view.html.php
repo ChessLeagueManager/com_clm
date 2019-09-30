@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -64,7 +64,12 @@ class CLMViewTurPlayers extends JViewLegacy {
 					JToolBarHelper::spacer();
 				}
 			}
-		
+			
+			// Online-Anmeldungen bearbeiten
+			if ($model->turnier->dateRegistration > '1970-01-01') { 
+				JToolBarHelper::custom( 'onlineRegList', 'copy.png', 'copy_f2.png', JText::_('ONLINE_REG_LIST'), false);
+				JToolBarHelper::spacer();
+			}
 		}
 		
 		JToolBarHelper::cancel();

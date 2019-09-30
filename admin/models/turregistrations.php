@@ -11,7 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-class CLMModelTurPlayers extends JModelLegacy {
+class CLMModelTurRegistrations extends JModelLegacy {
 
 	var $_pagination = null;
 	var $_total = null;
@@ -76,7 +76,7 @@ class CLMModelTurPlayers extends JModelLegacy {
 	function _getData() {
 	
 		// turnier
-		$query = 'SELECT * '
+		$query = 'SELECT id, name, teil, typ, tiebr1, tiebr2, tiebr3, tl, params'
 			. ' FROM #__clm_turniere'
 			. ' WHERE id = '.$this->param['id']
 			;
@@ -88,14 +88,21 @@ class CLMModelTurPlayers extends JModelLegacy {
 				. ' FROM #__clm_turniere_tlnr as a'
 				. ' LEFT JOIN #__clm_turniere_rnd_termine AS rt ON rt.turnier = a.turnier AND rt.nr = a.koRound '
 				.$this->_sqlWhere();
-		$this->playersTotal = $this->_getListCount($query);
+		$this->_db->setQuery($query);
+		$this->turPlayers = $this->_db->loadObjectList();
+		
+		// online registrations
+		$query = 'SELECT a.* '
+				. ' FROM #__clm_online_registration as a'
+				. ' WHERE a.tid = '.$this->turnier->id;
+		$this->registrationsTotal = $this->_getListCount($query);
 		
 		if ($this->limit > 0) {
 			$query .= $this->_sqlOrder().' LIMIT '.$this->limitstart.', '.$this->limit;
 		}
 		
 		$this->_db->setQuery($query);
-		$this->turPlayers = $this->_db->loadObjectList();
+		$this->turRegistrations = $this->_db->loadObjectList();
 		
 		// Flag, ob gestartet
 		$tournament = new CLMTournament($this->param['id'], true);
@@ -105,7 +112,7 @@ class CLMModelTurPlayers extends JModelLegacy {
 		// wenn nicht gestartet, check, ob Startnummern okay
 		if (!$tournament->started AND !$tournament->checkCorrectSnr()) {
 			
-			JError::raiseWarning(500, JText::_('PLEASE_CORRECT_SNR') );
+			//JError::raiseWarning(500, JText::_('PLEASE_CORRECT_SNR') );
 		
 		}
 		
@@ -138,7 +145,7 @@ class CLMModelTurPlayers extends JModelLegacy {
 	function _sqlOrder() {
 		
 		// array erlaubter order-Felder:
-		$arrayOrderAllowed = array('name', 'rankingPos', 'titel', 'snr', 'start_dwz', 'FIDEelo', 'twz', 'verein', 'ordering', 'sum_punkte');
+		$arrayOrderAllowed = array('name', 'titel', 'dwz', 'elo', 'verein', 'ordering');
 		if (!in_array($this->param['order'], $arrayOrderAllowed)) {
 			$this->param['order'] = 'id';
 		}
@@ -149,15 +156,7 @@ class CLMModelTurPlayers extends JModelLegacy {
 		
 		// Sortierung nach Punkten
 		} else {
-			$orderby = ' ORDER BY sum_punkte '. $this->param['order_Dir'];
-			$fwFieldNames = array(1 => 'sum_bhlz', 'sum_busum', 'sum_sobe', 'sum_wins');
-			// alle durchgehen
-			for ($f=1; $f<=3; $f++) {
-				$fieldName = 'tiebr'.$f; // Feldname in #_turniere
-				if ($this->turnier->$fieldName > 0) {
-					$orderby .= ', '.$fwFieldNames[$this->turnier->$fieldName].' '.$this->param['order_Dir'];
-				}
-			}
+			$orderby = ' ORDER BY timestamp '. $this->param['order_Dir'];
 		}
 	
 		return $orderby;
@@ -168,7 +167,7 @@ class CLMModelTurPlayers extends JModelLegacy {
 		// Load the content if it doesn't already exist
 		if (empty($this->pagination)) {
 			jimport('joomla.html.pagination');
-			$this->pagination = new JPagination($this->playersTotal, $this->limitstart, $this->limit );
+			$this->pagination = new JPagination($this->registrationsTotal, $this->limitstart, $this->limit );
 		}
 	}
 

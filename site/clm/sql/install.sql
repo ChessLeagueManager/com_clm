@@ -307,15 +307,24 @@ CREATE TABLE IF NOT EXISTS `#__clm_online_registration` (
   `tid` mediumint(5) unsigned DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
   `vorname` varchar(50) DEFAULT NULL,
+  `birthYear` year(4) NOT NULL DEFAULT '0000',
+  `geschlecht` char(1) DEFAULT NULL,
   `club` varchar(60) DEFAULT NULL,
   `email` varchar(100) NOT NULL DEFAULT '',
   `elo` smallint(4) unsigned DEFAULT NULL,
+  `FIDEid` int(8) DEFAULT NULL,
+  `FIDEcco` char(3) DEFAULT NULL,
   `dwz` smallint(4) unsigned DEFAULT NULL,
+  `dwz_I0` smallint(6) NOT NULL DEFAULT '0',
+  `titel` char(3) DEFAULT NULL,
+  `mgl_nr` mediumint(5) NOT NULL DEFAULT '0',
+  `PKZ` varchar(9) DEFAULT NULL,
+  `zps` varchar(5) NOT NULL DEFAULT '',
   `status` mediumint(5) NOT NULL DEFAULT '0',
   `timestamp` int(11) NOT NULL,
   `comment` text NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`)
+  `ordering` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------

@@ -22,8 +22,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_online_registration` (
   `status` mediumint(5) NOT NULL DEFAULT '0',
   `timestamp` int(11) NOT NULL,
   `comment` text NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --

@@ -32,12 +32,12 @@ $typeRegistration = $turParams->get('typeRegistration', 0);
 $reg_check01 	= JRequest::getVar('reg_check01','');
 $reg_name 		= JRequest::getVar('reg_name','');
 $reg_vorname 	= JRequest::getVar('reg_vorname','');
-$reg_jahr 		= JRequest::getVar('reg_jahr','');
+$reg_birthYear 	= JRequest::getVar('reg_jahr','');
 $reg_club 		= JRequest::getVar('reg_club','');
 $reg_mail 		= JRequest::getVar('reg_mail','');
 $reg_dwz 		= JRequest::getVar('reg_dwz','');
 $reg_elo 		= JRequest::getVar('reg_elo','');
-$reg_comment 		= JRequest::getVar('reg_comment','');
+$reg_comment 	= JRequest::getVar('reg_comment','');
 
 if ($typeRegistration == 5) {
 	$reg_spieler 		= JRequest::getVar('reg_spieler',100);
@@ -47,7 +47,26 @@ if ($typeRegistration == 5) {
 		$reg_club 		= JRequest::getVar('reg_club'.$reg_spieler,'');
 		$reg_dwz 		= JRequest::getVar('reg_dwz'.$reg_spieler,'');
 		$reg_elo 		= JRequest::getVar('reg_elo'.$reg_spieler,'');
+		$reg_PKZ 		= JRequest::getVar('reg_PKZ'.$reg_spieler,'');
+		$reg_titel 		= JRequest::getVar('reg_titel'.$reg_spieler,'');
+		$reg_geschlecht	= JRequest::getVar('reg_geschlecht'.$reg_spieler,'');
+		$reg_birthYear	= JRequest::getVar('reg_birthYear'.$reg_spieler,'');
+		$reg_mgl_nr		= JRequest::getVar('reg_mgl_nr'.$reg_spieler,'');
+		$reg_zps 		= JRequest::getVar('reg_zps'.$reg_spieler,'');
+		$reg_dwz_I0 	= JRequest::getVar('reg_dwz_I0'.$reg_spieler,'');
+		$reg_FIDEid 	= JRequest::getVar('reg_FIDEid'.$reg_spieler,'');
+		$reg_FIDEcco	= JRequest::getVar('reg_FIDEcco'.$reg_spieler,'');
 	}
+} else {
+		$reg_PKZ 		= '';
+		$reg_titel 		= '';
+		$reg_geschlecht	= '';
+		$reg_birthYear	= '';
+		$reg_mgl_nr		= '';
+		$reg_zps 		= '';
+		$reg_dwz_I0 	= '';
+		$reg_FIDEid 	= '';
+		$reg_FIDEcco	= '';
 }
 $session = JFactory::getSession();
 $reg_wert = $session->get('reg_wert');
@@ -94,9 +113,12 @@ if ($msg != '') {
 // kein Fehler -> Meldung in Tabelle schreiben
 	$db	=JFactory::getDBO();
 	$query	= "INSERT INTO #__clm_online_registration "
-		." ( `tid`, `name`, `vorname`, `club`, `email`, `elo`, `dwz`, `comment`, "
-		." `status`, `timestamp` ) "
+		." ( `tid`, `name`, `vorname`, `club`, `email`, `elo`, `dwz`,"
+		." `PKZ`, `titel`, `geschlecht`, `birthYear`, `mgl_nr`, `zps`, `dwz_I0`, `FIDEid`, `FIDEcco`,"
+		." `comment`, `status`, `timestamp` ) "
 		." VALUES ('$turnier->id','".clm_core::$db->escape($reg_name)."','".clm_core::$db->escape($reg_vorname)."','".clm_core::$db->escape($reg_club)."','$reg_mail','$reg_elo','$reg_dwz', "
+		." '".clm_core::$db->escape($reg_PKZ)."','".clm_core::$db->escape($reg_titel)."','".clm_core::$db->escape($reg_geschlecht)."','".clm_core::$db->escape($reg_birthYear)."','".clm_core::$db->escape($reg_mgl_nr)."', "
+		." '".clm_core::$db->escape($reg_zps)."','".clm_core::$db->escape($reg_dwz_I0)."','".clm_core::$db->escape($reg_FIDEid)."','".clm_core::$db->escape($reg_FIDEcco)."', "
 		." '".clm_core::$db->escape($reg_comment)."', '0',".time()." ) "
 		;
 	clm_core::$db->query($query);

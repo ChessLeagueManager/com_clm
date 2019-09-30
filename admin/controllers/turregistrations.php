@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -14,7 +14,7 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-class CLMControllerTurPlayers extends JControllerLegacy {
+class CLMControllerTurRegistrations extends JControllerLegacy {
 	
 
 	// Konstruktor
@@ -31,7 +31,7 @@ class CLMControllerTurPlayers extends JControllerLegacy {
 		$this->registerTask( 'unactive','active' );
 
 		$this->adminLink = new AdminLink();
-		$this->adminLink->view = "turplayers";
+		$this->adminLink->view = "turregistrations";
 		$this->adminLink->more = array('id' => $this->id);
 	
 	}
@@ -46,32 +46,10 @@ class CLMControllerTurPlayers extends JControllerLegacy {
 	}
 
 
-	// Weiterleitung!
-	function add() {
-		
-		$this->adminLink->view = "turplayerform";
-		$this->adminLink->makeURL();
-		
-		$this->setRedirect( $this->adminLink->url );
-	
-	}
-	// Nachzügler aufnehmen =  Anzahl erhöhen + Weiterleitung!
-	function add_nz() {
-		$tournament = new CLMTournament($this->id, true);
-		$tournament->makePlusTln(); // Message werden dort erstellt
-		
-		$this->adminLink->view = "turplayerform";
-		$this->adminLink->more = array('id' => $this->id, 'add_nz' => 1 );
-		$this->adminLink->makeURL();
-		
-		$this->setRedirect( $this->adminLink->url );
-	}
-
-	function del_player() {
+	function del_registrations() {
 		// ausgewählte Einträge
 		$cid = JRequest::getVar('cid', array(), '', 'array');
-
-		$output = clm_core::$api->db_tournament_player_del($this->id,$cid);
+		$output = clm_core::$api->db_tournament_registration_del($this->id,$cid);
 		$error = clm_core::$load->load_view("notification", array($output[1],false));	
 
 		// Message
@@ -82,25 +60,25 @@ class CLMControllerTurPlayers extends JControllerLegacy {
 		$this->setRedirect( $this->adminLink->url );
 	}
 
-	function plusTln() {
-	
-		$this->_plusTlnDo();
-
-		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
-	
+	function edit_registration() {
+		// ausgewählte Einträge
+		$cid = JRequest::getVar('cid', array(), '', 'array');
+		JArrayHelper::toInteger($cid);
+		$count = count($cid);
+		if ($count < 1) {
+			JError::raiseWarning(500, JText::_( 'NO_ITEM_SELECTED', true ) );
+			$this->adminLink = new AdminLink();
+			$this->adminLink->view = "turregistrations";
+			$this->adminLink->more = array('id' => $this->id);
+			$this->adminLink->makeURL();
+			$this->setRedirect( $this->adminLink->url );
+		} else {
+			$this->adminLink->view = "turregistrationedit";
+			$this->adminLink->more = array('registrationid' => $cid[0]);
+			$this->adminLink->makeURL();
+			$this->setRedirect( $this->adminLink->url );
+		}
 	}
-
-
-	function _plusTlnDo() {
-	
-		$tournament = new CLMTournament($this->id, true);
-		$tournament->makePlusTln(); // Message werden dort erstellt
-		
-		return true;
-	
-	}
-
 
 
 	function remove() {
@@ -430,7 +408,8 @@ class CLMControllerTurPlayers extends JControllerLegacy {
 
 	function cancel() {
 		
-		$this->adminLink->view = "turmain";
+		$this->adminLink->view = "turplayers";
+		$clmLog->params = array('tid' => $this->id);
 		$this->adminLink->makeURL();
 		
 		$this->setRedirect( $this->adminLink->url );

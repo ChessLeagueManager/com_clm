@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.7.3 - [xx-xx-2019] - - - - - - - - - - - - - - - - - - - -
++ Einzelturniere: Online-Turnieranmeldung (Teil Backend)
+
 - - - - - 3.7.2 - [07-09-2019] - - - - - - - - - - - - - - - - - - - -
 + Benutzergruppe: Turnierleiter mit Importberechtigung
 + Einzelturniere: Online-Turnieranmeldung einschl. Menüeintragstyp (Teil Frontend)
