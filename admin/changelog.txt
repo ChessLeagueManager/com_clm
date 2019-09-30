@@ -14,6 +14,7 @@ $ -> Language fix or change
 
 - - - - - 3.7.3 - [xx-xx-2019] - - - - - - - - - - - - - - - - - - - -
 + Einzelturniere: Online-Turnieranmeldung (Teil Backend)
+^ View Turnierrangliste,-tabelle: Weiterleitung auf Teilnehmerliste, wenn Turnier nicht gestartet 
 
 - - - - - 3.7.2 - [07-09-2019] - - - - - - - - - - - - - - - - - - - -
 + Benutzergruppe: Turnierleiter mit Importberechtigung

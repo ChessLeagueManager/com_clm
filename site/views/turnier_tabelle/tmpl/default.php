@@ -20,6 +20,8 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 // Konfigurationsparameter auslesen
 $itemid 		= JRequest::getVar( 'Itemid' );
 $spRang		= JRequest::getVar( 'spRang' ,0);	//Sonderranglisten
+$option 	= JRequest::getCmd( 'option' );
+$mainframe	= JFactory::getApplication();
 
 // $turnierid		= JRequest::getInt('turnier','1');
 $config = clm_core::$db->config();
@@ -45,9 +47,10 @@ if (!$archive_check) {
 	echo CLMContent::componentheading($heading);
 	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
 } elseif ($spRang == 0 and $this->turnier->playersCount < $this->turnier->teil) { //�nderung wegen Sonderranglisten
-	echo CLMContent::componentheading($heading);
-   	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_PLAYERLISTNOTCOMPLETE')."<br/>".JText::_('TOURNAMENT_NORANKINGEXISTING'));
+	$msg = JText::_('TOURNAMENT_PLAYERLISTNOTCOMPLETE')."<br/>".JText::_('TOURNAMENT_NORANKINGEXISTING');
+	$link = 'index.php?option='.$option.'&view=turnier_teilnehmer&turnier='.$this->turnier->id;
+	if ($itemid != 0) $link .= '&Itemid='.$itemid;
+	$mainframe->redirect( $link, $msg );
 
 } elseif($this->turnier->typ == 3) { // KO-System
 	echo CLMContent::componentheading($heading);
