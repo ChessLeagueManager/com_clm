@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -304,7 +304,7 @@ function edit()
 
 	if ( $runde[0]->hmnr > ($runde[0]->lid)*10 OR $runde[0]->gmnr > ($runde[0]->lid)*10) {
 		JError::raiseNotice( 6000, JText::_( 'ERGEBNISSE_MANNSCHAFTNUMMER' ) );
-		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_MN_HEIM').' '.$runde[0]->hmnr.JText::_('ERGEBNISSE_MN_GAST').' '.$runde[0]->gmnr.' !' );
+		JError::raiseNotice( 6000, JText::_( 'ERGEBNISSE_MN_HEIM').' '.$runde[0]->hmnr.JText::_('ERGEBNISSE_MN_GAST').' '.$runde[0]->gmnr.' !' );
 	}
 	
 	// Spieler Heim
