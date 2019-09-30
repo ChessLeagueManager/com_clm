@@ -17,6 +17,7 @@ $ -> Language fix or change
 ^ View Turnierrangliste,-tabelle: Weiterleitung auf Teilnehmerliste, wenn Turnier nicht gestartet 
 ^ Benutzer-Admin-View: keine Feldprüfungen bei Deaktivierung eines Benutzers
 # Admin-View Ergebnisse: Fehlermeldung wegen Mannschaftsnummer wird Hinweis
+# mehrere js-Routinen zur Feldprüfung: Aktivierung submit-Button
 
 - - - - - 3.7.2 - [07-09-2019] - - - - - - - - - - - - - - - - - - - -
 + Benutzergruppe: Turnierleiter mit Importberechtigung
