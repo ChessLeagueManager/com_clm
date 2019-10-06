@@ -316,7 +316,10 @@ if ($fe_submenu == 1) {
 	}
 
 if ($test_button) {
-	echo "<b>Ihr HTTP_USER_AGENT lautet:</b> ".$_SERVER['HTTP_USER_AGENT']."<br>";
+    if (!isset($_SERVER["HTTP_USER_AGENT"])) 
+		echo "<b>Kein HTTP_USER_AGENT defined:</b> "."Zugriff über Extern Modul"."<br>";
+	else
+		echo "<b>Ihr HTTP_USER_AGENT lautet:</b> ".$_SERVER['HTTP_USER_AGENT']."<br>";	
 	echo "<br>mobile:"; var_dump($mobile);
 	}
 	echo clm_submenu($array);
