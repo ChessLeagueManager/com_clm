@@ -6,7 +6,7 @@
  * @link http://www.chessleaguemanager.de
 */
 // Eingang: Liga-Index
-function clm_api_db_xml_data($lid,$dg,$runde,$paar) {
+function clm_api_db_xml_data($lid,$dg,$runde,$paar,$view) {
 	$liga = clm_core::$load->make_valid($lid, 0, -1);
 	$out["input"]["lid"] = $lid;
 
@@ -87,16 +87,7 @@ function clm_api_db_xml_data($lid,$dg,$runde,$paar) {
 		;
 	$out["termin"] = clm_core::$db->loadObjectList($terminModel);
 
-	
-/*  	$mannschaftModel = " SELECT * FROM #__clm_mannschaften "
-		." WHERE liga = ".$lid
-		." AND published = 1 "
-		//." ORDER BY tln_nr "
-		." ORDER BY rankingpos ASC"							// Sortierung für Kreuztabelle vollrundig
-		;
-	$out["mannschaft"] = clm_core::$db->loadObjectList($mannschaftModel);
-*/
-	
+		
 	$dgrunde = ($dg * 100) + $runde + 1;
 	$mannschaftModel = " SELECT a.tln_nr, m.name as name, m.published, "; 
 	if ($runde == 0)
@@ -132,7 +123,7 @@ function clm_api_db_xml_data($lid,$dg,$runde,$paar) {
 	else
 		$paarModel .= " g.z_rankingpos as grank, h.z_rankingpos as hrank, "; 		
 	$paarModel .= " g.man_nr as gmnr, h.id as hid, h.name as hname, h.tln_nr as htln, b.wertpunkte as gwertpunkte, "
-		." h.published as hpublished, h.man_nr as hmnr, t.name as rname "
+		." h.published as hpublished, h.man_nr as hmnr, t.name as rname, t.datum as rdatum, t.startzeit "
 		." FROM #__clm_rnd_man as a"
 		." LEFT JOIN #__clm_mannschaften AS g ON g.tln_nr = a.gegner"
 		." LEFT JOIN #__clm_mannschaften AS h ON h.tln_nr = a.tln_nr"
@@ -148,8 +139,12 @@ function clm_api_db_xml_data($lid,$dg,$runde,$paar) {
 	if ($runde > 0 AND $paar == 0)		// View Kreuztabelle
 		$paarModel .= " AND ((a.dg * 100) + a.runde) < ".$dgrunde;
 		//." ORDER BY a.dg ASC,a.runde ASC, a.paar ASC"
-	$paarModel .= " ORDER BY hrank ASC, a.dg ASC, grank ASC"			// Sortierung für Kreuztabelle vollrundig
-		;
+	if ($view != 2)
+		$paarModel .= " ORDER BY hrank ASC, a.dg ASC, grank ASC";			// Sortierung für Kreuztabelle vollrundig
+	else {
+		$paarModel .= " AND a.heim = 1";		// Sortierung für Paarungsliste
+		$paarModel .= " ORDER BY a.dg ASC, a.runde ASC, a.paar ASC";		// Sortierung für Paarungsliste
+	}
 	$out["paar"] = clm_core::$db->loadObjectList($paarModel);
 
 	
@@ -181,9 +176,10 @@ function clm_api_db_xml_data($lid,$dg,$runde,$paar) {
 		." LEFT JOIN #__clm_dwz_spieler AS g ON (g.ZPS = r.gzps AND g.PKZ = r.gPKZ AND g.sid = r.sid) "
 		." LEFT JOIN #__clm_meldeliste_spieler AS dm ON ( dm.lid = a.lid AND dm.zps = r.zps AND dm.PKZ = r.PKZ )"
 		." LEFT JOIN #__clm_meldeliste_spieler AS gm ON ( gm.lid = a.lid AND gm.zps = r.gzps AND gm.PKZ = r.gPKZ )";
-	$DWZgespieltModel .= " WHERE a.lid = $lid AND a.heim = 1 AND r.heim = 1 "
-		." AND a.dg = ".$dg." AND a.runde = ".$runde." AND a.paar = ".$paar
-		." GROUP BY a.dg ASC, a.runde ASC, a.paar ASC"
+	$DWZgespieltModel .= " WHERE a.lid = $lid AND a.heim = 1 AND r.heim = 1 ";
+	if ($view == 3)
+		$DWZgespieltModel .= " AND a.dg = ".$dg." AND a.runde = ".$runde." AND a.paar = ".$paar;
+	$DWZgespieltModel .= " GROUP BY a.dg ASC, a.runde ASC, a.paar ASC"
 		;
 	$out["DWZgespielt"] = clm_core::$db->loadObjectList($DWZgespieltModel);
 

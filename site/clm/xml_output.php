@@ -19,7 +19,7 @@ require ("index.php");
 	$view = $_GET["plgview"];
 	$view = clm_core::$load->make_valid($view, 0, -1);
 	$error_text = '';
-	$out = clm_core::$api->db_xml_data($lid,$dg,$runde,$paar);
+	$out = clm_core::$api->db_xml_data($lid,$dg,$runde,$paar,$view);
 
     if (isset($out[0]) AND $out[0] === false) { 
 		$error_text = $out[1];
@@ -47,6 +47,18 @@ require ("index.php");
 			}
 			if ($liga[0]->runden_modus != 1 AND $liga[0]->runden_modus != 2) {
 				$error_text = "PLG_CLM_SHOW_ERR_MODUS_V1";
+			}
+		}
+		if ($view == 2) { 
+			$mannschaft		= $out[2]["mannschaft"];
+			$DWZgespielt	= $out[2]["DWZgespielt"];
+			$DWZSchnitt	= $out[2]["DWZSchnitt"];
+			foreach ($DWZgespielt as $oneDWZgespielt) {
+				$arrayDWZ[$oneDWZgespielt->dg][$oneDWZgespielt->runde][$oneDWZgespielt->paar] = (string)round($oneDWZgespielt->dwz);
+				$garrayDWZ[$oneDWZgespielt->dg][$oneDWZgespielt->runde][$oneDWZgespielt->paar] = (string)round($oneDWZgespielt->gdwz);
+			}
+			foreach ($DWZSchnitt as $oneDWZSchnitt) {
+				$marrayDWZ[$oneDWZSchnitt->tlnr] = (string)round($oneDWZSchnitt->dwz);
 			}
 		}
 		if ($view == 3) {
@@ -126,6 +138,37 @@ if ($view == 0 or $view == 1) {		// Rangliste (Kreuztabelle/Tabelle)
 		$teamsNode->appendChild($dom->createElement("count_V", $mannschaft[$m]->count_V));
 		$teamsNode->appendChild($dom->createElement("mp", $mannschaft[$m]->mp));
 		$teamsNode->appendChild($dom->createElement("bp", $mannschaft[$m]->bp));
+	}
+}
+if ($view == 2) {		// Paarungsliste
+	$root->appendChild($ranglisteNode = $dom->createElement("paarungsliste"));
+	foreach ($a_paar as $paar0) {
+		$ranglisteNode->appendChild($teamsNode = $dom->createElement("paarung"));
+		$teamsNode->appendChild($dom->createElement("paar", $paar0->paar));
+		$teamsNode->appendChild($dom->createElement("tln_nr", $paar0->tln_nr));
+		$teamsNode->appendChild($dom->createElement("hname", $paar0->hname));
+		$teamsNode->appendChild($dom->createElement("gtln", $paar0->gtln));
+		$teamsNode->appendChild($dom->createElement("gname", $paar0->gname));
+		$teamsNode->appendChild($dom->createElement("dg", $paar0->dg));
+		$teamsNode->appendChild($dom->createElement("runde", $paar0->runde));
+		$teamsNode->appendChild($dom->createElement("brettpunkte", $paar0->brettpunkte));
+		$teamsNode->appendChild($dom->createElement("gbrettpunkte", $paar0->gbrettpunkte));
+		if (isset($arrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar])) 
+			$o_dwz = $arrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar];
+		else
+			if (isset($marrayDWZ[$paar0->tln_nr])) $o_dwz = $marrayDWZ[$paar0->tln_nr];
+			else $o_dwz = '';
+		$teamsNode->appendChild($dom->createElement("dwz", $o_dwz));
+		if (isset($garrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar])) 
+			$o_gdwz = $garrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar];
+		else
+			if (isset($marrayDWZ[$paar0->gtln])) $o_gdwz = $marrayDWZ[$paar0->gtln];
+			else $o_gdwz = '';
+		$teamsNode->appendChild($dom->createElement("gdwz", $o_gdwz));
+		$teamsNode->appendChild($dom->createElement("rname", $paar0->rname));
+		$teamsNode->appendChild($dom->createElement("rdatum", $paar0->rdatum));
+		$teamsNode->appendChild($dom->createElement("startzeit", $paar0->startzeit));
+		$teamsNode->appendChild($dom->createElement("comment", html_entity_decode($paar0->comment)));
 	}
 }
 if ($view == 3) {		// Paarung

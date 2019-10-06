@@ -18,6 +18,7 @@ $ -> Language fix or change
 ^ Benutzer-Admin-View: keine Feldprüfungen bei Deaktivierung eines Benutzers
 # Admin-View Ergebnisse: Fehlermeldung wegen Mannschaftsnummer wird Hinweis
 # mehrere js-Routinen zur Feldprüfung: Aktivierung submit-Button
++ XML-Ausgabe: Erweiterung um Paarungsliste
 
 - - - - - 3.7.2 - [07-09-2019] - - - - - - - - - - - - - - - - - - - -
 + Benutzergruppe: Turnierleiter mit Importberechtigung
