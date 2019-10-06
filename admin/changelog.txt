@@ -19,6 +19,7 @@ $ -> Language fix or change
 # Admin-View Ergebnisse: Fehlermeldung wegen Mannschaftsnummer wird Hinweis
 # mehrere js-Routinen zur Feldprüfung: Aktivierung submit-Button
 + XML-Ausgabe: Erweiterung um Paarungsliste
+# Tabelle clm-User: Joomla-User-ID angepasst
 
 - - - - - 3.7.2 - [07-09-2019] - - - - - - - - - - - - - - - - - - - -
 + Benutzergruppe: Turnierleiter mit Importberechtigung

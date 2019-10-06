@@ -1144,7 +1144,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere_tlnr` (
 CREATE TABLE IF NOT EXISTS `#__clm_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sid` smallint(3) unsigned DEFAULT NULL,
-  `jid` mediumint(5) unsigned DEFAULT NULL,
+  `jid` int(11) unsigned DEFAULT NULL,
   `name` text NOT NULL,
   `username` varchar(150) NOT NULL DEFAULT '',
   `aktive` tinyint(3) NOT NULL DEFAULT '0',
