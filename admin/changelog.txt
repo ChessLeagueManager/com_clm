@@ -21,6 +21,7 @@ $ -> Language fix or change
 + XML-Ausgabe: Erweiterung um Paarungsliste
 # Tabelle clm-User: Joomla-User-ID angepasst
 # is_mobile wegen Extern Zugriff korrigiert
+# pdf-Ausgabe: bei fehlerhafter Logo-Adresse kein Abbruch
 
 - - - - - 3.7.2 - [07-09-2019] - - - - - - - - - - - - - - - - - - - -
 + Benutzergruppe: Turnierleiter mit Importberechtigung

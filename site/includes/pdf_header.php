@@ -35,7 +35,7 @@ $pdf_orientation = JRequest::getVar( 'pdf_orientation');
 
 //Logo der Organisation (Landesverband, Verein, ...; über Einstellungen vorgegeben)  rechts 
 	$file_headers = @get_headers($org_logo);
-	if($org_logo != '' AND $file_headers[0] != 'HTTP/1.1 404 Not Found') {
+	if($org_logo != '' AND $file_headers !== false AND $file_headers[0] != 'HTTP/1.1 404 Not Found' AND $file_headers[0] != 'HTTP/1.0 302 Moved Temporarily' AND $file_headers[0] != 'HTTP/1.1 301 Moved Permanently') {
 		$this->Image($org_logo,$pdf_width-20,6,15); }
 //Linie mit Zeilenumbruch
     $this->Line(15, 20, $pdf_width, 20);
