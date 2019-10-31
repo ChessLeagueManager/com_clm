@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -126,16 +126,17 @@ function display($cachable = false, $urlparams = array())
 	if (isset($rows[0]) && $rows[0]->liga_mt == "0") {
 		$mppoint = 'league';
 		$csection = 'ligen';
+		$liga_type = '1';
 	} else {
 		$mppoint = 'teamtournament';
 		$csection = 'mturniere';
+		$liga_type = '0';
 	}
 
 	//echo "<br>runden: "; var_dump($rows);  die('  section');
 	if($clmAccess->access('BE_'.$mppoint.'_edit_round') === false) {
 		JError::raiseWarning( 500, JText::_( 'LIGEN_STAFFEL_TOTAL' ) );
-		$section = $csection;
-		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg , "message");
+		$mainframe->redirect( 'index.php?option='. $option.'&view=view_tournament_group&liga='.$liga_type, $msg , "message");
 	} elseif ($clmAccess->access('BE_'.$mppoint.'_edit_round') === true) $where_sl = '';
 	else $where_sl = ' AND a.sl = '.clm_core::$access->getJid();
 	
@@ -154,9 +155,12 @@ function display($cachable = false, $urlparams = array())
 	// Suchefilter
 	$lists['search']= $search;
 	if(isset($rows[0]) && $rows[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) {
-		JError::raiseWarning( 500, JText::_( 'LIGEN_STAFFEL1' ) );
-		$section = 'ligen';
-		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg , "message");
+		JError::raiseWarning( 500, JText::_( 'LIGEN_STAFFEL' ) );
+		$mainframe->redirect( 'index.php?option='. $option.'&view=view_tournament_group&liga='.$liga_type, $msg , "message");
+	}
+	if(!isset($rows[0])) {
+		JError::raiseWarning( 500, JText::_( 'LIGEN_NOT_POSSIBLE' ) );
+		$mainframe->redirect( 'index.php?option='. $option.'&view=view_tournament_group&liga='.$liga_type, $msg , "message");
 	}
  
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'runden.php');
