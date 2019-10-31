@@ -14,6 +14,7 @@ $ -> Language fix or change
 
 - - - - - 3.7.4 - [xx-xx-2019] - - - - - - - - - - - - - - - - - - - -
 # Admin-View Runden: Absicherung fehlerhafter Ligaparameter
+# pdf-Ausgaben: Klasse FPDF 1.81 vervollständigt
 
 - - - - - 3.7.3 - [07-10-2019] - - - - - - - - - - - - - - - - - - - -
 + Einzelturniere: Online-Turnieranmeldung (Teil Backend)

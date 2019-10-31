@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 function clm_view_schedule_pdf($out) {
 	$lang = clm_core::$lang->schedule;
 
@@ -45,10 +51,10 @@ $zelle = 6;
 // Wert von Zellenbreiten 
 $breite0 = 10;
 $br_date = 28;
-$br_lname = 30;
+$br_lname = 38;
 $br_dg = 6;
 $br_rd = 6;
-$br_team = 35;
+$br_team = 40;
 $br_result = 15;
 
 $pdf_orientation = 'P';
@@ -70,7 +76,7 @@ $first = true;
 				$pdf->Cell(10,3,' ',0,0);
 				$pdf->Cell($pdf_width-20,4,utf8_decode($lang->written.' '.$lang->date_on.' '.clm_core::$cms->showDate($now, $lang->date_format_clm_pdf)),0,1,'R');
 			$pdf->SetFont('Arial','B',$head_font);
-				$pdf->Cell(10,3,' ',0,0);
+				$pdf->Cell($breite0,3,' ',0,0);
 				$pdf->Cell($pdf_width-20,7,utf8_decode($club[0]->name." - ".$club[0]->season_name),0,1,'L');
 				$pdf->Cell(10,2,' ',0,1);
 			$pdf->SetFont('Times','',$font);
