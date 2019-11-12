@@ -143,6 +143,7 @@ class CLMTournament {
 
 		$turParams = new clm_class_params($this->_db->loadResult());
 		$paramTBFideCorrect = $turParams->get('optionTiebreakersFideCorrect', 0);
+		$param50PercentRule = $turParams->get('option50PercentRule', 1);
 		$paramuseAsTWZ = $turParams->get('useAsTWZ', 0);
 		$query = ' *'
 			. ' FROM #__clm_turniere'
@@ -300,7 +301,7 @@ class CLMTournament {
 			$gamesCount[$s]->tab = 1;
 			$gamesCount[$s]->count = 0;
 		}
-		if ($maxround > 4 AND $this->data->typ == 2) {		//nur Vollturniere
+		if ($maxround > 4 AND $this->data->typ == 2 AND $param50PercentRule == 1) {		//nur Vollturniere und Prüfung nicht ausgeschaltet
 			foreach ($matchData as $key => $value) {
 				if ($maxround < ((($value->dg - 1) * $runden) + $value->runde)) continue;  // Ignorieren von bereits gesetzten kampflos oder spielfrei in Folgerunden
 				if ($value->ergebnis != 4 AND $value->ergebnis != 6 AND $value->ergebnis != 7 AND $value->ergebnis != 8 AND $value->ergebnis != 11 AND $value->ergebnis != 12 AND $value->ergebnis != 13 AND !is_null($value->ergebnis)) $gamesCount[$value->tln_nr]->count++;
@@ -741,10 +742,12 @@ class CLMTournament {
 			} 	
 		}
 	
+		// direkter Vergleich
 		if ($this->data->tiebr1 == 25 OR $this->data->tiebr2 == 25 OR $this->data->tiebr3 == 25) {
 			$query = "SELECT * "
 				." FROM `#__clm_turniere_tlnr`"
 				." WHERE turnier = ".$this->turnierid
+				." AND sum_punkte > 0"					// check nur für Spieler mit Punkten > 0
 				." ORDER BY sum_punkte DESC, sumTiebr1 DESC, sumTiebr2 DESC, sumTiebr3 DESC, snr ASC"
 				;
 			$this->_db->setQuery( $query );

@@ -318,6 +318,14 @@ $turParams = new clm_class_params($this->turnier->params);
 			<?php echo JHtml::_('select.booleanlist', 'params[optionTiebreakersFideCorrect]', 'class="inputbox"', $turParams->get('optionTiebreakersFideCorrect', 0)); ?>
 		</fieldset></td>
 	</tr>
+	<tr>
+		<td class="paramlist_key" title="<?php echo JText::_( 'OPTION_50PERCENTRULE_HINT' );?>" >
+			<?php echo JText::_('OPTION_50PERCENTRULE'); ?>:
+		</td>
+		<td class="paramlist_value"><fieldset class="radio">
+			<?php echo JHtml::_('select.booleanlist', 'params[option50PercentRule]', 'class="inputbox"', $turParams->get('option50PercentRule', 1)); ?>
+		</fieldset></td>
+	</tr>
 
 	<tr>
 		<td nowrap="nowrap">
