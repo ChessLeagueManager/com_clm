@@ -8,16 +8,17 @@
 // Eingang: Liga-Index
 
 require ("index.php");
+	$view = $_GET["plgview"];
+	$view = clm_core::$load->make_valid($view, 0, -1);
 	$lid = $_GET["lid"];
 	$lid = clm_core::$load->make_valid($lid, 0, -1);
 	$dg = $_GET["dg"];
 	$dg = clm_core::$load->make_valid($dg, 0, -1);
 	$runde = $_GET["runde"];
-	$runde = clm_core::$load->make_valid($runde, 0, -1);
+	if ($view != 14)
+		$runde = clm_core::$load->make_valid($runde, 0, -1);
 	$paar = $_GET["paar"];
 	$paar = clm_core::$load->make_valid($paar, 0, -1);
-	$view = $_GET["plgview"];
-	$view = clm_core::$load->make_valid($view, 0, -1);
 	$error_text = '';
 	$out = clm_core::$api->db_xml_data($lid,$dg,$runde,$paar,$view);
 
@@ -49,7 +50,7 @@ require ("index.php");
 				$error_text = "PLG_CLM_SHOW_ERR_MODUS_V1";
 			}
 		}
-		if ($view == 2) { 
+		if ($view == 2 OR $view == 4) { 
 			$mannschaft		= $out[2]["mannschaft"];
 			$DWZgespielt	= $out[2]["DWZgespielt"];
 			$DWZSchnitt	= $out[2]["DWZSchnitt"];
@@ -68,6 +69,13 @@ require ("index.php");
 			}
 			$DWZgespielt	= $out[2]["DWZgespielt"];
 			$termin			= $out[2]["termin"];
+		}
+		if ($view == 14) {
+			$club			= $out[2]["club"];
+			$ligen = array();
+			foreach ($liga as $liga0) {
+				$ligen[$liga0->id] = $liga0->name;
+			}
 		}
 		$aconfig 			= $out[2]["aconfig"];
 	}
@@ -140,10 +148,20 @@ if ($view == 0 or $view == 1) {		// Rangliste (Kreuztabelle/Tabelle)
 		$teamsNode->appendChild($dom->createElement("bp", $mannschaft[$m]->bp));
 	}
 }
-if ($view == 2) {		// Paarungsliste
+if ($view == 2 OR $view == 4 OR $view == 14) {		// Paarungsliste / Spielplan Mannschaft o. Verein
+	if ($view == 14) {
+		$root->appendChild($ClubNode = $dom->createElement("cname", $club[0]->name));
+	}
 	$root->appendChild($ranglisteNode = $dom->createElement("paarungsliste"));
 	foreach ($a_paar as $paar0) {
 		$ranglisteNode->appendChild($teamsNode = $dom->createElement("paarung"));
+		if ($view == 14) {
+			if (isset($ligen[$paar0->lid])) 
+				$liga_name = $ligen[$paar0->lid];
+			else
+				$liga_name = 'unbekannt';
+			$teamsNode->appendChild($dom->createElement("lname", $liga_name));
+		}
 		$teamsNode->appendChild($dom->createElement("paar", $paar0->paar));
 		$teamsNode->appendChild($dom->createElement("tln_nr", $paar0->tln_nr));
 		$teamsNode->appendChild($dom->createElement("hname", $paar0->hname));
@@ -166,6 +184,10 @@ if ($view == 2) {		// Paarungsliste
 			else $o_gdwz = '';
 		$teamsNode->appendChild($dom->createElement("gdwz", $o_gdwz));
 		$teamsNode->appendChild($dom->createElement("rname", $paar0->rname));
+		if ($paar0->pdate > '1970-01-01') {
+			$paar0->rdatum = $paar0->pdate;
+			$paar0->startzeit = $paar0->ptime;
+		}
 		$teamsNode->appendChild($dom->createElement("rdatum", $paar0->rdatum));
 		$teamsNode->appendChild($dom->createElement("startzeit", $paar0->startzeit));
 		$teamsNode->appendChild($dom->createElement("comment", html_entity_decode($paar0->comment)));
