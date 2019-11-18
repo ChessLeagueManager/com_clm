@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -139,7 +139,7 @@ $pdf->SetTextColor(0);
 			}
 		  } else {
 			if (substr(CLMText::getResultString($this->matrix[$this->players[$p]->snr][$rnd]->ergebnis),0,7) == '&frac12') {
-				$pdf->Cell($br11,$zelle,$heim[$this->matrix[$this->players[$p]->snr][$rnd]->heim].chr(189),1,0,'C',1);
+				$pdf->Cell($br11,$zelle,$heim[$this->matrix[$this->players[$p]->snr][$rnd]->heim]."=",1,0,'C',1);
 			} else {
 				$pdf->Cell($br11,$zelle,$heim[$this->matrix[$this->players[$p]->snr][$rnd]->heim].CLMText::getResultString($this->matrix[$this->players[$p]->snr][$rnd]->ergebnis, 0),1,0,'C',1); 	  
 			}

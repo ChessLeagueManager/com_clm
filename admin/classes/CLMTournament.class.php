@@ -343,8 +343,8 @@ class CLMTournament {
 				$array_PlayerPunkteTB[$value->tln_nr] += $vremis; // FW-Korrektur Teil 1
 			} elseif ($value->ergebnis == 6 AND $paramTBFideCorrect == 1) { // kampflos beide verloren -:- und FIDE-Korrektur eingestellt?
 				$array_PlayerPunkteTB[$value->tln_nr] += $vremis; // FW-Korrektur Teil 1
-			} elseif ($value->ergebnis == 12 AND $paramTBFideCorrect == 1) { // kampflos remis (bye) -:- und FIDE-Korrektur eingestellt?
-				$array_PlayerPunkteTB[$value->tln_nr] += $vremis; // FW-Korrektur Teil 1
+//			} elseif ($value->ergebnis == 12 AND $paramTBFideCorrect == 1) { // kampflos remis (bye) -:- und FIDE-Korrektur eingestellt?
+//				$array_PlayerPunkteTB[$value->tln_nr] += $vremis; // FW-Korrektur Teil 1
 			} elseif ($value->ergebnis == 13 AND $paramTBFideCorrect == 1) { // kampflos beide verloren -:- und FIDE-Korrektur eingestellt?
 				$array_PlayerPunkteTB[$value->tln_nr] += $vremis; // FW-Korrektur Teil 1
 			}
@@ -384,6 +384,7 @@ class CLMTournament {
 					if ($value->heim == 1) $vsieg = $sieg; else $vsieg = $siegs;
 					if ($value->heim == 1) $vremis = $remis; else $vremis = $remiss;
 					if ($value->ergebnis == 4 OR $value->ergebnis == 8) { $PlayerPunkteKOR += $vsieg; }// Gegner gewinnt kampflos oder spielfrei
+					if ($value->ergebnis == 12) { $PlayerPunkteKOR += $vremis; }// Gegner spielt kampflos remis                                                                                 neu
 	  				if ($value->ergebnis == 3 OR $value->ergebnis == 6 OR $value->ergebnis == 13) { $PlayerPunkteKOR += $vsieg; }// Gegner verliert auch kampflos, ist aber egal
 					//$PlayerPunkteKOR += 0.5 * (($runden * $dg) - (($value->dg - 1) * $runden) - $value->runde);
 					$PlayerPunkteKOR += ($vremis * (($maxround) - (($value->dg - 1) * $runden) - $value->runde));
@@ -430,7 +431,7 @@ class CLMTournament {
 					if ($value->heim == 1) $vsieg = $sieg; else $vsieg = $siegs;
 					if ($value->heim == 1) $vremis = $remis; else $vremis = $remiss;
 					if (($value->ergebnis == 5 OR $value->ergebnis == 11)) { $PlayerFaktorKOR = $vsieg; }	// Spieler gewinnt kampflos 
-					elseif (($value->ergebnis == 12)) { $PlayerFaktorKOR = $vremis; }	// Spieler remis kampflos (bye)
+					elseif (($value->ergebnis == 12)) { $PlayerPunkteKOR += $vremis; $PlayerFaktorKOR = $vremis; }	// Spieler remis kampflos (bye)
 					else { $PlayerFaktorKOR = 0; }
 					$PlayerPunkteKOR += ($vremis * (($maxround) - (($value->dg - 1) * $runden) - $value->runde));
 					//echo "<br>p: $value->tln_nr  PlayerPunkteKOR: "; var_dump($PlayerPunkteKOR); 

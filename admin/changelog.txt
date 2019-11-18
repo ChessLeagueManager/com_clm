@@ -17,6 +17,7 @@ $ -> Language fix or change
 # pdf-Ausgaben: Klasse FPDF 1.81 vervollständigt
 + XML-Ausgabe: Erweiterung Spielplan Mannschaft und Spielplan Verein
 ^ Einzelturniere: Parameter zum Ausschalten der 50%-Regel nach FIDE
+^ SWT-Import Turniere: Rundenbezogenes Bye
 
 - - - - - 3.7.3 - [07-10-2019] - - - - - - - - - - - - - - - - - - - -
 + Einzelturniere: Online-Turnieranmeldung (Teil Backend)

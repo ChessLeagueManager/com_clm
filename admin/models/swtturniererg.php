@@ -240,11 +240,13 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 		
 		//Paarungen auslesen
 		$sp = 1;
+		$bye_brett = (integer) (round($anz_teilnehmer / 2) + 1);
+		$bye_count = 0;
 		while($sp <= $anz_teilnehmer) {
 			$rnd = 1;
 			while($rnd <= $swt_runden) {
 				
-				if(CLMSWT::readInt($swt,$offset	+ 13,1) > 0){//Deaktivierte Spieler abfangen
+				if(CLMSWT::readInt($swt,$offset	+ 13,1) > 0 OR CLMSWT::readInt($swt,$offset	+ 11,1) > 0){//Deaktivierte Spieler abfangen
 					$match = new JObject(); 
 					
 					$match->set('teil_nr'		, $sp);
@@ -259,6 +261,20 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 						$this->_SWTmatchesWhite[$rnd][$match->brett] = $match;
 					} elseif ($match->SWTheim == 3 OR $match->SWTheim == 4) {	
 						$this->_SWTmatchesBlack[$rnd][$match->brett] = $match;
+					}
+					//Bye Ergebnis = (kampflos 1/2 Punkt)
+					if($match->SWTheim == 0 AND $match->SWTergebnis == 2 AND $match->SWTattribute == 2) {
+						$match->set('brett'			, ($bye_brett + $bye_count));				
+						$this->_SWTmatchesWhite[$rnd][$match->brett] = $match;
+						$match = new JObject(); 
+						$match->set('teil_nr'		, 0);
+						$match->set('SWTheim'		, CLMSWT::readInt($swt,$offset	+ 8,1));
+						$match->set('brett'			, ($bye_brett + $bye_count));				
+						$bye_count++;
+						$match->set('gegner'		, $sp);
+						$match->set('SWTergebnis'	, CLMSWT::readInt($swt,$offset	+ 11,1));
+						$match->set('SWTattribute'	, CLMSWT::readInt($swt,$offset	+ 15,1));
+						$this->_SWTmatchesBlack[$rnd][$match->brett] = $match;						
 					}
 				}
 				
@@ -327,6 +343,8 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			return 9; // 0,5-0
 		} elseif ($SWTmatchWhite->SWTergebnis == 2 AND $SWTmatchWhite->SWTattribute != 2 AND $SWTmatchBlack->SWTergebnis == 1 AND $SWTmatchBlack->SWTattribute != 2) {
 			return 10; // 0-0,5
+		} elseif ($SWTmatchWhite->SWTergebnis == 2 AND $SWTmatchWhite->SWTattribute == 2 AND $SWTmatchBlack->SWTergebnis == 2 AND $SWTmatchBlack->SWTattribute == 2) {
+			return 12; // 0,5---
 		} else {
 			return 7; // noch nicht gespielt
 		}
@@ -351,6 +369,8 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			return 10; // 0-0,5
 		} elseif ($SWTmatchWhite->SWTergebnis == 2 AND $SWTmatchWhite->SWTattribute != 2 AND $SWTmatchBlack->SWTergebnis == 1 AND $SWTmatchBlack->SWTattribute != 2) {
 			return 9; // 0,5-0
+		} elseif ($SWTmatchWhite->SWTergebnis == 2 AND $SWTmatchWhite->SWTattribute == 2 AND $SWTmatchBlack->SWTergebnis == 2 AND $SWTmatchBlack->SWTattribute == 2) {
+			return 12; // 0,5---
 		} else {
 			return 7; // noch nicht gespielt
 		}
