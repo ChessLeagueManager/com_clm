@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.7.5 - [xx-xx-2019] - - - - - - - - - - - - - - - - - - - -
+# Online-Turnieranmeldung: Vervollständigung engl. Texte
+
 - - - - - 3.7.4 - [18-11-2019] - - - - - - - - - - - - - - - - - - - -
 # Admin-View Runden: Absicherung fehlerhafter Ligaparameter
 # pdf-Ausgaben: Klasse FPDF 1.81 vervollständigt

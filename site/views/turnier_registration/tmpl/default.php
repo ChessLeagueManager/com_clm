@@ -79,12 +79,10 @@ if ( $this->turnier->published == 0) {
 			var form = document.adminForm;
 			// do field validation
 			if (form.name99.value == "") {
-				//alert( "<?php echo JText::_( 'LEAGUE_HINT_1', true ); ?>" );
-				alert( "Bitte Spieler auswählen" );
-				//return false
+				alert( "<?php echo JText::_( 'REGISTRATION_PLAYER_INPUT', true ); ?>" );
+				//alert( "Bitte Spieler auswählen" );
 			} else if (form.club.value == "") {
-				alert( "<?php echo JText::_( 'LEAGUE_HINT_3', true ); ?>" );
-				//return false
+				alert( "<?php echo JText::_( 'REGISTRATION_CLUB_INPUT', true ); ?>" );
 			} else {
 				submitform( pressbutton );
 				//form.submit();
@@ -97,7 +95,7 @@ if ( $this->turnier->published == 0) {
 	
 		<tr>
 			<th align="left" colspan="2" class="anfang"><?php echo $headline; ?><br>
-				<span style="font-size: 80%; font-weight: lighter;">Mit (*) gekennzeichnete Felder sind Pflichteingaben. </span><br>
+				<span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_MANDATORY'); ?> </span><br>
 			</th>
 		</tr>
 	
@@ -170,10 +168,10 @@ if ( $this->turnier->published == 0) {
 		</tr>
 		<tr>
 			<th align="left" colspan="2" class="anfang">
-				<span style="font-size: 80%; font-weight: lighter;">Nach Absenden des Formulars erhalten Sie eine Bestätigungsmail, überprüfen Sie deshalb Ihre Email-Eintragung nochmals.</span>
+				<span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_COMMENT_1'); ?></span>
 				<?php if ($privacy_notice != '') { ?>
-				<br><span style="font-size: 80%; font-weight: lighter;">Die Verarbeitung der Eingaben erfolgt entsprechend unserer <a href="<?php echo $privacy_notice; ?>" target="_blank"><span style="color: black;">Datenschutzerklärung. </span></a></span>
-				<span style="font-size: 80%; font-weight: lighter;">Mit der Turnieranmeldung erklärt sich der Teilnehmer damit einverstanden. </span>
+				<br><span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_COMMENT_2A'); ?><a href="<?php echo $privacy_notice; ?>" target="_blank"><span style="color: black;"><?php echo JText::_('REGISTRATION_COMMENT_2B'); ?></span></a></span>
+				<span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_COMMENT_3'); ?></span>
 				<?php } ?>
 			</th>
 		</tr>

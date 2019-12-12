@@ -49,20 +49,20 @@ $reg_wert = $session->get('reg_wert');
 // Überprüfen der Eingaben
 $msg = '';
 if ($reg_name == '') 
-	$msg .= '<br>'.'Name nicht eingegeben';
+	$msg .= '<br>'.JText::_('REGISTRATION_E_NAME');
 if ($reg_vorname == '') 
-	$msg .= '<br>'.'Vorname nicht eingegeben';
+	$msg .= '<br>'.JText::_('REGISTRATION_E_VORNAME');
 if ($reg_jahr == '') 
-	$msg .= '<br>'.'Geburtsjahr nicht eingegeben';
+	$msg .= '<br>'.JText::_('REGISTRATION_E_YEAR');
 if ($reg_jahr != '' AND (!is_numeric($reg_jahr) OR $reg_jahr < 1880 OR $reg_jahr > 2018))
-	$msg .= '<br>'.'Geburtsjahr nicht korrekt';
+	$msg .= '<br>'.JText::_('REGISTRATION_E_YEARK');
 if (!clm_core::$load->is_email($reg_mail)) 
-	$msg .= '<br>'.'Mail-Adresse nicht korrekt';
+	$msg .= '<br>'.JText::_('REGISTRATION_E_MAIL');
 if ($f_source != 'sent') {
 	if ($reg_check01 == '') 
-		$msg .= '<br>'.'Spam-Wert nicht eingegeben';
+		$msg .= '<br>'.JText::_('REGISTRATION_E_SPAM');
 	elseif ($reg_check01 != $reg_wert) 
-		$msg .= '<br>'.'Spam-Wert nicht korrekt';
+		$msg .= '<br>'.JText::_('REGISTRATION_E_SPAM');
 }
 if ($msg != '') {
 	$link = JURI::base() .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 

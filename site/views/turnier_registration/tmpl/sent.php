@@ -74,19 +74,19 @@ $reg_wert = $session->get('reg_wert');
 // Überprüfen der Eingaben
 $msg = '';
 if ($reg_name == '') 
-	$msg .= '<br>'.'Name nicht eingegeben';
+	$msg .= '<br>'.JText::_('REGISTRATION_E_NAME');
 if ($reg_club == '') 
-	$msg .= '<br>'.'Club nicht eingegeben';
+	$msg .= '<br>'.JText::_('REGISTRATION_E_CLUB');
 if (!clm_core::$load->is_email($reg_mail)) 
-	$msg .= '<br>'.'Mail-Adresse nicht korrekt';
+	$msg .= '<br>'.JText::_('REGISTRATION_E_MAIL');
 if ($reg_dwz != '' AND (!is_numeric($reg_dwz) OR $reg_dwz < 0 OR $reg_dwz > 3000))
-	$msg .= '<br>'.'DWZ nicht korrekt';
+	$msg .= '<br>'.JText::_('REGISTRATION_E_NWZ');
 if ($reg_elo != '' AND (!is_numeric($reg_elo) OR $reg_elo < 0 OR $reg_elo > 3000))
-	$msg .= '<br>'.'Elo nicht korrekt';
+	$msg .= '<br>'.JText::_('REGISTRATION_E_MAIL');
 if ($reg_check01 == '') 
-	$msg .= '<br>'.'Spam-Wert nicht eingegeben';
+	$msg .= '<br>'.JText::_('REGISTRATION_E_SPAM');
 elseif ($reg_check01 != $reg_wert) 
-	$msg .= '<br>'.'Spam-Wert nicht korrekt';
+	$msg .= '<br>'.JText::_('REGISTRATION_E_SPAMK');
 
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
@@ -94,10 +94,10 @@ elseif ($reg_check01 != $reg_wert)
 	$fromname = $config->email_fromname;
 	$htmlMail = $config->email_type;
 	if ( $from == '' ) {
-		$msg .= '<br>'.'CLM-Installation hat keine Mail-Adresse -> kein Emailversand möglich ';
+		$msg .= '<br>'.JText::_('REGISTRATION_E_INSTALL_MAIL');
 	}
 	if ( $fromname == '' ) {
-		$msg .= '<br>'.'CLM-Installation hat keinen Namen -> kein Emailversand möglich ';
+		$msg .= '<br>'.JText::_('REGISTRATION_E_INSTALL_NAME');
 	}
 
 if ($msg != '') {
