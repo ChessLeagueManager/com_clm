@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.7.5 - [xx-xx-2019] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.8.0 - [12-12-2019] - - - - - - - - - - - - - - - - - - - -
 # Online-Turnieranmeldung: Vervollständigung engl. Texte
 ^ Mannschaftsturniere im KO-System: Abändern des Standardes bei 'Turnierwertung ändern' möglich
 
