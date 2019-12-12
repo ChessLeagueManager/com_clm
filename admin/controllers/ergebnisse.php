@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
@@ -1355,7 +1354,7 @@ function save()
 				elseif ($hwpunkte > $gwpunkte) $ko_par = 2;		// Sieger Heim nach Wertpunkte
 				elseif ($hwpunkte < $gwpunkte) $ko_par = 3;		// Sieger Gast nach Wertpunkte
 				else { $ko_par = 3;								// Sieger Gast nach Computer --> Nacharbeit durch TL
-				     $comment = '<b>Keine KO-Entscheidung eingegeben, Gast als Sieger angenommen, Nacharbeit durch Turnierleiter nötig</b><br>'.$comment; }
+				     $comment = JText::_('ERGEBNISSE_KO_COMMENT').$comment; }
 			}
 			elseif ($ko_decision == 2) $ko_par = 2;				// Sieger Heim nach Blitz-Entscheid
 			elseif ($ko_decision == 4) $ko_par = 2;				// Sieger Heim nach Los-Entscheid
@@ -2046,7 +2045,7 @@ function save_wertung()
 				elseif ($hwpunkte > $gwpunkte) $ko_par = 2;		// Sieger Heim nach Wertpunkte
 				elseif ($hwpunkte < $gwpunkte) $ko_par = 3;		// Sieger Gast nach Wertpunkte
 				else { $ko_par = 3;								// Sieger Gast nach Computer --> Nacharbeit durch TL
-				     $comment = '<b>Keine KO-Entscheidung eingegeben, Gast als Sieger angenommen, Nacharbeit durch Turnierleiter nötig</b><br>'.$comment; }
+				     if ($comment == '') $comment = JText::_('ERGEBNISSE_KO_COMMENT').$comment; }
 			}
 			elseif ($ko_decision == 2) $ko_par = 2;				// Sieger Heim nach Blitz-Entscheid
 			elseif ($ko_decision == 4) $ko_par = 2;				// Sieger Heim nach Los-Entscheid
