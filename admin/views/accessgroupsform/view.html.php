@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM-Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -21,7 +21,7 @@ class CLMViewAccessgroupsForm extends JViewLegacy {
 		$accessgroups	=  $this->get('Accessgroups');
 		$ordering		= 	$this->get('Ordering');
 		
-		if (JRequest::getVar( 'task') == 'add') {
+		if (clm_core::$load->request_string('task') == 'add') {
 			$isNew = true;
 		} else { 
 			$isNew = false;
@@ -54,11 +54,10 @@ class CLMViewAccessgroupsForm extends JViewLegacy {
 	
 					
 		// Daten an Template übergeben
-		$this->assignRef('params', $params);
-		$this->assignRef('accessgroup', $accessgroup);
-		$this->assignRef('accessgroups', $accessgroups);
-		$this->assignRef('isNew', $isNew );
-		$this->assignRef('lists' , $lists);
+		$this->accessgroup = $accessgroup;
+		$this->accessgroups = $accessgroups;
+		$this->isNew = $isNew;
+		$this->lists = $lists;
 		
 		parent::display($tpl); 
 

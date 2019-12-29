@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -35,9 +35,11 @@ class CLMControllerTermineForm extends JControllerLegacy {
 
 	function save() {
 	
-		if ($this->_saveDo()) { // erfolgreich?
+		$result = $this->_saveDo();
+		$app =JFactory::getApplication();
+		
+		if ($result[0]) { // erfolgreich?
 			
-			$app =JFactory::getApplication();
 			
 			if ($this->neu) { // neues termine?
 				$app->enqueueMessage( JText::_('TERMINE_TASK_CREATED') );
@@ -45,11 +47,11 @@ class CLMControllerTermineForm extends JControllerLegacy {
 				$app->enqueueMessage( JText::_('TERMINE_TASK_EDITED') );
 			}
 		
+		} else {
+			$app->enqueueMessage( $result[2],$result[1] );					
 		}
-		// sonst Fehlermeldung schon geschrieben
-
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$app->redirect( $this->adminLink->url );
 	
 	}
 
@@ -57,27 +59,25 @@ class CLMControllerTermineForm extends JControllerLegacy {
 	function _saveDo() {
 	
 		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 	
 		// Task
-		$task = JRequest::getVar('task');
-		
+		$task = clm_core::$load->request_string('task', '');
 		// Instanz der Tabelle
 		$row = JTable::getInstance( 'termine', 'TableCLM' );
 		
 	
-		if (!$row->bind(JRequest::get('post'))) {
-			JError::raiseError(500, $row->getError() );
-			return false;
-		
+		$post = $_POST; 
+		if (!$row->bind($post)) {
+			return array(false,'error',$row->getError());
 		} elseif (!$row->checkData()) {
 			// pre-save checks
-			JError::raiseWarning(500, $row->getError() );
-			// Weiterleitung bleibt im Formular !!
 			$this->adminLink->more = array('task' => $task, 'id' => $row->id);
-			return false;
+			return array(false,'warning',$row->getError());
 		
 		}
+		if ($row->startdate == '') $row->startdate = '1970-01-01';
+		if ($row->enddate == '') $row->enddate = '1970-01-01';
 		
 		// if new item, order last in appropriate group
 		if (!$row->id) {
@@ -94,14 +94,12 @@ class CLMControllerTermineForm extends JControllerLegacy {
 		if ($row->noendtime === 0) $row->noendtime = 0; else $row->noendtime = 1;
 		
 		// handling dates
-		if ($row->startdate != '0000-00-00' AND $row->startdate != '1970-01-01' AND $row->enddate == '0000-00-00' AND $row->enddate != '1970-01-01') $row->enddate = $row->startdate;
+		if ($row->startdate != '0000-00-00' AND $row->startdate != '1970-01-01' AND ($row->enddate == '0000-00-00' OR $row->enddate == '1970-01-01')) $row->enddate = $row->startdate;
 		
 		// save the changes
 		if (!$row->store()) {
-			JError::raiseError(500, $row->getError() );
+			return array(false,'error',$row->getError());
 		}
-	
-	
 		
 
 
@@ -114,7 +112,7 @@ class CLMControllerTermineForm extends JControllerLegacy {
 			$this->adminLink->view = "terminemain"; // WL in Liste
 		}
 	
-		return true;
+		return array(true);
 	
 	}
 
@@ -123,7 +121,8 @@ class CLMControllerTermineForm extends JControllerLegacy {
 		
 		$this->adminLink->view = "terminemain";
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$app = JFactory::getApplication();
+		$app->redirect( $this->adminLink->url );
 		
 	}
 

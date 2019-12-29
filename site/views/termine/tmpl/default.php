@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Fjodor Schäfer
@@ -9,16 +9,16 @@
 */
 
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip', $params);
 JHtml::_('behavior.tooltip', '.CLMTooltip');
 
-$lid			= JRequest::getInt('liga','1'); 
-$sid			= JRequest::getInt('saison','1');
-$runde			= JRequest::getInt( 'runde', '1' );
-$dg				= JRequest::getInt('dg','1');
-$categoryid		= JRequest::getInt('categoryid',0);
-$start			= JRequest::getVar('start','1');
-$itemid			= JRequest::getInt('Itemid','1');
+$sid	= clm_core::$load->request_int('saison', 1);	
+$liga	= clm_core::$load->request_int('liga', 1);
+$runde	= clm_core::$load->request_int('runde', 1);	
+$dg	= clm_core::$load->request_int('dg', 1);
+$categoryid	= clm_core::$load->request_int('categoryid', 0);
+$start	= clm_core::$load->request_string('start', '1');	
+$itemid	= clm_core::$load->request_int('Itemid', 1);
+
 $termine		= $this->termine;
 $schnellmenu	= $this->schnellmenu;
 
@@ -49,10 +49,6 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
     <div class="wrong"><?php echo JText::_('NO_ROUNDS') ?></div>
     <?php  } else { 
     
-//    $arrMonth = array(
-//        "January" => "Januar", "February" => "Februar", "March" => "M&auml;rz", "April" => "April", "May" => "Mai", "June" => "Juni", "July" => "Juli",  "August" => "August",  "September" => "September", "October" => "Oktober", "November" => "November", "December" => "Dezember",
-//        "01" => "Januar", "02" => "Februar", "03" => "M&auml;rz", "04" => "April", "05" => "Mai", "06" => "Juni", "07" => "Juli",  "08" => "August",  "09" => "September", "10" => "Oktober", "11" => "November", "12" => "Dezember"
-//    );
 	$arrMonth = array(
 		"January" => JText::_('MOD_CLM_TERMINE_M01'),
 		"February" => JText::_('MOD_CLM_TERMINE_M02'),
@@ -80,7 +76,6 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
 		"12" => JText::_('MOD_CLM_TERMINE_M12')
     );
             
-    //$arrWochentag = array( "Monday" => "Montag", "Tuesday" => "Dienstag", "Wednesday" => "Mittwoch", "Thursday" => "Donnerstag", "Friday" => "Freitag", "Saturday" => "Samstag", "Sunday" => "Sonntag", );
     $arrWochentag = array( 
 		"Monday" => JText::_('MOD_CLM_TERMINE_T01'), 
 		"Tuesday" => JText::_('MOD_CLM_TERMINE_T02'), 
@@ -105,7 +100,6 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
             else $new_year = false;    
             if ( !isset($schnellmenu_arr[$x-1]) OR  $schnellmenu_arr[$x][1] > $schnellmenu_arr[$x-1][1]  OR ($new_year)) { 
                 echo '<li><a href="index.php?option=com_clm&amp;view=termine&amp;categoryid='.$categoryid.'&amp;saison='. $sid .'&amp;Itemid='. $itemid .'&amp;start='.$schnellmenu_arr[$x][0].'-'.$schnellmenu_arr[$x][1].'-01">'. $arrMonth[date('F',$schnellmenu_monat)] ."</a></li>\n"; }
-                //echo '<li><a href="index.php?option=com_clm&amp;view=termine&amp;categoryid='.$categoryid.'&amp;saison='. $sid .'&amp;Itemid='. $itemid .'&amp;start='.$schnellmenu_arr[$x][0].'-'.$schnellmenu_arr[$x][1].'-01">'. date('F',$schnellmenu_monat) ."</a></li>\n"; }
             		
             } ?>
             </ul></td>
@@ -159,7 +153,6 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
                 echo '<tr><th colspan="3"><a name="'. $datum_arr[$t][0] .'">'. $datum_arr[$t][0] .'</a></th></tr>'; }
                 
                 echo '<tr class="anfang"><td colspan="3"><a name="'. $datum_arr[$t][0] .'-'. $datum_arr[$t][1] .'">'. $arrMonth[date('F',$monatsausgabe)] . '</a></td></tr>';  
-                //echo '<tr class="anfang"><td colspan="3"><a name="'. $datum_arr[$t][0] .'-'. $datum_arr[$t][1] .'">'. date('F',$monatsausgabe) . '</a></td></tr>';  
             } ?>
             <tr>
                 <td width="110" align="right" class="date">

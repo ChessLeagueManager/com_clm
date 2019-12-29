@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -16,12 +16,12 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 
 class TableCLMUsers extends JTable
 {
-	var $id			= null;
-	var $sid		= '';
-	var $jid		= '';
+	var $id			= 0;
+	var $sid		= 0;
+	var $jid		= 0;
 	var $name		= '';
 	var $username	= '';
-	var $aktive		= '';
+	var $aktive		= 0;
 	var $email		= '';
 	var $tel_fest	= '';
 	var $tel_mobil	= '';
@@ -30,14 +30,14 @@ class TableCLMUsers extends JTable
 	var $mglnr		= '';
 	var $PKZ		= '';
 	var $org_exc		= '0';
-	var $mannschaft		= '';
-	var $published		= '';
+	var $mannschaft		= 0;
+	var $published		= 0;
 	var $bemerkungen	= '';
 	var $bem_int		= '';
 	var $checked_out	= 0;
 	var $checked_out_time	= '1970-01-01 00:00:00';
-	var $ordering		= null;
-	var $block		= '';
+	var $ordering		= 0;
+	var $block		= 0;
 	var $activation		= '';
 
 	function __construct( &$_db ) {

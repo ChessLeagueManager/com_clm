@@ -123,7 +123,7 @@ public static function users( &$rows, &$lists, &$pageNav, $option )
 				//$row = &$rows[$i];
 				//$row = $value;
 				$row->load( $rows[$i]->id );
-				$link 		= JRoute::_( 'index.php?option=com_clm&section=users&task=edit&cid[]='. $row->id );
+				$link 		= JRoute::_( 'index.php?option=com_clm&section=users&task=edit&id='. $row->id );
 				$checked 	= JHtml::_('grid.checkedout',   $row, $i );
 				$published 	= JHtml::_('grid.published', $row, $i );
 
@@ -199,9 +199,7 @@ public static function users( &$rows, &$lists, &$pageNav, $option )
 public static function setUserToolbar()
 	{
 
-		$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
-		JArrayHelper::toInteger($cid, array(0));
-		if (JRequest::getVar( 'task') == 'edit') { 
+		if (clm_core::$load->request_string('task') == 'edit') { 
 			$text = JText::_( 'Edit' );
 		} else { 
 			$text = JText::_( 'New' );
@@ -218,7 +216,7 @@ public static function setUserToolbar()
 public static function user( &$row,$lists, $option )
 	{
 		CLMViewUsers::setUserToolbar();
-		JRequest::setVar( 'hidemainmenu', 1 );
+		$_GET['hidemainmenu'] = 1;
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 
 	// Konfigurationsparameter auslesen
@@ -231,7 +229,7 @@ public static function user( &$row,$lists, $option )
 		 Joomla.submitbutton = function (pressbutton) { 	
 			var form = document.adminForm;
 			if (pressbutton == 'cancel') {
-				submitform( pressbutton );
+				Joomla.submitform( pressbutton );
 				return;
 			}
 			var conf_user_member ="<?php echo $conf_user_member; ?>";
@@ -253,7 +251,7 @@ public static function user( &$row,$lists, $option )
 				} else if ( conf_user_member == "1" && form.org_exc.value == "1" && form.bem_int.value == "") {
 					alert( "<?php echo JText::_( 'USER_BEM_INT_ANGEBEN', true ); ?>" );
 				} else {
-					submitform( pressbutton );
+					Joomla.submitform( pressbutton );
 				}
 			} else {
 			// do field validation
@@ -266,11 +264,11 @@ public static function user( &$row,$lists, $option )
 				} else if ( conf_user_member == "1" && form.org_exc.value == "1" && form.bem_int.value == "") {
 					alert( "<?php echo JText::_( 'USER_BEM_INT_ANGEBEN', true ); ?>" );
 				} else {
-					submitform( pressbutton );
+					Joomla.submitform( pressbutton );
 				}
 			}
 			} else {
-				submitform( pressbutton );
+				Joomla.submitform( pressbutton );
 			}
 		}
 		 
@@ -409,7 +407,7 @@ public static function user( &$row,$lists, $option )
 	</tr>
 	</table>
   </fieldset>
-<?php if( JRequest::getVar( 'task') =='add') { ?>
+<?php if( clm_core::$load->request_string('task') =='add') { ?>
 <br>
   <fieldset class="adminform">
 	<table class="adminlist">
@@ -436,7 +434,7 @@ public static function user( &$row,$lists, $option )
 		<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
 		<input type="hidden" name="jid" id="jid" value="<?php echo $row->jid; ?>" />
 		<input type="hidden" name="aktive" value="<?php echo $row->aktive; ?>" />
-		<input type="hidden" name="script_task" value="<?php echo JRequest::getVar( 'task'); ?>" />
+		<input type="hidden" name="script_task" value="<?php echo clm_core::$load->request_string('task'); ?>" />
 		<input type="hidden" name="task" value="" />
 		<?php echo JHtml::_( 'form.token' ); ?>
 		</form>

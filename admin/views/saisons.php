@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -21,8 +21,8 @@ public static function setSaisonsToolbar($countryversion)
 
 		JToolBarHelper::title( JText::_( 'Saison Manager' ), 'clm_headmenu_saison.png' );
 	  if ($countryversion =="de") {
-		JToolBarHelper::custom('dwz_del','cancel.png','unarchive_f2.png','RUNDE_DWZ_DELETE',false);	
-		JToolBarHelper::custom('dwz_start','default.png','apply_f2.png','RUNDE_DWZ_APPLY',false);			
+		JToolBarHelper::custom('dwz_del','cancel.png','unarchive_f2.png','RUNDE_DWZ_DELETE',true);	
+		JToolBarHelper::custom('dwz_start','default.png','apply_f2.png','RUNDE_DWZ_APPLY',true);			
 	  }
 	/* Debugging / Testing
 		JToolBarHelper::custom( 'change', 'upload.png', 'upload_f2.png', 'Status ändern' , false);
@@ -38,13 +38,14 @@ public static function setSaisonsToolbar($countryversion)
 
 public static function saisons ( &$rows, &$lists, &$pageNav, $option )
 	{
+	$mainframe	= JFactory::getApplication();
 	// Nur CLM-Amin darf hier zugreifen
 	if (!JFactory::getUser()->authorise('core.manage.clm', 'com_clm')) 
 	{       
-	 return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
-	 }
+	 	$mainframe->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'),'warning');
+		return;
+	}
 	 
-		$mainframe	= JFactory::getApplication();
 		//CLM parameter auslesen
 		$config = clm_core::$db->config();
 		$countryversion = $config->countryversion;
@@ -116,10 +117,9 @@ public static function saisons ( &$rows, &$lists, &$pageNav, $option )
 			$k = 0;
 			$row = JTable::getInstance('saisons', 'TableCLM');
 			for ($i=0, $n=count( $rows ); $i < $n; $i++) {
-				//$row = &$rows[$i];
 				// load the row from the db table
 				$row->load( $rows[$i]->id );
-				$link 		= JRoute::_( 'index.php?option=com_clm&section=saisons&task=edit&cid[]='. $row->id );
+				$link 		= JRoute::_( 'index.php?option=com_clm&section=saisons&task=edit&id='. $row->id );
 				$checked 	= JHtml::_('grid.checkedout',   $row, $i );
 				$published 	= JHtml::_('grid.published', $row, $i );
 
@@ -184,9 +184,7 @@ public static function saisons ( &$rows, &$lists, &$pageNav, $option )
 public static function setSaisonToolbar()
 	{
 
-		$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
-		JArrayHelper::toInteger($cid, array(0));
-		if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
+		if (clm_core::$load->request_string('task', '') == 'edit') { $text = JText::_( 'Edit' );}
 			else { $text = JText::_( 'New' );}
 	
 		clm_core::$load->load_css("icons_images");
@@ -199,13 +197,15 @@ public static function setSaisonToolbar()
 		
 public static function saison( &$row,$lists, $option)
 	{
+	$mainframe	= JFactory::getApplication();
 	// Nur CLM-Admin darf hier zugreifen (neue Saison)
 	if (!JFactory::getUser()->authorise('core.manage.clm', 'com_clm')) 
 	{       
-	 return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
-	 }
+	 	$mainframe->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'),'warning');
+		return;
+	}
 		CLMViewSaisons::setSaisonToolbar();
-		JRequest::setVar( 'hidemainmenu', 1 );
+		$_GET["hidemainmenu"] = 1;
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 		?>
 	

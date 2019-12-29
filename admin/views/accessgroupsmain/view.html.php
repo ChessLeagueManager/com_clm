@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -16,7 +16,7 @@ class CLMViewAccessgroupsMain extends JViewLegacy {
 	function display($tpl = null) { 
 		
 		$mainframe	= JFactory::getApplication();
-		$option 	= JRequest::getCmd( 'option' );
+		$option 	= clm_core::$load->request_string('option', '');
 		
 		//Daten vom Model
 		$state = $this->get( 'State' );
@@ -65,12 +65,12 @@ class CLMViewAccessgroupsMain extends JViewLegacy {
 		
 		
 		//Daten an Template
-		$this->assignRef( 'accessgroups', $accessgroups );
-		$this->assignRef( 'lists', $lists );
-		$this->assignRef( 'user', $user );
-		$this->assignRef( 'pagination', $pagination );
-		$this->assignRef( 'ordering', $ordering );
-		$this->assignRef( 'accessgroupExists', $accessgroupExists );
+		$this->accessgroups = $accessgroups;
+		$this->lists = $lists;
+		$this->user = $user;
+		$this->pagination = $pagination;
+		$this->ordering = $ordering;
+		$this->accessgroupExists = $accessgroupExists;
 		
 		parent::display($tpl); 
 	} 

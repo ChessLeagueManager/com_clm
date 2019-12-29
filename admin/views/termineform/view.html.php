@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -21,7 +21,7 @@ class CLMViewTermineForm extends JViewLegacy {
 		
 		clm_core::$load->load_css("icons_images");
 		
-		if (JRequest::getVar( 'task') == 'edit') { 
+		if (clm_core::$load->request_string('task', '') == 'edit') { 
 			$text = JText::_( 'EDIT' );
 		} else {
 			$text = JText::_( 'NEW' );
@@ -33,7 +33,7 @@ class CLMViewTermineForm extends JViewLegacy {
 		JToolBarHelper::cancel();
 
 		// das MainMenu abschalten
-		JRequest::setVar( 'hidemainmenu', 1 );
+		$_GET['hidemainmenu'] = 1 ;
 
 		// Document/Seite
 		$document =JFactory::getDocument();
@@ -48,13 +48,14 @@ class CLMViewTermineForm extends JViewLegacy {
 		$document->addScriptDeclaration('jserror["enddate_wrong"] = "'.JText::_("TERMINE_ERROR_ENDDATE_WRONG").'";');
 		$document->addScriptDeclaration('jserror["dont_allday"] = "'.JText::_("TERMINE_ERROR_ALLDAY").'";');
 		$document->addScriptDeclaration('jserror["dont_noendtime"] = "'.JText::_("TERMINE_ERROR_NOENDTIME").'";');
+
+		// Script
+		$document->addScript(CLM_PATH_JAVASCRIPT.'termineform.js');
 		
 		// Daten an Template übergeben
-		$this->assignRef('user', $model->user);
-		
-		$this->assignRef('termine', $model->termine);
-
-		$this->assignRef('form', $model->form);
+		$this->user = $model->user;		
+		$this->termine = $model->termine;
+		$this->form = $model->form;
 
 
 		parent::display();

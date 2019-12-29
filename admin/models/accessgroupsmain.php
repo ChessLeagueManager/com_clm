@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -23,24 +23,24 @@ class CLMModelAccessgroupsMain extends JModelLegacy {
 	function __construct(){
 		parent::__construct();
 		$mainframe 	= JFactory::getApplication();
-		$option 	= JRequest::getVar( 'option' );
+		$option 	= clm_core::$load->request_string('option', '');
 
 		//Pagination Variabeln
-		$limit 		= JRequest::getVar( 'limit' , $mainframe->getCfg('list_limit') , 'default' , 'int' );
-		$limitstart	= JRequest::getVar( 'limitstart' , 0 , 'default' , 'int' );
+		$limit 		= clm_core::$load->request_int('limit', $mainframe->getCfg('list_limit')); 
+		$limitstart	= clm_core::$load->request_int('limitstart' , 0);
 
 		$this->setState( 'limit' , $limit ); 
 		$this->setState( 'limitstart' , $limitstart );
 		
 		//Suche 
-		$search 		= JRequest::getVar( 'search' , '' , 'default' , 'string' );
-		$search 		= JString::strtolower( $search );
+		$search 		= clm_core::$load->request_string('search', '');
+		$search 		= strtolower( $search );
 		
 		$this->setState( 'search' , $search );
 		
 		//Sortierung Variabeln
-		$filter_order     = JRequest::getVar( 'filter_order' , 'accessgroup' , 'default' , 'cmd' );
-		$filter_order_Dir = JRequest::getVar( 'filter_order_Dir' , 'ASC' , 'default' , 'word' );
+		$filter_order     = clm_core::$load->request_string('filter_order' , 'accessgroup');
+		$filter_order_Dir = clm_core::$load->request_string('filter_order_Dir' , 'ASC');
 		
 		$this->setState( 'filter_order' , $filter_order );
 		$this->setState( 'filter_order_Dir' , $filter_order_Dir );
@@ -93,11 +93,10 @@ class CLMModelAccessgroupsMain extends JModelLegacy {
 	
 	function _buildContentWhere() {
 		$mainframe	= JFactory::getApplication();
-		$option 	= JRequest::getCmd( 'option' );
+		$option 	= clm_core::$load->request_string('option', '');
 
-		//$filter_accessgroup	= JRequest::getVar( 'filter_accessgroup' , '' , 'default' , 'string' );
-		$search 		= JRequest::getVar( 'search' , '' , 'default' , 'string' );
-		$search 		= JString::strtolower( $search );
+		$search 		= clm_core::$load->request_string('search' , '');
+		$search 		= strtolower( $search );
 
 		$where = array();
 		if ($search) {
@@ -112,7 +111,7 @@ class CLMModelAccessgroupsMain extends JModelLegacy {
 	
 	function _buildContentOrderBy()	{
 		$mainframe	= JFactory::getApplication();
-		$option 	= JRequest::getCmd( 'option' );
+		$option 	= clm_core::$load->request_string('option', '');
  
 		$orderby = '';
 		$filter_order     = ''; //$this->getState('filter_order');

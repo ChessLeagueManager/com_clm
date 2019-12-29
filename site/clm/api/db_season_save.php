@@ -1,4 +1,10 @@
 <?php
+/*
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 function clm_api_db_season_save($id = - 1, $published = null, $archiv = null, $name = null, $bemerkungen = null, $bem_int = null, $datum = null) {
 	$id = clm_core::$load->make_valid($id, 0, -1);
 	// Eine bereits bestehende Saison wird bearbeitet
@@ -59,6 +65,7 @@ function clm_api_db_season_save($id = - 1, $published = null, $archiv = null, $n
 	clm_core::$db->saison->get($id)->bem_int = $bem_int;
 	clm_core::$db->saison->get($id)->datum = $datum;
 	clm_core::$db->saison->get($id)->checked_out_time = '1970-01-01 00:00:00';
+	clm_core::$db->saison->get($id)->checked_out = 0;
 	if ($enableSeason) {
 		// Erneuere die Rechteverwaltung
 		$out = clm_core::$api->db_season_enable($id);
@@ -68,6 +75,7 @@ function clm_api_db_season_save($id = - 1, $published = null, $archiv = null, $n
 		clm_core::$db->saison->get($id)->published = $published;
 		clm_core::$db->saison->get($id)->archiv = $archiv;
 		clm_core::$db->saison->get($id)->checked_out_time = '1970-01-01 00:00:00';
+		clm_core::$db->saison->get($id)->checked_out_time = 0;
 		clm_core::$db->saison->write();
 		// Erneuere die Rechteverwaltung
 		clm_core::$access = new clm_class_access();

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -19,7 +19,7 @@ class CLMViewTermineMain extends JViewLegacy {
 		
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
 		$model =   $this->getModel();
-		
+		$_GET['hidemainmenu'] = 1;
 		clm_core::$load->load_css("icons_images");
 		JToolBarHelper::title( JText::_( 'TITLE_TERMINE' ), 'clm_headmenu_termine.png' );
 	
@@ -40,17 +40,12 @@ class CLMViewTermineMain extends JViewLegacy {
 			JToolBarHelper::spacer();
 			JToolBarHelper::custom('delete','delete.png','delete_f2.png', JText::_('TERMINE_DELETE')); 
 		}
-
 		
 		// Daten an Template übergeben
-		$this->assignRef('user', $model->user);
-		
-		$this->assignRef('termine', $model->termine);
-
-		$this->assignRef('form', $model->form);
-		$this->assignRef('param', $model->param);
-
-		$this->assignRef('pagination', $model->pagination);
+		$this->user = $model->user;		
+		$this->termine = $model->termine;
+		$this->param = $model->param;
+		$this->pagination = $model->pagination;
 		
 		// zusätzliche Funktionalitäten
 		JHtml::_('behavior.tooltip');

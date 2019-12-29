@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -24,13 +24,13 @@ class CLMControllerSaisons extends JControllerLegacy {
 	}
 	function display($cachable = false, $urlparams = array()) {
 		$mainframe = JFactory::getApplication();
-		$option = JRequest::getCmd('option');
+		$option = clm_core::$load->request_string('option', '');
 		$db = JFactory::getDBO();
 		$filter_order = $mainframe->getUserStateFromRequest("$option.filter_order", 'filter_order', 'a.id', 'cmd');
 		$filter_order_Dir = $mainframe->getUserStateFromRequest("$option.filter_order_Dir", 'filter_order_Dir', '', 'word');
 		$filter_state = $mainframe->getUserStateFromRequest("$option.filter_state", 'filter_state', '', 'word');
 		$search = $mainframe->getUserStateFromRequest("$option.search", 'search', '', 'string');
-		$search = JString::strtolower($search);
+		$search = strtolower($search);
 		$limit = $mainframe->getUserStateFromRequest('global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int');
 		$limitstart = $mainframe->getUserStateFromRequest($option . '.limitstart', 'limitstart', 0, 'int');
 		$where = array();
@@ -63,12 +63,8 @@ class CLMControllerSaisons extends JControllerLegacy {
 		$pageNav = new JPagination($total, $limitstart, $limit);
 		// get the subset (based on limits) of required records
 		$query = 'SELECT a.*,u.name AS editor ' . ' FROM #__clm_saison AS a' . ' LEFT JOIN #__users AS u ON u.id = a.checked_out' . $where . $orderby;
-		$db->setQuery($query, $pageNav->limitstart, $pageNav->limit);
-		$rows = $db->loadObjectList();
-		if ($db->getErrorNum()) {
-			echo $db->stderr();
-			return false;
-		}
+		$rows = clm_core::$db->loadObjectList($query);	
+
 		// aktive Saisons zählen
 		$query = ' SELECT COUNT(id) as id FROM #__clm_saison ' . ' WHERE archiv = 0 AND published = 1';
 		$db->setQuery($query);
@@ -79,7 +75,7 @@ class CLMControllerSaisons extends JControllerLegacy {
 			} else {
 				$s = "";
 			}
-			JError::raiseNotice(6000, JText::_('SAISON_GIBT') . ' ' . $counter . ' ' . JText::_('SAISON_AKTIVE') . ' ' . ($counter - 1) . ' ' . JText::_('SAISON') . ' ' . $s . ' ' . JText::_('SAISON_ZURUECK'));
+			$this->setMessage(JText::_('SAISON_GIBT') . ' ' . $counter . ' ' . JText::_('SAISON_AKTIVE') . ' ' . ($counter - 1) . ' ' . JText::_('SAISON') . ' ' . $s . ' ' . JText::_('SAISON_ZURUECK'), 'notice');		
 		}
 		// state filter
 		$lists['state'] = JHtml::_('grid.state', $filter_state);
@@ -96,10 +92,11 @@ class CLMControllerSaisons extends JControllerLegacy {
 		// Check for request forgeries
 		$db = JFactory::getDBO();
 		$user = JFactory::getUser();
-		$task = JRequest::getVar('task');
-		$cid = JRequest::getVar('cid', array(0), '', 'array');
-		$option = JRequest::getCmd('option');
-		JArrayHelper::toInteger($cid, array(0));
+		$task = clm_core::$load->request_string('task', '');
+		$cid = clm_core::$load->request_array_int('cid');
+		if (is_null($cid)) 
+			$cid[0] = clm_core::$load->request_int('id');
+		$option = clm_core::$load->request_string('option', '');
 		$row = JTable::getInstance('saisons', 'TableCLM');
 		if ($task == 'edit') {
 			$row->load($cid[0]);
@@ -113,36 +110,46 @@ class CLMControllerSaisons extends JControllerLegacy {
 	}
 	function save() {
 		$mainframe = JFactory::getApplication();
-		$option = JRequest::getCmd('option');
+		$emessage = '';
+		$option = clm_core::$load->request_string('option', '');
 		// Check for request forgeries
-		JRequest::checkToken() or die('Invalid Token');
-		$section = JRequest::getVar('section');
+		defined('_JEXEC') or die('Invalid Token');
+		$section = clm_core::$load->request_string('section', '');
 		$db = JFactory::getDBO();
-		$task = JRequest::getVar('task');
+		$task = clm_core::$load->request_string('task', '');
 		$row = JTable::getInstance('saisons', 'TableCLM');
-		if (!$row->bind(JRequest::get('post'))) {
-			JError::raiseError(500, $row->getError());
+		$post = $_POST;
+		if (!$row->bind($post)) {
+			$emassage = $row->getError();
+			$etype = 'error';
 		}
-		// pre-save checks
-		if (!$row->check()) {
-			JError::raiseError(500, $row->getError());
+		if ($emassage == '') {
+			// pre-save checks
+			if (!$row->check()) {
+				$emessage = $row->getError();
+				$etype = 'warning';
+			}
+			if ($emessage == '') {
+				if (!$row->id) {
+					$id = - 1;
+				} else {
+					$id = $row->id;
+				}
+				$out = clm_core::$api->db_season_save($id, $row->published, $row->archiv, $row->name, $row->bemerkungen, $row->bem_int, $row->datum);
+				if ($task == 'save' && $out[0]) {
+					$link = 'index.php?option=' . $option . '&section=' . $section;
+				} else if ($out[0]) {
+					$link = 'index.php?option=' . $option . '&section=' . $section . '&task=edit&id=' . $out[2];
+				} else {
+					$message = clm_core::$load->load_view("notification", array($out[1], false));
+					$message = $message[0];  // array dereferencing fix php 5.3
+					$emessage = $message[0];
+					$etype = $message[1];
+				}
+			}
 		}
-		if (!$row->id) {
-			$id = - 1;
-		} else {
-			$id = $row->id;
-		}
-		$out = clm_core::$api->db_season_save($id, $row->published, $row->archiv, $row->name, $row->bemerkungen, $row->bem_int, $row->datum);
-		if ($task == 'save' && $out[0]) {
-			$link = 'index.php?option=' . $option . '&section=' . $section;
-		} else if ($out[0]) {
-			$link = 'index.php?option=' . $option . '&section=' . $section . '&task=edit&cid[]=' . $out[2];
-		} else {
-			$message = clm_core::$load->load_view("notification", array($out[1], false));
-			$message = $message[0];  // array dereferencing fix php 5.3
-
-			$mainframe->enqueueMessage($message[0], $message[1]);
-			$option = JRequest::getCmd('option');
+		if ($emassage != '') {
+			$mainframe->enqueueMessage( $emessage,$etype );
 			$lists['archiv'] = JHtml::_('select.booleanlist', 'archiv', 'class="inputbox"', $row->archiv);
 			$lists['published'] = JHtml::_('select.booleanlist', 'published', 'class="inputbox"', $row->published);
 			require_once (JPATH_COMPONENT . DS . 'views' . DS . 'saisons.php');
@@ -156,28 +163,29 @@ class CLMControllerSaisons extends JControllerLegacy {
 		$clmLog->write();
 		$message = clm_core::$load->load_view("notification", array($out[1], false));
 		$message = $message[0];  // array dereferencing fix php 5.3
-		$mainframe->redirect($link, $message[0], $message[1]);
+		$this->setRedirect($link);
+		$this->setMessage($message[0], $message[1]);
 	}
 	function cancel() {
 		$mainframe = JFactory::getApplication();
 		// Check for request forgeries
-		JRequest::checkToken() or die('Invalid Token');
-		$option = JRequest::getCmd('option');
-		$section = JRequest::getVar('section');
-		$id = JRequest::getVar('id');
+		defined('_JEXEC') or die('Invalid Token');
+		$option = clm_core::$load->request_string('option', '');
+		$section = clm_core::$load->request_string('section', '');
+		$id = clm_core::$load->request_int('id', 0);
 		$row = JTable::getInstance('saisons', 'TableCLM');
 		$msg = JText::_('SAISON_AKTION');
-		$mainframe->redirect('index.php?option=' . $option . '&section=' . $section, $msg, "message");
+		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
+		$this->setMessage($msg);
 	}
 	function remove() {
 		$mainframe = JFactory::getApplication();
 		// Check for request forgeries
-		JRequest::checkToken() or die('Invalid Token');
+		defined('_JEXEC') or die('Invalid Token');
 		$db = JFactory::getDBO();
-		$cids = JRequest::getVar('cid', array(), '', 'array');
-		$option = JRequest::getCmd('option');
-		$section = JRequest::getVar('section');
-		JArrayHelper::toInteger($cids);
+		$cids = clm_core::$load->request_array_int('cid');
+		$option = clm_core::$load->request_string('option', '');
+		$section = clm_core::$load->request_string('option', '');
 		foreach ($cids as $cid) {
 			$out = clm_core::$api->db_season_delete($cid);
 			$message = clm_core::$load->load_view("notification", array($out[1], false));
@@ -191,30 +199,29 @@ class CLMControllerSaisons extends JControllerLegacy {
 				$clmLog->write();
 			}
 		}
-		$mainframe->redirect('index.php?option=' . $option . '&section=' . $section);
+		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
 	}
 	function publish() {
 		$mainframe = JFactory::getApplication();
 		// Check for request forgeries
-		JRequest::checkToken() or die('Invalid Token');
+		defined('_JEXEC') or die('Invalid Token');
 		$db = JFactory::getDBO();
 		$user = JFactory::getUser();
-		$cids = JRequest::getVar('cid', array(), '', 'array');
-		$task = JRequest::getCmd('task');
-		$option = JRequest::getCmd('option');
-		$section = JRequest::getVar('section');
-		JArrayHelper::toInteger($cid);
+		$cids = clm_core::$load->request_array_int('cid');
+		$task = clm_core::$load->request_string('task', '');
+		$option = clm_core::$load->request_string('option', '');
+		$section = clm_core::$load->request_string('section', '');
 		foreach ($cids as $cid) {
 			if ($task == "publish") {
 				$out = clm_core::$api->db_season_save($cid, 1);
 				$message = clm_core::$load->load_view("notification", array($out[1], false));
 				$message = $message[0];  // array dereferencing fix php 5.3
-				$mainframe->enqueueMessage($message[0], $message[1]);
+				$this->setMessage($message[0], $message[1]);
 			} else {
 				$out = clm_core::$api->db_season_save($cid, 0);
 				$message = clm_core::$load->load_view("notification", array($out[1], false));
 				$message = $message[0];  // array dereferencing fix php 5.3
-				$mainframe->enqueueMessage($message[0], $message[1]);
+				$this->setMessage($message[0], $message[1]);
 			}
 			if ($out[0]) {
 				// Log schreiben
@@ -224,7 +231,7 @@ class CLMControllerSaisons extends JControllerLegacy {
 				$clmLog->write();
 			}
 		}
-		$mainframe->redirect('index.php?option=' . $option . '&section=' . $section);
+		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
 	}
 	/**
 	 * Moves the record up one position
@@ -245,19 +252,19 @@ class CLMControllerSaisons extends JControllerLegacy {
 	function order($inc) {
 		$mainframe = JFactory::getApplication();
 		// Check for request forgeries
-		JRequest::checkToken() or die('Invalid Token');
+		defined('_JEXEC') or die('Invalid Token');
 		$db = JFactory::getDBO();
-		$cid = JRequest::getVar('sid', array(0), '', 'array');
-		$option = JRequest::getCmd('option');
-		$section = JRequest::getVar('section');
-		JArrayHelper::toInteger($cid, array(0));
-		$limit = JRequest::getVar('limit', 0, '', 'int');
-		$limitstart = JRequest::getVar('limitstart', 0, '', 'int');
-		$sid = JRequest::getVar('sid', 0, '', 'int');
+		$cid = clm_core::$load->request_array_int('cid');
+		$option  = clm_core::$load->request_string('option', '');
+		$section = clm_core::$load->request_string('section', '');
+										  
+		$limit = clm_core::$load->request_int('limit', 0);
+		$limitstart = clm_core::$load->request_int('limitstart', 0);
+		$sid = clm_core::$load->request_int('sid', 0);
 		$row = JTable::getInstance('saisons', 'TableCLM');
 		$row->load($sid[0]);
 		$row->move($inc, 'id = ' . (int)$row->catid . ' AND published != 0');
-		$mainframe->redirect('index.php?option=' . $option . '&section=' . $section);
+		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
 	}
 	/**
 	 * Saves user reordering entry
@@ -265,15 +272,14 @@ class CLMControllerSaisons extends JControllerLegacy {
 	function saveOrder() {
 		$mainframe = JFactory::getApplication();
 		// Check for request forgeries
-		JRequest::checkToken() or die('Invalid Token');
+		defined('_JEXEC') or die('Invalid Token');
 		$db = JFactory::getDBO();
-		$cid = JRequest::getVar('cid', array(), 'post', 'array');
-		$option = JRequest::getCmd('option');
-		$section = JRequest::getVar('section');
-		JArrayHelper::toInteger($cid);
+		$cid = clm_core::$load->request_array_int('cid');
+		$option  = clm_core::$load->request_string('option', '');
+		$section = clm_core::$load->request_string('section', '');
+								
 		$total = count($cid);
-		$order = JRequest::getVar('order', array(0), 'post', 'array');
-		JArrayHelper::toInteger($order, array(0));
+		$order = clm_core::$load->request_array_int('order');
 		$row = JTable::getInstance('saisons', 'TableCLM');
 		$groupings = array();
 		// update ordering values
@@ -286,7 +292,8 @@ class CLMControllerSaisons extends JControllerLegacy {
 			if ($row->ordering != $order[$i]) {
 				$row->ordering = $order[$i];
 				if (!$row->store()) {
-					JError::raiseError(500, $db->getErrorMsg());
+					$this->setMessage($db->getErrorMsg(), 'error');
+					return;
 				}
 			}
 		}
@@ -295,17 +302,16 @@ class CLMControllerSaisons extends JControllerLegacy {
 		foreach ($groupings as $group) {
 			$row->reorder('id = ' . (int)$group);
 		}
-		$app =JFactory::getApplication();
-		$app->enqueueMessage( JText::_('CLM_NEW_ORDERING_SAVED') );
-		$mainframe->redirect('index.php?option=' . $option . '&section=' . $section);
+		$this->setMessage(JText::_('CLM_NEW_ORDERING_SAVED'));
+		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
 	}
 	function copy() {
 		// Check for request forgeries
-		JRequest::checkToken() or die('Invalid Token');
-		$option = JRequest::getCmd('option');
-		$section = JRequest::getVar('section');
+		defined('_JEXEC') or die('Invalid Token');
+		$option  = clm_core::$load->request_string('option', '');
+		$section = clm_core::$load->request_string('section', '');
 		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
-		$cid = JRequest::getVar('cid', null, 'post', 'array');
+		$cid = clm_core::$load->request_array_int('cid');
 		$db = JFactory::getDBO();
 		$table = JTable::getInstance('saisons', 'TableCLM');
 		$user = JFactory::getUser();
@@ -317,14 +323,17 @@ class CLMControllerSaisons extends JControllerLegacy {
 					$table->name = 'Kopie von ' . $table->name;
 					$table->published = 0;
 					if (!$table->store()) {
-						return JError::raiseWarning($table->getError());
+						$this->setMessage($table->getError(), 'warning');
+						return;
 					}
 				} else {
-					return JError::raiseWarning(500, $table->getError());
+					$this->setMessage($table->getError(), 'warning');
+					return;
 				}
 			}
 		} else {
-			return JError::raiseWarning(500, JText::_('SAISON_NO_SELECT'));
+			$this->setMessage(JText::_('SAISON_NO_SELECT'), 'warning');
+			return;
 		}
 		if ($n > 1) {
 			$msg = JText::_('SAISON_MSG_ENTRYS_COPY');
@@ -344,9 +353,9 @@ class CLMControllerSaisons extends JControllerLegacy {
 	function change() {
 		$mainframe = JFactory::getApplication();
 		// Check for request forgeries
-		JRequest::checkToken() or die('Invalid Token');
-		$option = JRequest::getCmd('option');
-		$section = JRequest::getVar('section');
+		defined('_JEXEC') or die('Invalid Token');
+		$option  = clm_core::$load->request_string('option', '');
+		$section = clm_core::$load->request_string('section', '');
 		$db = JFactory::getDBO();
 		$table = JTable::getInstance('saisons', 'TableCLM');
 		$table->load(1);
@@ -366,7 +375,8 @@ class CLMControllerSaisons extends JControllerLegacy {
 		}
 		$table->store();
 		$msg = JText::_('SAISON_MSG_STATUS');
-		$mainframe->redirect('index.php?option=' . $option . '&section=' . $section, $msg, "message");
+		$this->setMessage($msg);
+		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
 	}
  
 function dwz_start()          
@@ -374,19 +384,19 @@ function dwz_start()
 	$mainframe	= JFactory::getApplication();
 
 	// Check for request forgeries
-	JRequest::checkToken() or die( 'Invalid Token' );
+	defined('_JEXEC') or die( 'Invalid Token' );
 
 	$db 		= JFactory::getDBO();
-	$cid 		= JRequest::getVar('cid', array(), '', 'array');
-	$option 	= JRequest::getCmd('option');
-	$section	= JRequest::getVar('section');
-	JArrayHelper::toInteger($cid);
+	$cid 		= clm_core::$load->request_array_int('cid');
+	$option 	= clm_core::$load->request_string('option', '');
+	$section	= clm_core::$load->request_string('section', '');
 
 	// keine Saison gewählt
 	if ($cid[0] < 1 ) {
-	JError::raiseWarning( 500, JText::_( 'SAISON_NO_AUSWERTEN' ) );
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
-		}
+		$this->setMessage(JText::_('SAISON_NO_AUSWERTEN'), 'warning');
+		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
+		return;
+	}
 	//Saison wird durch User im Screen bestimmt
 	$row = JTable::getInstance( 'saisons', 'TableCLM' );
 	$row->load( $cid[0] );
@@ -405,7 +415,8 @@ function dwz_start()
 	$clmLog->write();
 
 	$msg = JText::_( 'SAISON_DWZ_IST');
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
+	$this->setMessage($msg);
+	$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
  
 }
 
@@ -413,19 +424,19 @@ function dwz_del()
 	{
 	$mainframe	= JFactory::getApplication();
 	// Check for request forgeries
-	JRequest::checkToken() or die( 'Invalid Token' );
+	defined('_JEXEC') or die( 'Invalid Token' );
 
 	$db 		= JFactory::getDBO();
-	$cid 		= JRequest::getVar('cid', array(), '', 'array');
-	$option 	= JRequest::getCmd('option');
-	$section	= JRequest::getVar('section');
-	JArrayHelper::toInteger($cid);
+	$cid 		= clm_core::$load->request_array_int('cid');
+	$option 	= clm_core::$load->request_string('option', '');
+	$section	= clm_core::$load->request_string('section', '');
 
 	// keine Saison gewählt
 	if ($cid[0] < 1 ) {
-	JError::raiseWarning( 500, JText::_( 'SAISON_NO_LOESCH' ) );
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
-		}
+		$this->setMessage(JText::_('SAISON_NO_LOESCH'), 'warning');
+		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
+		return;
+	}
 	//Saison wird durch User im Screen bestimmt
 	$row = JTable::getInstance( 'saisons', 'TableCLM' );
 	$row->load( $cid[0] );
@@ -443,6 +454,7 @@ function dwz_del()
 	$clmLog->write();
 
 	$msg = JText::_( 'SAISON_DWZ_IST_LOESCH');
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
+	$this->setMessage($msg);
+	$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
 	}
 }

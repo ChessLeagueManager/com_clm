@@ -2,9 +2,9 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -20,8 +20,8 @@ class CLMController extends JControllerLegacy
 	function display($cachable = false, $urlparams = false)
 	{
 		// Setzt einen Standard view 
-		if ( ! JRequest::getCmd( 'view') ) {
-			JRequest::setVar('view', 'categories' );
+		if ( clm_core::$load->request_string('view') == '' ) {
+			$_GET["view"] = 'categories';
 		}
 
 		parent::display();
@@ -48,7 +48,7 @@ class CLMController extends JControllerLegacy
 		}
 
 		if ($allowUserRegistration == '0' || $userActivation == '0') {
-			JError::raiseError( 403, JText::_( 'Access Forbidden' ));
+			$this->setRedirect('index.php?option=com_user&view=reset', JText::_( 'Access Forbidden' ));
 			return;
 		}
 
@@ -59,7 +59,7 @@ class CLMController extends JControllerLegacy
 		$message = new stdClass();
 
 		// Do we even have an activation string?
-		$activation = JRequest::getVar('activation', '', '', 'alnum' );
+		$activation = 	clm_core::$load->request_string('activation', '');
 		$activation = $db->getEscaped( $activation );
 
 		if (empty( $activation ))
@@ -111,10 +111,10 @@ class CLMController extends JControllerLegacy
 	function requestreset()
 	{
 		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 
 		// Get the input
-		$email		= JRequest::getVar('email', null, 'post', 'string');
+		$email		= clm_core::$load->request_string('email');
 
 		// Get the model
 		$model = &$this->getModel('Reset');
@@ -138,10 +138,11 @@ class CLMController extends JControllerLegacy
 	function confirmreset()
 	{
 		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 
 		// Get the input
-		$token = JRequest::getVar('token', null, 'post', 'alnum');
+		//$token = JRequest::getVar('token', null, 'post', 'alnum');
+		$token = clm_core::$load->request_string('token', '');
 
 		// Get the model
 		$model = &$this->getModel('Reset');
@@ -165,11 +166,11 @@ class CLMController extends JControllerLegacy
 	function completereset()
 	{
 		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 
 		// Get the input
-		$password1 = JRequest::getVar('password1', null, 'post', 'string', JREQUEST_ALLOWRAW);
-		$password2 = JRequest::getVar('password2', null, 'post', 'string', JREQUEST_ALLOWRAW);
+		$password1 = clm_core::$load->request_string('password1', '');
+		$password2 = clm_core::$load->request_string('password2', '');
 
 		// Get the model
 		$model = &$this->getModel('Reset');
@@ -183,7 +184,6 @@ class CLMController extends JControllerLegacy
 		}
 
 		$message = JText::_('Ihr Passwort wurde gespeichert !');
-		//$this->setRedirect('index.php?option=com_user&view=login', $message);
 		$this->setRedirect(JRoute::_('index.php?option=com_users&view=login', $message));
 	}
 }

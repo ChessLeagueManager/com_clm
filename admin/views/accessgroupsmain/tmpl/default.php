@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -30,7 +30,8 @@ defined('_JEXEC') or die('Restricted access');
 	</tbody>
 </table>
 <?php if( !$this->accessgroupExists ) {
-	JError::raiseWarning( 500, $row->name.": ".JText::_( 'ACCESSGROUP_WARNING_NO_TOURNAMENT' ) );
+	$mainframe	= JFactory::getApplication();
+	$mainframe->enqueueMessage(JText::_( 'ACCESSGROUP_NO' ),'warning');
 } ?>
 <div id="editcell"> 
 	<table class="adminlist">
@@ -79,8 +80,7 @@ defined('_JEXEC') or die('Restricted access');
 						
 						$adminLink = new AdminLink();
 						$adminLink->view = "accessgroupsform";
-						//$adminLink->more = array('task' => 'edit', 'layout' => 'form', 'hidemainmenu' => 1, 'cid' => $row->id);
-						$adminLink->more = array('task' => 'edit', 'hidemainmenu' => 1, 'cid' => $row->id);
+						$adminLink->more = array('task' => 'edit', 'hidemainmenu' => 1, 'id' => $row->id);
 						$adminLink->makeURL();
 					
 						if ($row->kind == "CLM") $row->name = JText::_( 'ACCESSGROUP_NAME_'.$row->usertype );

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -19,9 +19,10 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
  
 	function __construct() { 
 		parent::__construct(); 
-		$id 	= clm_escape(JRequest::getVar( 'id' ));
+		$id 	= clm_escape(clm_core::$load->request_int('id', 0));
 		if (!isset($id) OR $id==0) {
-			$array = JRequest::getVar('cid',  0, '', 'array'); 
+			$array = clm_core::$load->request_array_int('cid'); 
+			if ($array == NULL) $array[0] = 0;
 			$this->setId(clm_escape($array[0])); 
 		} else $this->setID($id);
 	} 
@@ -86,7 +87,7 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 	
 	function store() { 
 		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
-		$accessgroup = JRequest::get( 'post' ); 
+		$accessgroup = $_POST; 
 		if (!$row->bind($accessgroup)) { 
 			$this->setError($this->_db->getErrorMsg()); 
 			return false; 
@@ -103,7 +104,7 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 	}
 	
 	function delete() { 
-		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' ); 
+		$cids = clm_core::$load->request_array_int('cid'); 
 		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
 		if (count( $cids )) { 
 			foreach($cids as $cid) { 
@@ -117,7 +118,7 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 	} 
 	
 	function publish() {
-		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' );
+		$cids = clm_core::$load->request_array_int('cid');
 		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
 		if (!$row->publish( $cids )) { 
 			$this->setError( $row->_db->getErrorMsg() ); 
@@ -127,7 +128,7 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 	} 
 	
 	function unpublish() {
-		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' );
+		clm_core::$load->request_array_int('cid');
 		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
 		if (!$row->publish($cids,0)) { 
 			$this->setError( $row->_db->getErrorMsg() ); 
@@ -137,8 +138,8 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 	} 
 	
 	function saveOrder() {
-		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' );
-		$order = JRequest::getVar('order', array (0), 'post', 'array');
+		$cids = clm_core::$load->request_array_int('cid');
+		$order = clm_core::$load->request_array_int('order');
 		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );		
 		for($i = 0; $i < count($cids); $i ++) {
 			$row->load((int)$cids[$i]);
@@ -158,7 +159,7 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 	}
 	
 	function orderUp() {
-		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' );
+		$cids = clm_core::$load->request_array_int('cid');
 		if(isset($cids[0])) {
 			$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
 			$row->load((int)$cids[0]);
@@ -169,8 +170,7 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 	}
 	
 	function orderDown() {
-		$cids = JRequest::getVar( 'cid', array(0),'post', 'array' );
-				
+		$cids = clm_core::$load->request_array_int('cid');					
 		if(isset($cids[0])) {
 			$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
 			$row->load((int)$cids[0]);
@@ -181,7 +181,7 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 	}
 	
 	function copy() {
-		$cids = JRequest::getVar( 'cid', array(0), 'post', 'array' );
+		$cids = clm_core::$load->request_array_int('cid');
 		$n		= count( $cids );
 
 		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );

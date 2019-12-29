@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Fjodor Schäfer
@@ -17,9 +17,9 @@ $sreferer = strpos($referer, 'termine_detail');
 	$db = JFactory::getDbo();
 	$db->setQuery("SELECT id FROM #__clm_saison WHERE published = 1 AND archiv = 0 ORDER BY name DESC LIMIT 1 ");
 	$sid = $db->loadObject()->id;
-$nr			= JRequest::getVar('nr');
-$itemid		= JRequest::getInt('Itemid');
-$categoryid	= JRequest::getInt('categoryid',0);
+$nr			= clm_core::$load->request_int('nr', 0);
+$itemid		= clm_core::$load->request_int('Itemid', 1);
+$categoryid	= clm_core::$load->request_int('categoryid', 0);
 
 $termine_detail	= $this->termine_detail;
 

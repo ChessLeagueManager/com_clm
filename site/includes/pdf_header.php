@@ -1,5 +1,11 @@
 <?php
-$pdf_orientation = JRequest::getVar( 'pdf_orientation');
+/*
+ * @Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
+$pdf_orientation = clm_core::$load->request_string('pdf_orientation','P');
 //CLM-Logo links 
     $this->Image(JPATH_COMPONENT.DS.'images'.DS.'clm_logo.png',15,6,22);
 
