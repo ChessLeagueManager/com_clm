@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2019 CLM Team  All rights reserved
@@ -10,10 +9,9 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
-$turnierid		= JRequest::getInt('turnier','1');
+$turnierid		= clm_core::$load->request_int('turnier','1');
 $config			= clm_core::$db->config();
 
 $turParams = new clm_class_params($this->turnier->params);

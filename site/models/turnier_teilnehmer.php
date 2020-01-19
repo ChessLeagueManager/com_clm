@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -20,7 +20,7 @@ class CLMModelTurnier_Teilnehmer extends JModelLegacy {
 		
 		parent::__construct();
 
-		$this->turnierid = JRequest::getInt('turnier', 0);
+		$this->turnierid = clm_core::$load->request_int('turnier');
 
 		$this->_getTurnierData();
 

@@ -1,3 +1,9 @@
+/*
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2019 CLM Team  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 	
 	function openPgnRow(id) {
 		document.getElementById('pgnSwitch' + id).innerHTML = '';

@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -22,15 +22,16 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= JFactory::getDBO();
+		$this->_db	= JFactory::getDBO();
+		$this->app	= JFactory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
 		$this->registerTask( 'unapprove','approve' );
 		
 		// turnierid
-		$this->turnierid = JRequest::getInt('turnierid');
-		$this->roundid = JRequest::getInt('roundid');
+		$this->turnierid = clm_core::$load->request_int('turnierid');
+		$this->roundid = clm_core::$load->request_int('roundid');
 		
 	
 		$this->adminLink = new AdminLink();
@@ -45,7 +46,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		$this->_addDo();
 	
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	
 	}
 
@@ -53,7 +54,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 	function _addDo() {
 		
 		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 	
 		// Instanz der Tabelle
 		$row = JTable::getInstance( 'turniere', 'TableCLM' );
@@ -61,7 +62,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 
 		$clmAccess = clm_core::$access;      
 		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
-			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
+			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return false;
 		}
 	
@@ -77,7 +78,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 	
 		// wenn Runde schon bestätigt, hinzufügen nicht erlauben
 		if ($tl_ok == 1) {
-			JError::raiseWarning( 500,  CLMText::errorText('ROUND', 'ALREADYAPPROVED') );
+			$this->app->enqueueMessage( CLMText::errorText('ROUND', 'ALREADYAPPROVED'),'warning' );
 			return false;
 		}
 	
@@ -101,14 +102,13 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 					. " VALUES "
 					.implode(", ", $sqlValuesStrings)
 					;
-		$this->_db->setQuery($query);
-		if (!$this->_db->query()) { 
-			JError::raiseError(500, $this->_db->getErrorMsg() ); 
+//		$this->_db->setQuery($query);
+//		if (!$this->_db->query()) { 
+		if (!clm_core::$db->query($query)) { 
+			$this->app->enqueueMessage( $this->_db->getErrorMsg(),'error' );
 		}
-	
-	
-	
-		JError::raiseNotice( 500,  JText::_('MATCH_ADDED') );
+		
+		$this->app->enqueueMessage( JText::_('MATCH_ADDED'),'notice' );
 	
 		// Rangliste neu berechnen!
 		$tournament = new CLMTournament($this->turnierid, true);
@@ -133,13 +133,13 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 	
 		$this->_saveDo();
 	
-		if (JRequest::getVar('task') == 'save') {
+		if (clm_core::$load->request_string('task') == 'save') {
 			$this->adminLink->more = array('id' => $this->turnierid);
 			$this->adminLink->view = "turrounds";
 		}
 		
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	
 	}
 
@@ -147,7 +147,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 	function _saveDo() {
 	
 		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 	
 		// Instanz der Tabelle
 		$row = JTable::getInstance( 'turniere', 'TableCLM' );
@@ -155,7 +155,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 
 		$clmAccess = clm_core::$access;      
 		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
-			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
+			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return false;
 		}
 	
@@ -175,8 +175,8 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		// Anzahl Spieler abgleichen bevor gemeldet werden kann
 		if ($sum_tln != $this->teil) {
 			$diff = $this->teil-$sum_tln;
-			JError::raiseWarning( 500, JText::_( 'INSUFFICIENT_PLAYERS_REGISTERED' ) );
-			JError::raiseNotice( 6000,  JText::_( 'ADD_PLAYERS_OR_CHANGE_PARAMETERS' ));
+			$this->app->enqueueMessage( JText::_( 'INSUFFICIENT_PLAYERS_REGISTERED' ),'warning' );
+			$this->app->enqueueMessage( JText::_( 'ADD_PLAYERS_OR_CHANGE_PARAMETERS' ),'notice' );
 			return false;
 		}
 	
@@ -189,7 +189,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		list($runde, $dg, $gemeldet, $tl_ok) = $this->_db->loadRow();
 		
 		if ($tl_ok == 1) { // Runden schon bestätigt?
-			JError::raiseWarning( 500, CLMText::errorText(JText::_('ROUND'), 'ALREADYAPPROVED' ) );
+			$this->app->enqueueMessage( CLMText::errorText(JText::_('ROUND'), 'ALREADYAPPROVED' ),'warning' );
 			return false;
 		}
 		
@@ -200,16 +200,16 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		// andere Matrix für eid
 	
 		// daten ermitteln
-		$array_w = JRequest::getVar('w');
-		$array_b = JRequest::getVar('b');
-		$array_res = JRequest::getVar('res');
+		$array_w = clm_core::$load->request_array_string('w');
+		$array_b = clm_core::$load->request_array_string('b');
+		$array_res = clm_core::$load->request_array_string('res');
 		if ($pgnInput == 1) {
-			$array_pgn = JRequest::getVar('pgn');
+			$array_pgn = clm_core::$load->request_array_string('pgn');
 		}
 		$array_ergebnis = array(); // Array für bisherige Ergebnisse (Weiß)
 		if ($tournament->data->typ == 3 or $tournament->data->typ == 5) { // KO
-			$array_tiebrS = JRequest::getVar('tiebrS');
-			$array_tiebrG = JRequest::getVar('tiebrG');
+			$array_tiebrS = clm_core::$load->request_array_string('tiebrS');
+			$array_tiebrG = clm_core::$load->request_array_string('tiebrG');
 			$array_tiebrS_old = array();
 			$array_tiebrG_old = array();
 		}
@@ -234,7 +234,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 						;
 				$this->_db->setQuery($query);
 				if (!list($brettBlack, $array_ergebnis[$key], $array_pgnold[$key]) = $this->_db->loadRow()) {
-					JError::raiseWarning( 500,  JText::_('MATCH_UNKNOWN')." - ID: ".$key );
+					$this->app->enqueueMessage( JText::_('MATCH_UNKNOWN')." - ID: ".$key,'warning' );
 					// aus Array entfernen!
 					unset($array_w[$key]);
 				}
@@ -247,7 +247,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 						;
 				$this->_db->setQuery($query);
 				if (!list($brettBlack, $array_ergebnis[$key], $array_tiebrS_old[$key], $array_tiebrG_old[$key], $array_pgnold[$key]) = $this->_db->loadRow()) {
-					JError::raiseWarning( 500,  JText::_('MATCH_UNKNOWN')." - ID: ".$key );
+					$this->app->enqueueMessage( JText::_('MATCH_UNKNOWN')." - ID: ".$key,'warning' );
 					// aus Array entfernen!
 					unset($array_w[$key]);
 				}
@@ -262,7 +262,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 					;
 			$this->_db->setQuery($query);
 			if (!$array_idBlack[$key] = $this->_db->loadResult()) {
-				JError::raiseWarning( 500,  JText::_('MATCH_UNKNOWN')." - ID: ".$key );
+				$this->app->enqueueMessage( JText::_('MATCH_UNKNOWN')." - ID: ".$key,'warning' );
 				// aus Array entfernen!
 				unset($array_w[$key]);
 			} else {
@@ -277,7 +277,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 	
 		// Duplo-Kontrolle - nicht im freien System
 		if ($tournament->data->typ != 6 AND count($array_duplo) > count(array_unique($array_duplo)) ) {
-			JError::raiseWarning( 500, JText::_("PLAYER_ENTERED_TWICE") );
+			$this->app->enqueueMessage( JText::_("PLAYER_ENTERED_TWICE"),'warning' );
 			return false;
 		}
 	
@@ -352,32 +352,38 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 							. " SET ergebnis = ".$sqlResultW.", tln_nr = '".$value."', spieler = '".$value."', gegner = '".$array_b[$key]."'".$sqlPGN
 							. " WHERE id = ".$key
 							;
-				$this->_db->setQuery($query);
-				$this->_db->query();
+				clm_core::$db->query($query);
+//				$this->_db->setQuery($query);
+//				$this->_db->query();
 		
 				// Schwarz
 				$query = "UPDATE #__clm_turniere_rnd_spl"
 							. " SET ergebnis = ".$sqlResultB.", tln_nr ='".$array_b[$key]."', spieler ='".$array_b[$key]."', gegner ='".$value."'".$sqlPGN
 							." WHERE id = ".$array_idBlack[$key]
 							;
-				$this->_db->setQuery($query);
-				$this->_db->query();
+				clm_core::$db->query($query);
+//				$this->_db->setQuery($query);
+//				$this->_db->query();
+		
 			} else { // KO - auch tiebreak schreiben
 				// Weiss
 				$query = "UPDATE #__clm_turniere_rnd_spl"
 							. " SET ergebnis = ".$sqlResultW.", tiebrS = '".$array_tiebrS[$key]."', tiebrG = '".$array_tiebrG[$key]."', tln_nr = '".$value."', spieler = '".$value."', gegner = '".$array_b[$key]."'".$sqlPGN
 							. " WHERE id = ".$key
 							;
-				$this->_db->setQuery($query);
-				$this->_db->query();
+				clm_core::$db->query($query);
+//				$this->_db->setQuery($query);
+//				$this->_db->query();
 		
 				// Schwarz
 				$query = "UPDATE #__clm_turniere_rnd_spl"
 							. " SET ergebnis = ".$sqlResultB.", tiebrS = '".$array_tiebrG[$key]."', tiebrG = '".$array_tiebrS[$key]."', tln_nr ='".$array_b[$key]."', spieler ='".$array_b[$key]."', gegner ='".$value."'".$sqlPGN
 							." WHERE id = ".$array_idBlack[$key]
 							;
-				$this->_db->setQuery($query);
-				$this->_db->query();
+				clm_core::$db->query($query);
+//				$this->_db->setQuery($query);
+//				$this->_db->query();
+		
 			}
 	
 		}
@@ -386,9 +392,9 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		// Nachrichten:
 		// 1 - Matches wurden gespeichert
 		// 2 - Anzahl ($countChanges) geänderter Erebnisse
-		JError::raiseNotice( 500, JText::_('MATCHES').' '.JText::_('SAVED') );
+		$this->app->enqueueMessage( JText::_('MATCHES').' '.JText::_('SAVED'),'notice' );
 		$stringAction = CLMText::sgpl($countChanges, JText::_('RESULT'), JText::_('RESULTS'))." ".JText::_('SAVED')."/".JText::_('EDITED');
-		JError::raiseNotice( 500, $stringAction);
+		$this->app->enqueueMessage( $stringAction,'notice' );
 
 		$tournament->calculateRanking();
 		$tournament->setRankingPositions();
@@ -405,9 +411,10 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 					. " WHERE turnier = ".$this->turnierid." AND nr = ".$runde." AND dg = ".$dg
 					;
 		}
-		$this->_db->setQuery($query);
-		$this->_db->query();
-	
+		clm_core::$db->query($query);
+//		$this->_db->setQuery($query);
+//		$this->_db->query();
+		
 		// Berechne oder Lösche die inoff. DWZ nach dieser Änderung
 		$turParams = new clm_class_params(clm_core::$db->turniere->get($this->turnierid)->params);
 		$autoDWZ = $turParams->get("autoDWZ",0);
@@ -433,8 +440,10 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		$query = "UPDATE #__clm_turniere_tlnr"
 					. " SET koStatus = '".$kostatus."', koRound = ".$runde
 					. " WHERE turnier = ".$this->turnierid." AND snr = ".$snr;
-		$this->_db->setQuery($query);
-		$this->_db->query();
+		clm_core::$db->query($query);
+//		$this->_db->setQuery($query);
+//		$this->_db->query();
+		
 	}
 	
 
@@ -444,7 +453,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		$this->_resetDo();
 	
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	
 	}
 
@@ -452,7 +461,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 	function _resetDo() {
 		
 		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 	
 		// Instanz der Tabelle
 		$row = JTable::getInstance( 'turniere', 'TableCLM' );
@@ -460,7 +469,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 
 		$clmAccess = clm_core::$access;      
 		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
-			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
+			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return false;
 		}
 	
@@ -476,7 +485,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 	
 		// wenn Runde schon bestätigt, zurücksetzen nicht erlauben
 		if ($tl_ok == 1) {
-			JError::raiseWarning( 500,  CLMText::errorText('ROUND', 'ALREADYAPPROVED') );
+			$this->app->enqueueMessage( CLMText::errorText('ROUND', 'ALREADYAPPROVED'),'warning' );
 			return false;
 		}
 	
@@ -487,7 +496,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		$this->_db->setQuery($query);
 		$resultCount = $this->_db->loadResult();
 		if ($resultCount == 0) {
-			JError::raiseWarning( 500,  CLMText::errorText('RESULTS', 'NOTEXISTING') );
+			$this->app->enqueueMessage( CLMText::errorText('RESULTS', 'NOTEXISTING'),'warning' );
 			return false;
 		}
 	
@@ -496,29 +505,32 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 				. " SET gemeldet = NULL, zeit ='000e0-00-00 00:00:00', editor = ".$user->id.", edit_zeit = NOW()"
 				. " WHERE id = ".$this->roundid
 				;
-		$this->_db->setQuery($query);
-		$this->_db->query();
+		clm_core::$db->query($query);
+//		$this->_db->setQuery($query);
+//		$this->_db->query();
 		
 		// Ergebnisse löschen
 		$query = "UPDATE #__clm_turniere_rnd_spl"
 				. " SET ergebnis = NULL, tiebrS = 0, tiebrG = 0, gemeldet = NULL "
 				. " WHERE turnier = ".$this->turnierid." AND runde = ".$runde." AND dg = ".$dg
 				;
-		$this->_db->setQuery($query);
-		$this->_db->query();
-	
+		clm_core::$db->query($query);
+//		$this->_db->setQuery($query);
+//		$this->_db->query();
+		
 		// Teilnehmer zurücksetzen bei KO-Turnier
 		if ($row->typ == '3' or $row->typ == '5') {
 			$query = "UPDATE #__clm_turniere_tlnr"
 				. " SET koRound = ".($runde-1).", koStatus = '1' "
 				. " WHERE turnier = ".$this->turnierid." AND koRound >= ".$runde
 				;
-			$this->_db->setQuery($query);
-			$this->_db->query();
-		}
-
+			clm_core::$db->query($query);
+//			$this->_db->setQuery($query);
+//			$this->_db->query();
 		
-		JError::raiseNotice( 500,  CLMText::sgpl(($resultCount/2), JText::_('RESULT'), JText::_('RESULTS') )." ".JText::_('RESET') );
+		}
+		
+		$this->app->enqueueMessage( CLMText::sgpl(($resultCount/2), JText::_('RESULT'), JText::_('RESULTS') )." ".JText::_('RESET'),'notice' );
 	
 		// Rangliste neu berechnen!
 		$tournament = new CLMTournament($this->turnierid, true);
@@ -529,7 +541,6 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		// Log schreiben
 		$clmLog = new CLMLog();
 		$clmLog->aktion = JText::_('RESULTS')." ".JText::_('RESET');
-		//$clmLog->params = array('tid' => $this->turnierid, 'rnd' => $this->roundid); // TurnierID wird als LigaID gespeichert
 		$clmLog->params = array('tid' => $this->turnierid, 'rnd' => $runde); // TurnierID wird als LigaID gespeichert
 		$clmLog->write();
 	
@@ -543,7 +554,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		$this->_approveDo();
 
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	
 	}
 	
@@ -551,7 +562,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 	function _approveDo() {
 
 		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 
 		// Turnierdaten holen
 		$turnier =JTable::getInstance( 'turniere', 'TableCLM' );
@@ -559,7 +570,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 
 		$clmAccess = clm_core::$access;      
 		if (($turnier->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
-			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
+			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return false;
 		}
 
@@ -569,25 +580,25 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 
 		// Runde existent?
 		if (!$round->id) {
-			JError::raiseWarning( 500, CLMText::errorText('ROUND', 'NOTEXISTING') );
+			$this->app->enqueueMessage( CLMText::errorText('ROUND', 'NOTEXISTING'),'warning' );
 			return false;
 		
 		// Runde gehört zu Turnier?
 		} elseif ($round->turnier != $this->turnierid) {
-			JError::raiseWarning( 500, CLMText::errorText('ROUND', 'NOACCESS') );
+			$this->app->enqueueMessage( CLMText::errorText('ROUND', 'NOACCESS'),'warning' );
 			return false;
 		
 		}
 		
 		
-		$task		= JRequest::getCmd('task');
+		$task		= clm_core::$load->request_string('task');
 		$approve	= ($task == 'approve'); // zu vergebender Wert 0/1
 	
 		// weiterer Check: Ergebnisse vollständig?
 		if ($approve == 1) {
 			$tournamentRound = new CLMTournamentRound($this->turnierid, $this->roundid);
 			if (!$tournamentRound->checkResultsComplete()) {
-				JError::raiseWarning( 500, CLMText::errorText('RESULTS', 'INCOMPLETE') );
+				$this->app->enqueueMessage( CLMText::errorText('RESULTS', 'INCOMPLETE'),'warning' );
 				return false;
 			}
 		}
@@ -596,15 +607,14 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		// jetzt schreiben
 		$round->tl_ok = $approve;
 		if (!$round->store()) {
-			JError::raiseError(500, $row->getError() );
+			$this->app->enqueueMessage( $row->getError(),'error' );
 			return false;
 		}
-	
-		$app =JFactory::getApplication();
+									   
 		if ($approve) {
-			$app->enqueueMessage( JText::_('ROUND')." ".JText::_('CLM_APPROVED') );
+			$this->app->enqueueMessage( JText::_('ROUND')." ".JText::_('CLM_APPROVED') );
 		} else {
-			$app->enqueueMessage( JText::_('ROUND')." ".JText::_('CLM_UNAPPROVED') );
+			$this->app->enqueueMessage( JText::_('ROUND')." ".JText::_('CLM_UNAPPROVED') );
 		}
 	
 		// Log
@@ -625,7 +635,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		$this->adminLink->view = "turrounds";
 		$this->adminLink->makeURL();
 		
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 		
 	}
 
@@ -634,7 +644,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		$this->_deleteDo();
 	
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	
 	}
 
@@ -642,7 +652,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 	function _deleteDo() {
 		
 		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 		
 		// Instanz der Tabelle
 		$row = JTable::getInstance( 'turniere', 'TableCLM' );
@@ -650,7 +660,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 
 		$clmAccess = clm_core::$access;      
 		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
-			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
+			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return false;
 		}
 	
@@ -666,7 +676,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 	
 		// wenn Runde schon bestätigt, löschen nicht erlauben
 		if ($tl_ok == 1) {
-			JError::raiseWarning( 500,  CLMText::errorText('ROUND', 'ALREADYAPPROVED') );
+			$this->app->enqueueMessage( CLMText::errorText('ROUND', 'ALREADYAPPROVED'),'warning' );
 			return false;
 		}
 	
@@ -684,14 +694,13 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 					. "   AND runde = ".$runde." AND brett = ".$brettMax
 					. " LIMIT 2 "
 					;
-		//echo "<br>query: ".$query; //die('  del?');
-		$this->_db->setQuery($query);
-		if (!$this->_db->query()) { 
-			JError::raiseError(500, $this->_db->getErrorMsg() ); 
+//		$this->_db->setQuery($query);
+//		if (!$this->_db->query()) { 
+		if (!clm_core::$db->query($query)) { 
+			$this->app->enqueueMessage( $this->_db->getErrorMsg(),'error' );
 		}
-	
-	
-		JError::raiseNotice( 500,  JText::_('MATCH_DELETED') );
+		
+		$this->app->enqueueMessage( JText::_('MATCH_DELETED'),'notice' );
 	
 		// Rangliste neu berechnen!
 		$tournament = new CLMTournament($this->turnierid, true);

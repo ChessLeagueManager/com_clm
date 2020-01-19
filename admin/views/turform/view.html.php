@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -15,11 +15,11 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 class CLMViewTurForm extends JViewLegacy {
 
 	function display($tpl = null) {
-		$task = JRequest::getVar( 'task');
-		$id = JRequest::getVar( 'id');
+		$task = clm_core::$load->request_string('task');
+		$id = clm_core::$load->request_int('id');
 		
 		// Die Toolbar erstellen, die über der Seite angezeigt wird
-		if (JRequest::getVar( 'id') > 0) { 
+		if ($id > 0) { 
 			$text = JText::_( 'TOURNAMENT_EDIT' );
 		} else { 
 			$text = JText::_( 'TOURNAMENT_CREATE' );
@@ -39,7 +39,7 @@ class CLMViewTurForm extends JViewLegacy {
 		JToolBarHelper::cancel('cancel');
 
 		// das MainMenu abschalten
-		JRequest::setVar( 'hidemainmenu', 1 );
+		$_GET['hidemainmenu'] = 1;
 
 		$config = clm_core::$db->config();
 		$params['tourn_showtlok'] = $config->tourn_showtlok;
@@ -76,13 +76,13 @@ class CLMViewTurForm extends JViewLegacy {
 		$document->addScript(CLM_PATH_JAVASCRIPT.'turform.js');
 
 		// Daten an Template übergeben
-		$this->assignRef('user', $model->user);
+		$this->user = $model->user;
 		
-		$this->assignRef('params', $params);
+		$this->params = $params;
 		
-		$this->assignRef('turnier', $model->turnier);
+		$this->turnier = $model->turnier;
 
-		$this->assignRef('form', $model->form);
+		$this->form = $model->form;
 
 		
 		parent::display($tpl);

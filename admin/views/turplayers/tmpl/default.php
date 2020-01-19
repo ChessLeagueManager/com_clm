@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -21,7 +21,7 @@ $turParams = new clm_class_params($this->turnier->params);
 		<tr>
 			<td align="left" width="100%">
 				<?php echo JText::_( 'FILTER' ); ?>:
-		<input type="text" name="search" id="search" value="<?php echo $this->form['search'];?>" class="text_area" onchange="document.adminForm.submit();" />
+		<input type="text" name="search" id="search" value="<?php echo $this->param['search'];?>" class="text_area" onchange="document.adminForm.submit();" />
 		<button onclick="this.form.submit();"><?php echo JText::_( 'GO' ); ?></button>
 		<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_vid').value='0';this.form.submit();"><?php echo JText::_( 'RESET' ); ?></button>
 			</td>

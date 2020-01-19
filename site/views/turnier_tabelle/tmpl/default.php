@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip', '.CLMTooltip');
 
@@ -18,9 +17,9 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 
 // Konfigurationsparameter auslesen
-$itemid 		= JRequest::getVar( 'Itemid' );
-$spRang		= JRequest::getVar( 'spRang' ,0);	//Sonderranglisten
-$option 	= JRequest::getCmd( 'option' );
+$itemid 	= clm_core::$load->request_string( 'Itemid' );
+$spRang		= clm_core::$load->request_int('spRang');	//Sonderranglisten
+$option 	= clm_core::$load->request_string( 'option' );
 $mainframe	= JFactory::getApplication();
 
 // $turnierid		= JRequest::getInt('turnier','1');

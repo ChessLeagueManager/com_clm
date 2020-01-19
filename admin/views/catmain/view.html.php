@@ -1,15 +1,14 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
 class CLMViewCatMain extends JViewLegacy {
@@ -35,7 +34,7 @@ class CLMViewCatMain extends JViewLegacy {
 		
 		if (clm_core::$access->getType() === 'admin') {
 			JToolBarHelper::spacer();
-			JToolBarHelper::custom('delete','delete.png','delete_f2.png', JText::_('DELETE'), false);
+			JToolBarHelper::custom('delete','delete.png','delete_f2.png', JText::_('DELETE'),true);
 		}
 
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
@@ -44,15 +43,15 @@ class CLMViewCatMain extends JViewLegacy {
 		
 
 		// Daten an Template übergeben
-		$this->assignRef('user', $model->user);
+		$this->user = $model->user;
 		
-		$this->assignRef('categories', $model->categories);
+		$this->categories = $model->categories;
 
-		$this->assignRef('param', $model->param);
+		$this->param = $model->param;
 
-		$this->assignRef('form', $model->form);
+		$this->form = $model->form;
 		
-		$this->assignRef('pagination', $model->pagination);
+		$this->pagination = $model->pagination;
 
 		// zusätzliche Funktionalitäten
 		JHtml::_('behavior.tooltip');

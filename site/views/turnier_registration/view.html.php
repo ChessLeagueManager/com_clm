@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 jimport( 'joomla.application.component.view');
 
 class CLMViewTurnier_Registration extends JViewLegacy {
@@ -24,7 +23,7 @@ class CLMViewTurnier_Registration extends JViewLegacy {
 		$headTitle = CLMText::composeHeadTitle( array( $model->turnier->name, JText::_('TOURNAMENT_INFO') ) );
 		$document->setTitle( $headTitle );
 		
-		$this->assignRef('turnier', $model->turnier);
+		$this->turnier = $model->turnier;
 
 		parent::display($tpl);
 	

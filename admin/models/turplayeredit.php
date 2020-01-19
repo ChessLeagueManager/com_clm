@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -41,7 +41,7 @@ class CLMModelTurPlayerEdit extends JModelLegacy {
 	function _getParameters() {
 	
 		// roundid
-		$this->param['playerid'] = JRequest::getInt('playerid');
+		$this->param['playerid'] = clm_core::$load->request_int('playerid');
 	
 	}
 

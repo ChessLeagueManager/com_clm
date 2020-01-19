@@ -41,7 +41,7 @@ class CLMModelTurRegistrationEdit extends JModelLegacy {
 	function _getParameters() {
 	
 		// registrationid
-		$this->param['registrationid'] = JRequest::getInt('registrationid');
+		$this->param['registrationid'] = clm_core::$load->request_int('registrationid');
 	
 	}
 

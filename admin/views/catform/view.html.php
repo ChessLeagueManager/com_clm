@@ -1,15 +1,14 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
 class CLMViewCatForm extends JViewLegacy {
@@ -17,7 +16,7 @@ class CLMViewCatForm extends JViewLegacy {
 	function display($tpl = NULL) {
 
 		// Die Toolbar erstellen, die über der Seite angezeigt wird
-		if (JRequest::getVar( 'task') == 'edit') { 
+		if (clm_core::$load->request_string( 'task') == 'edit') { 
 			$text = JText::_( 'CATEGORY_EDIT' );
 		} else { 
 			$text = JText::_( 'CATEGORY_CREATE' );
@@ -33,7 +32,7 @@ class CLMViewCatForm extends JViewLegacy {
 		JToolBarHelper::cancel('cancel');
 
 		// das MainMenu abschalten
-		JRequest::setVar( 'hidemainmenu', 1 );
+		$_GET['hidemainmenu'] = 1;
 
 
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
@@ -50,11 +49,11 @@ class CLMViewCatForm extends JViewLegacy {
 		// $document->addScript(CLM_PATH_JAVASCRIPT.'catform.js');
 
 		// Daten an Template übergeben
-		$this->assignRef('user', $model->user);
+		$this->user = $model->user;
 		
-		$this->assignRef('category', $model->category);
+		$this->category = $model->category;
 
-		$this->assignRef('form', $model->form);
+		$this->form = $model->form;
 
 		
 		parent::display();

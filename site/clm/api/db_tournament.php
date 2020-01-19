@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 function clm_api_db_tournament() {
 	$table = '#__clm_turniere';
 	$primaryKey = 'id';
@@ -39,7 +45,8 @@ function clm_api_db_tournament() {
                     clm_core::$db->turniere->get($out["data"][$i][14])->dateStart != '1970-01-01') {
 			$out["data"][$i][3] = clm_core::$load->date_to_string(clm_core::$db->turniere->get($out["data"][$i][14])->dateStart,false,true);
 			if (clm_core::$db->turniere->get($out["data"][$i][14])->dateEnd != '0000-00-00' AND
-                            clm_core::$db->turniere->get($out["data"][$i][14])->dateEnd != '1970-01-01') {
+                            clm_core::$db->turniere->get($out["data"][$i][14])->dateEnd != '1970-01-01' AND
+                            clm_core::$db->turniere->get($out["data"][$i][14])->dateStart != clm_core::$db->turniere->get($out["data"][$i][14])->dateEnd) {
 				$out["data"][$i][3] .= " ".$lang->until." ". clm_core::$load->date_to_string(clm_core::$db->turniere->get($out["data"][$i][14])->dateEnd,false,true);
 			}
 		} else {

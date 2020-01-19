@@ -1,3 +1,9 @@
+/*
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2019 CLM Team  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 	function showFormRoundscount(){
 		if (document.getElementById('typ').value == 1) { // CH
 			document.getElementById('formRoundscountValue').innerHTML = jsform['runden'];
@@ -48,14 +54,28 @@
 	Joomla.submitbutton = function (pressbutton) { 
 		var form = document.adminForm;
 		if (pressbutton == 'cancel') {
-			submitform( pressbutton );
+			Joomla.submitform( pressbutton );
 			return;
 		}
 		
 		// do field validation
 		if (form.name.value == "") {
 			alert( jserror['enter_name'] );
-		} else if ( getSelectedValue('adminForm','sid') == 0 ) {
+//		} else if ( getSelectedValue('adminForm','sid') == 0 ) {
+//			alert( jserror['select_season'] );
+		} else {
+			// get references to select list and display text box
+			var sel = document.getElementById('sid');			
+			var opt;
+			for ( var i = 0, len = sel.options.length; i < len; i++ ) {
+				opt = sel.options[i];
+				if ( opt.selected === true ) {
+					val = opt.value;
+					break;
+				}
+			}
+		}
+		if ( val == 0 ) {
 			alert( jserror['select_season'] );
 		} else if (form.typ.value == 0) {
 			alert( jserror['select_modus'] );
@@ -74,6 +94,6 @@
 		} else if (form.typ.value != 3 && form.tiebr3.value != 0 && form.tiebr3.value == form.tiebr2.value) {
 			alert( jserror['select_tiebreakers_23'] );
 		} else {
-			submitform( pressbutton );
+			Joomla.submitform( pressbutton );
 		}
 	}

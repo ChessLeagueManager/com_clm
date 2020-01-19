@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -23,12 +21,11 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		parent::__construct( $config );
 		
 		// turnierid
-		$this->registrationid = JRequest::getInt('registrationid');
-		$this->turnierid = JRequest::getInt('turnierid');
+		$this->registrationid = clm_core::$load->request_int('registrationid');
+		$this->turnierid = clm_core::$load->request_int('turnierid');
 		
-		$this->_db		= JFactory::getDBO();
-		
-		$this->app =JFactory::getApplication();
+		$this->_db	= JFactory::getDBO();		
+		$this->app 	= JFactory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -47,14 +44,14 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		$this->_saveDo();
 
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	
 	}
 	
 	
 	function _saveDo() {
 	
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 	
 		// Instanz der Tabelle
 		$rowt = JTable::getInstance( 'turniere', 'TableCLM' );
@@ -62,12 +59,12 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 
 		$clmAccess = clm_core::$access;      
 		if (($rowt->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
-			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
+			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'), 'warning' );
 			return false;
 		}
 	
 		// Task
-		$task = JRequest::getVar('task');
+		$task = clm_core::$load->request_string('task');
 		
 		// Instanz der Tabelle
 		$row = JTable::getInstance( 'registrations', 'TableCLM' );
@@ -85,8 +82,7 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 				$text = JText::_('REGISTRATION_ALREADY_MOVED');
 			}
 			if ($text != '') {
-				$app =JFactory::getApplication();
-				$app->enqueueMessage( $text );
+				$this->app->enqueueMessage( $text );
 				// Weiterleitung zurück in Liste
 				$this->adminLink->more = array('id' => $this->turnierid);
 				$this->adminLink->view = "turregistrations"; // WL in Liste
@@ -95,11 +91,12 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		}
 		// registration existent?
 		if (!$row->id) {
-			JError::raiseWarning( 500, CLMText::errorText('REGISTRATION', 'NOTEXISTING') );
+			$this->app->enqueueMessage( CLMText::errorText('REGISTRATION', 'NOTEXISTING'), 'warning' );
 			return false;
 		}
-		if (!$row->bind(JRequest::get('post'))) {
-			JError::raiseError(500, $row->getError() );
+		$post = $_POST; 
+		if (!$row->bind($post)) {
+			$this->app->enqueueMessage( $row->getError(), 'error' );
 			return false;
 		}
 
@@ -109,12 +106,12 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		$row->vorname = substr($registrationname,($pos + 1));
 		if ($task == 'apply' OR $task == 'save') $row->status  = 1;
 		if ($task == 'copy_to') $row->status  = 2;
-		if (!$row->check(JRequest::get('post'))) {
-			JError::raiseError(500, $row->getError() );
+		if (!$row->check($post)) {
+			$this->app->enqueueMessage( $row->getError(), 'error' );
 			return false;
 		}
 		if (!$row->store()) {
-			JError::raiseError(500, $row->getError() );
+			$this->app->enqueueMessage( $row->getError(), 'error' );
 			return false;
 		}
 
@@ -159,12 +156,12 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 			$tlnr->titel	= $row->titel;
 			$tlnr->tlnrStatus = 1;
 			$tlnr->published = 1;
-			if (!$tlnr->check(JRequest::get('post'))) {
-				JError::raiseError(500, $tlnr->getError() );
+			if (!$tlnr->check($post)) {
+				$this->app->enqueueMessage( $tlnr->getError(), 'error' );
 				return false;
 			}
 			if (!$tlnr->store()) {
-				JError::raiseError(500, $tlnr->getError() );
+				$this->app->enqueueMessage( $tlnr->getError(), 'error' );
 				return false;
 			}
 			$text = JText::_('REGISTRATION_MOVED');
@@ -177,9 +174,8 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		$clmLog->aktion = $text;
 		$clmLog->params = array('tid' => $this->turnierid, 'rid' => $this->registrationid, 'name' => $registrationname); // TurnierID wird als LigaID gespeichert
 		$clmLog->write();
-		
-		$app =JFactory::getApplication();
-		$app->enqueueMessage( $text );
+								   
+		$this->app->enqueueMessage( $text );
 
 		// wenn 'apply', weiterleiten in form
 		if ($task == 'apply') {
@@ -199,7 +195,7 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		$this->adminLink->view = "turregistrations";
 		$this->adminLink->more = array('id' => $this->turnierid);
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 		
 	}
 

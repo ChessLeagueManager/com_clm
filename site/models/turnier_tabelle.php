@@ -20,8 +20,8 @@ class CLMModelTurnier_Tabelle extends JModelLegacy {
 		
 		parent::__construct();
 
-		$this->turnierid = JRequest::getInt('turnier', 0);
-		$this->spRang = JRequest::getInt('spRang', 0); 		//Sonderranglisten
+		$this->turnierid = clm_core::$load->request_int('turnier');
+		$this->spRang = clm_core::$load->request_int('spRang'); 		//Sonderranglisten
 
 		$this->_getTurnierData();
 

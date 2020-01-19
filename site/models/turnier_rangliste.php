@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 jimport( 'joomla.html.parameter' );
@@ -20,9 +19,9 @@ class CLMModelTurnier_Rangliste extends JModelLegacy {
 		
 		parent::__construct();
 
-		$this->turnierid = JRequest::getInt('turnier', 0);
-		$this->spRang = JRequest::getInt('spRang', 0); 		//Sonderranglisten
-		$this->orderby = clm_escape(JRequest::getVar('orderby', 'pos'));
+		$this->turnierid = clm_core::$load->request_int('turnier');
+		$this->spRang = clm_core::$load->request_int('spRang'); 		//Sonderranglisten
+		$this->orderby = clm_core::$load->request_string('orderby', 'pos');
 
 		$this->_getTurnierData();
 

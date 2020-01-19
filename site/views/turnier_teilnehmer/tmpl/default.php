@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,9 +9,7 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip', $params);
 JHtml::_('behavior.tooltip', '.CLMTooltip');
 
 // Stylesheet laden
@@ -19,10 +17,8 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 
 // Konfigurationsparameter auslesen
-$itemid 		= JRequest::getVar( 'Itemid' );
-// $turnierid		= JRequest::getInt('turnier','1');
+$itemid 		= clm_core::$load->request_string( 'Itemid' );
 $config			= clm_core::$db->config();
-// $pdf_melde 		= $config->pdf_meldelisten;
 $fixth_ttln		= $config->fixth_ttln;
 
 // CLM-Container

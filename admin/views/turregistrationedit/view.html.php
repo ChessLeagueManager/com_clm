@@ -40,7 +40,7 @@ class CLMViewTurRegistrationEdit extends JViewLegacy {
 		JToolBarHelper::cancel();
 
 		// das MainMenu abschalten
-		JRequest::setVar( 'hidemainmenu', 1 );
+		$_GET['hidemainmenu'] = 1;
 		
 
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
@@ -67,12 +67,12 @@ class CLMViewTurRegistrationEdit extends JViewLegacy {
 
 
 		// Daten an Template übergeben
-		$this->assignRef('user', $model->user);
+		$this->user = $model->user;
 		
-		$this->assignRef('registration', $model->registrationData);
-		$this->assignRef('turnier', $model->turnierData);
+		$this->registration = $model->registrationData;
+		$this->turnier = $model->turnierData;
 
-		$this->assignRef('param', $model->param);
+		$this->param = $model->param;
 
 
 		parent::display();

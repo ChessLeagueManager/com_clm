@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -18,7 +18,7 @@ defined('_JEXEC') or die('Restricted access');
 	Joomla.submitbutton = function submitbutton(pressbutton) {
 		var form = document.adminForm;
 		if (pressbutton == 'cancel') {
-			submitform( pressbutton );
+			Joomla.submitform( pressbutton );
 			return;
 		}
 		
@@ -26,7 +26,7 @@ defined('_JEXEC') or die('Restricted access');
 		if (form.name.value == "") {
 			alert( jserror['enter_name'] );
 		} else {
-			submitform( pressbutton );
+			Joomla.submitform( pressbutton );
 		}
 	}
 	

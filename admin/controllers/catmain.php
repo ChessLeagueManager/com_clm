@@ -1,16 +1,14 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -22,7 +20,8 @@ class CLMControllerCatMain extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= JFactory::getDBO();
+		$this->_db	= JFactory::getDBO();
+		$this->app	= JFactory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply','save' );
@@ -39,7 +38,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		$this->adminLink->view = "catform";
 		$this->adminLink->makeURL();
 		
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	
 	}
 
@@ -53,7 +52,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		$this->_copyDo();
 
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 
 	}
 
@@ -64,19 +63,18 @@ class CLMControllerCatMain extends JControllerLegacy {
 	function _copyDo() {
 		
 		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 		
 		
 		// zu bearbeitende IDs auslesen
-		$cid		= JRequest::getVar( 'cid', null, 'post', 'array' );
-		JArrayHelper::toInteger($cid);
+		$cid		= clm_core::$load->request_array_int('cid');
 		// vorerst nur eine ID bearbeiten!
 		$catid = $cid[0];
 		
 		// access?
 		$category = new CLMCategory($catid, true);
 		if (!$category->checkAccess()) {
-			JError::raiseWarning( 500, CLMText::errorText('JTOOLBAR_DUPLICATE', 'NOACCESS') );
+			$this->app->enqueueMessage( CLMText::errorText('JTOOLBAR_DUPLICATE', 'NOACCESS'),'warning' );
 			return false;
 		}
 		
@@ -84,7 +82,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		$row =JTable::getInstance( 'categories', 'TableCLM' );
 
 		if ( !$row->load($catid) ) {
-			JError::raiseWarning( 500, CLMText::errorText('JCATEGORY', 'NOTEXISTING') );
+			$this->app->enqueueMessage( CLMText::errorText('JCATEGORY', 'NOTEXISTING'),'warning' );
 			return false;
 		}
 		
@@ -98,7 +96,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 
 
 		if (!$row->store()) {	
-			JError::raiseWarning( $row->getError() );
+			$this->app->enqueueMessage( $row->getError(),'warning' );
 			return false; 
 		}
 		
@@ -110,8 +108,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		$clmLog->write();
 		
 		// Message
-		$app =JFactory::getApplication();
-		$app->enqueueMessage( $nameOld.": ".JText::_('CATEGORY_COPIED') );
+		$this->app->enqueueMessage( $nameOld.": ".JText::_('CATEGORY_COPIED') );
 
 		// Ende Runden erstellt
 		return true;
@@ -122,14 +119,13 @@ class CLMControllerCatMain extends JControllerLegacy {
 	// Weiterleitung!
 	function edit() {
 		
-		$cid	= JRequest::getVar('cid', array(), '', 'array');
-		JArrayHelper::toInteger($cid);
+		$cid	= clm_core::$load->request_array_int('cid');
 		
 		$this->adminLink->view = "catform";
 		$this->adminLink->more = array('task' => 'edit', 'id' => $cid[0]);
 		$this->adminLink->makeURL();
 		
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	
 	}
 
@@ -137,21 +133,19 @@ class CLMControllerCatMain extends JControllerLegacy {
 	function publish() {
 		
 		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 	
 		// TODO? evtl global inconstruct anlegen
 		$user 		=JFactory::getUser();
 		
-		$cid		= JRequest::getVar('cid', array(), '', 'array');
-		JArrayHelper::toInteger($cid);
+		$cid		= clm_core::$load->request_array_int('cid');
 		
-		$task		= JRequest::getCmd( 'task' );
+		$task		= clm_core::$load->request_string( 'task' );
 		$publish	= ($task == 'publish'); // zu vergebender Wert 0/1
 		
 		// Inhalte übergeben?
 		if (empty( $cid )) { 
-			
-			JError::raiseWarning( 500, 'NO_ITEM_SELECTED' );
+			$this->app->enqueueMessage( JText::_( 'NO_ITEM_SELECTED' ),'warning' );
 		
 		} else { // ja, Inhalte vorhanden
 			
@@ -164,8 +158,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		
 				// Prüfen ob User Berechtigung für diese category hat
 				if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
-					
-					JError::raiseWarning( 500, $row->name.": ".JText::_( 'CATEGORY_NO_ACCESS' ) );
+					$this->app->enqueueMessage( $row->name.": ".JText::_( 'CATEGORY_NO_ACCESS' ),'warning' );
 					
 					// daher diesen Eintrag aus dem cid-Array löschen
 					unset($cid[$key]);
@@ -198,24 +191,22 @@ class CLMControllerCatMain extends JControllerLegacy {
 				$row->publish( $cid, $publish );
 			
 				// Meldung erstellen
-				$app =JFactory::getApplication();
 				if ($publish) {
-					$app->enqueueMessage( CLMText::sgpl(count($cid), JText::_('JCATEGORY'), JText::_('JCATEGORIES'))." ".JText::_('CLM_PUBLISHED') );
+					$this->app->enqueueMessage( CLMText::sgpl(count($cid), JText::_('JCATEGORY'), JText::_('JCATEGORIES'))." ".JText::_('CLM_PUBLISHED') );
 				} else {
-					$app->enqueueMessage( CLMText::sgpl(count($cid), JText::_('JCATEGORY'), JText::_('JCATEGORIES'))." ".JText::_('CLM_UNPUBLISHED') );
+					$this->app->enqueueMessage( CLMText::sgpl(count($cid), JText::_('JCATEGORY'), JText::_('JCATEGORIES'))." ".JText::_('CLM_UNPUBLISHED') );
 				}
 			
 			} else {
 			
-				$app =JFactory::getApplication();
-				$app->enqueueMessage(JText::_('NO_CHANGES'));
+				$this->app->enqueueMessage(JText::_('NO_CHANGES'));
 			
 			}
 	
 		}
 	
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	
 	}
 
@@ -230,7 +221,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		$this->_deleteDo();
 
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 
 	}
 	
@@ -242,10 +233,9 @@ class CLMControllerCatMain extends JControllerLegacy {
 	function _deleteDo() {
 		
 		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 	
-		$cid = JRequest::getVar('cid', array(), '', 'array');
-		JArrayHelper::toInteger($cid);
+		$cid = clm_core::$load->request_array_int('cid');
 		// vorerst nur eine markiertes  übernehmen // später über foreach mehrere?
 		$catid = $cid[0];
 		
@@ -253,12 +243,12 @@ class CLMControllerCatMain extends JControllerLegacy {
 		// access?
 		$category = new CLMCategory($catid, TRUE);
 		if (!$category->checkAccess(true, false, false)) {
-			JError::raiseWarning( 500, JText::_('CATEGORY_NO_ACCESS') );
+			$this->app->enqueueMessage( JText::_('CATEGORY_NO_ACCESS'),'warning' );
 			return false;
 		}
 		
 		if (!$category->checkDelete()) {
-			JError::raiseWarning( 500, JText::_('CATEGORY_NO_DELETE') );
+			$this->app->enqueueMessage( JText::_('CATEGORY_NO_DELETE'),'warning' );
 			return false;
 		}
 		
@@ -268,7 +258,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		
 		// falls Cat existent?
 		if ( !$row->load( $catid ) ) {
-			JError::raiseWarning( 500, CLMText::errorText('CATEGORY', 'NOTEXISTING') );
+			$this->app->enqueueMessage( CLMText::errorText('CATEGORY', 'NOTEXISTING'),'warning' );
 			return false;
 		
 		}
@@ -278,11 +268,13 @@ class CLMControllerCatMain extends JControllerLegacy {
 		$query = " DELETE FROM #__clm_categories "
 			." WHERE id = ".$catid
 			;
-		$this->_db->setQuery( $query );
-		if (!$this->_db->query()) {
-			JError::raiseError(500, $this->_db->getErrorMsg() ); 
+//		$this->_db->setQuery($query);
+//		if (!$this->_db->query()) { 
+		if (!clm_core::$db->query($query)) { 
+			$this->app->enqueueMessage( $this->_db->getErrorMsg(),'error' );
+			return false;
 		}
-	
+*/	
 		
 		// Log schreiben
 		$clmLog = new CLMLog();
@@ -292,8 +284,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		
 		
 		// Message
-		$app =JFactory::getApplication();
-		$app->enqueueMessage( $row->name.": ".JText::_('CATEGORY_DELETED') );
+		$this->app->enqueueMessage( $row->name.": ".JText::_('CATEGORY_DELETED') );
 		
 		return true;
 		
@@ -306,7 +297,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		$this->_order(1);
 		
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	
 	}
 
@@ -316,7 +307,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		$this->_order(-1);
 		
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	
 	}
 
@@ -325,28 +316,26 @@ class CLMControllerCatMain extends JControllerLegacy {
 	function _order($inc) {
 	
 		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 	
-		$cid = JRequest::getVar('cid', array(), '', 'array');
-		JArrayHelper::toInteger($cid);
+		$cid = clm_core::$load->request_array_int('cid');
 		$catid = $cid[0];
 	
 		// access?
 		$category = new CLMCategory($catid, true);
 		if (!$category->checkAccess()) {
-			JError::raiseWarning( 500, JText::_('CATEGORY_NO_ACCESS') );
+			$this->app->enqueueMessage( JText::_('CATEGORY_NO_ACCESS'),'warning' );
 			return false;
 		}
 	
 		$row =JTable::getInstance( 'categories', 'TableCLM' );
 		if ( !$row->load( $catid ) ) {
-			JError::raiseWarning( 500, CLMText::errorText('CATEGORY', 'NOTEXISTING') );
+			$this->app->enqueueMessage( CLMText::errorText('CATEGORY', 'NOTEXISTING'),'warning' );
 			return false;
 		}
 		$row->move( $inc, '' );
 	
-		$app =JFactory::getApplication();
-		$app->enqueueMessage( $row->name.": ".JText::_('ORDERING_CHANGED') );
+		$this->app->enqueueMessage( $row->name.": ".JText::_('ORDERING_CHANGED') );
 		
 		return true;
 		
@@ -356,20 +345,18 @@ class CLMControllerCatMain extends JControllerLegacy {
 	function saveOrder() {
 	
 		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 	
 		if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
-			JError::raiseWarning( 500, JText::_('SECTION_NO_ACCESS') );
+			$this->app->enqueueMessage( JText::_('SECTION_NO_ACCESS'),'warning' );
 			return false;
 		}
 	
 	
-		$cid		= JRequest::getVar( 'cid', array(), 'post', 'array' );
-		JArrayHelper::toInteger($cid);
+		$cid		= clm_core::$load->request_array_int('cid');
 	
 		$total		= count( $cid );
-		$order		= JRequest::getVar( 'order', array(0), 'post', 'array' );
-		JArrayHelper::toInteger($order, array(0));
+		$order		= clm_core::$load->request_array_int('order');
 	
 		$row =JTable::getInstance( 'categories', 'TableCLM' );
 		$groupings = array();
@@ -383,7 +370,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 			if ($row->ordering != $order[$i]) {
 				$row->ordering = $order[$i];
 				if (!$row->store()) {
-					JError::raiseError(500, $db->getErrorMsg() );
+					$this->app->enqueueMessage( $db->getErrorMsg(),'error' );
 				}
 			}
 		}
@@ -393,11 +380,10 @@ class CLMControllerCatMain extends JControllerLegacy {
 			$row->reorder('sid = '.(int) $group);
 		}
 		
-		$app =JFactory::getApplication();
-		$app->enqueueMessage( JText::_('NEW_ORDERING_SAVED') );
+		$this->app->enqueueMessage( JText::_('NEW_ORDERING_SAVED') );
 	
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	
 	}
 

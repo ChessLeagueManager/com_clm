@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -23,11 +23,11 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 		parent::__construct( $config );
 		
 		// turnierid
-		$this->turnierid = JRequest::getInt('id');
+		$this->turnierid = clm_core::$load->request_int('id');
 		
 		$this->_db		= JFactory::getDBO();
 		
-		$this->app =JFactory::getApplication();
+		$this->app = JFactory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -43,7 +43,7 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 	function _checkTournamentOpen($playersIn, $teil) {
 	
 		if ($playersIn >= $teil) {
-			JError::raiseWarning( 500, CLMText::errorText('PLAYERLIST', 'FULL') );
+			$this->app->enqueueMessage(CLMText::errorText('PLAYERLIST', 'FULL'),'warning');
 			return false;
 		}
 		
@@ -58,14 +58,14 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 		// abschließend offene Restteilnehmerzahl
 
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	
 	}
 	
 	
 	function _saveDo() {
 	
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 		//CLM parameter auslesen
 		$config = clm_core::$db->config();
 		$countryversion = $config->countryversion;
@@ -76,15 +76,13 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 
 		$clmAccess = clm_core::$access;      
 		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
-		//if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
-			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
+			$this->app->enqueueMessage(JText::_('TOURNAMENT_NO_ACCESS'),'warning');
 			return false;
 		}
 	
 		$turnier = $this->turnierid;
-		$task		= JRequest::getVar( 'task');
-		$cid 		= JRequest::getVar( 'cid', array(0), '', 'array' );
-		// JArrayHelper::toInteger($cid, array(0));
+		$task		= clm_core::$load->request_string('task');
+		$cid 		= clm_core::$load->request_array_string('cid');
 	
 		// weiteren Daten aus TlnTabelle
 		$query = "SELECT MAX(mgl_nr), MAX(snr) FROM `#__clm_turniere_tlnr`"
@@ -107,18 +105,18 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 			return false;
 		}
 	
-		$name	= trim(JRequest::getVar('name'));
+		$name	= trim(clm_core::$load->request_string('name'));
 		// Spieler aus manueller Nachmeldung speichern
 		if ($name != "") {
 			
 			// weitere Angaben holen
-			$verein = JRequest::getString('verein');
-			// $dwz = JRequest::getInt('dwz');
-			$natrating = JRequest::getInt('natrating', 0);
-			$fideelo = JRequest::getInt('fideelo', 0);
-			$titel = JRequest::getString('titel');
-			$geschlecht = JRequest::getString('geschlecht', 'NULL');
-			$birthYear = JRequest::getString('birthYear', '0000');
+			$verein = clm_core::$load->request_string('verein');
+			// $dwz = clm_core::$load->request_int('dwz');
+			$natrating = clm_core::$load->request_int('natrating');
+			$fideelo = clm_core::$load->request_int('fideelo');
+			$titel = clm_core::$load->request_string('titel');
+			$geschlecht = clm_core::$load->request_string('geschlecht', 'NULL');
+			$birthYear = clm_core::$load->request_string('birthYear', '0000');
 			
 			$twz = clm_core::$load->gen_twz($param_useastwz, $natrating, $fideelo);
 
@@ -126,8 +124,9 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 				." (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `titel`, `mgl_nr` ,`zps`)"
 				." VALUES"
 				." ('".$tournament->data->sid."', '".$this->turnierid."', '".$maxSnr++."', '$name', '$birthYear', '$geschlecht', '$verein', '$twz', '$natrating', '$fideelo', '$titel', '".$maxFzps."', '99999')";
-			$this->_db->setQuery($query);
-			if ($this->_db->query()) {
+//		$this->_db->setQuery($query);
+//		if ($this->_db->query()) {
+		if (clm_core::$db->query($query)) { 
 				$this->app->enqueueMessage(JText::_('PLAYER')." ".$name." ".JText::_('ADDED'));
 				$playersIn++; // den angemeldeten Spielern zufügen
 				return true;
@@ -135,7 +134,6 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 				$this->app->enqueueMessage(JText::_('DB_ERROR'));
 				return false;
 			}
-		
 			
 		}
 		// wenn hier ein Spieler eingetragen wurde, geht es nicht mehr durch die Liste...
@@ -187,7 +185,7 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 					}
 					$this->_db->setQuery($query);
 					if ($this->_db->loadResult() > 0) {
-						JError::raiseWarning( 500, JText::_('PLAYER')." ".$data->Spielername." ".JText::_('ALREADYIN') );
+						$this->app->enqueueMessage(JText::_('PLAYER')." ".$data->Spielername." ".JText::_('ALREADYIN'), 'warning');
 					} else {
 					
 						$twz = clm_core::$load->gen_twz($param_useastwz, $data->DWZ, $data->FIDE_Elo);
@@ -196,18 +194,18 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 								. " (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `FIDEid`, `FIDEcco`, `titel`,`mgl_nr` ,`PKZ` ,`zps`) "
 								. " VALUES"
 								. " ('".$tournament->data->sid."','".$this->turnierid."', '".$maxSnr++."', '".clm_escape( $data->Spielername )."', '".$data->Geburtsjahr."', '".$data->Geschlecht."','".clm_escape( $data->Vereinname )."', '".$twz."', '".$data->DWZ."', '".$data->FIDE_Elo."', '".$data->FIDE_ID."', '".$data->FIDE_Land."', '".$data->FIDE_Titel."', '$mgl', '$PKZ', '$zps')";
-						$this->_db->setQuery($query);
-						
-						if ($this->_db->query()) {
+//						$this->_db->setQuery($query);
+//						if ($this->_db->query()) { 
+						if (clm_core::$db->query($query)) { 
 							$playersIn++;
 							$this->app->enqueueMessage(JText::_('PLAYER')." ".$data->Spielername." ".JText::_('ADDED'));
 						} else {
-							JError::raiseWarning( 500, JText::_('DB_ERROR') );
+							$this->app->enqueueMessage(JText::_('DB_ERROR'), 'warning');
 						}
 					}
 				
 				} else {
-					JError::raiseWarning( 500, CLMText::errorText('PLAYER', 'UNKNOWN') );
+					$this->app->enqueueMessage(CLMText::errorText('PLAYER', 'UNKNOWN'),'warning' );
 				}
 			
 			} // sonst war Turnier voll
@@ -230,9 +228,9 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 		// Plätze frei?
 		$openSpots = ($tournament->data->teil-$playersIn);
 		if ($openSpots > 0) {
-			JError::raiseNotice( 500, JText::_('PARTICIPANTS_WANTED').": ".$openSpots );
+			$this->app->enqueueMessage(JText::_('PARTICIPANTS_WANTED').": ".$openSpots, 'notice' );
 		} else {
-			JError::raiseNotice( 500, CLMText::errorText('PARTICIPANTLIST', 'FULL') );
+			$this->app->enqueueMessage(CLMText::errorText('PARTICIPANTLIST', 'FULL'), 'notice' );
 		}
 	
 	
@@ -250,7 +248,7 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 	}
 
 	function cancel() {
-		$add_nz = JRequest::getInt('add_nz');
+		$add_nz = clm_core::$load->request_int('add_nz');
 		if ($add_nz == '1') {
 			$tournament = new CLMTournament($this->turnierid, true);
 			$tournament->makeMinusTln(); // Message werden dort erstellt
@@ -259,7 +257,7 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 		$this->adminLink->view = "turplayers";
 		$this->adminLink->more = array('id' => $this->turnierid);
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 		
 	}
 

@@ -1,39 +1,39 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
 class TableCLMCategories extends JTable
 {
-	var $id				= null;
-	var $parentid		= null;
+	var $id				= 0;
+	var $parentid		= 0;
 	var $name		= '';
 	var $sid		= 0;
 	var $dateStart = '1970-01-01';
 	var $dateEnd   = '1970-01-01';
-	var $tl			= '';
+	var $tl			= 0;
 	var $bezirk		= '';
 	var $bezirkTur = '1';
-	var $vereinZPS = null;
-	var $published		= '';
+	var $vereinZPS = '';
+	var $published		= 0;
+	var $started		= 0;
+	var $finished		= 0;
 	// var $invitationText = ''; // soll nicht aus catform heraus gelöscht werden...
 	var $bemerkungen	= '';
 	var $bem_int		= '';
 	var $checked_out	= 0;
 	var $checked_out_time	= '1970-01-01 00:00:00';
-	var $ordering		= null;
-	var $params 		= null;
+	var $ordering		= 0;
+	var $params 		= '';
 
 	function __construct( &$_db ) {
 		parent::__construct( '#__clm_categories', 'id', $_db );

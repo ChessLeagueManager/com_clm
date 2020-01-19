@@ -49,11 +49,11 @@ class CLMModelTurRegistrations extends JModelLegacy {
 		}
 	
 		// turnierid
-		$this->param['id'] = JRequest::getInt('id');
+		$this->param['id'] = clm_core::$load->request_int('id');
 	
 		// search
 		$this->param['search'] = $mainframe->getUserStateFromRequest( "$option.search", 'search', '', 'string' );
-		$this->param['search'] = JString::strtolower( $this->param['search'] );
+		$this->param['search'] = strtolower( $this->param['search'] );
 	
 		// club
 		$this->param['vid'] = $mainframe->getUserStateFromRequest( "$option.filter_vid", 'filter_vid', '0', 'string' );
@@ -108,15 +108,7 @@ class CLMModelTurRegistrations extends JModelLegacy {
 		$tournament = new CLMTournament($this->param['id'], true);
 		$tournament->checkTournamentStarted();
 		$this->turnier->started = $tournament->started;
-		
-		// wenn nicht gestartet, check, ob Startnummern okay
-		if (!$tournament->started AND !$tournament->checkCorrectSnr()) {
-			
-			//JError::raiseWarning(500, JText::_('PLEASE_CORRECT_SNR') );
-		
-		}
-		
-		
+				
 	}
 	
 	

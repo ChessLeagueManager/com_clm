@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access'); 
 
 // Stylesheet laden
@@ -29,19 +28,19 @@ if (1==1)	{
 // Datensätze in Tabelle schreiben
 
 // Variablen holen
-$typeRegistration = JRequest::getVar('typeRegistration','');
-$reg_check01 	= JRequest::getVar('reg_check01','');
-$reg_name 		= JRequest::getVar('reg_name','');
-$reg_vorname 	= JRequest::getVar('reg_vorname','');
-$reg_jahr 		= JRequest::getVar('reg_jahr','');
-$reg_mail 		= JRequest::getVar('reg_mail','');
-$reg_club 		= JRequest::getVar('reg_club','');
-$reg_dwz 		= JRequest::getVar('reg_dwz','');
-$reg_elo 		= JRequest::getVar('reg_elo','');
-$reg_comment 		= JRequest::getVar('reg_comment','');
-$f_source 		= JRequest::getVar('f_source','');
+$typeRegistration = clm_core::$load->request_string('typeRegistration','');
+$reg_check01 	= clm_core::$load->request_string('reg_check01','');
+$reg_name 		= clm_core::$load->request_string('reg_name','');
+$reg_vorname 	= clm_core::$load->request_string('reg_vorname','');
+$reg_jahr 		= clm_core::$load->request_string('reg_jahr','');
+$reg_mail 		= clm_core::$load->request_string('reg_mail','');
+$reg_club 		= clm_core::$load->request_string('reg_club','');
+$reg_dwz 		= clm_core::$load->request_string('reg_dwz','');
+$reg_elo 		= clm_core::$load->request_string('reg_elo','');
+$reg_comment 	= clm_core::$load->request_string('reg_comment','');
+$f_source 		= clm_core::$load->request_string('f_source','');
 if ($f_source = 'sent') {
-	$reg_spieler 		= JRequest::getVar('reg_spieler',100);
+	$reg_spieler 		= clm_core::$load->request_int('reg_spieler',100);
 }
 $session = JFactory::getSession();
 $reg_wert = $session->get('reg_wert');

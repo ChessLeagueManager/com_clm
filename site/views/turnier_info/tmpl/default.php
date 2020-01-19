@@ -20,7 +20,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 echo "<div><div id='turnier_info'>";
 
 // Konfigurationsparameter auslesen
-$itemid 		= JRequest::getVar( 'Itemid' );
+$itemid 		= clm_core::$load->request_string( 'Itemid' );
 
 // componentheading vorbereiten
 $heading = $this->turnier->name;

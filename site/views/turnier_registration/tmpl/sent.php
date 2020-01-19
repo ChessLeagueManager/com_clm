@@ -9,10 +9,9 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access'); 
 
-JRequest::checkToken() or die( 'Invalid Token' );
+defined('_JEXEC') or die( 'Invalid Token' );
 
 	$mainframe	= JFactory::getApplication();
 
@@ -29,39 +28,38 @@ if (1==1)	{
 // Variablen holen
 $turParams = new clm_class_params($this->turnier->params);
 $typeRegistration = $turParams->get('typeRegistration', 0);
-$reg_check01 	= JRequest::getVar('reg_check01','');
-$reg_name 		= JRequest::getVar('reg_name','');
-$reg_vorname 	= JRequest::getVar('reg_vorname','');
-$reg_birthYear 	= JRequest::getVar('reg_jahr','');
-$reg_club 		= JRequest::getVar('reg_club','');
-$reg_mail 		= JRequest::getVar('reg_mail','');
-$reg_dwz 		= JRequest::getVar('reg_dwz','');
-$reg_elo 		= JRequest::getVar('reg_elo','');
-$reg_comment 	= JRequest::getVar('reg_comment','');
+$reg_check01 	= clm_core::$load->request_string('reg_check01','');
+$reg_name 		= clm_core::$load->request_string('reg_name','');
+$reg_vorname 	= clm_core::$load->request_string('reg_vorname','');
+$reg_birthYear 	= clm_core::$load->request_string('reg_jahr','');
+$reg_club 		= clm_core::$load->request_string('reg_club','');
+$reg_mail 		= clm_core::$load->request_string('reg_mail','');
+$reg_dwz 		= clm_core::$load->request_string('reg_dwz','');
+$reg_elo 		= clm_core::$load->request_string('reg_elo','');
+$reg_comment 	= clm_core::$load->request_string('reg_comment','');
 
 if ($typeRegistration == 5) {
-	$reg_spieler 		= JRequest::getVar('reg_spieler',100);
+	$reg_spieler 		= clm_core::$load->request_int('reg_spieler',100);
 	if ($reg_spieler < 99) {
-		$reg_name 		= JRequest::getVar('reg_name'.$reg_spieler,'');
-		$reg_vorname 	= JRequest::getVar('reg_vorname'.$reg_spieler,'');
-		$reg_club 		= JRequest::getVar('reg_club'.$reg_spieler,'');
-		$reg_dwz 		= JRequest::getVar('reg_dwz'.$reg_spieler,'');
-		$reg_elo 		= JRequest::getVar('reg_elo'.$reg_spieler,'');
-		$reg_PKZ 		= JRequest::getVar('reg_PKZ'.$reg_spieler,'');
-		$reg_titel 		= JRequest::getVar('reg_titel'.$reg_spieler,'');
-		$reg_geschlecht	= JRequest::getVar('reg_geschlecht'.$reg_spieler,'');
-		$reg_birthYear	= JRequest::getVar('reg_birthYear'.$reg_spieler,'');
-		$reg_mgl_nr		= JRequest::getVar('reg_mgl_nr'.$reg_spieler,'');
-		$reg_zps 		= JRequest::getVar('reg_zps'.$reg_spieler,'');
-		$reg_dwz_I0 	= JRequest::getVar('reg_dwz_I0'.$reg_spieler,'');
-		$reg_FIDEid 	= JRequest::getVar('reg_FIDEid'.$reg_spieler,'');
-		$reg_FIDEcco	= JRequest::getVar('reg_FIDEcco'.$reg_spieler,'');
+		$reg_name 		= clm_core::$load->request_string('reg_name'.$reg_spieler,'');
+		$reg_vorname 	= clm_core::$load->request_string('reg_vorname'.$reg_spieler,'');
+		$reg_club 		= clm_core::$load->request_string('reg_club'.$reg_spieler,'');
+		$reg_dwz 		= clm_core::$load->request_string('reg_dwz'.$reg_spieler,'');
+		$reg_elo 		= clm_core::$load->request_string('reg_elo'.$reg_spieler,'');
+		$reg_PKZ 		= clm_core::$load->request_string('reg_PKZ'.$reg_spieler,'');
+		$reg_titel 		= clm_core::$load->request_string('reg_titel'.$reg_spieler,'');
+		$reg_geschlecht	= clm_core::$load->request_string('reg_geschlecht'.$reg_spieler,'');
+		$reg_birthYear	= clm_core::$load->request_string('reg_birthYear'.$reg_spieler,'');
+		$reg_mgl_nr		= clm_core::$load->request_string('reg_mgl_nr'.$reg_spieler,'');
+		$reg_zps 		= clm_core::$load->request_string('reg_zps'.$reg_spieler,'');
+		$reg_dwz_I0 	= clm_core::$load->request_string('reg_dwz_I0'.$reg_spieler,'');
+		$reg_FIDEid 	= clm_core::$load->request_string('reg_FIDEid'.$reg_spieler,'');
+		$reg_FIDEcco	= clm_core::$load->request_string('reg_FIDEcco'.$reg_spieler,'');
 	}
 } else {
 		$reg_PKZ 		= '';
 		$reg_titel 		= '';
 		$reg_geschlecht	= '';
-		$reg_birthYear	= '';
 		$reg_mgl_nr		= '';
 		$reg_zps 		= '';
 		$reg_dwz_I0 	= '';

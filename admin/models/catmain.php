@@ -57,7 +57,7 @@ class CLMModelCatMain extends JModelLegacy {
 	
 		// search
 		$this->param['search'] = $mainframe->getUserStateFromRequest( "$option.search", 'search', '', 'string' );
-		$this->param['search'] = JString::strtolower( $this->param['search'] );
+		$this->param['search'] = strtolower( $this->param['search'] );
 	
 		// parent
 		$this->param['parentid'] = $mainframe->getUserStateFromRequest( "$option.filter_parentid", 'filter_parentid', 0, 'int' );

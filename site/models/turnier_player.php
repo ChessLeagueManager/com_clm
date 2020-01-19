@@ -22,8 +22,8 @@ class CLMModelTurnier_Player extends JModelLegacy {
 		
 		parent::__construct();
 
-		$this->turnierid = JRequest::getInt('turnier', 0);
-		$this->snr = JRequest::getInt('snr', 1);
+		$this->turnierid = clm_core::$load->request_int('turnier');
+		$this->snr = clm_core::$load->request_int('snr', 1);
 
 		$this->_getTurnierData();
 

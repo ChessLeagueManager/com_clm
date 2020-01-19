@@ -20,7 +20,7 @@ class CLMModelTurnier_DWZ extends JModelLegacy {
 		
 		parent::__construct();
 
-		$this->turnierid = JRequest::getInt('turnier', 0);
+		$this->turnierid = clm_core::$load->request_int('turnier');
 
 		$this->_getTurnierData();
 

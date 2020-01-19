@@ -1,15 +1,14 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 jimport( 'joomla.application.component.view');
 
 class CLMViewTurnier_Info extends JViewLegacy {
@@ -24,9 +23,9 @@ class CLMViewTurnier_Info extends JViewLegacy {
 		$headTitle = CLMText::composeHeadTitle( array( $model->turnier->name, JText::_('TOURNAMENT_INFO') ) );
 		$document->setTitle( $headTitle );
 		
-		$this->assignRef('turnier', $model->turnier);
-
-		$this->assignRef('matchStats', $model->matchStats);
+		$this->turnier = $model->turnier;
+		if (isset($model->matchStats))
+			$this->matchStats = $model->matchStats;
 
 
 		parent::display($tpl);

@@ -82,16 +82,15 @@ class CLMViewTurPlayers extends JViewLegacy {
 		
 
 		// Daten an Template übergeben
-		$this->assignRef('user', $model->user);
+		$this->user = $model->user;
 		
-		$this->assignRef('turnier', $model->turnier);
+		$this->turnier = $model->turnier;
 		
-		$this->assignRef('turplayers', $model->turPlayers);
+		$this->turplayers = $model->turPlayers;
 
-		$this->assignRef('form', $model->form);
-		$this->assignRef('param', $model->param);
+		$this->param = $model->param;
 
-		$this->assignRef('pagination', $model->pagination);
+		$this->pagination = $model->pagination;
 		
 		// zusätzliche Funktionalitäten
 		JHtml::_('behavior.tooltip');

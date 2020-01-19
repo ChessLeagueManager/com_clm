@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 JHTML::_( 'behavior.modal' );
 
@@ -18,7 +17,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 	
 // Konfigurationsparameter auslesen
-$itemid 		= JRequest::getVar( 'Itemid' );
+$itemid 		= clm_core::$load->request_string( 'Itemid' );
 $config = clm_core::$db->config();
 $countryversion = $config->countryversion;
 $turParams = new clm_class_params($this->turnier->params);
@@ -160,7 +159,7 @@ if ($this->playerPhoto != '') { ?>
         </div>
  
 	<?php
-	if (!is_null($this->matches) AND count($this->matches) > 0) {
+	if (isset($this->matches) AND !is_null($this->matches) AND count($this->matches) > 0) {
 	?>
 	
 		<table cellpadding="0" cellspacing="0" class="turnier_rangliste">

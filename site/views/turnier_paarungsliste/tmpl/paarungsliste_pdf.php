@@ -12,7 +12,7 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-$turnierid		= JRequest::getInt('turnier','1');
+$turnierid		= clm_core::$load->request_int('turnier','1');
 $config			= clm_core::$db->config();
 
 $turParams = new clm_class_params($this->turnier->params);

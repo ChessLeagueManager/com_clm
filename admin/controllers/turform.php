@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -43,27 +43,28 @@ class CLMControllerTurForm extends JControllerLegacy {
 			$this->adminLink->view = "turmain"; // WL in Liste
 		}
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$app =JFactory::getApplication();
+		$app->redirect( $this->adminLink->url );
 	}
 
 
 	function save() {
 	
-		if ($this->_saveDo()) { // erfolgreich?
-			
-			$app =JFactory::getApplication();
-			
+		$result = $this->_saveDo();   
+		$app =JFactory::getApplication();
+		
+		if ($result[0]) { // erfolgreich?
+		
 			if ($this->neu) { // neues Turnier?
 				$app->enqueueMessage( JText::_('TOURNAMENT_CREATED') );
 			} else {
 				$app->enqueueMessage( JText::_('TOURNAMENT_EDITED') );
 			}
-		
+		} else {
+			$app->enqueueMessage( $result[2],$result[1] );					
 		}
-		// sonst Fehlermeldung schon geschrieben
-
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$app->redirect( $this->adminLink->url );
 	
 	}
 
@@ -71,24 +72,23 @@ class CLMControllerTurForm extends JControllerLegacy {
 	function _saveDo() {
 	
 		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 	
 		// Task
-		$task = JRequest::getVar('task');
+		$task = clm_core::$load->request_string('task');
 		
 		// Instanz der Tabelle
 		$row = JTable::getInstance( 'turniere', 'TableCLM' );
 		
-		if (!$row->bind(JRequest::get('post'))) {
-			JError::raiseError(500, $row->getError() );
-			return false;
+		$post = $_POST; 
+		if (!$row->bind($post)) {
+			return array(false,'error',$row->getError());
 		}
 		
-	        $clmAccess = clm_core::$access;
+	    $clmAccess = clm_core::$access;
 		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
 		if ($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) {
-			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
-			return false;
+			return array(false,'warning',JText::_('TOURNAMENT_NO_ACCESS'));
 		}
 		
 		// Rundenzahl berechnen!
@@ -110,15 +110,18 @@ class CLMControllerTurForm extends JControllerLegacy {
 			$paramsStringArray[] = $key.'='.intval($value);
 		}
 		$row->params = implode("\n", $paramsStringArray);
-		
+
+		// handling dates
+		if ($row->dateStart == '') $row->dateStart = '1970-01-01';
+		if ($row->dateEnd == '') $row->dateEnd = '1970-01-01'; 
+		if ($row->dateRegistration == '') $row->dateRegistration = '1970-01-01'; 
+		if ($row->dateStart != '0000-00-00' AND $row->dateStart != '1970-01-01' AND ($row->dateEnd == '0000-00-00' OR $row->dateEnd == '1970-01-01')) $row->dateEnd = $row->dateStart;
 		
 		if (!$row->checkData()) {
 			// pre-save checks
-			JError::raiseWarning(500, $row->getError() );
 			// Weiterleitung bleibt im Formular !!
 			$this->adminLink->more = array('task' => $task, 'id' => $row->id);
-			return false;
-		
+			return array(false,'warning',$row->getError());
 		}
 		
 		// if new item, order last in appropriate group
@@ -134,11 +137,9 @@ class CLMControllerTurForm extends JControllerLegacy {
 		
 		// save the changes
 		if (!$row->store()) {
-			JError::raiseError(500, $row->getError() );
+			return array(false,'error',$row->getError());
 		}
-		
-
-		
+				
 		// bei bereits bestehendem Turnier noch calculateRanking
 		if (!$this->neu) {
 			$tournament = new CLMTournament($row->id, true);
@@ -146,14 +147,12 @@ class CLMControllerTurForm extends JControllerLegacy {
 			$tournament->setRankingPositions();
 		}
 		
-
 		// Log schreiben
 		$clmLog = new CLMLog();
 		$clmLog->aktion = $stringAktion.": ".$row->name;
 		$clmLog->params = array('sid' => $row->sid, 'tid' => $row->id); // TurnierID wird als LigaID gespeichert
 		$clmLog->write();
 		
-
 		// wenn 'apply', weiterleiten in form
 		if ($task == 'apply') {
 			// Weiterleitung bleibt im Formular
@@ -163,7 +162,7 @@ class CLMControllerTurForm extends JControllerLegacy {
 			$this->adminLink->view = "turmain"; // WL in Liste
 		}
 	
-		return true;
+		return array(true);
 	
 	}
 
@@ -172,7 +171,8 @@ class CLMControllerTurForm extends JControllerLegacy {
 		
 		$this->adminLink->view = "turmain";
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$app =JFactory::getApplication();
+		$app->redirect( $this->adminLink->url );
 		
 	}
 

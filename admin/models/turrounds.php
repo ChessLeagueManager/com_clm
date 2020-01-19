@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -22,7 +22,8 @@ class CLMModelTurRounds extends JModelLegacy {
 		parent::__construct();
 
 		// user
-		$this->user =JFactory::getUser();
+		$this->user = JFactory::getUser();
+		$this->app	= JFactory::getApplication();
 		
 		// get parameters
 		$this->_getParameters();
@@ -54,7 +55,7 @@ class CLMModelTurRounds extends JModelLegacy {
 		}
 	
 		// turnierid
-		$this->param['id'] = JRequest::getInt('id');
+		$this->param['id'] = clm_core::$load->request_int('id');
 	
 	
 		// Order
@@ -90,15 +91,6 @@ class CLMModelTurRounds extends JModelLegacy {
 		$this->turnier->roundToDraw = 0;
  
  
-	// limit
-/*		$rlimit = JRequest::getInt('rlimit',0);
-		if ($rlimit == 0) {
-			$this->limitstart = 0;
-		}
-		$this->limit = $this->turnier->runden;
-		$this->setState('limit', $this->limit);
-		$this->setState('limitstart', $this->limitstart);
-*/	
 	}
 
 	function _getTurRounds() {
@@ -187,31 +179,19 @@ class CLMModelTurRounds extends JModelLegacy {
 			if (!isset($this->turRounds[$temp]) OR $this->turRounds[$temp]->countAssigned == 0) { // letzte Runde erledigt?
 				$this->turnier->roundToDraw = $temp;
 				// Notice absetzen
-				if (isset($this->turRounds[$temp])) JError::raiseNotice(500, JText::_('NOTICE_NEXTROUNDTODRAW').": ".$this->turRounds[$temp]->name);
-				else JError::raiseNotice(500, JText::_('NOTICE_NEXTROUNDTODRAW'));
+				if (isset($this->turRounds[$temp])) 
+					$this->app->enqueueMessage( JText::_('NOTICE_NEXTROUNDTODRAW').": ".$this->turRounds[$temp]->name, 'notice' );
+				else 
+					$this->app->enqueueMessage( JText::_('NOTICE_NEXTROUNDTODRAW'), 'notice' );
 			}
 			
-		} /*elseif ($this->turnier->typ == 3 AND $this->turnier->roundMaxTLOK != 1) { // KO
-			// evtl zu losende Runde:
-			$temp = $this->turnier->roundMaxTLOK-1;
-			// Paarungen der Runde, die auf maximal bestätigte Runde folgt, schon vorhanden?
-			if (!isset($this->turRounds[$temp]) OR $this->turRounds[$temp]->countAssigned == 0) { // letzte Runde erledigt?
-				$this->turnier->roundToDraw = $temp;
-				// Notice absetzen
-				if (isset($this->turRounds[$temp])) JError::raiseNotice(500, JText::_('NOTICE_NEXTROUNDTODRAW').": ".$this->turRounds[$temp]->name);
-				else JError::raiseNotice(500, JText::_('NOTICE_NEXTROUNDTODRAW'));
-				
-			} 
-			
-		} */
-		
+		}
 	}
 	
 	function _getPagination() {
 		// Load the content if it doesn't already exist
 		if (empty($this->pagination)) {
 			jimport('joomla.html.pagination');
-			//$this->pagination = new JPagination($this->roundsTotal, $this->limitstart, $this->limit );
 			$this->pagination = new JPagination($this->roundsTotal, $this->getState('limitstart'), $this->getState('limit') );
 		}
 	}

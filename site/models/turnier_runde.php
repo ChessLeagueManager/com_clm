@@ -21,9 +21,9 @@ class CLMModelTurnier_Runde extends JModelLegacy {
 		
 		parent::__construct();
 
-		$this->turnierid = JRequest::getInt('turnier', 0);
-		$this->runde = JRequest::getInt('runde', 1); // Nr der Runde, nicht id
-		$this->dg = JRequest::getInt('dg', 1); 
+		$this->turnierid = clm_core::$load->request_int('turnier');
+		$this->runde = clm_core::$load->request_int('runde', 1); // Nr der Runde, nicht id
+		$this->dg = clm_core::$load->request_int('dg', 1); 
 
 		$this->_getTurnierData();
 

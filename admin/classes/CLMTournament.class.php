@@ -145,11 +145,11 @@ class CLMTournament {
 		$paramTBFideCorrect = $turParams->get('optionTiebreakersFideCorrect', 0);
 		$param50PercentRule = $turParams->get('option50PercentRule', 1);
 		$paramuseAsTWZ = $turParams->get('useAsTWZ', 0);
-		$query = ' *'
+		$query = ' SELECT *'
 			. ' FROM #__clm_turniere'
 			. ' WHERE id = '.$this->turnierid
 			;
-		$this->_db->setQuery($query);
+		$this->data	= clm_core::$db->loadObjectList($query);
 		$dg = $this->data->dg;
 		$runden = $this->data->runden;
 		$teil = $this->data->teil;
@@ -167,8 +167,7 @@ class CLMTournament {
 			." WHERE turnier = ".$this->turnierid
 			." ORDER BY a.snr "
 			;
-		$this->_db->setQuery($query);
-		$player	=$this->_db->loadObjectList();
+		$player	= clm_core::$db->loadObjectList($query);
 	
 		// TWZ ggf. korrigieren
 		foreach($player as $player1) {
@@ -191,8 +190,7 @@ class CLMTournament {
 				. " sumTiebr1 = 0, sumTiebr2 = 0, sumTiebr3 = 0 "
 				. " WHERE turnier = ".$this->turnierid 
 				;
-		$this->_db->setQuery($query);
-		$this->_db->query();
+		clm_core::$db->query($query);
  
 		// alle FW in Array schreiben
 		$arrayFW = array();
@@ -736,8 +734,9 @@ class CLMTournament {
 					
 					
 
-			$this->_db->setQuery($query);
-			$this->_db->query();
+			clm_core::$db->query($query);	
+//			$this->_db->setQuery($query);
+//			$this->_db->query();
 			// nur zur Verzögerung, damit UPDATE fertig ist bevor unten SELECT startet
 			for ($xx = 0; $xx <= 1000; $xx++) {
 			} 	
@@ -786,8 +785,9 @@ class CLMTournament {
 					$query .= " WHERE turnier = ".$this->turnierid
 						. " AND snr = ".$xvalue->snr
 						;
-					$this->_db->setQuery($query);
-					$this->_db->query();
+					clm_core::$db->query($query);	
+//					$this->_db->setQuery($query);
+//					$this->_db->query();
 				} else {
 					$query = "UPDATE #__clm_turniere_tlnr";
 					if ($this->data->tiebr1 == 25) $query .= " SET sumTiebr1 = NULL";
@@ -796,8 +796,9 @@ class CLMTournament {
 					$query .= " WHERE turnier = ".$this->turnierid
 						. " AND snr = ".$xvalue->snr
 						;
-					$this->_db->setQuery($query);
-					$this->_db->query();
+					clm_core::$db->query($query);	
+//					$this->_db->setQuery($query);
+//					$this->_db->query();
 				}
 			}
 		}
@@ -853,8 +854,9 @@ class CLMTournament {
 				. " SET teil = teil + 1"
 				. " WHERE id = ".$this->turnierid
 				;
-		$this->_db->setQuery($query);
-		if (!$this->_db->query()) {
+//		$this->_db->setQuery($query);
+//		if (!$this->_db->query()) { 
+		if (!clm_core::$db->query($query)) { 
 			JError::raiseNotice(500, JText::_('DB_ERROR') );
 			return FALSE;
 		}
@@ -881,8 +883,9 @@ class CLMTournament {
 				. " SET teil = teil - 1"
 				. " WHERE id = ".$this->turnierid
 				;
-		$this->_db->setQuery($query);
-		if (!$this->_db->query()) {
+//		$this->_db->setQuery($query);
+//		if (!$this->_db->query()) { 
+		if (!clm_core::$db->query($query)) { 
 			JError::raiseNotice(500, JText::_('DB_ERROR') );
 			return FALSE;
 		}

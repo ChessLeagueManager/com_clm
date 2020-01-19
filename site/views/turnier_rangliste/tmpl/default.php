@@ -9,24 +9,22 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip', '.CLMTooltip');
 
 // Konfigurationsparameter auslesen
-$itemid 		= JRequest::getVar( 'Itemid' );
-$spRang		= JRequest::getVar( 'spRang' ,0);	//Sonderranglisten
+$itemid 	= clm_core::$load->request_string( 'Itemid' );
+$spRang		= clm_core::$load->request_int( 'spRang');	//Sonderranglisten
 		// Userkennung holen
 	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
 
-$pgn		= JRequest::getInt('pgn','0'); 
-$option 	= JRequest::getCmd( 'option' );
+$pgn		= clm_core::$load->request_int('pgn'); 
+$option 	= clm_core::$load->request_string( 'option' );
 $mainframe	= JFactory::getApplication();
 if ($pgn == 1 AND $spRang == 0) { 
 	$result = clm_core::$api->db_pgn_export($this->turnier->id,false);
-	//JFactory::getApplication()->close();
-	JRequest::setVar('pgn',0);
+	$_GET['pgn'] = 0;
 	if (!$result[0]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
 	$link = 'index.php?option='.$option.'&view=turnier_rangliste&turnier='.$this->turnier->id.'&pgn=0';
 	if ($itemid != 0) $link .= '&Itemid='.$itemid;

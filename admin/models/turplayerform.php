@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -54,12 +54,12 @@ class CLMModelTurPlayerForm extends JModelLegacy {
 	$countryversion = $config->countryversion;
 	
 		// turnierid
-		$this->param['id'] = JRequest::getInt('id');
-		$this->param['add_nz'] = JRequest::getInt('add_nz');
+		$this->param['id'] = clm_core::$load->request_int('id');
+		$this->param['add_nz'] = clm_core::$load->request_int('add_nz');
 	
 		// search
 		$this->param['search'] = $mainframe->getUserStateFromRequest( "$option.search", 'search', '', 'string' );
-		$this->param['search'] = JString::strtolower( $this->param['search'] );
+		$this->param['search'] = strtolower( $this->param['search'] );
 	
 		// DWZ
 		$this->param['dwz'] = $mainframe->getUserStateFromRequest( "$option.filter_dwz", 'filter_dwz', 0, 'int' );

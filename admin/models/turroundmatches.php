@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -41,10 +41,10 @@ class CLMModelTurRoundMatches extends JModelLegacy {
 	function _getParameters() {
 	
 		// turnierid
-		$this->param['turnierid'] = JRequest::getInt('turnierid');
+		$this->param['turnierid'] = clm_core::$load->request_int('turnierid');
 	
 		// roundid
-		$this->param['roundid'] = JRequest::getInt('roundid');
+		$this->param['roundid'] = clm_core::$load->request_int('roundid');
 	
 	}
 

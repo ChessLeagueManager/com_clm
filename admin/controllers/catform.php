@@ -1,16 +1,14 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -23,7 +21,8 @@ class CLMControllerCatForm extends JControllerLegacy {
 		parent::__construct( $config );
 		
 		$this->_db		= JFactory::getDBO();
-		
+		$this->app =JFactory::getApplication();
+					
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
 	
@@ -37,19 +36,17 @@ class CLMControllerCatForm extends JControllerLegacy {
 	
 		if ($this->_saveDo()) { // erfolgreich?
 			
-			$app =JFactory::getApplication();
-			
 			if ($this->neu) { // neue Kategorie?
-				$app->enqueueMessage( JText::_('CATEGORY_CREATED') );
+				$this->app->enqueueMessage( JText::_('CATEGORY_CREATED') );
 			} else {
-				$app->enqueueMessage( JText::_('CATEGORY_EDITED') );
+				$this->app->enqueueMessage( JText::_('CATEGORY_EDITED') );
 			}
 		
 		}
 		// sonst Fehlermeldung schon geschrieben
 
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	
 	}
 
@@ -57,25 +54,26 @@ class CLMControllerCatForm extends JControllerLegacy {
 	function _saveDo() {
 	
 		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 	
 		if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
-			JError::raiseWarning(500, JText::_('SECTION_NO_ACCESS') );
+			$this->app->enqueueMessage( JText::_('SECTION_NO_ACCESS'),'warning' );
 			return false;
 		}
 	
 		// Task
-		$task = JRequest::getVar('task');
+		$task = clm_core::$load->request_string('task');
 		
 		// Instanz der Tabelle
 		$row = JTable::getInstance( 'categories', 'TableCLM' );
 		
-		if (!$row->bind(JRequest::get('post'))) {
-			JError::raiseError(500, $row->getError() );
+		$post = $_POST; 
+		if (!$row->bind($post)) {
+			$this->app->enqueueMessage( $row->getError(),'error' );
 			return false;
 		}
-		
-		
+		if ($row->dateStart == '') $row->dateStart = '1970-01-01';
+		if ($row->dateEnd == '') $row->dateEnd = '1970-01-01';		
 		// Parameter
 		$paramsStringArray = array();
 		foreach ($row->params as $key => $value) {
@@ -86,7 +84,7 @@ class CLMControllerCatForm extends JControllerLegacy {
 		
 		if (!$row->checkData()) {
 			// pre-save checks
-			JError::raiseWarning(500, $row->getError() );
+			$this->app->enqueueMessage( $row->getError(),'warning' );
 			// Weiterleitung bleibt im Formular !!
 			$this->adminLink->more = array('task' => $task, 'id' => $row->id);
 			return false;
@@ -106,10 +104,9 @@ class CLMControllerCatForm extends JControllerLegacy {
 		
 		// save the changes
 		if (!$row->store()) {
-			JError::raiseError(500, $row->getError() );
+			$this->app->enqueueMessage( $row->getError(),'error' );
+			return false;
 		}
-	
-	
 		
 
 		// Log schreiben
@@ -137,7 +134,7 @@ class CLMControllerCatForm extends JControllerLegacy {
 		
 		$this->adminLink->view = "catmain";
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 		
 	}
 

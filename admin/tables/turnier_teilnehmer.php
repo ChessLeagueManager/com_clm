@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -17,50 +17,50 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 class TableCLMTurnier_Teilnehmer extends JTable
 {
 
-	var $id			= null;
-	var $sid		= null;
-	var $turnier		= '';
-	var $snr		= '';
+	var $id			= 0;
+	var $sid		= 0;
+	var $turnier	= 0;
+	var $snr		= 0;
 	var $name       = '';
 	var $birthYear  = '';
 	var $geschlecht = '';
 	var $verein     = '';
-	var $twz        = '';
-	var $start_dwz  = '';
-	var $start_I0   = '';
-	var $FIDEelo    = '';
-	var $FIDEid     = '';
+	var $twz        = 0;
+	var $start_dwz  = 0;
+	var $start_I0   = 0;
+	var $FIDEelo    = 0;
+	var $FIDEid     = 0;
 	var $FIDEcco    = '';
 	var $titel      = '';
-	var $mgl_nr		= '';
+	var $mgl_nr		= 0;
 	var $PKZ		= '';
 	var $zps		= '';
-	var $status		= '';
-	var $rankingPos	= '';
+	var $status		= 0;
+	var $rankingPos	= 0;
 	var $tlnrStatus = 0;
 	var $anz_spiele = 0;
-	var $sum_punkte		= '';
-	var $sum_bhlz		= '';
-	var $sum_busum		= '';
-	var $sum_sobe		= '';
-	var $koStatus		= '';
-	var $koRound		= '';
-	var $sum_wins		= '';
-	var $sumTiebr1		= '';
-	var $sumTiebr2		= '';
-	var $sumTiebr3		= '';
-	var $DWZ		= '';
-	var $I0			= '';
+	var $sum_punkte		= 0;
+	var $sum_bhlz		= 0;
+	var $sum_busum		= 0;
+	var $sum_sobe		= 0;
+	var $koStatus		= 1;
+	var $koRound		= 0;
+	var $sum_wins		= 0;
+	var $sumTiebr1		= 0;
+	var $sumTiebr2		= 0;
+	var $sumTiebr3		= 0;
+	var $DWZ		= 0;
+	var $I0			= 0;
 	var $Punkte		= 0;
-	var $Partien		= 0;
+	var $Partien	= 0;
 	var $We			= 0;
-	var $Leistung		= 0;
-	var $EFaktor		= 0;
+	var $Leistung	= 0;
+	var $EFaktor	= 0;
 	var $Niveau		= 0;
 	var $published		= 0;
 	var $checked_out	= 0;
-	var $checked_out_time	= '1970 00:00:00';
-	var $ordering		= null;
+	var $checked_out_time	= '1970-01-01 00:00:00';
+	var $ordering		= 0;
 
 
 	function __construct( &$_db ) {

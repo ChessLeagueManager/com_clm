@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,16 +9,15 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip', '.CLMTooltip');
 
 
 // Konfigurationsparameter auslesen
-$itemid = JRequest::getVar( 'Itemid' );
+$itemid = clm_core::$load->request_string( 'Itemid' );
 $config = clm_core::$db->config();
 $commentParse = $config->tourn_comment_parse;
-$pgn		= JRequest::getInt('pgn','0'); 
+$pgn		= clm_core::$load->request_int('pgn'); 
 
 // Userkennung holen
 $user	=JFactory::getUser();
@@ -26,7 +25,7 @@ $jid	= $user->get('id');
 
   if ($pgn == 1) { 
 	$result = clm_core::$api->db_pgn_template($this->turnier->id,$this->round->dg,$this->round->nr,$pgn,false);
-	JRequest::setVar('pgn',0);
+	$_GET['pgn'] = 0;
 	if (!$result[1]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
 	$link = 'index.php?option='.$option.'&view=turnier_runde&liga='.$this->turnier->id.'&dg='.$$this->round->dg.'&runde='.$this->round->nr.'&pgn=0';
 	if ($itemid != 0) $link .= '&Itemid='.$itemid;

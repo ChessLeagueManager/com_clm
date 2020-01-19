@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -23,8 +23,8 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		parent::__construct( $config );
 		
 		// turnierid
-		$this->playerid = JRequest::getInt('playerid');
-		$this->turnierid = JRequest::getInt('turnierid');
+		$this->playerid = clm_core::$load->request_int('playerid');
+		$this->turnierid = clm_core::$load->request_int('turnierid');
 		
 		$this->_db		= JFactory::getDBO();
 		
@@ -46,14 +46,14 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		$this->_saveDo();
 
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	
 	}
 	
 	
 	function _saveDo() {
 	
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die( 'Invalid Token' );
 	
 		// Instanz der Tabelle
 		$row = JTable::getInstance( 'turniere', 'TableCLM' );
@@ -61,39 +61,42 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 
 		$clmAccess = clm_core::$access;      
 		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
-		//if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
-			JError::raiseWarning(500, JText::_('TOURNAMENT_NO_ACCESS') );
+			$this->app->enqueueMessage(JText::_('TOURNAMENT_NO_ACCESS'),'warning');
 			return false;
 		}
 	
 		// Task
-		$task = JRequest::getVar('task');
+		$task = clm_core::$load->request_string('task');
 		
 		// Instanz der Tabelle
-		$row = & JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
+		$row = JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
 		$row->load( $this->playerid ); // Daten zu dieser ID laden
 
 		// Spieler existent?
 		if (!$row->id) {
-			JError::raiseWarning( 500, CLMText::errorText('PLAYER', 'NOTEXISTING') );
+			$this->app->enqueueMessage(CLMText::errorText('PLAYER', 'NOTEXISTING'),'warning');
 			return false;
 		
 		// Runde gehört zu Turnier?
 		} elseif ($row->turnier != $this->turnierid) {
-			JError::raiseWarning( 500, CLMText::errorText('PLAYER', 'NOACCESS') );
+			$this->app->enqueueMessage(CLMText::errorText('PLAYER', 'NOACCESS'),'warning');
 			return false;
 		}
 		
-		if (!$row->bind(JRequest::get('post'))) {
-			JError::raiseError(500, $row->getError() );
+		$post = $_POST; 
+		if (!$row->bind($post)) {
+			$this->app->enqueueMessage($row->getError(),'error');
 			return false;
 		}
-		if (!$row->check(JRequest::get('post'))) {
-			JError::raiseError(500, $row->getError() );
+		if ($row->start_I0 == '') $row->start_I0 = 0;
+		if ($row->sum_punkte == '') $row->sum_punkte = 0;
+		if ($row->sumTiebr1 == '') $row->sumTiebr1 = 0;
+		if (!$row->check($post)) {
+			$this->app->enqueueMessage($row->getError(),'error');
 			return false;
 		}
 		if (!$row->store()) {
-			JError::raiseError(500, $row->getError() );
+			$this->app->enqueueMessage($row->getError(),'error');
 			return false;
 		}
 	
@@ -108,8 +111,7 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		$clmLog->params = array('sid' => $row->sid, 'tid' => $this->turnierid); // TurnierID wird als LigaID gespeichert
 		$clmLog->write();
 		
-		$app =JFactory::getApplication();
-		$app->enqueueMessage( $text );
+		$this->app->enqueueMessage( $text );
 
 		// wenn 'apply', weiterleiten in form
 		if ($task == 'apply') {
@@ -129,7 +131,7 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		$this->adminLink->view = "turplayers";
 		$this->adminLink->more = array('id' => $this->turnierid);
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 		
 	}
 

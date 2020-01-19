@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
 // Stylesheet laden
@@ -18,7 +17,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 echo "<div><div id='turnier_info'>";
 
 // Konfigurationsparameter auslesen
-$itemid 		= JRequest::getVar( 'Itemid' );
+$itemid 		= clm_core::$load->request_string( 'Itemid' );
 $today = date("Y-m-d");
 
 // componentheading vorbereiten
@@ -53,14 +52,14 @@ if ( $this->turnier->published == 0) {
 
 		$turParams = new clm_class_params($this->turnier->params);
 		$typeRegistration = $turParams->get('typeRegistration', 0);
-		$reg_name 		= JRequest::getVar('reg_name','');		
-		$reg_vorname 	= JRequest::getVar('reg_vorname','');		
-		$reg_jahr 		= JRequest::getVar('reg_jahr','');		
-		$reg_club 		= JRequest::getVar('reg_club','');		
-		$reg_mail 		= JRequest::getVar('reg_mail','');		
-		$reg_dwz 		= JRequest::getVar('reg_dwz','');		
-		$reg_elo 		= JRequest::getVar('reg_elo','');		
-		$reg_comment 		= JRequest::getVar('reg_comment','');		
+		$reg_name 		= clm_core::$load->request_string('reg_name','');		
+		$reg_vorname 	= clm_core::$load->request_string('reg_vorname','');		
+		$reg_jahr 		= clm_core::$load->request_string('reg_jahr','');		
+		$reg_club 		= clm_core::$load->request_string('reg_club','');		
+		$reg_mail 		= clm_core::$load->request_string('reg_mail','');		
+		$reg_dwz 		= clm_core::$load->request_string('reg_dwz','');		
+		$reg_elo 		= clm_core::$load->request_string('reg_elo','');		
+		$reg_comment 	= clm_core::$load->request_string('reg_comment','');		
 
 		if ($typeRegistration < 5) { 
 			$headline = JText::_('REGISTRATION_ONLINE');
@@ -80,12 +79,10 @@ if ( $this->turnier->published == 0) {
 			// do field validation
 			if (form.name99.value == "") {
 				alert( "<?php echo JText::_( 'REGISTRATION_PLAYER_INPUT', true ); ?>" );
-				//alert( "Bitte Spieler auswählen" );
 			} else if (form.club.value == "") {
 				alert( "<?php echo JText::_( 'REGISTRATION_CLUB_INPUT', true ); ?>" );
 			} else {
-				submitform( pressbutton );
-				//form.submit();
+				Joomla.submitform( pressbutton );
 			}
 		}
  

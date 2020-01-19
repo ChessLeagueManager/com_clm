@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 jimport( 'joomla.application.component.view');
 
 class CLMViewTurnier_Player extends JViewLegacy {
@@ -52,20 +51,21 @@ class CLMViewTurnier_Player extends JViewLegacy {
 		$headTitle = CLMText::composeHeadTitle( array( $model->turnier->name, $model->player->name ) );
 		$document->setTitle( $headTitle );
 		
-		$this->assignRef('turnier', $model->turnier);
+		$this->turnier = $model->turnier;
 		
-		$this->assignRef('pgnShow', $model->pgnShow);
+		$this->pgnShow = $model->pgnShow;
 		
 		$tourn_linkclub = $config->tourn_linkclub;
-		$this->assignRef('tourn_linkclub', $tourn_linkclub);
+		$this->tourn_linkclub = $tourn_linkclub;
 
-		$this->assignRef('player', $model->player);
+		$this->player = $model->player;
+		if (isset($model->matches))
+			$this->matches = $model->matches;
+		if (isset($model->points))
+			$this->points = $model->points;
 		
-		$this->assignRef('matches', $model->matches);
-		$this->assignRef('points', $model->points);
-		
-		$this->assignRef('joomGalleryPhotosWidth', $model->joomGalleryPhotosWidth);	
-		$this->assignRef('playerPhoto', $model->playerPhoto);
+		$this->joomGalleryPhotosWidth = $model->joomGalleryPhotosWidth;	
+		$this->playerPhoto = $model->playerPhoto;
 		
 		
 		parent::display($tpl);
