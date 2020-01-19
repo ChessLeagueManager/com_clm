@@ -15,6 +15,8 @@ $ -> Language fix or change
 - - - - - 3.8.1 - [xx-xx-2019] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: zentrale Routinen, Saison, Termine, Benutzer, Datenbank
 ^ Code-Anpassung Joomla 4: Einzelturniere, Kategorien
+^ Copyright 2008-2020
+# Admin-View Datenbank: Direkte Aktualisierung Fehler falsche ZPS
 
 - - - - - 3.8.0 - [12-12-2019] - - - - - - - - - - - - - - - - - - - -
 # Online-Turnieranmeldung: Vervollständigung engl. Texte

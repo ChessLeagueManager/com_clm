@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -11,10 +11,11 @@ function clm_api_db_dewis_player($zps = - 1, $incl_pd = 0, $mgl_nr = array()) {
 	$sid = clm_core::$access->getSeason();
 	$zps = clm_core::$load->make_valid($zps, 8, "");
 	$incl_pd = clm_core::$load->make_valid($incl_pd, 0, 0);
-	if (strlen($zps) != 5) {
-		return array(false, "e_wrongZPSFormat");
-	}
 	$counter = 0;
+	if (strlen($zps) != 5) {
+//		return array(false, "e_wrongZPSFormat");
+		return array(true, "e_wrongZPSFormat",$counter);
+	}
 	// SOAP Webservice
 	try {
 		$client = clm_core::$load->soap_wrapper($source);
