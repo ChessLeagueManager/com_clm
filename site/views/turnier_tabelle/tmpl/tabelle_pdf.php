@@ -16,19 +16,19 @@ $config			= clm_core::$db->config();
 
 $turParams = new clm_class_params($this->turnier->params);
 
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'fpdf.php');
+require_once(clm_core::$path.DS.'classes'.DS.'fpdf.php');
 
 class PDF extends FPDF
 {
 //Kopfzeile
 function Header()
 {
-	require(JPATH_COMPONENT.DS.'includes'.DS.'pdf_header.php');
+	require(clm_core::$path.DS.'includes'.DS.'pdf_header.php');
 }
 //Fusszeile
 function Footer()
 {
-	require(JPATH_COMPONENT.DS.'includes'.DS.'pdf_footer.php');
+	require(clm_core::$path.DS.'includes'.DS.'pdf_footer.php');
 }
 }
 
@@ -36,11 +36,11 @@ function Footer()
 $zelle = 6;
 // Zellenbreiten je Spalte
 $breite = 0;
-$br00 = 10;
-$br01 = 10;
-$br02 = 10;
-$br03 = 50;
-$br04 = 60;
+$br00 = 8;
+$br01 = 9;
+$br02 = 9;
+$br03 = 45;
+$br04 = 53;
 $br05 = 10;
 $br06 = 10;
 $br92 = 10;

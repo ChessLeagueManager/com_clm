@@ -665,6 +665,8 @@ $turParams = new clm_class_params($this->turnier->params);
 	<input type="hidden" name="id" value="<?php echo $this->turnier->id; ?>" />
 	<input type="hidden" name="controller" value="turform" />
 	<input type="hidden" name="task" value="" />
+	<input type="hidden" name="rnd" value="<?php echo $this->turnier->rnd; ?>" />
+	<input type="hidden" name="ordering" value="<?php echo $this->turnier->ordering; ?>" />
 	<input type="hidden" name="params[inofDWZ]" id="params[inofDWZ]" value="<?php echo $turParams->get('inofDWZ', '0'); ?>" />
 	<?php echo JHtml::_( 'form.token' ); ?>
 
