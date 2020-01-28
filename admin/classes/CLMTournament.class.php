@@ -149,7 +149,7 @@ class CLMTournament {
 			. ' FROM #__clm_turniere'
 			. ' WHERE id = '.$this->turnierid
 			;
-		$this->data	= clm_core::$db->loadObjectList($query);
+		$this->_db->setQuery($query);
 		$dg = $this->data->dg;
 		$runden = $this->data->runden;
 		$teil = $this->data->teil;
@@ -333,18 +333,33 @@ class CLMTournament {
 				} else {
 					$array_PlayerPunkteTB[$value->tln_nr] += $vsieg;
 				}
-			} elseif ($value->ergebnis == 4 AND $paramTBFideCorrect == 1) { // kampflos verloren und FIDE-Korrektur eingestellt?
-				$array_PlayerPunkteTB[$value->tln_nr] += $vremis; // FW-Korrektur Teil 1
-			} elseif ($value->ergebnis == 8 AND $paramTBFideCorrect == 1) { // spielfrei und FIDE-Korrektur eingestellt?
-				$array_PlayerPunkteTB[$value->tln_nr] += $vremis; // FW-Korrektur Teil 1
-			} elseif ($value->ergebnis == 3 AND $paramTBFideCorrect == 1) { // Ergebnis 0-0 und FIDE-Korrektur eingestellt?
-				$array_PlayerPunkteTB[$value->tln_nr] += $vremis; // FW-Korrektur Teil 1
-			} elseif ($value->ergebnis == 6 AND $paramTBFideCorrect == 1) { // kampflos beide verloren -:- und FIDE-Korrektur eingestellt?
-				$array_PlayerPunkteTB[$value->tln_nr] += $vremis; // FW-Korrektur Teil 1
-//			} elseif ($value->ergebnis == 12 AND $paramTBFideCorrect == 1) { // kampflos remis (bye) -:- und FIDE-Korrektur eingestellt?
-//				$array_PlayerPunkteTB[$value->tln_nr] += $vremis; // FW-Korrektur Teil 1
-			} elseif ($value->ergebnis == 13 AND $paramTBFideCorrect == 1) { // kampflos beide verloren -:- und FIDE-Korrektur eingestellt?
-				$array_PlayerPunkteTB[$value->tln_nr] += $vremis; // FW-Korrektur Teil 1
+			} elseif ($value->ergebnis == 0) { 	// verloren
+				$array_PlayerPunkte[$value->tln_nr] += $nieder;
+				$array_PlayerPunkteTB[$value->tln_nr] += $nieder; 
+			} elseif ($value->ergebnis == 3) { 							// Ergebnis 0-0 
+				$array_PlayerPunkte[$value->tln_nr] += $niederk;
+				if ($paramTBFideCorrect == 1)  							// FIDE-Korrektur eingestellt? -> FW-Korrektur Teil 1
+					$array_PlayerPunkteTB[$value->tln_nr] += $vremis; 	 
+			} elseif ($value->ergebnis == 4) { 							// kampflos verloren 
+				$array_PlayerPunkte[$value->tln_nr] += $niederk;
+				if ($paramTBFideCorrect == 1)  							// FIDE-Korrektur eingestellt? -> FW-Korrektur Teil 1
+					$array_PlayerPunkteTB[$value->tln_nr] += $vremis;
+			} elseif ($value->ergebnis == 6) { 							// kampflos beide verloren -:- und FIDE-Korrektur eingestellt?
+				$array_PlayerPunkte[$value->tln_nr] += $niederk;
+				if ($paramTBFideCorrect == 1)  							// FIDE-Korrektur eingestellt? -> FW-Korrektur Teil 1
+					$array_PlayerPunkteTB[$value->tln_nr] += $vremis;
+			} elseif ($value->ergebnis == 7) { 							// nicht gespielt --- und FIDE-Korrektur eingestellt?
+				$array_PlayerPunkte[$value->tln_nr] += $niederk;
+				if ($paramTBFideCorrect == 1)  							// FIDE-Korrektur eingestellt? -> FW-Korrektur Teil 1
+					$array_PlayerPunkteTB[$value->tln_nr] += $vremis;
+			} elseif ($value->ergebnis == 8) { 							// spielfrei und FIDE-Korrektur eingestellt?
+				$array_PlayerPunkte[$value->tln_nr] += $niederk;
+				if ($paramTBFideCorrect == 1)  							// FIDE-Korrektur eingestellt? -> FW-Korrektur Teil 1
+					$array_PlayerPunkteTB[$value->tln_nr] += $vremis;
+			} elseif ($value->ergebnis == 13) { 						// kampflos beide verloren 0:- und FIDE-Korrektur eingestellt?
+				$array_PlayerPunkte[$value->tln_nr] += $niederk;
+				if ($paramTBFideCorrect == 1)  							// FIDE-Korrektur eingestellt? -> FW-Korrektur Teil 1
+					$array_PlayerPunkteTB[$value->tln_nr] += $vremis;
 			}
 		}
 	
