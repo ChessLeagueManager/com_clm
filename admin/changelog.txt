@@ -18,6 +18,7 @@ $ -> Language fix or change
 ^ Copyright 2008-2020
 # Admin-View Datenbank: Direkte Aktualisierung Fehler falsche ZPS
 # Einzelturniere: Punkte für Niederlage (Antrittspunkt)
+^ Einzelturniere: Korrektur einzelner engl. Texte
 
 - - - - - 3.8.0 - [12-12-2019] - - - - - - - - - - - - - - - - - - - -
 # Online-Turnieranmeldung: Vervollständigung engl. Texte
