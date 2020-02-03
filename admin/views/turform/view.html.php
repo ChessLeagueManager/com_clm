@@ -71,6 +71,8 @@ class CLMViewTurForm extends JViewLegacy {
 
 		$document->addScriptDeclaration("var jsform = new Array();");
 		$document->addScriptDeclaration("jsform['runden'] = '<input class=\"inputbox\" type=\"text\" name=\"runden\" id=\"runden\" size=\"10\" maxlength=\"5\" value=\"".$model->turnier->runden."\" />';");
+		$document->addScriptDeclaration("jsform['runden1'] = '<input class=\"inputbox\" type=\"text\" name=\"runden\" id=\"runden\" size=\"10\" maxlength=\"5\" value=\"';");
+		$document->addScriptDeclaration("jsform['runden2'] = '\" />';");
 
 		// Script
 		$document->addScript(CLM_PATH_JAVASCRIPT.'turform.js');

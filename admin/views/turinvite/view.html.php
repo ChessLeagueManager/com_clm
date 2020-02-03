@@ -34,7 +34,7 @@ class CLMViewTurInvite extends JViewLegacy {
 
 		$this->turnier = $model->turnier;
 
-		$this->param = $model->param);
+		$this->param = $model->param;
 
 
 		parent::display();

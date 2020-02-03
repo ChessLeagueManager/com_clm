@@ -6,7 +6,7 @@
 */
 	function showFormRoundscount(){
 		if (document.getElementById('typ').value == 1) { // CH
-			document.getElementById('formRoundscountValue').innerHTML = jsform['runden'];
+			document.getElementById('formRoundscountValue').innerHTML = jsform['runden1'] + form.runden.value + jsform['runden2'];
 			document.getElementById('formRoundscountText').innerHTML = '';
 			document.getElementById('formStagecount').innerHTML = '-';
 			//document.getElementById('formTiebreakers').innerHTML = jsform['tiebreakers'];
@@ -79,7 +79,7 @@
 			alert( jserror['select_season'] );
 		} else if (form.typ.value == 0) {
 			alert( jserror['select_modus'] );
-		} else if (form.typ.value != 2 && form.typ.value != 3 && form.runden.value == "") {
+		} else if (form.typ.value != 2 && form.typ.value != 3 && (form.runden.value == "" || form.runden.value == 0)) {
 			alert( jserror['enter_rounds'] );
 		} else if (form.typ.value != 2 && form.typ.value != 3 && isNaN(form.runden.value)) {
 			alert( jserror['number_rounds'] );
