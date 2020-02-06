@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.8.1 - [03-02-2020] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.8.1 - [06-02-2020] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: zentrale Routinen, Saison, Termine, Benutzer, Datenbank
 ^ Code-Anpassung Joomla 4: Einzelturniere, Kategorien
 ^ Copyright 2008-2020
