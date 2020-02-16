@@ -15,6 +15,7 @@ $ -> Language fix or change
 - - - - - 3.8.2 - [xx-xx-2020] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: Importe ( SWT und SWM)
 # M-Turniere: Berliner Wertung bei Wertung ändern
+# SWM-Import: mehrere nationale Ratingermittlungen
 
 - - - - - 3.8.1 - [06-02-2020] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: zentrale Routinen, Saison, Termine, Benutzer, Datenbank

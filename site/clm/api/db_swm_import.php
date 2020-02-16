@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  *
@@ -466,6 +466,10 @@ function zzparse_structure($part) {
 					array('vch',107,0),		// email-Adresse
 					array('vch',108,0),		// Homepage
 					array('vch',109,0),		// Land						
+					array('vch',114,0),		// Fed1 für nationale Ratingermittlung						
+					array('vch',115,0),		// Fed2 für nationale Ratingermittlung						
+					array('vch',116,0),		// Fed3 für nationale Ratingermittlung						
+					array('vch',117,0),		// Fed4 für nationale Ratingermittlung						
 					array('ign',4,0)
 					);
 	if ($part == 'general2') 
@@ -513,7 +517,9 @@ function zzparse_structure($part) {
 					array('vch',2000,0),
 					array('vch',2002,'titel'),
 					array('vch',2034,'PKZ'),
-					array('ign',6,0),
+					array('vch',2046,0),
+					array('vch',2047,0),
+					array('vch',2048,0),
 					array('vch',2001,'verein'),
 					array('vch',2006,0),		// Land
 					array('vch',2045,0),		// Typ
