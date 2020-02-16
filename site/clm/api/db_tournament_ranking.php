@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -278,7 +278,8 @@
 		}
 		
 		// alle Matches in DatenArray schreiben
-		$query = "SELECT dg, runde, tln_nr, gegner, ergebnis, brettpunkte, manpunkte FROM `#__clm_rnd_man`"
+		//$query = "SELECT dg, runde, tln_nr, gegner, ergebnis, brettpunkte, manpunkte FROM `#__clm_rnd_man`"
+		$query = "SELECT dg, runde, tln_nr, gegner, ergebnis, brettpunkte, manpunkte, wertpunkte FROM `#__clm_rnd_man`"
 				. " WHERE lid = ".$id." AND brettpunkte IS NOT NULL";
 				//;
 		$matchData = clm_core::$db->loadObjectList($query);
@@ -341,10 +342,13 @@
 		
 		// Berliner Wertung
 		// alle Einzels durchgehen -> Mannschaften erhalten Wertpunkte
-		foreach ($einzelData as $key => $valuee) {
-			$array_PlayerBerlWertung[$valuee->tln_nr] += $valuee->punkte * ($id_stamm + 1 - $valuee->brett);
+//		foreach ($einzelData as $key => $valuee) {
+//			$array_PlayerBerlWertung[$valuee->tln_nr] += $valuee->punkte * ($id_stamm + 1 - $valuee->brett);
+//		}
+		foreach ($matchData as $key => $valuee) {
+			$array_PlayerBerlWertung[$valuee->tln_nr] += $valuee->wertpunkte;
 		}
-	
+		
 		// Buchholz & Sonneborn-Berger
 		// erneut alle Matches durchgehen -> Teams erhalten Feinwertungen
 		foreach ($matchData as $key => $value) {
