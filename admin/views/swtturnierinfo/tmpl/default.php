@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleagueamanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,9 +11,9 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-$swt = JRequest::getVar('swt', '', 'post', 'string');
-$update = JRequest::getVar('update', 0, 'post', 'int');
-$tid = JRequest::getVar('turnier', 0, 'post', 'int');
+$swt = clm_core::$load->request_string('swt', '');
+$update = clm_core::$load->request_int('update', 0);
+$tid = clm_core::$load->request_int('turnier', 0);
 
 $turParams = new clm_class_params($this->turnier->params);
 ?>

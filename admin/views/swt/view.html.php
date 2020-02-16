@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -41,37 +41,37 @@ class CLMViewSWT extends JViewLegacy {
 		//SWT-File-Auswahl erstellen
 		jimport( 'joomla.filesystem.file' );
 		
-		$filename = JRequest::getVar('filename', '');
+		$filename = clm_core::$load->request_string('filename', '');
 
 		$options_swt_files[]		= JHtml::_('select.option', '', JText::_( 'SWT_FILES' ));
 		if (isset($swtFiles)) {
 		foreach($swtFiles as $i => $file)	{
-			$options_swt_files[]		= JHtml::_('select.option', JFile::getName($file), JFile::getName($file));
+			$options_swt_files[]		= JHtml::_('select.option', basename($file), basename($file));
 		} 	}
 		$lists['swt_files']	= JHtml::_('select.genericlist', $options_swt_files, 'swt_file', 'class="inputbox"', 'value', 'text', $filename );
 	
 		//PGN-File-Auswahl erstellen
-		$pgn_filename = JRequest::getVar('pgn_filename', '');
+		$pgn_filename = clm_core::$load->request_string('pgn_filename', '');
 
 		$options_pgn_files[]		= JHtml::_('select.option', '', JText::_( 'PGN_FILES' ));
 		if (isset($pgnFiles)) {
 		foreach($pgnFiles as $i => $file)	{
-			$options_pgn_files[]		= JHtml::_('select.option', JFile::getName($file), JFile::getName($file));
+			$options_pgn_files[]		= JHtml::_('select.option', basename($file), basename($file));
 		} 	}
 		$lists['pgn_files']	= JHtml::_('select.genericlist', $options_pgn_files, 'pgn_file', 'class="inputbox"', 'value', 'text', $pgn_filename );
 		
 		//SWM-File-Auswahl erstellen
-		$swm_filename = JRequest::getVar('swm_filename', '');
+		$swm_filename = clm_core::$load->request_string('swm_filename', '');
 
 		$options_swm_files[]		= JHtml::_('select.option', '', JText::_( 'SWM_FILES' ));
 		if (isset($swmFiles)) {
 		foreach($swmFiles as $i => $file)	{
-			$options_swm_files[]		= JHtml::_('select.option', JFile::getName($file), JFile::getName($file));
+			$options_swm_files[]		= JHtml::_('select.option', basename($file), basename($file));
 		} 	}
 		$lists['swm_files']	= JHtml::_('select.genericlist', $options_swm_files, 'swm_file', 'class="inputbox"', 'value', 'text', $swm_filename );
 		
 		//Daten an Template
-		$this->assignRef( 'lists', $lists );
+		$this->lists = $lists;
 	
 		parent::display($tpl);
 	}

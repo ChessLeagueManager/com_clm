@@ -1,16 +1,14 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -21,26 +19,26 @@ class CLMControllerSWTTurnier extends JControllerLegacy
 	}
 	
 	function display($cachable = false, $urlparams = array()) { 
-		JRequest::setVar('view','swtturnier');
+		$_REQUEST['view'] = 'swtturnier';
 		parent::display(); 
 	} 
 	
 	function update() {		
-		$swt = JRequest::getVar('swt', '');
+		$swt = clm_core::$load->request_string('swt', '');
 		
-		JRequest::setVar('view', 'swtturnierinfo');
-		JRequest::setVar('swt' , $swt);
-		JRequest::setVar('update' , 1);
+		$_REQUEST['view'] = 'swtturnierinfo';
+		$_REQUEST['swt'] = $swt;
+		$_REQUEST['update'] = 1;
 		
 		parent::display(); 		
 	
 	}
 	
 	function add() {		
-		$swt = JRequest::getVar('swt', '');
+		$swt = clm_core::$load->request_string('swt', '');
 		
-		JRequest::setVar('view', 'swtturnierinfo');
-		JRequest::setVar('swt' , $swt);
+		$_REQUEST['view'] = 'swtturnierinfo';
+		$_REQUEST['swt'] = $swt;
 		
 		parent::display(); 		
 	

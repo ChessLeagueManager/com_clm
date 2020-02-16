@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -14,23 +14,24 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 class CLMControllerSWTTurnierInfo extends JControllerLegacy
 {
 	function __construct() {		
+		$this->app = JFactory::getApplication();
 		parent::__construct();		
 	}
 	
 	function display($cachable = false, $urlparams = array()) { 
-		JRequest::setVar('view','swtturnierinfo');
+		$_REQUEST['view'] = 'swtturnierinfo';
 		parent::display(); 
 	} 
 	
 	function next() {
 		$model = $this->getModel('swtturnierinfo');
 		if ($model->store ()) {
-			JRequest::setVar('view', 'swtturniertlnr');
+			$_REQUEST['view'] = 'swtturniertlnr';
 			$this->_message = JText::_( 'SWT_STORE_SUCCESS' );
 			parent::display ();
 		}
 		else {
-			JRequest::setVar('view', 'swtturnierinfo');
+			$_REQUEST['view'] = 'swtturnierinfo';
 			$this->_message = JText::_( 'SWT_STORE_ERROR' );
 			parent::display ();
 		}
@@ -43,7 +44,8 @@ class CLMControllerSWTTurnierInfo extends JControllerLegacy
 		$adminLink->makeURL ();
 		
 		$msg = JText::_( 'SWT_CANCEL_MSG' );
-		$this->setRedirect($adminLink->url, $msg);
+		$this->app->enqueueMessage( $msg );
+		$this->app->redirect($adminLink->url); 		
 	
 	}
 	

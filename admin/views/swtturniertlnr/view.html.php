@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleagueamanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -33,8 +33,8 @@ class CLMViewSWTTurnierTlnr extends JViewLegacy {
 		$geschlechter[] = JHtml::_('select.option','W',JText::_('OPTION_SEX_W'));
 		
 		//Daten ans Template
-		$this->assignRef('teilnehmer',$teilnehmer);
-		$this->assignRef('geschlechter',$geschlechter);
+		$this->teilnehmer = $teilnehmer;
+		$this->geschlechter = $geschlechter;
 		
 		parent::display($tpl);
 	}

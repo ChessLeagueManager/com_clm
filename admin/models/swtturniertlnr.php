@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -23,7 +23,7 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 		jimport( 'joomla.filesystem.file' );
 		
 		//Name und Verzeichnis der SWT-Datei
-		$filename 	= JRequest::getVar('swt', '', 'post', 'string');
+		$filename 	= clm_core::$load->request_string('swt', '');
 		$path 		= JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		$swt 		= $path.$filename;
 		
@@ -116,7 +116,7 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 		$db		=JFactory::getDBO ();
 		
 		//Name und Verzeichnis der SWT-Datei
-		$filename 	= JRequest::getVar('swt', '', 'post', 'string');
+		$filename 	= clm_core::$load->request_string('swt', '');
 		$path 		= JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		$swt 		= $path.$filename;
 				
@@ -129,11 +129,11 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 									( `sid`, `turnier`, `swt_tid`, `snr`, `name`, `birthYear`, `geschlecht`, `tlnrStatus`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `titel`, `FIDEcco`, `FIDEid`, `mgl_nr`, `zps`, `status`, `s_punkte`) "
 						  . " 	VALUES";
 			
-			print JRequest::getVar('snr[1]');
-			$pfirst = JRequest::getVar('pfirst', '', 'post', 'int');
-			$plast  = JRequest::getVar('plast', '', 'post', 'int');
+			print clm_core::$load->request_string('snr[1]');
+			$pfirst = clm_core::$load->request_int('pfirst', 0);
+			$plast  = clm_core::$load->request_int('plast', 0);
 			$i = 1;
-			$name = JRequest::getVar('name');
+			$name = clm_core::$load->request_array_string('name');
 			while($i <= $anz_teilnehmer) {
 
 				if ($i >= $pfirst AND $i <= $plast) {
@@ -170,9 +170,9 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 			$insert_query .= ";";
 			//print $insert_query;
 				
-			$db->setQuery($insert_query);
+			//$db->setQuery($insert_query);
 				
-			if($db->query()) {
+			if(clm_core::$db->query($insert_query)) {
 				//Daten wurden erfolgreich in die Datenbank geschrieben
 				return true;
 			} else {

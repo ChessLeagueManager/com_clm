@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -50,11 +50,11 @@ class CLMViewSWTTurnierErg extends JViewLegacy {
 		}
 		
 		//Daten ans Template
-		$this->assignRef('matches',$matches);
-		$this->assignRef('runden_options',$runden_options);
-		$this->assignRef('teilnehmer_options',$teilnehmer_options);
-		$this->assignRef('ergebnis_options',$ergebnis_options);
-		$this->assignRef('runden',$runden);
+		$this->matches = $matches;
+		$this->runden_options = $runden_options;
+		$this->teilnehmer_options = $teilnehmer_options;
+		$this->ergebnis_options = $ergebnis_options;
+		$this->runden = $runden;
 		
 		parent::display($tpl);
 	}

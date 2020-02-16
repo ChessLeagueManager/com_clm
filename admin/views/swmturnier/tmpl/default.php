@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -11,7 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-$swm = JRequest::getVar('swm_file', '', 'post', 'string');
+$swm = clm_core::$load->request_string('swm_file', '');
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm" >

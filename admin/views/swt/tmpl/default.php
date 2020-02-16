@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -53,7 +53,7 @@ $import_pgn	=$config->import_pgn;
 					<legend style="font-size:130%;line-height:100%;margin-bottom:10px;"><?php echo JText::_( 'SWT_UPLOAD_TAB' ); ?></legend> 
 					<table width="100%">
 						<tr>
-							<td width="50%"><input type="file" name="datei" /></td>
+							<td width="50%"><input type="file" name="swt_datei" /></td>
 							<td width="50%"><?php echo JText::_( 'SWT_UPLOAD_TEXT' ); ?></td>
 						</tr>
 					</table>

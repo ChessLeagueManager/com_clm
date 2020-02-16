@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleagueamanager.de
  * @author Thomas Schwietert
@@ -45,8 +45,8 @@ class CLMViewSWMTurnier extends JViewLegacy {
 		}
 		
 		$options_turniere[]		= JHtml::_('select.option', '', JText::_( 'SWT_TOURNAMENTS' ));
-		$swm_file	= JRequest::getVar('swm_file', '', 'post', 'string');
-		$current_turnier	= JRequest::getVar('turnier', '', 'post', 'string');
+		$swm_file	= clm_core::$load->request_string('swm_file', '');
+		$current_turnier	= clm_core::$load->request_string('turnier', '');
 		
 		foreach($turniere as $turnier)	{
 			$sf1 = strpos($turnier->bem_int, 'SWT-Importfile:');
@@ -65,7 +65,7 @@ class CLMViewSWMTurnier extends JViewLegacy {
 		$lists['turniere']	= JHtml::_('select.genericlist', $options_turniere, 'turnier', 'class="inputbox"', 'value', 'text', $current_turnier );
 		
 		//Daten an Template
-		$this->assignRef( 'lists', $lists );
+		$this->lists = $lists;
 				
 		parent::display($tpl);
 	}

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -54,7 +54,7 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 		if (empty( $this->_turnier )) { 
 			
 			//Name und Verzeichnis der SWT-Datei
-			$filename 	= JRequest::getVar('swt', '', 'post', 'string');
+			$filename 	= clm_core::$load->request_string('swt', '');
 			$path 		= JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 			$swt 		= $path.$filename;
 			
@@ -100,7 +100,7 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 			}
 			
 			//Mit Daten aus Datenbank �berschreiben, falls ein Turnier geupdated wird
-			if(JRequest::getInt('update') == 1) {
+			if(clm_core::$load->request_int('update') == 1) {
 				$turnierFromDatabase = $this->_getTurnierFromDatabase();
 			}
 			
@@ -306,17 +306,17 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 						   "published", "started", "finished", "invitationText", "bemerkungen", "bem_int",
 						   "ordering", "sieg", "siegs", "remis", "remiss", "nieder", "niederk" );
 		
-		//Strings f�r Felder und Werte erstellen
+		//Strings für Felder und Werte erstellen
 		$fields = '';
 		$values = '';
 		foreach ($spalten as $spalte) {
 			$fields .= "`".$spalte."`,";
-			$values .= " '".clm_escape(JRequest::getVar($spalte,''))."',";
+			$values .= " '".clm_escape(clm_core::$load->request_string($spalte,''))."',";
 		}
 		
 		// Parameter
 		$paramsStringArray = array();
-		foreach (JRequest::getVar('params','') as $key => $value) {
+		foreach (clm_core::$load->request_array_string('params','') as $key => $value) {
 			$paramsStringArray[] = $key.'='.intval($value);
 		}
 		$fields .= " `params`";
@@ -329,10 +329,10 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 		              . " 	VALUES 
 								( " . $values . " ); ";
 		
-		$db->setQuery($insert_query);
+		//$db->setQuery($insert_query);
 		
-		if($db->query()) {
-			JRequest::setVar('swt_tid',$db->insertid());
+		if(clm_core::$db->query($insert_query)) {
+			$_GET['swt_tid'] = clm_core::$db->insert_id();
 			return true;
 		} else {
 			print $db->getErrorMsg();
@@ -342,7 +342,7 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 	}
 	
 	function _getTurnierFromDatabase(){
-		if ($id = JRequest::getInt('turnier')) {
+		if ($id = clm_core::$load->request_int('turnier')) {
 			
 			$db		=JFactory::getDBO ();
 			$select_query = ' 	SELECT 
@@ -422,7 +422,7 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 		jimport( 'joomla.filesystem.file' );
 		
 		//Name und Verzeichnis der SWT-Datei
-		$filename 	= JRequest::getVar('swt', '', 'post', 'string');
+		$filename 	= clm_core::$load->request_string('swt', '');
 		$path 		= JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		$swt 		= $path.$filename;
 		

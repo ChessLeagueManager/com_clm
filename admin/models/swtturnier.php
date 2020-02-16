@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -19,7 +19,7 @@ class CLMModelSWTTurnier extends JModelLegacy {
 	function __construct(){
 		parent::__construct();
 		
-		$filter_saison	= JRequest::getVar( 'filter_saison' , $this->_getAktuelleSaison() , 'default' , 'int' );
+		$filter_saison	= clm_core::$load->request_int( 'filter_saison' , $this->_getAktuelleSaison() );
 		
 		$this->setState( 'filter_saison' , $filter_saison );
 	}

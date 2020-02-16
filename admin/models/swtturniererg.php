@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -44,11 +44,11 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			jimport( 'joomla.filesystem.file' );
 			
 			//Import-Modus auslesen
-			$update = JRequest::getVar('update', '', 'post', 'string');
-			$tid 	= clm_escape(JRequest::getVar('tid', '', 'post', 'string'));
+			$update = clm_core::$load->request_string('update', '');
+			$tid 	= clm_escape(clm_core::$load->request_string('tid', ''));
 			
 			//Name und Verzeichnis der SWT-Datei
-			$filename 	= JRequest::getVar('swt', '', 'post', 'string');
+			$filename 	= clm_core::$load->request_string('swt', '');
 			$path 		= JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 			$swt 		= $path.$filename;
 					
@@ -126,7 +126,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			$db		=JFactory::getDBO ();
 			
 			//Turnier-ID auslesen
-			$swt_tid = clm_escape(JRequest::getVar('swt_tid'));
+			$swt_tid = clm_escape(clm_core::$load->request_string('swt_tid'));
 			
 			$select_query = " 	SELECT 
 									`snr`,`name`
@@ -210,7 +210,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 		jimport( 'joomla.filesystem.file' );
 		
 		//Name und Verzeichnis der SWT-Datei
-		$filename 	= JRequest::getVar('swt', '', 'post', 'string');
+		$filename 	= clm_core::$load->request_string('swt', '');
 		$path 		= JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		$swt 		= $path.$filename;
 				
@@ -290,7 +290,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 		jimport( 'joomla.filesystem.file' );
 		
 		//Name und Verzeichnis der SWT-Datei
-		$filename 	= JRequest::getVar('swt', '', 'post', 'string');
+		$filename 	= clm_core::$load->request_string('swt', '');
 		$path 		= JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		$swt 		= $path.$filename;
 				
@@ -308,7 +308,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 		jimport( 'joomla.filesystem.file' );
 		
 		//Name und Verzeichnis der SWT-Datei
-		$filename 	= JRequest::getVar('swt', '', 'post', 'string');
+		$filename 	= clm_core::$load->request_string('swt', '');
 		$path 		= JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		$swt 		= $path.$filename;
 				
@@ -429,8 +429,8 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	
 	
 	function store() {
-		$rcount = JRequest::getVar('rcount', '', 'post', 'int');
-		$rlast  = JRequest::getVar('rlast', '', 'post', 'int');
+		$rcount = clm_core::$load->request_int('rcount', 0);
+		$rlast  = clm_core::$load->request_int('rlast', 0);
 		
 		// Rundeninformationen in Datenbank schreiben		
 		if(!$this->_storeRundenInfos()) {
@@ -477,8 +477,8 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	function _storeRundenInfos() {
 		$db		=JFactory::getDBO ();
 		$this->getRunden();
-		$rfirst = JRequest::getVar('rfirst', '', 'post', 'int');
-		$rlast  = JRequest::getVar('rlast', '', 'post', 'int');
+		$rfirst = clm_core::$load->request_int('rfirst', 0);
+		$rlast  = clm_core::$load->request_int('rlast', 0);
 		
 		if(!empty($this->_runden)) {
 			$insert_query = " 	INSERT IGNORE INTO 
@@ -510,7 +510,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			
 			$db->setQuery($insert_query);
 			
-			if($db->query()) {
+			if(clm_core::$db->query($insert_query)) {
 				//Daten wurden erfolgreich in die Datenbank geschrieben
 				return true;
 			} else {
@@ -533,8 +533,8 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	function _storePaarungen() {
 		$db		=JFactory::getDBO ();
 		$this->getRunden();
-		$rfirst = JRequest::getVar('rfirst', '', 'post', 'int');
-		$rlast  = JRequest::getVar('rlast', '', 'post', 'int');
+		$rfirst = clm_core::$load->request_int('rfirst', 0);
+		$rlast  = clm_core::$load->request_int('rlast', 0);
 		
 		if(!empty($this->_runden)) {
 			$insert_query = "INSERT IGNORE INTO 
@@ -593,7 +593,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			
 			$db->setQuery($insert_query);
 			
-			if($db->query()) {
+			if(clm_core::$db->query($insert_query)) {
 				//Daten wurden erfolgreich in die Datenbank geschrieben
 				return true;
 			} else {
@@ -614,7 +614,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	}
 	
 	function _deleteSpielfreiDummys() {
-		$swt_tid	= clm_escape(JRequest::getVar('swt_tid'));
+		$swt_tid	= clm_escape(clm_core::$load->request_string('swt_tid'));
 		$db		=JFactory::getDBO ();
 		
 		//Anzahl der Spielfrei-Dummys feststellen
@@ -658,7 +658,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 								swt_tid = ".$swt_tid." AND
 								name = 'spielfrei' ;";
 		$db->setQuery($delete_query);
-		if($db->query()) {
+		if(clm_core::$db->query($delete_query)) {
 			return true;
 		} else {		
 			//Ein Fehler ist aufgetreten
@@ -668,9 +668,9 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	}
 	
 	function _copyToCLMTables(){
-		$swt_tid	= clm_escape(JRequest::getVar('swt_tid'));
-		$update 	= JRequest::getVar('update');
-		$tid		= JRequest::getVar('tid');
+		$swt_tid	= clm_escape(clm_core::$load->request_string('swt_tid'));
+		$update 	= clm_core::$load->request_int('update');
+		$tid		= clm_core::$load->request_int('tid');
 		
 		
 		// Turnier kopieren
@@ -735,12 +735,14 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 				return true;
 			} 
 		} else {
+			$turnier->dateRegistration = '1970-01-01';
 			if($db->insertObject('#__clm_turniere',$turnier,'id')) {
 				//Turnier-ID in #__clm_swt_turniere updaten, damit die neue turnier-id �ber die swt-id gefunden werden kann 
-				//f�r den Fall, dass mit (F5) die Daten erneut gesendet werden und das Turnier bereits in die CLM-Datenbank kopiert wurde
+				//für den Fall, dass mit (F5) die Daten erneut gesendet werden und das Turnier bereits in die CLM-Datenbank kopiert wurde
 				$turnier->swt_tid = $swt_tid;
 				$turnier->tid = $db->insertid();
 				unset($turnier->id);
+				unset($turnier->dateRegistration);
 				
 				if($db->updateObject('#__clm_swt_turniere',$turnier,'swt_tid')) {
 					return true;
@@ -760,8 +762,8 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 								#__clm_turniere_tlnr
 							WHERE
 								turnier = ".$tid.";";
-		$db->setQuery($delete_query);
-		if(!$db->query()) {
+		//$db->setQuery($delete_query);
+		if(!clm_core::$db->query($delete_query)) {
 			return false;
 		}
 	
@@ -795,7 +797,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 							WHERE
 								turnier = ".$tid.";";
 		$db->setQuery($delete_query);
-		if(!$db->query()) {
+		if(!clm_core::$db->query($delete_query)) {
 			return false;
 		}
 		
@@ -846,7 +848,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 							WHERE
 								turnier = ".$tid.";";
 		$db->setQuery($delete_query);
-		if(!$db->query()) {
+		if(!clm_core::$db->query($delete_query)) {
 			return false;
 		}
 

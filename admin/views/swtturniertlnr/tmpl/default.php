@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,15 +10,15 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
-$pfirst	= JRequest::getVar( 'pfirst',1);
+$pfirst	= clm_core::$load->request_int( 'pfirst',1);
 $pcount = count($this->teilnehmer);
-JRequest::setVar('pcount', $pcount);
+$_GET['pcount'] = $pcount;
 $plast = $pcount;
-JRequest::setVar('pfirst', $pfirst);
+$_GET['pfirst'] = $pfirst;
 $prange = 50;
-JRequest::setVar('prange', $prange);
+$_GET['prange'] = $prange;
 
-$params = JRequest::getVar('params');
+$params = clm_core::$load->request_string('params');
 if(isset($params['useAsTWZ'])) {
 	$useAsTWZ = $params['useAsTWZ'];
 } else {
@@ -104,14 +104,14 @@ if(isset($params['useAsTWZ'])) {
 	
 	<div class="clr"></div>
 	
-	<input type="hidden" name="rnd" 	value="<?php echo JRequest::getVar('rnd'); ?>" />
-	<input type="hidden" name="typ" 	value="<?php echo JRequest::getVar('typ'); ?>" />
+	<input type="hidden" name="rnd" 	value="<?php echo clm_core::$load->request_int('rnd'); ?>" />
+	<input type="hidden" name="typ" 	value="<?php echo clm_core::$load->request_int('typ'); ?>" />
 	
-	<input type="hidden" name="swt" 	value="<?php echo JRequest::getVar('swt'); ?>" />
-	<input type="hidden" name="update" 	value="<?php echo JRequest::getVar('update'); ?>" />
-	<input type="hidden" name="tid" 	value="<?php echo JRequest::getVar('tid'); ?>" />
-	<input type="hidden" name="swt_tid" value="<?php echo JRequest::getVar('swt_tid'); ?>" />
-	<input type="hidden" name="sid" 	value="<?php echo JRequest::getVar('sid'); ?>" />
+	<input type="hidden" name="swt" 	value="<?php echo clm_core::$load->request_string('swt'); ?>" />
+	<input type="hidden" name="update" 	value="<?php echo clm_core::$load->request_int('update'); ?>" />
+	<input type="hidden" name="tid" 	value="<?php echo clm_core::$load->request_int('tid'); ?>" />
+	<input type="hidden" name="swt_tid" value="<?php echo clm_core::$load->request_int('swt_tid'); ?>" />
+	<input type="hidden" name="sid" 	value="<?php echo clm_core::$load->request_int('sid'); ?>" />
 	
 	<input type="hidden" name="pfirst" 	value="<?php echo $pfirst; ?>" />
 	<input type="hidden" name="plast" 	value="<?php echo $plast; ?>" />
