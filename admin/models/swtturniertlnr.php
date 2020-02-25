@@ -76,6 +76,7 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 				$teilnehmer->set('mgl_nr'		, CLMSWT::readName($swt,$offset+159	,4));
 				$teilnehmer->set('geschlecht'	, CLMSWT::readName($swt,$offset+184	,1));
 				$teilnehmer->set('tlnrStatus'	, (CLMSWT::readName($swt,$offset+184	,1)=="*" ? "0" : "1"));
+				if ($modus == 3 OR $modus == 5) $teilnehmer->set('tlnrStatus'	, 1);
 				$teilnehmer->set('FIDEid'   	, CLMSWT::readName($swt,$offset+324	,12));
 
 				$s_points = CLMSWT::readInt($swt,$offset+273,1);
