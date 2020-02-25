@@ -40,10 +40,6 @@ class CLMControllerSWTTurnierErg extends JControllerLegacy
 				$_REQUEST['view'] = 'swtturniererg';
 				parent::display ();
 			}
-
-/*		JRequest::setVar('view', 'swt');
-			JFactory::getApplication()->enqueueMessage( JText::_( 'SWT_STORE_SUCCESS' ),'message' );
-			parent::display (); */
 		}
 		else {
 			$_REQUEST['view'] = 'swtturniererg';

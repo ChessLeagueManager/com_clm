@@ -35,7 +35,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 		} 
 		if(!empty($this->_SWTmatchesWhite)) {
 			$this->_sortMatches();
-		}		
+		}
 		return $this->_matches;
 	}
 	
@@ -508,7 +508,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			$insert_query = substr ($insert_query, 0, -1);
 			$insert_query .= ";";
 			
-			$db->setQuery($insert_query);
+			//$db->setQuery($insert_query);
 			
 			if(clm_core::$db->query($insert_query)) {
 				//Daten wurden erfolgreich in die Datenbank geschrieben
@@ -591,7 +591,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			$insert_query = substr ($insert_query, 0, -1);
 			$insert_query .= ";";
 			
-			$db->setQuery($insert_query);
+			//$db->setQuery($insert_query);
 			
 			if(clm_core::$db->query($insert_query)) {
 				//Daten wurden erfolgreich in die Datenbank geschrieben
@@ -657,7 +657,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 							WHERE 
 								swt_tid = ".$swt_tid." AND
 								name = 'spielfrei' ;";
-		$db->setQuery($delete_query);
+		//$db->setQuery($delete_query);
 		if(clm_core::$db->query($delete_query)) {
 			return true;
 		} else {		
@@ -796,7 +796,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 								#__clm_turniere_rnd_termine
 							WHERE
 								turnier = ".$tid.";";
-		$db->setQuery($delete_query);
+		//$db->setQuery($delete_query);
 		if(!clm_core::$db->query($delete_query)) {
 			return false;
 		}
@@ -847,7 +847,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 								#__clm_turniere_rnd_spl
 							WHERE
 								turnier = ".$tid.";";
-		$db->setQuery($delete_query);
+		//$db->setQuery($delete_query);
 		if(!clm_core::$db->query($delete_query)) {
 			return false;
 		}

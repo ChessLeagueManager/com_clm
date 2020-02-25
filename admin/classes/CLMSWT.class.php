@@ -52,7 +52,8 @@ class CLMSWT {
 	
 	static function getFormValue($name, $default = null, $type = 'none', $keys = null) {
 		if($keys !== null) {
-			$data = clm_core::$load->request_array_string($name, null);
+			$data = $_POST[$name];
+//			$data = clm_core::$load->request_array_string($name, null);
 
 			if(is_array($keys)) {
 				foreach($keys as $key) {
