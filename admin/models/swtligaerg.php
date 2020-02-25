@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team. All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -36,26 +36,28 @@ class CLMModelSWTLigaerg extends JModelLegacy {
     		return $this->_splist;
     	}
     	set_time_limit(30);
-    	$swt_id = clm_escape(JRequest::getVar ('swt_id', 0, 'default', 'int'));
+    	$swt_id = clm_escape(clm_core::$load->request_int('swt_id', 0));
     	
 		$swt_db_data = $this->getDataSWTdb ();
 		$anz_mannschaften = $swt_db_data['anz_mannschaften'];
 		
     	for ($m = 1; $m <= $anz_mannschaften; $m++) {
 			
+			$sql = ' SELECT m.id, m.tln_nr, m.swt_id '   
+					. ' FROM #__clm_swt_mannschaften as m'
+					. ' WHERE m.swt_id = '.$swt_id.' AND m.tln_nr = '.$m;
+			$atmp = clm_core::$db->loadObjectList($sql);
 			$sql = ' SELECT s.man_id, s.snr, s.mgl_nr as mgl_nr, s.zps as zps, d.Mgl_Nr, d.ZPS, d.Spielername as name,'
-	//				. ' CONCAT_WS(" ", m.tln_nr, "-", s.snr, "&nbsp;", d.Spielername) as text, d.id as id'
 					. ' CONCAT_WS(" - ", s.snr, d.Spielername) as text, s.id as id'
 					. ' FROM #__clm_swt_meldeliste_spieler as s'
-					. ' LEFT JOIN #__clm_swt_mannschaften as m'
-					. ' ON s.man_id = m.id'
 					. ' LEFT JOIN #__clm_dwz_spieler as d'
-					. ' ON s.mgl_nr = d.Mgl_Nr AND s.zps = d.ZPS AND s.sid = d.sid'
-					. ' WHERE m.swt_id = '.$swt_id.' AND m.tln_nr = '.$m
+					. ' ON s.sid = d.sid AND s.zps = d.ZPS AND s.mgl_nr = d.Mgl_Nr'
+					. ' WHERE s.swt_id = '.$swt_id.' AND s.man_id = '.$atmp[0]->id
 					. ' ORDER BY s.snr ASC';
 		
 			$tmp = $this->_getList ($sql);
-			if ($tmp == null) {
+			//if ($tmp == null) {
+			if (is_null($tmp)) {
 				$tmp = array ();
 			}
 			
@@ -180,12 +182,12 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 		$db		= JFactory::getDBO ();
 		//$row	=& JTable::getInstance ('ligenSWT', 'TableCLM');
 		
-		$swt_id	= JRequest::getVar ('swt_id', 0, 'default', 'int');
-		$sid	= JRequest::getVar ('sid', 0, 'default', 'int');
-		$runde	= 1 + JRequest::getVar ('runde', 0, 'default', 'int');
-		$dgang	= 1 + JRequest::getVar ('dgang', 0, 'default', 'int');
-		$noOrgReference = JRequest::getVar('noOrgReference', '0', 'default', 'string');
-		$noBoardResults = JRequest::getVar('noBoardResults', '0', 'default', 'string');
+		$swt_id	= clm_core::$load->request_int('swt_id', 0);
+		$sid	= clm_core::$load->request_int('sid', 0);
+		$runde	= 1 + clm_core::$load->request_int('runde', 0);
+		$dgang	= 1 + clm_core::$load->request_int('dgang', 0);
+		$noOrgReference = clm_core::$load->request_string('noOrgReference', '0');
+		$noBoardResults = clm_core::$load->request_string('noBoardResults', '0');
 
 		
 		// zuvor in der DB gespeicherte Daten und (allgemeine) SWT-Daten
@@ -193,7 +195,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 		$swt_db_data	= $this->getDataSWTdb ();
 		
 		//Liga-Parameter aufbereiten
-		$swt_id = JRequest::getVar( 'swt_id', '', 'default', 'int' );
+		$swt_id = clm_core::$load->request_int( 'swt_id', 0);
 		$sql = ' SELECT params'
 			. ' FROM #__clm_swt_liga'
 			. ' WHERE id = '.$swt_id;
@@ -258,10 +260,10 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 			for ($b = 1; $b <= $anz_bretter; $b++) {
 			
 				// Einzelergebnisse 
-				$hbrett = JRequest::getVar ('hbrett_'.$p.'_'.$b);
-				$gbrett = JRequest::getVar ('gbrett_'.$p.'_'.$b);
+				$hbrett = clm_core::$load->request_int('hbrett_'.$p.'_'.$b);
+				$gbrett = clm_core::$load->request_int('gbrett_'.$p.'_'.$b);
 				
-				$hfarbe		= JRequest::getVar ('hfarbe_'.$p.'_'.$b);
+				$hfarbe		= clm_core::$load->request_string('hfarbe_'.$p.'_'.$b);
 				$hweiss		= ($hfarbe == 'w');
 				$hspieler	= $this->findSpieler ($hbrett);
 				if ($hspieler === false) {
@@ -272,7 +274,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 					$hzps		= $hspieler->zps;
 
 				}
-				$gfarbe		= JRequest::getVar ('gfarbe_'.$p.'_'.$b);
+				$gfarbe		= clm_core::$load->request_string('gfarbe_'.$p.'_'.$b);
 				$gweiss		= ($gfarbe == 'w');
 				$gspieler	= $this->findSpieler ($gbrett);
 				if ($gspieler === false) {
@@ -288,7 +290,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				$y1++;
 				if ($y1 >= strlen($colorstr)) $y1 = 0;
 				
-				$ergebnis	= JRequest::getVar ('erg_'.$p.'_'.$b);
+				$ergebnis	= clm_core::$load->request_int('erg_'.$p.'_'.$b, NULL);
 				$kampflos	= ($ergebnis == 4 || $ergebnis == 5 || $ergebnis == 6) * 2; // 0 (nicht kampflos) oder 2 (kampflos)
 				
 				
@@ -306,7 +308,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				$hmpunkte = $hpunkte;
 				$gmpunkte = $gpunkte;
 	
-				$ergebnisk	= JRequest::getVar ('ergk_'.$p.'_'.$b);
+				$ergebnisk	= clm_core::$load->request_int('ergk_'.$p.'_'.$b, NULL);
 				$dwz_edit   = 0;
 				if (isset($ergebnisk) AND $ergebnisk > 0) {
 					if		($ergebnisk == 4) { $hmpunkte = $nieder;				$gmpunkte = $sieg + $antritt;	} // kampflos
@@ -320,7 +322,8 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 					$dwz_editor = clm_core::$access->getID();
 				}
 				
-				if ($ergebnis != null) {
+				//if ($ergebnis != null) {
+				if (!is_null($ergebnis)) {
 				
 					$keine_ergebnisse = false;
 					$sp_fields = '`sid`, `swt_id`, `runde`, `paar`, `dg`, '
@@ -341,8 +344,8 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 							. ' ( ' . $sp_fields . ' ) '
 							. ' VALUES ( ' . $sp_hvalues . ' ), ( ' . $sp_gvalues . ' ); ';
 				
-					$db->setQuery ($query);
-					if (!$db->query ()) {
+					//$db->setQuery ($query);
+					if (!clm_core::$db->query($query)) {
 						print $db->getErrorMsg ();
 						return false;
 					}
@@ -467,8 +470,8 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 					. ' ( ' . $m_fields . ' ) '
 					. ' VALUES ( ' . $m_hvalues . ' ), ( ' . $m_gvalues . ' ); ';
 			
-			$db->setQuery ($query);
-			if (!$db->query ()) {
+			//$db->setQuery ($query);
+			if (!clm_core::$db->query($query)) {
 				print $db->getErrorMsg ();
 				return false;
 			}
@@ -489,7 +492,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 			jimport( 'joomla.filesystem.file' );
 		
 			// Namen und Verzeichnis der SWT-Datei auslesen
-			$filename = JRequest::getVar( 'swt', '', 'default', 'string' );
+			$filename = clm_core::$load->request_string( 'swt', '');
 			$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		
 			$swt = $path.$filename;
@@ -540,15 +543,15 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 		jimport( 'joomla.filesystem.file' );
 		
 		// Namen und Verzeichnis der SWT-Datei auslesen
-		$filename = JRequest::getVar( 'swt', '', 'default', 'string' );
+		$filename = clm_core::$load->request_string( 'swt', '');
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		
 		$swt = $path.$filename;
 
 		// Aktuell zu bearbeitende/r Runde und Durchgang sowie swt_id
-		$runde	= JRequest::getVar ('runde', 0, 'default', 'int');
-		$dgang	= JRequest::getVar ('dgang', 0, 'default', 'int');
-		$swt_id = JRequest::getVar ('swt_id', 0, 'default', 'int');
+		$runde	= clm_core::$load->request_int('runde', 0);
+		$dgang	= clm_core::$load->request_int('dgang', 0);
+		$swt_id = clm_core::$load->request_int('swt_id', 0);
 		
 		// schon gespeicherte SWT-Daten aus der DB holen
 		$swt_db_data = $this->getDataSWTdb ();
@@ -658,19 +661,19 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 		jimport( 'joomla.filesystem.file' );
 
 		// Namen und Verzeichnis der SWT-Datei auslesen
-		$filename = JRequest::getVar( 'swt', '', 'default', 'string' );
+		$filename = clm_core::$load->request_string( 'swt', '');
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		
 		$swt = $path.$filename;
 
 		// Aktuell zu bearbeitende(r) Paarung, Runde und Durchgang
-		$par	= JRequest::getVar ('par', 0, 'default', 'int');
-		$runde	= JRequest::getVar ('runde', 0, 'default', 'int');
-		$dgang	= JRequest::getVar ('dgang', 0, 'default', 'int');
-		$mturnier = JRequest::getVar ('mturnier', 0, 'default', 'int');
-		$ungerade = JRequest::getVar ('ungerade', false, 'default', 'bool');
-		$noOrgReference = JRequest::getVar('noOrgReference', '0', 'default', 'string');
-		$noBoardResults = JRequest::getVar('noBoardResults', '0', 'default', 'string');
+		$par	= clm_core::$load->request_int('par', 0);
+		$runde	= clm_core::$load->request_int('runde', 0);
+		$dgang	= clm_core::$load->request_int('dgang', 0);
+		$mturnier = clm_core::$load->request_int('mturnier', 0);
+		$ungerade = clm_core::$load->request_int('ungerade', 0);
+		$noOrgReference = clm_core::$load->request_string('noOrgReference', '0');
+		$noBoardResults = clm_core::$load->request_string('noBoardResults', '0');
 		
 		// schon gespeicherte SWT-Daten aus der DB holen
 		$swt_db_data = $this->getDataSWTdb ();
@@ -1301,7 +1304,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 			return $this->_swt_db_data;
 		}
 		
-		$swt_id = JRequest::getVar( 'swt_id', '', 'default', 'int' );
+		$swt_id = clm_core::$load->request_string( 'swt_id', '');
 		$sql = ' SELECT id, name as liga_name, teil as anz_mannschaften, stamm as anz_bretter, ersatz as anz_ersatzspieler, durchgang as anz_durchgaenge, runden as anz_runden, sieg, remis, nieder, antritt, man_sieg, man_remis, man_nieder, man_antritt, sieg_bed'
 				. ' FROM #__clm_swt_liga'
 				. ' WHERE id = '.$swt_id;

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -29,10 +29,10 @@ class CLMModelSWTLigasave extends JModelLegacy {
 		$date =JFactory::getDate ();
 		$zeit = $date->toSQL ();
 		
-		$swt_id	= JRequest::getVar ('swt_id', 0, 'default', 'int');
-		$sid	= JRequest::getVar ('sid', 0, 'default', 'int');
-		$liga_id	= JRequest::getVar ('lid', 0, 'default', 'int');
-		$update	= JRequest::getVar ('update', 0, 'default', 'int');
+		$swt_id	= clm_core::$load->request_int('swt_id', 0);
+		$sid	= clm_core::$load->request_int('sid', 0);
+		$liga_id	= clm_core::$load->request_int('lid', 0);
+		$update	= clm_core::$load->request_int('update', 0);
 		
 		$swt_data		= $this->getDataSWT ();
 		$swt_db_data	= $this->getDataSWTdb ();		
@@ -157,8 +157,8 @@ class CLMModelSWTLigasave extends JModelLegacy {
 						. ' SET `' . $liga_col[$table] . '` = "' . $liga_id . '"'
 						. ' WHERE ' . $where[$table];
 				
-				$db->setQuery ($upd);
-				if (!$db->query ()) {
+				//$db->setQuery ($upd);
+				if (!clm_core::$db->query($upd)) {
 					print $db->getErrorMsg ();
 					return false;
 				}
@@ -166,8 +166,8 @@ class CLMModelSWTLigasave extends JModelLegacy {
 			if ($liga_id > 0 AND $table != 'liga') {
 				$delete_query = ' DELETE FROM ' . $clm_prefix . $table
 								. ' WHERE '.$liga_col[$table].' = '.$liga_id;
-				$db->setQuery($delete_query);
-				if(!$db->query()) {
+				//$db->setQuery($delete_query);
+				if(!clm_core::$db->query($delete_query)) {
 					print $db->getErrorMsg ();
 					return false;
 				}
@@ -190,14 +190,14 @@ class CLMModelSWTLigasave extends JModelLegacy {
 				//echo "<br/><br/>query: $query"; //DBG
 				
 					
-			$db->setQuery ($copy[$table]);
-					if (!$db->query ()) {
+			//$db->setQuery ($copy[$table]);
+					if (!clm_core::$db->query($copy[$table])) {
 						print $db->getErrorMsg ();
 						return false;
 					}
 			if ($liga_id < 1 AND $table == 'liga') {
-				$liga_id = $db->insertid ();
-				JRequest::setVar ('lid', $liga_id);
+				$liga_id = clm_core::$db->insert_id();
+				$_GET['lid'] = $liga_id;
 			}
 			
 		}
@@ -220,8 +220,8 @@ class CLMModelSWTLigasave extends JModelLegacy {
 			
 			//echo "<br/><br/>upd_query[$table]: " . $upd_query[$table]; //DBG
 		
-			$db->setQuery ($upd_query[$table]);
-			if (!$db->query ()) {
+			//$db->setQuery ($upd_query[$table]);
+			if (!clm_core::$db->query($upd_query[$table])) {
 				print $db->getErrorMsg ();
 				return false;
 			}
@@ -231,8 +231,8 @@ class CLMModelSWTLigasave extends JModelLegacy {
 								. ' SET `brettpunkte` = NULL, `manpunkte` = NULL'
 								. ' WHERE `'.$liga_col[$table] .'` = "' . $liga_id . '" AND ((`runde` > "'.$gesp_runden.'" AND `dg` = "'.$gesp_dgang.'") OR `dg` > "'.$gesp_dgang.'")';
 
-				$db->setQuery ($upd_query2);
-				if (!$db->query ()) {
+				//$db->setQuery ($upd_query2);
+				if (!clm_core::$db->query($upd_query2)) {
 					print $db->getErrorMsg ();
 					return false;
 				}
@@ -242,8 +242,8 @@ class CLMModelSWTLigasave extends JModelLegacy {
 				$upd_query2 = ' DELETE FROM ' . $clm_prefix . $table
 								. ' WHERE `'.$liga_col[$table] .'` = "' . $liga_id . '" AND ((`runde` > "'.$gesp_runden.'" AND `dg` = "'.$gesp_dgang.'") OR `dg` > "'.$gesp_dgang.'")';
 
-				$db->setQuery ($upd_query2);
-				if (!$db->query ()) {
+				//$db->setQuery ($upd_query2);
+				if (!clm_core::$db->query($upd_query2)) {
 					print $db->getErrorMsg ();
 					return false;
 				}
@@ -272,8 +272,8 @@ class CLMModelSWTLigasave extends JModelLegacy {
 							. ' AND `lid` = "' . $liga_id . '"';
 				//echo "<br/><br/>query: $query"; //DBG
 
-					$db->setQuery ($sql);
-					if (!$db->query ()) {
+					//$db->setQuery ($sql);
+					if (!clm_core::$db->query($sql)) {
 						print $db->getErrorMsg ();
 						return false;
 			} 
@@ -288,8 +288,8 @@ class CLMModelSWTLigasave extends JModelLegacy {
 					. ' WHERE `liga` = "' . $liga_id . '"'
 					. ' AND (`name` = "spielfrei" OR `name` = "")'
 					. ' AND `zps` = "0"';
-		$db->setQuery ($sql_fix);
-		if (!$db->query ()) {
+		//$db->setQuery ($sql_fix);
+		if (!clm_core::$db->query($sql_fix)) {
 			print $db->getErrorMsg ();
 			return false;
 		}
@@ -309,7 +309,7 @@ class CLMModelSWTLigasave extends JModelLegacy {
 	function userAnlegen () {
 	
 		$db		=JFactory::getDBO ();
-		$sid	= JRequest::getVar ('sid', 0, 'default', 'int');
+		$sid	= clm_core::$load->request_int('sid', 0);
 		
 		$sql = ' SELECT `id`, `jid` FROM #__clm_user '
 				. ' WHERE `email` = "swt_import@clm.de"'
@@ -350,10 +350,10 @@ class CLMModelSWTLigasave extends JModelLegacy {
 		$date =JFactory::getDate ();
 		$zeit = $date->toSQL ();
 		
-		$swt_id	= JRequest::getVar ('swt_id', 0, 'default', 'int');
-		$sid	= JRequest::getVar ('sid', 0, 'default', 'int');
-		$update	= JRequest::getVar ('update', 0, 'default', 'int');
-		$liga_id= JRequest::getVar ('lid', 0, 'default', 'int');
+		$swt_id	= clm_core::$load->request_int('swt_id', 0);
+		$sid	= clm_core::$load->request_int('sid', 0);
+		$update	= clm_core::$load->request_int('update', 0);
+		$liga_id= clm_core::$load->request_int('lid', 0);
 
 		$swt_db_data	= $this->getDataSWTdb ();		
 		$swt_data		= $this->getDataSWT ();
@@ -382,8 +382,8 @@ class CLMModelSWTLigasave extends JModelLegacy {
 			}
 			$delete_query = ' DELETE FROM #__clm_runden_termine '
 							. ' WHERE liga = '.$liga_id;
-				$db->setQuery($delete_query);
-				if(!$db->query()) {
+				//$db->setQuery($delete_query);
+				if(!clm_core::$db->query($delete_query)) {
 					print $db->getErrorMsg ();
 					return false;
 				}
@@ -428,8 +428,8 @@ class CLMModelSWTLigasave extends JModelLegacy {
 						. ' ( ' . $fields . ' ) '
 						. ' VALUES ' . $values;
 		
-		$db->setQuery ($sql);
-		if (!$db->query ()) {
+		//$db->setQuery ($sql);
+		if (!clm_core::$db->query($sql)) {
 			print $db->getErrorMsg ();
 			return false;
 		}
@@ -445,7 +445,7 @@ class CLMModelSWTLigasave extends JModelLegacy {
 			jimport( 'joomla.filesystem.file' );
 		
 			// Namen und Verzeichnis der SWT-Datei auslesen
-			$filename = JRequest::getVar( 'swt', '', 'default', 'string' );
+			$filename = clm_core::$load->request_string( 'swt', '');
 			$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		
 			$swt = $path.$filename;
@@ -485,7 +485,7 @@ class CLMModelSWTLigasave extends JModelLegacy {
 			return $this->_swt_db_data;
 		}
 		
-		$swt_id = JRequest::getVar( 'swt_id', '', 'default', 'int' );
+		$swt_id = clm_core::$load->request_int( 'swt_id', 0);
 		$sql = ' SELECT id, teil as anz_mannschaften, stamm as anz_bretter, ersatz as anz_ersatzspieler,' 
 				. 'durchgang as anz_durchgaenge, runden as anz_runden, sieg, remis, nieder, antritt, man_sieg, '
 				. 'man_remis, man_nieder, man_antritt, sieg_bed'
@@ -531,7 +531,8 @@ class CLMModelSWTLigasave extends JModelLegacy {
 	function _SWTReadInt ($file, $offset, $length = 1) {
 		$value = 0;
 		for ($i = 0; $i < $length; $i++) {
-			$cur = ord (JFile::read ($file, false, 1, 8192, $offset+$i));
+			//$cur = ord (JFile::read ($file, false, 1, 8192, $offset+$i));
+			$cur = ord(file_get_contents ($file, false, null, $offset+$i, 1));
 			$value += $cur * pow (256, $i);
 		}
 		return $value;

@@ -1,29 +1,28 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
-$swt    = JRequest::getVar('swt', '', 'default', 'string');
-$update = JRequest::getVar('update', 0);
-$swt_id = JRequest::getVar('swt_id', 0, 'default', 'int');
-$man	= JRequest::getVar('man', 0, 'default', 'int');
+$swt    = clm_core::$load->request_string('swt', '');
+$update = clm_core::$load->request_int('update', 0);
+$swt_id = clm_core::$load->request_int('swt_id', 0);
+$man	= clm_core::$load->request_int('man', 0);
 $sid	= $this->swt_db_data['sid'];
-$mturnier = JRequest::getVar('mturnier', 0, 'default', 'int');
-$noOrgReference = JRequest::getVar('noOrgReference', '0', 'default', 'string');
-$noBoardResults = JRequest::getVar('noBoardResults', '0', 'default', 'string');
-$ungerade = JRequest::getVar('ungerade', false, 'default', 'bool');
+$mturnier = clm_core::$load->request_int('mturnier', 0);
+$noOrgReference = clm_core::$load->request_string('noOrgReference', '0');
+$noBoardResults = clm_core::$load->request_string('noBoardResults', '0');
+$ungerade = clm_core::$load->request_int('ungerade', 0);
 
-$spielerid = JRequest::getVar ('spielerid');
-$lid = JRequest::getVar('lid', 0, 'default', 'int');
+$spielerid = clm_core::$load->request_array_int('spielerid', NULL, true);
+$lid = clm_core::$load->request_int('lid', 0);
 ?>
 
 <script language="javascript" type="text/javascript">

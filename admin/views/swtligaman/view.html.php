@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -32,9 +32,9 @@ class CLMViewSWTLigaman extends JViewLegacy {
 		// $db_man_nr	=& $state->get( 'db_man_nr' ); fuer update
 
 		// Der nächste Task ist von der aktuell bearbeiteten Mannschaft abhängig
-		$man = JRequest::getVar ('man', 0, 'default', 'int');		
-		$noOrgReference = JRequest::getVar ('noOrgReference', '0', 'default', 'string');		
-		$noBoardResults = JRequest::getVar ('noBoardResults', '0', 'default', 'string');		
+		$man = clm_core::$load->request_int('man', 0);		
+		$noOrgReference = clm_core::$load->request_string('noOrgReference', '0', 'default', 'string');		
+		$noBoardResults = clm_core::$load->request_string('noBoardResults', '0', 'default', 'string');		
 		$anz_mannschaften = $swt_db_data['anz_mannschaften'];
 
 		// Toolbar
@@ -57,8 +57,8 @@ class CLMViewSWTLigaman extends JViewLegacy {
 		// Listen
 		//echo "GET1: "; print_r ($_GET); //DBG
 		//echo "swt_data[zps]: ".$swt_data['zps']; //DBG
-		$filter_zps = JRequest::getVar ('filter_zps', $swt_data['zps'], 'default', 'string');
-		$filter_sg_zps = JRequest::getVar ('filter_sg_zps', $swt_data['sg_zps'], 'default', 'string');
+		$filter_zps = clm_core::$load->request_string('filter_zps', $swt_data['zps']);
+		$filter_sg_zps = clm_core::$load->request_string('filter_sg_zps', $swt_data['sg_zps']);
 		//echo "filter_zps: $filter_zps"; //DBG
 		//echo "GET: "; print_r ($_GET); //DBG
 		// Vereinsliste
@@ -173,10 +173,10 @@ class CLMViewSWTLigaman extends JViewLegacy {
 
 
 		// Daten an Template
-		$this->assignRef ('lists', $lists);
-		$this->assignRef ('tables', $tables);
-		$this->assignRef ('swt_data', $swt_data);
-		$this->assignRef ('swt_db_data', $swt_db_data);
+		$this->lists = $lists;
+		$this->tables = $tables;
+		$this->swt_data = $swt_data;
+		$this->swt_db_data = $swt_db_data;
 
 		parent::display ($tpl);
 

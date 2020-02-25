@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -30,8 +30,9 @@ class CLMModelSWTLigaman extends JModelLegacy {
 		$vs	= $config->verein_sort;
 
 		$sql = " SELECT ZPS as zps, Vereinname as name FROM #__clm_dwz_vereine as a "
-				." LEFT JOIN #__clm_saison as s ON s.id= a.sid "
-				." WHERE s.archiv = 0 AND s.published = 1 ORDER BY ";
+//				." LEFT JOIN #__clm_saison as s ON s.id= a.sid "
+//				." WHERE s.archiv = 0 AND s.published = 1 ORDER BY ";
+				." WHERE sid = ".clm_core::$access->getSeason()." ORDER BY ";
 
 		if ($vs =="1") { $sql = $sql." a.ZPS ASC";}
 		else { $sql = $sql." a.Vereinname ASC";}
@@ -46,15 +47,17 @@ class CLMModelSWTLigaman extends JModelLegacy {
 			return $this->_spielerliste;
 		}
 		
-        	$filter_zps = JRequest::getVar( 'filter_zps', '', 'default', 'string' );
-        	$filter_sg_zps = JRequest::getVar( 'filter_sg_zps', '', 'default', 'string' );
+        	$filter_zps = clm_core::$load->request_string( 'filter_zps', '');
+        	$filter_sg_zps = clm_core::$load->request_string( 'filter_sg_zps', '');
 
 		if ($filter_zps != '') {
-			$sql = ' SELECT id, Spielername as name, ZPS as zps, Mgl_Nr as mgl_nr FROM #__clm_dwz_spieler';
+			$sql = " SELECT id, Spielername as name, ZPS as zps, Mgl_Nr as mgl_nr FROM #__clm_dwz_spieler"
+				." WHERE sid = ".clm_core::$access->getSeason();
 			if ($filter_zps != '') {
-				$sql .= " WHERE zps = '".$filter_zps."'";
 				if ($filter_sg_zps != '' AND $filter_sg_zps != '') {
-					$sql .= " OR FIND_IN_SET(zps,'".$filter_sg_zps."')";
+					$sql .= " AND ( zps = '".$filter_zps."' OR FIND_IN_SET(zps,'".$filter_sg_zps."') )";
+				} else {
+					$sql .= " AND zps = '".$filter_zps."'";
 				}
 			}
 			$this->_spielerliste = $this->_getList ($sql);
@@ -127,12 +130,12 @@ class CLMModelSWTLigaman extends JModelLegacy {
 
 		// allgemeine Formulardaten sammeln
 		//if ($sg_zps == 0) $sg_zps = '';
-		$swt_id	= JRequest::getVar ('swt_id', 0, 'default', 'int' );
-		$sid	= JRequest::getVar ('sid', 0, 'default', 'int' );
-		$lid	= JRequest::getVar ('lid', 0, 'default', 'int' );
-        $zps    = JRequest::getVar( 'filter_zps', '0', 'default', 'string' );
-		$noOrgReference = JRequest::getVar ('noOrgReference', '0', 'default', 'string');		
-		$noBoardResults = JRequest::getVar ('noBoardResults', '0', 'default', 'string');		
+		$swt_id	= clm_core::$load->request_int('swt_id', 0);
+		$sid	= clm_core::$load->request_int('sid', 0);
+		$lid	= clm_core::$load->request_int('lid', 0);
+        $zps    = clm_core::$load->request_string( 'filter_zps', '0');
+		$noOrgReference = clm_core::$load->request_string('noOrgReference', '0');		
+		$noBoardResults = clm_core::$load->request_string('noBoardResults', '0');		
 		
 		$swt_data		= $this->getDataSWT ();
 		$swt_db_data	= $this->getDataSWTdb ();
@@ -148,44 +151,44 @@ class CLMModelSWTLigaman extends JModelLegacy {
 		$anz_spieler = $swt_db_data['anz_spieler']; // pro Mannschaft!
 		
 		// Defaults setzen
-		JRequest::setVar ('lokal', '');
-		JRequest::setVar ('mf', NULL);
-		$tln_nr  = JRequest::getVar ('tln_nr');
+		$_POST['lokal'] = '';
+		$_POST['mf'] = NULL;
+		$tln_nr  = clm_core::$load->request_string('tln_nr');
 		if (strlen($tln_nr) == 1) $man_nr = $lid.'0'.$tln_nr;
 		else $man_nr = $lid.$tln_nr;
-		JRequest::setVar ('man_nr', $man_nr);
+		$_POST['man_nr'] = $man_nr;
 		//Mit Daten aus DB-Tab clm_mannschaften überschreiben, falls eine Liga geupdated wird
-		if (JRequest::getInt('update') == 1 AND  JRequest::getInt('lid') > 0) {
+		if (clm_core::$load->request_int('update') == 1 AND  clm_core::$load->request_int('lid') > 0) {
 			$db		=JFactory::getDBO ();
 			$select_query = '  SELECT * FROM #__clm_mannschaften '
 							.' WHERE liga = '.$lid.' AND tln_nr = '.$tln_nr;
 			$db->setQuery ($select_query);
 			$teamFromDatabase = $db->loadObject();
 			//Standardwerte werden überschrieben
-			JRequest::setVar ('lokal', $teamFromDatabase->lokal);
-			JRequest::setVar ('mf', $teamFromDatabase->mf);
-			JRequest::setVar ('man_nr', $teamFromDatabase->man_nr);
+		$_POST['lokal'] = $teamFromDatabase->lokal;
+		$_POST['mf'] = $teamFromDatabase->mf;
+		$_POST['man_nr'] = $teamFromDatabase->man_nr;
 		}
 		//Mit Daten aus DB-Tab clm_dwz_vereine überschreiben, falls eine Liga angelegt wird
-		if (JRequest::getInt('update') == 0 AND  JRequest::getInt('lid') == 0) {
+		if (clm_core::$load->request_int('update') == 0 AND  clm_core::$load->request_int('lid') == 0) {
 			$db		=JFactory::getDBO ();
 			$select_query = '  SELECT * FROM #__clm_vereine '
 							." WHERE sid = ".$sid." AND zps = '".$zps."'";
 			$db->setQuery ($select_query);
 			$clubFromDatabase = $db->loadObject();
 			//Standardwerte werden überschrieben
-			if (isset($clubFromDatabase)) JRequest::setVar ('lokal', $clubFromDatabase->lokal);
+			if (isset($clubFromDatabase)) $_POST['lokal'] = $clubFromDatabase->lokal;
 		}
 
 		// Allgemeine Mannschaftsdaten
 		$man_spalten = array ( 'name', 'sid', 'swt_id', 'tln_nr', 'bem_int', 'published', 'lokal', 'mf', 'man_nr' );
-		JRequest::setVar ('bem_int', 'Import durch SWT-Datei.');
+		$_POST['bem_int'] = 'Import durch SWT-Datei.';
 		$fields = '';
 		$values = '';	
 		
 		foreach ($man_spalten as $spalte) {
 			$fields .= "`" . $spalte . "`,";
-			$values .= " '" . JRequest::getVar ($spalte) . "',";
+			$values .= " '" . clm_core::$load->request_string($spalte) . "',";
 		}
 		
 		
@@ -194,10 +197,10 @@ class CLMModelSWTLigaman extends JModelLegacy {
 		$sql = ' INSERT IGNORE INTO #__clm_swt_mannschaften'
 				. ' ( ' . $fields . ' ) '
 				. ' VALUES ( ' . $values . ' ); ';
-		$db->setQuery ($sql);
+		//$db->setQuery ($sql);
 		
-		if ($db->query ()) {
-			$man_id = $db->insertid();
+		if (clm_core::$db->query($sql)) {
+			$man_id = clm_core::$db->insert_id();
 			//JRequest::setVar ('man_id', $db->insertid() );
 		}
 		else {
@@ -232,14 +235,11 @@ class CLMModelSWTLigaman extends JModelLegacy {
 
 		$neu = 1;
 		for ($i = 1; $i <= $anz_spieler; $i++) {
-			$dwzid		= JRequest::getVar ('dwzid_' . $i);
-			$spielerid	= JRequest::getVar ('spielerid_' . $i);
-			$name	= JRequest::getVar ('name_' . $i);
+			$dwzid		= clm_core::$load->request_string('dwzid_' . $i);
+			$spielerid	= clm_core::$load->request_string('spielerid_' . $i);
+			$name	= clm_core::$load->request_string('name_' . $i);
 
 			if ($noOrgReference == 1) $dwzid = -1;			
-//echo "<br>dwzid: $dwzid"; //DBG
-//echo "spielerid: $spielerid"; //DBG
-//echo "name: $name"; //DBG
 			if (empty ($spielerid)) { // neuer Spieler, der nicht in der SWT-Datei aufgeführt ist
 //				echo "groesste_id: $groesste_id"; //DBG
 				$spielerid = $groesste_id + $neu;
@@ -268,16 +268,16 @@ class CLMModelSWTLigaman extends JModelLegacy {
 		$newPlayerValues = substr ($newPlayerValues, 0, -2); // letztes ", " streichen
 
 		if (empty ($values)) { // spielfrei
-			JRequest::setVar ('ungerade', 'true');
+			$_POST['ungerade'] = 1;
 		}		
 		else {
 			$sql = ' INSERT IGNORE INTO #__clm_swt_meldeliste_spieler'
 					. ' ( ' . $fields . ' ) '
 					. ' VALUES ' . $values . '; ';
 		
-			$db->setQuery ($sql);
+			//$db->setQuery ($sql);
 		
-			if (! $db->query ()) {
+			if (!clm_core::$db->query($sql)) {
 				print $db->getErrorMsg ();
 				return false;
 			}
@@ -287,9 +287,9 @@ class CLMModelSWTLigaman extends JModelLegacy {
 			$sql = ' INSERT IGNORE INTO #__clm_dwz_spieler'
 				. ' ( ' . $newPlayerFields . ' ) '
 				. ' VALUES ' . $newPlayerValues . '; ';
-			$db->setQuery ($sql);
+			//$db->setQuery ($sql);
 		
-			if (! $db->query ()) {
+			if (!clm_core::$db->query($sql)) {
 				print $db->getErrorMsg ();
 				return false;
 			}
@@ -303,8 +303,8 @@ class CLMModelSWTLigaman extends JModelLegacy {
 		// DB-Zugriff
 		$db =JFactory::getDBO ();
 		
-		$sid		= JRequest::getVar ('sid');
-		$swt_id		= JRequest::getVar ('swt_id');
+		$sid		= clm_core::$load->request_int('sid');
+		$swt_id		= clm_core::$load->request_int('swt_id');
 		$swt_data	= $this->getDataSWT ();
 		
 		$anz_spieler = $swt_data['anz_spieler']; // anz_spieler gesamt!
@@ -332,8 +332,8 @@ class CLMModelSWTLigaman extends JModelLegacy {
 				$update_query = 'UPDATE #__clm_swt_meldeliste_spieler SET spielerid=' . $i . ''
 								. ' WHERE spielerid=' . $spielerid_alt . ''
 								. ' AND swt_id=' . $swt_id . '; ';
-				$db->setQuery ($update_query);
-				if (!$db->query ()) {
+				//$db->setQuery ($update_query);
+				if (!clm_core::$db->query($update_query)) {
 					print $db->getErrorMsg ();
 					return false;
 				}
@@ -353,13 +353,13 @@ class CLMModelSWTLigaman extends JModelLegacy {
         jimport( 'joomla.filesystem.file' );
 
 		// Namen und Verzeichnis der SWT-Datei auslesen
-		$filename = JRequest::getVar( 'swt', '', 'default', 'string' );
+		$filename = clm_core::$load->request_string( 'swt', '');
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . 'swt' . DIRECTORY_SEPARATOR;
 		
 		$swt = $path.$filename;
 
 		// Aktuell zu bearbeitende Mannschaft
-		$man = JRequest::getVar ('man', 0, 'default', 'int');
+		$man = clm_core::$load->request_int('man', 0);
 		
 		// ...
 		//$swt_data['liga_name'] = $this->_SWTReadName ($swt, 245, 60);
@@ -401,8 +401,8 @@ if ($ausgeloste_runden == 0) {
 		$i = 1;
 		$swt_data['zps'] = '';
 		$swt_data['sg_zps'] = '';
-		JRequest::setVar ('filter_zps', $swt_data['zps']);
-		JRequest::setVar ('filter_sg_zps', $swt_data['sg_zps']);
+		$_GET['filter_zps'] = $swt_data['zps'];
+		$_GET['filter_sg_zps'] = $swt_data['sg_zps'];
 		for ($s = 1; $s <= $anz_spieler; $s++) {
 		
 			$man_nr = CLMSWT::readInt ($swt, $offset + 201);
@@ -411,8 +411,8 @@ if ($ausgeloste_runden == 0) {
 				if (!isset ($swt_data['zps']) OR $swt_data['zps'] == '') { // einmalig die Mannschaftsdaten setzen
 					$swt_data['zps']		= CLMSWT::readString ($swt, $offset + 153, 5);
 					//$swt_data['man_name']	= CLMSWT::readString ($swt, $offset + 33, 32);
-					if (!empty ($swt_data['zps']) && (JRequest::getVar ('filter_zps', '', 'default', 'string') == '')) {
-						JRequest::setVar ('filter_zps', $swt_data['zps']);
+					if (!empty ($swt_data['zps']) && (clm_core::$load->request_string('filter_zps', '') == '')) {
+						$_GET['filter_zps'] = $swt_data['zps'];
 					}
 				}
 				$zps_act		= CLMSWT::readString ($swt, $offset + 153, 5);
@@ -422,7 +422,7 @@ if ($ausgeloste_runden == 0) {
 					if ($swt_data['sg_zps'] == '') $swt_data['sg_zps'] = $zps_act;
 					else $swt_data['sg_zps'] .= ','.$zps_act;
 					//if (($swt_data['sg_zps'] != '') && (JRequest::getVar ('filter_sg_zps', '', 'default', 'string') == '')) {
-						JRequest::setVar ('filter_sg_zps', $swt_data['sg_zps']);
+						$_GET['filter_sg_zps'] = $swt_data['sg_zps'];
 						//echo "<br>sg_zps: "; var_dump($swt_data['sg_zps']);
 						$this->_spielerliste = array ();
 					//}
@@ -445,7 +445,7 @@ if ($ausgeloste_runden == 0) {
 			$offset += 655;
 			
 		}
-		JRequest::setVar ('spielerid', $spielerid);
+		$_POST['spielerid'] = $spielerid;
 		
 		$swt_data['anz_spieler'] = $anz_spieler;
 		
@@ -460,7 +460,7 @@ if ($ausgeloste_runden == 0) {
 			return $this->_swt_db_data;
 		}
 		
-		$swt_id = JRequest::getVar( 'swt_id', '', 'default', 'int' );
+		$swt_id = clm_core::$load->request_int( 'swt_id', '');
 		$sql = ' SELECT id, sid, teil as anz_mannschaften, stamm as anz_bretter, ersatz as anz_ersatzspieler, durchgang as anz_durchgaenge, runden as anz_runden, params'
 				. ' FROM #__clm_swt_liga'
 				. ' WHERE id = '.$swt_id;

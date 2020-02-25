@@ -1,15 +1,14 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
  */
-
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
 class CLMViewSWTLigaerg extends JViewLegacy {
@@ -32,9 +31,9 @@ class CLMViewSWTLigaerg extends JViewLegacy {
 		// $db_man_nr	=& $state->get( 'db_man_nr' ); fuer update
 
 		// Der nächste Task ist von der aktuellen Runde abhängig
-		$runde				= JRequest::getVar ('runde', 0, 'default', 'int');
-		$dgang				= JRequest::getVar ('dgang', 0, 'default', 'int');
-		$mturnier			= JRequest::getVar ('mturnier', 0, 'default', 'int');
+		$runde				= clm_core::$load->request_int('runde', 0);
+		$dgang				= clm_core::$load->request_int('dgang', 0);
+		$mturnier			= clm_core::$load->request_int('mturnier', 0);
 
 		$anz_mannschaften	= $swt_db_data['anz_mannschaften'];
 		$anz_bretter		= $swt_db_data['anz_bretter'];
@@ -128,11 +127,11 @@ class CLMViewSWTLigaerg extends JViewLegacy {
 		}
 
 		// Daten an Template
-		$this->assignRef ('tables', $tables);
-		$this->assignRef ('hidden', $hidden);
-		$this->assignRef ('swt_data', $swt_data);
-		$this->assignRef ('swt_db_data', $swt_db_data);
-		$this->assignRef ('anz_paarungen', $anz_paarungen);
+		$this->tables = $tables;
+		$this->hidden = $hidden;
+		$this->swt_data = $swt_data;
+		$this->swt_db_data = $swt_db_data;
+		$this->anz_paarungen = $anz_paarungen;
 
 		parent::display ($tpl);
 

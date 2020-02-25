@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,8 +11,8 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-$swt = JRequest::getVar ('swt_file', '', 'default', 'string');
-$sid = JRequest::getVar ('filter_saison', 0, 'default', 'int');
+$swt = clm_core::$load->request_string ('swt_file', '');
+$sid = clm_core::$load->request_int ('filter_saison', 0);
 
 jimport( 'joomla.filesystem.file' );
 $path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . 'swt' . DIRECTORY_SEPARATOR;
@@ -25,7 +25,7 @@ if (empty ($liga_mannschaften) || $modus != 1) { // keine Liga oder nicht vollru
 } */
 $noOrgReference = '0';
 $noBoardResults = '0';
-$liga = JRequest::getVar('liga', 0, 'default', 'int');
+$liga = clm_core::$load->request_int('liga', 0);
 ?>
 
 <script language="javascript" type="text/javascript">

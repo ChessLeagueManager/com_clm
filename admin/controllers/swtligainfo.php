@@ -1,16 +1,14 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -21,22 +19,22 @@ class CLMControllerSWTLigainfo extends JControllerLegacy
 	}
 	
 	function display($cachable = false, $urlparams = array()) {
-		JRequest::setVar('view','swtliga');
+		$_REQUEST['view'] = 'swtliga';
 		parent::display();
 	} 
 	
 	function next() {
 	
+		$app = JFactory::getApplication();
 		$model = $this->getModel('swtligainfo');
 		if ($model->store ()) {
-			JRequest::setVar('view', 'swtligaman');
-			$this->_message = JText::_( 'SWT_STORE_SUCCESS' );
+			$_REQUEST['view'] = 'swtligaman';
 			parent::display ();
 		}
 		else
 		{
-			JRequest::setVar('view', 'swtligainfo');
-			$this->_message = JText::_( 'SWT_STORE_ERROR' );
+			$_REQUEST['view'] = 'swtligainfo';
+			$app->enqueueMessage( JText::_('SWT_STORE_SUCCESS') );
 			parent::display ();
 		}
 	

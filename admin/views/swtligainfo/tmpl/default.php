@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,15 +9,14 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
-$swt = JRequest::getVar('swt', '', 'default', 'string');
-$update = JRequest::getVar('update', 0, 'default', 'int');
-$mturnier = JRequest::getVar('mturnier', 0, 'default', 'int');
-$noOrgReference = JRequest::getVar('noOrgReference', '0', 'default', 'string');
-$noBoardResults = JRequest::getVar('noBoardResults', '0', 'default', 'string');
-$lid = JRequest::getVar('liga', 0, 'default', 'int');
+$swt = clm_core::$load->request_string('swt', '');
+$update = clm_core::$load->request_int('update', 0);
+$mturnier = clm_core::$load->request_int('mturnier', 0);
+$noOrgReference = clm_core::$load->request_string('noOrgReference', '0');
+$noBoardResults = clm_core::$load->request_string('noBoardResults', '0');
+$lid = clm_core::$load->request_int('liga', 0);
 $ordering = $this->default['ordering'];
 ?>
 
