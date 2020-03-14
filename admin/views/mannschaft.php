@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -237,6 +237,7 @@ public static function mannschaft( &$row,$lists, $option )
 
 		 Joomla.submitbutton = function (pressbutton) { 		
 			var form = document.adminForm;
+			var noOrgReference=<?php echo $lists['noOrgReference']; ?>;
 			if (pressbutton == 'cancel') {
 				submitform( pressbutton );
 				return;
@@ -252,7 +253,7 @@ public static function mannschaft( &$row,$lists, $option )
 				alert( "<?php echo JText::_( 'MANNSCHAFT_SAISON_AUSWAEHLEN', true ); ?>" );
 			} else if ( getSelectedValue('adminForm','liga') == 0 ) {
 				alert( "<?php echo JText::_( 'MANNSCHAFT_LIGA_AUSWAEHLEN', true ); ?>" );
-			} else if ( getSelectedValue('adminForm','zps') == 0 ) {
+			} else if ( getSelectedValue('adminForm','zps') == 0 && noOrgReference == 0 ) {
 				alert( "<?php echo JText::_( 'MANNSCHAFT_VEREIN_AUSWAEHLEN', true ); ?>" );
 			} else {
 				submitform( pressbutton );

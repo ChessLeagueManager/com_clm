@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -298,6 +298,9 @@ function edit()
 	else $lists['pgntype']= 0;
 	if (isset($lid_params['anz_sgp'])) $lists['anz_sgp'] = $lid_params['anz_sgp'];   //anz_sg Parameterübernahme
 	else $lists['anz_sgp']= 1;
+	if (isset($lid_params['noOrgReference'])) $lists['noOrgReference'] = $lid_params['noOrgReference'];   //noOrgReference Parameterübernahme
+	else $lists['noOrgReference']= 0;
+//echo "<br><br>2lid_params:"; var_dump($lid_params); //die();
 	// Spielgemeinschaft
 	$sg_string = $row->sg_zps;
 	$row->sg_zps = array();
@@ -336,7 +339,7 @@ function save()
 	$row->sg_zps = implode(',',$sg_array);
 	// pre-save checks
 
-	if (!$row->check() || empty($row->zps)) {
+	if (!$row->check()) {
 		JError::raiseError(500, "Die Eingaben sind unvollständig." );
 	switch ($task)
 	{
