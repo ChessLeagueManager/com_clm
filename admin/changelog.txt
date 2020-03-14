@@ -17,6 +17,7 @@ $ -> Language fix or change
 # M-Turniere: Berliner Wertung bei Wertung ändern
 # SWM-Import: mehrere nationale Ratingermittlungen
 ^ SWT-Import: bei KO-Turnier alle Teilnehmer aktiv
++ SWT-Import: Übernahme DWZ/Elo bei Ligen/Mannschaftsturnieren
 
 - - - - - 3.8.1 - [06-02-2020] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: zentrale Routinen, Saison, Termine, Benutzer, Datenbank

@@ -1,6 +1,6 @@
 --
 -- @ Chess League Manager (CLM) Component 
--- @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+-- @Copyright (C) 2008-2020 CLM Team.  All rights reserved
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 -- @link http://www.chessleaguemanager.de
 --
@@ -653,9 +653,13 @@ CREATE TABLE IF NOT EXISTS `#__clm_swt_meldeliste_spieler` (
   `man_id` mediumint(5) unsigned NOT NULL DEFAULT '0',
   `snr` mediumint(5) unsigned DEFAULT NULL,
   `mgl_nr` mediumint(5) unsigned NOT NULL DEFAULT '0',
+  `PKZ` varchar(9) DEFAULT NULL,
   `zps` varchar(5) NOT NULL DEFAULT '0',
   `status` mediumint(5) NOT NULL DEFAULT '0',
   `ordering` int(11) NOT NULL DEFAULT '0',
+  `start_dwz` smallint(4) unsigned DEFAULT NULL,
+  `start_I0` smallint(4) unsigned DEFAULT NULL,
+  `FIDEelo` smallint(4) unsigned DEFAULT NULL,
   `DWZ` smallint(4) unsigned NOT NULL DEFAULT '0',
   `I0` smallint(4) unsigned NOT NULL DEFAULT '0',
   `Punkte` decimal(4,1) unsigned NOT NULL DEFAULT '0.0',

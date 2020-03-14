@@ -209,8 +209,8 @@ class CLMModelSWTLigaman extends JModelLegacy {
 		}
 		
 //		echo "swt_anz_spieler: " . $swt_data['anz_spieler']; //DBG
-		$newPlayerFields = 'sid, ZPS, Mgl_Nr, Spielername';
-		$fields = 'spielerid, sid, swt_id, man_id, snr, mgl_nr, zps';
+		$newPlayerFields = 'sid, ZPS, Mgl_Nr, Spielername, DWZ, FIDE_Elo';
+		$fields = 'spielerid, sid, swt_id, man_id, snr, mgl_nr, zps, start_dwz, FIDEelo';
 		$values = '';
 		$newPlayerValues = '';
 		
@@ -239,6 +239,15 @@ class CLMModelSWTLigaman extends JModelLegacy {
 			$spielerid	= clm_core::$load->request_string('spielerid_' . $i);
 			$name	= clm_core::$load->request_string('name_' . $i);
 
+			if ($spielerid > 0) {
+				$elo = $swt_data['spieler_'.$i]['elo']; 
+				if ($elo < '1') $elo = '0'; //die();
+				$dwz = $swt_data['spieler_'.$i]['dwz']; 
+				if ($dwz < '1') $dwz = '0'; //die();
+			} else {
+				$elo = '0';
+				$dwz = '0';
+			}
 			if ($noOrgReference == 1) $dwzid = -1;			
 			if (empty ($spielerid)) { // neuer Spieler, der nicht in der SWT-Datei aufgeführt ist
 //				echo "groesste_id: $groesste_id"; //DBG
@@ -247,7 +256,7 @@ class CLMModelSWTLigaman extends JModelLegacy {
 			}
 			
 			if ($dwzid > 0 && $this->findMglNr ($dwzid) > 0) {
-				$values .= "( " . $spielerid . ", " . $sid . ", " . $swt_id . ", " . $man_id . ", " . $i . ", " . $this->findMglNr ($dwzid) . ", '". $this->findZPS ($dwzid) ."' ), ";
+				$values .= "( " . $spielerid . ", " . $sid . ", " . $swt_id . ", " . $man_id . ", " . $i . ", " . $this->findMglNr ($dwzid) . ", '". $this->findZPS ($dwzid) ."', ".$dwz.", ".$elo." ), ";
 			} else if ($dwzid == -1) {
 
 				if($MglNr<10) {
@@ -259,9 +268,9 @@ class CLMModelSWTLigaman extends JModelLegacy {
 				}
 				$MglNr++;
 
-				$newPlayerValues .= "( " . $sid . ", '-1', '".$MglNrString."', '".clm_core::$db->escape($name)."' ), ";
+				$newPlayerValues .= "( " . $sid . ", '-1', '".$MglNrString."', '".clm_core::$db->escape($name)."', ".$dwz.", ".$elo." ), ";
 
-				$values .= "( " . $spielerid . ", " . $sid . ", " . $swt_id . ", " . $man_id . ", " . $i . ", '".$MglNrString."', '-1' ), ";
+				$values .= "( " . $spielerid . ", " . $sid . ", " . $swt_id . ", " . $man_id . ", " . $i . ", '".$MglNrString."', '-1', ".$dwz.", ".$elo." ), ";
 			}
 		}
 		$values = substr ($values, 0, -2); // letztes ", " streichen
@@ -431,6 +440,8 @@ if ($ausgeloste_runden == 0) {
 				$i	= CLMSWT::readInt ($swt, $offset + 203);
 				
 				$swt_data['spieler_'.$i]['name']	= CLMSWT::readString ($swt, $offset, 32);
+				$swt_data['spieler_'.$i]['elo']		= CLMSWT::readString ($swt, $offset + 70, 4);
+				$swt_data['spieler_'.$i]['dwz']		= CLMSWT::readString ($swt, $offset + 75, 4);
 				$swt_data['spieler_'.$i]['zps']		= CLMSWT::readString ($swt, $offset + 153, 5);
 				$swt_data['spieler_'.$i]['mgl_nr']	= CLMSWT::readString ($swt, $offset + 159, 4);
 				$dwzid					= $this->findPlayerID ($swt_data['spieler_'.$i]);
