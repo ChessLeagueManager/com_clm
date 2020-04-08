@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -21,21 +21,19 @@ class CLMControllerSonderranglistenMain extends JControllerLegacy {
 	}
 	
 	function display($cachable = false, $urlparams = array()) { 
-		JRequest::setVar('view','sonderranglistenmain');
+		$_REQUEST['view'] = 'sonderranglistenmain';
 		parent::display(); 
 	} 
 	
 	function add() { 
-		JRequest::setVar( 'view', 'sonderranglistenform' ); 
-		//JRequest::setVar( 'layout', 'form'  ); 
-		JRequest::setVar( 'hidemainmenu', 1 ); 
+		$_REQUEST['view'] = 'sonderranglistenform' ; 
+		$_REQUEST['hidemainmenu'] = 1;
 		parent::display(); 
 	}
 	
 	function edit() { 
-		JRequest::setVar( 'view', 'sonderranglistenform' ); 
-		//JRequest::setVar( 'layout', 'form'  ); 
-		JRequest::setVar( 'hidemainmenu', 1 ); 
+		$_REQUEST['view'] = 'sonderranglistenform' ; 
+		$_REQUEST['hidemainmenu'] = 1;
 		parent::display(); 
 	}
 	
@@ -117,8 +115,8 @@ class CLMControllerSonderranglistenMain extends JControllerLegacy {
 	} 
 	
 	function copy_set() { 
-		JRequest::setVar( 'view', 'sonderranglistencopy' ); 
-		JRequest::setVar( 'hidemainmenu', 1 ); 
+		$_REQUEST['view'] = 'sonderranglistencopy' ; 
+		$_REQUEST['hidemainmenu'] = 1; 
 		parent::display(); 
 	}
 

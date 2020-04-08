@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -26,29 +26,29 @@ class CLMModelSonderranglistenMain extends JModelLegacy {
 		parent::__construct();
 		
 		$mainframe 	= JFactory::getApplication();
-		$option 	= JRequest::getVar( 'option' );
+		$option 	= clm_core::$load->request_string('option');
 
 		//Pagination Variabeln
-		$limit 		= JRequest::getVar( 'limit' , $mainframe->getCfg('list_limit') , 'default' , 'int' );
-		$limitstart	= JRequest::getVar( 'limitstart' , 0 , 'default' , 'int' );
+		$limit 		= clm_core::$load->request_int('limit' , $mainframe->getCfg('list_limit'));
+		$limitstart	= clm_core::$load->request_int('limitstart' , 0);
 
 		$this->setState( 'limit' , $limit ); 
 		$this->setState( 'limitstart' , $limitstart );
 		
 		//Suche und Filter
-		$filter_saison	= JRequest::getVar( 'filter_saison' , $this->_getAktuelleSaison() , 'default' , 'int' );
-		//$filter_turnier	= JRequest::getVar( 'filter_turnier' , '' , 'default' , 'int' );
+		//$filter_saison	= clm_core::$load->request_int('filter_saison' , $this->_getAktuelleSaison());
+		$filter_saison	= $mainframe->getUserStateFromRequest( "$option.filter_saison",'filter_saison','','int' );
 		$filter_turnier	= $mainframe->getUserStateFromRequest( "$option.filter_turnier",'filter_turnier','','int' );
-		$search 		= JRequest::getVar( 'search' , '' , 'default' , 'string' );
-		$search 		= JString::strtolower( $search );
+		$search 		= clm_core::$load->request_string('search', '');
+		$search 		= strtolower( $search );
 		
 		$this->setState( 'filter_saison' , $filter_saison ); 
 		$this->setState( 'filter_turnier' , $filter_turnier ); 
 		$this->setState( 'search' , $search );
 		
 		//Sortierung Variabeln
-		$filter_order     = JRequest::getVar( 'filter_order' , 'turnier' , 'default' , 'cmd' );
-		$filter_order_Dir = JRequest::getVar( 'filter_order_Dir' , 'ASC' , 'default' , 'word' );
+		$filter_order     = clm_core::$load->request_string('filter_order' , 'turnier');
+		$filter_order_Dir = clm_core::$load->request_string('filter_order_Dir' , 'ASC');
 		
 		$this->setState( 'filter_order' , $filter_order );
 		$this->setState( 'filter_order_Dir' , $filter_order_Dir );
@@ -61,7 +61,7 @@ class CLMModelSonderranglistenMain extends JModelLegacy {
 		if (empty( $this->_sonderranglisten )) { 
 			$query = $this->_buildQuery();
 			$this->_sonderranglisten = $this->_getList( $query , $this->getState('limitstart') , $this->getState('limit') ); 
-		} 
+		}
 		return $this->_sonderranglisten; 
 	} 
 	
@@ -115,7 +115,7 @@ class CLMModelSonderranglistenMain extends JModelLegacy {
 					LEFT JOIN
 						#__clm_turniere AS b
 					ON
-						a.turnier = b.id	
+						a.turnier = b.id
 					'.$where.' 
 					'.$order; 
 		return $query;
@@ -123,18 +123,21 @@ class CLMModelSonderranglistenMain extends JModelLegacy {
 	
 	function _buildContentWhere() {
 		$mainframe	= JFactory::getApplication();
-		$option 	= JRequest::getCmd( 'option' );
-
-		//$filter_turnier	= JRequest::getVar( 'filter_turnier' , '' , 'default' , 'int' );
+		$option 	= clm_core::$load->request_string('option');
+																					
+		$filter_saison	= $mainframe->getUserStateFromRequest( "$option.filter_saison",'filter_saison','','int' );
 		$filter_turnier	= $mainframe->getUserStateFromRequest( "$option.filter_turnier",'filter_turnier','','int' );
-		$search 		= JRequest::getVar( 'search' , '' , 'default' , 'string' );
-		$search 		= JString::strtolower( $search );
+		$search 		= clm_core::$load->request_string('search');
+		$search 		= strtolower( $search );
 
 		$where = array();
 		if ($search) {
 			$where[] = " LOWER(a.name) LIKE ".$this->_db->Quote('%'.$search.'%');
 		}
 		
+		if ($filter_saison) {
+			$where[] = " b.sid = ".$filter_saison;
+		}
 		if ($filter_turnier) {
 			$where[] = " a.turnier = ".$filter_turnier;
 		}
@@ -146,7 +149,7 @@ class CLMModelSonderranglistenMain extends JModelLegacy {
 	
 	function _buildContentOrderBy()	{
 		$mainframe	= JFactory::getApplication();
-		$option 	= JRequest::getCmd( 'option' );
+		$option 	= clm_core::$load->request_string('option');
  
 		$orderby = '';
 		$filter_order     = $this->getState('filter_order');
@@ -184,8 +187,7 @@ class CLMModelSonderranglistenMain extends JModelLegacy {
 		if (empty( $this->_filterTurniere )) { 
 		
 			$aktSaison = $this->_getAktuelleSaison();
-			//$filter_saison	= JRequest::getVar( 'filter_saison' , $aktSaison , 'default' , 'int' );
-			$filter_saison	= JRequest::getVar( 'filter_saison' , clm_core::$access->getSeason() , 'default' , 'int' );
+			$filter_saison	= clm_core::$load->request_int('filter_saison' , clm_core::$access->getSeason());
 			
 			$query =  ' SELECT 
 							id,

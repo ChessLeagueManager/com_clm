@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -15,8 +15,8 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 class CLMViewSonderranglistenForm extends JViewLegacy {
 
 	function display($tpl = null) { 
-		$task = JRequest::getVar( 'task');
-		$id = JRequest::getVar( 'id');
+		$task = clm_core::$load->request_string('task');
+		$id = clm_core::$load->request_int('id');
 	
 		//Daten vom Model
 		$sonderrangliste	= $this->get('Sonderrangliste');
@@ -24,7 +24,7 @@ class CLMViewSonderranglistenForm extends JViewLegacy {
 		$turniere			= $this->get('Turniere');
 		$saisons			= $this->get('Saisons');
 		
-		if (JRequest::getVar( 'task') == 'add') {
+		if (clm_core::$load->request_string('task') == 'add') {
 			$isNew = true;
 		} else { 
 			$isNew = false;
@@ -53,7 +53,7 @@ class CLMViewSonderranglistenForm extends JViewLegacy {
 		JToolBarHelper::cancel();
 		
 		// das MainMenu abschalten
-		JRequest::setVar( 'hidemainmenu', 1 );
+		$_REQUEST['hidemainmenu'] = 1; 
 
 		$config = clm_core::$db->config();
 		
@@ -147,10 +147,9 @@ class CLMViewSonderranglistenForm extends JViewLegacy {
 		$document->addScriptDeclaration("jserror['check_year_cfo'] = '".JText::_('PLEASE_CHECK_YEAR').":  ".JText::_( 'SPECIALRANKING_SEX_YEAR_FILTER_OPTIONS' )." - ".JText::_( 'SPECIALRANKING_OPTION_FEMALEYEAR_OLDER_THAN' )."';");
 
 		// Daten an Template übergeben
-		$this->assignRef('params', $params);
-		$this->assignRef('sonderrangliste', $sonderrangliste);
-		$this->assignRef('isNew', $isNew );
-		$this->assignRef('lists' , $lists);
+		$this->sonderrangliste = $sonderrangliste;
+		$this->isNew = $isNew;
+		$this->lists = $lists;
 
 		
 		parent::display($tpl); 

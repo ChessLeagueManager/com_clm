@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -66,15 +66,15 @@ class CLMControllerSonderranglistenCopy extends JControllerLegacy {
 	function _saveDo() {
 	
 		// Check for request forgeries
-		JRequest::checkToken() or die( 'Invalid Token' );
+		defined('_JEXEC') or die('Restricted access');
 	
 		$clmAccess = clm_core::$access;      
 		if ($clmAccess->access('BE_tournament_edit_detail') === false) {
 			JError::raiseWarning( 500, JText::_( 'TOURNAMENT_NO_ACCESS' ) );
 			return false;
 		}
-		$turnier_source = JRequest::getVar('turnier_source');
-		$turnier_target = JRequest::getVar('turnier_target');
+		$turnier_source = clm_core::$load->request_string('turnier_source');
+		$turnier_target = clm_core::$load->request_string('turnier_target');
 		$sql = ' SELECT * FROM #__clm_turniere_sonderranglisten '
 				.' WHERE turnier = '.$turnier_source; 
 		$source = clm_core::$db->loadObjectList($sql); 

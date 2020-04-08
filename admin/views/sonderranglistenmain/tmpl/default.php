@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -76,7 +76,7 @@ defined('_JEXEC') or die('Restricted access');
 						$adminLink = new AdminLink();
 						$adminLink->view = "sonderranglistenform";
 						//$adminLink->more = array('task' => 'edit', 'layout' => 'form', 'hidemainmenu' => 1, 'cid' => $row->id);
-						$adminLink->more = array('task' => 'edit', 'hidemainmenu' => 1, 'cid' => $row->id);
+						$adminLink->more = array('task' => 'edit', 'hidemainmenu' => 1, 'id' => $row->id);
 
 						$adminLink->makeURL();
 					

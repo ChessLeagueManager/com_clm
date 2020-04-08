@@ -20,6 +20,7 @@ $ -> Language fix or change
 + SWT-Import: Übernahme DWZ/Elo bei Ligen/Mannschaftsturnieren
 # Mannschaft: kein Vereinszwang bei Liga ohne DSB-Bezug (Schulschach)
 ^ Code-Anpassung Joomla 4: Saison (Nachbesserung)
+^ Code-Anpassung Joomla 4: Sonderranglisten
 
 - - - - - 3.8.1 - [06-02-2020] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: zentrale Routinen, Saison, Termine, Benutzer, Datenbank

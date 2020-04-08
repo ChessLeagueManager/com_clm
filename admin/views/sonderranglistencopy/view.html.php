@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -15,8 +15,8 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 class CLMViewSonderranglistenCopy extends JViewLegacy {
 
 	function display($tpl = null) { 
-		$task = JRequest::getVar( 'task');
-		$id = JRequest::getVar( 'id');
+		$task = clm_core::$load->request_string('task');
+		$id = clm_core::$load->request_int('id');
 	
 		//Daten vom Model
 		$turniere			= $this->get('Turniere');
@@ -36,7 +36,7 @@ class CLMViewSonderranglistenCopy extends JViewLegacy {
 		JToolBarHelper::cancel();
 		
 		// das MainMenu abschalten
-		JRequest::setVar( 'hidemainmenu', 1 );
+		$_GET['hidemainmenu'] = 1;
 
 		$config = clm_core::$db->config();
 		
@@ -75,7 +75,7 @@ class CLMViewSonderranglistenCopy extends JViewLegacy {
 		$document->addScriptDeclaration("jserror['enter_name'] = '".JText::_('PLEASE_ENTER')." ".JText::_('TOURNAMENT_NAME')."';");
 
 		// Daten an Template übergeben
-		$this->assignRef('lists' , $lists);
+		$this->lists = $lists;
 
 		
 		parent::display($tpl); 
