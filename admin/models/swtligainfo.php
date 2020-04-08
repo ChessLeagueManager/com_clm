@@ -57,7 +57,7 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		$default['params']					= '';
 		//Mit Daten aus Datenbank überschreiben, falls ein Liga geupdated wird
 		if(clm_core::$load->request_int('update') == 1) {
-			if ($id = JRequest::getInt('liga')) {
+			if ($id = clm_core::$load->request_int('liga')) {
 				$db		=JFactory::getDBO ();
 				$select_query = '  SELECT * FROM #__clm_liga '
 								.' WHERE id = '.$id.'; ';

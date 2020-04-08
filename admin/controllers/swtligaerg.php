@@ -19,7 +19,7 @@ class CLMControllerSWTLigaerg extends JControllerLegacy
 	}
 	
 	function display($cachable = false, $urlparams = array()) {
-		JRequest::setVar('view','swtligaerg');
+		$_REQUEST['view'] = 'swtligaerg';
 		parent::display();
 	} 
 	

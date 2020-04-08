@@ -49,9 +49,9 @@ class CLMControllerSWMTurnier extends JControllerLegacy
 		$language->load('com_clm');
 		$language->load('com_clm.swtimport');	
 
-		JRequest::setVar('view', 'swt');
+		$_REQUEST['view'] = 'swt';
 		JFactory::getApplication()->enqueueMessage( JText::_( 'SWT_STORE_SUCCESS' ),'message' );
-		JRequest::setVar('swm' , $swm);
+		$_REQUEST['swm'] = $swm;
 		
 		parent::display(); 		
 	
@@ -91,7 +91,7 @@ class CLMControllerSWMTurnier extends JControllerLegacy
 	function test() {		
 		$swm = clm_core::$load->request_string('swm', '');
 		$sid = clm_core::$load->request_int('filter_saison', 0);
-		$uturnier = JRequest::getVar('turnier', '');
+		$uturnier = clm_core::$load->request_string('turnier', '');
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		$result = clm_core::$api->db_swm_import($path.$swm,$sid,0,false,false,true);
 		

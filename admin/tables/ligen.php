@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -16,9 +16,9 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 
 class TableCLMLigen extends JTable
 {
-	var $id			= null;
+	var $id			= 0;
 	var $name		= '';
-	var $sid		= '';
+	var $sid		= 0;
 	var $teil		= '';
 	var $stamm		= '';
 	var $ersatz		= '';
@@ -41,10 +41,10 @@ class TableCLMLigen extends JTable
 	var $sl_mail		= '';
 	var $order		= '';
 	var $rnd		= '';
-	var $ab			= '';
-	var $ab_evtl		= '';
-	var $auf		= '';
-	var $auf_evtl		= '';
+	var $ab			= 0;
+	var $ab_evtl	= 0;
+	var $auf		= 0;
+	var $auf_evtl	= 0;
 	var $published		= '';
 	var $bemerkungen	= '';
 	var $bem_int		= '';

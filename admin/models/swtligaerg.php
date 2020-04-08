@@ -1235,7 +1235,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 		}
 		if ($this->debug_ausgaben > -1 && $during_store == 0) {
 		
-			$swt_id = JRequest::getVar ('swt_id', 0, 'default', 'int');
+			$swt_id = clm_core::$load->request_int('swt_id', 0);
 			$sql = ' SELECT name FROM #__clm_swt_mannschaften'
 					. ' WHERE swt_id = "'.$swt_id.'"'
 					. ' ORDER BY tln_nr ASC';

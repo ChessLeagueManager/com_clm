@@ -140,11 +140,6 @@ class CLMModelSWTLigaman extends JModelLegacy {
 		$swt_data		= $this->getDataSWT ();
 		$swt_db_data	= $this->getDataSWTdb ();
 		$sg_zps			= $swt_data['sg_zps'];
-/*		$sg_zps = JRequest::getVar( 'sg_zps0', '0', 'default', 'string' );  //!
-		for ($i = 1; $i < $swt_db_data['anz_sgp']; $i++) { 
-			$sg_zpsn = JRequest::getVar( 'sg_zps'.$i, '0', 'default', 'string' );  
-			$sg_zps  .= ','.$sg_zpsn;
-		}	*/
 		
 		// Spieler
 		$anz_bretter = $swt_db_data['anz_bretter'];
@@ -430,7 +425,6 @@ if ($ausgeloste_runden == 0) {
 					($swt_data['zps'] != $zps_act) AND (strpos($swt_data['sg_zps'],$zps_act) === false)) {
 					if ($swt_data['sg_zps'] == '') $swt_data['sg_zps'] = $zps_act;
 					else $swt_data['sg_zps'] .= ','.$zps_act;
-					//if (($swt_data['sg_zps'] != '') && (JRequest::getVar ('filter_sg_zps', '', 'default', 'string') == '')) {
 						$_GET['filter_sg_zps'] = $swt_data['sg_zps'];
 						//echo "<br>sg_zps: "; var_dump($swt_data['sg_zps']);
 						$this->_spielerliste = array ();
