@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -123,7 +123,7 @@ class CLMControllerSaisons extends JControllerLegacy {
 			$emassage = $row->getError();
 			$etype = 'error';
 		}
-		if ($emassage == '') {
+		if ($emessage == '') {
 			// pre-save checks
 			if (!$row->check()) {
 				$emessage = $row->getError();
@@ -148,7 +148,7 @@ class CLMControllerSaisons extends JControllerLegacy {
 				}
 			}
 		}
-		if ($emassage != '') {
+		if ($emessage != '') {
 			$mainframe->enqueueMessage( $emessage,$etype );
 			$lists['archiv'] = JHtml::_('select.booleanlist', 'archiv', 'class="inputbox"', $row->archiv);
 			$lists['published'] = JHtml::_('select.booleanlist', 'published', 'class="inputbox"', $row->published);
@@ -185,7 +185,7 @@ class CLMControllerSaisons extends JControllerLegacy {
 		$db = JFactory::getDBO();
 		$cids = clm_core::$load->request_array_int('cid');
 		$option = clm_core::$load->request_string('option', '');
-		$section = clm_core::$load->request_string('option', '');
+		$section = clm_core::$load->request_string('section', '');
 		foreach ($cids as $cid) {
 			$out = clm_core::$api->db_season_delete($cid);
 			$message = clm_core::$load->load_view("notification", array($out[1], false));

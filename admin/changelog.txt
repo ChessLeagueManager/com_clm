@@ -13,12 +13,13 @@ $ -> Language fix or change
 ! -> Note
 
 - - - - - 3.8.2 - [xx-xx-2020] - - - - - - - - - - - - - - - - - - - -
-^ Code-Anpassung Joomla 4: Importe ( SWT und SWM )
+^ Code-Anpassung Joomla 4: Importe ( SWT, SWM )
 # M-Turniere: Berliner Wertung bei Wertung ändern
 # SWM-Import: mehrere nationale Ratingermittlungen
 ^ SWT-Import: bei KO-Turnier alle Teilnehmer aktiv
 + SWT-Import: Übernahme DWZ/Elo bei Ligen/Mannschaftsturnieren
 # Mannschaft: kein Vereinszwang bei Liga ohne DSB-Bezug (Schulschach)
+^ Code-Anpassung Joomla 4: Saison (Nachbesserung)
 
 - - - - - 3.8.1 - [06-02-2020] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: zentrale Routinen, Saison, Termine, Benutzer, Datenbank
