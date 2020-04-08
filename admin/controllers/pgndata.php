@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -21,7 +21,7 @@ class CLMControllerPGNdata extends JControllerLegacy
 	}
 	
 	function display($cachable = false, $urlparams = array()) {
-		JRequest::setVar('view','pgndata');
+		$_REQUEST['view'] = 'pgndata';
 		parent::display();
 	} 
 	
@@ -29,13 +29,13 @@ class CLMControllerPGNdata extends JControllerLegacy
 	
 		$model = $this->getModel('pgndata');
 		if ($model->store ()) {
-			JRequest::setVar('view', 'swt');
+			$_REQUEST['view'] = 'swt';
 			JFactory::getApplication()->enqueueMessage( JText::_( 'PGN_STORE_SUCCESS' ),'message' );
 			parent::display ();
 		}
 		else
 		{
-			JRequest::setVar('view', 'swt');
+			$_REQUEST['view'] = 'swt';
 			JFactory::getApplication()->enqueueMessage( JText::_( 'PGN_STORE_ERROR' ),'message' );
 			parent::display ();
 		}

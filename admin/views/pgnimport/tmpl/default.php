@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,10 +11,9 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-$pgn = JRequest::getVar ('pgn_file', '', 'default', 'string');
-$pgn_file = JRequest::getVar ('pgn_file', '', 'default', 'string');
-//$swt_file = JRequest::getVar ('swt_file', '', 'default', 'string');
-$task = JRequest::getVar ('task', '', 'default', 'string');
+$pgn = clm_core::$load->request_string('pgn_file', '');
+$pgn_file = clm_core::$load->request_string ('pgn_file', '');
+$task = clm_core::$load->request_string('task', '');
 
 $stask = 0;
 
@@ -24,7 +23,7 @@ $path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . 'swt' . DIRECTORY_SEPARATOR;
 //echo "<br>vi-pgn_file:"; var_dump($pgn_file); //die();		
 //echo "<br>vi-swt_file:"; var_dump($swt_file); die();		
 
-$liga = JRequest::getVar('liga', '', 'default', 'string');
+$liga = clm_core::$load->request_string('liga', '');
 //echo "<br>ca-html-pgnimport: liga $liga "; var_dump($liga); //die();
 ?>
 

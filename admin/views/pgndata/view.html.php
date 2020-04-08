@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -16,8 +16,8 @@ class CLMViewPGNdata extends JViewLegacy {
 
 	function display ($tpl = null) {
 
-		$task = JRequest::getVar ('task', '', 'default', 'string');
-		$stask = JRequest::getVar ('stask', '', 'default', 'string');
+		$task = clm_core::$load->request_string('task', '');
+		$stask = clm_core::$load->request_string('stask', '');
 //echo "<br>html-pgndata: task $task  stask $stask "; //die();
 
 		// Turnierdaten
@@ -46,9 +46,9 @@ class CLMViewPGNdata extends JViewLegacy {
 		
 	
 		// PGN-Daten an Template
-		$this->assignRef( 'pgn_del', $pgn_del );
-		$this->assignRef( 'pgn_arr', $pgn_arr );
-		$this->assignRef( 'turnier', $turnier );
+		$this->pgn_del = $pgn_del;
+		$this->pgn_arr = $pgn_arr;
+		$this->turnier = $turnier;
 
 		parent::display($tpl);
 		

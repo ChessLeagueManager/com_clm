@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -22,20 +22,9 @@ class CLMViewPGNImport extends JViewLegacy {
 		$ligen		= $this->get( 'ligen' );
 		$turniere	= $this->get( 'turniere' );
 		
-/*		$task = JRequest::getVar ('task', '', 'default', 'string');
-		$stask = JRequest::getVar ('stask', '', 'default', 'string');
-echo "<br>html-pgnimport: task $task  stask $stask "; //die();
-*/					
 		//Toolbar
 		clm_core::$load->load_css("icons_images");
-/*		if ($task == 'import') {
-			JToolBarHelper::title( JText::_('TITLE_PGN_IMPORT') ,'clm_headmenu_manager.png' );
-			JToolBarHelper::custom('import','new.png','new_f2.png', JText::_('PGN_IMPORT_NEW'), false);
-		} else {
-			JToolBarHelper::title( JText::_('TITLE_PGN_SERVICE') ,'clm_headmenu_manager.png' );
-			JToolBarHelper::custom('service','new.png','new_f2.png', JText::_('PGN_SERVICE'), false);
-		}
-*/
+
 		JToolBarHelper::title( JText::_('TITLE_PGN_SERVICE') ,'clm_headmenu_manager.png' );
 		JToolBarHelper::custom('import','new.png','new_f2.png', JText::_('PGN_IMPORT_NEW'), false);
 		JToolBarHelper::custom('maintain','edit.png','edit_f2.png', JText::_('PGN_MAINTAIN'), false);
@@ -63,7 +52,7 @@ echo "<br>html-pgnimport: task $task  stask $stask "; //die();
 		$lists['ligen']	= JHtml::_('select.genericlist', $options_ligen, 'liga', 'class="inputbox"', 'value', 'text', 0 );
 		
 		//Daten an Template
-		$this->assignRef( 'lists', $lists );
+		$this->lists = $lists;
 		
 		parent::display($tpl);
 		

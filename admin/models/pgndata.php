@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -24,15 +24,15 @@ class CLMModelPGNdata extends JModelLegacy {
 	
 	// Turnierdaten
 	function getTurnier () {
-		$liga = JRequest::getVar('liga', '', 'default', 'string');
+		$liga = clm_core::$load->request_string('liga', '');
 		$liga_arr = explode('.', $liga, 2);
 		$tkz = $liga_arr[0];
 		$tid = $liga_arr[1];
 //echo "<br>1liga: $liga  tid: $tid  tkz: $tkz"; //die();
-		JRequest::setVar('tkz', $tkz);
-		JRequest::setVar('tid', $tid);
-		$tkz = JRequest::getVar('tkz', '0', 'default', 'string');
-		$tid = JRequest::getVar('tid', '0', 'default', 'string');
+		$_POST['tkz'] = $tkz;
+		$_POST['tid'] = $tid;
+		$tkz = clm_core::$load->request_string('tkz', '0');
+		$tid = clm_core::$load->request_string('tid', '0');
 //echo "<br>2liga: $liga  tid: $tid  tkz: $tkz"; //die();
 //echo "<br>ttid: $tid  tkz: $tkz"; //die();
 		if ($tkz == 't') { 		// Teamwettbewerb
@@ -51,11 +51,11 @@ class CLMModelPGNdata extends JModelLegacy {
 	
 	function getMainPGN () {
 		
-		$task = JRequest::getVar ('task', '', 'default', 'string');
-		$stask = JRequest::getVar ('stask', '', 'default', 'string');
+		$task = clm_core::$load->request_string('task', '');
+		$stask = clm_core::$load->request_string('stask', '');
 //echo "<br>md-main-pgndata: task $task  stask $stask "; //die();
 		
-		$liga = JRequest::getVar('liga', '', 'default', 'string');
+		$liga = clm_core::$load->request_string('liga', '');
 		$liga_arr = explode('.', $liga, 2);
 		$tkz = $liga_arr[0];
 		$tid = $liga_arr[1];
@@ -94,56 +94,56 @@ class CLMModelPGNdata extends JModelLegacy {
 	
 	function store () {
 	
-		$tid 	= JRequest::getVar ('tid', '0', 'default', 'string');
-		$tkz 	= JRequest::getVar ('tkz', '0', 'default', 'string');
-		$pgn_count 	= JRequest::getVar ('pgn_count', '-1', 'default', 'int');
+		$tid 	= clm_core::$load->request_string('tid', '0');
+		$tkz 	= clm_core::$load->request_string('tkz', '0');
+		$pgn_count 	= clm_core::$load->request_int('pgn_count', -1 );
 //echo "<br>store  tid $tid  tkz $tkz  pgn_count $pgn_count";
 		// DB-Zugriff
 		for ($p = 0; $p < $pgn_count ; $p++) {    			
 			
-			if (JRequest::getVar ('runde'.$p, '-1', 'default', 'int') == (-1)) continue;
-			if (JRequest::getVar ('dg'.$p, '0', 'default', 'int') == 0) continue;
-			if (JRequest::getVar ('runde'.$p, '0', 'default', 'int') == 0) continue;
+			if (clm_core::$load->request_int('runde'.$p, -1 ) == (-1)) continue;
+			if (clm_core::$load->request_int('dg'.$p, 0 ) == 0) continue;
+			if (clm_core::$load->request_int('runde'.$p, 0 ) == 0) continue;
 			if ($tkz == 't') 
-				if (JRequest::getVar ('paar'.$p, '0', 'default', 'int') == 0) continue;
-			if (JRequest::getVar ('brett'.$p, '0', 'default', 'int') == 0) continue;
+				if (clm_core::$load->request_int('paar'.$p, 0) == 0) continue;
+			if (clm_core::$load->request_int('brett'.$p, 0) == 0) continue;
 			$query = "DELETE FROM #__clm_pgn "
 				.' WHERE tkz = "'.$tkz.'"'
 				.' AND tid = '.$tid
-				.' AND dg = '.clm_escape(JRequest::getVar ('dg'.$p))
-				.' AND runde = '.clm_escape(JRequest::getVar ('runde'.$p));
+				.' AND dg = '.clm_escape(clm_core::$load->request_int('dg'.$p))
+				.' AND runde = '.clm_escape(clm_core::$load->request_int('runde'.$p));
 			if ($tkz == 't') 
-				$query .= ' AND paar = '.clm_escape(JRequest::getVar ('paar'.$p));
-			$query .= ' AND brett = '.clm_escape(JRequest::getVar ('brett'.$p));
+				$query .= ' AND paar = '.clm_escape(clm_core::$load->request_int('paar'.$p));
+			$query .= ' AND brett = '.clm_escape(clm_core::$load->request_int('brett'.$p));
 //echo "<br>store-delete_query: "; var_dump($query); //die(); 
 			clm_core::$db->query($query);
 			$query = 'UPDATE #__clm_pgn '
-				.' SET dg = '.clm_escape(JRequest::getVar ('dg'.$p))
-				.' , runde = '.clm_escape(JRequest::getVar ('runde'.$p));
+				.' SET dg = '.clm_escape(clm_core::$load->request_int('dg'.$p))
+				.' , runde = '.clm_escape(clm_core::$load->request_int('runde'.$p));
 			if ($tkz == 't') 
-				$query .= ' , paar = '.clm_escape(JRequest::getVar ('paar'.$p));
-			$query .= ' , brett = '.clm_escape(JRequest::getVar ('brett'.$p))
-				." , text = '".clm_escape(JRequest::getVar ('text'.$p))."'"
+				$query .= ' , paar = '.clm_escape(clm_core::$load->request_int('paar'.$p));
+			$query .= ' , brett = '.clm_escape(clm_core::$load->request_int('brett'.$p))
+				." , text = '".clm_escape(clm_core::$load->request_int('text'.$p))."'"
 				." , error = ''"
-				.' WHERE id = '.clm_escape(JRequest::getVar ('pgnnr'.$p));
+				.' WHERE id = '.clm_escape(clm_core::$load->request_int('pgnnr'.$p));
 //echo "<br>in_query: "; var_dump($query); //die(); 
 			clm_core::$db->query($query);
 //echo "<br>e: ".mysqli_errno.": ".mysqli_error;
 			if ($tkz == 't') {
 			  $query = 'UPDATE #__clm_rnd_spl '
-				.' SET pgnnr = '.clm_escape(JRequest::getVar ('pgnnr'.$p))
+				.' SET pgnnr = '.clm_escape(clm_core::$load->request_int('pgnnr'.$p))
 				.' WHERE lid = '.$tid
-				.' AND dg = '.clm_escape(JRequest::getVar ('dg'.$p))
-				.' AND runde = '.clm_escape(JRequest::getVar ('runde'.$p))
-				.' AND paar = '.clm_escape(JRequest::getVar ('paar'.$p))
-				.' AND brett = '.clm_escape(JRequest::getVar ('brett'.$p));
+				.' AND dg = '.clm_escape(clm_core::$load->request_int('dg'.$p))
+				.' AND runde = '.clm_escape(clm_core::$load->request_int('runde'.$p))
+				.' AND paar = '.clm_escape(clm_core::$load->request_int('paar'.$p))
+				.' AND brett = '.clm_escape(clm_core::$load->request_int('brett'.$p));
 			} elseif ($tkz == 's') {
 			  $query = 'UPDATE #__clm_turniere_rnd_spl '
-				.' SET pgn = '.clm_escape(JRequest::getVar ('pgnnr'.$p))
+				.' SET pgn = '.clm_escape(clm_core::$load->request_int('pgnnr'.$p))
 				.' WHERE turnier = '.$tid
-				.' AND dg = '.clm_escape(JRequest::getVar ('dg'.$p))
-				.' AND runde = '.clm_escape(JRequest::getVar ('runde'.$p))
-				.' AND brett = '.clm_escape(JRequest::getVar ('brett'.$p));
+				.' AND dg = '.clm_escape(clm_core::$load->request_int('dg'.$p))
+				.' AND runde = '.clm_escape(clm_core::$load->request_int('runde'.$p))
+				.' AND brett = '.clm_escape(clm_core::$load->request_int('brett'.$p));
 			}
 echo "<br>query: "; var_dump($query); //die(); 
 			clm_core::$db->query($query);

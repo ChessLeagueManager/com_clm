@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -26,8 +26,8 @@ for ($p = 0; $p < count($pgn_data); $p++) {
 if (isset($pgn_data[0]['tid'])) $tid = $pgn_data[0]['tid']; else $tid = 0;
 if (isset($pgn_data[0]['tkz'])) $tkz = $pgn_data[0]['tkz']; else $tkz = '';
  
-$task = JRequest::getVar ('task', '', 'default', 'string');
-$stask = JRequest::getVar ('stask', '', 'default', 'string');
+$task = clm_core::$load->request_string('task', '');
+$stask = clm_core::$load->request_string('stask', '');
 //echo "<br>v-pgndata  tid $tid  tkz $tkz  pgn_error $pgn_error";
 
 

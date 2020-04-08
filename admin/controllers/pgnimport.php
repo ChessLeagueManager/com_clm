@@ -2,9 +2,9 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -21,7 +21,7 @@ class CLMControllerPGNImport extends JControllerLegacy
 	}
 	
 	function display($cachable = false, $urlparams = array()) { 
-		JRequest::setVar('view','pgnimport');
+		$_REQUEST['view'] = 'pgnimport';
 		parent::display(); 
 	} 
 	
@@ -29,7 +29,7 @@ class CLMControllerPGNImport extends JControllerLegacy
 		$adminLink = new AdminLink ();
 		$adminLink->view = 'pgnimport';
 		$adminLink->makeURL ();		
-		$liga = JRequest::getVar('liga', '', 'default', 'string');
+		$liga = clm_core::$load->request_string('liga', '');
 //echo "<br>ci-html-pgnimport: liga $liga "; var_dump($liga); //die();
 		if ($liga == '') {	
 			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
@@ -46,14 +46,14 @@ class CLMControllerPGNImport extends JControllerLegacy
 		
 		jimport( 'joomla.filesystem.file' );
 		
-		$liga = JRequest::getVar('liga', '', 'default', 'string');
+		$liga = clm_core::$load->request_string('liga', '');
 		$liga_arr = explode('.', $liga, 2);
 		$tkz = $liga_arr[0];
 		$tid = $liga_arr[1];
 //echo "<br>cip-liga: $liga  tid: $tid  tkz: $tkz"; //die();
 		
 		// Namen und Verzeichnis der SWT-Datei auslesen
-		$filename = JRequest::getVar ('pgn_file', '', 'default', 'string');
+		$filename = clm_core::$load->request_string('pgn_file', '');
 //echo "<br>cip-filename:"; var_dump($filename); //die();
 		if ($filename == '') {
 			$msg = JText::_( 'PGN_FILE_NO' );
@@ -333,13 +333,13 @@ class CLMControllerPGNImport extends JControllerLegacy
 		$adminLink = new AdminLink ();
 		$adminLink->view = 'pgnimport';
 		$adminLink->makeURL ();		
-		$liga = JRequest::getVar('liga', '', 'default', 'string');
+		$liga = clm_core::$load->request_string('liga', '');
 //echo "<br>cm-html-pgnimport: liga $liga "; var_dump($liga); //die();
 		if ($liga == '') {	
 			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
 			$this->setRedirect($adminLink->url, $msg);
 		} else { 
-			JRequest::setVar('view', 'pgndata');		
+			$_REQUEST['view'] = 'pgndata';
 			parent::display(); 	
 		}
 	}
@@ -348,7 +348,7 @@ class CLMControllerPGNImport extends JControllerLegacy
 		$adminLink = new AdminLink ();
 		$adminLink->view = 'pgnimport';
 		$adminLink->makeURL ();		
-		$liga = JRequest::getVar('liga', '', 'default', 'string');
+		$liga = clm_core::$load->request_string('liga', '');
 //echo "<br>ca-html-pgnimport: liga $liga "; var_dump($liga); //die();
 		if ($liga == '') {	
 			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
@@ -365,7 +365,7 @@ class CLMControllerPGNImport extends JControllerLegacy
 		$adminLink = new AdminLink ();
 		$adminLink->view = 'pgnimport';
 		$adminLink->makeURL ();		
-		$liga = JRequest::getVar('liga', '', 'default', 'string');
+		$liga = clm_core::$load->request_string('liga', '');
 //echo "<br>ca-html-pgnimport: liga $liga "; var_dump($liga); //die();
 		if ($liga == '') {	
 			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
@@ -380,7 +380,7 @@ class CLMControllerPGNImport extends JControllerLegacy
 
 	function getDelPGN ($all = false) {
 		
-		$liga = JRequest::getVar('liga', '', 'default', 'string');
+		$liga = clm_core::$load->request_string('liga', '');
 		$liga_arr = explode('.', $liga, 2);
 		$tkz = $liga_arr[0];
 		$tid = $liga_arr[1];
