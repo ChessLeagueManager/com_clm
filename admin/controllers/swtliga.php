@@ -39,7 +39,7 @@ class CLMControllerSWTLiga extends JControllerLegacy
 			$this->setRedirect($adminLink->url, $msg);
 		} else {
 			$_REQUEST['view'] = 'swtligainfo';
-			$_POST['update'] = 1;
+			$_POST['update'] = '1';
 			$db		=JFactory::getDBO ();
 			$select_query = '  SELECT * FROM #__clm_liga '
 							.' WHERE id = '.$lid.'; ';

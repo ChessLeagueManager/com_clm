@@ -272,7 +272,7 @@ class CLMModelSWTLigaman extends JModelLegacy {
 		$newPlayerValues = substr ($newPlayerValues, 0, -2); // letztes ", " streichen
 
 		if (empty ($values)) { // spielfrei
-			$_POST['ungerade'] = 1;
+			$_POST['ungerade'] = '1';
 		}		
 		else {
 			$sql = ' INSERT IGNORE INTO #__clm_swt_meldeliste_spieler'

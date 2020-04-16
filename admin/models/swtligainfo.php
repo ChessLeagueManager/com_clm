@@ -382,7 +382,7 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		$default['params'] = implode("\n", $paramsStringArray);
 		$_POST['params'] = $default['params'];
 		$mturnier = clm_core::$load->request_int('mturnier', 0);
-		$_POST['liga_mt'] = $mturnier;
+		$_POST['liga_mt'] = (string) $mturnier;
 		
 		$spalten = array ( 'lid', 'name', 'sl', 'sid', 'rang', 'teil', 'stamm', 'ersatz', 'runden', 'durchgang', 'runden_modus', 'heim',
 		                   'sieg', 'remis', 'nieder', 'antritt', 'man_sieg', 'man_remis', 'man_nieder', 'man_antritt', 'sieg_bed',
