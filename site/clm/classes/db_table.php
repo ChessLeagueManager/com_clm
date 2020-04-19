@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 class clm_class_db_table {
 	private $db; // array ( db verbindung, db prefix)
 	private $data; // enthält bereits gelesene Anfragen
@@ -223,7 +229,8 @@ class clm_class_db_table {
 	}
 	// Findet den maximalen Wert der jeweiligen ID und setzt den darauf folgenden als den Auto Increment Wert
 	private function checkAutoIncrement() {
-		$query = "ALTER TABLE " . $this->db[1] . $this->table . " AUTO_INCREMENT=" . $this->getMax()+1;
+		//$query = "ALTER TABLE " . $this->db[1] . $this->table . " AUTO_INCREMENT=" . $this->getMax()+1;
+		$query = "ALTER TABLE " . $this->db[1] . $this->table . " AUTO_INCREMENT=" . ($this->getMax()+1);
 		$this->db[0]->query($query);
 	}
 	public function getMax() {

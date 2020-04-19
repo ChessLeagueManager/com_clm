@@ -1,4 +1,10 @@
 <?php 
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 // Berechenen der inoffiziellen DWZ eines Turniers
 function clm_api_db_tournament_genDWZ($id,$group=true) {
 	$id = clm_core::$load->make_valid($id, 0, -1);
@@ -89,7 +95,6 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
  		// addPlayer($id, $A, $R_o, $Index)
  	}
 
-
 	// Wer hat sich diese Struktur ausgedacht?
 	if($group) {
  	// Lese alle relevanten Partien aus
@@ -113,7 +118,7 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
  	{
 		
 		list ($punkte, $gpunkte) = clm_core::$load->gen_result($partien[$i]->ergebnis,0);
-		if($punkte[0]==-1) {
+		if($punkte==-1) {	// due to php 7.4  old: if($punkte[0]==-1) {
 			continue;		
 		}
 		// addMatch($id1, $id2, $result)

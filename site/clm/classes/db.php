@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 class clm_class_db {
 	// Verwendete Datenbank Konfiguration
 	private $dbConfig;
@@ -251,7 +257,8 @@ class clm_class_db {
 			}
 			else
 			{
-				$parts[] = $q{0} . $part . $q{1};
+				//$parts[] = $q{0} . $part . $q{1};
+				$parts[] = $q[0] . $part . $q[1];
 			}
 		}
 

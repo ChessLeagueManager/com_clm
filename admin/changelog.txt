@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.8.3 - [xx-xx-2020] - - - - - - - - - - - - - - - - - - - -
+^ Code-Anpassung php 7.4
+
 - - - - - 3.8.2 - [08-04-2020] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: Importe ( SWT, SWM und PGN )
 # M-Turniere: Berliner Wertung bei Wertung ändern

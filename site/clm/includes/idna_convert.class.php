@@ -47,11 +47,11 @@
  *
  * @author  Matthias Sommerfeld <mso@phlylabs.de>
  * @copyright 2004-2014 phlyLabs Berlin, http://phlylabs.de
- * @version 0.9.0 2014-12-12
+ * @version 0.9.0 2014-12-12    @version 0.9.0a 2020-04-17 !!!!!!!!!!!!
  */
 class idna_convert {
 
-    private $version = '0.9.0';
+    private $version = '0.9.0a';	// due to php 7.4: 4 statements changed with {} replaced by []
     protected $sub_version = 'main';
 
     // NP See below
@@ -423,7 +423,7 @@ class idna_convert {
         $delim_pos = strrpos($encoded, '-');
         if ($delim_pos > self::byteLength($this->_punycode_prefix)) {
             for ($k = self::byteLength($this->_punycode_prefix); $k < $delim_pos; ++$k) {
-                $decoded[] = ord($encoded{$k});
+                $decoded[] = ord($encoded[$k]);		// due to php 7.4  old: bisher $decoded[] = ord($encoded{$k});
             }
         }
         $deco_len = count($decoded);
@@ -437,7 +437,7 @@ class idna_convert {
 
         for ($enco_idx = ($delim_pos) ? ($delim_pos + 1) : 0; $enco_idx < $enco_len; ++$deco_len) {
             for ($old_idx = $idx, $w = 1, $k = $this->_base; 1; $k += $this->_base) {
-                $digit = $this->_decode_digit($encoded{$enco_idx++});
+                $digit = $this->_decode_digit($encoded[$enco_idx++]);	// due to php 7.4  old: $digit = $this->_decode_digit($encoded{$enco_idx++});
                 $idx += $digit * $w;
                 $t = ($k <= $bias) ? $this->_tmin :
                         (($k >= $bias + $this->_tmax) ? $this->_tmax : ($k - $bias));
@@ -864,7 +864,7 @@ class idna_convert {
         $mode = 'next';
         $test = 'none';
         for ($k = 0; $k < $inp_len; ++$k) {
-            $v = ord($input{$k}); // Extract byte from input string
+            $v = ord($input[$k]); // Extract byte from input string  // due to php 7.4  old: $v = ord($input{$k});
             if ($v < 128) { // We found an ASCII char - put into stirng as is
                 $output[$out_len] = $v;
                 ++$out_len;
@@ -995,7 +995,7 @@ class idna_convert {
                 $out_len++;
                 $output[$out_len] = 0;
             }
-            $output[$out_len] += ord($input{$i}) << (8 * (3 - ($i % 4) ) );
+            $output[$out_len] += ord($input[$i]) << (8 * (3 - ($i % 4) ) );	// due to php 7.4  old: $output[$out_len] += ord($input{$i}) << (8 * (3 - ($i % 4) ) );
         }
         return $output;
     }

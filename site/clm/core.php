@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 class clm_core {
 	// Pfad zum CLM Ordner
 	public static $path;
@@ -141,7 +147,8 @@ class clm_core {
 	// Fängt fatale Fehler für den Error Handler ab
 	public static function shutdown() {
 		$error = error_get_last();
-    	if ($error["type"] == E_ERROR ) { 
+    	//if ($error["type"] == E_ERROR ) { 
+    	if ((isset($error["type"])) AND ($error["type"] == E_ERROR )) { 
 			clm_core::errorHandler( $error["type"], $error["message"], $error["file"], $error["line"]);
       }
       restore_error_handler();

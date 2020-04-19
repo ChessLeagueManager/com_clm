@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 	// http://hg.joomla.org/joomla-platform/src/247ba8d88526/libraries/joomla/database/database.php, thanks to Joomla
 	function clm_function_db_add_prefix($sql, $db_prefix, $prefix = '#__') {
 		// Initialize variables.
@@ -38,7 +44,8 @@
 					break;
 				}
 				$l = $k - 1;
-				while ($l >= 0 && $sql{$l} == '\\') {
+				//while ($l >= 0 && $sql{$l} == '\\') {
+				while ($l >= 0 && $sql[$l] == '\\') {
 					$l--;
 					$escaped = !$escaped;
 				}
