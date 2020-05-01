@@ -18,6 +18,7 @@ $noOrgReference = clm_core::$load->request_string('noOrgReference', '0');
 $noBoardResults = clm_core::$load->request_string('noBoardResults', '0');
 $lid = clm_core::$load->request_int('liga', 0);
 $ordering = $this->default['ordering'];
+$str_params = clm_core::$load->request_string('str_params');
 ?>
 
 <script language="javascript" type="text/javascript">
@@ -510,5 +511,6 @@ $ordering = $this->default['ordering'];
 	<input type="hidden" name="noBoardResults" value="<?php echo $noBoardResults; ?>" />
 	<input type="hidden" name="lid" value="<?php echo $lid; ?>" />
 	<input type="hidden" name="ordering" value="<?php echo $ordering; ?>" />
+	<input type="hidden" name="str_params" value="<?php echo $str_params; ?>" />
 	<?php echo JHtml::_( 'form.token' ); ?>
 </form>

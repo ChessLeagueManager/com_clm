@@ -81,7 +81,7 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 				$default['params'] 		= $ligaFromDatabase->params;			
 			}
 		}
-		$_POST['params'] = $default['params'];
+		$_POST['str_params'] = $default['params'];
 
 		//Liga-Parameter aufbereiten
 		$paramsStringArray = explode("\n", $default['params']);
@@ -349,7 +349,7 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		$db		=JFactory::getDBO ();
 		
 		//Liga-Parameter aufbereiten
-		$default['params'] = clm_core::$load->request_string('params');
+		$default['params'] = clm_core::$load->request_string('str_params');
 		$paramsStringArray = explode("\n", $default['params']);
 		$default_params = array();
 		foreach ($paramsStringArray as $value) {
