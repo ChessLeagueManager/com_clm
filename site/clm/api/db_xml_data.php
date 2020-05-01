@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -72,6 +72,7 @@ function clm_api_db_xml_data($lid,$dg,$runde,$paar,$view) {
 					." AND s.published = 1";
 	} else {
 		$ligaModel .= " WHERE a.sid = ".$season
+					." AND a.published = 1"
 					." AND s.published = 1";
 	}		
 

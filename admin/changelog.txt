@@ -14,6 +14,7 @@ $ -> Language fix or change
 
 - - - - - 3.8.3 - [xx-xx-2020] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung php 7.4
+# Data für Plugin: Ausschluss nicht freigegebener Ligen
 
 - - - - - 3.8.2 - [08-04-2020] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: Importe ( SWT, SWM und PGN )
