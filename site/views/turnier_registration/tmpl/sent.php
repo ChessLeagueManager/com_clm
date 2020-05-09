@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -103,10 +103,11 @@ if ($msg != '') {
 	if ($typeRegistration == 5) {
 		$link .= '&layout=selection&f_source=sent&reg_spieler='.$reg_spieler;
 	}
-	$link .= '&reg_name='.$reg_name.'&reg_vorname='.$reg_vorname.'&reg_club='.$reg_club.'&reg_mail='.$reg_mail.'&reg_jahr='.$reg_jahr;
+	$link .= '&reg_name='.$reg_name.'&reg_vorname='.$reg_vorname.'&reg_club='.$reg_club.'&reg_mail='.$reg_mail.'&reg_jahr='.$reg_birthYear;
 	$link .= '&reg_dwz='.$reg_dwz.'&reg_elo='.$reg_elo.'&reg_comment='.$reg_comment;
 	$msg = substr($msg,4);
-	$mainframe->redirect( $link, $msg, "error" );
+	$mainframe->enqueueMessage( $msg, "error" );
+	$mainframe->redirect( $link );
 }
 // kein Fehler -> Meldung in Tabelle schreiben
 	$db	=JFactory::getDBO();
@@ -155,9 +156,10 @@ if ($msg != '') {
 	}
 	
 
-$msg = JText::_( 'REGISTRATION_SUCCESS' );
+	$msg = JText::_( 'REGISTRATION_SUCCESS' );
+	$mainframe->enqueueMessage( $msg );
 	$link = JURI::base() .'index.php?option=com_clm&view=turnier_info&turnier='. $turnier->id .'&Itemid='; 
-$mainframe->redirect( $link, $msg );
+	$mainframe->redirect( $link );
 }
 ?>
 
