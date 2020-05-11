@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -14,8 +14,8 @@
 defined('_JEXEC') or die('Restricted access');
 
 // Variablen aus URL Parametern holen
-$sid	= JRequest::getInt('saison','1');
-$itemid	= JRequest::getInt('Itemid','19');
+$sid	= clm_core::$load->request_int('saison',1);
+$itemid	= clm_core::$load->request_int('Itemid',19);
 
 // Variablen aus dem Model initialisieren
 $zps	= $this->zps;
@@ -31,7 +31,7 @@ $config = clm_core::$db->config();
 $countryversion = $config->countryversion;
 
 // FPDF Klasse einbinden
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'fpdf.php');
+require (clm_core::$path.DS.'classes'.DS.'fpdf.php');
 
 class PDF extends FPDF
 {

@@ -1,4 +1,10 @@
 <?php
+/*
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2020 CLM Team  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 class clm_class_cms_joomla extends clm_class_cms {
 	public function __construct() {
 		$this->cms = 1;
@@ -38,7 +44,8 @@ class clm_class_cms_joomla extends clm_class_cms {
 	}
 	public function addStyleSheet($url, $type = "text/css", $media = "all") {
 		$document = JFactory::getDocument();
-		$document->addStyleSheet($url, $type, $media);
+		//$document->addStyleSheet($url, $type, $media);
+		$document->addStyleSheet($url);			// Joomla 4
 	}
 	public function addStyleDeclaration($content, $type = "text/css") {
 		$document = JFactory::getDocument();

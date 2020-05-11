@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 class CLMViewVereine
 {
 public static function setVereineToolbar()
@@ -30,13 +28,13 @@ public static function setVereineToolbar()
 	}
 	if ($countryversion =="de") {
 		if($clmAccess->access('BE_club_general') === true) {
-			JToolBarHelper::custom('gruppen','send.png','send_f2.png','VEREIN_BUTTON_GROUP_EDIT',false);
-			JToolBarHelper::custom('rangliste','send.png','send_f2.png','VEREIN_BUTTON_RANG_EDIT',false);
+			JToolBarHelper::custom('gruppen','list.png','list_f2.png','VEREIN_BUTTON_GROUP_EDIT',false);
+			JToolBarHelper::custom('rangliste','edit.png','edit_f2.png','VEREIN_BUTTON_RANG_EDIT');
 		} 
 	}
 	if($clmAccess->access('BE_club_edit_member') === true) {
 	//if (clm_core::$access->getType() === 'admin' OR clm_core::$access->getType() === 'dv' OR clm_core::$access->getType() === 'dwz') {
-		JToolBarHelper::custom('dwz','send.png','send_f2.png','VEREIN_BUTTON_MEMBER_EDIT',false);
+		JToolBarHelper::custom('dwz','list.png','list_f2.png','VEREIN_BUTTON_MEMBER_EDIT');
 	}
 	if($clmAccess->access('BE_club_general') === true) {
 		JToolBarHelper::publishList();
@@ -44,7 +42,7 @@ public static function setVereineToolbar()
 	}
 	if($clmAccess->access('BE_club_create') === true) {
 		JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', 'VEREIN_BUTTON_COPY' );
-		JToolBarHelper::custom('remove','delete.png','delete_f2.png','VEREIN_BUTTON_DEL',false);
+		JToolBarHelper::custom('remove','delete.png','delete_f2.png','VEREIN_BUTTON_DEL');
 		JToolBarHelper::editList();
 		JToolBarHelper::custom('add','new.png','new_f2.png','VEREIN_BUTTON_NEW',false);
 	}
@@ -129,7 +127,7 @@ public static function vereine ( $rows, $lists, $pageNav, $option )
 				//$row = &$rows[$i];
 				// load the row from the db table
 				$row->load( $rows[$i]->id );
-				$link 		= JRoute::_( 'index.php?option=com_clm&section=vereine&task=edit&cid[]='. $row->id );
+				$link 		= JRoute::_( 'index.php?option=com_clm&section=vereine&task=edit&id='. $row->id );
 				$checked 	= JHtml::_('grid.checkedout',   $row, $i );
 				$published 	= JHtml::_('grid.published', $row, $i );
 
@@ -172,7 +170,7 @@ public static function vereine ( $rows, $lists, $pageNav, $option )
 
 	<td class="order">
 	<?php $disabled = $ordering ?  '' : 'disabled="disabled"'; ?>
-	<input type="text" name="order[]" size="5" value="<?php echo $row->ordering;?>" <?php echo $disabled ?> class="text_area" style="text-align: center" />
+	<input type="text" name="order" size="5" value="<?php echo $row->ordering;?>" <?php echo $disabled ?> class="text_area" style="text-align: center" />
 					</td>
 
 					<td align="center">
@@ -201,9 +199,8 @@ public static function setVereinToolbar()
 		clm_core::$load->load_css("icons_images");
 
 		//$zps = $row->zps;
-		$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
-		JArrayHelper::toInteger($cid, array(0));
-		if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
+		$cid = clm_core::$load->request_array_int( 'cid');
+		if (clm_core::$load->request_string( 'task') == 'edit') { $text = JText::_( 'Edit' );}
 			else { $text = JText::_( 'New' );}
 		JToolBarHelper::title(  JText::_( 'VEREIN' ).': [ '. $text.' ]', 'clm_headmenu_vereine.png' );
 		JToolBarHelper::save();
@@ -220,48 +217,11 @@ public static function verein( &$row, $lists, $option )
 		$surl = $_SERVER["SERVER_NAME"];
 		JToolBarHelper::preview( 'http://'.$surl.$rurl.'index.php?option=com_clm&view=verein&saison='.$row->sid.'&amp;zps='.$row->zps);
 		CLMViewVereine::setVereinToolbar();
-		JRequest::setVar( 'hidemainmenu', 1 );
+		$_REQUEST['hidemainmenu'] = 1;
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
+		
+		clm_core::$load->load_js("vereine");
 		?>
-	<script language="javascript" type="text/javascript">
-		 
-		function Tausch (x)
-		{
-			var w = document.getElementById(x).selectedIndex;
-			var selected_text = document.getElementById(x).options[w].text;
-
-			//document.getElementById('name').innerHTML=selected_text;
-			document.getElementById('name').value=selected_text;
-		}
-
-		function VSTausch (x)
-		{
-			var w = document.getElementById(x).selectedIndex;
-			var selected_text = document.getElementById(x).options[w].text;
-
-			//document.getElementById('name').innerHTML=selected_text;
-			document.getElementById('vs').value=selected_text;
-		}
-
-		 Joomla.submitbutton = function (pressbutton) { 		
-			var form = document.adminForm;
-			if (pressbutton == 'cancel') {
-				submitform( pressbutton );
-				return;
-			}
-			// do field validation
-			if (form.name.value == "") {
-				alert( "<?php echo JText::_( 'VEREIN_NAME_ANGEBEN', true ); ?>" );
-			} else if ( getSelectedValue('adminForm','zps') == 0 ) {
-				alert( "<?php echo JText::_( 'VEREIN_ZPS_AUSWAEHLEN', true ); ?>" );
-			} else if ( getSelectedValue('adminForm','sid') == 0 ) {
-				alert( "<?php echo JText::_( 'VEREIN_SAISON_AUSWAEHLEN', true ); ?>" );
-			} else {
-				submitform( pressbutton );
-			}
-		}
-		 
-		</script>
 
 		<form action="index.php" method="post" name="adminForm" id="adminForm">
 

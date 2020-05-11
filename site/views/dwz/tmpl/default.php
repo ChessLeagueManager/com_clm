@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team. All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,12 +9,11 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
-$sid	= JRequest::getInt('saison','1');
-$itemid	= JRequest::getInt('Itemid','1');
-$urlzps	= JRequest::getVar('zps');
+$sid	= clm_core::$load->request_int('saison',1);
+$itemid	= clm_core::$load->request_int('Itemid',1);
+$urlzps	= clm_core::$load->request_string('zps');
 $zps	= $this->zps;
 $liga	= $this->liga;
 $saisons	 	= $this->saisons;

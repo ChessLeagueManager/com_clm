@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -12,15 +12,13 @@
 
 defined('_JEXEC') or die('Restricted access'); 
 
-JRequest::checkToken() or die( 'Invalid Token' );
-
 	$mainframe	= JFactory::getApplication();
 
 // Variablen holen
-$sid 		= JRequest::getVar('saison');
-$zps 		= JRequest::getVar('zps');
-$name 		= JRequest::getVar('name');
-$new 		= JRequest::getVar('new');
+$sid 		= clm_core::$load->request_int('saison');
+$zps 		= clm_core::$load->request_string('zps');
+$name 		= clm_core::$load->request_string('name');
+$new 		= clm_core::$load->request_string('new');
 
 // Variablen initialisieren
 $liga 		= $this->liga;
@@ -33,15 +31,18 @@ $user =JFactory::getUser();
 // Login Status prüfen
 if (!$user->get('id')) {
 	$msg = JText::_( 'CLUB_DATA_SENT_LOGIN' );
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
  			}
 if ($clmuser[0]->published < 1) { 
 	$msg = JText::_( 'CLUB_DATA_SENT_ACCOUNT' );
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
 			}
 if ($clmuser[0]->zps <> $zps  OR $clmuser[0]->usertype == "spl") {
-		$msg = JText::_( 'CLUB_DATA_SENT_FALSE' );
-		$mainframe->redirect( $link, $msg );
+	$msg = JText::_( 'CLUB_DATA_SENT_FALSE' );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
  			}
 // Login Status prüfen
 if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps OR $clmuser[0]->usertype == "admin")
@@ -52,28 +53,28 @@ $db	=JFactory::getDBO();
 // Datensätze in Meldelistentabelle schreiben
 
 // Variablen holen
-$lokal 		= JRequest::getVar('lokal');
-$homepage 	= JRequest::getVar('homepage');
-$adresse 	= JRequest::getVar('adresse');
-$termine 	= JRequest::getVar('termine');
-	$vs 		= JRequest::getVar('vs');
-	$vs_mail	= JRequest::getVar('vs_mail');
-	$vs_tel		= JRequest::getVar('vs_tel');
-$tl 		= JRequest::getVar('tl');
-$tl_mail	= JRequest::getVar('tl_mail');
-$tl_tel		= JRequest::getVar('tl_tel');
-	$jw 		= JRequest::getVar('jw');
-	$jw_mail	= JRequest::getVar('jw_mail');
-	$jw_tel		= JRequest::getVar('jw_tel');
-$pw 		= JRequest::getVar('pw');
-$pw_mail	= JRequest::getVar('pw_mail');
-$pw_tel		= JRequest::getVar('pw_tel');
-	$kw 		= JRequest::getVar('kw');
-	$kw_mail	= JRequest::getVar('kw_mail');
-	$kw_tel		= JRequest::getVar('kw_tel');
-$sw 		= JRequest::getVar('sw');
-$sw_mail	= JRequest::getVar('sw_mail');
-$sw_tel		= JRequest::getVar('sw_tel');
+$lokal 		= clm_core::$load->request_string('lokal');
+$homepage 	= clm_core::$load->request_string('homepage');
+$adresse 	= clm_core::$load->request_string('adresse');
+$termine 	= clm_core::$load->request_string('termine');
+	$vs 		= clm_core::$load->request_string('vs');
+	$vs_mail	= clm_core::$load->request_string('vs_mail');
+	$vs_tel		= clm_core::$load->request_string('vs_tel');
+$tl 		= clm_core::$load->request_string('tl');
+$tl_mail	= clm_core::$load->request_string('tl_mail');
+$tl_tel		= clm_core::$load->request_string('tl_tel');
+	$jw 		= clm_core::$load->request_string('jw');
+	$jw_mail	= clm_core::$load->request_string('jw_mail');
+	$jw_tel		= clm_core::$load->request_string('jw_tel');
+$pw 		= clm_core::$load->request_string('pw');
+$pw_mail	= clm_core::$load->request_string('pw_mail');
+$pw_tel		= clm_core::$load->request_string('pw_tel');
+	$kw 		= clm_core::$load->request_string('kw');
+	$kw_mail	= clm_core::$load->request_string('kw_mail');
+	$kw_tel		= clm_core::$load->request_string('kw_tel');
+$sw 		= clm_core::$load->request_string('sw');
+$sw_mail	= clm_core::$load->request_string('sw_mail');
+$sw_tel		= clm_core::$load->request_string('sw_tel');
 
 // Vereinsdaten exisitieren
 if ($new < 1) {
@@ -102,8 +103,8 @@ if ($new < 1) {
 		." , sw_tel = '$sw_tel' "
 		." WHERE zps = '$zps' "
 		;
-	$db->setQuery($query);
-	$db->query();
+	//$db->setQuery($query);
+	clm_core::$db->query($query);
 		}
 // Vereinsdaten exisitieren NICHT
 else {
@@ -117,8 +118,8 @@ else {
 		." '$jw','$jw_mail','$jw_tel','$pw','$pw_mail','$pw_tel', "
 		." '$kw','$kw_mail','$kw_tel','$sw','$sw_mail','$sw_tel', '$termine', '1') "
 		;
-	$db->setQuery($query);
-	$db->query();
+	//$db->setQuery($query);
+	clm_core::$db->query($query);
 	}
 // Log
 	$aktion = "Vereinsdaten FE";
@@ -129,11 +130,12 @@ else {
 		." ( `callid`, `userid`, `timestamp` , `type` ,`name`, `content`) "
 		." VALUES ('".$callid."','".$userid."',".time().",5,'".$aktion."','".json_encode($parray)."') "
 		;
-	$db->setQuery($query);
-	$db->query();
+	//$db->setQuery($query);
+	clm_core::$db->query($query);
 
-$msg = JText::_( 'CLUB_DATA_SENT_SAVED' );
-$mainframe->redirect( $link, $msg );
+	$msg = JText::_( 'CLUB_DATA_SENT_SAVED' );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
 }
 ?>
 

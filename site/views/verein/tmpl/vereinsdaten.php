@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,12 +9,11 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
 // Variablen holen
-$sid = JRequest::getInt('saison','1');
-$zps = JRequest::getVar('zps');
+$sid = clm_core::$load->request_int('saison', 1);
+$zps = clm_core::$load->request_string('zps');
 
 echo '<div ><div id="vereinsdaten">';
 
@@ -28,34 +27,40 @@ $user	= JFactory::getUser();
 
 // Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
-	$conf_vereinsdaten=$config->conf_vereinsdaten;
+	$conf_vereinsdaten = $config->conf_vereinsdaten;
 
 if ($conf_vereinsdaten != 1) {
 	$msg = JText::_( 'CLUB_DATA_DISABLED');
+	$mainframe->enqueueMessage( $msg );
 	$link = "index.php?option=com_clm&view=info";
-	$mainframe->redirect( $link, $msg );
+	$mainframe->redirect( $link );
 			}
 if (!$user->get('id')) {
 	$msg = JText::_( 'CLUB_DATA_LOGIN' );
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
  			}
 if ($clmuser[0]->published < 1) { 
 	$msg = JText::_( 'CLUB_DATA_ACCOUNT' );
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
 				}
 if ( $clmuser[0]->usertype == "spl" ) { 
 		$msg = JText::_( 'NO_PERMISSION' );
-		$mainframe->redirect( $link, $msg );
+		$mainframe->enqueueMessage( $msg );
+		$mainframe->redirect( $link );
 		}
 if ( $clmuser[0]->zps <> $zps ) { 
 		$msg = JText::_( 'CLUB_DATA_FALSE' );
-		$mainframe->redirect( $link, $msg );
+		$mainframe->enqueueMessage( $msg );
+		$mainframe->redirect( $link );
 		}
-if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps  OR $clmuser[0]->usertype == "admin"){
+if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND ($clmuser[0]->zps == $zps  OR $clmuser[0]->usertype == "admin")) {
 
+// Stylesheet laden
 	$document = JFactory::getDocument();
 	$cssDir = JURI::base().DS. 'components'.DS.'com_clm'.DS.'includes';
-	$document->addStyleSheet( $cssDir.DS.'clm_content.css', 'text/css', null, array() );
+	$document->addStyleSheet( $cssDir.DS.'clm_content_0.css', 'text/css', null, array() );
 
 $row 	= $this->row;
 
@@ -72,7 +77,7 @@ if (!isset($row[0]->name)) { ?>
 <div id="desc"><?php echo JText::_('CLUB_DATA_NOTE') ?></div>
 <br>
 <center>
-<form action="index.php" method="post" name="adminForm">
+<form action="index.php?option=com_clm&amp;view=verein&amp;layout=sent" method="post" name="adminForm" id="adminForm">
 		<div class="col width-95">
 
 		<table class="admintable">
@@ -262,12 +267,12 @@ $name = $this->name;
 		<input type="hidden" name="task" value="" />
 		<?php echo JHTML::_( 'form.token' ); ?>
 		</form>
-<?php } ?>
 </center>
 <?php } ?>
 
-<br>
-
-</div>
-</div>
-<?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); ?>
+<?php }
+	  
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); 
+echo '</div>';
+echo '</div>';
+?>

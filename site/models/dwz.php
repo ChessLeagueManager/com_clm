@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,21 +9,18 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.model');
 
 class CLMModelDWZ extends JModelLegacy
 {
-
 	function _getCLMzps ()
 	{
-	
 	$mainframe	= JFactory::getApplication();
-	$option 	= JRequest::getCmd( 'option' );
+	$option 	= clm_core::$load->request_string( 'option' );
 
-	$zps	= clm_escape(JRequest::getVar('zps'));
-	$sid	= JRequest::getInt('saison','1');
+	$zps	= clm_escape(clm_core::$load->request_string('zps'));
+	$sid	= clm_core::$load->request_int('saison', 1);
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 		
@@ -55,8 +52,8 @@ class CLMModelDWZ extends JModelLegacy
 	
 	function _getCLMLiga( &$options )
 	{
-	$zps	= clm_escape(JRequest::getVar('zps'));
-	$sid	= JRequest::getInt('saison','1');
+	$zps	= clm_escape(clm_core::$load->request_string('zps'));
+	$sid	= clm_core::$load->request_int('saison', 1);
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
  
@@ -78,8 +75,8 @@ class CLMModelDWZ extends JModelLegacy
 	
 	function _getCLMVereinsliste( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$zps	= clm_escape(JRequest::getVar('zps'));
+	$zps	= clm_escape(clm_core::$load->request_string('zps'));
+	$sid	= clm_core::$load->request_int('saison', 1);
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 
@@ -99,8 +96,8 @@ class CLMModelDWZ extends JModelLegacy
 	}
 	function _getCLMSaisons( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$zps	= clm_escape(JRequest::getVar('zps'));
+	$zps	= clm_escape(clm_core::$load->request_string('zps'));
+	$sid	= clm_core::$load->request_int('saison', 1);
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 

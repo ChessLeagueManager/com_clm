@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 jimport( 'joomla.application.component.view');
 
 class CLMViewVerein extends JViewLegacy
@@ -23,39 +22,39 @@ class CLMViewVerein extends JViewLegacy
 		
 		$model	  = $this->getModel();
 		$verein     = $model->getCLMVerein();
-		$this->assignRef('verein'  , $verein);
+		$this->verein = $verein;
 		
 		$model	  = $this->getModel();
 		$vereinstats     = $model->getCLMVereinstats();
-		$this->assignRef('vereinstats'  , $vereinstats);
+		$this->vereinstats = $vereinstats;
 
 		$model	  = $this->getModel();
 		$mannschaft     = $model->getCLMMannschaft();
-		$this->assignRef('mannschaft'  , $mannschaft);
+		$this->mannschaft = $mannschaft;
 		
 		$model	  = $this->getModel();
 		$vereinsliste     = $model->getCLMVereinsliste();
-		$this->assignRef('vereinsliste'  , $vereinsliste);
+		$this->vereinsliste = $vereinsliste;
 		
 		$model	  = $this->getModel();
 		$saisons     = $model->getCLMSaisons();
-		$this->assignRef('saisons'  , $saisons);
+		$this->saisons = $saisons;
 		
 		$model	  = $this->getModel();
 		$turniere     = $model->getCLMTurniere();
-		$this->assignRef('turniere'  , $turniere);
+		$this->turniere = $turniere;
 		
 		$model	  = $this->getModel();
   		$row     = $model->getCLMData();
-		$this->assignRef('row'  , $row);
+		$this->row = $row;
 
 		$model	  = $this->getModel();
   		$name     = $model->getCLMName();
-		$this->assignRef('name'  , $name);
+		$this->name = $name;
 
 		$model	  = $this->getModel();
   		$clmuser     = $model->getCLMCLMuser();
-		$this->assignRef('clmuser'  , $clmuser);
+		$this->clmuser = $clmuser;
 		
 		if (isset($_SERVER['HTTPS']) AND $_SERVER['HTTPS'] != 'off') {
 			$prot = 'https';
