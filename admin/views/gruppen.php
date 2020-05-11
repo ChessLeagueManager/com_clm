@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 class CLMViewGruppen
 {
 public static function setGruppenToolbar()
@@ -106,7 +104,7 @@ public static function gruppen( &$rows, &$lists, &$pageNav, $option )
 			for ($i=0, $n=count( $rows ); $i < $n; $i++) {
 				$row = &$rows[$i];
 
-				$link 		= JRoute::_( 'index.php?option=com_clm&section=gruppen&task=edit&cid[]='. $row->id );
+				$link 		= JRoute::_( 'index.php?option=com_clm&section=gruppen&task=edit&id='. $row->id );
 
 				$checked 	= JHtml::_('grid.checkedout',   $row, $i );
 				$published 	= JHtml::_('grid.published', $row, $i );
@@ -172,9 +170,8 @@ public static function gruppen( &$rows, &$lists, &$pageNav, $option )
 public static function setGruppeToolbar()
 	{
 
-		$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
-		JArrayHelper::toInteger($cid, array(0));
-		if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
+		$cid = clm_core::$load->request_array_int('cid');
+		if (clm_core::$load->request_string('task') == 'edit') { $text = JText::_( 'Edit' );}
 			else { $text = JText::_( 'New' );}
 		JToolBarHelper::title(  JText::_( 'TITLE_GROUPS_2' ).': [ '. $text.' ]' );
 		JToolBarHelper::save();
@@ -186,31 +183,11 @@ public static function setGruppeToolbar()
 public static function gruppe( &$row,$lists, $option, $jid)
 	{
 		CLMViewGruppen::setGruppeToolbar();
-		JRequest::setVar( 'hidemainmenu', 1 );
+		$_REQUEST['hidemainmenu'] = 1;
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
-		?>
-	<script language="javascript" type="text/javascript">
-
-		 Joomla.submitbutton = function (pressbutton) { 	
-			var form = document.adminForm;
-			if (pressbutton == 'cancel') {
-				submitform( pressbutton );
-				return;
-			}
-			// do field validation
-			if (form.Gruppe.value == "") {
-				alert( "<?php echo JText::_( 'GROUPS_OVERVIEW_SCRIPT_GROUP', true ); ?>" );
-			} else if (form.Meldeschluss.value == "") {
-				alert( "<?php echo JText::_( 'GROUPS_OVERVIEW_SCRIPT_END', true ); ?>" );
-			}
-			 else if ( getSelectedValue('adminForm','sid') == 0 ) {
-				alert( "<?php echo JText::_( 'GROUPS_OVERVIEW_SCRIPT_SEASON', true ); ?>" );
-			} else {
-				submitform( pressbutton );
-			}
-		}
 		
-		</script>
+		clm_core::$load->load_js("gruppen");
+		?>
 
 		<form action="index.php" method="post" name="adminForm" id="adminForm">
 

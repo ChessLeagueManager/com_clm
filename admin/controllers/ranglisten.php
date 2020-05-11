@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -32,9 +30,9 @@ function __construct( $config = array() )
 function display($cachable = false, $urlparams = array())
 	{
 	$mainframe	= JFactory::getApplication();
-	$option 	= JRequest::getCmd( 'option' );
-	$section	= JRequest::getVar('section');
-	$db		=JFactory::getDBO();
+	$option 	= clm_core::$load->request_string('option');
+	$section	= clm_core::$load->request_string('section');
+	$db		= JFactory::getDBO();
 
 	$filter_gid		= $mainframe->getUserStateFromRequest( "$option.filter_gid",'filter_gid',0,'int' );
 	$filter_order		= $mainframe->getUserStateFromRequest( "$option.filter_order",'filter_order','a.id',	'cmd' );
@@ -44,13 +42,13 @@ function display($cachable = false, $urlparams = array())
 	$filter_vid		= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
 	$filter_catid		= $mainframe->getUserStateFromRequest( "$option.filter_catid",'filter_catid',0,'int' );
 	$search			= $mainframe->getUserStateFromRequest( "$option.search",'search','','string' );
-	$search			= JString::strtolower( $search );
+	$search			= strtolower( $search );
 	$limit			= $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
 	$limitstart		= $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
 
 	$where = array();
 	$where[]=' c.archiv = 0';
-	$zps	= JRequest::getVar( 'zps' );
+	$zps	= clm_core::$load->request_string( 'zps' );
 	if ($zps > 0) {
 		$filter_vid = $zps;
 			}
@@ -105,12 +103,13 @@ function display($cachable = false, $urlparams = array())
 	. ' LEFT JOIN #__users AS u ON u.id = a.checked_out'
 	. $where
 	. $orderby;
-	$db->setQuery( $query, $pageNav->limitstart, $pageNav->limit );
 
-	$rows = $db->loadObjectList();
-	if ($db->getErrorNum()) {
-		echo $db->stderr();
-		return false;
+	try {
+		$db->setQuery( $query, $pageNav->limitstart, $pageNav->limit );
+		$rows = $db->loadObjectList();
+	}
+	catch (Exception $e) {
+		$mainframe->enqueueMessage($db->stderr(), 'error');
 	}
 
 	// Filter
@@ -138,7 +137,8 @@ function display($cachable = false, $urlparams = array())
 function edit()
 	{
 	$mainframe	= JFactory::getApplication();
-	$option 	= JRequest::getCmd( 'option' );
+	$option 	= clm_core::$load->request_string('option');
+	$section	= clm_core::$load->request_string('section');
 
 	$filter_vid	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
 	$filter_sid	= $mainframe->getUserStateFromRequest( "$option.filter_sid",'filter_sid',0,'int' );
@@ -146,10 +146,10 @@ function edit()
 
 	$db 		=JFactory::getDBO();
 	$user 		=JFactory::getUser();
-	$task 		= JRequest::getVar( 'task');
-	$cid 		= JRequest::getVar( 'cid', array(0), '', 'array' );
-	$section 	= JRequest::getVar( 'section' );
-	JArrayHelper::toInteger($cid, array(0));
+	$task 		= clm_core::$load->request_string( 'task');
+	$cid 		= clm_core::$load->request_array_int('cid');
+	if (is_null($cid)) $cid[0] = clm_core::$load->request_int('id');
+										 
 	$row =JTable::getInstance( 'ranglisten', 'TableCLM' );
 	$vname="";
 	$gname="";
@@ -161,13 +161,13 @@ function edit()
 	$saison		=JTable::getInstance( 'saisons', 'TableCLM' );
 	$saison->load( $row->sid );
 	if ($saison->archiv == "1") {  // AND clm_core::$access->getType() !== 'admin') {
-		JError::raiseWarning( 500, JText::_( 'RANGLISTE_ARCHIV' ));
-		$mainframe->redirect( 'index.php?option='. $option.'&section=vereine', $msg );
-				}
+		$mainframe->enqueueMessage( JText::_( 'RANGLISTE_ARCHIV' ), 'warning' );		
+		$mainframe->redirect( 'index.php?option='. $option.'&section=vereine' );
+	}
 	if ($cid[0]== "" AND $task =='edit') {
-		JError::raiseWarning( 500, JText::_( 'RANGLISTE_FALSCH' ));
-		$mainframe->redirect( 'index.php?option='. $option.'&section=vereine', $msg );
-				}
+		$mainframe->enqueueMessage( JText::_( 'RANGLISTE_FALSCH' ), 'warning' );		
+		$mainframe->redirect( 'index.php?option='. $option.'&section=vereine' );
+	}
 	// load the row from the db table
 	$row->load( $cid[0] );
 
@@ -220,8 +220,8 @@ function edit()
 	// Rangliste in Abhängigkeit der Auswahl von vid,lid,sid ausgeben
 	if ($task == 'edit') {
 	$sql = " ALTER TABLE #__clm_rangliste_spieler order by sid desc,gruppe asc,zps asc,man_nr asc,Rang asc ";
-	$db->setQuery($sql);
-	$db->query();
+	//$db->setQuery($sql);
+	clm_core::$db->query($sql);
 
 	$sql = " SELECT Meldeschluss, geschlecht, alter_grenze, `alter` "
 		." FROM #__clm_rangliste_name"
@@ -335,8 +335,10 @@ function edit()
 		." AND published = 1"
 		;
 	$db->setQuery($sql);
-	if (!$db->query()){$this->setRedirect( 'index.php?option='.$option.'&section='.$section );
-		return JError::raiseWarning( 500, $db->getErrorMsg() );	}
+	if (!clm_core::$db->query($sql)){
+		$mainframe->enqueueMessage( $db->getErrorMsg(), 'warning' );		
+		$mainframe->redirect( 'index.php?option='.$option.'&section='.$section );
+	}
 	$gruppenlist[]	= JHtml::_('select.option',  '0', JText::_( 'RANGLISTE_GRUPPE_AUS' ), 'gid', 'Gruppe' );
 	$gruppenlist	= array_merge( $gruppenlist, $db->loadObjectList() );
 	$lists['gruppe']= JHtml::_('select.genericlist',   $gruppenlist, 'filter_gid', 'class="inputbox" size="1" onchange="javascript:edit();"','gid', 'Gruppe', intval( $filter_gid ) );
@@ -356,55 +358,59 @@ function save()
 	$mainframe	= JFactory::getApplication();
 
 	// Check for request forgeries
-	JRequest::checkToken() or die( 'Invalid Token' );
+	defined('clm') or die( 'Invalid Token' );
 
-	$option		= JRequest::getCmd('option');
-	$section	= JRequest::getVar('section');
+	$option 	= clm_core::$load->request_string('option');
+	$section	= clm_core::$load->request_string('section');
 
 	$db		= JFactory::getDBO();
-	$task		= JRequest::getVar( 'task');
-	$pre_task	= JRequest::getVar( 'pre_task');
+	$task		= clm_core::$load->request_string( 'task');
+	$pre_task	= clm_core::$load->request_string( 'pre_task');
 	$row		= JTable::getInstance( 'ranglisten', 'TableCLM' );
-	$msg		= JRequest::getVar( 'id');
-	$exist		= JRequest::getVar( 'exist');
+	$msg		= clm_core::$load->request_int( 'id');
+	$exist		= clm_core::$load->request_string( 'exist');
 
 	if ( $exist != "0" AND $pre_task !="edit") {
-		JError::raiseWarning( 500, JText::_( 'RANGLISTE_LISTE_IST' ) );
-		JError::raiseNotice( 6000,  JText::_( 'RANGLISTE_AENDERN' ));
+		$mainframe->enqueueMessage( JText::_( 'RANGLISTE_LISTE_IST' ), 'warning' );		
+		$mainframe->enqueueMessage( JText::_( 'RANGLISTE_AENDERN' ), 'notice' );		
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
 
-	if (!$row->bind(JRequest::get('post'))) {
-		JError::raiseError(500, $row->getError() );
+	$post = $_POST; 
+	if (!$row->bind($post)) {
+		$mainframe->enqueueMessage( $row->getError(), 'error' );		
+		$link = 'index.php?option='.$option.'&section='.$section;
+		$mainframe->redirect( $link);
 	}
 	// pre-save checks
 	if (!$row->check()) {
-		JError::raiseError(500, $row->getError() );
+		$mainframe->enqueueMessage( $row->getError(), 'error' );		
+		$link = 'index.php?option='.$option.'&section='.$section;
+		$mainframe->redirect( $link);
 	}
-
 	if ($pre_task == "add" ) {
-	$filter_vid	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
-	$filter_sid	= $mainframe->getUserStateFromRequest( "$option.filter_sid",'filter_sid',0,'int' );
-	$filter_gid	= $mainframe->getUserStateFromRequest( "$option.filter_gid",'filter_gid',0,'int' );
+		$filter_vid	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
+		$filter_sid	= $mainframe->getUserStateFromRequest( "$option.filter_sid",'filter_sid',0,'int' );
+		$filter_gid	= $mainframe->getUserStateFromRequest( "$option.filter_gid",'filter_gid',0,'int' );
 
-	$zps = $filter_vid ;
-	$sid = intval( $filter_sid );
-	$gid = intval( $filter_gid );
+		$zps = $filter_vid ;
+		$sid = intval( $filter_sid );
+		$gid = intval( $filter_gid );
 
-	$row->zps = $zps;
-	$row->sid = $sid;
-	$row->gid = $gid;
+		$row->zps = $zps;
+		$row->sid = $sid;
+		$row->gid = $gid;
 
-	$aktion = JText::_( 'RANGLISTE_LOG_ADDED');
-		}
+		$aktion = JText::_( 'RANGLISTE_LOG_ADDED');
+	}
 	else {
-	$zps = $row->zps;
-	$sid = $row->sid;
-	$gid = $row->gid;
+		$zps = $row->zps;
+		$sid = $row->sid;
+		$gid = $row->gid;
 
-	$aktion = JText::_( 'RANGLISTE_LOG_EDIT');
-		}
+		$aktion = JText::_( 'RANGLISTE_LOG_EDIT');
+	}
 
 	if (!$row->id) {
 		$where = "sid = " . (int) $row->sid;
@@ -412,20 +418,22 @@ function save()
 	}
 	// save the changes
 	if (!$row->store()) {
-		JError::raiseError(500, $row->getError() );
+		$mainframe->enqueueMessage( $row->getError(), 'error' );		
+		$link = 'index.php?option='.$option.'&section='.$section;
+		$mainframe->redirect( $link);
 	}
 	
 
 	// Rangnummern in #__clm_rangliste_spieler abspeichern
-	$count		= JRequest::getVar( 'count');
+	$count		= clm_core::$load->request_int( 'count');
 
 	$query	=" DELETE FROM #__clm_rangliste_spieler "
 		." WHERE Gruppe = ".$gid
 		." AND ZPS = '$zps'"
 		." AND sid =".$sid
 		;
-	$db->setQuery($query);
-	$db->query();
+	//$db->setQuery($query);
+	clm_core::$db->query($query);
 
 	//vor Löschen der Meldelisten Start-DWZ, u.a. sichern
 	$query	=" SELECT * FROM #__clm_meldeliste_spieler "
@@ -446,8 +454,8 @@ function save()
 		." AND ZPS = '$zps'"
 		." AND sid =".$sid
 		;
-	$db->setQuery($query);
-	$db->query();
+	//$db->setQuery($query);
+	clm_core::$db->query($query);
 
 	$query	=" SELECT a.liga, a.man_nr FROM #__clm_mannschaften as a"
 		." LEFT JOIN #__clm_liga as l ON l.id = a.liga and l.sid = a.sid"
@@ -485,19 +493,20 @@ function save()
 
 	// Rangliste und Arrays schreiben
 	for ($y=0; $y < $count; $y++) {
-	$mgl[]	= JRequest::getVar('MGL'.$y);
-	$pkz[]	= JRequest::getVar('PKZ'.$y);
-	$mnr[]	= JRequest::getVar('MA'.$y);
-	$rang[]	= JRequest::getVar('RA'.$y);
+		$mgl[]	= clm_core::$load->request_string('MGL'.$y);
+		$pkz[]	= clm_core::$load->request_string('PKZ'.$y);
+		$mnr[]	= clm_core::$load->request_string('MA'.$y);
+		$rang[]	= clm_core::$load->request_string('RA'.$y);
 
-	if ($mnr[$y] !=="99" AND $mnr[$y] !=="0" AND $mnr[$y] !=="") {
-	$query = " INSERT INTO #__clm_rangliste_spieler "
-		." (`Gruppe`, `ZPS`, `Mgl_Nr`, `PKZ`, `Rang`, `man_nr`, `sid`) "
-		." VALUES ('$gid','$zps','$mgl[$y]','$pkz[$y]','$rang[$y]','$mnr[$y]','$sid') "
-		;
-	$db->setQuery($query);
-	$db->query();
-	}}
+		if ($mnr[$y] !=="99" AND $mnr[$y] !=="0" AND $mnr[$y] !=="") {
+			$query = " INSERT INTO #__clm_rangliste_spieler "
+				." (`Gruppe`, `ZPS`, `Mgl_Nr`, `PKZ`, `Rang`, `man_nr`, `sid`) "
+				." VALUES ('$gid','$zps','$mgl[$y]','$pkz[$y]','$rang[$y]','$mnr[$y]','$sid') "
+				;
+			//$db->setQuery($query);
+			clm_core::$db->query($query);
+		}
+	}
 
 	// Meldelisten schreiben
 	for ($x=0; $x < count($lid_rang); $x++) {
@@ -554,8 +563,8 @@ function save()
 			." VALUES ('$sid','$liga','$man_nr','$snr_counter','$mgl[$y]','$zps','$gid','$z_ordering','$z_start_dwz','$z_start_I0'"
 			.",'$z_DWZ','$z_I0','$z_Punkte','$z_Partien','$z_We','$z_Leistung','$z_EFaktor','$z_Niveau','$z_sum_saison','$z_gesperrt') "
 			;
-		$db->setQuery($query);
-		$db->query();
+		//$db->setQuery($query);
+		clm_core::$db->query($query);
 		$sn_cnt++;
 		$snr_counter++;
 	}
@@ -565,22 +574,22 @@ function save()
 					." SET  liste = 1"
 					." WHERE sid = $sid AND liga = $liga AND man_nr = $man_nr AND zps = '$zps' "
 					;
-				$db->setQuery($query);
-				$db->query();
+				//$db->setQuery($query);
+				clm_core::$db->query($query);
 		}
 	}
 
 	if($sn_cnt =="1") {
-		JError::raiseNotice( 6000,  JText::_( 'RANGLISTE_MN_RANG' ));
-		JError::raiseNotice( 6000,  JText::_( 'RANGLISTE_ERGEBNIS' ));
-		JError::raiseNotice( 6000,  JText::_( 'RANGLISTE_MN_MANAGER' ));
+		$mainframe->enqueueMessage(JText::_( 'RANGLISTE_MN_RANG' ), 'notice');
+		$mainframe->enqueueMessage(JText::_( 'RANGLISTE_ERGEBNIS' ), 'notice');
+		$mainframe->enqueueMessage(JText::_( 'RANGLISTE_MN_MANAGER' ), 'notice');
 	}
 	
 	switch ($task)
 	{
 		case 'apply':
 			$msg = JText::_( 'RANGLISTE_MSG_CHANGES_SAVED');
-			$link = 'index.php?option='.$option.'&section='.$section.'&task=edit&cid[]='. $row->id ;
+			$link = 'index.php?option='.$option.'&section='.$section.'&task=edit&id='. $row->id ;
 			break;
 		case 'save':
 		default:
@@ -597,22 +606,24 @@ function save()
 
 	$clmLog->write();
 	
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage($msg, 'message');
+	$mainframe->redirect( $link );
 	}
 
 function cancel()
 	{
 	$mainframe	= JFactory::getApplication();
 	// Check for request forgeries
-	JRequest::checkToken() or die( 'Invalid Token' );
+	defined('clm') or die( 'Invalid Token' );
 	
-	$option		= JRequest::getCmd('option');
-	$section	= JRequest::getVar('section');
-	$id		= JRequest::getVar('id');	
+	$option 	= clm_core::$load->request_string('option');
+	$section	= clm_core::$load->request_string('section');
+	$id		= clm_core::$load->request_int('id');	
 	$row 		=JTable::getInstance( 'ranglisten', 'TableCLM' );
 	$filter_vid	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
 	$msg = JText::_( 'RANGLISTE_AKTION').$filter_vid;
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
+	$mainframe->enqueueMessage($msg, 'message');
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
 function remove()
@@ -620,16 +631,15 @@ function remove()
 	$mainframe	= JFactory::getApplication();
 
 	// Check for request forgeries
-	JRequest::checkToken() or die( 'Invalid Token' );
+	defined('clm') or die( 'Invalid Token' );
 
 	$db 		=JFactory::getDBO();
-	$cid 		= JRequest::getVar('cid', array(), '', 'array');
-	$option 	= JRequest::getCmd('option');
-	$section	= JRequest::getVar('section');
-	JArrayHelper::toInteger($cid);
+	$cid 		= clm_core::$load->request_array_int('cid');
+	$option 	= clm_core::$load->request_string('option');
+	$section	= clm_core::$load->request_string('section');
 
 	if (count($cid) < 1) {
-		JError::raiseWarning(500, JText::_( 'RANGLISTE_SELECT', true ) );
+		$mainframe->enqueueMessage(JText::_( 'RANGLISTE_SELECT', true ), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
@@ -644,7 +654,7 @@ function remove()
 	// Wenn User nicht Admin oder DWZ prüfen ob SL der Staffel //
 	$clmAccess = clm_core::$access;
 	if ($clmAccess->access('BE_club_edit_ranking') === false) {
-			JError::raiseWarning( 500, JText::_( 'RANGLISTE_RL_STAFFEL' ) );
+			$mainframe->enqueueMessage(JText::_( 'RANGLISTE_RL_STAFFEL', true ), 'warning');
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link);
 					}
@@ -657,18 +667,18 @@ function remove()
 			." AND ZPS ='$row->zps'"
 			." AND sid =".$row->sid
 			;
-		$db->setQuery( $query );
-		if (!$db->query()) {
-		echo "<script> alert('".$db->getErrorMsg(true)."'); window.history.go(-1); </script>\n";
+		//$db->setQuery( $query );
+		if (!clm_core::$db->query($query)) {
+			echo "<script> alert('".$db->getErrorMsg(true)."'); window.history.go(-1); </script>\n";
 		}
 
 		$query = " DELETE FROM #__clm_rangliste_id "
 			." WHERE id = $cid[0]"
 			." AND sid =".$row->sid
 			;
-		$db->setQuery( $query );
-		if (!$db->query()) {
-		echo "<script> alert('".$db->getErrorMsg(true)."'); window.history.go(-1); </script>\n";
+		//$db->setQuery( $query );
+		if (!clm_core::$db->query($query)) {
+			echo "<script> alert('".$db->getErrorMsg(true)."'); window.history.go(-1); </script>\n";
 		}
 
 		$query = " DELETE FROM #__clm_meldeliste_spieler "
@@ -676,8 +686,8 @@ function remove()
 			." AND zps = '$row->zps'"
 			." AND sid =".$row->sid
 			;
-		$db->setQuery( $query );
-		if (!$db->query()) {
+		//$db->setQuery( $query );
+		if (!clm_core::$db->query($query)) {
 		echo "<script> alert('".$db->getErrorMsg(true)."'); window.history.go(-1); </script>\n";
 		}
 		}
@@ -695,7 +705,8 @@ function remove()
 		$msg = count($cid)." ".JText::_( 'RANGLISTE_MSG_DEL_ENTRYS'); 
 	}
 
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
+	$mainframe->enqueueMessage($msg, 'message');
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
 function publish()
@@ -703,19 +714,18 @@ function publish()
 	$mainframe	= JFactory::getApplication();
 
 	// Check for request forgeries
-	JRequest::checkToken() or die( 'Invalid Token' );
+	defined('clm') or die( 'Invalid Token' );
 
 	$db 		= JFactory::getDBO();
 	$user 		= JFactory::getUser();
-	$cid		= JRequest::getVar('cid', array(), '', 'array');
-	$task		= JRequest::getCmd( 'task' );
+	$cid		= clm_core::$load->request_array_int('cid');
+	$task		= clm_core::$load->request_string( 'task' );
 	$publish	= ($task == 'publish');
-	$option		= JRequest::getCmd('option');
-	$section	= JRequest::getVar('section');
-	JArrayHelper::toInteger($cid);
+	$option 	= clm_core::$load->request_string('option');
+	$section	= clm_core::$load->request_string('section');
 
 	if (empty( $cid )) {
-		JError::raiseWarning( 500, 'No items selected' );
+		$mainframe->enqueueMessage('No items selected', 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 	// Prüfen ob User Berechtigung zum publizieren hat
@@ -729,10 +739,10 @@ function publish()
 	// Wenn User nicht Admin oder DWZ prüfen ob SL der Staffel
 	$clmAccess = clm_core::$access;
 	if ($clmAccess->access('BE_club_edit_ranking') === false) {
-		JError::raiseWarning( 500, JText::_( 'RANGLISTE_STAL_RANG' ) );
+		$mainframe->enqueueMessage(JText::_( 'RANGLISTE_STAL_RANG' ), 'warning');
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
-					}
+	}
 	else {
 		$cids = implode( ',', $cid );
 		$query = 'UPDATE #__clm_rangliste_id'
@@ -740,9 +750,12 @@ function publish()
 			. ' WHERE id IN ( '. $cids .' )'
 			. ' AND ( checked_out = 0 OR ( checked_out = '.(int) $user->get('id') .' ) )';
 		}
-		$db->setQuery( $query );
-	if (!$db->query()) { JError::raiseError(500, $db->getErrorMsg() );
-			}
+		//$db->setQuery( $query );
+	if (!clm_core::$db->query($query)) { 
+		$mainframe->enqueueMessage($db->getErrorMsg(), 'error');
+		$link = 'index.php?option='.$option.'&section='.$section;
+		$mainframe->redirect( $link);
+	}
 	if (count( $cid ) == 1) {
 		$row =JTable::getInstance( 'ranglisten', 'TableCLM' );
 		}
@@ -781,23 +794,23 @@ function order( $inc )
 	$mainframe	= JFactory::getApplication();
 
 	// Check for request forgeries
-	JRequest::checkToken() or die( 'Invalid Token' );
+	defined('clm') or die( 'Invalid Token' );
 
 	$db		=JFactory::getDBO();
-	$cid		= JRequest::getVar('cid', array(0), '', 'array');
-	$option 	= JRequest::getCmd('option');
-	$section	= JRequest::getVar('section');
-	JArrayHelper::toInteger($cid, array(0));
+	$cid		= clm_core::$load->request_array_int('cid');
+	$option 	= clm_core::$load->request_string('option');
+	$section	= clm_core::$load->request_string('section');
 
-	$limit 		= JRequest::getVar( 'limit', 0, '', 'int' );
-	$limitstart 	= JRequest::getVar( 'limitstart', 0, '', 'int' );
+	$limit 		= clm_core::$load->request_int( 'limit', 0, '', 'int' );
+	$limitstart 	= clm_core::$load->request_int( 'limitstart', 0, '', 'int' );
 
 	$row =JTable::getInstance( 'mannschaften', 'TableCLM' );
 	$row->load( $cid[0]);
 	$row->move( $inc, 'liga = '.(int) $row->liga.' AND published != 0' );
 
 	$msg 	= JText::_( 'RANGLISTE_MSG_SORT');
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg );
+	$mainframe->enqueueMessage($msg, 'message');
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
 /**
@@ -808,17 +821,15 @@ function saveOrder(  )
 	$mainframe	= JFactory::getApplication();
 
 	// Check for request forgeries
-	JRequest::checkToken() or die( 'Invalid Token' );
+	defined('clm') or die( 'Invalid Token' );
 
 	$db			=JFactory::getDBO();
-	$cid		= JRequest::getVar( 'cid', array(), 'post', 'array' );
-	$option 	= JRequest::getCmd('option');
-	$section	= JRequest::getVar('section');
-	JArrayHelper::toInteger($cid);
+	$cid		= clm_core::$load->request_array_int('cid');
+	$option 	= clm_core::$load->request_string('option');
+	$section	= clm_core::$load->request_string('section');
 
 	$total		= count( $cid );
-	$order		= JRequest::getVar( 'order', array(0), 'post', 'array' );
-	JArrayHelper::toInteger($order, array(0));
+	$order		= clm_core::$load->request_array_int('order');
 
 	$row =JTable::getInstance( 'mannschaften', 'TableCLM' );
 	$groupings = array();
@@ -832,7 +843,8 @@ function saveOrder(  )
 		if ($row->ordering != $order[$i]) {
 			$row->ordering = $order[$i];
 			if (!$row->store()) {
-				JError::raiseError(500, $db->getErrorMsg() );
+				$mainframe->enqueueMessage(JText::_( 'RANGLISTE_SELECT', true ), 'warning');
+				$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 			}
 		}
 	}
@@ -850,10 +862,10 @@ function copy()
 	{
 	$mainframe	= JFactory::getApplication();
 	// Check for request forgeries
-	JRequest::checkToken() or die( 'Invalid Token' );
-	$option 	= JRequest::getCmd('option');
-	$section	= JRequest::getVar('section');
-	$cid		= JRequest::getVar( 'cid', null, 'post', 'array' );
+	defined('clm') or die( 'Invalid Token' );
+	$option 	= clm_core::$load->request_string('option');
+	$section	= clm_core::$load->request_string('section');
+	$cid		= clm_core::$load->request_array_int('cid');
 	$db		= JFactory::getDBO();
 	$table		= &JTable::getInstance('ranglisten', 'TableCLM');
 	$user		= JFactory::getUser();
@@ -863,27 +875,35 @@ function copy()
 	// Prüfen ob User Berechtigung zum kopieren hat
 	$clmAccess = clm_core::$access;
 	if ($clmAccess->access('BE_club_edit_ranking') === false) {
-		JError::raiseWarning( 500, JText::_( 'RANGLISTE_ADMIN' ) );
-		$link = 'index.php?option='.$option.'&section='.$section;
-		$mainframe->redirect( $link);
-					}
+		$mainframe->enqueueMessage(JText::_( 'RANGLISTE_ADMIN', true ), 'warning');
+		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+	}
 	else {
 
 	if ($n > 0)
 	{
 		foreach ($cid as $id)
 		{
-			if ($table->load( (int)$id ))
-			{
-			$table->id			= 0;
-			$table->published		= 0;
+			if ($table->load( (int)$id )) {
+	
+				$table->id			= 0;
+				$table->published		= 0;
 
-			if (!$table->store()) {	return JError::raiseWarning( $table->getError() );}
+				if (!$table->store()) {	
+					$mainframe->enqueueMessage($table->getError(), 'warning');
+					$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+				}
+			} else {	
+				$mainframe->enqueueMessage($table->getError(), 'warning');
+				$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 			}
-		else {	return JError::raiseWarning( 500, $table->getError() );	}
+																  
 		}
 	}
-	else {	return JError::raiseWarning( 500, JText::_( 'RANGLISTE_NO_SELECT' ) );}
+	else {	
+		$mainframe->enqueueMessage(JText::_( 'RANGLISTE_NO_SELECT', true ), 'warning');
+		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+	}
 
 	if ($n >1) { $msg=JText::_( 'RANGLISTE_MSG_COPY_ENTRYS');}
 		else {$msg=JText::_( 'RANGLISTE_MSG_COPY_ENTRY');}
@@ -896,7 +916,8 @@ function copy()
 	$clmLog->params = array('sid' => $table->sid, 'lid' => $lid, 'zps' => $table->zps, 'cids' => implode( ',', $cid ));
 	$clmLog->write();
 	
-	$this->setMessage( JText::_( $n.$msg ) );
+	$mainframe->enqueueMessage($n.$msg, 'message');
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 	}
 }

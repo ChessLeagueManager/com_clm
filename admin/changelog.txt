@@ -18,6 +18,7 @@ $ -> Language fix or change
 # SWT-Import Ligen/Mturniere: Übernahme von Liga-Parametern bei Update
 ^ DB-Anpassung Joomla 4
 ^ Code-Anpassung Joomla 4: Vereine einschl. Mitgliederverwaltung und Frontend-Ausgaben
+^ Code-Anpassung Joomla 4: Ranglistengruppen und Vereinsranglisten
  
 - - - - - 3.8.2 - [08-04-2020] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: Importe ( SWT, SWM und PGN )
