@@ -45,10 +45,10 @@ else $ms = false;
 $paar=$this->paar;
 $ok=$this->ok;
 // Variblen aus URL holen
-$sid 		= JRequest::getInt('saison','1');
-$runde		= JRequest::getInt( 'runde', '1' );
-$dg		= JRequest::getInt('dg','1');
-$paarung		= JRequest::getInt( 'paarung', '1' );
+$sid 		= clm_core::$load->request_int('saison',1);
+$runde		= clm_core::$load->request_int( 'runde',1);
+$dg		= clm_core::$load->request_int('dg',1);
+$paarung		= clm_core::$load->request_int( 'paarung',1);
 $a_html = array('<b>','</b>');
 $a_pdf  = array('','');
  
@@ -67,8 +67,8 @@ if ((isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok == 0)) $hint_freenew = JText::_('C
 if ((!isset($ok[0]->sl_ok))) $hint_freenew = JText::_('CHIEF_NOK');
 
 $runden_modus = $liga[0]->runden_modus;
-//require_once(JPATH_COMPONENT.DS.'includes'.DS.'fpdf.php');
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'rotation.php');
+//require_once(JPATH_COMPONENT.DS.'includes'.DS.'rotation.php');
+require_once (clm_core::$path.DS.'classes'.DS.'rotation.php');
 
 //class PDF extends FPDF
 class PDF extends PDF_Rotate
@@ -76,12 +76,12 @@ class PDF extends PDF_Rotate
 //Kopfzeile
 function Header()
 {
-	require(JPATH_COMPONENT.DS.'includes'.DS.'pdf_header.php');
+	require(clm_core::$path.DS.'includes'.DS.'pdf_header.php');
 }
 //Fusszeile
 function Footer()
 {
-	require(JPATH_COMPONENT.DS.'includes'.DS.'pdf_footer.php');
+	require(clm_core::$path.DS.'includes'.DS.'pdf_footer.php');}
 }
 
 function RotatedText($x,$y,$txt,$angle)

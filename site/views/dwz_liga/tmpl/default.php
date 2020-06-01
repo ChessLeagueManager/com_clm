@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -30,9 +30,9 @@ $liga		= $this->liga;
 	if (!isset($params['dwz_date'])) { $params['dwz_date'] = '1970-01-01'; $old=true; } else { $old=false; }
 $dwz		= $this->dwz;
 $spieler	= $this->spieler;
-$sid		= JRequest::getInt( 'saison','1');
-$lid		= JRequest::getInt('liga','1');
-$item		= JRequest::getInt('Itemid','1');
+$sid		= clm_core::$load->request_int( 'saison',1);
+$lid		= clm_core::$load->request_int('liga',1);
+$item		= clm_core::$load->request_int('Itemid',1);
  
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
@@ -43,7 +43,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 	
 ?>
 
-<div >
+<div id="clm">
 <div id="dwz_liga">
 <?php echo CLMContent::componentheading(JText::_('DWZ_LIGA').'&nbsp;'.(isset($dwz[0]) ? $dwz[0]->name : "")); ?>
 

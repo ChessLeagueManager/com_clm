@@ -80,7 +80,7 @@ class CLMModelVerein extends JModelLegacy
 		." LEFT JOIN #__clm_liga as l on l.id = a.liga AND l.sid = a.sid "
 		." WHERE a.zps = '$zps'"
 		." AND a.sid = ".$sid
-		." AND a.published = 1 "
+		." AND a.published = 1 AND l.published = 1 "
 		." ORDER BY a.man_nr ASC "
 		;
 	return $query;

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -14,9 +14,9 @@ defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip', '.CLMTooltip');
 
 $liga		= $this->liga;
-$itemid		= JRequest::getInt('Itemid','1');
-$sid		= JRequest::getInt( 'saison','1');
-$lid		= JRequest::getInt('liga','1');
+$itemid		= clm_core::$load->request_int('Itemid','1');
+$sid		= clm_core::$load->request_int( 'saison','1');
+$lid		= clm_core::$load->request_int('liga','1');
 
 $sql = ' SELECT `sieg`, `remis`, `nieder`, `antritt`, `man_sieg`, `man_remis`, `man_nieder`, `man_antritt`'
 		. ' FROM #__clm_liga'
@@ -50,7 +50,7 @@ $ligapunkte = $db->loadObject ();
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 ?>
-<div >
+<div id="clm">
 <div id="statistik">
 <?php
 $config = clm_core::$db->config();
@@ -96,8 +96,8 @@ $bestenliste = $this->bestenliste;
 $kgmannschaft	= $this->kgmannschaft;
 $kvmannschaft	= $this->kvmannschaft;
 
-$sid 		= JRequest::getInt('saison','1');
-$lid 		= JRequest::getInt('liga');
+$sid 		= clm_core::$load->request_int('saison',1);
+$lid 		= clm_core::$load->request_int('liga');
 
 // Konfigurationsparameter auslesen
 $config		= clm_core::$db->config();

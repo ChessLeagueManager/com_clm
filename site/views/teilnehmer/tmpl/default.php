@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -13,10 +13,10 @@
 defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip', '.CLMTooltip');
  
-$lid		= JRequest::getInt('liga','1'); 
-$sid		= JRequest::getInt('saison',0);
-$runde		= JRequest::getInt('runde');
-$item		= JRequest::getInt('Itemid','1');
+$lid		= clm_core::$load->request_int('liga',1); 
+$sid		= clm_core::$load->request_int('saison',0);
+$runde		= clm_core::$load->request_int('runde');
+$item		= clm_core::$load->request_int('Itemid',1);
 $liga		= $this->liga;
 	//Liga-Parameter aufbereiten
 	$paramsStringArray = explode("\n", $liga[0]->params);
@@ -42,7 +42,7 @@ if ($sid == 0) {
 	$db->setQuery($query);
 	$zz	=$db->loadObjectList();
 	if (isset($zz)) {
-		JRequest::setVar('saison', $zz[0]->sid);
+		$_GET['saison'] = $zz[0]->sid;
 		$sid = $zz[0]->sid;
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -19,8 +19,8 @@ class CLMModelDWZ_Liga extends JModelLegacy
 	
 	function _getCLMLiga( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$lid	= JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 
@@ -79,8 +79,8 @@ class CLMModelDWZ_Liga extends JModelLegacy
 
 	function _getCLMSpieler( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$lid	= JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
  
@@ -107,8 +107,8 @@ class CLMModelDWZ_Liga extends JModelLegacy
 
 	function _getCLMdwz( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$lid	= JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
  

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -18,31 +18,31 @@ class CLMViewPaarungsliste extends JViewLegacy
 	{
 		$model	  = $this->getModel();
 		$liga     = $model->getCLMLiga();
-		$this->assignRef('liga'  , $liga);
+		$this->liga = $liga;
 
 		$model	  = $this->getModel();
 		$termin     = $model->getCLMTermin();
-		$this->assignRef('termin'  , $termin);
+		$this->termin = $termin;
 
 		$model	  = $this->getModel();
 		$paar     = $model->getCLMPaar();
-		$this->assignRef('paar'  , $paar);
+		$this->paar = $paar;
 
 		$model	  = $this->getModel();
 		$dwzschnitt     = $model->getCLMDWZSchnitt();
-		$this->assignRef('dwzschnitt'  , $dwzschnitt);
+		$this->dwzschnitt = $dwzschnitt;
 
 		$model	  = $this->getModel();
 		$dwzgespielt     = $model->getCLMDWZgespielt();
-		$this->assignRef('dwzgespielt'  , $dwzgespielt);
+		$this->dwzgespielt = $dwzgespielt;
 
 		$model	  = $this->getModel();
 		$summe     = $model->getCLMSumme();
-		$this->assignRef('summe'  , $summe);
+		$this->summe = $summe;
 
 		$model	  = $this->getModel();
 		$rundensumme     = $model->getCLMRundensumme();
-		$this->assignRef('rundensumme'  , $rundensumme);
+		$this->rundensumme = $rundensumme;
 
 		parent::display($tpl);
 	}	

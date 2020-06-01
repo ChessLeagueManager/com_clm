@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -13,24 +13,26 @@
 defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip', '.CLMTooltip');
  
-$lid		= JRequest::getInt('liga','1'); 
-$sid		= JRequest::getInt('saison',0);
-$runde		= JRequest::getInt('runde');
-$item		= JRequest::getInt('Itemid',0);
-$typeid		= JRequest::getInt('typeid',0);
+$lid		= clm_core::$load->request_int('liga','1'); 
+$sid		= clm_core::$load->request_int('saison',0);
+$runde		= clm_core::$load->request_int('runde');
+$item		= clm_core::$load->request_int('Itemid',0);
+$typeid		= clm_core::$load->request_int('typeid',0);
 $liga		= $this->liga;
-$option 	= JRequest::getCmd( 'option' );
+$option 	= clm_core::$load->request_string( 'option' );
+if ($option == '') $option = 'com_clm';
 $mainframe	= JFactory::getApplication();
 
-$pgn		= JRequest::getInt('pgn','0'); 
+$pgn		= clm_core::$load->request_int('pgn',0); 
 if ($pgn == 1) { 
 	$result = clm_core::$api->db_pgn_export($lid,true);
-	JRequest::setVar('pgn',0);
-	if (!$result[1]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
+	$_POST['pgn'] = 0;
+	if (!$result[0]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
 	$link = 'index.php?option='.$option.'&view=rangliste&liga='.$lid.'&pgn=0';
 	if ($item != 0) $link .= '&Itemid='.$item;
 	if ($typeid != 0) $link .= '&typeid='.$typeid;
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
 	//JFactory::getApplication()->close();
 }
 
@@ -62,7 +64,7 @@ if ($sid == 0) {
 	$db->setQuery($query);
 	$zz	=$db->loadObjectList();
 	if (isset($zz)) {
-		JRequest::setVar('saison', $zz[0]->sid);
+		$_POST['saison'] = $zz[0]->sid;
 		$sid = $zz[0]->sid;
 	}
 }
@@ -83,7 +85,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
 
-echo '<div ><div id="rangliste">';
+echo '<div id="clm"><div id="rangliste">';
 
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php');
 

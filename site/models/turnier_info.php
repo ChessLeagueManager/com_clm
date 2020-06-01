@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -115,7 +115,7 @@ class CLMModelTurnier_Info extends JModelLegacy {
 				$this->matchStats['bye']++;
 			} elseif ($value->ergebnis >= 3) {
 				$this->matchStats['default']++;
-			} elseif ($value->ergebnis != NULL) {
+			} elseif (!is_null($value->ergebnis)) {
 				$this->matchStats['played']++;
 				if ($value->ergebnis == 0) {
 					$this->matchStats['winsB']++;

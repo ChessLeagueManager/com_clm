@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -19,60 +19,60 @@ class CLMViewTabelle extends JViewLegacy
 	{
 		$model	  = $this->getModel();
   		$liga     = $model->getCLMLiga();
-		$this->assignRef('liga'  , $liga);
+		$this->liga = $liga;
 
 		$model	  = $this->getModel();
   		$spielfrei     = $model->getCLMSpielfrei();
-		$this->assignRef('spielfrei'  , $spielfrei);
+		$this->spielfrei = $spielfrei;
 
 		$model	  = $this->getModel();
   		$punkte     = $model->getCLMPunkte();
-		$this->assignRef('punkte'  , $punkte);
+		$this->punkte = $punkte;
 
 		$model	  = $this->getModel();
 		$dwzschnitt     = $model->getCLMDWZSchnitt();
-		$this->assignRef('dwzschnitt'  , $dwzschnitt);
+		$this->dwzschnitt = $dwzschnitt;
 		
 		//neu: Mannschaftsliste (klkl)
 		$model	  = $this->getModel();
   		$mannschaft     = $model->getCLMMannschaft();
-		$this->assignRef('mannschaft'  , $mannschaft);
+		$this->mannschaft = $mannschaft;
 		
 		//neu: Mannschaftsleiterliste (klkl)
 		$model	  = $this->getModel();
   		$mleiter     = $model->getCLMMLeiter();
-		$this->assignRef('mleiter'  , $mleiter);
+		$this->mleiter = $mleiter;
 		
 		//neu: Meldeliste (klkl)
 		$model	  = $this->getModel();
   		$count     = $model->getCLMCount();
-		$this->assignRef('count'  , $count);
+		$this->count = $count;
 		
 		//neu Saison (klkl)
 		$model	  = $this->getModel();
 		$saison     = $model->getCLMSaison();
-		$this->assignRef('saison'  , $saison);
+		$this->saison = $saison;
 
 		$model	  = $this->getModel();
   		$bp     = $model->getCLMBP();
-		$this->assignRef('bp'  , $bp);
+		$this->bp = $bp;
 
 		$model	  = $this->getModel();
   		$sumbp     = $model->getCLMSumBP();
-		$this->assignRef('sumbp'  , $sumbp);
+		$this->sumbp = $sumbp;
 
 		$model	  = $this->getModel();
   		$plan     = $model->getCLMSumPlan();
-		$this->assignRef('plan'  , $plan);
+		$this->plan = $plan;
 
 		$model	  = $this->getModel();
 		$termin     = $model->getCLMTermin();
-		$this->assignRef('termin'  , $termin);
+		$this->termin = $termin;
 		
 		//neu Einzelergebnisse (klkl)
 		$model	  = $this->getModel();
 		$einzel     = $model->getCLMEinzel();
-		$this->assignRef('einzel'  , $einzel);
+		$this->einzel = $einzel;
 
 	// Dokumenttyp setzen
 		$document =JFactory::getDocument();

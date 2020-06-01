@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -13,9 +13,9 @@
 defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip', '.CLMTooltip');
 
-$lid		= JRequest::getInt('liga','1'); 
-$sid		= JRequest::getInt('saison','1');
-$item		= JRequest::getInt('Itemid','1');
+$lid		= clm_core::$load->request_int('liga',1); 
+$sid		= clm_core::$load->request_int('saison',1);
+$item		= clm_core::$load->request_int('Itemid',1);
 $liga		= $this->liga;
 	//Liga-Parameter aufbereiten
 	$paramsStringArray = explode("\n", $liga[0]->params);
@@ -62,7 +62,7 @@ $fe_runde_tln	= $config->fe_runde_tln;
 $countryversion	= $config->countryversion;
 ?>
 
-<div >
+<div id="clm">
 <div id="paarungsliste">
 
 <div class="componentheading">
@@ -95,7 +95,7 @@ else {
 		$ohne_tln = "6";
 	}
 	if ($params['round_date'] == '1') $ohne_tln++;
-	$item		= JRequest::getInt('Itemid','1');
+	$item		= clm_core::$load->request_int('Itemid',1);
 
 	// Array für DWZ Schnitt setzen
 	$dwz = array();

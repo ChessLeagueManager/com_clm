@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -14,8 +14,8 @@ defined('_JEXEC') or die('Restricted access');
 
 $liga		= $this->liga;
 $bestenliste = $this->bestenliste;
-$sid		= JRequest::getInt( 'saison','1');
-$lid		= JRequest::getInt('liga','1');
+$sid		= clm_core::$load->request_int( 'saison','1');
+$lid		= clm_core::$load->request_int('liga','1');
 
 	//Parameter aufbereiten
 	$paramsStringArray = explode("\n", $liga[0]->params);
@@ -48,19 +48,19 @@ $config = clm_core::$db->config();
 	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
 
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'fpdf.php');
+require_once (clm_core::$path.DS.'classes'.DS.'fpdf.php');
 
 class PDF extends FPDF
 {
 //Kopfzeile
 function Header()
 {
-	require(JPATH_COMPONENT.DS.'includes'.DS.'pdf_header.php');
+	require(clm_core::$path.DS.'includes'.DS.'pdf_header.php');
 }
 //Fusszeile
 function Footer()
 {
-	require(JPATH_COMPONENT.DS.'includes'.DS.'pdf_footer.php');
+	require(clm_core::$path.DS.'includes'.DS.'pdf_footer.php');
 }
 }
 
@@ -121,8 +121,8 @@ $pdf->SetFont('Times','',$date_font);
 			elseif ($params['btiebr'.$xx] == 8) { $hstring = JText::_('LEAGUE_STAT_PERCENT'); $width = 9; $en = 3; $ey = 1; }
 			elseif ($params['btiebr'.$xx] == 9) { $hstring = JText::_('LEAGUE_STAT_BNUMBERS_PDF'); $width = 13; }
 			if ($params['btiebr'.$xx] > 0) { 
-				if ($en == 1) $pdf->Cell($width,$zelle,utf8_decode($hstring).html_entity_decode('&sup1;',ENT_COMPAT),1,0,'C',1);
-				elseif ($en == 3) $pdf->Cell($width,$zelle,utf8_decode($hstring).html_entity_decode('&sup3;',ENT_COMPAT),1,0,'C',1);
+				if ($en == 1) $pdf->Cell($width,$zelle,utf8_decode($hstring).utf8_decode(html_entity_decode('&sup1;',ENT_COMPAT)),1,0,'C',1);
+				elseif ($en == 3) $pdf->Cell($width,$zelle,utf8_decode($hstring).utf8_decode(html_entity_decode('&sup3;',ENT_COMPAT)),1,0,'C',1);
 				else $pdf->Cell($width,$zelle,utf8_decode($hstring),1,0,'C',1);
 			}
 		}
@@ -157,7 +157,7 @@ $pdf->SetFont('Times','',$date_font);
 				elseif ($params['btiebr'.$xx] == 8) { $hstring = round($spielerbrett->eprozent,1); $width = 9; }
 				elseif ($params['btiebr'.$xx] == 9) { $hstring = $spielerbrett->ebrett;  $width = 13; }
 				if ($params['btiebr'.$xx] > 0) { 	
-					if ($en == 2) $pdf->Cell($width,$zelle,$hstring.html_entity_decode('&sup2;',ENT_COMPAT),1,0,'C',1);
+					if ($en == 2) $pdf->Cell($width,$zelle,$hstring.utf8_decode(html_entity_decode('&sup2;',ENT_COMPAT)),1,0,'C',1);
 					else $pdf->Cell($width,$zelle,$hstring,1,0,'C',1);
 				}
 			}
@@ -168,11 +168,11 @@ $pdf->SetFont('Times','',$date_font);
 	$pdf->SetFont('Times','',$font-2);
 	$pdf->Cell($lrand,$zelle-2,'',0,1,'C');
 	$pdf->Cell($lrand,$zelle-2,'',0,0,'C');
-	$pdf->Cell(10,$zelle-2,html_entity_decode('&sup1;',ENT_COMPAT).JText::_('LEAGUE_RATING_COMMENT_PDF'),0,1,'L');
+	$pdf->Cell(10,$zelle-2,utf8_decode(html_entity_decode('&sup1;',ENT_COMPAT)).JText::_('LEAGUE_RATING_COMMENT_PDF'),0,1,'L');
 	if($ex >0) { $pdf->Cell($lrand,$zelle-2,'',0,0,'C');
-				 $pdf->Cell(10,$zelle-2,html_entity_decode('&sup2;',ENT_COMPAT).JText::_('LEAGUE_RATING_IMPOSSIBLE_PDF'),0,1,'L'); }
+				 $pdf->Cell(10,$zelle-2,utf8_decode(html_entity_decode('&sup2;',ENT_COMPAT)).JText::_('LEAGUE_RATING_IMPOSSIBLE_PDF'),0,1,'L'); }
 	if($ey >0) { $pdf->Cell($lrand,$zelle-2,'',0,0,'C');
-				 $pdf->Cell(10,$zelle-2,html_entity_decode('&sup3;',ENT_COMPAT).JText::_('LEAGUE_WITH_UNCONTESTED_PDF'),0,1,'L'); }
+				 $pdf->Cell(10,$zelle-2,utf8_decode(html_entity_decode('&sup3;',ENT_COMPAT)).JText::_('LEAGUE_WITH_UNCONTESTED_PDF'),0,1,'L'); }
 
 // Ausgabe
 $pdf->Output(JText::_('LEAGUE_STAT_BEST').' '.utf8_decode($liga[0]->name).'.pdf','D');

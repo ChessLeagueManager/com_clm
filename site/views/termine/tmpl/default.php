@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Fjodor Schäfer
@@ -30,7 +30,7 @@ $doc =JFactory::getDocument();
 $doc->setTitle(JText::_('TERMINE_HEAD'));
 
 ?>
-<div >
+<div id="clm">
 <div id="termine">
 	<div class="componentheading"><?php echo JText::_('TERMINE_HEAD') ?>
 

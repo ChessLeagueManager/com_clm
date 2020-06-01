@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -62,12 +62,12 @@ if ($session_lang == 'en-GB') $google_lang = 'en';
 else $google_lang = 'de';
  
 // Variblen aus URL holen
-$sid 		= JRequest::getInt('saison','1');
-$lid		= JRequest::getInt('liga','1'); 
-$liga 		= JRequest::getInt( 'liga', '1' );
-$tln 		= JRequest::getInt('tlnr');
-$itemid 	= JRequest::getInt('Itemid','1');
-$option 	= JRequest::getCmd( 'option' );
+$sid 		= clm_core::$load->request_int('saison',1);
+$lid		= clm_core::$load->request_int('liga',1); 
+$liga 		= clm_core::$load->request_int( 'liga',1);
+$tln 		= clm_core::$load->request_int('tlnr');
+$itemid 	= clm_core::$load->request_int('Itemid',1);
+$option 	= clm_core::$load->request_string( 'option' );
 $mainframe	= JFactory::getApplication();
  
 function vergleich($wert_a,$wert_b) {
@@ -93,13 +93,15 @@ if ($lparams['dwz_date'] == '0000-00-00' OR $lparams['dwz_date'] == '1970-01-01'
 }
 if ( !$mannschaft OR $mannschaft[0]->lpublished == 0) {
 	$msg = JText::_('NOT_PUBLISHED').JText::_('GEDULD');
+	$mainframe->enqueueMessage( $msg );
 	$link = 'index.php?option='.$option.'&view=info&Itemid='.$itemid;
-	$mainframe->redirect( $link, $msg );
+	$mainframe->redirect( $link );
 	 }
 if ( $mannschaft[0]->published == 0) {
 	$msg = JText::_('TEAM_NOT_PUBLISHED').JText::_('GEDULD');
+	$mainframe->enqueueMessage( $msg );
 	$link = 'index.php?option='.$option.'&view=info&Itemid='.$itemid;
-	$mainframe->redirect( $link, $msg );
+	$mainframe->redirect( $link );
 	}
 
 // Stylesheet laden
@@ -150,7 +152,7 @@ $clm_zeile2D			= RGB($clm_zeile2);
 $attr = clm_core::$api->db_lineup_attr($lid);
 ?>
 
-<div >
+<div id="clm">
 <div id="mannschaft">
 <?php
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php');

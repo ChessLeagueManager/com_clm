@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -18,8 +18,8 @@ class CLMModelPaarungsliste extends JModelLegacy
 
 	function _getCLMLiga( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$liga	= JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',1);
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
  
@@ -41,8 +41,8 @@ class CLMModelPaarungsliste extends JModelLegacy
 
 	function _getCLMTermin( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$liga	= JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',1);
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
  
@@ -62,8 +62,8 @@ class CLMModelPaarungsliste extends JModelLegacy
 
 	function _getCLMMannschaft( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$liga	= JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',1);
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
  
@@ -84,8 +84,8 @@ class CLMModelPaarungsliste extends JModelLegacy
 
 	function _getCLMPaar ( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$liga	= JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',1);
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 
@@ -125,8 +125,8 @@ class CLMModelPaarungsliste extends JModelLegacy
 
 	function _getCLMDWZSchnitt ( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$liga	= JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',1);
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
@@ -165,8 +165,8 @@ class CLMModelPaarungsliste extends JModelLegacy
 
 	function _getCLMDWZgespielt ( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$liga	= JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',1);
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
@@ -209,9 +209,9 @@ class CLMModelPaarungsliste extends JModelLegacy
 
 	function _getCLMSumme ( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$liga	= JRequest::getInt('liga','1');
-	$runde	= JRequest::getInt('runde');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',1);
+	$runde	= clm_core::$load->request_int('runde');
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 
@@ -232,8 +232,8 @@ class CLMModelPaarungsliste extends JModelLegacy
 
 	function _getCLMRundensumme ( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$liga	= JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',1);
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 

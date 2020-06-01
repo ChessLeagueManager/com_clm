@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -35,12 +35,12 @@ $termin		=$this->termin;
 $einzel		=$this->einzel;
 $saison		=$this->saison;
 // Variblen aus URL holen
-$sid 		= JRequest::getInt('saison','1');
-$liga 		= JRequest::getInt( 'liga', '1' );
-$tln 		= JRequest::getInt('tlnr');
-$itemid 	= JRequest::getInt('Itemid');
-$option 	= JRequest::getCmd( 'option' );
-$o_nr	 	= JRequest::getInt( 'o_nr' );
+$sid 		= clm_core::$load->request_int('saison','1');
+$liga 		= clm_core::$load->request_int( 'liga', '1' );
+$tln 		= clm_core::$load->request_int('tlnr');
+$itemid 	= clm_core::$load->request_int('Itemid');
+$option 	= clm_core::$load->request_string( 'option' );
+$o_nr	 	= clm_core::$load->request_int( 'o_nr' );
 
 function vergleich($wert_a,$wert_b) {
 	$a = 1000*($wert_a->dg) + 50*($wert_a->runde) + 2*($wert_a->paar) + $wert_a->heim;
@@ -73,19 +73,19 @@ $countryversion = $config->countryversion;
 	$jid	= $user->get('id');
 $attr = clm_core::$api->db_lineup_attr($liga);
 
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'fpdf.php');
+require_once (clm_core::$path.DS.'classes'.DS.'fpdf.php');
 
 class PDF extends FPDF
 {
 //Kopfzeile
 function Header()
 {
-	require(JPATH_COMPONENT.DS.'includes'.DS.'pdf_header.php');
+	require(clm_core::$path.DS.'includes'.DS.'pdf_header.php');
 }
 //Fusszeile
 function Footer()
 {
-	require(JPATH_COMPONENT.DS.'includes'.DS.'pdf_footer.php');
+	require(clm_core::$path.DS.'includes'.DS.'pdf_footer.php');
 }
 }
 
@@ -135,7 +135,7 @@ if ($anzspl > 20) {
 	$font = 8; 
 	$zelle = 5; 
 	$pdf_orientation = 'L'; }
-JRequest::setVar( 'pdf_orientation', $pdf_orientation);
+$_REQUEST['pdf_orientation'] = $pdf_orientation;
 // Orientation Portrait/Landscape
 	if (!isset($pdf_orientation) OR (strpos('PpLl', $pdf_orientation) === false)) $pdf_orientation = 'P';
 	if ($pdf_orientation == 'L' OR $pdf_orientation == 'l') {

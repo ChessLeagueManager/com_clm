@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -18,47 +18,47 @@ class CLMViewStatistik extends JViewLegacy
 	{
 		$model		= $this->getModel();
 		$liga		= $model->getCLMliga();
-		$this->assignRef('liga'  , $liga);
+		$this->liga = $liga;
 
 		$model		= $this->getModel();
 		$remis		= $model->getCLMRemis();
-		$this->assignRef('remis'  , $remis);
+		$this->remis = $remis;
 
 		$model		= $this->getModel();
 		$kampflos	= $model->getCLMKampflos();
-		$this->assignRef('kampflos'  , $kampflos);
+		$this->kampflos = $kampflos;
 
 		$model		= $this->getModel();
 		$heim		= $model->getCLMHeim();
-		$this->assignRef('heim'  , $heim);
+		$this->heim = $heim;
 
 		$model		= $this->getModel();
 		$gast		= $model->getCLMGast();
-		$this->assignRef('gast'  , $gast);
+		$this->gast = $gast;
 
 		$model		= $this->getModel();
 		$gesamt		= $model->getCLMGesamt();
-		$this->assignRef('gesamt'  , $gesamt);
+		$this->gesamt = $gesamt;
 
 		$model		= $this->getModel();
 		$bestenliste	= $model->getCLMBestenliste();
-		$this->assignRef('bestenliste'  , $bestenliste);
+		$this->bestenliste = $bestenliste;
 		
 		$model		= $this->getModel();
 		$mannschaft	= $model->getCLMMannschaft();
-		$this->assignRef('mannschaft'  , $mannschaft);
+		$this->mannschaft = $mannschaft;
 
 		$model		= $this->getModel();
 		$brett		= $model->getCLMBrett();
-		$this->assignRef('brett'  , $brett);
+		$this->brett = $brett;
 
 		$model		= $this->getModel();
 		$rbrett		= $model->getCLMRBrett();
-		$this->assignRef('rbrett'  , $rbrett);
+		$this->rbrett = $rbrett;
 
 		$model		= $this->getModel();
 		$kbrett		= $model->getCLMKBrett();
-		$this->assignRef('kbrett'  , $kbrett);
+		$this->kbrett = $kbrett;
 
 	// Dokumenttyp setzen
 		$document =JFactory::getDocument();

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -36,16 +36,16 @@ return '#'.$R.$G.$B;
 $NO_RESULT_YET=0;
 $RESULT_YET=0;
 
-$lid		= JRequest::getInt('liga','1'); 
-$sid		= JRequest::getInt('saison','1');
-$runde		= JRequest::getInt( 'runde', '1' );
-$dg			= JRequest::getInt('dg','1');
-$item		= JRequest::getInt('Itemid',0);
-$typeid		= JRequest::getInt('typeid',0);
+$lid		= clm_core::$load->request_int('liga',1); 
+$sid		= clm_core::$load->request_int('saison',1);
+$runde		= clm_core::$load->request_int( 'runde',1);
+$dg			= clm_core::$load->request_int('dg',1);
+$item		= clm_core::$load->request_int('Itemid',0);
+$typeid		= clm_core::$load->request_int('typeid',0);
 $liga		= $this->liga;
-$option 	= JRequest::getCmd( 'option' );
+$option 	= clm_core::$load->request_string( 'option' );
 $mainframe	= JFactory::getApplication();
-$pgn		= JRequest::getInt('pgn','0'); 
+$pgn		= clm_core::$load->request_int('pgn',0); 
   if (($pgn == 1) OR ($pgn == 2)) { 
 	$result = clm_core::$api->db_pgn_template($lid,$dg,$runde,$pgn,true);
 	JRequest::setVar('pgn',0);
@@ -74,7 +74,7 @@ $attr = clm_core::$api->db_lineup_attr($lid);
 	if (!isset($params['ReportForm'])) $params['ReportForm'] = '0';
 	if (!isset($params['pgnPublic'])) $params['pgnPublic'] = '0';
 $einzel		= $this->einzel;
-$detail		= JRequest::getInt('detail','0');
+$detail		= clm_core::$load->request_int('detail',0);
 if ($detail == 0) $detailp = '1'; else $detailp = '0';
 
 	// Userkennung holen
@@ -152,7 +152,7 @@ $clm_zeile2D			= RGB($clm_zeile2);
 
 ?>
 
-<div >
+<div id="clm">
 <div id="runde">
 
 <?php
@@ -325,7 +325,7 @@ if (isset($paar[$y]->htln)) {  // Leere Begegnungen ausblenden
             $paar_exist = 1;
             echo $summe[$z2]->sum.' : '.$summe[$z2+1]->sum;
 			if (($runden_modus == 4 OR $runden_modus == 5) AND ($summe[$z2]->sum == $summe[$z2+1]->sum)) $remis_com = 1; else $remis_com = 0;
-            if ($summe[$z2]->dwz_editor !="") { $medit++; }
+            if (!is_null($summe[$z2]->dwz_editor) AND $summe[$z2]->dwz_editor > '0') { $medit++; }
              }
         else { ?> : <?php }
         $z2=$z2+2; ?>
@@ -448,7 +448,7 @@ if ($edit > 0 OR $medit >0) { ?>
 if (($rang_runde =="1") AND ($liga[0]->runden_modus != 4 AND $liga[0]->runden_modus != 5)) { 
 
 $lid		= $liga[0]->id; 
-$sid		= JRequest::getInt('saison','1');
+$sid		= clm_core::$load->request_int('saison',1);
 $punkte		= $this->punkte;
 $spielfrei	= $this->spielfrei;
 

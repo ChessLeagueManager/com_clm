@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -18,10 +18,10 @@ class CLMModelSpieler extends JModelLegacy
 {
 	function _getCLMSpieler( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$zps	= clm_escape(JRequest::getVar('zps'));
-	$mgl	= JRequest::getInt('mglnr');
-	$PKZ	= JRequest::getVar('PKZ');
+	$sid	= clm_core::$load->request_int('saison','1');
+	$zps	= clm_escape(clm_core::$load->request_string('zps'));
+	$mgl	= clm_core::$load->request_int('mglnr');
+	$PKZ	= clm_core::$load->request_string('PKZ');
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
@@ -71,10 +71,10 @@ class CLMModelSpieler extends JModelLegacy
 
 	public static function getCLMLink()
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$zps	= clm_escape(JRequest::getVar('zps'));
-	$mgl	= JRequest::getInt('mglnr');
-	$PKZ	= JRequest::getVar('PKZ');
+	$sid	= clm_core::$load->request_int('saison','1');
+	$zps	= clm_escape(clm_core::$load->request_string('zps'));
+	$mgl	= clm_core::$load->request_int('mglnr');
+	$PKZ	= clm_core::$load->request_string('PKZ');
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
@@ -87,7 +87,7 @@ class CLMModelSpieler extends JModelLegacy
 
 	// Mannschaften mit Aufstellung nach Meldeliste suchen
 	$query = " SELECT a.lid as lid, l.name as liga_name, m.tln_nr as tln_nr, m.name as name FROM #__clm_meldeliste_spieler as a "
-		." LEFT JOIN #__clm_mannschaften as m ON ( (m.zps = a.zps) OR (FIND_IN_SET(a.zps, m.sg_zps) != 0)) AND m.man_nr = a.mnr AND m.sid = a.sid "		//neu
+		." LEFT JOIN #__clm_mannschaften as m ON ( (m.zps = a.zps) OR (FIND_IN_SET(a.zps, m.sg_zps) != 0)) AND m.man_nr = a.mnr AND m.sid = a.sid AND m.liga = a.lid "		//neu
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 		." LEFT JOIN #__clm_liga AS l ON l.id = a.lid AND l.sid = a.sid "
 		." WHERE a.zps = '$zps' ";
@@ -128,10 +128,10 @@ class CLMModelSpieler extends JModelLegacy
 
 	function _getCLMRunden ( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$zps	= clm_escape(JRequest::getVar('zps'));
-	$mgl	= JRequest::getInt('mglnr');
-	$PKZ	= JRequest::getVar('PKZ');
+	$sid	= clm_core::$load->request_int('saison','1');
+	$zps	= clm_escape(clm_core::$load->request_string('zps'));
+	$mgl	= clm_core::$load->request_int('mglnr');
+	$PKZ	= clm_core::$load->request_string('PKZ');
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
@@ -175,8 +175,8 @@ class CLMModelSpieler extends JModelLegacy
 	
 	function _getCLMVereinsliste( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$zps	= clm_escape(JRequest::getVar('zps'));
+	$sid	= clm_core::$load->request_int('saison','1');
+	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 
@@ -196,8 +196,8 @@ class CLMModelSpieler extends JModelLegacy
 	}
 	function _getCLMSaisons( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$zps	= clm_escape(JRequest::getVar('zps'));
+	$sid	= clm_core::$load->request_int('saison','1');
+	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 
@@ -218,8 +218,8 @@ class CLMModelSpieler extends JModelLegacy
 	
 	function _getCLMSpielerliste( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$zps	= clm_escape(JRequest::getVar('zps'));
+	$sid	= clm_core::$load->request_int('saison','1');
+	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 

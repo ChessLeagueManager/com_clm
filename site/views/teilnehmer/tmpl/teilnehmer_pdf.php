@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -14,9 +14,9 @@ defined('_JEXEC') or die('Restricted access');
 
 //require('fpdf.php');
 
-$lid = JRequest::getInt( 'liga', '1' ); 
-$sid = JRequest::getInt( 'saison','1');
-$view = JRequest::getVar( 'view');
+$lid = clm_core::$load->request_int( 'liga',1); 
+$sid = clm_core::$load->request_int( 'saison',1);
+$view = clm_core::$load->request_string( 'view');
 // Variablen ohne foreach setzen
 $liga=$this->liga;
 	//Liga-Parameter aufbereiten
@@ -36,19 +36,19 @@ $saison     =$this->saison;
 
 $name_liga = $liga[0]->name;
 
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'fpdf.php');
+require_once (clm_core::$path.DS.'classes'.DS.'fpdf.php');
 
 class PDF extends FPDF
 {
 //Kopfzeile
 function Header()
 {
-	require_once(JPATH_COMPONENT.DS.'includes'.DS.'pdf_header.php');
+	require(clm_core::$path.DS.'includes'.DS.'pdf_header.php');
 }
 //Fusszeile
 function Footer()
 {
-	require_once(JPATH_COMPONENT.DS.'includes'.DS.'pdf_footer.php');
+	require(clm_core::$path.DS.'includes'.DS.'pdf_footer.php');
 }
 }
 

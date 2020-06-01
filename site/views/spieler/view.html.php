@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -18,23 +18,23 @@ class CLMViewSpieler extends JViewLegacy
 	{
 		$model	  = $this->getModel();
   		$spieler     = $model->getCLMSpieler();
-		$this->assignRef('spieler'  , $spieler);
+		$this->spieler = $spieler;
 
 		$model	  = $this->getModel();
   		$runden     = $model->getCLMRunden();
-		$this->assignRef('runden'  , $runden);
+		$this->runden = $runden;
 		
 		$model	  = $this->getModel();
 		$spielerliste     = $model->getCLMSpielerliste();
-		$this->assignRef('spielerliste'  , $spielerliste);
+		$this->spielerliste = $spielerliste;
 		
 		$model	  = $this->getModel();
 		$vereinsliste     = $model->getCLMVereinsliste();
-		$this->assignRef('vereinsliste'  , $vereinsliste);
+		$this->vereinsliste = $vereinsliste;
 		
 		$model	  = $this->getModel();
 		$saisons     = $model->getCLMSaisons();
-		$this->assignRef('saisons'  , $saisons);
+		$this->saisons = $saisons;
 		
 		$document =JFactory::getDocument();
 		

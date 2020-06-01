@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2020 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -21,7 +21,7 @@ if ($fe_submenu_t == 1) {
 	if ($config->template) {
 		$document->addStyleSheet('components/com_clm/includes/submenu.css', 'text/css');
 	}
-	$itemid = JRequest::getVar('Itemid');
+	$itemid = clm_core::$load->request_string('Itemid');
 	include (JPATH_COMPONENT . DS . 'models' . DS . 'submenu_t.php');
 	require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'submenu_function.php');
 	$document->addScript('components/com_clm/javascript/submenu.js');
@@ -29,7 +29,7 @@ if ($fe_submenu_t == 1) {
 	$array = array();
 	// Informationen
 	$array[0][0] = JText::_('TOURNAMENT_INFO');
-	if (JRequest::getVar('view', 0) != "turnier_info") {
+	if (clm_core::$load->request_string('view', 0) != "turnier_info") {
 		$array[0][1] = 0;
 	} else {
 		$array[0][1] = 1;
@@ -43,7 +43,7 @@ if ($fe_submenu_t == 1) {
         $array[0][3]=array();
 	// Tabelle
 	$array[1][0] = JText::_('TOURNAMENT_TABLE');
-	if (JRequest::getVar('view', 0) != "turnier_tabelle" || JRequest::getVar('spRang', -1) != - 1) {
+	if (clm_core::$load->request_string('view', 0) != "turnier_tabelle" || clm_core::$load->request_string('spRang', -1) != - 1) {
 		$array[1][1] = 0;
 	} else {
 		$array[1][1] = 1;
@@ -57,7 +57,7 @@ if ($fe_submenu_t == 1) {
         $array[1][3]=array();
 	for ($i = 0;$i < count($sub_spRang);$i++) {
 		$array[1][3][$i][0] = $sub_spRang[$i]->name . " " . JText::_('TOURNAMENT_TABLE');
-		if (JRequest::getVar('view', 0) != "turnier_tabelle" || JRequest::getVar('spRang', -1) != $sub_spRang[$i]->id) {
+		if (clm_core::$load->request_string('view', 0) != "turnier_tabelle" || clm_core::$load->request_string('spRang', -1) != $sub_spRang[$i]->id) {
 			$array[1][3][$i][1] = 0;
 		} else {
 			$array[1][3][$i][1] = 1;
@@ -72,7 +72,7 @@ if ($fe_submenu_t == 1) {
 	}
 	// Rangliste
 	$array[2][0] = JText::_('TOURNAMENT_RANKING');
-	if (JRequest::getVar('view', 0) != "turnier_rangliste" || JRequest::getVar('spRang', -1) != - 1) {
+	if (clm_core::$load->request_string('view', 0) != "turnier_rangliste" || clm_core::$load->request_string('spRang', -1) != - 1) {
 		$array[2][1] = 0;
 	} else {
 		$array[2][1] = 1;
@@ -86,7 +86,7 @@ if ($fe_submenu_t == 1) {
         $array[2][3]=array();
 	for ($i = 0;$i < count($sub_spRang);$i++) {
 		$array[2][3][$i][0] = $sub_spRang[$i]->name . " " . JText::_('TOURNAMENT_RANKING');
-		if (JRequest::getVar('view', 0) != "turnier_rangliste" || JRequest::getVar('spRang', -1) != $sub_spRang[$i]->id) {
+		if (clm_core::$load->request_string('view', 0) != "turnier_rangliste" || clm_core::$load->request_string('spRang', -1) != $sub_spRang[$i]->id) {
 			$array[2][3][$i][1] = 0;
 		} else {
 			$array[2][3][$i][1] = 1;
@@ -101,7 +101,7 @@ if ($fe_submenu_t == 1) {
 	}
 	// Teilnehmerliste
 	$array[3][0] = JText::_('TOURNAMENT_PARTICIPANTLIST');
-	if (JRequest::getVar('view', 0) != "turnier_teilnehmer") {
+	if (clm_core::$load->request_string('view', 0) != "turnier_teilnehmer") {
 		$array[3][1] = 0;
 	} else {
 		$array[3][1] = 1;
@@ -114,7 +114,7 @@ if ($fe_submenu_t == 1) {
 	}
         $array[3][3]=array();
 		$array[3][3][0][0] = JText::_('TOURNAMENT_DWZ');
-		if (JRequest::getVar('view', 0) != "turnier_dwz") {
+		if (clm_core::$load->request_string('view', 0) != "turnier_dwz") {
 			$array[3][3][0][1] = 0;
 		} else {
 			$array[3][3][0][1] = 1;
@@ -128,7 +128,7 @@ if ($fe_submenu_t == 1) {
 
 	// Paarungsliste
 	$array[4][0] = JText::_('SUBMENU_PAAR');
-	if (JRequest::getVar('view', 0) != "turnier_paarungsliste" || JRequest::getVar('spRang', -1) != - 1) {
+	if (clm_core::$load->request_string('view', 0) != "turnier_paarungsliste" || clm_core::$load->request_string('spRang', -1) != - 1) {
 		$array[4][1] = 0;
 	} else {
 		$array[4][1] = 1;
@@ -142,7 +142,7 @@ if ($fe_submenu_t == 1) {
         $array[4][3]=array();
 	for ($i = 0;$i < count($sub_rounds);$i++) {
 		$array[4][3][$i][0] = $sub_rounds[$i]->name;
-		if (JRequest::getVar('view', 0) != "turnier_runde" || JRequest::getVar('runde', -1) != $sub_rounds[$i]->nr || JRequest::getVar('dg', -1) != $sub_rounds[$i]->dg) {
+		if (clm_core::$load->request_string('view', 0) != "turnier_runde" || clm_core::$load->request_string('runde', -1) != $sub_rounds[$i]->nr || clm_core::$load->request_string('dg', -1) != $sub_rounds[$i]->dg) {
 			$array[4][3][$i][1] = 0;
 		} else {
 			$array[4][3][$i][1] = 1;

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -18,8 +18,8 @@ class CLMModelStatistik extends JModelLegacy
 
 	function _getCLMLiga( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$lid	= JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
  
@@ -47,8 +47,8 @@ class CLMModelStatistik extends JModelLegacy
 
 	function _getCLMRemis( &$options )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$lid = JRequest::getInt('liga','1');	
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
@@ -68,8 +68,8 @@ class CLMModelStatistik extends JModelLegacy
 
 	function _getCLMKampflos( &$options )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$lid = JRequest::getInt('liga','1');	
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
@@ -89,8 +89,8 @@ class CLMModelStatistik extends JModelLegacy
 
 	function _getCLMHeim( &$options )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$lid = JRequest::getInt('liga','1');	
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
@@ -111,8 +111,8 @@ class CLMModelStatistik extends JModelLegacy
 
 	function _getCLMGast( &$options )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$lid = JRequest::getInt('liga','1');	
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
@@ -133,8 +133,8 @@ class CLMModelStatistik extends JModelLegacy
 
 	function _getCLMGesamt( &$options )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$lid = JRequest::getInt('liga','1');	
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
@@ -155,10 +155,10 @@ class CLMModelStatistik extends JModelLegacy
 	function _getCLMBestenliste( &$options )
 	{
 	$mainframe	= JFactory::getApplication();
-	$option 	= JRequest::getCmd( 'option' );
+	$option 	= clm_core::$load->request_string( 'option' );
 
-	$sid = JRequest::getInt('saison','1');
-	$lid = JRequest::getInt('liga','1');	
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
@@ -167,8 +167,8 @@ class CLMModelStatistik extends JModelLegacy
 		$id			= @$options['id'];
  
 	$query	= " SET SQL_BIG_SELECTS=1";
-	$db->setQuery($query);
-	$db->query();
+	//$db->setQuery($query);
+	clm_core::$db->query($query);
 
 	$query = " SELECT a.rang, a.params FROM #__clm_liga as a"
 		." WHERE a.id = $lid "
@@ -265,8 +265,8 @@ class CLMModelStatistik extends JModelLegacy
 
 	public static function checkSpieler( $punkte )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$lid = JRequest::getInt('liga','1');	
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
@@ -282,8 +282,8 @@ class CLMModelStatistik extends JModelLegacy
 
 	function _getCLMMannschaft( &$options )
 	{
-	$lid	= JRequest::getInt('liga','1');
-	$sid	= JRequest::getInt('saison','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
  
@@ -311,8 +311,8 @@ class CLMModelStatistik extends JModelLegacy
 
 	public static function Bretter()
 	{
-	$sid = JRequest::getInt('saison','1');
-	$lid = JRequest::getInt('liga','1');	
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
@@ -329,8 +329,8 @@ class CLMModelStatistik extends JModelLegacy
 
 	function _getCLMBrett( &$options )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$lid = JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
@@ -352,8 +352,8 @@ class CLMModelStatistik extends JModelLegacy
 
 	function _getCLMGBrett( &$options )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$lid = JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
@@ -376,8 +376,8 @@ class CLMModelStatistik extends JModelLegacy
 
 	public static function CLMBrett_all( $bretter )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$lid = JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 		$db			= JFactory::getDBO();
 
 // wg
@@ -452,8 +452,8 @@ class CLMModelStatistik extends JModelLegacy
 
 	function _getCLMRBrett( &$options )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$lid = JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
@@ -476,8 +476,8 @@ class CLMModelStatistik extends JModelLegacy
 
 	function _getCLMKBrett( &$options )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$lid = JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
@@ -502,8 +502,8 @@ class CLMModelStatistik extends JModelLegacy
 
 	function _getCLMkvMannschaft( &$options )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$lid = JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
@@ -526,8 +526,8 @@ class CLMModelStatistik extends JModelLegacy
 
 	function _getCLMkgMannschaft( &$options )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$lid = JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  

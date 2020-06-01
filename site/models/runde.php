@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -18,8 +18,8 @@ class CLMModelRunde extends JModelLegacy
 
 	function _getCLMLiga( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$liga	= JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',1);
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
  
@@ -45,8 +45,8 @@ class CLMModelRunde extends JModelLegacy
 
 	function _getCLMMannschaft( &$options )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$liga = JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',1);
 		// TODO: Cache on the fingerprint of the arguments
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
@@ -68,10 +68,10 @@ class CLMModelRunde extends JModelLegacy
 
 	function _getCLMPaar ( &$options )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$liga = JRequest::getInt('liga','1');
-	$dg = JRequest::getInt('dg');
-	$runde = JRequest::getInt('runde');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',1);
+	$dg 	= clm_core::$load->request_int('dg');
+	$runde = clm_core::$load->request_int('runde');
 
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
@@ -107,8 +107,8 @@ class CLMModelRunde extends JModelLegacy
 
 	function _getCLMDWZSchnitt ( &$options )
 	{
-	$liga = JRequest::getInt('liga','1');
-	$sid = JRequest::getInt('saison','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',1);
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
@@ -148,10 +148,10 @@ class CLMModelRunde extends JModelLegacy
 
 	function _getCLMDWZgespielt ( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$liga	= JRequest::getInt('liga','1');
-	$runde	= JRequest::getInt('runde', '1');
-	$dg	= JRequest::getInt('dg','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',1);
+	$dg 	= clm_core::$load->request_int('dg');
+	$runde = clm_core::$load->request_int('runde');
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
@@ -191,18 +191,18 @@ class CLMModelRunde extends JModelLegacy
 
 	function _getCLMEinzel ( &$options )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$liga = JRequest::getInt('liga','1');
-	$runde = JRequest::getInt('runde');
-	$dg = JRequest::getInt('dg');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',1);
+	$dg 	= clm_core::$load->request_int('dg');
+	$runde = clm_core::$load->request_int('runde');
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
 
 	$db	= JFactory::getDBO();
 	$query	= " SET SQL_BIG_SELECTS=1";
-	$db->setQuery($query);
-	$db->query();
+	//$db->setQuery($query);
+	clm_core::$db->query($query);
 
 	$query = " SELECT rang "
 		." FROM #__clm_liga as a "
@@ -284,10 +284,10 @@ class CLMModelRunde extends JModelLegacy
 
 	function _getCLMSumme ( &$options )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$liga = JRequest::getInt('liga','1');
-	$runde = JRequest::getInt('runde');
-	$dg = JRequest::getInt('dg');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',1);
+	$dg 	= clm_core::$load->request_int('dg');
+	$runde = clm_core::$load->request_int('runde');
 
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
@@ -315,10 +315,10 @@ class CLMModelRunde extends JModelLegacy
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
 
-	$sid = JRequest::getInt('saison','1');
-	$lid = JRequest::getInt('liga','1');
-	$runde = JRequest::getInt('runde');
-	$dg = JRequest::getInt('dg');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$lid	= clm_core::$load->request_int('liga',1);
+	$dg 	= clm_core::$load->request_int('dg');
+	$runde = clm_core::$load->request_int('runde');
 	
 	// Anz.Runden und Durchgänge aus #__clm_liga holen
 	$query = " SELECT a.runden, a.durchgang "
@@ -350,8 +350,8 @@ class CLMModelRunde extends JModelLegacy
 /////////////
 	function _getCLMSpielfrei( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$liga	= JRequest::getInt('liga','1');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',1);
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
  
@@ -371,10 +371,10 @@ class CLMModelRunde extends JModelLegacy
 
 	function _getCLMPunkte( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$liga	= JRequest::getInt('liga','1');
-	$dg     = JRequest::getInt('dg');         
-	$runde	= JRequest::getInt('runde');
+	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',1);
+	$dg 	= clm_core::$load->request_int('dg');
+	$runde = clm_core::$load->request_int('runde');
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 	// ordering für Rangliste -> Ersatz für direkten Vergleich
@@ -491,10 +491,10 @@ class CLMModelRunde extends JModelLegacy
 	// Paarungen Folgerunde   klkl
 	function _getCLMPaar1 ( &$options )
 	{
-	$sid = JRequest::getInt('saison','1');
-	$lid = JRequest::getInt('liga','1');
-	$dg = JRequest::getInt('dg');
-	$runde = JRequest::getInt('runde');
+	$sid = clm_core::$load->request_int('saison',1);
+	$lid = clm_core::$load->request_int('liga',1);
+	$dg 	= clm_core::$load->request_int('dg');
+	$runde = clm_core::$load->request_int('runde');
 	
 	$db			= JFactory::getDBO();
 	$id			= @$options['id'];
@@ -546,7 +546,7 @@ class CLMModelRunde extends JModelLegacy
 	{
 	$user	= JFactory::getUser();
 	$jid	= $user->get('id');
-	$sid	= JRequest::getInt('saison','1');
+	$sid	= clm_core::$load->request_int('saison',1);
 
 		$db	= JFactory::getDBO();
 		$id	= @$options['id'];

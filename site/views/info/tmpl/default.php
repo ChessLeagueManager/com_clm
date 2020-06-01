@@ -36,7 +36,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 ?>
 
-<div >
+<div id="clm">
 <div id="info">
 <div class="componentheading"><?php echo JText::_('SEASON_STATISTIK') ?> <?php echo $saison[0]->name; ?></div>
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -12,23 +12,23 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'fpdf.php');
+require_once (clm_core::$path.DS.'classes'.DS.'fpdf.php');
 
 class PDF extends FPDF
 {
 //Kopfzeile
 function Header()
 {
-	require_once(JPATH_COMPONENT.DS.'includes'.DS.'pdf_header.php');
+	require(clm_core::$path.DS.'includes'.DS.'pdf_header.php');
 }
 //Fusszeile
 function Footer()
 {
-	require_once(JPATH_COMPONENT.DS.'includes'.DS.'pdf_footer.php');
+	require(clm_core::$path.DS.'includes'.DS.'pdf_footer.php');
 }
 }
 
-$lid = JRequest::getInt( 'liga', '1' ); 
+$lid = clm_core::$load->request_int( 'liga', '1' ); 
 	//Liga-Parameter aufbereiten
 	if(isset($liga[0])){
 		$paramsStringArray = explode("\n", $liga[0]->params);
@@ -43,8 +43,8 @@ $lid = JRequest::getInt( 'liga', '1' );
 		}
 	}	
 	if (!isset($params['dwz_date'])) $params['dwz_date'] = '1970-01-01';
-$sid = JRequest::getInt( 'saison','1');
-$view = JRequest::getVar( 'view');
+$sid = clm_core::$load->request_int( 'saison','1');
+$view = clm_core::$load->request_string( 'view');
 // Variablen ohne foreach setzen
 $liga=$this->liga;
 $punkte=$this->punkte;
@@ -108,7 +108,7 @@ if ($liga[0]->runden_modus == 1 OR $liga[0]->runden_modus == 2) {    // vollrund
 // Leere Zelle zum zentrieren
 $leer = 2;
 // Orientation Portrait/Landscape
-	JRequest::setVar( 'pdf_orientation', $pdf_orientation);
+	$_POST['pdf_orientation'] = $pdf_orientation;
 	if (!isset($pdf_orientation) OR (strpos('PpLl', $pdf_orientation) === false)) $pdf_orientation = 'P';
 	if ($pdf_orientation == 'L' OR $pdf_orientation == 'l') {
 		$pdf_width = 285;

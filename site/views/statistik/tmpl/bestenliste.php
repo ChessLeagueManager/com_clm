@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -13,14 +13,11 @@
 defined('_JEXEC') or die('Restricted access');
 
 $liga		= $this->liga;
-//$sub_liga	= $this->sub_liga;
-//$sub_msch	= $this->sub_msch;
-//$sub_rnd	= $this->sub_rnd;
 $bestenliste= $this->bestenliste;
-$item		= JRequest::getInt('Itemid','1');
-$itemid 	= JRequest::getInt('Itemid');
-$sid		= JRequest::getInt( 'saison','1');
-$lid		= JRequest::getInt('liga','1');
+$item		= clm_core::$load->request_int('Itemid',1);
+$itemid 	= clm_core::$load->request_int('Itemid');
+$sid		= clm_core::$load->request_int('saison',1);
+$lid		= clm_core::$load->request_int('liga',1);
 
 	//Parameter aufbereiten
 	$paramsStringArray = explode("\n", $liga[0]->params);
@@ -65,7 +62,7 @@ function tableOrdering( order, dir, task )
 }
 </SCRIPT>
 
-<div >
+<div id="clm">
 <div id="statistik">
 <?php echo CLMContent::componentheading(JText::_('LEAGUE_STATISTIK').'&nbsp;'.$liga[0]->name); ?>
 

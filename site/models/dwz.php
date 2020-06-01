@@ -32,7 +32,7 @@ class CLMModelDWZ extends JModelLegacy
 	$filter_order     = $mainframe->getUserStateFromRequest( $option.'filter_order_dwz', 'filter_order', 'DWZ', 'cmd' );
 	$filter_order_Dir = $mainframe->getUserStateFromRequest( $option.'filter_order_Dir_dwz', 'filter_order_Dir', 'DESC', 'word' );
 		
-		$this->param['order'] = $mainframe->getUserStateFromRequest( "$option.filter_order", 'filter_order', 'DWZ', 'cmd' ); // JRequest::getString('filter_order', 'a.id');
+		$this->param['order'] = $mainframe->getUserStateFromRequest( "$option.filter_order", 'filter_order', 'DWZ', 'cmd' ); 
 		$this->param['order_Dir'] = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",'filter_order_Dir','desc','word' );
 	
 	if(!empty($filter_order) && !empty($filter_order_Dir) ){

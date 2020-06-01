@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -19,8 +19,8 @@ class CLMModelAktuell_Runde extends JModelLegacy
 	public static function Runden ()
 	{
 		$db	= JFactory::getDBO();
-		$sid	= JRequest::getInt('saison','1');
-		$liga	= JRequest::getInt('liga','1');
+		$sid	= clm_core::$load->request_int('saison','1');
+		$liga	= clm_core::$load->request_int('liga','1');
 	
 		// Konfigurationsparameter auslesen
 		$config = clm_core::$db->config();
