@@ -318,15 +318,17 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		} 
 		$db_data['sllist'] = $clmAccess->userlist($accesspoint,'>0');
 		if($db_data['sllist'] === false) {
+			$this->setMessage( $db->getErrorMsg(), 'warning' );
 			$this->setRedirect( 'index.php?option='.$option.'&section='.$section );
-			return JError::raiseWarning( 500, $db->getErrorMsg() );
+			return;
 		}
 
 		$sql = 'SELECT id as sid, name FROM #__clm_saison WHERE archiv = 0';
 		//$db->setQuery ($sql);
 		if (!clm_core::$db->query($sql)) {
+			$this->setMessage( $db->getErrorMsg(), 'warning' );
 			$this->setRedirect( 'index.php?option='.$option.'&section='.$section );
-			return JError::raiseWarning( 500, $db->getErrorMsg() );
+			return;
 		}
 		$db_data['saisonlist'] = clm_core::$db->loadObjectList($sql);
 
@@ -334,8 +336,9 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		$query = ' SELECT id, Gruppe FROM #__clm_rangliste_name ';
 		//$db->setQuery($query);
 		if (!clm_core::$db->query($query)) {
+			$this->setMessage( $db->getErrorMsg(), 'warning' );
 			$this->setRedirect( 'index.php?option='.$option.'&section='.$section );
-			return JError::raiseWarning( 500, $db->getErrorMsg() );
+			return;
 		}
 		$db_data['glist'] = clm_core::$db->loadObjectList($query);
 		

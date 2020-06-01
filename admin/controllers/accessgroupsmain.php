@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -21,20 +21,19 @@ class CLMControllerAccessgroupsMain extends JControllerLegacy {
 	}
 	
 	function display($cachable = false, $urlparams = array()) { 
-		$_GET['view'] = 'accessgroupsmain';
+		$_REQUEST['view'] = 'accessgroupsmain';
 		parent::display(); 
 	} 
 	
 	function add() { 
-		$_GET['view'] = 'accessgroupsform';
-		$_GET['hidemainmenu'] = 1; 
-		$this->setRedirect('index.php?option=com_clm&view=accessgroupsform&hidemainmenu=1'); 
-		//parent::display(); 
+		$_REQUEST['view'] = 'accessgroupsform';
+		$_REQUEST['hidemainmenu'] = 1; 
+		parent::display(); 
 	}
 	
 	function edit() { 
-		$_GET['view'] = 'accessgroupsform';
-		$_GET['hidemainmenu'] = 1; 
+		$_REQUEST['view'] = 'accessgroupsform';
+		$_REQUEST['hidemainmenu'] = 1; 
 		parent::display(); 
 	}
 	function copy() { 

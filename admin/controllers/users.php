@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -41,8 +39,8 @@ function display($cachable = false, $urlparams = array())
 	$filter_order		= $mainframe->getUserStateFromRequest( "$option.filter_order",'filter_order','a.id',	'cmd' );
 	$filter_order_Dir	= $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",'filter_order_Dir','','word' );
 	$filter_state		= $mainframe->getUserStateFromRequest( "$option.filter_state",'filter_state','','word' );
-	$filter_sid		= $mainframe->getUserStateFromRequest( "$option.filter_sid",'filter_sid',clm_core::$access->getSeason(),'int' );
-	$filter_vid		= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'string' );
+	$filter_sid			= $mainframe->getUserStateFromRequest( "$option.filter_sid",'filter_sid',clm_core::$access->getSeason(),'int' );
+	$filter_vid			= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'string' );
 	$filter_usertype	= $mainframe->getUserStateFromRequest( "$option.filter_usertype",'filter_usertype',0,'string' );
 	$search			= $mainframe->getUserStateFromRequest( "$option.search",'search','','string' );
 	$search			= strtolower( $search );
@@ -110,13 +108,24 @@ function display($cachable = false, $urlparams = array())
 	$rows = $db->loadObjectList();
 	
 	if(count($rows)==0){
-		$this->setRedirect('index.php?option=' . $option . '&amp;section=' . $section);
-		$this->setMessage(JText::_( 'USERS_NO_USER' ),'notice');
-		return;
+//		$this->setRedirect('index.php?option=' . $option . '&amp;section=' . $section);
+//		$this->setMessage(JText::_( 'USERS_NO_USER' ),'notice');
+//		return;
 	}
 
 	// Statusfilter
-	$lists['state']	= JHTML::_('grid.state',  $filter_state );
+	//$lists['state']	= JHTML::_('grid.state',  $filter_state );
+	$state = array();
+	$state[0]	= new stdClass();
+	$state[0]->id = ''; 
+	$state[0]->name = '- ' . JText::_('JLIB_HTML_SELECT_STATE') . ' -'; 
+	$state[1]	= new stdClass();
+	$state[1]->id = 'P';
+	$state[1]->name = JText::_('JPUBLISHED'); 
+	$state[2]	= new stdClass();
+	$state[2]->id = 'U';
+	$state[2]->name = JText::_('JUNPUBLISHED'); 
+	$lists['state']	= JHTML::_('select.genericlist', $state, 'filter_state', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_state );
 	// Saisonfilter
 	$sql = 'SELECT id, name FROM #__clm_saison WHERE published=1';
 	$db->setQuery($sql);
@@ -142,7 +151,8 @@ function display($cachable = false, $urlparams = array())
 	$usertypelist[]	= JHTML::_('select.option',  '0', JText::_( 'USERS_BENUTZER_DD' ), 'usertype', 'name' );
 	//$usertypelist		= array_merge( $usertypelist, $db->loadObjectList() );
 	$usertypelist		= array_merge( $usertypelist, $utlist );
-	$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'filter_usertype', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','usertype', 'name', intval ($filter_usertype) );
+	//$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'filter_usertype', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','usertype', 'name', intval ($filter_usertype) );
+	$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'filter_usertype', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','usertype', 'name', $filter_usertype );
 	// Ordering
 	$lists['order_Dir']	= $filter_order_Dir;
 	$lists['order']		= $filter_order;

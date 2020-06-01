@@ -196,7 +196,6 @@ class CLMModelSWTLigaman extends JModelLegacy {
 		
 		if (clm_core::$db->query($sql)) {
 			$man_id = clm_core::$db->insert_id();
-			//JRequest::setVar ('man_id', $db->insertid() );
 		}
 		else {
 			print $db->getErrorMsg ();

@@ -26,7 +26,7 @@ function setImport_1Toolbar ($execute,$upload)
 function Import_1 (&$spieler, &$lists,&$man, &$swt, &$man_zps, &$vereine, &$sid, $fileName, &$name_manuell)
 	{
 	CLMViewSWT::setImport_1Toolbar($execute,$upload);	
-	JRequest::setVar( 'hidemainmenu', 1 );
+	$_REQUEST['hidemainmenu'] = 1;
 	?>
 
 	<form action="index.php" name="adminForm" id="adminForm" method="post" enctype="multipart/form-data" >
@@ -146,7 +146,7 @@ function setImport_2Toolbar ($execute,$upload)
 function Import_2 (&$lists, &$swt, &$name_manuell, &$zps_db, &$vereine, &$sid, &$data, &$liga_swt, &$name_man_spl, $fileName, $sg_zps)
 	{
 	CLMViewSWT::setImport_2Toolbar($execute,$upload);	
-	JRequest::setVar( 'hidemainmenu', 1 );
+	$_REQUEST['hidemainmenu'] = 1;
 	?>
 
 	<form action="index.php" name="adminForm" id="adminForm" method="post" enctype="multipart/form-data" >
@@ -265,7 +265,7 @@ function setImport_3Toolbar ($execute,$upload)
 function Import_3 (&$lists, &$swt, &$zps_db, &$sid, &$data, &$liga_swt, &$man_zps, $fileName, $sg_zps)
 	{
 	CLMViewSWT::setImport_3Toolbar($execute,$upload);	
-	JRequest::setVar( 'hidemainmenu', 1 );
+	$_REQUEST['hidemainmenu'] = 1;
 	?>
 	<form action="index.php" name="adminForm" id="adminForm" method="post" enctype="multipart/form-data" >
 	
