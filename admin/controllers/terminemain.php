@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -128,7 +128,6 @@ class CLMControllerTermineMain extends JControllerLegacy {
 		
 		$cid = clm_core::$load->request_array_int('cid');	
 		
-		//$task		= JRequest::getCmd( 'task' );
 		$task = clm_core::$load->request_string('task', '');
 		$publish	= ($task == 'publish'); // zu vergebender Wert 0/1
 		

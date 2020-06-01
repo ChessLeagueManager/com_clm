@@ -70,7 +70,7 @@ class CLMControllerSonderranglistenCopy extends JControllerLegacy {
 	
 		$clmAccess = clm_core::$access;      
 		if ($clmAccess->access('BE_tournament_edit_detail') === false) {
-			JError::raiseWarning( 500, JText::_( 'TOURNAMENT_NO_ACCESS' ) );
+			$this->setMessage( JText::_( 'TOURNAMENT_NO_ACCESS' ), 'warning' );
 			return false;
 		}
 		$turnier_source = clm_core::$load->request_string('turnier_source');
