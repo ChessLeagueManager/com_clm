@@ -1,16 +1,14 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -31,8 +29,8 @@ function __construct( $config = array() )
 function display($cachable = false, $urlparams = array())
 	{
 	$mainframe	= JFactory::getApplication();
-	$option 	= JRequest::getCmd( 'option' );
-	$section = JRequest::getVar('section');
+	$option 	= clm_core::$load->request_string('option');
+	$section 	= clm_core::$load->request_string('section');
 	$db=JFactory::getDBO();
 
 	$filter_order		= $mainframe->getUserStateFromRequest( "$option.filter_order",'filter_order','a.id',	'cmd' );
@@ -145,12 +143,14 @@ function edit()
 
 	$db 		=JFactory::getDBO();
 	$user 		=JFactory::getUser();
-	$task 		= JRequest::getVar( 'task');
-	$cid 		= JRequest::getVar( 'cid', array(0), '', 'array' );
-	$option 	= JRequest::getCmd( 'option' );
-	$section 	= JRequest::getVar( 'section' );
-	$liga 		= JRequest::getVar( 'liga');
-	JArrayHelper::toInteger($cid, array(0));
+	$task 		= clm_core::$load->request_string( 'task');
+	$cid 		= clm_core::$load->request_array_int( 'cid');
+	if (is_null($cid)) 
+		$cid[0] = clm_core::$load->request_int('id');
+	$option 	= clm_core::$load->request_string('option');
+	$section 	= clm_core::$load->request_string('section');
+	$liga 		= clm_core::$load->request_string( 'liga');
+										 
 	$row =JTable::getInstance( 'mannschaften', 'TableCLM' );
 	// load the row from the db table
 	$row->load( $cid[0] );
@@ -164,12 +164,12 @@ function edit()
 	$clmAccess = clm_core::$access;
 	if ($clmAccess->access('BE_team_registration_list') === false) {
 		$section = 'info';
-		JError::raiseWarning( 500, JText::_( 'TEAM_NO_ACCESS' ) );
+		$mainframe->enqueueMessage( JText::_( 'TEAM_NO_ACCESS' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
 	if ( isset($lid[0]) && $lid[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_team_registration_list') !== true AND $task == 'edit') {
-		JError::raiseWarning( 500, JText::_( 'MELDELISTEN_STAFFEL' ) );
+		$mainframe->enqueueMessage( JText::_( 'MELDELISTEN_STAFFEL' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section=mannschaften';
 		$mainframe->redirect( $link);
 					}
@@ -248,15 +248,15 @@ function cancel()
 	{
 	$mainframe	= JFactory::getApplication();
 	// Check for request forgeries
-	JRequest::checkToken() or die( 'Invalid Token' );
+	defined('clm') or die( 'Invalid Token' );
 	
-	$option		= JRequest::getCmd('option');
-	$section	= JRequest::getVar('section');
-	$id		= JRequest::getVar('id');	
+	$option 	= clm_core::$load->request_string('option');
+	$section 	= clm_core::$load->request_string('section');
+	$id		= clm_core::$load->request_int('id');	
 	$row 		=JTable::getInstance( 'meldelisten', 'TableCLM' );
 
-
 	$msg = JText::_( 'MELDELISTEN_ML_ABGE').$id;
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg ,"message");
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 }

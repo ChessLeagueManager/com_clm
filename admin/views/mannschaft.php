@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 class CLMViewMannschaften
 {
 public static function setMannschaftenToolbar()
@@ -21,10 +19,10 @@ public static function setMannschaftenToolbar()
 
 		JToolBarHelper::title( JText::_( 'TITLE_MANNSCHAFT' ), 'clm_headmenu_mannschaften.png' );
 	if($clmAccess->access('BE_team_registration_list') !== false) {
-		JToolBarHelper::custom('delete_meldeliste','send.png','send_f2.png', JText::_( 'MANNSCHAFT_BUTTON_ML_DEL'), false);
-		JToolBarHelper::custom('meldeliste','send.png','send_f2.png', JText::_( 'MANNSCHAFT_BUTTON_ML_UPD'), false);
-		JToolBarHelper::custom('spielfrei','cancel.png','cancel_f2.png', JText::_( 'MANNSCHAFT_BUTTON_SPIELFREI'), false);
-		JToolBarHelper::custom('annull','cancel.png','cancel_f2.png', JText::_( 'MANNSCHAFT_BUTTON_ANNULL'), false);
+		JToolBarHelper::custom('delete_meldeliste','send.png','send_f2.png', JText::_( 'MANNSCHAFT_BUTTON_ML_DEL'));
+		JToolBarHelper::custom('meldeliste','send.png','send_f2.png', JText::_( 'MANNSCHAFT_BUTTON_ML_UPD'));
+		JToolBarHelper::custom('spielfrei','cancel.png','cancel_f2.png', JText::_( 'MANNSCHAFT_BUTTON_SPIELFREI'));
+		JToolBarHelper::custom('annull','cancel.png','cancel_f2.png', JText::_( 'MANNSCHAFT_BUTTON_ANNULL'));
 		JToolBarHelper::publishList();
 		JToolBarHelper::unpublishList();
 		JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', JText::_( 'MANNSCHAFT_BUTTON_COPY' )); 
@@ -129,7 +127,7 @@ public static function mannschaften( $rows, $lists, $pageNav, $option )
 				//$row = &$rows[$i];
 				// load the row from the db table 
 				$row->load( $rows[$i]->id );
-				$link 		= JRoute::_( 'index.php?option=com_clm&section=mannschaften&task=edit&cid[]='. $row->id );
+				$link 		= JRoute::_( 'index.php?option=com_clm&section=mannschaften&task=edit&id='. $row->id );
 				$checked 	= JHtml::_('grid.checkedout',   $row, $i );
 				$published 	= JHtml::_('grid.published', $row, $i );
 
@@ -216,9 +214,9 @@ public static function setMannschaftToolbar()
 	// Menubilder laden
 		clm_core::$load->load_css("icons_images");
 
-		$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
-		JArrayHelper::toInteger($cid, array(0));
-		if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
+		$cid = clm_core::$load->request_array_int('cid');
+										  
+		if (clm_core::$load->request_string( 'task') == 'edit') { $text = JText::_( 'Edit' );}
 			else { $text = JText::_( 'New' );}
 		JToolBarHelper::title(  JText::_( 'MANNSCHAFT' ).': [ '. $text.' ]' , 'clm_headmenu_mannschaften.png'  );
 		JToolBarHelper::save();
@@ -230,37 +228,12 @@ public static function setMannschaftToolbar()
 public static function mannschaft( &$row,$lists, $option )
 	{
 		CLMViewMannschaften::setMannschaftToolbar();
-		JRequest::setVar( 'hidemainmenu', 1 );
+		$_REQUEST['hidemainmenu'] = 1;
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
-		?>
-	<script language="javascript" type="text/javascript">
 
-		 Joomla.submitbutton = function (pressbutton) { 		
-			var form = document.adminForm;
-			var noOrgReference=<?php echo $lists['noOrgReference']; ?>;
-			if (pressbutton == 'cancel') {
-				submitform( pressbutton );
-				return;
-			}
-			// do field validation
-			if (form.name.value == "") {
-				alert( "<?php echo JText::_( 'MANNSCHAFT_NAMEN_ANGEBEN', true ); ?>" );
-			} else if (form.man_nr.value == "") {
-				alert( "<?php echo JText::_( 'MANNSCHAFT_NUMMER_ANGEBEN', true ); ?>" );
-			} else if (form.tln_nr.value == "") {
-				alert( "<?php echo JText::_( 'MANNSCHAFT_TEILNEHMER_NR_ANGEBEN', true ); ?>" );
-			} else if ( getSelectedValue('adminForm','sid') == 0 ) {
-				alert( "<?php echo JText::_( 'MANNSCHAFT_SAISON_AUSWAEHLEN', true ); ?>" );
-			} else if ( getSelectedValue('adminForm','liga') == 0 ) {
-				alert( "<?php echo JText::_( 'MANNSCHAFT_LIGA_AUSWAEHLEN', true ); ?>" );
-			} else if ( getSelectedValue('adminForm','zps') == 0 && noOrgReference == 0 ) {
-				alert( "<?php echo JText::_( 'MANNSCHAFT_VEREIN_AUSWAEHLEN', true ); ?>" );
-			} else {
-				submitform( pressbutton );
-			}
-		}
-		
-		</script>
+		$_REQUEST['clm_noOrgReference'] = $lists['noOrgReference'];
+		clm_core::$load->load_js("mannschaft");
+		?>
 
 		<form action="index.php" method="post" name="adminForm" id="adminForm">
 

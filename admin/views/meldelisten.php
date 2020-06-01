@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 class CLMViewMeldelisten
 {
 public static function setMeldelistenToolbar()
@@ -179,11 +177,11 @@ public static function setMeldelisteToolbar($row)
 	// Menubilder laden
 		clm_core::$load->load_css("icons_images");
 
-		$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
-		JArrayHelper::toInteger($cid, array(0));
-		if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
+		$cid = clm_core::$load->request_array_int('cid');
+										  
+		if (clm_core::$load->request_string( 'task') == 'edit') { $text = JText::_( 'Edit' );}
 			else { $text = JText::_( 'New' );}
-		$verein 	= JRequest::getVar( 'verein' );
+		$verein 	= clm_core::$load->request_string( 'verein' );
 		JToolBarHelper::title(  JText::_( 'MELDELISTE')." ".$row->name .': [ '. $text.' ]', 'clm_headmenu_mannschaften.png');
 		JToolBarHelper::custom( 'save_meldeliste', 'save.png', 'save_f2.png', JText::_('SAVE'), false );
 		JToolBarHelper::custom( 'apply_meldeliste', 'apply.png', 'apply_f2.png', JText::_('APPLY'), false );
@@ -194,73 +192,18 @@ public static function setMeldelisteToolbar($row)
 public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abgabe, $option)
 	{
 		CLMViewMeldelisten::setMeldelisteToolbar($row);
-		JRequest::setVar( 'hidemainmenu', 1 );
+		$_REQUEST['hidemainmenu'] = 1;
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 		$number = $liga[0]->stamm + $liga[0]->ersatz;
 		$insert_key = array();
-		
 		// Konfigurationsparameter auslesen
 		$config = clm_core::$db->config();
 		$countryversion=$config->countryversion;
+
+		$_REQUEST['clm_number'] = $number;
+		clm_core::$load->load_js("meldelisten");
 		?>
 
-	<script language="javascript" type="text/javascript">
-
-		 Joomla.submitbutton = function (pressbutton) { 		
-			var form = document.adminForm;
-			var number ="<?php echo $number; ?>";
-			var double = 0;
-			if (pressbutton == 'cancel') {
-				submitform( pressbutton );
-				return;
-			}
-			// do field validation
-			for ( var ispieler = 1; ispieler <= number; ispieler++) {
-				var iispieler = "spieler"+ispieler;
-				for ( var jspieler = ispieler + 1; jspieler <= number; jspieler++) {
-					var jjspieler = "spieler"+jspieler;
-					if ((getSelectedValue('adminForm',iispieler) != "0") && (getSelectedValue('adminForm',iispieler) == getSelectedValue('adminForm',jjspieler))) {
-						alert( "<?php echo JText::_( 'MELDELISTE_DOUBLE' ); ?>"+":  "+ispieler+" = "+jspieler );
-						double = 1;
-					}
-				}
-			}
-			if (double == 0) {
-				submitform( pressbutton );
-			}
-		}
-		
-
-		function insertPosition (spieler, selvalue) {
-			var selectedText = spieler.options[spieler.selectedIndex].innerHTML;
-			var selectedValue = spieler.value;
-			var selName = spieler.name;
-			var selNumber = selName.substr(7);
-			var number ="<?php echo $number; ?>";
-			if (selectedValue == "9999") {	// wurde einfügen ausgewählt?
-				var spielerlast = 'spieler' + number;
-				var valuelast = getSelectedValue('adminForm',spielerlast);
-				if (getSelectedValue('adminForm',spielerlast) != "0") {  // ist die letzte Meldeposition belegt?
-					alert( "<?php echo JText::_( 'MELDELISTE_LAST_POSITION' ); ?>" );
-					spieler.value = selvalue;
-				} else {
-					for ( var ispieler = Number(number); ispieler > selNumber; ispieler--) {
-						var jspieler = ispieler - 1;
-						var jjspieler = "spieler"+jspieler;
-						if (jspieler == selNumber) 
-							var jjvalue = selvalue;
-						else 
-							var jjvalue = getSelectedValue('adminForm',jjspieler);
-						var iispieler = "spieler"+ispieler;
-						var element = document.getElementById(iispieler);
-						element.value = jjvalue;					
-					}
-					spieler.selectedIndex = 0;
-				}
-			}
-		}
-
-		</script>
 
 		<form action="index.php" method="post" name="adminForm" id="adminForm">
 
