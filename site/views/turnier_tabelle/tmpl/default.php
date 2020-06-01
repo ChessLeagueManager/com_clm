@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -22,13 +22,12 @@ $spRang		= clm_core::$load->request_int('spRang');	//Sonderranglisten
 $option 	= clm_core::$load->request_string( 'option' );
 $mainframe	= JFactory::getApplication();
 
-// $turnierid		= JRequest::getInt('turnier','1');
 $config = clm_core::$db->config();
 // $pdf_melde = $config->pdf_meldelisten;
 $fixth_ttab = $config->fixth_ttab;
 	
 // CLM-Container
-echo '<div ><div id="turnier_tabelle">';
+echo '<div id="clm"><div id="turnier_tabelle">';
 	
 // Componentheading
 if($spRang != 0){			//Sonderranglisten

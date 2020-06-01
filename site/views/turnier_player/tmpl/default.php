@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +10,8 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
-JHTML::_( 'behavior.modal' );
+//JHtml::_( 'behavior.modal' );
+JHtml::_('behavior.tooltip', '.CLMTooltip');
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
@@ -23,7 +24,7 @@ $countryversion = $config->countryversion;
 $turParams = new clm_class_params($this->turnier->params);
 	
 // CLM-Container
-echo '<div ><div id="turnier_player">';
+echo '<div id="clm"><div id="turnier_player">';
 	
 	
 // Componentheading
@@ -228,7 +229,8 @@ if ($this->playerPhoto != '') { ?>
 					echo "</td>";
 					
 					// Ergebnis
-					if ($value->ergebnis != '') {
+					//if ($value->ergebnis != '') {
+					if (!is_null($value->ergebnis)) {
 						echo '<td class="tp_col_5">';
 						if ($value->pgn == '' OR !$this->pgnShow) {
 							echo CLMText::getResultString($value->ergebnis, 0);

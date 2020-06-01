@@ -22,6 +22,7 @@ $ -> Language fix or change
 # Verwendung Parameter CLM-Template-Div im Frontend
 ^ Code-Anpassung Joomla 4: Mannschaften und Meldelisten im Backend
 ^ Code-Anpassung Joomla 4: Frontend-Anzeigen zu Ligen/Mannschaftsturnieren
+^ Code-Anpassung php 7.2 (NULL)
  
 - - - - - 3.8.2 - [08-04-2020] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: Importe ( SWT, SWM und PGN )

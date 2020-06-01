@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -35,13 +35,12 @@ if ($pgn == 1 AND $spRang == 0) {
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 
-// $turnierid		= JRequest::getInt('turnier','1');
 $config = clm_core::$db->config();
 // $pdf_melde = $config->pdf_meldelisten;
 $fixth_tkreuz = $config->fixth_tkreuz;
 
 // CLM-Container
-echo '<div ><div id="turnier_rangliste">';
+echo '<div id="clm"><div id="turnier_rangliste">';
 
 // Componentheading
 if($spRang != 0){			//Sonderranglisten
@@ -247,7 +246,6 @@ if (!$archive_check) {
 						// ergebnis ermitteln
 
 						if (isset($this->matrix[$this->players[$p]->snr][$rnd]->ergebnis)) {
-
 							echo '<a href="index.php?option=com_clm&amp;view=turnier_runde&amp;turnier='.$this->turnier->id.'&amp;runde='.$this->matrix[$this->players[$p]->snr][$rnd]->runde.'&Itemid='.$itemid.'">';
 							if (isset($this->posToPlayers[$this->matrix[$this->players[$p]->snr][$rnd]->gegner]))
 								echo $this->posToPlayers[$this->matrix[$this->players[$p]->snr][$rnd]->gegner];

@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -85,9 +85,7 @@ class CLMControllerTurInvite extends JControllerLegacy {
 			return false;
 		}
 	
-		//$invitationText = JRequest::getVar('invitationText', '', 'post', 'string', JREQUEST_ALLOWRAW);
-		$invitationText = clm_core::$load->request_string('invitationText');
-	
+		$invitationText = clm_core::$load->request_string('invitationText');	
 
 		$query = "UPDATE #__clm_turniere"
 					. " SET invitationText = ".$this->_db->Quote($invitationText)

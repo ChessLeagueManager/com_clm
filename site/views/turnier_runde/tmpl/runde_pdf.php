@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -98,7 +98,7 @@ $pdf->SetTextColor(0);
 	else {
 		$p1 = false; 
 		$pdf->SetFillColor(240); }	
-if ( ($value->spieler != 0 AND $value->gegner != 0) OR $value->ergebnis != NULL) {
+if ( ($value->spieler != 0 AND $value->gegner != 0) OR !is_null($value->ergebnis)) {
 
 	$pdf->Cell($br00,$zelle," ",0,0,'C');
 	$pdf->Cell($br00,$zelle,$value->brett,1,0,'C',1); 
@@ -119,7 +119,7 @@ if ( ($value->spieler != 0 AND $value->gegner != 0) OR $value->ergebnis != NULL)
 		$pdf->Cell($br01,$zelle,utf8_decode($value->sname),1,0,'L',1);
 	}
 	$pdf->Cell($br05,$zelle,$value->stwz,1,0,'C',1); 
-	if ($value->ergebnis != NULL) {
+	if (!is_null($value->ergebnis)) {
 		if ($value->ergebnis == 2) { $ergebnis = chr(189).":".chr(189); }
 		elseif ($value->ergebnis == 9) { $ergebnis = "0:".chr(189); }
 		elseif ($value->ergebnis == 10) { $ergebnis = chr(189).":0"; }

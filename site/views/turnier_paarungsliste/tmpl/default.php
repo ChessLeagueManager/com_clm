@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -31,7 +31,7 @@ $jid	= $user->get('id');
 	foreach ($this->rounds as $value) {
 	  // alle Matches durchgehen
 	  foreach ($this->matches[$value->nr] as $matches) {
-		if ( ($matches->spieler != 0 AND $matches->gegner != 0) OR $matches->ergebnis != NULL) {
+		if ( ($matches->spieler != 0 AND $matches->gegner != 0) OR !is_null($matches->ergebnis)) {
 			$gtmarker = "*";
 			$resulthint = "";
 			fputs($pdatei, '[Event "'.utf8_decode($this->turnier->name).'"]'.$nl);
@@ -78,7 +78,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 
 // CLM-Container
-echo '<div ><div id="turnier_paarungsliste">';
+echo '<div id="clm"><div id="turnier_paarungsliste">';
 
 // componentheading vorbereiten
 $heading = $this->turnier->name.": ".JText::_('TOURNAMENT_PAIRINGLIST');
@@ -160,7 +160,7 @@ if (!$archive_check) {
 					$zeilenr = "zeile2"; 
 				}
 				
-				if ( ($matches->spieler != 0 AND $matches->gegner != 0) OR $matches->ergebnis != NULL) {
+				if ( ($matches->spieler != 0 AND $matches->gegner != 0) OR !is_null($matches->ergebnis)) {
 					echo '<tr class="'.$zeilenr.'">';
 						$nb++; $ic = 0;
 						echo '<td align="center">'.$nb.'</td>';
@@ -209,7 +209,7 @@ if (!$archive_check) {
 						//	echo '<td align="center">&nbsp;</td>';
 						//}
 
-						if ($matches->ergebnis != NULL) {
+						if (!is_null($matches->ergebnis)) {
 							echo '<td align="center">';
 							if ($matches->pgn == '' OR !$this->pgnShow) {
 								echo CLMText::getResultString($matches->ergebnis);

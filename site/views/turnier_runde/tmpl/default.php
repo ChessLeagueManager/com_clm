@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -119,7 +119,7 @@ if (!$archive_check) {
 			$zeilenr = "zeile2"; 
 		}
 
-		if ( ($value->spieler != 0 AND $value->gegner != 0) OR $value->ergebnis != NULL) {
+		if (($value->spieler != 0 AND $value->gegner != 0) OR !is_null($value->ergebnis)) {
 			$ic = 0;
 			echo '<tr class="'.$zeilenr.'">';
 				echo '<td align="center">'.$value->brett.'</td>';
@@ -154,7 +154,7 @@ if (!$archive_check) {
 				}
 				echo '</td>';
 				echo '<td align="center">'.CLMText::formatRating($value->stwz).'</td>';
-				if ($value->ergebnis != NULL) {
+				if (!is_null($value->ergebnis)) {
 					echo '<td align="center">';
 					if ($value->pgn == '' OR !$this->pgnShow) {
 						echo CLMText::getResultString($value->ergebnis);

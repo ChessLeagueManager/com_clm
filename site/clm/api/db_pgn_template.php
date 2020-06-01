@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  *
@@ -208,7 +208,7 @@ function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true) {
 	}
 	} else {
 	 foreach ($matches as $value) {
-		if ( ($value->spieler != 0 AND $value->gegner != 0) OR $value->ergebnis != NULL) {
+		if ( ($value->spieler != 0 AND $value->gegner != 0) OR !is_null($value->ergebnis)) {
 			$gtmarker = "*";
 			$resulthint = "";
 			fputs($pdatei, '[Event "'.utf8_decode($turnier->name).'"]'.$nl);
