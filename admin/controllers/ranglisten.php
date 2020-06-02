@@ -307,7 +307,7 @@ function edit()
 	} else { $lid = 0; }
 	$clmAccess = clm_core::$access;
 	if ($clmAccess->access('BE_club_edit_ranking') === false AND $task == 'edit') {
-		JError::raiseWarning( 500, JText::_( 'RANGLISTE_STAFFEL' ) );
+		$mainframe->enqueueMessage( JText::_( 'RANGLISTE_STAFFEL' ), 'warning' );		
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 					}
@@ -468,24 +468,6 @@ function save()
 	$db->setQuery($query);
 	$lid_rang	= $db->loadObjectList();
 
-/*
-	// Array zum sortieren nach Rang erstellen
-	$sort		= array();
-
-	for ($x=1; $x < 1+$count; $x++) {
-	$rang	= JRequest::getVar('rang'.$x);
-	$mgl	= JRequest::getVar('mgl'.$x);
-
-	if ($rang > 0) {
-	$rang_x		= array($x => $rang);
-	$sort		= $sort + $rang_x;
-	}}
-
-	asort ($sort);
-	$sort_key = array_keys($sort);
-
-	$cnt = 1;
-*/
 	$mgl	= array();
 	$pkz	= array();
 	$mnr	= array();

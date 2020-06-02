@@ -461,7 +461,8 @@ function saveOrder(  )
 		if ($row->ordering != $order[$i]) {
 			$row->ordering = $order[$i];
 			if (!$row->store()) {
-				JError::raiseError(500, $db->getErrorMsg() );
+				$mainframe->enqueueMessage( $db->getError(), 'error' );		
+				$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 			}
 		}
 	}
