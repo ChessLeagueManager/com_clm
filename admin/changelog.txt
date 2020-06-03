@@ -24,6 +24,7 @@ $ -> Language fix or change
 ^ Code-Anpassung Joomla 4: Frontend-Anzeigen zu Ligen/Mannschaftsturnieren
 ^ Code-Anpassung php 7.2 (NULL)
 # DeWIS-Dateiausgabe: mehrere Durchgänge bei Einzelturnier
+^ Verbesserung der Mehrsprachigkeit: Online-Turnieranmeldung
  
 - - - - - 3.8.2 - [08-04-2020] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: Importe ( SWT, SWM und PGN )

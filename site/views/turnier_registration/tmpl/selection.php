@@ -8,26 +8,27 @@
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
+ * Kommentare in Deutsch - Comments in English
 */
 defined('_JEXEC') or die('Restricted access'); 
 
-// Stylesheet laden
+// Stylesheet laden - loas CSS
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 	$mainframe	= JFactory::getApplication();
 
-// Variablen initialisieren
+// Variablen initialisieren - install variables
 $turnier 		= $this->turnier;
 
 $user =JFactory::getUser();
 	$link = JURI::base() .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
 
 if (1==1)	{
-// Prüfen ob Datensatz schon vorhanden ist
+// Prüfen ob Datensatz schon vorhanden ist - check if data exist
 
-// Datensätze in Tabelle schreiben
+// Datensätze in Tabelle schreiben - Transfer data into db-table
 
-// Variablen holen
+// Variablen holen - get variables
 $typeRegistration = clm_core::$load->request_string('typeRegistration','');
 $reg_check01 	= clm_core::$load->request_string('reg_check01','');
 $reg_name 		= clm_core::$load->request_string('reg_name','');
@@ -45,7 +46,7 @@ if ($f_source = 'sent') {
 $session = JFactory::getSession();
 $reg_wert = $session->get('reg_wert');
 
-// Überprüfen der Eingaben
+// Überprüfen der Eingaben - check input
 $msg = '';
 if ($reg_name == '') 
 	$msg .= '<br>'.JText::_('REGISTRATION_E_NAME');
@@ -82,25 +83,28 @@ $names = $result[3];
 $ii = count($names);
 
 echo "<div><div id='turnier_info'>";
-// componentheading vorbereiten
+// componentheading vorbereiten - prepare componentheading
 $heading = $this->turnier->name;
 	echo CLMContent::componentheading($heading);
-		// Captcha vorbereiten 
+		// Captcha vorbereiten - prepare captcha
 		$sresult = clm_core::$load->session_variables('o'); 
 
 ?>
 	<br />
 		<table>
 			<tr><th class="anfang">
-				<td class="anfang" style="font-size: 120%; font-weight: bolder;">Anmeldung - Vereinszugehörigkeit und Wertzahlen</td>
+				<td class="anfang" style="font-size: 120%; font-weight: bolder;"><?php echo JText::_('REGISTRATION_CLUB_ELO'); ?></td>
 			</tr>
 		</table>
-	Wählen Sie den für Sie richtigen Eintrag aus der DWZ-Liste.
+	<?php echo JText::_('REGISTRATION_LIST_OF_PLAYERS'); ?>
 	<br>	
 		<form action="index.php?option=com_clm&amp;view=turnier_registration&amp;layout=sent" method="post" name="adminForm" id="adminForm">
 		<table>
 			<tr><th class="anfang">
-				<td class="anfang">Name,Vorname</td><td class="anfang">DWZ</td><td class="anfang">Elo</td><td class="anfang">Verein</td>
+				<td class="anfang"><?php echo JText::_('REGISTRATION_PLAYER'); ?>,<?php echo JText::_('REGISTRATION_VORNAME'); ?></td>
+				<td class="anfang"><?php echo JText::_('REGISTRATION_DWZ'); ?></td>
+				<td class="anfang"><?php echo JText::_('REGISTRATION_ELO'); ?></td>
+				<td class="anfang"><?php echo JText::_('REGISTRATION_CLUB'); ?></td>
 			</th></tr>
 			<?php for ($i = 0; $i < $ii; $i++) { ?>
 				<tr><td style="text-align: center;"><input type="radio" id="<?php echo 'spieler'.($i); ?>" name="reg_spieler" value="<?php echo ($i); ?>"<?php if ($reg_spieler == $i) echo ' checked="checked"'; ?>></td>
@@ -125,10 +129,10 @@ $heading = $this->turnier->name;
 				</tr>
 			<?php } ?>
 		</table>
-	Ist der richtige Eintrag oben nicht dabei, wählen Sie diesen aus und ergänzen Sie unten stehenden Daten.
+	<?php echo JText::_('REGISTRATION_EDIT_DATA'); ?>
 		<table style="width: 50%;">
 			<tr><th class="anfang">
-				<td class="anfang">Name,Vorname</td>
+				<td class="anfang"><?php echo JText::_('REGISTRATION_PLAYER'); ?>,<?php echo JText::_('REGISTRATION_VORNAME'); ?></td>
 			</th></tr>
 			<tr><td style="text-align: center;"><input type="radio" id="spieler99" name="reg_spieler" value="99"<?php if ($reg_spieler == 99) echo ' checked="checked"'; ?>></td><td><?php echo $reg_name.','.$reg_vorname; ?></td>
 			</tr>
@@ -154,12 +158,12 @@ $heading = $this->turnier->name;
 		</tr>
 		</table>
 		<br>
-	Hier können Sie eine Nachricht an den Turnierleiter eingeben, falls notwendig oder gewünscht.
+	<?php echo JText::_('REGISTRATION_PLAYER'); ?>
 		<table style="width: 50%;">
 		<tr>
 			<td align="left" width="100" class="anfang"><?php echo JText::_('REGISTRATION_COMMENT'); ?>:</td>
 			<td>
-			<textarea class="inputbox" name="reg_comment" id="reg_comment" cols="50" rows="4" placeholder="Nachricht bitte hier eingeben"><?php echo $reg_comment; ?></textarea>
+			<textarea class="inputbox" name="reg_comment" id="reg_comment" cols="50" rows="4" placeholder="<?php echo JText::_('REGISTRATION_PLACEHOLDER'); ?>"><?php echo $reg_comment; ?></textarea>
 			</td>
 		</tr>
 		<tr>
@@ -170,7 +174,7 @@ $heading = $this->turnier->name;
 		</tr>
 		<tr>
 			<th align="left" colspan="2" class="anfang">
-				<span style="font-size: 80%; font-weight: lighter;">Nach Absenden des Formulars erhalten Sie eine Bestätigungsmail, überprüfen Sie deshalb Ihre Email-Eintragung nochmals</span></th>
+				<span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_SUBMITTING'); ?></span></th>
 		</tr>
 		
 		</table>

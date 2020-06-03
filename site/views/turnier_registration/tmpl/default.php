@@ -1,39 +1,40 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
+ * Kommentare in Deutsch - Comments in English
 */
 defined('_JEXEC') or die('Restricted access');
 
-// Stylesheet laden
+// Stylesheet laden - load CSS
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 echo "<div><div id='turnier_info'>";
 
-// Konfigurationsparameter auslesen
+// Konfigurationsparameter auslesen - get configuration parameter
 $itemid 		= clm_core::$load->request_string( 'Itemid' );
 $today = date("Y-m-d");
 
-// componentheading vorbereiten
+// componentheading vorbereiten - prepare componentheading
 $heading = $this->turnier->name;
 
-// Turnier unveröffentlicht?
+// Turnier unveröffentlicht? - Tournament unpublished?
 if ( $this->turnier->published == 0) {
 	echo CLMContent::componentheading($heading);
 	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
 
-// Turnier Registration nicht gesetzt oder abgelaufen
-} elseif (!isset($this->turnier->dateRegistration) OR $this->turnier->dateRegistration < $today)  { // Online Anmeldung vorgesehen?
+// Turnier Registration nicht gesetzt oder abgelaufen - Tournament registration not chosen or expired
+} elseif (!isset($this->turnier->dateRegistration) OR $this->turnier->dateRegistration < $today)  { // Online Anmeldung vorgesehen? - Omline registration provided?
 	echo CLMContent::componentheading($heading);
 	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NO_ONLINE_REG'));
 
-// Turnier
+// Turnier - Tournament
 } else {
 	echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
@@ -44,9 +45,9 @@ if ( $this->turnier->published == 0) {
 	
 	<?php
 
-	// Online Anmeldung
+	// Online Anmeldung - Online Registration
 	
-		// Konfigurationsparameter auslesen
+		// Konfigurationsparameter auslesen - get configuration parameter
 		$config = clm_core::$db->config();
 		$privacy_notice = $config->privacy_notice;
 
@@ -149,12 +150,12 @@ if ( $this->turnier->published == 0) {
 		<tr>
 			<td align="left" width="100"><?php echo JText::_('REGISTRATION_COMMENT'); ?>:</td>
 			<td>
-			<textarea class="inputbox" name="reg_comment" id="reg_comment" cols="50" rows="4" placeholder="Nachricht bitte hier eingeben"><?php echo $reg_comment; ?></textarea>
+			<textarea class="inputbox" name="reg_comment" id="reg_comment" cols="50" rows="4" placeholder="<?php echo JText::_('REGISTRATION_PLACEHOLDER'); ?>"><?php echo $reg_comment; ?></textarea>
 			</td>
 		</tr>
 	<?php } else {
 		  } 
-		// Formular-Ausgabe abschließen und Captcha einbinden 
+		// Formular-Ausgabe abschließen und Captcha einbinden - Finish formular output and implement captcha
 		$result = clm_core::$load->session_variables('o'); 
 		?>
 		<tr>

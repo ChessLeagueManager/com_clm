@@ -15,7 +15,7 @@ defined('_JEXEC') or die( 'Invalid Token' );
 
 	$mainframe	= JFactory::getApplication();
 
-// Variablen initialisieren
+// Variablen initialisieren - initializing variables
 $turnier 		= $this->turnier;
 
 $user =JFactory::getUser();
@@ -23,9 +23,9 @@ $user =JFactory::getUser();
 
 if (1==1)	{
 
-// Datensätze in Tabelle schreiben
+// Datensätze in Tabelle schreiben - insert data into table
 
-// Variablen holen
+// Variablen holen - get variables
 $turParams = new clm_class_params($this->turnier->params);
 $typeRegistration = $turParams->get('typeRegistration', 0);
 $reg_check01 	= clm_core::$load->request_string('reg_check01','');
@@ -69,7 +69,7 @@ if ($typeRegistration == 5) {
 $session = JFactory::getSession();
 $reg_wert = $session->get('reg_wert');
 
-// Überprüfen der Eingaben
+// Überprüfen der Eingaben - check input
 $msg = '';
 if ($reg_name == '') 
 	$msg .= '<br>'.JText::_('REGISTRATION_E_NAME');
@@ -86,7 +86,7 @@ if ($reg_check01 == '')
 elseif ($reg_check01 != $reg_wert) 
 	$msg .= '<br>'.JText::_('REGISTRATION_E_SPAMK');
 
-	// Konfigurationsparameter auslesen
+	// Konfigurationsparameter auslesen - get configuration parameter
 	$config = clm_core::$db->config();
 	$from = $config->email_from;
 	$fromname = $config->email_fromname;
@@ -109,7 +109,7 @@ if ($msg != '') {
 	$mainframe->enqueueMessage( $msg, "error" );
 	$mainframe->redirect( $link );
 }
-// kein Fehler -> Meldung in Tabelle schreiben
+// kein Fehler => Meldung in Tabelle schreiben - no error => trabsfer data into table
 	$db	=JFactory::getDBO();
 	$query	= "INSERT INTO #__clm_online_registration "
 		." ( `tid`, `name`, `vorname`, `club`, `email`, `elo`, `dwz`,"
@@ -122,7 +122,7 @@ if ($msg != '') {
 		;
 	clm_core::$db->query($query);
 
-// Log
+// Log - log
 	$aktion = "Online Registration";
 	$callid = uniqid ( "", false );
 	$userid = clm_core::$access->getId ();	
@@ -133,7 +133,7 @@ if ($msg != '') {
 		;
 	clm_core::$db->query($query);
 
-	$subject = 'Turnieranmeldung'.' - '.$turnier->name;
+	$subject = JText::_('REGISTRATION_ONLINE').' - '.$turnier->name;
 	$body_daten = JText::_('REGISTRATION_PLAYER').': '.$reg_name."\n";
 	if ($reg_vorname != '') $body_daten .=  JText::_('REGISTRATION_VORNAME').': '.$reg_vorname."\n";
 	$body_daten .=	JText::_('REGISTRATION_CLUB').': '.$reg_club."\n"
@@ -144,14 +144,15 @@ if ($msg != '') {
 	$body_TL = $turnier->name."\n".'Eine neue Online-Anmeldung liegt vor: '."\n".$body_daten;
 	$email_TL = $turnier->tlemail;
 	$htmlMail = '0';
-	// Email an TL	
+	// Email an TL - e-mail to tournament controller
 	if ($email_TL != "") {
-		$body_TL = $turnier->name."\n\n".'Hallo Turnierleiter;'."\n".'Eine neue Online-Anmeldung liegt vor: '."\n".$body_daten;
+		$body_TL = $turnier->name."\n\n".JText::_('REG_TC_HELLO_1')."\n".JText::_('REG_TC_HELLO_2')."\n".$body_daten;
 		clm_core::$cms->sendMail($from, $fromname, $email_TL, $subject, $body_TL, $htmlMail);
 	}
+	// Info-E-mail an den Spieler - info e-mail to player
 	if ($reg_mail != "") {
-		$body_AM = $turnier->name."\n\n".'Hallo Teilnehmer,'."\n".'Vielen Dank für Ihre Anmeldung.'."\n".'Mit diesen Daten haben Sie sich angemeldet: '."\n".$body_daten;
-		$body_AM .= "\n".'Ihre Angaben werden durch den Turnierleiter innerhalb weniger Tage geprüft und dann auf die offizielle Teilnehmerliste übernommen.';
+		$body_AM = $turnier->name."\n\n".JText::_('REG_PLAYER_HELLO_1')."\n".JText::_('REG_PLAYER_HELLO_2')."\n".JText::_('REG_PLAYER_HELLO_3')."\n".$body_daten;
+		$body_AM .= "\n".JText::_('REG_PLAYER_HELLO_4');
 		clm_core::$cms->sendMail($from, $fromname, $reg_mail, $subject, $body_AM, $htmlMail);
 	}
 	
