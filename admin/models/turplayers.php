@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -141,7 +141,7 @@ class CLMModelTurPlayers extends JModelLegacy {
 	function _sqlOrder() {
 		
 		// array erlaubter order-Felder:
-		$arrayOrderAllowed = array('name', 'rankingPos', 'titel', 'snr', 'start_dwz', 'FIDEelo', 'twz', 'verein', 'ordering', 'sum_punkte');
+		$arrayOrderAllowed = array('rankingPos', 'snr', 'tlnrStatus', 'titel', 'name', 'verein', 'twz', 'start_dwz', 'FIDEelo', 'FIDEcco', 'sum_punkte', 'ordering', 'id');
 		if (!in_array($this->param['order'], $arrayOrderAllowed)) {
 			$this->param['order'] = 'id';
 		}
@@ -157,7 +157,7 @@ class CLMModelTurPlayers extends JModelLegacy {
 			// alle durchgehen
 			for ($f=1; $f<=3; $f++) {
 				$fieldName = 'tiebr'.$f; // Feldname in #_turniere
-				if ($this->turnier->$fieldName > 0) {
+				if ($this->turnier->$fieldName > 0 AND $this->turnier->$fieldName < 4) {
 					$orderby .= ', '.$fwFieldNames[$this->turnier->$fieldName].' '.$this->param['order_Dir'];
 				}
 			}

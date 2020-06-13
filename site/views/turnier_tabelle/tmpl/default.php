@@ -19,7 +19,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 // Konfigurationsparameter auslesen
 $itemid 	= clm_core::$load->request_string( 'Itemid' );
 $spRang		= clm_core::$load->request_int('spRang');	//Sonderranglisten
-$option 	= clm_core::$load->request_string( 'option' );
+$option 	= clm_core::$load->request_string('option','com_clm');
 $mainframe	= JFactory::getApplication();
 
 $config = clm_core::$db->config();
@@ -48,7 +48,8 @@ if (!$archive_check) {
 	$msg = JText::_('TOURNAMENT_PLAYERLISTNOTCOMPLETE')."<br/>".JText::_('TOURNAMENT_NORANKINGEXISTING');
 	$link = 'index.php?option='.$option.'&view=turnier_teilnehmer&turnier='.$this->turnier->id;
 	if ($itemid != 0) $link .= '&Itemid='.$itemid;
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
 
 } elseif($this->turnier->typ == 3) { // KO-System
 	echo CLMContent::componentheading($heading);

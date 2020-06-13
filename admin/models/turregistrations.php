@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -137,7 +137,7 @@ class CLMModelTurRegistrations extends JModelLegacy {
 	function _sqlOrder() {
 		
 		// array erlaubter order-Felder:
-		$arrayOrderAllowed = array('name', 'titel', 'dwz', 'elo', 'verein', 'ordering');
+		$arrayOrderAllowed = array('name', 'titel', 'club', 'FIDEcco', 'dwz', 'elo', 'status', 'timestamp', 'ordering');
 		if (!in_array($this->param['order'], $arrayOrderAllowed)) {
 			$this->param['order'] = 'id';
 		}

@@ -32,6 +32,7 @@ class clm_class_cms_standalone extends clm_class_cms {
 	}
 	public function addStyleSheet($url, $type = "text/css", $media = "all") {
 		$this->style[] = array($url,$type,$media);
+//		$this->style[] = array($url);
 	}
 	public function addStyleDeclaration($content, $type = "text/css") {
 		$this->style[] = array($content,$type);

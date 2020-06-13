@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -74,7 +74,7 @@ $turParams = new clm_class_params($this->turnier->params);
 					if ($turParams->get('displayPlayerFederation', 0) == 1) {
 					?>
 					<th width="5%">
-						<?php echo JHtml::_('grid.sort', JText::_('FEDERATION'), 'twz', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo JHtml::_('grid.sort', JText::_('FEDERATION'), 'FIDEcco', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<?php
 					}

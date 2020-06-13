@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -39,26 +39,26 @@ $turParams = new clm_class_params($this->turnier->params);
 						<?php echo JHtml::_('grid.sort', JText::_('PLAYER_NAME'), 'name', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<th width="20%">
-						<?php echo JHtml::_('grid.sort', JText::_('CLUB'), 'verein', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo JHtml::_('grid.sort', JText::_('CLUB'), 'club', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<?php
 					?>
 					<th width="5%">
-						<?php echo JHtml::_('grid.sort', JText::_('FEDERATION'), 'twz', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo JHtml::_('grid.sort', JText::_('FEDERATION'), 'FIDEcco', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<?php
 					?>
 					<th width="5%">
-						<?php echo JHtml::_('grid.sort', JText::_('RATING'), 'start_dwz', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo JHtml::_('grid.sort', JText::_('RATING'), 'dwz', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<th width="5%">
-						<?php echo JHtml::_('grid.sort', JText::_('FIDE_ELO'), 'FIDEelo', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo JHtml::_('grid.sort', JText::_('FIDE_ELO'), 'elo', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<th width="20%" class="title">
 						<?php echo JHtml::_('grid.sort', JText::_('STATUS'), 'status', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<th width="20%" class="title">
-						<?php echo JHtml::_('grid.sort', JText::_('TIMESTAMP'), 'status', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo JHtml::_('grid.sort', JText::_('TIMESTAMP'), 'timestamp', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 															
 					<th width="10%" nowrap="nowrap">

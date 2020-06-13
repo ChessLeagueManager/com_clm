@@ -20,7 +20,7 @@ $spRang		= clm_core::$load->request_int( 'spRang');	//Sonderranglisten
 	$jid	= $user->get('id');
 
 $pgn		= clm_core::$load->request_int('pgn'); 
-$option 	= clm_core::$load->request_string( 'option' );
+$option 	= clm_core::$load->request_string('option','com_clm' );
 $mainframe	= JFactory::getApplication();
 if ($pgn == 1 AND $spRang == 0) { 
 	$result = clm_core::$api->db_pgn_export($this->turnier->id,false);
@@ -28,7 +28,8 @@ if ($pgn == 1 AND $spRang == 0) {
 	if (!$result[0]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
 	$link = 'index.php?option='.$option.'&view=turnier_rangliste&turnier='.$this->turnier->id.'&pgn=0';
 	if ($itemid != 0) $link .= '&Itemid='.$itemid;
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
 }
 
 // Stylesheet laden
