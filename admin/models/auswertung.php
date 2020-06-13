@@ -23,24 +23,59 @@ function __construct(){
 function datei() {
 
 	// Check for request forgeries
-	JRequest::checkToken() or die( 'Invalid Token' );
+	defined('clm') or die( 'Invalid Token' );
 	$db	= JFactory::getDBO();
 	$app	= JFactory::getApplication();
-	$option	= JRequest::getCmd('option');
+	$option	= clm_core::$load->request_string('option');
+	// Link zum redirect generieren
+	$adminLink = new AdminLink();
+	$adminLink->view = "auswertung";
+	$adminLink->makeURL();
+
 	$jinput = $app->input;
 	$liga	= $jinput->get('filter_lid', null, null);
 	$mt	= $jinput->get('filter_mt', null, null);
 	$et	= $jinput->get('filter_et', null, null);
 	$format	= $jinput->get('filter_format', null, null);
+
+	if(!is_null($liga)) {
+		$vround	= $jinput->get('lround', null, null);
+		$vpairing	= $jinput->get('lpairing', null, null);
+	} elseif(!is_null($mt)) {
+		$vround	= $jinput->get('mround', null, null);
+		$vpairing	= $jinput->get('mpairing', null, null);
+	} else {
+		$vround	= "";
+		$vpairing	= "";
+	}
+	if ($vround != "") {
+		$around = explode(".",$vround);
+		if (is_null($around) OR count($around) != 2 OR !is_numeric($around[0]) OR !is_numeric($around[1])) {
+			$app->enqueueMessage(JText::_( 'DEWIS_ERROR_SELPARAMETER1' ).$vround, 'warning');
+			$app->redirect( $adminLink->url);
+		}
+	}
+	if ($vpairing != "") {
+		$apairing = explode(",",$vpairing);
+		if (is_null($apairing) OR count($apairing) < 1 OR count($apairing) > 10) {
+			$app->enqueueMessage(JText::_( 'DEWIS_ERROR_SELPARAMETER2' ).$vpairing, 'warning');
+			$app->redirect( $adminLink->url);
+		}
+		$aapairing = array();
+		foreach ($apairing as $apairing1) {
+			$aapairingx = explode(".",$apairing1);
+			if (is_null($aapairingx) OR count($aapairingx) < 1 OR !is_numeric($aapairingx[0]) OR !is_numeric($aapairingx[1]) OR !is_numeric($aapairingx[2])) {
+				$app->enqueueMessage(JText::_( 'DEWIS_ERROR_SELPARAMETER2' ).$vpairing, 'warning');
+				$app->redirect( $adminLink->url);
+			}
+			$aapairing[] = $aapairingx;
+		}	
+	}
+
 	$sid	= clm_core::$access->getSeason();
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
-
-	// Link zum redirect generieren
-	$adminLink = new AdminLink();
-	$adminLink->view = "auswertung";
-	$adminLink->makeURL();
 
 	// Dateinamen zusammensetzen
 	$date	=JFactory::getDate();
@@ -48,9 +83,9 @@ function datei() {
 	$datum	= JHTML::_('date',  $now, JText::_('d-m-Y__H-i-s'));
 
 	// Grunddaten für Ligen und Mannschaftsturniere laden
-	if($liga !=null OR $mt !=null){
+	if(!is_null($liga) OR !is_null($mt)){
 		// Mannschaftsturnier eine Liga ID zuweisen
-		if($mt !=null){ $liga = $mt;}
+		if(!is_null($mt)){ $liga = $mt;}
 		
 		$sql = " SELECT a.* FROM #__clm_liga as a"
 			." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
@@ -123,7 +158,7 @@ function datei() {
 	}
 	
 	// Grunddaten für Einzelturniere laden
-	if($et !=null){
+	if(!is_null($et)){
 		$liga = $et;
 		$sql = " SELECT a.* FROM #__clm_turniere as a"
 			." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
@@ -137,7 +172,7 @@ function datei() {
 	}
 	
 	// Unterscheidung Einzel- und Mannschaftsturnier mit verschiedenen Ausgabemodi
-	if($et !=null) {
+	if(!is_null($et)) {
 		if ($countryversion == "de")
 			$format = 2;  // Nur XML für deutsche Einzelturniere
 		else
@@ -149,8 +184,8 @@ function datei() {
 		if($typ =="4"){ $turnier_typ = 'SC'; } 
 		if($typ =="5"){ $turnier_typ = 'SC'; } // SC: Einzelturnier; K.O. System (Pokal)
 	}
-	if($liga !=null) {
-		if($mt !=null){ 
+	if(!is_null($liga)) {
+		if(!is_null($mt)){ 
 			if ($countryversion == "de")
 				$format	= 2;  // Nur XML für deutsche Mannschaftsturniere. KEINE LIGA !
 			else
@@ -162,6 +197,10 @@ function datei() {
 		if($typ =="3"){ $turnier_typ = 'TW'; } // TW: Mannschaftsturnier: Schweizer System
 		if($typ =="4"){ $turnier_typ = 'TC'; }
 		if($typ =="5"){ $turnier_typ = 'TC'; } // TC: Mannschaftsturnier: K.O.-System (Pokal)
+	}
+
+	if ($vround != "" OR $vpairing != "") { 
+		$liga_name[0]->name .= '_2';
 	}
 
 	////////////////
@@ -207,13 +246,20 @@ function datei() {
 		." LEFT JOIN #__clm_dwz_spieler as s ON s.sid = a.sid AND s.ZPS = a.zps AND s.Mgl_Nr = a.spieler "
 		." LEFT JOIN #__clm_dwz_vereine as v ON v.sid = a.sid AND v.ZPS = a.zps "
 		." WHERE a.sid = ".$sid
-		." AND a.lid = ".$liga_name[0]->id
-		." GROUP BY a.zps, a.spieler "
+		." AND a.lid = ".$liga_name[0]->id;
+	if ($vround != "" OR $vpairing != "") { 
+		if ($vround != "" AND $vpairing != "") 
+			$sql .= " AND (( a.dg > ".$around[0]." OR (a.dg = ".$around[0]." AND a.runde >= ".$around[1].") ) OR FIND_IN_SET( CONCAT_WS('.',a.dg,a.runde,a.paar), '".$vpairing."') != 0 )";
+		if ($vround != "" AND $vpairing == "") $sql .= " AND ( a.dg > ".$around[0]." OR (a.dg = ".$around[0]." AND a.runde >= ".$around[1].") ) ";
+		if ($vround == "" AND $vpairing != "") $sql .= " AND FIND_IN_SET( CONCAT_WS(';',a.dg,a.runde,a.paar), '".$vpairing."') != 0 ";
+	}
+	$sql .= " GROUP BY a.zps, a.spieler "
 		." ORDER BY a.zps ASC , a.brett ASC, spieler ASC "
 		;
 	$db->setQuery($sql);
 	$spieler=$db->loadObjectList();
-	if (count($spieler) == 0) { JError::raiseWarning( 500, JText::_( 'DB_NO_PLAYER' ) ); 
+	if (count($spieler) == 0) { 
+		$app->enqueueMessage(JText::_( 'DB_NO_PLAYER' ), 'warning');
 		$app->enqueueMessage(JText::_( 'DB_FILE_NOSUCCESS' ), 'warning');
 		$app->redirect( $adminLink->url);
 	}
@@ -257,11 +303,16 @@ function datei() {
 	}
 
 	// Rundendaten holen
-	$sql = " SELECT * FROM `#__clm_rnd_spl` "
+	$sql = " SELECT * FROM `#__clm_rnd_spl` as a "
 		." WHERE sid = ".$sid
-		." AND lid = ".$liga_name[0]->id
-		//." AND weiss = 1 "
-		." ORDER BY zps ASC, spieler ASC, dg ASC, runde ASC "
+		." AND lid = ".$liga_name[0]->id;
+	if ($vround != "" OR $vpairing != "") { 
+		if ($vround != "" AND $vpairing != "") 
+			$sql .= " AND (( a.dg > ".$around[0]." OR (a.dg = ".$around[0]." AND a.runde >= ".$around[1].") ) OR FIND_IN_SET( CONCAT_WS('.',a.dg,a.runde,a.paar), '".$vpairing."') != 0 )";
+		if ($vround != "" AND $vpairing == "") $sql .= " AND ( a.dg > ".$around[0]." OR (a.dg = ".$around[0]." AND a.runde >= ".$around[1].") ) ";
+		if ($vround == "" AND $vpairing != "") $sql .= " AND FIND_IN_SET( CONCAT_WS(';',a.dg,a.runde,a.paar), '".$vpairing."') != 0 ";
+	}
+	$sql .=	" ORDER BY zps ASC, spieler ASC, dg ASC, runde ASC "
 		;
 	$db->setQuery($sql);
 	$runden_daten =$db->loadObjectList();
@@ -444,10 +495,15 @@ function datei() {
 		$sql = " SELECT a.*,v.Vereinname,s.PKZ,s.Geburtsjahr,s.Spielername,s.DWZ,s.FIDE_ID FROM `#__clm_rnd_spl` as a "
 			." LEFT JOIN #__clm_dwz_spieler as s ON s.sid = a.sid AND s.ZPS = a.zps AND s.Mgl_Nr = a.spieler "
 			." LEFT JOIN #__clm_dwz_vereine as v ON v.sid = a.sid AND v.ZPS = a.zps "
-
 			." WHERE a.sid = ".$sid
-			." AND a.lid = ".$liga_name[0]->id
-			." GROUP BY a.zps, a.spieler "
+			." AND a.lid = ".$liga_name[0]->id;
+		if ($vround != "" OR $vpairing != "") { 
+			if ($vround != "" AND $vpairing != "") 
+				$sql .= " AND (( a.dg > ".$around[0]." OR (a.dg = ".$around[0]." AND a.runde >= ".$around[1].") ) OR FIND_IN_SET( CONCAT_WS('.',a.dg,a.runde,a.paar), '".$vpairing."') != 0 )";
+			if ($vround != "" AND $vpairing == "") $sql .= " AND ( a.dg > ".$around[0]." OR (a.dg = ".$around[0]." AND a.runde >= ".$around[1].") ) ";
+			if ($vround == "" AND $vpairing != "") $sql .= " AND FIND_IN_SET( CONCAT_WS(';',a.dg,a.runde,a.paar), '".$vpairing."') != 0 ";
+		}
+		$sql .=	" GROUP BY a.zps, a.spieler "
 			." ORDER BY a.zps ASC , a.brett ASC, spieler ASC "
 			;
 	} else {
@@ -496,11 +552,17 @@ function datei() {
 
 	// Begegnungen
 	if(!$et){
-		$sql = " SELECT * FROM `#__clm_rnd_spl` "
+		$sql = " SELECT * FROM `#__clm_rnd_spl` as a "
 			." WHERE sid = ".$sid
 			." AND lid = ".$liga_name[0]->id
-			." AND weiss = 1 "
-			." ORDER BY dg ASC, runde ASC, paar ASC, brett ASC "
+			." AND weiss = 1 ";
+		if ($vround != "" OR $vpairing != "") { 
+			if ($vround != "" AND $vpairing != "") 
+				$sql .= " AND (( a.dg > ".$around[0]." OR (a.dg = ".$around[0]." AND a.runde >= ".$around[1].") ) OR FIND_IN_SET( CONCAT_WS('.',a.dg,a.runde,a.paar), '".$vpairing."') != 0 )";
+			if ($vround != "" AND $vpairing == "") $sql .= " AND ( a.dg > ".$around[0]." OR (a.dg = ".$around[0]." AND a.runde >= ".$around[1].") ) ";
+			if ($vround == "" AND $vpairing != "") $sql .= " AND FIND_IN_SET( CONCAT_WS(';',a.dg,a.runde,a.paar), '".$vpairing."') != 0 ";
+		}
+		$sql .=	" ORDER BY dg ASC, runde ASC, paar ASC, brett ASC "
 			;
 	} else {
 		$sql = " SELECT a.*, t.mgl_nr as spieler, t.zps as zps, u.mgl_nr as gegner, u.zps as gzps FROM `#__clm_turniere_rnd_spl` as a "
@@ -666,7 +728,7 @@ function datei() {
 include(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'ExcelWriterXML.php');
 
 // Find Players
-  if($et !=null) 
+  if(!is_null($et)) 
 	$sql = " SELECT a.PKZ,a.zps,a.verein as Vereinname,a.name as Spielername,a.geschlecht as Geschlecht FROM `#__clm_turniere_tlnr` as a "
 		." LEFT JOIN #__clm_dwz_spieler as s ON s.sid = a.sid AND s.ZPS = a.zps AND s.PKZ = a.PKZ "
 		." LEFT JOIN #__clm_dwz_vereine as v ON v.sid = a.sid AND v.ZPS = a.zps "
@@ -678,8 +740,14 @@ include(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR
 		." LEFT JOIN #__clm_dwz_spieler as s ON s.sid = a.sid AND s.ZPS = a.zps AND s.PKZ = a.PKZ "
 		." LEFT JOIN #__clm_dwz_vereine as v ON v.sid = a.sid AND v.ZPS = a.zps "
 		." WHERE a.sid = ".$sid
-		." AND a.lid = ".$liga_name[0]->id
-		." GROUP BY a.zps, a.PKZ "
+		." AND a.lid = ".$liga_name[0]->id;
+	if ($vround != "" OR $vpairing != "") { 
+		if ($vround != "" AND $vpairing != "") 
+			$sql .= " AND (( a.dg > ".$around[0]." OR (a.dg = ".$around[0]." AND a.runde >= ".$around[1].") ) OR FIND_IN_SET( CONCAT_WS('.',a.dg,a.runde,a.paar), '".$vpairing."') != 0 )";
+		if ($vround != "" AND $vpairing == "") $sql .= " AND ( a.dg > ".$around[0]." OR (a.dg = ".$around[0]." AND a.runde >= ".$around[1].") ) ";
+		if ($vround == "" AND $vpairing != "") $sql .= " AND FIND_IN_SET( CONCAT_WS(';',a.dg,a.runde,a.paar), '".$vpairing."') != 0 ";
+	}
+	$sql .=	" GROUP BY a.zps, a.PKZ "
 		." ORDER BY a.zps ASC , a.brett ASC, a.PKZ ASC "
 		;
 	$db->setQuery($sql);
@@ -838,7 +906,7 @@ $sheet3->columnWidth(8,'200');
 $sheet3->writeString(1,8,'Comment');
 
 // Find games
-  if($et !=null) 
+  if(!is_null($et)) 
     $sql = " SELECT a.*, a.heim as weiss, h.zps, h.PKZ, g.zps as gzps, g.PKZ as gPKZ, m.datum as pdate FROM `#__clm_turniere_rnd_spl` as a "
 			." LEFT JOIN #__clm_turniere_rnd_termine as m ON m.turnier = a.turnier AND m.dg = a.dg AND m.nr = a.runde "
 			." LEFT JOIN #__clm_turniere_tlnr as h ON h.turnier = a.turnier AND h.snr = a.spieler "
@@ -856,8 +924,14 @@ $sheet3->writeString(1,8,'Comment');
 			." WHERE a.sid = ".$sid
 			." AND a.lid = ".$liga_name[0]->id
 			." AND a.ergebnis < 3 "
-			." AND a.heim = 1 "
-			." ORDER BY a.dg ASC, a.runde ASC, a.paar ASC, a.brett ASC "
+			." AND a.heim = 1 ";
+	if ($vround != "" OR $vpairing != "") { 
+		if ($vround != "" AND $vpairing != "") 
+			$sql .= " AND (( a.dg > ".$around[0]." OR (a.dg = ".$around[0]." AND a.runde >= ".$around[1].") ) OR FIND_IN_SET( CONCAT_WS('.',a.dg,a.runde,a.paar), '".$vpairing."') != 0 )";
+		if ($vround != "" AND $vpairing == "") $sql .= " AND ( a.dg > ".$around[0]." OR (a.dg = ".$around[0]." AND a.runde >= ".$around[1].") ) ";
+		if ($vround == "" AND $vpairing != "") $sql .= " AND FIND_IN_SET( CONCAT_WS(';',a.dg,a.runde,a.paar), '".$vpairing."') != 0 ";
+	}
+	$sql .=	" ORDER BY a.dg ASC, a.runde ASC, a.paar ASC, a.brett ASC "
 			;
 	$db->setQuery($sql);
 	$partien =$db->loadObjectList();
@@ -886,7 +960,7 @@ foreach($partien as $games){
 	$sheet3->writeString($crow,5,clm_core::$cms->showDate($games->pdate, "d M Y"));
 	$sheet3->writeString($crow,6,$games->brett);
 	$sheet3->writeString($crow,7,$games->runde);
-  if($et !=null) {
+  if(!is_null($et)) {
 	if ($crow == 2) $sheet3->writeString($crow,8,$liga_name[0]->name); }
   else {
 	$sheet3->writeString($crow,8,$games->hmname." - ".$games->gmname); }
@@ -913,9 +987,12 @@ $xml = $xmla->writeData();
 
 	// Datei schreiben ggf. Fehlermeldung absetzen
 	jimport('joomla.filesystem.file');
-	if (!JFile::write( $write, $xml )) { JError::raiseWarning( 500, JText::_( 'DB_FEHLER_SCHREIB' ) ); }
+	if (!JFile::write( $write, $xml )) { 
+		$app->enqueueMessage(JText::_( 'DB_FEHLER_SCHREIB' ), 'warning');
+		$app->redirect( $adminLink->url);
+	}
   
-	$app->enqueueMessage(JText::_( 'DB_FILE_SUCCESS' ).utf8_encode($file), 'warning');
+	$app->enqueueMessage(JText::_( 'DB_FILE_SUCCESS' ).utf8_encode($file), 'message');
 	$app->redirect( $adminLink->url);
 	}
 
@@ -923,7 +1000,7 @@ $xml = $xmla->writeData();
 function xml_dateien()
 	{
 	jimport( 'joomla.filesystem.folder' );
-	$option		= JRequest::getCmd('option');
+	$option		= clm_core::$load->request_string('option');
 	$filesDir 	= 'components'.DS.$option.DS.'dewis';
 	$ex_dbf		= JFolder::files( $filesDir, 'dbf$',true, false);
 	$ex_dbf[]	= 'index.html';
@@ -958,10 +1035,8 @@ function xml_dateien()
 
 function download()
 	{
-	// Check for request forgeries
-	//JRequest::checkToken() or die( 'Invalid Token' );
-	$option		= JRequest::getCmd('option');
-	$datei		= JRequest::getVar('datei');
+	$option		= clm_core::$load->request_string('option');
+	$datei		= clm_core::$load->request_string('datei');
 	$app		= JFactory::getApplication();
 	
 	if($datei){
@@ -989,10 +1064,8 @@ function download()
 	}	
 function delete()
 	{
-	// Check for request forgeries
-	//JRequest::checkToken() or die( 'Invalid Token' );
-	$option		= JRequest::getCmd('option');
-	$datei		= JRequest::getVar('datei');
+	$option		= clm_core::$load->request_string('option');
+	$datei		= clm_core::$load->request_string('datei');
 	$app		= JFactory::getApplication();
 	
 	if($datei){
@@ -1015,7 +1088,8 @@ function liga_filter() {
 	// Ligafilter
 	$sql = 'SELECT d.id AS cid, d.name FROM #__clm_liga as d'
 		." LEFT JOIN #__clm_saison as s ON s.id = d.sid"
-		." WHERE s.archiv = 0 AND d.liga_mt = 0 ";
+		." WHERE s.archiv = 0 AND d.liga_mt = 0 "
+		." AND d.published = 1 ";
 	$db->setQuery($sql);
 	$ligalist[]	= JHTML::_('select.option',  '0', JText::_( 'MANNSCHAFTEN_LIGA' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
@@ -1043,7 +1117,8 @@ function mannschaftsturnier_filter() {
 	// Ligafilter
 	$sql = 'SELECT d.id AS cid, d.name FROM #__clm_liga as d'
 		." LEFT JOIN #__clm_saison as s ON s.id = d.sid"
-		." WHERE s.archiv = 0 AND d.liga_mt = 1 ";
+		." WHERE s.archiv = 0 AND d.liga_mt = 1 "
+		." AND d.published = 1 ";
 	$db->setQuery($sql);
 	$ligalist[]	= JHTML::_('select.option',  '0', JText::_( 'DB_FILE_TEAMTOURNAMENT_0' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
