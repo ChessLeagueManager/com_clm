@@ -8,16 +8,17 @@
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
+ * Kommentare Deutsch - Comments English
 */
 defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip', '.CLMTooltip');
 
-// Konfigurationsparameter auslesen
+// Konfigurationsparameter auslesen - get configuration parameters
 $itemid = clm_core::$load->request_string( 'Itemid' );
 $config = clm_core::$db->config();
 $pgn	= clm_core::$load->request_int('pgn'); 
 
-// Userkennung holen
+// Userkennung holen - get user id
 $user	=JFactory::getUser();
 $jid	= $user->get('id');
 
@@ -27,9 +28,9 @@ $jid	= $user->get('id');
 	$file_name = strtr($file_name,' ./','___');
 	$file_name .= '.pgn'; 
 	$pdatei = fopen($file_name,"wt");
-	// alle Runden durchgehen
+	// alle Runden durchgehen - go through all rounds
 	foreach ($this->rounds as $value) {
-	  // alle Matches durchgehen
+	  // alle Matches durchgehen - go through all matches
 	  foreach ($this->matches[$value->nr] as $matches) {
 		if ( ($matches->spieler != 0 AND $matches->gegner != 0) OR !is_null($matches->ergebnis)) {
 			$gtmarker = "*";
@@ -50,9 +51,9 @@ $jid	= $user->get('id');
 			if ($matches->ergebnis == "2") { fputs($pdatei, '[Result "1/2-1/2"]'.$nl); $gtmarker = "1/2-1/2"; }
 			elseif ($matches->ergebnis == "0") { fputs($pdatei, '[Result "0-1"]'.$nl); $gtmarker = "0-1"; }
 			elseif ($matches->ergebnis == "1") { fputs($pdatei, '[Result "1-0"]'.$nl); $gtmarker = "1-0"; }
-			elseif ($matches->ergebnis == "5") { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".utf8_decode('Weiß gewinnt kampflos')."}"; $gtmarker = "1-0"; }
-			elseif ($matches->ergebnis == "4") { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{Schwarz gewinnt kampflos}"; $gtmarker = "0-1"; }
-			elseif ($matches->ergebnis == "6") { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{beide verlieren kampflos}"; $gtmarker = "*"; }
+			elseif ($matches->ergebnis == "5") { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".utf8_decode(JText::_('PAAR_RESULT_HINT_1'))."}"; $gtmarker = "1-0"; }
+			elseif ($matches->ergebnis == "4") { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{".utf8_decode(JText::_('PAAR_RESULT_HINT_2'))."}"; $gtmarker = "0-1"; }
+			elseif ($matches->ergebnis == "6") { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{".utf8_decode(JText::_('PAAR_RESULT_HINT_3'))."}"; $gtmarker = "*"; }
 			else fputs($pdatei, '[Result "'.$matches->ergebnis.'"]'.$nl);		
 			fputs($pdatei, '[PlyCount "0"]'.$nl);
 			fputs($pdatei, '[EventDate "'.JHTML::_('date',  $this->turnier->dateStart, JText::_('Y.m.d')).'"]'.$nl);
@@ -73,14 +74,14 @@ $jid	= $user->get('id');
 		JFactory::getApplication()->close();
   }	
 
-// Stylesheet laden
+// Stylesheet laden - load CSS
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 
-// CLM-Container
+// CLM-Container - CLM-Container
 echo '<div id="clm"><div id="turnier_paarungsliste">';
 
-// componentheading vorbereiten
+// componentheading vorbereiten - prepare componentheading
 $heading = $this->turnier->name.": ".JText::_('TOURNAMENT_PAIRINGLIST');
 
 $archive_check = clm_core::$api->db_check_season_user($this->turnier->sid);
@@ -98,7 +99,7 @@ if (!$archive_check) {
 	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOROUNDS'));
 
 } else {
-	// PDF-Link
+	// PDF-Link - PGF-link
 	echo CLMContent::createPDFLink('turnier_paarungsliste', JText::_('TOURNAMENT_PAIRINGLIST_PRINT'), array('turnier' => $this->turnier->id, 'layout' => 'paarungsliste'));
 	
 	if ($jid != 0) {
@@ -111,16 +112,16 @@ if (!$archive_check) {
 
 	$turParams = new clm_class_params($this->turnier->params);
 	$ia = -1;
-	// alle Runden durchgehen
+	// alle Runden durchgehen - go through all rounds
 	foreach ($this->rounds as $value) {
 		
-		// published?
+		// veröffentlicht? - published?
 		if ($value->published == 1) {
 			
-			// Table aufziehen
+			// Table aufziehen - create table
 			echo '<table cellpadding="0" cellspacing="0" class="runde">';
 			
-			// Kopfzeile
+			// Kopfzeile - table heading
 			echo '<tr><td colspan="9">';
 				echo '<div style="text-align:left; padding-left:1%">';
 					echo '<b>';
@@ -132,9 +133,9 @@ if (!$archive_check) {
 					echo '</b>';
 				echo '</div>';
 			echo '</td></tr>';
-			// Ende Kopfzeile
+			// Ende Kopfzeile - end of header
 		
-			// Spaltenüberschriften
+			// Spaltenüberschriften - title of columns
 			?>
 			<tr>
 				<th align="center"><?php echo JText::_('TOURNAMENT_TNR'); ?></th>
@@ -147,13 +148,13 @@ if (!$archive_check) {
 			</tr>
 			<?php
 		
-			// alle Matches eintragen
-			$m=0; // CounterFlag für Farbe
-			$nb=0; //Tischnummer
+			// alle Matches eintragen - register all matches
+			$m=0; // CounterFlag für Farbe - CounterFlag for colour
+			$nb=0; //Tischnummer - board number
 			foreach ($this->matches[$value->nr + (($value->dg - 1) * $this->turnier->runden)] as $matches) {
 				
 				$m++;
-				// Farbe
+				// Farbe - colour
 				if ($m%2 != 0) { 
 					$zeilenr = "zeile1"; 
 				} else { 
@@ -241,7 +242,7 @@ if (!$archive_check) {
 				
 			}
 			
-			// tl_ok? Haken anzeigen!
+			// tl_ok? Haken anzeigen! - tl_ok? shoe tick
 			if ($this->displayTlOK AND $value->tl_ok > 0) {
 				echo '<tr><td colspan="9">';
 					echo '<div style="float:right; padding-right:1%;"><label for="name" class="hasTip" title="'.JText::_('TOURNAMENT_ROUNDOK').'"><img  src="'.CLMImage::imageURL('accept.png').'" /></label></div>';
@@ -251,7 +252,7 @@ if (!$archive_check) {
 			
 			echo '</table>';
 		
-			// Bereich für pgn-Viewer alt
+			// Bereich für pgn-Viewer alt - area for pgb-viewer old
 			//echo '<span id="pgnArea'.$value->nr.'"></span>';
 		
 			echo '<br>';
