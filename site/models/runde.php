@@ -200,9 +200,6 @@ class CLMModelRunde extends JModelLegacy
 	$countryversion = $config->countryversion;
 
 	$db	= JFactory::getDBO();
-	$query	= " SET SQL_BIG_SELECTS=1";
-	//$db->setQuery($query);
-	clm_core::$db->query($query);
 
 	$query = " SELECT rang "
 		." FROM #__clm_liga as a "
@@ -277,8 +274,12 @@ class CLMModelRunde extends JModelLegacy
 
 	function getCLMEinzel ( $options=array() )
 	{
+		$query1	= " SET SESSION SQL_BIG_SELECTS=1 ";
+		clm_core::$db->query($query1);
+		
 		$query	= $this->_getCLMEinzel( $options );
-		$result = $this->_getList( $query );
+		//$result = $this->_getList( $query );
+		$result = clm_core::$db->loadObjectList($query);	
 		return @$result;
 	}
 

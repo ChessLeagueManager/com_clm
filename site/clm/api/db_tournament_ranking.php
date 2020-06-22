@@ -306,13 +306,14 @@
 					if ($maxround < ((($d - 1) * $runden) + $r)) break;  		// nur bis zur aktuellen Runde
 					if (!isset($matrix[$s][$d][$r])) {
 						$matchData[$z] = new stdClass();
-						$matchData[$z]->tln_nr = $s;
-						$matchData[$z]->gegner = 0;
 						$matchData[$z]->dg = $d;
 						$matchData[$z]->runde = $r;
+						$matchData[$z]->tln_nr = $s;
+						$matchData[$z]->gegner = 0;
 						$matchData[$z]->ergebnis = 8;		// spielfrei
-						$matchData[$z]->manpunkte = 0;		
 						$matchData[$z]->brettpunkte = 0;	
+						$matchData[$z]->manpunkte = 0;		
+						$matchData[$z]->wertpunkte = 0;	
 						$z++;
 					}
 				}

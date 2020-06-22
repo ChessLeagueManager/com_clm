@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -1063,6 +1063,8 @@ function save()
 	}
 	$thzps	= $theim[1];
 	$tgzps	= $tgast[1];
+	if ($thzps == '') $thzps = '-1';
+	if ($tgzps == '') $tgzps = '-1';
 
 	// Heim updaten
 	$query	= "UPDATE #__clm_rnd_spl "
