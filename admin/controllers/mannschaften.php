@@ -758,7 +758,7 @@ function saveOrder(  )
 	$section 	= clm_core::$load->request_string('section');
 							   
 	$total		= count( $cid );
-	$cid		= clm_core::$load->request_array_int('order');
+	$order		= clm_core::$load->request_array_int('order');
 
 	$row =JTable::getInstance( 'mannschaften', 'TableCLM' );
 	$groupings = array();

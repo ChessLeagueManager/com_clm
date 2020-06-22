@@ -231,7 +231,7 @@ public static function mannschaft( &$row,$lists, $option )
 		$_REQUEST['hidemainmenu'] = 1;
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 
-		$_REQUEST['clm_noOrgReference'] = $lists['noOrgReference'];
+		$_POST['clm_noOrgReference'] = $lists['noOrgReference'];
 		clm_core::$load->load_js("mannschaft");
 		?>
 

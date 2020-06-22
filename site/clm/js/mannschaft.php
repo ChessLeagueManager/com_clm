@@ -8,7 +8,7 @@
 defined('clm') or die('Restricted access');
 
 $lang = clm_core::$lang->mannschaft;
-$lists_noOrgReference = clm_core::$load->request_array_string('clm_noOrgReference');
+$lists_noOrgReference = clm_core::$load->request_string('clm_noOrgReference');
 clm_core::$cms->addScriptDeclaration('var clm_mannschaft_url = "'.clm_core::$url.clm_core::$load->gen_url().'";');
 clm_core::$cms->addScriptDeclaration('var clm_mannschaft_name = "'.html_entity_decode($lang->name_angeben).'";');
 clm_core::$cms->addScriptDeclaration('var clm_mannschaft_mnr = "'.html_entity_decode($lang->mnr_angeben).'";');
