@@ -199,9 +199,15 @@ $str_params = clm_core::$load->request_string('str_params');
 							<option value="1" <?php if ($this->swt_data['tiebr1'] == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_1' );?></option>
 							<option value="11" <?php if ($this->swt_data['tiebr1'] == 11) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_11' );?></option>
 							<option value="2" <?php if ($this->swt_data['tiebr1'] == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_2' );?></option>
+							<option value="12" <?php if ($this->swt_data['tiebr1'] == 12) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_12' );?></option>
+							<option value="7" <?php if ($this->swt_data['tiebr1'] == 7) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_7' );?></option>
+							<option value="17" <?php if ($this->swt_data['tiebr1'] == 17) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_17' );?></option>
+							<option value="8" <?php if ($this->swt_data['tiebr1'] == 8) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_8' );?></option>
+							<option value="18" <?php if ($this->swt_data['tiebr1'] == 18) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_18' );?></option>
 							<option value="23" <?php if ($this->swt_data['tiebr1'] == 23) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_23' );?></option>
 							<option value="4" <?php if ($this->swt_data['tiebr1'] == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_4' );?></option>
 							<option value="5" <?php if ($this->swt_data['tiebr1'] == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_5' );?></option>
+							<option value="9" <?php if ($this->swt_data['tiebr1'] == 9) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_9' );?></option>
 							<option value="10" <?php if ($this->swt_data['tiebr1'] == 10) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_10' );?></option>
 							<option value="3" <?php if ($this->swt_data['tiebr1'] == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_3' );?></option>
 							<option value="25" <?php if ($this->swt_data['tiebr1'] == 25) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_25' );?></option>
@@ -217,9 +223,15 @@ $str_params = clm_core::$load->request_string('str_params');
 							<option value="1" <?php if ($this->swt_data['tiebr2'] == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_1' );?></option>
 							<option value="11" <?php if ($this->swt_data['tiebr2'] == 11) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_11' );?></option>
 							<option value="2" <?php if ($this->swt_data['tiebr2'] == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_2' );?></option>
+							<option value="12" <?php if ($this->swt_data['tiebr2'] == 12) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_12' );?></option>
+							<option value="7" <?php if ($this->swt_data['tiebr2'] == 7) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_7' );?></option>
+							<option value="17" <?php if ($this->swt_data['tiebr2'] == 17) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_17' );?></option>
+							<option value="8" <?php if ($this->swt_data['tiebr2'] == 8) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_8' );?></option>
+							<option value="18" <?php if ($this->swt_data['tiebr2'] == 18) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_18' );?></option>
 							<option value="23" <?php if ($this->swt_data['tiebr2'] == 23) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_23' );?></option>
 							<option value="4" <?php if ($this->swt_data['tiebr2'] == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_4' );?></option>
 							<option value="5" <?php if ($this->swt_data['tiebr2'] == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_5' );?></option>
+							<option value="9" <?php if ($this->swt_data['tiebr2'] == 9) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_9' );?></option>
 							<option value="10" <?php if ($this->swt_data['tiebr2'] == 10) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_10' );?></option>
 							<option value="3" <?php if ($this->swt_data['tiebr2'] == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_3' );?></option>
 							<option value="25" <?php if ($this->swt_data['tiebr2'] == 25) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_25' );?></option>
@@ -236,9 +248,15 @@ $str_params = clm_core::$load->request_string('str_params');
 							<option value="1" <?php if ($this->swt_data['tiebr3'] == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_1' );?></option>
 							<option value="11" <?php if ($this->swt_data['tiebr3'] == 11) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_11' );?></option>
 							<option value="2" <?php if ($this->swt_data['tiebr3'] == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_2' );?></option>
+							<option value="12" <?php if ($this->swt_data['tiebr3'] == 12) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_12' );?></option>
+							<option value="7" <?php if ($this->swt_data['tiebr3'] == 7) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_7' );?></option>
+							<option value="17" <?php if ($this->swt_data['tiebr3'] == 17) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_17' );?></option>
+							<option value="8" <?php if ($this->swt_data['tiebr3'] == 8) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_8' );?></option>
+							<option value="18" <?php if ($this->swt_data['tiebr3'] == 18) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_18' );?></option>
 							<option value="23" <?php if ($this->swt_data['tiebr3'] == 23) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_23' );?></option>
 							<option value="4" <?php if ($this->swt_data['tiebr3'] == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_4' );?></option>
 							<option value="5" <?php if ($this->swt_data['tiebr3'] == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_5' );?></option>
+							<option value="9" <?php if ($this->swt_data['tiebr3'] == 9) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_9' );?></option>
 							<option value="10" <?php if ($this->swt_data['tiebr3'] == 10) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_10' );?></option>
 							<option value="3" <?php if ($this->swt_data['tiebr3'] == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_3' );?></option>
 							<option value="25" <?php if ($this->swt_data['tiebr3'] == 25) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_25' );?></option>

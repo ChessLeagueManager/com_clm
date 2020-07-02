@@ -260,6 +260,7 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 			$man_dritt = $this->_SWTReadInt ($swt, 616);
 		}
 		/* SWT -> CLM	(Beschreibung)
+			 1 ->  9	 Brettpunkte
 			 2 ->  5	 Brettpunkte
 			 3 ->  1	 Buchholz
 			    > 11	 Buchholz (1 Streichergebnis)
@@ -270,7 +271,7 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 			15 -> 25     Direkter Vergleich
 			16 -> 10	 Berliner Wertung    (alt 6)
 			18 -> 10	 Berliner Wertung (dir. Vergleich)   (alt 6) */
-		$clm_fein = array (0 => 0, 2 => 5, 3 => 1, 4 => 2, 5 => 23, 14 => 4, 15 => 25, 16 => 10, 18 => 10);
+		$clm_fein = array (0 => 0, 1 => 9, 2 => 5, 3 => 1, 4 => 2, 5 => 23, 14 => 4, 15 => 25, 16 => 10, 18 => 10);
 		
 		$swt_data['tiebr1'] = $clm_fein[$man_zweit];
 		$swt_data['tiebr2'] = $clm_fein[$man_dritt];

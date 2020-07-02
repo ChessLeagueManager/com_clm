@@ -98,6 +98,8 @@
 		$man_remis		= $team[0]->man_remis;
 		$brett_sieg		= $team[0]->sieg;
 		$brett_remis	= $team[0]->remis;
+		$mbrett_sieg	= $team[0]->sieg * $team[0]->stamm;
+		$mbrett_remis	= $team[0]->remis * $team[0]->stamm;
 		$id_stamm 	= $team[0]->stamm;
 		$sid = $team[0]->sid;
 		
@@ -251,29 +253,42 @@
 		$array_PlayerMPunkte = array();
 		$array_PlayerMPunkteTB = array();
 		$array_PlayerBPunkte = array();
+		$array_PlayerBPunkteTB = array();
 		$array_PlayerBerlWertung = array();
 		$array_PlayerBuch = array();
 		$array_PlayerBuch1St = array();
 		$array_PlayerBuchOpp = array();
+		$array_PlayerBuchBP = array();
+		$array_PlayerBuch1StBP = array();
+		$array_PlayerBuchOppBP = array();
 		$array_PlayeraSoBe = array();
 		$array_PlayerSoBe = array();
 		$array_PlayerBuSum = array();
 		$array_PlayerBuSum1St = array();
 		$array_PlayerBuSumMin = array();
+		$array_PlayerBuSumBP = array();
+		$array_PlayerBuSum1StBP = array();
+		$array_PlayerBuSumMinBP = array();
 		$array_PlayerWins = array();
 		for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
 			$array_PlayerSpiele[$s] = 0;
 			$array_PlayerMPunkte[$s] = 0;
 			$array_PlayerMPunkteTB[$s] = 0;
 			$array_PlayerBPunkte[$s] = 0;
+			$array_PlayerBPunkteTB[$s] = 0;
 			$array_PlayerBerlWertung[$s] = 0;
 			$array_PlayerBuch[$s] = 0;
 			$array_PlayerBuch1St[$s] = 0;
+			$array_PlayerBuchBP[$s] = 0;
+			$array_PlayerBuch1StBP[$s] = 0;
 			$array_PlayeraSoBe[$s] = 0;
 			$array_PlayerSoBe[$s] = 0;
 			$array_PlayerBuSum[$s] = 0;
 			$array_PlayerBuSum1St[$s] = 0;
 			$array_PlayerBuSumMin[$s] = 9999;
+			$array_PlayerBuSumBP[$s] = 0;
+			$array_PlayerBuSum1StBP[$s] = 0;
+			$array_PlayerBuSumMinBP[$s] = 9999;
 			$array_PlayerWins[$s] = 0;
 		}
 		
@@ -334,10 +349,13 @@
 			$array_PlayerBPunkte[$value->tln_nr] += $value->brettpunkte;
 			if ($value->ergebnis < 3) { 	// gespielter Vergleich
 				$array_PlayerMPunkteTB[$value->tln_nr] += $value->manpunkte;
+				$array_PlayerBPunkteTB[$value->tln_nr] += $value->brettpunkte;
 			} elseif ($value->ergebnis > 2 AND $params['optionTiebreakersFideCorrect'] == 0) { // kampflos und ohne FIDE-Korrektur eingestellt
 				$array_PlayerMPunkteTB[$value->tln_nr] += $value->manpunkte;
+				$array_PlayerBPunkteTB[$value->tln_nr] += $value->brettpunkte;
 			} elseif ($value->ergebnis > 2 AND $params['optionTiebreakersFideCorrect'] == 1) { // kampflos und mit FIDE-Korrektur eingestellt
 				$array_PlayerMPunkteTB[$value->tln_nr] += $man_remis;
+				$array_PlayerBPunkteTB[$value->tln_nr] += $mbrett_remis;
 			}
 	}
 		
@@ -354,9 +372,8 @@
 		// erneut alle Matches durchgehen -> Teams erhalten Feinwertungen
 		foreach ($matchData as $key => $value) {
 			if ($maxround < ((($value->dg - 1) * $runden) + $value->runde)) continue;  // Ignorieren von bereits gesetzten kampflos oder spielfrei in Folgerunden
-			// Buchholz
+			// Buchholz auf Basis Mannschaftspunkte
 			if (in_array(1, $arrayFW) OR in_array(2, $arrayFW) OR in_array(11, $arrayFW)) { // beliebige Buchholz als TieBreaker gewünscht?
-				//$array_PlayerBuchOpp[$value->tln_nr][] = $array_PlayerBPunkte[$value->gegner]; // Array mit Gegnerwerten - für Streichresultat
 				if ($value->ergebnis < 3 OR $params['optionTiebreakersFideCorrect'] == 0) {
 					$array_PlayerBuchOpp[$value->tln_nr][] = $array_PlayerMPunkteTB[$value->gegner]; // Array mit Gegnerwerten - für Streichresultat
 				} else { //Ranglistenkorrektur nach FIDE (Teil 2) nur für CH-Turniere
@@ -382,6 +399,34 @@
 					$array_PlayerBuchOpp[$value->tln_nr][] = $PlayerPunkteKOR; // Array mit Gegnerwerten - für Streichresultat
 				}
 			}
+			// Buchholz auf Basis Brettpunkte 
+			if (in_array(7, $arrayFW) OR in_array(8, $arrayFW) OR in_array(17, $arrayFW) OR in_array(18, $arrayFW)) { // beliebige Buchholz als TieBreaker gewünscht?
+				if ($value->ergebnis < 3 OR $params['optionTiebreakersFideCorrect'] == 0) {
+					$array_PlayerBuchOppBP[$value->tln_nr][] = $array_PlayerBPunkteTB[$value->gegner]; // Array mit Gegnerwerten - für Streichresultat
+				} else { //Ranglistenkorrektur nach FIDE (Teil 2) nur für CH-Turniere
+					$query = "SELECT tln_nr, gegner, dg, runde, ergebnis FROM `#__clm_rnd_man`"
+					. " WHERE lid = ".$id
+					. " AND tln_nr = ".$value->tln_nr
+					. " AND ergebnis IS NOT NULL"
+					. " ORDER BY dg ASC, runde ASC"
+					;
+					$matchDataSnr = clm_core::$db->loadObjectList($query);
+					$PlayerPunkteKOR = 0;
+					foreach ($matchDataSnr as $key => $valuesnr) {
+						if ($maxround < ((($valuesnr->dg - 1) * $runden) + $valuesnr->runde)) continue;  // Ignorieren von bereits gesetzten kampflos oder spielfrei in Folgerunden
+						if (($valuesnr->dg < $value->dg) OR ($valuesnr->dg == $value->dg AND $valuesnr->runde < $value->runde)) {
+							if ($valuesnr->ergebnis == 1) $PlayerPunkteKOR += $mbrett_sieg; // Sieg
+							elseif ($valuesnr->ergebnis == 2) $PlayerPunkteKOR += $mbrett_remis; // remis
+							elseif ($valuesnr->ergebnis == 5) $PlayerPunkteKOR += $mbrett_sieg; // Sieg kampflos
+						}
+					}	
+					if (($value->ergebnis == 4) OR ($value->ergebnis == 8)) { $PlayerPunkteKOR += $mbrett_sieg; }// Gegner gewinnt kampflos oder spielfrei
+	  				if (($value->ergebnis == 3) OR ($value->ergebnis == 6)) { $PlayerPunkteKOR += $mbrett_sieg; }// Gegner verliert auch kampflos, ist aber egal
+					$PlayerPunkteKOR += ($mbrett_remis * (($maxround) - (($value->dg - 1) * $runden) - $value->runde));
+					$array_PlayerBuchOppBP[$value->tln_nr][] = $PlayerPunkteKOR; // Array mit Gegnerwerten - für Streichresultat
+				}
+			}
+			
 			
 			// Sonneborn-Berger alt
 			if (in_array(3, $arrayFW)) { // SoBe(alt) als ein TieBreaker gewünscht?
@@ -400,7 +445,7 @@
 			}
 		}
 	
-		// Buchholz
+		// Buchholz auf Basis Mannschaftspunkte
 		if ((in_array(1, $arrayFW)) OR (in_array(2, $arrayFW)) OR (in_array(12, $arrayFW))) { // normale Buchholz als TieBreaker gewünscht?
 			for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
 				//$array_PlayerBuch[$s] = array_sum($array_PlayerBuchOpp[$s]);
@@ -423,8 +468,30 @@
 				else $array_PlayerBuch1St[$s] = array_sum($array_PlayerBuchOpp[$s]);
 			}
 		}
-	
-		// BuchholzSumme
+		// Buchholz auf Basis Brettpunkte
+		if ((in_array(7, $arrayFW)) OR (in_array(8, $arrayFW)) OR (in_array(18, $arrayFW))) { // normale Buchholz als TieBreaker gewünscht?
+			for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
+				//$array_PlayerBuch[$s] = array_sum($array_PlayerBuchOpp[$s]);
+				if (!isset($array_PlayerBuchOppBP[$s])) $array_PlayerBuchBP[$s] = 0;
+				elseif (count($array_PlayerBuchOppBP[$s]) == 1) $array_PlayerBuchBP[$s] = $array_PlayerBuchOppBP[$s][0];
+				else $array_PlayerBuchBP[$s] = array_sum($array_PlayerBuchOppBP[$s]);
+			}
+		} 
+		if (in_array(17, $arrayFW)) { // Buchholz mit Streichresultat
+			for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
+				//$array_PlayerBuch[$s] = array_sum($array_PlayerBuchOpp[$s]) - min($array_PlayerBuchOpp[$s]);
+				if (!isset($array_PlayerBuchOppBP[$s])) 
+					$array_PlayerBuch1St[$s] = 0;
+				elseif (count($array_PlayerBuchOppBP[$s]) == 0) 
+					$array_PlayerBuch1St[$s] = 0;
+				elseif (count($array_PlayerBuchOpp[$s]) == 1) 
+					$array_PlayerBuch1StBP[$s] = $array_PlayerBuchOppBP[$s][0];
+				elseif (count($array_PlayerBuchOpp[$s]) > 2) //== ($dg * $runden)) 
+					$array_PlayerBuch1StBP[$s] = array_sum($array_PlayerBuchOppBP[$s]) - min($array_PlayerBuchOppBP[$s]);
+				else $array_PlayerBuch1StBP[$s] = array_sum($array_PlayerBuchOppBP[$s]);
+			}
+		}
+		// BuchholzSumme auf Basis Mannschaftspunkte
 		if ((in_array(2, $arrayFW)) OR (in_array(12, $arrayFW))) { // Buchholz-Summe als TieBreaker gewünscht?
 			// erneut alle Matches durchgehen -> Spieler erhalten Buchholzsummen
 			foreach ($matchData as $key => $value) {
@@ -443,7 +510,25 @@
 				$array_PlayerBuSum1St[$s] = $array_PlayerBuSum[$s] - $array_PlayerBuSumMin[$s];
 			}
 		}
-		
+		// BuchholzSumme auf Basis Brettpunkte
+		if ((in_array(2, $arrayFW)) OR (in_array(12, $arrayFW))) { // Buchholz-Summe als TieBreaker gewünscht?
+			// erneut alle Matches durchgehen -> Spieler erhalten Buchholzsummen
+			foreach ($matchData as $key => $value) {
+				$array_PlayerBuSumBP[$value->tln_nr] += $array_PlayerBuchBP[$value->gegner];
+				// und Min-Buchholz setzen
+				if ($array_PlayerBuSumMinBP[$value->tln_nr] > $array_PlayerBuchBP[$value->gegner]) {
+					$array_PlayerBuSumMinBP[$value->tln_nr] = $array_PlayerBuchBP[$value->gegner];
+				}
+			}
+		}
+		if (in_array(12, $arrayFW)) { // Buchholz-Summe mit Streichresultat als TieBreaker gewünscht?
+			for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
+				if ($array_PlayerBuSumMinBP[$s] == 9999) {
+					$array_PlayerBuSumMinBP[$s] = 0;
+				}
+				$array_PlayerBuSum1StBP[$s] = $array_PlayerBuSumBP[$s] - $array_PlayerBuSumMinBP[$s];
+			}
+		}
 		// alle Spieler durchgehen und updaten (kein vorheriges Löschen notwendig)
 		for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
 			// Korrektur Mannschaftspunkte
@@ -477,6 +562,15 @@
 					case 5: // brettpunkte
 						$sumTiebr[$tb] = $array_PlayerBPunkte[$s];
 						break;
+					case 7: // buchholz BP
+						$sumTiebr[$tb] = $array_PlayerBuchBP[$s];
+						break;
+					case 8: // bhhlz.-summe BP
+						$sumTiebr[$tb] = $array_PlayerBuSumBP[$s];
+						break;
+					case 9: // mannschaftspunkte
+						$sumTiebr[$tb] = $array_PlayerMPunkte[$s];
+						break;
 					case 10: // berliner wertung
 						$sumTiebr[$tb] = $array_PlayerBerlWertung[$s];
 						break;
@@ -484,6 +578,12 @@
 						$sumTiebr[$tb] = $array_PlayerBuch1St[$s];
 						break;
 					case 12: // bhhlz-sum mit 1 streichresultat
+						$sumTiebr[$tb] = $array_PlayerBuSum1St[$s];
+						break;
+					case 17: // bhhlz mit 1 streichresultat BP
+						$sumTiebr[$tb] = $array_PlayerBuch1St[$s];
+						break;
+					case 18: // bhhlz-sum mit 1 streichresultat BP
 						$sumTiebr[$tb] = $array_PlayerBuSum1St[$s];
 						break;
 					case 23: // sobe 

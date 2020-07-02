@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -29,7 +29,7 @@ class CLMViewMTurniere
 	public static function mturnier(&$row, $lists, $option, $new)
 	{
 	CLMViewMTurniere::setMTurnierToolbar($new, $row->sid);
-	JRequest::setVar( 'hidemainmenu', 1 );
+	$_REQUEST['hidemainmenu'] = 1;
 
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
@@ -338,9 +338,14 @@ class CLMViewMTurniere
 		<option value="11" <?php if ($row->tiebr1 == 11) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_11' );?></option>
 		<option value="2" <?php if ($row->tiebr1 == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_2' );?></option>
 		<option value="12" <?php if ($row->tiebr1 == 12) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_12' );?></option>
+		<option value="7" <?php if ($row->tiebr1 == 7) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_7' );?></option>
+		<option value="17" <?php if ($row->tiebr1 == 17) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_17' );?></option>
+		<option value="8" <?php if ($row->tiebr1 == 8) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_8' );?></option>
+		<option value="18" <?php if ($row->tiebr1 == 18) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_18' );?></option>
 		<option value="23" <?php if ($row->tiebr1 == 23) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_23' );?></option>
 		<option value="4" <?php if ($row->tiebr1 == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_4' );?></option>
 		<option value="5" <?php if ($row->tiebr1 == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_5' );?></option>
+		<option value="9" <?php if ($row->tiebr1 == 9) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_9' );?></option>
 		<option value="10" <?php if ($row->tiebr1 == 10) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_10' );?></option>
 		<option value="3" <?php if ($row->tiebr1 == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_3' );?></option>
 		<option value="25" <?php if ($row->tiebr1 == 25) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_25' );?></option>
@@ -358,9 +363,14 @@ class CLMViewMTurniere
 		<option value="11" <?php if ($row->tiebr2 == 11) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_11' );?></option>
 		<option value="2" <?php if ($row->tiebr2 == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_2' );?></option>
 		<option value="12" <?php if ($row->tiebr2 == 12) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_12' );?></option>
+		<option value="7" <?php if ($row->tiebr2 == 7) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_7' );?></option>
+		<option value="17" <?php if ($row->tiebr2 == 17) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_17' );?></option>
+		<option value="8" <?php if ($row->tiebr2 == 8) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_8' );?></option>
+		<option value="18" <?php if ($row->tiebr2 == 18) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_18' );?></option>
 		<option value="23" <?php if ($row->tiebr2 == 23) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_23' );?></option>
 		<option value="4" <?php if ($row->tiebr2 == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_4' );?></option>
 		<option value="5" <?php if ($row->tiebr2 == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_5' );?></option>
+		<option value="9" <?php if ($row->tiebr2 == 9) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_9' );?></option>
 		<option value="10" <?php if ($row->tiebr2 == 10) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_10' );?></option>
 		<option value="3" <?php if ($row->tiebr2 == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_3' );?></option>
 		<option value="25" <?php if ($row->tiebr2 == 25) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_25' );?></option>
@@ -379,9 +389,14 @@ class CLMViewMTurniere
 		<option value="11" <?php if ($row->tiebr3 == 11) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_11' );?></option>
 		<option value="2" <?php if ($row->tiebr3 == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_2' );?></option>
 		<option value="12" <?php if ($row->tiebr3 == 12) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_12' );?></option>
+		<option value="7" <?php if ($row->tiebr3 == 7) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_7' );?></option>
+		<option value="17" <?php if ($row->tiebr3 == 17) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_17' );?></option>
+		<option value="8" <?php if ($row->tiebr3 == 8) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_8' );?></option>
+		<option value="18" <?php if ($row->tiebr3 == 18) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_18' );?></option>
 		<option value="23" <?php if ($row->tiebr3 == 23) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_23' );?></option>
 		<option value="4" <?php if ($row->tiebr3 == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_4' );?></option>
 		<option value="5" <?php if ($row->tiebr3 == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_5' );?></option>
+		<option value="9" <?php if ($row->tiebr3 == 9) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_9' );?></option>
 		<option value="10" <?php if ($row->tiebr3 == 10) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_10' );?></option>
 		<option value="3" <?php if ($row->tiebr3 == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_3' );?></option>
 		<option value="25" <?php if ($row->tiebr3 == 25) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_25' );?></option>
