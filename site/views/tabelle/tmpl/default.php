@@ -32,6 +32,10 @@ $punkte		= $this->punkte;
 $spielfrei	= $this->spielfrei;
 $dwzschnitt	= $this->dwzschnitt;
 
+// Test MP als Feinwertung -> d.h. Spalte MP als Hauptwertung wird dann unterdrückt
+if ($liga[0]->tiebr1 == 9 OR $liga[0]->tiebr2 == 9 OR $liga[0]->tiebr3 == 9) $columnMP = 0;
+else $columnMP = 1;
+
 if ($sid == 0) {
 	$db	= JFactory::getDBO();
 	$query = " SELECT a.* FROM #__clm_liga as a"
@@ -129,8 +133,9 @@ elseif (!$liga OR $liga[0]->published == 0) {
 			<th class="gsrv"><div><?php echo JText::_('TABELLE_WINS') ?></div></th>
 			<th class="gsrv"><div><?php echo JText::_('TABELLE_DRAW') ?></div></th>
 			<th class="gsrv"><div><?php echo JText::_('TABELLE_LOST') ?></div></th>
-			<th class="mp"><div><?php echo JText::_('MP') ?></div></th>
-			
+			<?php if ($columnMP == 1) { ?>
+				<th class="mp"><div><?php echo JText::_('MP') ?></div></th>
+			<?php } ?>			
 			<?php 
 			if ( $liga[0]->liga_mt == 0) { 
 				echo '<th class="bp"><div>'.JText::_('BP').'</div></th>';
@@ -209,8 +214,9 @@ elseif (!$liga OR $liga[0]->published == 0) {
 				echo '<td class="gsrv"><div>'.$punkte[$x]->count_S; echo '</div></td>';
 				echo '<td class="gsrv"><div>'.$punkte[$x]->count_R; echo '</div></td>';
 				echo '<td class="gsrv"><div>'.$punkte[$x]->count_V; echo '</div></td>';
-				echo '<td class="mp"><div>'.$punkte[$x]->mp; if ($punkte[$x]->abzug > 0) echo '*'; echo '</div></td>';
-				
+				if ($columnMP == 1) {
+					echo '<td class="mp"><div>'.$punkte[$x]->mp; if ($punkte[$x]->abzug > 0) echo '*'; echo '</div></td>';
+				}
 				// BP
 				if ( $liga[0]->liga_mt == 0) {
 					echo '<td class="bp"><div>'.$punkte[$x]->bp; if ($punkte[$x]->bpabzug > 0) echo '*'; echo '</div></td>';

@@ -12,8 +12,6 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-//require('fpdf.php');
-
 $lid = clm_core::$load->request_int( 'liga', '1' ); 
 $sid = clm_core::$load->request_int( 'saison','1');
 $view = clm_core::$load->request_string( 'view');
@@ -35,6 +33,9 @@ $dwzschnitt=$this->dwzschnitt;
 $saison     =$this->saison; 
 
 $name_liga = $liga[0]->name;
+// Test MP als Feinwertung -> d.h. Spalte MP als Hauptwertung wird dann unterdrückt
+if ($liga[0]->tiebr1 == 9 OR $liga[0]->tiebr2 == 9 OR $liga[0]->tiebr3 == 9) $columnMP = 0;
+else $columnMP = 1;
 
 require_once (clm_core::$path.DS.'classes'.DS.'fpdf.php');
 
@@ -121,7 +122,9 @@ $pdf->SetTextColor(255);
 	$pdf->Cell(7-$rbreite,$zelle,JText::_('TABELLE_WINS'),1,0,'C',1);
 	$pdf->Cell(7-$rbreite,$zelle,JText::_('TABELLE_DRAW'),1,0,'C',1);
 	$pdf->Cell(7-$rbreite,$zelle,JText::_('TABELLE_LOST'),1,0,'C',1);
-	$pdf->Cell(8-$rbreite,$zelle,JText::_('MP'),1,0,'C',1);
+	if ($columnMP == 1) {
+		$pdf->Cell(8-$rbreite,$zelle,JText::_('MP'),1,0,'C',1);
+	}
 	if ( $liga[0]->liga_mt == 0) { 
 		$pdf->Cell(10-$breite,$zelle,JText::_('BP'),1,0,'C',1); 
 		if ($liga[0]->b_wertung > 0) {
@@ -153,8 +156,10 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	$pdf->Cell(7-$rbreite,$zelle,$punkte[$x]->count_S,1,0,'C',$fc);
 	$pdf->Cell(7-$rbreite,$zelle,$punkte[$x]->count_R,1,0,'C',$fc);
 	$pdf->Cell(7-$rbreite,$zelle,$punkte[$x]->count_V,1,0,'C',$fc);
-	if ($punkte[$x]->abzug > 0) $pdf->Cell(8-$rbreite,$zelle,$punkte[$x]->mp.'*',1,0,'C',$fc);
-	else $pdf->Cell(8-$rbreite,$zelle,$punkte[$x]->mp,1,0,'C',$fc);
+	if ($columnMP == 1) {
+		if ($punkte[$x]->abzug > 0) $pdf->Cell(8-$rbreite,$zelle,$punkte[$x]->mp.'*',1,0,'C',$fc);
+		else $pdf->Cell(8-$rbreite,$zelle,$punkte[$x]->mp,1,0,'C',$fc);
+	}
 	if ( $liga[0]->liga_mt == 0) {
 		if ($punkte[$x]->bpabzug > 0) $pdf->Cell(10-$rbreite,$zelle,$punkte[$x]->bp.'*',1,0,'C',$fc);
 		else $pdf->Cell(10-$breite,$zelle,$punkte[$x]->bp,1,0,'C',$fc); 

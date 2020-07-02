@@ -62,6 +62,9 @@ $einzel		=$this->einzel;
 $plan		=$this->plan;
 $termin		=$this->termin;
   
+// Test MP als Feinwertung -> d.h. Spalte MP als Hauptwertung wird dann unterdrückt
+if ($liga[0]->tiebr1 == 9 OR $liga[0]->tiebr2 == 9 OR $liga[0]->tiebr3 == 9) $columnMP = 0;
+else $columnMP = 1;
   
 if ($liga[0]->rang > 0) $anz_player = 999;
 else $anz_player = $liga[0]->stamm + $liga[0]->ersatz;
@@ -212,7 +215,9 @@ if ($liga[0]->runden_modus != 4 AND $liga[0]->runden_modus != 5) {
 			$pdf->Cell(14-$breite,$zelle,$rnd+1,1,0,'C',1); }
 	}
 	
-	$pdf->Cell(8-$rbreite,$zelle,JText::_('MP'),1,0,'C',1);
+	if ($columnMP == 1) {
+		$pdf->Cell(8-$rbreite,$zelle,JText::_('MP'),1,0,'C',1);
+	}
 	if ( $liga[0]->liga_mt == 0) { 
 		$pdf->Cell(10-$breite,$zelle,JText::_('BP'),1,0,'C',1); 
 		if ( $liga[0]->b_wertung > 0) {
@@ -313,8 +318,10 @@ if ($liga[0]->runden_modus == 3) {
 				$pdf->Cell(8-$breite,$zelle,$runden_dg4[($punkte[$y]->tln_nr)-1]->brettpunkte,1,0,'C',$fc);
 		}}}}
 // Ende Runden
-	if ($punkte[$x]->abzug > 0) $pdf->Cell(8-$rbreite,$zelle,$punkte[$x]->mp.'*',1,0,'C',$fc);
-	else $pdf->Cell(8-$rbreite,$zelle,$punkte[$x]->mp,1,0,'C',$fc);
+	if ($columnMP == 1) {
+		if ($punkte[$x]->abzug > 0) $pdf->Cell(8-$rbreite,$zelle,$punkte[$x]->mp.'*',1,0,'C',$fc);
+		else $pdf->Cell(8-$rbreite,$zelle,$punkte[$x]->mp,1,0,'C',$fc);
+	}
 	if ( $liga[0]->liga_mt == 0) {
 		if ($punkte[$x]->bpabzug > 0) $pdf->Cell(10-$rbreite,$zelle,$punkte[$x]->bp.'*',1,0,'C',$fc);
 		else $pdf->Cell(10-$rbreite,$zelle,$punkte[$x]->bp,1,0,'C',$fc); 
