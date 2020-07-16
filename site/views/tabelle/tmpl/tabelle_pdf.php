@@ -113,10 +113,19 @@ $pdf->SetFont('Times','B',$head_font+2);
 $pdf->SetFont('Times','',$font+2);
 $pdf->SetFillColor(100);
 $pdf->SetTextColor(255);
-	$pdf->Cell($leer,$zelle,' ',0,0,'L');
+// max. Länge des Names bestimmen
+$lmax = 0;
+for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
+	$n = $pdf->GetStringWidth(utf8_decode($punkte[$x]->name));
+	if ($n > $lmax) $lmax = $n;
+}
+if ($lmax < (50-$nbreite)) $lmax = 50 - $nbreite;
+if ($lmax > 66) $lmax = 66;
+ 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(7-$rbreite,$zelle,JText::_('RANG'),1,0,'C',1);
 	$pdf->Cell(7-$rbreite,$zelle,JText::_('TLN'),1,0,'C',1);
-	$pdf->Cell(60-$nbreite-$breite,$zelle,JText::_('TEAM'),1,0,'L',1);
+	//$pdf->Cell(60-$nbreite-$breite,$zelle,JText::_('TEAM'),1,0,'L',1);
+	$pdf->Cell($lmax+12-$breite,$zelle,JText::_('TEAM'),1,0,'L',1);
  
 	$pdf->Cell(7-$rbreite,$zelle,JText::_('TABELLE_GAMES_PLAYED'),1,0,'C',1);
 	$pdf->Cell(7-$rbreite,$zelle,JText::_('TABELLE_WINS'),1,0,'C',1);
@@ -148,7 +157,10 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(7-$rbreite,$zelle,$x+1,1,0,'C',$fc);
 	$pdf->Cell(7-$rbreite,$zelle,$punkte[$x]->tln_nr,1,0,'C',$fc);
-	$pdf->Cell(50-$nbreite,$zelle,utf8_decode($punkte[$x]->name),1,0,'L',$fc);
+	//$pdf->Cell(50-$nbreite,$zelle,utf8_decode($punkte[$x]->name),1,0,'L',$fc);
+	while (($lmax) < $pdf->GetStringWidth(utf8_decode($punkte[$x]->name)))
+		$punkte[$x]->name = substr($punkte[$x]->name,0,-1);
+	$pdf->Cell($lmax+2,$zelle,utf8_decode($punkte[$x]->name),1,0,'L',$fc);
 	if (isset($dwz[($punkte[$x]->tln_nr)])) $pdf->Cell(10-$breite,$zelle,round($dwz[($punkte[$x]->tln_nr)]),1,0,'C',$fc);
 	else $pdf->Cell(10-$breite,$zelle,'',1,0,'C',$fc);
 

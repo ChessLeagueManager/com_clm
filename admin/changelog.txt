@@ -18,6 +18,7 @@ $ -> Language fix or change
 ^ Code-Anpassung Joomla 4: Mannschaften (Nachbesserung)
 + Mannschaftsturniere: neue Feinwertungen Buchholz auf Basis Brettpunkte
 + Mannschaftsturniere: neue Feinwertung Mannschaftspunkte
+^ Mannschaftsturniere/Ligen: Anpassung Namensspalten in pdf-Ausgaben
 
 - - - - - 3.8.3 - [14-06-2020] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung php 7.4

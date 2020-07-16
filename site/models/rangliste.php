@@ -67,9 +67,8 @@ class CLMModelRangliste extends JModelLegacy
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
 	// ordering für Rangliste -> Ersatz für direkten Vergleich
-		$query = "SELECT a.order, a.runden, a.durchgang, a.b_wertung, a.liga_mt FROM #__clm_liga as a"
+		$query = "SELECT a.* FROM #__clm_liga as a"
 			." WHERE id = ".$liga
-			//." AND sid = ".$sid
 			;
 		$db->setQuery($query);
  		$order = $db->loadObjectList();
@@ -79,6 +78,10 @@ class CLMModelRangliste extends JModelLegacy
 		//$query = " SELECT a.tln_nr as tln_nr,m.name as name, SUM(a.manpunkte) as mp, "
 		$query = " SELECT a.tln_nr as tln_nr,m.name as name, (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
 			." (SUM(a.brettpunkte) - m.bpabzug) as bp, m.bpabzug, SUM(a.wertpunkte) as wp, m.published, m.man_nr, COUNT(DISTINCT a.runde, a.dg) as spiele, "
+			." SUM(case when a.manpunkte IS NULL then 0 else 1 end) as count_G, "
+			." SUM(case when a.manpunkte = ".($order[0]->man_sieg+$order[0]->man_antritt)." then 1 else 0 end) as count_S, "
+			." SUM(case when a.manpunkte = ".($order[0]->man_remis+$order[0]->man_antritt)." then 1 else 0 end) as count_R, "
+			." SUM(case when a.manpunkte = ".($order[0]->man_nieder+$order[0]->man_antritt)." then 1 else 0 end) as count_V, "
 			." m.sumtiebr1, m.sumtiebr2, m.sumtiebr3 "
 			." FROM #__clm_rnd_man as a "
 			." LEFT JOIN #__clm_mannschaften as m ON m.liga = $liga AND m.tln_nr = a.tln_nr "
@@ -162,7 +165,7 @@ class CLMModelRangliste extends JModelLegacy
 			." FROM #__clm_meldeliste_spieler as a"
 			." LEFT JOIN #__clm_dwz_spieler AS d ON (d.Mgl_Nr = a.mgl_nr AND d.ZPS = a.zps AND d.sid = a.sid AND d.DWZ !=0)"
 //			." LEFT JOIN #__clm_mannschaften AS e ON (e.sid=a.sid AND e.liga= a.lid AND (e.zps=a.zps OR e.sg_zps=a.zps) AND e.man_nr = a.mnr AND e.man_nr !=0 AND e.liste !=0) "
-			." LEFT JOIN #__clm_mannschaften AS e ON (e.sid=a.sid AND e.liga= a.lid AND (e.zps=a.zps OR FIND_IN_SET(a.zps,e.sg_zps) != 0) AND e.man_nr = a.mnr AND e.man_nr !=0 AND e.liste !=0) "
+			." LEFT JOIN #__clm_mannschaften AS e ON (e.sid=a.sid AND e.liga= a.lid AND (e.zps=a.zps OR FIND_IN_SET(a.zps,e.sg_zps) != 0 OR (e.zps = '0' AND a.zps = '-1')) AND e.man_nr = a.mnr AND e.man_nr !=0 AND e.liste !=0) "
 			." WHERE a.lid = ".$liga
 			//." AND a.sid = ".$sid
 			." AND e.tln_nr IS NOT NULL "
@@ -319,12 +322,10 @@ class CLMModelRangliste extends JModelLegacy
 			$query .= " LEFT JOIN #__clm_dwz_spieler as d on d.zps = a.zps AND d.mgl_nr = a.mgl_nr AND d.sid = a.sid";
 		else
 			$query .= " LEFT JOIN #__clm_dwz_spieler as d on d.zps = a.zps AND d.PKZ = a.PKZ AND d.sid = a.sid";
-		$query .= " LEFT JOIN #__clm_mannschaften as m on m.liga = a.lid AND (m.zps = a.zps OR FIND_IN_SET(a.zps,m.sg_zps) != 0) AND m.man_nr = a.mnr AND m.sid = a.sid"
+		$query .= " LEFT JOIN #__clm_mannschaften as m on m.liga = a.lid AND (m.zps = a.zps OR FIND_IN_SET(a.zps,m.sg_zps) != 0 OR (m.zps = '0' AND a.zps = '-1')) AND m.man_nr = a.mnr AND m.sid = a.sid"
 			." WHERE a.lid = ".$liga
-			//." AND a.sid = ".$sid
-//			." AND (m.zps = a.zps OR m.sg_zps = a.zps) "
-			." AND (m.zps = a.zps OR FIND_IN_SET(a.zps,m.sg_zps) != 0) "
-			." AND a.zps > '0' "
+			." AND (m.zps = a.zps OR FIND_IN_SET(a.zps,m.sg_zps) != 0 OR (m.zps = '0' AND a.zps = '-1')) "
+//			." AND a.zps > '0' "
 			." ORDER BY tln_nr ASC, a.snr ASC ";
 		}	
 		return $query;

@@ -69,7 +69,6 @@ class CLMModelTabelle extends JModelLegacy
 	// ordering für Rangliste -> Ersatz für direkten Vergleich
 		$query = "SELECT a.* FROM #__clm_liga as a"
 			." WHERE id = ".$liga
-			//." AND sid = ".$sid
 			;
 		$db->setQuery($query);
  		$order = $db->loadObjectList();
@@ -165,7 +164,7 @@ class CLMModelTabelle extends JModelLegacy
 			." FROM #__clm_meldeliste_spieler as a"
 			." LEFT JOIN #__clm_dwz_spieler AS d ON (d.Mgl_Nr = a.mgl_nr AND d.ZPS = a.zps AND d.sid = a.sid AND d.DWZ !=0)"
 //			." LEFT JOIN #__clm_mannschaften AS e ON (e.sid=a.sid AND e.liga= a.lid AND (e.zps=a.zps OR e.sg_zps=a.zps) AND e.man_nr = a.mnr AND e.man_nr !=0 AND e.liste !=0) "
-			." LEFT JOIN #__clm_mannschaften AS e ON (e.sid=a.sid AND e.liga= a.lid AND (e.zps=a.zps OR FIND_IN_SET(a.zps,e.sg_zps) != 0) AND e.man_nr = a.mnr AND e.man_nr !=0 AND e.liste !=0) "
+			." LEFT JOIN #__clm_mannschaften AS e ON (e.sid=a.sid AND e.liga= a.lid AND (e.zps=a.zps OR FIND_IN_SET(a.zps,e.sg_zps) != 0 OR (e.zps = '0' AND a.zps = '-1')) AND e.man_nr = a.mnr AND e.man_nr !=0 AND e.liste !=0) "
 			." WHERE a.lid = ".$liga
 			//." AND a.sid = ".$sid
 			." AND e.tln_nr IS NOT NULL "

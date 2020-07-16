@@ -88,6 +88,7 @@ function RotatedImage($file,$x,$y,$w,$h,$angle)
 // Seitenlänge
 	$lspalte_paar = 230;
 	$lspalte_tab = 210;
+	if ($liga[0]->teil > 10) $lspalte_tab = $lspalte_tab - (($liga[0]->teil - 10) * 8);
 	$lspalte_comment = 200;
 	$lspalte = 240;
 // Überschrift Fontgröße Standard = 12
@@ -179,6 +180,8 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 	if (!$cr) $pdf->SetX($xx1); else $pdf->SetX($xx2);
 	$pdf->Cell(5,1,'',0,1);
 	if (!$cr) $pdf->SetX($xx1); else $pdf->SetX($xx2);
+	while (($breite1-1) < $pdf->GetStringWidth(utf8_decode($paar[$y]->hname)))
+		$paar[$y]->hname = substr($paar[$y]->hname,0,-1);
 	if (isset($paar[$y]->hpublished) AND $paar[$y]->hpublished == 1 and isset($paar[$y]->hname)) {
 		if ($ms) { $pdf->Cell($breite0,$zelle+1,'','LTB',0);
 		$pdf->Cell($breite1,$zelle+1,utf8_decode($paar[$y]->hname),'RTB',0,'L'); }
@@ -190,6 +193,8 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 	} else $pdf->Cell($breite1+5,$zelle+1,'',0,0);
 	$breite1 = 42;
 	$pdf->Cell(5,$zelle+1,' - ',1,0,'C');
+	while (($breite1-1) < $pdf->GetStringWidth(utf8_decode($paar[$y]->gname)))
+		$paar[$y]->gname = substr($paar[$y]->gname,0,-1);
 	if (isset($paar[$y]->gpublished) AND $paar[$y]->gpublished == 1 and isset($paar[$y]->gname)) {
 		$pdf->Cell($breite1,$zelle+1,utf8_decode($paar[$y]->gname),1,0,'L');
 	} elseif ($paar[$y]->gname == 'spielfrei') {
@@ -387,6 +392,8 @@ $diff = $spielfrei[0]->count;
 for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	if (!$cr) $pdf->SetX($xx1); else $pdf->SetX($xx2);
 	$pdf->Cell(5,$zelle,$x+1,'L',0,'C');
+	while (($breite1+3) < $pdf->GetStringWidth(utf8_decode($punkte[$x]->name)))
+		$punkte[$x]->name = substr($punkte[$x]->name,0,-1);
 	$pdf->Cell($breite1+4,$zelle,utf8_decode($punkte[$x]->name),0,0,'L');
 	$pdf->Cell(7,$zelle,$punkte[$x]->spiele,0,0,'C');
 	if ($punkte[$x]->abzug > 0) $pdf->Cell(9,$zelle,$punkte[$x]->mp.'*',0,0,'C');
@@ -473,6 +480,8 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	else { $breite0 = 0;
 			$breite1 = 42; }
 	if (!$cr) $pdf->SetX($xx1); else $pdf->SetX($xx2);
+	while (($breite1-1) < $pdf->GetStringWidth(utf8_decode($paar1[$y]->hname)))
+		$paar1[$y]->hname = substr($paar1[$y]->hname,0,-1);
 	if (isset($paar1[$y]->hpublished) AND $paar1[$y]->hpublished == 1 and isset($paar1[$y]->hname)) {
 		if ($ms) { $pdf->Cell($breite0,$zelle+1,'','LTB',0);
 		$pdf->Cell($breite1,$zelle+1,utf8_decode($paar1[$y]->hname),'RTB',0,'L'); }
@@ -484,6 +493,8 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	} else $pdf->Cell($breite1+4,$zelle+1,'',0,0);
 	
 	$pdf->Cell(5,$zelle+1,' - ','TB',0,'C');
+	while (($breite1-1) < $pdf->GetStringWidth(utf8_decode($paar1[$y]->gname)))
+		$paar1[$y]->gname = substr($paar1[$y]->gname,0,-1);
 	if (isset($paar1[$y]->gpublished) AND $paar1[$y]->gpublished == 1 and isset($paar1[$y]->gname)) {
 		if ($ms) { $pdf->Cell($breite1,$zelle+1,utf8_decode($paar1[$y]->gname),'LTB',0,'L');
 			$pdf->Cell($breite0,$zelle+1,'','RTB',0); }

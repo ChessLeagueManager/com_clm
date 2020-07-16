@@ -141,10 +141,19 @@ $pdf->SetFont('Times','B',$head_font);
 $pdf->SetFont('Times','',$font+2);
 $pdf->SetFillColor(120);
 $pdf->SetTextColor(255);
+// max. Länge des Names bestimmen
+$lmax = 0;
+for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
+	$n = $pdf->GetStringWidth(utf8_decode($punkte[$x]->name));
+	if ($n > $lmax) $lmax = $n;
+}
+if ($lmax < (50-$nbreite)) $lmax = 45 - $nbreite;
+if ($lmax > 50) $lmax = 50;
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(6-$rbreite,$zelle,JText::_('RANG'),1,0,'C',1);
 	$pdf->Cell(6-$rbreite,$zelle,JText::_('TLN'),1,0,'C',1);
-	$pdf->Cell(55-$nbreite-$breite,$zelle,JText::_('TEAM'),1,0,'L',1);
+	//$pdf->Cell(55-$nbreite-$breite,$zelle,JText::_('TEAM'),1,0,'L',1);
+	$pdf->Cell($lmax+11-$breite,$zelle,JText::_('TEAM'),1,0,'L',1);
 	
 	if ($liga[0]->runden_modus == 1 OR $liga[0]->runden_modus == 2) {    // vollrundig
 // erster Durchgang
@@ -198,7 +207,10 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(6-$rbreite,$zelle,$x+1,1,0,'C',$fc);
 	$pdf->Cell(6-$rbreite,$zelle,$punkte[$x]->tln_nr,1,0,'C',$fc);
-	$pdf->Cell(45-$nbreite,$zelle,utf8_decode($punkte[$x]->name),1,0,'L',$fc);
+	//$pdf->Cell(45-$nbreite,$zelle,utf8_decode($punkte[$x]->name),1,0,'L',$fc);
+	while (($lmax) < $pdf->GetStringWidth(utf8_decode($punkte[$x]->name)))
+		$punkte[$x]->name = substr($punkte[$x]->name,0,-1);
+	$pdf->Cell($lmax+1,$zelle,utf8_decode($punkte[$x]->name),1,0,'L',$fc);
 	if (isset($dwz[($punkte[$x]->tln_nr)])) $pdf->Cell(10-$breite,$zelle,round($dwz[($punkte[$x]->tln_nr)]),1,0,'C',$fc);
 	else $pdf->Cell(10-$breite,$zelle,'',1,0,'C',$fc);
   

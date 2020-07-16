@@ -446,7 +446,7 @@ elseif (!$liga OR $liga[0]->published == "0") {
 				<div class="clr"></div>
 			
 				<?php 
-				if ($diff == 1 AND $liga[0]->ab ==1 ) { echo JText::_('ROUND_NO_RELEGATED_TEAM'); }
+				//if ($diff == 1 AND $liga[0]->ab ==1 ) { echo JText::_('ROUND_NO_RELEGATED_TEAM'); }
 				//if ($diff == 1 AND $liga[0]->ab >1 ) { echo JText::_('ROUND_LESS_RELEGATED_TEAM'); }
 				?>
 			<?php 
