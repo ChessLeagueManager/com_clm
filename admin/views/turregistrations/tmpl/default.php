@@ -157,7 +157,10 @@ $turParams = new clm_class_params($this->turnier->params);
 						if ($row->status > 2) {
 							echo $row->status;
 						} else {
-							echo JText::_('REGISTRATION_STATUS_'.$row->status);
+							if ($row->approved == '0' AND $row->status == '0')
+								echo JText::_('REGISTRATION_STATUS_00');
+							else
+								echo JText::_('REGISTRATION_STATUS_'.$row->status);
 						}
 						?>
 					</td>

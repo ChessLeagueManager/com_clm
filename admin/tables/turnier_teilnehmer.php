@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -25,6 +23,7 @@ class TableCLMTurnier_Teilnehmer extends JTable
 	var $birthYear  = '';
 	var $geschlecht = '';
 	var $verein     = '';
+	var $email     	= '';
 	var $twz        = 0;
 	var $start_dwz  = 0;
 	var $start_I0   = 0;
@@ -35,6 +34,8 @@ class TableCLMTurnier_Teilnehmer extends JTable
 	var $mgl_nr		= 0;
 	var $PKZ		= '';
 	var $zps		= '';
+	var $tel_no		= '';
+	var $account	= '';
 	var $status		= 0;
 	var $rankingPos	= 0;
 	var $tlnrStatus = 0;

@@ -23,18 +23,21 @@ $turnier 		= $this->turnier;
 $user =JFactory::getUser();
 	$link = JURI::base() .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
 
-if (1==1)	{
-// Prüfen ob Datensatz schon vorhanden ist - check if data exist
 
 // Datensätze in Tabelle schreiben - Transfer data into db-table
 
 // Variablen holen - get variables
 $typeRegistration = clm_core::$load->request_string('typeRegistration','');
+$typeAccount	= clm_core::$load->request_string('typeAccount','');
+$privacy_notice = clm_core::$load->request_string('privacy_notice','');
+$reg_dsgvo 		= clm_core::$load->request_int('reg_dsgvo',0);
 $reg_check01 	= clm_core::$load->request_string('reg_check01','');
 $reg_name 		= clm_core::$load->request_string('reg_name','');
 $reg_vorname 	= clm_core::$load->request_string('reg_vorname','');
 $reg_jahr 		= clm_core::$load->request_string('reg_jahr','');
 $reg_mail 		= clm_core::$load->request_string('reg_mail','');
+$reg_tel_no 	= clm_core::$load->request_string('reg_tel_no','');
+$reg_account 	= clm_core::$load->request_string('reg_account','');
 $reg_club 		= clm_core::$load->request_string('reg_club','');
 $reg_dwz 		= clm_core::$load->request_string('reg_dwz','');
 $reg_elo 		= clm_core::$load->request_string('reg_elo','');
@@ -58,6 +61,16 @@ if ($reg_jahr != '' AND (!is_numeric($reg_jahr) OR $reg_jahr < 1880 OR $reg_jahr
 	$msg .= '<br>'.JText::_('REGISTRATION_E_YEARK');
 if (!clm_core::$load->is_email($reg_mail)) 
 	$msg .= '<br>'.JText::_('REGISTRATION_E_MAIL');
+if ($typeAccount > '0') {
+	if ($reg_account == '') $msg .= '<br>'.JText::_('REGISTRATION_E_ACCOUNT_NO');
+	elseif ($typeAccount == '1') {
+		//if (!clm_core::$load->is_url($reg_account)) $msg .= '<br>'.JText::_('REGISTRATION_E_ACCOUNT_F');
+		if (substr($reg_account,0,22) == 'https://lichess.org/@/') $reg_account1 = $reg_account;
+		else $reg_account1 = 'https://lichess.org/@/'.$reg_account;
+		if (@file_get_contents($reg_account1,false,NULL,0,1) === false) $msg .= '<br>'.JText::_('REGISTRATION_E_ACCOUNT_NK');
+	}}
+if ($reg_dsgvo == 0 AND $privacy_notice != '') 
+	$msg .= '<br>'.JText::_('REGISTRATION_E_CHECKBOX');
 if ($f_source != 'sent') {
 	if ($reg_check01 == '') 
 		$msg .= '<br>'.JText::_('REGISTRATION_E_SPAM');
@@ -67,7 +80,7 @@ if ($f_source != 'sent') {
 if ($msg != '') {
 	$link = JURI::base() .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
 	$link .= '&reg_name='.$reg_name.'&reg_vorname='.$reg_vorname.'&reg_club='.$reg_club.'&reg_mail='.$reg_mail.'&reg_jahr='.$reg_jahr;
-	$link .= '&reg_dwz='.$reg_dwz.'&reg_elo='.$reg_elo.'&reg_comment='.$reg_comment;
+	$link .= '&reg_dwz='.$reg_dwz.'&reg_elo='.$reg_elo.'&reg_tel_no='.$reg_tel_no.'&reg_account='.$reg_account.'&reg_comment='.$reg_comment;
 	$msg = substr($msg,4);
 	$mainframe->enqueueMessage( $msg, "warning" );
 	$mainframe->redirect( $link );
@@ -174,7 +187,7 @@ $heading = $this->turnier->name;
 		</tr>
 		<tr>
 			<th align="left" colspan="2" class="anfang">
-				<span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_SUBMITTING'); ?></span></th>
+				<span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_SUBMITTING_2'); ?></span></th>
 		</tr>
 		
 		</table>
@@ -191,6 +204,7 @@ $heading = $this->turnier->name;
 		<input type="hidden" name="reg_vorname" value="<?php echo $reg_vorname; ?>" />
 		<input type="hidden" name="reg_jahr" value="<?php echo $reg_jahr; ?>" />
 		<input type="hidden" name="reg_mail" value="<?php echo $reg_mail; ?>" />
+		<input type="hidden" name="reg_dsgvo" value="<?php echo $reg_dsgvo; ?>" />
 		<input type="hidden" name="task" value="" />
 		<?php echo JHTML::_( 'form.token' ); ?>
 		
@@ -200,7 +214,6 @@ $heading = $this->turnier->name;
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); 
 echo '</div></div>';
 									
-}
 ?>
 
 

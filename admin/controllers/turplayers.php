@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -503,6 +501,16 @@ class CLMControllerTurPlayers extends JControllerLegacy {
 	function onlineRegList() {
 		
 		$this->adminLink->view = "turregistrations";
+		$this->adminLink->makeURL();		
+		$this->app->redirect( $this->adminLink->url );
+	
+	}
+
+	// Weiterleitung!
+	function mail_to_all() {
+		
+		$this->adminLink->view = "turplayersmail";
+		$this->adminLink->more = array('turnierid' => $this->id);
 		$this->adminLink->makeURL();		
 		$this->app->redirect( $this->adminLink->url );
 	

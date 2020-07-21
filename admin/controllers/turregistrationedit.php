@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -128,6 +128,7 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 			$tlnr->birthYear = $row->birthYear;
 			$tlnr->geschlecht = $row->geschlecht;
 			$tlnr->verein	= $row->club;
+			$tlnr->email	= $row->email;
 			if ($row->dwz == '' OR $row->dwz < 1) $tlnr->start_dwz = 0;
 			else $tlnr->start_dwz = $row->dwz;
 			$tlnr->start_I0	= $row->dwz_I0;
@@ -153,6 +154,8 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 			$tlnr->mgl_nr	= $row->mgl_nr;
 			$tlnr->PKZ		= $row->PKZ;
 			$tlnr->zps		= $row->zps;
+			$tlnr->tel_no	= $row->tel_no;
+			$tlnr->account	= $row->account;
 			$tlnr->titel	= $row->titel;
 			$tlnr->tlnrStatus = 1;
 			$tlnr->published = 1;

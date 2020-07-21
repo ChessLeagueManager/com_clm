@@ -320,10 +320,14 @@ CREATE TABLE IF NOT EXISTS `#__clm_online_registration` (
   `mgl_nr` mediumint(5) NOT NULL DEFAULT '0',
   `PKZ` varchar(9) DEFAULT NULL,
   `zps` varchar(5) NOT NULL DEFAULT '',
+  `tel_no` varchar(30) NOT NULL DEFAULT '',
+  `account` varchar(50) NOT NULL DEFAULT '',
   `status` mediumint(5) NOT NULL DEFAULT '0',
   `timestamp` int(11) NOT NULL,
   `comment` text NOT NULL,
   `ordering` int(11) NOT NULL DEFAULT '0',
+  `pid` varchar(32) NOT NULL DEFAULT '',
+  `approved` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

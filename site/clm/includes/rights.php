@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -88,6 +88,7 @@ $rights["db_tournament_sortByTWZ"]=array(1,"BE_tournament_edit_detail","BE_leagu
 $rights["db_tournament_auto"]=array(1,"BE_tournament_edit_detail","BE_league_edit_detail","BE_teamtournament_edit_detail",1,0); // Automatische Aktualisierung von inoff. DWZ und Ranking
 $rights["db_tournament_player_del"]=array(2,"BE_tournament_edit_detail",0); // Entfernen von unbenutzten Spielern
 $rights["db_tournament_registration_del"]=array(2,"BE_tournament_edit_detail",0); // Entfernen von unbenutzten Online-Registrierungen
+$rights["db_tournament_registration_approve"]=array(); // Bestätigen von Online-Registrierungen
 
 $rights["db_ordering"]=array(); // Ordering ändern
 $rights["db_pgn_export"]=array(); // pgn-Datei erstellen

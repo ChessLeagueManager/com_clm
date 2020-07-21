@@ -22,6 +22,7 @@ $itemid 		= clm_core::$load->request_string( 'Itemid' );
 $config = clm_core::$db->config();
 $countryversion = $config->countryversion;
 $turParams = new clm_class_params($this->turnier->params);
+$typeAccount 	= $turParams->get('typeAccount', 0);
 	
 // CLM-Container
 echo '<div id="clm"><div id="turnier_player">';
@@ -118,6 +119,14 @@ if ($this->playerPhoto != '') { ?>
 					?>
 				</td>
 			</tr>
+			<?php // Online Account
+			if ($typeAccount > 0) { ?>
+			<tr>
+				<td align="left" class="tp_col_1"><?php echo JText::_('REGISTRATION_ACCOUNT_'.$typeAccount) ?>:</td>
+				<td class="tp_col_data"><a href="<?php echo $this->player->account ?>" target="blank"><?php echo $this->player->account ?></a></td>
+			</tr>
+			<?php } ?>
+			
 			<?php // Federation
 			if ($turParams->get('displayPlayerFederation', 0) == 1) { ?>
 			<tr>

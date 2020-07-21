@@ -21,19 +21,21 @@ $turnier 		= $this->turnier;
 $user =JFactory::getUser();
 	$link = JURI::base() .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
 
-if (1==1)	{
-
 // Datensätze in Tabelle schreiben - insert data into table
 
 // Variablen holen - get variables
 $turParams = new clm_class_params($this->turnier->params);
 $typeRegistration = $turParams->get('typeRegistration', 0);
+$typeAccount	= $turParams->get('typeAccount', 0);
+$reg_dsgvo 		= clm_core::$load->request_int('reg_dsgvo',0);
 $reg_check01 	= clm_core::$load->request_string('reg_check01','');
 $reg_name 		= clm_core::$load->request_string('reg_name','');
 $reg_vorname 	= clm_core::$load->request_string('reg_vorname','');
 $reg_birthYear 	= clm_core::$load->request_string('reg_jahr','');
 $reg_club 		= clm_core::$load->request_string('reg_club','');
 $reg_mail 		= clm_core::$load->request_string('reg_mail','');
+$reg_tel_no 	= clm_core::$load->request_string('reg_tel_no','');
+$reg_account 	= clm_core::$load->request_string('reg_account','');
 $reg_dwz 		= clm_core::$load->request_string('reg_dwz','');
 $reg_elo 		= clm_core::$load->request_string('reg_elo','');
 $reg_comment 	= clm_core::$load->request_string('reg_comment','');
@@ -47,23 +49,23 @@ if ($typeRegistration == 5) {
 		$reg_dwz 		= clm_core::$load->request_string('reg_dwz'.$reg_spieler,'');
 		$reg_elo 		= clm_core::$load->request_string('reg_elo'.$reg_spieler,'');
 		$reg_PKZ 		= clm_core::$load->request_string('reg_PKZ'.$reg_spieler,'');
+		$reg_zps 		= clm_core::$load->request_string('reg_zps'.$reg_spieler,'');
 		$reg_titel 		= clm_core::$load->request_string('reg_titel'.$reg_spieler,'');
 		$reg_geschlecht	= clm_core::$load->request_string('reg_geschlecht'.$reg_spieler,'');
 		$reg_birthYear	= clm_core::$load->request_string('reg_birthYear'.$reg_spieler,'');
 		$reg_mgl_nr		= clm_core::$load->request_string('reg_mgl_nr'.$reg_spieler,'');
-		$reg_zps 		= clm_core::$load->request_string('reg_zps'.$reg_spieler,'');
 		$reg_dwz_I0 	= clm_core::$load->request_string('reg_dwz_I0'.$reg_spieler,'');
 		$reg_FIDEid 	= clm_core::$load->request_string('reg_FIDEid'.$reg_spieler,'');
 		$reg_FIDEcco	= clm_core::$load->request_string('reg_FIDEcco'.$reg_spieler,'');
 	}
 } else {
 		$reg_PKZ 		= '';
+		$reg_zps 		= '';
 		$reg_titel 		= '';
 		$reg_geschlecht	= '';
-		$reg_mgl_nr		= '';
-		$reg_zps 		= '';
-		$reg_dwz_I0 	= '';
-		$reg_FIDEid 	= '';
+		$reg_mgl_nr		= 0;
+		$reg_dwz_I0 	= 0;
+		$reg_FIDEid 	= 0;
 		$reg_FIDEcco	= '';
 }
 $session = JFactory::getSession();
@@ -77,10 +79,18 @@ if ($reg_club == '')
 	$msg .= '<br>'.JText::_('REGISTRATION_E_CLUB');
 if (!clm_core::$load->is_email($reg_mail)) 
 	$msg .= '<br>'.JText::_('REGISTRATION_E_MAIL');
+if ($typeAccount > '0') {
+	if ($reg_account == '') $msg .= '<br>'.JText::_('REGISTRATION_E_ACCOUNT_NO');
+	elseif ($typeAccount == '1') {
+		//if (!clm_core::$load->is_url($reg_account)) $msg .= '<br>'.JText::_('REGISTRATION_E_ACCOUNT_F');
+		if (substr($reg_account,0,22) == 'https://lichess.org/@/') $reg_account1 = $reg_account;
+		else $reg_account1 = 'https://lichess.org/@/'.$reg_account;
+		if (@file_get_contents($reg_account1,false,NULL,0,1) === false) $msg .= '<br>'.JText::_('REGISTRATION_E_ACCOUNT_NK');
+	}}
 if ($reg_dwz != '' AND (!is_numeric($reg_dwz) OR $reg_dwz < 0 OR $reg_dwz > 3000))
 	$msg .= '<br>'.JText::_('REGISTRATION_E_NWZ');
 if ($reg_elo != '' AND (!is_numeric($reg_elo) OR $reg_elo < 0 OR $reg_elo > 3000))
-	$msg .= '<br>'.JText::_('REGISTRATION_E_MAIL');
+	$msg .= '<br>'.JText::_('REGISTRATION_E_ELO');
 if ($reg_check01 == '') 
 	$msg .= '<br>'.JText::_('REGISTRATION_E_SPAM');
 elseif ($reg_check01 != $reg_wert) 
@@ -91,12 +101,15 @@ elseif ($reg_check01 != $reg_wert)
 	$from = $config->email_from;
 	$fromname = $config->email_fromname;
 	$htmlMail = $config->email_type;
+	$privacy_notice = $config->privacy_notice;
 	if ( $from == '' ) {
 		$msg .= '<br>'.JText::_('REGISTRATION_E_INSTALL_MAIL');
 	}
 	if ( $fromname == '' ) {
 		$msg .= '<br>'.JText::_('REGISTRATION_E_INSTALL_NAME');
 	}
+	if ($reg_dsgvo == '0' AND $privacy_notice != '') 
+		$msg .= '<br>'.JText::_('REGISTRATION_E_CHECKBOX');
 
 if ($msg != '') {
 	$link = JURI::base() .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
@@ -104,22 +117,27 @@ if ($msg != '') {
 		$link .= '&layout=selection&f_source=sent&reg_spieler='.$reg_spieler;
 	}
 	$link .= '&reg_name='.$reg_name.'&reg_vorname='.$reg_vorname.'&reg_club='.$reg_club.'&reg_mail='.$reg_mail.'&reg_jahr='.$reg_birthYear;
-	$link .= '&reg_dwz='.$reg_dwz.'&reg_elo='.$reg_elo.'&reg_comment='.$reg_comment;
+	$link .= '&reg_dwz='.$reg_dwz.'&reg_elo='.$reg_elo.'&reg_tel_no='.$reg_tel_no.'&reg_account='.$reg_account.'&reg_comment='.$reg_comment.'&reg_dsgvo='.$reg_dsgvo;
 	$msg = substr($msg,4);
 	$mainframe->enqueueMessage( $msg, "error" );
 	$mainframe->redirect( $link );
 }
-// kein Fehler => Meldung in Tabelle schreiben - no error => trabsfer data into table
+// kein Fehler => Meldung in Tabelle schreiben - no error => transfer data into table
+	$randomUid = md5(uniqid('', true) . '|' . microtime());
+	if (!is_numeric($reg_elo)) $reg_elo = 0;
+	if (!is_numeric($reg_dwz)) $reg_dwz = 0;
+	if (!is_numeric($reg_elo)) $reg_elo = 0;
 	$db	=JFactory::getDBO();
 	$query	= "INSERT INTO #__clm_online_registration "
 		." ( `tid`, `name`, `vorname`, `club`, `email`, `elo`, `dwz`,"
 		." `PKZ`, `titel`, `geschlecht`, `birthYear`, `mgl_nr`, `zps`, `dwz_I0`, `FIDEid`, `FIDEcco`,"
-		." `comment`, `status`, `timestamp` ) "
+		." `tel_no`,`account`,`comment`, `status`, `timestamp`, "
+		." `pid`, `approved` ) "
 		." VALUES ('$turnier->id','".clm_core::$db->escape($reg_name)."','".clm_core::$db->escape($reg_vorname)."','".clm_core::$db->escape($reg_club)."','$reg_mail','$reg_elo','$reg_dwz', "
 		." '".clm_core::$db->escape($reg_PKZ)."','".clm_core::$db->escape($reg_titel)."','".clm_core::$db->escape($reg_geschlecht)."','".clm_core::$db->escape($reg_birthYear)."','".clm_core::$db->escape($reg_mgl_nr)."', "
 		." '".clm_core::$db->escape($reg_zps)."','".clm_core::$db->escape($reg_dwz_I0)."','".clm_core::$db->escape($reg_FIDEid)."','".clm_core::$db->escape($reg_FIDEcco)."', "
-		." '".clm_core::$db->escape($reg_comment)."', '0',".time()." ) "
-		;
+		." '".clm_core::$db->escape($reg_tel_no)."','".clm_core::$db->escape($reg_account)."','".clm_core::$db->escape($reg_comment)."', '0',".time().","
+		." '".$randomUid."', '0' ) ";
 	clm_core::$db->query($query);
 
 // Log - log
@@ -140,10 +158,14 @@ if ($msg != '') {
 				. JText::_('REGISTRATION_MAIL').': '.$reg_mail."\n";
 	if ($reg_dwz != '') $body_daten .=  JText::_('REGISTRATION_DWZ').': '.$reg_dwz."\n";
 	if ($reg_elo != '') $body_daten .=  JText::_('REGISTRATION_ELO').': '.$reg_elo."\n";
-	if ($reg_comment != '') $body_daten .= JText::_('REGISTRATION_COMMENT').': '.$reg_comment."\n";
-	$body_TL = $turnier->name."\n".'Eine neue Online-Anmeldung liegt vor: '."\n".$body_daten;
+	if ($reg_tel_no != '') $body_daten .=  JText::_('REGISTRATION_TEL_NO').': '.$reg_tel_no."\n";
+	if ($reg_account != '') $body_daten .=  JText::_('REGISTRATION_ACCOUNT_'.$typeAccount).': '.$reg_account." \n";
+	if ($reg_comment != '') $body_daten .=  JText::_('REGISTRATION_COMMENT').': '.$reg_comment."\n";
+	//$body_TL = $turnier->name."\n".'Eine neue Online-Anmeldung liegt vor: '."\n".$body_daten;
 	$email_TL = $turnier->tlemail;
 	$htmlMail = '0';
+	$url = JURI::base().'components/com_clm/clm/mail_approve.php?parameter='.$randomUid;
+
 	// Email an TL - e-mail to tournament controller
 	if ($email_TL != "") {
 		$body_TL = $turnier->name."\n\n".JText::_('REG_TC_HELLO_1')."\n".JText::_('REG_TC_HELLO_2')."\n".$body_daten;
@@ -153,6 +175,8 @@ if ($msg != '') {
 	if ($reg_mail != "") {
 		$body_AM = $turnier->name."\n\n".JText::_('REG_PLAYER_HELLO_1')."\n".JText::_('REG_PLAYER_HELLO_2')."\n".JText::_('REG_PLAYER_HELLO_3')."\n".$body_daten;
 		$body_AM .= "\n".JText::_('REG_PLAYER_HELLO_4');
+		$body_AM .= "\n".$url;
+		$body_AM .= "\n".JText::_('REG_PLAYER_HELLO_5');
 		clm_core::$cms->sendMail($from, $fromname, $reg_mail, $subject, $body_AM, $htmlMail);
 	}
 	
@@ -161,7 +185,7 @@ if ($msg != '') {
 	$mainframe->enqueueMessage( $msg );
 	$link = JURI::base() .'index.php?option=com_clm&view=turnier_info&turnier='. $turnier->id .'&Itemid='; 
 	$mainframe->redirect( $link );
-}
+
 ?>
 
 

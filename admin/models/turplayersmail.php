@@ -11,7 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-class CLMModelTurPlayerEdit extends JModelLegacy {
+class CLMModelTurPlayersMail extends JModelLegacy {
 
 
 	// benötigt für Pagination
@@ -26,8 +26,8 @@ class CLMModelTurPlayerEdit extends JModelLegacy {
 		// get parameters
 		$this->_getParameters();
 
-		// get Player
-		$this->_getPlayerData();
+		// get players
+		$this->_getPlayersData();
 		
 		// get turnier
 		$this->_getTurnierData();
@@ -40,20 +40,20 @@ class CLMModelTurPlayerEdit extends JModelLegacy {
 	// alle vorhandenen Parameter auslesen
 	function _getParameters() {
 	
-		// roundid
-		$this->param['playerid'] = clm_core::$load->request_int('playerid');
+		// turnier_id
+		$this->param['turnierid'] = clm_core::$load->request_int('turnierid');
 	
 	}
 
 	
-	function _getPlayerData() {
+	function _getPlayersData() {
 	
 		$query = 'SELECT * '
 			. ' FROM #__clm_turniere_tlnr'
-			. ' WHERE id = '.$this->param['playerid']
+			. ' WHERE turnier = '.$this->param['turnierid']
 			;
 		$this->_db->setQuery($query);
-		$this->playerData = $this->_db->loadObject();
+		$this->playersData = $this->_db->loadObjectList();
 	
 	}
 
@@ -62,10 +62,17 @@ class CLMModelTurPlayerEdit extends JModelLegacy {
 	
 		$query = 'SELECT * '
 			. ' FROM #__clm_turniere'
-			. ' WHERE id = '.$this->playerData->turnier
+			. ' WHERE id = '.$this->param['turnierid']
 			;
 		$this->_db->setQuery($query);
 		$this->turnierData = $this->_db->loadObject();
+		$query = 'SELECT * '
+			. ' FROM #__clm_user'
+			. ' WHERE jid = '.$this->turnierData->tl
+			. ' AND sid = '.$this->turnierData->sid
+			;
+		$this->_db->setQuery($query);
+		$this->tlData = $this->_db->loadObject();
 	
 	}
 

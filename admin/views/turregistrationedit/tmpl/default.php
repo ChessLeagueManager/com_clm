@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleague.de
  * @author Thomas Schwietert
@@ -11,6 +11,8 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
+		$turParams = new clm_class_params($this->turnier->params);
+		$param_typeaccount = $turParams->get('typeAccount', 0);
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -38,6 +40,16 @@ defined('_JEXEC') or die('Restricted access');
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_EMAIL'); ?>:</td>
 				<td><input class="inputbox" type="text" name="email" id="email" size="50" maxlength="60" value="<?php echo $this->registration->email; ?>" /></td>
 			</tr>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_TEL_NO'); ?>:</td>
+				<td><input class="inputbox" type="text" name="tel_no" id="tel_no" size="30" maxlength="30" value="<?php echo $this->registration->tel_no; ?>" /></td>
+			</tr>
+			<?php if ($param_typeaccount > '0') { ?>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_ACCOUNT_'.$param_typeaccount); ?>:</td>
+				<td><input class="inputbox" type="text" name="account" id="account" size="50" maxlength="50" value="<?php echo $this->registration->account; ?>" /></td>
+			</tr>
+			<?php } ?>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('RATING'); ?>:</td>
 				<td><input class="inputbox" type="text" name="dwz" id="dwz" size="4" maxlength="4" value="<?php if ($this->registration->dwz != 0) echo $this->registration->dwz; else echo ""; ?>" /></td>
@@ -88,7 +100,13 @@ defined('_JEXEC') or die('Restricted access');
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_ZPS'); ?>:</td>
-				<td><input class="inputbox" type="text" name="zps" id="zps" size="5" maxlength="5" value="<?php if ($this->registration->zps != 0) echo $this->registration->zps; else echo ""; ?>" /></td>
+				<td><input class="inputbox" type="text" name="zps" id="zps" size="5" maxlength="5" value="<?php if ($this->registration->zps != '0') echo $this->registration->zps; else echo ""; ?>" /></td>
+			</tr>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_COMMENT'); ?>:</td>
+				<td width="100%" valign="top">
+					<textarea class="inputbox" name="bem_int" id="bem_int" cols="40" rows="4" style="width:90%"><?php echo str_replace('&','&amp;',$this->registration->comment);?></textarea>
+				</td>
 			</tr>
 		</table>
 		

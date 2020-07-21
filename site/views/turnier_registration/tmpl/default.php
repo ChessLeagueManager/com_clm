@@ -15,7 +15,7 @@ defined('_JEXEC') or die('Restricted access');
 // Stylesheet laden - load CSS
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
-echo "<div><div id='turnier_info'>";
+echo "<div id='clm'><div id='turnier_info'>";
 
 // Konfigurationsparameter auslesen - get configuration parameter
 $itemid 		= clm_core::$load->request_string( 'Itemid' );
@@ -53,14 +53,18 @@ if ( $this->turnier->published == 0) {
 
 		$turParams = new clm_class_params($this->turnier->params);
 		$typeRegistration = $turParams->get('typeRegistration', 0);
+		$typeAccount 	= $turParams->get('typeAccount', 0);
 		$reg_name 		= clm_core::$load->request_string('reg_name','');		
 		$reg_vorname 	= clm_core::$load->request_string('reg_vorname','');		
 		$reg_jahr 		= clm_core::$load->request_string('reg_jahr','');		
 		$reg_club 		= clm_core::$load->request_string('reg_club','');		
 		$reg_mail 		= clm_core::$load->request_string('reg_mail','');		
+		$reg_tel_no 	= clm_core::$load->request_string('reg_tel_no','');		
+		$reg_account 	= clm_core::$load->request_string('reg_account','');		
 		$reg_dwz 		= clm_core::$load->request_string('reg_dwz','');		
 		$reg_elo 		= clm_core::$load->request_string('reg_elo','');		
 		$reg_comment 	= clm_core::$load->request_string('reg_comment','');		
+		$reg_dsgvo 	= clm_core::$load->request_string('reg_dsgvo',0);		
 
 		if ($typeRegistration < 5) { 
 			$headline = JText::_('REGISTRATION_ONLINE');
@@ -124,6 +128,21 @@ if ( $this->turnier->published == 0) {
 			<input class="inputbox" type="text" name="reg_mail" id="reg_mail" size="50" maxlength="100" value="<?php echo $reg_mail; ?>" />
 			</td>
 		</tr>
+		<tr>
+			<td align="left" width="100"><?php echo JText::_('REGISTRATION_TEL_NO'); ?>:</td>
+			<td>
+			<input class="inputbox" type="text" name="reg_tel_no" id="reg_tel_no" size="30" maxlength="30" value="<?php echo $reg_tel_no; ?>" />
+			</td>
+		</tr>
+	<?php if ($typeAccount > 0) { 
+	?>
+		<tr>
+			<td align="left" width="100" title="<?php echo JText::_('REGISTRATION_ACCOUNT_HINT'); ?>"><?php echo JText::_('REGISTRATION_ACCOUNT_'.$typeAccount); ?>(*):</td>
+			<td>
+			<input class="inputbox" type="text" name="reg_account" id="reg_account" size="30" maxlength="50" value="<?php echo $reg_account; ?>" />
+			</td>
+		</tr>
+	<?php } ?>
 	<?php if ($typeRegistration < 5) { 
 	?>
 		<tr>
@@ -158,6 +177,16 @@ if ( $this->turnier->published == 0) {
 		// Formular-Ausgabe abschließen und Captcha einbinden - Finish formular output and implement captcha
 		$result = clm_core::$load->session_variables('o'); 
 		?>
+		<?php if ($privacy_notice != '') { ?>
+		  <tr>
+			<th style="align: center;" class="anfang">&nbsp;&nbsp;&nbsp;<input type="checkbox" id="reg_dsgvo" name="reg_dsgvo" value="1">
+				<span style="font-size: 80%; font-weight: lighter;">&nbsp;<?php echo JText::_('REGISTRATION_COMMENT_0'); ?></span></th>
+			<th align="left" colspan="1" class="anfang">
+				<span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_COMMENT_2A'); ?><a href="<?php echo $privacy_notice; ?>" target="_blank"><span style="color: black;"><?php echo JText::_('REGISTRATION_COMMENT_2B'); ?></span></a></span>
+				<span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_COMMENT_3'); ?></span>
+			</th>
+		  </tr>
+		<?php } ?>
 		<tr>
 			<td align="left" width="100"><?php echo JText::_('REGISTRATION_CHECK'); ?>(*):</td>
 			<td><?php echo $result[1]." + ".$result[2]." = "; ?>	 
@@ -167,10 +196,6 @@ if ( $this->turnier->published == 0) {
 		<tr>
 			<th align="left" colspan="2" class="anfang">
 				<span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_COMMENT_1'); ?></span>
-				<?php if ($privacy_notice != '') { ?>
-				<br><span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_COMMENT_2A'); ?><a href="<?php echo $privacy_notice; ?>" target="_blank"><span style="color: black;"><?php echo JText::_('REGISTRATION_COMMENT_2B'); ?></span></a></span>
-				<span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_COMMENT_3'); ?></span>
-				<?php } ?>
 			</th>
 		</tr>
 		
@@ -184,6 +209,8 @@ if ( $this->turnier->published == 0) {
 		<input type="hidden" name="option" value="com_clm" />
 		<input type="hidden" name="turnier" value="<?php echo $this->turnier->id; ?>" />
 		<input type="hidden" name="typeRegistration" value="<?php echo $typeRegistration; ?>" />
+		<input type="hidden" name="typeAccount" value="<?php echo $typeAccount; ?>" />
+		<input type="hidden" name="privacy_notice" value="<?php echo $privacy_notice; ?>" />
 		<input type="hidden" name="task" value="" />
 		<?php echo JHTML::_( 'form.token' ); ?>
 		
