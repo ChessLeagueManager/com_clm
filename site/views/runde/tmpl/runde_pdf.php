@@ -530,7 +530,7 @@ if (isset($liga[$runde-1]->comment) AND $liga[$runde-1]->comment <> "") {
 	if (!$cr) $pdf->SetX($xx1); else $pdf->SetX($xx2);
 	$pdf->Cell($breite,$zelle,'',0,1,'C');
 	if (!$cr) $pdf->SetX($xx1); else $pdf->SetX($xx2);
-	$pdf->Cell($breite,6,utf8_decode(JText::_('NOTICE')),0,1,'L');
+	$pdf->Cell($breite,6,utf8_decode(JText::_('NOTICE_SL')),0,1,'L');
 	if (!$cr) $pdf->SetX($xx1); else $pdf->SetX($xx2);
 		$pdf->MultiCell($breite,$zelle,utf8_decode($liga[$runde-1]->comment),1,'L');
     }

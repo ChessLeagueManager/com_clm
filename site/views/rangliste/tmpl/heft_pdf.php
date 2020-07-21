@@ -480,7 +480,7 @@ $pdf->Ln();
 if ($liga[0]->bemerkungen <> "") {
 	$pdf->SetFont('Times','B',$font+2);
 	$pdf->Cell(10,$zelle,' ',0,0,'L');
-	$pdf->Cell(150,$zelle,' '.utf8_decode(JText::_('NOTICE')).' :',0,1,'B');
+	$pdf->Cell(150,$zelle,' '.utf8_decode(JText::_('NOTICE_SL')).' :',0,1,'B');
 	$pdf->SetFont('Times','',$font);
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
 	$pdf->MultiCell(150,$zelle,utf8_decode($liga[0]->bemerkungen),0,'L',0);

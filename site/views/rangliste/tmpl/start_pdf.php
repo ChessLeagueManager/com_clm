@@ -804,7 +804,7 @@ $pdf->SetFont('Times','',14);
 	}		
 $pdf->SetFont('Times','',$font+1);
 	$pdf->Cell(10,$zelle,' ',0,0,'L');
-	$pdf->Cell(150,$zelle,JText::_('NOTICE').' :',0,1,'B');
+	$pdf->Cell(150,$zelle,JText::_('NOTICE_SL').' :',0,1,'B');
 	$pdf->SetFont('Times','',$font);
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
 	if ($liga[0]->bemerkungen == utf8_decode($liga[0]->bemerkungen))

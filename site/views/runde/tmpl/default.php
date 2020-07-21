@@ -222,7 +222,7 @@ else {   ?>
 <?php // Kommentare zur Liga
 if (isset($liga[$runde-1]->comment) AND $liga[$runde-1]->comment <> "") { ?>
 <div id="desc">
-    <p class="run_note_title"><?php echo JText::_('NOTICE') ?></p>
+    <p class="run_note_title"><?php echo JText::_('NOTICE_SL') ?></p>
     <p><?php echo nl2br($liga[$runde-1]->comment); ?></p>
 </div>
 <?php } 

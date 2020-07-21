@@ -126,7 +126,7 @@ else {
     <?php // Kommentare zur Liga
     if ($liga[0]->bemerkungen <> "") { ?>
     <div class="ran_note">
-        <div class="ran_note_left"><?php echo JText::_('NOTICE') ?></div>
+        <div class="ran_note_left"><?php echo JText::_('NOTICE_SL') ?></div>
         <div class="ran_note_right"><?php echo nl2br($liga[0]->bemerkungen); ?></div>
     </div>
     <div class="clr"></div>
