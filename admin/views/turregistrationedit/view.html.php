@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -71,6 +71,7 @@ class CLMViewTurRegistrationEdit extends JViewLegacy {
 		
 		$this->registration = $model->registrationData;
 		$this->turnier = $model->turnierData;
+		$this->snrmax = $model->turnierSnrMax->snrmax;
 
 		$this->param = $model->param;
 

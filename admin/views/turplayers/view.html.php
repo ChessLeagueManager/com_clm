@@ -70,16 +70,17 @@ class CLMViewTurPlayers extends JViewLegacy {
 				JToolBarHelper::custom( 'onlineRegList', 'copy.png', 'copy_f2.png', JText::_('ONLINE_REG_LIST'), false);
 				JToolBarHelper::spacer();
 			}
-			// Email an Teilnehmer
-			JToolBarHelper::custom( 'mail_to_all', 'copy.png', 'copy_f2.png', JText::_('MAIL_TO_ALL'), false);
+			// Email an Teilnehmer (TL muss gesetzt sein)
+			if ($model->turnier->tl != '0') {
+				JToolBarHelper::custom( 'mail_to_all', 'copy.png', 'copy_f2.png', JText::_('MAIL_TO_ALL'), false);
+			}
 		}
 		
 		JToolBarHelper::cancel();
 		if (($model->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
 			JToolBarHelper::divider();
 			JToolBarHelper::spacer();
-			JToolBarHelper::custom( 'turform', 'config.png', 'config_f2.png', JText::_('TOURNAMENT'), false);
-		
+			JToolBarHelper::custom( 'turform', 'config.png', 'config_f2.png', JText::_('TOURNAMENT'), false);		
 		}
 		
 

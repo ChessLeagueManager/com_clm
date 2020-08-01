@@ -23,6 +23,7 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		// turnierid
 		$this->registrationid = clm_core::$load->request_int('registrationid');
 		$this->turnierid = clm_core::$load->request_int('turnierid');
+		$this->snrmax = clm_core::$load->request_int('snrmax');
 		
 		$this->_db	= JFactory::getDBO();		
 		$this->app 	= JFactory::getApplication();
@@ -123,7 +124,7 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 			$tlnr = JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
 			$tlnr->sid		= $rowt->sid;
 			$tlnr->turnier	= $row->tid;
-			$tlnr->snr		= 0;
+			$tlnr->snr		= $this->snrmax + 1;  // 0
 			$tlnr->name		= $registrationname;
 			$tlnr->birthYear = $row->birthYear;
 			$tlnr->geschlecht = $row->geschlecht;

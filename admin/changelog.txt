@@ -23,6 +23,7 @@ $ -> Language fix or change
 + Einzelturniere: Online-Turnieranmeldung erweitert (u.a. Double Opt-in, lichess-Account)
 + Einzelturniere: Mail an Turnierteilnehmer
 # Text-Konstante NOTICE geändert in NOTICE_SL
++ Online-Turnieranmeldung: Mailversand mit Check auf Erfolg
 
 - - - - - 3.8.3 - [14-06-2020] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung php 7.4

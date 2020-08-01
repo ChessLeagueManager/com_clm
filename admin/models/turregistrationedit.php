@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleguemanager.de
  * @author Thomas Schwietert
@@ -19,7 +19,6 @@ class CLMModelTurRegistrationEdit extends JModelLegacy {
 		
 		parent::__construct();
 
-
 		// user
 		$this->user =JFactory::getUser();
 		
@@ -32,7 +31,8 @@ class CLMModelTurRegistrationEdit extends JModelLegacy {
 		// get turnier
 		$this->_getTurnierData();
 
-		
+		// get max. start number
+		$this->_getTurnierSnrMax();
 
 	}
 
@@ -69,6 +69,16 @@ class CLMModelTurRegistrationEdit extends JModelLegacy {
 	
 	}
 
+	function _getTurnierSnrMax() {
+	
+		$query = 'SELECT MAX(snr) as snrmax '
+			. ' FROM #__clm_turniere_tlnr'
+			. ' WHERE turnier = '.$this->registrationData->tid
+			;
+		$this->_db->setQuery($query);
+		$this->turnierSnrMax = $this->_db->loadObject();
+		if (!isset($this->turnierSnrMax->snrmax)) $this->turnierSnrMax->snrmax = 0;
+	}
 
 }
 

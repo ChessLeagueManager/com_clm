@@ -120,6 +120,7 @@ defined('_JEXEC') or die('Restricted access');
 	<input type="hidden" name="view" value="turregistrationedit" />
 	<input type="hidden" name="registrationid" value="<?php echo $this->param['registrationid']; ?>" />
 	<input type="hidden" name="turnierid" value="<?php echo $this->registration->tid; ?>" />
+	<input type="hidden" name="snrmax" value="<?php echo $this->snrmax; ?>" />
 	<input type="hidden" name="controller" value="turregistrationedit" />
 	<input type="hidden" name="task" value="" />
 	<?php echo JHtml::_( 'form.token' ); ?>

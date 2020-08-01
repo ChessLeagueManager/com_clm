@@ -57,6 +57,7 @@ if ( $this->turnier->published == 0) {
 		$reg_name 		= clm_core::$load->request_string('reg_name','');		
 		$reg_vorname 	= clm_core::$load->request_string('reg_vorname','');		
 		$reg_jahr 		= clm_core::$load->request_string('reg_jahr','');		
+		$reg_geschlecht	= clm_core::$load->request_string('reg_geschlecht','');		
 		$reg_club 		= clm_core::$load->request_string('reg_club','');		
 		$reg_mail 		= clm_core::$load->request_string('reg_mail','');		
 		$reg_tel_no 	= clm_core::$load->request_string('reg_tel_no','');		
@@ -165,7 +166,22 @@ if ( $this->turnier->published == 0) {
 			<input class="inputbox" type="text" name="reg_elo" id="reg_elo" size="4" maxlength="4" value="<?php echo $reg_elo; ?>" />
 			</td>
 		</tr>
-
+		<tr>
+			<td align="left" width="100"><?php echo JText::_('REGISTRATION_SEX'); ?>:</td>
+			<td class="paramlist_value">
+					<?php
+					$options = array();
+					$options[''] = '';
+					$options['M'] = JText::_('REGISTRATION_SEX_M');
+					$options['W'] = JText::_('REGISTRATION_SEX_W');
+					$optionlist = array();
+					foreach ($options as $key => $val) {
+						$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
+					}
+					echo JHtml::_('select.genericlist', $optionlist, 'reg_geschlecht', 'class="inputbox"', 'id', 'name', $reg_geschlecht);
+					?>
+				</td>
+		</tr>
 		<tr>
 			<td align="left" width="100"><?php echo JText::_('REGISTRATION_COMMENT'); ?>:</td>
 			<td>

@@ -36,7 +36,8 @@ class CLMControllerTurPlayersMail extends JControllerLegacy
 		$config = clm_core::$db->config();
 		$from = $config->email_from;
 		$fromname = $config->email_fromname;
-		$htmlMail = $config->email_type;
+		//$htmlMail = $config->email_type;
+		$htmlMail = 0;
 		if ( $from == '' ) {
 			$msg .= '<br>'.JText::_('REGISTRATION_E_INSTALL_MAIL');
 		}
@@ -60,20 +61,24 @@ class CLMControllerTurPlayersMail extends JControllerLegacy
 		if ( $mail_body == '' ) {
 			$msg .= '<br>'.JText::_('MAIL_BODY_EMPTY');
 		}
+		$count_mail = 0;
 		// mail to TL
 		$result = clm_core::$cms->sendMail($from, $fromname, $mail_to, $mail_subj, $mail_body, $htmlMail);
+		if ($result !== true) $msg .= '<br>'.JText::_('MAIL_ERROR').' '.$mail_to;
+		else $count_mail++;
 		// mail to participants
 		$a_bcc = explode(';', $mail_bcc);
 		foreach ($a_bcc as $bcc) {
 			if ($bcc == '') continue;
 			$result = clm_core::$cms->sendMail($from, $fromname, $bcc, $mail_subj, $mail_body, $htmlMail);			
 			//$result = clm_core::$cms->sendMail($from, $fromname, $mail_to, $mail_subj, $mail_body, $htmlMail, null, $mail_bcc);
-			if ($result === false) $msg .= JText::_('MAIL_ERROR').' '.$bcc;
+			if ($result !== true) $msg .= '<br>'.JText::_('MAIL_ERROR').' '.$bcc;
+			else $count_mail++;
 		}
-		if ($msg == '')
-			$this->app->enqueueMessage(JText::_('MAIL_SENT'),'message');
-		else
-			$this->app->enqueueMessage($msg,'warning');
+		if ($msg != '') 
+			$this->app->enqueueMessage(substr($msg,4),'warning');
+		if ($count_mail > 0)
+			$this->app->enqueueMessage($count_mail.' '.JText::_('MAIL_SENT'),'message');
 		$this->adminLink->view = "turplayers";
 		$this->adminLink->more = array('id' => $this->turnierid);
 		$this->adminLink->makeURL();
