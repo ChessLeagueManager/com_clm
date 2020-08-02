@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.8.4 - [xx-xx-2020] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.8.4 - [01-08-2020] - - - - - - - - - - - - - - - - - - - -
 # Ligen/MTurniere: Ergebniskorrektur bei vereinslosen Spielern
 ^ Rundenbericht: Absicherung bei extrem vielen Vereinsmitgliedern
 ^ Code-Anpassung Joomla 4: Mannschaften (Nachbesserung)
