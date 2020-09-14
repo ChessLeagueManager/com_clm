@@ -59,14 +59,14 @@ if (!$liga OR $liga[0]->published == 0) {
 	echo CLMContent::clmWarning(JText::_('NOT_PUBLISHED')."<br/>".JText::_('GEDULD'));
 
 // falscher Modus
-} elseif (!in_array($liga[0]->runden_modus, array(1,2,3)) ) {
+/* } elseif (!in_array($liga[0]->runden_modus, array(1,2,3)) ) {
 
 	$link = new CLMcLink();
 	$link->view = 'paarungsliste';
 	$link->more = array('saison' => $sid, 'liga' => $lid, 'Itemid' => $item);
 	$link->makeURL();
 	echo CLMContent::clmWarning(JText::_('TOURNAMENT_TABLENOTAVAILABLE')."<br />".$link->makeLink(JText::_('PAAR_OVERVIEW')));
-
+*/
 } else {
 
 	// Browsertitelzeile setzen

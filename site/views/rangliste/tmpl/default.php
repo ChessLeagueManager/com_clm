@@ -102,6 +102,14 @@ elseif (!$liga OR $liga[0]->published == "0") {
 	
 	echo "<div id='wrong'>".JText::_('NOT_PUBLISHED')."<br>".JText::_('GEDULD')."</div>";
 
+}
+// keine Rangliste bei KO-Modus
+elseif ($liga[0]->runden_modus == "4" OR $liga[0]->runden_modus == "5") {
+	
+	echo "<div id='wrong'>".JText::_('NOT_AVAILABLE')."<br>".JText::_('GO_TO_PAARUNGSLISTE')."</div>";
+	
+	// dieser Marker wird nur beim Extern Zugriff verwendet
+	echo '<input type="hidden" name="extern_comment" value="GO_TO_PAARUNGSLISTE" />';
 } else {
 
 	// Array für DWZ Schnitt setzen
