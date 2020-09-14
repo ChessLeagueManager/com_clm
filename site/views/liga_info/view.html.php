@@ -9,12 +9,11 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 jimport( 'joomla.application.component.view');
 
-class CLMViewTeilnehmer extends JViewLegacy
+class CLMViewLiga_Info extends JViewLegacy
 {
-	function display($tpl = 'raw')
+	function display($tpl = null)
 	{
 		$model	  = $this->getModel();
   		$liga     = $model->getCLMLiga();
@@ -31,12 +30,6 @@ class CLMViewTeilnehmer extends JViewLegacy
 		$model	  = $this->getModel();
 		$dwzschnitt     = $model->getCLMDWZSchnitt();
 		$this->dwzschnitt = $dwzschnitt;
-
-	$html	= JRequest::getInt('html','1');
-	if($html !="1"){
-		$document =JFactory::getDocument();
-		$document->setMimeEncoding('text/css');
-		}
 
 		parent::display($tpl);
 	}	

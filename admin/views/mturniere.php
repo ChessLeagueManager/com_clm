@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 class CLMViewMTurniere
 {
 	public static function setMTurnierToolbar($new, $sid)
@@ -77,6 +75,8 @@ class CLMViewMTurniere
 		$row->params['noOrgReference'] = '0'; }
 	if (!isset($row->params['noBoardResults']))  {   //Standardbelegung
 		$row->params['noBoardResults'] = '0'; }
+	if (!isset($row->params['inofDWZ']))  {   //Standardbelegung
+		$row->params['inofDWZ'] = '0'; }
 	if (!isset($row->params['optionTiebreakersFideCorrect']))  {   //Standardbelegung
 		$row->params['optionTiebreakersFideCorrect'] = '0'; }
 	if (!isset($row->params['ReportForm']))  {   //Standardbelegung
@@ -89,6 +89,10 @@ class CLMViewMTurniere
 		$row->params['pgnDownload'] = '0'; }
 	if (!isset($row->params['firstView']))  {   //Standardbelegung
 		$row->params['firstView'] = '0'; }
+	if (!isset($row->params['time_control']))  {   //Standardbelegung
+		$row->params['time_control'] = ''; }
+	if (!isset($row->params['waiting_period']))  {   //Standardbelegung
+		$row->params['waiting_period'] = ''; }
 	?>
 	
 	<script language="javascript" type="text/javascript">
@@ -461,6 +465,18 @@ class CLMViewMTurniere
 			echo JHtml::_('select.genericlist', $optionlist, 'params[autoRANKING]', 'class="inputbox"', 'id', 'name', (isset($row->params['autoRANKING']) ? $row->params['autoRANKING'] : "0")); ?>
 		</td>
 	</tr>
+	<tr>
+		<td width="20%" nowrap="nowrap">
+			<label for="params[time_control]"><?php echo JText::_( 'LEAGUE_TIME_CONTROL' ); ?></label>
+		</td><td colspan="2">
+		<input class="inputbox" type="text" name="params[time_control]" id="params[time_control]" size="40" maxlength="120" value="<?php echo $row->params['time_control']; ?>" />
+		</td>
+		<td nowrap="nowrap">
+			<label for="params[waiting_period]"><?php echo JText::_( 'LEAGUE_WAITING_PERIOD' ); ?></label>
+		</td><td colspan="2">
+		<input class="inputbox" type="text" name="params[waiting_period]" id="params[waiting_period]" size="30" maxlength="50" value="<?php echo $row->params['waiting_period']; ?>" />
+		</td>
+	</tr>
 		</table>
   </fieldset>
   
@@ -825,6 +841,7 @@ class CLMViewMTurniere
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="params[noOrgReference]" value="<?php echo $row->params['noOrgReference']; ?>" />
 	<input type="hidden" name="params[noBoardResults]" value="<?php echo $row->params['noBoardResults']; ?>" />
+	<input type="hidden" name="params[inofDWZ]" value="<?php echo $row->params['inofDWZ']; ?>" />
 	<input type="hidden" name="ordering" value="<?php echo $row->ordering; ?>" />
 	<?php $row->liga_mt = 1; //mtmt ?>
 	<?php echo JHtml::_( 'form.token' ); ?>

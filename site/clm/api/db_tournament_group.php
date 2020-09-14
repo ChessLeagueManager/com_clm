@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 function clm_api_db_tournament_group() {
 	$table = '#__clm_liga';
 	$primaryKey = 'id';
@@ -56,8 +62,8 @@ function clm_api_db_tournament_group() {
 		
 		$out["data"][$i][1] = clm_class_category::name($out["data"][$i][14],true);
 		if (!(($out["data"][$i][7] != $clmAccess->getJid() AND $clmAccess->access('BE_'.$right.'_edit_detail') !== true ) OR ($clmAccess->access('BE_'.$right.'_edit_detail') === false))) {
-			//$out["data"][$i][1] = '<a href="'.clm_core::$load->gen_url(array("section"=>"ligen","task"=>"edit","cid[]"=>$out["data"][$i][14]),array("view")).'">'.$out["data"][$i][1].'</a>';
-			$out["data"][$i][1] = '<a href="'.clm_core::$load->gen_url(array("section"=>$section,"task"=>"edit","cid[]"=>$out["data"][$i][14]),array("view")).'">'.$out["data"][$i][1].'</a>';
+			//$out["data"][$i][1] = '<a href="'.clm_core::$load->gen_url(array("section"=>$section,"task"=>"edit","cid[]"=>$out["data"][$i][14]),array("view")).'">'.$out["data"][$i][1].'</a>';
+			$out["data"][$i][1] = '<a href="'.clm_core::$load->gen_url(array("section"=>$section,"task"=>"edit","id"=>$out["data"][$i][14]),array("view")).'">'.$out["data"][$i][1].'</a>';
 		}
 		
 		// Saisonname statt sid Anzeigen

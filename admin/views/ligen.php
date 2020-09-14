@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 class CLMViewLigen
 {
 	public static function setLigaToolbar($new, $sid)
@@ -29,7 +27,7 @@ class CLMViewLigen
 	public static function liga(&$row, $lists, $option, $new )
 	{
 	CLMViewLigen::setLigaToolbar($new, $row->sid);
-	JRequest::setVar( 'hidemainmenu', 1 );
+	$_REQUEST['hidemainmenu'] = 1;
 
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
@@ -83,6 +81,8 @@ class CLMViewLigen
 		$row->params['noOrgReference'] = '0'; }
 	if (!isset($row->params['noBoardResults']))  {   //Standardbelegung
 		$row->params['noBoardResults'] = '0'; }
+	if (!isset($row->params['inofDWZ']))  {   //Standardbelegung
+		$row->params['inofDWZ'] = '0'; }
 	if (!isset($row->params['ReportForm']))  {   //Standardbelegung
 		$row->params['ReportForm'] = '0'; }
 	if (!isset($row->params['pgnInput']))  {   //Standardbelegung
@@ -93,6 +93,10 @@ class CLMViewLigen
 		$row->params['pgnDownload'] = '0'; }
 	if (!isset($row->params['firstView']))  {   //Standardbelegung
 		$row->params['firstView'] = '0'; }
+	if (!isset($row->params['time_control']))  {   //Standardbelegung
+		$row->params['time_control'] = ''; }
+	if (!isset($row->params['waiting_period']))  {   //Standardbelegung
+		$row->params['waiting_period'] = ''; }
 	?>
 	
 	<script language="javascript" type="text/javascript">
@@ -139,16 +143,16 @@ class CLMViewLigen
       <table class="paramlist admintable">
 
 	<tr>
-	<td width="20%" nowrap="nowrap">
-	<label for="name"><?php echo JText::_( 'LEAGUE_NAME' ); ?></label>
-	</td><td colspan="2">
-	<input class="inputbox" type="text" name="name" id="name" size="20" maxlength="30" value="<?php echo $row->name; ?>" />
-	</td>
-	<td nowrap="nowrap">
-	<label for="sl"><?php echo JText::_( 'LEAGUE_CHIEF' ); ?></label>
-	</td><td colspan="2">
-	<?php echo $lists['sl']; ?>
-	</td>
+		<td width="20%" nowrap="nowrap">
+		<label for="name"><?php echo JText::_( 'LEAGUE_NAME' ); ?></label>
+		</td><td colspan="2">
+		<input class="inputbox" type="text" name="name" id="name" size="20" maxlength="30" value="<?php echo $row->name; ?>" />
+		</td>
+		<td nowrap="nowrap">
+		<label for="sl"><?php echo JText::_( 'LEAGUE_CHIEF' ); ?></label>
+		</td><td colspan="2">
+		<?php echo $lists['sl']; ?>
+		</td>
 	</tr>
 	<?php
 	// Kategorien
@@ -316,20 +320,20 @@ class CLMViewLigen
 	</tr>
 
 	<tr>
-	<td nowrap="nowrap">
-	<label for="ersatz_regel"><?php echo JText::_( 'LEAGUE_ERSATZ_REGEL' ); ?></label>
-	</td><td colspan="2">
-		<select name="ersatz_regel" id="ersatz_regel" value="<?php echo $row->ersatz_regel; ?>" size="1">
-		<!--<option>- wählen -</option>-->
-		<option value="0" <?php if ($row->ersatz_regel == 0) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_ERSATZ_REGEL_0' );?></option>
-		<option value="1" <?php if ($row->ersatz_regel == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_ERSATZ_REGEL_1' );?></option>
-		</select>
-	</td>
-	<td nowrap="nowrap">
-	<label for="anz_sgp"><?php echo JText::_( 'LEAGUE_ANZ_SGP' ); ?></label>
-	</td><td colspan="2">
-	<input class="inputbox" type="text" name="anz_sgp" id="anz_sgp" size="4" maxlength="4" value="<?php echo $row->params['anz_sgp'] ?>" />
-	</td>
+		<td nowrap="nowrap">
+		<label for="ersatz_regel"><?php echo JText::_( 'LEAGUE_ERSATZ_REGEL' ); ?></label>
+		</td><td colspan="2">
+			<select name="ersatz_regel" id="ersatz_regel" value="<?php echo $row->ersatz_regel; ?>" size="1">
+			<!--<option>- wählen -</option>-->
+			<option value="0" <?php if ($row->ersatz_regel == 0) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_ERSATZ_REGEL_0' );?></option>
+			<option value="1" <?php if ($row->ersatz_regel == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_ERSATZ_REGEL_1' );?></option>
+			</select>
+		</td>
+		<td nowrap="nowrap">
+		<label for="anz_sgp"><?php echo JText::_( 'LEAGUE_ANZ_SGP' ); ?></label>
+		</td><td colspan="2">
+		<input class="inputbox" type="text" name="anz_sgp" id="anz_sgp" size="4" maxlength="4" value="<?php echo $row->params['anz_sgp'] ?>" />
+		</td>
 	</tr>
 	<tr>
 		<td class="paramlist_key">
@@ -371,6 +375,18 @@ class CLMViewLigen
 				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
 			}
 			echo JHtml::_('select.genericlist', $optionlist, 'params[autoRANKING]', 'class="inputbox"', 'id', 'name', (isset($row->params['autoRANKING']) ? $row->params['autoRANKING'] : "0")); ?>
+		</td>
+	</tr>
+	<tr>
+		<td width="20%" nowrap="nowrap">
+			<label for="params[time_control]"><?php echo JText::_( 'LEAGUE_TIME_CONTROL' ); ?></label>
+		</td><td colspan="2">
+		<input class="inputbox" type="text" name="params[time_control]" id="params[time_control]" size="40" maxlength="120" value="<?php echo $row->params['time_control']; ?>" />
+		</td>
+		<td nowrap="nowrap">
+			<label for="params[waiting_period]"><?php echo JText::_( 'LEAGUE_WAITING_PERIOD' ); ?></label>
+		</td><td colspan="2">
+		<input class="inputbox" type="text" name="params[waiting_period]" id="params[waiting_period]" size="30" maxlength="50" value="<?php echo $row->params['waiting_period']; ?>" />
 		</td>
 	</tr>
       </table>
@@ -742,6 +758,7 @@ class CLMViewLigen
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="params[noOrgReference]" value="<?php echo $row->params['noOrgReference']; ?>" />
 	<input type="hidden" name="params[noBoardResults]" value="<?php echo $row->params['noBoardResults']; ?>" />
+	<input type="hidden" name="params[inofDWZ]" value="<?php echo $row->params['inofDWZ']; ?>" />
 	<input type="hidden" name="ordering" value="<?php echo $row->ordering; ?>" />
 
 	<?php echo JHtml::_( 'form.token' ); ?>

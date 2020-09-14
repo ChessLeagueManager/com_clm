@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -12,43 +12,32 @@
 
 jimport( 'joomla.application.component.view');
 
-class CLMViewPaarungsliste extends JViewLegacy
+class CLMViewLiga_Info extends JViewLegacy
 {
-	function display($tpl = "raw")
+	function display($tpl = 'raw')
 	{
 		$model	  = $this->getModel();
-		$liga     = $model->getCLMLiga();
+  		$liga     = $model->getCLMLiga();
 		$this->liga = $liga;
 
 		$model	  = $this->getModel();
-		$termin     = $model->getCLMTermin();
-		$this->termin = $termin;
+  		$spielfrei     = $model->getCLMSpielfrei();
+		$this->spielfrei = $spielfrei;
 
 		$model	  = $this->getModel();
-		$paar     = $model->getCLMPaar();
-		$this->paar = $paar;
+  		$punkte     = $model->getCLMPunkte();
+		$this->punkte = $punkte;
 
 		$model	  = $this->getModel();
 		$dwzschnitt     = $model->getCLMDWZSchnitt();
 		$this->dwzschnitt = $dwzschnitt;
 
-		$model	  = $this->getModel();
-		$dwzgespielt     = $model->getCLMDWZgespielt();
-		$this->dwzgespielt = $dwzgespielt;
-
-		$model	  = $this->getModel();
-		$summe     = $model->getCLMSumme();
-		$this->summe = $summe;
-
-		$model	  = $this->getModel();
-		$rundensumme     = $model->getCLMRundensumme();
-		$this->rundensumme = $rundensumme;
-
-	$html	= clm_core::$load->request_string('html','1');
+	$html	= JRequest::getInt('html','1');
 	if($html !="1"){
 		$document =JFactory::getDocument();
 		$document->setMimeEncoding('text/css');
-	}
+		}
+
 		parent::display($tpl);
 	}	
 }

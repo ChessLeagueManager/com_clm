@@ -64,6 +64,7 @@ $countryversion	= $config->countryversion;
 
 <div id="clm">
 <div id="paarungsliste">
+<?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
 
 <div class="componentheading">
 <?php echo JText::_('PAAR_OVERVIEW') ?> : <?php echo $liga[0]->name; ?>
@@ -77,7 +78,7 @@ if ($countryversion == 'en')
 </div></div>
 <div class="clr"></div>
 
-<?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); 
+<?php //require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); 
 
 $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
