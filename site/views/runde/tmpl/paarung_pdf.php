@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -99,7 +99,7 @@ function RotatedImage($file,$x,$y,$w,$h,$angle)
 	$this->Image($file,$x,$y,$w,$h);
 	$this->Rotate(0);
 }
-}
+
 
 // Zellenhöhe -> Standard 6
 	$zelle = 8;
