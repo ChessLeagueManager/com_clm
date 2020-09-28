@@ -17,6 +17,7 @@ $ -> Language fix or change
 ^ Code-Anpassung Joomla 4: Ligen/Mannschaftsturnieren im Backend
 ^ Umleitung Rangliste zu Paarungsliste bei KO-Modus
 # View Runde: pdf-Spielberichtsformular
+# Einzelturniere: Online-Anmeldung Namen mit Sonderzeichen
 
 - - - - - 3.8.4 - [01-08-2020] - - - - - - - - - - - - - - - - - - - -
 # Ligen/MTurniere: Ergebniskorrektur bei vereinslosen Spielern

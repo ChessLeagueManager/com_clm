@@ -133,33 +133,44 @@ if ($msg != '') {
 }
 // kein Fehler => Meldung in Tabelle schreiben - no error => transfer data into table
 	$randomUid = md5(uniqid('', true) . '|' . microtime());
-	if (!is_numeric($reg_elo)) $reg_elo = 0;
-	if (!is_numeric($reg_dwz)) $reg_dwz = 0;
-	if (!is_numeric($reg_elo)) $reg_elo = 0;
-	$db	=JFactory::getDBO();
-	$query	= "INSERT INTO #__clm_online_registration "
+	if (!is_numeric($reg_elo)) $reg_elo = 0; else $reg_elo = (int) $reg_elo;
+	if (!is_numeric($reg_dwz)) $reg_dwz = 0; else $reg_dwz = (int) $reg_dwz;
+	if (!is_numeric($reg_mgl_nr)) $reg_dwz = 0; else $reg_mgl_nr = (int) $reg_mgl_nr;
+
+	$sql = "INSERT INTO #__clm_online_registration "
 		." ( `tid`, `name`, `vorname`, `club`, `email`, `elo`, `dwz`,"
 		." `PKZ`, `titel`, `geschlecht`, `birthYear`, `mgl_nr`, `zps`, `dwz_I0`, `FIDEid`, `FIDEcco`,"
 		." `tel_no`,`account`,`comment`, `status`, `timestamp`, "
-		." `pid`, `approved` ) "
-		." VALUES ('$turnier->id','".clm_core::$db->escape($reg_name)."','".clm_core::$db->escape($reg_vorname)."','".clm_core::$db->escape($reg_club)."','$reg_mail','$reg_elo','$reg_dwz', "
-		." '".clm_core::$db->escape($reg_PKZ)."','".clm_core::$db->escape($reg_titel)."','".clm_core::$db->escape($reg_geschlecht)."','".clm_core::$db->escape($reg_birthYear)."','".clm_core::$db->escape($reg_mgl_nr)."', "
-		." '".clm_core::$db->escape($reg_zps)."','".clm_core::$db->escape($reg_dwz_I0)."','".clm_core::$db->escape($reg_FIDEid)."','".clm_core::$db->escape($reg_FIDEcco)."', "
-		." '".clm_core::$db->escape($reg_tel_no)."','".clm_core::$db->escape($reg_account)."','".clm_core::$db->escape($reg_comment)."', '0',".time().","
-		." '".$randomUid."', '0' ) ";
-	clm_core::$db->query($query);
+		." `pid`, `approved` ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	$ltime = time();
+	$zero0 = 0;
+	$zero1 = 0;
+	$stmt = clm_core::$db->prepare($sql);
+	$stmt->bind_param('issssiissssisiissssiisi', $turnier->id, $reg_name, $reg_vorname, $reg_club, $reg_mail, $reg_elo, $reg_dwz,
+		$reg_PKZ, $reg_titel, $reg_geschlecht, $reg_birthYear, $reg_mgl_nr,
+		$reg_zps, $reg_dwz_I0, $reg_FIDEid, $reg_FIDEcco,
+		$reg_tel_no, $reg_account, $reg_comment, $zero0, $ltime,
+		$randomUid, $zero1);
+
+	$result = $stmt->execute();
+	if ($result === false) { 
+		$link = JURI::base() .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
+		if ($typeRegistration == 5) {
+			$link .= '&layout=selection&f_source=sent&reg_spieler='.$reg_spieler;
+		}
+		$link .= '&reg_name='.$reg_name.'&reg_vorname='.$reg_vorname.'&reg_club='.$reg_club.'&reg_mail='.$reg_mail.'&reg_jahr='.$reg_birthYear.'&reg_geschlecht='.$reg_geschlecht;
+		$link .= '&reg_dwz='.$reg_dwz.'&reg_elo='.$reg_elo.'&reg_tel_no='.$reg_tel_no.'&reg_account='.$reg_account.'&reg_comment='.$reg_comment.'&reg_dsgvo='.$reg_dsgvo;
+		$msg = 'Speicherfehler clm_online_registration';
+		$mainframe->enqueueMessage( $msg, "error" );
+		$mainframe->redirect( $link );
+	}
 
 // Log - log
 	$aktion = "Online Registration";
-	$callid = uniqid ( "", false );
-	$userid = clm_core::$access->getId ();	
-	$parray = array('turnier' => $turnier->id, 'name' => clm_core::$db->escape($reg_name), 'vorname' => clm_core::$db->escape($reg_vorname), 'mail' => clm_core::$db->escape($reg_mail), 'club' => clm_core::$db->escape($reg_club));
-	$query	= "INSERT INTO #__clm_logging "
-		." ( `callid`, `userid`, `timestamp` , `type` ,`name`, `content`) "
-		." VALUES ('".$callid."','".$userid."',".time().",5,'".$aktion."','".json_encode($parray,JSON_UNESCAPED_UNICODE)."') "
-		;
-	clm_core::$db->query($query);
+	$parray = array('turnier' => $turnier->id, 'name' => $reg_name, 'vorname' => $reg_vorname, 'mail' => clm_core::$db->escape($reg_mail), 'club' => $reg_club);
+	clm_core::addDeprecated($aktion, json_encode($parray));
 
+// Email Erstellung
 	$subject = JText::_('REGISTRATION_ONLINE').' - '.$turnier->name;
 	$body_daten = JText::_('REGISTRATION_PLAYER').': '.$reg_name."\n";
 	if ($reg_vorname != '') $body_daten .=  JText::_('REGISTRATION_VORNAME').': '.$reg_vorname."\n";
