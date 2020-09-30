@@ -129,9 +129,11 @@ $turParams = new clm_class_params($this->turnier->params);
 			<span id="formRoundscountValue">
 			<?php
 			// nur, wenn Runden noch nicht erstellt
-			if (IS_NULL($this->turnier->rnd) OR $this->turnier->rnd == 0) {
+			if (IS_NULL($this->turnier->rnd) OR $this->turnier->rnd == '0') {
 				if ($this->turnier->typ != 2 AND $this->turnier->typ != 3 AND $this->turnier->typ != 5) {
 					echo '<input class="inputbox" type="text" name="runden" id="runden" size="10" maxlength="5" value="'.$this->turnier->runden.'" />';
+				} else {
+					echo CLMForm::hidden('runden', $this->turnier->runden); // damit JavaScript funktioniert
 				}
 			} else {
 				echo $this->turnier->runden;
@@ -142,7 +144,7 @@ $turParams = new clm_class_params($this->turnier->params);
 			<span id="formRoundscountText">
 			<?php
 			// nur, wenn Runden noch nicht erstellt
-			if (IS_NULL($this->turnier->rnd) OR $this->turnier->rnd == 0) {
+			if (IS_NULL($this->turnier->rnd) OR $this->turnier->rnd == '0') {
 				if ($this->turnier->typ == 2 OR $this->turnier->typ == 3 OR $this->turnier->typ == 5) {
 					echo $this->turnier->runden." (".JText::_('ROUNDS_COUNT_GENERATED').")";
 				}

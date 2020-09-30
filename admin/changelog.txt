@@ -18,6 +18,7 @@ $ -> Language fix or change
 ^ Umleitung Rangliste zu Paarungsliste bei KO-Modus
 # View Runde: pdf-Spielberichtsformular
 # Einzelturniere: Online-Anmeldung Namen mit Sonderzeichen
+# Einzelturniere: Spielsystemwechsel vor Turnierstart
 
 - - - - - 3.8.4 - [01-08-2020] - - - - - - - - - - - - - - - - - - - -
 # Ligen/MTurniere: Ergebniskorrektur bei vereinslosen Spielern
