@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.8.6 - [xx-xx-2020] - - - - - - - - - - - - - - - - - - - -
+# Grading File Export (engl. Anwendung): Einzelturniere Abbruch
+
 - - - - - 3.8.5 - [06-10-2020] - - - - - - - - - - - - - - - - - - - -
 + Ligen/MTurniere: Infokarte
 ^ Code-Anpassung Joomla 4: Ligen/Mannschaftsturnieren im Backend

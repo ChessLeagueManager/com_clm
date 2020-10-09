@@ -728,14 +728,14 @@ function datei() {
 include(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR.'com_clm'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'ExcelWriterXML.php');
 
 // Find Players
-  if(!is_null($et)) 
+  if(!is_null($et)) {
 	$sql = " SELECT a.PKZ,a.zps,a.verein as Vereinname,a.name as Spielername,a.geschlecht as Geschlecht FROM `#__clm_turniere_tlnr` as a "
-		." LEFT JOIN #__clm_dwz_spieler as s ON s.sid = a.sid AND s.ZPS = a.zps AND s.PKZ = a.PKZ "
-		." LEFT JOIN #__clm_dwz_vereine as v ON v.sid = a.sid AND v.ZPS = a.zps "
+//		." LEFT JOIN #__clm_dwz_spieler as s ON s.sid = a.sid AND s.ZPS = a.zps AND s.PKZ = a.PKZ "
+//		." LEFT JOIN #__clm_dwz_vereine as v ON v.sid = a.sid AND v.ZPS = a.zps "
 		." WHERE a.turnier = ".$liga_name[0]->id
 		." ORDER BY a.zps ASC , a.PKZ ASC "
 		;
-  else 
+  } else {
 	$sql = " SELECT a.*,v.Vereinname,s.Spielername,s.Geschlecht FROM `#__clm_rnd_spl` as a "
 		." LEFT JOIN #__clm_dwz_spieler as s ON s.sid = a.sid AND s.ZPS = a.zps AND s.PKZ = a.PKZ "
 		." LEFT JOIN #__clm_dwz_vereine as v ON v.sid = a.sid AND v.ZPS = a.zps "
@@ -750,6 +750,7 @@ include(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR.'components'.DIRECTORY_SEPARATOR
 	$sql .=	" GROUP BY a.zps, a.PKZ "
 		." ORDER BY a.zps ASC , a.brett ASC, a.PKZ ASC "
 		;
+  }
 	$db->setQuery($sql);
 	$spieler=$db->loadObjectList();
 
@@ -906,7 +907,7 @@ $sheet3->columnWidth(8,'200');
 $sheet3->writeString(1,8,'Comment');
 
 // Find games
-  if(!is_null($et)) 
+  if(!is_null($et)) {
     $sql = " SELECT a.*, a.heim as weiss, h.zps, h.PKZ, g.zps as gzps, g.PKZ as gPKZ, m.datum as pdate FROM `#__clm_turniere_rnd_spl` as a "
 			." LEFT JOIN #__clm_turniere_rnd_termine as m ON m.turnier = a.turnier AND m.dg = a.dg AND m.nr = a.runde "
 			." LEFT JOIN #__clm_turniere_tlnr as h ON h.turnier = a.turnier AND h.snr = a.spieler "
@@ -916,7 +917,7 @@ $sheet3->writeString(1,8,'Comment');
 			." AND a.heim = 1 "
 			." ORDER BY a.dg ASC, a.runde ASC, a.paar ASC, a.brett ASC "
 			;
-  else
+  } else {
 	$sql = " SELECT a.*, hm.name as hmname, gm.name as gmname, m.pdate FROM `#__clm_rnd_spl` as a "
 			." LEFT JOIN #__clm_rnd_man as m ON m.sid = a.sid AND m.lid = a.lid AND m.dg = a.dg AND m.runde = a.runde AND m.tln_nr = a.tln_nr "
 			." LEFT JOIN #__clm_mannschaften as hm ON hm.sid = a.sid AND hm.liga = a.lid AND hm.tln_nr = a.tln_nr "
@@ -933,6 +934,7 @@ $sheet3->writeString(1,8,'Comment');
 	}
 	$sql .=	" ORDER BY a.dg ASC, a.runde ASC, a.paar ASC, a.brett ASC "
 			;
+  }
 	$db->setQuery($sql);
 	$partien =$db->loadObjectList();
 
