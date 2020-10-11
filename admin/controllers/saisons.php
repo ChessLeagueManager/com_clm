@@ -102,9 +102,16 @@ class CLMControllerSaisons extends JControllerLegacy {
 			$row->load($cid[0]);
 			$row->checkout($user->get('id'));
 		}
+		//CLM parameter auslesen
+		$config = clm_core::$db->config();
+		$countryversion = $config->countryversion;
+		if ($countryversion == 'en' AND $row->id == 0) {
+			$row->rating_type = 1;
+		}
 		// Archiv
 		$lists['archiv'] = JHtml::_('select.booleanlist', 'archiv', 'class="inputbox"', $row->archiv);
 		$lists['published'] = JHtml::_('select.booleanlist', 'published', 'class="inputbox"', $row->published);
+		$lists['rating_type'] = JHtml::_('select.booleanlist', 'rating_type', 'class="inputbox"', $row->rating_type);
 		require_once (JPATH_COMPONENT . DS . 'views' . DS . 'saisons.php');
 		CLMViewSaisons::saison($row, $lists, $option);
 	}
@@ -135,7 +142,7 @@ class CLMControllerSaisons extends JControllerLegacy {
 				} else {
 					$id = $row->id;
 				}
-				$out = clm_core::$api->db_season_save($id, $row->published, $row->archiv, $row->name, $row->bemerkungen, $row->bem_int, $row->datum);
+				$out = clm_core::$api->db_season_save($id, $row->published, $row->archiv, $row->name, $row->bemerkungen, $row->bem_int, $row->datum, $row->rating_type);
 				if ($task == 'save' && $out[0]) {
 					$link = 'index.php?option=' . $option . '&section=' . $section;
 				} else if ($out[0]) {
@@ -152,6 +159,7 @@ class CLMControllerSaisons extends JControllerLegacy {
 			$mainframe->enqueueMessage( $emessage,$etype );
 			$lists['archiv'] = JHtml::_('select.booleanlist', 'archiv', 'class="inputbox"', $row->archiv);
 			$lists['published'] = JHtml::_('select.booleanlist', 'published', 'class="inputbox"', $row->published);
+			$lists['rating_type'] = JHtml::_('select.booleanlist', 'rating_type', 'class="inputbox"', $row->rating_type);
 			require_once (JPATH_COMPONENT . DS . 'views' . DS . 'saisons.php');
 			CLMViewSaisons::saison($row, $lists, $option);
 			return;

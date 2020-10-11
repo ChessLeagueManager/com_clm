@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 class CLMViewSaisons
 {
 public static function setSaisonsToolbar($countryversion)
@@ -207,6 +205,10 @@ public static function saison( &$row,$lists, $option)
 		CLMViewSaisons::setSaisonToolbar();
 		$_GET["hidemainmenu"] = 1;
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
+
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 		?>
 	
 		<form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -248,6 +250,15 @@ public static function saison( &$row,$lists, $option)
 			<?php echo CLMForm::calendar($row->datum, 'datum', 'datum', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
             </td>
 		</tr>
+		<?php if ($countryversion == 'en') { ?>
+		<tr>
+			<td class="key" nowrap="nowrap"><label for="rating_type"><?php echo JText::_( 'SAISON_RATING_TYPE' ).' : '; ?></label>
+			</td>
+			<td><fieldset class="radio">
+			<?php echo $lists['rating_type']; ?>
+			</fieldset></td>
+		</tr>
+		<?php } ?>
 	
 		</table>
 		</fieldset>

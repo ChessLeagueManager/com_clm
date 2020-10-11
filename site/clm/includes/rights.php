@@ -35,6 +35,9 @@ $rights["db_clubs"]=array();
 $rights["db_dewis_player"]=array(0,"BE_database_general",true);
 $rights["db_dewis_player_by_name"]=array();
 $rights["db_dewis_club"]=array(0,"BE_database_general",true);
+$rights["db_ecfv2_clubs"]=array();
+$rights["db_ecfv2_player"]=array(0,"BE_database_general",true);
+$rights["db_ecfv2_club"]=array(0,"BE_database_general",true);
 $rights["db_dsb_player"]=array(0,"BE_database_general",true);
 $rights["db_dsb_club"]=array(0,"BE_database_general",true);
 $rights["db_ecf_player"]=array(0,"BE_database_general",true);
@@ -67,6 +70,7 @@ $rights["db_logging_del"]=array(0,"BE_logfile_general",true);
 $rights["db_lineup_attr"]=array();
 $rights["db_xml_data"]=array();
 
+$rights["test_print"]=array();
 //************************
 // Turniere
 //************************

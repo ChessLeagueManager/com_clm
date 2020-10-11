@@ -87,6 +87,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_dwz_spieler` (
   `Geschlecht` char(1) DEFAULT NULL,
   `Spielberechtigung` char(1) NOT NULL DEFAULT '',
   `Geburtsjahr` year(4) NOT NULL DEFAULT '0000',
+  `Junior` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `Letzte_Auswertung` mediumint(6) unsigned DEFAULT NULL,
   `DWZ` smallint(4) unsigned DEFAULT NULL,
   `DWZ_Index` smallint(3) unsigned DEFAULT NULL,
@@ -540,6 +541,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_saison` (
   `checked_out_time` datetime NOT NULL DEFAULT '1970-01-01 00:00:00',
   `ordering` int(11) NOT NULL DEFAULT '0',
   `datum` date NOT NULL DEFAULT '1970-01-01',
+  `rating_type` tinyint(1) unsigned NOT NULL DEFAULT '0',  
   PRIMARY KEY (`id`),
   KEY `published` (`published`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
