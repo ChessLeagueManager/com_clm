@@ -17,6 +17,7 @@ $ -> Language fix or change
 + Grading Online Import (engl. Anwendung): Online API von ECF
 # Einzelturniere: Feinwertung Buchholzsumme
 ^ File Export: Dateinamen ohne nicht erlaubte Sonderzeichen
+^ View Spieler (engl. Anwendung): ECF-Link angepasst
 
 - - - - - 3.8.5 - [06-10-2020] - - - - - - - - - - - - - - - - - - - -
 + Ligen/MTurniere: Infokarte
