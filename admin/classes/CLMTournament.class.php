@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -557,7 +557,8 @@ class CLMTournament {
 							$array_PlayerBuSum1StMin[$value->tln_nr] = $array_PlayerBuch1St[$value->gegner];
 			}
 			for ($s=1; $s<= $this->data->teil; $s++) { // alle Startnummern durchgehen
-				$array_PlayerBuSum1St[$s] = $array_PlayerBuSum1St[$s] - $array_PlayerBuSum1StMin[$s];
+				if ($array_PlayerBuSum1StMin[$s] < 999)
+					$array_PlayerBuSum1St[$s] = $array_PlayerBuSum1St[$s] - $array_PlayerBuSum1StMin[$s];
 			}
 		}
 	

@@ -14,7 +14,8 @@ $ -> Language fix or change
 
 - - - - - 3.8.6 - [xx-xx-2020] - - - - - - - - - - - - - - - - - - - -
 # Grading File Export (engl. Anwendung): Einzelturniere Abbruch
-+ Grading Online Import (engl. Anwendung): Online API von ECF 
++ Grading Online Import (engl. Anwendung): Online API von ECF
+# Einzelturniere: Feinwertung Buchholzsumme
 
 - - - - - 3.8.5 - [06-10-2020] - - - - - - - - - - - - - - - - - - - -
 + Ligen/MTurniere: Infokarte
