@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 // Diese Funktion filtert eingehende Variablen nach gewählten Kriterien
 // und sollte bei korrekter Verwendung sql Injection vollständig und XSS größtenteils verhindern
 // input enthält den erhaltenen Wert, type erhält den jeweiligen Typ der Veriable,
@@ -19,6 +25,7 @@
 //12 -> E-Mail
 //13 -> Länge
 //14 -> URL
+//20 -> Bereinigung von Dateinamen bei Dateierstellung
 // Bei ungültigen Typ wird stets der Standardwert zurückgegeben!
 function clm_function_make_valid($input, $type, $standard, $choose = null) {
 	if (is_null($input)) {
@@ -116,6 +123,39 @@ function clm_function_make_valid($input, $type, $standard, $choose = null) {
 				return $standard;
 			}
 			return  str_replace(array('"',"'","\\"), '',$input);
+		break;
+		case 20: // $input is a file name
+				 // im Dateinamen nicht erlaubte oder nicht erwünschte Zeichen werden ersetzt
+				 // nach selfphp.de code_snippet 118
+			$patterns = array(
+				"/\\s/",  # Leerzeichen
+				"/\\&/",  # Kaufmaennisches UND
+				"/\\+/",  # Plus-Zeichen
+				"/\\</",  # < Zeichen
+				"/\\>/",  # > Zeichen
+				"/\\?/",  # ? Zeichen
+				"/\"/",   # " Zeichen
+				"/\\:/",  # : Zeichen
+				"/\\|/",  # | Zeichen
+				"/\\\\/",   # \ Zeichen
+				"/\\//",  # / Zeichen
+				"/\\*/"   # * Zeichen
+			);
+			$replacements = array(
+				"_",
+				"-",
+				"-",
+				"-",
+				"-",
+				"_",
+				"_",
+				"_",
+				"_",
+				"_",
+				"_",
+				"_"
+			); 
+			return preg_replace( $patterns, $replacements, $input );
 		break;
 		default:
 			return $standard; // falsche Nummer wird abgefangen

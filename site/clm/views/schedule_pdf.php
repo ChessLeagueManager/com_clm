@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -111,7 +111,9 @@ $first = true;
     } 
 
 // Ausgabe
-$pdf->Output(utf8_decode($club[0]->name." - ".$club[0]->season_name).'.pdf','D');
+$filename = clm_core::$load->make_valid(utf8_decode($club[0]->name." - ".$club[0]->season_name), 20, 'outputfile');
+$pdf->Output($filename.'.pdf','D');
+//$pdf->Output(utf8_decode($club[0]->name." - ".$club[0]->season_name).'.pdf','D');
 exit();
 return;
 }

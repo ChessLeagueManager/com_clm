@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -60,8 +60,9 @@ function clm_view_schedule_xls($out) {
 	$nl = "\n";
 	$file_name = 'Schedule'.'_'.utf8_decode($club[0]->name."_".$club[0]->season_name);   
 	$file_name .= '.csv'; 
-	$file_name = strtr($file_name,' ','_');
-	$file_name = strtr($file_name,"/","_");
+//	$file_name = strtr($file_name,' ','_');
+//	$file_name = strtr($file_name,"/","_");
+	$file_name = clm_core::$load->make_valid($file_name, 20, 'outputfile');
 	if (!file_exists('components'.DS.'com_clm'.DS.'pgn'.DS)) mkdir('components'.DS.'com_clm'.DS.'pgn'.DS);
 	$pdatei = fopen('components'.DS.'com_clm'.DS.'pgn'.DS.$file_name,"wt");
 	foreach($schedule as $schedule1) {
