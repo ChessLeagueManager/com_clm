@@ -18,6 +18,7 @@ $ -> Language fix or change
 # Einzelturniere: Feinwertung Buchholzsumme
 ^ File Export: Dateinamen ohne nicht erlaubte Sonderzeichen
 ^ View Spieler (engl. Anwendung): ECF-Link angepasst
++ engl. Anwendung: inoff. NWZ-Berechnung einschl. Ligastatistik
 
 - - - - - 3.8.5 - [06-10-2020] - - - - - - - - - - - - - - - - - - - -
 + Ligen/MTurniere: Infokarte

@@ -339,7 +339,8 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
 			$spielerl->start_dwz = $spielerl->dsbDWZ;
 			$spielerl->start_I0  = $spielerl->DWZ_Index;
         } ?>
-		<td><?php echo $spielerl->start_dwz.'-'.$spielerl->start_I0;?></td>
+		<td><?php if ($countryversion == "de") echo $spielerl->start_dwz.'-'.$spielerl->start_I0;
+					else echo $spielerl->start_dwz; ?></td>
         <td><?php echo $spielerl->Punkte;?></td>
         <td><?php echo number_format($spielerl->We,2);?></td>
         <td><?php echo $spielerl->EFaktor;?></td>
@@ -357,10 +358,12 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
         <td><?php echo $Pkt[0].'  /  '.$spielerl->Partien;?></td>
          <?php } ?>
         <?php if ($spielerl->DWZ > 0) { ?>
-        <td><?php echo $spielerl->DWZ.'-'.$spielerl->I0;?></td>
+        <td><?php if ($countryversion == "de") echo $spielerl->DWZ.'-'.$spielerl->I0; 
+					else echo $spielerl->DWZ; ?></td>
         <?php }
            if ($spielerl->start_dwz >0 AND $spielerl->DWZ == 0) { ?>
-                <td><?php echo $spieler->start_dwz.'-'.$spieler->start_I0;?></td>
+                <td><?php if ($countryversion == "de") echo $spieler->start_dwz.'-'.$spieler->start_I0; 
+							else echo $spieler->start_dwz; ?></td>
                 <?php }
             if ($spielerl->start_dwz  == 0 AND $spielerl->DWZ == 0) { ?>
                 <td><?php echo JText::_('PLAYER_REST') ?></td>

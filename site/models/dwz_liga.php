@@ -27,6 +27,10 @@ class CLMModelDWZ_Liga extends JModelLegacy
 	$row	= JTable::getInstance( 'ligen', 'TableCLM' );
 	$row->load( $lid );
 
+// Konfigurationsparameter auslesen
+$config = clm_core::$db->config();
+$countryversion = $config->countryversion;
+
 	if ($row->rang > 0) {
 		$query = "SELECT  l.rang, l.name as lname, m.tln_nr, m.name, d.Spielername,d.DWZ as dsbDWZ,d.DWZ_Index, a.*, l.anzeige_ma"
 			.",r.man_nr as rmnr, r.Rang as rrang, l.params "
@@ -58,10 +62,12 @@ class CLMModelDWZ_Liga extends JModelLegacy
 		$query = "SELECT l.rang, l.name as lname, m.tln_nr, m.name, d.Spielername,d.DWZ as dsbDWZ,d.DWZ_Index, a.*, l.anzeige_ma, l.params"
 			." FROM #__clm_mannschaften as m "
 			." LEFT JOIN #__clm_liga AS l ON l.id = m.liga  AND l.sid = m.sid "
-			//." LEFT JOIN #__clm_meldeliste_spieler as a on (a.zps = m.zps OR a.zps = m.sg_zps) AND a.mnr = m.man_nr AND a.sid = m.sid AND a.lid = m.liga"
-			." LEFT JOIN #__clm_meldeliste_spieler as a on (a.zps = m.zps OR FIND_IN_SET(a.zps,m.sg_zps) != 0) AND a.mnr = m.man_nr AND a.sid = m.sid AND a.lid = m.liga"
-			." LEFT JOIN #__clm_dwz_spieler as d on d.zps = a.zps AND d.mgl_nr = a.mgl_nr AND d.sid = a.sid"
-			." WHERE m.sid = ".$sid
+			." LEFT JOIN #__clm_meldeliste_spieler as a on (a.zps = m.zps OR FIND_IN_SET(a.zps,m.sg_zps) != 0) AND a.mnr = m.man_nr AND a.sid = m.sid AND a.lid = m.liga";
+		if ($countryversion == "de") 
+			$query .= " LEFT JOIN #__clm_dwz_spieler as d on d.zps = a.zps AND d.mgl_nr = a.mgl_nr AND d.sid = a.sid";
+		else 
+			$query .= " LEFT JOIN #__clm_dwz_spieler as d on d.zps = a.zps AND d.PKZ = a.PKZ AND d.sid = a.sid";
+		$query .= " WHERE m.sid = ".$sid
 			." AND m.liga = ".$lid
 			." AND a.Partien > 0 "
 			." ORDER BY m.tln_nr ASC, a.mnr ASC, a.snr ASC ";
@@ -83,17 +89,23 @@ class CLMModelDWZ_Liga extends JModelLegacy
 	$lid	= clm_core::$load->request_int('liga',1);
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
- 
+// Konfigurationsparameter auslesen
+$config = clm_core::$db->config();
+$countryversion = $config->countryversion;
+
 	$query = " SELECT a.tln_nr, COUNT(a.zps) as count, SUM(m.DWZ) as dwz, SUM(m.Punkte) as punkte, SUM(m.I0) as i0, SUM(m.Partien) as partien, SUM(m.We) as we, SUM(m.Leistung) as leistung,"
 		." SUM(m.EFaktor) as efaktor, SUM(m.Niveau) as niveau, SUM(d.DWZ) as dsbDWZ, SUM(m.start_dwz) as start_dwz"
 		." FROM #__clm_mannschaften as a "
-		." LEFT JOIN #__clm_meldeliste_spieler AS m ON m.lid = a.liga AND ( m.zps = a.zps OR FIND_IN_SET(m.zps,a.sg_zps) != 0) AND m.mnr = a.man_nr AND m.sid = a.sid "
-		." LEFT JOIN #__clm_dwz_spieler AS d ON d.ZPS = m.zps  AND d.Mgl_Nr = m.mgl_nr AND d.sid = m.sid"
-		." WHERE a.liga = ".$lid
-		." AND a.sid = ".$sid
-		." AND m.mgl_nr > 0 "
-		." AND m.Partien > 0 "
-		." GROUP BY a.tln_nr "
+		." LEFT JOIN #__clm_meldeliste_spieler AS m ON m.lid = a.liga AND ( m.zps = a.zps OR FIND_IN_SET(m.zps,a.sg_zps) != 0) AND m.mnr = a.man_nr AND m.sid = a.sid ";
+	if ($countryversion == "de") 
+		$query .= " LEFT JOIN #__clm_dwz_spieler AS d ON d.ZPS = m.zps  AND d.Mgl_Nr = m.mgl_nr AND d.sid = m.sid";
+	else 
+		$query .= " LEFT JOIN #__clm_dwz_spieler AS d ON d.ZPS = m.zps  AND d.PKZ = m.PKZ AND d.sid = m.sid";
+	$query .= " WHERE a.liga = ".$lid
+		." AND a.sid = ".$sid;
+	if ($countryversion == "de") $query .= " AND m.mgl_nr > 0 ";
+	else $query .= " AND m.PKZ > '0' ";
+	$query .= " GROUP BY a.tln_nr ";
 		;
 		return $query;
 	}

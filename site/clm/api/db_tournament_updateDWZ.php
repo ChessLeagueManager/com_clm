@@ -1,4 +1,11 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
+// Aktualisieren der NWZ in der Meldeliste eines Turnieres
 function clm_api_db_tournament_updateDWZ($id,$group=true) {
 	$id = clm_core::$load->make_valid($id, 0, -1);
 	if($group) {
@@ -12,6 +19,9 @@ function clm_api_db_tournament_updateDWZ($id,$group=true) {
 		$table_list_id = "turnier";
 		$elo = ", FIDEcco=?, FIDEelo=?, FIDEid=?, twz=?";
 	}
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 	// Datum der zu übernehmenden DWZ Daten anhand der Saison festsetzen, eventuell useAsTWZ auslesen
 	$lastDWZUpdate = clm_core::$db->saison->get(clm_core::$access->getSeason())->datum;
 	if($group) {
@@ -27,24 +37,36 @@ function clm_api_db_tournament_updateDWZ($id,$group=true) {
 		$useAsTWZ = $params->get("useAsTWZ","0");
 	}
 	// Spieler DWZ Aktualisieren
-	$query = 'SELECT a.zps as zps, a.mgl_nr as mgl_nr, b.DWZ as dwz, b.FIDE_Elo as FIDEelo, b.FIDE_ID as FIDEid, b.FIDE_Land as FIDEcco, b.DWZ_Index as dwz_index FROM '.$table_list.' as a'
-			  .' INNER JOIN #__clm_dwz_spieler as b'
-			  .' ON a.sid=b.sid AND a.zps=b.zps AND a.mgl_nr = b.Mgl_Nr '
-			  .' WHERE a.'.$table_list_id.' = '.$id
-					;
+	$query = 'SELECT a.zps as zps, a.mgl_nr as mgl_nr, a.PKZ as PKZ, b.DWZ as dwz, b.FIDE_Elo as FIDEelo, b.FIDE_ID as FIDEid, b.FIDE_Land as FIDEcco, b.DWZ_Index as dwz_index FROM '.$table_list.' as a'
+			  .' INNER JOIN #__clm_dwz_spieler as b';
+	if ($countryversion == "de") 
+		$query .= ' ON a.sid=b.sid AND a.zps=b.zps AND a.mgl_nr = b.Mgl_Nr ';
+	else 
+		$query .= ' ON a.sid=b.sid AND a.zps=b.zps AND a.PKZ = b.PKZ ';
+	$query .= ' WHERE a.'.$table_list_id.' = '.$id;
+	
 	$players = clm_core::$db->loadObjectList($query);
 
-	$sql = "UPDATE ".$table_list." SET start_dwz=?, start_I0=?".$elo." WHERE ".$table_list_id."=? AND zps=? AND mgl_nr=?";
+	if ($countryversion == "de") 
+		$sql = "UPDATE ".$table_list." SET start_dwz=?, start_I0=?".$elo." WHERE ".$table_list_id."=? AND zps=? AND mgl_nr=?";
+	else 
+		$sql = "UPDATE ".$table_list." SET start_dwz=?, start_I0=?".$elo." WHERE ".$table_list_id."=? AND zps=? AND PKZ=?";
 	$stmt = clm_core::$db->prepare($sql);
  	// Ergebnis Schreiben
 	foreach ($players as $value)
  	{
  		if($group) {
-			$stmt->bind_param('iiiisi', $value->dwz, $value->dwz_index,$value->FIDEelo, $id, $value->zps, $value->mgl_nr);
+			if ($countryversion == "de") 
+				$stmt->bind_param('iiiisi', $value->dwz, $value->dwz_index,$value->FIDEelo, $id, $value->zps, $value->mgl_nr);
+			else 
+				$stmt->bind_param('iiiiss', $value->dwz, $value->dwz_index,$value->FIDEelo, $id, $value->zps, $value->PKZ);
 		} else {
 			// TWZ Aktualisieren 	
 			$twz = clm_core::$load->gen_twz($useAsTWZ,$value->dwz,$value->FIDEelo);
-			$stmt->bind_param('iisiiiisi', $value->dwz, $value->dwz_index, $value->FIDEcco,$value->FIDEelo,$value->FIDEid,$twz, $id, $value->zps, $value->mgl_nr);
+			if ($countryversion == "de") 
+				$stmt->bind_param('iisiiiisi', $value->dwz, $value->dwz_index, $value->FIDEcco,$value->FIDEelo,$value->FIDEid,$twz, $id, $value->zps, $value->mgl_nr);
+			else 
+				$stmt->bind_param('iisiiiiss', $value->dwz, $value->dwz_index, $value->FIDEcco,$value->FIDEelo,$value->FIDEid,$twz, $id, $value->zps, $value->PKZ);
 		}
 		$stmt->execute();
 	}

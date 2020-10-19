@@ -41,6 +41,9 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 	$doc =JFactory::getDocument();
 	$doc->setTitle(JText::_('DWZ_LIGA').' '.(isset($dwz[0]) ? $dwz[0]->name : ""));
 	
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 ?>
 
 <div id="clm">
@@ -121,11 +124,19 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 <?php } ?>
 <tr class="<?php echo $zeilenr; ?>">
     <td><?php if($liga->rang =="1") { echo $liga->mnr.'-';} echo $liga->snr;?></td>
-    <td><a href="index.php?option=com_clm&amp;view=spieler&amp;saison=<?php echo $sid; ?>&amp;zps=<?php echo $liga->zps; ?>&amp;mglnr=<?php echo $liga->mgl_nr; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $liga->Spielername;?></a></td>
-    <?php if ($old) { ?>
-		<td><?php echo $liga->dsbDWZ.'-'.$liga->DWZ_Index;?></td>
-	<?php } else { ?>
-		<td><?php echo $liga->start_dwz.'-'.$liga->start_I0;?></td>	
+	<td><a href="index.php?option=com_clm&amp;view=spieler&amp;saison=<?php echo $sid; ?>&amp;zps=<?php echo $liga->zps; ?>&amp;mglnr=<?php echo $liga->mgl_nr; ?>&amp;PKZ=<?php echo $liga->PKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $liga->Spielername;?></a></td>
+    <?php if ($old) { 
+		if ($countyversion == "de") { ?>
+			<td><?php echo $liga->dsbDWZ.'-'.$liga->DWZ_Index;?></td>
+		<?php } else { ?>
+			<td><?php echo $liga->dsbDWZ; ?></td>
+		<?php } ?>
+	<?php } else { 
+		if ($countryversion == "de") { ?>
+			<td><?php echo $liga->start_dwz.'-'.$liga->start_I0;?></td>	
+		<?php } else { ?>
+			<td><?php echo $liga->start_dwz; ?></td>
+		<?php } ?>
 	<?php } ?>
     <td><?php echo $liga->Punkte;?></td>
     <td><?php echo number_format($liga->We,2);?></td>
@@ -143,8 +154,12 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
         else { ?>
     <td><?php echo $Pkt[0].'  /  '.$liga->Partien;?></td>
      <?php } ?>
-    <?php if ($liga->DWZ > 0) { ?>
-    <td><?php echo $liga->DWZ.'-'.$liga->I0;?></td>
+    <?php if ($liga->DWZ > 0) { 
+		if ($countryversion == "de") { ?>
+			<td><?php echo $liga->DWZ.'-'.$liga->I0;?></td>
+		<?php } else { ?>
+			<td><?php echo $liga->DWZ; ?></td>
+		<?php } ?>
     <?php } 
 	if ($liga->dsbDWZ >0 AND $liga->DWZ == 0) { ?>
 		<td><?php echo $liga->dsbDWZ.'-'.$liga->DWZ_Index;?></td>
