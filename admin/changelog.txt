@@ -19,6 +19,7 @@ $ -> Language fix or change
 ^ File Export: Dateinamen ohne nicht erlaubte Sonderzeichen
 ^ View Spieler (engl. Anwendung): ECF-Link angepasst
 + engl. Anwendung: inoff. NWZ-Berechnung einschl. Ligastatistik
+# Eingabe Meldeliste: Breite K-Feld
 
 - - - - - 3.8.5 - [06-10-2020] - - - - - - - - - - - - - - - - - - - -
 + Ligen/MTurniere: Infokarte
