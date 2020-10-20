@@ -20,6 +20,7 @@ $ -> Language fix or change
 ^ View Spieler (engl. Anwendung): ECF-Link angepasst
 + engl. Anwendung: inoff. NWZ-Berechnung einschl. Ligastatistik
 # Eingabe Meldeliste: Breite K-Feld
+# Admin-View Sonderranglisten: Reihenfolge sichern
 
 - - - - - 3.8.5 - [06-10-2020] - - - - - - - - - - - - - - - - - - - -
 + Ligen/MTurniere: Infokarte

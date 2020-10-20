@@ -167,10 +167,10 @@ class CLMModelSonderranglistenForm extends JModelLegacy {
 				} 
 			} 
 		} 
-//		if(!$row->reorderAll()) {
-//			$this->setError( $this->_db->getErrorMsg() );
-//			return false;
-//		}
+		if(!$row->reorderAll()) {
+			$this->setError( $this->_db->getErrorMsg() );
+			return false;
+		}
 		return true; 
 	} 
 	

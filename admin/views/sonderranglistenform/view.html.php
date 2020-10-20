@@ -84,7 +84,7 @@ class CLMViewSonderranglistenForm extends JViewLegacy {
 		if (!$isNew) { 
 			$options_o[] = JHtml::_('select.option',0,'0 '.JText::_('ORDERING_FIRST'));
 			$orderingMax = 1;
-			
+
 			foreach($ordering as $rank){
 				$options_o[] = JHtml::_('select.option',$rank->ordering,$rank->ordering.' ('.$rank->name.')');
 				$orderingMax++;
