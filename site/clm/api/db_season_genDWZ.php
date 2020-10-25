@@ -1,7 +1,16 @@
 <?php 
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 // Berechenen der inoffiziellen DWZ einer Saison
 function clm_api_db_season_genDWZ($id,$group=true) {
 	$id = clm_core::$load->make_valid($id, 0, -1);
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 	if($group) {
 		$table_main = "#__clm_liga";
 		$table_dates = "#__clm_runden_termine";
@@ -10,7 +19,10 @@ function clm_api_db_season_genDWZ($id,$group=true) {
 		$table_list_id = "sid";
 		$table_round = "#__clm_rnd_spl";
 		$table_round_id = "lid";
-		$playerId = "zps=? AND mgl_nr=? AND sid=?";
+		if ($countryversion == "de") 
+			$playerId = "zps=? AND mgl_nr=? AND sid=?";
+		else 
+			$playerId = "zps=? AND PKZ=? AND sid=?";
 		$birthAndID = "";
 	} 
 	
@@ -66,11 +78,11 @@ function clm_api_db_season_genDWZ($id,$group=true) {
 		$year = intval($year);
 	}
 	// Lese alle beteiligten Spieler aus
-	$query='SELECT a.zps, a.mgl_nr, d.DWZ as start_dwz, d.DWZ_Index as start_I0, d.FIDE_elo as FIDEelo, d.Geburtsjahr'
+	$query='SELECT a.zps, a.mgl_nr, a.PKZ, d.DWZ as start_dwz, d.DWZ_Index as start_I0, d.FIDE_elo as FIDEelo, d.Geburtsjahr'
 			 . ' FROM #__clm_meldeliste_spieler as a'
 			 . ' LEFT JOIN #__clm_dwz_spieler AS d ON d.sid = a.sid AND d.zps = a.zps AND d.mgl_nr = a.mgl_nr'
 			 . ' WHERE a.sid ='.$id
-			 . ' GROUP by a.zps, a.mgl_nr';
+			 . ' GROUP by a.zps, a.mgl_nr, a.PKZ';
 	$spieler = clm_core::$db->loadObjectList($query);
 
 	$dwz = new clm_class_dwz_rechner();
@@ -82,18 +94,28 @@ function clm_api_db_season_genDWZ($id,$group=true) {
 	// Spieler zur DWZ Auswertung hinzufügen
 	for ($i=0;$i < count($spieler);$i++)
  	{
+		// SWT Importe besitzen keinen Index, falls die DWZ größer als 0 ist muss es jedoch einen geben.
+		if($spieler[$i]->start_I0==0 && $spieler[$i]->start_dwz>0) {
+			$spieler[$i]->start_I0=22;
+		}
 		if($group) {
- 			$dwz->addPlayer($spieler[$i]->zps.":".$spieler[$i]->mgl_nr,$year-$spieler[$i]->Geburtsjahr,$spieler[$i]->start_dwz,$spieler[$i]->start_I0);
+ 		 	if ($countryversion == "de")
+				$dwz->addPlayer($spieler[$i]->zps.":".$spieler[$i]->mgl_nr,$year-$spieler[$i]->Geburtsjahr,$spieler[$i]->start_dwz,$spieler[$i]->start_I0);
+ 		 	else
+				$dwz->addPlayer($spieler[$i]->zps.":".$spieler[$i]->PKZ,$year-$spieler[$i]->Geburtsjahr,$spieler[$i]->start_dwz,$spieler[$i]->start_I0);
 		} 
  	}
 
 	// Wer hat sich diese Struktur ausgedacht?
 	if($group) {
  	// Lese alle relevanten Partien aus
-		$query='SELECT zps, spieler, gzps, gegner, ergebnis'
-		 	. ' FROM #__clm_rnd_spl'
-			. ' WHERE FIND_IN_SET(lid,"'.$ligen.'") != 0'
-			. ' AND heim = 1';
+		if ($countryversion == "de")
+			$query='SELECT zps, spieler, gzps, gegner, ergebnis';
+		else
+			$query='SELECT zps, PKZ as spieler, gzps, gPKZ as gegner, ergebnis';
+		$query .= ' FROM #__clm_rnd_spl'
+			.' WHERE FIND_IN_SET(lid,"'.$ligen.'") != 0'
+			.' AND heim = 1';
 	} 
 	$partien = clm_core::$db->loadObjectList($query);
 
@@ -131,7 +153,10 @@ function clm_api_db_season_genDWZ($id,$group=true) {
 
 		if($group) {
 			$id2 = explode(":",$id2);
-			$stmt->bind_param('iididiiisii', $value->R_n,$value->R_nI,$value->W,$value->n,$value->W_e,$value->R_p,$value->E,$value->R_c,$id2[0],$id2[1],$id);
+			if ($countryversion == "de")
+				$stmt->bind_param('iididiiisii', $value->R_n,$value->R_nI,$value->W,$value->n,$value->W_e,$value->R_p,$value->E,$value->R_c,$id2[0],$id2[1],$id);
+			else
+				$stmt->bind_param('iididiiissi', $value->R_n,$value->R_nI,$value->W,$value->n,$value->W_e,$value->R_p,$value->E,$value->R_c,$id2[0],$id2[1],$id);
 		} 
 		$stmt->execute();
 	}

@@ -236,7 +236,7 @@ if ($count < 10) { $a = $count; }
 			else { $zeilenr = "zeile2"; } ?>
 	<tr class="<?php echo $zeilenr; ?>">
 		<td class="nr" align="center"><?php echo $x+1; ?></td>
-		<td class="name" align="left"><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $spieler[$x]->zps; ?>&mglnr=<?php echo $spieler[$x]->mgl_nr; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $spieler[$x]->Spielername; ?></a></td>
+		<td class="name" align="left"><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $spieler[$x]->zps; ?>&PKZ=<?php echo $spieler[$x]->PKZ; ?>&mglnr=<?php echo $spieler[$x]->mgl_nr; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $spieler[$x]->Spielername; ?></a></td>
 		<td class="dwz" align="center"><?php echo $spieler[$x]->DWZ; ?></td>
 		<td class="verein" align="left"><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $spieler[$x]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $spieler[$x]->Vereinname; ?></a></td>
 		<td class="punkte" align="center"><?php echo $spieler[$x]->Punkte; ?></td>

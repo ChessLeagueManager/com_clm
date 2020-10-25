@@ -219,7 +219,7 @@ class CLMModelInfo extends JModelLegacy
 		$db			= JFactory::getDBO();
 		$id			= @$options['id'];
  
-		$query = " SELECT a.mgl_nr,a.zps,a.Punkte,a.Partien,a.Niveau,a.Leistung,a.ZPS,a.DWZ,a.Spielername,v.Vereinname "
+		$query = " SELECT a.mgl_nr,a.PKZ,a.zps,a.Punkte,a.Partien,a.Niveau,a.Leistung,a.ZPS,a.DWZ,a.Spielername,v.Vereinname "
 			." FROM #__clm_dwz_spieler as a"
 			." LEFT JOIN #__clm_dwz_vereine as v ON v.ZPS = a.zps AND v.sid = a.sid"
 			." WHERE a.sid = ".$sid

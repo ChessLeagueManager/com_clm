@@ -12,6 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 $sid	= clm_core::$load->request_int('saison',1);
+$rating_type = clm_core::$db->saison->get($sid)->rating_type;
 $itemid	= clm_core::$load->request_int('Itemid',1);
 $urlzps	= clm_core::$load->request_string('zps');
 $zps	= $this->zps;
@@ -154,8 +155,10 @@ echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
     <td class="dwz_5"><?php echo $zps->Geschlecht; ?></td>
    <?php if ($countryversion =="de") { ?>	
     <td class="dwz_6"><a href="http://schachbund.de/spieler.html?zps=<?php echo $zps->ZPS; ?>-<?php echo $zps->Mgl_Nr; ?>" target="_blank"><?php echo $zps->DWZ; ?></a> - <?php echo $zps->DWZ_Index; ?></td>
-   <?php } else { ?>
-    <td class="dwz_6"><?php echo $zps->DWZ; if ($countryversion == "en") echo '<font size="1"> ('.(600 + ($zps->DWZ * 8)).')</font>'; ?></td>
+   <?php } elseif ($countryversion == "en" AND $rating_type == 0) { ?>
+    <td class="dwz_6"><?php echo $zps->DWZ; echo '<font size="1"> ('.(600 + ($zps->DWZ * 8)).')</font>'; ?></td>
+   <?php } elseif ($countryversion == "en" AND $rating_type == 1) { ?>
+    <td class="dwz_6"><a href="https://www.ecfrating.org.uk/v2/new/player.php?ECF_code=<?php echo $zps->PKZ; ?>" target="_blank"><?php echo $zps->DWZ; ?></td>
    <?php } ?>
     <td class="dwz_7"><?php if ( $zps->FIDE_Elo == 0 ) { echo "-"; } else { echo '<a href="http://ratings.fide.com/card.phtml?event=' . $zps->FIDE_ID . '" target="_blank">' . $zps->FIDE_Elo .'</a>'; } ?></td>
     <td class="dwz_8"><?php echo $zps->FIDE_Titel; ?></td>

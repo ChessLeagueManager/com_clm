@@ -18,7 +18,7 @@ $ -> Language fix or change
 # Einzelturniere: Feinwertung Buchholzsumme
 ^ File Export: Dateinamen ohne nicht erlaubte Sonderzeichen
 ^ View Spieler (engl. Anwendung): ECF-Link angepasst
-+ engl. Anwendung: inoff. NWZ-Berechnung einschl. Ligastatistik
++ engl. Anwendung: inoff. NWZ-Berechnung einschl. Liga- und Saisonstatistik
 # Eingabe Meldeliste: Breite K-Feld
 # Admin-View Sonderranglisten: Reihenfolge sichern
 # Einzelturniere: Online-Anmeldung (Nacharbeit)
