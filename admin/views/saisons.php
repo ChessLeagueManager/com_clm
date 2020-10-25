@@ -18,10 +18,10 @@ public static function setSaisonsToolbar($countryversion)
 		clm_core::$load->load_css("icons_images");
 
 		JToolBarHelper::title( JText::_( 'Saison Manager' ), 'clm_headmenu_saison.png' );
-	  if ($countryversion =="de") {
+//	  if ($countryversion =="de") {
 		JToolBarHelper::custom('dwz_del','cancel.png','unarchive_f2.png','RUNDE_DWZ_DELETE',true);	
 		JToolBarHelper::custom('dwz_start','default.png','apply_f2.png','RUNDE_DWZ_APPLY',true);			
-	  }
+//	  }
 	/* Debugging / Testing
 		JToolBarHelper::custom( 'change', 'upload.png', 'upload_f2.png', 'Status ändern' , false);
 	*/
