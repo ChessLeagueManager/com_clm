@@ -29,6 +29,17 @@ if(isset($_GET["view"]) && $_GET["view"]=="forceUpdate") {
 			echo "The DB should work!!";
 		}
 	}
+} else if(isset($_GET["view"]) && $_GET["view"]=="forceDBCorrection") {
+	JToolBarHelper::title('forceFullUpdate');
+	require_once (JPATH_SITE.DIRECTORY_SEPARATOR."components".DIRECTORY_SEPARATOR."com_clm".DIRECTORY_SEPARATOR."clm".DIRECTORY_SEPARATOR."index.php");
+	require_once (JPATH_SITE.DIRECTORY_SEPARATOR."components".DIRECTORY_SEPARATOR."com_clm".DIRECTORY_SEPARATOR."clm".DIRECTORY_SEPARATOR."includes".DIRECTORY_SEPARATOR."dbcorrection.php");
+	require_once(JPATH_ADMINISTRATOR.DIRECTORY_SEPARATOR."components".DIRECTORY_SEPARATOR."com_clm".DIRECTORY_SEPARATOR."installer.php");
+	$installer = new com_clmInstallerScript();
+	if($installer->preflight("install", null)) {
+		if($installer->install(null)) {
+			echo "<br>The DB should work!!";
+		}
+	}
 } else {
 
 // no direct access

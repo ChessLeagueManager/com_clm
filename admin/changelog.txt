@@ -23,6 +23,7 @@ $ -> Language fix or change
 # Admin-View Sonderranglisten: Reihenfolge sichern
 # Einzelturniere: Online-Anmeldung (Nacharbeit)
 ^ deutsche Anwendung: Aktualisierung Verbandsnamen
++ DB: Routine zur Korrektur leerer Felder vom Typ datetime
 
 - - - - - 3.8.5 - [06-10-2020] - - - - - - - - - - - - - - - - - - - -
 + Ligen/MTurniere: Infokarte
