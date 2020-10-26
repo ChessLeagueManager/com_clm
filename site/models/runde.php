@@ -570,6 +570,14 @@ class CLMModelRunde extends JModelLegacy
 	public static function team_tlnr ( $lid, $tlnr )
 	{
 	$db	= JFactory::getDBO();
+	$query = " SELECT rang "
+		." FROM #__clm_liga as a "
+		." WHERE a.id = ".$lid
+			;
+	$db->setQuery($query);
+	$man	=$db->loadObjectList();
+	$rang	=$man[0]->rang;
+	if ($rang == 0)
 	$query = " SELECT a.tln_nr, a.man_nr, m.snr, m.mgl_nr, m.zps, d.Spielername, IF(m.start_dwz IS NULL, d.DWZ, m.start_dwz) as dwz "
 		." FROM #__clm_mannschaften as a "
 		." LEFT JOIN #__clm_meldeliste_spieler AS m ON m.lid = a.liga AND m.mnr = a.man_nr "
@@ -579,6 +587,19 @@ class CLMModelRunde extends JModelLegacy
 		." AND a.tln_nr = ".$tlnr
 		." ORDER BY m.snr "
 		;
+	else
+	$query = " SELECT a.tln_nr, a.man_nr, m.snr, m.mgl_nr, m.zps, d.Spielername, IF(m.start_dwz IS NULL, d.DWZ, m.start_dwz) as dwz, t.Rang as trang, t.man_nr as tman_nr "
+		." FROM #__clm_mannschaften as a "
+		." LEFT JOIN #__clm_meldeliste_spieler AS m ON m.lid = a.liga AND m.mnr = a.man_nr "
+				." AND ( m.zps = a.zps OR FIND_IN_SET(m.zps, a.sg_zps))	"	
+		." LEFT JOIN #__clm_dwz_spieler AS d ON d.sid = a.sid AND d.ZPS = m.zps AND d.Mgl_Nr = m.mgl_nr "
+		." LEFT JOIN #__clm_rangliste_spieler as t on t.ZPS = a.zps AND t.Mgl_Nr = m.mgl_nr AND t.sid = a.sid AND t.Gruppe = ".$rang
+		." WHERE a.liga = ".$lid
+		." AND a.tln_nr = ".$tlnr
+		." AND a.man_nr = t.man_nr "
+		." ORDER BY m.snr "
+		;
+		
 	$db 	=JFactory::getDBO();
 	$db->setQuery( $query );
 	$team	=$db->loadObjectList();

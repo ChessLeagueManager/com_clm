@@ -24,6 +24,8 @@ $ -> Language fix or change
 # Einzelturniere: Online-Anmeldung (Nacharbeit)
 ^ deutsche Anwendung: Aktualisierung Verbandsnamen
 + DB: Routine zur Korrektur leerer Felder vom Typ datetime
+^ Formular Spielbericht: Umstellung auf Querformat
++ Formular Spielbericht: auch für Ranglistenwettbewerbe
 
 - - - - - 3.8.5 - [06-10-2020] - - - - - - - - - - - - - - - - - - - -
 + Ligen/MTurniere: Infokarte

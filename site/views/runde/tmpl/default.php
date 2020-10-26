@@ -295,7 +295,7 @@ if (isset($paar[$y]->htln)) {  // Leere Begegnungen ausblenden
         <?php
         $edit=0;
         $medit=0;
-		?> <div class=paarung> <?php	if ($liga[0]->rang == 0 AND $paar[$y]->hname != 'spielfrei' AND $paar[$y]->gname != 'spielfrei' AND $params['ReportForm'] != '0') {   // $jid != 0 AND 
+		?> <div class=paarung> <?php	if ($paar[$y]->hname != 'spielfrei' AND $paar[$y]->gname != 'spielfrei' AND $params['ReportForm'] != '0') {   // $jid != 0 AND 
 		?>
             <div class="run_admit"><a href="index.php?option=com_clm&view=runde&saison=<?php echo $liga[0]->sid; ?>&liga=<?php echo $liga[0]->id; ?>&amp;layout=paarung&amp;runde=<?php echo $runde_orig; ?>&amp;dg=<?php echo $dg; ?>&amp;paarung=<?php echo ($y + 1); ?>&amp;format=pdf"><label for="name" class="hasTip"><img  src="<?php echo CLMImage::imageURL('pdf_button.png'); ?>"  class="CLMTooltip" title="<?php echo JText::_('PAIRING_PDF'); ?>" /></label></a>
 			<?php } ?>
