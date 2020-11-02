@@ -26,6 +26,7 @@ $ -> Language fix or change
 + DB: Routine zur Korrektur leerer Felder vom Typ datetime
 ^ Formular Spielbericht: Umstellung auf Querformat
 + Formular Spielbericht: auch für Ranglistenwettbewerbe
+^ Admin-Views: Überarbeitung engl. Sprachdateien
 
 - - - - - 3.8.5 - [06-10-2020] - - - - - - - - - - - - - - - - - - - -
 + Ligen/MTurniere: Infokarte
