@@ -126,7 +126,7 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
     <td><?php if($liga->rang =="1") { echo $liga->mnr.'-';} echo $liga->snr;?></td>
 	<td><a href="index.php?option=com_clm&amp;view=spieler&amp;saison=<?php echo $sid; ?>&amp;zps=<?php echo $liga->zps; ?>&amp;mglnr=<?php echo $liga->mgl_nr; ?>&amp;PKZ=<?php echo $liga->PKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $liga->Spielername;?></a></td>
     <?php if ($old) { 
-		if ($countyversion == "de") { ?>
+		if ($countryversion == "de") { ?>
 			<td><?php echo $liga->dsbDWZ.'-'.$liga->DWZ_Index;?></td>
 		<?php } else { ?>
 			<td><?php echo $liga->dsbDWZ; ?></td>

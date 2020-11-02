@@ -464,7 +464,7 @@ class CLMModelRangliste extends JModelLegacy
 	{
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
-	$countyversion = $config->countryversion;
+	$countryversion = $config->countryversion;
 	$sid	= clm_core::$load->request_int('saison',1);
 	$liga	= clm_core::$load->request_int('liga',1);
 	
@@ -501,7 +501,7 @@ class CLMModelRangliste extends JModelLegacy
 			." m.snr as snr "
 			." FROM #__clm_rnd_spl as a "
 			." LEFT JOIN #__clm_mannschaften as m1 ON m1.sid = a.sid AND m1.liga = a.lid AND m1.tln_nr = a.tln_nr";
-		if ($countyversion == "de")
+		if ($countryversion == "de")
 			$query .= " LEFT JOIN #__clm_meldeliste_spieler as m ON m.sid = a.sid AND m.lid = a.lid AND m.mgl_nr = a.spieler AND m.zps = a.zps AND m.mnr = m1.man_nr";
 		else	
 			$query .= " LEFT JOIN #__clm_meldeliste_spieler as m ON m.sid = a.sid AND m.lid = a.lid AND m.PKZ = a.PKZ AND m.zps = a.zps AND m.mnr = m1.man_nr";
