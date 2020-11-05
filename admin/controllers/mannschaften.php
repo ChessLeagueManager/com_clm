@@ -959,13 +959,26 @@ public static function delete_meldeliste()
 	$section 	= clm_core::$load->request_string('section');
 	$db 		= JFactory::getDBO();
 	$task 		= clm_core::$load->request_string( 'task');
-	$cid		= clm_core::$load->request_int( 'cid');
+	$link = 'index.php?option='.$option.'&section='.$section;
+
+	$cid 		= clm_core::$load->request_array_int( 'cid');
+	if (is_null($cid)) 
+		$cid[0] = clm_core::$load->request_int('id');
 
 	if (count($cid) < 1) {
 		$mainframe->enqueueMessage( JText::_( 'MANNSCHAFTEN_LISTE_LOSCH'), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link );
 	}
+
+	// load the row from the db table
+	$row 		= JTable::getInstance( 'mannschaften', 'TableCLM' );
+	$row->load( $cid[0]);
+	$rowliga	= JTable::getInstance( 'ligen', 'TableCLM' );
+	$liga		= $row->liga;
+	$rowliga->load( $liga );
+
+
 	// Prüfen ob User Berechtigung zum löschen hat
 	$clmAccess = clm_core::$access;      
 	if ($clmAccess->access('BE_team_registration_list') === false) {
@@ -974,22 +987,13 @@ public static function delete_meldeliste()
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
-	//if ( clm_core::$access->getType() !== 'admin' ) {
+
 	if ( $rang == 0 AND $rowliga->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_registration_list') !== true) {
 		$mainframe->enqueueMessage( JText::_( 'MANNSCHAFTEN_NO_MELDE_LOESCH' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 		}
 	
-	// load the row from the db table
-	$row 		= JTable::getInstance( 'mannschaften', 'TableCLM' );
-	$row->load( $cid[0]);
-	$rowliga	= JTable::getInstance( 'ligen', 'TableCLM' );
-	$liga		= $row->liga;
-	$rowliga->load( $liga );
-
-	$link = 'index.php?option='.$option.'&section='.$section;
-
 	// Wenn Rangliste dann nicht löschen
 	if ( $rowliga->rang > 0) {
 		$mainframe->enqueueMessage( JText::_('MANNSCHAFTEN_NO_LOESCH' ), 'warning' );
@@ -1127,9 +1131,9 @@ public static function save_meldeliste()
 	clm_core::$db->query($query);	
 
 	for ($y=1; $y< 1+($stamm+$ersatz); $y++){
-	$spl	= clm_core::$load->request_string( 'spieler'.$y);
-	$block	= clm_core::$load->request_int( 'check'.$y);
-	$attr	= clm_core::$load->request_string( 'attr'.$y);
+		$spl	= clm_core::$load->request_string( 'spieler'.$y);
+		$block	= clm_core::$load->request_int( 'check'.$y);
+		$attr	= clm_core::$load->request_string( 'attr'.$y);
 		if ($attr == '') $attr = NULL;
 		$teil	= explode("-", $spl);
 		if ($countryversion == "de") {
@@ -1141,12 +1145,14 @@ public static function save_meldeliste()
 		}
 		$tzps	= $teil[1];
 		$dwz	= $teil[2];
+		if ($dwz == '') $dwz = '0';
 		$dwz_I0	= $teil[3];
+		if ($dwz_I0 == '') $dwz_I0 = '0';
 
 		if ($spl >0) {
 			$query	= "REPLACE INTO #__clm_meldeliste_spieler"
 				." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `PKZ`, `zps`, `ordering`, `gesperrt`, `start_dwz`, `start_I0`, `attr`) "
-				. " VALUES ('$sid','$liga','$mnr','$y','$mgl_nr','$PKZ','$tzps','','$block','$dwz','$dwz_I0'";
+				. " VALUES ('$sid','$liga','$mnr','$y','$mgl_nr','$PKZ','$tzps', 0, '$block','$dwz','$dwz_I0'";
 			if (!is_null($attr))
 				$query	.= ",'$attr') ";
 			else
@@ -1255,11 +1261,11 @@ public static function apply_meldeliste()
 	clm_core::$db->query($query);	
 
 	for ($y=1; $y< 1+($stamm+$ersatz); $y++){
-	$spl	= clm_core::$load->request_string( 'spieler'.$y);
-	$block	= clm_core::$load->request_int( 'check'.$y);
-	$attr	= clm_core::$load->request_string( 'attr'.$y);
+		$spl	= clm_core::$load->request_string( 'spieler'.$y);
+		$block	= clm_core::$load->request_int( 'check'.$y);
+		$attr	= clm_core::$load->request_string( 'attr'.$y);
 		if ($attr == '') $attr = NULL;
-	$teil	= explode("-", $spl);
+		$teil	= explode("-", $spl);
 		if ($countryversion == "de") {
 			$mgl_nr	= $teil[0];
 			$PKZ    = '';
@@ -1269,12 +1275,14 @@ public static function apply_meldeliste()
 		}
 		$tzps	= $teil[1];
 		$dwz	= $teil[2];
+		if ($dwz == '') $dwz = '0';
 		$dwz_I0	= $teil[3];
+		if ($dwz_I0 == '') $dwz_I0 = '0';
 
 		if($spl >0){
 			$query	= "REPLACE INTO #__clm_meldeliste_spieler"
 				." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `PKZ`, `zps`, `ordering`, `gesperrt`, `start_dwz`, `start_I0`, `attr`) "
-				. " VALUES ('$sid','$liga','$mnr','$y','$mgl_nr','$PKZ','$tzps','','$block','$dwz','$dwz_I0'";
+				. " VALUES ('$sid','$liga','$mnr','$y','$mgl_nr','$PKZ','$tzps', 0,'$block','$dwz','$dwz_I0'";
 			if (!is_null($attr))
 				$query	.= ",'$attr') ";
 			else

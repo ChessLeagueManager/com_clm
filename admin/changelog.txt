@@ -28,6 +28,7 @@ $ -> Language fix or change
 + Formular Spielbericht: auch für Ranglistenwettbewerbe
 ^ Admin-Views: Überarbeitung engl. Sprachdateien
 ^ SWT-Import: nicht nur in aktuelle Saison 
+# Admin-View Mannschaft: Löschen einer Meldeliste
 
 - - - - - 3.8.5 - [06-10-2020] - - - - - - - - - - - - - - - - - - - -
 + Ligen/MTurniere: Infokarte
