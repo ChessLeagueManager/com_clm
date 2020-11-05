@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -23,13 +23,15 @@ class CLMModelSWTliga extends JModelLegacy {
 	function getSaisons() {
 		if (empty( $this->_saisons )) { 
 			$query =  ' SELECT id, name FROM #__clm_saison'
-					. ' WHERE published = 1 AND archiv = 0';
+//					. ' WHERE published = 1 AND archiv = 0';
+					. ' WHERE published = 1';
 			$this->_saisons = $this->_getList( $query );
 		} 
 		return $this->_saisons;
 	}
 	
 	function getLigen() {
+		$filter_saison	= clm_core::$load->request_int( 'filter_saison' , $this->_getAktuelleSaison() );
 		if (empty( $this->_ligen )) { 
 			$query =  ' SELECT 
 							id,
@@ -37,7 +39,8 @@ class CLMModelSWTliga extends JModelLegacy {
 						FROM 
 							#__clm_liga 
 						WHERE 
-							sid = '.$this->getState( 'filter_saison' ).'';
+							sid = '.$filter_saison;
+//							sid = '.$this->getState( 'filter_saison' ).'';
 			$this->_ligen = $this->_getList( $query );
 		} 
 		return $this->_ligen;

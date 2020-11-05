@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 
 /**
  * Klassenbibliothek CLMForm für verschiedene Eingabemasken in Formularen
@@ -37,13 +36,17 @@ class CLMForm {
 	}
 	
 	
-	public static function selectSeason ($name, $value = 0, $filter = FALSE) {
+	public static function selectSeason ($name, $value = 0, $filter = FALSE, $only = true) {
 	
 		$_db				= JFactory::getDBO();
 		
 		$saisonlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_SEASON' )), 'id', 'name' );
-		
-		$query = 'SELECT id, name FROM #__clm_saison WHERE archiv = 0';
+		if ($only === true) 
+			$query = 'SELECT id, name FROM #__clm_saison WHERE archiv = 0';
+		elseif ($only > 0 AND $only < 1000)
+			$query = 'SELECT id, name FROM #__clm_saison WHERE id = '.$only;
+		else 
+			$query = 'SELECT id, name FROM #__clm_saison';
 		$_db->setQuery($query);
 		$saisonlist		= array_merge( $saisonlist, $_db->loadObjectList() );
 		

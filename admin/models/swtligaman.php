@@ -28,11 +28,14 @@ class CLMModelSWTLigaman extends JModelLegacy {
 		// Konfigurationsparameter auslesen
 		$config = clm_core::$db->config();
 		$vs	= $config->verein_sort;
+		
+		$sid	= clm_core::$load->request_int('sid', 0);
 
 		$sql = " SELECT ZPS as zps, Vereinname as name FROM #__clm_dwz_vereine as a "
 //				." LEFT JOIN #__clm_saison as s ON s.id= a.sid "
 //				." WHERE s.archiv = 0 AND s.published = 1 ORDER BY ";
-				." WHERE sid = ".clm_core::$access->getSeason()." ORDER BY ";
+//				." WHERE sid = ".clm_core::$access->getSeason()." ORDER BY ";
+				." WHERE sid = ".$sid." ORDER BY ";
 
 		if ($vs =="1") { $sql = $sql." a.ZPS ASC";}
 		else { $sql = $sql." a.Vereinname ASC";}
@@ -47,12 +50,14 @@ class CLMModelSWTLigaman extends JModelLegacy {
 			return $this->_spielerliste;
 		}
 		
-        	$filter_zps = clm_core::$load->request_string( 'filter_zps', '');
-        	$filter_sg_zps = clm_core::$load->request_string( 'filter_sg_zps', '');
+        $filter_zps = clm_core::$load->request_string( 'filter_zps', '');
+        $filter_sg_zps = clm_core::$load->request_string( 'filter_sg_zps', '');
+		$sid	= clm_core::$load->request_int('sid', 0);
 
 		if ($filter_zps != '') {
 			$sql = " SELECT id, Spielername as name, ZPS as zps, Mgl_Nr as mgl_nr FROM #__clm_dwz_spieler"
-				." WHERE sid = ".clm_core::$access->getSeason();
+				." WHERE sid = ".$sid;
+//				." WHERE sid = ".clm_core::$access->getSeason();
 			if ($filter_zps != '') {
 				if ($filter_sg_zps != '' AND $filter_sg_zps != '') {
 					$sql .= " AND ( zps = '".$filter_zps."' OR FIND_IN_SET(zps,'".$filter_sg_zps."') )";

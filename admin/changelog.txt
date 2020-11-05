@@ -27,6 +27,7 @@ $ -> Language fix or change
 ^ Formular Spielbericht: Umstellung auf Querformat
 + Formular Spielbericht: auch für Ranglistenwettbewerbe
 ^ Admin-Views: Überarbeitung engl. Sprachdateien
+^ SWT-Import: nicht nur in aktuelle Saison 
 
 - - - - - 3.8.5 - [06-10-2020] - - - - - - - - - - - - - - - - - - - -
 + Ligen/MTurniere: Infokarte

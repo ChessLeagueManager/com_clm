@@ -174,8 +174,8 @@ $str_params = clm_core::$load->request_string('str_params');
 					<td nowrap="nowrap">
 						<label for="runden_modus"><?php echo JText::_( 'MTURN_PAIRING_MODE' ); ?></label>
 						</td><td colspan="2">
-						<select name="runden_modus" id="runden_modus" value="<?php echo $swt_data['runden_modus']; ?>" size="1">
-							<!--<option>- wählen -</option>-->
+						<select name="runden_modus" id="runden_modus" value="<?php echo $this->swt_data['runden_modus']; ?>" size="1">
+							<!-- <option>- wählen -</option> -->
 							<option value="1" <?php if ($this->swt_data['runden_modus'] == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_PAIRING_MODE_2' );?></option>
 							<option value="2" <?php if ($this->swt_data['runden_modus'] == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_PAIRING_MODE_3' );?></option>
 							<option value="3" <?php if ($this->swt_data['runden_modus'] == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_PAIRING_MODE_4' );?></option>

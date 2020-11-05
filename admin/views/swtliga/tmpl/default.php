@@ -12,6 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 $swt = clm_core::$load->request_string ('swt_file', '');
+$swt_file = clm_core::$load->request_string ('swt_file', '');
 $sid = clm_core::$load->request_int ('filter_saison', 0);
 
 jimport( 'joomla.filesystem.file' );

@@ -324,7 +324,11 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 			return;
 		}
 
-		$sql = 'SELECT id as sid, name FROM #__clm_saison WHERE archiv = 0';
+		$filter_saison = clm_core::$load->request_int('filter_saison', 0);
+		//$sql = 'SELECT id as sid, name FROM #__clm_saison WHERE archiv = 0';
+		$sql = 'SELECT id as sid, name FROM #__clm_saison ';
+		if(clm_core::$load->request_int('update',0) == 1)
+			$sql .= " WHERE id = ".$filter_saison;
 		//$db->setQuery ($sql);
 		if (!clm_core::$db->query($sql)) {
 			$this->setMessage( $db->getErrorMsg(), 'warning' );

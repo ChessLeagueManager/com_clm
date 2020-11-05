@@ -23,7 +23,7 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 		jimport( 'joomla.filesystem.file' );
 		
 		//Name und Verzeichnis der SWT-Datei
-		$filename 	= clm_core::$load->request_string('swt', '');
+		$filename 	= clm_core::$load->request_string('swt_file', '');
 		$path 		= JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		$swt 		= $path.$filename;
 		
@@ -117,7 +117,7 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 		$db		=JFactory::getDBO ();
 		
 		//Name und Verzeichnis der SWT-Datei
-		$filename 	= clm_core::$load->request_string('swt', '');
+		$filename 	= clm_core::$load->request_string('swt_file', '');
 		$path 		= JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		$swt 		= $path.$filename;
 				

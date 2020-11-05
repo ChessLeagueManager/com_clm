@@ -230,6 +230,7 @@ foreach($this->runden as $rnd => $runde) {
 	<input type="hidden" name="rnd" 	value="<?php echo clm_core::$load->request_int('rnd'); ?>" />
 	
 	<input type="hidden" name="swt" 	value="<?php echo clm_core::$load->request_string('swt'); ?>" />
+	<input type="hidden" name="swt_file" 	value="<?php echo clm_core::$load->request_string('swt_file'); ?>" />
 	<input type="hidden" name="update" 	value="<?php echo clm_core::$load->request_int('update'); ?>" />
 	<input type="hidden" name="tid" 	value="<?php echo clm_core::$load->request_int('tid'); ?>" />
 	<input type="hidden" name="swt_tid" value="<?php echo clm_core::$load->request_int('swt_tid'); ?>" />

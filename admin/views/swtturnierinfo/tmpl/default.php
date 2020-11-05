@@ -12,6 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 $swt = clm_core::$load->request_string('swt', '');
+$swt_file = clm_core::$load->request_string('swt_file', '');
 $update = clm_core::$load->request_int('update', 0);
 $tid = clm_core::$load->request_int('turnier', 0);
 
@@ -587,6 +588,7 @@ $turParams = new clm_class_params($this->turnier->params);
 	
 	<input type="hidden" name="rnd" value="<?php echo $this->turnier->rnd; ?>" />
 	
+	<input type="hidden" name="swt_file" value="<?php echo $swt_file; ?>" />
 	<input type="hidden" name="swt" value="<?php echo $swt; ?>" />
 	<input type="hidden" name="update" value="<?php echo $update; ?>" />
 	<input type="hidden" name="tid" value="<?php echo $tid; ?>" />
