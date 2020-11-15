@@ -426,14 +426,15 @@ if ($edit > 0 OR $medit >0) { ?>
 	</td></tr>
 <?php } ?>
 
-	<!--Bereich für pgn-Viewer-->
-<tr><td colspan ="<?php echo $col_h; ?>" class="noborder"><span id="pgnArea<?php echo $y ?>"></span></td></tr>
-<tr><td colspan ="<?php echo $col_h; ?>" class="noborder">&nbsp;</td></tr>
 <?php } elseif ((isset($paar[$y]->gpublished) AND $paar[$y]->gpublished == 1 AND $paar[$y]->hpublished == 1) AND ($paar_exist== 0)) { ?>
     <tr><td colspan ="<?php echo $col_h; ?>" align="left"><?php echo JText::_('NO_RESULT_YET'); $NO_RESULT_YET++; ?></td></tr>
     <?php } elseif (isset($paar[$y]) AND $paar[$y]->comment != "") { ?>
 	<tr><td colspan ="<?php echo $col_h; ?>"><?php  echo JText::_('PAAR_COMMENT').$paar[$y]->comment; ?></td></tr>
 	<?php } else { ?><tr><td colspan ="<?php echo $col_h; ?>" class="noborder">&nbsp;</td></tr><?php } ?>
+
+	<!--Bereich für pgn-Viewer-->
+<tr><td colspan ="<?php echo $col_h; ?>" class="noborder"><span id="pgnArea<?php echo $y ?>"></span></td></tr>
+<tr><td colspan ="<?php echo $col_h; ?>" class="noborder">&nbsp;</td></tr>
 
 <?php } ?>
 </table>
