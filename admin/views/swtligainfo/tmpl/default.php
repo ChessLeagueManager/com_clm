@@ -292,6 +292,14 @@ $str_params = clm_core::$load->request_string('str_params');
 				</tr>
 <?php } ?>
 <!-- bis hier Liga-Eingabemaske -->
+			<tr>
+				<td nowrap="nowrap">
+					<label for="pseudo_dwz"><?php echo JText::_( 'LEAGUE_PSEUDO_DWZ' ); ?></label>
+				</td><td colspan="2">
+					<input class="inputbox" type="text" name="pseudo_dwz" id="pseudo_dwz" size="4" maxlength="4" value="<?php echo $this->swt_data['pseudo_dwz']; ?>" />
+				</td>
+				<td colspan="2"></td>
+			</tr>
 				
 			</table>
 		</fieldset>

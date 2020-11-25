@@ -277,8 +277,10 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		$swt_data['tiebr2'] = $clm_fein[$man_dritt];
 		$swt_data['tiebr3'] = 0;
 		
+		//Pseudo-DWZ
+		$swt_data['pseudo_dwz'] = $this->_SWTReadInt($swt,626,2);
+
 		//Ranglistenkorrektur
-		//$swt_data['optionTiebreakersFideCorrect'] = $this->_SWTReadBool($swt,675);
 		if ($this->_SWTReadInt($swt,675) == 0) $swt_data['optionTiebreakersFideCorrect'] = false; 
 		else $swt_data['optionTiebreakersFideCorrect'] = true;
 
@@ -373,6 +375,7 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		$default_params['anz_sgp'] = clm_core::$load->request_string('anz_sgp');
 		$default_params['color_order'] = clm_core::$load->request_string('color_order');
 		$default_params['optionTiebreakersFideCorrect'] = clm_core::$load->request_string('optionTiebreakersFideCorrect');
+		$default_params['pseudo_dwz'] = clm_core::$load->request_string('pseudo_dwz');
 		$default_params['noOrgReference'] = clm_core::$load->request_string('noOrgReference', '0', 'default', 'string');
 		$default_params['noBoardResults'] = clm_core::$load->request_string('noBoardResults', '0', 'default', 'string');
 		if 	($default_params['noBoardResults'] == '1' AND $default_params['noOrgReference'] == '0') {
