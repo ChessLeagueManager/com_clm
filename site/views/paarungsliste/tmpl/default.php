@@ -31,8 +31,8 @@ $liga		= $this->liga;
 	if (!isset($params['noBoardResults'])) $params['noBoardResults'] = '0';
 
 $termin		= $this->termin;
-$dwzschnitt	= $this->dwzschnitt;
-$dwzgespielt= $this->dwzgespielt;
+//$dwzschnitt	= $this->dwzschnitt;
+//$dwzgespielt= $this->dwzgespielt;
 $paar		= $this->paar;
 $summe		= $this->summe;
 $rundensumme= $this->rundensumme;
@@ -60,6 +60,15 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 $config			= clm_core::$db->config();
 $fe_runde_tln	= $config->fe_runde_tln;
 $countryversion	= $config->countryversion;
+
+	// DWZ Durchschnitte - Aufstellung 
+	$result = clm_core::$api->db_nwz_average($lid);
+//echo "<br>lid:"; var_dump($lid);
+//echo "<br>result:"; var_dump($result);
+	$a_average_dwz_lineup = $result[2];
+//echo "<br>a_average_dwz_lineup:"; var_dump($a_average_dwz_lineup);
+//die();
+
 ?>
 
 <div id="clm">
@@ -99,7 +108,7 @@ else {
 	$item		= clm_core::$load->request_int('Itemid',1);
 
 	// Array für DWZ Schnitt setzen
-	$dwz = array();
+/*	$dwz = array();
 	for ($y=1; $y< ($liga[0]->teil)+1; $y++){
 		if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
 			if(isset($dwzschnitt[($y-1)]->dwz)) {
@@ -109,6 +118,7 @@ else {
 			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; }
 		}
 	}
+*/
 ?>
  
 <br>
@@ -144,9 +154,25 @@ $z2=0;
 $sum_paar=0;
 $rund_sum=0;
 $term = 0;
-if ( $liga[0]->durchgang == 2) { ?><h4><?php echo JText::_('PAAR_HIN') ?></h4><?php } ?>
+
+for ($xx=0; $xx< ($liga[0]->durchgang); $xx++){
+if ( $liga[0]->durchgang == 2 AND $xx == 0) { ?><h4><?php echo JText::_('PAAR_HIN') ?></h4><?php }
+if ( $liga[0]->durchgang == 2 AND $xx == 1) { ?><br><h4><?php echo JText::_('PAAR_RUECK') ?></h4><?php } 
+if ( $liga[0]->durchgang > 2 AND $xx > 0) { ?><br><?php } ?>
 
 <?php for ($x=0; $x< ($liga[0]->runden); $x++){
+	// DWZ Durchschnitte - gespielt in Runde 
+	$runde1 = $x + 1;
+	$dg1 = $xx +1;
+	$result = clm_core::$api->db_nwz_average($lid,$runde1,$dg1);
+//echo "<br>lid:"; var_dump($lid);
+//echo "<br><br>runde:"; var_dump($runde1);
+//echo "<br>result:"; var_dump($result);
+	$a_average_dwz_round = $result[2];
+//echo "<br>a_average_dwz_round:"; var_dump($a_average_dwz_round);
+//die();
+//echo "<br>termin:"; var_dump($termin);
+
 if ($termin[$term]->published =="1") { ?>
 	<table cellpadding="0" cellspacing="0" class="paarungsliste">
 	<tr>
@@ -155,7 +181,7 @@ if ($termin[$term]->published =="1") { ?>
 	<?php
 	//echo "_!_".$rundensumme[$rund_sum]->nr.'__!__'.($x+1);
 	// Wenn Rundensumme existiert dann  Rundensymbol (Lupe) anzeigen
-	if ($rundensumme[$rund_sum]->nr == ($x+1) ) { ?>
+	if ($rundensumme[$rund_sum]->nr == ($x+1+ (($xx)*$liga[0]->runden)) ) { ?>
 		<div class="left" style="width: 70%;">
 		<?php 
 		if ($termin[$term]->bemerkungen <> "") { ?>
@@ -163,7 +189,7 @@ if ($termin[$term]->published =="1") { ?>
 		// Wenn SL_OK dann Haken anzeigen
 		if ($rundensumme[$rund_sum]->sl_ok > 0) { ?>
 			<span class="editlinktip hasTip"><img  src="<?php echo CLMImage::imageURL('accept.png'); ?>" class="CLMTooltip" title="<?php echo JText::_( 'CHIEF_OK') ?>" /></span><?php } ?>
-		<b>&nbsp;<?php if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1)) { 
+		<b>&nbsp;<?php if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1+ (($xx)*$liga[0]->runden)) ) { 
 			if ($termin[$term]->datum > 0) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); 
 			if($params['round_date'] == '0' and isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { echo '  '.substr($termin[$term]->startzeit,0,5); }
 			if($params['round_date'] == '1' and isset($termin[$term]->enddatum) and $termin[$term]->enddatum > '1970-01-01' and $termin[$term]->enddatum != $termin[$term]->datum) { 
@@ -172,7 +198,7 @@ if ($termin[$term]->published =="1") { ?>
 			else {  }?></b>
 		</div>
 
-		<div class="paa_titel"><a href="index.php?option=com_clm&amp;view=runde&amp;liga=<?php echo $liga[0]->id ?>&amp;runde=<?php echo $x+1; ?>&amp;saison=<?php echo $liga[0]->sid; ?>&amp;dg=1&amp;Itemid=<?php echo $item; ?>"> <?php echo $termin[$term-1]->name; ?><img width="16" height="16" src="<?php echo CLMImage::imageURL('lupe.png'); ?>" /></a></div> 
+		<div class="paa_titel"><a href="index.php?option=com_clm&amp;view=runde&amp;liga=<?php echo $liga[0]->id ?>&amp;runde=<?php echo $x+1; ?>&amp;saison=<?php echo $liga[0]->sid; ?>&amp;dg=<?php echo $xx+1; ?>&amp;Itemid=<?php echo $item; ?>"> <?php echo $termin[$term-1]->name; ?><img width="16" height="16" src="<?php echo CLMImage::imageURL('lupe.png'); ?>" /></a></div> 
 		<?php $rund_sum++; 
 	}
 	else { ?>
@@ -217,10 +243,14 @@ if ($y%2 != 0) { $zeilenr = 'zeile2'; }
 	else { echo $paar[$z]->hname; } ?>
 	</td>
 	<td class="dwz">
-		<?php if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 1 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
-			{ if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') echo round($dwzgespielt[$z2]->dwz); 
-				else echo round($dwzgespielt[$z2]->start_dwz); }
-			else { if (isset($dwz[$paar[$z]->htln])) echo round($dwz[($paar[$z]->htln)]); } ?></td>
+		<?php //if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 1 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
+			//{ if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') echo round($dwzgespielt[$z2]->dwz); 
+			//	else echo round($dwzgespielt[$z2]->start_dwz); }
+			//else { if (isset($dwz[$paar[$z]->htln])) echo round($dwz[($paar[$z]->htln)]); } ?>
+        <?php if ($a_average_dwz_round[$paar[$z]->htln] != '-' AND $paar[$z]->htln !=0 AND $paar[$z]->gtln != 0)
+                { echo $a_average_dwz_round[$paar[$z]->htln]; }
+                else { echo $a_average_dwz_lineup[$paar[$z]->htln];} ?>
+		</td>
 		<?php
 		// Wenn Paarung existiert dann Ergebnis-Summen anzeigen
 		while ( $summe[$sum_paar]->runde < ($x+1) ) $sum_paar++;
@@ -242,14 +272,17 @@ if ($y%2 != 0) { $zeilenr = 'zeile2'; }
 else { echo $paar[$z]->gname; } ?>
 </td>
 
-<td class="dwz">
-	<?php if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 1 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
-			{ if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') echo round($dwzgespielt[$z2]->gdwz); 
-				else echo round($dwzgespielt[$z2]->gstart_dwz); 
-			$z2++;
-		}
-		else { if (isset($dwz[$paar[$z]->gtln])) echo round($dwz[($paar[$z]->gtln)]); } ?></td>
-</td>
+	<td class="dwz">
+	<?php //if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 1 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
+		//	{ if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') echo round($dwzgespielt[$z2]->gdwz); 
+		//		else echo round($dwzgespielt[$z2]->gstart_dwz); 
+			//$z2++;
+		//}
+		//else { if (isset($dwz[$paar[$z]->gtln])) echo round($dwz[($paar[$z]->gtln)]); } ?>
+        <?php if ($a_average_dwz_round[$paar[$z]->gtln] != '-' AND $paar[$z]->htln !=0 AND $paar[$z]->gtln != 0)
+                { echo $a_average_dwz_round[$paar[$z]->gtln]; $z2++; }
+                else { echo $a_average_dwz_lineup[$paar[$z]->gtln];} ?>
+	</td>
 	<?php if ($params['round_date'] == '1') { ?>
 	<td class="heim">
 	<?php 
@@ -313,12 +346,12 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 <br>
 <?php
 }}
-
+}
 ///////////////////////
 // zweiter Durchgang //
 ///////////////////////
 
-if ( $liga[0]->durchgang > 1) { if ( $liga[0]->durchgang == 2) {?>
+if ( $liga[0]->durchgang > 6) { if ( $liga[0]->durchgang == 2) {?>
 <br><h4><?php echo JText::_('PAAR_RUECK') ?></h4>
 <?php }
 for ($x=0; $x< ($liga[0]->runden); $x++){
@@ -468,7 +501,7 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 // dritter Durchgang //
 ///////////////////////
 
-if ( $liga[0]->durchgang > 2) { 
+if ( $liga[0]->durchgang > 10) { 
 for ($x=0; $x< ($liga[0]->runden); $x++){
 if ($termin[$term]->published =="1") {
 ?>
@@ -616,7 +649,7 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 // vierter Durchgang //
 ///////////////////////
 
-if ( $liga[0]->durchgang > 3) { 
+if ( $liga[0]->durchgang > 10) { 
 for ($x=0; $x< ($liga[0]->runden); $x++){
 if ($termin[$term]->published =="1") {
 ?>

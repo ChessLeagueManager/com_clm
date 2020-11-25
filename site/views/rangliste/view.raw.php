@@ -33,10 +33,10 @@ class CLMViewRangliste extends JViewLegacy
 		$punkte     = $model->getCLMPunkte();
 		$this->punkte = $punkte;
 
-		$model	  = $this->getModel();
+/*		$model	  = $this->getModel();
 		$dwzschnitt     = $model->getCLMDWZSchnitt();
 		$this->dwzschnitt = $dwzschnitt;
-
+*/
 		$html	= clm_core::$load->request_string('html','1');
 		if($html !="1"){
 			$document =JFactory::getDocument();

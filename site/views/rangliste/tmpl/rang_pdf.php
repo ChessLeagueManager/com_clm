@@ -49,7 +49,7 @@ $view = clm_core::$load->request_string( 'view');
 $liga=$this->liga;
 $punkte=$this->punkte;
 $spielfrei=$this->spielfrei;
-$dwzschnitt=$this->dwzschnitt;
+//$dwzschnitt=$this->dwzschnitt;
 $saison     =$this->saison; 
 
 $name_liga = $liga[0]->name;
@@ -58,7 +58,7 @@ if ($liga[0]->tiebr1 == 9 OR $liga[0]->tiebr2 == 9 OR $liga[0]->tiebr3 == 9) $co
 else $columnMP = 1;
 
 	// Array für DWZ Schnitt setzen
-	$dwz = array();
+/*	$dwz = array();
 	for ($y=1; $y< ($liga[0]->teil)+1; $y++){
 		if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
 			if(isset($dwzschnitt[($y-1)]->dwz)) {
@@ -68,6 +68,15 @@ else $columnMP = 1;
 			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; }
 		}
 	}
+*/
+	
+// DWZ Durchschnitte - Aufstellung
+$result = clm_core::$api->db_nwz_average($lid);
+//echo "<br>lid:"; var_dump($lid);
+//echo "<br>result:"; var_dump($result);
+$a_average_dwz_lineup = $result[2];
+//echo "<br>a_average_dwz_p:"; var_dump($a_average_dwz_p);
+
 // Spielfreie Teilnehmer finden
 $diff = $spielfrei[0]->count;
 $anzspl = ($liga[0]->teil - $diff) * $liga[0]->durchgang;
@@ -211,9 +220,9 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	while (($lmax) < $pdf->GetStringWidth(utf8_decode($punkte[$x]->name)))
 		$punkte[$x]->name = substr($punkte[$x]->name,0,-1);
 	$pdf->Cell($lmax+1,$zelle,utf8_decode($punkte[$x]->name),1,0,'L',$fc);
-	if (isset($dwz[($punkte[$x]->tln_nr)])) $pdf->Cell(10-$breite,$zelle,round($dwz[($punkte[$x]->tln_nr)]),1,0,'C',$fc);
-	else $pdf->Cell(10-$breite,$zelle,'',1,0,'C',$fc);
-  
+	//if (isset($dwz[($punkte[$x]->tln_nr)])) $pdf->Cell(10-$breite,$zelle,round($dwz[($punkte[$x]->tln_nr)]),1,0,'C',$fc);
+	//else $pdf->Cell(10-$breite,$zelle,'',1,0,'C',$fc);
+	$pdf->Cell(10-$breite,$zelle,$a_average_dwz_lineup[$punkte[$x]->tln_nr],1,0,'C',$fc);
 $runden = CLMModelRangliste::punkte_tlnr($sid,$lid,$punkte[$x]->tln_nr,1,$liga[0]->runden_modus);
 
 // Anzahl der Runden durchlaufen 1.Durchgang

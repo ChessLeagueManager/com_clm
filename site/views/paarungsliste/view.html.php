@@ -28,14 +28,14 @@ class CLMViewPaarungsliste extends JViewLegacy
 		$paar     = $model->getCLMPaar();
 		$this->paar = $paar;
 
-		$model	  = $this->getModel();
+/*		$model	  = $this->getModel();
 		$dwzschnitt     = $model->getCLMDWZSchnitt();
 		$this->dwzschnitt = $dwzschnitt;
-
-		$model	  = $this->getModel();
+*/
+/*		$model	  = $this->getModel();
 		$dwzgespielt     = $model->getCLMDWZgespielt();
 		$this->dwzgespielt = $dwzgespielt;
-
+*/
 		$model	  = $this->getModel();
 		$summe     = $model->getCLMSumme();
 		$this->summe = $summe;

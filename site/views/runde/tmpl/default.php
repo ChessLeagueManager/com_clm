@@ -150,6 +150,23 @@ $clm_zeile2			= $config->zeile2;
 $clm_zeile1D			= RGB($clm_zeile1);
 $clm_zeile2D			= RGB($clm_zeile2);
 
+	// DWZ Durchschnitte - Aufstellung 
+	$result = clm_core::$api->db_nwz_average($lid);
+//echo "<br>lid:"; var_dump($lid);
+//echo "<br>result:"; var_dump($result);
+	$a_average_dwz_lineup = $result[2];
+//echo "<br>a_average_dwz_lineup:"; var_dump($a_average_dwz_lineup);
+//die();
+	// DWZ Durchschnitte - gespielt in Runde 
+	$result = clm_core::$api->db_nwz_average($lid,$runde_orig,$dg);
+//echo "<br>lid:"; var_dump($lid);
+//echo "<br>runde:"; var_dump($runde_orig);
+//echo "<br>dg:"; var_dump($dg);
+//echo "<br>result:"; var_dump($result);
+	$a_average_dwz_round = $result[2];
+//echo "<br>a_average_dwz_round:"; var_dump($a_average_dwz_round);
+//die();
+
 ?>
 
 <div id="clm">
@@ -228,8 +245,8 @@ if (isset($liga[$runde-1]->comment) AND $liga[$runde-1]->comment <> "") { ?>
 <?php } 
 
 // Variablen ohne foreach setzen
-$dwzschnitt	=$this->dwzschnitt;
-$dwzgespielt=$this->dwzgespielt;
+//$dwzschnitt	=$this->dwzschnitt;
+//$dwzgespielt=$this->dwzgespielt;
 $paar		=$this->paar;
  
 $summe		=$this->summe;
@@ -238,7 +255,7 @@ $summe		=$this->summe;
 $erg_text = CLMModelRunde::punkte_text($liga[0]->id);
 
 // Array für DWZ Schnitt setzen
-$dwz = array();
+/* $dwz = array();
 for ($y=1; $y< ($liga[0]->teil)+1; $y++){
 	if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
 		if(isset($dwzschnitt[($y-1)]->dwz)) {
@@ -248,6 +265,7 @@ for ($y=1; $y< ($liga[0]->teil)+1; $y++){
 		$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; }
 	}
 }
+*/
 // Anzahl Spalten für Mannschaftsnamen
 if ($detail == 1) $col_m = 2; else $col_m = 1;
 if ($attr) $col_m++;
@@ -313,9 +331,9 @@ if (isset($paar[$y]->htln)) {  // Leere Begegnungen ausblenden
         }} ?>
         </th>
         <th class="paarung">
-        <?php if (isset($dwzgespielt[$zz]->dwz) AND $dwzgespielt[$zz]->paar == ($y+1) AND $paar[$y]->htln !=0 AND $paar[$y]->gtln != 0)
-                { echo round($dwzgespielt[$zz]->dwz); }
-                else { if(isset($paar[$y]->htln) AND isset($dwz[($paar[$y]->htln)])) { echo round($dwz[($paar[$y]->htln)]); }} ?>
+        <?php if ($a_average_dwz_round[$paar[$y]->htln] != '-' AND $paar[$y]->htln !=0 AND $paar[$y]->gtln != 0)
+                { echo $a_average_dwz_round[$paar[$y]->htln]; }
+                else { echo $a_average_dwz_lineup[$paar[$y]->htln];} ?>
         </th>
         <th class="paarung">
         <?php
@@ -340,11 +358,9 @@ if (isset($paar[$y]->htln)) {  // Leere Begegnungen ausblenden
         }} ?>
         </th>
         <th class="paarung">
-        <?php if (isset($dwzgespielt[$zz]->dwz) AND $dwzgespielt[$zz]->paar == ($y+1) AND $paar[$y]->htln !=0 AND $paar[$y]->gtln != 0)
-                { echo round($dwzgespielt[$zz]->gdwz);
-                    $zz++;
-                }
-                else { if(isset($paar[$y]->gtln) AND isset($dwz[($paar[$y]->gtln)])) { echo round($dwz[($paar[$y]->gtln)]); }} ?>
+        <?php if ($a_average_dwz_round[$paar[$y]->gtln] != '-' AND $paar[$y]->htln !=0 AND $paar[$y]->gtln != 0)
+                { echo $a_average_dwz_round[$paar[$y]->gtln]; $zz++; }
+                else { echo $a_average_dwz_lineup[$paar[$y]->gtln]; } ?>
         </th>
     </tr>
 <?php
@@ -530,10 +546,10 @@ if ($x%2 != 0) { $zeilenr	= "zeile2";
 	<td class="team">
 	<?php if ($punkte[$x]->published ==1 AND $params['noBoardResults'] == '0') { ?>
 	<div><a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $sid; ?>&liga=<?php echo $lid; ?>&tlnr=<?php echo $punkte[$x]->tln_nr; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $punkte[$x]->name; ?></a></div>
-	<div class="dwz"><?php if (isset($dwz[($punkte[$x]->tln_nr)])) echo "( ".round($dwz[($punkte[$x]->tln_nr)])." )"; else echo "( 0 )"; ?></div>
+	<div class="dwz"><?php echo "(".$a_average_dwz_lineup[$punkte[$x]->tln_nr].")"; ?></div>
 	<?php } else { ?>
 	<div><?php	echo $punkte[$x]->name; ?></div>
-	<div class="dwz"><?php if (isset($dwz[($punkte[$x]->tln_nr)])) echo "( ".round($dwz[($punkte[$x]->tln_nr)])." )"; else echo "( 0 )"; } ?></div>
+	<div class="dwz"><?php echo "(".$a_average_dwz_lineup[$punkte[$x]->tln_nr].")"; } ?></div>
 	</td>
 <?php
 // Anzahl der Runden durchlaufen 1.Durchgang

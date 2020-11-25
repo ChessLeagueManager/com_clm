@@ -244,6 +244,11 @@ function clm_api_db_xml_data($lid,$dg,$runde,$paar,$view) {
 			;
 		$out["DWZSchnitt"] = clm_core::$db->loadObjectList($DWZSchnittModel);
 
+		// DWZ Durchschnitte - Aufstellung 
+		$result = clm_core::$api->db_nwz_average($lid);
+		$a_average_dwz_lineup = $result[2];
+		$out["DWZSchnitt2"] = $a_average_dwz_lineup;
+
 		$DWZgespieltModel = " SELECT a.sid,a.lid,a.runde,a.paar,a.dg, AVG(d.DWZ) as dwz,AVG(g.DWZ) as gdwz, AVG(dm.start_dwz) as start_dwz,AVG(gm.start_dwz) as gstart_dwz "
 			." FROM #__clm_rnd_man as a "
 			." LEFT JOIN #__clm_rnd_spl AS r ON (r.sid=a.sid AND r.lid= a.lid AND r.runde=a.runde AND r.paar = a.paar AND r.dg = a.dg) ";
@@ -263,6 +268,18 @@ function clm_api_db_xml_data($lid,$dg,$runde,$paar,$view) {
 		$DWZgespieltModel .= " GROUP BY a.dg ASC, a.runde ASC, a.paar ASC"
 			;
 		$out["DWZgespielt"] = clm_core::$db->loadObjectList($DWZgespieltModel);
+
+		// DWZ Durchschnitte - gespielt in Runde 
+		$aa_average_dwz_round = array();
+		for ($xd=1; $xd<= ($out["liga"][0]->durchgang); $xd++){
+			if ($view == 3 AND $xd != $dg) continue;
+			for ($xr=1; $xr<= ($out["liga"][0]->runden); $xr++){
+				if ($view == 3 AND $xr != $runde) continue;
+				$result = clm_core::$api->db_nwz_average($lid,$xr,$xd);
+				$aa_average_dwz_round[$xd][$xr] = $result[2];
+			}
+		}
+		$out["DWZgespielt2"] = $aa_average_dwz_round;
 	
 		$summeModel = " SELECT a.dg,a.paar as paarung,a.runde as runde,a.brettpunkte as sum "
 			." FROM #__clm_rnd_man as a "

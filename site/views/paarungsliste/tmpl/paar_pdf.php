@@ -25,8 +25,8 @@ $liga		= $this->liga;
 	if (!isset($params['dwz_date'])) $params['dwz_date'] = '1970-01-01';
 	if (!isset($params['round_date'])) $params['round_date'] = '0';
 $termin		= $this->termin;
-$dwzschnitt	= $this->dwzschnitt;
-$dwzgespielt	= $this->dwzgespielt;
+//$dwzschnitt	= $this->dwzschnitt;
+//$dwzgespielt	= $this->dwzgespielt;
 $paar		= $this->paar;
 $summe		= $this->summe;
 $rundensumme	= $this->rundensumme;
@@ -71,9 +71,9 @@ if ( $liga[0]->published == 0) {
 	$pdf->Ln();
 	$pdf->Cell(10,15,utf8_decode(JText::_('GEDULD')),0,0);
  } else {
-//Array für DWZ Schnitt setzen
-$dwz = array();
-for ($y=1; $y< ($liga[0]->teil)+1; $y++){ 
+/*	//Array für DWZ Schnitt setzen
+	$dwz = array();
+	for ($y=1; $y< ($liga[0]->teil)+1; $y++){ 
 		if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
 			if(isset($dwzschnitt[($y-1)]->dwz)) {
 			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->dwz; }
@@ -82,6 +82,17 @@ for ($y=1; $y< ($liga[0]->teil)+1; $y++){
 			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; }
 		}
 	}
+*/
+	// DWZ Durchschnitte - Aufstellung 
+	$lid = $liga[0]->id;
+	$result = clm_core::$api->db_nwz_average($lid);
+//echo "<br>lid:"; var_dump($lid);
+//echo "<br>result:"; var_dump($result);
+	$a_average_dwz_lineup = $result[2];
+//echo "<br>a_average_dwz_lineup:"; var_dump($a_average_dwz_lineup);
+//die();
+
+
 // Zellenhöhe -> Standard 6
 $zelle = 6;
 // Wert von Zellenbreite abziehen
@@ -133,25 +144,32 @@ $sum_paar=0;
 $rund_sum=0;
 $term = 0;
 
+for ($dd=0; $dd< ($liga[0]->durchgang); $dd++){
 $pdf->SetFont('Times','',$head_font-1);
 	//$pdf->Ln();
 
-if ( $liga[0]->durchgang > 1) {
 	$pdf->Cell(10,15,' ',0,0);
-	if ( $liga[0]->durchgang == 2) $pdf->Cell(80,15,utf8_decode(JText::_('PAAR_HIN')),0,1,'L');
-	else $pdf->Cell(80,15,utf8_decode(JText::_('PAAR_DG'))." 1",0,1,'L');
-	}
-else {
-	$pdf->Cell(10,15,' ',0,0);
-	$pdf->Cell(80,15,' ',0,1,'L');
-	}
+	if ( $liga[0]->durchgang == 2 AND $dd == 0) $pdf->Cell(80,15,utf8_decode(JText::_('PAAR_HIN')),0,1,'L');
+	if ( $liga[0]->durchgang == 2 AND $dd == 1) $pdf->Cell(80,15,utf8_decode(JText::_('PAAR_RUECK')),0,1,'L');
+	if ( $liga[0]->durchgang > 2 )  $pdf->Cell(80,15,utf8_decode(JText::_('PAAR_DG'))." ".($dd+1),0,1,'L');
+
 for ($x=0; $x< ($liga[0]->runden); $x++){
+	// DWZ Durchschnitte - gespielt in Runde 
+	$runde1 = $x + 1;
+	$dg1 = $dd +1;
+	$result = clm_core::$api->db_nwz_average($lid,$runde1,$dg1);
+//echo "<br>lid:"; var_dump($lid);
+//echo "<br><br>runde:"; var_dump($runde1);
+//echo "<br>result:"; var_dump($result);
+	$a_average_dwz_round = $result[2];
+//echo "<br>a_average_dwz_round:"; var_dump($a_average_dwz_round);
+//die();
 
 if ($pdf->GetY() > $lspalte_paar) {
 		$pdf->AddPage();
 	}
 
-if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1)) { if ($termin[$term]->datum > 0) {
+if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1+ (($dd)*$liga[0]->runden))) { if ($termin[$term]->datum > 0) {
 	$datum = ', '.JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); 
 			if($params['round_date'] == '0' and isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { $datum .= '  '.substr($termin[$term]->startzeit,0,5).' Uhr'; }
 			if($params['round_date'] == '1' and isset($termin[$term]->enddatum) and $termin[$term]->enddatum > '1970-01-01' and $termin[$term]->enddatum != $termin[$term]->datum) { 
@@ -191,12 +209,15 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 	$pdf->Cell(8-$breite,$zelle,$paar[$z]->tln_nr,1,0,'C');
 	$pdf->Cell($nbreite-$breite,$zelle,utf8_decode($paar[$z]->hname),1,0,'C');
 
-	if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 1 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
+/*	if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 1 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
 		{ if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') $pdf->Cell(12-$breite,$zelle,round($dwzgespielt[$z2]->dwz),1,0,'C'); 
 			else $pdf->Cell(12-$breite,$zelle,round($dwzgespielt[$z2]->start_dwz),1,0,'C'); }
 
 		elseif (isset($dwz[($paar[$z]->htln)])) { $pdf->Cell(12-$breite,$zelle,round($dwz[($paar[$z]->htln)]),1,0,'C');}
 		else { $pdf->Cell(12-$breite,$zelle,'',1,0,'C');}
+*/   if ($a_average_dwz_round[$paar[$z]->htln] != '-' AND $paar[$z]->htln !=0 AND $paar[$z]->gtln != 0) {
+        $pdf->Cell(12-$breite,$zelle,$a_average_dwz_round[$paar[$z]->htln],1,0,'C'); }
+     else { $pdf->Cell(12-$breite,$zelle,$a_average_dwz_lineup[$paar[$z]->htln],1,0,'C'); }
 // Wenn Paarung existiert dann Ergebnis-Summen anzeigen
 while ( $summe[$sum_paar]->runde < ($x+1) ) $sum_paar++;
 if ( $summe[$sum_paar]->runde == ($x+1) AND $summe[$sum_paar]->paarung == ($y+1)) {
@@ -209,13 +230,16 @@ else { $pdf->Cell($rbreite-$breite,$zelle,' --- ',1,0,'C'); }
 	$pdf->Cell(8-$breite,$zelle,$paar[$z]->gtln,1,0,'C');
 	$pdf->Cell($nbreite-$breite,$zelle,utf8_decode($paar[$z]->gname),1,0,'C');
 
-	if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 1 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
+/*	if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 1 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
 		{ 	if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') $pdf->Cell(12-$breite,$zelle,round($dwzgespielt[$z2]->gdwz),1,0,'C');
 			else $pdf->Cell(12-$breite,$zelle,round($dwzgespielt[$z2]->gstart_dwz),1,0,'C'); 
 			$z2++;
 		}
 		elseif (isset($dwz[($paar[$z]->gtln)])) { $pdf->Cell(12-$breite,$zelle,round($dwz[($paar[$z]->gtln)]),1,0,'C'); }
 		else { $pdf->Cell(12-$breite,$zelle,'',1,0,'C');}
+*/   if ($a_average_dwz_round[$paar[$z]->htln] != '-' AND $paar[$z]->htln !=0 AND $paar[$z]->gtln != 0) {
+        $pdf->Cell(12-$breite,$zelle,$a_average_dwz_round[$paar[$z]->gtln],1,0,'C'); $z2++; }
+     else { $pdf->Cell(12-$breite,$zelle,$a_average_dwz_lineup[$paar[$z]->gtln],1,0,'C'); }
 	if ($params['round_date'] == '1') { 
 		if (isset($paar[$z]->pdate) AND $paar[$z]->pdate > '1970-01-01') {
 			$pdatum = JHTML::_('date',  $paar[$z]->pdate, JText::_('DATE_FORMAT_CLM_Y2')); 
@@ -261,10 +285,11 @@ $z++;
 	$pdf->Ln($zelle);
 }
 }
+}
 ////////////////////
 // zweiter Durchgang
 ////////////////////
-if ( $liga[0]->durchgang > 1) {
+if ( $liga[0]->durchgang > 10) {
 // Rundenschleife
 
 $pdf->SetFont('Times','',$head_font-1);
@@ -356,7 +381,7 @@ $z++;
 ////////////////////
 // dritter Durchgang
 ////////////////////
-if ( $liga[0]->durchgang > 2) {
+if ( $liga[0]->durchgang > 20) {
 // Rundenschleife
 
 $pdf->SetFont('Times','',$head_font-1);
@@ -447,7 +472,7 @@ $z++;
 ////////////////////
 // vierter Durchgang
 ////////////////////
-if ( $liga[0]->durchgang > 3) {
+if ( $liga[0]->durchgang > 30) {
 // Rundenschleife
 
 $pdf->SetFont('Times','',$head_font-1);

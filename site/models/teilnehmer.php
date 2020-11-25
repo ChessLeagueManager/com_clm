@@ -118,7 +118,7 @@ class CLMModelTeilnehmer extends JModelLegacy
 		return @$result;
 	}
 
-	function _getCLMDWZSchnitt ( &$options )
+/*	function _getCLMDWZSchnitt ( &$options )
 	{
 	$sid	= clm_core::$load->request_int('saison',1);
 	$liga	= clm_core::$load->request_int('liga',1);
@@ -192,7 +192,7 @@ class CLMModelTeilnehmer extends JModelLegacy
 		$result = $this->_getList( $query );
 		return @$result;
 	}
-	
+*/	
 	public static function punkte_tlnr ( $sid, $lid, $tlnr, $dg, $runden_modus )
 	{
 	$db	= JFactory::getDBO();

@@ -97,6 +97,8 @@ class CLMViewLigen
 		$row->params['time_control'] = ''; }
 	if (!isset($row->params['waiting_period']))  {   //Standardbelegung
 		$row->params['waiting_period'] = ''; }
+	if (!isset($row->params['pseudo_dwz']))  {   //Standardbelegung
+		$row->params['pseudo_dwz'] = '0'; }
 	?>
 	
 	<script language="javascript" type="text/javascript">
@@ -276,7 +278,7 @@ class CLMViewLigen
 			<option <?php if ($row->durchgang == 4) {echo 'selected="selected"';} ?>>4</option>
 		</select>
 	</td>
-</tr>
+	</tr>
 
 	<tr>
 	<td nowrap="nowrap">
@@ -376,6 +378,14 @@ class CLMViewLigen
 			}
 			echo JHtml::_('select.genericlist', $optionlist, 'params[autoRANKING]', 'class="inputbox"', 'id', 'name', (isset($row->params['autoRANKING']) ? $row->params['autoRANKING'] : "0")); ?>
 		</td>
+	</tr>
+	<tr>
+		<td nowrap="nowrap">
+		<label for="params[pseudo_dwz]"><?php echo JText::_( 'LEAGUE_PSEUDO_DWZ' ); ?></label>
+		</td><td colspan="2">
+		<input class="inputbox" type="text" name="params[pseudo_dwz]" id="params[pseudo_dwz]" size="4" maxlength="4" value="<?php echo $row->params['pseudo_dwz']; ?>" />
+		</td>
+		<td colspan="3"></td>
 	</tr>
 	<tr>
 		<td width="20%" nowrap="nowrap">

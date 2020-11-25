@@ -14,6 +14,7 @@ $ -> Language fix or change
 
 - - - - - 3.8.7 - [xx-xx-2020] - - - - - - - - - - - - - - - - - - - -
 # Rundenbericht: Sonderfall bei pgn-Anzeige
++ Ligen/MTurniere: NWZ-Durchschnittsberechnung mit Pseudowertzahl für Spieler ohne NWZ 
 
 - - - - - 3.8.6 - [05-11-2020] - - - - - - - - - - - - - - - - - - - -
 # Grading File Export (engl. Anwendung): Einzelturniere Abbruch

@@ -30,7 +30,7 @@ $liga		= $this->liga;
 	if (!isset($params['dwz_date'])) $params['dwz_date'] = '1970-01-01';
 $punkte		= $this->punkte;
 $spielfrei	= $this->spielfrei;
-$dwzschnitt	= $this->dwzschnitt;
+//$dwzschnitt	= $this->dwzschnitt;
 
 // Test MP als Feinwertung -> d.h. Spalte MP als Hauptwertung wird dann unterdrückt
 if ($liga[0]->tiebr1 == 9 OR $liga[0]->tiebr2 == 9 OR $liga[0]->tiebr3 == 9) $columnMP = 0;
@@ -92,7 +92,7 @@ elseif (!$liga OR $liga[0]->published == 0) {
 } else {
 
 	// Array für DWZ Schnitt setzen
-	$dwz = array();
+/*	$dwz = array();
 	for ($y=1; $y< ($liga[0]->teil)+1; $y++) {
 		if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
 			if(isset($dwzschnitt[($y-1)]->dwz)) {
@@ -102,7 +102,7 @@ elseif (!$liga OR $liga[0]->published == 0) {
 			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; }
 		}
 	}
-
+*/
 	// Spielfreie Teilnehmer finden //
 	$diff = $spielfrei[0]->count;
 	?>
@@ -117,6 +117,14 @@ elseif (!$liga OR $liga[0]->published == 0) {
 	<?php
 	echo CLMContent::createPDFLink('tabelle', JText::_('TABELLE_PDF'), array('saison' => $sid, 'layout' => 'tabelle', 'liga' => $lid));
 	echo CLMContent::createViewLink('rangliste', JText::_('TABELLE_GOTO_RANGLISTE'), array('saison' => $sid, 'liga' => $lid) );
+
+	// DWZ Durchschnitte - Aufstellung
+	$result = clm_core::$api->db_nwz_average($lid);
+//echo "<br>lid:"; var_dump($lid);
+//echo "<br>result:"; var_dump($result);
+	$a_average_dwz_lineup = $result[2];
+//echo "<br>a_average_dwz_p:"; var_dump($a_average_dwz_p);
+//die();
 	?>
 
 	</div></div>
@@ -200,11 +208,13 @@ elseif (!$liga OR $liga[0]->published == 0) {
 					echo '<div>'.$strName.'</div>';
 					if ($man_showdwz == 1) {
 						echo '<div class="dwz">';
-						if (isset($dwz[($punkte[$x]->tln_nr)])) {
+/*						if (isset($dwz[($punkte[$x]->tln_nr)])) {
 							echo "(".round($dwz[($punkte[$x]->tln_nr)]).")"; 
 						} else {
 							echo "(-)";
 						}
+*/
+						echo "(".$a_average_dwz_lineup[$punkte[$x]->tln_nr].")";
 						echo '</div>';
 					}
 				echo '</td>';

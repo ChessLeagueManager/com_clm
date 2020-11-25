@@ -26,9 +26,13 @@ $liga		= $this->liga;
 	if (!isset($params['color_order'])) $params['coloer_order'] = '';
 	if (!isset($params['time_control'])) $params['time_control'] = ''; 
 	if (!isset($params['waiting_period'])) $params['waiting_period'] = ''; 
+ 	$paramsc = new clm_class_params($liga[0]->params);
+	$params['pseudo_dwz'] = $paramsc->get('pseudo_dwz',0);
+	if ($params['pseudo_dwz'] < 1) $params['pseudo_dwz'] = '';
+
 $punkte		= $this->punkte;
 $spielfrei	= $this->spielfrei;
-$dwzschnitt	= $this->dwzschnitt;
+//$dwzschnitt	= $this->dwzschnitt;
 
 $lang = clm_core::$lang->liga_info;
 
@@ -79,7 +83,7 @@ elseif (!$liga OR $liga[0]->published == 0) {
 } else {
 
 	// Array für DWZ Schnitt setzen
-	$dwz = array();
+/*	$dwz = array();
 	for ($y=1; $y< ($liga[0]->teil)+1; $y++) {
 		if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
 			if(isset($dwzschnitt[($y-1)]->dwz)) {
@@ -89,7 +93,7 @@ elseif (!$liga OR $liga[0]->published == 0) {
 			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; }
 		}
 	}
-
+*/
 	// Spielfreie Teilnehmer finden //
 	$diff = $spielfrei[0]->count;
 	?>
@@ -160,6 +164,10 @@ elseif (!$liga OR $liga[0]->published == 0) {
 				  }
 			?>
 		</td>
+	</tr>
+	<tr>
+		<td align="left" width="100"><?php echo $lang->pseudo_dwz ?>:</td>
+		<td><?php echo $params['pseudo_dwz']; ?></td>
 	</tr>
 	<tr>
 		<td align="left" width="100"><?php echo $lang->time_control ?>:</td>

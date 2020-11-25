@@ -52,22 +52,25 @@ require ("index.php");
 		}
 		if ($view == 2 OR $view == 4) { 
 			$mannschaft		= $out[2]["mannschaft"];
-			$DWZgespielt	= $out[2]["DWZgespielt"];
-			$DWZSchnitt	= $out[2]["DWZSchnitt"];
-			foreach ($DWZgespielt as $oneDWZgespielt) {
+			$DWZgespielt2	= $out[2]["DWZgespielt2"];
+			$DWZSchnitt2	= $out[2]["DWZSchnitt2"];
+//			$DWZgespielt	= $out[2]["DWZgespielt"];
+//			$DWZSchnitt		= $out[2]["DWZSchnitt"];
+/*			foreach ($DWZgespielt as $oneDWZgespielt) {
 				$arrayDWZ[$oneDWZgespielt->dg][$oneDWZgespielt->runde][$oneDWZgespielt->paar] = (string)round($oneDWZgespielt->dwz);
 				$garrayDWZ[$oneDWZgespielt->dg][$oneDWZgespielt->runde][$oneDWZgespielt->paar] = (string)round($oneDWZgespielt->gdwz);
 			}
 			foreach ($DWZSchnitt as $oneDWZSchnitt) {
 				$marrayDWZ[$oneDWZSchnitt->tlnr] = (string)round($oneDWZSchnitt->dwz);
 			}
-		}
+*/		}
 		if ($view == 3) {
 			$einzel			= $out[2]["einzel"];
 			if (count($einzel) == 0) {
 				$error_text = "PLG_CLM_SHOW_ERR_EINZEL";
 			}
-			$DWZgespielt	= $out[2]["DWZgespielt"];
+//			$DWZgespielt	= $out[2]["DWZgespielt"];
+			$DWZgespielt2	= $out[2]["DWZgespielt2"];
 			$termin			= $out[2]["termin"];
 		}
 		if ($view == 14) {
@@ -171,17 +174,29 @@ if ($view == 2 OR $view == 4 OR $view == 14) {		// Paarungsliste / Spielplan Man
 		$teamsNode->appendChild($dom->createElement("runde", $paar0->runde));
 		$teamsNode->appendChild($dom->createElement("brettpunkte", $paar0->brettpunkte));
 		$teamsNode->appendChild($dom->createElement("gbrettpunkte", $paar0->gbrettpunkte));
-		if (isset($arrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar])) 
+/*		if (isset($arrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar])) 
 			$o_dwz = $arrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar];
 		else
 			if (isset($marrayDWZ[$paar0->tln_nr])) $o_dwz = $marrayDWZ[$paar0->tln_nr];
 			else $o_dwz = '';
+*/
+		if (isset($DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->tln_nr]) 
+			AND $DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->tln_nr] != '-'
+			AND $paar0->tln_nr != 0 AND $paar0->gtln != 0)
+			$o_dwz = $DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->tln_nr];
+		else $o_dwz = $DWZSchnitt2[$paar0->tln_nr];
 		$teamsNode->appendChild($dom->createElement("dwz", $o_dwz));
-		if (isset($garrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar])) 
+/*		if (isset($garrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar])) 
 			$o_gdwz = $garrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar];
 		else
 			if (isset($marrayDWZ[$paar0->gtln])) $o_gdwz = $marrayDWZ[$paar0->gtln];
 			else $o_gdwz = '';
+*/
+		if (isset($DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->gtln])
+			AND $DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->gtln] != '-'
+			AND $paar0->tln_nr != 0 AND $paar0->gtln != 0)
+			$o_gdwz = $DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->gtln];
+		else $o_gdwz = $DWZSchnitt2[$paar0->tln_nr];
 		$teamsNode->appendChild($dom->createElement("gdwz", $o_gdwz));
 		$teamsNode->appendChild($dom->createElement("rname", $paar0->rname));
 		if ($paar0->pdate > '1970-01-01') {
@@ -198,11 +213,13 @@ if ($view == 3) {		// Paarung
 	$root->appendChild($GnameNode = $dom->createElement("gname", $a_paar[0]->gname));
 	$root->appendChild($HbpNode = $dom->createElement("hbp", $a_paar[0]->brettpunkte));
 	$root->appendChild($GbpNode = $dom->createElement("gbp", $a_paar[0]->gbrettpunkte));
-	if ($dwz_date == '0000-00-00' OR $dwz_date == '1970-01-01') $hdwz = round($DWZgespielt[0]->dwz); 
-	else $hdwz = round($DWZgespielt[0]->start_dwz); 
+//	if ($dwz_date == '0000-00-00' OR $dwz_date == '1970-01-01') $hdwz = round($DWZgespielt[0]->dwz); 
+//	else $hdwz = round($DWZgespielt[0]->start_dwz); 
+	$hdwz = $DWZgespielt2[$a_paar[0]->dg][$a_paar[0]->runde][$a_paar[0]->htln]; 
 	$root->appendChild($HdwzNode = $dom->createElement("hdwz", $hdwz));
-	if ($dwz_date == '0000-00-00' OR $dwz_date == '1970-01-01') $gdwz = round($DWZgespielt[0]->gdwz); 
-	else $gdwz = round($DWZgespielt[0]->gstart_dwz); 
+//	if ($dwz_date == '0000-00-00' OR $dwz_date == '1970-01-01') $gdwz = round($DWZgespielt[0]->gdwz); 
+//	else $gdwz = round($DWZgespielt[0]->gstart_dwz); 
+	$gdwz = $DWZgespielt2[$a_paar[0]->dg][$a_paar[0]->runde][$a_paar[0]->gtln]; 
 	$root->appendChild($GdwzNode = $dom->createElement("gdwz", $gdwz));
 	$root->appendChild($RnameNode = $dom->createElement("rname", $termin[0]->name));
 

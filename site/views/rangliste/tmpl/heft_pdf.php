@@ -52,7 +52,7 @@ $o_nr = clm_core::$load->request_string( 'o_nr');
 // Variablen ohne foreach setzen
 $punkte=$this->punkte;
 $spielfrei=$this->spielfrei;
-$dwzschnitt=$this->dwzschnitt;
+//$dwzschnitt=$this->dwzschnitt;
 $mannschaft	=$this->mannschaft; 
 $mleiter	=$this->mleiter; 
 $count		=$this->count;      
@@ -90,8 +90,8 @@ usort($bpr, 'vergleich');
 	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
 
-// Array für DWZ Schnitt setzen
-$dwz = array();
+/*	// Array für DWZ Schnitt setzen
+	$dwz = array();
 	for ($y=1; $y< ($liga[0]->teil)+1; $y++) {
 		if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
 			if(isset($dwzschnitt[($y-1)]->dwz)) {
@@ -101,6 +101,14 @@ $dwz = array();
 			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; }
 		}
 	}
+*/
+// DWZ Durchschnitte - Aufstellung
+$result = clm_core::$api->db_nwz_average($lid);
+//echo "<br>lid:"; var_dump($lid);
+//echo "<br>result:"; var_dump($result);
+$a_average_dwz_lineup = $result[2];
+//echo "<br>a_average_dwz_p:"; var_dump($a_average_dwz_p);
+
 // Spielfreie Teilnehmer finden
 $diff = $spielfrei[0]->count;
 $anzspl = ($liga[0]->teil - $diff) * $liga[0]->durchgang;
@@ -230,11 +238,13 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	while (($lmax) < $pdf->GetStringWidth(utf8_decode($punkte[$x]->name)))
 		$punkte[$x]->name = substr($punkte[$x]->name,0,-1);
 	$pdf->Cell($lmax+2,$zelle,utf8_decode($punkte[$x]->name),1,0,'L',$fc);
-	if (isset($dwz[($punkte[$x]->tln_nr)])) {
+/*	if (isset($dwz[($punkte[$x]->tln_nr)])) {
 		$pdf->Cell(10-$breite,$zelle,round($dwz[($punkte[$x]->tln_nr)]),1,0,'C',$fc);
 	} else {
 		$pdf->Cell(10-$breite,$zelle,'',1,0,'C',$fc);
 	}
+*/
+	$pdf->Cell(10-$breite,$zelle,$a_average_dwz_lineup[$punkte[$x]->tln_nr],1,0,'C',$fc);
 	$pdf->Cell(7-$rbreite,$zelle,$punkte[$x]->count_G,1,0,'C',$fc);
 	$pdf->Cell(7-$rbreite,$zelle,$punkte[$x]->count_S,1,0,'C',$fc);
 	$pdf->Cell(7-$rbreite,$zelle,$punkte[$x]->count_R,1,0,'C',$fc);
@@ -369,8 +379,9 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	while (($lmax) < $pdf->GetStringWidth(utf8_decode($punkte[$x]->name)))
 		$punkte[$x]->name = substr($punkte[$x]->name,0,-1);
 	$pdf->Cell($lmax+1,$zelle,utf8_decode($punkte[$x]->name),1,0,'L',$fc);
-	if (isset($dwz[($punkte[$x]->tln_nr)])) $pdf->Cell(10-$breite,$zelle,round($dwz[($punkte[$x]->tln_nr)]),1,0,'C',$fc);
-	else $pdf->Cell(10-$breite,$zelle,'',1,0,'C',$fc);
+	//if (isset($dwz[($punkte[$x]->tln_nr)])) $pdf->Cell(10-$breite,$zelle,round($dwz[($punkte[$x]->tln_nr)]),1,0,'C',$fc);
+	//else $pdf->Cell(10-$breite,$zelle,'',1,0,'C',$fc);
+	$pdf->Cell(10-$breite,$zelle,$a_average_dwz_lineup[$punkte[$x]->tln_nr],1,0,'C',$fc);
   
 $runden = CLMModelRangliste::punkte_tlnr($sid,$lid,$punkte[$x]->tln_nr,1,$liga[0]->runden_modus);
 

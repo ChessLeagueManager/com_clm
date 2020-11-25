@@ -29,7 +29,7 @@ $liga=$this->liga;
 	if (!isset($params['dwz_date'])) $params['dwz_date'] = '1970-01-01';
 $punkte=$this->punkte;
 $spielfrei=$this->spielfrei;
-$dwzschnitt=$this->dwzschnitt;
+//$dwzschnitt=$this->dwzschnitt;
 $mannschaft	=$this->mannschaft; 
 $mleiter	=$this->mleiter; 
 $count		=$this->count;  
@@ -68,11 +68,11 @@ function Footer()
 	$jid	= $user->get('id');
 
 // Array für DWZ Schnitt setzen
-$dwz = array();
+/* $dwz = array();
 for ($y=1; $y< ($liga[0]->teil)+1; $y++){
 	if (isset($dwzschnitt[($y-1)])) {
 	$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->dwz; } }
- 
+*/ 
 // Spielfreie Teilnehmer finden
 $diff = $spielfrei[0]->count;
 

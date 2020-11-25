@@ -28,10 +28,10 @@ class CLMViewTeilnehmer extends JViewLegacy
   		$punkte     = $model->getCLMPunkte();
 		$this->punkte = $punkte;
 
-		$model	  = $this->getModel();
+/*		$model	  = $this->getModel();
 		$dwzschnitt     = $model->getCLMDWZSchnitt();
 		$this->dwzschnitt = $dwzschnitt;
-
+*/
 	$html	= JRequest::getInt('html','1');
 	if($html !="1"){
 		$document =JFactory::getDocument();

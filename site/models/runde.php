@@ -105,7 +105,7 @@ class CLMModelRunde extends JModelLegacy
 		return @$result;
 	}
 
-	function _getCLMDWZSchnitt ( &$options )
+/*	function _getCLMDWZSchnitt ( &$options )
 	{
 	$sid	= clm_core::$load->request_int('saison',1);
 	$liga	= clm_core::$load->request_int('liga',1);
@@ -145,8 +145,8 @@ class CLMModelRunde extends JModelLegacy
 		$result = $this->_getList( $query );
 		return @$result;
 	}
-
-	function _getCLMDWZgespielt ( &$options )
+*/
+/*	function _getCLMDWZgespielt ( &$options )
 	{
 	$sid	= clm_core::$load->request_int('saison',1);
 	$liga	= clm_core::$load->request_int('liga',1);
@@ -188,7 +188,7 @@ class CLMModelRunde extends JModelLegacy
 		$result = $this->_getList( $query );
 		return @$result;
 	}
-
+*/
 	function _getCLMEinzel ( &$options )
 	{
 	$sid	= clm_core::$load->request_int('saison',1);

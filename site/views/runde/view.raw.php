@@ -28,14 +28,14 @@ class CLMViewRunde extends JViewLegacy
   		$paar     = $model->getCLMPaar();
 		$this->assignRef('paar'  , $paar);
 
-		$model	  = $this->getModel();
+/*		$model	  = $this->getModel();
   		$dwzschnitt     = $model->getCLMDWZSchnitt();
 		$this->assignRef('dwzschnitt'  , $dwzschnitt);
-
-		$model	  = $this->getModel();
+*/
+/*		$model	  = $this->getModel();
 		$dwzgespielt     = $model->getCLMDWZgespielt();
 		$this->assignRef('dwzgespielt'  , $dwzgespielt);
-
+*/
 		$model	  = $this->getModel();
   		$einzel     = $model->getCLMEinzel();
 		$this->assignRef('einzel'  , $einzel);

@@ -315,7 +315,8 @@
 		}
 			
 		// für Teams, die nicht gesetzt wurden, werden spielfreie Pseudo-Paarungen angelegt (für FIDE-Ranglistenkorrektur)
-		for ($s=1; $s<= $teil; $s++) { 		// alle Startnummern durchgehen
+		if ($params['optionTiebreakersFideCorrect'] == 1) {
+		  for ($s=1; $s<= $teil; $s++) { 		// alle Startnummern durchgehen
 			for ($d=1; $d<= $dg; $d++) { 		// alle Durchgänge durchgehen
 				for ($r=1; $r<= $runden; $r++) { 	// alle Runden durchgehen
 					if ($maxround < ((($d - 1) * $runden) + $r)) break;  		// nur bis zur aktuellen Runde
@@ -333,6 +334,7 @@
 					}
 				}
 			}
+		  }
 		}
 		
 
