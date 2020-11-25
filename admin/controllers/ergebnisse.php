@@ -641,7 +641,7 @@ function save()
 	$hzps		= JRequest::getVar( 'hzps');
 	$gzps		= JRequest::getVar( 'gzps');
 	$ko_decision = JRequest::getVar( 'ko_decision');
-	$comment = JRequest::getVar( 'comment');
+	$comment = addslashes(JRequest::getVar( 'comment'));
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
@@ -1706,7 +1706,7 @@ function save_wertung()
 	$ww_erg		= JRequest::getVar('ww_erg',-1);
 	$sw_erg		= JRequest::getVar('sw_erg',-1);
 	$ko_decision = JRequest::getVar( 'ko_decision');
-	$comment = JRequest::getVar( 'comment');
+	$comment = addslashes(JRequest::getVar( 'comment'));
 	
 	// Punktemodus aus #__clm_liga holen
 	$query = " SELECT a.stamm, a.sieg, a.sieg_bed, a.remis, a.nieder, a.antritt, a.runden_modus, "
