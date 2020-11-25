@@ -16,6 +16,7 @@ $ -> Language fix or change
 # Rundenbericht: Sonderfall bei pgn-Anzeige
 + Ligen/MTurniere: NWZ-Durchschnittsberechnung mit Pseudowertzahl für Spieler ohne NWZ 
 + SWT-Import: Übernahme Pseudowertzahl für Spieler ohne NWZ
+- pdf-Ausgabe: Dopplung von class usw. entfernt
 
 - - - - - 3.8.6 - [05-11-2020] - - - - - - - - - - - - - - - - - - - -
 # Grading File Export (engl. Anwendung): Einzelturniere Abbruch

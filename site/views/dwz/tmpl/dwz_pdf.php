@@ -38,12 +38,12 @@ class PDF extends FPDF
 //Kopfzeile
 function Header()
 {
-	require_once(JPATH_COMPONENT.DS.'includes'.DS.'pdf_header.php');
+	require(clm_core::$path.DS.'includes'.DS.'pdf_header.php');
 }
 //Fusszeile
 function Footer()
 {
-	require(JPATH_COMPONENT.DS.'includes'.DS.'pdf_footer.php');
+	require(clm_core::$path.DS.'includes'.DS.'pdf_footer.php');
 }
 }
 
