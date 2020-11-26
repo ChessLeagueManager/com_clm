@@ -18,6 +18,7 @@ $ -> Language fix or change
 + SWT-Import: Übernahme Pseudowertzahl für Spieler ohne NWZ
 - pdf-Ausgabe: Dopplung von class usw. entfernt
 # Ligen/MTurniere: Apostroph usw. in Kommentarfeld möglich
+# Submenü: Parameterübergabe
 
 - - - - - 3.8.6 - [05-11-2020] - - - - - - - - - - - - - - - - - - - -
 # Grading File Export (engl. Anwendung): Einzelturniere Abbruch

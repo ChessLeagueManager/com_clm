@@ -65,7 +65,7 @@ if ($fe_submenu == 1) {
 	for ($i = 0;$i < count($sub_liga);$i++) {
 		$params_m = new clm_class_params($sub_liga[$i]->params);
 		$array[1][3][$i][0] = $sub_liga[$i]->name;
-		if (clm_core::$load->request_string('liga', -1) != $sub_liga[$i]->id || clm_core::$load->request_string('view', -1) == "info" || clm_core::$load->request_string('view', -1) == "termine") {
+		if (clm_core::$load->request_int('liga', -1) != $sub_liga[$i]->id || clm_core::$load->request_string('view', -1) == "info" || clm_core::$load->request_string('view', -1) == "termine") {
 			$array[1][3][$i][1] = 0;
 		} else {
 			$liga_on = true;
