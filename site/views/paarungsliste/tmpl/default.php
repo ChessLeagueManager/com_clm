@@ -13,8 +13,8 @@
 defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip', '.CLMTooltip');
 
-$lid		= clm_core::$load->request_int('liga',1); 
-$sid		= clm_core::$load->request_int('saison',1);
+$lid		= clm_core::$load->request_int('liga',0); 
+$sid		= clm_core::$load->request_int('saison',0);
 $item		= clm_core::$load->request_int('Itemid',1);
 $liga		= $this->liga;
 	//Liga-Parameter aufbereiten
@@ -37,6 +37,21 @@ $paar		= $this->paar;
 $summe		= $this->summe;
 $rundensumme= $this->rundensumme;
 $runden_modus = $liga[0]->runden_modus;
+
+if ($sid == 0) {
+	$db	= JFactory::getDBO();
+	$query = " SELECT a.* FROM #__clm_liga as a"
+			." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
+			." WHERE a.id = ".$lid
+			." AND s.published = 1"
+			;
+	$db->setQuery($query);
+	$zz	=$db->loadObjectList();
+	if (isset($zz)) {
+		$_GET['saison'] = $zz[0]->sid;
+		$sid = $zz[0]->sid;
+	}
+}
 
 $runde_t = $liga[0]->runden + 1;  
 // Test alte/neue Standardrundenname bei 2 Durchgängen
