@@ -20,6 +20,7 @@ $ -> Language fix or change
 # Ligen/MTurniere: Apostroph usw. in Kommentarfeld möglich
 # Submenü: Parameterübergabe
 # Paarungsliste: Anpassung an Menüeintragstyp
++ DB: Routine zur Korrektur leerer Felder um Feldtyp date erweitert
 
 - - - - - 3.8.6 - [05-11-2020] - - - - - - - - - - - - - - - - - - - -
 # Grading File Export (engl. Anwendung): Einzelturniere Abbruch
