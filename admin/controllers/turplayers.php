@@ -214,11 +214,13 @@ class CLMControllerTurPlayers extends JControllerLegacy {
 		$tlnid = $cid[0];
 	
 		$row =JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
-		if ( !$row->load($tlnid) ) {
+		if ( !$row->load((int)$tlnid) ) {
 			$this->app->enqueueMessage( CLMText::errorText('PLAYER', 'NOTEXISTING'),'warning' );
 			return false;
 		}
-		$row->move($inc, '');
+		//$row->move($inc, '');
+		$row->move($inc, 'turnier = '.$row->turnier);
+		$row->reorder('turnier = '.$row->turnier);
 									   
 		$this->app->enqueueMessage( JText::_('ORDERING_CHANGED') );
 		

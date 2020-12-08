@@ -328,11 +328,13 @@ class CLMControllerCatMain extends JControllerLegacy {
 		}
 	
 		$row =JTable::getInstance( 'categories', 'TableCLM' );
-		if ( !$row->load( $catid ) ) {
+		if ( !$row->load( (int)$catid ) ) {
 			$this->app->enqueueMessage( CLMText::errorText('CATEGORY', 'NOTEXISTING'),'warning' );
 			return false;
 		}
-		$row->move( $inc, '' );
+//		$row->move( $inc, '' );
+		$row->move($inc, 'sid = '.$row->sid);
+		$row->reorder('sid = '.$row->sid);
 	
 		$this->app->enqueueMessage( $row->name.": ".JText::_('ORDERING_CHANGED') );
 		
@@ -364,7 +366,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		for( $i=0; $i < $total; $i++ ) {
 			$row->load( (int) $cid[$i] );
 			// track categories
-			$groupings[] = $row->saison;
+			$groupings[] = $row->sid;
 	
 			if ($row->ordering != $order[$i]) {
 				$row->ordering = $order[$i];

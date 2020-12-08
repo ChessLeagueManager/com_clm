@@ -182,8 +182,8 @@ public static function mannschaften( $rows, $lists, $pageNav, $option )
 						<?php echo $published;?>
 					</td>
 	<td class="order">
-	<span><?php echo $pageNav->orderUpIcon($i, ($row->liga == @$rows[$i-1]->liga), 'orderup()', 'Move Up', $ordering ); ?></span>
-	<span><?php echo $pageNav->orderDownIcon($i, $n, ($row->liga == @$rows[$i+1]->liga), 'orderdown()', 'Move Down', $ordering ); ?></span>
+	<span><?php echo $pageNav->orderUpIcon($i, ($row->liga == @$rows[$i-1]->liga), 'orderup', 'Move Up', $ordering ); ?></span>
+	<span><?php echo $pageNav->orderDownIcon($i, $n, ($row->liga == @$rows[$i+1]->liga), 'orderdown', 'Move Down', $ordering ); ?></span>
 	<?php $disabled = $ordering ?  '' : 'disabled="disabled"'; ?>
 	<input type="text" name="order[]" size="5" value="<?php echo $row->ordering;?>" <?php echo $disabled ?> class="text_area" style="text-align: center" />
 					</td>
