@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 class CLMViewRunden
 {
 public static function setRundenToolbar($sid, $params_round_date)
@@ -44,7 +42,7 @@ public static function setRundenToolbar($sid, $params_round_date)
 public static function runden( $rows, $lists, $pageNav, $option )
 	{
 		$mainframe	= JFactory::getApplication();
-		$cliga 		= intval(JRequest::getVar( 'liga' ));
+		$cliga 		= clm_core::$load->request_int('liga'); 
 
 		// Liga-Parameter holen 
 		$db 		=JFactory::getDBO();
@@ -178,7 +176,7 @@ public static function runden( $rows, $lists, $pageNav, $option )
 				$row 	= JTable::getInstance( 'runden', 'TableCLM' );
 			for ($i=0, $n=count( $rows ); $i < $n; $i++) {
 				$row->load( $rows[$i]->id );
-			if ($val == 0) { $menu = 'index.php?option=com_clm&section=runden&task=edit&cid[]='. $row->id; }
+			if ($val == 0) { $menu = 'index.php?option=com_clm&section=runden&task=edit&id='. $row->id; }
 			else {
 				if ($rows[$i]->durchgang >1 ) {
 					if($row->nr > (3 * $rows[$i]->runden)) {$menu ='index.php?option=com_clm&section=ergebnisse&runde='.($row->nr-(3 * $rows[$i]->runden)).'&dg=4&liga='.$row->liga;}
@@ -209,7 +207,7 @@ public static function runden( $rows, $lists, $pageNav, $option )
 					<td>
 	
 								<span class="editlinktip hasTip" title="<?php echo JText::_( 'Edit Runde' );?>::<?php echo $row->name; ?>">
-							<a href="index.php?option=com_clm&section=runden&task=edit&cid[]=<?php echo $row->id; ?>&liga=<?php echo $cliga; ?>">
+							<a href="index.php?option=com_clm&section=runden&task=edit&id=<?php echo $row->id; ?>&liga=<?php echo $cliga; ?>">
 								<?php echo $row->name; ?></a></span>
 	
 					</td>
@@ -259,8 +257,8 @@ public static function runden( $rows, $lists, $pageNav, $option )
 					</td>
 
 	<td class="order">
-	<span><?php echo $pageNav->orderUpIcon($i, (isset($rows[$i-1]) AND $rows[$i]->liga == $rows[$i-1]->liga), 'orderup()', 'Move Up', $ordering ); ?></span>
-	<span><?php echo $pageNav->orderDownIcon($i, $n, (isset($rows[$i+1]) AND $rows[$i]->liga == $rows[$i+1]->liga), 'orderdown()', 'Move Down', $ordering ); ?></span>
+	<span><?php echo $pageNav->orderUpIcon($i, (isset($rows[$i-1]) AND $rows[$i]->liga == $rows[$i-1]->liga), 'orderup', 'Move Up', $ordering ); ?></span>
+	<span><?php echo $pageNav->orderDownIcon($i, $n, (isset($rows[$i+1]) AND $rows[$i]->liga == $rows[$i+1]->liga), 'orderdown', 'Move Down', $ordering ); ?></span>
 	<?php $disabled = $ordering ?  '' : 'disabled="disabled"'; ?>
 	<input type="text" name="order[]" size="4" value="<?php echo $row->ordering;?>" <?php echo $disabled ?> class="text_area" style="text-align: center" />
 					</td>
@@ -278,7 +276,7 @@ public static function runden( $rows, $lists, $pageNav, $option )
 
 		<input type="hidden" name="option" value="<?php echo $option;?>" />
 		<input type="hidden" name="task" value="" />
-		<input type="hidden" name="liga" value="<?php echo JRequest::getVar( 'liga' ); ?>" />
+		<input type="hidden" name="liga" value="<?php echo clm_core::$load->request_int('liga');; ?>" />
 		<input type="hidden" name="boxchecked" value="0" />
 		<input type="hidden" name="filter_order" value="<?php echo $lists['order']; ?>" />
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $lists['order_Dir']; ?>" />
@@ -289,10 +287,12 @@ public static function runden( $rows, $lists, $pageNav, $option )
 
 public static function setRundeToolbar($sid)
 	{
-
-		$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
-		JArrayHelper::toInteger($cid, array(0));
-		if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
+		$cid = clm_core::$load->request_array_int('cid');
+		$id = clm_core::$load->request_int('id',0);
+		if (is_null($cid)) {
+			$cid[0] = $id;
+		}
+		if (clm_core::$load->request_string('task') == 'edit') { $text = JText::_( 'Edit' );}
 			else { $text = JText::_( 'New' );}
 		JToolBarHelper::title(  JText::_( 'RUNDE' ).': [ '. $text.' ]' );
 		if (clm_core::$db->saison->get($sid)->published == 1 AND clm_core::$db->saison->get($sid)->archiv == 0) {
@@ -305,28 +305,31 @@ public static function setRundeToolbar($sid)
 		
 public static function runde( &$row,$lists, $option )
 	{
+		if ($row->sid < 1) $row->sid = clm_core::$access->getSeason(); // aktuelle Saison
 		CLMViewRunden::setRundeToolbar($row->sid);
-		JRequest::setVar( 'hidemainmenu', 1 );
+		$_REQUEST['hidemainmenu'] = 1;
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
-		$cliga 		= intval(JRequest::getVar( 'liga' ));
+		$cliga 		= clm_core::$load->request_int('liga');
 		// Liga-Parameter holen 
 		$db 	=JFactory::getDBO();
 		$sql = "SELECT params FROM #__clm_liga as l"
 			." WHERE l.id = ".$row->liga;
 		$db->setQuery( $sql );
 		$tparams = $db->loadObjectList();
-		//Liga-Parameter aufbereiten
-		$paramsStringArray = explode("\n", $tparams[0]->params);
+		//Liga-Parameter aufbereiten														  
 		$lparams = array();
-		foreach ($paramsStringArray as $value) {
-			$ipos = strpos ($value, '=');
-			if ($ipos !==false) {
-				$key = substr($value,0,$ipos);
-				if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
-				if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
-				$lparams[$key] = substr($value,$ipos+1);
-			}
-		}	
+		if (isset($tparams[0])) {
+			$paramsStringArray = explode("\n", $tparams[0]->params);
+			foreach ($paramsStringArray as $value) {
+				$ipos = strpos ($value, '=');
+				if ($ipos !==false) {
+					$key = substr($value,0,$ipos);
+					if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
+					if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
+					$lparams[$key] = substr($value,$ipos+1);
+				}
+			}	
+		}
 		if (!isset($lparams['round_date']))  {   //Standardbelegung
 			$lparams['round_date'] = '0'; }
 

@@ -1,16 +1,14 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 class CLMViewCheck
 {
 public static function setCheckToolbar()
@@ -23,7 +21,7 @@ public static function setCheckToolbar()
 public static function check( &$row, $dat, $rnd, $liga, $dg ,$runde)
 	{
 	CLMViewCheck::setCheckToolbar();
-	JRequest::setVar( 'hidemainmenu', 1 );
+	$_REQUEST['hidemainmenu'] = 1;
 	JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();

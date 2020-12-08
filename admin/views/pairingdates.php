@@ -1,16 +1,14 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 class CLMViewPairingDates
 {
 
@@ -19,11 +17,9 @@ public static function setPairingDatesToolbar($row)
 	// Menubilder laden
 		clm_core::$load->load_css("icons_images");
 
-	$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
-	JArrayHelper::toInteger($cid, array(0));
-	if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
+	if (clm_core::$load->request_string('task') == 'edit') { $text = JText::_( 'Edit' );}
 		else { $text = JText::_( 'New' );}
-	$verein 	= JRequest::getVar( 'verein' );
+	$verein 	= clm_core::$load->request_string('verein');
 	JToolBarHelper::title(  JText::_( 'TITLE_PAARUNG').' '.$row->name.': [ '. $text.' ]' ,'clm_settings_2');
 	JToolBarHelper::custom( 'save', 'save.png', 'save_f2.png', JText::_( 'SAVE'),false );
 	JToolBarHelper::custom( 'apply', 'apply.png', 'apply_f2.png', JText::_( 'APPLY'),false );
@@ -34,7 +30,7 @@ public static function setPairingDatesToolbar($row)
 public static function pairingdates( &$row, $paarung, $man, $count_man, $option, $cid, &$lists)
 	{
 	CLMViewPairingDates::setPairingDatesToolbar($row);
-	JRequest::setVar( 'hidemainmenu', 1 );
+	$_REQUEST['hidemainmenu'] = 1;
 	JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 		?>
 <!--- <br> --->
@@ -90,11 +86,9 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
    		<?php 
    		$ndate = 'D'.$paarung[$count]->dg.'R'.$paarung[$count]->runde.'P'.$paarung[$count]->paar.'Date'; 
    		$ntime = 'D'.$paarung[$count]->dg.'R'.$paarung[$count]->runde.'P'.$paarung[$count]->paar.'Time';
-		//echo "<br>ndate:".$ndate."  pdate:".$paarung[$count]->pdate."  datum:".$paarung[$count]->datum;
 		if ($paarung[$count]->pdate < '1970-01-02' AND $paarung[$count]->datum > '1970-01-01') {
 			$paarung[$count]->pdate = $paarung[$count]->datum;
 			$paarung[$count]->ptime = $paarung[$count]->startzeit;
-		//echo "<br>Jndate:".$ndate."  pdate:".$paarung[$count]->pdate."  datum:".$paarung[$count]->datum;
 		}
 		?>
 		<td>
@@ -104,7 +98,7 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 			<input class="inputbox" type="time" name="<?php echo $ntime; ?>" id="<?php echo $ntime; ?>" size="6" maxlength="6" value="<?php echo substr($paarung[$count]->ptime,0,5); ?>"  />
 		</td>
 	</tr>
-<?php $count++; }} ?>
+	<?php $count++; }} ?>
 
 	</table>
 	</fieldset>

@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -29,9 +27,9 @@ function __construct( $config = array() )
 function display($cachable = false, $urlparams = array())
 	{
 	$mainframe	= JFactory::getApplication();
-	$option 	= JRequest::getCmd( 'option' );
-	$section = JRequest::getVar('section');
-	$mainframe->redirect( 'index.php?option='. $option.'&section=info', $msg );
+	$option 	= clm_core::$load->request_string('option');
+	$section 	= clm_core::$load->request_string('section');
+	$mainframe->redirect( 'index.php?option='. $option.'&section=info' );
 	}
 
 function edit()
@@ -40,12 +38,15 @@ function edit()
 
 	$db 		=JFactory::getDBO();
 	$user 		=JFactory::getUser();
-	$task 		= JRequest::getVar( 'task');
-	$cid 		= JRequest::getVar( 'cid', array(0), '', 'array' );
-	$option 	= JRequest::getCmd( 'option' );
-	$section 	= JRequest::getVar( 'section' );
-	$liga 		= JRequest::getVar( 'liga');
-	JArrayHelper::toInteger($cid, array(0));
+	$task 		= clm_core::$load->request_string('task');
+	$cid = clm_core::$load->request_array_int('cid');
+	$id  = clm_core::$load->request_int('id',0);
+	if (is_null($cid)) {
+		$cid[0] = $id; }
+	$option 	= clm_core::$load->request_string('option');
+	$section 	= clm_core::$load->request_string('section');
+	$liga 		= clm_core::$load->request_int('liga');
+
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion= $config->countryversion;
@@ -63,10 +64,10 @@ function edit()
 	// evtl. mitschneiden !?!
 	$saison		=JTable::getInstance( 'saisons', 'TableCLM' );
 	$saison->load( $rnd[0]->sid );
-	if ($saison->archiv == "1") { // AND clm_core::$access->getType() !== 'admin') {
-		JError::raiseWarning( 500, JText::_( 'CHECK_RUNDEN' ));
-		$mainframe->redirect( 'index.php?option='. $option.'&section=info', $msg );
-				}
+	if ($saison->archiv == "1") { 
+		$app->enqueueMessage( JText::_( 'CHECK_RUNDEN' ), 'warning' );
+		$mainframe->redirect( 'index.php?option='. $option.'&section=info' );
+	}
 
 	// aktuellen Durchgang bestimmen um Runde zu bestimmen (notwendig für Doppelrunden)
 	if ( $rnd[0]->nr > $rnd[0]->runden) {

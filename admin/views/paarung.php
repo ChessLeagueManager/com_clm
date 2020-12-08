@@ -1,16 +1,14 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 class CLMViewPaarung
 {
 
@@ -19,11 +17,9 @@ public static function setPaarungToolbar($row)
 	// Menubilder laden
 		clm_core::$load->load_css("icons_images");
 
-	$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
-	JArrayHelper::toInteger($cid, array(0));
-	if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
+	if (clm_core::$load->request_string('task') == 'edit') { $text = JText::_( 'Edit' );}
 		else { $text = JText::_( 'New' );}
-	$verein 	= JRequest::getVar( 'verein' );
+	$verein 	= clm_core::$load->request_string('verein');
 	JToolBarHelper::title(  JText::_( 'TITLE_PAARUNG').' '.$row->name.': [ '. $text.' ]' ,'clm_settings_2');
 	JToolBarHelper::custom( 'save', 'save.png', 'save_f2.png', JText::_( 'SAVE'),false );
 	JToolBarHelper::custom( 'apply', 'apply.png', 'apply_f2.png', JText::_( 'APPLY'),false );
@@ -34,7 +30,7 @@ public static function setPaarungToolbar($row)
 public static function paarung( &$row, $paarung, $man, $count_man, $option, $cid, &$lists)
 	{
 	CLMViewPaarung::setPaarungToolbar($row);
-	JRequest::setVar( 'hidemainmenu', 1 );
+	$_REQUEST['hidemainmenu'] = 1;
 	JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 	//Liga-Parameter aufbereiten
 	$paramsStringArray = explode("\n", $row->params);
