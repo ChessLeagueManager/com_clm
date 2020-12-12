@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.8.7 - [xx-xx-2020] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.8.7 - [09-12-2020] - - - - - - - - - - - - - - - - - - - -
 # Rundenbericht: Sonderfall bei pgn-Anzeige
 + Ligen/MTurniere: NWZ-Durchschnittsberechnung mit Pseudowertzahl für Spieler ohne NWZ 
 + SWT-Import: Übernahme Pseudowertzahl für Spieler ohne NWZ
