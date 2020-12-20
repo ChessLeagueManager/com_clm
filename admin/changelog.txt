@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.9.0 - [xx-12-2020] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.9.0 - [20-12-2020] - - - - - - - - - - - - - - - - - - - -
 # pdf-Paarungsliste: Überschrift Runde 1
 ^ Fehlerreporting: Ergänzung Bot-Erkennung
 
