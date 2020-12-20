@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -80,7 +80,7 @@ class clm_class_log {
 		$message .= " Backtrace: " . clm_core::getBacktrace () . " User: " . $user . " Domain: " . $domain . " Parameter: " . $parameter. " Parameter2: " . $parameter2;
 
 
-		$bots = array('crawl', 'metaweb', 'msn.com', 'google', 'archiver', 'firefly', 'msnbo', 'slurp', 'inktomisearch', 'bot', 'AhrefsBot', 'qwant'); // bot erkennung
+		$bots = array('crawl', 'metaweb', 'msn.com', 'google', 'archiver', 'firefly', 'msnbo', 'slurp', 'inktomisearch', 'bot', 'AhrefsBot', 'qwant', 'AppleWebKit', 'Trident'); // bot erkennung
 		$ist_bot = 0;
 		foreach($bots as $element) {
 			if (stristr(getEnv("HTTP_USER_AGENT"),$element) == TRUE) {

@@ -148,7 +148,7 @@ for ($dd=0; $dd< ($liga[0]->durchgang); $dd++){
 $pdf->SetFont('Times','',$head_font-1);
 	//$pdf->Ln();
 
-	$pdf->Cell(10,15,' ',0,0);
+	if ( $liga[0]->durchgang != 1) $pdf->Cell(10,15,' ',0,0);
 	if ( $liga[0]->durchgang == 2 AND $dd == 0) $pdf->Cell(80,15,utf8_decode(JText::_('PAAR_HIN')),0,1,'L');
 	if ( $liga[0]->durchgang == 2 AND $dd == 1) $pdf->Cell(80,15,utf8_decode(JText::_('PAAR_RUECK')),0,1,'L');
 	if ( $liga[0]->durchgang > 2 )  $pdf->Cell(80,15,utf8_decode(JText::_('PAAR_DG'))." ".($dd+1),0,1,'L');
