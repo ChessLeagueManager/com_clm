@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -174,30 +174,32 @@ if ($view == 2 OR $view == 4 OR $view == 14) {		// Paarungsliste / Spielplan Man
 		$teamsNode->appendChild($dom->createElement("runde", $paar0->runde));
 		$teamsNode->appendChild($dom->createElement("brettpunkte", $paar0->brettpunkte));
 		$teamsNode->appendChild($dom->createElement("gbrettpunkte", $paar0->gbrettpunkte));
-/*		if (isset($arrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar])) 
-			$o_dwz = $arrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar];
-		else
-			if (isset($marrayDWZ[$paar0->tln_nr])) $o_dwz = $marrayDWZ[$paar0->tln_nr];
-			else $o_dwz = '';
+		if ($view != 14) {
+/*			if (isset($arrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar])) 
+				$o_dwz = $arrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar];
+			else
+				if (isset($marrayDWZ[$paar0->tln_nr])) $o_dwz = $marrayDWZ[$paar0->tln_nr];
+				else $o_dwz = '';
 */
-		if (isset($DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->tln_nr]) 
-			AND $DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->tln_nr] != '-'
-			AND $paar0->tln_nr != 0 AND $paar0->gtln != 0)
-			$o_dwz = $DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->tln_nr];
-		else $o_dwz = $DWZSchnitt2[$paar0->tln_nr];
-		$teamsNode->appendChild($dom->createElement("dwz", $o_dwz));
-/*		if (isset($garrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar])) 
-			$o_gdwz = $garrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar];
-		else
-			if (isset($marrayDWZ[$paar0->gtln])) $o_gdwz = $marrayDWZ[$paar0->gtln];
-			else $o_gdwz = '';
+			if (isset($DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->tln_nr]) 
+				AND $DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->tln_nr] != '-'
+				AND $paar0->tln_nr != 0 AND $paar0->gtln != 0)
+				$o_dwz = $DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->tln_nr];
+			else $o_dwz = $DWZSchnitt2[$paar0->tln_nr];
+			$teamsNode->appendChild($dom->createElement("dwz", $o_dwz));
+/*			if (isset($garrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar])) 
+				$o_gdwz = $garrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar];
+			else
+				if (isset($marrayDWZ[$paar0->gtln])) $o_gdwz = $marrayDWZ[$paar0->gtln];
+				else $o_gdwz = '';
 */
-		if (isset($DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->gtln])
-			AND $DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->gtln] != '-'
-			AND $paar0->tln_nr != 0 AND $paar0->gtln != 0)
-			$o_gdwz = $DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->gtln];
-		else $o_gdwz = $DWZSchnitt2[$paar0->tln_nr];
-		$teamsNode->appendChild($dom->createElement("gdwz", $o_gdwz));
+			if (isset($DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->gtln])
+				AND $DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->gtln] != '-'
+				AND $paar0->tln_nr != 0 AND $paar0->gtln != 0)
+				$o_gdwz = $DWZgespielt2[$paar0->dg][$paar0->runde][$paar0->gtln];
+			else $o_gdwz = $DWZSchnitt2[$paar0->tln_nr];
+			$teamsNode->appendChild($dom->createElement("gdwz", $o_gdwz));
+		}
 		$teamsNode->appendChild($dom->createElement("rname", $paar0->rname));
 		if ($paar0->pdate > '1970-01-01') {
 			$paar0->rdatum = $paar0->pdate;

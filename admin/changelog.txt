@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.9.1 - [xx-xx-2021] - - - - - - - - - - - - - - - - - - - -
+# Data für Plugin: Datenaufbereitung für Vereinsübersicht
+
 - - - - - 3.9.0 - [20-12-2020] - - - - - - - - - - - - - - - - - - - -
 # pdf-Paarungsliste: Überschrift Runde 1
 ^ Fehlerreporting: Ergänzung Bot-Erkennung
