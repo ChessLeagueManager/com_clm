@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 /*******************************************************/
 /********Implementierung der DWZ Berechnung nach********/
 /*******************DSB-Wertungsordnung*****************/
@@ -138,16 +144,16 @@ class clm_class_dwz_rechner {
 		}
 		$output = array();
 		if ($key) {
-			$output["R_o"] = $this->result[$i][0];
-			$output["R_oI"] = $this->result[$i][1];
-			$output["W"] = $this->result[$i][2];
-			$output["n"] = $this->result[$i][3];
-			$output["W_e"] = $this->result[$i][4];
-			$output["E"] = $this->result[$i][5];
-			$output["R_p"] = $this->result[$i][6];
-			$output["R_c"] = $this->result[$i][7];
-			$output["R_n"] = $this->result[$i][8];
-			$output["R_nI"] = $this->result[$i][9];
+			$output["R_o"] = $this->result[$i][0];	// alte Wertzahl  
+			$output["R_oI"] = $this->result[$i][1];	// Index alte Wertzahl 
+			$output["W"] = $this->result[$i][2];	// erzielte Punkte
+			$output["n"] = $this->result[$i][3];	// Anzahl wertbarer Partien
+			$output["W_e"] = $this->result[$i][4];	// Erwartung in Punkten
+			$output["E"] = $this->result[$i][5];	// Entwichlungskoeffizient
+			$output["R_p"] = $this->result[$i][6];	// Leistung
+			$output["R_c"] = $this->result[$i][7];	// Wertzahldurchschnitt der Gegner = Niveau
+			$output["R_n"] = $this->result[$i][8];	// neue Wertzahl
+			$output["R_nI"] = $this->result[$i][9];	// Index neue Wertzahl
 			$output["Rest"] = $this->result[$i][10];
 		} else {
 			$output[] = $this->result[$i][0];
@@ -233,12 +239,13 @@ class clm_class_dwz_rechner {
 			$output[$i + count($tournament[0]) ][3] = $neueSpieler[$i][1];
 			$output[$i + count($tournament[0]) ][4] = 0;
 			$output[$i + count($tournament[0]) ][5] = 0;
-			$output[$i + count($tournament[0]) ][7] = intval(round($neueSpieler[$i][4]));
 			if ($neueSpieler[$i][3] > 0) {
 				$output[$i + count($tournament[0]) ][6] = intval(round(clm_class_dwz_rechner::R_p($neueSpieler[$i][2], $neueSpieler[$i][4], $neueSpieler[$i][1])));
 			} else {
 				$output[$i + count($tournament[0]) ][6] = 0;
 			}
+/* bis 3.9.0
+			$output[$i + count($tournament[0]) ][7] = intval(round($neueSpieler[$i][4]));
 			$output[$i + count($tournament[0]) ][8] = $neueSpieler[$i][0];
 			if ($neueSpieler[$i][3] > 0) {
 				$output[$i + count($tournament[0]) ][9] = 1;
@@ -246,6 +253,21 @@ class clm_class_dwz_rechner {
 				$output[$i + count($tournament[0]) ][9] = 0;
 			}
 			$output[$i + count($tournament[0]) ][10] = $neueSpieler[$i][5];
+*/
+// ab 3.9.1
+			$output[$i + count($tournament[0]) ][7] = intval(round($neueSpieler[$i][4]));
+			if ($output[$i + count($tournament[0]) ][7] == 0) $output[$i + count($tournament[0]) ][7] = intval(round($neueSpieler[$i][5]));
+			$output[$i + count($tournament[0]) ][8] = $neueSpieler[$i][0];
+			if ($neueSpieler[$i][3] > 0) {
+				$output[$i + count($tournament[0]) ][9] = 1;
+			} else {
+				$output[$i + count($tournament[0]) ][9] = 0;
+			}
+			if ($output[$i + count($tournament[0]) ][8] == 0) {
+				$output[$i + count($tournament[0]) ][10] = 1;
+			} else {
+				$output[$i + count($tournament[0]) ][10] = 0;
+			}
 		}
 		return $output;
 	}
@@ -288,7 +310,8 @@ class clm_class_dwz_rechner {
 							break;
 						}
 					}
-				} else if($players[$i][0]==count($players[$i][0])) {
+//				} else if($players[$i][0]==count($players[$i][0])) {
+				} else if($players[$i][0]==count($players[$i][1])) {
 					foreach($players[$i][2] as $value) {
 						if($value[1]<1) {
 							$allowNewDWZ = true;
