@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -99,6 +99,10 @@ class CLMViewLigen
 		$row->params['waiting_period'] = ''; }
 	if (!isset($row->params['pseudo_dwz']))  {   //Standardbelegung
 		$row->params['pseudo_dwz'] = '0'; }
+	if (!isset($row->params['dwz_date']))  {   //Standardbelegung
+		$row->params['dwz_date'] = '1970-01-01'; }
+	if (!isset($row->params['import_date']))  {   //Standardbelegung
+		$row->params['import_date'] = '1970-01-01'; }
 	?>
 	
 	<script language="javascript" type="text/javascript">
@@ -769,6 +773,8 @@ class CLMViewLigen
 	<input type="hidden" name="params[noOrgReference]" value="<?php echo $row->params['noOrgReference']; ?>" />
 	<input type="hidden" name="params[noBoardResults]" value="<?php echo $row->params['noBoardResults']; ?>" />
 	<input type="hidden" name="params[inofDWZ]" value="<?php echo $row->params['inofDWZ']; ?>" />
+	<input type="hidden" name="params[dwz_date]" value="<?php echo $row->params['dwz_date']; ?>" />
+	<input type="hidden" name="params[import_date]" value="<?php echo $row->params['import_date']; ?>" />
 	<input type="hidden" name="ordering" value="<?php echo $row->ordering; ?>" />
 
 	<?php echo JHtml::_( 'form.token' ); ?>
