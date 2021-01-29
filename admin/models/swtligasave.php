@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -33,6 +33,7 @@ class CLMModelSWTLigasave extends JModelLegacy {
 		$sid	= clm_core::$load->request_int('sid', 0);
 		$liga_id	= clm_core::$load->request_int('lid', 0);
 		$update	= clm_core::$load->request_int('update', 0);
+		$dwz_handling   = clm_core::$load->request_string( 'dwz_handling', '0');
 		
 		$swt_data		= $this->getDataSWT ();
 		$swt_db_data	= $this->getDataSWTdb ();		
@@ -197,7 +198,7 @@ class CLMModelSWTLigasave extends JModelLegacy {
 					}
 			if ($liga_id < 1 AND $table == 'liga') {
 				$liga_id = clm_core::$db->insert_id();
-				$_GET['lid'] = $liga_id;
+				$_POST['lid'] = $liga_id;
 			}
 			
 		}

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -29,20 +29,25 @@ class CLMControllerSWTLigasave extends JControllerLegacy
 	
 	function save () {
 		
-		//echo "in save ()<br/>";
-
 		$model = $this->getModel('swtligasave');
 		if ($model->finalCopy () && $model->rundenTermine () && $model->userAnlegen ()) {
 			$_REQUEST['view'] = 'swt';
-			JFactory::getApplication()->enqueueMessage( JText::_( 'SWT_STORE_SUCCESS' ),'message' );
-			parent::display ();
+			$msg = JText::_( 'SWT_STORE_SUCCESS' );
 		}
 		else {
 			$_REQUEST['view'] = 'swtligaerg';
-			JFactory::getApplication()->enqueueMessage( JText::_( 'SWT_STORE_ERROR' ),'message' );
-			parent::display ();
+			$msg = JText::_( 'SWT_STORE_ERROR' );
 		}
-		
+		$sid = clm_core::$load->request_int('sid');
+		$lid = clm_core::$load->request_int('lid');
+		$swt = clm_core::$load->request_string('swt');
+		// Log schreiben
+		$clmLog = new CLMLog();
+		$clmLog->aktion = 'SWT-Import - '.$msg;
+		$clmLog->params = array('sid' => $sid, 'lid' => $lid, 'swt' => $swt);
+		$clmLog->write();
+		JFactory::getApplication()->enqueueMessage( $msg,'message' );
+		parent::display ();
 	}
 		
 }

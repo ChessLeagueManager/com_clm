@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -23,6 +23,7 @@ $mturnier = clm_core::$load->request_int('mturnier', 0);
 $ungerade = clm_core::$load->request_int('ungerade', 0);
 $noOrgReference = clm_core::$load->request_string('noOrgReference', '0');
 $noBoardResults = clm_core::$load->request_string('noBoardResults', '0');
+$dwz_handling   = clm_core::$load->request_string( 'dwz_handling', '0');
 
 ?>
 
@@ -158,6 +159,7 @@ $noBoardResults = clm_core::$load->request_string('noBoardResults', '0');
 	<input type="hidden" name="noOrgReference" value="<?php echo $noOrgReference; ?>" />
 	<input type="hidden" name="noBoardResults" value="<?php echo $noBoardResults; ?>" />
 	<input type="hidden" name="ungerade" value="<?php echo $ungerade; ?>" />
+	<input type="hidden" name="dwz_handling" value="<?php echo $dwz_handling; ?>" />
     <?php echo $this->hidden['farbe']; ?>
 	<?php echo JHtml::_( 'form.token' ); ?>
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -383,6 +383,16 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 			$_POST['noOrgReference'] = '1';	
 		}
 		if 	($default_params['noOrgReference'] == '1') $default_params['incl_to_season'] = '0';
+		$now_date = date('Y-m-d');
+		$default_params['import_date'] = $now_date;
+		// Übernahme mit oder ohne DWZ
+		$dwz_handling = clm_core::$load->request_string('dwz_handling','0');
+		$_POST['dwz_handling'] = (string) $dwz_handling;
+		if ($dwz_handling == '1') {
+			$default_params['dwz_date'] = $now_date;
+		} else {
+			$default_params['dwz_date'] = '1970-01-01';
+		}
 		//Liga-Parameter zusammenfassen
 		$paramsStringArray = array();
 		foreach ($default_params as $key => $value) {

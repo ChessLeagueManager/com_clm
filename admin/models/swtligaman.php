@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -141,6 +141,7 @@ class CLMModelSWTLigaman extends JModelLegacy {
         $zps    = clm_core::$load->request_string( 'filter_zps', '0');
 		$noOrgReference = clm_core::$load->request_string('noOrgReference', '0');		
 		$noBoardResults = clm_core::$load->request_string('noBoardResults', '0');		
+        $dwz_handling   = clm_core::$load->request_string( 'dwz_handling', '0');
 		
 		$swt_data		= $this->getDataSWT ();
 		$swt_db_data	= $this->getDataSWTdb ();
@@ -238,7 +239,7 @@ class CLMModelSWTLigaman extends JModelLegacy {
 			$spielerid	= clm_core::$load->request_string('spielerid_' . $i);
 			$name	= clm_core::$load->request_string('name_' . $i);
 
-			if ($spielerid > 0) {
+			if ($spielerid > 0 AND $dwz_handling == '1') {
 				$elo = $swt_data['spieler_'.$i]['elo']; 
 				if ($elo < '1') $elo = '0'; //die();
 				$dwz = $swt_data['spieler_'.$i]['dwz']; 

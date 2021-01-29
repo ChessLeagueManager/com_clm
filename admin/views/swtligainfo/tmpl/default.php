@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -467,6 +467,21 @@ $str_params = clm_core::$load->request_string('str_params');
 
 	<div class="width-40 fltrt">
 		<fieldset class="adminform">
+			<legend><?php echo ''; ?></legend>
+			<table class="paramlist admintable">
+				<legend><?php echo JText::_( 'SWT_DWZ_HANDLING' ); ?></legend>
+				<tr>
+					<td style="text-align: left;">					
+						<label for="dwz_trans_1">
+						<input type="radio" id="dwz_trans_1" name="dwz_handling" value="1" >
+						<?php echo '&nbsp;'.JText::_( 'SWT_DWZ_HANDLING_1' ); ?></label>
+						<label for="dwz_trans_0">
+						<input type="radio" id="dwz_trans_0" name="dwz_handling" value="0" checked="checked" >
+						<?php echo '&nbsp;'.JText::_( 'SWT_DWZ_HANDLING_0' ); ?></label>
+					</td>
+				</tr>
+			</table>
+			<br><br>
 			<legend><?php echo JText::_( 'REMARKS' ); ?></legend>
 			<table class="paramlist admintable">
 				<legend><?php echo JText::_( 'REMARKS_PUBLIC' ); ?></legend>

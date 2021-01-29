@@ -15,6 +15,7 @@ $ -> Language fix or change
 - - - - - 3.9.1 - [xx-xx-2021] - - - - - - - - - - - - - - - - - - - -
 # Data für Plugin: Datenaufbereitung für Vereinsübersicht
 # DWZ-Ermittlung: count-Warnung und Ausgabefeldzuordnung bei Spieler ohne DWZ
++ SWT-Import Mannschaftswettbewerbe: mit oder ohne DWZ-Übernahme in Meldeliste
 
 - - - - - 3.9.0 - [20-12-2020] - - - - - - - - - - - - - - - - - - - -
 # pdf-Paarungsliste: Überschrift Runde 1

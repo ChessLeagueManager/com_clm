@@ -1,7 +1,7 @@
 <?php 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -39,7 +39,7 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
  	clm_core::$api->db_tournament_delDWZ($id,$group);
 
 	// Liga Punktebereich auslesen
-	$query='SELECT sid'
+	$query='SELECT sid, params'
 			.' FROM '.$table_main
 			.' WHERE id='.$id;
 	$liga = clm_core::$db->loadObjectList($query);
@@ -47,6 +47,11 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
 			return array(true, "e_calculateDWZNoLiga"); 	
 	}
 	$liga = $liga[0];
+	// DWZ-Handling ermitteln 
+	$tparams = new clm_class_params($liga->params);
+	$param_dwz_date = $tparams->get('dwz_date', '1970-01-01');
+	if ($param_dwz_date == '0000-00-00' OR $param_dwz_date == '1970-01-01') $old = true; // DWZ aus dwz_spieler
+	else $old = false;				// DWZ aus Meldeliste
 	// Vermeintliches Ende bestimmen
 	$query='SELECT MAX(datum) as date'
 			.' FROM '.$table_dates
@@ -80,7 +85,7 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
 			$spieler[$i]->start_I0=22;
 		}
 		if($group) {
- 			$query='SELECT Geburtsjahr'
+ 			$query='SELECT Geburtsjahr, DWZ as dsbDWZ, DWZ_Index as dsbDWZ_Index '
  					.' FROM #__clm_dwz_spieler'
  					.' WHERE sid='.$liga->sid
  					.' AND ZPS="'. clm_core::$db->escape($spieler[$i]->zps) .'"';
@@ -89,6 +94,11 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
  		 	else
 				$query .= ' AND PKZ="'. clm_core::$db->escape($spieler[$i]->PKZ) .'"';
  			$birth = clm_core::$db->loadObjectList($query);
+ 
+			if ($old) { 	// keine DWZ-Angaben in Meldeliste, Berechnung auf Basis dwz_spieler
+				$spieler[$i]->start_dwz = $birth[0]->dsbDWZ;
+				$spieler[$i]->start_I0  = $birth[0]->dsbDWZ_Index;
+			} 
  			if(count($birth)==0) { // Spieler in der Saison gelöscht?
  				$birth = 0; // Spieler wird als älter als 25 angenommen
  			} else {
@@ -157,6 +167,7 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
  	// Ergebnis Schreiben
 	foreach ($result as $id2 => $value)
  	{
+
 		// Korrektur Leistung: Anzeige bei weniger als 5 Spielen oder nur Siegen/Niederlagen nicht gewollt
 		if($value->n<5 || $value->W==0 || $value->W==$value->n) {
 			$value->R_p = 0;
