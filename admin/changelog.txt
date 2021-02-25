@@ -22,6 +22,7 @@ $ -> Language fix or change
 + Einzelturniere auch mit Mannschaftswertung möglich
 + TRF-Import: Einzelturniere ohne oder mit Mannschaftswertung
 # View DWZ-Übersicht: Hinweis, wenn Verein nicht abgelegt
+# View Ligastatistik: Limit 20 Mannschaften entfernt
 
 - - - - - 3.9.0 - [20-12-2020] - - - - - - - - - - - - - - - - - - - -
 # pdf-Paarungsliste: Überschrift Runde 1

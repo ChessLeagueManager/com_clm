@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
@@ -296,7 +295,7 @@ class CLMModelStatistik extends JModelLegacy
 			." AND a.sid = ".$sid
 			." GROUP BY a.lid,a.tln_nr "
 			." ORDER BY mp DESC, bp DESC "
-			." LIMIT 20 "
+//			." LIMIT 20 "
 			;
 
 		return $query;
