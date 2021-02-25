@@ -23,7 +23,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Datenbank: `clm`
+-- Datenbank: `clm`  Change status: 10.02.2021
 --
 
 -- --------------------------------------------------------
@@ -764,8 +764,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_swt_turniere` (
   `tid` int(11) NOT NULL DEFAULT '0',
   `name` varchar(100) NOT NULL DEFAULT '',
   `sid` mediumint(3) unsigned DEFAULT NULL,
-  `dateStart` date NOT NULL,
-  `dateEnd` date NOT NULL,
+  `dateStart` date NOT NULL DEFAULT '1970-01-01',
+  `dateEnd` date NOT NULL DEFAULT '1970-01-01',
   `catidAlltime` smallint(6) unsigned NOT NULL DEFAULT '0',
   `catidEdition` smallint(6) unsigned NOT NULL DEFAULT '0',
   `typ` tinyint(1) unsigned DEFAULT NULL,
@@ -865,6 +865,26 @@ CREATE TABLE IF NOT EXISTS `#__clm_swt_turniere_rnd_termine` (
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `#__clm_swt_turniere_teams`
+--
+
+CREATE TABLE IF NOT EXISTS `#__clm_swt_turniere_teams` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `swt_tid` int(11) unsigned DEFAULT NULL,
+  `tid` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(100) NOT NULL DEFAULT '',
+  `sid` mediumint(5) unsigned DEFAULT NULL,
+  `tln_nr` mediumint(5) unsigned DEFAULT NULL,
+  `zps` varchar(5) DEFAULT NULL,
+  `man_nr` mediumint(5) unsigned DEFAULT NULL,
+  `published` mediumint(3) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `tid_tlnnr` (`swt_tid`,`tln_nr`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `#__clm_swt_turniere_tlnr`
 --
 
@@ -880,6 +900,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_swt_turniere_tlnr` (
   `verein` varchar(150) DEFAULT NULL,
   `twz` smallint(4) unsigned DEFAULT NULL,
   `start_dwz` smallint(4) unsigned DEFAULT NULL,
+  `start_I0` smallint(6) unsigned NOT NULL DEFAULT '0',
   `FIDEelo` smallint(4) unsigned DEFAULT NULL,
   `FIDEid` int(8) unsigned DEFAULT NULL,
   `FIDEcco` char(3) DEFAULT NULL,
@@ -889,7 +910,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_swt_turniere_tlnr` (
   `zps` varchar(5) NOT NULL DEFAULT '0',
   `status` mediumint(5) NOT NULL DEFAULT '0',
   `rankingPos` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `tlnrStatus` tinyint(1) unsigned NOT NULL,
+  `tlnrStatus` tinyint(11) unsigned NOT NULL DEFAULT '1',
+  `mtln_nr` mediumint(5) unsigned DEFAULT NULL,
   `s_punkte` decimal(3,1) DEFAULT '0.0',
   `sum_punkte` decimal(4,1) DEFAULT NULL,
   `sum_bhlz` decimal(5,2) DEFAULT NULL,
@@ -959,8 +981,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL DEFAULT '',
   `sid` mediumint(3) unsigned DEFAULT NULL,
-  `dateStart` date NOT NULL,
-  `dateEnd` date NOT NULL,
+  `dateStart` date NOT NULL DEFAULT '1970-01-01',
+  `dateEnd` date NOT NULL DEFAULT '1970-01-01',
   `catidAlltime` smallint(6) unsigned NOT NULL DEFAULT '0',
   `catidEdition` smallint(6) unsigned NOT NULL DEFAULT '0',
   `typ` tinyint(1) unsigned DEFAULT NULL,
@@ -991,7 +1013,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere` (
   `remiss` decimal(2,1) unsigned DEFAULT '0.5',
   `nieder` decimal(2,1) unsigned DEFAULT '0.0',
   `niederk` decimal(2,1) unsigned DEFAULT '0.0',
-  `dateRegistration` date NOT NULL,
+  `dateRegistration` date NOT NULL DEFAULT '1970-01-01',
   PRIMARY KEY (`id`),
   KEY `published` (`published`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -1092,6 +1114,25 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere_sonderranglisten` (
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `#__clm_turniere_teams`
+--
+
+CREATE TABLE IF NOT EXISTS `#__clm_turniere_teams` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tid` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(100) NOT NULL DEFAULT '',
+  `sid` mediumint(5) unsigned DEFAULT NULL,
+  `tln_nr` mediumint(5) unsigned DEFAULT NULL,
+  `zps` varchar(5) DEFAULT NULL,
+  `man_nr` mediumint(5) unsigned DEFAULT NULL,
+  `published` mediumint(3) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `tid_tlnnr` (`tid`,`tln_nr`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `#__clm_turniere_tlnr`
 --
 
@@ -1107,7 +1148,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere_tlnr` (
   `email` varchar(100) NOT NULL DEFAULT '',
   `twz` smallint(4) unsigned DEFAULT NULL,
   `start_dwz` smallint(4) unsigned DEFAULT NULL,
-  `start_I0` smallint(4) unsigned default NULL,
+  `start_I0` smallint(6) unsigned NOT NULL DEFAULT '0',
   `FIDEelo` smallint(4) unsigned DEFAULT NULL,
   `FIDEid` int(8) unsigned DEFAULT NULL,
   `FIDEcco` char(3) DEFAULT NULL,
@@ -1120,6 +1161,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere_tlnr` (
   `status` mediumint(5) NOT NULL DEFAULT '0',
   `rankingPos` smallint(5) unsigned NOT NULL DEFAULT '0',
   `tlnrStatus` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `mtln_nr` mediumint(5) unsigned DEFAULT NULL,
   `s_punkte` decimal(3,1) DEFAULT '0.0',
   `anz_spiele` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `sum_punkte` decimal(4,1) DEFAULT NULL,

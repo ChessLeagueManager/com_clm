@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -13,6 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 
 		$turParams = new clm_class_params($this->turnier->params);
 		$param_typeaccount = $turParams->get('typeAccount', 0);
+		$param_teamranking = $turParams->get('teamranking', 0);
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -44,6 +45,25 @@ defined('_JEXEC') or die('Restricted access');
 				<td class="key" nowrap="nowrap"><?php echo JText::_('CLUB'); ?>:</td>
 				<td><input class="inputbox" type="text" name="verein" id="verein" size="20" maxlength="60" value="<?php echo $this->player->verein; ?>" /></td>
 			</tr>
+			<?php if ($param_teamranking > '0') { ?>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo JText::_('TEAM'); ?>:</td>
+				<td class="paramlist_value">
+					<?php
+					$options = array();
+					$options[0] = JText::_('KEIN TEAM');
+					foreach ($this->teams as $team) {
+						$options[$team->tln_nr] = $team->name;
+					}
+					$optionlist = array();
+					foreach ($options as $key => $val) {
+						$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
+					}
+					echo JHtml::_('select.genericlist', $optionlist, 'mtln_nr', 'class="inputbox"', 'id', 'name', $this->player->mtln_nr);
+					?>
+				</td>
+			</tr>
+			<?php } ?>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('TWZ'); ?>:</td>
 				<td><input class="inputbox" type="text" name="twz" id="twz" size="4" maxlength="4" value="<?php echo $this->player->twz; ?>" /></td>

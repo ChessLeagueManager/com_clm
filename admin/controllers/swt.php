@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -186,6 +186,54 @@ class CLMControllerSWT extends JControllerLegacy
 			$adminLink->makeURL();
 			
 			$msg = JText::_( 'SWM_FILE_ERROR!' ); 
+			
+			$this->app->enqueueMessage( $msg );
+			$this->app->redirect($adminLink->url); 		
+		}				
+	}
+	
+	function trf_upload() {
+		$model = $this->getModel('swt');
+		$msg = $model->trf_upload();
+		$trf_filename = clm_core::$load->request_string('trf_filename', '');
+		
+		$adminLink = new AdminLink();
+		$adminLink->more = array('trf_filename' => $trf_filename);
+		$adminLink->view = "swt";
+		$adminLink->makeURL();
+			
+		$this->app->enqueueMessage( $msg );
+		$this->app->redirect($adminLink->url); 		
+	}
+	
+	function trf_delete(){
+		$model = $this->getModel('swt');
+		$msg = $model->trf_delete();
+		
+		$adminLink = new AdminLink();
+		$adminLink->view = "swt";
+		$adminLink->makeURL();
+			
+		$this->app->enqueueMessage( $msg );
+		$this->app->redirect($adminLink->url); 		
+	}
+	
+	function trf_import() {
+		$model = $this->getModel('swt');
+		//$type = $model->trf_import();
+		$type = 0;
+		if($type == 0) {
+			$_REQUEST['view'] = 'trfturnier';
+			parent::display();
+		} elseif($type == 255){
+			$_REQUEST['view'] = 'swtliga';
+			parent::display();
+		} else {
+			$adminLink = new AdminLink();
+			$adminLink->view = "swt";
+			$adminLink->makeURL();
+			
+			$msg = JText::_( 'TRF_FILE_ERROR!' ); 
 			
 			$this->app->enqueueMessage( $msg );
 			$this->app->redirect($adminLink->url); 		

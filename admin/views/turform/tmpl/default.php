@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -215,6 +215,24 @@ $turParams = new clm_class_params($this->turnier->params);
 				echo '-';
 			}
 			?>
+		</td>
+		<td class="paramlist_value">
+			<label for="teamranking">
+				<?php echo JText::_( 'TEAMRANKING' ); ?>:
+			</label>
+			<br>
+			<?php 
+			$options = array();
+			$options[0] = JText::_('TEAMRKG_0');
+			$options[2] = JText::_('TEAMRKG_2');
+			$options[3] = JText::_('TEAMRKG_3');
+			$options[4] = JText::_('TEAMRKG_4');
+			$options[99] = JText::_('TEAMRKG_99');
+			$optionlist = array();
+			foreach ($options as $key => $val) {
+				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
+			}
+			echo JHtml::_('select.genericlist', $optionlist, 'params[teamranking]', 'class="inputbox"', 'id', 'name', $turParams->get('teamranking', 0)); ?>
 		</td>
 	</tr>
 	<tr>

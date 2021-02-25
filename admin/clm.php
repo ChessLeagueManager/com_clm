@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -449,7 +449,7 @@ if ($viewName = clm_core::$load->request_string('view')) {
 	$language->load('com_clm');
 	if ( in_array($viewName, array('catform', 'catmain', 'turform', 'turinvite', 'turmain', 'turplayeredit',
 						'turplayerform', 'turplayers', 'turroundform', 'turroundmatches','turrounds',
-						'turregistrations', 'turregistrationedit','turplayersmail',
+						'turregistrations', 'turregistrationedit','turplayersmail','turteams',
 						'terminemain', 'termineform',
 						'swtturnier', 'swtturnierinfo', 'swtturniertlnr', 'swtturniererg'))) {
 		$language->load('com_clm.turnier');

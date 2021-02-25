@@ -88,6 +88,7 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 			$this->app->enqueueMessage($row->getError(),'error');
 			return false;
 		}
+		if ($row->start_dwz == '') $row->start_dwz = 0;
 		if ($row->start_I0 == '') $row->start_I0 = 0;
 		if ($row->sum_punkte == '') $row->sum_punkte = 0;
 		if ($row->sumTiebr1 == '') $row->sumTiebr1 = 0;

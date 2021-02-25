@@ -1,6 +1,11 @@
 <?php
 /**
-* Import einer Turnierdatei vom Swiss-Manager ( zur Zeit nur TUNx = Einzelturnier im CH-Modus
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2021 CLM Team  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+ *
+ * Copy der Turnierdaten aus den clm_swt_Tabellen in die clm_Dateien - Teil der Importe von SWT,SWM und TRF
 */
 function clm_api_db_swt_to_clm($swt_tid,$tid,$group=false,$update=false) {
     $lang = clm_core::$lang->swm_import;
@@ -117,6 +122,26 @@ if ($debug > 0) { echo "<br>turnier-insertid:"; var_dump($turnier); } //die();
 
 		if(!clm_core::$db->insertObject('#__clm_turniere_rnd_spl',$paarung,'id')) {
 			return false;
+		}
+	}
+	
+	//Copy Mannschaftsdaten bei Einzelturnier mit Mannschaftswertung
+	$delete_query = " DELETE FROM #__clm_turniere_teams
+						WHERE tid = ".$turnier->tid.";";
+	clm_core::$db->query($delete_query);		
+		
+	$select_query = " SELECT * FROM #__clm_swt_turniere_teams
+						WHERE swt_tid = ".$swt_tid.";";
+	$teams	= clm_core::$db->loadObjectList($select_query);
+	if (!is_null($teams) AND count($teams) > 0) { 
+		foreach($teams as $team){
+			unset($team->id);
+			unset($team->swt_tid);
+			$team->tid = $turnier->tid;
+			
+			if(!clm_core::$db->insertObject('#__clm_turniere_teams',$team,'id')) {
+				return false;
+			}
 		}
 	}
 	

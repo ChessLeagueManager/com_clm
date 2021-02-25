@@ -4,17 +4,12 @@
  * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
- * @author Thomas Schwietert
- * @email fishpoke@fishpoke.de
- * @author Andreas Dorn
- * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 jimport( 'joomla.html.parameter' );
 
-class CLMModelTurnier_Tabelle extends JModelLegacy {
+class CLMModelTurnier_Team_Tabelle extends JModelLegacy {
 	
 	function __construct() {
 		
@@ -46,6 +41,7 @@ class CLMModelTurnier_Tabelle extends JModelLegacy {
 		if ($addCatToName != 0 AND ($this->turnier->catidAlltime > 0 OR $this->turnier->catidEdition > 0)) {
 			$this->turnier->name = CLMText::addCatToName($addCatToName, $this->turnier->name, $this->turnier->catidAlltime, $this->turnier->catidEdition);
 		}
+		$this->params_teamranking = $turParams->get('teamranking', 0);
 
 	}
 	
@@ -103,6 +99,7 @@ class CLMModelTurnier_Tabelle extends JModelLegacy {
 			}
 	}
 	
+	
 	function _getTurnierTeams() {
 	
 		$query = "SELECT * FROM `#__clm_turniere_teams`"
@@ -111,24 +108,38 @@ class CLMModelTurnier_Tabelle extends JModelLegacy {
 		
 		$this->_db->setQuery($query);
 		$this->teams = $this->_db->loadObjectList();
+//echo "<br>teams:"; var_dump($this->teams);
 		
 		$this->turnier->teamsCount = count($this->teams);
 		$this->a_teams = array();
 		foreach ($this->teams as $key => $value) {
 			$this->a_teams[$value->tln_nr] = new stdClass();
+			$this->a_teams[$value->tln_nr]->points = 0;
 			$this->a_teams[$value->tln_nr]->tln_nr = $value->tln_nr;
 			$this->a_teams[$value->tln_nr]->name = $value->name;
-			$this->a_teams[$value->tln_nr]->points = 0;
 		}
-		// Addition der Punkte pro Team
+		// Punkte pro team ermitteln
+		$a_points = array();
 		foreach ($this->players as $key => $value) {
 			if ($value->mtln_nr < 1) continue;
-			if (!isset($a_teams[$value->mtln_nr])) continue;
-			$this->a_teams[$value->mtln_nr] += $value->sum_punkte;
+			if (!isset($this->a_teams[$value->mtln_nr])) continue;
+			$this->a_points[$value->mtln_nr][] = $value->sum_punkte;
 		}
+		foreach ($this->a_points as $key => $value) {
+			rsort($value);
+		}
+		foreach ($this->a_points as $key => $value) {
+			$i = 0;
+			foreach ($value as $vkey => $vvalue) {
+				$i++;
+				if ($i > $this->params_teamranking) break;
+				$this->a_teams[$key]->points += $vvalue;
+			}
+		}
+
+		rsort($this->a_teams);
 	}
 		
-	
 	//Sonderranglisten
 	function _getSpecialRankingWhere()	{
 		$where = "";

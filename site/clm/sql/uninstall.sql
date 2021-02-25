@@ -1,3 +1,9 @@
+--
+-- @ Chess League Manager (CLM) Component 
+-- @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+-- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+-- @link http://www.chessleaguemanager.de
+--
 -- phpMyAdmin SQL Dump
 -- version 4.1.13
 -- http://www.phpmyadmin.net
@@ -17,7 +23,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Datenbank: `clm`
+-- Datenbank: `clm`  Change status: 10.02.2021
 --
 
 -- --------------------------------------------------------
@@ -49,6 +55,7 @@ DROP TABLE IF EXISTS #__clm_swt_rnd_spl;
 DROP TABLE IF EXISTS #__clm_swt_turniere;
 DROP TABLE IF EXISTS #__clm_swt_turniere_rnd_spl;
 DROP TABLE IF EXISTS #__clm_swt_turniere_rnd_termine;
+DROP TABLE IF EXISTS #__clm_swt_turniere_teams;
 DROP TABLE IF EXISTS #__clm_swt_turniere_tlnr;
 DROP TABLE IF EXISTS #__clm_swt_spl;
 DROP TABLE IF EXISTS #__clm_swt_man;
@@ -59,6 +66,7 @@ DROP TABLE IF EXISTS #__clm_turniere;
 DROP TABLE IF EXISTS #__clm_turniere_rnd_spl;
 DROP TABLE IF EXISTS #__clm_turniere_rnd_termine;
 DROP TABLE IF EXISTS #__clm_turniere_sonderranglisten;
+DROP TABLE IF EXISTS #__clm_turniere_teams;
 DROP TABLE IF EXISTS #__clm_turniere_tlnr;
 DROP TABLE IF EXISTS #__clm_user;
 DROP TABLE IF EXISTS #__clm_usertype;

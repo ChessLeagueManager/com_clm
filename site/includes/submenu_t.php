@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2021 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -25,6 +25,11 @@ if ($fe_submenu_t == 1) {
 	include (JPATH_COMPONENT . DS . 'models' . DS . 'submenu_t.php');
 	require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'submenu_function.php');
 	$document->addScript('components/com_clm/javascript/submenu.js');
+	
+	// Turnierparameter bereitstellen
+ 	$params = new clm_class_params($this->turnier->params);
+	$params_teamranking = $params->get('teamranking','0');
+	
 	// erzeugen des Array für die Anzeige
 	$array = array();
 	// Informationen
@@ -70,6 +75,21 @@ if ($fe_submenu_t == 1) {
 			$array[1][3][$i][2][] = array("Itemid", $itemid);
 		}
 	}
+	if ($params_teamranking > 1) {  // Einzelturnier mit Mannschaftswertung
+		$array[1][3][$i][0] = JText::_('TOURNAMENT_TEAM');
+		if (clm_core::$load->request_string('view', 0) != "turnier_team_tabelle" ) {
+			$array[1][3][$i][1] = 0;
+		} else {
+			$array[1][3][$i][1] = 1;
+		}
+		$array[1][3][$i][2][] = array("option", "com_clm");
+		$array[1][3][$i][2][] = array("view", "turnier_team_tabelle");
+		$array[1][3][$i][2][] = array("turnier", $this->turnier->id);
+		if ($itemid <> '') {
+			$array[1][3][$i][2][] = array("Itemid", $itemid);
+		}
+	}
+	
 	// Rangliste
 	$array[2][0] = JText::_('TOURNAMENT_RANKING');
 	if (clm_core::$load->request_string('view', 0) != "turnier_rangliste" || clm_core::$load->request_string('spRang', -1) != - 1) {

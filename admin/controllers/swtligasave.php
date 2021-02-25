@@ -33,10 +33,11 @@ class CLMControllerSWTLigasave extends JControllerLegacy
 		if ($model->finalCopy () && $model->rundenTermine () && $model->userAnlegen ()) {
 			$_REQUEST['view'] = 'swt';
 			$msg = JText::_( 'SWT_STORE_SUCCESS' );
+			$htext = " (ID = ".$lid.")";
 		}
 		else {
 			$_REQUEST['view'] = 'swtligaerg';
-			$msg = JText::_( 'SWT_STORE_ERROR' );
+			$msg = JText::_( 'SWT_STORE_ERROR' );			
 		}
 		$sid = clm_core::$load->request_int('sid');
 		$lid = clm_core::$load->request_int('lid');
@@ -46,7 +47,8 @@ class CLMControllerSWTLigasave extends JControllerLegacy
 		$clmLog->aktion = 'SWT-Import - '.$msg;
 		$clmLog->params = array('sid' => $sid, 'lid' => $lid, 'swt' => $swt);
 		$clmLog->write();
-		JFactory::getApplication()->enqueueMessage( $msg,'message' );
+		$htext = " (ID = ".$lid.")";
+		JFactory::getApplication()->enqueueMessage( $msg.$htext,'message' );
 		parent::display ();
 	}
 		

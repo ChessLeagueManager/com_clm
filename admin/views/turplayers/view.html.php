@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
 class CLMViewTurPlayers extends JViewLegacy {
@@ -73,6 +72,12 @@ class CLMViewTurPlayers extends JViewLegacy {
 			// Email an Teilnehmer (TL muss gesetzt sein)
 			if ($model->turnier->tl != '0') {
 				JToolBarHelper::custom( 'mail_to_all', 'copy.png', 'copy_f2.png', JText::_('MAIL_TO_ALL'), false);
+			}
+			// Turnier mit Mannschaftswertung
+			$turParams = new clm_class_params($model->turnier->params);
+			$param_teamranking = $turParams->get('teamranking', 0);
+			if ($param_teamranking > '0') {
+				JToolBarHelper::custom( 'edit_teams', 'copy.png', 'copy_f2.png', JText::_('EDIT_TEAMS'), false);
 			}
 		}
 		

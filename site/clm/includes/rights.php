@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -99,6 +99,7 @@ $rights["db_ordering"]=array(); // Ordering ändern
 $rights["db_pgn_export"]=array(); // pgn-Datei erstellen
 $rights["db_pgn_template"]=array(); // pgn-Template erstellen
 $rights["db_swm_import"]=array(); // Swiss-Manager-Datei importieren
+$rights["db_trf_import"]=array(); // Turnierdatei im TRF-Format importieren
 $rights["db_dewis_user"]=array(); // Online Club Check für User
 $rights["db_check_season_user"]=array(); // Online Season Check für Ligen und Turniere
 ?>

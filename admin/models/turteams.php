@@ -4,14 +4,10 @@
  * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
- * @author Thomas Schwietert
- * @email fishpoke@fishpoke.de
- * @author Andreas Dorn
- * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
 
-class CLMModelTurPlayerEdit extends JModelLegacy {
+class CLMModelTurTeams extends JModelLegacy {
 
 
 	// benötigt für Pagination
@@ -26,8 +22,8 @@ class CLMModelTurPlayerEdit extends JModelLegacy {
 		// get parameters
 		$this->_getParameters();
 
-		// get Player
-		$this->_getPlayerData();
+		// get players
+		$this->_getPlayersData();
 		
 		// get turnier
 		$this->_getTurnierData();
@@ -40,20 +36,20 @@ class CLMModelTurPlayerEdit extends JModelLegacy {
 	// alle vorhandenen Parameter auslesen
 	function _getParameters() {
 	
-		// roundid
-		$this->param['playerid'] = clm_core::$load->request_int('playerid');
+		// turnier_id
+		$this->param['turnierid'] = clm_core::$load->request_int('turnierid');
 	
 	}
 
 	
-	function _getPlayerData() {
+	function _getPlayersData() {
 	
 		$query = 'SELECT * '
 			. ' FROM #__clm_turniere_tlnr'
-			. ' WHERE id = '.$this->param['playerid']
+			. ' WHERE turnier = '.$this->param['turnierid']
 			;
 		$this->_db->setQuery($query);
-		$this->playerData = $this->_db->loadObject();
+		$this->playersData = $this->_db->loadObjectList();
 	
 	}
 
@@ -62,18 +58,18 @@ class CLMModelTurPlayerEdit extends JModelLegacy {
 	
 		$query = 'SELECT * '
 			. ' FROM #__clm_turniere'
-			. ' WHERE id = '.$this->playerData->turnier
+			. ' WHERE id = '.$this->param['turnierid']
 			;
 		$this->_db->setQuery($query);
 		$this->turnierData = $this->_db->loadObject();
-	
 		$query = 'SELECT * '
 			. ' FROM #__clm_turniere_teams'
-			. ' WHERE tid = '.$this->playerData->turnier
+			. ' WHERE tid = '.$this->param['turnierid']
+			. ' ORDER BY tln_nr'
 			;
 		$this->_db->setQuery($query);
 		$this->teamData = $this->_db->loadObjectList();
-
+	
 	}
 
 
