@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -31,9 +31,11 @@ $countryversion = $config->countryversion;
 	// Browsertitelzeile setzen
 	$doc =JFactory::getDocument();
 	if ($countryversion == "de") {
-		$doc->setTitle(JText::_('CLUB_RATING').' '.$liga[0]->Vereinname);
+		if (isset($liga[0])) $doc->setTitle(JText::_('CLUB_RATING').' '.$liga[0]->Vereinname);
+		else $doc->setTitle(JText::_('CLUB_RATING'));
 	} else {
-		$doc->setTitle(JText::_('CLUB_RATING_EN').' '.$liga[0]->Vereinname);
+		if (isset($liga[0])) $doc->setTitle(JText::_('CLUB_RATING_EN').' '.$liga[0]->Vereinname);
+		else $doc->setTitle(JText::_('CLUB_RATING_EN'));
 	}
 ?>
 <Script language="JavaScript">
@@ -58,11 +60,12 @@ function tableOrdering( order, dir, task )
 <div class="componentheading">
 <?php 	if ($countryversion == "de") echo JText::_('CLUB_RATING'); 
 		else echo JText::_('CLUB_RATING_EN'); 
-		echo " ::: ".$liga[0]->Vereinname; ?>
+		if (isset($liga[0])) echo " ::: ".$liga[0]->Vereinname; ?>
 <div id="pdf">
 
 <?php
-echo CLMContent::createPDFLink('dwz', JText::_('PDF_CLUBRATING'), array('layout' => 'dwz', 'saison' => $sid, 'zps' => $urlzps));
+if (isset($liga[0]))
+	echo CLMContent::createPDFLink('dwz', JText::_('PDF_CLUBRATING'), array('layout' => 'dwz', 'saison' => $sid, 'zps' => $urlzps));
 ?>
 </div>
 </div>
@@ -106,7 +109,7 @@ if (!$archive_check) {
 }
 else {
 // Prüfen ob ZPS vorhanden ist
- if (!$liga[0]->Vereinname) { 
+ if (!isset($liga[0]) OR !$liga[0]->Vereinname) { 
 echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
  } else { 
  
@@ -170,12 +173,12 @@ echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
 <input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 <input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />
 </form>
-
-   <?php if ($countryversion =="de") { ?>
+  <?php if (isset($liga[0]) AND $urlzps != '-1') {
+    if ($countryversion =="de") { ?>
 	<div class="hint">DWZ Liste: <a href="http://schachbund.de/verein.html?zps=<?php echo $urlzps; ?>" target="_blank">http://schachbund.de/verein.html?zps=<?php echo $urlzps; ?></a></div>   
    <?php } elseif ($countryversion =="en") { ?>
 	<div class="hint">The ECF Grading Database: <a href="http://www.ecfgrading.org.uk/new/menu.php" target="_blank">http://www.ecfgrading.org.uk/new/menu.php</a></div>   
-   <?php } ?>
+  <?php } } ?>
 <br>
 
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); ?>

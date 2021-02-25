@@ -19,7 +19,9 @@ $ -> Language fix or change
 ^ View DWZ-Mannschaften: Umgestaltung Gesamtzeile sowie DWZ-Index-Anzeige
 ^ Mannschaftswettbewerbe: Generierung inoffz.DWZ auch auf Basis DWZ-Tabelle  
 # Ligadetails: Weitergabe von Parametern 
-+ TRF-Import: Einzelturniere mit oder ohne Mannschaftswertung
++ Einzelturniere auch mit Mannschaftswertung möglich
++ TRF-Import: Einzelturniere ohne oder mit Mannschaftswertung
+# View DWZ-Übersicht: Hinweis, wenn Verein nicht abgelegt
 
 - - - - - 3.9.0 - [20-12-2020] - - - - - - - - - - - - - - - - - - - -
 # pdf-Paarungsliste: Überschrift Runde 1
