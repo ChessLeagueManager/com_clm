@@ -98,6 +98,9 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
 			if ($old) { 	// keine DWZ-Angaben in Meldeliste, Berechnung auf Basis dwz_spieler
 				$spieler[$i]->start_dwz = $birth[0]->dsbDWZ;
 				$spieler[$i]->start_I0  = $birth[0]->dsbDWZ_Index;
+				if($spieler[$i]->start_I0==0 && $spieler[$i]->start_dwz>0) {  // Wiederholung wegen England ohne Index
+					$spieler[$i]->start_I0=22;
+				}
 			} 
  			if(count($birth)==0) { // Spieler in der Saison gelöscht?
  				$birth = 0; // Spieler wird als älter als 25 angenommen
