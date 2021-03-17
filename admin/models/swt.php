@@ -160,7 +160,7 @@ class CLMModelSWT extends JModelLegacy {
 		jimport( 'joomla.filesystem.folder' );
 		
 		$filesDir = 'components'.DS."com_clm".DS.'swt';
-		$this->swmFiles = JFolder::files( $filesDir, '.TUNx$|.tunx$|.TUNX$|.TURx$|.turx$|.TURX$', false, true );
+		$this->swmFiles = JFolder::files( $filesDir, '.TUNx$|.tunx$|.TUNX$|.TURx$|.turx$|.TURX$|.TUMx$|.tumx$|.TUMX$|.TUTx$|.tutx$|.TUTX$', false, true );
 		
 		return $this->swmFiles;
 	}
@@ -178,7 +178,8 @@ class CLMModelSWT extends JModelLegacy {
 		$src = $file['tmp_name'];
 		$dest = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR . $filename;
 		//Datei wird auf dem Server gespeichert (abfrage auf .tunx oder turx Endung)
-		if ( strtolower(JFile::getExt($filename) ) == 'tunx' OR strtolower(JFile::getExt($filename) ) == 'turx') {
+		if ( strtolower(JFile::getExt($filename) ) == 'tunx' OR strtolower(JFile::getExt($filename) ) == 'turx' OR
+			 strtolower(JFile::getExt($filename) ) == 'tumx' OR strtolower(JFile::getExt($filename) ) == 'tutx') {
 			if ( JFile::upload($src, $dest) ) {
 				$msg = JText::_( 'SWT_UPLOAD_SUCCESS' ); 
 			} else {

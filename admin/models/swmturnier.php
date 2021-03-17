@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanaager.de
  * @author Thomas Schwietert
@@ -35,12 +35,18 @@ class CLMModelSWMTurnier extends JModelLegacy {
 	}
 	
 	function getTurniere() {
+		$swm_file	= clm_core::$load->request_string( 'swm_file' );
+		if (strtolower(JFile::getExt($swm_file) ) == 'tumx' OR strtolower(JFile::getExt($swm_file) ) == 'tutx') {
+			$group = true; 
+		} else { $group = false; }
 		if (empty( $this->_turniere )) { 
-			$query =  ' SELECT id, name, bem_int
-						FROM 
-							#__clm_turniere 
-						WHERE 
-							sid = '.$this->getState( 'filter_saison' ).'';
+			if ($group) {
+				$query =  ' SELECT id, name, bem_int FROM #__clm_liga ' 
+						.' WHERE sid = '.$this->getState( 'filter_saison' ).'';
+			} else {	
+				$query =  ' SELECT id, name, bem_int FROM #__clm_turniere ' 
+						.' WHERE sid = '.$this->getState( 'filter_saison' ).'';
+			}
 			$this->_turniere = $this->_getList( $query );
 		} 
 		return $this->_turniere;

@@ -1,16 +1,21 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  *
  * Import einer Turnierdatei vom Swiss-Manager 
- * zur Zeit nur TUNx = Einzelturnier im CH-Modus und TURx = Einzelturnier als Vollturnier
+ * bisher nur TUNx = Einzelturnier im CH-Modus und TURx = Einzelturnier als Vollturnier
+ * neu ab 3.9.1 auch TUMx = Mannschaftsturnier im CH-Modus und TUTx = Mannschaftsturnier als Vollturnier
 */
 function clm_api_db_swm_import($file,$season,$turnier,$group=false,$update=false,$test=false) {
+	if (strtolower(JFile::getExt($file) ) == 'tumx' OR strtolower(JFile::getExt($file) ) == 'tutx') {
+		$group = true; 
+	} else { $group = false; }
     $lang = clm_core::$lang->swm_import;
 	if ($test) $debug = 1; else $debug = 0;
+	$auser = (integer) clm_core::$access->getId(); // aktueller CLM-User
 	if ($test)	echo "<br><br>Test - keine Übernahme der Daten ins CLM!"; 
 	$new_ID = 0;
 if ($debug > 0) { echo "<br><br>-- allgemeine Daten --";	}
@@ -40,18 +45,25 @@ if ($debug > 1) { echo "<br>apos: ";	var_dump($apos); } //die();
 
 	// read common tournament data
 	// Allgemeine Turnierdaten auslesen
-//	Turnierdaten -> Tabelle clm_turniere
+//	Turnierdaten -> Tabelle clm_turniere / clm_liga
 if ($debug > 0) { echo "<br><br>-- Turnierdaten --";	}
-	$tournament = zzparse_interpret($contents, 'general',$apos[1],($apos[2]-$apos[1]),$debug);
+	$tournament = zzparse_interpret($contents, 'general',$group, $apos[1],($apos[2]-$apos[1]),$debug);
 if ($debug > 1) { echo "<br>tournament: ";	var_dump($tournament); }
-	$tournament2 = zzparse_interpret($contents, 'general2',$apos[2],($apos[3]-$apos[2]),$debug);
+	$tournament2 = zzparse_interpret($contents, 'general2',$group, $apos[2],($apos[3]-$apos[2]),$debug);
 if ($debug > 1) { echo "<br>tournament2: ";	var_dump($tournament2); }
-	$tournament["out"][1] = $tournament2["out"][1];
-	$tournament["out"][4] = $tournament2["out"][4];
-	$tournament["out"][201] = transcode_tiebr($tournament2,201,$debug); // Feinwertung
-	$tournament["out"][202] = transcode_tiebr($tournament2,202,$debug); // Feinwertung
-	$tournament["out"][203] = transcode_tiebr($tournament2,203,$debug); // Feinwertung
-	$tournament["out"][204] = transcode_tiebr($tournament2,204,$debug); // Feinwertung
+	$tournament["out"][1] = $tournament2["out"][1]; // Anzahl Runden
+	$arunden = (integer) $tournament["out"][1][0]; // Anzahl Runden
+	if ($group) {
+		$tournament["out"][2] = $tournament2["out"][2]; // Anzahl Mannschaften
+		$teil = (integer) $tournament["out"][2][0]; // Anzahl Mannschaften
+		$tournament["out"][3] = $tournament2["out"][3]; // Anzahl Bretter
+		$stamm = (integer) $tournament["out"][3][0]; // Anzahl Bretter
+	}
+	$tournament["out"][4] = $tournament2["out"][4]; // Anzahl Teilnehmer
+	$tournament["out"][201] = transcode_tiebr($group,$tournament2,201,$debug); // Feinwertung
+	$tournament["out"][202] = transcode_tiebr($group,$tournament2,202,$debug); // Feinwertung
+	$tournament["out"][203] = transcode_tiebr($group,$tournament2,203,$debug); // Feinwertung
+	$tournament["out"][204] = transcode_tiebr($group,$tournament2,204,$debug); // Feinwertung
 	$tournament["out"][24] = transcode_twz($tournament2["out"][24]);  // TWZ-Ermittlung paramuseAsTWZ
 	$tournament["out"][70] = $tournament2["out"][70]; // Startdatum
 	$tournament["out"][71] = $tournament2["out"][71]; // Enddatum
@@ -62,70 +74,141 @@ if ($debug > 1) { echo "<br>tournament2: ";	var_dump($tournament2); }
 	if ($tournament_fk[0] > $tournament["out"][213][0]) $tournament["out"][213][0] = $tournament_fk[0];
 	$tournament_fk = transcode_fidecorrect($tournament2["out"][215]); // optionTiebreakersFideCorrect
 	if ($tournament_fk[0] > $tournament["out"][213][0]) $tournament["out"][213][0] = $tournament_fk[0];
-	$typ = '1';
-	if (strpos($file,'.TUR') > 0 OR strpos($file,'.tur') > 0 ) $typ = '2';
- 
-	$keyS = '`sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `name`, `bezirkTur`, `checked_out_time`';
-	$valueS = $season.", '".$typ."', 1, 1, 0, 1, '".$name."', '0', '1970-01-01 00:00:00'";
-	$params_array = array();
-	foreach ($tournament['out'] as $tour) {
+	
+	If ($group) { 	// Mannschaftsturniere
+		$typ = '3'; 														   // Mannschaft-Schweizer Sytem .TUM
+		if (strpos($file,'.TUT') > 0 OR strpos($file,'.tut') > 0 ) $typ = '1'; // Mannschaft-Rundenturnier	 .TUT
+		$tiebr1 = $tournament["out"][201][0];
+		$tiebr2 = $tournament["out"][202][0];
+		$tiebr3 = $tournament["out"][203][0];
+		$str_params = '';
+		$params = new clm_class_params($str_params);
+		$params->set("optionTiebreakersFideCorrect",(string) $tournament["out"][213][0]);
+		$params->set("color_order",'1');	
+		$params->set("time_control",$tournament["out"][106][0]);
+		$str_params = $params->params();
+		$keyS = '`name`,`sid`,`runden_modus`,`durchgang`,`rnd`,`sl`,`published`,`stamm`,`ersatz`,`teil`,`runden`,`params`,`liga_mt`,`tiebr1`,`tiebr2`,`tiebr3`';
+		$valueS = "'".$name."', ".$season.", '".$typ."', 1, 1, 0, 1, '"
+			.$stamm."', '0','".$teil."','".$arunden."','".$str_params."', 1,".$tiebr1.",".$tiebr2.",".$tiebr3;
+
+		$sql = "INSERT INTO #__clm_swt_liga (".$keyS.") VALUES (".$valueS.")";
+if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
+		clm_core::$db->query($sql);
+		$new_swt_tid = clm_core::$db->insert_id();
+	} else { 		// Einzelturniere
+		$typ = '1'; 														   // Einzel-Schweizer Sytem .TUN
+		if (strpos($file,'.TUR') > 0 OR strpos($file,'.tur') > 0 ) $typ = '2'; // Einzel-Rundenturnier	 .TUR
+		$keyS = '`sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `name`, `bezirkTur`, `checked_out_time`';
+		$valueS = $season.", '".$typ."', 1, 1, 0, 1, '".$name."', '0', '1970-01-01 00:00:00'";
+		$params_array = array();
+		foreach ($tournament['out'] as $tour) {
 if ($debug > 1) { echo "<br>tour: ";	var_dump($tour); }
-		if ($tour[1][2] == '0') continue;
-		if (substr($tour[1][2],0,6) == 'params') {
-			$params_array[] = substr($tour[1][2],7).'='.$tour[0];
-		} else {
-			$keyS .= ',`'.$tour[1][2].'`';
-			$valueS .= ",'".clm_core::$db->escape($tour[0])."'";
+			if ($tour[1][2] == '0') continue;
+			if (substr($tour[1][2],0,6) == 'params') {
+				$params_array[] = substr($tour[1][2],7).'='.$tour[0];
+			} else {
+				$keyS .= ',`'.$tour[1][2].'`';
+				$valueS .= ",'".clm_core::$db->escape($tour[0])."'";
+			}
 		}
-	}
-	$params_array[] = 'playerViewDisplaySex=0';
-	$params_array[] = 'playerViewDisplayBirthYear=0';	
+		$params_array[] = 'playerViewDisplaySex=0';
+		$params_array[] = 'playerViewDisplayBirthYear=0';	
 if ($debug > 2) { echo "<br>params_array: ";	var_dump($params_array); }
-	$params = implode("\n", $params_array);
-	$keyS .= ', `params`';
-	$valueS .= ", '".$params."'";
+		$params = implode("\n", $params_array);
+		$keyS .= ', `params`';
+		$valueS .= ", '".$params."'";
 if ($debug > 2) { echo "<br>params: ";	var_dump($params); }
 
-	$sql = "INSERT INTO #__clm_swt_turniere (".$keyS.") VALUES (".$valueS.")";
+		$sql = "INSERT INTO #__clm_swt_turniere (".$keyS.") VALUES (".$valueS.")";
 if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
-//die();
-	clm_core::$db->query($sql);
-	$new_swt_tid = clm_core::$db->insert_id();
-if ($debug > 0) { echo "<br>neue Turnier-ID (swt): ";	var_dump($new_swt_tid); }
-
+		clm_core::$db->query($sql);
+		$new_swt_tid = clm_core::$db->insert_id();
+	}	
+	
+if ($debug > 0) { echo "<br><br><b>neue Turnier-ID (swm): ".$new_swt_tid."</b>"; }
+//die('Ende Turnierdaten');
 	$paramuseAsTWZ = $tournament["out"][24][0];
 
-//	Rundendaten -> Tabelle clm_turniere_rnd_termine
+
+//	Rundendaten -> Tabelle clm_turniere_rnd_termine / clm_runden_termine
 if ($debug > 0) { echo "<br><br>-- Rundendaten --";	}
 	$paarprorunde = array();
+	$tableprorunde = array();
 	$slength = 0;
 	for ($i = 0; $i < $tournament["out"][1][0]; $i++) {
-		$tab_record = zzparse_interpret($contents, 'round', ($apos[3]+$slength),($apos[4]-$apos[3]-$slength),$debug);
+		$tab_record = zzparse_interpret($contents, 'round', $group, ($apos[3]+$slength),($apos[4]-$apos[3]-$slength),$debug);
 		$slength += $tab_record['length'];
 if ($debug > 1) { echo "<br>tab_record: ";	var_dump($tab_record); }
-		$keyS = '`sid`, `name`, `swt_tid`, `dg`, `nr`, `published`, `zeit`, `edit_zeit`, `checked_out_time`';
-		$valueS = $season.", 'Runde ".($i+1)."', ".$new_swt_tid.", 1, ".($i+1).", 1, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '1970-01-01 00:00:00'";
-		foreach ($tab_record['out'] as $tab) {
-if ($debug > 2) { echo "<br>tab: ";	var_dump($tab); }
-			if ($tab[1][2] == '0') continue;
-			$keyS .= ',`'.$tab[1][2].'`';
-			//$valueS .= ",'".clm_core::$db->escape($tab[0])."'";		
-			$valueS .= ",'".$tab[0]."'";		
-		}
-		$sql = "INSERT INTO #__clm_swt_turniere_rnd_termine (".$keyS.") VALUES (".$valueS.")";
-if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
+		$startzeit = $tab_record['out'][9001][0];
+		$startzeit = clm_core::$load->make_valid($startzeit, 15, "00:00");
+		$rdatum = $tab_record['out'][9002][0];
+		if ($rdatum == '0000-00-00') $rdatum = '1970-01-01';
 
-		clm_core::$db->query($sql);
-	$paarprorunde[$i+1] = $tab_record['out'][9003][0];
+		If ($group) { 	// Mannschaftsturniere
+			$keyS = '`sid`, `name`, `swt_liga`, `nr`, `published`, `datum`, `startzeit`';
+			$valueS = $season.", 'Runde ".($i+1)."', ".$new_swt_tid.", ".($i+1).", 1, '".$rdatum."', '".$startzeit."'";
+			foreach ($tab_record['out'] as $tab) {
+if ($debug > 2) { echo "<br>tab: ";	var_dump($tab); }
+				if ($tab[1][2] == '0') continue;
+				$keyS .= ',`'.$tab[1][2].'`';
+				//$valueS .= ",'".clm_core::$db->escape($tab[0])."'";		
+				$valueS .= ",'".$tab[0]."'";		
+			}
+
+			$sql = "INSERT INTO #__clm_swt_runden_termine (".$keyS.") VALUES (".$valueS.")";
+if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
+			clm_core::$db->query($sql);
+		} else { 		// Einzelturniere
+			$keyS = '`sid`, `name`, `swt_tid`, `dg`, `nr`, `published`, `datum`, `startzeit`';
+			$valueS = $season.", 'Runde ".($i+1)."', ".$new_swt_tid.", 1, ".($i+1).", 1, '".$rdatum."', '".$startzeit."'";
+			foreach ($tab_record['out'] as $tab) {
+if ($debug > 2) { echo "<br>tab: ";	var_dump($tab); }
+				if ($tab[1][2] == '0') continue;
+				$keyS .= ',`'.$tab[1][2].'`';
+				//$valueS .= ",'".clm_core::$db->escape($tab[0])."'";		
+				$valueS .= ",'".$tab[0]."'";		
+			}
+			$sql = "INSERT INTO #__clm_swt_turniere_rnd_termine (".$keyS.") VALUES (".$valueS.")";
+if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
+			clm_core::$db->query($sql);
+		}
+		$paarprorunde[$i+1] = $tab_record['out'][9003][0];
+		$tableprorunde[$i+1] = $tab_record['out'][9004][0];
 	}
-if ($debug > 2) { echo "<br>paarprorunde: ";	var_dump($paarprorunde); }
-//die('rr');
+if ($debug > 1) { echo "<br>paarprorunde: ";	var_dump($paarprorunde); }
+if ($debug > 1) { echo "<br>tableprorunde: ";	var_dump($tableprorunde); }
+//die('Ende Rundendaten');
+
 
 	//	Spielerdaten -> Tabelle clm_turniere_tlnr
 if ($debug > 0) { echo "<br><br>-- Spielerdaten --";	}
 	$slength = 0;
+	// Letzte vergebene Mitgl-Nr für Verein "-1"
+//	$sql = "SELECT MAX(Mgl_Nr) as mmax FROM #__clm_swt_dwz_spieler"
+//			." WHERE ZPS = '-1' ";
+//	$mobj = clm_core::$db->loadObject($sql);
+//	$max_mglnr = $mobj->mmax;
+//if ($debug > 0) { echo "<br>max_mglnr: $max_mglnr ";	var_dump($max_mglnr); }
+	$sql = "DELETE FROM #__clm_swt_dwz_spieler"
+			." WHERE ZPS = '-1' ";
+	clm_core::$db->query($sql);
+
+//die('delete');
+	$mglnr = 0;
+	$a_team = array();
+	$a_team[0] = 0;
 	for ($i = 0; $i < $tournament["out"][4][0]; $i++) {
-		$tab_record = zzparse_interpret($contents, 'player', ($apos[4]+$slength),($apos[5]-$apos[4]-$slength),$debug);
+//if ($debug > 0) { echo "<br>i: ";	var_dump($i); }
+		$tab_record = zzparse_interpret($contents, 'player', $group, ($apos[4]+$slength),($apos[5]-$apos[4]-$slength),$debug);
+//if ($debug > 0) { echo "<br>tab: ";	var_dump($tab_record); } 
+//if ($debug > 0) { echo "<br>tab: ";	var_dump($tab_record['out'][2021]); }
+		// Ergänzen der Startnummer
+		$tab_record['out'][2060][0] = $i +1;
+		$tab_record['out'][2060][1][0] = 'int';
+		$tab_record['out'][2060][1][1] = 2060;
+		$tab_record['out'][2060][1][2] = 0;
+if ($debug > 0) {echo "<br>2060 ".$lang->t2060.': '.$tab_record['out'][2060][0];}
+//if ($debug > 0) { echo "<br>tab: ";	var_dump($tab_record['out'][2060]); }
 		$slength += $tab_record['length'];
 		if($paramuseAsTWZ == 0) { 
 			if ($tab_record['out'][2003][0] >= $tab_record['out'][2004][0]) { $twz = $tab_record['out'][2003][0]; } //FIDEelo; 
@@ -139,43 +222,79 @@ if ($debug > 0) { echo "<br><br>-- Spielerdaten --";	}
 		} else $twz = 0;
 		// Feld Typ überschreibt Feld Titel, falls dieses leer ist													
 		if ($tab_record['out'][2002][0] == '') $tab_record['out'][2002][0] = $tab_record['out'][2045][0];
+		$titel = $tab_record['out'][2002][0];
+		if (strlen($titel) > 3) $titel = '';
 if ($debug > 2) { echo "<br>paramuseAsTWZ: $paramuseAsTWZ  twz: $twz  tab_player: ";	var_dump($tab_record); }
 		$tab_record['out'][2008][0] = substr($tab_record['out'][2008][0],0,4); //Geburtsjahr
+		$geburtsjahr = $tab_record['out'][2008][0];
 		$name = $tab_record['out'][2040][0].",".$tab_record['out'][2041][0];
-		$keyS = '`sid`, `swt_tid`, `twz`, `name`, `tlnrStatus`, `snr`, `checked_out_time`';
-		$valueS = $season.", ".$new_swt_tid.", ".$twz.", '".$name."', '1', ".($i+1).", '1970-01-01 00:00:00'";
-		foreach ($tab_record['out'] as $tab) {
-if ($debug > 2) { echo "<br>tab: ";	var_dump($tab); }
-		if ($tab[1][2] == '0') continue;
-			$keyS .= ',`'.$tab[1][2].'`';
-			//$valueS .= ",'".clm_core::$db->escape($tab[0])."'";		
-			$valueS .= ",'".$tab[0]."'";		
-		}
-		$sql = "INSERT INTO #__clm_swt_turniere_tlnr (".$keyS.") VALUES (".$valueS.")";
+		$PKZ = $tab_record['out'][2034][0];
+		$dwz = (integer) $tab_record['out'][2004][0];
+		$elo = (integer) $tab_record['out'][2003][0];
+		$fideid = (integer) $tab_record['out'][2033][0];
+		$land = $tab_record['out'][2006][0];
+		if (strlen($land) > 3) $land = '';
+		$FIDEcco = $tab_record['out'][2007][0];
+		if (strlen($FIDEcco) > 3) $FIDEcco = '';
+
+		If ($group) { 	// Mannschaftsturniere
+			$manid = (integer) $tab_record['out'][2061][0];
+			$brett = (integer) $tab_record['out'][2062][0];
+			// Tabelle clm_dwz_spieler
+			$mglnr++;
+			$a_team[$mglnr] = $manid;
+			$keyS = '`sid`, `PKZ`, `ZPS`, `Mgl_Nr`, `Spielername`, `Geburtsjahr`, `DWZ`, `FIDE_elo`, `FIDE_Titel`, `FIDE_ID`, `FIDE_Land`';
+			$valueS = $season.", '".$PKZ."', '-1', ".$mglnr.", '".$name."', '".$geburtsjahr."', ".$dwz.", ".$elo.", '".$titel."', ".$fideid.", '".$land."'";
+			$sql = "INSERT INTO #__clm_swt_dwz_spieler (".$keyS.") VALUES (".$valueS.")";
 if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
-
-		clm_core::$db->query($sql);
+			clm_core::$db->query($sql);
+//die();			
+			// Tabelle clm_meldeliste_spieler
+			$keyS = '`spielerid`, `sid`, `swt_id`, `man_id`, `snr`, `mgl_nr`, `PKZ`, `zps`, `start_dwz`, `FIDEelo`';
+			$valueS = $mglnr.", ".$season.", ".$new_swt_tid.", ".$manid.", ".$brett.", ".$mglnr.", '".$PKZ."', '-1', ".$dwz.", ".$elo;
+			$sql = "INSERT INTO #__clm_swt_meldeliste_spieler (".$keyS.") VALUES (".$valueS.")";
+if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
+			clm_core::$db->query($sql);
+//die();			
+		} else { 		// Einzelturniere	
+			$keyS = '`sid`, `swt_tid`, `twz`, `name`, `tlnrStatus`, `snr`, `FIDEcco`, `titel`';
+			$valueS = $season.", ".$new_swt_tid.", ".$twz.", '".$name."', '1', ".($i+1).", '".$FIDEcco."', '".$titel."'";
+			foreach ($tab_record['out'] as $tab) {
+if ($debug > 2) { echo "<br>tab: ";	var_dump($tab); }
+				if ($tab[1][2] == '0') continue;
+				$keyS .= ',`'.$tab[1][2].'`';
+				//$valueS .= ",'".clm_core::$db->escape($tab[0])."'";		
+				$valueS .= ",'".$tab[0]."'";		
+			}
+			$sql = "INSERT INTO #__clm_swt_turniere_tlnr (".$keyS.") VALUES (".$valueS.")";
+if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
+			clm_core::$db->query($sql);
+		}
 	}
-//die('play');
+if ($debug > 0 AND $group) { echo "<br>a_team: ";	var_dump($a_team); }
+//die('<br>Ende Spielerdaten');
 
-	//	Ergebnisdaten -> Tabelle clm_turniere_rnd_spl
-if ($debug > 0) { echo "<br><br>-- Ergebnisdaten --";	}
+
+	//	Einzel-Ergebnisdaten -> Tabelle clm_turniere_rnd_spl / clm_rnd_spl
+if ($debug > 0) { echo "<br><br>-- Einzel-Ergebnisdaten --";	}
 	$slength = 0;
 	$runde = 1;
 	$brett = 0;
+	$paar = 1;
+	$epaar = 0;
+	if ($group) {
+		$m_punkte = array();
+		for ($i = 1; $i <= $arunden; $i++) {
+			for ($j = 0; $j <= $teil; $j++) {	
+				$m_punkte[$i][$j] = 0;
+			}
+		}
+	}
 	//for ($i = 0; $i < $tournament["out"][1][0] * $paar_zahl; $i++) {
 	for ($i = 0; $i < 5000; $i++) {
-		$tab_record = zzparse_interpret($contents, 'individual_pairing', ($apos[5]+$slength),($apos[6]-$apos[5]-$slength),$debug);
+		$tab_record = zzparse_interpret($contents, 'individual_pairing', $group, ($apos[5]+$slength),($apos[6]-$apos[5]-$slength),$debug);
 		$slength += $tab_record['length'];
 if ($debug > 1) { echo "<br>tab_record: $i ";	var_dump($tab_record); }
-		//if ($i < ($runde * $paar_zahl)) {
-		if ($brett < $paarprorunde[$runde]) {
-			$brett++;
-		} else {
-			$runde++;
-			if ($runde > $tournament["out"][1][0]) break;
-			$brett = 1;
-		}
 if ($debug > 0) { echo " ( Runde: $runde  Brett: $brett ) ";	}
 		$spieler = $tab_record['out'][4007][0];
 		$gegner = $tab_record['out'][4008][0];
@@ -186,26 +305,227 @@ if ($debug > 0) { echo " ( Runde: $runde  Brett: $brett ) ";	}
 if ($debug > 1) { echo "<br>runde: $runde  brett: $brett  ergebnis: $ergebnis  -- "; var_dump($ergebnis);	}
 		if (($spieler == 0 OR $gegner == 0) AND $ergebnis == 7) continue;
 		if ($ergebnis == 99) continue;
-		$keyS = '`sid`, `swt_tid`, `dg`, `runde`, `brett`, `tln_nr`, `heim`, `spieler`, `gegner`, `ergebnis`, `pgn`';
-		if (!is_null($ergebnis))
-			$valueS = $season.", ".$new_swt_tid.", 1,".$runde.", ".$brett.", ".$spieler.", ".$heim.",".$spieler.", ".$gegner.", ".$ergebnis.", ''";
-		else 
-			$valueS = $season.", ".$new_swt_tid.", 1,".$runde.", ".$brett.", ".$spieler.", ".$heim.",".$spieler.", ".$gegner.", NULL, ''";
-		$sql = "INSERT INTO #__clm_swt_turniere_rnd_spl (".$keyS.") VALUES (".$valueS.")";
+//die();
+
+		If ($group) { 	// Mannschaftsturniere
+			$brett++;
+			$epaar++;
+			if ($brett > $stamm) {
+				$brett = 1;
+				$paar++;
+			}
+			if ($epaar > $paarprorunde[$runde]) {
+				$runde++;
+				$epaar = 1;
+				$paar = 1;
+			} 
+			if ($runde > $arunden) break;
+			if ($brett % 2 != 0) { $heim = 1; }
+			else { $heim = 0; } 
+			$ergebnis = transcode_ergebnis($tab_record['out'][4002][0],$heim,$gegner);
+			$weiss = 0;
+			if ($ergebnis < 3) $kampflos = 0; else $kampflos = 1;
+			if (is_null($ergebnis)) $ergebnis = 8;
+			if ($heim == 1) {
+				if ($ergebnis == 1 OR $ergebnis == 5 ) $punkte = '1';
+				elseif ($ergebnis == 2) $punkte = '0.5';
+				else $punkte = '0';
+			} else {
+				if ($ergebnis == 0 OR $ergebnis == 4 ) $punkte = '1';
+				elseif ($ergebnis == 2) $punkte = '0.5';
+				else $punkte = '0';
+			}
+			$tln_nr = $a_team[$spieler];
+if ($debug > 0) { echo " ( Runde: $runde  Paar: $paar  Brett: $brett  Teilnehmer: $tln_nr  Punkte: $punkte) ";	}
+			$gtln_nr = $a_team[$gegner];
+			$m_punkte[$runde][$tln_nr] += $punkte;
+			$keyS = '`sid`, `swt_id`, `dg`, `runde`, `paar`, `tln_nr`, `brett`, `heim`, `weiss`, `spieler`, `zps`, `gegner`, `gzps`, `ergebnis`, `kampflos`, `punkte`, `gemeldet`';
+			if (!is_null($ergebnis))
+				$valueS = $season.",".$new_swt_tid.",1,".$runde.",".$paar.",".$tln_nr.",".$brett.",".$heim.",".$weiss.",".$spieler.", '-1', ".$gegner.", '-1', ".$ergebnis.", ".$kampflos.", '".$punkte."', ".$auser;
+			else 
+				$valueS = $season.",".$new_swt_tid.",1,".$runde.",".$paar.",".$tln_nr.",".$brett.",".$heim.",".$weiss.",".$spieler.", '-1', ".$gegner.", '-1', NULL, ".$kampflos.", '".$punkte."', ".$auser;
+			$sql = "INSERT INTO #__clm_swt_rnd_spl (".$keyS.") VALUES (".$valueS.")";
 if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
-		clm_core::$db->query($sql);
-		$heim = 0;
-		$ergebnis = transcode_ergebnis($tab_record['out'][4002][0],$heim,$gegner);
-		$keyS = '`sid`, `swt_tid`, `dg`, `runde`, `brett`, `tln_nr`, `heim`, `spieler`, `gegner`, `ergebnis`, `pgn`';
-		if (!is_null($ergebnis))
-			$valueS = $season.", ".$new_swt_tid.", 1,".$runde.", ".$brett.", ".$gegner.", ".$heim.", ".$gegner.", ".$spieler.", ".$ergebnis.", ''";
-		else
-			$valueS = $season.", ".$new_swt_tid.", 1,".$runde.", ".$brett.", ".$gegner.", ".$heim.", ".$gegner.", ".$spieler.", NULL, ''";
-		$sql = "INSERT INTO #__clm_swt_turniere_rnd_spl (".$keyS.") VALUES (".$valueS.")";
+			clm_core::$db->query($sql);
+//die();
+			$weiss = 1;
+//			$ergebnis = transcode_ergebnis($tab_record['out'][4002][0],$heim,$gegner);
+			if ($brett % 2 != 0) { $heim = 0; }
+			else { $heim = 1; } 
+			if ($ergebnis < 3) $kampflos = 0; else $kampflos = 1;
+			if ($heim == 1) {
+				if ($ergebnis == 1 OR $ergebnis == 5 ) $punkte = '1';
+				elseif ($ergebnis == 2) $punkte = '0.5';
+				else $punkte = '0';
+			} else {
+				if ($ergebnis == 0 OR $ergebnis == 4 ) $punkte = '1';
+				elseif ($ergebnis == 2) $punkte = '0.5';
+				else $punkte = '0';
+			}
+			$m_punkte[$runde][$gtln_nr] += $punkte;
+if ($debug > 0) { echo " ( Runde: $runde  Paar: $paar  Brett: $brett  Teilnehmer: $gtln_nr  Punkte: $punkte) ";	}
+			if (!is_null($ergebnis))
+				$valueS = $season.",".$new_swt_tid.",1,".$runde.",".$paar.",".$gtln_nr.",".$brett.",".$heim.",".$weiss.",".$gegner.", '-1', ".$spieler.", '-1', ".$ergebnis.", ".$kampflos.", '".$punkte."', ".$auser;
+			else 
+				$valueS = $season.",".$new_swt_tid.",1,".$runde.",".$paar.",".$gtln_nr.",".$brett.",".$heim.",".$weiss.",".$gegner.", '-1', ".$spieler.", '-1', NULL, ".$kampflos.", '".$punkte."', ".$auser;
+			$sql = "INSERT INTO #__clm_swt_rnd_spl (".$keyS.") VALUES (".$valueS.")";
+if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
+			clm_core::$db->query($sql);
+//if ($i > 6) die();
+
+		} else { 		// Einzelturniere	
+			if ($brett < $paarprorunde[$runde]) {
+				$brett++;
+			} else {
+				$runde++;
+				if ($runde > $tournament["out"][1][0]) break;
+				$brett = 1;
+			}
+if ($debug > 0) { echo " ( Runde: $runde  Brett: $brett ) ";	}
+			$heim = 1;
+			$keyS = '`sid`, `swt_tid`, `dg`, `runde`, `brett`, `tln_nr`, `heim`, `spieler`, `gegner`, `ergebnis`, `pgn`';
+			if (!is_null($ergebnis))
+				$valueS = $season.", ".$new_swt_tid.", 1,".$runde.", ".$brett.", ".$spieler.", ".$heim.",".$spieler.", ".$gegner.", ".$ergebnis.", ''";
+			else 
+				$valueS = $season.", ".$new_swt_tid.", 1,".$runde.", ".$brett.", ".$spieler.", ".$heim.",".$spieler.", ".$gegner.", NULL, ''";
+			$sql = "INSERT INTO #__clm_swt_turniere_rnd_spl (".$keyS.") VALUES (".$valueS.")";
+if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
+			clm_core::$db->query($sql);
+			$heim = 0;
+			$ergebnis = transcode_ergebnis($tab_record['out'][4002][0],$heim,$gegner);
+			$keyS = '`sid`, `swt_tid`, `dg`, `runde`, `brett`, `tln_nr`, `heim`, `spieler`, `gegner`, `ergebnis`, `pgn`';
+			if (!is_null($ergebnis))
+				$valueS = $season.", ".$new_swt_tid.", 1,".$runde.", ".$brett.", ".$gegner.", ".$heim.", ".$gegner.", ".$spieler.", ".$ergebnis.", ''";
+			else
+				$valueS = $season.", ".$new_swt_tid.", 1,".$runde.", ".$brett.", ".$gegner.", ".$heim.", ".$gegner.", ".$spieler.", NULL, ''";
+			$sql = "INSERT INTO #__clm_swt_turniere_rnd_spl (".$keyS.") VALUES (".$valueS.")";
+if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
+			clm_core::$db->query($sql);
+		}
+	}
+//die('Ende Einzelergebnisse');
+
+
+	//	Mannschaftsdaten -> Tabelle clm_mannschaften
+  if ($group) { 	// Mannschaftsturniere
+if ($debug > 0) { echo "<br><br>-- Mannschaftsdaten --";	}
+	$bem_int = 'Import durch SWM-Datei';
+	$slength = 0;
+	for ($i = 0; $i < $tournament["out"][2][0]; $i++) {
+//if ($debug > 0) { echo "<br>i: ";	var_dump($i); }
+		$tab_record = zzparse_interpret($contents, 'team', $group, ($apos[6]+$slength),($apos[7]-$apos[6]-$slength),$debug);
+		// Ergänzen der Startnummer
+		$tab_record['out'][3060][0] = $i +1;
+		$tab_record['out'][3060][1][0] = 'int';
+		$tab_record['out'][3060][1][1] = 3060;
+		$tab_record['out'][3060][1][2] = 0;
+if ($debug > 1) {echo "<br>3060 ".$lang->t3060.': '.$tab_record['out'][3060][0];}
+		$slength += $tab_record['length'];
+		
+		$name = $tab_record['out'][3040][0];
+		$land = (integer) $tab_record['out'][3043][0];
+		$tlnnr = (integer) $tab_record['out'][3060][0];
+		$mannr = (integer) $tab_record['out'][3060][0];
+		$keyS = '`sid`, `name`, `swt_id`, `zps`, `liste`, `man_nr`, `tln_nr`, `bem_int`, `published`';
+		$valueS = $season.", '".$name."', ".$new_swt_tid.", '-1', 62, ".$mannr.", ".$tlnnr.", '".$bem_int."', 1";
+		$sql = "INSERT INTO #__clm_swt_mannschaften (".$keyS.") VALUES (".$valueS.")";
 if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 		clm_core::$db->query($sql);
 	}
-//die('erg');
+  }
+//die('Ende Mannschaftsdaten');
+
+	
+	//	Mannschafts-Paarungen -> Tabelle clm_rnd_man
+  if ($group) { 	// Mannschaftsturniere
+    $a_man_paar = array();
+if ($debug > 0) { echo "<br><br>-- Mannschafts-Paarungen --";	}
+	$slength = 0;
+	$runde = 1;
+	$table = 0;
+	//for ($i = 0; $i < $tournament["out"][1][0] * $paar_zahl; $i++) {
+	for ($i = 0; $i < 5000; $i++) {
+		$tab_record = zzparse_interpret($contents, 'team_pairing', $group, ($apos[7]+$slength),($apos[8]-$apos[7]-$slength),$debug);
+		$slength += $tab_record['length'];
+if ($debug > 1) { echo "<br>tab_record: $i ";	var_dump($tab_record); }
+		//if ($i < ($runde * $paar_zahl)) {
+		if ($table < $tableprorunde[$runde]) {
+			$table++;
+		} else {
+			$runde++;
+			if ($runde > $tournament["out"][1][0]) break;
+			$table = 1;
+		}
+if ($debug > 0) { echo " ( Runde: $runde  Tisch: $table ) ";	}
+		$spieler = $tab_record['out'][5007][0];
+		$gegner = $tab_record['out'][5008][0];
+		$heim = 1;
+//		$ergebnis = transcode_ergebnis($tab_record['out'][4002][0],$heim,$gegner);
+		if ($gegner < 16000) {			// normaler Kampf
+			$h_punkte = $m_punkte[$runde][$spieler];
+			$g_punkte = $m_punkte[$runde][$gegner];
+			if ($h_punkte > $g_punkte) $man_punkte = 2;
+			elseif ($h_punkte < $g_punkte) $man_punkte = 0;
+			else $man_punkte = 1;
+			$kampflos = 0;
+		} elseif ($gegner == 65535) {		// spielfrei für Heimmannschaft
+			$h_punkte = $stamm;
+			$g_punkte = 0;
+			$man_punkte = 2;
+			$kampflos = 1;
+			$gegner = 0;
+		} elseif ($gegner == 65534) {		// Heimmannschaft nicht ausgelost
+			$h_punkte = 0;
+			$g_punkte = 0;
+			$man_punkte = 0;
+			$kampflos = 1;
+			$gegner = 0;
+		} else {		// sonstiges zur Absicherung
+			$h_punkte = 0;
+			$g_punkte = 0;
+			$man_punkte = 0;
+			$kampflos = 0;
+			$spieler = 0;
+			$gegner = 0;
+		}
+if ($debug > 1) { echo "<br>runde: $runde  brett: $brett  ergebnis: $ergebnis  -- "; var_dump($ergebnis);	}
+
+		$keyS = '`sid`, `swt_id`, `dg`, `runde`, `paar`, `heim`, `tln_nr`, `gegner`, `kampflos`, `brettpunkte`, `manpunkte`, `comment`';
+		$valueS = $season.",".$new_swt_tid.", 1,".$runde.", ".$table.", ".$heim.",".$spieler.", ".$gegner.", ".$kampflos.", '".$h_punkte."', ".$man_punkte.", ''";
+		$sql = "INSERT INTO #__clm_swt_rnd_man (".$keyS.") VALUES (".$valueS.")";
+if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
+		clm_core::$db->query($sql);
+		$a_man_paar[1][$runde][$table][$heim] = $spieler;
+//die();
+		$heim = 0;
+		if ($gegner > 0) $man_punkte = 2 - $man_punkte;
+		else $man_punkte = 0;
+		$keyS = '`sid`, `swt_id`, `dg`, `runde`, `paar`, `heim`, `tln_nr`, `gegner`, `kampflos`, `brettpunkte`, `manpunkte`, `comment`';
+		$valueS = $season.",".$new_swt_tid.", 1,".$runde.", ".$table.", ".$heim.",".$gegner.", ".$spieler.", ".$kampflos.", '".$g_punkte."', ".$man_punkte.", ''";
+		$sql = "INSERT INTO #__clm_swt_rnd_man (".$keyS.") VALUES (".$valueS.")";
+if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
+		clm_core::$db->query($sql);
+		$a_man_paar[1][$runde][$table][$heim] = $gegner;
+//die();
+		}
+//die('Ende Mannschaftspaarungen');
+
+		// Korrektur Einzel-Paarungen
+		$select_query = " SELECT * FROM #__clm_swt_rnd_spl
+						WHERE swt_id = ".$new_swt_tid." AND tln_nr = 0";
+		$paarungen = clm_core::$db->loadObjectList($select_query);
+
+		foreach($paarungen as $paar){
+			if (isset($a_man_paar[1][$paar->runde][$paar->paar][$paar->heim]))
+				$paar->tln_nr = $a_man_paar[1][$paar->runde][$paar->paar][$paar->heim];
+
+			if(!clm_core::$db->updateObject('#__clm_swt_rnd_spl',$paar,'id')) {
+				return false;
+			}
+		}
+//die('Ende Korrektur Einzel-Paarungen');
+	}
+	
 	
 	if (!$test) { 
 		$result = clm_core::$api->db_swt_to_clm($new_swt_tid,$turnier,$group,$update);
@@ -230,7 +550,7 @@ if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
  *		array out: field title => value
  *		array bin: begin, end and type (for development)
  */
-function zzparse_interpret($binary, $part, $start = 0, $end = false, $debug = 0) {
+function zzparse_interpret($binary, $part, $group, $start = 0, $end = false, $debug = 0) {
 	//if ($part == 'general') $debug = 3; 
 if ($debug > 1) { echo "<br>part: $part   start: $start   end: $end"; }
     $lang = clm_core::$lang->swm_import;
@@ -238,7 +558,8 @@ if ($debug > 3) { echo "<br>binary: $binary   <br>ende"; }
 	if ($end) $binary = substr($binary, $start, $end);
 	$data = array();
 	$data['out'] = array();
-	$structure = zzparse_structure($part);
+	if ($group) $structure = zzparse_structure_t($part);  // s-single = Einzelturnier
+	else $structure = zzparse_structure_s($part);		  // t-team = Mannschaftswettbewerb
 if ($debug > 3) { echo "<br>structure: "; var_dump($structure); } //die(); 
 if ($debug > 3) { echo "<br>binary: $binary   <br>ende"; }
 //	$test1 = bin2hex(substr($binary, 0, 20)); 
@@ -264,12 +585,15 @@ if ($debug > 2) { echo "<br>vch-istart: $istart"; }
 //			$test = bin2hex(substr($binary, $istart, 4)); 
 //if ($debug > 0) { echo "<br>test: $test"; }
 			$length = hexdec(bin2hex(substr($binary, $istart, 1)));
-if ($debug > 2) { echo "   length: $length"; }
-			if ($length < 0 OR $length > 256) { 
+if ($debug > 1) { echo "   1length: $length"; }
+			$length256 = hexdec(bin2hex(substr($binary, $istart+1, 1)));
+			$length += 256 * $length256;
+if ($debug > 1) { echo "   2length: $length"; }
+/*			if ($length < 0 OR $length > 256) { 
 				$lenght = 0;
 				if ($debug > 2) echo "<br>length-error  byte:$istart";
 			}
-			$istart++; $istart++;
+*/			$istart++; $istart++;
 			$substring = substr($binary, $istart, 2 * $length);
 if ($debug > 2) { echo "<br>substring: $substring"; }
 			$istart += (2 * $length);		
@@ -436,7 +760,7 @@ for ($d = 0; $d < count($data['bin']); $d++) {
  * @return array structure of part
  * @see zzparse_interpret()
  */
-function zzparse_structure($part) {
+function zzparse_structure_s($part) {
 	
 	if ($part == 'general') 
 		$fields = array(
@@ -502,12 +826,132 @@ function zzparse_structure($part) {
 					);
 	if ($part == 'round') 
 		$fields = array(
-					array('vch',9001,'startzeit'),
+					array('vch',9001,0),
 					array('ign',30,0),
-					array('ind',9002,'datum'),
+					array('ind',9002,0),
 					array('ign',2,0),
-					array('int',9003,0),		//Anzahl Paarungen in Runde
-					array('ign',69,0)
+					array('int',9003,0),		//Anzahl Einzel-Paarungen in Runde
+					array('ign',1,0),
+					array('int',9004,0),		//Anzahl Mannschafts-Paarungen in Runde
+					array('ign',67,0)
+					);
+	if ($part == 'player') 
+		$fields = array(
+					array('vch',2040,0),
+					array('vch',2041,0),
+					array('vch',2044,0),
+					array('vch',2000,0),
+					array('vch',2002,0),
+					array('vch',2034,'PKZ'),
+					array('vch',2046,0),
+					array('vch',2047,0),
+					array('vch',2048,0),
+					array('vch',2001,'verein'),
+					array('vch',2006,0),		// Land
+					array('vch',2045,0),		// Typ
+					array('vch',2042,0),		// Gruppe
+					array('ign',8,0),
+//					array('vch',2007,'FIDEcco'),
+					array('vch',2007,0),
+					array('ign',32,0),
+					array('inb',2003,'FIDEelo'),
+					array('inb',2004,'start_dwz'),
+					array('ign',2,0),
+					array('ind',2008,'birthYear'),
+					array('inb',2010,'zps'),
+					array('ign',4,0),
+					array('in4',2033,'FIDEid'),
+					array('ign',28,0),
+					array('int',2021,0),
+					array('ign',53,0)
+					);
+	if ($part == 'individual_pairing') 
+		$fields = array(
+					array('inb',4007,'spieler'),
+					array('inb',4008,'gegner'),
+					array('int',4002,'ergebnis'),
+					array('ign',16,0)
+					);
+
+	return $fields;
+}
+function zzparse_structure_t($part) {
+	
+	if ($part == 'general') 
+		$fields = array(
+					array('ign',104,0),
+					array('vch',12,0),		// Turnierüberschrift Zeile 1
+					array('vch',18,0),		// Turnierüberschrift Zeile 2
+					array('vch',69,'bemerkungen'),
+					array('vch',102,0),		// Turnierdirektor
+					array('vch',101,0),		// Veranstalter
+					array('vch',66,0),		// Ort/Land
+					array('vch',67,0),		// Schiedsrichter
+					//array('ign',2,0),
+					array('vch',103,0),		// Name der pgn-Datei
+					array('vch',110,0),		// Name der Video-Datei
+					array('vch',65,0),		// Turniername				
+					array('vch',66,0),		// Ort/Land
+					array('vch',104,0),		// Name der Turnierdatei						
+					array('vch',301,0),		// unklar301 ??
+					array('vch',105,0),		// Altersgruppen
+					array('vch',106,0),		// Zeitkontrolle						
+					array('ign',2,0),		
+					array('vch',111,0),		// Vorlage
+					array('ign',6,0),		
+					array('vch',112,0),		// Förderation						
+					array('vch',68,0),		// Hauptschiedsrichter				
+					array('vch',113,0),		// Föderations-Repräsendant
+					array('vch',107,0),		// email-Adresse
+					array('vch',108,0),		// Homepage
+					array('vch',109,0),		// Land						
+					array('vch',114,0),		// Fed1 für nationale Ratingermittlung						
+					array('vch',115,0),		// Fed2 für nationale Ratingermittlung						
+					array('vch',116,0),		// Fed3 für nationale Ratingermittlung						
+					array('vch',117,0),		// Fed4 für nationale Ratingermittlung						
+					array('ign',4,0)
+					);
+	if ($part == 'general2') 
+		$fields = array(
+					array('inb',1,'runden'),
+					array('ign',17,0),
+					array('inb',4,'teil'),
+					array('ign',8,0),
+					array('inb',201,'tiebr1'),
+					array('inb',202,'tiebr2'),
+					array('inb',203,'tiebr3'),
+					array('inb',204,0),
+					array('ign',10,0),
+					array('inb',2,0),
+					array('inb',3,0),
+					array('ign',20,0),
+					array('ind',70,'dateStart'),
+					array('ind',71,'dateEnd'),
+					array('ign',572,0),
+					array('int',205,0),
+					array('int',213,0),
+					array('ign',17,0),
+					array('int',206,0),
+					array('int',214,0),
+					array('ign',17,0),
+					array('int',207,0),
+					array('int',215,0),
+					array('ign',17,0),
+					array('int',208,0),
+					array('int',216,0),
+					array('ign',162,0),
+					array('int',24,0)
+					);
+	if ($part == 'round') 
+		$fields = array(
+					array('vch',9001,0),
+					array('ign',30,0),
+					array('ind',9002,0),
+					array('ign',2,0),
+					array('int',9003,0),		//Anzahl Einzel-Paarungen in Runde
+					array('ign',1,0),
+					array('int',9004,0),		//Anzahl Mannschafts-Paarungen in Runde
+					array('ign',67,0)
 					);
 	if ($part == 'player') 
 		$fields = array(
@@ -534,7 +978,9 @@ function zzparse_structure($part) {
 					array('inb',2010,'zps'),
 					array('ign',4,0),
 					array('in4',2033,'FIDEid'),
-					array('ign',28,0),
+					array('inb',2061,0),
+					array('inb',2062,0),
+					array('ign',24,0),
 					array('int',2021,0),
 					array('ign',53,0)
 					);
@@ -544,6 +990,22 @@ function zzparse_structure($part) {
 					array('inb',4008,'gegner'),
 					array('int',4002,'ergebnis'),
 					array('ign',16,0)
+					);
+	if ($part == 'team') 
+		$fields = array(
+					array('vch',3040,0),
+					array('vch',3041,0),
+					array('vch',3042,0),
+					array('vch',3043,0),
+					array('vch',3044,0),
+					array('ign',96,0)
+					);
+	if ($part == 'team_pairing') 
+		$fields = array(
+					array('inb',5007,'spieler'),
+					array('inb',5008,'gegner'),
+					array('int',4002,'ergebnis'),
+					array('ign',10,0)
 					);
 
 	return $fields;
@@ -589,30 +1051,31 @@ function transcode_fidecorrect($line) {
     return $line;
 }
 
-function transcode_tiebr($tournament,$line_nr,$debug) {
-	/* SWM -> CLM	(Beschreibung)
-		1 ->  1	 Spielerpunkte
-		5 ->  2	 Manuelle Eingabe (Ordering)
-		8 ->  2	 Fidewertung (Progressive Score)
-		9 ->  0	 Fidewertung mit Streichwerten (Progressive Score)
-		11 ->  25  Direktvergleich
-		19 ->  3  Sonneborn-Berger mit Fide-Korr.  
-		23 ->  1  Elosumme mit Streichwert
-		36 ->  2  Elo-Durchschnitt
-		37 ->  1  Buchholz
-		42 ->  2  Spielerpunkte + Vorrunde  
-		43 ->  1  Punkte bei Stichkamf
-		44 ->  2  Matchpunkte
-		52 ->  6  Sonneborn-Berger variabel
-		53 ->  6  Mehr Schwarz-Partien
-		54 ->  2  Recursive Eloperformance  
-		55 ->  1  durchsch, recursive Eloperformance der Gegner
-		59 ->  2  Eloperformance mit 2 Streichwerten
-		60 ->  6  Eloperformance variabel
-		61 ->  1  Arranz-Sytem
-		68 ->  2  Anzahl Siege variabel
-		70 ->  6  Summe Buchholz variabel
+function transcode_tiebr($group,$tournament,$line_nr,$debug) {
+	/* SWM -> ET  	MT	(Beschreibung)
+		1  ->  1   	5 Spielerpunkte
+		5  ->  2	0 Manuelle Eingabe (Ordering)
+		8  ->  2	0 Fidewertung (Progressive Score)
+		9  ->  0	0 Fidewertung mit Streichwerten (Progressive Score)
+		11 -> 25   25 Direktvergleich
+		19 ->  3   23 Sonneborn-Berger mit Fide-Korr.  
+		23 ->  1    0 Elosumme mit Streichwert
+		36 ->  2    0 Elo-Durchschnitt
+		37 ->  1    1 Buchholz
+		42 ->  2    1 Spielerpunkte + Vorrunde  
+		43 ->  1    1 Punkte bei Stichkamf
+		44 ->  2    9 Matchpunkte
+		52 ->  6   23 Sonneborn-Berger variabel
+		53 ->  6    0 Mehr Schwarz-Partien
+		54 ->  2    0 Recursive Eloperformance  
+		55 ->  1    0 durchsch, recursive Eloperformance der Gegner
+		59 ->  2    0 Eloperformance mit 2 Streichwerten
+		60 ->  6    0 Eloperformance variabel
+		61 ->  1    1 Arranz-Sytem
+		68 ->  2    4 Anzahl Siege variabel
+		70 ->  6    2 Summe Buchholz variabel
 	*/
+if ($debug > 1) { echo "<br>group:"; var_dump($group); } 		
 	$clm_array = array (0 => 0, 1 => 0, 5 => 51, 8 => 1, 9 => 1, 11 => 25, 19 => 13, 23 => 16, 36 => 16,
 		37 => 1, 42 => 0, 43 => 0, 44 => 0, 52 => 13, 54 => 0, 55 => 0, 59 => 0, 60 => 0, 61 => 0, 68 => 4, 70 => 2);
 if ($debug > 1) { echo "<br>1tiebr linenr:"; var_dump($line_nr); } 		
@@ -625,33 +1088,63 @@ if ($debug > 1) { echo "<br>streich_schwach: $streich_schwach   streich_stark: $
 //die();	
 	$line = $tournament["out"][$line_nr];
 	$swm = $line[0];
-	if ($line[0] == 2) {		// Buchholz ohne Parameter
-		$line[0] = 1; }
-	elseif ($line[0] == 11) {		// Direkter Vergleich
-		$line[0] = 25; }
-	elseif ($line[0] == 12) {		// Anzahl Siege
-		$line[0] = 4; }
-	elseif ($line[0] == 36) {		// Elo-Schnitt
-		if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 6; }
-		else { $line[0] = 0; } }
-	elseif ($line[0] == 37) {		// Buchholz
-		if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 1; }
-		elseif ($streich_stark == 0 AND $streich_schwach == 1) { $line[0] = 11; } // mit 1 Streichwert
-		elseif ($streich_stark == 1 AND $streich_schwach == 1) { $line[0] = 5; }	// mittlere Buchholz
-		else { $line[0] = 0; } }
-	elseif ($line[0] == 52) {		// Sonneborn-Berger
-		if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 3; }
-		elseif ($streich_stark == 0 AND $streich_schwach == 1) { $line[0] = 13; } // mit 1 Streichwert
-		else { $line[0] = 0; } }
-	elseif ($line[0] == 68) {		// Anzahl Siege
-		if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 4; }
-		else { $line[0] = 0; } }
-	elseif ($line[0] == 70) {		// Buchholz Summe
-		if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 2; }
-		elseif ($streich_stark == 0 AND $streich_schwach == 1) { $line[0] = 12; } // mit 1 Streichwert
-		else { $line[0] = 0; } }
-	else { $line[0] = 0; } 
-	
+	if ($group) {
+		if ($line[0] == 1) {		// Brettpunkte
+			$line[0] = 5; }
+		elseif ($line[0] == 2) {		// Buchholz ohne Parameter
+			$line[0] = 1; }
+		elseif ($line[0] == 11) {		// Direkter Vergleich
+			$line[0] = 25; }
+		elseif ($line[0] == 12) {		// Anzahl Siege
+			$line[0] = 4; }
+		elseif ($line[0] == 36) {		// Elo-Schnitt
+			if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 6; }
+			else { $line[0] = 0; } }
+		elseif ($line[0] == 37) {		// Buchholz
+			if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 1; }
+			elseif ($streich_stark == 0 AND $streich_schwach == 1) { $line[0] = 11; } // mit 1 Streichwert
+			elseif ($streich_stark == 1 AND $streich_schwach == 1) { $line[0] = 7; }	// mittlere Buchholz
+			else { $line[0] = 0; } }
+		elseif ($line[0] == 52) {		// Sonneborn-Berger
+			if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 3; }
+			elseif ($streich_stark == 0 AND $streich_schwach == 1) { $line[0] = 23; } // mit 1 Streichwert
+			else { $line[0] = 0; } }
+		elseif ($line[0] == 68) {		// Anzahl Siege
+			if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 4; }
+			else { $line[0] = 0; } }
+		elseif ($line[0] == 70) {		// Buchholz Summe
+			if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 2; }
+			elseif ($streich_stark == 0 AND $streich_schwach == 1) { $line[0] = 12; } // mit 1 Streichwert
+			else { $line[0] = 0; } }
+		else { $line[0] = 0; } 
+	} else {
+		if ($line[0] == 2) {		// Buchholz ohne Parameter
+			$line[0] = 1; }
+		elseif ($line[0] == 11) {		// Direkter Vergleich
+			$line[0] = 25; }
+		elseif ($line[0] == 12) {		// Anzahl Siege
+			$line[0] = 4; }
+		elseif ($line[0] == 36) {		// Elo-Schnitt
+			if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 6; }
+			else { $line[0] = 0; } }
+		elseif ($line[0] == 37) {		// Buchholz
+			if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 1; }
+			elseif ($streich_stark == 0 AND $streich_schwach == 1) { $line[0] = 11; } // mit 1 Streichwert
+			elseif ($streich_stark == 1 AND $streich_schwach == 1) { $line[0] = 5; }	// mittlere Buchholz
+			else { $line[0] = 0; } }
+		elseif ($line[0] == 52) {		// Sonneborn-Berger
+			if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 3; }
+			elseif ($streich_stark == 0 AND $streich_schwach == 1) { $line[0] = 13; } // mit 1 Streichwert
+			else { $line[0] = 0; } }
+		elseif ($line[0] == 68) {		// Anzahl Siege
+			if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 4; }
+			else { $line[0] = 0; } }
+		elseif ($line[0] == 70) {		// Buchholz Summe
+			if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 2; }
+			elseif ($streich_stark == 0 AND $streich_schwach == 1) { $line[0] = 12; } // mit 1 Streichwert
+			else { $line[0] = 0; } }
+		else { $line[0] = 0; } 
+	}
 if ($debug > 1) { echo "<br>9tiebr line:"; var_dump($line); } 	
 if ($debug > 0) { echo "<br>feinwertung  swm: $swm  ->  clm: ".$line[0]; } 	
 //die();	

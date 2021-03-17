@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -25,6 +25,7 @@
 //12 -> E-Mail
 //13 -> Länge
 //14 -> URL
+//15 -> Zeit, z.B. 09:30
 //20 -> Bereinigung von Dateinamen bei Dateierstellung
 // Bei ungültigen Typ wird stets der Standardwert zurückgegeben!
 function clm_function_make_valid($input, $type, $standard, $choose = null) {
@@ -123,6 +124,15 @@ function clm_function_make_valid($input, $type, $standard, $choose = null) {
 				return $standard;
 			}
 			return  str_replace(array('"',"'","\\"), '',$input);
+		break;
+		case 15: // is $input a time expression like 09:00 
+			$input = str_replace(".", ":", $input);
+			$input = preg_replace("/[^0-9:]/", "", $input);
+			if (is_numeric($input)) $input .= ':00';
+			if (clm_core::$load->is_time($input)) {
+				return $input;
+			}
+			return  '00:00';
 		break;
 		case 20: // $input is a file name
 				 // im Dateinamen nicht erlaubte oder nicht erwünschte Zeichen werden ersetzt

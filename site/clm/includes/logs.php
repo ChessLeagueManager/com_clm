@@ -34,4 +34,7 @@ $logs[]="db_tournament_copy";
 $logs[]="db_pgn_export";
 $logs[]="db_pgn_template";
 $logs[]="test_print";
+$logs[]="db_trf_import";
+$logs[]="db_swm_import";
+$logs[]="db_swt_to_clm";
 ?>

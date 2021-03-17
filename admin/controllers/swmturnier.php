@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -27,30 +25,45 @@ class CLMControllerSWMTurnier extends JControllerLegacy
 	
 	function update() {		
 		$swm = clm_core::$load->request_string('swm', '');
+		if (strtolower(JFile::getExt($swm) ) == 'tumx' OR strtolower(JFile::getExt($swm) ) == 'tutx') {
+			$group = true; 
+		} else { $group = false; }
 		$sid = clm_core::$load->request_int('filter_saison', 0);
 		$tid = clm_core::$load->request_int('turnier', 0);
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		$result = clm_core::$api->db_swm_import($path.$swm,$sid,$tid,false,true,false);
 		if (isset($result[2]) AND $result[2] > 0) {
 			$new_ID = $result[2];
-			$turnier = new CLMTournament($new_ID,true);
-		
-			//Punkte und Feinwertungen neu berechnen
-			$turnier->calculateRanking();
-		
-			//Rangliste neu berechnen
-			$turnier->setRankingPositions();
-
-			//inoffizielle DWZ-Ermittlung
-			clm_core::$api->direct("db_tournament_genDWZ",array($new_ID,false));
+			If (!$group) { // Einzelturnier
+				$turnier = new CLMTournament($new_ID,true);
+				//Punkte und Feinwertungen neu berechnen
+				$turnier->calculateRanking();
+				//Rangliste neu berechnen
+				$turnier->setRankingPositions();	
+				//inoffizielle DWZ-Ermittlung
+				clm_core::$api->direct("db_tournament_genDWZ",array($new_ID,false));
+			} else { 		// Mannschaftsturnier
+				//Punkte und Feinwertungen neu berechnen und Rangliste neu berechnen
+				clm_core::$api->db_tournament_ranking($new_ID,true); 
+				//inoffizielle DWZ-Ermittlung
+				clm_core::$api->direct("db_tournament_genDWZ",array($new_ID,true));
+			}
 		}
 		
 		$language = JFactory::getLanguage();
 		$language->load('com_clm');
 		$language->load('com_clm.swtimport');	
 
+		// Log schreiben
+		$msg = JText::_( 'SWT_STORE_SUCCESS' );
+		$clmLog = new CLMLog();
+		$clmLog->aktion = 'SWM-Import - '.$msg;
+		$clmLog->params = array('sid' => $sid, 'tid' => $tid, 'swm' => $swm);
+		$clmLog->write();
+
 		$_REQUEST['view'] = 'swt';
-		JFactory::getApplication()->enqueueMessage( JText::_( 'SWT_STORE_SUCCESS' ),'message' );
+		if (isset($result[2]) AND $result[2] > 0) { $htext = " (ID = ".$new_ID.")"; } else $htext = ""; 
+		JFactory::getApplication()->enqueueMessage( JText::_( 'SWT_STORE_SUCCESS' ).$htext,'message' );
 		$_REQUEST['swm'] = $swm;
 		
 		parent::display(); 		
@@ -59,30 +72,46 @@ class CLMControllerSWMTurnier extends JControllerLegacy
 	
 	function add() {		
 		$swm = clm_core::$load->request_string('swm', '');
+		if (strtolower(JFile::getExt($swm) ) == 'tumx' OR strtolower(JFile::getExt($swm) ) == 'tutx') {
+			$group = true; 
+		} else { $group = false; }
 		$sid = clm_core::$load->request_int('filter_saison', 0);
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
-		$result = clm_core::$api->db_swm_import($path.$swm,$sid,0,false,false,false);
+		$result = clm_core::$api->db_swm_import($path.$swm,$sid,0,$group,false,false);
 //echo "<br>result:"; var_dump($result); //die();
 		if (isset($result[2]) AND $result[2] > 0) {
 			$new_ID = $result[2];
-			$turnier = new CLMTournament($new_ID,true);
-		
-			//Punkte und Feinwertungen neu berechnen
-			$turnier->calculateRanking();
-		
-			//Rangliste neu berechnen
-			$turnier->setRankingPositions();
-
-			//inoffizielle DWZ-Ermittlung
-			clm_core::$api->direct("db_tournament_genDWZ",array($new_ID,false));
+			
+			If (!$group) { // Einzelturnier
+				$turnier = new CLMTournament($new_ID,true);
+				//Punkte und Feinwertungen neu berechnen
+				$turnier->calculateRanking();
+				//Rangliste neu berechnen
+				$turnier->setRankingPositions();	
+				//inoffizielle DWZ-Ermittlung
+				clm_core::$api->direct("db_tournament_genDWZ",array($new_ID,false));
+			} else { 		// Mannschaftsturnier
+				//Punkte und Feinwertungen neu berechnen und Rangliste neu berechnen
+				clm_core::$api->db_tournament_ranking($new_ID,true); 
+				//inoffizielle DWZ-Ermittlung
+				clm_core::$api->direct("db_tournament_genDWZ",array($new_ID,true));
+			}
 		}
 		
 		$language = JFactory::getLanguage();
 		$language->load('com_clm');
 		$language->load('com_clm.swtimport');	
 
+		// Log schreiben
+		$msg = JText::_( 'SWT_STORE_SUCCESS' );
+		$clmLog = new CLMLog();
+		$clmLog->aktion = 'SWM-Import - '.$msg;
+		$clmLog->params = array('sid' => $sid, 'tid' => $new_ID, 'swm' => $swm);
+		$clmLog->write();
+
 		$_REQUEST['view'] = 'swt';
-		JFactory::getApplication()->enqueueMessage( JText::_( 'SWT_STORE_SUCCESS' ),'message' );
+		if (isset($result[2]) AND $result[2] > 0) { $htext = " (ID = ".$new_ID.")"; } else $htext = ""; 
+		JFactory::getApplication()->enqueueMessage( JText::_( 'SWT_STORE_SUCCESS' ).$htext,'message' );
 		$_REQUEST['swm'] = $swm;
 		parent::display(); 		
 	

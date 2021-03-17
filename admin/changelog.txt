@@ -23,6 +23,7 @@ $ -> Language fix or change
 + TRF-Import: Einzelturniere ohne oder mit Mannschaftswertung
 # View DWZ-Übersicht: Hinweis, wenn Verein nicht abgelegt
 # View Ligastatistik: Limit 20 Mannschaften entfernt
++ SWM-Import: auch TUMX- und TUTX-Dateien für Mannschaftswettbewerbe  
 
 - - - - - 3.9.0 - [20-12-2020] - - - - - - - - - - - - - - - - - - - -
 # pdf-Paarungsliste: Überschrift Runde 1
