@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -367,7 +367,8 @@
 //			$array_PlayerBerlWertung[$valuee->tln_nr] += $valuee->punkte * ($id_stamm + 1 - $valuee->brett);
 //		}
 		foreach ($matchData as $key => $valuee) {
-			$array_PlayerBerlWertung[$valuee->tln_nr] += $valuee->wertpunkte;
+			if ($valuee->tln_nr > 0)
+			 $array_PlayerBerlWertung[$valuee->tln_nr] += $valuee->wertpunkte;
 		}
 		
 		// Buchholz & Sonneborn-Berger

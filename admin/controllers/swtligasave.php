@@ -33,7 +33,7 @@ class CLMControllerSWTLigasave extends JControllerLegacy
 		if ($model->finalCopy () && $model->rundenTermine () && $model->userAnlegen ()) {
 			$_REQUEST['view'] = 'swt';
 			$msg = JText::_( 'SWT_STORE_SUCCESS' );
-			$htext = " (ID = ".$lid.")";
+//			$htext = " (ID = ".$lid.")";
 		}
 		else {
 			$_REQUEST['view'] = 'swtligaerg';
