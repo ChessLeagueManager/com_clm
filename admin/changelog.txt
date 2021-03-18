@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.9.1 - [xx-xx-2021] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.9.1 - [17-03-2021] - - - - - - - - - - - - - - - - - - - -
 # Data für Plugin: Datenaufbereitung für Vereinsübersicht
 # DWZ-Ermittlung: count-Warnung und Ausgabefeldzuordnung bei Spieler ohne DWZ
 + SWT-Import Mannschaftswettbewerbe: mit oder ohne DWZ-Übernahme in Meldeliste
@@ -24,6 +24,7 @@ $ -> Language fix or change
 # View DWZ-Übersicht: Hinweis, wenn Verein nicht abgelegt
 # View Ligastatistik: Limit 20 Mannschaften entfernt
 + SWM-Import: auch TUMX- und TUTX-Dateien für Mannschaftswettbewerbe  
+^ Copyright 2008-2021
 
 - - - - - 3.9.0 - [20-12-2020] - - - - - - - - - - - - - - - - - - - -
 # pdf-Paarungsliste: Überschrift Runde 1
