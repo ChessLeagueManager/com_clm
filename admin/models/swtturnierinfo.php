@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -192,6 +192,9 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 				} elseif($feinwertung1 == 8) {
 					//Elo-Schnitt
 					$this->_turnier->set('tiebr1', 6);
+				} elseif($feinwertung1 == 9) {
+					//Turnierleistung
+					$this->_turnier->set('tiebr1', 30);
 				} elseif($feinwertung1 == 14) {
 					//Anz. der Siege
 					$this->_turnier->set('tiebr1', 4);
@@ -229,6 +232,9 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 				} elseif($feinwertung2 == 8) {
 					//Elo-Schnitt
 					$this->_turnier->set('tiebr2', 6);
+				} elseif($feinwertung2 == 9) {
+					//Turnierleistung
+					$this->_turnier->set('tiebr2', 30);
 				} elseif($feinwertung2 == 14) {
 					//Anz. der Siege
 					$this->_turnier->set('tiebr2', 4);

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,15 +9,11 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
-
 /**
 * CLMText
 * Klassenbibliothek für text-bezogene Funktionalitäten
 */
 class CLMText {
-
-	
 	
 	/**
 	* public static function composeHeadTitle
@@ -192,6 +188,9 @@ class CLMText {
 				break;
 			case 29: // Prozentpunkte
 				$format = "%01.2f";
+				break;
+			case 30: // Turnierleistung
+				$format = "%01.0f";
 				break;
 		
 		}

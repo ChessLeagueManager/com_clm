@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -727,6 +727,9 @@ class CLMTournament {
 					case 29: // Prozentpunkte
 						if ($array_PlayerSpiele[$s] == 0) $sumTiebr[$tb] = 0;
 						else $sumTiebr[$tb] = ($array_PlayerPunkte[$s] * 100) / $array_PlayerSpiele[$s];
+						break;
+					case 30: // Turnierleistung
+						$sumTiebr[$tb] = $player[$s-1]->Leistung;
 						break;
 					case 51: // ordering
 						$sumTiebr[$tb] = 1000 - $player[$s-1]->ordering;

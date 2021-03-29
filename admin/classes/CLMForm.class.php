@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -95,6 +95,7 @@ class CLMForm {
 		$tiebr[19] = JText::_('TIEBR_19');
 		$tiebr[25] = JText::_('TIEBR_25');
 		$tiebr[29] = JText::_('TIEBR_29');
+		$tiebr[30] = JText::_('TIEBR_30');
 		$tiebr[51] = JText::_('TIEBR_51');
 		foreach ($tiebr as $key => $val) {
 			$tiebrlist[]	= JHTML::_('select.option', $key, $val, 'id', 'name' );

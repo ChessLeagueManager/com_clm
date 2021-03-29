@@ -14,6 +14,7 @@ $ -> Language fix or change
 
 - - - - - 3.9.2 - [xx-xx-2021] - - - - - - - - - - - - - - - - - - - -
 ^ SWT-Import: Anpassungen wegen Schulschach ohne DSB-Bezug
++ Einzelturniere: neue Feinwertung Turnierleistung
 
 - - - - - 3.9.1 - [17-03-2021] - - - - - - - - - - - - - - - - - - - -
 # Data für Plugin: Datenaufbereitung für Vereinsübersicht
