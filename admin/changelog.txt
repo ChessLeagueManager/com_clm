@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.9.2 - [xx-xx-2021] - - - - - - - - - - - - - - - - - - - -
+^ SWT-Import: Anpassungen wegen Schulschach ohne DSB-Bezug
+
 - - - - - 3.9.1 - [17-03-2021] - - - - - - - - - - - - - - - - - - - -
 # Data für Plugin: Datenaufbereitung für Vereinsübersicht
 # DWZ-Ermittlung: count-Warnung und Ausgabefeldzuordnung bei Spieler ohne DWZ

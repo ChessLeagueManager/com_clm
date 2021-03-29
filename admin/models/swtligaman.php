@@ -139,7 +139,9 @@ class CLMModelSWTLigaman extends JModelLegacy {
 		$sid	= clm_core::$load->request_int('sid', 0);
 		$lid	= clm_core::$load->request_int('lid', 0);
         $zps    = clm_core::$load->request_string( 'filter_zps', '0');
+        $name    = clm_core::$load->request_string( 'name', '0');
 		$noOrgReference = clm_core::$load->request_string('noOrgReference', '0');		
+		if ($noOrgReference == '1' AND $name != 'spielfrei') $zps = '-1';
 		$noBoardResults = clm_core::$load->request_string('noBoardResults', '0');		
         $dwz_handling   = clm_core::$load->request_string( 'dwz_handling', '0');
 		
@@ -238,7 +240,7 @@ class CLMModelSWTLigaman extends JModelLegacy {
 			$dwzid		= clm_core::$load->request_string('dwzid_' . $i);
 			$spielerid	= clm_core::$load->request_string('spielerid_' . $i);
 			$name	= clm_core::$load->request_string('name_' . $i);
-
+			if ($name == '' AND $dwzid == '') continue;
 			if ($spielerid > 0 AND $dwz_handling == '1') {
 				$elo = $swt_data['spieler_'.$i]['elo']; 
 				if ($elo < '1') $elo = '0'; //die();

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -43,7 +43,7 @@ class CLMModelSpieler extends JModelLegacy
 		$query .= " LEFT JOIN #__clm_dwz_vereine as d ON a.ZPS = d.ZPS AND d.sid = a.sid";
 		$query .= " LEFT JOIN #__clm_mannschaften as n ON ( (n.zps = a.ZPS) OR (FIND_IN_SET(a.ZPS, n.sg_zps) != 0)) AND n.man_nr = m.mnr AND n.liga = m.lid AND n.sid = a.sid";
 	} else {
-		$query .= " LEFT JOIN #__clm_mannschaften as n ON n.zps = '0' AND n.man_nr = m.mnr AND n.liga = m.lid AND n.sid = a.sid";
+		$query .= " LEFT JOIN #__clm_mannschaften as n ON (n.zps = '0' OR n.zps = '-1') AND n.man_nr = m.mnr AND n.liga = m.lid AND n.sid = a.sid";
 	}
 	$query .= " LEFT JOIN #__clm_liga l ON l.id = n.liga AND l.sid = n.sid "
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "

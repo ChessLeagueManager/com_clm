@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team. All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -344,10 +344,12 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 							. ' ( ' . $sp_fields . ' ) '
 							. ' VALUES ( ' . $sp_hvalues . ' ), ( ' . $sp_gvalues . ' ); ';
 				
-					//$db->setQuery ($query);
-					if (!clm_core::$db->query($query)) {
-						print $db->getErrorMsg ();
-						return false;
+					if ($noOrgReference == 1 AND $swt_data[$p]['heim_kampflos'] == 2 AND $swt_data[$p]['gast_kampflos'] == 2) { } else {
+						//$db->setQuery ($query);
+						if (!clm_core::$db->query($query)) {
+							print $db->getErrorMsg ();
+							return false;
+						}
 					}
 					
 					$hbrettpunkte += $hmpunkte;
@@ -1260,6 +1262,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				echo "<br><br>p $p:"; var_dump($swt_man[$p]);
 				if ($noBoardResults == '0') {
 				for ($b = 1; $b <=  $anz_bretter; $b++) {
+					if ($noOrgReference == 1 AND $swt_man[$p]['heim_kampflos'] == 2 AND $swt_man[$p]['gast_kampflos'] == 2) break;
 					foreach ($tmp_spl as $spl) {
 						if ($spl->id == $swt_data[$p]['hbrett_'.$b]) {
 							$hname = $spl->name;
