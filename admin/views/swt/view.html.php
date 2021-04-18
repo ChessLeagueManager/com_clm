@@ -29,6 +29,9 @@ class CLMViewSWT extends JViewLegacy {
 		JToolBarHelper::custom( 'upload', 'upload.png', 'upload_f2.png', JText::_('SWT_UPLOAD'), false);
 		
 		JToolBarHelper::spacer();
+		JToolBarHelper::custom( 'arena_import', 'upload.png', 'upload_f2.png', JText::_('ARENA_IMPORT'), false);
+		
+		JToolBarHelper::spacer();
 		JToolBarHelper::custom( 'swm_import', 'upload.png', 'upload_f2.png', JText::_('SWM_IMPORT'), false);
 		JToolBarHelper::custom('swm_delete','delete.png','delete_f2.png', JText::_('SWM_DELETE'), false);
 		JToolBarHelper::custom( 'swm_upload', 'upload.png', 'upload_f2.png', JText::_('SWM_UPLOAD'), false);

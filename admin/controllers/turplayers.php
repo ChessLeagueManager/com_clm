@@ -522,4 +522,12 @@ class CLMControllerTurPlayers extends JControllerLegacy {
 		$this->app->redirect( $this->adminLink->url );	
 	}
 
+	// Weiterleitung!
+	function player_decode() {		
+		$this->adminLink->view = "turdecode";
+		$this->adminLink->more = array('turnierid' => $this->id);
+		$this->adminLink->makeURL();		
+		$this->app->redirect( $this->adminLink->url );	
+	}
+
 }

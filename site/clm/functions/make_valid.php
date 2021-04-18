@@ -129,6 +129,7 @@ function clm_function_make_valid($input, $type, $standard, $choose = null) {
 			$input = str_replace(".", ":", $input);
 			$input = preg_replace("/[^0-9:]/", "", $input);
 			if (is_numeric($input)) $input .= ':00';
+			if (strlen($input) == 8) $input = substr($input, 0, 5);
 			if (clm_core::$load->is_time($input)) {
 				return $input;
 			}

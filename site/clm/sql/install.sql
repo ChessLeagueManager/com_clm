@@ -373,6 +373,23 @@ CREATE TABLE IF NOT EXISTS `#__clm_rangliste_id` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
+--
+-- Tabellenstruktur für Tabelle `#__clm_player_decode`
+--
+
+CREATE TABLE IF NOT EXISTS `#__clm_player_decode` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sid` mediumint(6) unsigned DEFAULT NULL,
+  `source` varchar(20) DEFAULT NULL,
+  `oname` varchar(50) DEFAULT NULL,
+  `nname` varchar(150) DEFAULT NULL,
+  `verein` varchar(150) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sid_source_oname` (`sid`,`source`,`oname`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+-- --------------------------------------------------------
 
 --
 -- Tabellenstruktur für Tabelle `#__clm_rangliste_name`
@@ -985,6 +1002,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_swt_turniere_tlnr` (
   `status` mediumint(5) NOT NULL DEFAULT '0',
   `rankingPos` smallint(5) unsigned NOT NULL DEFAULT '0',
   `tlnrStatus` tinyint(11) unsigned NOT NULL DEFAULT '1',
+  `oname` varchar(50) DEFAULT NULL,
   `mtln_nr` mediumint(5) unsigned DEFAULT NULL,
   `s_punkte` decimal(3,1) DEFAULT '0.0',
   `sum_punkte` decimal(4,1) DEFAULT NULL,
@@ -992,9 +1010,9 @@ CREATE TABLE IF NOT EXISTS `#__clm_swt_turniere_tlnr` (
   `sum_busum` decimal(6,2) DEFAULT NULL,
   `sum_sobe` decimal(5,2) DEFAULT NULL,
   `sum_wins` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `sumTiebr1` decimal(6,3) NOT NULL DEFAULT '0.000',
-  `sumTiebr2` decimal(6,3) NOT NULL DEFAULT '0.000',
-  `sumTiebr3` decimal(6,3) NOT NULL DEFAULT '0.000',
+  `sumTiebr1` decimal(8,3) NOT NULL DEFAULT '0.000',
+  `sumTiebr2` decimal(8,3) NOT NULL DEFAULT '0.000',
+  `sumTiebr3` decimal(8,3) NOT NULL DEFAULT '0.000',
   `koStatus` enum('0','1') NOT NULL DEFAULT '1',
   `koRound` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `DWZ` smallint(4) unsigned NOT NULL DEFAULT '0',
@@ -1235,6 +1253,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere_tlnr` (
   `status` mediumint(5) NOT NULL DEFAULT '0',
   `rankingPos` smallint(5) unsigned NOT NULL DEFAULT '0',
   `tlnrStatus` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `oname` varchar(50) DEFAULT NULL,
   `mtln_nr` mediumint(5) unsigned DEFAULT NULL,
   `s_punkte` decimal(3,1) DEFAULT '0.0',
   `anz_spiele` tinyint(2) unsigned NOT NULL DEFAULT '0',

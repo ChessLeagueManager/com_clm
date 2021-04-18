@@ -192,6 +192,24 @@ class CLMControllerSWT extends JControllerLegacy
 		}				
 	}
 	
+	function arena_import() {
+		$model = $this->getModel('swt');
+		$arena_code = $model->arena_import();
+		if($arena_code != '') {
+			$_REQUEST['view'] = 'arenaturnier';
+			parent::display();
+		} else {
+			$adminLink = new AdminLink();
+			$adminLink->view = "swt";
+			$adminLink->makeURL();
+			
+			$msg = JText::_( 'ARENA_CODE_MISSING' ); 
+			
+			$this->app->enqueueMessage( $msg );
+			$this->app->redirect($adminLink->url); 		
+		}				
+	}
+	
 	function trf_upload() {
 		$model = $this->getModel('swt');
 		$msg = $model->trf_upload();

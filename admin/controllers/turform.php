@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -107,7 +107,11 @@ class CLMControllerTurForm extends JControllerLegacy {
 		// Parameter
 		$paramsStringArray = array();
 		foreach ($row->params as $key => $value) {
-			$paramsStringArray[] = $key.'='.intval($value);
+			if ($key == 'import_source') {
+				$paramsStringArray[] = $key.'='.$value;
+			} else {
+				$paramsStringArray[] = $key.'='.intval($value);
+			}
 		}
 		$row->params = implode("\n", $paramsStringArray);
 

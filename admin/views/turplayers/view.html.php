@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -76,8 +76,15 @@ class CLMViewTurPlayers extends JViewLegacy {
 			// Turnier mit Mannschaftswertung
 			$turParams = new clm_class_params($model->turnier->params);
 			$param_teamranking = $turParams->get('teamranking', 0);
+			$param_teamranking  = preg_replace("/[^a-z\d_äöü ]/si" , '' , $param_teamranking); 
 			if ($param_teamranking > '0') {
 				JToolBarHelper::custom( 'edit_teams', 'copy.png', 'copy_f2.png', JText::_('EDIT_TEAMS'), false);
+			}
+			// Turnier mit Umschlüsslung von Namen
+			$param_import_source = $turParams->get('import_source', 0);
+			$param_import_source  = preg_replace("/[^a-z\d_äöü ]/si" , '' , $param_import_source); 
+			if ($param_import_source > '0') {
+				JToolBarHelper::custom( 'player_decode', 'copy.png', 'copy_f2.png', JText::_('DECODE_PLAYERS'), false);
 			}
 		}
 		

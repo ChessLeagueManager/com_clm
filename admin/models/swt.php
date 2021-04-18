@@ -289,6 +289,13 @@ class CLMModelSWT extends JModelLegacy {
 		}
 	}
 
+	function arena_import() {
+		//Name der zu Datei wird geladen
+		$arena_code = clm_core::$load->request_string('arena_code', '');
+		
+		return $arena_code;
+	}
+
 }
 
 ?>

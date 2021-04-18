@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -110,7 +110,19 @@ if (!$archive_check) {
 	
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
 
+function pgn_element($contents, $uelement, $ustart, $debug = 0) {
+	$upos = strpos(($contents),$uelement.' ',$ustart);
+	if ($upos === false) return '';
+	$length = strlen($uelement);
+	$vstart = $upos + $length + 2;
+	$vend = strpos(($contents),'"',$vstart+1);
+	if ($vend === false) return '';
+	$value = substr($contents,$vstart,$vend-$vstart);
+	return $value;
+}	
+
 	$turParams = new clm_class_params($this->turnier->params);
+	$param_source = $turParams->get('import_source', '0');
 	$ia = -1;
 	// alle Runden durchgehen - go through all rounds
 	foreach ($this->rounds as $value) {
@@ -228,6 +240,10 @@ if (!$archive_check) {
 							// echo CLMText::getResultString($matches->ergebnis);
 							if (($this->turnier->typ == 3 OR $this->turnier->typ == '5') AND ($matches->tiebrS > 0 OR $matches->tiebrG > 0)) {
 								echo '<br /><small>'.$matches->tiebrS.':'.$matches->tiebrG.'</small>';
+							}
+							if ($param_source == 'lichess' AND $matches->pgn != '' AND $this->pgnShow) {
+								$site = pgn_element($matches->pgn, 'Site', 0);
+								echo ' <small style="float:right"><a href="'.$site.'" target="_blank">lichess</a></small>';
 							}
 							echo '</td>';
 						} else {

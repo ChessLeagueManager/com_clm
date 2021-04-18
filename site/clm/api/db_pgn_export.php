@@ -1,5 +1,11 @@
 <?php
 /**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
+/**
 * erstellt pgn-Ausgabe eines Mannschafts- oder Einzelturniers
 */
 function clm_api_db_pgn_export($id,$group=true) {
@@ -32,7 +38,14 @@ function clm_api_db_pgn_export($id,$group=true) {
 			." AND a.dg > 0 "
 			." ORDER BY a.dg, a.runde, a.paar, a.brett ";
 		$pgn = clm_core::$db->loadObjectList($query);
-		
+		if(is_null($pgn) OR count($pgn)==0) {
+			$query = " SELECT pgn as text FROM #__clm_turniere_rnd_spl as a "
+				." WHERE a.turnier = ".$id
+				." AND a.dg > 0 "
+				." AND a.heim = 1 "
+				." ORDER BY a.dg, a.runde, a.brett ";
+			$pgn = clm_core::$db->loadObjectList($query);
+		}		
 	}
 	if(count($pgn)==0) {
 		return array(false, "e_PgnNoDataError");
