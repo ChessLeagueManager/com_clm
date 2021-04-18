@@ -172,8 +172,14 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
  	{
 
 		// Korrektur Leistung: Anzeige bei weniger als 5 Spielen oder nur Siegen/Niederlagen nicht gewollt
-		if($value->n<5 || $value->W==0 || $value->W==$value->n) {
+//		if($value->n<5 || $value->W==0 || $value->W==$value->n) {
+//			$value->R_p = 0;
+//		}
+		if($value->n<5 || $value->W==0 ) {
 			$value->R_p = 0;
+		}
+		elseif($value->W==$value->n) {
+			$value->R_p = $value->R_c + 667;
 		}
 
 		if($group) {
