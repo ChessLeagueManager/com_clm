@@ -221,8 +221,8 @@ class CLMText {
 	*/
 	public static function formatNote($text) {
 	
-		$string = nl2br(JFilterOutput::cleantext($text));
-		
+		$text = nl2br(JFilterOutput::cleantext($text));
+		$string = preg_replace("~[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]~","<a href=\"\\0\" target=\"_blank\">\\0</a>", $text);
 		return $string;
 	
 	}

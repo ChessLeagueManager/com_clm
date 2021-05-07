@@ -18,6 +18,7 @@ $ -> Language fix or change
 + Import von Arena-Turnierdateien von lichess
 + Einzelturniere: Decodieren von Nicknamen
 # Einzelturniere: inoff. DWZ-Ermittlung bei 100%-Erfolg
++ Einzelturniere: Darstellung von Links im Text
 
 - - - - - 3.9.1 - [17-03-2021] - - - - - - - - - - - - - - - - - - - -
 # Data für Plugin: Datenaufbereitung für Vereinsübersicht
