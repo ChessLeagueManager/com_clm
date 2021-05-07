@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -117,6 +117,10 @@ if (!$liga OR $liga[0]->published == 0) {
 	<?php
 	echo CLMContent::createPDFLink('teilnehmer', JText::_('TABELLE_PDF'), array('saison' => $sid, 'layout' => 'teilnehmer', 'liga' => $lid));
 	//echo CLMContent::createViewLink('rangliste', JText::_('TABELLE_GOTO_RANGLISTE'), array('saison' => $sid, 'liga' => $lid) );
+	if ($pdf_melde == 1) {
+		// Neue Ausgabe: Saisonstart
+		echo CLMContent::createPDFLink('rangliste', JText::_('PDF_RANGLISTE_TEAM_LISTING'), array('saison' => $sid, 'layout' => 'start', 'liga' => $lid));
+	}
 	?>
 
 	</div></div>

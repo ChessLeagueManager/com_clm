@@ -19,6 +19,7 @@ $ -> Language fix or change
 + Einzelturniere: Decodieren von Nicknamen
 # Einzelturniere: inoff. DWZ-Ermittlung bei 100%-Erfolg
 + Einzelturniere: Darstellung von Links im Text
++ View Teilnehmerliste mit Link zu Meldelisten
 
 - - - - - 3.9.1 - [17-03-2021] - - - - - - - - - - - - - - - - - - - -
 # Data für Plugin: Datenaufbereitung für Vereinsübersicht
