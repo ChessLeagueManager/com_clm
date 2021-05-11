@@ -457,7 +457,8 @@ if ($ausgeloste_runden == 0) {
 			$offset += 655;
 			
 		}
-		$_POST['spielerid'] = $spielerid;
+		if (isset($spielerid))
+			$_POST['spielerid'] = $spielerid;
 		
 		$swt_data['anz_spieler'] = $anz_spieler;
 		

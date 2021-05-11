@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -88,17 +88,25 @@ class CLMViewSWTLigaman extends JViewLegacy {
 		// Stammspieler-Auswahl
 		$stammtable = '';
 		for ($i = 1; $i <= $swt_db_data['anz_bretter']; $i++) {
-			$dwzid		= $swt_data['spieler_'.$i]['dwzid'];
+			if (isset($swt_data['spieler_'.$i])) {
+				$dwzid		= $swt_data['spieler_'.$i]['dwzid'];
+				$swt_spieler = $swt_data['spieler_'.$i]['name'];
+			} else {
+				$dwzid		= 0;
+				$swt_spieler = '';
+			}
 			$splist		= array ();
 			$splist[]	= JHtml::_('select.option', '0', JText::_( 'SWT_LEAGUE_PLAYER_SELECT' ), 'id', 'name');
 			$splist		= array_merge( $splist, $db_splist );
 			if ($noOrgReference == '0')
-				$splist[]	= JHtml::_('select.option', '-1', $swt_data['spieler_'.$i]['name'] . " " . JText::_( 'SWT_LEAGUE_NEW' ), 'id', 'name');
+//				$splist[]	= JHtml::_('select.option', '-1', $swt_data['spieler_'.$i]['name'] . " " . JText::_( 'SWT_LEAGUE_NEW' ), 'id', 'name');
+				$splist[]	= JHtml::_('select.option', '-1', $swt_spieler . " " . JText::_( 'SWT_LEAGUE_NEW' ), 'id', 'name');
 			else
-				$splist[]	= JHtml::_('select.option', '-1', $swt_data['spieler_'.$i]['name'], 'id', 'name');
+//				$splist[]	= JHtml::_('select.option', '-1', $swt_data['spieler_'.$i]['name'], 'id', 'name');
+				$splist[]	= JHtml::_('select.option', '-1', $swt_spieler, 'id', 'name');
 			$blist		= JHtml::_('select.genericlist', $splist, 'dwzid_'.$i, 'class="inputbox" size="1"', 'id', 'name', $dwzid);
 			
-			$swt_spieler = $swt_data['spieler_'.$i]['name'];
+//			$swt_spieler = $swt_data['spieler_'.$i]['name'];
 			if ($dwzid == -1) {
 				$swt_spieler = '<b style="color: #f00">' . $swt_spieler . '</b>';
 				$swt_spieler .= '<br>'.$swt_data['spieler_'.$i]['zps'].($swt_data['spieler_'.$i]['mgl_nr']!="" ? "/".$swt_data['spieler_'.$i]['mgl_nr'] : "");

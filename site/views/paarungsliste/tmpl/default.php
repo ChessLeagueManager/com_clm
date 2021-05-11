@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -341,7 +341,17 @@ if ($remis_com == 1) { $remis_com = 0; ?>
 <div class="left">
 <?php
 if ($rundensumme[$rund_sum]->nr == ($x+1) ) { $rund_sum++; }
-if ($termin[$term]->datum AND $termin[$term]->nr == ($x+1)) { if ($termin[$term]->datum > 0) echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); $term++;} ?>
+
+	if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1+ (($xx)*$liga[0]->runden)) ) {
+		if ($termin[$term]->datum > 0) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); 
+			if($params['round_date'] == '0' and isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { echo '  '.substr($termin[$term]->startzeit,0,5); }
+			if($params['round_date'] == '1' and isset($termin[$term]->enddatum) and $termin[$term]->enddatum > '1970-01-01' and $termin[$term]->enddatum != $termin[$term]->datum) { 
+						echo ' - '.JHTML::_('date',  $termin[$term]->enddatum, JText::_('DATE_FORMAT_CLM_F')); }
+		}
+		$term++;
+	}
+//if ($termin[$term]->datum AND $termin[$term]->nr == ($x+1)) { if ($termin[$term]->datum > 0) echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); $term++;}
+ ?>
 </div>
 <div style="text-align: right; padding: 0 10px 0 0;"> <?php echo $termin[$x]->name; ?></div>
 </b>
