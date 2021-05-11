@@ -352,6 +352,23 @@ CREATE TABLE IF NOT EXISTS `#__clm_pgn` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
+--
+-- Tabellenstruktur für Tabelle `#__clm_player_decode`
+--
+
+CREATE TABLE IF NOT EXISTS `#__clm_player_decode` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sid` mediumint(6) unsigned DEFAULT NULL,
+  `source` varchar(20) DEFAULT NULL,
+  `oname` varchar(50) DEFAULT NULL,
+  `nname` varchar(150) DEFAULT NULL,
+  `verein` varchar(150) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sid_source_oname` (`sid`,`source`,`oname`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+-- --------------------------------------------------------
 
 --
 -- Tabellenstruktur für Tabelle `#__clm_rangliste_id`
@@ -371,23 +388,6 @@ CREATE TABLE IF NOT EXISTS `#__clm_rangliste_id` (
   `ordering` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
---
--- Tabellenstruktur für Tabelle `#__clm_player_decode`
---
-
-CREATE TABLE IF NOT EXISTS `#__clm_player_decode` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `sid` mediumint(6) unsigned DEFAULT NULL,
-  `source` varchar(20) DEFAULT NULL,
-  `oname` varchar(50) DEFAULT NULL,
-  `nname` varchar(150) DEFAULT NULL,
-  `verein` varchar(150) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `sid_source_oname` (`sid`,`source`,`oname`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
 
 -- --------------------------------------------------------
 

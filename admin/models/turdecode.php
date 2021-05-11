@@ -43,6 +43,7 @@ class CLMModelTurDecode extends JModelLegacy {
 		$mainframe =JFactory::getApplication();
 		global $option;
 		$db=JFactory::getDBO();
+//echo "<br>GET: "; var_dump($_GET);	
 //echo "<br>POST: "; var_dump($_POST);	
 		// clm_spielername
 		$this->param['clm_spielername'] = $mainframe->getUserStateFromRequest( "$option.clm_spielername", 'clm_spielername', '', 'string' );
@@ -55,9 +56,13 @@ class CLMModelTurDecode extends JModelLegacy {
 
 		// clm_org
 //echo "<br>lv:".$config->lv;
+		$config_lv = substr($config->lv,0,1).'00';
+//echo "<br>lv:".$config_lv;
 //echo "<br>0filter_verband:".$filter_verband;
 //		$filter_verband		= $mainframe->getUserStateFromRequest( "$option.filter_verband",'filter_verband',$config->lv,'string' );
-		$filter_verband		= $mainframe->getUserStateFromRequest( "filter_verband",'filter_verband',$config->lv );
+		$filter_verband		= $mainframe->getUserStateFromRequest( "filter_verband",'filter_verband',$config_lv );
+		$filter_verein		= $mainframe->getUserStateFromRequest( "filter_verein",'filter_verein','' );
+		$filter_numberlines	= $mainframe->getUserStateFromRequest( "filter_numberlines",'filter_numberlines',0 );
 //echo "<br>1filter_verband:".$filter_verband;
 //		$this->param['clm_org'] = $mainframe->getUserStateFromRequest( "$option.clm_org", 'clm_org', '', 'string' );
 //		$this->param['clm_org'] = strtolower( $this->param['clm_org'] );
@@ -73,15 +78,35 @@ class CLMModelTurDecode extends JModelLegacy {
 		else
 			$this->param['verband'] = '';		
 //echo "<br>verband:".$this->param['verband'];
+		// Vereinsfilter
+		$sql = 'SELECT ZPS, Vereinname FROM #__clm_dwz_vereine ';
+		$sql .= " WHERE sid = ".clm_core::$access->getSeason(); // aktuelle Saison
+		if ($filter_verband != '' AND $countryversion == 'de')
+			$sql .= " AND SUBSTR(ZPS,1,1) = '".substr($filter_verband,0,1)."'";
+		$sql .= " ORDER BY Vereinname ";
+		$db->setQuery($sql);
+		$vereinlist[]	= JHTML::_('select.option',  '', JText::_( 'DECODE_VEREIN_WAEHLEN' ), 'ZPS', 'Vereinname' );
+		$vereinlist	= array_merge( $vereinlist, $db->loadObjectList() );
+		$this->lists['verein']	= JHTML::_('select.genericlist', $vereinlist, 'filter_verein', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','ZPS', 'Vereinname', $filter_verein );
+//		if ($countryversion =="de") 
+			$this->param['verein'] = $filter_verein;
+//		else
+//			$this->param['verein'] = '';		
+//echo "<br>verein:".$this->param['verein'];
+		// turnier_id
+		$this->param['init_numberlines'] = clm_core::$load->request_int('init_numberlines',13);
+//echo "<br>m_numberlines:".$this->param['init_numberlines']; //die();
+		$this->param['numberlines'] = $filter_numberlines;
+		if (!is_numeric($this->param['numberlines'])) $this->param['numberlines'] = 0;
 
 		// turnier_id
 		$this->param['turnierid'] = clm_core::$load->request_int('turnierid');
 	
 		// limit
-		$this->limit		= $mainframe->getUserStateFromRequest( $option.'limit', 'limit', $mainframe->getCfg('list_limit'), 'int');
+//		$this->limit		= $mainframe->getUserStateFromRequest( $option.'limit', 'limit', $mainframe->getCfg('list_limit'), 'int');
 		$this->limitstart = $mainframe->getUserStateFromRequest( $option.'limitstart', 'limitstart', 0, 'int' );
 
-		$this->setState('limit', $this->limit);
+//		$this->setState('limit', $this->limit);
 		$this->setState('limitstart', $this->limitstart);
 
 	}
@@ -109,8 +134,8 @@ class CLMModelTurDecode extends JModelLegacy {
 			$this->a_names[$player->oname]->nname = $player->nname; 
 			$this->a_names[$player->oname]->verein = $player->verein; 
 		}			
-
-		$query = 'SELECT Spielername, Vereinname as verein '
+		unset($this->playersNames);
+		$query = 'SELECT Spielername, Vereinname as verein, a.ZPS, a.mgl_nr, a.PKZ '
 			. ' FROM #__clm_dwz_spieler as a'
 			. ' LEFT JOIN #__clm_dwz_vereine as v ON v.sid = a.sid AND v.ZPS = a.ZPS '
 			. " WHERE a.sid = ".$this->turnier->sid
@@ -121,6 +146,10 @@ class CLMModelTurDecode extends JModelLegacy {
 				$query .= " AND SUBSTR(Verband, 1, 1) = '".substr($this->param['verband'], 0, 1)."'";
 			else 
 				$query .= " AND Verband = '".$this->param['verband']."'";
+		}
+		if ($this->param['verein'] != '' AND 
+			($this->param['verband'] == '' OR substr($this->param['verband'], 0, 1) == substr($this->param['verein'], 0, 1)) ) {
+			$query .= " AND a.ZPS = '".$this->param['verein']."'";
 		}
 		$query .= ' ORDER BY Spielername '
 			. ' LIMIT 20000 '
@@ -134,30 +163,35 @@ class CLMModelTurDecode extends JModelLegacy {
 
 	function _getPlayersData() {
 	
+		//CLM parameter auslesen
+		$config = clm_core::$db->config();
+		$countryversion = $config->countryversion;
+		$trial_and_error = $config->trial_and_error;
+	
 		$query = 'SELECT * '
 			. ' FROM #__clm_turniere_tlnr'
 			. ' WHERE turnier = '.$this->param['turnierid']
 			;
 		$this->_db->setQuery($query);
 		$this->playersTotal = $this->_getListCount($query);
-//echo "<br>playersTotal:".$this->playersTotal;
-		if ($this->limit > 0) {
-			
+//echo "<br>filter_numberlines:".$this->param['numberlines'];
+		if (isset($this->param['init_numberlines']) AND $this->param['init_numberlines'] == 1) { 			
+			$this->limit = clm_core::$load->line_number($this->dwzTotal);
+			unset($_GET['init_numberlines']);
+			$this->param['init_numberlines'] = 0;
+		} else {
+			if ($trial_and_error == 1 AND $this->param['numberlines'] > 0 ) {
+				$this->limit = $this->param['numberlines'];
+			} else {
+				$this->limit = clm_core::$load->line_number($this->dwzTotal);
+			}	
+		}
 //echo "<br>m_memory_limit: ".ini_get('memory_limit'); //var_dump(ini_get('memory_limit'));
 //echo "<br>m_dwzTotal:".$this->dwzTotal;
-			$memory_limit = (integer) ini_get('memory_limit');
+//			$memory_limit = (integer) ini_get('memory_limit');
 //echo "<br>m_memory_limit: ".$memory_limit; //var_dump(ini_get('memory_limit'));
-			if ($memory_limit < 128) $this->limit = 10;
-			if ($memory_limit >= 128)
-				if ($this->dwzTotal > 15000) $this->limit = 15;
-				else $this->limit = 20;
 //echo "<br>m_limit: ".$this->limit; 
-			if ($this->limitstart > $this->playersTotal) {
-				$this->limitstart = $this->playersTotal - $this->limit;
-				if ($this->limitstart < 0) $this->limitstart = 0;
-			}
-			$query .= ' LIMIT '.$this->limitstart.', '.$this->limit;
-		}
+		$query .= ' LIMIT '.$this->limitstart.', '.$this->limit;
 		
 		$this->_db->setQuery($query);
 		$this->turPlayers = $this->_db->loadObjectList();

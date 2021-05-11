@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -62,11 +62,18 @@ function clm_api_db_tournament_updateDWZ($id,$group=true) {
 				$stmt->bind_param('iiiiss', $value->dwz, $value->dwz_index,$value->FIDEelo, $id, $value->zps, $value->PKZ);
 		} else {
 			// TWZ Aktualisieren 	
-			$twz = clm_core::$load->gen_twz($useAsTWZ,$value->dwz,$value->FIDEelo);
-			if ($countryversion == "de") 
-				$stmt->bind_param('iisiiiisi', $value->dwz, $value->dwz_index, $value->FIDEcco,$value->FIDEelo,$value->FIDEid,$twz, $id, $value->zps, $value->mgl_nr);
-			else 
-				$stmt->bind_param('iisiiiiss', $value->dwz, $value->dwz_index, $value->FIDEcco,$value->FIDEelo,$value->FIDEid,$twz, $id, $value->zps, $value->PKZ);
+			if ($useAsTWZ != 8) {
+				$twz = clm_core::$load->gen_twz($useAsTWZ,$value->dwz,$value->FIDEelo);
+				if ($countryversion == "de") 
+					$stmt->bind_param('iisiiiisi', $value->dwz, $value->dwz_index, $value->FIDEcco,$value->FIDEelo,$value->FIDEid,$twz, $id, $value->zps, $value->mgl_nr);
+				else 
+					$stmt->bind_param('iisiiiiss', $value->dwz, $value->dwz_index, $value->FIDEcco,$value->FIDEelo,$value->FIDEid,$twz, $id, $value->zps, $value->PKZ);
+			} else {
+				if ($countryversion == "de") 
+					$stmt->bind_param('iisiiisi', $value->dwz, $value->dwz_index, $value->FIDEcco,$value->FIDEelo,$value->FIDEid, $id, $value->zps, $value->mgl_nr);
+				else 
+					$stmt->bind_param('iisiiiss', $value->dwz, $value->dwz_index, $value->FIDEcco,$value->FIDEelo,$value->FIDEid, $id, $value->zps, $value->PKZ);
+			}
 		}
 		$stmt->execute();
 	}

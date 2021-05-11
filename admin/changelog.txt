@@ -16,7 +16,7 @@ $ -> Language fix or change
 ^ SWT-Import: Anpassungen wegen Schulschach ohne DSB-Bezug
 + Einzelturniere: neue Feinwertung Turnierleistung
 + Import von Arena-Turnierdateien von lichess
-+ Einzelturniere: Decodieren von Nicknamen
++ Einzelturniere: Decodieren von Nicknamen mit Übernahme von NWZ, Elo, Geburtsjahr
 # Einzelturniere: inoff. DWZ-Ermittlung bei 100%-Erfolg
 + Einzelturniere: Darstellung von Links im Text
 + View Teilnehmerliste mit Link zu Meldelisten

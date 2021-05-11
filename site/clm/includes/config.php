@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -145,4 +145,5 @@ $config["test_button"]=array(124,9,0,array(0,1));
 $config["view_archive"]=array(125,9,0,array(0,1,2));
 $config["user_member"]=array(126,9,0,array(0,1)); 
 $config["privacy_notice"]=array(127,14,"",null);
+$config["trial_and_error"]=array(128,9,0,array(0,1)); 
 ?>

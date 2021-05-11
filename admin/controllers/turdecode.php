@@ -66,16 +66,56 @@ class CLMControllerTurDecode extends JControllerLegacy
 				$verein = $a_tname[1];
 			}
 			if ($nname == '') continue;
+			$nname = addslashes($nname);
+			$verein = addslashes($verein);
 			
 			if ($tname != '-2' ) {
+				// Zusatzdaten holen
+				$zps = '';
+				$mgl_nr = 0;
+				$PKZ = 0;
+				$titel = '';
+				$birthyear = '0000';
+				$geschlecht = '';
+				$start_dwz = 0;
+				$start_I0 = 0;
+				$FIDEelo = 0;
+				$FIDEid = 0;
+				$FIDEcco = '';
+				$query = 'SELECT a.*, Vereinname as verein '
+					. ' FROM #__clm_dwz_spieler as a'
+					. ' LEFT JOIN #__clm_dwz_vereine as v ON v.sid = a.sid AND v.ZPS = a.ZPS '
+					. " WHERE a.sid = ".$sid
+					. " AND a.Spielername = '".$nname."' AND v.Vereinname = '".$verein."'"; 
+				$dwzDetails = clm_core::$db->loadObjectList($query);	
+				if (isset($dwzDetails[0]->Spielername)) {
+					$zps = $dwzDetails[0]->ZPS;
+					$mgl_nr = (integer) $dwzDetails[0]->Mgl_Nr;
+					$PKZ = $dwzDetails[0]->PKZ;
+					$titel = $dwzDetails[0]->FIDE_Titel;
+					$birthyear = $dwzDetails[0]->Geburtsjahr;
+					$geschlecht = $dwzDetails[0]->Geschlecht;
+					$start_dwz = (integer) $dwzDetails[0]->DWZ;
+					$start_I0 = (integer) $dwzDetails[0]->DWZ_Index;
+					$FIDEelo = (integer) $dwzDetails[0]->FIDE_Elo;
+					$FIDEid = (integer) $dwzDetails[0]->FIDE_ID;
+					$FIDEcco = $dwzDetails[0]->FIDE_Land;
+				}	
+
 				// Update der Recode-Tabelle
-				$query	= "REPLACE INTO #__clm_player_decode"
+//				$query	= "REPLACE INTO #__clm_player_decode"
+//					. " ( `sid`, `source`, `oname`, `nname`, `verein`) "
+//					. " VALUES (".$sid.",'lichess', '".$oname."', '".$nname."', '".$verein."' )";
+				$query	= "INSERT INTO #__clm_player_decode"
 					. " ( `sid`, `source`, `oname`, `nname`, `verein`) "
-					. " VALUES (".$sid.",'lichess', '".$oname."', '".$nname."', '".$verein."' )";
+					. " VALUES (".$sid.",'lichess', '".$oname."', '".$nname."', '".$verein."' )"
+					. " ON DUPLICATE KEY UPDATE nname = '".$nname."', verein = '".$verein."'";
 				clm_core::$db->query($query);			
 				// Update der Teilnehmertabelle
 				$query	= "UPDATE #__clm_turniere_tlnr"
-					. " SET name = '".$nname."', verein = '".$verein."'"
+					. " SET name = '".$nname."', verein = '".$verein."', zps = '".$zps."', mgl_nr = ".$mgl_nr.", PKZ = '".$PKZ."'"
+					. " , titel = '".$titel."', birthyear = '".$birthyear."', geschlecht = '".$geschlecht."', start_dwz = ".$start_dwz.", start_I0 = ".$start_I0
+					. ", FIDEelo = ".$FIDEelo.", FIDEid = ".$FIDEid.", FIDEcco = '".$FIDEcco."'"
 					. " WHERE turnier = ".$tid
 					. " AND oname = '".$oname."'";
 				clm_core::$db->query($query);

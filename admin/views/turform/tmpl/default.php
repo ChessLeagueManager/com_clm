@@ -271,9 +271,13 @@ $turParams = new clm_class_params($this->turnier->params);
 		<td class="paramlist_value">
 			<?php 
 			$options = array();
-			$options[0] = JText::_('OPTION_USEASTWZ_0');
-			$options[1] = JText::_('OPTION_USEASTWZ_1');
-			$options[2] = JText::_('OPTION_USEASTWZ_2');
+			if ($turParams->get('useAsTWZ', 0) == 8) {
+				$options[8] = JText::_('OPTION_USEASTWZ_8');
+			} else {
+				$options[0] = JText::_('OPTION_USEASTWZ_0');
+				$options[1] = JText::_('OPTION_USEASTWZ_1');
+				$options[2] = JText::_('OPTION_USEASTWZ_2');
+			}
 			$optionlist = array();
 			foreach ($options as $key => $val) {
 				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );

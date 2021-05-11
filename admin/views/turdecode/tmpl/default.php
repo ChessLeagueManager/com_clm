@@ -12,6 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
+	$trial_and_error = $config->trial_and_error;
 
 ?>
 <div id="clm"><div class="clm">
@@ -20,13 +21,19 @@ defined('_JEXEC') or die('Restricted access');
 	<table>
 		<tr>
 			<td width="75%">
+				<?php if ($trial_and_error == 1) {
+					echo JText::_( 'DECODE_ANZEIGEZEILEN' );				
+				?>
+				  <input type="text" name="filter_numberlines" id="filter_numberlines" value="<?php echo $this->param['numberlines']; ?>" size="4" maxlength="5" title="<?php echo JText::_( 'DECODE_HINT' ); ?>" onchange="document.adminForm.submit();">
+				<?php } ?>
 			</td>
 			<td nowrap="nowrap" width="25%">
 				<?php
+					echo JText::_( 'DECODE_SELECTION' );
 					if ($countryversion =="de") {
-						echo JText::_( 'DECODE_SELECTION' );
 						echo "&nbsp;&nbsp;&nbsp;".$this->lists['verband'];
 					}
+					echo "&nbsp;&nbsp;&nbsp;".$this->lists['verein'];
 				?>
 			</td>
 		</tr>
@@ -75,6 +82,10 @@ defined('_JEXEC') or die('Restricted access');
 				  $verein = $this->a_names[$player->oname]->verein;
 			  } else { 
 				  $verein = '';
+			  } 
+			  if ($nname == '' AND $player->name != $player->oname) {
+				  $nname = $player->name;
+				  $verein = $player->verein;
 			  } 
 			  
 				  ?>

@@ -14,6 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 		$turParams = new clm_class_params($this->turnier->params);
 		$param_typeaccount = $turParams->get('typeAccount', 0);
 		$param_teamranking = $turParams->get('teamranking', 0);
+		$param_import_source = $turParams->get('import_source', '');
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -62,6 +63,12 @@ defined('_JEXEC') or die('Restricted access');
 					echo JHtml::_('select.genericlist', $optionlist, 'mtln_nr', 'class="inputbox"', 'id', 'name', $this->player->mtln_nr);
 					?>
 				</td>
+			</tr>
+			<?php } ?>
+			<?php if ($param_import_source != '') { ?>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo JText::_('DECODE_NICKNAME'); ?> (<?php echo $param_import_source; ?>):</td>
+				<td><input class="inputbox" type="text" name="oname" id="oname" size="20" maxlength="60" value="<?php echo $this->player->oname; ?>" /></td>
 			</tr>
 			<?php } ?>
 			<tr>

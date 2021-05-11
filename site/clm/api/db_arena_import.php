@@ -195,14 +195,21 @@ if ($debug > 0) { echo "<br>"; }
 		$n_spieler[$spieler->name]->elo = $spieler->elo;
 		$n_spieler[$spieler->name]->name = $spieler->name;
 		$n_spieler[$spieler->name]->snr = $key + 1;
-		$n_spieler[$spieler->name]->performance = $e_spieler[$spieler->name]->performance;
-		$n_spieler[$spieler->name]->tieBreak = $e_spieler[$spieler->name]->tieBreak;
 		$s_spieler[($key + 1)] = new stdclass();
 		$s_spieler[($key + 1)]->elo = $spieler->elo;
 		$s_spieler[($key + 1)]->name = $spieler->name;
 		$s_spieler[($key + 1)]->snr = $key + 1;
-		$s_spieler[$key + 1]->performance = $e_spieler[$spieler->name]->performance;
-		$s_spieler[$key + 1]->tieBreak = $e_spieler[$spieler->name]->tieBreak;
+		if (isset($e_spieler[$spieler->name])) { // notwendig wegen Dateninkonsistenz bei lichess (selten)
+			$n_spieler[$spieler->name]->performance = $e_spieler[$spieler->name]->performance;
+			$n_spieler[$spieler->name]->tieBreak = $e_spieler[$spieler->name]->tieBreak;
+			$s_spieler[$key + 1]->performance = $e_spieler[$spieler->name]->performance;
+			$s_spieler[$key + 1]->tieBreak = $e_spieler[$spieler->name]->tieBreak;
+		} else {
+			$n_spieler[$spieler->name]->performance = 0;
+			$n_spieler[$spieler->name]->tieBreak = 0;
+			$s_spieler[$key + 1]->performance = 0;
+			$s_spieler[$key + 1]->tieBreak = 0;
+		}
 if ($debug > 0) { echo "<br>-- spieler --:".($key+1).' '.$spieler->name.' '.$spieler->elo;	} // var_dump($n_spieler); } 
 	}
 if ($debug > 1) { echo "<br><br>-- n_spieler --:";	var_dump($n_spieler); } 
@@ -278,6 +285,7 @@ if ($debug > 0) { echo "<br>-- Runden --:".$runden; } //die();
 		$params_array[] = 'pgnPublic=1';	
 		$params_array[] = 'pgnDownload=1';	
 		$params_array[] = 'autoDWZ=2';	
+		$params_array[] = 'useAsTWZ=8';	
 		$params_array[] = 'inofDWZ=0';	
 		$params_array[] = 'import_source=lichess';	
 if ($debug > 2) { echo "<br>params_array: ";	var_dump($params_array); }

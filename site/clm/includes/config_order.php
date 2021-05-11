@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -32,6 +32,6 @@ $config_order = array(
 				array("pgn", 0, "fe_pgn_show", "fe_pgn_moveFont", "fe_pgn_commentFont", "fe_pgn_style"),
 				array("upDown", 0,"rang_auf","rang_auf_evtl", "rang_ab", "rang_ab_evtl"),
 				array("wrong", 0, "wrong1", "wrong2_length", "wrong2_style", "wrong2_color")),
-			array("developer", 0, "soap_safe", "log", "log_error", "log_warning", "log_notice", "log_unknown", "log_info", "test_button")
+			array("developer", 0, "soap_safe", "log", "log_error", "log_warning", "log_notice", "log_unknown", "log_info", "trial_and_error", "test_button")
 		);
 ?>
