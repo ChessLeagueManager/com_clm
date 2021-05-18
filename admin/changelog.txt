@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.9.2 - [xx-xx-2021] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.9.2 - [11-05-2021] - - - - - - - - - - - - - - - - - - - -
 ^ SWT-Import: Anpassungen wegen Schulschach ohne DSB-Bezug
 + Einzelturniere: neue Feinwertung Turnierleistung
 + Import von Arena-Turnierdateien von lichess
