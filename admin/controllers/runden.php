@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -51,7 +51,7 @@ function display($cachable = false, $urlparams = array())
 	$filter_lid		= $mainframe->getUserStateFromRequest( "$option.filter_lid",'filter_lid',0,'int' );
 	$filter_catid		= $mainframe->getUserStateFromRequest( "$option.filter_catid",'filter_catid',0,'int' );
 	$search			= $mainframe->getUserStateFromRequest( "$option.search",'search','','string' );
-	$search			= JString::strtolower( $search );
+	$search			= strtolower( $search );
 	$limit			= $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
 	$limitstart		= $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
 
@@ -100,14 +100,21 @@ function display($cachable = false, $urlparams = array())
 	. ' LEFT JOIN #__clm_liga AS d ON a.liga = d.id'
 	. ' LEFT JOIN #__users AS u ON u.id = a.checked_out'
 	. $where.$orderby;
-	$db->setQuery( $query, $pageNav->limitstart, $pageNav->limit );
+/*	$db->setQuery( $query, $pageNav->limitstart, $pageNav->limit );
 
 	$rows = $db->loadObjectList();
 	if ($db->getErrorNum()) {
 		echo $db->stderr();
 		return false;
 	}
-
+*/
+	try {
+		$db->setQuery( $query, $pageNav->limitstart, $pageNav->limit );
+		$rows = $db->loadObjectList();
+	}
+	catch (Exception $e) {
+		$mainframe->enqueueMessage($db->stderr(), 'error');
+	}
 	// Filter
 	// Statusfilter
 	$lists['state']	= JHtml::_('grid.state',  $filter_state );
