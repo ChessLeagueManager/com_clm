@@ -11,7 +11,8 @@
 */
 
 defined('_JEXEC') or die('Restricted access');
-JHtml::_('behavior.tooltip', '.CLMTooltip');
+//JHtml::_('behavior.tooltip', '.CLMTooltip');
+require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
 $lid		= clm_core::$load->request_int('liga',0); 
 $sid		= clm_core::$load->request_int('saison',0);

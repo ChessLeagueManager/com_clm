@@ -6,7 +6,8 @@
  * @link http://www.chessleaguemanager.de
 */
 defined('_JEXEC') or die('Restricted access');
-JHtml::_('behavior.tooltip', '.CLMTooltip');
+//JHtml::_('behavior.tooltip', '.CLMTooltip');
+require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');

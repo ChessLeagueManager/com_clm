@@ -10,7 +10,8 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
-JHtml::_('behavior.tooltip', '.CLMTooltip');
+//JHtml::_('behavior.tooltip', '.CLMTooltip');
+require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
 $liga		= $this->liga;
 	//Liga-Parameter aufbereiten

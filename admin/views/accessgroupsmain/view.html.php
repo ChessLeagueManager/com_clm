@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 All rights reserved
+ * @Copyright (C) 2008-2021 All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
 class CLMViewAccessgroupsMain extends JViewLegacy {
@@ -45,7 +44,8 @@ class CLMViewAccessgroupsMain extends JViewLegacy {
 			JToolBarHelper::addNew(); 
 		}
 		
-		JHtml::_('behavior.tooltip');
+//		JHtml::_('behavior.tooltip');
+		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 		
 		//Suche 
 		$search 			= $state->get( 'search' );

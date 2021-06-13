@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.9.3 - [xx-xx-2021] - - - - - - - - - - - - - - - - - - - -
+^ Code-Anpassung Joomla 4: ToolTip
+
 - - - - - 3.9.2 - [11-05-2021] - - - - - - - - - - - - - - - - - - - -
 ^ SWT-Import: Anpassungen wegen Schulschach ohne DSB-Bezug
 + Einzelturniere: neue Feinwertung Turnierleistung

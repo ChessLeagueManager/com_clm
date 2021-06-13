@@ -49,7 +49,8 @@ class CLMViewReset extends JViewLegacy
 		JHTML::_('behavior.formvalidation');
 
 		// Add the tooltip behavior
-		JHTML::_('behavior.tooltip');
+//		JHtml::_('behavior.tooltip');
+		require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'tooltip.php');
 
 		// Get the layout
 		$layout	= $this->getLayout();

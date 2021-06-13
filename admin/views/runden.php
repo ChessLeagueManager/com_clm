@@ -75,7 +75,8 @@ public static function runden( $rows, $lists, $pageNav, $option )
 		//Ordering allowed ?
 		$ordering = ($lists['order'] == 'a.ordering');
 
-		JHtml::_('behavior.tooltip');
+//		JHtml::_('behavior.tooltip');
+		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 
 	if(isset($rows[0]) && $rows[0]->sid_pub =="0" AND $val !=0) {
 	JError::raiseNotice( 6000,  JText::_( 'RUNDE_ERROR_SAISON_UNPUBLISHED' ));

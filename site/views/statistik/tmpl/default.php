@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -11,7 +11,8 @@
 */
 
 defined('_JEXEC') or die('Restricted access');
-JHtml::_('behavior.tooltip', '.CLMTooltip');
+//JHtml::_('behavior.tooltip', '.CLMTooltip');
+require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
 $liga		= $this->liga;
 $itemid		= clm_core::$load->request_int('Itemid','1');

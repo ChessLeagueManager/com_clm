@@ -35,7 +35,8 @@ public static function gruppen( &$rows, &$lists, &$pageNav, $option )
 		//Ordering allowed ?
 		$ordering = ($lists['order'] == 'a.ordering');
 
-		JHtml::_('behavior.tooltip');
+//		JHtml::_('behavior.tooltip');
+		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 		?>
 		<form action="index.php?option=com_clm&section=gruppen" method="post" name="adminForm" id="adminForm">
 

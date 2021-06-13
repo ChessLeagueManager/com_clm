@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -43,7 +43,8 @@ public static function users( &$rows, &$lists, &$pageNav, $option )
 		$user =JFactory::getUser();
 		//Ordering allowed ?
 		$ordering = ($lists['order'] == 'a.ordering');
-		JHtml::_('behavior.tooltip');
+//		JHtml::_('behavior.tooltip');
+		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 		?>
 		<form action="index.php?option=com_clm&section=users" method="post" name="adminForm" id="adminForm">
 

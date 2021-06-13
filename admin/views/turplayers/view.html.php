@@ -108,7 +108,8 @@ class CLMViewTurPlayers extends JViewLegacy {
 		$this->pagination = $model->pagination;
 		
 		// zusätzliche Funktionalitäten
-		JHtml::_('behavior.tooltip');
+//		JHtml::_('behavior.tooltip');
+		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 
 
 		parent::display();
