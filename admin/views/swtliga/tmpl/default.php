@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -11,9 +11,9 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-$swt = clm_core::$load->request_string ('swt_file', '');
+//$swt = clm_core::$load->request_string ('swt_file', '');
 $swt_file = clm_core::$load->request_string ('swt_file', '');
-$sid = clm_core::$load->request_int ('filter_saison', 0);
+//$sid = clm_core::$load->request_int ('filter_saison', 0);
 
 jimport( 'joomla.filesystem.file' );
 $path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . 'swt' . DIRECTORY_SEPARATOR;
@@ -126,8 +126,8 @@ $liga = clm_core::$load->request_int('liga', 0);
 	<input type="hidden" name="view" value="swtliga" />
 	<input type="hidden" name="controller" value="swtliga" />
 	<input type="hidden" name="task" value="" />
-	<input type="hidden" name="swt" value="<?php echo $swt; ?>" />
+<!--	<input type="hidden" name="swt" value="<?php echo $swt; ?>" /> -->
 	<input type="hidden" name="swt_file" value="<?php echo $swt_file; ?>" />
-	<input type="hidden" name="sid" value="<?php echo $sid; ?>" />
+<!--	<input type="hidden" name="sid" value="<?php echo $sid; ?>" />  -->
 	<?php echo JHtml::_( 'form.token' ); ?>
 </form>

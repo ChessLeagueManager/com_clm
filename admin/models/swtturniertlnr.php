@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -51,7 +51,8 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 		}
 		
 		//TWZ-Bestimmen Parameter lesen
-		$useAsTWZ = CLMSWT::getFormValue('params',0,'int','useAsTWZ');
+//		$useAsTWZ = CLMSWT::getFormValue('params',0,'int','useAsTWZ');
+		$useAsTWZ = clm_core::$load->request_string('useAsTWZ', '0');
 				
 		//Spielerdaten werden aus SWT-Datei gelesen und in einem Array von JObjects gespeichert
 		$i = 1;

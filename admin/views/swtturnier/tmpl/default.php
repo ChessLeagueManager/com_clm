@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleagueamanager.de
  * @author Thomas Schwietert
@@ -12,7 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 $swt_file = clm_core::$load->request_string('swt_file', '');
-$swt = clm_core::$load->request_string('swt', '');
+//$swt = clm_core::$load->request_string('swt', '');
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm" >
@@ -42,7 +42,7 @@ $swt = clm_core::$load->request_string('swt', '');
 		</tr>		
 	</table>
 	
-	<input type="hidden" name="swt" value="<?php echo $swt; ?>" />
+<!--	<input type="hidden" name="swt" value="<?php echo $swt; ?>" /> -->
 	<input type="hidden" name="swt_file" value="<?php echo $swt_file; ?>" />
 	
 	<input type="hidden" name="option" value="com_clm" />

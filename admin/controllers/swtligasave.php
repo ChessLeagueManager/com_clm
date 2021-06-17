@@ -29,9 +29,10 @@ class CLMControllerSWTLigasave extends JControllerLegacy
 	
 	function save () {
 		
+		$app = JFactory::getApplication();
 		$model = $this->getModel('swtligasave');
 		if ($model->finalCopy () && $model->rundenTermine () && $model->userAnlegen ()) {
-			$_REQUEST['view'] = 'swt';
+//			$_REQUEST['view'] = 'swt';
 			$msg = JText::_( 'SWT_STORE_SUCCESS' );
 //			$htext = " (ID = ".$lid.")";
 		}
@@ -41,15 +42,21 @@ class CLMControllerSWTLigasave extends JControllerLegacy
 		}
 		$sid = clm_core::$load->request_int('sid');
 		$lid = clm_core::$load->request_int('lid');
-		$swt = clm_core::$load->request_string('swt');
+		$swt_file = clm_core::$load->request_string('swt_file');
 		// Log schreiben
 		$clmLog = new CLMLog();
 		$clmLog->aktion = 'SWT-Import - '.$msg;
-		$clmLog->params = array('sid' => $sid, 'lid' => $lid, 'swt' => $swt);
+		$clmLog->params = array('sid' => $sid, 'lid' => $lid, 'swt_file' => $swt_file);
 		$clmLog->write();
 		$htext = " (ID = ".$lid.")";
-		JFactory::getApplication()->enqueueMessage( $msg.$htext,'message' );
-		parent::display ();
+		$app->enqueueMessage( $msg.$htext,'message' );
+
+		$adminLink = new AdminLink();
+		$adminLink->more = array('swt_file' => $swt_file, 'sid' => $sid, 'lid' => $lid);
+		$adminLink->view = "swt";
+		$adminLink->makeURL();
+		$app->redirect($adminLink->url); 		
+//		parent::display ();
 	}
 		
 }

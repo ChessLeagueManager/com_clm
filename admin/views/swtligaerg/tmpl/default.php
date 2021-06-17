@@ -11,7 +11,7 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-$swt    = clm_core::$load->request_string('swt', '');
+$swt_file    = clm_core::$load->request_string('swt_file', '');
 $update = clm_core::$load->request_int('update', 0);
 $lid 	= clm_core::$load->request_int('lid', 0);
 $swt_id = clm_core::$load->request_int('swt_id', 0);
@@ -148,7 +148,7 @@ $dwz_handling   = clm_core::$load->request_string( 'dwz_handling', '0');
 	<input type="hidden" name="view" value="swtligaerg" />
 	<input type="hidden" name="controller" value="swtligaerg" />
 	<input type="hidden" name="task" value="" />
-	<input type="hidden" name="swt" value="<?php echo $swt; ?>" />
+	<input type="hidden" name="swt_file" value="<?php echo $swt_file; ?>" />
 	<input type="hidden" name="update" value="<?php echo $update; ?>" />
 	<input type="hidden" name="lid" value="<?php echo $lid; ?>" />
     <input type="hidden" name="swt_id" value="<?php echo $swt_id; ?>" />

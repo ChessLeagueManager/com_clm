@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -30,11 +30,16 @@ class CLMControllerSWTTurnierErg extends JControllerLegacy
 			$rlast  = clm_core::$load->request_string('rlast');
 			$rrange = clm_core::$load->request_string('rrange');
 			$rcount = clm_core::$load->request_string('rcount');
-			$this->_message = JText::_( 'SWT_STORE_SUCCESS' );
+//			$this->_message = JText::_( 'SWT_STORE_SUCCESS' );
 			if ($rlast == $rcount) {
-				$_REQUEST['view'] = 'swt';
+//				$_REQUEST['view'] = 'swt';
+				$adminLink = new AdminLink();
+				$adminLink->more = array('swt_file' => $swt_file);
+				$adminLink->view = "swt";
+				$adminLink->makeURL();
 				$this->app->enqueueMessage( JText::_( 'SWT_STORE_SUCCESS' ),'message' );
-				parent::display ();
+				$this->app->redirect($adminLink->url); 				
+//				parent::display ();
 			} else {
 				$_GET['rfirst'] = ($rlast + 1);
 				$_REQUEST['view'] = 'swtturniererg';

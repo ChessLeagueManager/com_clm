@@ -32,7 +32,8 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		$this->setState ('rang', $rang);
 		$this->setState ('sl_mail', $sl_mail);
 
-		$this->setState ('saison_id', clm_core::$load->request_int('filter_saison', 0));
+//		$this->setState ('saison_id', clm_core::$load->request_int('filter_saison', 0));
+		$this->setState ('saison_id', clm_core::$load->request_int('sid', 0));
 				
 		$this->setState ('db_sllist', $db_sllist);
 		$this->setState ('db_saisonlist', $db_saisonlist);
@@ -57,10 +58,10 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		$default['params']					= '';
 		//Mit Daten aus Datenbank überschreiben, falls ein Liga geupdated wird
 		if(clm_core::$load->request_int('update') == 1) {
-			if ($id = clm_core::$load->request_int('liga')) {
+			if ($lid = clm_core::$load->request_int('lid')) {
 				$db		=JFactory::getDBO ();
 				$select_query = '  SELECT * FROM #__clm_liga '
-								.' WHERE id = '.$id.'; ';
+								.' WHERE id = '.$lid.'; ';
 				$db->setQuery ($select_query);
 				$ligaFromDatabase = $db->loadObject();
 				//Standardwerte werden überschrieben
@@ -110,7 +111,7 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		$mturnier = clm_core::$load->request_int('mturnier', 0);
 		
 		// Namen und Verzeichnis der SWT-Datei auslesen
-		$filename = clm_core::$load->request_string('swt', '');
+		$filename = clm_core::$load->request_string('swt_file', '');
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . 'swt' . DIRECTORY_SEPARATOR;
 		
 		$swt = $path.$filename;
@@ -326,7 +327,8 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 			return;
 		}
 
-		$filter_saison = clm_core::$load->request_int('filter_saison', 0);
+//		$filter_saison = clm_core::$load->request_int('filter_saison', 0);
+		$filter_saison = clm_core::$load->request_int('sid', 0);
 		//$sql = 'SELECT id as sid, name FROM #__clm_saison WHERE archiv = 0';
 		$sql = 'SELECT id as sid, name FROM #__clm_saison ';
 		if(clm_core::$load->request_int('update',0) == 1)

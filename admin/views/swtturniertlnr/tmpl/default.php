@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -18,12 +18,15 @@ $_GET['pfirst'] = $pfirst;
 $prange = 50;
 $_GET['prange'] = $prange;
 
+/*
 $params = clm_core::$load->request_string('params');
 if(isset($params['useAsTWZ'])) {
 	$useAsTWZ = $params['useAsTWZ'];
 } else {
 	$useAsTWZ = 0;
 }
+*/  
+$useAsTWZ = clm_core::$load->request_string('useAsTWZ', '0');
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm" >
@@ -108,7 +111,7 @@ if(isset($params['useAsTWZ'])) {
 	<input type="hidden" name="typ" 	value="<?php echo clm_core::$load->request_int('typ'); ?>" />
 	
 	<input type="hidden" name="swt_file" 	value="<?php echo clm_core::$load->request_string('swt_file'); ?>" />
-	<input type="hidden" name="swt" 	value="<?php echo clm_core::$load->request_string('swt'); ?>" />
+<!--	<input type="hidden" name="swt" 	value="<?php echo clm_core::$load->request_string('swt'); ?>" /> -->
 	<input type="hidden" name="update" 	value="<?php echo clm_core::$load->request_int('update'); ?>" />
 	<input type="hidden" name="tid" 	value="<?php echo clm_core::$load->request_int('tid'); ?>" />
 	<input type="hidden" name="swt_tid" value="<?php echo clm_core::$load->request_int('swt_tid'); ?>" />
@@ -117,7 +120,7 @@ if(isset($params['useAsTWZ'])) {
 	<input type="hidden" name="pfirst" 	value="<?php echo $pfirst; ?>" />
 	<input type="hidden" name="plast" 	value="<?php echo $plast; ?>" />
 	<input type="hidden" name="pcount" 	value="<?php echo $pcount; ?>" />
-	<input type="hidden" name="params[useAsTWZ]"    value="<?php echo $useAsTWZ; ?>" />
+	<input type="hidden" name="useAsTWZ"    value="<?php echo $useAsTWZ; ?>" />
 	<input type="hidden" name="option" value="com_clm" />
 	<input type="hidden" name="view" value="swtturniertlnr" />
 	<input type="hidden" name="controller" value="swtturniertlnr" />

@@ -494,7 +494,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 			jimport( 'joomla.filesystem.file' );
 		
 			// Namen und Verzeichnis der SWT-Datei auslesen
-			$filename = clm_core::$load->request_string( 'swt', '');
+			$filename = clm_core::$load->request_string( 'swt_file', '');
 			$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		
 			$swt = $path.$filename;
@@ -545,7 +545,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 		jimport( 'joomla.filesystem.file' );
 		
 		// Namen und Verzeichnis der SWT-Datei auslesen
-		$filename = clm_core::$load->request_string( 'swt', '');
+		$filename = clm_core::$load->request_string( 'swt_file', '');
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		
 		$swt = $path.$filename;
@@ -663,7 +663,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 		jimport( 'joomla.filesystem.file' );
 
 		// Namen und Verzeichnis der SWT-Datei auslesen
-		$filename = clm_core::$load->request_string( 'swt', '');
+		$filename = clm_core::$load->request_string( 'swt_file', '');
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		
 		$swt = $path.$filename;

@@ -53,13 +53,24 @@ class CLMControllerSWT extends JControllerLegacy
 	function import() {
 		$model = $this->getModel('swt');
 		$type = $model->import();
+		$swt_file = clm_core::$load->request_string('swt_file', '');
 		
 		if($type == 0) {
-			$_REQUEST['view'] = 'swtturnier';
-			parent::display();
+//			$_REQUEST['view'] = 'swtturnier';
+			$adminLink = new AdminLink();
+			$adminLink->more = array('swt_file' => $swt_file);
+			$adminLink->view = "swtturnier";
+			$adminLink->makeURL();
+			$this->app->redirect($adminLink->url); 		
+//			parent::display();
 		} elseif($type == 255){
-			$_REQUEST['view'] = 'swtliga';
-			parent::display();
+//			$_REQUEST['view'] = 'swtliga';
+			$adminLink = new AdminLink();
+			$adminLink->more = array('swt_file' => $swt_file);
+			$adminLink->view = "swtliga";
+			$adminLink->makeURL();
+			$this->app->redirect($adminLink->url); 		
+//			parent::display();
 		} else {
 			$adminLink = new AdminLink();
 			$adminLink->view = "swt";

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -19,11 +19,12 @@ class CLMViewSWTliga extends JViewLegacy {
 		$state		= $this->get( 'state' );
 		$saisons	= $this->get( 'saisons' );
 		$ligen		= $this->get( 'ligen' );
+		$swt_file = clm_core::$load->request_string ('swt_file', '');
 		
 			
 		//Toolbar
 		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title( JText::_('TITLE_SWT_LEAGUE') ,'clm_headmenu_manager.png' );
+		JToolBarHelper::title( JText::_('TITLE_SWT_LEAGUE')." - ".$swt_file ,'clm_headmenu_manager.png' );
 		
 		JToolBarHelper::custom('update','refresh.png','refresh_f2.png', JText::_('SWT_LEAGUE_UPDATE'), false);
 		JToolBarHelper::custom('add','new.png','new_f2.png', JText::_('SWT_TOURNAMENT_NEW'), false);

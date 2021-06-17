@@ -11,12 +11,12 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-$swt = clm_core::$load->request_string('swt', '');
+$swt_file = clm_core::$load->request_string('swt_file', '');
 $update = clm_core::$load->request_int('update', 0);
 $mturnier = clm_core::$load->request_int('mturnier', 0);
 $noOrgReference = clm_core::$load->request_string('noOrgReference', '0');
 $noBoardResults = clm_core::$load->request_string('noBoardResults', '0');
-$lid = clm_core::$load->request_int('liga', 0);
+$lid = clm_core::$load->request_int('lid', 0);
 $ordering = $this->default['ordering'];
 $str_params = clm_core::$load->request_string('str_params');
 ?>
@@ -545,7 +545,7 @@ $str_params = clm_core::$load->request_string('str_params');
 	<input type="hidden" name="view" value="swtligainfo" />
 	<input type="hidden" name="controller" value="swtligainfo" />
 	<input type="hidden" name="task" value="" />
-	<input type="hidden" name="swt" value="<?php echo $swt; ?>" />
+	<input type="hidden" name="swt_file" value="<?php echo $swt_file; ?>" />
 	<input type="hidden" name="update" value="<?php echo $update; ?>" />
 	<input type="hidden" name="mturnier" value="<?php echo $mturnier; ?>" />
 	<input type="hidden" name="noOrgReference" value="<?php echo $noOrgReference; ?>" />
