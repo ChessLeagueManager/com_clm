@@ -1,6 +1,6 @@
 /*
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -102,7 +102,7 @@
 			}
 			if ( val == 0 ) {
 				alert( unescape(clm_users_sid) ); return;
-			} else if ( conf_user_member == "1" && form.org_exc.value == "1" && form.bem_int.value == "") {
+			} else if ( clm_user_member == "1" && form.org_exc.value == "1" && form.bem_int.value == "") {
 				alert( unescape(clm_users_bem) ); return;
 			} else {
 				Joomla.submitform( pressbutton );
