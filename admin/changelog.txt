@@ -17,6 +17,7 @@ $ -> Language fix or change
 ^ Code-Anpassung Joomla 4: Runden im Backend (Nachbesserung)
 ^ Code-Anpassung Joomla 4: SWT-Import
 # Admin-View User: J-User wird CLM-User
+^ Code-Anpassung Joomla 4: Ergebniseingabe Backend
 
 - - - - - 3.9.2 - [11-05-2021] - - - - - - - - - - - - - - - - - - - -
 ^ SWT-Import: Anpassungen wegen Schulschach ohne DSB-Bezug

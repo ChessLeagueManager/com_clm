@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -54,7 +54,8 @@ static function ergebnisse ( $rows, $lists, $pageNav, $option )
 	//Ordering allowed ?
 	$ordering = ($lists['order'] == 'a.ordering');
 
-	JHtml::_('behavior.tooltip');
+//	JHtml::_('behavior.tooltip');
+	require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 	?>
 	<form action="index.php?option=com_clm&section=ergebnisse" method="post" name="adminForm" id="adminForm">
 
@@ -147,7 +148,8 @@ static function ergebnisse ( $rows, $lists, $pageNav, $option )
 			//$row = &$rows[$i];
 			// load the row from the db table
 			$row->load( $rows[$i]->id );
-		$link 		= JRoute::_( 'index.php?option=com_clm&section=ergebnisse&task=edit&cid[]='. $row->id );
+//		$link 		= JRoute::_( 'index.php?option=com_clm&section=ergebnisse&task=edit&cid[]='. $row->id );
+			$link 		= JRoute::_( 'index.php?option=com_clm&section=ergebnisse&task=edit&id='. $row->id );
 			$checked 	= JHtml::_('grid.checkedout',   $row, $i );
 			$published 	= JHtml::_('grid.published', $row, $i );
 			?>
@@ -215,7 +217,7 @@ static function ergebnisse ( $rows, $lists, $pageNav, $option )
 
 static function setErgebnisToolbar($runde)
 	{
-		if (JRequest::getVar( 'task') == 'edit') { $text = JText::_( 'Edit' );}
+		if (clm_core::$load->request_string( 'task') == 'edit') { $text = JText::_( 'Edit' );}
 			else { $text = JText::_( 'New' );}
 		JToolBarHelper::title(  JText::_( 'TITLE_RESULTS_8').' '.$runde[0]->hname.' - '.$runde[0]->gname .': [ '. $text.' ]' );
 		JToolBarHelper::save();
@@ -227,7 +229,7 @@ static function setErgebnisToolbar($runde)
 static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter, $ergebnis, $option, $hvoraufstellung, $gvoraufstellung)
 	{
 		CLMViewErgebnisse::setErgebnisToolbar($runde);
-		JRequest::setVar( 'hidemainmenu', 1 );
+		$_REQUEST['hidemainmenu'] = 1;
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
@@ -525,7 +527,7 @@ public static function setWertungToolbar($row)
 public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $lists)
 	{
 		CLMViewErgebnisse::setWertungToolbar($row);
-		JRequest::setVar( 'hidemainmenu', 1 );
+		$_REQUEST['hidemainmenu'] = 1;
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 	?>
 
