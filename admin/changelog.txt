@@ -19,6 +19,7 @@ $ -> Language fix or change
 # Admin-View User: J-User wird CLM-User
 ^ Code-Anpassung Joomla 4: Ergebniseingabe Backend
 # Einzelturniere: Fehler bei Fotoanzeige, wenn JoomGallery nicht installiert ist
+# SWT-Import: notice bei count-Funktion
 
 - - - - - 3.9.2 - [11-05-2021] - - - - - - - - - - - - - - - - - - - -
 ^ SWT-Import: Anpassungen wegen Schulschach ohne DSB-Bezug

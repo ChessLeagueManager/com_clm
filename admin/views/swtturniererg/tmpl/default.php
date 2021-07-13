@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -11,7 +11,8 @@
 */
 defined('_JEXEC') or die('Restricted access');
 $rfirst	= clm_core::$load->request_int( 'rfirst',1);
-$rcount = count($this->runden);
+if (is_null($this->runden)) $rcount = 0;
+else $rcount = count($this->runden);
 $_GET['rcount'] = $rcount;
 $rlast = $rcount;
 $_GET['rfirst'] = $rfirst;
@@ -60,7 +61,8 @@ function showRounds(){
 <br/--->
 <?php
 
-if (isset($this->runden) AND count($this->runden) > 0) {
+//if (isset($this->runden) AND count($this->runden) > 0) {
+if (isset($rcount) AND $rcount > 0) {
 foreach($this->runden as $rnd => $runde) {
 	if ($runde->nr < $rfirst) continue;
 	if ($runde->nr > ($rfirst + $rrange - 1)) { $rlast = ($runde->nr - 1); break;}
