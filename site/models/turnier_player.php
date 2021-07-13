@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -183,13 +183,16 @@ class CLMModelTurnier_Player extends JModelLegacy {
 	
 	function _getPlayerPhoto() {
 	
+		// Test, ob joomgallery installiert ist
+		$query = "SHOW TABLES LIKE '%joomgallery'";
+		$result = clm_core::$db->query($query);
 		// JoomGallery-Parameter auswerten
 		$turParams = new clm_class_params($this->turnier->params);
         $this->joomGalleryPhotosWidth = $turParams->get('joomGalleryPhotosWidth', '');
         if(!is_numeric($this->joomGalleryPhotosWidth)){$this->joomGalleryPhotosWidth=0;}
 		$joomGalleryDisplayPlayerPhotos = $turParams->get('joomGalleryDisplayPlayerPhotos', 0);
 		$joomGalleryCatId = $turParams->get('joomGalleryCatId', '');
-		if( $joomGalleryDisplayPlayerPhotos == 1 AND $joomGalleryCatId != ''){
+		if( $joomGalleryDisplayPlayerPhotos == 1 AND $joomGalleryCatId != '' AND $result->num_rows == 1 ){
 			$query = "SELECT id"
 				." FROM #__joomgallery"
 				." WHERE catid = ".$joomGalleryCatId." AND ordering = ".$this->snr
