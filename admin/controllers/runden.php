@@ -299,6 +299,8 @@ function save()
 		$mainframe->enqueueMessage($row->getError(), 'error');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
+	if ($row->deadlineday == '' OR $row->deadlineday == '0000-00-00') $row->deadlineday = '1970-01-01';
+	if ($row->deadlinetime == '') $row->deadlinetime = '24:00';
 	// pre-save checks
 	if (!$row->check()) {
 		$mainframe->enqueueMessage($row->getError(), 'error');
