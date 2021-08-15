@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -160,7 +160,7 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 				// in CLM DB suchen
 				$query = "SELECT a.Spielername, a.Geburtsjahr, a.Geschlecht, a.FIDE_Titel, a.FIDE_Elo, a.FIDE_ID, FIDE_Land, a.DWZ, v.Vereinname, a.PKZ"
 						. " FROM `#__clm_dwz_spieler` as a"
-						. " LEFT JOIN #__clm_dwz_vereine as v ON v.ZPS = a.ZPS"
+						. " LEFT JOIN #__clm_dwz_vereine as v ON v.ZPS = a.ZPS AND v.sid = a.sid "
 						. " LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 						. " WHERE a.ZPS = '$zps'"
 						. " AND s.archiv = 0 "
