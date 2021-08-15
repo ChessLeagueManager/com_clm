@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -15,9 +15,9 @@ defined('_JEXEC') or die('Restricted access');
 $mainframe = JFactory::getApplication();
 
 // Variablen holen
-$sid		= JRequest::getVar('saison');
-$zps 		= JRequest::getVar('zps');
-$mgl		= JRequest::getInt('mglnr');
+$sid		= clm_core::$load->request_int('saison');
+$zps 		= clm_core::$load->request_string('zps');
+$mgl		= clm_core::$load->request_int('mglnr');
 
 $clmuser 	= $this->clmuser;
 $spieler	= $this->spieler;
@@ -27,7 +27,8 @@ $link = JURI::base() . 'index.php?option=com_clm&view=mitglieder_details&saison=
 
 if ($clmuser[0]->zps <> $zps) {
 	$msg = JText::_( 'Sie sind nicht berechtigt, Aenderungen vorzunehmen.' );
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
 				}
 				
 // Login Status prüfen
@@ -44,7 +45,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 		;
 		
 	$db->setQuery($query);
-	$db->query();
+	clm_core::$db->query($query);
 
 	// Log
 	$date =JFactory::getDate();
@@ -54,8 +55,9 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 	$aktion = "Spielerdaten gelöscht FE";
 
 $msg = JText::_( 'Spielerdaten gelöscht FE' );
+$mainframe->enqueueMessage( $msg );
 $linkback = JURI::base() . 'index.php?option=com_clm&view=mitglieder&saison='. $sid .'&zps='. $zps; 
-$mainframe->redirect( $linkback, $msg );
+$mainframe->redirect( $linkback );
 
 return;
 }

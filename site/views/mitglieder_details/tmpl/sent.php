@@ -1,25 +1,23 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 
-defined('_JEXEC') or die('Restricted access'); 
-
-JRequest::checkToken() or die( 'Invalid Token' );
+defined('clm') or die('Restricted access'); 
 
 $mainframe = JFactory::getApplication();
 
 // Variablen holen
-$sid		= JRequest::getVar('saison');
-$zps 		= JRequest::getVar('zps');
-$mgl		= JRequest::getInt('mglnr');
+$sid		= clm_core::$load->request_int('saison');
+$zps 		= clm_core::$load->request_string('zps');
+$mgl		= clm_core::$load->request_int('mglnr');
 
 $clmuser 	= $this->clmuser;
 $spieler	= $this->spieler;
@@ -30,7 +28,8 @@ $link = JURI::base() . 'index.php?option=com_clm&view=mitglieder_details&saison=
 
 if ($clmuser[0]->zps <> $zps) {
 	$msg = JText::_( 'Sie sind nicht berechtigt, Aenderungen vorzunehmen.' );
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
 				}
 				
 // Login Status prüfen
@@ -40,14 +39,14 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 	$db	=JFactory::getDBO();
 
 	// Variablen holen
-	$sid		= JRequest::getVar('saison');
-	$name 		= JRequest::getVar('name');
-	$mglnr		= JRequest::getVar('mglnr');
-	$dwz 		= JRequest::getVar('dwz');
-	$dwz_index 	= JRequest::getVar('dwz_index');
-	$geschlecht	= JRequest::getVar('geschlecht');
-	$geburtsjahr= JRequest::getVar('geburtsjahr');
-	$zps		= JRequest::getVar('zps');
+	$sid		= clm_core::$load->request_int('saison');
+	$name 		= clm_core::$load->request_string('name');
+	$mglnr		= clm_core::$load->request_int('mglnr');
+	$dwz 		= clm_core::$load->request_int('dwz');
+	$dwz_index 	= clm_core::$load->request_int('dwz_index');
+	$geschlecht	= clm_core::$load->request_string('geschlecht');
+	$geburtsjahr= clm_core::$load->request_int('geburtsjahr');
+	$zps		= clm_core::$load->request_string('zps');
 	
 	if ($new < 1) {	
 		// Datensatz updaten
@@ -64,7 +63,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 			;
 			
 		$db->setQuery($query);
-		$db->query();
+		clm_core::$db->query($query);
 		
 		}
 	// Neuer Spieler
@@ -74,7 +73,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 			." VALUES ('$sid', '$zps','$mglnr','N','$name','$geschlecht', '$geburtsjahr','$dwz','$dwz_index')"
 			;
 		$db->setQuery($query);
-		$db->query();
+		clm_core::$db->query($query);
 		}
 
 	// Log
@@ -86,8 +85,9 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 
 
 $msg = JText::_( 'Spielerdaten geändert' );
+$mainframe->enqueueMessage( $msg );
 $linkback = JURI::base() . 'index.php?option=com_clm&view=mitglieder&saison='. $sid .'&zps='. $zps; 
-$mainframe->redirect( $linkback, $msg );
+$mainframe->redirect( $linkback );
 
 }
 ?>

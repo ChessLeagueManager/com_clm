@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -19,10 +19,10 @@ class CLMModelMitglieder extends JModelLegacy
 	{
 	
 	$mainframe	= JFactory::getApplication();
-	$option 	= JRequest::getCmd( 'option' );
+	$option 	= clm_core::$load->request_string( 'option' );
 
-	$sid	= JRequest::getInt('saison','1');
-	$zps	= clm_escape(JRequest::getVar('zps'));
+	$sid	= clm_core::$load->request_int('saison','1');
+	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	
 	$db	= JFactory::getDBO();
 	$id	= @$options['id'];
@@ -52,7 +52,7 @@ class CLMModelMitglieder extends JModelLegacy
 	{
 	$user	= JFactory::getUser();
 	$jid	= $user->get('id');
-	$sid	= JRequest::getInt('saison','1');
+	$sid	= clm_core::$load->request_int('saison','1');
 
 		$db	= JFactory::getDBO();
 		$id	= @$options['id'];

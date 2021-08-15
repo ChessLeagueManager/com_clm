@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -13,8 +13,8 @@
 defined('_JEXEC') or die('Restricted access');
 
 // Variablen holen
-$sid = JRequest::getInt( 'saison', '1' ); 
-$zps = JRequest::getVar( 'zps' );
+$sid = clm_core::$load->request_int( 'saison', '1' ); 
+$zps = clm_core::$load->request_string( 'zps' );
 
 
 // Login Status prüfen
@@ -31,15 +31,18 @@ $config = clm_core::$db->config();
 
 if (!$user->get('id')) {
 	$msg = JText::_( 'CLUB_LIST_LOGIN' );
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
  			}
 if ($clmuser[0]->published < 1) {
 	$msg = JText::_( 'CLUB_LIST_ACCOUNT' );
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
 				}
 if ($clmuser[0]->zps <> $zps) {
 	$msg = JText::_( 'CLUB_LIST_FALSE' );
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
 				}
 
 if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps){
@@ -78,11 +81,11 @@ function tableOrdering( order, dir, task )
 			<th width="5%" class="key" nowrap="nowrap"><?php echo JText::_( 'Nr' ); ?></th>
 			<th width="5%" class="key" nowrap="nowrap"><?php echo JHTML::_( 'grid.sort', 'Mgl Nr.', 'id', $this->lists['order_Dir'], $this->lists['order']); ?></th>
 			<th width="20%" class="key" nowrap="nowrap"><a href="javascript:tableOrdering('name','asc','');"><?php echo JText::_( 'Name' ); ?></a></th>
-			<th width="5%" class="key" nowrap="nowrap"><?php echo JHTML::_( 'grid.sort', 'Geburtsjahr', 'Geburtsjahr', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+			<th width="5%" class="key" nowrap="nowrap"><?php echo JHTML::_( 'grid.sort', 'G.jahr', 'Geburtsjahr', $this->lists['order_Dir'], $this->lists['order']); ?></th>
 			<th width="5%" class="key" nowrap="nowrap"><?php echo JHTML::_( 'grid.sort', 'DWZ', 'dwz', $this->lists['order_Dir'], $this->lists['order']); ?></th>
 			<th width="5%" class="key" nowrap="nowrap"><?php echo JHTML::_( 'grid.sort', 'ELO', 'elo', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-			<th width="5%" class="key" nowrap="nowrap" align="center"><?php echo JText::_( 'Status' ); ?></th>
-			<th width="5%" class="key" nowrap="nowrap" align="center"><?php echo JText::_( 'Bearbeiten' ); ?></th>
+			<th width="5%" class="key" nowrap="nowrap" align="center"><?php echo JText::_( 'St.' ); ?></th>
+			<th width="5%" class="key" nowrap="nowrap" align="center"><?php echo JText::_( 'Edit' ); ?></th>
 			<th width="5%" class="key" nowrap="nowrap" align="center"><?php echo JText::_( 'Löschen' ); ?></th>
 		</tr>
         
@@ -96,8 +99,7 @@ function tableOrdering( order, dir, task )
             <td><?php if ( $spieler->elo < 1 ) { echo "-"; } else { echo $spieler->elo; } ?></td>
             <td><?php echo $spieler->Status; ?></td>
             <td align="center"><a href="index.php?option=com_clm&amp;view=mitglieder_details&amp;saison=<?php echo $sid; ?>&amp;zps=<?php echo $zps; ?>&amp;mglnr=<?php echo $spieler->id; ?>"><img src="<?php echo CLMImage::imageURL('edit_f2.png'); ?>"/></a></td>
-            <td align="center">
-            <a href="index.php?option=com_clm&amp;view=mitglieder&amp;saison=<?php echo $sid; ?>&amp;zps=<?php echo $zps; ?>&amp;mglnr=<?php echo $spieler->id; ?>&amp;layout=delete"><img src="<?php echo CLMImage::imageURL('cancel_f2.png'); ?>"/></a></td>
+            <td align="center"><a href="index.php?option=com_clm&amp;view=mitglieder&amp;saison=<?php echo $sid; ?>&amp;zps=<?php echo $zps; ?>&amp;mglnr=<?php echo $spieler->id; ?>&amp;layout=delete"><img src="<?php echo CLMImage::imageURL('cancel_f2.png'); ?>"/></a></td>
         </tr>
         <?php $i++;} ?> 
         

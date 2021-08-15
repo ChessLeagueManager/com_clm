@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -16,9 +16,9 @@ defined('_JEXEC') or die('Restricted access');
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 // Variablen holen
-$sid 		= JRequest::getInt( 'saison', '1' ); 
-$zps 		= JRequest::getVar('zps');
-$mgl		= JRequest::getInt('mglnr');
+$sid 		= clm_core::$load->request_int( 'saison', '1' ); 
+$zps 		= clm_core::$load->request_string('zps');
+$mgl		= clm_core::$load->request_int('mglnr');
 
 // Login Status prüfen
 $clmuser 	= $this->clmuser;
@@ -68,8 +68,9 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
     </div>
     <br />
 
-    <form action="index.php" method="post" name="adminForm">
-    
+<!--    <form action="index.php" method="post" name="adminForm"> -->
+<form action="clm?&amp;view=mitglieder_details&amp;layout=sent&amp;saison=<?php echo $sid ?>&amp;mglnr=<?php echo $mgl ?>&amp;zps=<?php echo $zps ?>" method="post" name="adminForm">
+   
     <table class="mitglieder_details">
         <tr>
             <td>Spielername</td>
