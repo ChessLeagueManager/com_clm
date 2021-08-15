@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,8 +10,7 @@
  * @email webmaster@sbbl.org
 */
 
-defined('_JEXEC') or die('Restricted access');
-JRequest::checkToken() or die( 'Invalid Token' );
+defined('clm') or die('Restricted access');
 
 $mainframe	= JFactory::getApplication();
 
@@ -20,17 +19,17 @@ $mainframe	= JFactory::getApplication();
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 // Variablen holen
-$sid 		= JRequest::getInt('saison','1');
-$lid 		= JRequest::getInt('lid','1');
-$zps 		= JRequest::getVar('zps');
-$man 		= JRequest::getInt('man');
-$stamm 		= JRequest::getInt('stamm');
-$ersatz		= JRequest::getInt('ersatz');
-$cid 		= JRequest::getVar('cid', array(), '', 'array');
-$attr 		= JRequest::getVar('attr', array(), '', 'array');
-$man_name 	= JRequest::getVar('man_name');
-$liga_lokal	= JRequest::getVar('lokal');
-$liga_mf 	= JRequest::getVar('mf');
+$sid 		= clm_core::$load->request_int('saison','1');
+$lid 		= clm_core::$load->request_int('lid','1');
+$zps 		= clm_core::$load->request_string('zps');
+$man 		= clm_core::$load->request_int('man');
+$stamm 		= clm_core::$load->request_int('stamm');
+$ersatz		= clm_core::$load->request_int('ersatz');
+$cid 		= clm_core::$load->request_array_string('cid');
+$attr 		= clm_core::$load->request_array_string('attr');
+$man_name 	= clm_core::$load->request_string('man_name');
+$liga_lokal	= clm_core::$load->request_string('lokal');
+$liga_mf 	= clm_core::$load->request_string('mf');
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
@@ -231,7 +230,10 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
         }
 --></script>
 
+<!--
 <form action="index.php?option=com_clm&amp;view=meldeliste&amp;layout=sent" method="post" name="adminForm">
+-->
+<form action="clm?&amp;view=meldeliste&amp;layout=sent&amp;saison=<?php echo $sid ?>&amp;lid=<?php echo $lid ?>&amp;zps=<?php echo $zps ?>&amp;man=<?php echo $man ?>" method="post" name="adminForm">
 <center>
 <table class="adminlist" cellpadding="0" cellspacing="0">
 	<tr> 

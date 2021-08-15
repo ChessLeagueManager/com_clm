@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -10,18 +10,17 @@
  * @email webmaster@sbbl.org
 */
 
-defined('_JEXEC') or die('Restricted access'); 
+defined('clm') or die('Restricted access');
 
-JRequest::checkToken() or die( 'Invalid Token' );
 $mainframe	= JFactory::getApplication();
 // Variablen holen
-$sid 	= JRequest::getInt('saison','1');
-$lid 	= JRequest::getInt('liga');
-$zps 	= JRequest::getVar('zps');
-$gid 	= JRequest::getInt('gid');
-$count 	= JRequest::getInt('count');
+$sid 	= clm_core::$load->request_int('saison','1');
+$lid 	= clm_core::$load->request_int('liga');
+$zps 	= clm_core::$load->request_string('zps');
+$gid 	= clm_core::$load->request_int('gid');
+$count 	= clm_core::$load->request_int('count');
 
-	$option = JRequest::getCmd( 'option' );
+	$option = clm_core::$load->request_string('option' );
 	$db	= JFactory::getDBO();
 
 $user 		=JFactory::getUser();
@@ -47,21 +46,21 @@ $meldung 	= $user->get('id');
 		." AND zps = '$zps'"
 		;
 	$db->setQuery($query);
-	$db->query();
+	clm_core::$db->query($query);
 
 	$query	=" DELETE FROM #__clm_rangliste_spieler "
 		." WHERE Gruppe = ".$gid
 		." AND ZPS = '$zps'"
 		;
 	$db->setQuery($query);
-	$db->query();
+	clm_core::$db->query($query);
 
 	$query	=" DELETE FROM #__clm_meldeliste_spieler "
 		." WHERE status = ".$gid
 		." AND ZPS = '$zps'"
 		;
 	$db->setQuery($query);
-	$db->query();
+	clm_core::$db->query($query);
 
 	// Liganummer ermitteln
 	$query	=" SELECT liga FROM #__clm_mannschaften "
@@ -78,13 +77,13 @@ $meldung 	= $user->get('id');
 	// Datensätze schreiben
 	$liga_count	= 0;
 	$liga		= $lid_rang[0]->liga;
-	$change		= JRequest::getVar('MA0');
+	$change		= clm_core::$load->request_string('MA0');
 
 	for ($y=0; $y < $count; $y++) {
-	$mgl	= JRequest::getVar('MGL'.$y);
-	$pkz	= JRequest::getVar('PKZ'.$y);
-	$mnr	= JRequest::getVar('MA'.$y);
-	$rang	= JRequest::getVar('RA'.$y);
+	$mgl	= clm_core::$load->request_string('MGL'.$y);
+	$pkz	= clm_core::$load->request_string('PKZ'.$y);
+	$mnr	= clm_core::$load->request_string('MA'.$y);
+	$rang	= clm_core::$load->request_string('RA'.$y);
 
 	if ($y !="0" AND $mnr > $change) {
 		$liga_count++;
@@ -98,14 +97,14 @@ $meldung 	= $user->get('id');
 		." VALUES ('$gid','$zps','$mgl','$pkz','$rang','$mnr','$sid') "
 		;
 	$db->setQuery($query);
-	$db->query();
+	clm_core::$db->query($query);
 
 	$query = " INSERT INTO #__clm_meldeliste_spieler "
 		." (`sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`,`status`) "
 		." VALUES ('$sid','$liga','$mnr','$rang','$mgl','$zps','$gid') "
 		;
 	$db->setQuery($query);
-	$db->query();
+	clm_core::$db->query($query);
 	}}
 
 	$query = " INSERT INTO #__clm_rangliste_id "
@@ -113,8 +112,9 @@ $meldung 	= $user->get('id');
 		." VALUES ('$gid','$sid','$zps','0','0') "
 		;
 	$db->setQuery($query);
-	$db->query();
+	clm_core::$db->query($query);
 
 	$msg = JText::_( '<h2>Die Rangliste wurde gespeichert !</h2>' );
-	$mainframe->redirect( 'index.php?option='. $option.'&view=info', $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( 'index.php?option='. $option.'&view=info' );
 ?>

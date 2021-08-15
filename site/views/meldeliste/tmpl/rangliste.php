@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -17,10 +17,10 @@ $cssDir = JURI::base().DS. 'components'.DS.'com_clm'.DS.'includes';
 $document->addStyleSheet( $cssDir.DS.'clm_content.css', 'text/css', null, array() );
 	
 // Variablen holen
-$sid = JRequest::getInt( 'saison', '1' );
-$zps = JRequest::getVar( 'zps','1');
-$man = JRequest::getInt( 'man' );
-$gid	= JRequest::getInt('gid');
+$sid = clm_core::$load->request_int('saison', '1' );
+$zps = clm_core::$load->request_string('zps','1');
+$man = clm_core::$load->request_int('man' );
+$gid	= clm_core::$load->request_int('gid');
 
 // Login Status prüfen
 $clmuser 	= $this->clmuser;
@@ -360,7 +360,9 @@ Liste absenden !
 
 <br><br>
 
-<form action="index.php?option=com_clm&amp;view=meldeliste&amp;layout=sent_rangliste" method="post" name="adminForm">
+<!--<form action="index.php?option=com_clm&amp;view=meldeliste&amp;layout=sent_rangliste" method="post" name="adminForm">
+-->
+<form action="clm?&amp;view=meldeliste&amp;layout=sent_rangliste&amp;saison=<?php echo $sid ?>&amp;gid=<?php echo $gid ?>&amp;zps=<?php echo $zps ?>&amp;count=<?php echo count($spieler) ?>" method="post" name="adminForm">
 
 <style type="text/css">table { width:60%; }</style>
 
@@ -416,7 +418,7 @@ Liste absenden !
 		<input type="hidden" name="count" value="<?php echo count($spieler); ?>" />
 		<input type="hidden" name="zps" value="<?php echo $spieler[0]->ZPS; ?>" />
 		<input type="hidden" name="saison" value="<?php echo $spieler[0]->sid; ?>" />
-		<input type="hidden" name="gid" value="<?php echo JRequest::getInt('gid'); ?>" />
+		<input type="hidden" name="gid" value="<?php echo clm_core::$load->request_int('gid'); ?>" />
 
 		<?php echo JHTML::_( 'form.token' ); ?>
 		</form>

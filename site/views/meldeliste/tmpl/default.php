@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -13,9 +13,9 @@
 defined('_JEXEC') or die('Restricted access');
 
 // Variablen holen
-$sid = JRequest::getInt( 'saison', '1' ); 
-$zps = JRequest::getVar( 'zps','1');
-$man = JRequest::getInt( 'man' ); 
+$sid = clm_core::$load->request_int('saison',1 ); 
+$zps = clm_core::$load->request_string('zps','1');
+$man = clm_core::$load->request_int('man'); 
 $liga 		= $this->liga;
 
 
@@ -158,7 +158,7 @@ echo "<br>published ".$clmuser[0]->published;
 		</script>
 
 
-<form action="index.php?option=com_clm&amp;view=meldeliste&amp;layout=order" method="post" name="adminForm">
+<form action="clm?&amp;view=meldeliste&amp;layout=order&amp;saison=<?php echo $sid ?>&amp;lid=<?php echo $liga[0]->lid ?>&amp;zps=<?php echo $zps ?>&amp;man=<?php echo $man ?>" method="post" name="adminForm">
 <center>
 <!---
 <table class="adminlist" cellpadding="0" cellspacing="0">

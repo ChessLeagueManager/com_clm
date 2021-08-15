@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,21 +10,20 @@
  * @email webmaster@sbbl.org
 */
 
-defined('_JEXEC') or die('Restricted access'); 
+defined('clm') or die('Restricted access'); 
 
-JRequest::checkToken() or die( 'Invalid Token' );
 $mainframe	= JFactory::getApplication();
 // Variablen holen
-$option 	= JRequest::getInt('option','1');
-$sid 		= JRequest::getInt('saison','1');
-$lid 		= JRequest::getInt('lid',9898);
-$zps 		= JRequest::getVar('zps');
-$man 		= JRequest::getInt('man');
-$stamm		= JRequest::getInt('stamm');
-$ersatz		= JRequest::getInt('ersatz');
-$man_name 	= JRequest::getInt('man_name');
-$liga_lokal	= JRequest::getVar('lokal');
-$liga_mf 	= JRequest::getVar('mf');
+$option 	= clm_core::$load->request_string('option','1');
+$sid 		= clm_core::$load->request_int('saison','1');
+$lid 		= clm_core::$load->request_int('lid',9898);
+$zps 		= clm_core::$load->request_string('zps');
+$man 		= clm_core::$load->request_int('man');
+$stamm		= clm_core::$load->request_int('stamm');
+$ersatz		= clm_core::$load->request_int('ersatz');
+$man_name 	= clm_core::$load->request_string('man_name');
+$liga_lokal	= clm_core::$load->request_string('lokal');
+$liga_mf 	= clm_core::$load->request_string('mf');
  
 $user 		=JFactory::getUser();
 $meldung 	= $user->get('id');
@@ -46,13 +45,15 @@ $clmuser 	= $this->clmuser;
 if (!isset($test[0]) AND $lid == 9898) {
 	$link = 'index.php?option=com_clm&view=info';
 	$msg = JText::_( 'Login-Modul sollte mind. Version 1.1.2 sein' );
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg, 'warning' );
+	$mainframe->redirect( $link );
  			}
 
 if ($test[0]->id < 1) {
 	$link = 'index.php?option=com_clm&view=info';
 	$msg = JText::_( 'CLUB_LIST_TEAM_DISABLED' );
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg, 'warning' );
+	$mainframe->redirect( $link );
  			}
 $abgabe		= $this->abgabe;
 	$today = date("Y-m-d"); 
@@ -74,12 +75,14 @@ $abgabe		= $this->abgabe;
 if ($abgabe[0]->liste > 0 AND ($abgabe[0]->params['deadline_roster'] == '0000-00-00' OR $abgabe[0]->params['deadline_roster'] == '1970-01-01')) {
 	$msg = JText::_( 'CLUB_LIST_ALREADY_EXIST' );
 	$link = "index.php?option=com_clm&view=info";
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg, 'warning' );
+	$mainframe->redirect( $link );
  			}
 if ($abgabe[0]->liste > 0 AND $abgabe[0]->params['deadline_roster'] < $today) {
 	$msg = JText::_( 'CLUB_LIST_TOO_LATE' );
 	$link = "index.php?option=com_clm&view=info";
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg, 'warning' );
+	$mainframe->redirect( $link );
 }
 	$link 	= 'index.php';
 	$db 	=JFactory::getDBO();
@@ -99,7 +102,7 @@ if ($abgabe[0]->liste > 0 AND $abgabe[0]->params['deadline_roster'] < $today) {
 		." AND zps = '$zps'"
 		;
 	$db->setQuery($query);
-	$db->query();
+	clm_core::$db->query($query);
 
 // alte Meldeliste löschen bei Bedarf
 	if ($abgabe[0]->liste > 0) {
@@ -110,20 +113,20 @@ if ($abgabe[0]->liste > 0 AND $abgabe[0]->params['deadline_roster'] < $today) {
 		." AND ( zps = '$zps' or FIND_IN_SET(zps,'".$abgabe[0]->sg_zps."') != 0 ) "
 		;
 	$db->setQuery($query);
-	$db->query();
+	clm_core::$db->query($query);
 	}
 	
 // neue Meldeliste schreiben
 for ($y=1; $y< (1+$stamm+$ersatz) ; $y++){ 
-	$stm		= JRequest::getInt( 'name'.$y);
-	$attr		= JRequest::getVar( 'hidden_attr'.$y);
+	$stm		= clm_core::$load->request_int('name'.$y);
+	$attr		= clm_core::$load->request_string('hidden_attr'.$y);
 	if ($attr == '') $attr = NULL;
 
-	$dwz		= JRequest::getInt( 'hidden_dwz'.$y);
-	$dwz_I0		= JRequest::getInt( 'hidden_dwz_I0'.$y);
-	$mgl		= JRequest::getInt( 'hidden_mglnr'.$y);
-	$PKZ		= JRequest::getVar( 'hidden_PKZ'.$y);
-	$hidden_zps		= JRequest::getVar( 'hidden_zps'.$y);
+	$dwz		= clm_core::$load->request_int('hidden_dwz'.$y);
+	$dwz_I0		= clm_core::$load->request_int('hidden_dwz_I0'.$y);
+	$mgl		= clm_core::$load->request_int('hidden_mglnr'.$y);
+	$PKZ		= clm_core::$load->request_string('hidden_PKZ'.$y);
+	$hidden_zps		= clm_core::$load->request_string('hidden_zps'.$y);
 	if ($countryversion =="de") {
 		if ($mgl == 0) break;
 	} else {
@@ -137,7 +140,7 @@ for ($y=1; $y< (1+$stamm+$ersatz) ; $y++){
 	else
 		$query	.= ", NULL) ";
 	$db->setQuery($query);
-	$db->query();
+	clm_core::$db->query($query);
 	}
 
 // Log
@@ -151,7 +154,7 @@ for ($y=1; $y< (1+$stamm+$ersatz) ; $y++){
 		." VALUES ('".$callid."','".$userid."',".time().",5,'".$aktion."','".json_encode($parray)."') "
 		;
 	$db->setQuery($query);
-	$db->query();
+	clm_core::$db->query($query);
 
 // Mails verschicken ?
 	$query	= "SELECT l.*, u.email as sl_email, u.name as sl_name FROM #__clm_liga as l "
@@ -180,7 +183,7 @@ if ( $liga[0]->mail > 0 ) {
 // nur wegen sehr leistungsschwachen Providern
 	$query	= " SET SQL_BIG_SELECTS=1";
 	$db->setQuery($query);
-	$db->query();
+	clm_core::$db->query($query);
 
 // Daten für Email sammeln
 $attr = clm_core::$api->db_lineup_attr($lid);
@@ -486,5 +489,6 @@ $attr = clm_core::$api->db_lineup_attr($lid);
 }
 $msg = JText::_( 'CLUB_LIST_SEND_OK' );
 if ($countmail > 0) $msg .= JText::_( 'CLUB_LIST_SEND_MAIL' );
-$mainframe->redirect( $link, $msg );
+$mainframe->enqueueMessage( $msg );
+$mainframe->redirect( $link );
 ?>

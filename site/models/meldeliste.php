@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -17,11 +17,11 @@ class CLMModelMeldeliste extends JModelLegacy
 {
 	function _getCLMLiga( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$zps	= clm_escape(JRequest::getVar('zps'));
-	$man	= JRequest::getInt('man','1');
-	$layout	= clm_escape(JRequest::getVar('layout'));
-	$gid	= JRequest::getInt('gid');
+	$sid	= clm_core::$load->request_int('saison','1');
+	$zps	= clm_escape(clm_core::$load->request_string('zps'));
+	$man	= clm_core::$load->request_int('man','1');
+	$layout	= clm_escape(clm_core::$load->request_string('layout'));
+	$gid	= clm_core::$load->request_int('gid');
 
 		// TODO: Cache on the fingerprint of the arguments
 		$db	= JFactory::getDBO();
@@ -56,11 +56,11 @@ class CLMModelMeldeliste extends JModelLegacy
 
 	function _getCLMSpieler( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$zps	= clm_escape(JRequest::getVar('zps'));
-	$man	= JRequest::getInt('man','1');
-	$layout	= clm_escape(JRequest::getVar('layout'));
-	$gid	= JRequest::getInt('gid');
+	$sid	= clm_core::$load->request_int('saison','1');
+	$zps	= clm_escape(clm_core::$load->request_string('zps'));
+	$man	= clm_core::$load->request_int('man','1');
+	$layout	= clm_escape(clm_core::$load->request_string('layout'));
+	$gid	= clm_core::$load->request_int('gid');
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
@@ -152,14 +152,13 @@ class CLMModelMeldeliste extends JModelLegacy
 
 	function _getCLMCount( &$options )
 	{
-	$zps = JRequest::getVar('zps');
 
 		// TODO: Cache on the fingerprint of the arguments
 		$db	= JFactory::getDBO();
 		$id	= @$options['id'];
-		$sid	= JRequest::getInt('saison','1');
-		$zps	= clm_escape(JRequest::getVar('zps'));
-		$man	= JRequest::getInt('man','1');
+		$sid	= clm_core::$load->request_int('saison','1');
+		$zps	= clm_escape(clm_core::$load->request_string('zps'));
+		$man	= clm_core::$load->request_int('man','1');
 		$query = "SELECT a.zps, a.sg_zps "
 			." FROM #__clm_mannschaften as a"
 			." WHERE a.sid = $sid AND a.zps = '$zps' AND a.man_nr = $man AND a.published = 1 "
@@ -184,11 +183,11 @@ class CLMModelMeldeliste extends JModelLegacy
 	// Prüfen ob Meldeliste schon abgegeben wurde
 	function _getCLMAccess ( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$zps	= clm_escape(JRequest::getVar('zps'));
-	$man	= JRequest::getInt('man','1');
-	$layout	= clm_escape(JRequest::getVar('layout'));
-	$gid	= JRequest::getInt('gid');
+	$sid	= clm_core::$load->request_int('saison','1');
+	$zps	= clm_escape(clm_core::$load->request_string('zps'));
+	$man	= clm_core::$load->request_int('man','1');
+	$layout	= clm_escape(clm_core::$load->request_string('layout'));
+	$gid	= clm_core::$load->request_int('gid');
 
 		$db	= JFactory::getDBO();
 		$id	= @$options['id'];
@@ -216,11 +215,11 @@ class CLMModelMeldeliste extends JModelLegacy
 
 	function _getCLMAbgabe ( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$zps	= clm_escape(JRequest::getVar('zps'));
-	$man	= JRequest::getInt('man','1');
-	$layout	= clm_escape(JRequest::getVar('layout'));
-	$gid	= JRequest::getInt('gid','1');
+	$sid	= clm_core::$load->request_int('saison','1');
+	$zps	= clm_escape(clm_core::$load->request_string('zps'));
+	$man	= clm_core::$load->request_int('man','1');
+	$layout	= clm_escape(clm_core::$load->request_string('layout'));
+	$gid	= clm_core::$load->request_int('gid','1');
 
 		$db	= JFactory::getDBO();
 		$id	= @$options['id'];
@@ -253,7 +252,7 @@ class CLMModelMeldeliste extends JModelLegacy
 	{
 	$user	= JFactory::getUser();
 	$jid	= $user->get('id');
-	$sid	= JRequest::getInt('saison','1');
+	$sid	= clm_core::$load->request_int('saison','1');
 
 
 		$db	= JFactory::getDBO();
@@ -276,9 +275,9 @@ class CLMModelMeldeliste extends JModelLegacy
 
 	public static function Sortierung ( $cids ) {
 
-	$zps 	= clm_escape(JRequest::getVar('zps'));
-	$man	= JRequest::getInt('man','1');
-	$sid	= JRequest::getInt('saison','1');      
+	$zps 	= clm_escape(clm_core::$load->request_string('zps'));
+	$man	= clm_core::$load->request_int('man','1');
+	$sid	= clm_core::$load->request_int('saison','1');      
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
@@ -328,10 +327,10 @@ class CLMModelMeldeliste extends JModelLegacy
 	// mögliche Mannschaftsleiter
 	function _getCLMML ( &$options )
 	{
-	$sid	= JRequest::getInt('saison','1');
-	$lid	= JRequest::getInt('lid','1');
-	$zps 	= clm_escape(JRequest::getVar('zps'));
-	$man	= JRequest::getInt('man','1');
+	$sid	= clm_core::$load->request_int('saison','1');
+	$lid	= clm_core::$load->request_int('lid','1');
+	$zps 	= clm_escape(clm_core::$load->request_string('zps'));
+	$man	= clm_core::$load->request_int('man','1');
 	$db	= JFactory::getDBO();
 	
 	$query = "SELECT a.zps, a.sg_zps " 
