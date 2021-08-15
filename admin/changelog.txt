@@ -23,6 +23,7 @@ $ -> Language fix or change
 ^ Code-Anpassung Joomla 4: Aufstellungs- und Ranglistenpflege Frontend
 # Einzelturniere: Teilnehmer hinzufügen (Vereinsnamen)
 ^ Code-Anpassung Joomla 4: Admin-View Logging
+# SWT-Import: Siegbedingungen bei Ligen/Mannschaftsturnieren
 
 - - - - - 3.9.2 - [11-05-2021] - - - - - - - - - - - - - - - - - - - -
 ^ SWT-Import: Anpassungen wegen Schulschach ohne DSB-Bezug

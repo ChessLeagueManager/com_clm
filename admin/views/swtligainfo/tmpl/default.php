@@ -356,11 +356,11 @@ $str_params = clm_core::$load->request_string('str_params');
 						<label for="sieg_bed"><?php echo JText::_( 'LEAGUE_WINNING_CONDITIONS' ); ?></label>
 					</td>
 					<td colspan="2">&nbsp;&nbsp;
-						<select name="sieg_bed" id="sieg_bed" value="<?php /*echo $this->swt_data['sieg_bed']; */ ?>" size="1">
-							<option value="1" <?php if ($this->swt_data['sieg_bed'] == 1) {echo '"selected"';}  ?>>
+						<select name="sieg_bed" id="sieg_bed" value="<?php echo $this->swt_data['sieg_bed']; ?>" size="1">
+							<option value="1" <?php if ($this->swt_data['sieg_bed'] == 1) {echo 'selected="selected"';}  ?>>
 								<?php echo JText::_( 'LEAGUE_WINNING_CONDITIONS_1' );?>
 							</option>
-							<option value="2" <?php if ($this->swt_data['sieg_bed'] == 2) {echo '"selected"';}  ?>>
+							<option value="2" <?php if ($this->swt_data['sieg_bed'] == 2) {echo 'selected="selected"';}  ?>>
 								<?php echo JText::_( 'LEAGUE_WINNING_CONDITIONS_2' );?>
 							</option>
 						</select>

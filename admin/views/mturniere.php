@@ -829,6 +829,13 @@ class CLMViewMTurniere
   	<?php echo JText::_( 'LEAGUE_HINTS_10' ); ?>
   	<?php echo JText::_( 'LEAGUE_HINTS_11' ); ?>
   	<?php echo JText::_( 'LEAGUE_HINTS_12' ); ?>
+	<?php echo JText::_( 'LEAGUE_HINTS_13' ); ?>
+  	<?php echo JText::_( 'LEAGUE_HINTS_14' ); ?>
+  	<?php echo JText::_( 'LEAGUE_HINTS_15' ); ?>
+	<?php echo JText::_( 'LEAGUE_HINTS_16' ); ?>
+  	<?php echo JText::_( 'LEAGUE_HINTS_17' ); ?>
+  	<?php echo JText::_( 'LEAGUE_HINTS_18' ); ?>
+  	<?php echo JText::_( 'LEAGUE_HINTS_19' ); ?>
 	<?php echo JText::_( 'LEAGUE_HINTS_20' ); ?>
   	<?php echo JText::_( 'LEAGUE_HINTS_21' ); ?>
   	<?php echo JText::_( 'LEAGUE_HINTS_22' ); ?>
@@ -838,7 +845,13 @@ class CLMViewMTurniere
 	<?php echo JText::_( 'LEAGUE_HINTS_26' ); ?>
   	<?php echo JText::_( 'LEAGUE_HINTS_27' ); ?>
   	<?php echo JText::_( 'LEAGUE_HINTS_28' ); ?>
-
+	<?php echo JText::_( 'LEAGUE_HINTS_30' ); ?>
+  	<?php echo JText::_( 'LEAGUE_HINTS_31' ); ?>
+  	<?php echo JText::_( 'LEAGUE_HINTS_32' ); ?>
+	<?php echo JText::_( 'LEAGUE_HINTS_33' ); ?>
+  	<?php echo JText::_( 'LEAGUE_HINTS_34' ); ?>
+  	<?php echo JText::_( 'LEAGUE_HINTS_35' ); ?>
+	<?php echo JText::_( 'LEAGUE_HINTS_36' ); ?>
   	</fieldset>
 
   </div>

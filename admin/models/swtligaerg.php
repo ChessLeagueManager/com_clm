@@ -412,7 +412,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				if ($hbrettpunkte > $haelfte) {
 					$hmanpunkte += $man_sieg;
 					$hergebnis = 1;				
-				} elseif ($hbrettpunkte == $haelfe) {
+				} elseif ($hbrettpunkte == $haelfte) {
 					$hmanpunkte += $man_remis;
 					$hergebnis = 2;				
 				} else { // $hbrettpunkte < $haelfte
@@ -423,7 +423,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				if ($gbrettpunkte > $haelfte) {
 					$gmanpunkte += $man_sieg;
 					$gergebnis = 1;
-				} elseif ($gbrettpunkte == $haelfe) {
+				} elseif ($gbrettpunkte == $haelfte) {
 					$gmanpunkte += $man_remis;
 					$gergebnis = 2;
 				} else { // $gbrettpunkte < $haelfte

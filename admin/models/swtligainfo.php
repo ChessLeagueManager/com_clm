@@ -247,7 +247,7 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		// Siegbedingungen
 		$sieg_bed = $this->_SWTReadInt ($swt, 623);
 		$swt_data['sieg_bed'] = 1; // Mannschaft mit meisten BP gewinnt
-		if ($sieg_bed == 1) { // Mindespunktzahl (mehr als die Haelfte der moeglichen Punkte) muss erreicht werden
+		if ($sieg_bed == 255) { // Mindespunktzahl (mehr als die Haelfte der moeglichen Punkte) muss erreicht werden
 			$swt_data['sieg_bed'] = 2;
 		}
 		
