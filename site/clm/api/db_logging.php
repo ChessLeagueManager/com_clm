@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 function clm_api_db_logging() {
 	$table = '#__clm_logging';
 	$primaryKey = 'id';
@@ -21,8 +27,8 @@ function clm_api_db_logging() {
 		if(!clm_core::$db->user->get($out["data"][$i][5])->isNew()) {
 			$out["data"][$i][5] = clm_core::$db->user->get($out["data"][$i][5])->username;
 		}
-		//$out["data"][$i][4] = date("d.m.y H:i:s",$out["data"][$i][4]);
-		$out["data"][$i][4] = clm_core::$cms->showDate($out["data"][$i][4], $format = "d.m.y H:i:s");
+		$out["data"][$i][4] = date("d.m.y H:i:s",$out["data"][$i][4]);
+//		$out["data"][$i][4] = clm_core::$cms->showDate($out["data"][$i][4], $format = "d.m.y H:i:s");
 		
 		$result = clm_class_log::refactor($out["data"][$i][1],$out["data"][$i][2],$out["data"][$i][3]);
 		$out["data"][$i][1] = $result[0];

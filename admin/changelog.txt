@@ -22,6 +22,7 @@ $ -> Language fix or change
 # SWT-Import: notice bei count-Funktion
 ^ Code-Anpassung Joomla 4: Aufstellungs- und Ranglistenpflege Frontend
 # Einzelturniere: Teilnehmer hinzufügen (Vereinsnamen)
+^ Code-Anpassung Joomla 4: Admin-View Logging
 
 - - - - - 3.9.2 - [11-05-2021] - - - - - - - - - - - - - - - - - - - -
 ^ SWT-Import: Anpassungen wegen Schulschach ohne DSB-Bezug
