@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -66,8 +66,10 @@ function clm_api_db_pgn_export($id,$group=true) {
 	header('Content-type: text/html');
 	header('Cache-Control:');
 	header('Pragma:');
+	flush();
 	readfile('components'.DS.'com_clm'.DS.'pgn'.DS.$file_name);
 	flush();
+	exit;
 	
 	return array(true, "m_PgnExportSuccess"); 
 }
