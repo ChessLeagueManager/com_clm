@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -114,9 +114,9 @@ function cancel()
 	{
 	$mainframe	= JFactory::getApplication();
 	// Check for request forgeries
-	JRequest::checkToken() or die( 'Invalid Token' );
+	defined('clm') or die('Restricted access'); 
 	
-	$option		= JRequest::getCmd('option');
+	$option		= clm_core::$load->request_string('option');
 	$row 		=JTable::getInstance( 'ligen', 'TableCLM' );
 	$id		= clm_core::$load->request_int('id');	
 	// load the row from the db table
@@ -168,8 +168,8 @@ function save()
 			$cnt = $x;
 			}
 	for ($y = 0; $y < $pairings; $y++ ) {
-		$ndate	= JRequest::getVar( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Date');
-		$ntime	= JRequest::getVar( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Time');
+		$ndate	= clm_core::$load->request_string( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Date');
+		$ntime	= clm_core::$load->request_string( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Time');
 		if ($ntime != '00:00:00' AND $n1time == '00:00:00') $n1time = $ntime;
 		
 		$query	= "UPDATE #__clm_rnd_man"
@@ -183,7 +183,7 @@ function save()
 			." AND heim = 1 "
 			;
 		$db->setQuery($query);
-		$db->query();
+		clm_core::$db->query($query);
 
 		$query	= "UPDATE #__clm_rnd_man"
 			." SET pdate = '".$ndate."'"
@@ -196,7 +196,7 @@ function save()
 			." AND heim = 0 "
 			;
 		$db->setQuery($query);
-		$db->query();
+		clm_core::$db->query($query);
 	 }
 		$query	= "UPDATE #__clm_rnd_man"
 			." SET ptime = '".$n1time."'"
@@ -206,7 +206,7 @@ function save()
 			." AND ptime = '00:00:00' "
 			;
 		$db->setQuery($query);
-		$db->query();
+		clm_core::$db->query($query);
 	}
 
 	switch ($task)

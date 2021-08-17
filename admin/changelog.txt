@@ -24,6 +24,7 @@ $ -> Language fix or change
 # Einzelturniere: Teilnehmer hinzufügen (Vereinsnamen)
 ^ Code-Anpassung Joomla 4: Admin-View Logging
 # SWT-Import: Siegbedingungen bei Ligen/Mannschaftsturnieren
+^ Code-Anpassung Joomla 4: Admin-View Paarungstermin (kein fester Rundentermin)
 
 - - - - - 3.9.2 - [11-05-2021] - - - - - - - - - - - - - - - - - - - -
 ^ SWT-Import: Anpassungen wegen Schulschach ohne DSB-Bezug
