@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -123,7 +123,7 @@ class CLMModelPGNdata extends JModelLegacy {
 			if ($tkz == 't') 
 				$query .= ' , paar = '.clm_escape(clm_core::$load->request_int('paar'.$p));
 			$query .= ' , brett = '.clm_escape(clm_core::$load->request_int('brett'.$p))
-				." , text = '".clm_escape(clm_core::$load->request_int('text'.$p))."'"
+				." , text = '".clm_escape(clm_core::$load->request_string('text'.$p))."'"
 				." , error = ''"
 				.' WHERE id = '.clm_escape(clm_core::$load->request_int('pgnnr'.$p));
 //echo "<br>in_query: "; var_dump($query); //die(); 
@@ -145,7 +145,7 @@ class CLMModelPGNdata extends JModelLegacy {
 				.' AND runde = '.clm_escape(clm_core::$load->request_int('runde'.$p))
 				.' AND brett = '.clm_escape(clm_core::$load->request_int('brett'.$p));
 			}
-echo "<br>query: "; var_dump($query); //die(); 
+//echo "<br>query: "; var_dump($query); //die(); 
 			clm_core::$db->query($query);
 		}
 		return true;
