@@ -25,6 +25,7 @@ $ -> Language fix or change
 ^ Code-Anpassung Joomla 4: Admin-View Logging
 # SWT-Import: Siegbedingungen bei Ligen/Mannschaftsturnieren
 ^ Code-Anpassung Joomla 4: Admin-View Paarungstermin (kein fester Rundentermin)
+^ Code-Anpassung durch Änderung der API der ECF (engl. Anwendung)
 
 - - - - - 3.9.2 - [11-05-2021] - - - - - - - - - - - - - - - - - - - -
 ^ SWT-Import: Anpassungen wegen Schulschach ohne DSB-Bezug

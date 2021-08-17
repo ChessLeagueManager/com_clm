@@ -1,13 +1,14 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
 function clm_api_db_ecfv2_player($zps = - 1, $mgl_nr = array()) {
 	@set_time_limit(0); // hope
-	$source = "https://www.ecfrating.org.uk/v2/new/api.php?v2/players_ratings";
+//	$source = "https://www.ecfrating.org.uk/v2/new/api.php?v2/players_ratings"; // until June 2021
+	$source = "https://www.ecfrating.org.uk/v2/new/api.php?v2/rating_list";
 	$sid = clm_core::$access->getSeason();
 	$zps = clm_core::$load->make_valid($zps, 8, "");
 	if (strlen($zps) != 4) {
@@ -23,7 +24,8 @@ function clm_api_db_ecfv2_player($zps = - 1, $mgl_nr = array()) {
 		if ($value == 'ECF_junior') $i_ECF_junior = $key;
 		if ($value == 'gender') $i_gender = $key;
 		if ($value == 'nation') $i_nation = $key;
-		if ($value == 'standard_original_rating') $i_standard_original_rating = $key;
+//		if ($value == 'standard_original_rating') $i_standard_original_rating = $key;
+		if ($value == 'original_standard') $i_original_standard = $key;
 		if ($value == 'club_code') $i_club_code = $key;
 	}
 
@@ -56,7 +58,8 @@ function clm_api_db_ecfv2_player($zps = - 1, $mgl_nr = array()) {
 			if ($player[$i_ECF_junior] == true ) $junior = 1; else $junior = 0;
 		} else $junior = 0;
 		if ($player[$i_gender] == 'F') $gender = 'W'; else $gender = $player[$i_gender];
-		$stmt->bind_param('isissiisssiisiss', $sid, $zps, $mgl_nr, $player[$i_ECF_code], $player[$i_full_name], $player[$i_standard_original_rating], $dwz_index, $spl_name, $gender, $geburtsjahr, $junior, $fide_elo, $player[$i_nation], $fide_no, $status, $fide_titel);
+//		$stmt->bind_param('isissiisssiisiss', $sid, $zps, $mgl_nr, $player[$i_ECF_code], $player[$i_full_name], $player[$i_standard_original_rating], $dwz_index, $spl_name, $gender, $geburtsjahr, $junior, $fide_elo, $player[$i_nation], $fide_no, $status, $fide_titel);
+		$stmt->bind_param('isissiisssiisiss', $sid, $zps, $mgl_nr, $player[$i_ECF_code], $player[$i_full_name], $player[$i_original_standard], $dwz_index, $spl_name, $gender, $geburtsjahr, $junior, $fide_elo, $player[$i_nation], $fide_no, $status, $fide_titel);
 		$result = $stmt->execute();
 		if ($result === false) { $str .= " ".$zps."-".$player[$i_ECF_code]; }
 		$counter++;
