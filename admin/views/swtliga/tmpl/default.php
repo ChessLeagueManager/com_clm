@@ -34,19 +34,25 @@ $liga = clm_core::$load->request_int('liga', 0);
 	Joomla.submitbutton = function (pressbutton) { 
         var form = document.adminForm;
         if (pressbutton == 'cancel') {
-            submitform( pressbutton );
+            Joomla.submitform( pressbutton );
             return;
         }
         // do field validation
-		if ( getSelectedValue('adminForm','task') == 'update' ) {
-			if ( getSelectedValue('adminForm','liga') == 0 ) {
-				alert( "<?php echo JText::_( 'LEAGUE_HINT_00', true ); ?>" );
-			} else {
-				submitform( pressbutton );
+		if ( pressbutton == 'update' ) {
+			// get references to select list and display text box
+			var sel = document.getElementById('liga');			
+			var opt;
+			for ( var i = 0, len = sel.options.length; i < len; i++ ) {
+				opt = sel.options[i];
+				if ( opt.selected === true ) {
+					val = opt.value;
+					break;
+				}
 			}
-        } else {
-            submitform( pressbutton );
-        }
+			if ( val == '' ) {
+				alert( "<?php echo JText::_( 'LEAGUE_HINT_00', true ); ?>" ); }
+		}
+        Joomla.submitform( pressbutton );
     }
 	
 </script>
