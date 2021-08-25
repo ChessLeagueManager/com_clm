@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Fjodor Schäfer
@@ -89,8 +89,35 @@ class CLMModelTermine extends JModelLegacy
 	function getTermine( $options=array() )
 	{
 		$query	= $this->_getTermine( $options );
-		$result = clm_core::$db->loadObjectList($query);	
-		return @$result;
+		$result = clm_core::$db->loadObjectList($query);
+		$result2 = array();
+		$layout	= clm_core::$load->request_string('layout');	
+		if (is_null($result) OR $layout == 'termine_long') {
+			return $result; }
+		$zname = '';
+		$znr = 0;
+		for ($i = 0; $i < count($result); $i++) {
+			if ($i == 0) continue;
+			if ($result[$i]->source == 'turnier' AND 
+				$result[$i]->source == $result[$i-1]->source AND 
+				$result[$i]->datum == $result[$i-1]->datum AND 
+				$result[$i]->starttime == $result[$i-1]->starttime AND 
+				$result[$i]->typ_id == $result[$i-1]->typ_id AND
+				$result[$i]->dg == $result[$i-1]->dg) {
+				if ($zname == '') $zname = $result[$i-1]->name;	
+				if ($znr == 0) $znr = $result[$i-1]->nr;	
+			} else {
+				if ($zname != '') $result[$i-1]->zname = $zname;	
+				if ($znr != 0) $result[$i-1]->znr = $znr;	
+				$result2[] = $result[$i-1];
+				$zname = '';
+				$znr = 0;
+			}	
+		}
+		if ($zname != '') $result[$i-1]->zname = $zname;	
+		if ($znr != 0) $result[$i-1]->znr = $znr;	
+		$result2[] = $result[$i-1];	
+		return $result2;
 	}
 	
 	

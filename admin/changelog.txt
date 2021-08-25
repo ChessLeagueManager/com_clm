@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.9.4 - [xx-xx-2021] - - - - - - - - - - - - - - - - - - - -
++ Termine: mehrere Runden am gleichen Tag/Uhrzeit zu einem Termin
+
 - - - - - 3.9.3 - [17-08-2021] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: ToolTip
 ^ Code-Anpassung Joomla 4: Runden im Backend (Nachbesserung)

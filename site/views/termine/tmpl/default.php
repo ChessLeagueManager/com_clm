@@ -114,6 +114,7 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
         if ( $date <= $termine[$t]->datum ) {
         
             // Veranstaltung verlinken
+			$linkname0 = '';
             if ($termine[$t]->source == 'termin') { 
 				$linkname = "index.php?option=com_clm&amp;view=termine&amp;nr=". $termine[$t]->id ."&amp;layout=termine_detail&amp;categoryid=".$categoryid; 
 			} elseif ($termine[$t]->source == 'liga') { 
@@ -124,7 +125,9 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
 				$linkname = "index.php?option=com_clm&amp;view=runde&amp;saison=". $termine[$t]->sid ."&amp;liga=".  $termine[$t]->typ_id ."&amp;runde=". $runde ."&amp;dg=". $dg; 
 			} elseif ($termine[$t]->source == 'lpaar') { 
 				$linkname = "index.php?option=com_clm&amp;view=runde&amp;saison=". $termine[$t]->sid ."&amp;liga=".  $termine[$t]->typ_id ."&amp;runde=". $termine[$t]->nr ."&amp;dg=". $termine[$t]->dg; 
-			} else {
+			} else { // source == turnier
+				if (isset($termine[$t]->znr) AND isset($termine[$t]->zname)) {
+					$linkname0 = "index.php?option=com_clm&amp;view=turnier_runde&amp;runde=". $termine[$t]->znr ."&amp;turnier=". $termine[$t]->typ_id; }
 				$linkname = "index.php?option=com_clm&amp;view=turnier_runde&amp;runde=". $termine[$t]->nr ."&amp;turnier=". $termine[$t]->typ_id; }
                 
             // Veranstaltungsbereich / Ort verlinken
@@ -166,7 +169,11 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
 			if ($termine[$t]->starttime != '00:00:00') echo '&nbsp;&nbsp;&nbsp;'.substr($termine[$t]->starttime,0,5).'&nbsp;';
                       } ?>
                 </td>
-                <td width="120" class="title"><a href="<?php echo $linkname; if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php  echo $termine[$t]->name; ?></a></td>
+                <td width="120" class="title">
+					<?php if ($linkname0 > '') { ?>
+						<a href="<?php echo $linkname0; if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php  echo $termine[$t]->zname; ?></a>
+					<?php echo ' - '; } ?>
+				<a href="<?php echo $linkname; if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php  echo $termine[$t]->name; ?></a></td>
                 <td width="120" class="typ"><?php echo $linktyp; ?></td>
             </tr>
             

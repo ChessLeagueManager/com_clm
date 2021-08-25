@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -134,7 +134,9 @@ $date = date("Y-m-d");
 			//$pdf->Cell($br02,$zelle,utf8_decode($termine[$t]->name),1,0,'L',1);        
 			$yy1 = $pdf->GetY();
 			$xx1 = $pdf->GetX() + $br02;
-			$pdf->Multicell($br02,$zelle,utf8_decode($termine[$t]->name),1,1,'L',1);        
+			if ($termine[$t]->zname != '') $zt = utf8_decode($termine[$t]->zname).' - ';
+			else $zt = '';
+			$pdf->Multicell($br02,$zelle,$zt.utf8_decode($termine[$t]->name),1,1,'L',1);        
 			$yy3 = $pdf->GetY();
 			$pdf->SetY($yy1);
 			$pdf->SetX($xx1);
