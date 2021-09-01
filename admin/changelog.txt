@@ -15,6 +15,7 @@ $ -> Language fix or change
 - - - - - 3.9.4 - [xx-xx-2021] - - - - - - - - - - - - - - - - - - - -
 + Termine: mehrere Runden am gleichen Tag/Uhrzeit zu einem Termin
 ^ CLM-Menue: auch für J 4.0 sprachabhängig
+^ Code-Anpassung Joomla 4: Umsetzungsroutine auf engl. Anwendung
 
 - - - - - 3.9.3 - [17-08-2021] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: ToolTip
