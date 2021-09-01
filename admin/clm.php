@@ -116,48 +116,78 @@ if (substr($joomlaVersion,0,1) > 3) {  ?>
 			<div>
 				<ul id="submenu" class="nav nav-list">
 					<li>
-						<a href="index.php?option=com_clm&amp;view=info">Info&nbsp;&nbsp;</a>
+						<a href="index.php?option=com_clm&amp;view=info"><?php echo JText::_('INFO'); ?>&nbsp;&nbsp;</a>
 					</li>
+					<?php if($clmAccess->access('BE_season_general')) { ?>
 					<li>
-						<a href="index.php?option=com_clm&amp;section=saisons">Saison&nbsp;&nbsp;</a>
+						<a href="index.php?option=com_clm&amp;section=saisons"><?php echo JText::_('SAISON'); ?>&nbsp;&nbsp;</a>
 					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_event_general')) { ?>
 					<li>
-						<a href="index.php?option=com_clm&amp;view=terminemain">Veranstaltungen&nbsp;&nbsp;</a>
+						<a href="index.php?option=com_clm&amp;view=terminemain"><?php echo JText::_('TERMINE'); ?>&nbsp;&nbsp;</a>
 					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_tournament_general')) { ?>
 					<li>
-						<a href="index.php?option=com_clm&amp;view=view_tournament">Turniere&nbsp;&nbsp;</a>
+						<a href="index.php?option=com_clm&amp;view=view_tournament"><?php echo JText::_('TURNIERE'); ?>&nbsp;&nbsp;</a>
 					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_league_general')) { ?>
 					<li>
-						<a href="index.php?option=com_clm&amp;view=view_tournament_group&amp;liga=1">Ligen&nbsp;&nbsp;</a>
+						<a href="index.php?option=com_clm&amp;view=view_tournament_group&amp;liga=1"><?php echo JText::_('LIGEN'); ?>&nbsp;&nbsp;</a>
 					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_teamtournament_general')) { ?>
 					<li>
-						<a href="index.php?option=com_clm&amp;view=view_tournament_group&amp;liga=0">Mannschaftsturniere&nbsp;&nbsp;</a>
+						<a href="index.php?option=com_clm&amp;view=view_tournament_group&amp;liga=0"><?php echo JText::_('MTURNIERE'); ?>&nbsp;&nbsp;</a>
 					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_club_general')) { ?>
 					<li>
-						<a href="index.php?option=com_clm&amp;section=vereine">Vereine&nbsp;&nbsp;</a>
+						<a href="index.php?option=com_clm&amp;section=vereine"><?php echo JText::_('VEREINE'); ?>&nbsp;&nbsp;</a>
 					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_team_general')) { ?>
 					<li>
-						<a href="index.php?option=com_clm&amp;section=mannschaften">Mannschaften&nbsp;&nbsp;</a>
+						<a href="index.php?option=com_clm&amp;section=mannschaften"><?php echo JText::_('MANNSCHAFTEN'); ?>&nbsp;&nbsp;</a>
 					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_user_general')) { ?>
 					<li>
-						<a href="index.php?option=com_clm&amp;section=users">Benutzer&nbsp;&nbsp;</a>
+						<a href="index.php?option=com_clm&amp;section=users"><?php echo JText::_('USER'); ?>&nbsp;&nbsp;</a>
 					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_swt_general')) { ?>
 					<li>
-						<a href="index.php?option=com_clm&amp;view=swt">Importe&nbsp;&nbsp;</a>
+						<a href="index.php?option=com_clm&amp;view=swt"><?php echo JText::_('SWT'); ?>&nbsp;&nbsp;</a>
 					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_dewis_general')) { ?>
 					<li>
-						<a href="index.php?option=com_clm&amp;view=auswertung">DeWIS&nbsp;&nbsp;</a>
+						<?php if ($countryversion =="de") { ?>
+						<a href="index.php?option=com_clm&amp;view=auswertung"><?php echo JText::_('DeWIS'); ?>&nbsp;&nbsp;</a>
+						<?php } ?>
+						<?php if ($countryversion =="en") { ?>
+						<a href="index.php?option=com_clm&amp;view=auswertung"><?php echo JText::_('GRADING_EXPORT'); ?>&nbsp;&nbsp;</a>
+						<?php } ?>
 					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_database_general')) { ?>
 					<li>
-						<a href="index.php?option=com_clm&amp;view=db">Datenbank&nbsp;&nbsp;</a>
+						<a href="index.php?option=com_clm&amp;view=db"><?php echo JText::_('DATABASE'); ?>&nbsp;&nbsp;</a>
 					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_logfile_general')) { ?>
 					<li>
-						<a href="index.php?option=com_clm&amp;view=view_logging">Logging&nbsp;&nbsp;</a>
+						<a href="index.php?option=com_clm&amp;view=view_logging"><?php echo JText::_('LOGFILE'); ?>&nbsp;&nbsp;</a>
 					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_config_general')) { ?>
 					<li>
-						<a href="index.php?option=com_clm&amp;view=view_config">Einstellungen</a>
+						<a href="index.php?option=com_clm&amp;view=view_config"><?php echo JText::_('CONFIG_TITLE'); ?></a>
 					</li>
-				</ul>
+					<?php } ?>
 			</div>
 		</div> <?php 
 }
