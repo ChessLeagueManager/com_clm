@@ -188,6 +188,7 @@ if (substr($joomlaVersion,0,1) > 3) {  ?>
 						<a href="index.php?option=com_clm&amp;view=view_config"><?php echo JText::_('CONFIG_TITLE'); ?></a>
 					</li>
 					<?php } ?>
+				</ul>
 			</div>
 		</div> <?php 
 }
