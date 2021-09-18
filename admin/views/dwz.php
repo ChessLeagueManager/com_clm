@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -62,7 +62,7 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 
 		if (pre_task.value == 'add') {
 			if (pressbutton == 'cancel') {
-				submitform( pressbutton );
+				Joomla.submitform( pressbutton );
 				return;
 			}
 			// do field validation
@@ -73,10 +73,10 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 			} else if (form.filter_gid.value == "0") {
 				alert( "<?php echo JText::_( 'MEMBER_JS_3', true ); ?>" );
 			} else {
-				submitform( pressbutton );
+				Joomla.submitform( pressbutton );
 			}
 		} else {
-			submitform( pressbutton );
+			Joomla.submitform( pressbutton );
 		}
 	}
  

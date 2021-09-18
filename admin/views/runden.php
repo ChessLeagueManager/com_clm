@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -340,7 +340,7 @@ public static function runde( &$row,$lists, $option )
 		 Joomla.submitbutton = function (pressbutton) { 		
 			var form = document.adminForm;
 			if (pressbutton == 'cancel') {
-				submitform( pressbutton );
+				Joomla.submitform( pressbutton );
 				return;
 			}
 			// do field validation
@@ -350,12 +350,41 @@ public static function runde( &$row,$lists, $option )
 				alert( "<?php echo JText::_( 'RUNDE_NUMMER_ANGEBEN', true ); ?>" );
 			} else if (form.datum.value == "") {
 				alert( "<?php echo JText::_( 'RUNDE_DATE_ANGEBEN', true ); ?>" );
-			} else if ( getSelectedValue('adminForm','sid') == 0 ) {
+//			} else if ( getSelectedValue('adminForm','sid') == 0 ) {
+//				alert( "<?php echo JText::_( 'RUNDE_SAISON_AUSWAEHLEN', true ); ?>" );
+			} else {
+				// get references to select list and display text box
+				var sel = document.getElementById('sid');			
+				var opt;
+				for ( var i = 0, len = sel.options.length; i < len; i++ ) {
+					opt = sel.options[i];
+					if ( opt.selected === true ) {
+						val = opt.value;
+						break;
+					}
+				}
+			}
+			if ( val == 0 ) {
 				alert( "<?php echo JText::_( 'RUNDE_SAISON_AUSWAEHLEN', true ); ?>" );
-			} else if ( getSelectedValue('adminForm','liga') == 0 ) {
+				return;
+//			} else if ( getSelectedValue('adminForm','liga') == 0 ) {
+//				alert( "<?php echo JText::_( 'RUNDE_LIGA_AUSWAEHLEN', true ); ?>" );
+			} else {
+				// get references to select list and display text box
+				var sel = document.getElementById('liga');			
+				var opt;
+				for ( var i = 0, len = sel.options.length; i < len; i++ ) {
+					opt = sel.options[i];
+					if ( opt.selected === true ) {
+						val = opt.value;
+						break;
+					}
+				}
+			}
+			if ( val == 0 ) {
 				alert( "<?php echo JText::_( 'RUNDE_LIGA_AUSWAEHLEN', true ); ?>" );
 			} else {
-				submitform( pressbutton );
+				Joomla.submitform( pressbutton );
 			}
 		}
 		</script>
