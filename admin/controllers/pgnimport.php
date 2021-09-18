@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -26,19 +26,24 @@ class CLMControllerPGNImport extends JControllerLegacy
 	} 
 	
 	function import() {		
+		$app =JFactory::getApplication();
+		$liga = clm_core::$load->request_string('liga', '');
+		$pgn_file = clm_core::$load->request_string('pgn_file', '');
 		$adminLink = new AdminLink ();
 		$adminLink->view = 'pgnimport';
+		$adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
 		$adminLink->makeURL ();		
-		$liga = clm_core::$load->request_string('liga', '');
 //echo "<br>ci-html-pgnimport: liga $liga "; var_dump($liga); //die();
 		if ($liga == '') {	
 			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
-			$this->setRedirect($adminLink->url, $msg);
+			$app->enqueueMessage( $msg );
+			$app->redirect($adminLink->url);
 		} else { 
 			$msg = $this->getDataPGN();
 //echo "<br>ci-html-pgnimport: msg $msg "; var_dump($msg); //die();
 			//$msg = $pgn_del.' '.JText::_( 'PGN_DELETE_TOTAL' );
-			$this->setRedirect($adminLink->url, $msg);
+			$app->enqueueMessage( $msg );
+			$app->redirect($adminLink->url);
 		}
 	}
 
@@ -330,51 +335,67 @@ class CLMControllerPGNImport extends JControllerLegacy
 	
 	
 	function maintain() {		
+		$app =JFactory::getApplication();
+		$liga = clm_core::$load->request_string('liga', '');
 		$adminLink = new AdminLink ();
 		$adminLink->view = 'pgnimport';
+		$adminLink->more = array('liga' => $liga);
 		$adminLink->makeURL ();		
-		$liga = clm_core::$load->request_string('liga', '');
 //echo "<br>cm-html-pgnimport: liga $liga "; var_dump($liga); //die();
 		if ($liga == '') {	
 			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
-			$this->setRedirect($adminLink->url, $msg);
+			$app->enqueueMessage( $msg );
+			$app->redirect($adminLink->url);
 		} else { 
-			$_REQUEST['view'] = 'pgndata';
-			parent::display(); 	
+//			$_REQUEST['view'] = 'pgndata';
+//			$app->enqueueMessage( $msg );
+			$adminLink = new AdminLink ();
+			$adminLink->view = 'pgndata';
+			$adminLink->more = array('liga' => $liga);
+			$adminLink->makeURL ();		
+			$app->redirect($adminLink->url);
 		}
 	}
 	
 	function delete_all() {		
+		$app =JFactory::getApplication();
+		$liga = clm_core::$load->request_string('liga', '');
 		$adminLink = new AdminLink ();
 		$adminLink->view = 'pgnimport';
+		$adminLink->more = array('liga' => $liga);
 		$adminLink->makeURL ();		
-		$liga = clm_core::$load->request_string('liga', '');
 //echo "<br>ca-html-pgnimport: liga $liga "; var_dump($liga); //die();
 		if ($liga == '') {	
 			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
-			$this->setRedirect($adminLink->url, $msg);
+			$app->enqueueMessage( $msg );
+			$app->redirect($adminLink->url);
 		} else { 
 			$pgn_del = $this->getDelPGN(true);
 //echo "<br>ca-html-pgnimport: pgn_del $pgn_del "; var_dump($pgn_del); //die();
 			$msg = $pgn_del.' '.JText::_( 'PGN_DELETE_TOTAL' );
-			$this->setRedirect($adminLink->url, $msg);
+			$app->enqueueMessage( $msg );
+			$app->redirect($adminLink->url);
 		}
 	}
 
 	function delete_open() {		
+		$app =JFactory::getApplication();
+		$liga = clm_core::$load->request_string('liga', '');
 		$adminLink = new AdminLink ();
 		$adminLink->view = 'pgnimport';
+		$adminLink->more = array('liga' => $liga);
 		$adminLink->makeURL ();		
-		$liga = clm_core::$load->request_string('liga', '');
 //echo "<br>ca-html-pgnimport: liga $liga "; var_dump($liga); //die();
 		if ($liga == '') {	
 			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
-			$this->setRedirect($adminLink->url, $msg);
+			$app->enqueueMessage( $msg );
+			$app->redirect($adminLink->url);
 		} else {
 			$pgn_del = $this->getDelPGN(false);
 //echo "<br>co-html-pgnimport: pgn_del $pgn_del "; var_dump($pgn_del); //die();
 			$msg = $pgn_del.' '.JText::_( 'PGN_DELETE_TOTAL' );
-			$this->setRedirect($adminLink->url, $msg);
+			$app->enqueueMessage( $msg );
+			$app->redirect($adminLink->url);
 		}
 	}
 
@@ -415,11 +436,13 @@ class CLMControllerPGNImport extends JControllerLegacy
 	}	
 
 	function cancel() {		
+		$app =JFactory::getApplication();
 		$adminLink = new AdminLink ();
 		$adminLink->view = 'swt';
 		$adminLink->makeURL ();		
 		$msg = JText::_( 'SWT_CANCEL_MSG' );
-		$this->setRedirect($adminLink->url, $msg);	
+		$app->enqueueMessage( $msg );
+		$app->redirect($adminLink->url);
 	}
 	
 }

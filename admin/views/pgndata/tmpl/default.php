@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -35,18 +35,15 @@ $stask = clm_core::$load->request_string('stask', '');
 
 <script language="javascript" type="text/javascript">
 
-		 Joomla.submitbutton = function (pressbutton) { 		
+	Joomla.submitbutton = function (pressbutton) { 		
         var form = document.adminForm;
         if (pressbutton == 'cancel') {
-            submitform( pressbutton );
+            Joomla.submitform( pressbutton );
             return;
         }
-        // do field validation
-        if (form.name.value == "") {
-            alert( "<?php echo JText::_( 'LEAGUE_HINT_1', true ); ?>" );
-        } else {
-            submitform( pressbutton );
-        }
+        // do field validation (z.Z. nichts)
+           
+		Joomla.submitform( pressbutton );
     }
 
 </script>

@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -26,30 +26,35 @@ class CLMControllerPGNdata extends JControllerLegacy
 	} 
 	
 	function next() {
-	
+		$app =JFactory::getApplication();	
 		$model = $this->getModel('pgndata');
 		if ($model->store ()) {
-			$_REQUEST['view'] = 'swt';
-			JFactory::getApplication()->enqueueMessage( JText::_( 'PGN_STORE_SUCCESS' ),'message' );
-			parent::display ();
+			$adminLink = new AdminLink ();
+			$adminLink->view = 'swt';
+			$adminLink->makeURL ();
+			$app->enqueueMessage( JText::_( 'PGN_STORE_SUCCESS' ),'message' );
+			$app->redirect($adminLink->url);
 		}
 		else
 		{
-			$_REQUEST['view'] = 'swt';
-			JFactory::getApplication()->enqueueMessage( JText::_( 'PGN_STORE_ERROR' ),'message' );
-			parent::display ();
+			$adminLink = new AdminLink ();
+			$adminLink->view = 'swt';
+			$adminLink->makeURL ();
+			$app->enqueueMessage( JText::_( 'PGN_STORE_ERROR' ),'message' );
+			$app->redirect($adminLink->url);
 		}
 	
 	}
 	
 	function cancel() {		
-	
+		$app =JFactory::getApplication();	
 		$adminLink = new AdminLink ();
 		$adminLink->view = 'swt';
 		$adminLink->makeURL ();
 		
 		$msg = JText::_( 'SWT_CANCEL_MSG' );
-		$this->setRedirect($adminLink->url, $msg);
+		$app->enqueueMessage( $msg );
+		$app->redirect($adminLink->url);
 	
 	}
 	

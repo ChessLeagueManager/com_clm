@@ -23,13 +23,19 @@ $ungerade = clm_core::$load->request_int('ungerade', 0);
 
 ?>
 <script language="javascript" type="text/javascript">
-    <!--
-    function submitbutton(pressbutton) {
+    
+	Joomla.submitbutton = function (pressbutton) { 		
         var form = document.adminForm;
-        submitform( pressbutton );
-        return;
+        if (pressbutton == 'cancel') {
+            Joomla.submitform( pressbutton );
+            return;
+        }
+        // do field validation ( z.Z. nichts)
+		
+        Joomla.submitform( pressbutton );
+        
     }
-	//-->
+	
 </script>
 
 Der Import kann nun abgeschlossen werden.

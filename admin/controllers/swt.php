@@ -113,10 +113,16 @@ class CLMControllerSWT extends JControllerLegacy
 		$model = $this->getModel('swt');
 		$type = $model->pgn_import();
 		$type = 0;
+		$pgn_file = clm_core::$load->request_string('pgn_file', '');
+		
 		if($type == 0) {
-			$_REQUEST['task'] = 'import';
-			$_REQUEST['view'] = 'pgnimport';
-			parent::display();
+//			$_REQUEST['task'] = 'import';
+//			$_REQUEST['view'] = 'pgnimport';
+			$adminLink = new AdminLink();
+			$adminLink->more = array('pgn_file' => $pgn_file);
+			$adminLink->view = "pgnimport";
+			$adminLink->makeURL();
+			$this->app->redirect($adminLink->url); 		
 		} elseif($type == 255){
 			$_REQUEST['view'] = 'swtliga';
 			parent::display();
@@ -207,8 +213,13 @@ class CLMControllerSWT extends JControllerLegacy
 		$model = $this->getModel('swt');
 		$arena_code = $model->arena_import();
 		if($arena_code != '') {
-			$_REQUEST['view'] = 'arenaturnier';
-			parent::display();
+//			$_REQUEST['view'] = 'arenaturnier';
+			$adminLink = new AdminLink();
+			$adminLink->more = array('arena_code' => $arena_code);
+			$adminLink->view = "arenaturnier";
+			$adminLink->makeURL();
+			$this->app->redirect($adminLink->url); 		
+//			parent::display();
 		} else {
 			$adminLink = new AdminLink();
 			$adminLink->view = "swt";

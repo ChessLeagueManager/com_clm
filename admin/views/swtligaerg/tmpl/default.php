@@ -28,33 +28,19 @@ $dwz_handling   = clm_core::$load->request_string( 'dwz_handling', '0');
 ?>
 
 <script language="javascript" type="text/javascript">
-    <!--
-    function submitbutton(pressbutton) {
+    
+	Joomla.submitbutton = function (pressbutton) { 		
         var form = document.adminForm;
         if (pressbutton == 'cancel') {
-            submitform( pressbutton );
+            Joomla.submitform( pressbutton );
             return;
         }
-        // do field validation
-        /*if (form.name.value == "") {
-            alert( "<?php echo JText::_( 'LEAGUE_HINT_1', true ); ?>" );
-        } else if ( getSelectedValue('adminForm','sid') == 0 ) {
-            alert( "<?php echo JText::_( 'LEAGUE_HINT_2', true ); ?>" );
-        } else if (form.stamm.value == "") {
-            alert( "<?php echo JText::_( 'LEAGUE_HINT_3', true ); ?>" );
-        } else if (form.ersatz.value == "") {
-            alert( "<?php echo JText::_( 'LEAGUE_HINT_4', true ); ?>" );
-        } else if (form.teil.value == "") {
-            alert( "<?php echo JText::_( 'LEAGUE_HINT_5', true ); ?>" );
-        } else if (form.runden.value == "") {
-            alert( "<?php echo JText::_( 'LEAGUE_HINT_6', true ); ?>" );
-        } else if ( getSelectedValue('adminForm','durchgang') == "" ) {
-            alert( "<?php echo JText::_( 'LEAGUE_HINT_7', true ); ?>" );
-        } else {*/
-            submitform( pressbutton );
-        //}
+        // do field validation ( z.Z. nichts)
+		
+        Joomla.submitform( pressbutton );
+        
     }
-	//-->
+	
 </script>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm">

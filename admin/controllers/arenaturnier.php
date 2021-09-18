@@ -11,6 +11,7 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 class CLMControllerArenaTurnier extends JControllerLegacy
 {
 	function __construct() {		
+		$this->app = JFactory::getApplication();
 		parent::__construct();		
 	}
 	
@@ -65,10 +66,15 @@ class CLMControllerArenaTurnier extends JControllerLegacy
 			} elseif ($msg == '')  $msg = JText::_( 'SWT_STORE_ERROR' );
 		}
 		
-		JFactory::getApplication()->enqueueMessage( $msg,'message' );
-		$_REQUEST['view'] = 'swt';
-		$_REQUEST['arena'] = $arena;		
-		parent::display(); 		
+//		$_REQUEST['view'] = 'swt';
+//		$_REQUEST['arena'] = $arena;		
+		$adminLink = new AdminLink();
+//		$adminLink->more = array('arena' => $arena);
+		$adminLink->view = "swt";
+		$adminLink->makeURL();
+		$this->app->enqueueMessage( $msg );
+		$this->app->redirect($adminLink->url); 		
+//		parent::display(); 		
 	
 	}
 	
@@ -115,10 +121,15 @@ class CLMControllerArenaTurnier extends JControllerLegacy
 				$msg = JText::_( 'ARENA_CODE_NOVALID' ).' <b>'.$result[2].'</b>'; }
 			else $msg = JText::_( 'SWT_STORE_ERROR' );
 		}
-		JFactory::getApplication()->enqueueMessage( $msg,'message' );
-		$_REQUEST['view'] = 'swt';
-		$_REQUEST['arena'] = $arena;
-		parent::display(); 		
+//		$_REQUEST['view'] = 'swt';
+//		$_REQUEST['arena'] = $arena;		
+		$adminLink = new AdminLink();
+		$adminLink->more = array('arena' => $arena);
+		$adminLink->view = "swt";
+		$adminLink->makeURL();
+		$this->app->enqueueMessage( $msg );
+		$this->app->redirect($adminLink->url); 		
+//		parent::display(); 		
 	
 	}
 	
@@ -155,10 +166,15 @@ class CLMControllerArenaTurnier extends JControllerLegacy
 		$language->load('com_clm');
 		$language->load('com_clm.swtimport');	
 
-		$_REQUEST['view'] = 'swt';
-		JFactory::getApplication()->enqueueMessage( JText::_( 'ARENA_ACTION_CANCEL' ),'message' );
-		$_REQUEST['arena'] = $arena;
-		parent::display(); 		
+//		$_REQUEST['view'] = 'swt';
+//		$_REQUEST['arena'] = $arena;
+		$adminLink = new AdminLink();
+//		$adminLink->more = array('swt_file' => $swt_file);
+		$adminLink->view = "swt";
+		$adminLink->makeURL();
+		$this->app->enqueueMessage( JText::_( 'ARENA_ACTION_CANCEL' ) );
+		$this->app->redirect($adminLink->url); 		
+//		parent::display(); 		
 	
 	}
 }
