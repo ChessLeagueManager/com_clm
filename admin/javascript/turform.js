@@ -1,6 +1,6 @@
 /*
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -79,19 +79,19 @@
 			alert( jserror['select_season'] );
 		} else if (form.typ.value == 0) {
 			alert( jserror['select_modus'] );
-		} else if (form.typ.value != 2 && form.typ.value != 3 && (form.runden.value == "" || form.runden.value == 0)) {
+		} else if (form.typ.value != 2 && form.typ.value != 3 && form.typ.value != 5 && (form.runden.value == "" || form.runden.value == 0)) {
 			alert( jserror['enter_rounds'] );
-		} else if (form.typ.value != 2 && form.typ.value != 3 && isNaN(form.runden.value)) {
+		} else if (form.typ.value != 2 && form.typ.value != 3 && form.typ.value != 5 && isNaN(form.runden.value)) {
 			alert( jserror['number_rounds'] );
 		} else if (form.teil.value == "" || form.teil.value == 0) {
 			alert( jserror['enter_participants'] );
 		} else if (isNaN(form.teil.value)) {
 			alert( jserror['number_participants'] );
-		} else if (form.typ.value != 3 && form.tiebr2.value != 0 && form.tiebr2.value == form.tiebr1.value) {
+		} else if (form.typ.value != 3 && form.typ.value != 5 && form.tiebr2.value != 0 && form.tiebr2.value == form.tiebr1.value) {
 			alert( jserror['select_tiebreakers_12'] );
-		} else if (form.typ.value != 3 && form.tiebr3.value != 0 && form.tiebr3.value == form.tiebr1.value) {
+		} else if (form.typ.value != 3 && form.typ.value != 5 && form.tiebr3.value != 0 && form.tiebr3.value == form.tiebr1.value) {
 			alert( jserror['select_tiebreakers_13'] );
-		} else if (form.typ.value != 3 && form.tiebr3.value != 0 && form.tiebr3.value == form.tiebr2.value) {
+		} else if (form.typ.value != 3 && form.typ.value != 5 && form.tiebr3.value != 0 && form.tiebr3.value == form.tiebr2.value) {
 			alert( jserror['select_tiebreakers_23'] );
 		} else {
 			Joomla.submitform( pressbutton );

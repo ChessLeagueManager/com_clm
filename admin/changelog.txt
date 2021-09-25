@@ -19,6 +19,7 @@ $ -> Language fix or change
 ^ Code-Anpassung Joomla 4: SWT-, PGN-, Arena-Import
 ^ Code-Anpassung Joomla 4: JS-Feldprüfungen 
 # Termine: Erkennen Kategorie
+# Einzelturniere: Update von KO-Turnieren
 
 - - - - - 3.9.3 - [17-08-2021] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: ToolTip
