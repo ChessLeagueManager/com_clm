@@ -18,7 +18,7 @@ class CLMModelTermine extends JModelLegacy
 	{
 		$sid	= clm_core::$load->request_int('saison', 1);	
 		$liga	= clm_core::$load->request_int('liga', 1);
-		$categoryid	= clm_core::$load->request_int('categyryid', 0);
+		$categoryid	= clm_core::$load->request_int('categoryid', 0);
 		// CategoryID vorgegeben?
 		$addWhere_t = '';
 		$addWhere_e = '';
@@ -268,9 +268,9 @@ class CLMModelTermine extends JModelLegacy
 				
 				// checken, ob ParentID in Array der bereits ermittelten Parents vorhanden
 				if (in_array($value->parentid, $parentsExisting)) {
-					
+					error_reporting(E_ALL & ~E_NOTICE);
 					$parentArray[$key] = $parentArray[$value->parentid].' > '.$value->name;
-					
+					error_reporting(E_ALL);
 					// Parent
 					$parentID[$key] = $value->parentid;
 					
