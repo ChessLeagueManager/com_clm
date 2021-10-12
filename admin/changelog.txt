@@ -20,6 +20,7 @@ $ -> Language fix or change
 ^ Code-Anpassung Joomla 4: JS-Feldprüfungen 
 # Termine: Erkennen Kategorie
 # Einzelturniere: Update von KO-Turnieren
+^ Anpassung Joomla 4: standalone-Routine
 
 - - - - - 3.9.3 - [17-08-2021] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: ToolTip

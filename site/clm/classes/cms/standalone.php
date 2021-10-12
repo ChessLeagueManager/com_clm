@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 class clm_class_cms_standalone extends clm_class_cms {
 	
 	private $title;
@@ -131,12 +137,60 @@ class clm_class_cms_standalone extends clm_class_cms {
 			ob_start();
 			require_once ($this->root . '/includes/defines.php');
 			require_once ($this->root . '/includes/framework.php');
-			if (isset($_GET["clm_backend"]) && $_GET["clm_backend"] == "1") {
-				$mainframe = JFactory::getApplication('administrator');
+			
+			// Test Joomla 3.x oder 4.0
+			$query	= "SELECT * FROM #__clm_config"
+				." WHERE id = 1001 ";
+			$record = clm_core::$db->loadObjectList($query);
+			if (isset($record[0]->value) AND substr($record[0]->value,0,1) > 3) {
+				// Joomla 4.0
+				if (isset($_GET["clm_backend"]) && $_GET["clm_backend"] == "1") {
+
+					// Boot the DI container
+					$container = \Joomla\CMS\Factory::getContainer();
+
+					$container->alias('session.web', 'session.web.administrator')
+						->alias('session', 'session.web.administrator')
+						->alias('JSession', 'session.web.administrator')
+						->alias(\Joomla\CMS\Session\Session::class, 'session.web.administrator')
+						->alias(\Joomla\Session\Session::class, 'session.web.administrator')
+						->alias(\Joomla\Session\SessionInterface::class, 'session.web.administrator');
+
+					// Instantiate the application.
+					$app = $container->get(\Joomla\CMS\Application\AdministratorApplication::class);
+
+					// Set the application as global app
+					\Joomla\CMS\Factory::$application = $app;
+				} else {
+					// Boot the DI container
+					$container = \Joomla\CMS\Factory::getContainer();
+
+					/*
+					* Alias the session service keys to the web session service as that is the primary session backend for this application
+					*
+					* In addition to aliasing "common" service keys, we also create aliases for the PHP classes to ensure autowiring objects
+					* is supported.  This includes aliases for aliased class names, and the keys for aliased class names should be considered
+					* deprecated to be removed when the class name alias is removed as well.
+					*/
+					$container->alias('session.web', 'session.web.site')
+					->alias('session', 'session.web.site')
+					->alias('JSession', 'session.web.site')
+					->alias(\Joomla\CMS\Session\Session::class, 'session.web.site')
+					->alias(\Joomla\Session\Session::class, 'session.web.site')
+					->alias(\Joomla\Session\SessionInterface::class, 'session.web.site');
+					$app = $container->get(\Joomla\CMS\Application\SiteApplication::class);
+					// Set the application as global app
+					\Joomla\CMS\Factory::$application = $app;
+				}
 			} else {
-				$mainframe = JFactory::getApplication('site');
+				// Joomla 3.x
+				if (isset($_GET["clm_backend"]) && $_GET["clm_backend"] == "1") {
+					$mainframe = JFactory::getApplication('administrator');
+				} else {
+					$mainframe = JFactory::getApplication('site');
+				}
+				$mainframe->initialise();
 			}
-			$mainframe->initialise();
 			$this->initJoomla=false;
 			ob_end_clean();
 		}

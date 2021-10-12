@@ -62,6 +62,17 @@ require_once(JPATH_SITE.DIRECTORY_SEPARATOR."components".DIRECTORY_SEPARATOR."co
 // lädt Funktion zum sichern vor SQL-Injektion
 require_once(JPATH_SITE.DS."components".DS."com_clm".DS."includes".DS."escape.php");
 
+// Übernahme der aktiven Jooma-Version in die Datenbank
+$query	= "SELECT * FROM #__clm_config"
+	." WHERE id = 1001 ";
+$record = clm_core::$db->loadObjectList($query);
+if (!isset($record[0]->value) OR $record[0]->value != JVERSION) {
+	$query	= "REPLACE INTO #__clm_config"
+		." ( `id`, `value` ) "
+		." VALUES (1001,'".JVERSION."' )";
+	clm_core::$db->query($query);	
+}
+
 // Fix für empfindliche Server //
 $query = "SET SQL_BIG_SELECTS=1";
 clm_core::$db->query($query);
@@ -490,7 +501,8 @@ if ($viewName = clm_core::$load->request_string('view')) {
 	//	$language->load('com_clm.config');
 	}
 	if ( in_array($viewName, array('swt', 'swtturnier', 'swtturnierinfo', 'swtturniertlnr', 'swtturniererg',
-						'swtliga', 'swtligainfo', 'swtligaman', 'swtligaerg', 'swtligasave', 'pgnimport', 'pgndata'))) {
+						'swtliga', 'swtligainfo', 'swtligaman', 'swtligaerg', 'swtligasave',
+						'pgnimport', 'pgndata', 'arenaturnier'))) {
 		$language->load('com_clm.swtimport');
 		clm_core::$load->load_js("submit");
 	}
