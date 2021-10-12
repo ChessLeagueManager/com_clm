@@ -21,6 +21,7 @@ $ -> Language fix or change
 # Termine: Erkennen Kategorie
 # Einzelturniere: Update von KO-Turnieren
 ^ Anpassung Joomla 4: standalone-Routine
+# SWT-Import: Namen mit Hochkomma
 
 - - - - - 3.9.3 - [17-08-2021] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: ToolTip

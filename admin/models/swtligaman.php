@@ -191,7 +191,8 @@ class CLMModelSWTLigaman extends JModelLegacy {
 		
 		foreach ($man_spalten as $spalte) {
 			$fields .= "`" . $spalte . "`,";
-			$values .= " '" . clm_core::$load->request_string($spalte) . "',";
+//			$values .= " '" . clm_core::$load->request_string($spalte) . "',";
+			$values .= " '" . addslashes(htmlspecialchars_decode(clm_core::$load->request_string($spalte))) . "',";
 		}
 		
 		

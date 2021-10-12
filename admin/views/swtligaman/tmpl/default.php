@@ -54,7 +54,7 @@ $dwz_handling   = clm_core::$load->request_string( 'dwz_handling', '0');
                         <label for="name"><?php echo JText::_( 'SWT_LEAGUE_TEAM_NAME' ); ?></label>
                     </td>
                     <td colspan="2">
-                        <input class="inputbox" type="text" name="name" id="name" size="22" maxlength="32" value="<?php echo $this->swt_data['man_name']; ?>" />
+                        <input class="inputbox" type="text" name="name" id="name" size="22" maxlength="32" value="<?php echo htmlspecialchars($this->swt_data['man_name'], ENT_QUOTES); ?>" />
                     </td>
                     <?php if (isset($this->db_man_nr)) { ?>
 						<td nowrap="nowrap">

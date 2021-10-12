@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -18,7 +18,8 @@ class CLMSWT {
 		$i = 0;
 		$name = '';
 		while(ord($chr = file_get_contents ($file, false, null, $offset+$i, 1)) != 0 AND $i < $length){
-			if ($chr != '"' AND $chr != "'") $name .= $chr;
+//			if ($chr != '"' AND $chr != "'") $name .= $chr;
+			$name .= $chr;
 			$i++;
 		}
 		
