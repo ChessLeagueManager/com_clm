@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
 // Variablen ohne foreach setzen
@@ -41,6 +40,8 @@ else $ms = false;
 	}
 	if (!isset($params['ReportForm']))  {   // sollte nicht vorkommen!Standardbelegung
 		$params['ReportForm'] = '1'; }
+	if (!isset($params['round_date']))  {   // sollte nicht vorkommen!Standardbelegung
+		$params['round_date'] = '0'; }
 
 $paar=$this->paar;
 $ok=$this->ok;
@@ -177,7 +178,11 @@ $pdf->SetFont('Times','B',$head_font);
 	$pdf->Cell(50,6,'',0,1);
 $pdf->SetFont('Times','',$head_font-1);
 	$pdf->Cell(10,5,' ',0,0);
-	if ($liga[$runde-1]->datum > 0) {
+	if ($params['round_date'] == '1' AND $paar[$paarung]->pdate > '1970-01-01') { 
+		$pdf_title = utf8_decode($runden_text).JText::_('PAIRING').$paarung.' '.JText::_('ON_DAY').' '.utf8_decode(JHTML::_('date', $paar[$paarung-1]->pdate, JText::_('DATE_FORMAT_CLM_F')));
+		if(isset($paar[$paarung-1]->ptime) and $paar[$paarung-1]->ptime != '00:00:00') { $pdf_title .= '  '.substr($paar[$paarung-1]->ptime,0,5).' Uhr'; } 		
+		$pdf->Cell(($pdf_width-25),5,$pdf_title,0,1,'C'); }
+	elseif ($liga[$runde-1]->datum > '1970-01-01') {
 		$pdf_title = utf8_decode($runden_text).JText::_('PAIRING').$paarung.' '.JText::_('ON_DAY').' '.utf8_decode(JHTML::_('date', $liga[$runde-1]->datum, JText::_('DATE_FORMAT_CLM_F')));
 		if(isset($liga[$runde-1]->startzeit) and $liga[$runde-1]->startzeit != '00:00:00') { $pdf_title .= '  '.substr($liga[$runde-1]->startzeit,0,5).' Uhr'; } 		
 		$pdf->Cell(($pdf_width-25),5,$pdf_title,0,1,'C'); }
