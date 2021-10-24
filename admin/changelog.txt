@@ -15,6 +15,7 @@ $ -> Language fix or change
 - - - - - 3.9.5 - [xx-xx-2021] - - - - - - - - - - - - - - - - - - - -
 # Vereinsliste bei Vereinen aus mehreren Landesverbänden
 # pdf-Spielbericht bei Termin pro Paarung
+^ DeWIS API: Einbau eines Delay-Parameters
 
 - - - - - 3.9.4 - [12-10-2021] - - - - - - - - - - - - - - - - - - - -
 + Termine: mehrere Runden am gleichen Tag/Uhrzeit zu einem Termin

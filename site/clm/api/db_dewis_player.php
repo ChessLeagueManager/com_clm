@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -9,11 +9,14 @@ function clm_api_db_dewis_player($zps = - 1, $incl_pd = 0, $mgl_nr = array()) {
 	@set_time_limit(0); // hope
 	$source = "https://dwz.svw.info/services/files/dewis.wsdl";
 	$sid = clm_core::$access->getSeason();
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$dewis_import_delay = $config->dewis_import_delay;
+
 	$zps = clm_core::$load->make_valid($zps, 8, "");
 	$incl_pd = clm_core::$load->make_valid($incl_pd, 0, 0);
 	$counter = 0;
 	if (strlen($zps) != 5) {
-//		return array(false, "e_wrongZPSFormat");
 		return array(true, "e_wrongZPSFormat",$counter);
 	}
 	// SOAP Webservice
@@ -21,6 +24,9 @@ function clm_api_db_dewis_player($zps = - 1, $incl_pd = 0, $mgl_nr = array()) {
 		$client = clm_core::$load->soap_wrapper($source);
 
 		// VKZ des Vereins --> Vereinsliste
+			
+		usleep($dewis_import_delay);
+			
 		$unionRatingList = $client->unionRatingList($zps);
 		$str = '';
 		$sql = "REPLACE INTO #__clm_dwz_spieler ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Spielername`, `DWZ`, `DWZ_Index`, `Spielername_G`, `Geschlecht`, `Geburtsjahr`, `FIDE_Elo`, `FIDE_Land`, `FIDE_ID`, `Status`, FIDE_Titel) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -43,6 +49,9 @@ function clm_api_db_dewis_player($zps = - 1, $incl_pd = 0, $mgl_nr = array()) {
 					continue;
 				}
 			}
+			
+			usleep($dewis_import_delay);
+			
 			$tcard = $client->tournamentCardForId($m->pid);
 			$out = clm_core::$load->player_dewis_to_clm($m->surname, $m->firstname, $m->membership, $m->gender, $m->idfide, $tcard->member->fideNation);
 			// return array($dsbmglnr, $clmName, $clmNameG, $dsbgeschlecht, $dsbfideland);
