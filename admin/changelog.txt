@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.9.5 - [xx-xx-2021] - - - - - - - - - - - - - - - - - - - -
+# Vereinsliste bei Vereinen aus mehreren Landesverbänden
+
 - - - - - 3.9.4 - [12-10-2021] - - - - - - - - - - - - - - - - - - - -
 + Termine: mehrere Runden am gleichen Tag/Uhrzeit zu einem Termin
 ^ CLM-Menue: auch für J 4.0 sprachabhängig

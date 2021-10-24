@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -111,9 +111,10 @@ function tableOrdering( order, dir, task )
          for ($z = 0; $z < count ( $vereine ); $z++) { 
 		 
 			// Verband
-			if (isset($verband[$z-1]) AND ((!isset($verband[$z-1]->LV)) OR (isset($verband[$z]) && $verband[$z]->LV != $verband[$z-1]->LV) )) { 
+//			if (isset($verband[$z-1]) AND ((!isset($verband[$z-1]->LV)) OR (isset($verband[$z]) && $verband[$z]->LV != $verband[$z-1]->LV) )) { 
+			if (isset($vereine[$z-1]->Verband) AND ((!isset($vereine[$z-1]->LV)) OR (isset($vereine[$z]->Verband) && $vereine[$z]->LV != $vereine[$z-1]->LV) )) { 
 			echo '<tr><td colspan="9" class="noborder">&nbsp;</td></tr>';
-			echo '<tr class="anfang"><td colspan="9">'. $verband[$z]->Verbandname .'</td></tr>';
+//			echo '<tr class="anfang"><td colspan="9">'. $verband[$z]->Verbandname .'</td></tr>';
 			}
 			
 			// Verbände / Bezirke
