@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.9.6 - [xx-xx-2021] - - - - - - - - - - - - - - - - - - - -
++ Veranstaltungen: Export und Import über csv-Dateien
+
 - - - - - 3.9.5 - [24-10-2021] - - - - - - - - - - - - - - - - - - - -
 # Vereinsliste bei Vereinen aus mehreren Landesverbänden
 # pdf-Spielbericht bei Termin pro Paarung

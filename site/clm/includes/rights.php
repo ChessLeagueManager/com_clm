@@ -59,6 +59,8 @@ $rights["view_schedule_pdf"]=array();
 $rights["view_schedule_xls"]=array();
 $rights["db_paarungsliste"]=array();
 $rights["view_paarungsliste_xls"]=array();
+$rights["db_terminliste"]=array();
+$rights["view_terminliste_xls"]=array();
 $rights["db_be_menu"]=array();
 $rights["view_be_menu"]=array();
 $rights["view_app_info"]=array();
@@ -103,4 +105,5 @@ $rights["db_trf_import"]=array(); // Turnierdatei im TRF-Format importieren
 $rights["db_arena_import"]=array(); // Turnier aus lechess importieren
 $rights["db_dewis_user"]=array(); // Online Club Check für User
 $rights["db_check_season_user"]=array(); // Online Season Check für Ligen und Turniere
+$rights["db_term_import"]=array(); // Calenderdatei im csv-Format importieren
 ?>

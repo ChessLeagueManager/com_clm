@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -58,6 +58,10 @@ if (clm_core::$access->getSeason() != -1) {
 	} 
 	elseif ($view == "paarungsliste" AND $format == "xls") {
 			clm_core::$api->callStandalone("view_paarungsliste_xls");
+			return;
+	}
+	elseif ($view == "terminliste" AND $format == "xls") {
+			clm_core::$api->callStandalone("view_terminliste_xls");
 			return;
 	}
 	elseif ($view == "schedule") {

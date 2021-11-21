@@ -475,7 +475,10 @@ if($view == "view_config") {
 	return;
 }
 
-echo '<div id="clm"><div class="clm">';
+$task = clm_core::$load->request_string('task');
+if($view != "terminemain" OR $task != "download" )  {
+	echo '<div id="clm"><div class="clm">';
+}
 jimport('joomla.filesystem.folder');
 
 // lädt alle CLM-Klassen - quasi autoload
@@ -502,7 +505,7 @@ if ($viewName = clm_core::$load->request_string('view')) {
 	}
 	if ( in_array($viewName, array('swt', 'swtturnier', 'swtturnierinfo', 'swtturniertlnr', 'swtturniererg',
 						'swtliga', 'swtligainfo', 'swtligaman', 'swtligaerg', 'swtligasave',
-						'pgnimport', 'pgndata', 'arenaturnier'))) {
+						'pgnimport', 'pgndata', 'arenaturnier', 'termineimport'))) {
 		$language->load('com_clm.swtimport');
 		clm_core::$load->load_js("submit");
 	}

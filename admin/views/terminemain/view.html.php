@@ -40,6 +40,9 @@ class CLMViewTermineMain extends JViewLegacy {
 			JToolBarHelper::spacer();
 			JToolBarHelper::custom('delete','delete.png','delete_f2.png', JText::_('TERMINE_DELETE')); 
 		}
+		JToolBarHelper::custom( 'import', 'upload.png', 'upload_f2.png', JText::_('TERMINE_IMPORT'), false);
+		JToolBarHelper::custom( 'export', 'copy.png', 'copy_f2.png', JText::_('TERMINE_EXPORT'), false);
+		JToolBarHelper::custom( 'download', 'download.png', 'download_f2.png', JText::_('TERMINE_DOWNLOAD'), false);
 		
 		// Daten an Template übergeben
 		$this->user = $model->user;		

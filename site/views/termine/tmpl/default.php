@@ -7,7 +7,6 @@
  * @author Fjodor Schäfer
  * @email ich@vonfio.de
 */
-
 defined('_JEXEC') or die('Restricted access');
 //JHtml::_('behavior.tooltip', '.CLMTooltip');
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
@@ -39,6 +38,9 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
 		// PDF-Links
 		echo CLMContent::createPDFLink('termine', JText::_('TERMINE_SHORT_PRINT'), array('layout' => 'termine_short', 'saison' => $sid));
 		echo CLMContent::createPDFLink('termine', JText::_('TERMINE_LONG_PRINT'), array('layout' => 'termine_long', 'saison' => $sid));
+		if (clm_core::$access->getJid() > 0) {
+			echo clm_core::$load->create_link_xls('terminliste', JText::_('CSV_TERM'), array('layout' => 'terminliste', 'saison' => $sid));
+		}
 		?>	
 	</div>
 

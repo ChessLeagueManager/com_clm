@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -12,9 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 $today = date("Y-m-d");
 
-
 ?>
-
 			
 <form action="index.php" method="post" name="adminForm" id="adminForm">
   <div class="width-60 fltlft">
@@ -133,7 +131,8 @@ $today = date("Y-m-d");
 			</label>
 			</td>
 			<td>
-				<?php if ($this->termine->enddate < '1970-01-01') $this->termine->enddate = $today; 
+				<?php if ($this->termine->enddate < '1970-01-01') $this->termine->enddate = '1970-01-01'; //$today; 
+					  if ($this->termine->enddate == '1970-01-01') $this->termine->endtime = '00:00:00'; //neu 
 				echo CLMForm::calendar($this->termine->enddate, 'enddate', 'enddate', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
 				<span >  </span>
 			</td><td>
