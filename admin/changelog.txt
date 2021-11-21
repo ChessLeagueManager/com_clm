@@ -14,6 +14,7 @@ $ -> Language fix or change
 
 - - - - - 3.9.6 - [xx-xx-2021] - - - - - - - - - - - - - - - - - - - -
 + Veranstaltungen: Export und Import über csv-Dateien
+# Vereine: ordering erhalten bei Update
 
 - - - - - 3.9.5 - [24-10-2021] - - - - - - - - - - - - - - - - - - - -
 # Vereinsliste bei Vereinen aus mehreren Landesverbänden

@@ -463,6 +463,7 @@ public static function verein( &$row, $lists, $option )
 		<input type="hidden" name="section" value="vereine" />
 		<input type="hidden" name="option" value="com_clm" />
 		<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
+		<input type="hidden" name="ordering" value="<?php echo $row->ordering; ?>" />
 <!---		<input type="hidden" name="cid" value="<?php //echo $row->cid; ?>" />
 		<input type="hidden" name="client_id" value="<?php //echo $row->cid; ?>" />
 --->		<input type="hidden" name="task" value="" />
