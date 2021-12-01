@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -988,9 +988,14 @@ function send()
 	." WHERE a.id = ".$cid[0];
 	$n=1;
 	}
-	$db->setQuery( $query );
-	$rows = $db->loadObjectList();
-	if ($db->getErrorNum()) {echo $db->stderr(); return false;}
+	try {
+		$db->setQuery( $query );
+		$rows = $db->loadObjectList();
+	}
+	catch (Exception $e) {
+		$mainframe->enqueueMessage($db->stderr(), 'error');
+		return false;
+	}
 	
 	// Generiere neuen Aktivierungscode
 	jimport('joomla.user.helper');
@@ -1034,7 +1039,10 @@ function send()
 			// Email mit Accountdaten schicken
 			jimport( 'joomla.mail.mail' );
 			$mail = JFactory::getMailer();
-			$mail->sendMail($from, $fromname, $recipient, $subject_neu, $body, 0, null, $bcc);
+			if ($bcc == '') 
+				$mail->sendMail($from, $fromname, $recipient, $subject_neu, $body);
+			else
+				$mail->sendMail($from, $fromname, $recipient, $subject_neu, $body, 0, null, $bcc);
 
 		}
 		////////////////////////////////////////////////
@@ -1062,7 +1070,10 @@ function send()
 			// Erinnerungsmail schicken
 			jimport( 'joomla.mail.mail' );
 			$mail = JFactory::getMailer();
-			$mail->sendMail($from,$fromname,$recipient,$subject_remind,$body,0,null,$bcc);
+			if ($bcc == '') 
+				$mail->sendMail($from,$fromname,$recipient,$subject_remind,$body);
+			else 
+				$mail->sendMail($from,$fromname,$recipient,$subject_remind,$body,0,null,$bcc);
 
 			//$msg = JText::_( 'USERS_MIDESTENS'.$bcc);
 			$msg = JText::_( 'USERS_MIDESTENS');
