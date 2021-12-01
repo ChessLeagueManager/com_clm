@@ -164,6 +164,8 @@ $str_params = clm_core::$load->request_string('str_params');
 						<select name="durchgang" id="durchgang" value="<?php echo $this->swt_data['anz_durchgaenge']; ?>" size="1">
 							<option value="1" <?php if ($this->swt_data['anz_durchgaenge'] < 2) {echo 'selected="selected"';} ?>>1</option>
 							<option value="2" <?php if ($this->swt_data['anz_durchgaenge'] == 2) {echo 'selected="selected"';} ?>>2</option>
+							<option value="3" <?php if ($this->swt_data['anz_durchgaenge'] == 3) {echo 'selected="selected"';} ?>>3</option>
+							<option value="4" <?php if ($this->swt_data['anz_durchgaenge'] == 4) {echo 'selected="selected"';} ?>>4</option>
 						</select>
 					</td>
 				</tr>
