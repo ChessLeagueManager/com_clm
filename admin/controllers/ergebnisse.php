@@ -139,14 +139,7 @@ function display($cachable = false, $urlparams = array())
 	.' WHERE a.heim = 1 '
 	. $where
 	. $orderby	;
-/*	$db->setQuery( $query, $pageNav->limitstart, $pageNav->limit );
 
-	$rows = $db->loadObjectList();
-	if ($db->getErrorNum()) {
-		echo $db->stderr();
-		return false;
-	}
-*/
 	try {
 		$db->setQuery( $query, $pageNav->limitstart, $pageNav->limit );
 		$rows = $db->loadObjectList();
@@ -156,7 +149,8 @@ function display($cachable = false, $urlparams = array())
 	}
 	// Filter
 	// Statusfilter
-	$lists['state']	= JHTML::_('grid.state',  $filter_state );
+	//$lists['state']	= JHTML::_('grid.state',  $filter_state );
+	$lists['state'] = CLMForm::selectState( $filter_state );
 	// Saisonfilter
 	$sql = 'SELECT id, name FROM #__clm_saison WHERE archiv =0';
 	$db->setQuery($sql);

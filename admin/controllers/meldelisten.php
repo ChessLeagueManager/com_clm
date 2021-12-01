@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -90,16 +90,18 @@ function display($cachable = false, $urlparams = array())
 	. ' LEFT JOIN #__clm_vereine AS e ON e.zps = a.zps'
 	. $where
 	. $orderby	;
-	$db->setQuery( $query, $pageNav->limitstart, $pageNav->limit );
-
-	$rows = $db->loadObjectList();
-	if ($db->getErrorNum()) {
-		echo $db->stderr();
+	try {
+		$db->setQuery( $query, $pageNav->limitstart, $pageNav->limit );
+		$rows = $db->loadObjectList();
+	}
+	catch (Exception $e) {
+		$mainframe->enqueueMessage($db->stderr(), 'error');
 		return false;
 	}
 
 	// state filter
-	$lists['state']	= JHtml::_('grid.state',  $filter_state );
+	//$lists['state']	= JHTML::_('grid.state',  $filter_state );
+	$lists['state'] = CLMForm::selectState( $filter_state );
 
 	// Saisonfilter
 	$sql = 'SELECT id, name FROM #__clm_saison WHERE archiv =0';

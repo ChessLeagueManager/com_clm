@@ -100,14 +100,6 @@ function display($cachable = false, $urlparams = array())
 	. ' LEFT JOIN #__clm_liga AS d ON a.liga = d.id'
 	. ' LEFT JOIN #__users AS u ON u.id = a.checked_out'
 	. $where.$orderby;
-/*	$db->setQuery( $query, $pageNav->limitstart, $pageNav->limit );
-
-	$rows = $db->loadObjectList();
-	if ($db->getErrorNum()) {
-		echo $db->stderr();
-		return false;
-	}
-*/
 	try {
 		$db->setQuery( $query, $pageNav->limitstart, $pageNav->limit );
 		$rows = $db->loadObjectList();
@@ -117,7 +109,8 @@ function display($cachable = false, $urlparams = array())
 	}
 	// Filter
 	// Statusfilter
-	$lists['state']	= JHtml::_('grid.state',  $filter_state );
+	//$lists['state']	= JHTML::_('grid.state',  $filter_state );
+	$lists['state'] = CLMForm::selectState( $filter_state );
 	// nach Saison sortieren
 	$sql = 'SELECT id, name FROM #__clm_saison WHERE archiv =0';
 	$db->setQuery($sql);

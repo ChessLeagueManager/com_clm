@@ -281,7 +281,7 @@ class CLMForm {
 
 
 	// neu
-	public static function selectVereinTournament ($name, $value = 0, $turnier, $filter = FALSE) {
+	public static function selectVereinTournament ($name, $value = 0, $turnier = 0, $filter = FALSE) {
 		
 			$sql = "SELECT a.zps, v.Vereinname as name FROM #__clm_turniere_tlnr as a "
 				." LEFT JOIN #__clm_dwz_vereine as v ON v.sid= a.sid AND v.ZPS = a.zps"
@@ -366,6 +366,49 @@ class CLMForm {
 	
 		return JHTML::_('calendar', $value, $name, $id, $format, $attribs);
 	}	
+
+
+	/**
+	 * copy of Joomla 3.9  function state  in libraries/cms/html/grid.php  	line231ff
+	 *
+	 * Method to create a select list of states for filtering
+	 * By default the filter shows only published and unpublished items
+	 *
+	 * @param   string  $filterState  The initial filter state
+	 * @param   string  $published    The JText string for published
+	 * @param   string  $unpublished  The JText string for Unpublished
+	 * @param   string  $archived     The JText string for Archived
+	 * @param   string  $trashed      The JText string for Trashed
+	 *
+	 * @return  string
+	 *
+	 * @since   1.5
+	 */
+	public static function selectState($filterState = '*', $published = 'JPUBLISHED', $unpublished = 'JUNPUBLISHED', $archived = null, $trashed = null)
+	{
+		$state = array('' => '- ' . JText::_('JLIB_HTML_SELECT_STATE') . ' -', 'P' => JText::_($published), 'U' => JText::_($unpublished));
+
+		if ($archived)
+		{
+			$state['A'] = JText::_($archived);
+		}
+
+		if ($trashed)
+		{
+			$state['T'] = JText::_($trashed);
+		}
+
+		return JHtml::_(
+			'select.genericlist',
+			$state,
+			'filter_state',
+			array(
+				'list.attr' => 'class="inputbox" size="1" onchange="Joomla.submitform();"',
+				'list.select' => $filterState,
+				'option.key' => null,
+			)
+		);
+	}
 
 }
 ?>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -78,7 +78,8 @@ class CLMControllerSaisons extends JControllerLegacy {
 			$this->setMessage(JText::_('SAISON_GIBT') . ' ' . $counter . ' ' . JText::_('SAISON_AKTIVE') . ' ' . ($counter - 1) . ' ' . JText::_('SAISON') . ' ' . $s . ' ' . JText::_('SAISON_ZURUECK'), 'notice');		
 		}
 		// state filter
-		$lists['state'] = JHtml::_('grid.state', $filter_state);
+		//$lists['state']	= JHTML::_('grid.state',  $filter_state );
+		$lists['state'] = CLMForm::selectState( $filter_state );
 		// table ordering
 		$lists['order_Dir'] = $filter_order_Dir;
 		$lists['order'] = $filter_order;

@@ -48,7 +48,9 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
     <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
     <br />
     
-    <?php if (isset($termine[0]) AND $termine[0]->nr == 0) {	?>
+    <?php if (count($termine) < 1 ) {	?>
+    <div class="wrong"><?php echo JText::_('NO_TERMINE') ?></div>
+    <?php  } elseif (isset($termine[0]) AND $termine[0]->nr == 0) {	?>
     <div class="wrong"><?php echo JText::_('NO_ROUNDS') ?></div>
     <?php  } else { 
     

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -105,8 +105,9 @@ function display($cachable = false, $urlparams = array())
 		$mainframe->enqueueMessage($db->stderr(), 'error');
 	}
 	// state filter
-	$lists['state']	= JHTML::_('grid.state',  $filter_state );
-
+	//$lists['state']	= JHTML::_('grid.state',  $filter_state );
+	$lists['state'] = CLMForm::selectState( $filter_state );
+	
 	// Saisonfilter
 	$sql = 'SELECT id, name FROM #__clm_saison WHERE archiv =0';
 	$db->setQuery($sql);

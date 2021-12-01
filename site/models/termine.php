@@ -7,7 +7,6 @@
  * @author Fjodor Schäfer
  * @email ich@vonfio.de
 */
-
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
@@ -91,6 +90,7 @@ class CLMModelTermine extends JModelLegacy
 		$query	= $this->_getTermine( $options );
 		$result = clm_core::$db->loadObjectList($query);
 		$result2 = array();
+		if (count($result) < 1) return $result2;
 		$layout	= clm_core::$load->request_string('layout');	
 		if (is_null($result) OR $layout == 'termine_long') {
 			return $result; }

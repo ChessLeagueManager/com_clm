@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -25,7 +25,8 @@ defined('_JEXEC') or die('Restricted access');
 			<td nowrap="nowrap">
 				<?php
 					echo $this->form['parent'];
-					echo "&nbsp;&nbsp;&nbsp;".JHtml::_('grid.state',  $this->param['state'] );
+//					echo "&nbsp;&nbsp;&nbsp;".JHtml::_('grid.state',  $this->param['state'] );
+					echo "&nbsp;&nbsp;&nbsp;".CLMForm::selectState( $this->param['state'] );
 				?>
 			</td>
 		</tr>
