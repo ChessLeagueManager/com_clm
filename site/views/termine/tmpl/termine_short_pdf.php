@@ -148,6 +148,16 @@ $date = date("Y-m-d");
         // ENDE : Terminschleife 
         		
 // Ausgabe
-$pdf->Output(utf8_decode(JText::_('TERMINE_HEAD')).'.pdf','D');
+if ($t1 < 1) {
+	$pdf->AddPage();
+	$pdf->SetFont('Times','',$date_font);
+	$pdf->Cell(10,3,' ',0,0);
+	$pdf->Cell(175,3,utf8_decode(JText::_('WRITTEN')).' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
+	
+	$pdf->SetFont('Times','',$head_font);
+	$pdf->Cell(10,10,' ',0,0);
+	$pdf->Cell(150,10,utf8_decode(JText::_('NO_TERMINE')),0,1,'L');
+}
+$pdf->Output(utf8_decode(JText::_('TERMINE_COMPACT')).'.pdf','D');
 exit;
 ?>

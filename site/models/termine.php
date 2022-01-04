@@ -201,7 +201,7 @@ class CLMModelTermine extends JModelLegacy
 	$db		= JFactory::getDBO();
 	$date 	= date("Y-m-d");
 		$query = " SELECT a.dg,a.lid,a.sid,a.runde,a.paar,a.tln_nr,a.gegner "
-			." ,t.name as dat_name, t.datum as datum "
+			." ,t.name as dat_name, t.datum as datum, t.startzeit AS starttime, l.ordering "
 			." ,m.name as hname, n.name as gname, m.published as hpublished, "
 			." n.published as gpublished "
 			." FROM #__clm_rnd_man as a "
@@ -211,7 +211,7 @@ class CLMModelTermine extends JModelLegacy
 			." LEFT JOIN #__clm_runden_termine as t ON t.nr = (a.runde + ((a.dg - 1)*l.runden)) AND t.liga = a.lid AND t.sid = a.sid " //klkl
 			." WHERE TO_DAYS(t.datum)+2 >= TO_DAYS(NOW())"
 			." AND a.heim = 1"
-			." ORDER BY datum ASC, a.lid ASC, a.paar ASC "
+			." ORDER BY datum ASC, starttime ASC, ABS(l.ordering) ASC, a.lid ASC, a.paar ASC "
 			;
 		return $query;
 	}
