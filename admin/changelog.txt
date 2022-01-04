@@ -12,13 +12,14 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.9.6 - [xx-xx-2021] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.9.6 - [xx-xx-2022] - - - - - - - - - - - - - - - - - - - -
 + Veranstaltungen: Export und Import über csv-Dateien
 # Vereine: ordering erhalten bei Update
 # Benutzer: Email-Versand ohne Admin-Copy
 ^ Code-Anpassung Joomla 4: Selectionsfeld Status
 + SWT-Import: Liga mit 3 bzw. 4 Durchgängen möglich
 # Termine: leere Termineliste ohne Notice
+^ Admin-Bereich: CLM-Submenü templategerecht (nun auch bei J4.0)
 
 - - - - - 3.9.5 - [24-10-2021] - - - - - - - - - - - - - - - - - - - -
 # Vereinsliste bei Vereinen aus mehreren Landesverbänden

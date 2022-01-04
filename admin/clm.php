@@ -123,59 +123,59 @@ $countryversion = $config->countryversion;
 	$joomlaVersion = $version->getShortVersion();
 
 if (substr($joomlaVersion,0,1) > 3) {  ?>
-		<div id="j-sidebar-container" >
+		<div>
 			<div>
-				<ul id="submenu" class="nav nav-list">
-					<li>
+				<ul id="submenu" class="nav sidebar-nav">
+					<li <?php if (clm_core::$load->request_string('view') == 'info') echo 'class="active"'; ?>>
 						<a href="index.php?option=com_clm&amp;view=info"><?php echo JText::_('INFO'); ?>&nbsp;&nbsp;</a>
 					</li>
 					<?php if($clmAccess->access('BE_season_general')) { ?>
-					<li>
+					<li <?php if (clm_core::$load->request_string('section') == 'saisons') echo 'class="active"'; ?>>
 						<a href="index.php?option=com_clm&amp;section=saisons"><?php echo JText::_('SAISON'); ?>&nbsp;&nbsp;</a>
 					</li>
 					<?php } ?>
 					<?php if($clmAccess->access('BE_event_general')) { ?>
-					<li>
+					<li <?php if (clm_core::$load->request_string('view') == 'terminemain') echo 'class="active"'; ?>>
 						<a href="index.php?option=com_clm&amp;view=terminemain"><?php echo JText::_('TERMINE'); ?>&nbsp;&nbsp;</a>
 					</li>
 					<?php } ?>
 					<?php if($clmAccess->access('BE_tournament_general')) { ?>
-					<li>
+					<li <?php if (clm_core::$load->request_string('view') == 'view_tournament') echo 'class="active"'; ?>>
 						<a href="index.php?option=com_clm&amp;view=view_tournament"><?php echo JText::_('TURNIERE'); ?>&nbsp;&nbsp;</a>
 					</li>
 					<?php } ?>
 					<?php if($clmAccess->access('BE_league_general')) { ?>
-					<li>
+					<li <?php if (clm_core::$load->request_string('view') == 'view_tournament_group' AND clm_core::$load->request_int('liga') == 1) echo 'class="active"'; ?>>
 						<a href="index.php?option=com_clm&amp;view=view_tournament_group&amp;liga=1"><?php echo JText::_('LIGEN'); ?>&nbsp;&nbsp;</a>
 					</li>
 					<?php } ?>
 					<?php if($clmAccess->access('BE_teamtournament_general')) { ?>
-					<li>
+					<li <?php if (clm_core::$load->request_string('view') == 'view_tournament_group' AND clm_core::$load->request_int('liga') == 0) echo 'class="active"'; ?>>
 						<a href="index.php?option=com_clm&amp;view=view_tournament_group&amp;liga=0"><?php echo JText::_('MTURNIERE'); ?>&nbsp;&nbsp;</a>
 					</li>
 					<?php } ?>
 					<?php if($clmAccess->access('BE_club_general')) { ?>
-					<li>
+					<li <?php if (clm_core::$load->request_string('section') == 'vereine') echo 'class="active"'; ?>>
 						<a href="index.php?option=com_clm&amp;section=vereine"><?php echo JText::_('VEREINE'); ?>&nbsp;&nbsp;</a>
 					</li>
 					<?php } ?>
 					<?php if($clmAccess->access('BE_team_general')) { ?>
-					<li>
+					<li <?php if (clm_core::$load->request_string('section') == 'mannschaften') echo 'class="active"'; ?>>
 						<a href="index.php?option=com_clm&amp;section=mannschaften"><?php echo JText::_('MANNSCHAFTEN'); ?>&nbsp;&nbsp;</a>
 					</li>
 					<?php } ?>
 					<?php if($clmAccess->access('BE_user_general')) { ?>
-					<li>
+					<li <?php if (clm_core::$load->request_string('section') == 'users') echo 'class="active"'; ?>>
 						<a href="index.php?option=com_clm&amp;section=users"><?php echo JText::_('USER'); ?>&nbsp;&nbsp;</a>
 					</li>
 					<?php } ?>
 					<?php if($clmAccess->access('BE_swt_general')) { ?>
-					<li>
+					<li <?php if (clm_core::$load->request_string('view') == 'swt') echo 'class="active"'; ?>>
 						<a href="index.php?option=com_clm&amp;view=swt"><?php echo JText::_('SWT'); ?>&nbsp;&nbsp;</a>
 					</li>
 					<?php } ?>
 					<?php if($clmAccess->access('BE_dewis_general')) { ?>
-					<li>
+					<li <?php if (clm_core::$load->request_string('view') == 'auswertung') echo 'class="active"'; ?>>
 						<?php if ($countryversion =="de") { ?>
 						<a href="index.php?option=com_clm&amp;view=auswertung"><?php echo JText::_('DeWIS'); ?>&nbsp;&nbsp;</a>
 						<?php } ?>
@@ -185,17 +185,17 @@ if (substr($joomlaVersion,0,1) > 3) {  ?>
 					</li>
 					<?php } ?>
 					<?php if($clmAccess->access('BE_database_general')) { ?>
-					<li>
+					<li <?php if (clm_core::$load->request_string('view') == 'db') echo 'class="active"'; ?>>
 						<a href="index.php?option=com_clm&amp;view=db"><?php echo JText::_('DATABASE'); ?>&nbsp;&nbsp;</a>
 					</li>
 					<?php } ?>
 					<?php if($clmAccess->access('BE_logfile_general')) { ?>
-					<li>
+					<li <?php if (clm_core::$load->request_string('view') == 'view_logging') echo 'class="active"'; ?>>
 						<a href="index.php?option=com_clm&amp;view=view_logging"><?php echo JText::_('LOGFILE'); ?>&nbsp;&nbsp;</a>
 					</li>
 					<?php } ?>
 					<?php if($clmAccess->access('BE_config_general')) { ?>
-					<li>
+					<li <?php if (clm_core::$load->request_string('view') == 'view_config') echo 'class="active"'; ?>>
 						<a href="index.php?option=com_clm&amp;view=view_config"><?php echo JText::_('CONFIG_TITLE'); ?></a>
 					</li>
 					<?php } ?>
