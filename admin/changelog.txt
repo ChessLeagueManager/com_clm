@@ -21,6 +21,7 @@ $ -> Language fix or change
 # Termine: leere Termineliste ohne Notice
 ^ Admin-Bereich: CLM-Submenü templategerecht (nun auch bei J4.0)
 # Termine: Darstellung bei unterschiedlichen Startzeiten
+# SWT-Import: Liga Rundenturnier mit spielfrei 
 
 - - - - - 3.9.5 - [24-10-2021] - - - - - - - - - - - - - - - - - - - -
 # Vereinsliste bei Vereinen aus mehreren Landesverbänden

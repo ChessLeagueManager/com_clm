@@ -322,8 +322,8 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 					$dwz_editor = clm_core::$access->getID();
 				}
 				
-				//if ($ergebnis != null) {
-				if (!is_null($ergebnis)) {
+				//if (!is_null($ergebnis)) {
+				if (!is_null($ergebnis) AND ($ergebnis != 7)) {
 				
 					$keine_ergebnisse = false;
 					$sp_fields = '`sid`, `swt_id`, `runde`, `paar`, `dg`, '
@@ -447,6 +447,8 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 				$gmanpunkte = null;
 				$hergebnis = null;
 				$gergebnis = null;
+				$hkampflos = null;
+				$gkampflos = null;
 			}
 			
 			if ($hkampflos == 1) {
@@ -461,12 +463,20 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 			}
 			
 			$m_hvalues = '"'.$sid.'", "'.$swt_id.'", "'.$runde.'", "'.$p.'", "'.$dgang.'", '
-						. '"1", "'.$htln_nr.'", "'.$gtln_nr.'", "'.$hergebnis.'", "'.$hkampflos.'", "'
-						.$hbrettpunkte.'", "'.$hmanpunkte . '", "1"';
+						. '"1", "'.$htln_nr.'", "'.$gtln_nr.'", ';
+			if (is_null($hergebnis)) $m_hvalues .= 'NULL, '; else $m_hvalues .= '"'.$hergebnis.'", ';			
+			if (is_null($hkampflos)) $m_hvalues .= 'NULL, '; else $m_hvalues .= '"'.$hkampflos.'", ';			
+			if (is_null($hbrettpunkte)) $m_hvalues .= 'NULL, '; else $m_hvalues .= '"'.$hbrettpunkte.'", ';			
+			if (is_null($hmanpunkte)) $m_hvalues .= 'NULL, '; else $m_hvalues .= '"'.$hmanpunkte.'", ';			
+			$m_hvalues .= ' "1"';
 						
 			$m_gvalues = '"'.$sid.'", "'.$swt_id.'", "'.$runde.'", "'.$p.'", "'.$dgang.'", '
-						. '"0", "'.$gtln_nr.'", "'.$htln_nr.'", "'.$gergebnis.'", "'.$gkampflos.'", "'
-						.$gbrettpunkte.'", "'.$gmanpunkte . '", "1"';
+						. '"0", "'.$gtln_nr.'", "'.$htln_nr.'", ';
+			if (is_null($gergebnis)) $m_gvalues .= 'NULL, '; else $m_gvalues .= '"'.$gergebnis.'", ';			
+			if (is_null($gkampflos)) $m_gvalues .= 'NULL, '; else $m_gvalues .= '"'.$gkampflos.'", ';			
+			if (is_null($gbrettpunkte)) $m_gvalues .= 'NULL, '; else $m_gvalues .= '"'.$gbrettpunkte.'", ';			
+			if (is_null($hmanpunkte)) $m_gvalues .= 'NULL, '; else $m_gvalues .= '"'.$gmanpunkte.'", ';			
+			$m_gvalues .= ' "1"';
 						
 			$query = ' INSERT IGNORE INTO #__clm_swt_rnd_man'
 					. ' ( ' . $m_fields . ' ) '
