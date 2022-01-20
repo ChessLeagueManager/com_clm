@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -197,13 +197,15 @@ function saveIt($apply=false)
 		$ko_id = 0;
 		$tln_ko	= $row->teil;
 		while ($row->teil < pow(2,$row->runden)) { $ko_id++; $row->teil = $row->teil+1;}
-		if ($ko_id > 0)  JError::raiseWarning(500, JText::_( 'MTURN_MANNSCH_KO', true ) ); 
+//		if ($ko_id > 0)  JError::raiseWarning(500, JText::_( 'MTURN_MANNSCH_KO', true ) ); 
+		if ($ko_id > 0)  $mainframe->enqueueMessage(JText::_( 'MTURN_MANNSCH_KO' ), 'notice');
 			}	
 	if ($row->runden_modus == 5) {
 		$ko_id = 0;
 		$tln_ko	= $row->teil;
 		while ($row->teil < pow(2,$row->runden-1)) { $ko_id++; $row->teil = $row->teil+1;}
-		if ($ko_id > 0)  JError::raiseWarning(500, JText::_( 'MTURN_MANNSCH_KO', true ) ); 
+//		if ($ko_id > 0)  JError::raiseWarning(500, JText::_( 'MTURN_MANNSCH_KO', true ) ); 
+		if ($ko_id > 0)  $mainframe->enqueueMessage(JText::_( 'MTURN_MANNSCH_KO' ), 'notice');
 		}
 	}
 	$row->liga_mt	= 1; //mtmt 0 = liga  1 = mannschaftsturnier

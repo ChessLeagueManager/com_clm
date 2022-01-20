@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -105,8 +103,9 @@ class CLMControllerTurRoundForm extends JControllerLegacy {
 				." AND sid = ".$row->sid
 				." AND startzeit = '00:00:00' "
 			;
-			$db->setQuery($query);
-			$db->query();
+//			$db->setQuery($query);
+//			$db->query();
+			clm_core::$db->query($query);
 		}
 		if ($this->task == 'apply') {
 			$this->adminLink->view = "turroundform";

@@ -16,7 +16,7 @@ require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
  
 $lid		= clm_core::$load->request_int('liga','1'); 
 $sid		= clm_core::$load->request_int('saison',0);
-$runde		= clm_core::$load->request_int('runde');
+$runde		= clm_core::$load->request_string('runde');
 $item		= clm_core::$load->request_int('Itemid',0);
 $typeid		= clm_core::$load->request_int('typeid',0);
 $liga		= $this->liga;

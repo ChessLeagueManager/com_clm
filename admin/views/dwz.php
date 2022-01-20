@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -299,8 +299,9 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 	<div>
 	<?php 	$zps = $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
 		$spl = CLMControllerDWZ::spieler($zps); ?>
+	<br>
 	<fieldset class="adminform">
-	<legend><?php echo JText::_( 'MEMBER_TABLE_27' ); ?></legend>
+	<legend style="margin-bottom:0"><?php echo JText::_( 'MEMBER_TABLE_27' ); ?></legend>
 	<?php if ($filter_vid !="0") { ?>
 		<table class="admintable">
 			<tr>
@@ -324,8 +325,9 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 	<div>
 	<?php 	$zps = $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
 		$spl = CLMControllerDWZ::spieler($zps); ?>
+	<br>
 	<fieldset class="adminform">
-	<legend><?php echo JText::_( 'MEMBER_TABLE_30' ); ?></legend>
+	<legend style="margin-bottom:0"><?php echo JText::_( 'MEMBER_TABLE_30' ); ?></legend>
 	<?php if ($filter_vid !="0") { ?>
 		<table class="admintable">
 			<tr>
@@ -350,8 +352,9 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 	<div>
 	<?php 	$zps = $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
 		$spl = CLMControllerDWZ::spieler($zps); ?>
+	<br>
 	<fieldset class="adminform">
-	<legend><?php echo JText::_( 'MEMBER_TABLE_MOVE_0' ); ?></legend>
+	<legend style="margin-bottom:0"><?php echo JText::_( 'MEMBER_TABLE_MOVE_0' ); ?></legend>
 	<?php if ($filter_vid !="0") { ?>
 		<table class="admintable">
 			<tr>
@@ -378,8 +381,9 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 	<div>
 	<?php 	//$zps = $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
 		//$spl = CLMControllerDWZ::spieler($filter_vid_from); ?>
+	<br>
 	<fieldset class="adminform">
-	<legend><?php echo JText::_( 'MEMBER_TABLE_MOVE_1' ); ?></legend>
+	<legend style="margin-bottom:0"><?php echo JText::_( 'MEMBER_TABLE_MOVE_1' ); ?></legend>
 <!---	<?php if ($filter_vid_from !="0") { ?>  -->
 		<table class="admintable">
 			<tr>
