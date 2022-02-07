@@ -1,7 +1,7 @@
 <?php
 /*
  * @Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -40,7 +40,9 @@ $pdf_orientation = clm_core::$load->request_string('pdf_orientation','P');
 	$this->Cell($pdf_width-15,5,utf8_decode($output),0,1,'C');
 
 //Logo der Organisation (Landesverband, Verein, ...; über Einstellungen vorgegeben)  rechts 
-	$file_headers = @get_headers($org_logo);
+//	$file_headers = @get_headers($org_logo);
+	if($org_logo != '') $file_headers = @get_headers($org_logo);
+	else $file_headers = false;
 	if($org_logo != '' AND $file_headers !== false AND $file_headers[0] != 'HTTP/1.1 404 Not Found' AND $file_headers[0] != 'HTTP/1.0 302 Moved Temporarily' AND $file_headers[0] != 'HTTP/1.1 301 Moved Permanently') {
 		$this->Image($org_logo,$pdf_width-20,6,15); }
 //Linie mit Zeilenumbruch

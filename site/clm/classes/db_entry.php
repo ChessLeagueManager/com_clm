@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 class clm_class_db_entry {
 	private $finish = false; // ist er noch dabei das Objekt zu befüllen
 	private $new = false; // ist es ein neuer Eintrag
@@ -41,7 +47,8 @@ class clm_class_db_entry {
 			$type.= "s";
 		}
 		$type.= $this->tableId[1];
-		call_user_func_array('mysqli_stmt_bind_param', array_merge(array($stmt, $type), $this->refValues($this->data), array(&$this->id)));
+//		call_user_func_array('mysqli_stmt_bind_param', array_merge(array($stmt, $type), $this->refValues($this->data), array(&$this->id)));
+		call_user_func_array('mysqli_stmt_bind_param', array_merge(array($stmt, $type), array_values($this->refValues($this->data)), array(&$this->id)));
 		$stmt->execute();
 		$this->change = false;
 	}
@@ -51,7 +58,8 @@ class clm_class_db_entry {
 		for ($i = 0;$i < count($this->data);$i++) {
 			$type.= "s";
 		}
-		call_user_func_array('mysqli_stmt_bind_param', array_merge(array($stmt, $type), array(&$this->id), $this->refValues($this->data)));
+//		call_user_func_array('mysqli_stmt_bind_param', array_merge(array($stmt, $type), array(&$this->id), $this->refValues($this->data)));
+		call_user_func_array('mysqli_stmt_bind_param', array_merge(array($stmt, $type), array(&$this->id), array_values($this->refValues($this->data))));
 		$stmt->execute();
 		$this->change = false;
 		$this->new = false;

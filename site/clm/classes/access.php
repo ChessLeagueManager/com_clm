@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -172,9 +172,11 @@ class clm_class_access {
 	}
 	public static function compareWithId($id1, $id2, $onlyPublished = true) {
 		$accesspoints = clm_class_access::getAccesspoints();
-		foreach ($accesspoints as $accesspoint) {
-			if (is_int($accesspoint)) $str_ap = strval($accesspoint);    // verhindert die Deprecated-Meldung; gesamte Funktion ist eventuell inkorrekt!
-			else $str_ap = $accesspoint;
+		foreach ($accesspoints as $key => $accesspoint) {
+//			if (is_int($accesspoint)) $str_ap = strval($accesspoint);    // verhindert die Deprecated-Meldung; gesamte Funktion ist eventuell inkorrekt!
+//			else $str_ap = $accesspoint;
+			if (is_int($key)) $str_ap = strval($key);    // verhindert die Deprecated-Meldung; gesamte Funktion ist eventuell inkorrekt!
+			else $str_ap = $key;
 			$result1 = clm_class_access::accessWithId($id1, $str_ap, $onlyPublished);
 			if ($result1 === true) {
 				continue;

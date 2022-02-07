@@ -1,5 +1,11 @@
 <?php
-function clm_view_table($lang,$destination,$count,$buttons_name=array(),$buttons_title=array(),$buttons_value=array(),$buttons_class=array(),$select=array(),$order,$orderType) {
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
+function clm_view_table($lang,$destination,$count,$buttons_name=array(),$buttons_title=array(),$buttons_value=array(),$buttons_class=array(),$select=array(),$order='',$orderType='') {
 clm_core::$load->load_css("DataTables");
 clm_core::$load->load_css("buttons");
 clm_core::$load->load_css("notification");

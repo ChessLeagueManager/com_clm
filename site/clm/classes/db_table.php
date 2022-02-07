@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -117,7 +117,8 @@ class clm_class_db_table {
 			$result[$field->name] = "";
 			$resultArray[$field->name] = & $result[$field->name];
 		}
-		call_user_func_array(array($this->stmtRead, 'bind_result'), $resultArray);
+//		call_user_func_array(array($this->stmtRead, 'bind_result'), $resultArray);
+		call_user_func_array(array($this->stmtRead, 'bind_result'), array_values($resultArray));
 		while ($this->stmtRead->fetch()) {
 			$resultObject = new clm_class_db_entry($id, $this->table, $this->id);
 			foreach ($resultArray as $key => $value) {
