@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -150,6 +150,7 @@ class CLMTournament {
 			. ' WHERE id = '.$this->turnierid
 			;
 		$this->_db->setQuery($query);
+		$this->data	= clm_core::$db->loadObject($query);
 		$dg = $this->data->dg;
 		$runden = $this->data->runden;
 		$teil = $this->data->teil;
@@ -168,6 +169,8 @@ class CLMTournament {
 			." ORDER BY a.snr "
 			;
 		$player	= clm_core::$db->loadObjectList($query);
+	
+		if (count($player) < 1) return;
 	
 		// TWZ ggf. korrigieren
 		foreach($player as $player1) {
