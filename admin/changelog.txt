@@ -23,6 +23,7 @@ $ -> Language fix or change
 # Termine: Darstellung bei unterschiedlichen Startzeiten
 # SWT-Import: Liga Rundenturnier mit spielfrei 
 ^ Code-Anpassung php 8
+# Importe: Fehlermeldung, wenn keine Datei ausgewählt bei Delete
 
 - - - - - 3.9.5 - [24-10-2021] - - - - - - - - - - - - - - - - - - - -
 # Vereinsliste bei Vereinen aus mehreren Landesverbänden

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -62,7 +62,10 @@ class CLMModelSWT extends JModelLegacy {
 		
 		//Name der zu löschenden Datei wird geladen
 		$filename = clm_core::$load->request_string('swt_file', '');
-		
+		if ($filename == '') {
+			$msg = JText::_( 'SWT_FILE_ERROR' ); 
+			return $msg;
+		}
 		//SWT-Verzeichnis
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		
@@ -129,7 +132,10 @@ class CLMModelSWT extends JModelLegacy {
 		
 		//Name der zu löschenden Datei wird geladen
 		$filename = clm_core::$load->request_string('pgn_file', '');
-		
+		if ($filename == '') {
+			$msg = JText::_( 'SWT_FILE_ERROR' ); 
+			return $msg;
+		}		
 		//SWT-Verzeichnis
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		
@@ -196,7 +202,10 @@ class CLMModelSWT extends JModelLegacy {
 		
 		//Name der zu löschenden Datei wird geladen
 		$filename = clm_core::$load->request_string('swm_file', '');
-		
+		if ($filename == '') {
+			$msg = JText::_( 'SWT_FILE_ERROR' ); 
+			return $msg;
+		}		
 		//SWT-Verzeichnis
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		
@@ -262,7 +271,10 @@ class CLMModelSWT extends JModelLegacy {
 		
 		//Name der zu löschenden Datei wird geladen
 		$filename = clm_core::$load->request_string('trf_file', '');
-		
+		if ($filename == '') {
+			$msg = JText::_( 'SWT_FILE_ERROR' ); 
+			return $msg;
+		}		
 		//SWT-Verzeichnis
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		
