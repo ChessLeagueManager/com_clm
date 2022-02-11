@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -85,6 +85,7 @@ class CLMViewTurPlayers extends JViewLegacy {
 			$param_import_source  = preg_replace("/[^a-z\d_äöü ]/si" , '' , $param_import_source); 
 			if ($param_import_source > '0') {
 				JToolBarHelper::custom( 'player_decode', 'copy.png', 'copy_f2.png', JText::_('DECODE_PLAYERS'), false);
+				JToolBarHelper::custom( 'player_decode_copy', 'copy.png', 'copy_f2.png', JText::_('DECODE_SEASON'), false);
 			}
 		}
 		

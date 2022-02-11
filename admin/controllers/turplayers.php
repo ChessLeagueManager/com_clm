@@ -530,4 +530,60 @@ class CLMControllerTurPlayers extends JControllerLegacy {
 		$this->app->redirect( $this->adminLink->url );	
 	}
 
+	// Copy der Nicknamen aus Vorsaison
+	function player_decode_copy() {	
+		// id aktuelle Saison bestimmen
+		$sql	=" SELECT id FROM #__clm_saison "
+			." WHERE archiv = 0 AND published = 1"
+			." ORDER BY id ASC LIMIT 1"
+			;
+		$this->_db->setQuery($sql);
+		$sid	= $this->_db->loadResult();
+		// id Vorsaison
+		if (is_numeric($sid)) $vsid = $sid - 1;
+		else $vsid = 0;
+		
+		// schon vorhandenen Nicknamen in aktueller Saison bestimmen und in Array ablegen		
+		$query = 'SELECT concat(source,oname) as oname FROM `#__clm_player_decode`'
+				.' WHERE sid = '.$sid
+				;
+		$this->_db->setQuery($query);
+		$sid_nicknames = $this->_db->loadObjectList();
+		$arr_nicknames = array();
+		foreach ($sid_nicknames as $nickname) {
+			$arr_nicknames[] = "'".$nickname->oname."'";
+		}
+		$str_nicknames = implode( ',', $arr_nicknames );
+			
+		// Alle Nicknames aus Vorsaison laden, die noch nicht vorhanden sind
+		$sql = " SELECT id FROM #__clm_player_decode "
+		." WHERE sid = ".$vsid;
+		if (count($arr_nicknames) > 0) { 
+			$sql = $sql.' AND concat(source,oname) NOT IN ('.$str_nicknames.') ';}
+		$sql = $sql." ORDER BY id ASC "
+		;
+		$this->_db->setQuery($sql);
+		$vsid_nicknames	= $this->_db->loadObjectList();
+		$this->adminLink->view = "turplayers";
+		$this->adminLink->more = array('id' => $this->id);
+		$this->adminLink->makeURL();
+		
+		// Nicknamen laden und mit neuer Saison speichern
+		$row =JTable::getInstance( 'decode', 'TableCLM' );
+		$i = 0;
+		for($x=0; $x < count($vsid_nicknames); $x++) {
+			$row->load( $vsid_nicknames[$x]->id);
+			$row->id	= "0";
+			$row->sid	= $sid;
+			if (!$row->store()) {	
+				$this->app->enqueueMessage( $row->getError(), 'error' );
+				$this->app->redirect( $this->adminLink->url );
+			}
+			$i++;
+		}
+		
+		$this->app->enqueueMessage( $i.' '.JText::_('DECODE_SEASON_COPIED') );
+		$this->app->redirect( $this->adminLink->url );
+	}
+
 }
