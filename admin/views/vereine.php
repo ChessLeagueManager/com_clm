@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -212,11 +212,13 @@ public static function setVereinToolbar()
 		
 public static function verein( &$row, $lists, $option )
 	{
+		$http = (empty($_SERVER['HTTPS'])) ? 'http://' : 'https://';
 		$url = $_SERVER["REQUEST_URI"];
 		$ipos = strpos($url,'administrator');
 		$rurl = substr($url,0,$ipos);
 		$surl = $_SERVER["SERVER_NAME"];
-		JToolBarHelper::preview( 'http://'.$surl.$rurl.'index.php?option=com_clm&view=verein&saison='.$row->sid.'&amp;zps='.$row->zps);
+//		JToolBarHelper::preview( 'http://'.$surl.$rurl.'index.php?option=com_clm&view=verein&saison='.$row->sid.'&amp;zps='.$row->zps);
+		JToolBarHelper::preview( $http.$surl.$rurl.'index.php?option=com_clm&view=verein&saison='.$row->sid.'&amp;zps='.$row->zps);
 		CLMViewVereine::setVereinToolbar();
 		$_REQUEST['hidemainmenu'] = 1;
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
