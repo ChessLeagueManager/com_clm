@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 3.9.6 - [xx-xx-2022] - - - - - - - - - - - - - - - - - - - -
+- - - - - 3.9.6 - [16-02-2022] - - - - - - - - - - - - - - - - - - - -
 + Veranstaltungen: Export und Import über csv-Dateien
 # Vereine: ordering erhalten bei Update
 # Benutzer: Email-Versand ohne Admin-Copy
@@ -27,6 +27,7 @@ $ -> Language fix or change
 # Einzelturniere: Rankingbestimmung bevor Spieler eingetragen sind
 + Decodierung Spieler: Übernahme aus der Vorsaison
 ^ Code-Anpassung https					 
+^ Copyright 2008-2022
 
 - - - - - 3.9.5 - [24-10-2021] - - - - - - - - - - - - - - - - - - - -
 # Vereinsliste bei Vereinen aus mehreren Landesverbänden
