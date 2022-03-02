@@ -19,7 +19,7 @@ $config_order = array(
 			array("rounds", 0, "fe_runde_rang", "fe_runde_aktuell", "fe_runde_tln", "fe_runde_subuml"),
 			array("teams", 0, "man_manleader", "man_mail", "man_tel", "man_mobil", "man_spiellokal", "man_spielplan", "man_showdwz"),
 			array("externServices", 0, "googlemaps", 
-				array("googlemaps", 0, "googlemaps_api", "googlemaps_rtype", "googlemaps_ver", "googlemaps_vrout", "googlemaps_msch", "googlemaps_mrout"), 
+			array("googlemaps", 0, "googlemaps_api", "googlemaps_rtype", "googlemaps_ver", "googlemaps_vrout", "googlemaps_msch", "googlemaps_mrout", "maps_resolver"), 
 				array("googlecharts", 0, "googlecharts"),
 				array("exp", 0, "tourn_comment_parse", "tourn_seed")),
 			array("data_protection", 0, "privacy_notice", "view_archive", "user_member"),

@@ -60,8 +60,8 @@ if (isset($verein[0])) {
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'googlemaps.php');
-
+// Load functions for map and address lookup
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'geo_functions.php');
 
 echo '<div ><div id="verein">';
 
@@ -194,112 +194,44 @@ if ($conf_vereinsdaten == 1) {
             <!---div class="column"--->
               <?php $lokal = explode(",", $verein[0]->adresse); ?>
               <tr><td><h4><?php echo JText::_('CLUB_LOCATION') ?></h4></td></tr>
-                
-                <!-- Google Maps-->
-                <?php if ( ($verein[0]->lokal ==! false) and ($googlemaps_ver == "1") and ($googlemaps == "1") ) { ?>
-              <tr><td><center><div style="border:1px solid #CCC;"><div id="map" style="width: 100%; height: 300px;"><script>load();</script>map</div></div></center></td></tr>
-                <?php } ?>
+
 				
-    <?php //Kartenanzeige mit OpenStreetMap
-    if ( ($verein[0]->lokal ==! false) and ($googlemaps_ver == "3") and ($googlemaps == "1") ) { ?>
-        <tr><td>
-		<?php 
-		if (isset($spiellokal1G[2]) AND $googlemaps_rtype == 2) {
-			if (isset($spiellokal1G[2]))$city = str_replace(" ","%20",$spiellokal1G[2]); else $city = '';
-			if (isset($spiellokal1G[1])) $street = str_replace(" ","%20",$spiellokal1G[1]); else $street = '';
-			$error_text = "name,straße,ort,...";
-        } else {  // $googlemaps_rtype == 3
-			if (isset($spiellokal1G[1]))$city = str_replace(" ","%20",$spiellokal1G[1]); else $city = '';
-			if (isset($spiellokal1G[0])) $street = str_replace(" ","%20",$spiellokal1G[0]); else $street = '';
-			$error_text = "straße,ort,...";
-		}
-		$baseUrl = 'https://nominatim.openstreetmap.org/search?format=json&city='.$city.'&street='.$street;
-		$data = file_get_contents( $baseUrl.'&limit=1&email='.$email_from.'&addressdetails=1' );
-		$json = json_decode( $data );
-		if (isset($json[0])) {
-			$lat = $json[0]->lat;
-			$lon = $json[0]->lon; 
-		} else {
-			$lat = 0;
-			$lon = 0; 
-		}
+	<?php //Kartenanzeige 
+	if ( ($verein[0]->lokal ==! false) and ($googlemaps_ver == "3") and ($googlemaps == "1") ) { ?>
+	<tr><td>
+		<?php
+		$coordinates = getCoordinates($verein[0]->lokal);
+		$lat = $coordinates[0];
+		$lon = $coordinates[1];
 		if ($spiellokal1G[0] ==! false ) $loc_text = $spiellokal1G[0]; else $loc_text = '';
 		if (isset($spiellokal1G[1])) $loc_text .= '<br>'.$spiellokal1G[1]; 
 		if (isset($spiellokal1G[2])) $loc_text .= '<br>'.$spiellokal1G[2]; 
 		if (isset($spiellokal1G[3])) $loc_text .= '<br>'.$spiellokal1G[3]; 
 
 		$img_marker = clm_core::$load->gen_image_url("table/marker-icon");
-  	?>
+
+	?>
 
 	<br>
-    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
+
 	<div style="position:relative;">
 		<div id="mapdiv1" class="map" style="position:absolute;top:0;right:0;float:right;width:100%;height:300px;text-align:center;"></div>
-		<?php if ($lat != 0 || $lon != 0) { ?>
-			<div id="madinfo" style="position:absolute;top:0;right:0;float:right;z-index:1000;width:80%;height:200px;text-align:center;"><span style="font-weight: bold; background-color: #FFF"><?php echo $loc_text; ?></span></div>
-		<?php } ?>
 	</div>
-    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
  
 	<script>
 		var Lat=<?php printf( '%0.7f', $lat ); ?>;
 		var Lon=<?php printf( '%0.7f', $lon ); ?>;
+		var popupText = "<?php printf($loc_text); ?>";
 		if (Lat == 0 && Lon == 0) {
-			alert("Die Adresse des Spiellokals wird nicht gefunden.");
+			console.log("Die Adresse des Spiellokals wird nicht gefunden.");
 			document.getElementById('mapdiv1').innerHTML = "Die Adresse des Spiellokals wird nicht gefunden.<br>Vielleicht entspricht die Angabe nicht der Vorgabe " + "<?php echo $error_text; ?>" + "<br><br>" + '<?php echo $loc_text; ?>';
 		} else {
-			var map = new ol.Map({
-				layers: [new ol.layer.Tile({ source: new ol.source.OSM() })],
-				target: document.getElementById('mapdiv1'),
-				view: new ol.View({
-					center: ol.proj.fromLonLat([Lon, Lat]),
-					zoom: 15
-					})
-				});
-
-			// Adding a marker on the map
-			var marker = new ol.Feature({
-				geometry: new ol.geom.Point(
-				ol.proj.fromLonLat([Lon,Lat])
-				),  // Cordinates of New York's Town Hall
-			});
-			
-			marker.setStyle(new ol.style.Style({
-				image: new ol.style.Icon(({
-					crossOrigin: 'anonymous',
-					anchor: [0.5, 1],
-					anchorXUnits: 'fraction',
-					anchorYUnits: 'fraction',
-					src: '<?php echo $img_marker; ?>'
-				}))
-			}));
-			var vectorSource = new ol.source.Vector({
-				features: [marker]
-			});
-			var markerVectorLayer = new ol.layer.Vector({
-				source: vectorSource,
-			});
-			map.addLayer(markerVectorLayer);
-			
-/*			// Adding a marker on the map
-			var north = Lat-0.0003;
-			var south = Lat+0.0003;
-			var east = Lon-0.0005;
-			var west = Lon+0.0005;
-			var extent = ol.proj.transformExtent([east, north, west, south], 'EPSG:4326', 'EPSG:3857');
-			var imageLayer = new ol.layer.Image({
-				source: new ol.source.ImageStatic({
-					url: '<?php echo $img_marker; ?>',
-					imageExtent: extent
-				})
-			});
-			map.addLayer(imageLayer);
-*/		}
+			createLeafletMap(Lat, Lon, popupText);
+		}
 	</script>
 		<div id="mapdiv0" class="map" style="width:100%;height:300px;"></div>																	   
 		</td></tr>
-                <?php } ?>
-				
+		<?php } ?>		
               <tr><td></td></tr>  
 			</table>
                 <div style="float:left; width: 50%;">
