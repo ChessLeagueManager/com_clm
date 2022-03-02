@@ -26,8 +26,8 @@ class CLMViewMannschaft extends JViewLegacy
 		}
 		$document =JFactory::getDocument();
 		if ($googlemaps == 1) {
-			$document->addScript($prot.'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js');
-			$document->addStyleSheet($prot.'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
+			$document->addScript($prot.'://unpkg.com/leaflet@1.7.1/dist/leaflet.js');
+			$document->addStyleSheet($prot.'://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
 		}
 		
 		$document->addScript($prot.'://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
