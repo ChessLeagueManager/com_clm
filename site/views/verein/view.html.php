@@ -17,7 +17,6 @@ class CLMViewVerein extends JViewLegacy
 	{
 		
 		$config = clm_core::$db->config();
-		$googlemaps_api = $config->googlemaps_api;
 		$googlemaps     = $config->googlemaps;
 		
 		$model	  = $this->getModel();
@@ -64,7 +63,8 @@ class CLMViewVerein extends JViewLegacy
 		$document =JFactory::getDocument();
 		
 		if ($googlemaps == 1) {
-			$document->addScript($prot.'://maps.google.com/maps?file=api&v=2&key='.$googlemaps_api.'');
+			$document->addScript($prot.'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js');
+			$document->addStyleSheet($prot.'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
 		}
 		
 		// Title in Browser

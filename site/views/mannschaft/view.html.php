@@ -17,7 +17,6 @@ class CLMViewMannschaft extends JViewLegacy
 	function display($tpl = null)
 	{
 		$config = clm_core::$db->config();
-		$googlemaps_api = $config->googlemaps_api;
 		$googlemaps     = $config->googlemaps;
 		
 		if (isset($_SERVER['HTTPS']) AND $_SERVER['HTTPS'] != 'off') {
@@ -27,7 +26,8 @@ class CLMViewMannschaft extends JViewLegacy
 		}
 		$document =JFactory::getDocument();
 		if ($googlemaps == 1) {
-			$document->addScript($prot.'://maps.google.com/maps?file=api&v=2&key='.$googlemaps_api.'');
+			$document->addScript($prot.'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js');
+			$document->addStyleSheet($prot.'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
 		}
 		
 		$document->addScript($prot.'://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
