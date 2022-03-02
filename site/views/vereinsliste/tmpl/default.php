@@ -32,8 +32,6 @@ $doc->setTitle(JText::_('CLUBS_LIST'));
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'googlemaps.php');
-
 // Sortierung
 if ($itemid <>'') { $plink = '&saison=' . $sid . '&Itemid='.$itemid; }
 else { $plink = '&saison=' . $sid ;  }
