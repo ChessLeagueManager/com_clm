@@ -23,17 +23,48 @@
         marker.bindPopup(popupText).openPopup();
      }  
 </script>
+<!--- Prepare Address -->
+<?php
+function prepareAddress($address)
+{
+    // Depending on User settings on parts of the address are used in the map to e.g. filter out names of buildings
+    $config 			= clm_core::$db->config();
+    $googlemaps_rtype   = $config->googlemaps_rtype;
 
+    //Users is able to choose from three option
+    $addressArray = explode(',', $address);
+    switch($googlemaps_rtype)
+    {
+        case 0: //Whole field
+            $address = implode(",", $addressArray);
+            break;
+        case 1: //term1, term2 and term3
+            $address = implode(",", array($addressArray[0], $addressArray[1], $addressArray[2]));
+            break;
+        case 2: //only term2 and term3
+            $address = implode(",", array($addressArray[1], $addressArray[2]));
+            break;
+        case 3: //only term1 and term2
+            $address = implode(",", array($addressArray[0], $addressArray[1]));
+            break;
+        default: //Default, use whole field
+            break;
+    }
+    // Encode the address
+    $address = urlencode($address);
+    return ($address);
+}
+?>
 <!--  Reverse Geo Lookup -->
 <?php
 function getCoordinates($address)
 {
-    $config 			= clm_core::$db->config();
+    // Prepare address (encoding for URL, separating of terms)
+    $address = prepareAddress($address);
 
-    // Encode the address
-    $address = urlencode($address);
     
     // Read service provider from Config
+    $config 			= clm_core::$db->config();
     $service = $config->maps_resolver;
 
     if ($service == 1){ //Google
