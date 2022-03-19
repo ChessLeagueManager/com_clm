@@ -33,23 +33,17 @@ function prepareAddress($address)
 
     //Users is able to choose from three option
     $addressArray = explode(',', $address);
-    switch($googlemaps_rtype)
-    {
-        case 0: //Whole field
-            $address = implode(",", $addressArray);
-            break;
-        case 1: //term1, term2 and term3
-            $address = implode(",", array($addressArray[0], $addressArray[1], $addressArray[2]));
-            break;
-        case 2: //only term2 and term3
-            $address = implode(",", array($addressArray[1], $addressArray[2]));
-            break;
-        case 3: //only term1 and term2
-            $address = implode(",", array($addressArray[0], $addressArray[1]));
-            break;
-        default: //Default, use whole field
-            break;
+
+    if (isset($addressArray[2]) AND $googlemaps_rtype == 1) {  //term1, term2 and term3
+        $address = implode(",", array($addressArray[0], $addressArray[1], $addressArray[2])); }
+    elseif (isset($addressArray[2]) AND $googlemaps_rtype == 2) {  //only term2 and term3
+        $address = implode(",", array($addressArray[1], $addressArray[2])); }
+    elseif (isset($addressArray[1]) AND $googlemaps_rtype == 3) { //only term1 and term2
+        $address =  implode(",", array($addressArray[0], $addressArray[1])); }
+    else {
+        $address = implode(",", $addressArray); //Default, use whole field
     }
+  
     // Encode the address
     $address = urlencode($address);
     return ($address);
