@@ -147,5 +147,5 @@ $config["user_member"]=array(126,9,0,array(0,1));
 $config["privacy_notice"]=array(127,14,"",null);
 $config["trial_and_error"]=array(128,9,0,array(0,1)); 
 $config["dewis_import_delay"]=array(129,0,250000,null);
-$config["maps_resolver"]=array(130,9,1,array(1,2));
+$config["maps_resolver"]=array(130,9,2,array(1,2));
 ?>
