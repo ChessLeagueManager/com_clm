@@ -627,7 +627,7 @@ for ($x=0; $x< 100; $x++){
 	<script>
 		var Lat=<?php printf( '%0.7f', $lat ); ?>;
 		var Lon=<?php printf( '%0.7f', $lon ); ?>;
-		var popupText = "<?php printf($loc_text); ?>";
+		var popupText = `<?php printf($loc_text); ?>`;
 		if (Lat == 0 && Lon == 0) {
 			console.log("Die Adresse des Spiellokals wird nicht gefunden.");
 			document.getElementById('mapdiv1').innerHTML = "Die Adresse des Spiellokals wird nicht gefunden.<br>Vielleicht entspricht die Angabe nicht der Vorgabe " + "<?php echo $error_text; ?>" + "<br><br>" + '<?php echo $loc_text; ?>';
