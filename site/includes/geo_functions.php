@@ -106,7 +106,11 @@ function getCoordinatesFromOSM($address)
     }
     else
     {
-        $coordinates =  array($resp[0]['lat'], $resp[0]['lon']);
+        try {
+            $coordinates =  array($resp[0]['lat'], $resp[0]['lon']);
+        } catch (Throwable $t) {
+            $coordinates = array(0,0); //Return 0,0 in case search was not successfull
+        }
     }
     return $coordinates;
 }
