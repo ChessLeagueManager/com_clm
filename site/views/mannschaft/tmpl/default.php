@@ -607,7 +607,12 @@ for ($x=0; $x< 100; $x++){
 	if (isset($spiellokal1G[1])) $loc_text .= '<br>'.$spiellokal1G[1]; 
 	if (isset($spiellokal1G[2])) $loc_text .= '<br>'.$spiellokal1G[2]; 
 	if (isset($spiellokal1G[3])) $loc_text .= '<br>'.$spiellokal1G[3]; 
-
+	//Error text if coordinates are zero
+	if (isset($spiellokal1G[2]) AND $googlemaps_rtype == 2) {
+		$error_text = "name,straße,ort,...";
+	} else {  // $googlemaps_rtype == 3
+		$error_text = "straße,ort,...";
+	}
 	$img_marker = clm_core::$load->gen_image_url("table/marker-icon");
 
 	?>
