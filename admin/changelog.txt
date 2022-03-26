@@ -14,6 +14,7 @@ $ -> Language fix or change
 
 - - - - - 3.9.7 - [xx-xx-2022] - - - - - - - - - - - - - - - - - - - -
 # Einzelturniere: Feinwertung Buchholzsumme bei Aussetzen
+# SWT-Import: Streichwertung bei Teamwettbewerben
 
 - - - - - 3.9.6 - [16-02-2022] - - - - - - - - - - - - - - - - - - - -
 + Veranstaltungen: Export und Import über csv-Dateien
