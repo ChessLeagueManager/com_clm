@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -267,10 +267,10 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		  </select>
 		</td>
 		<td align="center">
-		  <input type="text" name="attr<?php echo $i+1; ?>" value="<?php if(isset($row_sel[$i])) echo $row_sel[$i]->attr; else echo '';  ?>" size="1" maxlength="4" style="width:100%;">
+		  <input type="text" name="attr<?php echo $i+1; ?>" id="attr<?php echo $i+1; ?>" value="<?php if(isset($row_sel[$i])) echo $row_sel[$i]->attr; else echo '';  ?>" size="1" maxlength="4" style="width:100%;">
 		</td>
 		<td align="center">
-		  <input type="checkbox" name="check<?php echo $i+1; ?>" value="1" <?php if(isset($row_sel[$i]) AND $row_sel[$i]->gesperrt =="1") { echo 'checked="checked"'; }?>>
+		  <input type="checkbox" name="check<?php echo $i+1; ?>" id="check<?php echo $i+1; ?>" value="1" <?php if(isset($row_sel[$i]) AND $row_sel[$i]->gesperrt =="1") { echo 'checked="checked"'; }?>>
 		</td>
 	</tr>
 <?php }} ?> 
@@ -372,10 +372,10 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		  </select>
 		</td>
 		<td align="center">
-	  <input type="text" name="attr<?php echo $i+1; ?>" value="<?php if(isset($row_sel[$i])) echo $row_sel[$i]->attr; else echo '';  ?>" size="1" maxlength="4" style="width:100%;">
+		  <input type="text" name="attr<?php echo $i+1; ?>" id="attr<?php echo $i+1; ?>" value="<?php if(isset($row_sel[$i])) echo $row_sel[$i]->attr; else echo '';  ?>" size="1" maxlength="4" style="width:100%;">
 		</td>
 		<td align="center">
-		  <input type="checkbox" name="check<?php echo $i+1; ?>" value="1" <?php if(isset($row_sel[$i]) AND $row_sel[$i]->gesperrt =="1") { echo 'checked="checked"'; }?>>
+		  <input type="checkbox" name="check<?php echo $i+1; ?>" id="check<?php echo $i+1; ?>" value="1" <?php if(isset($row_sel[$i]) AND $row_sel[$i]->gesperrt =="1") { echo 'checked="checked"'; }?>>
 		</td>
 
 	</tr>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -278,6 +278,11 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		$swt_data['tiebr2'] = $clm_fein[$man_dritt];
 		$swt_data['tiebr3'] = 0;
 		
+		// Streichwertung bei Buchholz
+		$anzStreichwertungen = $this->_SWTReadInt ($swt, 9);
+		if ($swt_data['tiebr1'] == 1 AND $anzStreichwertungen == 1) $swt_data['tiebr1'] = 11;
+		if ($swt_data['tiebr2'] == 1 AND $anzStreichwertungen == 1) $swt_data['tiebr2'] = 11;
+
 		//Pseudo-DWZ
 		$swt_data['pseudo_dwz'] = $this->_SWTReadInt($swt,626,2);
 
