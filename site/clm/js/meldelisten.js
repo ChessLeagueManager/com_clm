@@ -1,6 +1,6 @@
 /*
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -74,9 +74,11 @@
 					for ( var ispieler = Number(clm_meldelisten_number); ispieler > selNumber; ispieler--) {
 						var jspieler = ispieler - 1;
 						var jjspieler = "spieler"+jspieler;
-						if (jspieler == selNumber) 
+						var jjattr = "attr"+jspieler;
+						if (jspieler == selNumber) {
 							var jjvalue = selvalue;
-						else {
+							var jjvaluea = "";
+						} else {
 							var sel = document.getElementById(jjspieler);			
 							var opt;
 							var jjvalue = 0;
@@ -87,10 +89,16 @@
 									break;
 								}
 							}
+							var elementa = document.getElementById(jjattr);
+							var jjvaluea = elementa.value;
 						}
 						var iispieler = "spieler"+ispieler;
 						var element = document.getElementById(iispieler);
-						element.value = jjvalue;					
+						element.value = jjvalue;
+
+						var iiattr = "attr"+ispieler;
+						var elementn = document.getElementById(iiattr);
+						elementn.value = jjvaluea;					
 					}
 					spieler.selectedIndex = 0;
 				}

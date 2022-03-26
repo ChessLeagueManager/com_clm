@@ -16,6 +16,7 @@ $ -> Language fix or change
 # Einzelturniere: Feinwertung Buchholzsumme bei Aussetzen
 # SWT-Import: Streichwertung bei Teamwettbewerben
 # Rundenbericht: Rangliste bei Mannschaftsturnieren
+# Meldeliste: Spieler einfügen mit Attributsverwendung
 
 - - - - - 3.9.6 - [16-02-2022] - - - - - - - - - - - - - - - - - - - -
 + Veranstaltungen: Export und Import über csv-Dateien
