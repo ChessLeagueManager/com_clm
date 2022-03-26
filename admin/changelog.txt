@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.9.7 - [xx-xx-2022] - - - - - - - - - - - - - - - - - - - -
+# Einzelturniere: Feinwertung Buchholzsumme bei Aussetzen
+
 - - - - - 3.9.6 - [16-02-2022] - - - - - - - - - - - - - - - - - - - -
 + Veranstaltungen: Export und Import über csv-Dateien
 # Vereine: ordering erhalten bei Update
