@@ -23,6 +23,46 @@
         marker.bindPopup(popupText).openPopup();
      }  
 </script>
+
+<!--  OSM map -->
+	
+<script type="text/javascript">
+     function createOSMap(Lat, Lon) {
+        var map = new ol.Map({
+				layers: [new ol.layer.Tile({ source: new ol.source.OSM() })],
+				target: document.getElementById('mapdiv1'),
+				view: new ol.View({
+					center: ol.proj.fromLonLat([Lon, Lat]),
+					zoom: 15
+					})
+				});
+
+			// Adding a marker on the map
+			var marker = new ol.Feature({
+				geometry: new ol.geom.Point(
+				ol.proj.fromLonLat([Lon,Lat])
+				),  
+			});
+			
+			marker.setStyle(new ol.style.Style({
+				image: new ol.style.Icon(({
+					crossOrigin: 'anonymous',
+					anchor: [0.5, 1],
+					anchorXUnits: 'fraction',
+					anchorYUnits: 'fraction',
+					src: '<?php echo $img_marker; ?>'
+				}))
+			}));
+			var vectorSource = new ol.source.Vector({
+				features: [marker]
+			});
+			var markerVectorLayer = new ol.layer.Vector({
+				source: vectorSource,
+			});
+			map.addLayer(markerVectorLayer);
+     }  
+</script>
+
 <!--- Prepare Address -->
 <?php
 function prepareAddress($address)
@@ -129,6 +169,7 @@ function getCoordinatesFromGoogle($address, $gAPIKey )
     $resp = json_decode($resp_json, true);
 
     // Check if status ok
+    try{
     if ($resp['status']=='OK'){
         $coordinates =  array($resp['results'][0]['geometry']['location']['lat'],
                             $resp['results'][0]['geometry']['location']['lng']);
@@ -137,7 +178,10 @@ function getCoordinatesFromGoogle($address, $gAPIKey )
     {
         $coordinates = array(0,0);
     }
-
+    }
+    catch (Throwable $t) {
+        $coordinates = array(0,0); //Return 0,0 in case search was not successfull
+    }
     return $coordinates;
 }
 ?>

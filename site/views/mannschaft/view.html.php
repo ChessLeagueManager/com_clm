@@ -18,6 +18,7 @@ class CLMViewMannschaft extends JViewLegacy
 	{
 		$config = clm_core::$db->config();
 		$googlemaps     = $config->googlemaps;
+		$googlemaps_msch     = $config->googlemaps_msch;
 		
 		if (isset($_SERVER['HTTPS']) AND $_SERVER['HTTPS'] != 'off') {
 			$prot = 'https';
@@ -26,8 +27,14 @@ class CLMViewMannschaft extends JViewLegacy
 		}
 		$document =JFactory::getDocument();
 		if ($googlemaps == 1) {
-			$document->addScript($prot.'://unpkg.com/leaflet@1.7.1/dist/leaflet.js');
-			$document->addStyleSheet($prot.'://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
+			if ($googlemaps_msch == 1){ //Load Leaflet
+				$document->addScript($prot.'://unpkg.com/leaflet@1.7.1/dist/leaflet.js');
+				$document->addStyleSheet($prot.'://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
+			}
+			elseif ($googlemaps_msch == 3){ //Load OSM
+				$document->addScript($prot.'://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js');
+				$document->addStyleSheet($prot.'://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css');
+			}
 		}
 		
 		$document->addScript($prot.'://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');

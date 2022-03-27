@@ -597,7 +597,7 @@ for ($x=0; $x< 100; $x++){
 	
     <a name="google"></a>    
 	<?php //Kartenanzeige 
-	if ( ($mannschaft[0]->lokal ==! false) and ($googlemaps_msch == "3")  and ($googlemaps == "1") ) { ?>
+	if ( ($mannschaft[0]->lokal ==! false) and (($googlemaps_msch == "3") || ($googlemaps_msch == "1"))  and ($googlemaps == "1") ) { ?>
 	<h4><?php echo JText::_('OSM_MAPS') ?></h4>
     <?php 
 	$coordinates = getCoordinates($mannschaft[0]->lokal); //Get Coordinates from Address
@@ -620,19 +620,27 @@ for ($x=0; $x< 100; $x++){
 
 	<div style="position:relative;">
 		<div id="mapdiv1" class="map" style="position:absolute;top:0;right:0;float:right;width:100%;height:300px;text-align:center;"></div>
+		<?php if (($lat != 0 || $lon != 0) && $googlemaps_msch == 3) {?>
+			<div id="madinfo" style="position:absolute;top:0;right:0;float:right;z-index:1000;width:80%;height:200px;text-align:center;"><span style="font-weight: bold; background-color: #FFF"><?php echo $loc_text; ?></span></div>
+		<?php } ?>
 	</div>
 	<br><br>
-
+,
 
 	<script>
 		var Lat=<?php printf( '%0.7f', $lat ); ?>;
 		var Lon=<?php printf( '%0.7f', $lon ); ?>;
-		var popupText = `<?php printf($loc_text); ?>`;
 		if (Lat == 0 && Lon == 0) {
 			console.log("Die Adresse des Spiellokals wird nicht gefunden.");
 			document.getElementById('mapdiv1').innerHTML = "Die Adresse des Spiellokals wird nicht gefunden.<br>Vielleicht entspricht die Angabe nicht der Vorgabe " + "<?php echo $error_text; ?>" + "<br><br>" + '<?php echo $loc_text; ?>';
 		} else {
-			createLeafletMap(Lat, Lon, popupText);
+			<?php if ($googlemaps_msch == 1) {?>
+				var popupText = `<?php printf($loc_text); ?>`;
+				createLeafletMap(Lat, Lon, popupText);
+			<?php } ?>
+			<?php if ($googlemaps_msch == 3) {?>
+				createOSMap(Lat, Lon);
+			<?php } ?>
 		}
 	</script>
 	<div id="mapdiv0" class="map" style="width:100%;height:300px;"></div>																		   

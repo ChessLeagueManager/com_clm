@@ -197,7 +197,7 @@ if ($conf_vereinsdaten == 1) {
 
 				
 	<?php //Kartenanzeige 
-	if ( ($verein[0]->lokal ==! false) and ($googlemaps_ver == "3") and ($googlemaps == "1") ) { ?>
+	if ( ($verein[0]->lokal ==! false) and (($googlemaps_ver == "3") || ($googlemaps_ver == "1")) and ($googlemaps == "1") ) { ?>
 	<tr><td>
 		<?php
 		$coordinates = getCoordinates($verein[0]->lokal);
@@ -221,17 +221,25 @@ if ($conf_vereinsdaten == 1) {
 
 	<div style="position:relative;">
 		<div id="mapdiv1" class="map" style="position:absolute;top:0;right:0;float:right;width:100%;height:300px;text-align:center;"></div>
+		<?php if (($lat != 0 || $lon != 0) && $googlemaps_ver == 3) {?>
+			<div id="madinfo" style="position:absolute;top:0;right:0;float:right;z-index:1000;width:80%;height:200px;text-align:center;"><span style="font-weight: bold; background-color: #FFF"><?php echo $loc_text; ?></span></div>
+		<?php } ?>
 	</div>
  
 	<script>
 		var Lat=<?php printf( '%0.7f', $lat ); ?>;
 		var Lon=<?php printf( '%0.7f', $lon ); ?>;
-		var popupText = `<?php printf($loc_text); ?>`;
 		if (Lat == 0 && Lon == 0) {
 			console.log("Die Adresse des Spiellokals wird nicht gefunden.");
 			document.getElementById('mapdiv1').innerHTML = "Die Adresse des Spiellokals wird nicht gefunden.<br>Vielleicht entspricht die Angabe nicht der Vorgabe " + "<?php echo $error_text; ?>" + "<br><br>" + '<?php echo $loc_text; ?>';
 		} else {
-			createLeafletMap(Lat, Lon, popupText);
+			<?php if ($googlemaps_ver == 1) {?>
+				var popupText = `<?php printf($loc_text); ?>`;
+				createLeafletMap(Lat, Lon, popupText);
+			<?php } ?>
+			<?php if ($googlemaps_ver == 3) {?>
+				createOSMap(Lat, Lon);
+			<?php } ?>
 		}
 	</script>
 		<div id="mapdiv0" class="map" style="width:100%;height:300px;"></div>																	   
