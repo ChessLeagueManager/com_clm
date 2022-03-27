@@ -114,7 +114,7 @@ defined('_JEXEC') or die('Restricted access');
 				<tbody>
 					<tr>
        					<td valign="top">
-                       	<?php echo $this->params->render( 'params', 'googlemaps'); ?> <a href="http://code.google.com/intl/de-DE/apis/maps/signup.html" target="_blank"><?php echo JText::_( 'CONFIG_FRONTEND_MAPS_GETKEY' ); ?></a>
+                       	<?php echo $this->params->render( 'params', 'googlemaps'); ?> <a href="https://console.cloud.google.com/projectcreate" target="_blank"><?php echo JText::_( 'CONFIG_FRONTEND_MAPS_GETKEY' ); ?></a>
                         </td>
       				</tr>
 				</tbody>
