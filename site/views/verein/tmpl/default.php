@@ -238,7 +238,7 @@ if ($conf_vereinsdaten == 1) {
 				createLeafletMap(Lat, Lon, popupText);
 			<?php } ?>
 			<?php if ($googlemaps_ver == 3) {?>
-				createOSMap(Lat, Lon);
+				createOSMap(Lat, Lon, `<?php echo $img_marker; ?>`);
 			<?php } ?>
 		}
 	</script>

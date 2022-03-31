@@ -639,7 +639,7 @@ for ($x=0; $x< 100; $x++){
 				createLeafletMap(Lat, Lon, popupText);
 			<?php } ?>
 			<?php if ($googlemaps_msch == 3) {?>
-				createOSMap(Lat, Lon);
+				createOSMap(Lat, Lon, `<?php echo $img_marker; ?>`);
 			<?php } ?>
 		}
 	</script>

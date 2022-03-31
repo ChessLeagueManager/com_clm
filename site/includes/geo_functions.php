@@ -27,7 +27,7 @@
 <!--  OSM map -->
 	
 <script type="text/javascript">
-     function createOSMap(Lat, Lon) {
+     function createOSMap(Lat, Lon, markerLink) {
         var map = new ol.Map({
 				layers: [new ol.layer.Tile({ source: new ol.source.OSM() })],
 				target: document.getElementById('mapdiv1'),
@@ -50,7 +50,7 @@
 					anchor: [0.5, 1],
 					anchorXUnits: 'fraction',
 					anchorYUnits: 'fraction',
-					src: '<?php echo $img_marker; ?>'
+					src: markerLink,
 				}))
 			}));
 			var vectorSource = new ol.source.Vector({
