@@ -554,7 +554,13 @@ class CLMTournament {
 		}
 		// BuchholzSumme mit Streichresultat
 		if (in_array(12, $arrayFW)) { // als TieBreaker gewünscht?
+			$array_s12 = array();
 			foreach ($matchData as $key => $value) {
+					if ($value->ergebnis == 8) { // Spielfrei bzw. Pausieren 
+						// Zielstellung: die spielfreie Runde wird als Streichresultat verwendet, weitere spielfreie Runden werden ignoriert
+						if (isset($array_s12[$value->tln_nr])) continue;
+						$array_s12[$value->tln_nr] = 1;
+					}
 					$array_PlayerBuSum1St[$value->tln_nr] += $array_PlayerBuch1St[$value->gegner];
 					if ($array_PlayerBuSum1StMin[$value->tln_nr] > $array_PlayerBuch1St[$value->gegner]) 
 							$array_PlayerBuSum1StMin[$value->tln_nr] = $array_PlayerBuch1St[$value->gegner];

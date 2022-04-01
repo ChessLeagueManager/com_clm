@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -387,9 +387,9 @@ class CLMModelRunde extends JModelLegacy
 		$order = $db->loadObjectList();
  			if ($order[0]->order == 1) { $ordering = " , m.ordering ASC";}
 			//else { $ordering =', a.tln_nr ASC ';} 
-			else { $ordering =' ';} 
-		// $query = " SELECT a.tln_nr as tln_nr,m.name as name, SUM(a.manpunkte) as mp, "
-		$query = " SELECT a.tln_nr as tln_nr,m.name as name, (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
+			else { $ordering =' ';}
+		if ($order[0]->liga_mt == 0) { // Liga
+			$query = " SELECT a.tln_nr as tln_nr,m.name as name, (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
 			." (SUM(a.brettpunkte) - m.bpabzug) as bp, m.bpabzug, SUM(a.wertpunkte) as wp, m.published, m.man_nr, "  
 			." COUNT(DISTINCT case when a.gemeldet > 1 then CONCAT(a.dg,' ',a.runde) else null end) as spiele, "  
 			." m.sumtiebr1, m.sumtiebr2, m.sumtiebr3 "
@@ -397,8 +397,20 @@ class CLMModelRunde extends JModelLegacy
 			." LEFT JOIN #__clm_mannschaften as m ON m.liga = $liga AND m.tln_nr = a.tln_nr "
 			." WHERE a.lid = ".$liga
 			." AND m.man_nr <> 0 ";
-			if (($runde != "") AND ($dg == 1)) { $query = $query." AND runde < ".($runde +1)." AND dg = 1";}
-			if (($runde != "") AND ($dg > 1)) { $query = $query." AND (( runde < ".($runde +1)." AND dg = ".$dg.") OR dg < ".$dg.")";}
+		} else { // Mannschaftsturnier
+			$rc = 999;
+			$rc = clm_core::$api->db_tournament_ranking_round($liga,true,$runde,$dg);
+			$query = " SELECT a.tln_nr as tln_nr,m.name as name, (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
+			." (SUM(a.brettpunkte) - m.bpabzug) as bp, m.bpabzug, SUM(a.wertpunkte) as wp, m.published, m.man_nr, "  
+			." COUNT(DISTINCT case when a.gemeldet > 1 then CONCAT(a.dg,' ',a.runde) else null end) as spiele, "  
+			." m.z_sumtiebr1 as sumtiebr1, m.z_sumtiebr2  as sumtiebr2, m.z_sumtiebr3 as sumtiebr3 "
+			." FROM #__clm_rnd_man as a "
+			." LEFT JOIN #__clm_mannschaften as m ON m.liga = $liga AND m.tln_nr = a.tln_nr "
+			." WHERE a.lid = ".$liga
+			." AND m.man_nr <> 0 ";
+		}
+		if (($runde != "") AND ($dg == 1)) { $query = $query." AND runde < ".($runde +1)." AND dg = 1";}
+		if (($runde != "") AND ($dg > 1)) { $query = $query." AND (( runde < ".($runde +1)." AND dg = ".$dg.") OR dg < ".$dg.")";}
 			 
 		$query = $query	
 			." GROUP BY a.tln_nr ";
@@ -412,8 +424,9 @@ class CLMModelRunde extends JModelLegacy
 			$query = $query
 			." ORDER BY mp DESC, bp DESC ".$ordering.", wp DESC"; }
 		if ($order[0]->liga_mt == 1) {                       //mtmt
-			$query = $query
-			." ORDER BY rankingpos ASC"; }
+			if ($runde = 0) $query = $query." ORDER BY rankingpos ASC"; 
+			else $query = $query." ORDER BY z_rankingpos ASC"; 
+		}
 		$query = $query
 			.", a.tln_nr ASC"; 		
 		return $query;
