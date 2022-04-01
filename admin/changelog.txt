@@ -16,36 +16,39 @@ $ -> Language fix or change
 # Einzelturniere: Feinwertung Buchholzsumme bei Aussetzen
 # SWT-Import: Streichwertung bei Teamwettbewerben
 # Rundenbericht: Rangliste bei Mannschaftsturnieren
-# Meldeliste: Spieler einfügen mit Attributsverwendung
+# Meldeliste: Spieler einfï¿½gen mit Attributsverwendung
+# Kartenanzeige: Google Maps entfernt
+# Kartenanzeige: Leaflet hinzugefÃ¼gt
+# Kartenanzeige: Google Geocoding API fÃ¼r Adressumwandlung hinzugefÃ¼gt
 
 - - - - - 3.9.6 - [16-02-2022] - - - - - - - - - - - - - - - - - - - -
-+ Veranstaltungen: Export und Import über csv-Dateien
++ Veranstaltungen: Export und Import ï¿½ber csv-Dateien
 # Vereine: ordering erhalten bei Update
 # Benutzer: Email-Versand ohne Admin-Copy
 ^ Code-Anpassung Joomla 4: Selectionsfeld Status
-+ SWT-Import: Liga mit 3 bzw. 4 Durchgängen möglich
++ SWT-Import: Liga mit 3 bzw. 4 Durchgï¿½ngen mï¿½glich
 # Termine: leere Termineliste ohne Notice
-^ Admin-Bereich: CLM-Submenü templategerecht (nun auch bei J4.0)
+^ Admin-Bereich: CLM-Submenï¿½ templategerecht (nun auch bei J4.0)
 # Termine: Darstellung bei unterschiedlichen Startzeiten
 # SWT-Import: Liga Rundenturnier mit spielfrei 
 ^ Code-Anpassung php 8
-# Importe: Fehlermeldung, wenn keine Datei ausgewählt bei Delete
+# Importe: Fehlermeldung, wenn keine Datei ausgewï¿½hlt bei Delete
 # Einzelturniere: Rankingbestimmung bevor Spieler eingetragen sind
-+ Decodierung Spieler: Übernahme aus der Vorsaison
++ Decodierung Spieler: ï¿½bernahme aus der Vorsaison
 ^ Code-Anpassung https					 
 ^ Copyright 2008-2022
 
 - - - - - 3.9.5 - [24-10-2021] - - - - - - - - - - - - - - - - - - - -
-# Vereinsliste bei Vereinen aus mehreren Landesverbänden
+# Vereinsliste bei Vereinen aus mehreren Landesverbï¿½nden
 # pdf-Spielbericht bei Termin pro Paarung
 ^ DeWIS API: Einbau eines Delay-Parameters
 
 - - - - - 3.9.4 - [12-10-2021] - - - - - - - - - - - - - - - - - - - -
 + Termine: mehrere Runden am gleichen Tag/Uhrzeit zu einem Termin
-^ CLM-Menue: auch für J 4.0 sprachabhängig
+^ CLM-Menue: auch fï¿½r J 4.0 sprachabhï¿½ngig
 ^ Code-Anpassung Joomla 4: Umsetzungsroutine auf engl. Anwendung
 ^ Code-Anpassung Joomla 4: SWT-, PGN-, Arena-Import
-^ Code-Anpassung Joomla 4: JS-Feldprüfungen 
+^ Code-Anpassung Joomla 4: JS-Feldprï¿½fungen 
 # Termine: Erkennen Kategorie
 # Einzelturniere: Update von KO-Turnieren
 ^ Anpassung Joomla 4: standalone-Routine
@@ -60,11 +63,11 @@ $ -> Language fix or change
 # Einzelturniere: Fehler bei Fotoanzeige, wenn JoomGallery nicht installiert ist
 # SWT-Import: notice bei count-Funktion
 ^ Code-Anpassung Joomla 4: Aufstellungs- und Ranglistenpflege Frontend
-# Einzelturniere: Teilnehmer hinzufügen (Vereinsnamen)
+# Einzelturniere: Teilnehmer hinzufï¿½gen (Vereinsnamen)
 ^ Code-Anpassung Joomla 4: Admin-View Logging
 # SWT-Import: Siegbedingungen bei Ligen/Mannschaftsturnieren
 ^ Code-Anpassung Joomla 4: Admin-View Paarungstermin (kein fester Rundentermin)
-^ Code-Anpassung durch Änderung der API der ECF (engl. Anwendung)
+^ Code-Anpassung durch ï¿½nderung der API der ECF (engl. Anwendung)
 # Ligen/Mannschaftsturniere: Erstellung pgn-Download
 # pgn-Import: manuelle Zuordnung
 
@@ -72,41 +75,41 @@ $ -> Language fix or change
 ^ SWT-Import: Anpassungen wegen Schulschach ohne DSB-Bezug
 + Einzelturniere: neue Feinwertung Turnierleistung
 + Import von Arena-Turnierdateien von lichess
-+ Einzelturniere: Decodieren von Nicknamen mit Übernahme von NWZ, Elo, Geburtsjahr
++ Einzelturniere: Decodieren von Nicknamen mit ï¿½bernahme von NWZ, Elo, Geburtsjahr
 # Einzelturniere: inoff. DWZ-Ermittlung bei 100%-Erfolg
 + Einzelturniere: Darstellung von Links im Text
 + View Teilnehmerliste mit Link zu Meldelisten
 ^ View Paarungsliste: auch nicht freigegebene Runden mit Uhrzeit
 
 - - - - - 3.9.1 - [17-03-2021] - - - - - - - - - - - - - - - - - - - -
-# Data für Plugin: Datenaufbereitung für Vereinsübersicht
+# Data fï¿½r Plugin: Datenaufbereitung fï¿½r Vereinsï¿½bersicht
 # DWZ-Ermittlung: count-Warnung und Ausgabefeldzuordnung bei Spieler ohne DWZ
-+ SWT-Import Mannschaftswettbewerbe: mit oder ohne DWZ-Übernahme in Meldeliste
++ SWT-Import Mannschaftswettbewerbe: mit oder ohne DWZ-ï¿½bernahme in Meldeliste
 ^ View DWZ-Mannschaften: Umgestaltung Gesamtzeile sowie DWZ-Index-Anzeige
 ^ Mannschaftswettbewerbe: Generierung inoffz.DWZ auch auf Basis DWZ-Tabelle  
 # Ligadetails: Weitergabe von Parametern 
-+ Einzelturniere auch mit Mannschaftswertung möglich
++ Einzelturniere auch mit Mannschaftswertung mï¿½glich
 + TRF-Import: Einzelturniere ohne oder mit Mannschaftswertung
-# View DWZ-Übersicht: Hinweis, wenn Verein nicht abgelegt
+# View DWZ-ï¿½bersicht: Hinweis, wenn Verein nicht abgelegt
 # View Ligastatistik: Limit 20 Mannschaften entfernt
-+ SWM-Import: auch TUMX- und TUTX-Dateien für Mannschaftswettbewerbe  
++ SWM-Import: auch TUMX- und TUTX-Dateien fï¿½r Mannschaftswettbewerbe  
 ^ Copyright 2008-2021
 
 - - - - - 3.9.0 - [20-12-2020] - - - - - - - - - - - - - - - - - - - -
-# pdf-Paarungsliste: Überschrift Runde 1
-^ Fehlerreporting: Ergänzung Bot-Erkennung
+# pdf-Paarungsliste: ï¿½berschrift Runde 1
+^ Fehlerreporting: Ergï¿½nzung Bot-Erkennung
 
 - - - - - 3.8.7 - [09-12-2020] - - - - - - - - - - - - - - - - - - - -
 # Rundenbericht: Sonderfall bei pgn-Anzeige
-+ Ligen/MTurniere: NWZ-Durchschnittsberechnung mit Pseudowertzahl für Spieler ohne NWZ 
-+ SWT-Import: Übernahme Pseudowertzahl für Spieler ohne NWZ
++ Ligen/MTurniere: NWZ-Durchschnittsberechnung mit Pseudowertzahl fï¿½r Spieler ohne NWZ 
++ SWT-Import: ï¿½bernahme Pseudowertzahl fï¿½r Spieler ohne NWZ
 - pdf-Ausgabe: Dopplung von class usw. entfernt
-# Ligen/MTurniere: Apostroph usw. in Kommentarfeld möglich
-# Submenü: Parameterübergabe
-# Paarungsliste: Anpassung an Menüeintragstyp
+# Ligen/MTurniere: Apostroph usw. in Kommentarfeld mï¿½glich
+# Submenï¿½: Parameterï¿½bergabe
+# Paarungsliste: Anpassung an Menï¿½eintragstyp
 + DB: Routine zur Korrektur leerer Felder um Feldtyp date erweitert
 # Admin-Views: Aktivierung Ordering-Spalte einschl. Pfeile
-^ Code-Anpassung Joomla 4: Runden sowie Paarungen ändern/Runden prüfen im Backend
+^ Code-Anpassung Joomla 4: Runden sowie Paarungen ï¿½ndern/Runden prï¿½fen im Backend
 
 - - - - - 3.8.6 - [05-11-2020] - - - - - - - - - - - - - - - - - - - -
 # Grading File Export (engl. Anwendung): Einzelturniere Abbruch
@@ -121,10 +124,10 @@ $ -> Language fix or change
 ^ deutsche Anwendung: Aktualisierung Verbandsnamen
 + DB: Routine zur Korrektur leerer Felder vom Typ datetime
 ^ Formular Spielbericht: Umstellung auf Querformat
-+ Formular Spielbericht: auch für Ranglistenwettbewerbe
-^ Admin-Views: Überarbeitung engl. Sprachdateien
++ Formular Spielbericht: auch fï¿½r Ranglistenwettbewerbe
+^ Admin-Views: ï¿½berarbeitung engl. Sprachdateien
 ^ SWT-Import: nicht nur in aktuelle Saison 
-# Admin-View Mannschaft: Löschen einer Meldeliste
+# Admin-View Mannschaft: Lï¿½schen einer Meldeliste
 
 - - - - - 3.8.5 - [06-10-2020] - - - - - - - - - - - - - - - - - - - -
 + Ligen/MTurniere: Infokarte
@@ -144,13 +147,13 @@ $ -> Language fix or change
 ^ Mannschaftsturniere/Ligen: Anpassung Namensspalten in pdf-Ausgaben
 + Einzelturniere: Online-Turnieranmeldung erweitert (u.a. Double Opt-in, lichess-Account)
 + Einzelturniere: Mail an Turnierteilnehmer
-# Text-Konstante NOTICE geändert in NOTICE_SL
+# Text-Konstante NOTICE geï¿½ndert in NOTICE_SL
 + Online-Turnieranmeldung: Mailversand mit Check auf Erfolg
 
 - - - - - 3.8.3 - [14-06-2020] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung php 7.4
-# Data für Plugin: Ausschluss nicht freigegebener Ligen
-# SWT-Import Ligen/Mturniere: Übernahme von Liga-Parametern bei Update
+# Data fï¿½r Plugin: Ausschluss nicht freigegebener Ligen
+# SWT-Import Ligen/Mturniere: ï¿½bernahme von Liga-Parametern bei Update
 ^ DB-Anpassung Joomla 4
 ^ Code-Anpassung Joomla 4: Vereine einschl. Mitgliederverwaltung und Frontend-Ausgaben
 ^ Code-Anpassung Joomla 4: Ranglistengruppen und Vereinsranglisten
@@ -158,16 +161,16 @@ $ -> Language fix or change
 ^ Code-Anpassung Joomla 4: Mannschaften und Meldelisten im Backend
 ^ Code-Anpassung Joomla 4: Frontend-Anzeigen zu Ligen/Mannschaftsturnieren
 ^ Code-Anpassung php 7.2 (NULL)
-# DeWIS-Dateiausgabe: mehrere Durchgänge bei Einzelturnier
+# DeWIS-Dateiausgabe: mehrere Durchgï¿½nge bei Einzelturnier
 ^ Verbesserung der Mehrsprachigkeit: Online-Turnieranmeldung, Turnierpaarungsliste
 + DeWIS-Dateiausgabe: Liga/Turnierauswertung in Teilen
  
 - - - - - 3.8.2 - [08-04-2020] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung Joomla 4: Importe ( SWT, SWM und PGN )
-# M-Turniere: Berliner Wertung bei Wertung ändern
+# M-Turniere: Berliner Wertung bei Wertung ï¿½ndern
 # SWM-Import: mehrere nationale Ratingermittlungen
 ^ SWT-Import: bei KO-Turnier alle Teilnehmer aktiv
-+ SWT-Import: Übernahme DWZ/Elo bei Ligen/Mannschaftsturnieren
++ SWT-Import: ï¿½bernahme DWZ/Elo bei Ligen/Mannschaftsturnieren
 # Mannschaft: kein Vereinszwang bei Liga ohne DSB-Bezug (Schulschach)
 ^ Code-Anpassung Joomla 4: Saison (Nachbesserung)
 ^ Code-Anpassung Joomla 4: Sonderranglisten
@@ -177,16 +180,16 @@ $ -> Language fix or change
 ^ Code-Anpassung Joomla 4: Einzelturniere, Kategorien
 ^ Copyright 2008-2020
 # Admin-View Datenbank: Direkte Aktualisierung Fehler falsche ZPS
-# Einzelturniere: Punkte für Niederlage (Antrittspunkt)
+# Einzelturniere: Punkte fï¿½r Niederlage (Antrittspunkt)
 ^ Einzelturniere: Korrektur einzelner engl. Texte
 
 - - - - - 3.8.0 - [12-12-2019] - - - - - - - - - - - - - - - - - - - -
-# Online-Turnieranmeldung: Vervollständigung engl. Texte
-^ Mannschaftsturniere im KO-System: Abändern des Standardes bei 'Turnierwertung ändern' möglich
+# Online-Turnieranmeldung: Vervollstï¿½ndigung engl. Texte
+^ Mannschaftsturniere im KO-System: Abï¿½ndern des Standardes bei 'Turnierwertung ï¿½ndern' mï¿½glich
 
 - - - - - 3.7.4 - [18-11-2019] - - - - - - - - - - - - - - - - - - - -
 # Admin-View Runden: Absicherung fehlerhafter Ligaparameter
-# pdf-Ausgaben: Klasse FPDF 1.81 vervollständigt
+# pdf-Ausgaben: Klasse FPDF 1.81 vervollstï¿½ndigt
 + XML-Ausgabe: Erweiterung Spielplan Mannschaft und Spielplan Verein
 ^ Einzelturniere: Parameter zum Ausschalten der 50%-Regel nach FIDE
 ^ SWT-Import Turniere: Rundenbezogenes Bye
@@ -194,9 +197,9 @@ $ -> Language fix or change
 - - - - - 3.7.3 - [07-10-2019] - - - - - - - - - - - - - - - - - - - -
 + Einzelturniere: Online-Turnieranmeldung (Teil Backend)
 ^ View Turnierrangliste,-tabelle: Weiterleitung auf Teilnehmerliste, wenn Turnier nicht gestartet 
-^ Benutzer-Admin-View: keine Feldprüfungen bei Deaktivierung eines Benutzers
+^ Benutzer-Admin-View: keine Feldprï¿½fungen bei Deaktivierung eines Benutzers
 # Admin-View Ergebnisse: Fehlermeldung wegen Mannschaftsnummer wird Hinweis
-# mehrere js-Routinen zur Feldprüfung: Aktivierung submit-Button
+# mehrere js-Routinen zur Feldprï¿½fung: Aktivierung submit-Button
 + XML-Ausgabe: Erweiterung um Paarungsliste
 # Tabelle clm-User: Joomla-User-ID angepasst
 # is_mobile wegen Extern Zugriff korrigiert
@@ -204,9 +207,9 @@ $ -> Language fix or change
 
 - - - - - 3.7.2 - [07-09-2019] - - - - - - - - - - - - - - - - - - - -
 + Benutzergruppe: Turnierleiter mit Importberechtigung
-+ Einzelturniere: Online-Turnieranmeldung einschl. Menüeintragstyp (Teil Frontend)
++ Einzelturniere: Online-Turnieranmeldung einschl. Menï¿½eintragstyp (Teil Frontend)
 # Benutzergruppe Spieler (spl): Korrektur der Berechtigung im Frontend
-+ Datenschutz: Möglichkeit neueste Archivsaison offen
++ Datenschutz: Mï¿½glichkeit neueste Archivsaison offen
 ^ Benutzer-Admin-View: nur freigegebene Benutzer werden aus dem Vorjahr kopiert
 + Submenu: Anpassung Touchscreen
 + Einzelturniere: Qualifikationsmarker auch im View Tabelle
@@ -221,7 +224,7 @@ $ -> Language fix or change
 # strpos-Funktion und php 7.3
 + SWT-Import Einzel: einschl. inoff. DWZ-Berechnung
 # Turniere: Marker inoff. DWZ-Berechnung bei Update Turnierdetails 
-+ XML-Ausgabe für CLM-Show-Plugin
++ XML-Ausgabe fï¿½r CLM-Show-Plugin
 
 - - - - - 3.7.0 - [16-02-2019] - - - - - - - - - - - - - - - - - - - -
 # SWT-Import: Ignorieren von Verein und Mitgliedsnummer bei Import ohne Org-Bezug
@@ -231,7 +234,7 @@ $ -> Language fix or change
 # pgn-Dateierstellung
 ^ count-Funktion und PHP 7.3
 + Fehlerbehandlung: Kennzeichnung der durch Bots verursachten Fehler im Fehlertext
-^ Leistungssteigerung der DB-Zugriffe durch geänderte/neue Indizes
+^ Leistungssteigerung der DB-Zugriffe durch geï¿½nderte/neue Indizes
   
 - - - - - 3.6.5 - [15-01-2019] - - - - - - - - - - - - - - - - - - - -
 # View Mitgliederliste: Anzeige Vorjahre entsprechend Datenschutzparameter
@@ -239,14 +242,14 @@ $ -> Language fix or change
 # AdminClass CLMText: Format Feinwertungen
 ^ Team-Views: Weglassen des Kommentars bei ungerader Anzahl Mannschaften
 ^ Copyright 2008-2019
-+ Views Mannschaft und Verein: Kartenanzeige nun wahlweise auch über OpenStreetMap
++ Views Mannschaft und Verein: Kartenanzeige nun wahlweise auch ï¿½ber OpenStreetMap
  
 - - - - - 3.6.4 - [22-11-2018] - - - - - - - - - - - - - - - - - - - -
 # Admin-View Mannschaftsaufstellung: Editorname
-+ Einzelturniere: Teilnehmer mit weniger als 50% der Partien (FIDE §12b,c)
-# Admin-View Turnierwertung ändern: bei deaktivierter Berliner Wertung
++ Einzelturniere: Teilnehmer mit weniger als 50% der Partien (FIDE ï¿½12b,c)
+# Admin-View Turnierwertung ï¿½ndern: bei deaktivierter Berliner Wertung
 # Ergebnismeldung: Handling --kein Spieler-- verbessert zur Vermeidung von Notice (284+285)
-# Mini-Korrekturen zur Vermeidung von Warnungen bei Extern-Lösung
+# Mini-Korrekturen zur Vermeidung von Warnungen bei Extern-Lï¿½sung
 ^ pdf-Ausgabe: leichte Umgestaltung pdf-Meldeliste
 
 - - - - - 3.6.3 - [17-10-2018] - - - - - - - - - - - - - - - - - - - -
@@ -255,28 +258,28 @@ $ -> Language fix or change
 - - - - - 3.6.2 - [18-09-2018] - - - - - - - - - - - - - - - - - - - -
 ^ Einzelturniere: Anzeige Direkter Vergleich
 + SWM-Import Voll-Turniere (Swiss-Manager Dateityp TURx) einschl. Update
-+ Verein Saisonübersicht: CSV-Ausgabe
++ Verein Saisonï¿½bersicht: CSV-Ausgabe
 # Admin-View Runden: Korrektur bis einschl. Uhrzeit
 # Admin-View Liga: Reihenfolge-Id
 + Liga Paarungsliste: CSV-Ausgabe zur Planung (nur engl. Anwendung)
 ^ DB-Felder: Vereinsname, Spielername und FIDE-Titel erweitert 
-+ Direkt-Update DSB-daten: Prüfung auf Update erfolgreich
-# Rundenmanager: Runden bearbeiten für aktuelle Liga
-^ Ligaheft: Minidesignändeung
++ Direkt-Update DSB-daten: Prï¿½fung auf Update erfolgreich
+# Rundenmanager: Runden bearbeiten fï¿½r aktuelle Liga
+^ Ligaheft: Minidesignï¿½ndeung
 
 - - - - - 3.6.1 - [02-07-2018] - - - - - - - - - - - - - - - - - - - -
 ^ Geburtsjahr: Anzeige-Standard nein
-+ Archivdaten: Anzeige der Daten der Vorjahre nur für registrierte Benutzer (optional)
-+ Benutzercheck auf Vereinszugehörigkeit (optional)
++ Archivdaten: Anzeige der Daten der Vorjahre nur fï¿½r registrierte Benutzer (optional)
++ Benutzercheck auf Vereinszugehï¿½rigkeit (optional)
 
 - - - - - 3.6.0 - [23-05-2018] - - - - - - - - - - - - - - - - - - - -
-^ View Turnier-Spieler: Mini-Designänderung
+^ View Turnier-Spieler: Mini-Designï¿½nderung
 # SWM-Import: Feld Typ 
 
 - - - - - 3.5.2 - [14-05-2018] - - - - - - - - - - - - - - - - - - - -
-# Admin-View Meldeliste: Prüfung doppelte Spieler
-# Admin-View Ergebnismeldung: Turnierwertung ändern insb. Wertpunkte
-+ Admin-View Meldeliste: Einfügen Spieler
+# Admin-View Meldeliste: Prï¿½fung doppelte Spieler
+# Admin-View Ergebnismeldung: Turnierwertung ï¿½ndern insb. Wertpunkte
++ Admin-View Meldeliste: Einfï¿½gen Spieler
 + Admin-View Mannschaft: Mannschaft annullieren
 # View Runde / View Info: Code-Nachbesserungen
 ^ pdf-Ausgaben: Klasse FPDF 1.6 durch FPDF 1.81 wegen PHP 7.2 ersetzt
@@ -291,16 +294,16 @@ $ -> Language fix or change
 # Admin-View Datenbank: Liga Export/Import
 # Views Rangliste und Tabelle: deaktivierte Mannschaften 
 ^ Saisonstatistik: ggf.ohne Daten -> keine Anzeige und kein Kommentar
-# Importe: engl. Texte überarbeitet
+# Importe: engl. Texte ï¿½berarbeitet
 ^ View Rangliste: Spaltenbreite bei CH-Turnier erweitert
 # Link in Ergebnismail
 # View Turnier-Rangliste: Design-Nachbesserung
-+ Ligen/MTurniere: Parameter 'Rangliste/Tabelle' als Standard-View in Submenü und Modulen
-+ Menüeintragstyp Vereinsliste: Parameter erweitert
-# Ligen/MTurniere: nach 'Turnierwertung ändern' folgt Ranglisten-Neuberechnung
++ Ligen/MTurniere: Parameter 'Rangliste/Tabelle' als Standard-View in Submenï¿½ und Modulen
++ Menï¿½eintragstyp Vereinsliste: Parameter erweitert
+# Ligen/MTurniere: nach 'Turnierwertung ï¿½ndern' folgt Ranglisten-Neuberechnung
 # SWT-Import: fehlender Text
-+ neuer View 'Liga-Teilnehmer' über Submenü und Menüeintragstyp
-+ SWT-Import(Liga): Datei mit 0(0) Runden zur Übernahme der Teilnehmer
++ neuer View 'Liga-Teilnehmer' ï¿½ber Submenï¿½ und Menï¿½eintragstyp
++ SWT-Import(Liga): Datei mit 0(0) Runden zur ï¿½bernahme der Teilnehmer
 + Ligen/MTurniere: Parameter 'Standard-View' erweitert um Teilnehmerliste
 
 - - - - - 3.5.0 - [13-12-2017] - - - - - - - - - - - - - - - - - - - -
@@ -308,9 +311,9 @@ $ -> Language fix or change
 # Meldeliste Eingabe im FE bei Spielgemeinschaften
 # Admin-View Saison: Anpassung MySQL 5.7 / PHP 7
 + SWM-Import CH-Turniere (Swiss-Manager Dateityp TUNx) einschl. Update
-+ neuer View: Saisonübersicht pro Verein einschl. Kopfmenü
-# SWT-Import Turnier: Übernahme der Ergebnissen 0,5-0 und 0-0,5
-# Admin-View Ligen: Änderung Hint-Text
++ neuer View: Saisonï¿½bersicht pro Verein einschl. Kopfmenï¿½
+# SWT-Import Turnier: ï¿½bernahme der Ergebnissen 0,5-0 und 0-0,5
+# Admin-View Ligen: ï¿½nderung Hint-Text
 # Admin-View Meldeliste: rechte K-Spalte 4-stellig
 # View Mannschaft und Ligaheft: Prozentfehler bei KO-Turnier
 
@@ -319,21 +322,21 @@ $ -> Language fix or change
 + pdf-View Mannschaft mit Attributsfeld
 + Sonderranglisten kopieren
 # Sonderranglisten: Textkorrekturen
-^ Logging: alle Einträge löschen -> alle älter als 450 Tage
-# SWT-Import Turnier: Übernahme Teilnehmerzahl
+^ Logging: alle Eintrï¿½ge lï¿½schen -> alle ï¿½lter als 450 Tage
+# SWT-Import Turnier: ï¿½bernahme Teilnehmerzahl
 # pdf-Views Paarungsliste und Liga-Heft: Datum der Paarung
 
 - - - - - 3.4.1 - [22-05-2017] - - - - - - - - - - - - - - - - - - - -
 ^ Anpassungen an date,datetime mit '0000-00-00' (MySQL 5.7)
 ^ Anpassungen PHP7
-+ Grading Export für Mannschaftsturniere (engl.Anwendung)
++ Grading Export fï¿½r Mannschaftsturniere (engl.Anwendung)
 # pdf-Paarungsliste: Behandlung langer Kommentare
 + Mannschaftsturniere: Erstellung pgn-Templatedatei
 # Einzelturniere: Text Freies System
 # Termine: Tippfehler bei date-Anpassung und kleine Designkorrektur
 ^ Rundenbericht: pgn-Template als API und mit Mehrsprachigkeit
 # DWZ-Liste: Sortierung mit DWZ-Index
-# Ergebniskorrektur: kleine engl. Textänderungen
+# Ergebniskorrektur: kleine engl. Textï¿½nderungen
 + View Spieler: Link zu ECF Grading Database (engl. Anwendung)
 # View akt. Runde: fehlerhafte Parameterabfrage
 # View Spieler: Summierung Punkte bei kampflosen Partien
@@ -348,34 +351,34 @@ $ -> Language fix or change
 # Datenbank: direkte Aktualisierung mit FIDE-Titel
 + View Mannschaft: neu mit FIDE-Titel
 + Einzelturniere: Einbau der engl. Anwendung einschl. Grading Export
-# Ligen: pgn-Templateerstellung für Runden des 2./3.Durchgangs
+# Ligen: pgn-Templateerstellung fï¿½r Runden des 2./3.Durchgangs
 
 - - - - - 3.3.5 - [21-01-2017] - - - - - - - - - - - - - - - - - - - -
 # Admin-View Runden: kleine Code-Bereinigung
-# Admin-View Turnier: Veranstalter/Ausrichter wählen
+# Admin-View Turnier: Veranstalter/Ausrichter wï¿½hlen
 # Ligastatistik: Kriterien kampflos + Gegner ohne DWZ
 # Admin-Views Turniere: Darstellung leeres Datum
-# Admin-View Turnier: Datumsprüfung von-bis
+# Admin-View Turnier: Datumsprï¿½fung von-bis
 # Admin-ET-Ranking: Notice wegen Tippfehler verhindern
 # Admin-Mitgliederverwaltung: Notice wegen Tippfehler verhindern
 + PGN-Import: Team- und Single-Wettbewerbe
-+ PGN-Anzeige Frontend für Team-Wettbewerbe
-^ PGN-Anzeige Frontend für Single-Wettbewerbe
-+ PGN-Download Frontend für Team- und Single-Wettbewerbe
++ PGN-Anzeige Frontend fï¿½r Team-Wettbewerbe
+^ PGN-Anzeige Frontend fï¿½r Single-Wettbewerbe
++ PGN-Download Frontend fï¿½r Team- und Single-Wettbewerbe
 # SWT-Import Einzel: Partiewertung
 ^ DeWIS-Export: Geburtsjahr als Pflichtfeld
 + PGN-Download: Schalter pro Wettbewerb
-+ Menüeintragstyp für die Teilnehmerliste eines Turnieres
++ Menï¿½eintragstyp fï¿½r die Teilnehmerliste eines Turnieres
  
 - - - - - 3.3.4 - [24-11-2016] - - - - - - - - - - - - - - - - - - - -
 + SWT-Import: Engl. Sprachfile 
-# Ergebnismeldung: Berechtigung nur für Heimspiele bei Spielgemeinschaft
+# Ergebnismeldung: Berechtigung nur fï¿½r Heimspiele bei Spielgemeinschaft
 ^ Einzelturniere: mysql_errno ersetzt in calculateRanking
-# pdf View Turnierteilnehmer: Clublink unnötig
-# SWT-Import Liga: gesp. Runden und gesp. Durchgänge
-# Ergebnismeldung: Erstellung der Bestätigungsmails Sprache entsprechend Land
-# Admin-View Ergebnisse: Rücksetzen durch Löschen aller Eingabenwerte
-+ Einzelturniere: 3-Punkte-Wertung u. ä.
+# pdf View Turnierteilnehmer: Clublink unnï¿½tig
+# SWT-Import Liga: gesp. Runden und gesp. Durchgï¿½nge
+# Ergebnismeldung: Erstellung der Bestï¿½tigungsmails Sprache entsprechend Land
+# Admin-View Ergebnisse: Rï¿½cksetzen durch Lï¿½schen aller Eingabenwerte
++ Einzelturniere: 3-Punkte-Wertung u. ï¿½.
 # Admin-View Ligen: kleine html-Korrekturen
 
 - - - - - 3.3.3 - [13-10-2016] - - - - - - - - - - - - - - - - - - - -
@@ -385,20 +388,20 @@ $ -> Language fix or change
 # DWZ-Routine: Ausschluss von angesetzten aber noch nicht gespielten Paarungen
 # Admin-View Meldeliste: Apply-Button bei englischer Anwendung
 # Einzelturniere: Ranglistenermittlung bei wenig Teilnehmern
-# Admin-View Ergebnisse: Übernahme Bemerkung bei 'Turnierwertung ändern'
+# Admin-View Ergebnisse: ï¿½bernahme Bemerkung bei 'Turnierwertung ï¿½ndern'
 + Admin-View Verein Mitgliederverwaltung: Umsetzen von Spieler, nur englische Anwendung
 # class idna_convert Mehrfachverwendung Email-Adressen-Check
 + View Mannschaft: Anzeige der Partnervereine
-+ Routenplaner sprachabhängig
++ Routenplaner sprachabhï¿½ngig
 
 - - - - - 3.3.2 - [06-09-2016] - - - - - - - - - - - - - - - - - - - -
 + Ergebnis 0-0,5 bzw. 0,5-0 eingebaut
-# Admin View Liga/MTurniere: Prüfung Rundenanzahl
-+ SWT-Import: Hochgeladene Datei Standard für Import
+# Admin View Liga/MTurniere: Prï¿½fung Rundenanzahl
++ SWT-Import: Hochgeladene Datei Standard fï¿½r Import
 + SWT-Import: Zuordnung SWT-Dateiname zu Liga/Turnier
 # DeWIS-Dateiausgabe: Anpassung PHP7
 # DB-Update (u.a. Saison): Anpassung PHP7
-# View Paarungliste: Datum pro Paarung bei 3/4 Durchgängen
+# View Paarungliste: Datum pro Paarung bei 3/4 Durchgï¿½ngen
 # pdf-Terminliste: lange Namen in Spalte 2
 # Admin-View Liga: Kopieren von Ligen
 # class idna_convert Mehrfachverwendung
@@ -406,26 +409,26 @@ $ -> Language fix or change
 # View Mannschaft: Anzeige von organisierten Spieler beim Schulschach
 
 - - - - - 3.3.1 - [09-07-2016] - - - - - - - - - - - - - - - - - - - -
-+ View Runde: pdf-Formular Spielbericht über Liga-Parameter
++ View Runde: pdf-Formular Spielbericht ï¿½ber Liga-Parameter
 # Englisch: Minitextkorrektur
-+ Menüeintragstyp Terminliste mit Selektion CLM-Kategorie
++ Menï¿½eintragstyp Terminliste mit Selektion CLM-Kategorie
 # SWT-Import Einzel: pgn bleibt erhalten bei Update
-# pdf-Listen: Nachbesserung insb. für große Mannschaftsturniere
+# pdf-Listen: Nachbesserung insb. fï¿½r groï¿½e Mannschaftsturniere
 # pdf-Terminlisten: Mehrsprachigkeit
-# Backend-Rundenübersicht: Abbruchfehler bei archivierten Ligen
+# Backend-Rundenï¿½bersicht: Abbruchfehler bei archivierten Ligen
 # Vereindatenpflege: Mehrsprachigkeit
-# View Spieler: Gespielte Partien vollständig
+# View Spieler: Gespielte Partien vollstï¿½ndig
 # View Mannschaft: Zuordnung Ergebnisse (nur engl. Anwendung)
 - View Spieler: Link zur DSB-Karteikarte entfernt
-# Englisch: überarbeitete Sprachfiles
+# Englisch: ï¿½berarbeitete Sprachfiles
 ^ Views Paarungsliste/Runde: keine Anzeige bei spielfrei vs. spielfrei
-^ Admin-View Ergebniskorrektur: erhöhter Wertebereich wegen JRCup
+^ Admin-View Ergebniskorrektur: erhï¿½hter Wertebereich wegen JRCup
 # View aktuelle Runde: sql bei engl. Anwendung
-+ Admin-View Ergebniskorrektur: Erweiterung für KO-Turniere
++ Admin-View Ergebniskorrektur: Erweiterung fï¿½r KO-Turniere
 
 - - - - - 3.3.0 - [27-04-2016] - - - - - - - - - - - - - - - - - - - -
 # Korrektur englischer Texte / Mehrsprachigkeit
-+ Einzelturniere: Aktivierung für Anwendung England
++ Einzelturniere: Aktivierung fï¿½r Anwendung England
 ^ Termine: Umstellung auf CLM-Kategorien 
 # Code-Nachbesserungen
 
@@ -436,66 +439,66 @@ $ -> Language fix or change
 # Mannschaft: Abzug von Mannschaftspunkten
 # Nachbesserung Mehrsprachigkeit (einf. Tabelle, pdf-Footer)
 # Admin Ergebnisse: Verbesserung Fehlermeldung bei Nichtauswahl
-+ MTurniere: auch 3 bzw. 4 Durchgänge möglich
-# SWT-Import Liga: Übernahme Mannschaftsergebnisse
-^ CLM-Admin-Menü: Anpassung an J!3.5.0
++ MTurniere: auch 3 bzw. 4 Durchgï¿½nge mï¿½glich
+# SWT-Import Liga: ï¿½bernahme Mannschaftsergebnisse
+^ CLM-Admin-Menï¿½: Anpassung an J!3.5.0
 + View Mannschaft: Spielplan auch wenn kein DSB-Bezug
 + View Mannschaft: Spielplan mit Ergebnis 
 # Class CLMForm: SelectVerein
 + MTurniere: Feinwertung Buchholzsumme mit Streichwertung
 
 - - - - - 3.2.4 - [08-03-2016] - - - - - - - - - - - - - - - - - - - -
-^ Überarbeitung engl. Textfiles für Backend
+^ ï¿½berarbeitung engl. Textfiles fï¿½r Backend
 # SWT-Import Liga: Nachbesserung bei kampflos und Erg.korrektur nach TO
-+ Ligen: Rundendaten von-bis sowie Termin pro Paarung möglich
-+ Ergänzung Engl. Anwendung: Check-Routine, Termine, Runden-Details 
++ Ligen: Rundendaten von-bis sowie Termin pro Paarung mï¿½glich
++ Ergï¿½nzung Engl. Anwendung: Check-Routine, Termine, Runden-Details 
 # Einzelturniere: Rangliste Elo mit Streichwertung
-+ Ergänzung Engl. Anwendung: Export Grading File einschl. ExcelWriterXML
++ Ergï¿½nzung Engl. Anwendung: Export Grading File einschl. ExcelWriterXML
 # DeWIS Auswertung: Vereinsname aus der aktuellen Saison
 # Liga-Ranking: Buchholz-Wertung auf Mannschaftspunkte umgestellt
 + SWT-Import: erweitert auf Schul- und Freizeitturniere ohne DSB-Bezug
 + SWT-Import: erweitert auf M-turniere ohne Erfassung der Einzelergebnissen
 # M-Turnier: Erweiterung Wertebereich Feinwertungen auf decimal(7,3)
-# Liga-Submenü bei Bedarf 2-spaltig
+# Liga-Submenï¿½ bei Bedarf 2-spaltig
 
 - - - - - 3.2.3 - [22-01-2016] - - - - - - - - - - - - - - - - - - - -
-+ Menüeintagstyp für Liga-Paarungsliste
-^ Sprachfilezuordnung für umgestellte Views
-# raw-View Verein für Extern-Zugriff
++ Menï¿½eintagstyp fï¿½r Liga-Paarungsliste
+^ Sprachfilezuordnung fï¿½r umgestellte Views
+# raw-View Verein fï¿½r Extern-Zugriff
 # Manuelle Aktualisierung von Vereinen und Spielern: Behandlung von Sonderzeichen
-# Admin-View Vereine: Berechtigung für Freigeben u. Sperren
-# DWZ-Übersicht pdf-Liste
-+ Einbau engl. Version insb. Ref.-No anstelle Mitgliedsnummer sowie Datenübernahme
+# Admin-View Vereine: Berechtigung fï¿½r Freigeben u. Sperren
+# DWZ-ï¿½bersicht pdf-Liste
++ Einbau engl. Version insb. Ref.-No anstelle Mitgliedsnummer sowie Datenï¿½bernahme
 + Englische Sprachfiles
 # Datumbehandlung in umgestellten Views
 # Datumsdarstellung bei englischer Sprache
 # Sprachsteuerung in umgestellten Views insb. Tabellenanzeigen
-+ CLM-Benutzergruppen sprachabhängig
-# Paarungsliste falls Teilnehmernummer nicht gewünscht
-# Frontend-Mitgliederliste: Sortiermöglichkeiten
++ CLM-Benutzergruppen sprachabhï¿½ngig
+# Paarungsliste falls Teilnehmernummer nicht gewï¿½nscht
+# Frontend-Mitgliederliste: Sortiermï¿½glichkeiten
 + Einbau engl. Version insb. Ref.-No anstelle Mitgliedsnummer in den PDF-Views
 # Ergebnismeldung: Reaktivierung 'gesperrt'-Markierung
 # Admin-View Saisons: Sortierung nach Reihenfolge
 # SWT-Import Liga: Paarungsnummer aus Einzelergebnis ignorieren
-# Default Werte nun bei neuen Tabelleneinträgen setzen
-# SWT-Import Turnier: Prüfung Start- und Enddatum
+# Default Werte nun bei neuen Tabelleneintrï¿½gen setzen
+# SWT-Import Turnier: Prï¿½fung Start- und Enddatum
 # Spieler-View: Darstellung DWZ
 ^ PDF-Ausgaben: Umstellung Format von clm_pdf auf pdf
 # Admin-View MTurniere: Kopieren bei ausreichenden Rechten wurde verweigert
-# Admin-View Einzelturniere: Detailpflege nach 'Runden löschen' war nicht möglich
-^ Überarbeitung Textfiles für CLM-Benutzergruppen
-# Ligen: Rundenturnier mit zusätzlichen Runden wieder möglich
+# Admin-View Einzelturniere: Detailpflege nach 'Runden lï¿½schen' war nicht mï¿½glich
+^ ï¿½berarbeitung Textfiles fï¿½r CLM-Benutzergruppen
+# Ligen: Rundenturnier mit zusï¿½tzlichen Runden wieder mï¿½glich
 
 - - - - - 3.2.2 - [05-10-2015] - - - - - - - - - - - - - - - - - - - -
 # Config: Email-Adressen mit Umlauten erlauben
-# Config: Ergebnisdienst-Name mit Umlauten möglich
-# Logging: Einträge bei Meldelistenabgabe und Vereinspflege im FE aktiviert
+# Config: Ergebnisdienst-Name mit Umlauten mï¿½glich
+# Logging: Eintrï¿½ge bei Meldelistenabgabe und Vereinspflege im FE aktiviert
 # Admin-View Datenbank: Text-Korrektur
-# Meldeliste in FE: vollständige Vorbelegung bei Korrektur
+# Meldeliste in FE: vollstï¿½ndige Vorbelegung bei Korrektur
 # Meldeliste in FE: kleine Text-Korrektur
-# Mannschaftsaufstellung (pdf): korrektes Ignorieren von Null-Sätzen
-+ Funktion zum nochmaligen Einspielen aller DB Änderungen seit DB Version 0 (CLM 3)
-# Ligatabelle: Berücksichtigung von Antrittspunkte bei SRV-Spalten 
+# Mannschaftsaufstellung (pdf): korrektes Ignorieren von Null-Sï¿½tzen
++ Funktion zum nochmaligen Einspielen aller DB ï¿½nderungen seit DB Version 0 (CLM 3)
+# Ligatabelle: Berï¿½cksichtigung von Antrittspunkte bei SRV-Spalten 
 # Saisonstatistik: Codebereinigung zur Vermeidung von Warnungen
 # pgn-Vorlage-Datei: Ablage im Pfad 'pgn'
 # Spieler-View: Anzeige bei Spielgemeinschaften
@@ -506,11 +509,11 @@ $ -> Language fix or change
 # Ligen: Berliner Wertung als 4.Ranglistenkriterium
 # Ligastatistik: Auflistung mit Anz kampfloser Partien
 # Spieler-View: Mannschaften mit Ranglisten
-^ Admin-Liga-View: kleine Designänderungen
+^ Admin-Liga-View: kleine Designï¿½nderungen
 # Ergebnismeldung: Mannschaftsturnier im KO-System
 # Ligaheft: Spielfrei nicht letzte Mannschaft
 + Aktivierung der html-Mails bei Ergebniseingabe
-# FE Vereindaten Ändern
+# FE Vereindaten ï¿½ndern
 
 - - - - - 3.2.0 - [16-07-2015] - - - - - - - - - - - - - - - - - - - -
 Startpunkt des changelog
