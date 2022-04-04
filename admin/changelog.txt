@@ -17,6 +17,9 @@ $ -> Language fix or change
 # SWT-Import: Streichwertung bei Teamwettbewerben
 # Rundenbericht: Rangliste bei Mannschaftsturnieren
 # Meldeliste: Spieler einfügen mit Attributsverwendung
+- Kartenanzeige: Google Maps entfernt
++ Kartenanzeige: Leaflet hinzugefügt
++ Kartenanzeige: Google Geocoding API für Adressumwandlung hinzugefügt
 
 - - - - - 3.9.6 - [16-02-2022] - - - - - - - - - - - - - - - - - - - -
 + Veranstaltungen: Export und Import über csv-Dateien

@@ -17,9 +17,9 @@ class CLMViewVerein extends JViewLegacy
 	{
 		
 		$config = clm_core::$db->config();
-		$googlemaps_api = $config->googlemaps_api;
 		$googlemaps     = $config->googlemaps;
-		
+		$googlemaps_ver     = $config->googlemaps_ver;
+
 		$model	  = $this->getModel();
 		$verein     = $model->getCLMVerein();
 		$this->verein = $verein;
@@ -64,9 +64,19 @@ class CLMViewVerein extends JViewLegacy
 		$document =JFactory::getDocument();
 		
 		if ($googlemaps == 1) {
-			$document->addScript($prot.'://maps.google.com/maps?file=api&v=2&key='.$googlemaps_api.'');
+			if ($googlemaps_ver == 1){ //Load Leaflet
+				$document->addScript($prot.'://unpkg.com/leaflet@1.7.1/dist/leaflet.js');
+				$document->addStyleSheet($prot.'://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
+			}
+			elseif ($googlemaps_ver == 3){ //Load OSM
+				$document->addScript($prot.'://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js');
+				$document->addStyleSheet($prot.'://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css');
+			}
 		}
-		
+		if ($googlemaps == 1) {
+			$document->addScript($prot.'://unpkg.com/leaflet@1.7.1/dist/leaflet.js');
+			$document->addStyleSheet($prot.'://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
+		}
 		// Title in Browser
 		if (isset($verein[0])) {
 			$headTitle = CLMText::composeHeadTitle( array( $verein[0]->name ) );

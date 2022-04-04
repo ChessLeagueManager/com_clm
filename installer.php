@@ -153,6 +153,7 @@ class com_clmInstallerScript {
 		$this->params['tourn_showtlok'] = JComponentHelper::getParams('com_clm')->get('tourn_showtlok',null);
 		$this->params['tourn_comment_parse'] = JComponentHelper::getParams('com_clm')->get('tourn_comment_parse',null);
 		$this->params['menue'] = JComponentHelper::getParams('com_clm')->get('menue',null);
+		$this->params['maps_resolver'] = JComponentHelper::getParams('com_clm')->get('maps_resolver',null);
 	}
 	
 	function saveParams() {
