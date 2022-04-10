@@ -113,20 +113,22 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 	$doc->setTitle($mannschaft[0]->name.' - '.$mannschaft[0]->liga_name);
 
 	// Konfigurationsparameter auslesen
-	$config = clm_core::$db->config();
-	$email_from = $config->email_from;
-	$countryversion   = $config->countryversion;
-	$telefon= $config->man_tel;
-	$mobil	= $config->man_mobil;
-	$mail	= $config->man_mail;
-	$man_manleader	= $config->man_manleader;
-	$man_spiellokal	= $config->man_spiellokal;
-	$man_spielplan	= $config->man_spielplan;
-	$fixth_msch = $config->fixth_msch;
-	$googlemaps_msch   = $config->googlemaps_msch;
-	$googlemaps   = $config->googlemaps;
+	$config 			= clm_core::$db->config();
+	$email_from 		= $config->email_from;
+	$countryversion   	= $config->countryversion;
+	$telefon			= $config->man_tel;
+	$mobil				= $config->man_mobil;
+	$mail				= $config->man_mail;
+	$man_manleader		= $config->man_manleader;
+	$man_spiellokal		= $config->man_spiellokal;
+	$man_spielplan		= $config->man_spielplan;
+	$fixth_msch 		= $config->fixth_msch;
+	$googlemaps_msch   	= $config->googlemaps_msch;
+	$googlemaps   		= $config->googlemaps;
 	$googlemaps_rtype   = $config->googlemaps_rtype;
 	$googlemaps_mrout   = $config->googlemaps_mrout;
+	$maps_zoom			= $config->maps_zoom;
+
 	// Aufbereitung Googledaten 1. Spiellokal
 	$mannschaft[0]->lokal = str_replace(chr(10),"",$mannschaft[0]->lokal);
 	$mannschaft[0]->lokal = str_replace(chr(13),"",$mannschaft[0]->lokal);
@@ -636,10 +638,10 @@ for ($x=0; $x< 100; $x++){
 		} else {
 			<?php if ($googlemaps_msch == 1) {?>
 				var popupText = `<?php printf($loc_text); ?>`;
-				createLeafletMap(Lat, Lon, popupText);
+				createLeafletMap(Lat, Lon, popupText, <?php echo $maps_zoom; ?>);
 			<?php } ?>
 			<?php if ($googlemaps_msch == 3) {?>
-				createOSMap(Lat, Lon, `<?php echo $img_marker; ?>`);
+				createOSMap(Lat, Lon, `<?php echo $img_marker; ?>`, <?php echo $maps_zoom; ?>);
 			<?php } ?>
 		}
 	</script>

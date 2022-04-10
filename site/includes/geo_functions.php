@@ -1,9 +1,9 @@
 <!--  Leaflet map -->
 	
 <script type="text/javascript">
-     function createLeafletMap(Lat, Lon, popupText) {
+     function createLeafletMap(Lat, Lon, popupText, zoom) {
         // Create Map
-        var map = L.map('mapdiv1').setView([Lat, Lon], 12);
+        var map = L.map('mapdiv1').setView([Lat, Lon], zoom);
 
         // Set Layer
         var tileLayer = new L.TileLayer('https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png',{
@@ -27,13 +27,13 @@
 <!--  OSM map -->
 	
 <script type="text/javascript">
-     function createOSMap(Lat, Lon, markerLink) {
+     function createOSMap(Lat, Lon, markerLink, zoom) {
         var map = new ol.Map({
 				layers: [new ol.layer.Tile({ source: new ol.source.OSM() })],
 				target: document.getElementById('mapdiv1'),
 				view: new ol.View({
 					center: ol.proj.fromLonLat([Lon, Lat]),
-					zoom: 15
+					zoom: zoom
 					})
 				});
 
@@ -135,7 +135,7 @@ function getCoordinatesFromOSM($address)
     $userAgent = stream_context_create($options);     
 
     $url = "https://nominatim.openstreetmap.org/?format=json&addressdetails=1&q={$address}&format=json&limit=1";
-        
+           
     // Call Url
     $resp_json = file_get_contents($url, false, $userAgent);
 
@@ -144,13 +144,13 @@ function getCoordinatesFromOSM($address)
     if (is_null($resp)==true){//Check if search was successful
         $coordinates = array(0,0); //Return 0,0 in case search was not successfull
     }
-    else
+    elseif (isset($resp[0]['lat']) && isset($resp[0]['lon'])) //Check if coordinates are there
     {
-        try {
-            $coordinates =  array($resp[0]['lat'], $resp[0]['lon']);
-        } catch (Throwable $t) {
-            $coordinates = array(0,0); //Return 0,0 in case search was not successfull
-        }
+        $coordinates =  array($resp[0]['lat'], $resp[0]['lon']);
+    }
+    else //if not successfull return error code
+    {
+        $coordinates = array(0,0);
     }
     return $coordinates;
 }
@@ -169,8 +169,8 @@ function getCoordinatesFromGoogle($address, $gAPIKey )
     $resp = json_decode($resp_json, true);
 
     // Check if status ok
-    try{
-    if ($resp['status']=='OK'){
+    if ($resp['status']=='OK' && (isset($resp['results'][0]['geometry']['location']['lat']) && isset($resp['results'][0]['geometry']['location']['lng'])))
+    {
         $coordinates =  array($resp['results'][0]['geometry']['location']['lat'],
                             $resp['results'][0]['geometry']['location']['lng']);
     }
@@ -178,11 +178,5 @@ function getCoordinatesFromGoogle($address, $gAPIKey )
     {
         $coordinates = array(0,0);
     }
-    }
-    catch (Throwable $t) {
-        $coordinates = array(0,0); //Return 0,0 in case search was not successfull
-    }
     return $coordinates;
 }
-?>
-

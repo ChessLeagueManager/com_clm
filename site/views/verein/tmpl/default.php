@@ -30,13 +30,13 @@ $user	= JFactory::getUser();
 
 // Konfigurationsparameter auslesen
 $config 			= clm_core::$db->config();
-$email_from = $config->email_from;
-$conf_vereinsdaten	=$config->conf_vereinsdaten;
+$email_from 		= $config->email_from;
+$conf_vereinsdaten	= $config->conf_vereinsdaten;
 $googlemaps_ver   	= $config->googlemaps_ver;
 $googlemaps   		= $config->googlemaps;
-$googlemaps_rtype   		= $config->googlemaps_rtype;
-$googlemaps_vrout   		= $config->googlemaps_vrout;
- 
+$googlemaps_rtype   = $config->googlemaps_rtype;
+$googlemaps_vrout   = $config->googlemaps_vrout;
+$maps_zoom			= $config->maps_zoom;
 // Browsertitelzeile setzen
 $doc =JFactory::getDocument();
 if (isset($verein[0])) { $daten['title'] = $verein[0]->name; }
@@ -235,10 +235,10 @@ if ($conf_vereinsdaten == 1) {
 		} else {
 			<?php if ($googlemaps_ver == 1) {?>
 				var popupText = `<?php printf($loc_text); ?>`;
-				createLeafletMap(Lat, Lon, popupText);
+				createLeafletMap(Lat, Lon, popupText, <?php echo $maps_zoom; ?>);
 			<?php } ?>
 			<?php if ($googlemaps_ver == 3) {?>
-				createOSMap(Lat, Lon, `<?php echo $img_marker; ?>`);
+				createOSMap(Lat, Lon, `<?php echo $img_marker; ?>`, <?php echo $maps_zoom; ?>);
 			<?php } ?>
 		}
 	</script>
