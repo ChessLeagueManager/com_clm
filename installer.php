@@ -154,6 +154,7 @@ class com_clmInstallerScript {
 		$this->params['tourn_comment_parse'] = JComponentHelper::getParams('com_clm')->get('tourn_comment_parse',null);
 		$this->params['menue'] = JComponentHelper::getParams('com_clm')->get('menue',null);
 		$this->params['maps_resolver'] = JComponentHelper::getParams('com_clm')->get('maps_resolver',null);
+		$this->params['maps_zoom'] = JComponentHelper::getParams('com_clm')->get('maps_zoom',null);
 	}
 	
 	function saveParams() {
