@@ -20,6 +20,8 @@ $ -> Language fix or change
 - Kartenanzeige: Google Maps entfernt
 + Kartenanzeige: Leaflet hinzugefügt
 + Kartenanzeige: Google Geocoding API für Adressumwandlung hinzugefügt
++ Kartenanzeige: Kartenmassstab einstellbar
+# Saisonstatistik: Leistung bei 100%
 
 - - - - - 3.9.6 - [16-02-2022] - - - - - - - - - - - - - - - - - - - -
 + Veranstaltungen: Export und Import über csv-Dateien

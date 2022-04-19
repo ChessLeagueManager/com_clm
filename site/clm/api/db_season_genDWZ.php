@@ -1,7 +1,7 @@
 <?php 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -147,8 +147,11 @@ function clm_api_db_season_genDWZ($id,$group=true) {
 	foreach ($result as $id2 => $value)
  	{
 		// Korrektur Leistung: Anzeige bei weniger als 5 Spielen oder nur Siegen/Niederlagen nicht gewollt
-		if($value->n<5 || $value->W==0 || $value->W==$value->n) {
+		if($value->n<5 || $value->W==0 ) {
 			$value->R_p = 0;
+		}
+		elseif($value->W==$value->n) {
+			$value->R_p = $value->R_c + 667;
 		}
 
 		if($group) {
