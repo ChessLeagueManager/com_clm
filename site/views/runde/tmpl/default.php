@@ -49,7 +49,7 @@ $mainframe	= JFactory::getApplication();
 $pgn		= clm_core::$load->request_int('pgn',0); 
   if (($pgn == 1) OR ($pgn == 2)) { 
 	$result = clm_core::$api->db_pgn_template($lid,$dg,$runde,$pgn,true);
-	JRequest::setVar('pgn',0);
+	//JRequest::setVar('pgn',0);
 	if (!$result[1]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
 	$link = 'index.php?option='.$option.'&view=runde&saison='.$sid.'&liga='.$lid.'&dg='.$dg.'&runde='.$runde.'&pgn=0';
 	if ($item != 0) $link .= '&Itemid='.$item;

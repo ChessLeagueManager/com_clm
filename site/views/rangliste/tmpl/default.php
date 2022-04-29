@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -113,20 +113,6 @@ elseif ($liga[0]->runden_modus == "4" OR $liga[0]->runden_modus == "5") {
 	echo '<input type="hidden" name="extern_comment" value="GO_TO_PAARUNGSLISTE" />';
 } else {
 
-	// Array für DWZ Schnitt setzen
-/*	$dwz = array();
-	for ($y=1; $y< ($liga[0]->teil)+1; $y++) {
-		if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
-			if(isset($dwzschnitt[($y-1)]->dwz)) {
-				$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->dwz; 
-			}
-		} else {
-			if(isset($dwzschnitt[($y-1)]->start_dwz)) {
-				$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; 
-			}
-		}
-	}
-*/
 	// Spielfreie Teilnehmer finden //
 	$diff = $spielfrei[0]->count;
 	?>
@@ -154,17 +140,15 @@ elseif ($liga[0]->runden_modus == "4" OR $liga[0]->runden_modus == "5") {
 	}
 	echo CLMContent::createViewLink('tabelle', JText::_('RANGLISTE_GOTO_TABELLE'), array('saison' => $sid, 'liga' => $lid, 'Itemid' => $item));
 	// PGN gesamtes Turnier
-	if (($jid != 0 AND $params['pgnPublic'] == '1') OR $params['pgnDownload'] == '1') {
+	//if (($jid != 0 AND $params['pgnPublic'] == '1') OR $params['pgnDownload'] == '1') {
+	if ($jid != 0 AND $params['pgnDownload'] == '1') {
 		echo CLMContent::createPGNLink('rangliste', JText::_('RANGLISTE_PGN_ALL'), array('liga' => $liga[0]->id), 1 );
 	} 
 	
 	// DWZ Durchschnitte - Aufstellung
 	$result = clm_core::$api->db_nwz_average($lid);
-//echo "<br>lid:"; var_dump($lid);
-//echo "<br>result:"; var_dump($result);
 	$a_average_dwz_lineup = $result[2];
-//echo "<br>a_average_dwz_p:"; var_dump($a_average_dwz_p);
-//die();
+
 	?>
 	</div></div>
 	<div class="clr"></div>

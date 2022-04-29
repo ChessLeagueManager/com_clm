@@ -23,6 +23,7 @@ $ -> Language fix or change
 + Kartenanzeige: Kartenmassstab einstellbar
 # Saisonstatistik: Leistung bei 100%
 ^ View-Aufbau für Extern Zugriff: Code-Anpassung für Joomla 4.0
+# Rangliste: pgn-Download nur für angemeldete Nutzer
 
 - - - - - 3.9.6 - [16-02-2022] - - - - - - - - - - - - - - - - - - - -
 + Veranstaltungen: Export und Import über csv-Dateien
