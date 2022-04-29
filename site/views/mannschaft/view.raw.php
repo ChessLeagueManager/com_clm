@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -18,44 +18,44 @@ class CLMViewMannschaft extends JViewLegacy
 	{
 		$model	  = $this->getModel();
   		$mannschaft     = $model->getCLMMannschaft();
-		$this->assignRef('mannschaft'  , $mannschaft);
+		$this->mannschaft = $mannschaft;
 
 		$model	  = $this->getModel();
   		$vereine     = $model->getCLMVereine();
-		$this->assignRef('vereine'  , $vereine);
+		$this->vereine = $vereine;
 
 		$model	  = $this->getModel();
   		$count     = $model->getCLMCount();
-		$this->assignRef('count'  , $count);
+		$this->count = $count;
 
 		$model	  = $this->getModel();
   		$bp     = $model->getCLMBP();
-		$this->assignRef('bp'  , $bp);
+		$this->bp = $bp;
 
 		$model	  = $this->getModel();
   		$sumbp     = $model->getCLMSumBP();
-		$this->assignRef('sumbp'  , $sumbp);
+		$this->sumbp = $sumbp;
 
 		$model	  = $this->getModel();
   		$plan     = $model->getCLMSumPlan();
-		$this->assignRef('plan'  , $plan);
+		$this->plan = $plan;
 
 		$model	  = $this->getModel();
 		$termin     = $model->getCLMTermin();
-		$this->assignRef('termin'  , $termin);
+		$this->termin = $termin;
 
 		$model	  = $this->getModel();
 		$saison     = $model->getCLMSaison();
-		$this->assignRef('saison'  , $saison);
+		$this->saison = $saison;
 
 		$model	  = $this->getModel();
 		$einzel     = $model->getCLMEinzel();
-		$this->assignRef('einzel'  , $einzel);
+		$this->einzel = $einzel;
 		
-	$html	= JRequest::getInt('html','1');
-	if($html !="1"){
-		$document =JFactory::getDocument();
-		$document->setMimeEncoding('text/css');
+		$html	= clm_core::$load->request_string('html','1');
+		if($html !="1"){
+			$document =JFactory::getDocument();
+			$document->setMimeEncoding('text/css');
 		}
 
 		parent::display($tpl);

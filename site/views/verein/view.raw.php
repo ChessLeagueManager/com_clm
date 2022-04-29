@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
-  * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -22,44 +22,44 @@ class CLMViewVerein extends JViewLegacy
 		
 		$model	  = $this->getModel();
 		$verein     = $model->getCLMVerein();
-		$this->assignRef('verein'  , $verein);
+		$this->verein = $verein;
 		
 		$model	  = $this->getModel();
 		$vereinstats     = $model->getCLMVereinstats();
-		$this->assignRef('vereinstats'  , $vereinstats);
+		$this->vereinstats =$vereinstats;
 
 		$model	  = $this->getModel();
 		$mannschaft     = $model->getCLMMannschaft();
-		$this->assignRef('mannschaft'  , $mannschaft);
+		$this->mannschaft = $mannschaft;
 
 		$model	  = $this->getModel();
 		$vereinsliste     = $model->getCLMVereinsliste();
-		$this->assignRef('vereinsliste'  , $vereinsliste);
+		$this->vereinsliste = $vereinsliste;
 		
 		$model	  = $this->getModel();
 		$saisons     = $model->getCLMSaisons();
-		$this->assignRef('saisons'  , $saisons);
+		$this->saisons = $saisons;
 		
 		$model	  = $this->getModel();
 		$turniere     = $model->getCLMTurniere();
-		$this->assignRef('turniere'  , $turniere);
+		$this->turniere = $turniere;
 		
 		$model	  = $this->getModel();
   		$row     = $model->getCLMData();
-		$this->assignRef('row'  , $row);
+		$this->row = $row;
 
 		$model	  = $this->getModel();
   		$name     = $model->getCLMName();
-		$this->assignRef('name'  , $name);
+		$this->name = $name;
 
 		$model	  = $this->getModel();
   		$clmuser     = $model->getCLMCLMuser();
-		$this->assignRef('clmuser'  , $clmuser);
+		$this->clmuser = $clmuser;
 
-	$html	= JRequest::getInt('html','1');
-	if($html !="1"){
-		$document =JFactory::getDocument();
-		$document->setMimeEncoding('text/css');
+		$html	= clm_core::$load->request_string('html','1');
+		if($html !="1"){
+			$document =JFactory::getDocument();
+			$document->setMimeEncoding('text/css');
 		}
 
 		parent::display($tpl);

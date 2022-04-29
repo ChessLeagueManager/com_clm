@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -18,16 +18,16 @@ class CLMViewDWZ extends JViewLegacy
 	{
 		$model	  = $this->getModel();
   		$liga     = $model->getCLMLiga();
-		$this->assignRef('liga'  , $liga);
+		$this->liga = $liga;
 
 		$model = $this->getModel();
 		$zps = $model->getCLMzps();
-		$this->assignRef('zps'  , $zps);
+		$this->zps = $zps;
 
-	$html	= JRequest::getInt('html','1');
-	if($html !="1"){
-		$document =JFactory::getDocument();
-		$document->setMimeEncoding('text/css');
+		$html	= clm_core::$load->request_string('html','1');
+		if($html !="1"){
+			$document =JFactory::getDocument();
+			$document->setMimeEncoding('text/css');
 		}
 
 		parent::display($tpl);

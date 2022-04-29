@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -18,60 +18,60 @@ class CLMViewInfo extends JViewLegacy
 	{
 		$model		= $this->getModel();
 		$saison		= $model->getCLMSaison();
-		$this->assignRef('saison'  , $saison);
+		$this->saison = $saison;
 
 		$model		= $this->getModel();
 		$remis		= $model->getCLMRemis();
-		$this->assignRef('remis'  , $remis);
+		$this->remis = $remis;
 
 		$model		= $this->getModel();
 		$kampflos	= $model->getCLMKampflos();
-		$this->assignRef('kampflos'  , $kampflos);
+		$this->kampflos = $kampflos;
 
 		$model		= $this->getModel();
 		$heim		= $model->getCLMHeim();
-		$this->assignRef('heim'  , $heim);
+		$this->heim = $heim;
 
 		$model		= $this->getModel();
 		$gast		= $model->getCLMGast();
-		$this->assignRef('gast'  , $gast);
+		$this->gast = $gast;
 
 		$model		= $this->getModel();
 		$gesamt		= $model->getCLMGesamt();
-		$this->assignRef('gesamt'  , $gesamt);
+		$this->gesamt = $gesamt;
 
 		$model		= $this->getModel();
 		$spieler	= $model->getCLMSpieler();
-		$this->assignRef('spieler'  , $spieler);
+		$this->spieler = $spieler;
 
 		$model		= $this->getModel();
 		$mannschaft	= $model->getCLMMannschaft();
-		$this->assignRef('mannschaft'  , $mannschaft);
+		$this->mannschaft = $mannschaft;
 
 		$model		= $this->getModel();
 		$brett		= $model->getCLMBrett();
-		$this->assignRef('brett'  , $brett);
+		$this->brett = $brett;
 
 		$model		= $this->getModel();
 		$wbrett		= $model->getCLMWBrett();
-		$this->assignRef('wbrett'  , $wbrett);
+		$this->wbrett = $wbrett;
 
 		$model		= $this->getModel();
 		$sbrett		= $model->getCLMSBrett();
-		$this->assignRef('sbrett'  , $sbrett);
+		$this->sbrett = $sbrett;
 
 		$model		= $this->getModel();
 		$rbrett		= $model->getCLMRBrett();
-		$this->assignRef('rbrett'  , $rbrett);
+		$this->rbrett = $rbrett;
 
 		$model		= $this->getModel();
 		$kbrett		= $model->getCLMKBrett();
-		$this->assignRef('kbrett'  , $kbrett);
+		$this->kbrett = $kbrett;
 
-	$html	= JRequest::getInt('html','1');
-	if($html !="1"){
-		$document =JFactory::getDocument();
-		$document->setMimeEncoding('text/css');
+		$html	= clm_core::$load->request_string('html','1');
+		if($html !="1"){
+			$document =JFactory::getDocument();
+			$document->setMimeEncoding('text/css');
 		}
 
 		parent::display($tpl);

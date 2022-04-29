@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team. All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -18,7 +18,7 @@ class CLMViewTabelle extends JViewLegacy
 	{
 		$model	  = $this->getModel();
   		$liga     = $model->getCLMLiga();
-		$this->assignRef('liga'  , $liga);
+		$this->liga = $liga;
 
 		if ($liga[0]->runden_modus == 4 OR $liga[0]->runden_modus == 5) {
 			$app =JFactory::getApplication();
@@ -27,20 +27,16 @@ class CLMViewTabelle extends JViewLegacy
 				
 		$model	  = $this->getModel();
   		$spielfrei     = $model->getCLMSpielfrei();
-		$this->assignRef('spielfrei'  , $spielfrei);
+		$this->spielfrei = $spielfrei;
 
 		$model	  = $this->getModel();
   		$punkte     = $model->getCLMPunkte();
-		$this->assignRef('punkte'  , $punkte);
+		$this->punkte = $punkte;
 
-/*		$model	  = $this->getModel();
-		$dwzschnitt     = $model->getCLMDWZSchnitt();
-		$this->assignRef('dwzschnitt'  , $dwzschnitt);
-*/
-	$html	= JRequest::getInt('html','1');
-	if($html !="1"){
-		$document =JFactory::getDocument();
-		$document->setMimeEncoding('text/css');
+		$html	= clm_core::$load->request_string('html','1');
+		if($html !="1"){
+			$document =JFactory::getDocument();
+			$document->setMimeEncoding('text/css');
 		}
 
 		parent::display($tpl);
