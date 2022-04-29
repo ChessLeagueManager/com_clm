@@ -319,9 +319,13 @@
 		// und Anlegen einer Matrix der gesetzten Matches (Mannschaft)
 		$maxround = 0;
 		$matrix = array();
-		foreach ($matchData as $key => $value) {
+		if ($p_runde != 0) {
+			$maxround = ((($p_dg - 1) * $runden) + $p_runde);
+		} else {
+			foreach ($matchData as $key => $value) {
 			if ($value->ergebnis < 3 AND ((($value->dg - 1) * $runden) + $value->runde) > $maxround) $maxround = (($value->dg - 1) * $runden) + $value->runde;
 			$matrix[$value->tln_nr][$value->dg][$value->runde] = 1;
+			}
 		}
 			
 		// für Teams, die nicht gesetzt wurden, werden spielfreie Pseudo-Paarungen angelegt (für FIDE-Ranglistenkorrektur)
