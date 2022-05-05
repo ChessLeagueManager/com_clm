@@ -53,6 +53,10 @@ class CLMViewStatistik extends JViewLegacy
 		$this->brett = $brett;
 
 		$model		= $this->getModel();
+		$gbrett		= $model->getCLMGBrett();
+		$this->gbrett = $gbrett;
+
+		$model		= $this->getModel();
 		$rbrett		= $model->getCLMRBrett();
 		$this->rbrett = $rbrett;
 
