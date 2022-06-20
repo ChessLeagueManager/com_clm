@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -16,6 +16,7 @@ class CLMViewPGNImport extends JViewLegacy {
 
 	function display($tpl = null) { 
 
+		$p_liga = clm_core::$load->request_string('liga', '');
 		//Daten vom Model
 		$state		= $this->get( 'state' );
 		$saisons	= $this->get( 'saisons' );
@@ -43,13 +44,14 @@ class CLMViewPGNImport extends JViewLegacy {
 		foreach($ligen as $liga) {
 			$options_ligen[] = JHtml::_('select.option', 't.'.$liga->id, $liga->name);
 		}
-		$options_ligen[] = JHtml::_('select.option', '', '----------');
+		$options_ligen[] = JHtml::_('select.option', '99', '----------');
 		foreach($turniere as $turnier) {
 			$options_ligen[] = JHtml::_('select.option', 's.'.$turnier->id, $turnier->name);
 		}
 		
 		$lists['saisons']	= JHtml::_('select.genericlist', $options_saisons, 'filter_saison', 'class="inputbox" onchange="this.form.submit();"', 'value', 'text', $state->get('filter_saison') );
-		$lists['ligen']	= JHtml::_('select.genericlist', $options_ligen, 'liga', 'class="inputbox"', 'value', 'text', 0 );
+//		$lists['ligen']	= JHtml::_('select.genericlist', $options_ligen, 'liga', 'class="inputbox"', 'value', 'text', 0 );
+		$lists['ligen']	= JHtml::_('select.genericlist', $options_ligen, 'liga', 'class="inputbox"', 'value', 'text', $p_liga );
 		
 		//Daten an Template
 		$this->lists = $lists;
