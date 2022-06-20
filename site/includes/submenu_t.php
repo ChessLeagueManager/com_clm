@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,18 +10,21 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
 // Konfigurationsparameter auslesen
 $config = clm_core::$db->config();
 $fe_submenu_t = $config->fe_submenu_t;
-?>
+$test_button = $config->test_button;
+$mobile = clm_core::$load->is_mobile();
 
-<?php // Prüfen, ob active
+// Prüfen, ob active
 if ($fe_submenu_t == 1) {
 	$document = JFactory::getDocument();
 	if ($config->template) {
 		$document->addStyleSheet('components/com_clm/includes/submenu.css', 'text/css');
 	}
 	$itemid = clm_core::$load->request_string('Itemid');
+	// Datenbank einlesen
 	include (JPATH_COMPONENT . DS . 'models' . DS . 'submenu_t.php');
 	require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'submenu_function.php');
 	$document->addScript('components/com_clm/javascript/submenu.js');
@@ -121,61 +124,123 @@ if ($fe_submenu_t == 1) {
 	}
 	// Teilnehmerliste
 	$array[3][0] = JText::_('TOURNAMENT_PARTICIPANTLIST');
-	if (clm_core::$load->request_string('view', 0) != "turnier_teilnehmer") {
-		$array[3][1] = 0;
+	if (!$mobile) {
+		if (clm_core::$load->request_string('view', 0) != "turnier_teilnehmer") {
+			$array[3][1] = 0;
+		} else {
+			$array[3][1] = 1;
+		}
+		$array[3][2][] = array("option", "com_clm");
+		$array[3][2][] = array("view", "turnier_teilnehmer");
+		$array[3][2][] = array("turnier", $this->turnier->id);
+		if ($itemid <> '') {
+			$array[3][2][] = array("Itemid", $itemid);
+		}
 	} else {
-		$array[3][1] = 1;
+		$array[3][1] = 2;
+		$array[3][2] = array();
 	}
-	$array[3][2][] = array("option", "com_clm");
-	$array[3][2][] = array("view", "turnier_teilnehmer");
-	$array[3][2][] = array("turnier", $this->turnier->id);
-	if ($itemid <> '') {
-		$array[3][2][] = array("Itemid", $itemid);
-	}
-        $array[3][3]=array();
-		$array[3][3][0][0] = JText::_('TOURNAMENT_DWZ');
-		if (clm_core::$load->request_string('view', 0) != "turnier_dwz") {
+    $array[3][3]=array();
+	
+	if ($mobile) {
+		$array[3][3][0][0] = JText::_('TOURNAMENT_PARTICIPANTLIST');
+		if (clm_core::$load->request_string('view', 0) != "turnier_teilnehmer") {
 			$array[3][3][0][1] = 0;
 		} else {
 			$array[3][3][0][1] = 1;
 		}
 		$array[3][3][0][2][] = array("option", "com_clm");
-		$array[3][3][0][2][] = array("view", "turnier_dwz");
+		$array[3][3][0][2][] = array("view", "turnier_teilnehmer");
 		$array[3][3][0][2][] = array("turnier", $this->turnier->id);
 		if ($itemid <> '') {
 			$array[3][3][0][2][] = array("Itemid", $itemid);
 		}
+	}	
+		
+	$array[3][3][0][0] = JText::_('TOURNAMENT_DWZ');
+	if (clm_core::$load->request_string('view', 0) != "turnier_dwz") {
+		$array[3][3][0][1] = 0;
+	} else {
+		$array[3][3][0][1] = 1;
+	}
+	$array[3][3][0][2][] = array("option", "com_clm");
+	$array[3][3][0][2][] = array("view", "turnier_dwz");
+	$array[3][3][0][2][] = array("turnier", $this->turnier->id);
+	if ($itemid <> '') {
+		$array[3][3][0][2][] = array("Itemid", $itemid);
+	}
 
 	// Paarungsliste
 	$array[4][0] = JText::_('SUBMENU_PAAR');
-	if (clm_core::$load->request_string('view', 0) != "turnier_paarungsliste" || clm_core::$load->request_string('spRang', -1) != - 1) {
-		$array[4][1] = 0;
-	} else {
-		$array[4][1] = 1;
-	}
-	$array[4][2][] = array("option", "com_clm");
-	$array[4][2][] = array("view", "turnier_paarungsliste");
-	$array[4][2][] = array("turnier", $this->turnier->id);
-	if ($itemid <> '') {
-		$array[4][2][] = array("Itemid", $itemid);
-	}
-        $array[4][3]=array();
-	for ($i = 0;$i < count($sub_rounds);$i++) {
-		$array[4][3][$i][0] = $sub_rounds[$i]->name;
-		if (clm_core::$load->request_string('view', 0) != "turnier_runde" || clm_core::$load->request_string('runde', -1) != $sub_rounds[$i]->nr || clm_core::$load->request_string('dg', -1) != $sub_rounds[$i]->dg) {
-			$array[4][3][$i][1] = 0;
+	if (!$mobile) {
+		if (clm_core::$load->request_string('view', 0) != "turnier_paarungsliste" || clm_core::$load->request_string('spRang', -1) != - 1) {
+			$array[4][1] = 0;
 		} else {
-			$array[4][3][$i][1] = 1;
+			$array[4][1] = 1;
 		}
-		$array[4][3][$i][2][] = array("option", "com_clm");
-		$array[4][3][$i][2][] = array("view", "turnier_runde");
-		$array[4][3][$i][2][] = array("turnier", $this->turnier->id);
-		$array[4][3][$i][2][] = array("runde", $sub_rounds[$i]->nr);
-		$array[4][3][$i][2][] = array("dg", $sub_rounds[$i]->dg);
+		$array[4][2][] = array("option", "com_clm");
+		$array[4][2][] = array("view", "turnier_paarungsliste");
+		$array[4][2][] = array("turnier", $this->turnier->id);
 		if ($itemid <> '') {
-			$array[4][3][$i][2][] = array("Itemid", $itemid);
+			$array[4][2][] = array("Itemid", $itemid);
 		}
+	} else {
+		$array[4][1] = 2;
+		$array[4][2] = array();
+	}
+	$array[4][3]=array();
+
+	if ($mobile) {
+		$array[4][3][0][0] = JText::_('SUBMENU_PAAR');
+		if (clm_core::$load->request_string('view', -1) != "turnier_runde" || clm_core::$load->request_string('runde', -1) != $sub_rounds[$i]->nr || clm_core::$load->request_string('dg', -1) != $sub_rounds[$i]->dg) {
+			$array[4][3][0][1] = 0;
+		} else {
+			$array[4][3][0][1] = 1;
+		}
+		$array[4][3][0][2][] = array("option", "com_clm");
+		$array[4][3][0][2][] = array("view", "turnier_runde");
+		$array[4][3][0][2][] = array("turnier", $this->turnier->id);
+		$array[4][3][0][2][] = array("runde", $sub_rounds[$i]->nr);
+		$array[4][3][0][2][] = array("dg", $sub_rounds[$i]->dg);
+		if ($itemid <> '') {
+			$array[4][3][0][2][] = array("Itemid", $itemid);
+		}
+	}
+	
+	// Alle Runden
+	if(count($sub_rounds)>0) {		
+		for ($i = 0;$i < count($sub_rounds);$i++) {
+			$array[4][3][$i][0] = $sub_rounds[$i]->name;
+			if (clm_core::$load->request_string('view', 0) != "turnier_runde" || clm_core::$load->request_string('runde', -1) != $sub_rounds[$i]->nr || clm_core::$load->request_string('dg', -1) != $sub_rounds[$i]->dg) {
+				$array[4][3][$i][1] = 0;
+			} else {
+			$array[4][3][$i][1] = 1;
+			}
+			$array[4][3][$i][2][] = array("option", "com_clm");
+			$array[4][3][$i][2][] = array("view", "turnier_runde");
+			$array[4][3][$i][2][] = array("turnier", $this->turnier->id);
+			$array[4][3][$i][2][] = array("runde", $sub_rounds[$i]->nr);
+			$array[4][3][$i][2][] = array("dg", $sub_rounds[$i]->dg);
+			if ($itemid <> '') {
+				$array[4][3][$i][2][] = array("Itemid", $itemid);
+			}
+		}
+	} else {
+		$array[4][3] = array();
 	}
 	echo clm_submenu($array);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
  

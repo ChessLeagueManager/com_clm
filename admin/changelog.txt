@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.9.8 - [xx-xx-2022] - - - - - - - - - - - - - - - - - - - -
+^ SubMenü Turniere: Anpassung Touchscreen
+
 - - - - - 3.9.7 - [30-04-2022] - - - - - - - - - - - - - - - - - - - -
 # Einzelturniere: Feinwertung Buchholzsumme bei Aussetzen
 # SWT-Import: Streichwertung bei Teamwettbewerben
