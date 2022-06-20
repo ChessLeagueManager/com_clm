@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -149,4 +149,5 @@ $config["trial_and_error"]=array(128,9,0,array(0,1));
 $config["dewis_import_delay"]=array(129,0,250000,null);
 $config["maps_resolver"]=array(130,9,2,array(1,2));
 $config["maps_zoom"]=array(131,9,15,array(11,12,13,14,15,16));
+$config["ikommentarfeld"]=array(132,9,0,array(0,1,2));
 ?>

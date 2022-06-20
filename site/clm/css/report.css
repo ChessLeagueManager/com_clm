@@ -1,3 +1,9 @@
+/*
+ * @ CLM Extern Component
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 /********************/
 /****** report ******/
 /********************/
@@ -107,7 +113,7 @@
 
 /* Notiz */
 
-#clm .clm .clm_view_report .outer_comment {
+#clm .clm .clm_view_report .outer_comment, #clm .clm .clm_view_report .outer_icomment  {
 	width:100%;
 	margin-top:20px;
 	border: 1px solid #cccccc;
@@ -116,18 +122,18 @@
 	text-align:-webkit-center;
 }
 
-#clm .clm .clm_view_report .outer_comment .info {
+#clm .clm .clm_view_report .outer_comment .info, #clm .clm .clm_view_report .outer_icomment .info  {
 	font-size: 110%;
 	font-weight:bold;
 	padding:5px;
 	word-wrap: break-word;
 }
 
-#clm .clm .clm_view_report .outer_comment .text {
+#clm .clm .clm_view_report .outer_comment .text, #clm .clm .clm_view_report .outer_icomment .text  {
 	border: 1px solid #cccccc;
 }
 
-#clm .clm .clm_view_report .outer_comment .text textarea {
+#clm .clm .clm_view_report .outer_comment .text textarea, #clm .clm .clm_view_report .outer_icomment .text textarea  {
 	width:100%;
 	height:50px;
 	padding:0;

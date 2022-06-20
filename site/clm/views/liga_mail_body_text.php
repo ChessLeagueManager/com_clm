@@ -1,5 +1,11 @@
 <?php
-function clm_view_liga_mail_body_text($player, $result, $dateNow, $dateGame, $hname, $gname, $hmf, $gmf, $comment, $ko, $sender, $liga, $gemeldet) {
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
+function clm_view_liga_mail_body_text($player, $result, $dateNow, $dateGame, $hname, $gname, $hmf, $gmf, $comment, $icomment, $ko, $sender, $liga, $gemeldet) {
 	$lang = clm_core::$lang->liga_mail_body;
 	$header = $lang->raw("header1")."\n".$lang->raw("header11");
 	$header.= " " . $hname . " - " . $gname . "\n";
@@ -60,7 +66,9 @@ function clm_view_liga_mail_body_text($player, $result, $dateNow, $dateGame, $hn
 	if ($comment != "") { 
 		echo $lang->raw("comment"). " " .$comment."\n\n"; ;
 	}
-	
+	if ($icomment != "") { 
+		echo $lang->raw("icomment"). " " .$icomment."\n\n"; ;
+	}
 	if ($ko != - 1) { 
 		echo $lang->raw("ko") . " " . $ko."\n\n"; ; 
 	}

@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -408,7 +407,7 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 <?php // Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
 	$pcomment = $config->kommentarfeld;
-	if (($pcomment == 1) OR ($pcomment == 2 AND ($runde[0]->runden_modus == 4 OR $runde[0]->runden_modus == 5))) {    // Kommentarfeld ?>			
+//	if (($pcomment == 1) OR ($pcomment == 2 AND ($runde[0]->runden_modus == 4 OR $runde[0]->runden_modus == 5))) {    // Kommentarfeld ?>			
 	<div class="width-40 fltrt">
 	  <fieldset class="adminform">
 		<legend><?php echo JText::_( 'RESULTS_COMMENT_LEGEND' ); ?></legend>
@@ -424,8 +423,25 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 		</table>
 	  </fieldset>	
 	</div>		
-<?php } ?> 		
-	
+<?php // }  		
+	$picomment = $config->ikommentarfeld;
+//	if (($picomment == 1) OR ($picomment == 2 AND ($runde[0]->runden_modus == 4 OR $runde[0]->runden_modus == 5))) {    // int. Kommentarfeld ?>			
+	<div class="width-40 fltrt">
+	  <fieldset class="adminform">
+		<legend><?php echo JText::_( 'RESULTS_ICOMMENT_LEGEND' ); ?></legend>
+		<table class="admintable">
+		<tr>
+			<td class="key" nowrap="nowrap">
+			<label for="icomment"><?php echo JText::_( 'RESULTS_COMMENT' ); ?></label>
+			</td>
+			<td class="inputbox" nowrap="nowrap" width="100%" valign="top">
+			<textarea name="icomment" id="icomment" cols="40" rows="3" style="width:90%"><?php echo str_replace('&','&amp;',$runde[0]->icomment);?></textarea>
+			</td>
+		</tr>
+		</table>
+	  </fieldset>	
+	</div>		
+<?php // } ?>	
 		<div class="width-40 fltrt">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'RESULTS_DETAILS_DETAILS' ); ?></legend>
@@ -672,6 +688,24 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 			</td>
 			<td class="inputbox" nowrap="nowrap" width="100%" valign="top">
 			<textarea name="comment" id="comment" cols="40" rows="3" style="width:90%"><?php echo str_replace('&','&amp;',$runde[0]->comment);?></textarea>
+			</td>
+		</tr>
+		</table>
+	  </fieldset>	
+	</div>		
+<?php }  		
+	$picomment = $config->ikommentarfeld;
+	if (($picomment == 1) OR ($picomment == 2 AND ($runde[0]->runden_modus == 4 OR $runde[0]->runden_modus == 5))) {    // internes Kommentarfeld ?>			
+	<div class="width-40 fltrt">
+	  <fieldset class="adminform">
+		<legend><?php echo JText::_( 'RESULTS_ICOMMENT_LEGEND' ); ?></legend>
+		<table class="admintable">
+		<tr>
+			<td class="key" nowrap="nowrap">
+			<label for="icomment"><?php echo JText::_( 'RESULTS_COMMENT' ); ?></label>
+			</td>
+			<td class="inputbox" nowrap="nowrap" width="100%" valign="top">
+			<textarea name="icomment" id="icomment" cols="40" rows="3" style="width:90%"><?php echo str_replace('&','&amp;',$runde[0]->icomment);?></textarea>
 			</td>
 		</tr>
 		</table>

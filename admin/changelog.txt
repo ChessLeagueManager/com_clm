@@ -18,6 +18,7 @@ $ -> Language fix or change
 # SWT-Import: Marker Runden angelegt
 # Einzelturniere: Turnier-Modus bereinigen
 + Ligen/MTurniere: verschiedene Annullierungsverfahren
++ Ergebnis-Meldung: zusätzliches Feld für interne Kommentare
 
 - - - - - 3.9.7 - [30-04-2022] - - - - - - - - - - - - - - - - - - - -
 # Einzelturniere: Feinwertung Buchholzsumme bei Aussetzen

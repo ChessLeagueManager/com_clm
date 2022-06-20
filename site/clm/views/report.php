@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ CLM Extern Component
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 function clm_view_report($out) {
 	clm_core::$load->load_css("report");
 	clm_core::$load->load_css("buttons");
@@ -104,6 +110,16 @@ function clm_view_report($out) {
 			</div>
 			<div class="text">
 				<textarea class="comment" ><?php echo str_replace('&','&amp;',$paar[0]->comment);?></textarea>
+			</div>
+	</div>
+<?php } 
+	if (($config->ikommentarfeld == 1) OR ($config->ikommentarfeld == 2 AND ($liga[0]->runden_modus == 4 OR $liga[0]->runden_modus == 5))) {    // internes Kommentarfeld ?>			
+	<div class="outer_icomment">
+			<div class="info">
+				<?php echo $lang->inotice; ?>
+			</div>
+			<div class="text">
+				<textarea class="icomment" ><?php echo str_replace('&','&amp;',$paar[0]->icomment);?></textarea>
 			</div>
 	</div>
 <?php } 

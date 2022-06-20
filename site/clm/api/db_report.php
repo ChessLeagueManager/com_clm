@@ -114,7 +114,8 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 			." AND a.runde = ".$runde
 			." AND a.paar = ".$paar
 			." AND a.dg = ".$dg
-			." AND a.heim = 1  ";		
+			." AND a.heim = 1  "		
+			." ORDER BY a.id"; 
 	$someData = clm_core::$db->loadObjectList($someData);
 
 	// Kein Ergebnis -> Daten Inkonsistent oder falsche Eingabe

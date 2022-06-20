@@ -1,5 +1,11 @@
 <?php
-function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hname, $gname, $hmf, $gmf, $comment, $ko, $sender, $liga, $gemeldet, $out, $recipient) {
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
+function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hname, $gname, $hmf, $gmf, $comment, $icomment, $ko, $sender, $liga, $gemeldet, $out, $recipient) {
 	$lang = clm_core::$lang->liga_mail_body;
 	$dateNow = clm_core::$load->date_to_string($dateNow,true);
 	if ($dateGame != - 1) {
@@ -175,6 +181,26 @@ function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hn
 			<td width="80" valign="top"><strong>'.$lang->raw("comment").'</strong></td>
 			<td  width="420" nowrap="nowrap" valign="top" size="1">
 				<textarea cols="30" rows="2" style="width:90%">'.str_replace('&','&amp;',$comment).'</textarea>
+			</td>
+  		</tr>
+	  ';
+/*      $body_html .= 	'
+		<tr>
+			<td width="80" valign="top"><strong>'.$lang->raw("comment").'</strong></td>
+			<td  width="420" nowrap="nowrap" valign="top" size="1">
+				<textarea cols="30" rows="2" style="width:90%">'.utf8_decode($comment).'</textarea>
+			</td>
+  		</tr>
+	  ';
+*/	}
+	if ($icomment != "") { 
+		$icomment = preg_replace('/\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s/','<br>',$icomment);
+
+      $body_html .= 	'
+		<tr>
+			<td width="80" valign="top"><strong>'.$lang->raw("icomment").'</strong></td>
+			<td  width="420" nowrap="nowrap" valign="top" size="1">
+				<textarea cols="30" rows="2" style="width:90%">'.str_replace('&','&amp;',$icomment).'</textarea>
 			</td>
   		</tr>
 	  ';

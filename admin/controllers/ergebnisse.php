@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -171,7 +171,6 @@ function display($cachable = false, $urlparams = array())
 	}
 	//echo "<br>erg: "; var_dump($rows);  die('  section');
 	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
-//		JError::raiseWarning( 500, JText::_( 'LIGEN_STAFFEL_TOTAL' ) );
 		$mainframe->enqueueMessage( JText::_('LIGEN_STAFFEL_TOTAL'),'warning' );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
@@ -179,7 +178,6 @@ function display($cachable = false, $urlparams = array())
 	else $where_sl = ' AND a.sl = '.clm_core::$access->getJid();
 	
 	if($rows[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
-//		JError::raiseWarning( 500, JText::_( 'LIGEN_STAFFEL' ) );
 		$mainframe->enqueueMessage( JText::_('LIGEN_STAFFEL'),'warning' );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
@@ -243,15 +241,12 @@ function edit()
 
 	// Ergebnisse einer unveröffentlichten Saison nicht bearbeiten
 	if ($sid->published =="0") {
-//		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_SAISON' ));
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SAISON'),'warning' );
-//		JError::raiseNotice( 6000,  JText::_( 'ERGEBNISSE_SAISON_WARTEN' ));
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SAISON_WARTEN'),'notice' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 	// spielfreie Runde  kann nicht gemeldet / bearbeitet werden
 	if ($row->gemeldet == "1") {
-//		JError::raiseNotice( 6000,  JText::_( 'ERGEBNISSE_SPIELFREIE' ));
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SPIELFREIE'),'notice' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
@@ -261,7 +256,6 @@ function edit()
 	$saison		=JTable::getInstance( 'saisons', 'TableCLM' );
 	$saison->load( $row->sid );
 	if ($saison->archiv == "1") { //  AND clm_core::$access->getType() !== 'admin') {
-//		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_ARCHIV' ));
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_ARCHIV'),'warning' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
@@ -269,7 +263,7 @@ function edit()
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
 
-	$data = "SELECT a.gemeldet,a.editor, a.id,a.sid, a.lid, a.runde, a.dg, a.tln_nr, a.ko_decision, a.comment," //mtmt
+	$data = "SELECT a.gemeldet,a.editor, a.id,a.sid, a.lid, a.runde, a.dg, a.tln_nr, a.ko_decision, a.comment, a.icomment," //mtmt
 		." a.gegner,a.paar, a.dwz_zeit, a.dwz_editor, w.name as dwz_editor, "
 		." a.zeit, a.edit_zeit, u.name as melder, v.name as name_editor, "
 		." m.name as hname,m.zps as hzps,m.man_nr as hmnr,m.sg_zps as sgh_zps, "
@@ -297,14 +291,11 @@ function edit()
 		$csection = 'mturniere';
 	}
 	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
-//		JError::raiseWarning( 500, JText::_( 'LIGEN_STAFFEL_TOTAL' ) );
 		$mainframe->enqueueMessage( JText::_('LIGEN_STAFFEL_TOTAL'),'warning' );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	} 
 	if ($runde[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
-	//if ( $runde[0]->sl !== clm_core::$access->getJid() AND clm_core::$access->getType() !== 'admin') {
-//		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_IHRER' ) );
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_IHRER'),'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
@@ -312,9 +303,7 @@ function edit()
 	$row->checkout( clm_core::$access->getJid() );
 
 	if ( $runde[0]->hmnr > ($runde[0]->lid)*10 OR $runde[0]->gmnr > ($runde[0]->lid)*10) {
-//		JError::raiseNotice( 6000, JText::_( 'ERGEBNISSE_MANNSCHAFTNUMMER' ) );
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_MANNSCHAFTNUMMER'),'notice' );
-//		JError::raiseNotice( 6000, JText::_( 'ERGEBNISSE_MN_HEIM').' '.$runde[0]->hmnr.JText::_('ERGEBNISSE_MN_GAST').' '.$runde[0]->gmnr.' !' );
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_MN_HEIM').' '.$runde[0]->hmnr.JText::_('ERGEBNISSE_MN_GAST').' '.$runde[0]->gmnr.' !','notice' );
 	}
 	
@@ -400,7 +389,6 @@ function edit()
 		$remis 		= $liga[0]->remis;
 		$nieder		= $liga[0]->nieder;
 		$antritt	= $liga[0]->antritt;
-////
 ////
 
 	// Ergebnistexte nach Modus setzen
@@ -509,10 +497,8 @@ function remove()
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
 	$user 		=JFactory::getUser();
-//	JArrayHelper::toInteger($cid);
 
 	if (count($cid) < 1) {
-//		JError::raiseWarning(500, JText::_( 'ERGEBNISSE_SELECT', true ) );
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SELECT'),'warning' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
@@ -536,18 +522,15 @@ function remove()
 		$csection = 'mturniere';
 	}
 	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
-//		JError::raiseWarning( 500, JText::_( 'LIGEN_STAFFEL_TOTAL' ) );
 		$mainframe->enqueueMessage( JText::_('LIGEN_STAFFEL_TOTAL'),'warning' );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	} 
 	if ($data[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
-	//if ( $data[0]->sl !== clm_core::$access->getJid() AND clm_core::$access->getType() !== 'admin') {
-//		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_LOESCH' ) );
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_LOESCH'),'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
-					}
+	}
 
 		// Für Heimmannschaft updaten
 		$query	=" UPDATE #__clm_rnd_man"
@@ -561,6 +544,7 @@ function remove()
 			." , manpunkte = NULL"
 			." , ko_decision = 0"          //mtmt
 			." , comment = ''"          //mtmt
+			." , icomment = ''"          //mtmt
 			." WHERE sid = ".$data[0]->sid
 			." AND lid = ".$data[0]->lid
 			." AND runde = ".$data[0]->runde
@@ -582,6 +566,7 @@ function remove()
 			." , manpunkte = NULL"
 			." , ko_decision = 0"          //mtmt
 			." , comment = ''"          //mtmt
+			." , icomment = ''"          //mtmt
 			." WHERE sid = ".$data[0]->sid
 			." AND lid = ".$data[0]->lid
 			." AND runde = ".$data[0]->runde
@@ -658,6 +643,7 @@ function save()
 	$gzps		= clm_core::$load->request_string( 'gzps');
 	$ko_decision = clm_core::$load->request_string( 'ko_decision');
 	$comment = addslashes(clm_core::$load->request_string( 'comment'));
+	$icomment = addslashes(clm_core::$load->request_string( 'icomment'));
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
@@ -973,6 +959,7 @@ function save()
 		." , manpunkte = ".$hman_punkte
 		." , wertpunkte = ".$hwpunkte
 		." , comment = '".$comment."'"
+		." , icomment = '".$icomment."'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd
@@ -993,6 +980,7 @@ function save()
 		." , manpunkte = ".$gman_punkte
 		." , wertpunkte = ".$gwpunkte
 		." , comment = '".$comment."'"
+		." , icomment = '".$icomment."'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd
@@ -1236,7 +1224,6 @@ function save()
 	}
 	// Nachricht absetzen als Hinweis das Ergebnis nicht geändert wurde
 	else {
-//		JError::raiseNotice( 6000, JText::_( 'ERGEBNISSE_ME_WERTUNG') );
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_ME_WERTUNG'),'notice' );
 	}
 
@@ -1328,6 +1315,7 @@ function save()
 			}
 		$query = $query
 		." , comment = '".$comment."'"
+		." , icomment = '".$icomment."'"
 		." , tln_nr = ".$tln_nr
 		." , gegner = ".$gegner
 		." WHERE sid = ".$sid
@@ -1353,6 +1341,7 @@ function save()
 			}
 		$query = $query
 		." , comment = '".$comment."'"
+		." , icomment = '".$icomment."'"
 		." , tln_nr = ".$gegner
 		." , gegner = ".$tln_nr
 		." WHERE sid = ".$sid
@@ -1403,6 +1392,7 @@ function save()
 		$query	= "UPDATE #__clm_rnd_man"
 			." SET ko_decision = ".$ko_decision
 			." , comment = '".$comment."'"
+			." , icomment = '".$icomment."'"
 			." WHERE sid = ".$sid
 			." AND lid = ".$lid
 			." AND runde = ".$rnd
@@ -1416,6 +1406,7 @@ function save()
 		$query	= "UPDATE #__clm_rnd_man"
 			." SET ko_decision = ".$ko_decision
 			." , comment = '".$comment."'"
+			." , icomment = '".$icomment."'"
 			." WHERE sid = ".$sid
 			." AND lid = ".$lid
 			." AND runde = ".$rnd
@@ -1491,10 +1482,8 @@ function wertung()
 	$option 	= clm_core::$load->request_string( 'option' );
 	$section 	= clm_core::$load->request_string( 'section' );
 	$cid 		= clm_core::$load->request_array_int('cid');
-//	JArrayHelper::toInteger($cid);
 
 	if (count($cid) < 1) {
-//		JError::raiseWarning(500, JText::_( 'ERGEBNISSE_SELECT', true ) );
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SELECT'),'warning' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
@@ -1508,21 +1497,18 @@ function wertung()
 
 	// Ergebnisse einer unveröffentlichten Saison nicht bearbeiten
 	if ($sid->published =="0") {
-//		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_SAISON_NO' ));
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SAISON_NO'),'warning' );
-//		JError::raiseNotice( 6000,  JText::_( 'ERGEBNISSE_SAISON_WARTEN' ));
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SAISON_WARTEN'),'notice' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
 	// spielfreie Runde  kann nicht gemeldet / bearbeitet werden
 	if ($row->gemeldet == "1") {
-//		JError::raiseNotice( 6000,  JText::_( 'ERGEBNISSE_TW_RUNDEN' ));
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_TW_RUNDEN'),'notice' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
-	$data = "SELECT a.gemeldet,a.editor, a.id,a.sid, a.lid, a.runde, a.dg, a.tln_nr, a.ko_decision, a.comment, "
+	$data = "SELECT a.gemeldet,a.editor, a.id,a.sid, a.lid, a.runde, a.dg, a.tln_nr, a.ko_decision, a.comment, a.icomment, "
 		." a.gegner,a.paar, a.dwz_zeit, a.dwz_editor as dwz_edit, w.name as dwz_editor, "
 		." a.zeit, a.edit_zeit, u.name as melder, v.name as name_editor, "
 		." m.name as hname,m.zps as hzps,m.man_nr as hmnr, "
@@ -1541,7 +1527,6 @@ function wertung()
 	$runde		= $db->loadObjectList();
 	// Prüfen ob Ergebnis bereits gemeldet wurde
 	if ($runde[0]->gemeldet < 1) {
-//		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_DWZ' ) );
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_DWZ'),'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
@@ -1558,14 +1543,11 @@ function wertung()
 	}
 
 	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
-//		JError::raiseWarning( 500, JText::_( 'LIGEN_STAFFEL_TOTAL' ) );
 		$mainframe->enqueueMessage( JText::_('LIGEN_STAFFEL_TOTAL'),'warning' );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	} 
 	if ($runde[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
-	//if ( $runde[0]->sl !== clm_core::$access->getJid() AND clm_core::$access->getType() !== 'admin') {
-//		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_DWZ_BEARBEIT' ) );
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_DWZ_BEARBEIT'),'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
@@ -1907,21 +1889,16 @@ function save_wertung()
 	else $limit = $stamm;
 	$err = 0;
 	if($w_erg + $s_erg > $limit ) {
-//		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_ME_HOCH' ) );
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_ME_HOCH'),'warning' );
 		$err=1;
 	}
-	//if($w_erg =="-1" OR $s_erg =="-1" OR $err =="1") {	//neu: immer
 	if($w_erg =="-1" AND $s_erg !="-1" ) {
-//		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_GEAENDERT_HM' ) );
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_GEAENDERT_HM'),'warning' );
 	}
 	if($w_erg !="-1" AND $s_erg =="-1" ) {
-//		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_GEAENDERT_GM' ) );
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_GEAENDERT_GM'),'warning' );
 	}
 	if($count_einzel > 0) {
-//		JError::raiseNotice( 6000,  JText::_( 'ERGEBNISSE_EE' ));
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_EE'),'notice' );
 	}
 	// Brettpunkte Heim summieren
@@ -2022,7 +1999,6 @@ function save_wertung()
 	$query	= "UPDATE #__clm_rnd_man";
 		// Wenn nichts geändert wurde (keine Einzelergebnis, keine Mannschaftswertung)
 		if($w_erg =="-1" AND $s_erg =="-1" AND $ww_erg =="-1" AND $sw_erg =="-1" AND $count_einzel =="0") {
-//			JError::raiseNotice( 6000,  JText::_( 'ERGEBNISSE_TW_GELOESCHT' ));
 			$mainframe->enqueueMessage( JText::_('ERGEBNISSE_TW_GELOESCHT'),'notice' );
 			$query = $query
 			." SET dwz_editor = NULL"
@@ -2037,6 +2013,7 @@ function save_wertung()
 		." , manpunkte = '".$hman_punkte."'"
 		." , wertpunkte = '".$hwpunkte."'"
 		." , comment = '".$comment."'"
+		." , icomment = '".$icomment."'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd
@@ -2062,6 +2039,7 @@ function save_wertung()
 		." , manpunkte = '".$gman_punkte."'"
 		." , wertpunkte = '".$gwpunkte."'"
 		." , comment = '".$comment."'"
+		." , icomment = '".$icomment."'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd
@@ -2119,6 +2097,7 @@ function save_wertung()
 		$query	= "UPDATE #__clm_rnd_man"
 			." SET ko_decision = ".$ko_decision
 			." , comment = '".$comment."'"
+			." , icomment = '".$icomment."'"
 			." WHERE sid = ".$sid
 			." AND lid = ".$lid
 			." AND runde = ".$rnd
@@ -2132,6 +2111,7 @@ function save_wertung()
 		$query	= "UPDATE #__clm_rnd_man"
 			." SET ko_decision = ".$ko_decision
 			." , comment = '".$comment."'"
+			." , icomment = '".$icomment."'"
 			." WHERE sid = ".$sid
 			." AND lid = ".$lid
 			." AND runde = ".$rnd
@@ -2211,14 +2191,11 @@ function delete_wertung()
 		$csection = 'mturniere';
 	}
 	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
-//		JError::raiseWarning( 500, JText::_( 'LIGEN_STAFFEL_TOTAL' ) );
 		$mainframe->enqueueMessage( JText::_('LIGEN_STAFFEL_TOTAL'),'warning' );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	} 
 	if ($liga_sl->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
-	//if ( $liga_sl->sl !== clm_core::$access->getJid() AND clm_core::$access->getType() !== 'admin') {
-//		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_DWZ_LOESCHEN' ) );
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_DWZ_LOESCHEN'),'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
@@ -2344,6 +2321,7 @@ function delete_wertung()
 		." , manpunkte = '".$hman_punkte."'"
 		." , wertpunkte = '".$hwpunkte."'"
 		." , comment = '".$comment."'"
+		." , icomment = '".$icomment."'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd
@@ -2362,6 +2340,7 @@ function delete_wertung()
 		." , manpunkte = '".$gman_punkte."'"
 		." , wertpunkte = '".$gwpunkte."'"
 		." , comment = '".$comment."'"
+		." , icomment = '".$icomment."'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd
@@ -2463,10 +2442,8 @@ function kampflos($gast)
 	$db 		= JFactory::getDBO();
 	$link		= 'index.php?option='.$option.'&section='.$section;
 	$cid 		= clm_core::$load->request_array_int('cid');
-//	JArrayHelper::toInteger($cid);
  
  if (count($cid) < 1) {
-//		JError::raiseWarning(500, JText::_( 'ERGEBNISSE_SELECT', true ) );
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SELECT'), 'warning' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
@@ -2510,14 +2487,11 @@ function kampflos($gast)
 		$csection = 'mturniere';
 	}
 	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
-//		JError::raiseWarning( 500, JText::_( 'LIGEN_STAFFEL_TOTAL' ) );
 		$mainframe->enqueueMessage( JText::_('LIGEN_STAFFEL_TOTAL'), 'warning' );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	} 
 	if ($liga_sl->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
-	//if ( $liga_sl->sl !== clm_core::$access->getJid() AND clm_core::$access->getType() !== 'admin') {
-//		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_LIGEN_ARBEIT' ) );
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_LIGEN_ARBEIT'),'warning' );
 		$mainframe->redirect( $link);
 					}
@@ -2534,7 +2508,6 @@ function kampflos($gast)
 
 	// Wenn "Spielfrei" kampflos gesetzt wurde
 	if ((($data[0]->hzps =="0" AND ($gast == "heim" OR $gast=="home")) OR ( $data[0]->gzps =="0" AND ($gast == "gast" OR $gast=="away"))) AND $params['noOrgReference'] == '0') {
-//		JError::raiseWarning( 500, JText::_( 'ERGEBNISSE_SPIELFREI' ) );
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SPIELFREI'),'warning' );
 		$mainframe->redirect( $link);
 					}
@@ -2557,6 +2530,7 @@ function kampflos($gast)
 		." , zeit = '$now'"
 		." , gemeldet = '$meldung'"
 		." , comment = '$comment'"
+		." , icomment = '$icomment'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd
@@ -2576,6 +2550,7 @@ function kampflos($gast)
 		." , zeit = '$now'"
 		." , gemeldet = '$meldung'"
 		." , comment = '$comment'"
+		." , icomment = '$icomment'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd
