@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 function clm_api_view_tournament() {
 	$lang = clm_core::$lang->tournament;
 	$table = new clm_class_table("tournament","db_tournament",15,13);
@@ -42,7 +48,8 @@ function clm_api_view_tournament() {
 
 	$table->add_filter_field("catidAlltime:catidEdition",$category);
 	$table->add_filter_field("sid",$season,clm_core::$access->getSeason());
-	$table->add_filter_field("typ",array("" => $lang->mode0,1 => $lang->mode1,2 => $lang->mode2,3 => $lang->mode3,4 => $lang->mode4,5 => $lang->mode5,6 => $lang->mode6));
+//	$table->add_filter_field("typ",array("" => $lang->mode0,1 => $lang->mode1,2 => $lang->mode2,3 => $lang->mode3,4 => $lang->mode4,5 => $lang->mode5,6 => $lang->mode6));
+	$table->add_filter_field("typ",array("" => $lang->mode0,1 => $lang->mode1,2 => $lang->mode2,3 => $lang->mode3,5 => $lang->mode5,6 => $lang->mode6));
 	$table->add_filter_field("published",array("" => $lang->status0,1 => $lang->status1,0 => $lang->status2));
 
 	$fix= clm_core::$load->load_view("table", $table->result());
