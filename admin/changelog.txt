@@ -20,6 +20,7 @@ $ -> Language fix or change
 + Ligen/MTurniere: verschiedene Annullierungsverfahren
 + Ergebnis-Meldung: zusätzliches Feld für interne Kommentare
 ^ Code-Anpassung php 8 (Nachtrag)
+# Benutzer: Datenpflege durch Nicht-Admin
 
 - - - - - 3.9.7 - [30-04-2022] - - - - - - - - - - - - - - - - - - - -
 # Einzelturniere: Feinwertung Buchholzsumme bei Aussetzen

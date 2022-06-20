@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -62,7 +62,8 @@ function display($cachable = false, $urlparams = array())
 			$where[] = 'a.published = 0';
 		}
 	}
-	if($usertypestring!=""){$where[]=' a.usertype OUT ('.$usertypestring.' ) ';} 
+//	if($usertypestring!=""){$where[]=' a.usertype OUT ('.$usertypestring.' ) ';} 
+	if($usertypestring!=""){$where[]=' !(a.usertype IN ('.$usertypestring.' )) ';} 
 
 	$where 		= ( count( $where ) ? ' WHERE ' . implode( ' AND ', $where ) : '' );
 	if ($filter_order == 'a.id') {
@@ -141,7 +142,8 @@ function display($cachable = false, $urlparams = array())
 
 	// Funktionsliste
 	$sql = 'SELECT usertype, name, kind FROM #__clm_usertype ';
-	if($usertypestring!=""){ $sql.=	' WHERE usertype OUT ('.$usertypestring.' ) '; }
+//	if($usertypestring!=""){ $sql.=	' WHERE usertype OUT ('.$usertypestring.' ) '; }
+	if($usertypestring!=""){ $sql.= ' WHERE !(usertype IN ('.$usertypestring.' )) ';} 
 	$sql.=	' ORDER BY ordering ASC ';
 	$db->setQuery($sql);
 	$utlist = $db->loadObjectList();
@@ -290,7 +292,8 @@ function edit()
 	// Funktionsliste
 	$sql = 'SELECT usertype, name, kind FROM #__clm_usertype ';
 	$sql .= ' WHERE published = 1 ';
-	if($usertypestring!=""){ $sql .= 'AND usertype OUT ('.$usertypestring.' ) '; }
+//	if($usertypestring!=""){ $sql .= 'AND usertype OUT ('.$usertypestring.' ) '; }
+	if($usertypestring!=""){ $sql .= 'AND !(usertype IN ('.$usertypestring.' )) ';} 
 	$sql .= ' ORDER BY ordering ';
 	$db->setQuery($sql);
 	$utlist = $db->loadObjectList();
