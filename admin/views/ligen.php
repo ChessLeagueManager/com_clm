@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -417,7 +417,20 @@ class CLMViewLigen
 		</td><td colspan="2">
 		<input class="inputbox" type="text" name="params[pseudo_dwz]" id="params[pseudo_dwz]" size="4" maxlength="4" value="<?php echo $row->params['pseudo_dwz']; ?>" />
 		</td>
-		<td colspan="3"></td>
+		<td class="paramlist_key">
+			<?php echo JText::_('ANNUL_PROC'); ?>:
+		</td>
+		<td colspan="2" class="paramlist_value">
+			<?php 
+			$options = array();
+			$options[0] = JText::_('ANNUL_PROC_0');
+			$options[1] = JText::_('ANNUL_PROC_1');
+			$optionlist = array();
+			foreach ($options as $key => $val) {
+				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
+			}
+			echo JHtml::_('select.genericlist', $optionlist, 'params[annul_proc]', 'class="inputbox"', 'id', 'name', (isset($row->params['annul_proc']) ? $row->params['annul_proc'] : "0")); ?>
+		</td>
 	</tr>
 	<tr>
 		<td width="20%" nowrap="nowrap">

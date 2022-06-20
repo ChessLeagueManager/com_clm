@@ -17,6 +17,7 @@ $ -> Language fix or change
 # pgn-Import: groﬂe Dateien, Parameterweitergabe
 # SWT-Import: Marker Runden angelegt
 # Einzelturniere: Turnier-Modus bereinigen
++ Ligen/MTurniere: verschiedene Annullierungsverfahren
 
 - - - - - 3.9.7 - [30-04-2022] - - - - - - - - - - - - - - - - - - - -
 # Einzelturniere: Feinwertung Buchholzsumme bei Aussetzen

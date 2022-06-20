@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -1429,6 +1429,11 @@ public static function annull()			// Mannschaft annullieren d.h. Brett- und Wert
 		$mainframe->redirect( $link);
 	}
 
+	// Liga-Parameter auswerten 
+	$tparams = new clm_class_params($rowliga->params);
+	$params_annul_proc = $tparams->get('annul_proc', '0');
+	
+	if ($params_annul_proc == '0') {
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET brettpunkte = 0, manpunkte = 0, bp_sum = NULL, mp_sum = NULL, gemeldet = 1, wertpunkte = 0 "
 		." WHERE sid = ".$row->sid
@@ -1437,7 +1442,28 @@ public static function annull()			// Mannschaft annullieren d.h. Brett- und Wert
 		;
 	$db->setQuery($query);
 	clm_core::$db->query($query);
+	} else {
+	$query	= "UPDATE #__clm_rnd_man"
+		." SET brettpunkte = 0, manpunkte = 0, bp_sum = NULL, mp_sum = NULL, gemeldet = 1, wertpunkte = 0 "
+		." WHERE sid = ".$row->sid
+		." AND lid = ".$row->liga
+		." AND tln_nr = $tlnr "
+		;
+	$db->setQuery($query);
+	clm_core::$db->query($query);
+	
+	$query	= "UPDATE #__clm_rnd_man"
+		." SET brettpunkte = '".$rowliga->stamm."', manpunkte = 2, bp_sum = NULL, mp_sum = NULL, gemeldet = 1, wertpunkte = 0 "
+		." WHERE sid = ".$row->sid
+		." AND lid = ".$row->liga
+		." AND gegner = $tlnr "
+		;
+	$db->setQuery($query);
+	clm_core::$db->query($query);
+	}
 
+	clm_core::$api->db_tournament_ranking($row->liga,true);
+	
 	// Log schreiben
 	$clmLog = new CLMLog();
 	$clmLog->aktion = JText::_( 'MANNSCHAFT_LOG_ANNULL');
