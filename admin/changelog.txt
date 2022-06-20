@@ -19,6 +19,7 @@ $ -> Language fix or change
 # Einzelturniere: Turnier-Modus bereinigen
 + Ligen/MTurniere: verschiedene Annullierungsverfahren
 + Ergebnis-Meldung: zusätzliches Feld für interne Kommentare
+^ Code-Anpassung php 8 (Nachtrag)
 
 - - - - - 3.9.7 - [30-04-2022] - - - - - - - - - - - - - - - - - - - -
 # Einzelturniere: Feinwertung Buchholzsumme bei Aussetzen

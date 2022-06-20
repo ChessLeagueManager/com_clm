@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -65,7 +65,9 @@ class CLMModelTurForm extends JModelLegacy {
 		$this->form['bezirkTur']= JHtml::_('select.booleanlist', 'bezirkTur', 'class="inputbox"', $this->turnier->bezirkTur);
 		
 		// vereinZPS
-		if (strlen($this->turnier->vereinZPS) < 2) $this->turnier->vereinZPS = null;
+//		if (strlen($this->turnier->vereinZPS) < 2) $this->turnier->vereinZPS = null;
+		if (is_null($this->turnier->vereinZPS)) $this->turnier->vereinZPS = '';
+		if (strlen($this->turnier->vereinZPS) < 2) $this->turnier->vereinZPS = '';
 		$this->form['vereinZPS']= CLMForm::selectVereinZPSuVerband('vereinZPS', $this->turnier->vereinZPS);
 		
 		
