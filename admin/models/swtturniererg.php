@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -724,8 +724,9 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 								WHERE id = ".$tid.";";
 			$db->setQuery($select_query);
 			$turnier_orig = $db->loadObject();
-			if ($turnier_orig->teil != $turnier->teil) {
+			if ($turnier_orig->teil != $turnier->teil OR $turnier_orig->rnd != $turnier->rnd) {
 				$turnier_orig->teil = $turnier->teil;
+				$turnier_orig->rnd  = $turnier->rnd;
 				if($db->updateObject('#__clm_turniere',$turnier_orig,'id')) {
 					return true;
 				} else {

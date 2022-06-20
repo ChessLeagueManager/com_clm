@@ -15,6 +15,7 @@ $ -> Language fix or change
 - - - - - 3.9.8 - [xx-xx-2022] - - - - - - - - - - - - - - - - - - - -
 ^ SubMenü Turniere: Anpassung Touchscreen
 # pgn-Import: große Dateien, Parameterweitergabe
+# SWT-Import: Marker Runden angelegt
 
 - - - - - 3.9.7 - [30-04-2022] - - - - - - - - - - - - - - - - - - - -
 # Einzelturniere: Feinwertung Buchholzsumme bei Aussetzen
