@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -43,6 +41,7 @@ class TableCLMErgebnisse extends JTable
 	var $ordering		= null;
 	var $ko_decision	= 0;
 	var $comment		= '';
+	var $icomment		= '';
 	var $pdate		= '1970-01-01';
 	var $ptime		= '00:00:00';
  
