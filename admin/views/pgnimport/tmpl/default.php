@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -47,6 +47,8 @@ $liga = clm_core::$load->request_string('liga', '');
 			<td width="35%" style="vertical-align: top;">
 				<fieldset class="adminform"> 
 					<legend><?php echo JText::_( 'PGN_LEAGUE_OVERWRITE_HINTS_TAB' ); ?></legend> 
+					<?php echo JText::_( 'PGN_LEAGUE_SELECTED_FILE_TEXT' )." : ".$pgn_file; ?>
+					<br><br>
 					<?php echo JText::_( 'PGN_LEAGUE_OVERWRITE_HINTS_TEXT' ); ?>
 				</fieldset>
 			</td>

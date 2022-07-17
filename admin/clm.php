@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -505,7 +505,7 @@ if ($viewName = clm_core::$load->request_string('view')) {
 	}
 	if ( in_array($viewName, array('swt', 'swtturnier', 'swtturnierinfo', 'swtturniertlnr', 'swtturniererg',
 						'swtliga', 'swtligainfo', 'swtligaman', 'swtligaerg', 'swtligasave',
-						'pgnimport', 'pgndata', 'arenaturnier', 'termineimport'))) {
+						'pgnimport', 'pgndata', 'pgnntable', 'arenaturnier', 'termineimport'))) {
 		$language->load('com_clm.swtimport');
 		clm_core::$load->load_js("submit");
 	}

@@ -29,8 +29,10 @@ class CLMViewPGNImport extends JViewLegacy {
 		JToolBarHelper::title( JText::_('TITLE_PGN_SERVICE') ,'clm_headmenu_manager.png' );
 		JToolBarHelper::custom('import','new.png','new_f2.png', JText::_('PGN_IMPORT_NEW'), false);
 		JToolBarHelper::custom('maintain','edit.png','edit_f2.png', JText::_('PGN_MAINTAIN'), false);
+		JToolBarHelper::custom('using_ntable','edit.png','edit_f2.png', JText::_('PGN_USING_NTABLE'), false);
 		JToolBarHelper::custom('delete_open','delete.png','delete_f2.png', JText::_('PGN_DELETE_OPEN'), false);
 		JToolBarHelper::custom('delete_all','trash.png','trash_f2.png', JText::_('PGN_DELETE_ALL'), false);
+		JToolBarHelper::custom('maintain_ntable','edit.png','edit_f2.png', JText::_('PGN_MAINTAIN_NTABLE'), false);
 		JToolBarHelper::custom('cancel','cancel.png','cancel_f2.png', JText::_('SWT_LEAGUE_CANCEL'), false);
 
 	

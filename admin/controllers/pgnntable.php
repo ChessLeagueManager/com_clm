@@ -9,24 +9,23 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-class CLMControllerPGNdata extends JControllerLegacy
+class CLMControllerPGNntable extends JControllerLegacy
 {
 	function __construct() {
 		parent::__construct();
 	}
 	
 	function display($cachable = false, $urlparams = array()) {
-		$_REQUEST['view'] = 'pgndata';
+		$_REQUEST['view'] = 'pgnntable';
 		parent::display();
 	} 
 	
 	function next() {
 		$app =JFactory::getApplication();	
-		$model = $this->getModel('pgndata');
+		$model = $this->getModel('pgnntable');
 		$liga = clm_core::$load->request_string('liga', '');
 		$pgn_file = clm_core::$load->request_string('pgn_file', '');
 		if ($model->store ()) {

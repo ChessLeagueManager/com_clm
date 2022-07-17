@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -28,8 +28,8 @@ if (isset($pgn_data[0]['tkz'])) $tkz = $pgn_data[0]['tkz']; else $tkz = '';
  
 $task = clm_core::$load->request_string('task', '');
 $stask = clm_core::$load->request_string('stask', '');
-//echo "<br>v-pgndata  tid $tid  tkz $tkz  pgn_error $pgn_error";
-
+$liga = clm_core::$load->request_string('liga', '');
+$pgn_file = clm_core::$load->request_string('pgn_file', '');
 
 ?>
 
@@ -128,6 +128,8 @@ $stask = clm_core::$load->request_string('stask', '');
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="tkz" value="<?php echo $tkz; ?>" />
 	<input type="hidden" name="tid" value="<?php echo $tid; ?>" />
+	<input type="hidden" name="liga" value="<?php echo $liga; ?>" />
+	<input type="hidden" name="pgn_file" value="<?php echo $pgn_file; ?>" />
 	<input type="hidden" name="pgn_count" value="<?php echo count($pgn_data); ?>" />
 	<?php echo JHtml::_( 'form.token' ); ?>
 </form>
