@@ -23,6 +23,7 @@ $ -> Language fix or change
 # Benutzer: Datenpflege durch Nicht-Admin
 + pgn-Import: Nameszuordnung über Tabelle
 # Ligen/MTurniere: Nachbesserung Feldprüfung
+# Runde: Vermeidung von notice
 
 - - - - - 3.9.7 - [30-04-2022] - - - - - - - - - - - - - - - - - - - -
 # Einzelturniere: Feinwertung Buchholzsumme bei Aussetzen

@@ -561,12 +561,12 @@ if ($liga[0]->runden_modus == 1 OR $liga[0]->runden_modus == 2) {
 	for ($y=0; $y< $liga[0]->teil-$diff; $y++) {
 		if ($y == $x) { ?><td class="trenner">X</td><?php } else { ?>
 	<td class="<?php echo $zeilenr; ?>"><?php 
-	if ($punkte[$y]->tln_nr > $runden[0]->tln_nr) {
+	if (isset($punkte[$y]) AND $punkte[$y]->tln_nr > $runden[0]->tln_nr) {
 		if ($runde != "" AND $runden[($punkte[$y]->tln_nr)-2]->runde <= $runde) {
 		echo $runden[($punkte[$y]->tln_nr)-2]->brettpunkte; }
 		if ($runde == "") { echo $runden[($punkte[$y]->tln_nr)-2]->brettpunkte; }
 		}
-	if ($punkte[$y]->tln_nr < $runden[0]->tln_nr) {
+	if (isset($punkte[$y]) AND $punkte[$y]->tln_nr < $runden[0]->tln_nr) {
 		if ($runde != "" AND $runden[($punkte[$y]->tln_nr)-1]->runde <= $runde) {
 		echo $runden[($punkte[$y]->tln_nr)-1]->brettpunkte; }
 		if ($runde == "") { echo $runden[($punkte[$y]->tln_nr)-1]->brettpunkte; }
