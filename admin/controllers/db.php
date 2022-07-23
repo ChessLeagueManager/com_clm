@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -1228,11 +1228,16 @@ class CLMControllerDB extends JControllerLegacy {
 				$berech = $spieler[8];
 				$geb_j = $spieler[9];
 				$ausw = $spieler[10];
+				if ($ausw == '') $ausw = 0;
 				$dwz = $spieler[11];
+				if ($dwz == '') $dwz = 0;
 				$dwz_i = $spieler[12];
+				if ($dwz_i == '') $dwz_i = 0;
 				$elo = $spieler[13];
+				if ($elo == '') $elo = 0;
 				$titel = $spieler[14];
 				$f_id = $spieler[15];
+				if ($f_id == '') $f_id = 0;
 				$f_land = utf8_encode(substr($spieler[16], 0, -2));
 				$sql = " INSERT INTO `#__clm_dwz_spieler` ( `sid`, `PKZ`, `ZPS`, `Mgl_Nr`, `Status`, `Spielername`, `Spielername_G`, `Geschlecht`, `Spielberechtigung`, `Geburtsjahr`, `Letzte_Auswertung`, `DWZ`, `DWZ_Index`, `FIDE_Elo`, `FIDE_Titel`, `FIDE_ID`, `FIDE_Land`) VALUES " . " ('$saison','$pkz','$zps','$mgl','$status','$name','$name_g','$gesch','$berech','$geb_j','$ausw','$dwz','$dwz_i','$elo','$titel','$f_id','$f_land')";
 				//$db->setQuery($sql);
