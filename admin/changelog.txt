@@ -22,6 +22,7 @@ $ -> Language fix or change
 ^ Code-Anpassung php 8 (Nachtrag)
 # Benutzer: Datenpflege durch Nicht-Admin
 + pgn-Import: Nameszuordnung über Tabelle
+# Ligen/MTurniere: Nachbesserung Feldprüfung
 
 - - - - - 3.9.7 - [30-04-2022] - - - - - - - - - - - - - - - - - - - -
 # Einzelturniere: Feinwertung Buchholzsumme bei Aussetzen

@@ -115,23 +115,34 @@ class CLMViewLigen
 				return;
 			}
 			// do field validation
-			if (form.name.value == "") {
-				alert( "<?php echo JText::_( 'LEAGUE_HINT_1', true ); ?>" );
-//			} else if ( getSelectedValue('adminForm','sid') == 0 ) {
-//				alert( "<?php echo JText::_( 'LEAGUE_HINT_2', true ); ?>" );
-			} else {
-				// get references to select list and display text box
-				var sel = document.getElementById('sid');			
-				var opt;
-				for ( var i = 0, len = sel.options.length; i < len; i++ ) {
-					opt = sel.options[i];
-					if ( opt.selected === true ) {
-						val = opt.value;
-						break;
-					}
+			// check season
+			var vals = 0;
+			// get references to select list and display text box
+			var sel = document.getElementById('sid');			
+			var opt;
+			for ( var i = 0, len = sel.options.length; i < len; i++ ) {
+				opt = sel.options[i];
+				if ( opt.selected === true ) {
+					vals = opt.value;
+					break;
 				}
 			}
-			if ( val == 0 ) {
+			// check lap - durchgang
+			var vald = 0;
+			// get references to select list 
+			var sel = document.getElementById('durchgang');			
+			var opt;
+			for ( var i = 0, len = sel.options.length; i < len; i++ ) {
+				opt = sel.options[i];
+				if ( opt.selected === true ) {
+					vald = opt.value;
+					break;
+				}
+			}
+			
+			if (form.name.value == "") {
+				alert( "<?php echo JText::_( 'LEAGUE_HINT_1', true ); ?>" );
+			} else if ( vals == 0 ) { 	//display text box checking season
 				alert( "<?php echo JText::_( 'LEAGUE_HINT_2', true ); ?>" );
 			} else if (form.stamm.value == "") {
 				alert( "<?php echo JText::_( 'LEAGUE_HINT_3', true ); ?>" );
@@ -141,21 +152,7 @@ class CLMViewLigen
 				alert( "<?php echo JText::_( 'LEAGUE_HINT_5', true ); ?>" );
 			} else if (form.runden.value == "") {
 				alert( "<?php echo JText::_( 'LEAGUE_HINT_6', true ); ?>" );
-//			} else if ( getSelectedValue('adminForm','durchgang') == "" ) {
-//				alert( "<?php echo JText::_( 'LEAGUE_HINT_7', true ); ?>" );
-			} else {
-				// get references to select list and display text box
-				var sel = document.getElementById('durchgang');			
-				var opt;
-				for ( var i = 0, len = sel.options.length; i < len; i++ ) {
-					opt = sel.options[i];
-					if ( opt.selected === true ) {
-						val = opt.value;
-						break;
-					}
-				}
-			}
-			if ( val == 0 ) {
+			} else if ( vald == 0 ) {  //display text box checking lap
 				alert( "<?php echo JText::_( 'LEAGUE_HINT_7', true ); ?>" );
 			} else if (form.anz_sgp.value < 0 ) {
 				alert( "<?php echo JText::_( 'LEAGUE_HINT_8', true ); ?>" );

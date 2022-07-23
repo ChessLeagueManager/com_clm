@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -189,7 +189,7 @@ function saveIt($apply=false)
 		$ungerade_id	= 1;
 		$row->teil	= $row->teil+1;
 		$tln		= $row->teil;
-		$mainframe->enqueueMessage(JText::_( 'LIGEN_MANNSCH', true ), 'warning');
+		$mainframe->enqueueMessage(JText::_( 'LIGEN_MANNSCH', true ), 'notice');
 	}
 	}
 	$row->liga_mt	= 0; //mtmt 0 = liga  1 = mannschaftsturnier
@@ -204,7 +204,8 @@ function saveIt($apply=false)
 	$publish	= $row->published;
 
 	// Wenn sid gewechselt wurde, alle Daten in neue Saison verschieben
-	if ($sid_alt != $sid AND $sid_alt != "") {
+//	if ($sid_alt != $sid AND $sid_alt != "") {
+	if ($sid_alt != $sid AND $sid_alt != "0") {
 		$mainframe->enqueueMessage(JText::_( 'LIGEN_SAISON_AEND' ), 'notice');
 	$query = " UPDATE #__clm_mannschaften "
 		." SET sid = ".$sid

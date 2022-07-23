@@ -191,20 +191,18 @@ function saveIt($apply=false)
 		$ungerade_id	= 1;
 		$row->teil	= $row->teil+1;
 		$tln		= $row->teil;
-		$mainframe->enqueueMessage(JText::_( 'LIGEN_MANNSCH', true ), 'warning');
+		$mainframe->enqueueMessage(JText::_( 'LIGEN_MANNSCH', true ), 'notice');
 	}	}	
 	if ($row->runden_modus == 4) {
 		$ko_id = 0;
 		$tln_ko	= $row->teil;
 		while ($row->teil < pow(2,$row->runden)) { $ko_id++; $row->teil = $row->teil+1;}
-//		if ($ko_id > 0)  JError::raiseWarning(500, JText::_( 'MTURN_MANNSCH_KO', true ) ); 
 		if ($ko_id > 0)  $mainframe->enqueueMessage(JText::_( 'MTURN_MANNSCH_KO' ), 'notice');
 			}	
 	if ($row->runden_modus == 5) {
 		$ko_id = 0;
 		$tln_ko	= $row->teil;
 		while ($row->teil < pow(2,$row->runden-1)) { $ko_id++; $row->teil = $row->teil+1;}
-//		if ($ko_id > 0)  JError::raiseWarning(500, JText::_( 'MTURN_MANNSCH_KO', true ) ); 
 		if ($ko_id > 0)  $mainframe->enqueueMessage(JText::_( 'MTURN_MANNSCH_KO' ), 'notice');
 		}
 	}
@@ -220,7 +218,8 @@ function saveIt($apply=false)
 	$publish	= $row->published;
 
 	// Wenn sid gewechselt wurde, alle Daten in neue Saison verschieben
-	if ($sid_alt != $sid AND $sid_alt != "") {
+//	if ($sid_alt != $sid AND $sid_alt != "") {
+	if ($sid_alt != $sid AND $sid_alt != "0") {
 		$mainframe->enqueueMessage(JText::_( 'LIGEN_SAISON_AEND' ), 'notice');
 	$query = " UPDATE #__clm_mannschaften "
 		." SET sid = ".$sid
