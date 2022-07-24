@@ -213,10 +213,12 @@ elseif ($liga[0]->runden_modus == "4" OR $liga[0]->runden_modus == "5") {
 			// Farbgebung der Zeilen //
 			if ($x%2 != 0) { 
 				$zeilenr	= "zeile2";
-				$zeilenr_dg2	= "zeile2_dg2";
+//				$zeilenr_dg2	= "zeile2_dg2";
+				$zeilenr_dg2	= "zeile2";
 			} else { 
 				$zeilenr		= "zeile1";
-				$zeilenr_dg2	= "zeile1_dg2";
+//				$zeilenr_dg2	= "zeile1_dg2";
+				$zeilenr_dg2	= "zeile1";
 			}
 			
 			// Zeile Start
