@@ -14,6 +14,7 @@ $ -> Language fix or change
 
 - - - - - 3.9.9 - [xx-xx-2022] - - - - - - - - - - - - - - - - - - - -
 # CLM Liga-Export/Import: Liga ohne Brettergebnisse
+^ Ergebnis-App: neue Webadresse
 
 - - - - - 3.9.8 - [24-07-2022] - - - - - - - - - - - - - - - - - - - -
 ^ SubMenü Turniere: Anpassung Touchscreen

@@ -1,3 +1,9 @@
+/**
+ * @ Chess League Manager (CLM) 
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 clmQuery(document).ready(function($) {
 
 	$( ".clm_view_app_info .clm_qrcode .clm_qrcode_direct" ).each(function() {
@@ -5,7 +11,8 @@ clmQuery(document).ready(function($) {
 			width : 200,
 			height : 200
 		});
-		qrcode.makeCode("market://details?id=com.ChessLeagueManager.main&hl=de");
+//		qrcode.makeCode("market://details?id=com.ChessLeagueManager.main&hl=de");
+		qrcode.makeCode("https://play.google.com/store/apps/details?id=com.CLM");
 	});
 	
 	$( ".clm_view_app_info .clm_button" ).click(function() {
