@@ -540,7 +540,7 @@ class CLMControllerDB extends JControllerLegacy {
 		$sql = " SELECT * FROM #__clm_rnd_spl " . " WHERE lid = " . $liga . " ORDER BY dg ASC, runde ASC , paar ASC, brett ASC ";
 		$db->setQuery($sql);
 		$srnd = $db->loadObjectList();
-		if (count($srnd) > 0) {
+		if (!is_null($srnd) AND count($srnd) > 0) {
 			if ($clm_sql == "1") {
 				$spl_rnd = "\n\nINSERT INTO `#__clm_rnd_spl` (`sid`, `lid`, `runde`, `paar`, `dg`, `tln_nr`, `brett`, `heim`, `weiss`, `spieler`, `zps`, `gegner`, `gzps`, `ergebnis`, `kampflos`, `punkte`, `gemeldet`, `dwz_edit`, `dwz_editor`) VALUES ";
 				$end = ",";
@@ -593,6 +593,11 @@ class CLMControllerDB extends JControllerLegacy {
 					}
 					$spl_rnd = $spl_rnd . "\n('" . $srnd[$x]->sid . "','" . $srnd[$x]->lid . "','" . $srnd[$x]->runde . "','" . $srnd[$x]->paar . "','" . $srnd[$x]->dg . "','" . $srnd[$x]->tln_nr . "','" . $srnd[$x]->brett . "','" . $srnd[$x]->heim . "','" . $srnd[$x]->weiss . "','" . $srnd[$x]->spieler . "','" . $srnd[$x]->zps . "','" . $srnd[$x]->gegner . "','" . $srnd[$x]->gzps . "','" . $srnd[$x]->ergebnis . "','" . $srnd[$x]->kampflos . "','" . $srnd[$x]->punkte . "','" . $gemeldet . "','" . $dwz_edit . "','" . $dwz_editor . "');";
 				}
+			}
+		} else {
+			if ($clm_sql != "1") {
+				$spl_rnd = "\n\n#0#";
+				$spl_rnd = $spl_rnd . "\n  ";
 			}
 		}
 		// Rundentermine
