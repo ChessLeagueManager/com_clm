@@ -534,9 +534,11 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	if (!isset($punkte[$x])) break;
 // Farbgebung der Zeilen //
 if ($x%2 != 0) { $zeilenr	= "zeile2";
-		$zeilenr_dg2	= "zeile2_dg2";}
+//		$zeilenr_dg2	= "zeile2_dg2";}
+		$zeilenr_dg2	= "zeile2";}
 	else { $zeilenr		= "zeile1";
-		$zeilenr_dg2	= "zeile1_dg2";}
+//		$zeilenr_dg2	= "zeile1_dg2";}
+		$zeilenr_dg2	= "zeile1";}
 ?>
 <tr class="<?php echo $zeilenr; ?>">
 <td class="rang<?php 
