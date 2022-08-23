@@ -1078,7 +1078,6 @@ function send()
 			else 
 				$mail->sendMail($from,$fromname,$recipient,$subject_remind,$body,0,null,$bcc);
 
-			//$msg = JText::_( 'USERS_MIDESTENS'.$bcc);
 			$msg = JText::_( 'USERS_MIDESTENS');
 		}
 		// set password = NULL and activiation code as md5 hash
@@ -1100,7 +1099,8 @@ function send()
 	$clmLog->params = array('jid' => $cid[0], 'cids' => $cids);
 	$clmLog->write();
 	
-	$mainframe->redirect( $link, $msg, "message" );
+	$mainframe->enqueueMessage( $msg, 'message' );
+	$mainframe->redirect( $link );
 	}
 
 function copy_saison()
@@ -1211,8 +1211,10 @@ function copy_saison()
 	$clmLog->aktion = "User Vorsaison kopiert";
 	$clmLog->params = array('jid' => $jid, 'cids' => $users);
 	$clmLog->write();
-	
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section, $msg, "message" );
+
+	$msg = 'Benutzer aus Vorsaison übernommen';
+	$mainframe->enqueueMessage( $msg, "message" );
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 	
 	//UserAccessGroups
