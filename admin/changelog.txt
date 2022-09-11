@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 3.9.10 - [xx-xx-2022] - - - - - - - - - - - - - - - - - - - -
+^ Code-Änderung im View Meldelistenerfassung im FE wegen Joomla 4 / php 8
+
 - - - - - 3.9.9 - [15-08-2022] - - - - - - - - - - - - - - - - - - - -
 # CLM Liga-Export/Import: Liga ohne Brettergebnisse
 ^ Ergebnis-App: neue Webadresse
