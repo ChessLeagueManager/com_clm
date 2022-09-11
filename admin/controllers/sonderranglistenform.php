@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -22,7 +21,8 @@ class CLMControllerSonderranglistenForm extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= JFactory::getDBO();
+		$this->_db	= JFactory::getDBO();
+		$this->app	= JFactory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save', 'edit' );
@@ -43,27 +43,27 @@ class CLMControllerSonderranglistenForm extends JControllerLegacy {
 			$this->adminLink->view = "sonderranglistenmain"; // WL in Liste
 		}
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	}
 
 
 	function save() {
 	
 		$result = $this->_saveDo();   
-		$app =JFactory::getApplication();
+//		$app =JFactory::getApplication();
 		
 		if ($result[0]) { // erfolgreich?
 			
 			if ($this->neu) { // neues Turnier?
-				$app->enqueueMessage( JText::_('SP_RANKING_CREATED') );
+				$this->app->enqueueMessage( JText::_('SP_RANKING_CREATED') );
 			} else {
-				$app->enqueueMessage( JText::_('SP_RANKING_EDITED') );
+				$this->app->enqueueMessage( JText::_('SP_RANKING_EDITED') );
 			}
 		} else {
-			$app->enqueueMessage( $result[2],$result[1] );					
+			$this->app->enqueueMessage( $result[2],$result[1] );					
 		}
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	
 	}
 
@@ -130,7 +130,7 @@ class CLMControllerSonderranglistenForm extends JControllerLegacy {
 		
 		$this->adminLink->view = "sonderranglistenmain";
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 		
 	}
 

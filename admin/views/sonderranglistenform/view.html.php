@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -21,6 +21,7 @@ class CLMViewSonderranglistenForm extends JViewLegacy {
 		//Daten vom Model
 		$sonderrangliste	= $this->get('Sonderrangliste');
 		$ordering			= $this->get('Ordering');
+		if (is_null($ordering)) $ordering = array();
 		$turniere			= $this->get('Turniere');
 		$saisons			= $this->get('Saisons');
 		
@@ -138,7 +139,9 @@ class CLMViewSonderranglistenForm extends JViewLegacy {
 
 		// JS-Array jtext -> Fehlertexte
 		$document->addScriptDeclaration("var jserror = new Array();");
-		$document->addScriptDeclaration("jserror['enter_name'] = '".JText::_('PLEASE_ENTER')." ".JText::_('TOURNAMENT_NAME')."';");
+		$document->addScriptDeclaration("jserror['enter_name'] = '".JText::_('PLEASE_ENTER')." ".JText::_('SPECIALRANKING_NAME')."';");
+		$document->addScriptDeclaration("jserror['enter_saison'] = '".JText::_('PLEASE_ENTER')." ".JText::_('SPECIALRANKING_SAISON')."';");
+		$document->addScriptDeclaration("jserror['enter_turnier'] = '".JText::_('PLEASE_ENTER')." ".JText::_('SPECIALRANKING_TOURNAMENT')."';");
 		$document->addScriptDeclaration("jserror['check_year_ay'] = '".JText::_('PLEASE_CHECK_YEAR').":  ".JText::_( 'SPECIALRANKING_BIRTHYEAR_FILTER_OPTIONS' )." - ".JText::_( 'SPECIALRANKING_OPTION_BIRTHYEAR_YOUNGER_THAN' )."';");
 		$document->addScriptDeclaration("jserror['check_year_ao'] = '".JText::_('PLEASE_CHECK_YEAR').":  ".JText::_( 'SPECIALRANKING_BIRTHYEAR_FILTER_OPTIONS' )." - ".JText::_( 'SPECIALRANKING_OPTION_BIRTHYEAR_OLDER_THAN' )."';");
 		$document->addScriptDeclaration("jserror['check_year_cmy'] = '".JText::_('PLEASE_CHECK_YEAR').":  ".JText::_( 'SPECIALRANKING_SEX_YEAR_FILTER_OPTIONS' )." - ".JText::_( 'SPECIALRANKING_OPTION_MALEYEAR_YOUNGER_THAN' )."';");

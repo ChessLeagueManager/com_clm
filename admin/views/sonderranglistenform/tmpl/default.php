@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -35,34 +35,43 @@ function showTournaments(){
 	
 	Joomla.submitbutton = function (pressbutton) { 
 		var form = document.adminForm;
+		var err = 0;
 		if (pressbutton == 'cancel') {
-			submitform( pressbutton );
+			Joomla.submitform( pressbutton );
 			return;
 		}
 		
 		// do field validation
 		if (form.name.value == "") {
-			alert( jserror['enter_name'] );
+			alert( jserror['enter_name'] ); err = 1;
+		}
+		if (form.saison.value == "0") {
+			alert( jserror['enter_saison'] ); err = 1;
+		}
+		if (form.turnier.value == "0") {
+			alert( jserror['enter_turnier'] ); err = 1;
 		}
 		if (form.use_birthYear_filter.value == 1 ) {
 			if (form.birthYear_younger_than.value < '1901' || form.birthYear_younger_than.value > '2155') {
-				alert( jserror['check_year_ay'] );
+				alert( jserror['check_year_ay'] ); err = 1;
 			} else if (form.birthYear_older_than.value < '1901' || form.birthYear_older_than.value > '2155') {
-				alert( jserror['check_year_ao'] );
+				alert( jserror['check_year_ao'] ); err = 1;
 			}
 		} 
 		if (form.use_sex_year_filter.value == 1 ) {
 			if (form.maleYear_younger_than.value < '1901' || form.maleYear_younger_than.value > '2155') {
-			alert( jserror['check_year_cmy'] );
+			alert( jserror['check_year_cmy'] ); err = 1;
 		} else if (form.maleYear_older_than.value < '1901' || form.maleYear_older_than.value > '2155') {
-			alert( jserror['check_year_cmo'] );
+			alert( jserror['check_year_cmo'] ); err = 1;
 		} else if (form.femaleYear_younger_than.value < '1901' || form.femaleYear_younger_than.value > '2155') {
-			alert( jserror['check_year_cfy'] );
+			alert( jserror['check_year_cfy'] ); err = 1;
 		} else if (form.femaleYear_older_than.value < '1901' || form.femaleYear_older_than.value > '2155') {
-			alert( jserror['check_year_cfo'] );
+			alert( jserror['check_year_cfo'] ); err = 1;
 			}
 		} 
-		submitform( pressbutton );
+		if (err == 0) {
+			Joomla.submitform( pressbutton );
+		}
 	}  
 </script>
 
