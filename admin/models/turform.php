@@ -32,6 +32,7 @@ class CLMModelTurForm extends JModelLegacy {
 	function _getForms() {
 	
 		
+		if (!isset($this->form) OR is_null($this->form)) $this->form = array();	// seit J 4.2 nötig um notice zu vermeiden
 		// category
 		list($this->parentArray, $this->parentKeys) = CLMCategoryTree::getTree();
 		if (count($this->parentArray) > 0)  { // nur, wenn Kategorien existieren

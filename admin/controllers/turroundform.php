@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -26,6 +26,7 @@ class CLMControllerTurRoundForm extends JControllerLegacy {
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
 	
+		if (!isset($this->param) OR is_null($this->param)) $this->param = array();	// seit J 4.2 nötig um notice zu vermeiden
 		// turnierid
 		$this->param['turnierid'] = clm_core::$load->request_int('turnierid');
 		

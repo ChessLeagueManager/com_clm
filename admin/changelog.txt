@@ -17,6 +17,7 @@ $ -> Language fix or change
 ^ Code-Anpassung Joomla 4: Design der Listen in den Admin-Views
 ^ Code-Änderung im View Ranglistenerfassung im FE wegen Joomla 4 / php 8
 ^ Code-Anpassung Joomla 4: Admin-View Sonderranglisten
+^ Code-Anpassung zur Vermeidung von notice unter J 4.2
 
 - - - - - 3.9.9 - [15-08-2022] - - - - - - - - - - - - - - - - - - - -
 # CLM Liga-Export/Import: Liga ohne Brettergebnisse

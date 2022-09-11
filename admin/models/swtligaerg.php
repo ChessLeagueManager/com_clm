@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team. All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -60,7 +60,7 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 			if (is_null($tmp)) {
 				$tmp = array ();
 			}
-			
+			if (!isset($this->_splist) OR is_null($this->_splist)) $this->_splist = array(); // ab J 4.2 nötig, um notice zu vermeiden
 			$this->_splist[$m] = $tmp;
 			
 		}

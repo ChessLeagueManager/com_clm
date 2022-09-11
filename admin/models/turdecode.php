@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -43,8 +43,8 @@ class CLMModelTurDecode extends JModelLegacy {
 		$mainframe =JFactory::getApplication();
 		global $option;
 		$db=JFactory::getDBO();
-//echo "<br>GET: "; var_dump($_GET);	
-//echo "<br>POST: "; var_dump($_POST);	
+
+		if (!isset($this->param) OR is_null($this->param)) $this->param = array();	// seit J 4.2 nötig um notice zu vermeiden
 		// clm_spielername
 		$this->param['clm_spielername'] = $mainframe->getUserStateFromRequest( "$option.clm_spielername", 'clm_spielername', '', 'string' );
 		$this->param['clm_spielername'] = strtolower( $this->param['clm_spielername'] );

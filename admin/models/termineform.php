@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -31,6 +31,7 @@ class CLMModelTermineForm extends JModelLegacy {
 	// alle vorhandenen Filter
 	function _getForms() {
 	
+		if (!isset($this->form) OR is_null($this->form)) $this->form = array();	// seit J 4.2 nötig um notice zu vermeiden
 		// published
 		$this->form['published']	= CLMForm::radioPublished('published', $this->termine->published);
 		
