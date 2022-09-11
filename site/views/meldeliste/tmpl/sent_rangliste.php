@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -108,8 +108,8 @@ $meldung 	= $user->get('id');
 	}}
 
 	$query = " INSERT INTO #__clm_rangliste_id "
-		." (`gid`, `sid`, `zps`, `rang`, `published`) "
-		." VALUES ('$gid','$sid','$zps','0','0') "
+		." (`gid`, `sid`, `zps`, `rang`, `published`, `bemerkungen`, `bem_int`) "
+		." VALUES ('$gid','$sid','$zps','0','0','','') "
 		;
 	$db->setQuery($query);
 	clm_core::$db->query($query);
