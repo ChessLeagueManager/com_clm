@@ -91,7 +91,8 @@ defined('_JEXEC') or die('Restricted access');
 			// load the row from the db table 
 			$row->load( $value->id );
 			$checked 	= JHtml::_('grid.checkedout',   $row, $i );
-			$published 	= JHtml::_('grid.published', $row, $i );
+//			$published 	= JHtml::_('grid.published', $row, $i );
+			$published 	= JHtml::_('jgrid.published', $row->published, $i );
 
 			?>
 			<tr class="<?php echo 'row'. $k; ?>">

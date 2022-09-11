@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -80,7 +80,8 @@ $clmAccess = clm_core::$access;
 			// load the row from the db table 
 			$row->load( $value->id );
 			$checked 	= JHtml::_('grid.checkedout',   $row, ($i) ); //-1
-			$published 	= JHtml::_('grid.published', $row, ($i) );  //-1
+//			$published 	= JHtml::_('grid.published', $row, ($i) );  //-1
+			$published 	= JHtml::_('jgrid.published', $row->published, $i );
 			?>
 			
 			<tr class="<?php echo 'row'. $k; ?>">

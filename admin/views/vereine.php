@@ -130,7 +130,8 @@ public static function vereine ( $rows, $lists, $pageNav, $option )
 				$row->load( $rows[$i]->id );
 				$link 		= JRoute::_( 'index.php?option=com_clm&section=vereine&task=edit&id='. $row->id );
 				$checked 	= JHtml::_('grid.checkedout',   $row, $i );
-				$published 	= JHtml::_('grid.published', $row, $i );
+//				$published 	= JHtml::_('grid.published', $row, $i );
+				$published 	= JHtml::_('jgrid.published', $row->published, $i );
 
 				?>
 				<tr class="<?php echo 'row'. $k; ?>">

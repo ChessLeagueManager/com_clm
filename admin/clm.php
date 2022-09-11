@@ -50,7 +50,7 @@ $_GET["clm_backend"]=1;
 $jlang = JFactory::getLanguage(); 
 $_GET["session_language"] = $jlang->getTag();
 
-if(substr(JVERSION,0,1)>2) {
+if(substr(JVERSION,0,1) > '2') {
 	$GLOBALS["clm"]["grid.checkall"] = JHtml::_('grid.checkall');
 } else {
 	$GLOBALS["clm"]["grid.checkall"] = '<input type="checkbox" name="toggle" value="" onclick="checkAll(this);" />';
@@ -96,14 +96,20 @@ $app            = JFactory::getApplication();
 $template = $app->getTemplate('template')->template;	
 $config = clm_core::$db->config();
 
-if($config->isis_remove_sidebar>0 && ($config->isis_remove_sidebar==2 || $template=="isis")) {
-	clm_core::$load->load_css("isis_fix");
+if(substr(JVERSION,0,1) < '4') {
+	if($config->isis_remove_sidebar>0 && ($config->isis_remove_sidebar==2 || $template=="isis")) {
+		clm_core::$load->load_css("isis_fix");
+	}
+	if($config->isis>0 && ($config->isis==2 || $template=="isis"))
+	{
+		$document = JFactory::getDocument();
+		$document->addStyleSheet("../components/com_clm/includes/clm_isis.css");
+	}
 }
-if($config->isis>0 && ($config->isis==2 || $template=="isis"))
-{
-	$document = JFactory::getDocument();
-	$document->addStyleSheet("../components/com_clm/includes/clm_isis.css");
-}
+if(substr(JVERSION,0,1) == '4') {
+		$document = JFactory::getDocument();
+		$document->addStyleSheet("../components/com_clm/includes/clm_backend.css");
+}	
 
 // Pfad zum JS-Verzeichnis
 DEFINE ('CLM_PATH_JAVASCRIPT', 'components'.DS.'com_clm'.DS.'javascript'.DS);

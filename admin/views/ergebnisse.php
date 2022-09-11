@@ -150,7 +150,8 @@ static function ergebnisse ( $rows, $lists, $pageNav, $option )
 //		$link 		= JRoute::_( 'index.php?option=com_clm&section=ergebnisse&task=edit&cid[]='. $row->id );
 			$link 		= JRoute::_( 'index.php?option=com_clm&section=ergebnisse&task=edit&id='. $row->id );
 			$checked 	= JHtml::_('grid.checkedout',   $row, $i );
-			$published 	= JHtml::_('grid.published', $row, $i );
+//			$published 	= JHtml::_('grid.published', $row, $i );
+			$published 	= JHtml::_('jgrid.published', $row->published, $i );
 			?>
 			<tr class="<?php echo 'row'. $k; ?>">
 				<td align="center">

@@ -99,11 +99,10 @@ public static function meldelisten ( &$rows, &$lists, &$pageNav, $option )
 			$k = 0;
 			for ($i=0, $n=count( $rows ); $i < $n; $i++) {
 				$row = &$rows[$i];
-
 				$link 		= JRoute::_( 'index.php?option=com_clm&section=meldelisten&task=edit&cid[]='. $row->id );
-
 				$checked 	= JHtml::_('grid.checkedout',   $row, $i );
-				$published 	= JHtml::_('grid.published', $row, $i );
+//				$published 	= JHtml::_('grid.published', $row, $i );
+				$published 	= JHtml::_('jgrid.published', $row->published, $i );
 
 				?>
 				<tr class="<?php echo 'row'. $k; ?>">
