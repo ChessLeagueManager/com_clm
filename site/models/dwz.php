@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -32,6 +32,7 @@ class CLMModelDWZ extends JModelLegacy
 	$filter_order     = $mainframe->getUserStateFromRequest( $option.'filter_order_dwz', 'filter_order', 'DWZ', 'cmd' );
 	$filter_order_Dir = $mainframe->getUserStateFromRequest( $option.'filter_order_Dir_dwz', 'filter_order_Dir', 'DESC', 'word' );
 		
+		$this->param = array(); 
 		$this->param['order'] = $mainframe->getUserStateFromRequest( "$option.filter_order", 'filter_order', 'DWZ', 'cmd' ); 
 		$this->param['order_Dir'] = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",'filter_order_Dir','desc','word' );
 	

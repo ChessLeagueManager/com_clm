@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,14 +9,12 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die();
 
 jimport('joomla.application.component.model');
 jimport( 'joomla.html.parameter' );
 
 class CLMModelTurnier_Paarungsliste extends JModelLegacy {
-	
 	
 	function __construct() {
 		
@@ -34,7 +32,6 @@ class CLMModelTurnier_Paarungsliste extends JModelLegacy {
 		$this->_getTurnierPoints();
 
 	}
-	
 	
 	
 	function _getTurnierData() {
@@ -115,6 +112,7 @@ class CLMModelTurnier_Paarungsliste extends JModelLegacy {
 	function _getTurnierMatches() {
 	
 		// alle ermittelten Runden durchgehen
+		$this->matches = array();
 		foreach ($this->rounds as $value) {
 			$query = "SELECT a.*, "
 				." t.name as wname, t.twz as wtwz, t.verein as wverein, t.start_dwz as wdwz, t.FIDEelo as welo, "

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die();
 
 jimport('joomla.application.component.model');
@@ -100,6 +99,7 @@ class CLMModelTurnier_Info extends JModelLegacy {
 		$this->matches = $this->_db->loadObjectList();
 
 		// MatchCount
+		$this->matchStats = array();
 		$this->matchStats['count'] = count($this->matches);
 		$this->matchStats['played'] = 0;
 		$this->matchStats['winsW'] = 0;
