@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -509,6 +509,7 @@ if ($liga[0]->bemerkungen <> "") {
 $pdf->Ln();
 // Ende Teilnehmer
 
+// --------------------------------------------------------------
 // Paarungen pro Spieltag
 $pdf_orientation = 'P';
 	$_REQUEST['pdf_orientation'] = $pdf_orientation;
@@ -601,6 +602,7 @@ if ($lmax > 60) $lmax = 60;
 		}}
 	}
 
+// -----------------------------------------------------------
 //Mannschaften
 $ic = 0;
 $ie = 0;
@@ -798,6 +800,8 @@ for ($x=0; $x< $anz_player; $x++){
 	if ($x%2 != 0) { $fc = 1; } else { $fc = 0; }
 	// Überlesen von Null-Sätzen 
 	while (isset($count[$ic]) and $countryversion == "de" and $count[$ic]->mgl_nr == "0")  {
+		$ic++; }
+	while (isset($count[$ic]) and $countryversion == "de" and is_null($count[$ic]->tln_nr) )  {
 		$ic++; }
 	if (!isset($count[$ic])) break;
 	if ($count[$ic]->PKZ === NULL) { $count[$ic]->PKZ = ""; }
