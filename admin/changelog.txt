@@ -22,6 +22,7 @@ $ -> Language fix or change
 ^ Rundenmanager: Änderung Standard für Deadlinetime
 + neue Indizes zur Beschleunigung
 # Ligaheft: Überlesen von Nullsätzen
+^ SWT-Import: Verarbeitung ungewöhnlicher Ergebniswerte
 
 - - - - - 3.9.9 - [15-08-2022] - - - - - - - - - - - - - - - - - - - -
 # CLM Liga-Export/Import: Liga ohne Brettergebnisse

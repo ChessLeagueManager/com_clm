@@ -325,6 +325,12 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	}
 	
 	function _calculateCLMErgebnisWhite($SWTmatchWhite, $SWTmatchBlack) {
+		if($SWTmatchWhite->SWTergebnis == 241) $SWTmatchWhite->SWTergebnis = 1;
+		if($SWTmatchWhite->SWTergebnis == 242) $SWTmatchWhite->SWTergebnis = 2;
+		if($SWTmatchWhite->SWTergebnis == 243) $SWTmatchWhite->SWTergebnis = 3;
+		if($SWTmatchBlack->SWTergebnis == 241) $SWTmatchBlack->SWTergebnis = 1;
+		if($SWTmatchBlack->SWTergebnis == 242) $SWTmatchBlack->SWTergebnis = 2;
+		if($SWTmatchBlack->SWTergebnis == 243) $SWTmatchBlack->SWTergebnis = 3;
 		if($SWTmatchWhite->SWTergebnis == 1 AND $SWTmatchWhite->SWTattribute != 2 AND $SWTmatchBlack->SWTergebnis == 3 AND $SWTmatchBlack->SWTattribute != 2) {
 			return 0; // 0-1
 		} elseif ($SWTmatchWhite->SWTergebnis == 3 AND $SWTmatchWhite->SWTattribute != 2 AND $SWTmatchBlack->SWTergebnis == 1 AND $SWTmatchBlack->SWTattribute != 2) {
