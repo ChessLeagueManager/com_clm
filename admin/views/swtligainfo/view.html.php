@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -58,6 +58,10 @@ class CLMViewSWTLigainfo extends JViewLegacy {
 		$glist[]	= JHtml::_('select.option',  '0', JText::_( 'LIGEN_ML' ), 'id', 'Gruppe' );
 		$glist		= array_merge( $glist, $db_glist );
 		$lists['gruppe']= JHtml::_('select.genericlist',   $glist, 'rang', 'class="inputbox" size="1"', 'id', 'Gruppe', $rang );
+		// Ersatz-Regel
+		$lists['ersatz_regel']	= $default['ersatz_regel'];
+		// Anzeige Mannschaftsaufstellungen
+		$lists['anzeige_ma']	= JHtml::_('select.booleanlist',  'anzeige_ma', 'class="inputbox"', $default['anzeige_ma'] );
 		
 
 		// Konfigurationsparameter an Template

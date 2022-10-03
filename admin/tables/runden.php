@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,13 +9,11 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
 class TableCLMRunden extends JTable
 {
-
 	var $id			= null;
 	var $sid		= null;
 	var $name		= '';
@@ -25,7 +22,7 @@ class TableCLMRunden extends JTable
 	var $datum		= '1970-01-01';
 	var $startzeit  = '00:00:00';
 	var $deadlineday   = '1970-01-01';
-	var $deadlinetime  = '24:00:00';
+	var $deadlinetime  = '00:00:00';
 	var $meldung	= 0;
 	var $sl_ok		= 0;
 	var $published	= 0;

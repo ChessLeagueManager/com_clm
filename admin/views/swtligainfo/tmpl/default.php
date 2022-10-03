@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -170,6 +170,14 @@ $str_params = clm_core::$load->request_string('str_params');
 					</td>
 				</tr>
 				<tr>
+					<td nowrap="nowrap">
+						<label for="ersatz_regel"><?php echo JText::_( 'LEAGUE_ERSATZ_REGEL' ); ?></label>
+					</td><td colspan="2">
+						<select name="ersatz_regel" id="ersatz_regel" value="<?php echo $this->lists['ersatz_regel']; ?>" size="1">
+							<option value="0" <?php if ($this->lists['ersatz_regel'] == 0) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_ERSATZ_REGEL_0' );?></option>
+							<option value="1" <?php if ($this->lists['ersatz_regel'] == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_ERSATZ_REGEL_1' );?></option>
+						</select>
+					</td>
 					<td nowrap="nowrap">
 						<label for="anz_sgp"><?php echo JText::_( 'LEAGUE_ANZ_SGP' ); ?></label>
 						</td><td colspan="2">
@@ -447,6 +455,13 @@ $str_params = clm_core::$load->request_string('str_params');
 			<legend><?php echo JText::_( 'LEAGUE_PREFERENCES' ); ?></legend>
 			<table class="paramlist admintable">
 
+				<tr>
+					<td nowrap="nowrap" colspan="2">
+						<label for="anzeige_ma"><?php echo JText::_( 'LEAGUE_SHOW_PLAYERLIST' ); ?></label>
+						</td><td colspan="1"><fieldset class="radio">
+						<?php echo $this->lists['anzeige_ma']; ?>
+						</fieldset></td>
+				</tr>
 				<tr>
 					<td nowrap="nowrap">
 						<label for="mail"><?php echo JText::_( 'LEAGUE_MAIL' ); ?></label>

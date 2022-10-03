@@ -55,6 +55,8 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		$default['order']					= '0';
 		$default['published']				= '0';
 		$default['ordering']				= '0';
+		$default['ersatz_regel']			= '0';
+		$default['anzeige_ma']				= '0';
 		$default['params']					= '';
 		//Mit Daten aus Datenbank überschreiben, falls ein Liga geupdated wird
 		if(clm_core::$load->request_int('update') == 1) {
@@ -77,6 +79,8 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 				$default['order']		= $ligaFromDatabase->order;
 				$default['published'] 	= $ligaFromDatabase->published;
 				$default['ordering']	= $ligaFromDatabase->ordering;
+				$default['ersatz_regel'] = $ligaFromDatabase->ersatz_regel;
+				$default['anzeige_ma']	= $ligaFromDatabase->anzeige_ma;
 				$default['bem_int'] 	= $ligaFromDatabase->bem_int;
 				$default['bemerkungen'] = $ligaFromDatabase->bemerkungen;
 				$default['params'] 		= $ligaFromDatabase->params;			
@@ -367,7 +371,8 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		
 		//Liga-Parameter aufbereiten
 		$default['params'] = clm_core::$load->request_string('str_params');
-		$paramsStringArray = explode("\n", $default['params']);
+//		$paramsStringArray = explode("\n", $default['params']);
+		$paramsStringArray = explode(PHP_EOL, $default['params']);
 		$default_params = array();
 		foreach ($paramsStringArray as $value) {
 			$ipos = strpos ($value, '=');
@@ -415,7 +420,7 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		$spalten = array ( 'lid', 'name', 'sl', 'sid', 'rang', 'teil', 'stamm', 'ersatz', 'runden', 'durchgang', 'runden_modus', 'heim',
 		                   'sieg', 'remis', 'nieder', 'antritt', 'man_sieg', 'man_remis', 'man_nieder', 'man_antritt', 'sieg_bed',
 						   'b_wertung', 'auf', 'auf_evtl', 'ab', 'ab_evtl', 'mail', 'sl_mail', 'order', 
-						   'published', 'ordering', 'bem_int', 'liga_mt', 'tiebr1', 'tiebr2', 'tiebr3', 'params' );
+						   'published', 'ordering', 'bem_int', 'liga_mt', 'tiebr1', 'tiebr2', 'tiebr3', 'ersatz_regel', 'anzeige_ma', 'params' );
 
 		
 		$fields = '';

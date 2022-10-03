@@ -1,6 +1,6 @@
 --
 -- @ Chess League Manager (CLM) Component 
--- @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+-- @Copyright (C) 2008-2022 CLM Team.  All rights reserved
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 -- @link http://www.chessleaguemanager.de
 --
@@ -294,7 +294,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_meldeliste_spieler` (
   `gesperrt` tinyint(1) unsigned DEFAULT NULL,
   `attr` varchar(4) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `lid_zps_mglnr` (`lid`,`zps`,`mgl_nr`)
+  KEY `lid_zps_mglnr` (`lid`,`zps`,`mgl_nr`),
+  KEY `lid` (`lid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -386,7 +387,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_rangliste_id` (
   `checked_out` int(11) unsigned NOT NULL DEFAULT '0',
   `checked_out_time` datetime NOT NULL DEFAULT '1970-01-01 00:00:00',
   `ordering` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `gid_sid_zps` (`gid`,`sid`,`zps`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -427,7 +429,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_rangliste_spieler` (
   `Rang` int(10) unsigned NOT NULL DEFAULT '0',
   `man_nr` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `sid` mediumint(3) unsigned DEFAULT '0',
-  PRIMARY KEY (`Gruppe`,`ZPS`,`man_nr`,`Rang`)
+  PRIMARY KEY (`Gruppe`,`ZPS`,`man_nr`,`Rang`),
+  KEY `sid_ZPS_mannr_mglnr` (`sid`,`ZPS`,`man_nr`,`Mgl_Nr`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -524,7 +527,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_runden_termine` (
   `datum` date NOT NULL DEFAULT '1970-01-01',
   `startzeit` time NOT NULL DEFAULT '00:00:00',
   `deadlineday` date NOT NULL DEFAULT '1970-01-01',
-  `deadlinetime` time NOT NULL DEFAULT '24:00:00',
+  `deadlinetime` time NOT NULL DEFAULT '00:00:00',
   `meldung` tinyint(1) NOT NULL DEFAULT '0',
   `sl_ok` tinyint(1) NOT NULL DEFAULT '0',
   `published` tinyint(1) NOT NULL DEFAULT '0',
@@ -539,7 +542,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_runden_termine` (
   `ordering` int(11) NOT NULL DEFAULT '0',
   `enddatum` date NOT NULL DEFAULT '1970-01-01',
   PRIMARY KEY (`id`),
-  KEY `published` (`published`)
+  KEY `published` (`published`),
+  KEY `liga` (`liga`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -561,7 +565,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_saison` (
   `datum` date NOT NULL DEFAULT '1970-01-01',
   `rating_type` tinyint(1) unsigned NOT NULL DEFAULT '0',  
   PRIMARY KEY (`id`),
-  KEY `published` (`published`)
+  KEY `published` (`published`),
+  KEY `archiv` (`archiv`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -652,6 +657,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_swt_liga` (
   `tiebr1` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `tiebr2` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `tiebr3` tinyint(2) unsigned NOT NULL DEFAULT '0',
+  `ersatz_regel` tinyint(1) unsigned DEFAULT '0',
+  `anzeige_ma` tinyint(1) unsigned DEFAULT '0',
   `params` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `published` (`published`)
@@ -827,7 +834,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_swt_runden_termine` (
   `datum` date NOT NULL DEFAULT '1970-01-01',
   `startzeit` time NOT NULL DEFAULT '00:00:00',
   `deadlineday` date NOT NULL DEFAULT '1970-01-01',
-  `deadlinetime` time NOT NULL DEFAULT '24:00:00',
+  `deadlinetime` time NOT NULL DEFAULT '00:00:00',
   `meldung` tinyint(1) NOT NULL DEFAULT '0',
   `sl_ok` tinyint(1) NOT NULL DEFAULT '0',
   `published` tinyint(1) NOT NULL DEFAULT '0',

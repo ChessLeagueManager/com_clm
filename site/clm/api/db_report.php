@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -253,7 +253,7 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 		// Prüfen ob Datensatz schon vorhanden ist
 		$now = date('Y-m-d H:i:s'); 
 		$mdt = $finish[($runde+(($dg-1)*$out["liga"][0]->runden)-1)]->deadlineday.' ';
-		if ($finish[($runde+(($dg-1)*$out["liga"][0]->runden)-1)]->deadlinetime != '00:00:00') $mdt .= $finish[($runde+(($dg-1)*$out["liga"][0]->runden)-1)]->deadlinetime; else $mdt .= '24:00:00';
+		if ($finish[($runde+(($dg-1)*$out["liga"][0]->runden)-1)]->deadlinetime != '00:00:00') $mdt .= $finish[($runde+(($dg-1)*$out["liga"][0]->runden)-1)]->deadlinetime; else $mdt .= '00:00:00';
 		if ($out["access"][0]->gemeldet > 0 AND $mdt < $now) {
 		return array(false, "e_reportAlready", array($liga,$out["paar"][0]->sid));
 	}	
