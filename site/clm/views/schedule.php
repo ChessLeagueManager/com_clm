@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -20,6 +20,8 @@ function clm_view_schedule($out) {
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
+	
+	$itemid 	= clm_core::$load->request_int('Itemid',0);
 ?>
 <Script language="JavaScript">
 <!-- Vereinsliste
@@ -76,16 +78,16 @@ location=form.select.options[index].value;}}
 								if ($paar1->rtime != "00:00:00" AND $paar1->rtime != "24:00:00") echo "<br>".substr($paar1->rtime,0,5); }
 							?></div>
 <div class="element league">
-    <a href="index.php?option=com_clm&view=paarungsliste&saison=<?php echo $paar1->sid; ?>&liga=<?php echo $paar1->lid; ?>">
+    <a href="index.php?option=com_clm&view=paarungsliste&saison=<?php echo $paar1->sid; ?>&liga=<?php echo $paar1->lid; ?><?php if ($itemid <> 0) { echo "&Itemid=".$itemid; } ?>">
 	<?php echo $paar1->lname; ?></a></div>
 <div class="element dg"><?php echo $paar1->dg; ?></div>
 <div class="element round"><?php echo $paar1->runde; ?></div>
 <div class="element home">
-    <a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $paar1->sid; ?>&liga=<?php echo $paar1->lid; ?>&tlnr=<?php echo $paar1->htln; ?>">
+    <a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $paar1->sid; ?>&liga=<?php echo $paar1->lid; ?>&tlnr=<?php echo $paar1->htln; ?><?php if ($itemid <> 0) { echo "&Itemid=".$itemid; } ?>">
 	<?php echo $paar1->hname; ?></a></div>
 <div class="element result"><?php echo $paar1->brettpunkte." : ".$paar1->gbrettpunkte; ?></div>
 <div class="element guest">
-    <a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $paar1->sid; ?>&liga=<?php echo $paar1->lid; ?>&tlnr=<?php echo $paar1->gtln; ?>">
+    <a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $paar1->sid; ?>&liga=<?php echo $paar1->lid; ?>&tlnr=<?php echo $paar1->gtln; ?><?php if ($itemid <> 0) { echo "&Itemid=".$itemid; } ?>">
 	<?php echo $paar1->gname; ?></a></div>
 </div>
 

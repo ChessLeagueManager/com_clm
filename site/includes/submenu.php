@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -25,7 +25,7 @@ if ($fe_submenu == 1) {
 	if ($config->template) {
 		$document->addStyleSheet('components/com_clm/includes/submenu.css', 'text/css');
 	}
-	$itemid = clm_core::$load->request_string('Itemid');
+	$itemid = clm_core::$load->request_int('Itemid');
 	// Datenbank einlesen
 	include (JPATH_COMPONENT . DS . 'models' . DS . 'submenu.php');
 	require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'submenu_function.php');

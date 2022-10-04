@@ -23,6 +23,7 @@ $ -> Language fix or change
 + neue Indizes zur Beschleunigung
 # Ligaheft: Überlesen von Nullsätzen
 ^ SWT-Import: Verarbeitung ungewöhnlicher Ergebniswerte
+# Code-Anpassung Joomla 4: SEF-Funktionalität
 
 - - - - - 3.9.9 - [15-08-2022] - - - - - - - - - - - - - - - - - - - -
 # CLM Liga-Export/Import: Liga ohne Brettergebnisse

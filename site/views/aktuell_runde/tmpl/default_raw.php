@@ -15,7 +15,7 @@ defined('_JEXEC') or die('Restricted access');
 $rnd_dg = CLMModelAktuell_Runde::Runden();
 $runde	= $rnd_dg[0];
 $dg	= $rnd_dg[1];
-$itemid		= clm_core::$load->request_string('Itemid','1');
+$itemid		= clm_core::$load->request_int('Itemid',1);
 $sid		= clm_core::$load->request_string( 'saison','1');
 $lid		= clm_core::$load->request_string('liga','1');
  
