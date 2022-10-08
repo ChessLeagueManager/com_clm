@@ -24,6 +24,7 @@ $ -> Language fix or change
 # Ligaheft: Überlesen von Nullsätzen
 ^ SWT-Import: Verarbeitung ungewöhnlicher Ergebniswerte
 # Code-Anpassung Joomla 4: SEF-Funktionalität
++ Datenübernahme vom DSB über csv-Datei: um FIDE-Titel erweitert											   
 
 - - - - - 3.9.9 - [15-08-2022] - - - - - - - - - - - - - - - - - - - -
 # CLM Liga-Export/Import: Liga ohne Brettergebnisse

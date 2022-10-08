@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Modul
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 function clm_api_db_dsb_player($spieler = array(), $incl_pd = 0) {
 	@set_time_limit(0); // hope
 	$sid = clm_core::$access->getSeason();
@@ -7,7 +13,7 @@ function clm_api_db_dsb_player($spieler = array(), $incl_pd = 0) {
 		return array(true, "w_noPlayerToUpdate");
 	}
 	$counter = 0;
-	$sql = "REPLACE INTO #__clm_dwz_spieler ( `sid`,`ZPS`, `Mgl_Nr`, `Spielername`, `DWZ`, `DWZ_Index`, `Spielername_G`, `Geschlecht`, `Geburtsjahr`, `FIDE_Elo`, `FIDE_Land`, `FIDE_ID`, `Status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	$sql = "REPLACE INTO #__clm_dwz_spieler ( `sid`,`ZPS`, `Mgl_Nr`, `Spielername`, `DWZ`, `DWZ_Index`, `Spielername_G`, `Geschlecht`, `Geburtsjahr`, `FIDE_Elo`, `FIDE_Land`, `FIDE_ID`, `Status`, `FIDE_Titel`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	$stmt = clm_core::$db->prepare($sql);
 	// Detaildaten zu Mitgliedern lesen
 	for ($i = 0;$i < count($spieler);$i++) {
@@ -20,7 +26,7 @@ function clm_api_db_dsb_player($spieler = array(), $incl_pd = 0) {
 		// return array($dsbmglnr, $clmName, $clmNameG, $dsbgeschlecht, $dsbfideland);
 		$rating = ($einSpieler[8] != '0' ? $einSpieler[8] : "NULL");
 		$rating_index = ($einSpieler[8] != '0' ? $einSpieler[9] : "NULL");
-		$stmt->bind_param('issssssssssss', $sid, $einSpieler[0], $out[0], $out[1], $rating, $rating_index, $out[2], $out[3], $einSpieler[6], $einSpieler[10], $out[4], $einSpieler[12], $einSpieler[2]);
+		$stmt->bind_param('isssssssssssss', $sid, $einSpieler[0], $out[0], $out[1], $rating, $rating_index, $out[2], $out[3], $einSpieler[6], $einSpieler[10], $out[4], $einSpieler[12], $einSpieler[2], $einSpieler[11]);
 		$stmt->execute();
 		$counter++;
 	}
