@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -16,7 +16,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 //echo "<br>vttt-players:"; var_dump($this->players);
 //die();
 // Konfigurationsparameter auslesen
-$itemid 	= clm_core::$load->request_string( 'Itemid' );
+$itemid 	= clm_core::$load->request_int( 'Itemid' );
 $spRang		= clm_core::$load->request_int('spRang');	//Sonderranglisten
 $option 	= clm_core::$load->request_string('option','com_clm');
 $mainframe	= JFactory::getApplication();

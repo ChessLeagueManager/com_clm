@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -15,7 +15,7 @@ defined('_JEXEC') or die('Restricted access');
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
 // Konfigurationsparameter auslesen - get configuration parameters
-$itemid = clm_core::$load->request_string( 'Itemid' );
+$itemid = clm_core::$load->request_int( 'Itemid' );
 $config = clm_core::$db->config();
 $pgn	= clm_core::$load->request_int('pgn'); 
 

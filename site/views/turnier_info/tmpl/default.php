@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -20,7 +20,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 echo "<div id='clm'><div id='turnier_info'>";
 
 // Konfigurationsparameter auslesen
-$itemid 		= clm_core::$load->request_string( 'Itemid' );
+$itemid 		= clm_core::$load->request_int( 'Itemid' );
 
 // componentheading vorbereiten
 $heading = $this->turnier->name;

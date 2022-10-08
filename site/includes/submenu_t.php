@@ -23,7 +23,7 @@ if ($fe_submenu_t == 1) {
 	if ($config->template) {
 		$document->addStyleSheet('components/com_clm/includes/submenu.css', 'text/css');
 	}
-	$itemid = clm_core::$load->request_string('Itemid');
+	$itemid = clm_core::$load->request_int('Itemid');
 	// Datenbank einlesen
 	include (JPATH_COMPONENT . DS . 'models' . DS . 'submenu_t.php');
 	require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'submenu_function.php');
