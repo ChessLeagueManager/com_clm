@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -119,6 +118,9 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 			$birthYear = clm_core::$load->request_string('birthYear', '0000');
 			
 			$twz = clm_core::$load->gen_twz($param_useastwz, $natrating, $fideelo);
+			if (is_null($twz) OR $twz == '') $twz = 0;						
+			if (is_null($natrating) OR $natrating == '') $natrating = 0;						
+			if (is_null($fideelo) OR $fideelo == '') $fideelo = 0;						
 
 			$query = " INSERT INTO #__clm_turniere_tlnr"
 				." (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `titel`, `mgl_nr` ,`zps`)"
@@ -189,6 +191,10 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 					} else {
 					
 						$twz = clm_core::$load->gen_twz($param_useastwz, $data->DWZ, $data->FIDE_Elo);
+						if (is_null($twz) OR $twz == '') $twz = 0;						
+						if (is_null($data->DWZ) OR $data->DWZ == '') $data->DWZ = 0;						
+						if (is_null($data->FIDE_Elo) OR $data->FIDE_Elo == '') $data->FIDE_Elo = 0;						
+						if (is_null($data->FIDE_ID) OR $data->FIDE_ID == '') $data->FIDE_ID = 0;						
 						
 						$query = " INSERT INTO #__clm_turniere_tlnr"
 								. " (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `FIDEid`, `FIDEcco`, `titel`,`mgl_nr` ,`PKZ` ,`zps`) "
