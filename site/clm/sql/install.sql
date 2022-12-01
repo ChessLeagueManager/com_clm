@@ -782,6 +782,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_swt_rnd_man` (
   `wertpunkte` decimal(5,1) unsigned DEFAULT NULL,
   `ko_decision` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `comment` text NOT NULL,
+  `icomment` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `published` (`published`),
   KEY `swt_id` (`swt_id`)

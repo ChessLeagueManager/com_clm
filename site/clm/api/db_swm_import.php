@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  *
@@ -13,13 +13,17 @@ function clm_api_db_swm_import($file,$season,$turnier,$group=false,$update=false
 	if (strtolower(JFile::getExt($file) ) == 'tumx' OR strtolower(JFile::getExt($file) ) == 'tutx') {
 		$group = true; 
 	} else { $group = false; }
+	$pos1 = strrpos($file, '/'); if ($pos1 === false) $pos1 = 0;
+	$pos2 = strrpos($file, '\\'); if ($pos2 === false) $pos2 = 0;
+	if ($pos2 > $pos1); $pos1 = $pos2;
+	$filename = substr($file,$pos1+1);
     $lang = clm_core::$lang->swm_import;
 	if ($test) $debug = 1; else $debug = 0;
 	$auser = (integer) clm_core::$access->getId(); // aktueller CLM-User
 	if ($test)	echo "<br><br>Test - keine Übernahme der Daten ins CLM!"; 
 	$new_ID = 0;
 if ($debug > 0) { echo "<br><br>-- allgemeine Daten --";	}
-if ($debug > 0) echo "<br><br>datei: ".$file; 		//echo "<br>end"; //die();
+if ($debug > 0) echo "<br><br>datei: ".$filename; 		//echo "<br>end"; //die();
 if ($debug > 0) echo "<br>saison: ".$season; 	//echo "<br>end"; //die();
 if ($debug > 0) echo "<br>turnier: ".$turnier; 	//echo "<br>end"; //die();
 
@@ -74,6 +78,7 @@ if ($debug > 1) { echo "<br>tournament2: ";	var_dump($tournament2); }
 	if ($tournament_fk[0] > $tournament["out"][213][0]) $tournament["out"][213][0] = $tournament_fk[0];
 	$tournament_fk = transcode_fidecorrect($tournament2["out"][215]); // optionTiebreakersFideCorrect
 	if ($tournament_fk[0] > $tournament["out"][213][0]) $tournament["out"][213][0] = $tournament_fk[0];
+	$bem_int = 'SWM-Importdatei'.$filename.';';
 	
 	If ($group) { 	// Mannschaftsturniere
 		$typ = '3'; 														   // Mannschaft-Schweizer Sytem .TUM
@@ -87,19 +92,19 @@ if ($debug > 1) { echo "<br>tournament2: ";	var_dump($tournament2); }
 		$params->set("color_order",'1');	
 		$params->set("time_control",$tournament["out"][106][0]);
 		$str_params = $params->params();
-		$keyS = '`name`,`sid`,`runden_modus`,`durchgang`,`rnd`,`sl`,`published`,`stamm`,`ersatz`,`teil`,`runden`,`params`,`liga_mt`,`tiebr1`,`tiebr2`,`tiebr3`';
+		$keyS = '`name`,`sid`,`runden_modus`,`durchgang`,`rnd`,`sl`,`published`,`stamm`,`ersatz`,`teil`,`runden`,`params`,`liga_mt`,`tiebr1`,`tiebr2`,`tiebr3`,`bem_int`';
 		$valueS = "'".$name."', ".$season.", '".$typ."', 1, 1, 0, 1, '"
-			.$stamm."', '0','".$teil."','".$arunden."','".$str_params."', 1,".$tiebr1.",".$tiebr2.",".$tiebr3;
+			.$stamm."', '0','".$teil."','".$arunden."','".$str_params."', 1,".$tiebr1.",".$tiebr2.",".$tiebr3.",".$bem_int;
 
 		$sql = "INSERT INTO #__clm_swt_liga (".$keyS.") VALUES (".$valueS.")";
-if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
+		if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 		clm_core::$db->query($sql);
 		$new_swt_tid = clm_core::$db->insert_id();
 	} else { 		// Einzelturniere
 		$typ = '1'; 														   // Einzel-Schweizer Sytem .TUN
 		if (strpos($file,'.TUR') > 0 OR strpos($file,'.tur') > 0 ) $typ = '2'; // Einzel-Rundenturnier	 .TUR
-		$keyS = '`sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `name`, `bezirkTur`, `checked_out_time`';
-		$valueS = $season.", '".$typ."', 1, 1, 0, 1, '".$name."', '0', '1970-01-01 00:00:00'";
+		$keyS = '`sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `name`, `bezirkTur`, `checked_out_time`, `bem_int`';
+		$valueS = $season.", '".$typ."', 1, 1, 0, 1, '".$name."', '0', '1970-01-01 00:00:00', '".$bem_int."'";
 		$params_array = array();
 		foreach ($tournament['out'] as $tour) {
 if ($debug > 1) { echo "<br>tour: ";	var_dump($tour); }
@@ -490,8 +495,8 @@ if ($debug > 0) { echo " ( Runde: $runde  Tisch: $table ) ";	}
 		}
 if ($debug > 1) { echo "<br>runde: $runde  brett: $brett  ergebnis: $ergebnis  -- "; var_dump($ergebnis);	}
 
-		$keyS = '`sid`, `swt_id`, `dg`, `runde`, `paar`, `heim`, `tln_nr`, `gegner`, `kampflos`, `brettpunkte`, `manpunkte`, `comment`';
-		$valueS = $season.",".$new_swt_tid.", 1,".$runde.", ".$table.", ".$heim.",".$spieler.", ".$gegner.", ".$kampflos.", '".$h_punkte."', ".$man_punkte.", ''";
+		$keyS = '`sid`, `swt_id`, `dg`, `runde`, `paar`, `heim`, `tln_nr`, `gegner`, `kampflos`, `brettpunkte`, `manpunkte`, `comment`, `icomment`';
+		$valueS = $season.",".$new_swt_tid.", 1,".$runde.", ".$table.", ".$heim.",".$spieler.", ".$gegner.", ".$kampflos.", '".$h_punkte."', ".$man_punkte.", '', ''";
 		$sql = "INSERT INTO #__clm_swt_rnd_man (".$keyS.") VALUES (".$valueS.")";
 if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 		clm_core::$db->query($sql);
@@ -500,8 +505,8 @@ if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 		$heim = 0;
 		if ($gegner > 0) $man_punkte = 2 - $man_punkte;
 		else $man_punkte = 0;
-		$keyS = '`sid`, `swt_id`, `dg`, `runde`, `paar`, `heim`, `tln_nr`, `gegner`, `kampflos`, `brettpunkte`, `manpunkte`, `comment`';
-		$valueS = $season.",".$new_swt_tid.", 1,".$runde.", ".$table.", ".$heim.",".$gegner.", ".$spieler.", ".$kampflos.", '".$g_punkte."', ".$man_punkte.", ''";
+		$keyS = '`sid`, `swt_id`, `dg`, `runde`, `paar`, `heim`, `tln_nr`, `gegner`, `kampflos`, `brettpunkte`, `manpunkte`, `comment`, `icomment`';
+		$valueS = $season.",".$new_swt_tid.", 1,".$runde.", ".$table.", ".$heim.",".$gegner.", ".$spieler.", ".$kampflos.", '".$g_punkte."', ".$man_punkte.", '', ''";
 		$sql = "INSERT INTO #__clm_swt_rnd_man (".$keyS.") VALUES (".$valueS.")";
 if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 		clm_core::$db->query($sql);

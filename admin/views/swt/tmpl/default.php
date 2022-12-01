@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -24,7 +24,7 @@ $import_pgn	=$config->import_pgn;
 <form action="index.php" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data" >
 	<table width="100%" class="admintable"> 
 <!---  Teil swt - Import von Swiss-Chess Dateien ------------------------------------------------------------------------------------------ -->		
-		<tr><td><fieldset><legend>SWT-Import</legend></fieldset></td></tr>
+		<tr><td><fieldset><legend>SWT-Import  <span style="font-size:80%;">(Swiss-Chess)</span></legend></fieldset></td></tr>
 		<tr>
 			<td width="50%" style="vertical-align: top;">
 				<fieldset class="adminform"> 
@@ -115,7 +115,7 @@ $import_pgn	=$config->import_pgn;
 		</tr>		
 
 <!---  Teil swm - Import von Swiss-Manager Dateien------------------------------------------------------------------------------------------ -->		
-		<tr><td><br><br><fieldset><legend>SWM-Import</legend></fieldset></td></tr>
+		<tr><td><br><br><fieldset><legend>SWM-Import  <span style="font-size:80%;">(Swiss-Manager)</span></legend></fieldset></td></tr>
 		<tr>
 			<td width="50%" style="vertical-align: top;">
 				<fieldset class="adminform"> 

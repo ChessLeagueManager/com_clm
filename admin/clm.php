@@ -511,7 +511,7 @@ if ($viewName = clm_core::$load->request_string('view')) {
 	}
 	if ( in_array($viewName, array('swt', 'swtturnier', 'swtturnierinfo', 'swtturniertlnr', 'swtturniererg',
 						'swtliga', 'swtligainfo', 'swtligaman', 'swtligaerg', 'swtligasave',
-						'pgnimport', 'pgndata', 'pgnntable', 'arenaturnier', 'termineimport'))) {
+						'pgnimport', 'pgndata', 'pgnntable', 'arenaturnier', 'termineimport', 'swmturnier'))) {
 		$language->load('com_clm.swtimport');
 		clm_core::$load->load_js("submit");
 	}

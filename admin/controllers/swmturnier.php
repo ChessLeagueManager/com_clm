@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -15,6 +15,7 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 class CLMControllerSWMTurnier extends JControllerLegacy
 {
 	function __construct() {		
+		$this->app = JFactory::getApplication();
 		parent::__construct();		
 	}
 	
@@ -61,12 +62,16 @@ class CLMControllerSWMTurnier extends JControllerLegacy
 		$clmLog->params = array('sid' => $sid, 'tid' => $tid, 'swm' => $swm);
 		$clmLog->write();
 
-		$_REQUEST['view'] = 'swt';
+//		$_REQUEST['view'] = 'swt';
 		if (isset($result[2]) AND $result[2] > 0) { $htext = " (ID = ".$new_ID.")"; } else $htext = ""; 
-		JFactory::getApplication()->enqueueMessage( JText::_( 'SWT_STORE_SUCCESS' ).$htext,'message' );
-		$_REQUEST['swm'] = $swm;
-		
-		parent::display(); 		
+		$this->app->enqueueMessage( JText::_( 'SWT_STORE_SUCCESS' ).$htext,'message' );
+//		$_REQUEST['swm'] = $swm;
+		$adminLink = new AdminLink();
+		$adminLink->more = array('swm_file' => $swm_file, 'swm' => $swm );
+		$adminLink->view = "swt";
+		$adminLink->makeURL();
+		$this->app->redirect($adminLink->url); 				
+//		parent::display(); 		
 	
 	}
 	
@@ -109,11 +114,16 @@ class CLMControllerSWMTurnier extends JControllerLegacy
 		$clmLog->params = array('sid' => $sid, 'tid' => $new_ID, 'swm' => $swm);
 		$clmLog->write();
 
-		$_REQUEST['view'] = 'swt';
+//		$_REQUEST['view'] = 'swt';
 		if (isset($result[2]) AND $result[2] > 0) { $htext = " (ID = ".$new_ID.")"; } else $htext = ""; 
-		JFactory::getApplication()->enqueueMessage( JText::_( 'SWT_STORE_SUCCESS' ).$htext,'message' );
-		$_REQUEST['swm'] = $swm;
-		parent::display(); 		
+		$this->app->enqueueMessage( JText::_( 'SWT_STORE_SUCCESS' ).$htext,'message' );
+//		$_REQUEST['swm'] = $swm;
+		$adminLink = new AdminLink();
+		$adminLink->more = array('swm_file' => $swm_file, 'swm' => $swm );
+		$adminLink->view = "swt";
+		$adminLink->makeURL();
+		$this->app->redirect($adminLink->url); 				
+//		parent::display(); 		
 	
 	}
 	
@@ -146,8 +156,13 @@ class CLMControllerSWMTurnier extends JControllerLegacy
 
 		$_REQUEST['view'] = 'swt';
 		JFactory::getApplication()->enqueueMessage( JText::_( 'SWM_ACTION_CANCEL' ),'message' );
-		$_REQUEST['swm'] = $swm;
-		parent::display(); 		
+//		$_REQUEST['swm'] = $swm;
+		$adminLink = new AdminLink();
+		$adminLink->more = array('swm_file' => $swm_file, 'swm' => $swm );
+		$adminLink->view = "swt";
+		$adminLink->makeURL();
+		$this->app->redirect($adminLink->url); 				
+//		parent::display(); 		
 	
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleagueamanager.de
  * @author Thomas Schwietert
@@ -19,11 +19,14 @@ class CLMViewSWMTurnier extends JViewLegacy {
 		$state 		= $this->get( 'State' );
 		$saisons 	= $this->get( 'saisons' );
 		$turniere 	= $this->get( 'turniere' );
-		
-		
+		$swm_file = clm_core::$load->request_string ('swm_file', '');
+				
 		//Toolbar
 		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title( JText::_('TITLE_SWT_TOURNAMENT') ,'clm_headmenu_manager.png' );
+		if (strtolower(JFile::getExt($swm_file) ) == 'tumx' OR strtolower(JFile::getExt($swm_file) ) == 'tutx') 
+			JToolBarHelper::title( JText::_('TITLE_SWT_LEAGUE')." - ".$swm_file ,'clm_headmenu_manager.png' );
+		else
+			JToolBarHelper::title( JText::_('TITLE_SWT_TOURNAMENT')." - ".$swm_file ,'clm_headmenu_manager.png' );
 		
 		JToolBarHelper::custom('update','refresh.png','refresh_f2.png', JText::_('SWT_TOURNAMENT_UPDATE'), false);
 		$clmAccess = clm_core::$access;

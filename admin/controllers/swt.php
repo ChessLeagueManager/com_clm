@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -189,11 +189,18 @@ class CLMControllerSWT extends JControllerLegacy
 	
 	function swm_import() {
 		$model = $this->getModel('swt');
-		//$type = $model->swm_import();
+//		$type = $model->swm_import();
 		$type = 0;
+		$swm_file = clm_core::$load->request_string('swm_file', '');
+		if ($swm_file == '') $type = 999;
 		if($type == 0) {
-			$_REQUEST['view'] = 'swmturnier';
-			parent::display();
+//			$_REQUEST['task'] = 'import';
+//			$_REQUEST['view'] = 'pgnimport';
+			$adminLink = new AdminLink();
+			$adminLink->more = array('swm_file' => $swm_file);
+			$adminLink->view = "swmturnier";
+			$adminLink->makeURL();
+			$this->app->redirect($adminLink->url); 		
 		} elseif($type == 255){
 			$_REQUEST['view'] = 'swtliga';
 			parent::display();
@@ -202,7 +209,7 @@ class CLMControllerSWT extends JControllerLegacy
 			$adminLink->view = "swt";
 			$adminLink->makeURL();
 			
-			$msg = JText::_( 'SWM_FILE_ERROR!' ); 
+			$msg = JText::_( 'SWT_FILE_ERROR' ); 
 			
 			$this->app->enqueueMessage( $msg );
 			$this->app->redirect($adminLink->url); 		
