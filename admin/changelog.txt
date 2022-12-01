@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 4.0.1 - [xx-xx-2022] - - - - - - - - - - - - - - - - - - - -
++ Admin-View Mitgliederverwaltung: Reaktivierung der Vorbelegung bei Änderung
+
 - - - - - 4.0.0 - [15-10-2022] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Änderung im View Meldelistenerfassung im FE wegen Joomla 4 / php 8
 ^ Code-Anpassung Joomla 4: Design der Listen in den Admin-Views

@@ -43,6 +43,11 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 		
 	$clmAccess = clm_core::$access;      
+		
+	if (count($spieler) == 0) {
+		$spieler[0] = new stdClass();
+		$spieler[0]->Geschlecht = "";
+	}
 		?>
 
 <script language="javascript" type="text/javascript">
@@ -107,6 +112,7 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 	</table>
 
 <?php	 $filter_vid	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' ); ?>
+<?php	 $filter_mgl	= $mainframe->getUserStateFromRequest( "$option.filter_mgl",'filter_mgl',0,'int' ); ?>
 
 	<div class="width-40 fltlft">
 	<fieldset class="adminform">
