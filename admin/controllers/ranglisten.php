@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -462,7 +462,7 @@ function save()
 		." WHERE a.zps = '$zps'"
 		." AND a.sid =".$sid
 		." AND l.rang = ".$gid
-		." GROUP BY a.man_nr ASC "
+		." GROUP BY a.man_nr "
 		." ORDER BY a.man_nr ASC "
 		;
 	$db->setQuery($query);
@@ -515,6 +515,7 @@ function save()
 			$z_sum_saison = $old_ml[$dkey]->sum_saison; 
 			$z_gesperrt	 = $old_ml[$dkey]->gesperrt; 
 		} else {
+			$z_ordering = 0;
 			$z_start_dwz = NULL;
 			$z_start_I0 = NULL;
 			//echo "<br>n:".$dkey."  :"; var_dump($z_dwz);
@@ -527,7 +528,7 @@ function save()
 			$z_EFaktor	 = 0; 
 			$z_Niveau	 = 0; 
 			$z_sum_saison = 0; 
-			$z_gesperrt	 = NULL; 
+			$z_gesperrt	 = 0; 
 		}
 	//if (($mnr[$y] >= $lid_rang[$x]->man_nr AND $rang[$y] < 1000 ) OR ($mnr[$y] == $lid_rang[$x]->man_nr) ) {
 	if ($mnr[$y] >= $lid_rang[$x]->man_nr) {

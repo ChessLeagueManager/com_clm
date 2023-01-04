@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -107,7 +107,7 @@
 		$query = " SELECT COUNT(id) FROM #__clm_mannschaften as a "
 			." WHERE a.liga = ".$id
 			." AND a.name = 'spielfrei'"
-			." ORDER BY a.tln_nr "
+//			." ORDER BY a.tln_nr "
 			;
 		$spielfreiNumber = clm_core::$db->count($query);
 		

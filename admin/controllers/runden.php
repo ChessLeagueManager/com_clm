@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -62,7 +62,7 @@ function display($cachable = false, $urlparams = array())
 	if ( $filter_lid ) {	$where[] = 'a.liga = '.(int) $filter_lid; }
 	if ($search) {	$where[] = 'LOWER(a.name) LIKE "'.$db->escape('%'.$search.'%').'"';}
 
-	if ( $filter_state ) {
+	if ( isset($filter_state) AND is_string($filter_state) ) {
 		if ( $filter_state == 'P' ) {
 			$where[] = 'a.published = 1';
 		} else if ($filter_state == 'U' ) {

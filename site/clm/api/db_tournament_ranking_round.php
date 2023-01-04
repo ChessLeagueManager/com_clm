@@ -110,7 +110,7 @@
 		$query = " SELECT COUNT(id) FROM #__clm_mannschaften as a "
 			." WHERE a.liga = ".$id
 			." AND a.name = 'spielfrei'"
-			." ORDER BY a.tln_nr "
+//			." ORDER BY a.tln_nr "
 			;
 		$spielfreiNumber = clm_core::$db->count($query);
 		

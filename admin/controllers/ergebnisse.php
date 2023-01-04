@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -94,7 +93,7 @@ function display($cachable = false, $urlparams = array())
 
 	if ($search) {	$where[] = 'LOWER(m.name) LIKE "'.$db->escape('%'.$search.'%').'"';}
 
-	if ( $filter_state ) {
+	if ( isset($filter_state) AND is_string($filter_state) ) {
 		if ( $filter_state == 'P' ) {
 			$where[] = 'a.published = 1';
 		} else if ($filter_state == 'U' ) {
@@ -158,7 +157,7 @@ function display($cachable = false, $urlparams = array())
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
 	$lists['sid']      = JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 	// Nur ausführen wenn Saison published = 1 !!
-	if ($rows[0]->liga) {
+	if ( isset($rows[0]->liga) AND is_string($rows[0]->liga) ) {
 	
 	//Zugangscheck
 	$clmAccess = clm_core::$access;      
@@ -193,7 +192,7 @@ function display($cachable = false, $urlparams = array())
 	$lists['lid']	= JHTML::_('select.genericlist', $ligalist, 'filter_lid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
 	// Rundenfilter
 	$sql = 'SELECT id, runde as name FROM #__clm_rnd_man '
-		." WHERE  lid =".($rows[0]->lid)." AND paar =1 AND heim = 1 AND dg = 1"
+		." WHERE lid =".($rows[0]->lid)." AND paar =1 AND heim = 1 AND dg = 1"
 		." ORDER BY runde ASC ";
 	$db->setQuery($sql);
 	$rlist[]	= JHTML::_('select.option',  '0', JText::_( 'ERGEBNISSE_RUNDE' ), 'name', 'name' );
@@ -1447,7 +1446,8 @@ function save()
 	$clmLog->write();
 
 	// errechnte/aktualisiere Rangliste & inoff. DWZ falls eingestellt (autoDWZ, autoRANKING)
-	clm_core::$api->direct("db_tournament_auto",array($liga,true,true));
+//	clm_core::$api->direct("db_tournament_auto",array($liga,true,true));
+	clm_core::$api->direct("db_tournament_auto",array($lid,true,true));
  	
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );

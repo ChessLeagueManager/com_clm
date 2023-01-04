@@ -17,6 +17,7 @@ $ -> Language fix or change
 # Code-Änderung im Admin-View Importe SWM-Datei (Nachbesserung)
 # Ergebnismeldung mit interner Bemerkung (Rückwirkung auf Importe)
 + Frontend: Nichtanzeige Mailadresse SL möglich
+^ Code-Anpassung wegen MariaDB(SQL-Mode) / php 8.1
 
 - - - - - 4.0.0 - [15-10-2022] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Änderung im View Meldelistenerfassung im FE wegen Joomla 4 / php 8

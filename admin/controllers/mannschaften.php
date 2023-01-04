@@ -350,10 +350,12 @@ function save()
 		$mainframe->redirect( $link);
 	}
 	// Spielgemeinschaft
-	$sg_array = array();
-	$sg_array = $row->sg_zps;
-	$row->sg_zps = '';
-	$row->sg_zps = implode(',',$sg_array);
+	if ($row->sg_zps != '') {
+		$sg_array = array();
+		$sg_array = $row->sg_zps;
+		$row->sg_zps = '';
+		$row->sg_zps = implode(',',$sg_array);
+	}
 	// pre-save checks
 
 	if (!$row->check()) {
