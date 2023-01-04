@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,9 +9,8 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip');
+
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
  
 $lid		= clm_core::$load->request_int('liga',1); 
@@ -31,7 +30,6 @@ $liga		= $this->liga;
 	if (!isset($params['dwz_date'])) $params['dwz_date'] = '1970-01-01';
 $punkte		= $this->punkte;
 $spielfrei	= $this->spielfrei;
-//$dwzschnitt	= $this->dwzschnitt;
 
 if ($sid == 0) {
 	$db	= JFactory::getDBO();
@@ -79,24 +77,12 @@ if (!$liga OR $liga[0]->published == 0) {
 	$config = clm_core::$db->config();
 	$pdf_melde = $config->pdf_meldelisten;
 	$man_showdwz = $config->man_showdwz;
+	$show_sl_mail = $config->show_sl_mail;
 
 		// Userkennung holen
 	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
 
-	// Array für DWZ Schnitt setzen
-/*	$dwz = array();
-	for ($y=1; $y< ($liga[0]->teil)+1; $y++) {
-		if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
-			if(isset($dwzschnitt[($y-1)]->dwz)) {
-			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->dwz; }
-		} else {
-			if(isset($dwzschnitt[($y-1)]->start_dwz)) {
-			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; }
-		}
-	}
-*/
-	
 	// DWZ Durchschnitte - Aufstellung
 	$result = clm_core::$api->db_nwz_average($lid);
 //echo "<br>lid:"; var_dump($lid);
@@ -269,7 +255,11 @@ if (!$liga OR $liga[0]->published == 0) {
 				?>
 				<div class="ran_chief">
 					<div class="ran_chief_left"><?php echo JText::_('CHIEF') ?></div>
-					<div class="ran_chief_right"><?php echo $liga[0]->sl; ?> | <?php echo JHTML::_( 'email.cloak', $liga[0]->email ); ?></div>	
+					<?php if ($jid > 0 OR $show_sl_mail > 0) { ?>
+						<div class="ran_chief_right"><?php echo $liga[0]->sl; ?> | <?php echo JHTML::_( 'email.cloak', $liga[0]->email ); ?></div>	
+					<?php } else { ?>
+						<div class="ran_chief_right"><?php echo $liga[0]->sl; ?></div>	
+					<?php } ?>
 				</div>
 				<div class="clr"></div>
 				<?php  

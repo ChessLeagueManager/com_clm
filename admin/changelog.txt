@@ -16,6 +16,7 @@ $ -> Language fix or change
 + Admin-View Mitgliederverwaltung: Reaktivierung der Vorbelegung bei Änderung
 # Code-Änderung im Admin-View Importe SWM-Datei (Nachbesserung)
 # Ergebnismeldung mit interner Bemerkung (Rückwirkung auf Importe)
++ Frontend: Nichtanzeige Mailadresse SL möglich
 
 - - - - - 4.0.0 - [15-10-2022] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Änderung im View Meldelistenerfassung im FE wegen Joomla 4 / php 8

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
 // Variablen ohne foreach setzen
@@ -79,6 +78,14 @@ function RotatedImage($file,$x,$y,$w,$h,$angle)
 	$this->Rotate(0);
 }
 }
+
+	// Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$show_sl_mail = $config->show_sl_mail;
+
+	// Userkennung holen
+	$user	=JFactory::getUser();
+	$jid	= $user->get('id');
 
 // Zellenhöhe -> Standard 6
 	$zelle = 4;
@@ -565,7 +572,11 @@ if (isset($liga[$runde-1]->comment) AND $liga[$runde-1]->comment <> "") {
 	if (!$cr) $pdf->SetX($xx1); else $pdf->SetX($xx2);
 	$pdf->Cell(3,$zelle,' ',0,0,'L');
 	$pdf->SetFont('Times','U',$font);
-	$pdf->Cell($breite-3,$zelle,utf8_decode($liga[0]->email),0,1,'L');
+	if ($jid > 0 OR $show_sl_mail > 0) {
+		$pdf->Cell($breite-3,$zelle,utf8_decode($liga[0]->email),0,1,'L');
+	} else {
+		$pdf->Cell($breite-3,$zelle,'',0,1,'L');
+	}
 	}
 }
 // Ausgabe

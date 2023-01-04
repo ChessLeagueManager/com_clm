@@ -9,9 +9,8 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip');
+
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
  
 $lid		= clm_core::$load->request_int('liga',1); 
@@ -63,6 +62,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 	$config = clm_core::$db->config();
 	$pdf_melde = $config->pdf_meldelisten;
 	$man_showdwz = $config->man_showdwz;
+	$show_sl_mail = $config->show_sl_mail;
 
 		// Userkennung holen
 	$user	=JFactory::getUser();
@@ -259,7 +259,11 @@ elseif (!$liga OR $liga[0]->published == 0) {
 				?>
 				<div class="ran_chief">
 					<div class="ran_chief_left"><?php echo JText::_('CHIEF') ?></div>
-					<div class="ran_chief_right"><?php echo $liga[0]->sl; ?> | <?php echo JHTML::_( 'email.cloak', $liga[0]->email ); ?></div>	
+					<?php if ($jid > 0 OR $show_sl_mail > 0) { ?>
+						<div class="ran_chief_right"><?php echo $liga[0]->sl; ?> | <?php echo JHTML::_( 'email.cloak', $liga[0]->email ); ?></div>	
+					<?php } else { ?>
+						<div class="ran_chief_right"><?php echo $liga[0]->sl; ?></div>	
+					<?php } ?>
 				</div>
 				<div class="clr"></div>
 				<?php  

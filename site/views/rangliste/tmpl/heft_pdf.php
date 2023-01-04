@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
 require_once (clm_core::$path.DS.'classes'.DS.'fpdf.php');
@@ -85,23 +84,12 @@ usort($bpr, 'vergleich');
 	$telefon= $config->man_tel;
 	$mobil	= $config->man_mobil;
 	$mail	= $config->man_mail;
+	$show_sl_mail = $config->show_sl_mail;
 
 	// Userkennung holen
 	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
 
-/*	// Array für DWZ Schnitt setzen
-	$dwz = array();
-	for ($y=1; $y< ($liga[0]->teil)+1; $y++) {
-		if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
-			if(isset($dwzschnitt[($y-1)]->dwz)) {
-			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->dwz; }
-		} else {
-			if(isset($dwzschnitt[($y-1)]->start_dwz)) {
-			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; }
-		}
-	}
-*/
 // DWZ Durchschnitte - Aufstellung
 $result = clm_core::$api->db_nwz_average($lid);
 //echo "<br>lid:"; var_dump($lid);
@@ -505,8 +493,12 @@ if ($liga[0]->bemerkungen <> "") {
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
 	$pdf->Cell(150,$zelle,utf8_decode($liga[0]->sl),0,1,'L');
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
-	$pdf->Cell(150,$zelle,$liga[0]->email,0,1,'L');
-$pdf->Ln();
+	if ($jid > 0 OR $show_sl_mail > 0) {
+		$pdf->Cell(150,$zelle,$liga[0]->email,0,1,'L');
+	} else {
+		$pdf->Cell(150,$zelle,'',0,1,'L');
+	}
+	$pdf->Ln();
 // Ende Teilnehmer
 
 // --------------------------------------------------------------

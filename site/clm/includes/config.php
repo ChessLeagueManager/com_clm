@@ -150,4 +150,5 @@ $config["dewis_import_delay"]=array(129,0,250000,null);
 $config["maps_resolver"]=array(130,9,2,array(1,2));
 $config["maps_zoom"]=array(131,9,15,array(11,12,13,14,15,16));
 $config["ikommentarfeld"]=array(132,9,0,array(0,1,2));
+$config["show_sl_mail"]=array(133,9,1,array(0,1));
 ?>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
 require_once (clm_core::$path.DS.'classes'.DS.'fpdf.php');
@@ -49,7 +48,6 @@ $view = clm_core::$load->request_string( 'view');
 $liga=$this->liga;
 $punkte=$this->punkte;
 $spielfrei=$this->spielfrei;
-//$dwzschnitt=$this->dwzschnitt;
 $saison     =$this->saison; 
 
 $name_liga = $liga[0]->name;
@@ -57,25 +55,20 @@ $name_liga = $liga[0]->name;
 if ($liga[0]->tiebr1 == 9 OR $liga[0]->tiebr2 == 9 OR $liga[0]->tiebr3 == 9) $columnMP = 0;
 else $columnMP = 1;
 
-	// Array für DWZ Schnitt setzen
-/*	$dwz = array();
-	for ($y=1; $y< ($liga[0]->teil)+1; $y++){
-		if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
-			if(isset($dwzschnitt[($y-1)]->dwz)) {
-			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->dwz; }
-		} else {
-			if(isset($dwzschnitt[($y-1)]->start_dwz)) {
-			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; }
-		}
-	}
-*/
-	
 // DWZ Durchschnitte - Aufstellung
 $result = clm_core::$api->db_nwz_average($lid);
 //echo "<br>lid:"; var_dump($lid);
 //echo "<br>result:"; var_dump($result);
 $a_average_dwz_lineup = $result[2];
 //echo "<br>a_average_dwz_p:"; var_dump($a_average_dwz_p);
+
+	// Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$show_sl_mail = $config->show_sl_mail;
+
+	// Userkennung holen
+	$user	=JFactory::getUser();
+	$jid	= $user->get('id');
 
 // Spielfreie Teilnehmer finden
 $diff = $spielfrei[0]->count;
@@ -344,8 +337,12 @@ if ($liga[0]->bemerkungen <> "") {
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
 	$pdf->Cell(150,$zelle,utf8_decode($liga[0]->sl),0,1,'L');
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
-	$pdf->Cell(150,$zelle,$liga[0]->email,0,1,'L');
-$pdf->Ln();
+	if ($jid > 0 OR $show_sl_mail > 0) {
+		$pdf->Cell(150,$zelle,$liga[0]->email,0,1,'L');
+	} else {
+		$pdf->Cell(150,$zelle,'',0,1,'L');
+	}
+	$pdf->Ln();
 
 // Ausgabe
 $pdf->Output(JText::_('RANGLISTE').' '.utf8_decode($liga[0]->name).'.pdf','D');

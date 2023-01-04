@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
 $lid = clm_core::$load->request_int('liga',1); 
@@ -62,17 +61,12 @@ function Footer()
 	$telefon= $config->man_tel;
 	$mobil	= $config->man_mobil;
 	$mail	= $config->man_mail;
+	$show_sl_mail = $config->show_sl_mail;
 
 	// Userkennung holen
 	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
 
-// Array für DWZ Schnitt setzen
-/* $dwz = array();
-for ($y=1; $y< ($liga[0]->teil)+1; $y++){
-	if (isset($dwzschnitt[($y-1)])) {
-	$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->dwz; } }
-*/ 
 // Spielfreie Teilnehmer finden
 $diff = $spielfrei[0]->count;
 
@@ -835,8 +829,12 @@ $pdf->SetFont('Times','',$font+1);
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
 	$pdf->Cell(150,$zelle,utf8_decode($liga[0]->sl),0,1,'L');
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
-	$pdf->Cell(150,$zelle,utf8_decode($liga[0]->email),0,1,'L');
-$pdf->Ln();
+	if ($jid > 0 OR $show_sl_mail > 0) {
+		$pdf->Cell(150,$zelle,$liga[0]->email,0,1,'L');
+	} else {
+		$pdf->Cell(150,$zelle,'',0,1,'L');
+	}
+	$pdf->Ln();
 }
 
 // Ausgabe
