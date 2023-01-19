@@ -288,7 +288,9 @@ class CLMControllerDB extends JControllerLegacy {
 		$man = $db->loadObjectList();
 		if (count($man) > 0) {
 			if ($clm_sql == "1") {
-				$mannschaft = "\n\nINSERT INTO `#__clm_mannschaften` (`sid`, `name`, `liga`, `zps`, `liste`, `edit_liste`, `man_nr`, `tln_nr`, `mf`, `datum`, `edit_datum`, `lokal`, `bemerkungen`, `bem_int`,`published`, `ordering`) VALUES ";
+//				$mannschaft = "\n\nINSERT INTO `#__clm_mannschaften` (`sid`, `name`, `liga`, `zps`, `liste`, `edit_liste`, `man_nr`, `tln_nr`, `mf`, `datum`, `edit_datum`, `lokal`, `bemerkungen`, `bem_int`,`published`, `ordering`) VALUES ";
+				$mannschaft = "\n\nINSERT INTO `#__clm_mannschaften` (`sid`, `name`, `liga`, `zps`, `liste`, `edit_liste`, `man_nr`, `tln_nr`, `mf`, `sg_zps`, `datum`, `edit_datum`, "; 
+				$mannschaft .= "`lokal`, `bemerkungen`, `bem_int`,`published`, `ordering`, `rankingpos`,`abzug`, `bpabzug`) VALUES ";
 				$end = ",";
 				for ($x = 0;$x < count($man);$x++) {
 					if ($x + 1 == count($man)) {
@@ -297,7 +299,9 @@ class CLMControllerDB extends JControllerLegacy {
 					if ($clm_cuser != "1") {
 						$man[$x]->mf = JID;
 					}
-					$mannschaft = $mannschaft . "\n('" . $man[$x]->sid . "','" . utf8_decode($man[$x]->name) . "','" . $man[$x]->liga . "','" . $man[$x]->zps . "','" . $man[$x]->liste . "','" . JID . "','" . $man[$x]->man_nr . "','" . $man[$x]->tln_nr . "','" . JID . "','" . $man[$x]->datum . "','" . $man[$x]->edit_datum . "'";
+//					$mannschaft .= "\n('" . $man[$x]->sid . "','" . utf8_decode($man[$x]->name) . "','" . $man[$x]->liga . "','" . $man[$x]->zps . "','" . $man[$x]->liste . "','" . JID . "','" . $man[$x]->man_nr . "','" . $man[$x]->tln_nr . "','" . JID . "','" . $man[$x]->datum . "','" . $man[$x]->edit_datum . "'";
+					$mannschaft .= "\n('" . $man[$x]->sid . "','" . utf8_decode($man[$x]->name) . "','" . $man[$x]->liga . "','" . $man[$x]->zps . "','" . $man[$x]->liste . "','" . JID; 
+					$mannschaft .= "','" . $man[$x]->man_nr . "','" . $man[$x]->tln_nr . "','" . JID . "','" . $man[$x]->sg_zps . "','" . $man[$x]->datum . "','" . $man[$x]->edit_datum . "'";
 					$neu = str_replace($replace, ' ', $man[$x]->lokal);
 					$neu = str_replace($_surch, '\r\n', $neu);
 					$mannschaft = $mannschaft . ",'" . utf8_decode($neu) . "'";
@@ -306,7 +310,7 @@ class CLMControllerDB extends JControllerLegacy {
 					$mannschaft = $mannschaft . ",'" . utf8_decode($neu) . "'";
 					$neu = str_replace($replace, ' ', $man[$x]->bem_int);
 					$neu = str_replace($_surch, '\r\n', $neu);
-					$mannschaft = $mannschaft . ",'" . utf8_decode($neu) . "','" . $man[$x]->published . "','" . $man[$x]->ordering . "')" . $end;
+					$mannschaft = $mannschaft . ",'" . utf8_decode($neu) . "','" . $man[$x]->published . "','" . $man[$x]->ordering . "','" . $man[$x]->rankingpos . "','" . $man[$x]->abzug . "','" . $man[$x]->bpabzug . "')" . $end;
 				}
 			} else {
 				$mannschaft = "\n\n#" . count($man) . "#";
@@ -314,7 +318,7 @@ class CLMControllerDB extends JControllerLegacy {
 					if ($clm_cuser != "1") {
 						$man[$x]->mf = JID;
 					}
-					$mannschaft = $mannschaft . "\n('" . $man[$x]->sid . "','" . utf8_decode($man[$x]->name) . "','" . $man[$x]->liga . "','" . $man[$x]->zps . "','" . $man[$x]->liste . "','" . $man[$x]->edit_liste . "','" . $man[$x]->man_nr . "','" . $man[$x]->tln_nr . "','" . $man[$x]->mf . "','" . $man[$x]->datum . "','" . $man[$x]->edit_datum . "'";
+					$mannschaft .= "\n('" . $man[$x]->sid . "','" . utf8_decode($man[$x]->name) . "','" . $man[$x]->liga . "','" . $man[$x]->zps . "','" . $man[$x]->liste . "','" . $man[$x]->edit_liste . "','" . $man[$x]->man_nr . "','" . $man[$x]->tln_nr . "','" . $man[$x]->mf . "','" . $man[$x]->sg_zps . "','" . $man[$x]->datum . "','" . $man[$x]->edit_datum . "'";
 					$neu = str_replace($replace, ' ', $man[$x]->lokal);
 					$neu = str_replace($_surch, '\r\n', $neu);
 					$neu = str_replace(';', ':', $neu);
@@ -325,8 +329,8 @@ class CLMControllerDB extends JControllerLegacy {
 					$mannschaft = $mannschaft . ",'" . utf8_decode($neu) . "'";
 					$neu = str_replace($replace, ' ', $man[$x]->bem_int);
 					$neu = str_replace($_surch, '\r\n', $neu);
-					$mannschaft = $mannschaft . ",'" . utf8_decode($neu) . "','" . $man[$x]->published . "','" . $man[$x]->ordering . "');";
 					$neu = str_replace(';', ':', $neu);
+					$mannschaft .= ",'" . utf8_decode($neu) . "','" . $man[$x]->published . "','" . $man[$x]->ordering . "','" . $man[$x]->rankingpos . "','" . $man[$x]->abzug . "','" . $man[$x]->bpabzug . "');";
 				}
 			}
 		}
@@ -357,18 +361,25 @@ class CLMControllerDB extends JControllerLegacy {
 		$ml = $db->loadObjectList();
 		if (count($ml) > 0) {
 			if ($clm_sql == "1") {
-				$liste = "\n\nINSERT INTO `#__clm_meldeliste_spieler` (`sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`, `status`, `ordering`, `DWZ`, `I0`, `Punkte`, `Partien`, `We`, `Leistung`, `EFaktor`, `Niveau`,`sum_saison`) VALUES ";
+				$liste = "\n\nINSERT INTO `#__clm_meldeliste_spieler` (`sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`, `status`, `ordering`, `start_dwz`, `start_I0`, `FIDEelo`,";
+				$liste .= " `DWZ`, `I0`, `Punkte`, `Partien`, `We`, `Leistung`, `EFaktor`, `Niveau`,`sum_saison`) VALUES ";
 				$end = ",";
 				for ($x = 0;$x < count($ml);$x++) {
 					if ($x + 1 == count($ml)) {
 						$end = ";";
 					}
-					$liste = $liste . "\n('" . $ml[$x]->sid . "','" . $ml[$x]->lid . "','" . $ml[$x]->mnr . "','" . $ml[$x]->snr . "','" . $ml[$x]->mgl_nr . "','" . $ml[$x]->zps . "','" . $ml[$x]->status . "','" . $ml[$x]->ordering . "','" . $ml[$x]->DWZ . "','" . $ml[$x]->I0 . "','" . $ml[$x]->Punkte . "','" . $ml[$x]->Partien . "','" . $ml[$x]->We . "','" . $ml[$x]->Leistung . "','" . $ml[$x]->EFaktor . "','" . $ml[$x]->Niveau . "','" . $ml[$x]->sum_saison . "')" . $end;
+					$liste .= "\n('" . $ml[$x]->sid . "','" . $ml[$x]->lid . "','" . $ml[$x]->mnr . "','" . $ml[$x]->snr . "','" . $ml[$x]->mgl_nr;
+					$liste .= "','" . $ml[$x]->zps . "','" . $ml[$x]->status . "','" . $ml[$x]->ordering . "','" . $ml[$x]->start_dwz . "','" . $ml[$x]->start_I0 . "','" . $ml[$x]->FIDEelo;
+					$liste .= "','" . $ml[$x]->DWZ . "','" . $ml[$x]->I0 . "','" . $ml[$x]->Punkte . "','" . $ml[$x]->Partien . "','" . $ml[$x]->We . "','" . $ml[$x]->Leistung;
+					$liste .= "','" . $ml[$x]->EFaktor . "','" . $ml[$x]->Niveau . "','" . $ml[$x]->sum_saison . "')" . $end;
 				}
 			} else {
 				$liste = "\n\n#" . count($ml) . "#";
 				for ($x = 0;$x < count($ml);$x++) {
-					$liste = $liste . "\n('" . $ml[$x]->sid . "','" . $ml[$x]->lid . "','" . $ml[$x]->mnr . "','" . $ml[$x]->snr . "','" . $ml[$x]->mgl_nr . "','" . $ml[$x]->zps . "','" . $ml[$x]->status . "','" . $ml[$x]->ordering . "','" . $ml[$x]->DWZ . "','" . $ml[$x]->I0 . "','" . $ml[$x]->Punkte . "','" . $ml[$x]->Partien . "','" . $ml[$x]->We . "','" . $ml[$x]->Leistung . "','" . $ml[$x]->EFaktor . "','" . $ml[$x]->Niveau . "','" . $ml[$x]->sum_saison . "');";
+					$liste .= "\n('" . $ml[$x]->sid . "','" . $ml[$x]->lid . "','" . $ml[$x]->mnr . "','" . $ml[$x]->snr . "','" . $ml[$x]->mgl_nr;
+					$liste .= "','" . $ml[$x]->zps . "','" . $ml[$x]->status . "','" . $ml[$x]->ordering . "','" . $ml[$x]->start_dwz . "','" . $ml[$x]->start_I0 . "','" . $ml[$x]->FIDEelo;
+					$liste .= "','" . $ml[$x]->DWZ . "','" . $ml[$x]->I0 . "','" . $ml[$x]->Punkte . "','" . $ml[$x]->Partien . "','" . $ml[$x]->We . "','" . $ml[$x]->Leistung;
+					$liste .= "','" . $ml[$x]->EFaktor . "','" . $ml[$x]->Niveau . "','" . $ml[$x]->sum_saison . "');";
 				}
 			}
 		}
@@ -851,9 +862,22 @@ class CLMControllerDB extends JControllerLegacy {
 				$mainframe->enqueueMessage(JText::_('DB_ANZAHL_MR_GROSS'),'warning');
 				$fehler++;
 			}
-			if (($cnt_rnd_man != ($liga_daten[2] * $liga_daten[7] * $liga_daten[8])) OR (count($man_rnd_daten) - 1 != ($liga_daten[2] * $liga_daten[7] * $liga_daten[8]))) {
-				$mainframe->enqueueMessage(JText::_('DB_ANZAHL_MR_FALSCH'),'warning');
-				$fehler++;
+			$runden_modus = $liga_daten[13];
+			if ($runden_modus == 4 OR $runden_modus == 5) {
+				$rnd_anz = 0;
+				for ($i = 1;$i < ($liga_daten[7]+1);$i++) {
+					$rnd_anz += pow(2,$i);
+				}
+				if ($runden_modus == 5) $rnd_anz += 2;
+				if (($cnt_rnd_man != $rnd_anz) OR (count($man_rnd_daten) - 1 != $rnd_anz)) {
+					$mainframe->enqueueMessage(JText::_('DB_ANZAHL_MR_FALSCH'),'warning');
+					$fehler++;
+				}
+			} else {
+				if (($cnt_rnd_man != ($liga_daten[2] * $liga_daten[7] * $liga_daten[8])) OR (count($man_rnd_daten) - 1 != ($liga_daten[2] * $liga_daten[7] * $liga_daten[8]))) {
+					$mainframe->enqueueMessage(JText::_('DB_ANZAHL_MR_FALSCH'),'warning');
+					$fehler++;
+				}
 			}
 			if ($cnt_rnd_spl + 1 > count($spl_rnd_daten)) {
 				$mainframe->enqueueMessage(JText::_('DB_ANZAHL_SR_KLEIN'),'warning');
@@ -1178,7 +1202,7 @@ class CLMControllerDB extends JControllerLegacy {
 			clm_core::$db->query($sql);	
 		}
 		for ($x = 0;$x < $cnt_man;$x++) {
-			$man_einzel = explode("','", $man_daten[$x]);
+			$man_einzel = explode("','", substr($man_daten[$x],0,-2));
 			$row = JTable::getInstance('mannschaften', 'TableCLM');
 			$row->sid = $saison;
 			$row->name = utf8_encode($man_einzel[1]);
@@ -1197,19 +1221,23 @@ class CLMControllerDB extends JControllerLegacy {
 			} else {
 				$row->mf = $jid_new[(int)$man_einzel[8]];
 			}
-			$row->datum = $man_einzel[9];
-			$row->edit_datum = $man_einzel[10];
-			$bem = utf8_encode($man_einzel[11]);
-			$neu = str_replace('\r\n', "\n", $bem);
-			$row->lokal = $neu;
+			$row->sg_zps = $man_einzel[9];
+			$row->datum = $man_einzel[10];
+			$row->edit_datum = $man_einzel[11];
 			$bem = utf8_encode($man_einzel[12]);
 			$neu = str_replace('\r\n', "\n", $bem);
-			$row->bemerkungen = $neu;
+			$row->lokal = $neu;
 			$bem = utf8_encode($man_einzel[13]);
 			$neu = str_replace('\r\n', "\n", $bem);
+			$row->bemerkungen = $neu;
+			$bem = utf8_encode($man_einzel[14]);
+			$neu = str_replace('\r\n', "\n", $bem);
 			$row->bem_int = $neu;
-			$row->published = $man_einzel[14];
-			$row->ordering = 0; //substr($man_einzel[15], 0, -1);
+			$row->published = $man_einzel[15];
+			$row->ordering = 0; //substr($man_einzel[16], 0, -1);
+			$row->rankingpos = $man_einzel[17];
+			$row->abzug = $man_einzel[18];
+			$row->bpabzug = $man_einzel[19];
 			if (!$row->store()) {
 				$mainframe->enqueueMessage($row->getError(),'warning');
 				return;
@@ -1259,8 +1287,8 @@ class CLMControllerDB extends JControllerLegacy {
 			clm_core::$db->query($sql);	
 		}
 		for ($x = 0;$x < $cnt_spl;$x++) {
-			$spl_einzel = explode("','", $melde_daten[$x]);
-			/* Aus einem unbekannten Grund will es so nicht funktionieren -> später prüfen
+			$spl_einzel = explode("','", substr($melde_daten[$x],0,-2));
+
 			$row 		= JTable::getInstance( 'meldelisten', 'TableCLM' );
 			$row->sid		= $saison;
 			if ($liga =="new") {	$row->lid = $lid; }
@@ -1271,29 +1299,25 @@ class CLMControllerDB extends JControllerLegacy {
 			$row->zps		= $spl_einzel[5];
 			$row->status		= $spl_einzel[6];
 			$row->ordering		= $spl_einzel[7];
-			$row->DWZ		= $spl_einzel[8];
-			$row->I0		= $spl_einzel[9];
-			$row->Punkte		= $spl_einzel[10];
-			$row->Partien		= $spl_einzel[11];
-			$row->We		= $spl_einzel[12];
-			$row->Leistung		= $spl_einzel[13];
-			$row->EFaktor		= $spl_einzel[14];
-			$row->Niveau		= $spl_einzel[15];
-			$row->sum_saison	= substr($spl_einzel[16], 0, -2);
+			$row->start_dwz		= $spl_einzel[8];
+			$row->start_I0		= $spl_einzel[9];
+			$row->FIDEelo		= $spl_einzel[10];
+			$row->DWZ		= $spl_einzel[11];
+			$row->I0		= $spl_einzel[12];
+			$row->Punkte		= $spl_einzel[13];
+			$row->Partien		= $spl_einzel[14];
+			$row->We		= $spl_einzel[15];
+			$row->Leistung		= $spl_einzel[16];
+			$row->EFaktor		= $spl_einzel[17];
+			$row->Niveau		= $spl_einzel[18];
+			$row->sum_saison	= $spl_einzel[19];
 			
-			if (!$row->store()) { return JError::raiseWarning( 500,$row->getError() );}
-			*/
-			if ($liga == "new") {
-				$mlid = $lid;
-			} else {
-				$mlid = $liga;
+			if (!$row->store()) {
+				$mainframe->enqueueMessage($row->getError(),'warning');
+				return;
 			}
-			$sum_saison = substr($spl_einzel[16], 0, -2);
-			$query = "INSERT INTO #__clm_meldeliste_spieler " . " ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`, `status`, `ordering`, `DWZ`, `I0`, `Punkte`, `Partien`, `We`, `Leistung`, `EFaktor`, `Niveau`, `sum_saison`) " . " VALUES ('$saison','$mlid','$spl_einzel[2]','$spl_einzel[3]','$spl_einzel[4]','$spl_einzel[5]','$spl_einzel[6]','$spl_einzel[7]','$spl_einzel[8]','$spl_einzel[9]','$spl_einzel[10]','$spl_einzel[11]','$spl_einzel[12]','$spl_einzel[13]','$spl_einzel[14]','$spl_einzel[15]','$sum_saison') ";
-			//$db->setQuery($query);
-			//$db->query();
-			clm_core::$db->query($query);	
 		}
+
 		// Mannschaftsrunden anlegen
 		if ($liga != "new") {
 			$sql = " DELETE FROM #__clm_rnd_man WHERE lid = $liga AND sid = $saison ";
