@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 
 /**
  * Turnier
@@ -680,8 +679,10 @@ class CLMTournament {
 
 		
 		// alle Spieler durchgehen und updaten (kein vorheriges Löschen notwendig)
-		for ($s=1; $s<= $this->data->teil; $s++) { // alle Startnummern durchgehen
+//		for ($s=1; $s<= $this->data->teil; $s++) { // alle Startnummern durchgehen
+		for ($s=1; $s<= count($player); $s++) { // alle Startnummern durchgehen
 			// den TiebrSummen ihre Werte zuordnen
+			if (!isset($player[$s-1])) break;
 			for ($tb=1; $tb<=3; $tb++) {
 				$fieldname = 'tiebr'.$tb;
 				switch ($this->data->$fieldname) {
@@ -755,7 +756,7 @@ class CLMTournament {
 					. " SET sum_punkte = ".$array_PlayerPunkte[$s].", sum_wins = ".$array_PlayerWins[$s].", "
 					. " anz_spiele = ".$array_PlayerSpiele[$s].", "
 					. " sumTiebr1 = ".$sumTiebr[1].", sumTiebr2 = ".$sumTiebr[2].", sumTiebr3 = ".$sumTiebr[3].","
-					. " twz = ".$player[$s-1]->twz
+					. " twz = '".$player[$s-1]->twz."'"
 					. " WHERE turnier = ".$this->turnierid
 					. " AND snr = ".$s
 					;

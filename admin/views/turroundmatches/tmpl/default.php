@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -143,7 +143,10 @@ $pgnInput = $turParams->get('pgnInput', 1);
 							<td nowrap="nowrap" style="background-color:<?php echo $color; ?>;" align="center">
 								<span id="pgnSwitch<?php echo $value->id; ?>">
 								<?php
-									echo '<a href="#" onclick="openPgnRow('.$value->id.')">'.strlen($value->pgn).'</a>';
+									if (is_null($value->pgn)) 
+										echo '<a href="#" onclick="openPgnRow('.$value->id.')">0</a>';
+									else
+										echo '<a href="#" onclick="openPgnRow('.$value->id.')">'.strlen($value->pgn).'</a>';
 								?>
 								</span>
 							</td>

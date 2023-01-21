@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +10,7 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip');
+
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
 // Konfigurationsparameter auslesen
@@ -64,7 +64,8 @@ if (!$archive_check) {
 	$msg = JText::_('TOURNAMENT_PLAYERLISTNOTCOMPLETE')."<br/>".JText::_('TOURNAMENT_NORANKINGEXISTING');
 	$link = 'index.php?option='.$option.'&view=turnier_teilnehmer&turnier='.$this->turnier->id;
 	if ($itemid != 0) $link .= '&Itemid='.$itemid;
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
 
 } elseif ($spRang != 0 and $this->turnier->playersCount == 0 ) { //Hinzugefügt wegen Sonderranglisten
 	echo CLMContent::componentheading($heading);
