@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 jimport( 'joomla.application.component.view');
 
 class CLMViewStatistik extends JViewLegacy
@@ -83,11 +82,16 @@ class CLMViewStatistik extends JViewLegacy
 		$document->setTitle( $headTitle );
 
 		/* Call the state object */
-		$state = $this->get( 'state' );
+//		$state = $this->get( 'state' );
+		$mainframe =JFactory::getApplication();
+		global $option;
+		$lists['state'] = $mainframe->getUserStateFromRequest( "$option.filter_state",'filter_state','','word' );
  
 		/* Get the values from the state object that were inserted in the model's construct function */
-		$lists['order']     = $state->get( 'filter_order_bl' );
-		$lists['order_Dir'] = $state->get( 'filter_order_Dir_bl' );
+		$lists['order'] = $mainframe->getUserStateFromRequest( "$option.filter_order", 'filter_order', 'Punkte', 'cmd' ); // JRequest::getString('filter_order', 'a.id');
+		$lists['order_Dir'] = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",'filter_order_Dir','desc','word' );
+//		$lists['order']     = $state->get( 'filter_order_bl' );
+//		$lists['order_Dir'] = $state->get( 'filter_order_Dir_bl' );
  
 		$this->lists = $lists;
 
