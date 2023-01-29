@@ -6,7 +6,7 @@
 * Date:    2019-12-07                                                          *
 * Author:  Olivier PLATHEY                                                     *
 *******************************************************************************/
-
+/* Mini-Anpassung php 8.1 line 1212                                           */
 define('FPDF_VERSION','1.82');
 
 class FPDF
@@ -1208,6 +1208,7 @@ protected function _UTF8toUTF16($s)
 protected function _escape($s)
 {
 	// Escape special characters
+	if (is_null($s)) $s = '';
 	if(strpos($s,'(')!==false || strpos($s,')')!==false || strpos($s,'\\')!==false || strpos($s,"\r")!==false)
 		return str_replace(array('\\','(',')',"\r"), array('\\\\','\\(','\\)','\\r'), $s);
 	else

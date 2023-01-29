@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,9 +9,8 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip');
+
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
 function RGB($Hex){ 
@@ -482,7 +481,7 @@ for ($x=0; $x< 100; $x++){
         for ($z=0; $z< $mannschaft[0]->runden; $z++) { 			
 			while ((isset($bp[$spl]->tln_nr)) AND ($bp[$spl]->tln_nr != $mannschaft[0]->tln_nr)) { $spl++; } 
         if (isset($bp[$spl]->runde) AND $bp[$spl]->runde == $z+1) { ?>
-    <td class="rnd"><?php echo str_replace ('.0', '', $bp[$spl]->brettpunkte); ?></td>
+    <td class="rnd"><?php if (!is_null($bp[$spl]->brettpunkte)) echo str_replace ('.0', '', $bp[$spl]->brettpunkte); ?></td>
     <?php if (!is_null($bp[$spl]->brettpunkte)) $ibe++; 
 		 $spl++; }
          else { ?>

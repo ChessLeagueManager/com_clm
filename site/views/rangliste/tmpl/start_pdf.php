@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -238,6 +238,7 @@ $pdf->SetFont('Times','',$font);
 //Zeile 03	
 	$pdf->Cell(10,$zelle,'',0,0,'C');
 	$pdf->Cell(14,$zelle,JText::_('MELDELISTE_CAPTAIN'),0,0,'L');
+	if (is_null($mleiter[$ml]->mf_name)) $mleiter[$ml]->mf_name = '';
 	if ($ml<99) $pdf->Cell(51,$zelle,utf8_decode($mleiter[$ml]->mf_name),0,0,'L');
 	else $pdf->Cell(51,$zelle,JText::_('MELDELISTE_NOT_YET'),0,0,'L');
 	$zn++;

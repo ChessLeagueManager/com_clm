@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
 $sid			= clm_core::$load->request_int('saison', 1);
@@ -134,7 +133,7 @@ $date = date("Y-m-d");
 			//$pdf->Cell($br02,$zelle,utf8_decode($termine[$t]->name),1,0,'L',1);        
 			$yy1 = $pdf->GetY();
 			$xx1 = $pdf->GetX() + $br02;
-			if ($termine[$t]->zname != '') $zt = utf8_decode($termine[$t]->zname).' - ';
+			if (isset($termine[$t]->zname) AND $termine[$t]->zname != '') $zt = utf8_decode($termine[$t]->zname).' - ';
 			else $zt = '';
 			$pdf->Multicell($br02,$zelle,$zt.utf8_decode($termine[$t]->name),1,1,'L',1);        
 			$yy3 = $pdf->GetY();

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
 // Variablen ohne foreach setzen
@@ -404,7 +403,10 @@ for ($x=0; $x< 100; $x++){
 	for ($b=0; $b<$mannschaft[0]->runden; $b++) {
 		while (isset($bp[$spl]) AND $bp[$spl]->tln_nr != $mannschaft[0]->tln_nr) { $spl++; }
 		if (isset($bp[$spl]->runde) AND $bp[$spl]->runde == $b+1) { 
-			$pdf->Cell($breite,$zelle,str_replace ('.0', '', $bp[$spl]->brettpunkte),1,0,'C');
+			if (!is_null($bp[$spl]->brettpunkte))
+				$pdf->Cell($breite,$zelle,str_replace ('.0', '', $bp[$spl]->brettpunkte),1,0,'C');
+			else
+				$pdf->Cell($breite,$zelle,'',1,0,'C');
 			if (!is_null($bp[$spl]->brettpunkte)) $ibe++;
 			$spl++;
 		}

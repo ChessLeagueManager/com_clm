@@ -1,7 +1,7 @@
 <?php 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -82,7 +82,8 @@ function clm_api_db_season_genDWZ($id,$group=true) {
 			 . ' FROM #__clm_meldeliste_spieler as a'
 			 . ' LEFT JOIN #__clm_dwz_spieler AS d ON d.sid = a.sid AND d.zps = a.zps AND d.mgl_nr = a.mgl_nr'
 			 . ' WHERE a.sid ='.$id
-			 . ' GROUP by a.zps, a.mgl_nr, a.PKZ';
+//			 . ' GROUP by a.zps, a.mgl_nr, a.PKZ'
+			;
 	$spieler = clm_core::$db->loadObjectList($query);
 
 	$dwz = new clm_class_dwz_rechner();
