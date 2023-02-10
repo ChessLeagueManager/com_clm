@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -46,6 +46,8 @@ class CLMViewSWTLigainfo extends JViewLegacy {
 		$lists['sl_mail']	= JHtml::_('select.booleanlist',  'sl_mail', 'class="inputbox"', $sl_mail );
 		// Ordering für Rangliste
 		$lists['order']	= JHtml::_('select.booleanlist',  'order', 'class="inputbox"', $default['order'] );
+		// Mannschaftsnamen mit Land
+		$lists['name_land']	= JHtml::_('select.booleanlist',  'name_land', 'class="inputbox"', '0' );
 		// SL Listen
 		$sllist[]	= JHtml::_('select.option',  '0', JText::_( 'LIGEN_SL' ), 'jid', 'name' );
 		$sllist		= array_merge( $sllist, $db_sllist );

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -24,6 +24,7 @@ $ungerade = clm_core::$load->request_int('ungerade', 0);
 $spielerid = clm_core::$load->request_array_int('spielerid', NULL, true);
 $lid = clm_core::$load->request_int('lid', 0);
 $dwz_handling   = clm_core::$load->request_string( 'dwz_handling', '0');
+$name_land   = clm_core::$load->request_string( 'name_land', '0');
 ?>
 
 <script language="javascript" type="text/javascript">
@@ -136,6 +137,7 @@ $dwz_handling   = clm_core::$load->request_string( 'dwz_handling', '0');
 	<input type="hidden" name="noBoardResults" value="<?php echo $noBoardResults; ?>" />
 	<input type="hidden" name="ungerade" value="<?php echo $ungerade; ?>" />
 	<input type="hidden" name="dwz_handling" value="<?php echo $dwz_handling; ?>" />
+	<input type="hidden" name="name_land" value="<?php echo $name_land; ?>" />
    	<?php
    		for ($i = 1; $i <= $this->swt_db_data['anz_spieler']; $i++) {
 			if (!isset($this->swt_data['spieler_'.$i])) continue;

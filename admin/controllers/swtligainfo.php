@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -30,6 +30,7 @@ class CLMControllerSWTLigainfo extends JControllerLegacy
 		$sid = clm_core::$load->request_int('sid', 0);
 		$swt_file = clm_core::$load->request_string('swt_file', '');
 		$lid = clm_core::$load->request_int('lid', 0);
+		$name_land = clm_core::$load->request_string('name_land', '0');
 		$model = $this->getModel('swtligainfo');
 		if ($model->store ()) {
 //			$_REQUEST['view'] = 'swtligaman';
@@ -42,7 +43,7 @@ class CLMControllerSWTLigainfo extends JControllerLegacy
 			$params = clm_core::$load->request_string('strparams', '');
 			$adminLink = new AdminLink();
 			$adminLink->more = array('swt_file' => $swt_file, 'update' => $update, 'sid' => $sid, 'swt_id' => $swt_id, 'lid' => $lid,'mturnier' => $mturnier,
-				'noOrgReference' => $noOrgReference, 'noBoardResults' => $noBoardResults, 'dwz_handling' => $dwz_handling, 'strparams' => $params);
+				'noOrgReference' => $noOrgReference, 'noBoardResults' => $noBoardResults, 'dwz_handling' => $dwz_handling, 'name_land' => $name_land, 'strparams' => $params);
 			$adminLink->view = "swtligaman";
 			$adminLink->makeURL();
 			$this->app->redirect($adminLink->url); 		

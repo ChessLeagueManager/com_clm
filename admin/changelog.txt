@@ -14,6 +14,7 @@ $ -> Language fix or change
 
 - - - - - 4.0.2 - [xx-xx-2023] - - - - - - - - - - - - - - - - - - - -
 + neuer Menüeintragstyp: Paarungsliste Einzelturnier
++ SWT-Import: Mannschaftsnamen durch Land ergänzen (optional)
 
 - - - - - 4.0.1 - [30-01-2023] - - - - - - - - - - - - - - - - - - - -
 + Admin-View Mitgliederverwaltung: Reaktivierung der Vorbelegung bei Änderung

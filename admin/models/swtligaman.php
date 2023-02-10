@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -372,6 +372,7 @@ class CLMModelSWTLigaman extends JModelLegacy {
 
 		// Aktuell zu bearbeitende Mannschaft
 		$man = clm_core::$load->request_int('man', 0);
+		$name_land = clm_core::$load->request_string( 'name_land', '0');
 		
 		// ...
 		//$swt_data['liga_name'] = $this->_SWTReadName ($swt, 245, 60);
@@ -403,6 +404,9 @@ if ($ausgeloste_runden == 0) {
 			$man_nr = CLMSWT::readInt ($swt, $offset + 201);
 			if ($man_nr == $man + 1) { // nur aktuelle Mannschaft betrachten
 				$swt_data['man_name']	= CLMSWT::readString ($swt, $offset, 32);
+				$swt_data['man_land']	= CLMSWT::readString ($swt, $offset + 105, 3);
+				if ($name_land == '1' AND $swt_data['man_land'] != '') 
+					$swt_data['man_name'] .= ' ('.$swt_data['man_land'].')';
 				break;
 			}
 			$offset += 655;

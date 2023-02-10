@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -522,6 +522,16 @@ $str_params = clm_core::$load->request_string('str_params');
 					</td>
 				</tr>
 			</table>
+			<br>
+				<legend><?php echo JText::_( 'SWT_SP_ACTIONS' ); ?></legend>
+				<tr>
+					<td nowrap="nowrap">
+						<label for="name_land"><?php echo JText::_( 'SWT_NAME_LAND' ); ?></label>
+					</td>
+					<td><fieldset class="radio">
+						<?php echo $this->lists['name_land']; ?>
+					</fieldset></td>
+				</tr>
 			<br><br>
 			<legend><?php echo JText::_( 'REMARKS' ); ?></legend>
 			<table class="paramlist admintable">
