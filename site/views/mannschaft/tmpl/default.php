@@ -231,6 +231,7 @@ elseif ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) { ?>
         <br />
         <div style="float:left; width: 50%;">
             <?php $spiellokal1 = explode(",", $mannschaft[0]->lokal); 
+				if (is_null($mannschaft[0]->adresse)) $mannschaft[0]->adresse = '';
 				$spiellokal2 = explode(",", $mannschaft[0]->adresse); ?>
             <?php
             // 1. Spiellokal

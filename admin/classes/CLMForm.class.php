@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -289,6 +289,9 @@ class CLMForm {
 				." GROUP BY v.Vereinname, a.zps";
 
 		$vereine = clm_core::$db->loadObjectList($sql);
+		foreach ($vereine as $verein) {
+			if (is_null($verein->name)) $verein->name = "";
+		}
 
 		$vlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_CLUB' )), 'zps', 'name' );
 		$vlist		= array_merge( $vlist, $vereine);

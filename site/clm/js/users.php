@@ -1,14 +1,14 @@
 <?php
 /*
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
 defined('clm') or die('Restricted access');
 
 $lang = clm_core::$lang->users;
-$conf_user_member = clm_core::$load->request_array_string('clm_user_member');
+$conf_user_member = clm_core::$load->request_string('clm_user_member');
 clm_core::$cms->addScriptDeclaration('var clm_users_url = "'.clm_core::$url.clm_core::$load->gen_url().'";');
 clm_core::$cms->addScriptDeclaration('var clm_users_name = "'.html_entity_decode($lang->name_angeben).'";');
 clm_core::$cms->addScriptDeclaration('var clm_users_user = "'.html_entity_decode($lang->user_angeben).'";');

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  *
@@ -94,10 +94,10 @@ if ($debug > 1) { echo "<br>tournament2: ";	var_dump($tournament2); }
 		$str_params = $params->params();
 		$keyS = '`name`,`sid`,`runden_modus`,`durchgang`,`rnd`,`sl`,`published`,`stamm`,`ersatz`,`teil`,`runden`,`params`,`liga_mt`,`tiebr1`,`tiebr2`,`tiebr3`,`bem_int`';
 		$valueS = "'".$name."', ".$season.", '".$typ."', 1, 1, 0, 1, '"
-			.$stamm."', '0','".$teil."','".$arunden."','".$str_params."', 1,".$tiebr1.",".$tiebr2.",".$tiebr3.",".$bem_int;
+			.$stamm."', '0','".$teil."','".$arunden."','".$str_params."', 1,".$tiebr1.",".$tiebr2.",".$tiebr3.", '".$bem_int."'";
 
 		$sql = "INSERT INTO #__clm_swt_liga (".$keyS.") VALUES (".$valueS.")";
-		if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
+if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 		clm_core::$db->query($sql);
 		$new_swt_tid = clm_core::$db->insert_id();
 	} else { 		// Einzelturniere
