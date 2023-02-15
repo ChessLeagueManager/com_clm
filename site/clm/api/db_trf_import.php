@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  *
@@ -32,7 +32,9 @@ if ($debug > 0) echo "<br>turnier: ".$turnier; 	//echo "<br>end"; //die();
 	$a_spielerdaten = array();
 	$a_teamdaten = array();
 	$a_rundendaten = array();
-	$pab = 0;
+	$adate = '1970-01-01';
+	$edate = '1970-01-01';
+	$pab = 1;
 	// Durchgehen des Arrays inkl. Zuordnund der Zeilen
 	// read common tournament data
 	// Allgemeine Turnierdaten auslesen
@@ -45,8 +47,30 @@ if ($debug > 1) { echo "<br>din:"; var_dump($din); }
 		$value = trim(substr($line,4));
 if ($debug > 1) { echo "<br>value:"; var_dump($value); }
 		switch ($din) {
-			case '012': $name = addslashes($value); //break;
-if ($debug > 1) { echo "<br>name:"; var_dump($name); } break;
+			case '012': $name = addslashes($value); 
+if ($debug > 1) { echo "<br>name:"; var_dump($name); } 
+						break;
+			case '042': $adate = $value; 
+						// Aufbereiten des Startdatums DD.MM.YYYY
+						$yyyy = substr($adate,6,4);
+						$mm = substr($adate,3,2);
+						$dd = substr($adate,0,2);
+						$adate = $yyyy.'-'.$mm.'-'.$dd;
+						if (!clm_core::$load->is_date($adate,'Y-m-d')) {
+							$adate = '1970-01-01'; }
+if ($debug > 0) { echo "<br>adate:"; var_dump($adate); }
+						break;
+			case '052': $edate = $value; 
+						// Aufbereiten des Enddatums DD.MM.YYYY
+						$yyyy = substr($edate,6,4);
+						$mm = substr($edate,3,2);
+						$dd = substr($edate,0,2);
+						$edate = $yyyy.'-'.$mm.'-'.$dd;
+if ($debug > 0) { echo "<br>edate:"; var_dump($edate); }
+						if (!clm_core::$load->is_date($edate,'Y-m-d')) {
+							$edate = '1970-01-01'; }
+//die();
+						break;
 			case '062': $teil = $value; break;
 			case '132': $rundendata = $value; break;
 			case 'XXR': $rundenzahl = $value; break;
@@ -54,7 +78,9 @@ if ($debug > 1) { echo "<br>name:"; var_dump($name); } break;
 						if ($pos_pab !== false) $pab = substr($value, ($pos_pab + 4),3); break;
 		}
 	}
-	if (isset($pab) AND $pab == '0.5') $erg_pab = 12; else $erg_pab = 13;
+	if (isset($pab) AND $pab == '0.5') $erg_pab = 12; 
+	elseif (isset($pab) AND $pab == 1 ) $erg_pab = 5; 
+	else $erg_pab = 13;
 if ($debug > 0) { echo "<br>pab: $pab   erg: $erg_pab "; }
 	if (!isset($rundendata)) $rundendata = '';
 if ($debug > 0) { echo "<br>name:"; var_dump($name); }
@@ -68,8 +94,8 @@ if ($debug > 0) { echo "<br>name:"; var_dump($name); }
 		$valueS = "'".$name."', ".$season.", '".$typ."', 1, 1, 0, 1, '".$name."', '0'";
 	} else { 		// Einzelturniere
 		$typ = '1'; 														   // Einzel-Schweizer Sytem
-		$keyS = '`name`, `sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `runden`, `teil`, `bezirkTur`';
-		$valueS = "'".$name."',".$season.", '".$typ."', 1, 1, 0, 1, '".$rundenzahl."', '".$teil."', '0'";
+		$keyS = '`name`, `sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `runden`, `teil`, `bezirkTur`, `dateStart`, `dateEnd`';
+		$valueS = "'".$name."',".$season.", '".$typ."', 1, 1, 0, 1, '".$rundenzahl."', '".$teil."', '0', '".$adate."', '".$edate."'";
 		$params_array = array();
 		$params_array[] = 'playerViewDisplaySex=0';
 		$params_array[] = 'playerViewDisplayBirthYear=0';
@@ -92,6 +118,7 @@ if ($debug > 0) { echo "<br>neue Turnier-ID (trf): ";	var_dump($new_swt_tid); }
 
 //	Rundendaten -> Tabelle clm_turniere_rnd_termine
 if ($debug > 0) { echo "<br><br>-- Rundendaten --";	}
+		$rundendata = substr($rundendata,87);
 if ($debug > 0) { echo "<br>Rundendaten: $rundendata ";	}
 	for ($i = 0; $i < $rundenzahl; $i++) {
 		// Aufbereiten der Rundendata YY/MM/DD
@@ -99,6 +126,7 @@ if ($debug > 0) { echo "<br>Rundendaten: $rundendata ";	}
 		$mm = substr($rundendata,(3+($i * 10)),2);
 		$dd = substr($rundendata,(6+($i * 10)),2);
 		$rdate = '20'.$yy.'-'.$mm.'-'.$dd;
+if ($debug > 0) { echo "<br>rdate:"; var_dump($rdate); }
 		if (!clm_core::$load->is_date($rdate,'Y-m-d')) {
 			$rdate = '1970-01-01';
 		}

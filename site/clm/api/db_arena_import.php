@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  *
@@ -59,7 +59,7 @@ if ($debug > 1 ) { echo "<br>a_line: "; 	var_dump($a_line); }
 		$e_spieler[$a_line->username] = new stdclass();
 		$e_spieler[$a_line->username]->snr = $key + 1;
 		$e_spieler[$a_line->username]->rank = $a_line->rank;
-		$e_spieler[$a_line->username]->score = $a_line->score;
+		if (isset($a_line->score)) $e_spieler[$a_line->username]->score = $a_line->score;
 		$e_spieler[$a_line->username]->elo = $a_line->rating;
 		$e_spieler[$a_line->username]->name = addslashes($a_line->username);
 		if (isset($a_line->tieBreak)) {
@@ -373,6 +373,7 @@ if ($debug > 0) { echo "<br><br>-- Einzel-Ergebnisdaten --<br>";	}
 	$brett = 0;
 	$paar = 1;
 	$epaar = 0;
+	$a_paar_spl = array();
 	foreach ($a_paar as $key => $paar) {
 		$spieler = $n_spieler[$paar->white]->snr;
 		$gegner = $n_spieler[$paar->black]->snr;
@@ -380,16 +381,22 @@ if ($debug > 0) { echo "<br><br>-- Einzel-Ergebnisdaten --<br>";	}
 		$runde = $paar->runde;
 		$brett = $paar->brett;
 		$ergebnis = transcode_ergebnis($paar->result,$heim,$gegner);
+if ($debug > 0) { echo "<br>Runde: $runde  Brett: $brett  Spieler: $spieler  Gegner: $gegner  Paar-result: $paar->result   Ergebnis: $ergebnis"; } //var_dump($ergebnis);	}
 		if ($gegner > 16000) $gegner = 0;
 if ($debug > 0) { echo "<br>Runde: $runde  Brett: $brett  Spieler: $spieler  Gegner: $gegner  Ergebnis: $ergebnis  -- "; } //var_dump($ergebnis);	}
 		if (($spieler == 0 OR $gegner == 0) AND $ergebnis == 7) continue;
 		if ($ergebnis == 99) continue;
 //die();
+		$a_paar_spl[$runde][$spieler][$gegner] = new stdclass();
+		$a_paar_spl[$runde][$spieler][$gegner]->runde = $runde;
+		$a_paar_spl[$runde][$spieler][$gegner]->spieler = $spieler;
+		$a_paar_spl[$runde][$spieler][$gegner]->gegner = $gegner;
 
 		If ($group) { 	// Mannschaftsturniere
 		} else { 		// Einzelturniere	
 			$heim = 1;
 			$ergebnis = transcode_ergebnis($paar->result,$heim,$gegner);
+			$a_paar_spl[$runde][$spieler][$gegner]->werg =	$ergebnis;
 			$nota = $a_pgn[$paar->pgnnr];
 if ($debug > 1) { echo "<br>nota: ";	var_dump($nota); } //die();
 			$keyS = '`sid`, `swt_tid`, `dg`, `runde`, `brett`, `tln_nr`, `heim`, `spieler`, `gegner`, `ergebnis`, `pgn`';
@@ -403,6 +410,7 @@ if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 			clm_core::$db->query($sql);
 			$heim = 0;
 			$ergebnis = transcode_ergebnis($paar->result,$heim,$gegner);
+			$a_paar_spl[$runde][$spieler][$gegner]->berg =	$ergebnis;
 			$keyS = '`sid`, `swt_tid`, `dg`, `runde`, `brett`, `tln_nr`, `heim`, `spieler`, `gegner`, `ergebnis`, `pgn`';
 			if (!is_null($ergebnis))
 				$valueS = $season.", ".$new_swt_tid.", 1,".$runde.", ".$brett.", ".$gegner.", ".$heim.", ".$gegner.", ".$spieler.", ".$ergebnis.", '".$nota."'";
@@ -413,12 +421,14 @@ if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 			clm_core::$db->query($sql);
 		}
 	}
+if ($debug > 1) { echo "<br>a_paar_spl: ";	var_dump($a_paar_spl); }
 //die('Ende Einzelergebnisse');
 
 	//	Einzel-Ergebnisdaten -> Tabelle clm_turniere_rnd_spl / clm_rnd_spl 
 	// ergänzen aus TRF-Datei
   if ($tur_mode == 'swiss') {
 if ($debug > 0) { echo "<br><br>-- Einzel-Ergebnisdaten ohne Partie aus TRF-Datei --<br>";	}
+if ($debug > 0) { echo "<br><br>-- Einzel-Ergebnisdaten Korrekturen aus TRF-Datei --<br>";	}
 	$a_spielerdaten = array();
 	$file = 'https://lichess.org/swiss/'.$arena_code.'.trf';
 if ($debug > 0) { echo "<br>TRF-Datei: ".$file; }
@@ -536,12 +546,12 @@ if ($debug > 1) { echo "<br> ( Runde: ".$runde."  Spieler: $spieler  Gegner: $ge
 	
 	for ($i = 1; $i <= $rundenzahl; $i++) {
 		for ($j = 1; $j <= $a_brett[$i]; $j++) {
-if ($debug > 3) { 
+if ($debug > 1) { 
 			echo "<br>Runde: ".$i."  Brett: ".$j."   ";
 			if (isset($a_paarung[$i][$j]['spieler']) AND $a_paarung[$i][$j]['spieler'] > 0) 
-				echo "  ".$a_name[$a_paarung[$i][$j]['spieler']]."  ".$a_paarung[$i][$j]['werg']; 
+				echo "  ".$s_spieler[$a_paarung[$i][$j]['spieler']]->name."  ".$a_paarung[$i][$j]['spieler']."  ".$a_paarung[$i][$j]['werg']; 
 			if (isset($a_paarung[$i][$j]['gegner']) AND $a_paarung[$i][$j]['gegner'] > 0) 
-				echo "  ".$a_name[$a_paarung[$i][$j]['gegner']]."  ".$a_paarung[$i][$j]['berg'];
+				echo "  ".$s_spieler[$a_paarung[$i][$j]['gegner']]->name."  ".$a_paarung[$i][$j]['gegner']."  ".$a_paarung[$i][$j]['berg'];
 			}
 			$runde = $i;
 			$brett = $j;
@@ -554,11 +564,12 @@ if ($debug > 3) {
 				$a_paarung[$i][$j]['berg'] = 0;
 			}
 			if ($a_paarung[$i][$j]['werg'] == 'U' OR $a_paarung[$i][$j]['werg'] == 'H') {
+				// Einzel-Ergebnisdaten ohne Partie aus TRF-Datei
 				if ($a_paarung[$i][$j]['werg'] == 'U') $ergebnis = 5;
 				if ($a_paarung[$i][$j]['werg'] == 'H') $ergebnis = 12;
 				$a_runde[$runde]->count++;
 				$brett = $a_runde[$runde]->count;
-if ($debug > 0) { echo "<br> neu: Runde: ".$runde."  Spieler: $spieler  Gegner: $gegner   Ergebnis: $ergebnis  ";	}
+if ($debug > 0) { echo "<br> Ergebnis ohne Partie: Runde: ".$runde."  Spieler: $spieler  Gegner: $gegner   Ergebnis: $ergebnis  ";	}
 				$keyS = '`sid`, `swt_tid`, `dg`, `runde`, `brett`, `tln_nr`, `heim`, `spieler`, `gegner`, `ergebnis`, `pgn`';
 				$valueS = $season.", ".$new_swt_tid.", 1,".$runde.", ".$brett.", ".$spieler.", ".$heim.",".$spieler.", ".$gegner.", ".$ergebnis.", ''";
 				$sql = "INSERT INTO #__clm_swt_turniere_rnd_spl (".$keyS.") VALUES (".$valueS.")";
@@ -575,6 +586,32 @@ if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 //die();
 				clm_core::$db->query($sql);
+			} else {
+				// Einzel-Ergebnisdaten Korrekturen aus TRF-Datei
+				$p_result = $a_paarung[$i][$j]['werg']."-".$a_paarung[$i][$j]['berg'];
+					if ($p_result != '--0' AND $p_result != '0--') {
+					$wergebnis = transcode_ergebnis($p_result,'1',$gegner);
+					$bergebnis = transcode_ergebnis($p_result,'0',$spieler);
+if ($debug > 1) { echo "<br>Runde: ".$runde."  Brett: ".$brett."  Spieler: $spieler  Gegner: $gegner   PErgebnis: $p_result  WErgebnis: $wergebnis  BErgebnis: $bergebnis  ";	}
+					if (isset($a_paar_spl[$runde][$spieler][$gegner])
+						AND $a_paar_spl[$runde][$spieler][$gegner]->werg == $wergebnis 
+						AND $a_paar_spl[$runde][$spieler][$gegner]->berg == $bergebnis) {
+if ($debug > 1) { echo "<br> ja: Runde: ".$runde."  Brett: ".$brett."  Spieler: $spieler  Gegner: $gegner  ";	}
+						} else {
+if ($debug > 0) { echo "<br> Ergebniskorrektur: Runde: ".$runde."  Brett: ".$brett."  Spieler: $spieler  Gegner: $gegner  Ergebnis: $p_result ";	}
+					$query = "UPDATE #__clm_swt_turniere_rnd_spl "
+						." SET ergebnis = ".$wergebnis
+						." WHERE swt_tid = ".$new_swt_tid." AND runde = ".$runde." AND tln_nr = ".$spieler;
+if ($debug > 1) { echo "<br>query:"; var_dump($query); }
+					clm_core::$db->query($query);
+					$query = "UPDATE #__clm_swt_turniere_rnd_spl "
+						." SET ergebnis = ".$bergebnis
+						." WHERE swt_tid = ".$new_swt_tid." AND runde = ".$runde." AND tln_nr = ".$gegner;
+if ($debug > 1) { echo "<br>query:"; var_dump($query); }
+					clm_core::$db->query($query);
+						}
+					}
+//die();
 			}
 		}
 	}
@@ -754,10 +791,16 @@ function transcode_ergebnis($ergebnis, $heim, $gegner) {
 	if ($heim == 1) {
 		if ($ergebnis == '1-0') $rergebnis = 1;
 		elseif ($ergebnis == '1/2-1/2') $rergebnis = 2;
+		elseif ($ergebnis == '=-=') $rergebnis = 2;
+		elseif ($ergebnis == '--+') $rergebnis = 4;
+		elseif ($ergebnis == '+--') $rergebnis = 5;
 		else $rergebnis = 0;
 	} else	{
 		if ($ergebnis == '0-1') $rergebnis = 1;
 		elseif ($ergebnis == '1/2-1/2') $rergebnis = 2;
+		elseif ($ergebnis == '=-=') $rergebnis = 2;
+		elseif ($ergebnis == '--+') $rergebnis = 5;
+		elseif ($ergebnis == '+--') $rergebnis = 4;
 		else $rergebnis = 0;
 	}
 //echo "<br>heim: $heim  ergebnis  arena: $ergebnis  ->  clm: $rergebnis";  	
