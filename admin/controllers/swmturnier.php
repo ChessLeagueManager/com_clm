@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -25,16 +25,35 @@ class CLMControllerSWMTurnier extends JControllerLegacy
 	} 
 	
 	function update() {		
-		$swm = clm_core::$load->request_string('swm', '');
-		if (strtolower(JFile::getExt($swm) ) == 'tumx' OR strtolower(JFile::getExt($swm) ) == 'tutx') {
+		$swm_file = clm_core::$load->request_string('swm_file', '');
+		if (strtolower(JFile::getExt($swm_file) ) == 'tumx' OR strtolower(JFile::getExt($swm_file) ) == 'tutx') {
 			$group = true; 
 		} else { $group = false; }
 		$sid = clm_core::$load->request_int('filter_saison', 0);
 		$tid = clm_core::$load->request_int('turnier', 0);
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
-		$result = clm_core::$api->db_swm_import($path.$swm,$sid,$tid,false,true,false);
+		if ($swm_file == '') {
+			$adminLink = new AdminLink();
+			$adminLink->view = "swmturnier";
+			$adminLink->makeURL();			
+			$msg = JText::_( 'SWM_FILE_ERROR' ); 			
+			$this->app->enqueueMessage( $msg );
+			$this->app->redirect($adminLink->url); 		
+		}
+		$_REQUEST['swm_file'] = $swm_file;
+		if ($tid == 0) {
+			$adminLink = new AdminLink();
+			$adminLink->view = "swmturnier";
+			$adminLink->makeURL();			
+			$msg = JText::_( 'SWT_TOURNAMENT_ERROR' ); 			
+			$this->app->enqueueMessage( $msg );
+			$this->app->redirect($adminLink->url); 		
+		}
+		$_REQUEST['tid'] = $tid;
+		$result = clm_core::$api->db_swm_import($path.$swm_file,$sid,$tid,$group,true,false);
 		if (isset($result[2]) AND $result[2] > 0) {
 			$new_ID = $result[2];
+
 			If (!$group) { // Einzelturnier
 				$turnier = new CLMTournament($new_ID,true);
 				//Punkte und Feinwertungen neu berechnen
@@ -59,31 +78,34 @@ class CLMControllerSWMTurnier extends JControllerLegacy
 		$msg = JText::_( 'SWT_STORE_SUCCESS' );
 		$clmLog = new CLMLog();
 		$clmLog->aktion = 'SWM-Import - '.$msg;
-		$clmLog->params = array('sid' => $sid, 'tid' => $tid, 'swm' => $swm);
+		$clmLog->params = array('sid' => $sid, 'tid' => $tid, 'swm_file' => $swm_file);
 		$clmLog->write();
 
-//		$_REQUEST['view'] = 'swt';
+		$_REQUEST['view'] = 'swtturnier';
 		if (isset($result[2]) AND $result[2] > 0) { $htext = " (ID = ".$new_ID.")"; } else $htext = ""; 
 		$this->app->enqueueMessage( JText::_( 'SWT_STORE_SUCCESS' ).$htext,'message' );
-//		$_REQUEST['swm'] = $swm;
-		$adminLink = new AdminLink();
-		$adminLink->more = array('swm_file' => $swm_file, 'swm' => $swm );
-		$adminLink->view = "swt";
-		$adminLink->makeURL();
-		$this->app->redirect($adminLink->url); 				
-//		parent::display(); 		
-	
+		$_REQUEST['swm_file'] = $swm_file;
+
+		parent::display();
 	}
 	
 	function add() {		
-		$swm = clm_core::$load->request_string('swm', '');
-		if (strtolower(JFile::getExt($swm) ) == 'tumx' OR strtolower(JFile::getExt($swm) ) == 'tutx') {
+		$swm_file = clm_core::$load->request_string('swm_file', '');
+		if (strtolower(JFile::getExt($swm_file) ) == 'tumx' OR strtolower(JFile::getExt($swm_file) ) == 'tutx') {
 			$group = true; 
 		} else { $group = false; }
 		$sid = clm_core::$load->request_int('filter_saison', 0);
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
-		$result = clm_core::$api->db_swm_import($path.$swm,$sid,0,$group,false,false);
-//echo "<br>result:"; var_dump($result); //die();
+		if ($swm_file == '') {
+			$adminLink = new AdminLink();
+			$adminLink->view = "swmturnier";
+			$adminLink->makeURL();			
+			$msg = JText::_( 'SWM_FILE_ERROR' ); 			
+			$this->app->enqueueMessage( $msg );
+			$this->app->redirect($adminLink->url); 		
+		}
+		$result = clm_core::$api->db_swm_import($path.$swm_file,$sid,0,$group,false,false);
+
 		if (isset($result[2]) AND $result[2] > 0) {
 			$new_ID = $result[2];
 			
@@ -111,59 +133,80 @@ class CLMControllerSWMTurnier extends JControllerLegacy
 		$msg = JText::_( 'SWT_STORE_SUCCESS' );
 		$clmLog = new CLMLog();
 		$clmLog->aktion = 'SWM-Import - '.$msg;
-		$clmLog->params = array('sid' => $sid, 'tid' => $new_ID, 'swm' => $swm);
+		$clmLog->params = array('sid' => $sid, 'tid' => $new_ID, 'swm_file' => $swm_file);
 		$clmLog->write();
 
-//		$_REQUEST['view'] = 'swt';
+		$_REQUEST['view'] = 'swmturnier';
 		if (isset($result[2]) AND $result[2] > 0) { $htext = " (ID = ".$new_ID.")"; } else $htext = ""; 
 		$this->app->enqueueMessage( JText::_( 'SWT_STORE_SUCCESS' ).$htext,'message' );
-//		$_REQUEST['swm'] = $swm;
-		$adminLink = new AdminLink();
-		$adminLink->more = array('swm_file' => $swm_file, 'swm' => $swm );
-		$adminLink->view = "swt";
-		$adminLink->makeURL();
-		$this->app->redirect($adminLink->url); 				
-//		parent::display(); 		
-	
+		$_REQUEST['swm_file'] = $swm_file;
+
+		parent::display();
 	}
 	
 	function test() {		
-		$swm = clm_core::$load->request_string('swm', '');
+		$swm_file = clm_core::$load->request_string('swm_file', '');
+		if (strtolower(JFile::getExt($swm_file) ) == 'tumx' OR strtolower(JFile::getExt($swm_file) ) == 'tutx') {
+			$group = true; 
+		} else { $group = false; }
 		$sid = clm_core::$load->request_int('filter_saison', 0);
 		$uturnier = clm_core::$load->request_string('turnier', '');
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
-		$result = clm_core::$api->db_swm_import($path.$swm,$sid,0,false,false,true);
+		$result = clm_core::$api->db_swm_import($path.$swm_file,$sid,0,$group,false,true);
 		
 		$language = JFactory::getLanguage();
 		$language->load('com_clm');
 		$language->load('com_clm.swtimport');	
 
-		$_REQUEST['view'] = 'swmturnier';
+		$_POST['view'] = 'swmturnier';
 		$_GET['turnier'] = $uturnier;
-		$_REQUEST['swm'] = $swm;
-		$_REQUEST['swm_filename'] = $swm;
+		$_POST['swm_file'] = $swm_file;
+
 		parent::display(); 		
 	
 	}
 
 	function cancel() {		
-		$swm = clm_core::$load->request_string('swm', '');
+		$swm_file = clm_core::$load->request_string('swm_file', '');
 		$sid = clm_core::$load->request_int('filter_saison', 0);
 		
 		$language = JFactory::getLanguage();
 		$language->load('com_clm');
 		$language->load('com_clm.swtimport');	
 
-		$_REQUEST['view'] = 'swt';
-		JFactory::getApplication()->enqueueMessage( JText::_( 'SWM_ACTION_CANCEL' ),'message' );
-//		$_REQUEST['swm'] = $swm;
 		$adminLink = new AdminLink();
-		$adminLink->more = array('swm_file' => $swm_file, 'swm' => $swm );
 		$adminLink->view = "swt";
+		$adminLink->more = array('swm_file' => $swm_file );
 		$adminLink->makeURL();
+		$this->app->enqueueMessage( JText::_( 'SWM_ACTION_CANCEL' ),'message' );
 		$this->app->redirect($adminLink->url); 				
-//		parent::display(); 		
 	
+	}
+
+	function swm_upload() {
+		$model = $this->getModel('swmturnier');
+		$msg = $model->swm_upload();
+		$swm_file = clm_core::$load->request_string('swm_file', '');
+		
+		$adminLink = new AdminLink();
+		$adminLink->more = array('swm_file' => $swm_file);
+		$adminLink->view = "swmturnier";
+		$adminLink->makeURL();
+			
+		$this->app->enqueueMessage( $msg );
+		$this->app->redirect($adminLink->url); 		
+	}
+	
+	function swm_delete(){
+		$model = $this->getModel('swmturnier');
+		$msg = $model->swm_delete();
+		
+		$adminLink = new AdminLink();
+		$adminLink->view = "swmturnier";
+		$adminLink->makeURL();
+			
+		$this->app->enqueueMessage( $msg );
+		$this->app->redirect($adminLink->url); 		
 	}
 }
 ?>

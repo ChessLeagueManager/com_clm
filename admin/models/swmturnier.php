@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanaager.de
  * @author Thomas Schwietert
@@ -15,6 +15,7 @@ class CLMModelSWMTurnier extends JModelLegacy {
 
 	var $_saisons;
 	var $_turniere;
+	var $_swmFiles;
 	
 	function __construct(){
 		parent::__construct();
@@ -67,7 +68,81 @@ class CLMModelSWMTurnier extends JModelLegacy {
 		} 
 		return $var[0]->id;
 	}
+
+	function getSwmFiles() { 
+		jimport( 'joomla.filesystem.folder' );
+		
+		$filesDir = 'components'.DS."com_clm".DS.'swt';
+		$this->swmFiles = JFolder::files( $filesDir, '.TUNx$|.tunx$|.TUNX$|.TURx$|.turx$|.TURX$|.TUMx$|.tumx$|.TUMX$|.TUTx$|.tutx$|.TUTX$', false, true );
+		
+		return $this->swmFiles;
+	}
 	
+	function swm_upload() {
+		jimport( 'joomla.filesystem.file' );
+
+		//Datei wird hochgeladen
+		$file = clm_core::$load->request_file('swm_datei', null);
+
+		//Dateiname wird bereinigt
+		$swm_file = JFile::makeSafe($file['name']);
+		$_POST['swm_file'] = $swm_file;
+
+		//Temporärer Name und Ziel werden festgesetzt
+		$src = $file['tmp_name'];
+		$dest = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR . $swm_file;
+
+		//Datei wird auf dem Server gespeichert (abfrage auf .tunx oder turx Endung)
+		if ( strtolower(JFile::getExt($swm_file) ) == 'tunx' OR strtolower(JFile::getExt($swm_file) ) == 'turx' OR
+			 strtolower(JFile::getExt($swm_file) ) == 'tumx' OR strtolower(JFile::getExt($swm_file) ) == 'tutx') {
+			if ( JFile::upload($src, $dest) ) {
+				$msg = JText::_( 'SWT_UPLOAD_SUCCESS' ); 
+			} else {
+				$msg = JText::_( 'SWT_UPLOAD_ERROR' );
+			}
+		} else {
+			$msg = JText::_( 'SWT_UPLOAD_ERROR_WRONG_EXT' ).'*'.$swm_file.'*';
+		}
+
+		return $msg;
+	}
+
+	function swm_delete() {
+		jimport( 'joomla.filesystem.file' );
+		
+		//Name der zu löschenden Datei wird geladen
+		$swm_file = clm_core::$load->request_string('swm', '');
+		if ($swm_file == '') {
+			$msg = JText::_( 'SWT_FILE_ERROR' ); 
+			return $msg;
+		}		
+		//SWT-Verzeichnis
+		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
+		
+		//Datei löschen
+		if ( JFile::delete($path.$swm_file) ) {
+			$msg = JText::_( 'SWT_DELETE_SUCCESS' ); 
+		} else {
+			$msg = JText::_( 'SWT_DELETE_ERROR' ); 
+		}
+		return $msg;
+	}
+	
+	function swm_import() {
+
+		//Name der zu Datei wird geladen
+		$swm_file = clm_core::$load->request_string('swm_file', '');
+		
+		//SWT-Verzeichnis
+		$path = JPATH_COMPONENT . DS . "swt" . DS;
+
+		if($swm_file!=""&&file_exists($path.$swm_file)) {
+			return 1;
+		} else {
+			return -1;
+		}
+	}
+
 }
 
 ?>

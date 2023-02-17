@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleagueamanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
 class CLMViewSWMTurnier extends JViewLegacy {
@@ -19,7 +18,8 @@ class CLMViewSWMTurnier extends JViewLegacy {
 		$state 		= $this->get( 'State' );
 		$saisons 	= $this->get( 'saisons' );
 		$turniere 	= $this->get( 'turniere' );
-		$swm_file = clm_core::$load->request_string ('swm_file', '');
+		$swmFiles 	= $this->get( 'swmFiles' );		
+		$swm_file	= clm_core::$load->request_string('swm_file', '');
 				
 		//Toolbar
 		clm_core::$load->load_css("icons_images");
@@ -39,6 +39,8 @@ class CLMViewSWMTurnier extends JViewLegacy {
 		if ($test_button) {
 			JToolBarHelper::custom('test','delete.png','delete_f2.png', JText::_('SWT_TOURNAMENT_TEST'), false);
 		}
+		JToolBarHelper::custom('swm_delete','delete.png','delete_f2.png', JText::_('SWM_DELETE'), false);
+		JToolBarHelper::custom( 'swm_upload', 'upload.png', 'upload_f2.png', JText::_('SWM_UPLOAD'), false);
 		JToolBarHelper::cancel();
 		
 		//Saison- und Turnier-Auswahl erstellen
@@ -48,10 +50,10 @@ class CLMViewSWMTurnier extends JViewLegacy {
 		}
 		
 		$options_turniere[]		= JHtml::_('select.option', '', JText::_( 'SWT_TOURNAMENTS' ));
-		$swm_file	= clm_core::$load->request_string('swm_file', '');
 		$current_turnier	= clm_core::$load->request_string('turnier', '');
 		
 		foreach($turniere as $turnier)	{
+			if (is_null($turnier->bem_int)) $turnier->bem_int = '';
 			$sf1 = strpos($turnier->bem_int, 'SWT-Importfile:');
 			$sf2 = strpos($turnier->bem_int, '.SWT');
 			if ($sf2 === false) $sf2 = strpos($turnier->bem_int, '.swt');
@@ -64,9 +66,16 @@ class CLMViewSWMTurnier extends JViewLegacy {
 		}
 		
 		$lists['saisons']	= JHtml::_('select.genericlist', $options_saisons, 'filter_saison', 'class="inputbox" onchange="this.form.submit();"', 'value', 'text', $state->get('filter_saison') );
-		//$lists['turniere']	= JHtml::_('select.genericlist', $options_turniere, 'turnier', 'class="inputbox"', 'value', 'text', 0 );
 		$lists['turniere']	= JHtml::_('select.genericlist', $options_turniere, 'turnier', 'class="inputbox"', 'value', 'text', $current_turnier );
 		
+		//SWM-File-Auswahl erstellen
+		$options_swm_files[]		= JHtml::_('select.option', '', JText::_( 'SWM_FILES' ));
+		if (isset($swmFiles)) {
+		foreach($swmFiles as $i => $file)	{
+			$options_swm_files[]		= JHtml::_('select.option', basename($file), basename($file));
+		} 	}
+		$lists['swm_files']	= JHtml::_('select.genericlist', $options_swm_files, 'swm_file', 'class="inputbox"', 'value', 'text', $swm_file );
+
 		//Daten an Template
 		$this->lists = $lists;
 				

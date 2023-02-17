@@ -17,6 +17,7 @@ $ -> Language fix or change
 + SWT-Import: Mannschaftsnamen durch Land ergänzen (optional)
 ^ Code-Anpassung wegen MariaDB(SQL-Mode) / php 8.1
 + Importe: Erweiterung lichess- und TRF-Import
+^ Importe: Neue Struktur von TRF- und SWM-Import
 
 - - - - - 4.0.1 - [30-01-2023] - - - - - - - - - - - - - - - - - - - -
 + Admin-View Mitgliederverwaltung: Reaktivierung der Vorbelegung bei Änderung

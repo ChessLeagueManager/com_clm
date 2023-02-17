@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -18,7 +18,6 @@ class CLMViewSWT extends JViewLegacy {
 		$swtFiles 	= $this->get( 'swtFiles' );
 		$swmFiles 	= $this->get( 'swmFiles' );
 		$pgnFiles 	= $this->get( 'pgnFiles' );
-		$trfFiles 	= $this->get( 'trfFiles' );
 		
 		//Toolbar
 		clm_core::$load->load_css("icons_images");
@@ -33,19 +32,13 @@ class CLMViewSWT extends JViewLegacy {
 		JToolBarHelper::custom( 'arena_import', 'upload.png', 'upload_f2.png', JText::_('ARENA_IMPORT'), false);
 		
 		JToolBarHelper::spacer();
-		JToolBarHelper::custom( 'swm_import', 'upload.png', 'upload_f2.png', JText::_('SWM_IMPORT'), false);
-		JToolBarHelper::custom('swm_delete','delete.png','delete_f2.png', JText::_('SWM_DELETE'), false);
-		JToolBarHelper::custom( 'swm_upload', 'upload.png', 'upload_f2.png', JText::_('SWM_UPLOAD'), false);
-		
-		JToolBarHelper::spacer();
 		JToolBarHelper::custom( 'pgn_import', 'upload.png', 'upload_f2.png', JText::_('PGN_IMPORT'), false);
 		JToolBarHelper::custom('pgn_delete','delete.png','delete_f2.png', JText::_('PGN_DELETE'), false);
 		JToolBarHelper::custom( 'pgn_upload', 'upload.png', 'upload_f2.png', JText::_('PGN_UPLOAD'), false);
 		
 		JToolBarHelper::spacer();
-		JToolBarHelper::custom( 'trf_import', 'upload.png', 'upload_f2.png', JText::_('TRF_IMPORT'), false);
-		JToolBarHelper::custom('trf_delete','delete.png','delete_f2.png', JText::_('TRF_DELETE'), false);
-		JToolBarHelper::custom( 'trf_upload', 'upload.png', 'upload_f2.png', JText::_('TRF_UPLOAD'), false);
+		JToolBarHelper::custom( 'trf_import', 'forward.png', 'forward_f2.png', JText::_('GOTO_TRF_IMPORT'), false);
+		JToolBarHelper::custom( 'swm_import', 'forward.png', 'forward_f2.png', JText::_('GOTO_SWM_IMPORT'), false);
 
 		//SWT-File-Auswahl erstellen
 		jimport( 'joomla.filesystem.file' );
@@ -78,17 +71,7 @@ class CLMViewSWT extends JViewLegacy {
 			$options_swm_files[]		= JHtml::_('select.option', basename($file), basename($file));
 		} 	}
 		$lists['swm_files']	= JHtml::_('select.genericlist', $options_swm_files, 'swm_file', 'class="inputbox"', 'value', 'text', $swm_filename );
-		
-		//TRF-File-Auswahl erstellen
-		$trf_filename = clm_core::$load->request_string('trf_filename', '');
-
-		$options_trf_files[]		= JHtml::_('select.option', '', JText::_( 'TRF_FILES' ));
-		if (isset($trfFiles)) {
-		foreach($trfFiles as $i => $file)	{
-			$options_trf_files[]		= JHtml::_('select.option', basename($file), basename($file));
-		} 	}
-		$lists['trf_files']	= JHtml::_('select.genericlist', $options_trf_files, 'trf_file', 'class="inputbox"', 'value', 'text', $trf_filename );
-		
+				
 		//Daten an Template
 		$this->lists = $lists;
 	
