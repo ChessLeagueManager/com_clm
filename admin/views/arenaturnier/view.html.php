@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleagueamanager.de
 */
@@ -42,10 +42,10 @@ class CLMViewArenaTurnier extends JViewLegacy {
 		
 		$options_turniere[]		= JHtml::_('select.option', '', JText::_( 'SWT_TOURNAMENTS' ));
 		$arena_code	= clm_core::$load->request_string('arena_code', '');
-		$current_turnier	= clm_core::$load->request_string('turnier', '');
+		$current_turnier	= clm_core::$load->request_string('tid', '');
 		
 		foreach($turniere as $turnier)	{
-			$sf1 = strpos($turnier->bem_int, 'SWT-Importfile:');
+/*			$sf1 = strpos($turnier->bem_int, 'SWT-Importfile:');
 			$sf2 = strpos($turnier->bem_int, '.SWT');
 			if ($sf2 === false) $sf2 = strpos($turnier->bem_int, '.swt');
 			if (!($sf1 === false) AND !($sf2 === false) AND ($sf1 < $sf2))
@@ -53,14 +53,14 @@ class CLMViewArenaTurnier extends JViewLegacy {
 			else $filename = '';
 //			if ($filename == $swm_file)	$current_turnier = $turnier->id;
 			$current_turnier = 0;
-
+*/
 			$options_turniere[]		= JHtml::_('select.option', $turnier->id, $turnier->name);
 		}
 		
 		$lists['saisons']	= JHtml::_('select.genericlist', $options_saisons, 'filter_saison', 'class="inputbox" onchange="this.form.submit();"', 'value', 'text', $state->get('filter_saison') );
-		//$lists['turniere']	= JHtml::_('select.genericlist', $options_turniere, 'turnier', 'class="inputbox"', 'value', 'text', 0 );
-		$lists['turniere']	= JHtml::_('select.genericlist', $options_turniere, 'turnier', 'class="inputbox"', 'value', 'text', $current_turnier );
-		
+
+		$lists['turniere']	= JHtml::_('select.genericlist', $options_turniere, 'turnier', 'class="inputbox"', 'value', 'text', 0 );
+
 		//Daten an Template
 		$this->lists = $lists;
 				

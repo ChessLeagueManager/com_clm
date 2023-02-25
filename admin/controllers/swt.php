@@ -83,106 +83,6 @@ class CLMControllerSWT extends JControllerLegacy
 		}				
 	}
 	
-	function pgn_upload() {
-		$model = $this->getModel('swt');
-		$msg = $model->pgn_upload();
-		$pgn_filename = clm_core::$load->request_string('pgn_filename', '');
-		
-		$adminLink = new AdminLink();
-		$adminLink->more = array('pgn_filename' => $pgn_filename);
-		$adminLink->view = "swt";
-		$adminLink->makeURL();
-			
-		$this->app->enqueueMessage( $msg );
-		$this->app->redirect($adminLink->url); 		
-	}
-	
-	function pgn_delete(){
-		$model = $this->getModel('swt');
-		$msg = $model->pgn_delete();
-		
-		$adminLink = new AdminLink();
-		$adminLink->view = "swt";
-		$adminLink->makeURL();
-			
-		$this->app->enqueueMessage( $msg );
-		$this->app->redirect($adminLink->url); 		
-	}
-	
-	function pgn_import() {
-		$model = $this->getModel('swt');
-		$type = $model->pgn_import();
-		$type = 0;
-		$pgn_file = clm_core::$load->request_string('pgn_file', '');
-		
-		if($type == 0) {
-//			$_REQUEST['task'] = 'import';
-//			$_REQUEST['view'] = 'pgnimport';
-			$adminLink = new AdminLink();
-			$adminLink->more = array('pgn_file' => $pgn_file);
-			$adminLink->view = "pgnimport";
-			$adminLink->makeURL();
-			$this->app->redirect($adminLink->url); 		
-		} elseif($type == 255){
-			$_REQUEST['view'] = 'swtliga';
-			parent::display();
-		} else {
-			$adminLink = new AdminLink();
-			$adminLink->view = "swt";
-			$adminLink->makeURL();
-			
-			$msg = JText::_( 'PGN_FILE_ERROR!' ); 
-			
-			$this->app->enqueueMessage( $msg );
-			$this->app->redirect($adminLink->url); 		
-		}				
-	}
-	
-	function pgn_service() {
-		$model = $this->getModel('swt');
-		$type = $model->pgn_import();
-		$type = 0;
-		if($type == 0) {
-			$_REQUEST['task'] = 'service';
-			$_REQUEST['view'] = 'pgnimport';
-			parent::display();
-		} elseif($type == 255){
-			$_REQUEST['view'] = 'swtliga';
-			parent::display();
-		} else {
-			$adminLink = new AdminLink();
-			$adminLink->view = "swt";
-			$adminLink->makeURL();
-			
-			$msg = JText::_( 'PGN_FILE_ERROR!' ); 
-			
-			$this->app->enqueueMessage( $msg );
-			$this->app->redirect($adminLink->url); 		
-		}				
-	}
-	
-	function arena_import() {
-		$model = $this->getModel('swt');
-		$arena_code = $model->arena_import();
-		if($arena_code != '') {
-//			$_REQUEST['view'] = 'arenaturnier';
-			$adminLink = new AdminLink();
-			$adminLink->more = array('arena_code' => $arena_code);
-			$adminLink->view = "arenaturnier";
-			$adminLink->makeURL();
-			$this->app->redirect($adminLink->url); 		
-//			parent::display();
-		} else {
-			$adminLink = new AdminLink();
-			$adminLink->view = "swt";
-			$adminLink->makeURL();
-			
-			$msg = JText::_( 'ARENA_CODE_MISSING' ); 
-			
-			$this->app->enqueueMessage( $msg );
-			$this->app->redirect($adminLink->url); 		
-		}				
-	}
 	
 	function trf_import() {
 		$trf_file = clm_core::$load->request_string('trf_file', '');
@@ -199,6 +99,26 @@ class CLMControllerSWT extends JControllerLegacy
 		$adminLink = new AdminLink();
 		$adminLink->more = array('swm_file' => $swm_file);
 		$adminLink->view = "swmturnier";
+		$adminLink->makeURL();
+		$this->app->redirect($adminLink->url); 		
+						
+	}
+	
+	function pgn_import() {
+		$pgn_file = clm_core::$load->request_string('pgn_file', '');
+		$adminLink = new AdminLink();
+		$adminLink->more = array('pgn_file' => $pgn_file);
+		$adminLink->view = "pgnimport";
+		$adminLink->makeURL();
+		$this->app->redirect($adminLink->url); 		
+						
+	}
+	
+	function arena_import() {
+		$arena_code = clm_core::$load->request_string('arena_code', '');
+		$adminLink = new AdminLink();
+		$adminLink->more = array('arena_code' => $arena_code);
+		$adminLink->view = "arenaturnier";
 		$adminLink->makeURL();
 		$this->app->redirect($adminLink->url); 		
 						

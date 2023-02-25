@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanaager.de
 */
@@ -31,7 +31,6 @@ class CLMModelArenaTurnier extends JModelLegacy {
 	}
 	
 	function getTurniere() {
-		$arena	= clm_core::$load->request_string( 'arena' );
 		$group = false;
 		if (empty( $this->_turniere )) { 
 			if ($group) {

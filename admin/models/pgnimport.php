@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -12,6 +12,8 @@
 defined('_JEXEC') or die('Restricted access');
 
 class CLMModelPGNImport extends JModelLegacy {
+
+	var $_pgnFiles;
 
 	function __construct(){
 		parent::__construct();
@@ -62,7 +64,77 @@ class CLMModelPGNImport extends JModelLegacy {
 		}
 		
 		return 0;
+	}
 
+	function getPgnFiles() { 
+		jimport( 'joomla.filesystem.folder' );
+		
+		$filesDir = 'components'.DS."com_clm".DS.'swt';
+		$this->pgnFiles = JFolder::files( $filesDir, '.PGN$|.pgn$', false, true );
+		
+		return $this->pgnFiles;
+	}
+	
+	function pgn_upload() {
+		jimport( 'joomla.filesystem.file' );
+		
+		//Datei wird hochgeladen
+		$file = clm_core::$load->request_file('pgn_datei', null);
+		
+		//Dateiname wird bereinigt
+		$pgn_file = JFile::makeSafe($file['name']);
+		$_POST['pgn_file'] = $pgn_file;
+
+		//Temporärer Name und Ziel werden festgesetzt
+		$src = $file['tmp_name'];
+		$dest = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR . $pgn_file;
+		
+		//Datei wird auf dem Server gespeichert (abfrage auf .pgn Endung)
+		if ( strtolower(JFile::getExt($pgn_file) ) == 'pgn') {
+			if ( JFile::upload($src, $dest) ) {
+				$msg = JText::_( 'SWT_UPLOAD_SUCCESS' ); 
+			} else {
+				$msg = JText::_( 'SWT_UPLOAD_ERROR' );
+			}
+		} else {
+			$msg = JText::_( 'SWT_UPLOAD_ERROR_WRONG_EXT' );
+		}
+		return $msg;
+	}
+	
+	function pgn_delete() {
+		jimport( 'joomla.filesystem.file' );
+
+		//Name der zu löschenden Datei wird geladen
+		$pgn_file = clm_core::$load->request_string('pgn_file', '');
+		if ($pgn_file == '') {
+			$msg = JText::_( 'SWT_FILE_ERROR' ); 
+			return $msg;
+		}		
+		//SWT-Verzeichnis
+		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
+		
+		//Datei löschen
+		if ( JFile::delete($path.$pgn_file) ) {
+			$msg = JText::_( 'SWT_DELETE_SUCCESS' ); 
+		} else {
+			$msg = JText::_( 'SWT_DELETE_ERROR' ); 
+		}
+		return $msg;
+	}
+	
+	function pgn_import() {
+		//Name der zu Datei wird geladen
+		$pgn_file = clm_core::$load->request_string('pgn_file', '');
+		
+		//SWT-Verzeichnis
+		$path = JPATH_COMPONENT . DS . "swt" . DS;
+
+		if($pgn_file!=""&&file_exists($path.$pgn_file)) {
+			return CLMSWT::readInt($path.$pgn_file,606,1);
+		} else {
+			return -1;
+		}
 	}
 	
 }

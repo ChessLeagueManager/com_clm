@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
 class CLMViewPGNImport extends JViewLegacy {
@@ -22,12 +21,16 @@ class CLMViewPGNImport extends JViewLegacy {
 		$saisons	= $this->get( 'saisons' );
 		$ligen		= $this->get( 'ligen' );
 		$turniere	= $this->get( 'turniere' );
+		$pgnFiles 	= $this->get( 'pgnFiles' );		
+		$pgn_file	= clm_core::$load->request_string('pgn_file', '');
 		
 		//Toolbar
 		clm_core::$load->load_css("icons_images");
 
 		JToolBarHelper::title( JText::_('TITLE_PGN_SERVICE') ,'clm_headmenu_manager.png' );
 		JToolBarHelper::custom('import','new.png','new_f2.png', JText::_('PGN_IMPORT_NEW'), false);
+		JToolBarHelper::custom('pgn_delete','delete.png','delete_f2.png', JText::_('PGN_DELETE'), false);
+		JToolBarHelper::custom('pgn_upload', 'upload.png', 'upload_f2.png', JText::_('PGN_UPLOAD'), false);
 		JToolBarHelper::custom('maintain','edit.png','edit_f2.png', JText::_('PGN_MAINTAIN'), false);
 		JToolBarHelper::custom('using_ntable','edit.png','edit_f2.png', JText::_('PGN_USING_NTABLE'), false);
 		JToolBarHelper::custom('delete_open','delete.png','delete_f2.png', JText::_('PGN_DELETE_OPEN'), false);
@@ -55,6 +58,14 @@ class CLMViewPGNImport extends JViewLegacy {
 //		$lists['ligen']	= JHtml::_('select.genericlist', $options_ligen, 'liga', 'class="inputbox"', 'value', 'text', 0 );
 		$lists['ligen']	= JHtml::_('select.genericlist', $options_ligen, 'liga', 'class="inputbox"', 'value', 'text', $p_liga );
 		
+		//PGN-File-Auswahl erstellen
+		$options_pgn_files[]		= JHtml::_('select.option', '', JText::_( 'PGN_FILES' ));
+		if (isset($pgnFiles)) {
+		foreach($pgnFiles as $i => $file)	{
+			$options_pgn_files[]		= JHtml::_('select.option', basename($file), basename($file));
+		} 	}
+		$lists['pgn_files']	= JHtml::_('select.genericlist', $options_pgn_files, 'pgn_file', 'class="inputbox"', 'value', 'text', $pgn_file );
+
 		//Daten an Template
 		$this->lists = $lists;
 		

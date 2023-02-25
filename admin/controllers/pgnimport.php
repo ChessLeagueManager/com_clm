@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -15,6 +15,7 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 class CLMControllerPGNImport extends JControllerLegacy
 {
 	function __construct() {		
+		$this->app =JFactory::getApplication();
 		parent::__construct();		
 	}
 	
@@ -24,7 +25,6 @@ class CLMControllerPGNImport extends JControllerLegacy
 	} 
 	
 	function import() {		
-		$app =JFactory::getApplication();
 		$liga = clm_core::$load->request_string('liga', '');
 		$pgn_file = clm_core::$load->request_string('pgn_file', '');
 		$adminLink = new AdminLink ();
@@ -33,12 +33,13 @@ class CLMControllerPGNImport extends JControllerLegacy
 		$adminLink->makeURL ();		
 		if ($liga == '') {	
 			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
-			$app->enqueueMessage( $msg );
-			$app->redirect($adminLink->url);
+			$this->app->enqueueMessage( $msg );
+			$this->app->redirect($adminLink->url);
 		} else { 
 			$msg = $this->getDataPGN();
-			$app->enqueueMessage( $msg );
-			$app->redirect($adminLink->url);
+			$this->app->enqueueMessage( $msg );
+
+			parent::display(); 		
 		}
 	}
 
@@ -117,8 +118,7 @@ if ($test_button > 0) {
 		else
 			$msg .= $pgn_error.' '.JText::_( 'PGN_IMPORT_OPEN' );
 if ($test_button > 0) {		
-		echo "<br><br>Ende pgn-Import <br> $msg"; 
-		die(); 
+		echo "<br><br>Ende pgn-Import <br><br><br>"; 
 }
 	
 		return $msg;
@@ -480,7 +480,6 @@ if ($test_button > 0) {
 	}
 
 	function maintain() {		
-		$app =JFactory::getApplication();
 		$liga = clm_core::$load->request_string('liga', '');
 		$pgn_file = clm_core::$load->request_string('pgn_file', '');
 		$adminLink = new AdminLink ();
@@ -489,19 +488,18 @@ if ($test_button > 0) {
 		$adminLink->makeURL ();		
 		if ($liga == '') {	
 			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
-			$app->enqueueMessage( $msg );
-			$app->redirect($adminLink->url);
+			$this->app->enqueueMessage( $msg );
+			$this->app->redirect($adminLink->url);
 		} else { 
 			$adminLink = new AdminLink ();
 			$adminLink->view = 'pgndata';
 			$adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
 			$adminLink->makeURL ();		
-			$app->redirect($adminLink->url);
+			$this->app->redirect($adminLink->url);
 		}
 	}
 	
 	function delete_all() {		
-		$app =JFactory::getApplication();
 		$liga = clm_core::$load->request_string('liga', '');
 		$pgn_file = clm_core::$load->request_string('pgn_file', '');
 		$adminLink = new AdminLink ();
@@ -510,18 +508,17 @@ if ($test_button > 0) {
 		$adminLink->makeURL ();		
 		if ($liga == '') {	
 			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
-			$app->enqueueMessage( $msg );
-			$app->redirect($adminLink->url);
+			$this->app->enqueueMessage( $msg );
+			$this->app->redirect($adminLink->url);
 		} else { 
 			$pgn_del = $this->getDelPGN(true);
 			$msg = $pgn_del.' '.JText::_( 'PGN_DELETE_TOTAL' );
-			$app->enqueueMessage( $msg );
-			$app->redirect($adminLink->url);
+			$this->app->enqueueMessage( $msg );
+			$this->app->redirect($adminLink->url);
 		}
 	}
 
 	function delete_open() {		
-		$app =JFactory::getApplication();
 		$liga = clm_core::$load->request_string('liga', '');
 		$pgn_file = clm_core::$load->request_string('pgn_file', '');
 		$adminLink = new AdminLink ();
@@ -530,13 +527,13 @@ if ($test_button > 0) {
 		$adminLink->makeURL ();		
 		if ($liga == '') {	
 			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
-			$app->enqueueMessage( $msg );
-			$app->redirect($adminLink->url);
+			$this->app->enqueueMessage( $msg );
+			$this->app->redirect($adminLink->url);
 		} else {
 			$pgn_del = $this->getDelPGN(false);
 			$msg = $pgn_del.' '.JText::_( 'PGN_DELETE_TOTAL' );
-			$app->enqueueMessage( $msg );
-			$app->redirect($adminLink->url);
+			$this->app->enqueueMessage( $msg );
+			$this->app->redirect($adminLink->url);
 		}
 	}
 
@@ -572,7 +569,6 @@ if ($test_button > 0) {
 	}	
 
 	function maintain_ntable() {		
-		$app =JFactory::getApplication();
 		$liga = clm_core::$load->request_string('liga', '');
 		$pgn_file = clm_core::$load->request_string('pgn_file', '');
 		$adminLink = new AdminLink ();
@@ -581,29 +577,59 @@ if ($test_button > 0) {
 		$adminLink->makeURL ();		
 		if ($liga == '') {	
 			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
-			$app->enqueueMessage( $msg );
-			$app->redirect($adminLink->url);
+			$this->app->enqueueMessage( $msg );
+			$this->app->redirect($adminLink->url);
 		} else { 
 			$adminLink = new AdminLink ();
 			$adminLink->view = 'pgnntable';
 			$adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
 			$adminLink->makeURL ();		
-			$app->redirect($adminLink->url);
+			$this->app->redirect($adminLink->url);
 		}
 	}
 
 	function cancel() {		
-		$app =JFactory::getApplication();
 		$liga = clm_core::$load->request_string('liga', '');
 		$pgn_file = clm_core::$load->request_string('pgn_file', '');
+
 		$adminLink = new AdminLink ();
 		$adminLink->view = 'swt';
 		$adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
 		$adminLink->makeURL ();		
 		$msg = JText::_( 'SWT_CANCEL_MSG' );
-		$app->enqueueMessage( $msg );
-		$app->redirect($adminLink->url);
+		$this->app->enqueueMessage( $msg );
+		$this->app->redirect($adminLink->url);
 	}
+
+	function pgn_upload() {
+		$model = $this->getModel('pgnimport');
+		$msg = $model->pgn_upload();
+		$pgn_file = clm_core::$load->request_string('pgn_file', '');
+		$liga = clm_core::$load->request_string('liga', '');
+		
+		$adminLink = new AdminLink();
+		$adminLink->view = "pgnimport";
+		$adminLink->more = array('pgn_file' => $pgn_file, 'liga' => $liga);
+		$adminLink->makeURL();
+			
+		$this->app->enqueueMessage( $msg );
+		$this->app->redirect($adminLink->url);
+	}
+	
+	function pgn_delete(){
+		$model = $this->getModel('pgnimport');
+		$msg = $model->pgn_delete();
+		$liga = clm_core::$load->request_string('liga', '');
+		
+		$adminLink = new AdminLink();
+		$adminLink->view = "pgnimport";
+//		$adminLink->more = array('pgn_file' => $pgn_file, 'liga' => $liga);
+		$adminLink->makeURL();
+			
+		$this->app->enqueueMessage( $msg );
+		$this->app->redirect($adminLink->url); 		
+	}
+	
 	
 }
 

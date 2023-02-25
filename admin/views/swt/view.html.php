@@ -16,12 +16,9 @@ class CLMViewSWT extends JViewLegacy {
 				
 		//Daten vom Model
 		$swtFiles 	= $this->get( 'swtFiles' );
-		$swmFiles 	= $this->get( 'swmFiles' );
-		$pgnFiles 	= $this->get( 'pgnFiles' );
 		
 		//Toolbar
 		clm_core::$load->load_css("icons_images");
-//		JToolBarHelper::title( JText::_('TITLE_SWT') ,'clm_headmenu_manager.png' );
 		JToolBarHelper::title( JText::_('SWT') ,'clm_headmenu_manager.png' );
 		
 		JToolBarHelper::custom( 'import', 'upload.png', 'upload_f2.png', JText::_('SWT_IMPORT'), false);
@@ -29,16 +26,10 @@ class CLMViewSWT extends JViewLegacy {
 		JToolBarHelper::custom( 'upload', 'upload.png', 'upload_f2.png', JText::_('SWT_UPLOAD'), false);
 		
 		JToolBarHelper::spacer();
-		JToolBarHelper::custom( 'arena_import', 'upload.png', 'upload_f2.png', JText::_('ARENA_IMPORT'), false);
-		
-		JToolBarHelper::spacer();
-		JToolBarHelper::custom( 'pgn_import', 'upload.png', 'upload_f2.png', JText::_('PGN_IMPORT'), false);
-		JToolBarHelper::custom('pgn_delete','delete.png','delete_f2.png', JText::_('PGN_DELETE'), false);
-		JToolBarHelper::custom( 'pgn_upload', 'upload.png', 'upload_f2.png', JText::_('PGN_UPLOAD'), false);
-		
-		JToolBarHelper::spacer();
 		JToolBarHelper::custom( 'trf_import', 'forward.png', 'forward_f2.png', JText::_('GOTO_TRF_IMPORT'), false);
 		JToolBarHelper::custom( 'swm_import', 'forward.png', 'forward_f2.png', JText::_('GOTO_SWM_IMPORT'), false);
+		JToolBarHelper::custom( 'pgn_import', 'forward.png', 'forward_f2.png', JText::_('GOTO_PGN_IMPORT'), false);
+		JToolBarHelper::custom( 'arena_import', 'forward.png', 'forward_f2.png', JText::_('GOTO_LICHESS_IMPORT'), false);
 
 		//SWT-File-Auswahl erstellen
 		jimport( 'joomla.filesystem.file' );
@@ -51,26 +42,6 @@ class CLMViewSWT extends JViewLegacy {
 			$options_swt_files[]		= JHtml::_('select.option', basename($file), basename($file));
 		} 	}
 		$lists['swt_files']	= JHtml::_('select.genericlist', $options_swt_files, 'swt_file', 'class="inputbox"', 'value', 'text', $filename );
-	
-		//PGN-File-Auswahl erstellen
-		$pgn_filename = clm_core::$load->request_string('pgn_filename', '');
-
-		$options_pgn_files[]		= JHtml::_('select.option', '', JText::_( 'PGN_FILES' ));
-		if (isset($pgnFiles)) {
-		foreach($pgnFiles as $i => $file)	{
-			$options_pgn_files[]		= JHtml::_('select.option', basename($file), basename($file));
-		} 	}
-		$lists['pgn_files']	= JHtml::_('select.genericlist', $options_pgn_files, 'pgn_file', 'class="inputbox"', 'value', 'text', $pgn_filename );
-		
-		//SWM-File-Auswahl erstellen
-		$swm_filename = clm_core::$load->request_string('swm_filename', '');
-
-		$options_swm_files[]		= JHtml::_('select.option', '', JText::_( 'SWM_FILES' ));
-		if (isset($swmFiles)) {
-		foreach($swmFiles as $i => $file)	{
-			$options_swm_files[]		= JHtml::_('select.option', basename($file), basename($file));
-		} 	}
-		$lists['swm_files']	= JHtml::_('select.genericlist', $options_swm_files, 'swm_file', 'class="inputbox"', 'value', 'text', $swm_filename );
 				
 		//Daten an Template
 		$this->lists = $lists;

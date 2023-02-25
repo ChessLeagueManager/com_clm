@@ -14,8 +14,6 @@ defined('_JEXEC') or die('Restricted access');
 class CLMModelSWT extends JModelLegacy {
 
 	var $_swtFiles;
-	var $_swmFiles;
-	var $_pgnFiles;
 
 	function __construct(){
 		parent::__construct();
@@ -91,82 +89,6 @@ class CLMModelSWT extends JModelLegacy {
 		}
 	}
 	
-	function getPgnFiles() { 
-		jimport( 'joomla.filesystem.folder' );
-		
-		$filesDir = 'components'.DS."com_clm".DS.'swt';
-		$this->pgnFiles = JFolder::files( $filesDir, '.PGN$|.pgn$', false, true );
-		
-		return $this->pgnFiles;
-	}
-	
-	function pgn_upload() {
-		jimport( 'joomla.filesystem.file' );
-		
-		//Datei wird hochgeladen
-		$file = clm_core::$load->request_file('pgn_datei', null);
-		
-		//Dateiname wird bereinigt
-		$filename = JFile::makeSafe($file['name']);
-		$_POST['pgn_filename'] = $filename;
-		//Temporärer Name und Ziel werden festgesetzt
-		$src = $file['tmp_name'];
-		$dest = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR . $filename;
-		
-		//Datei wird auf dem Server gespeichert (abfrage auf .pgn Endung)
-		if ( strtolower(JFile::getExt($filename) ) == 'pgn') {
-			if ( JFile::upload($src, $dest) ) {
-				$msg = JText::_( 'SWT_UPLOAD_SUCCESS' ); 
-			} else {
-				$msg = JText::_( 'SWT_UPLOAD_ERROR' );
-			}
-		} else {
-			$msg = JText::_( 'SWT_UPLOAD_ERROR_WRONG_EXT' );
-		}
-		return $msg;
-	}
-	
-	function pgn_delete() {
-		jimport( 'joomla.filesystem.file' );
-		
-		//Name der zu löschenden Datei wird geladen
-		$filename = clm_core::$load->request_string('pgn_file', '');
-		if ($filename == '') {
-			$msg = JText::_( 'SWT_FILE_ERROR' ); 
-			return $msg;
-		}		
-		//SWT-Verzeichnis
-		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
-		
-		//Datei löschen
-		if ( JFile::delete($path.$filename) ) {
-			$msg = JText::_( 'SWT_DELETE_SUCCESS' ); 
-		} else {
-			$msg = JText::_( 'SWT_DELETE_ERROR' ); 
-		}
-		return $msg;
-	}
-	
-	function pgn_import() {
-		//Name der zu Datei wird geladen
-		$filename = clm_core::$load->request_string('pgn_file', '');
-		
-		//SWT-Verzeichnis
-		$path = JPATH_COMPONENT . DS . "swt" . DS;
-
-		if($filename!=""&&file_exists($path.$filename)) {
-			return CLMSWT::readInt($path.$filename,606,1);
-		} else {
-			return -1;
-		}
-	}
-
-	function arena_import() {
-		//Name der zu Datei wird geladen
-		$arena_code = clm_core::$load->request_string('arena_code', '');
-		
-		return $arena_code;
-	}
 
 }
 
