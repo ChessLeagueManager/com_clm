@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -12,6 +12,8 @@
 defined('_JEXEC') or die('Restricted access');
 
 $turParams = new clm_class_params($this->turnier->params);
+if (is_null($this->turnier->bemerkungen)) $this->turnier->bemerkungen = '';
+if (is_null($this->turnier->bem_int)) $this->turnier->bem_int = '';
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -674,7 +676,7 @@ $turParams = new clm_class_params($this->turnier->params);
 
 	<div class="width-60 fltlft">
 		<fieldset class="adminform">
-			
+			<br>
 			<legend><?php echo JText::_( 'REMARKS' ); ?></legend>
 		
 			<table class="paramlist admintable">
