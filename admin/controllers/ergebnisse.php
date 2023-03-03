@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -2602,5 +2602,69 @@ function kampflos($gast)
 	function calculateRanking($sid,$liga) {
 		clm_core::$api->direct("db_tournament_auto",array($liga,true,false));
 	}
+
+
+function update_remarks()
+	{
+	$mainframe	= JFactory::getApplication();
+
+	// Check for request forgeries
+	defined('clm') or die('Restricted access');
+
+	$option		= clm_core::$load->request_string('option');
+	$section	= clm_core::$load->request_string('section');
+	$db 		=JFactory::getDBO();
+	$task		= clm_core::$load->request_string( 'task');
+	$user 		=JFactory::getUser();
+	$id_id 		= clm_core::$load->request_string( 'id');
+	$date		=JFactory::getDate();
+
+	$meldung 	= $user->get('id');
+	$sid		= clm_core::$load->request_int( 'sid');
+	$lid 		= clm_core::$load->request_int( 'lid');
+	$rnd		= clm_core::$load->request_int( 'rnd');
+	$paarung	= clm_core::$load->request_int( 'paarung');
+	$dg			= clm_core::$load->request_int( 'dg');
+	$comment = addslashes(clm_core::$load->request_string( 'comment'));
+	$icomment = addslashes(clm_core::$load->request_string( 'icomment'));
+
+	// Für Heimmannschaft updaten
+	$query	= "UPDATE #__clm_rnd_man"
+		." SET comment = '".$comment."'"
+		." , icomment = '".$icomment."'"
+		." WHERE sid = ".$sid
+		." AND lid = ".$lid
+		." AND runde = ".$rnd
+		." AND paar = ".$paarung
+		." AND dg = ".$dg
+		." AND heim = 1 "
+		;
+	clm_core::$db->query($query);
+
+	// Für Gastmannschaft updaten
+	$query	= "UPDATE #__clm_rnd_man"
+		." SET comment = '".$comment."'"
+		." , icomment = '".$icomment."'"
+		." WHERE sid = ".$sid
+		." AND lid = ".$lid
+		." AND runde = ".$rnd
+		." AND paar = ".$paarung
+		." AND dg = ".$dg
+		." AND heim = 0 "
+		;
+	clm_core::$db->query($query);
+
+	// Log schreiben
+	$clmLog = new CLMLog();
+	$clmLog->aktion = JText::_( 'ERGEBNISSE_UPDATE_REMARKS' );
+	$clmLog->params = array('sid' => $sid, 'lid' => $lid, 'rnd' => $rnd, 'paar' => $paarung, 'dg' => $dg);
+	$clmLog->write();
+
+	$msg = JText::_( 'ERGEBNISSE_UPDATE_REMARKS' );
+	$link = 'index.php?option='.$option.'&section='.$section;
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
+	}
+
 
 }

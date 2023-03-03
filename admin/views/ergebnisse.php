@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 class CLMViewErgebnisse
 {
 static function setErgebnisseToolbar($val, $rows, $f_lid, $f_runde, $f_dg)
@@ -222,6 +221,7 @@ static function setErgebnisToolbar($runde)
 		JToolBarHelper::title(  JText::_( 'TITLE_RESULTS_8').' '.$runde[0]->hname.' - '.$runde[0]->gname .': [ '. $text.' ]' );
 		JToolBarHelper::save();
 		JToolBarHelper::apply();
+		JToolBarHelper::custom('update_remarks','save.png','save_f2.png',JText::_('BUTTON_UPDATE_REMARKS'),false);
 		JToolBarHelper::cancel();
 		JToolBarHelper::help( 'screen.clm.edit' );
 	}

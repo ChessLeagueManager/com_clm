@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,9 +9,8 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access'); 
-//JHtml::_('behavior.tooltip', '.CLMTooltip');
+
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
  
 function RGB($Hex){ 
@@ -445,7 +444,8 @@ if ($edit > 0 OR $medit >0) { ?>
 <?php } ?>
 
 <?php } elseif ((isset($paar[$y]->gpublished) AND $paar[$y]->gpublished == 1 AND $paar[$y]->hpublished == 1) AND ($paar_exist== 0)) { ?>
-    <tr><td colspan ="<?php echo $col_h; ?>" align="left"><?php echo JText::_('NO_RESULT_YET'); $NO_RESULT_YET++; ?></td></tr>
+<!--    <tr><td colspan ="<?php echo $col_h; ?>" align="left"><?php echo JText::_('NO_RESULT_YET'); $NO_RESULT_YET++; ?></td></tr> -->
+    <tr><td colspan ="<?php echo $col_h; ?>" align="left"><?php echo JText::_('NO_RESULT_YET'); if ($paar[$y]->comment != "") echo "<br>".JText::_('PAAR_COMMENT').$paar[$y]->comment; $NO_RESULT_YET++; ?></td></tr>
     <?php } elseif (isset($paar[$y]) AND $paar[$y]->comment != "") { ?>
 	<tr><td colspan ="<?php echo $col_h; ?>"><?php  echo JText::_('PAAR_COMMENT').$paar[$y]->comment; ?></td></tr>
 	<?php } else { ?><tr><td colspan ="<?php echo $col_h; ?>" class="noborder">&nbsp;</td></tr><?php } ?>

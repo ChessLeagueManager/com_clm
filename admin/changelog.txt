@@ -19,6 +19,7 @@ $ -> Language fix or change
 + Importe: Erweiterung lichess- und TRF-Import
 ^ Importe: Neue Struktur von TRF- und SWM-Import
 ^ Importe: Neue Struktur von PGN- und lichess-Import
++ View Ergebnisse: Update Bemerkungen
 
 - - - - - 4.0.1 - [30-01-2023] - - - - - - - - - - - - - - - - - - - -
 + Admin-View Mitgliederverwaltung: Reaktivierung der Vorbelegung bei Änderung
