@@ -10,10 +10,13 @@ defined('_JEXEC') or die('Restricted access');
 $arena_code = clm_core::$load->request_string('arena_code', '');
 $sid = clm_core::$load->request_string('sid', '');
 $tid = clm_core::$load->request_string('tid', '');
+$turnier_codes = $this->turnier_codes;
+
 // Konfigurationsparameter auslesen
 $config		= clm_core::$db->config();
 $execute	= $config->execute_swt;
 
+clm_core::$load->load_js("arenaimport");
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm" >
@@ -75,6 +78,9 @@ $execute	= $config->execute_swt;
 		</tr>		
 	</table>
 	
+	<?php foreach ($turnier_codes as $key => $turnier_code) { ?>
+		<input type="hidden" name="turnier<?php echo $key; ?>" id="turnier<?php echo $key; ?>" value="<?php echo $turnier_code; ?>" />	
+	<?php } ?>
 	<input type="hidden" name="option" value="com_clm" />
 	<input type="hidden" name="view" value="arenaturnier" />
 	<input type="hidden" name="controller" value="arenaturnier" />

@@ -8,8 +8,8 @@
  * Import einer Turnierdatei aus lichess  
 */
 function clm_api_db_arena_import($arena_code,$season,$turnier,$group=false,$update=false,$test=false) {
+    $lang = clm_core::$lang->imports;
 	$group = false;
-    $lang = clm_core::$lang->swm_import;
 	if ($test) $debug = 1; else $debug = 0;
 	$auser = (integer) clm_core::$access->getId(); // aktueller CLM-User
 	if ($test)	echo "<br><br>Test - keine Übernahme der Daten ins CLM!"; 
@@ -266,12 +266,12 @@ if ($debug > 0) { echo "<br><br>-- Turnierdaten --"; } //die();
 		$runden = $anz_runden;
 		$keyS = '`name`, `sid`, `typ`, `dg`, `rnd`, `teil`, `runden`, `tl`, `published`, `bezirkTur`, `dateStart`, `dateEnd`';
 		$valueS = "'".$name."',".$season.", '".$typ."', 1, 1,".$teil.",".$runden.", 0, 1, '0', '".$dateStart."', '".$dateEnd."'";
-		$bem_int = 'Übernahme aus lichess';
+		$bem_int = $lang->arena_remark.' '.$arena_code;
 		$keyS .= ', `tiebr1`,`bem_int`, `sieg`, `siegs`, `remis`, `remiss`';
 		if ($tur_mode == 'swiss')
-			$valueS .= ", 3, '.$bem_int.', 1, 1, '0.5', '0.5'";
+			$valueS .= ", 3, '$bem_int', 1, 1, '0.5', '0.5'";
 		else   // mode arena
-			$valueS .= ", 30, '.$bem_int.', 2, 2, 1, 1";
+			$valueS .= ", 30, '$bem_int', 2, 2, 1, 1";
 if ($debug > 0) { echo "<br>-- Name --:".$name; } //die();
 if ($debug > 0) { echo "<br>-- Teilnehmer --:".$teil; } //die();
 if ($debug > 0) { echo "<br>-- Runden --:".$runden; } //die();

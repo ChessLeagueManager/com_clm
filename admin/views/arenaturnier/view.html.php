@@ -16,6 +16,7 @@ class CLMViewArenaTurnier extends JViewLegacy {
 		$saisons 	= $this->get( 'saisons' );
 		$turniere 	= $this->get( 'turniere' );
 		
+		$lang = clm_core::$lang->imports;
 		
 		//Toolbar
 		clm_core::$load->load_css("icons_images");
@@ -43,26 +44,26 @@ class CLMViewArenaTurnier extends JViewLegacy {
 		$options_turniere[]		= JHtml::_('select.option', '', JText::_( 'SWT_TOURNAMENTS' ));
 		$arena_code	= clm_core::$load->request_string('arena_code', '');
 		$current_turnier	= clm_core::$load->request_string('tid', '');
+		$turnier_codes = array();
 		
 		foreach($turniere as $turnier)	{
-/*			$sf1 = strpos($turnier->bem_int, 'SWT-Importfile:');
-			$sf2 = strpos($turnier->bem_int, '.SWT');
-			if ($sf2 === false) $sf2 = strpos($turnier->bem_int, '.swt');
-			if (!($sf1 === false) AND !($sf2 === false) AND ($sf1 < $sf2))
-				$filename = substr($turnier->bem_int, ($sf1 + 15), ($sf2 + 4 - ($sf1 + 15) ));
-			else $filename = '';
-//			if ($filename == $swm_file)	$current_turnier = $turnier->id;
+			$sf1 = strpos($turnier->bem_int, $lang->arena_remark);
+			if ($sf1 === false) $tur_code = $tur_code = '';
+			else $tur_code = substr($turnier->bem_int, (strlen($lang->arena_remark)+1),8);
+																 
 			$current_turnier = 0;
-*/
+
+			$turnier_codes[$turnier->id] = $tur_code;
 			$options_turniere[]		= JHtml::_('select.option', $turnier->id, $turnier->name);
 		}
 		
 		$lists['saisons']	= JHtml::_('select.genericlist', $options_saisons, 'filter_saison', 'class="inputbox" onchange="this.form.submit();"', 'value', 'text', $state->get('filter_saison') );
 
-		$lists['turniere']	= JHtml::_('select.genericlist', $options_turniere, 'turnier', 'class="inputbox"', 'value', 'text', 0 );
+		$lists['turniere']	= JHtml::_('select.genericlist', $options_turniere, 'tid', 'class="inputbox" onChange="insertCode()"', 'value', 'text', 0 );
 
 		//Daten an Template
 		$this->lists = $lists;
+		$this->turnier_codes = $turnier_codes;
 				
 		parent::display($tpl);
 	}
