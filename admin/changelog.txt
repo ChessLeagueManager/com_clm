@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 4.0.2 - [xx-xx-2023] - - - - - - - - - - - - - - - - - - - -
+- - - - - 4.0.2 - [04-03-2023] - - - - - - - - - - - - - - - - - - - -
 + neuer Menüeintragstyp: Paarungsliste Einzelturnier
 + SWT-Import: Mannschaftsnamen durch Land ergänzen (optional)
 ^ Code-Anpassung wegen MariaDB(SQL-Mode) / php 8.1

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -336,13 +336,14 @@ if ($fe_submenu == 1) {
 		$array[4][3][6][2][] = array("Itemid", $itemid);
 	}
 
-if ($test_button) {
+/*	if ($test_button) {
     if (!isset($_SERVER["HTTP_USER_AGENT"])) 
 		echo "<b>Kein HTTP_USER_AGENT defined:</b> "."Zugriff über Extern Modul"."<br>";
 	else
 		echo "<b>Ihr HTTP_USER_AGENT lautet:</b> ".$_SERVER['HTTP_USER_AGENT']."<br>";	
 	echo "<br>mobile:"; var_dump($mobile);
 	}
+*/
 	echo clm_submenu($array);
 }
  
