@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,8 +10,6 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access'); 
-
-defined('_JEXEC') or die( 'Invalid Token' );
 
 	$mainframe	= JFactory::getApplication();
 
@@ -174,7 +172,8 @@ if ($msg != '') {
 	$subject = JText::_('REGISTRATION_ONLINE').' - '.$turnier->name;
 	$body_daten = JText::_('REGISTRATION_PLAYER').': '.$reg_name."\n";
 	if ($reg_vorname != '') $body_daten .=  JText::_('REGISTRATION_VORNAME').': '.$reg_vorname."\n";
-	$body_daten .=	JText::_('REGISTRATION_CLUB').': '.$reg_club."\n"
+	$body_daten .=	JText::_('REGISTRATION_JAHR').': '.$reg_birthYear."\n"
+				. JText::_('REGISTRATION_CLUB').': '.$reg_club."\n"
 				. JText::_('REGISTRATION_MAIL').': '.$reg_mail."\n";
 	if ($reg_dwz != '') $body_daten .=  JText::_('REGISTRATION_DWZ').': '.$reg_dwz."\n";
 	if ($reg_elo != '') $body_daten .=  JText::_('REGISTRATION_ELO').': '.$reg_elo."\n";
