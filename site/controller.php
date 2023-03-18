@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die();
 jimport('joomla.application.component.controller');
@@ -173,12 +171,12 @@ class CLMController extends JControllerLegacy
 		$password2 = clm_core::$load->request_string('password2', '');
 
 		// Get the model
-		$model = &$this->getModel('Reset');
+		$model = $this->getModel('Reset');
 
 		// Reset the password
 		if ($model->completeReset($password1, $password2) === false)
 		{
-			$message = JText::sprintf('PASSWORD_RESET_FAILED', $model->getError());
+			$message = JText::_('PASSWORD_RESET_FAILED')." ". $model->getError();
 			$this->setRedirect('index.php?option=com_clm&view=reset&layout=complete', $message);
 			return false;
 		}

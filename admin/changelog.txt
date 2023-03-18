@@ -15,6 +15,7 @@ $ -> Language fix or change
 - - - - - 4.0.3 - [xx-xx-2023] - - - - - - - - - - - - - - - - - - - -
 + Extern-Zugriff: View 'Aktuelle Runde'
 ^ Online-Turnieranmeldung: Ergänzung der Bestätigungsmails
+# Passwort-Rücksetzen: Erhöhen der Sicherheit
 
 - - - - - 4.0.2 - [04-03-2023] - - - - - - - - - - - - - - - - - - - -
 + neuer Menüeintragstyp: Paarungsliste Einzelturnier

@@ -1,7 +1,7 @@
 <?php 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -58,7 +58,7 @@ else {
 		</tr>
 
 	</table>
-<p><?php echo JText::_('RESET_PASSWORD_ADVICE'); ?></p>
+<p><?php echo JText::_('RESET_PASSWORD_ADVICE1').JText::_('RESET_PASSWORD_ADVICE2'); ?></p>
 
 	<button type="submit" class="validate"><?php echo JText::_('RESET_PASSWORD_SUBMIT'); ?></button>
 	<?php echo JHTML::_( 'form.token' ); ?>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -94,14 +94,22 @@ class CLMModelReset extends JModelLegacy
 		// Make sure that we have a pasword
 		if ( ! $password1 )
 		{
-			$this->setError(JText::_('MUST_SUPPLY_PASSWORD'));
+			$this->setError(JText::_('PASSWORD_MUST_GIVEN'));
 			return false;
 		}
 
 		// Verify that the passwords match
 		if ($password1 != $password2)
 		{
-			$this->setError(JText::_('PASSWORDS_DO_NOT_MATCH_LOW'));
+			$this->setError(JText::_('PASSWORDS_DO_NOT_MATCH'));
+			return false;
+		}
+
+		// Verify the password against the rules
+		$pattern = '/(?=^.{8,}$)(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[+,.;:\-_!%&\/]).*$/';
+		if (!preg_match($pattern, $password1) == 1) 
+		{
+			$this->setError(JText::_('PASSWORD_DO_NOT_MATCH_RULES'));
 			return false;
 		}
 
