@@ -20,13 +20,24 @@ function clm_api_db_swm_import($file,$season,$turnier,$group=false,$update=false
     $lang = clm_core::$lang->swm_import;
 	if ($test) $debug = 1; else $debug = 0;
 	$auser = (integer) clm_core::$access->getId(); // aktueller CLM-User
-	if ($test)	echo "<br><br>Test - keine Übernahme der Daten ins CLM!"; 
+	if ($test)	echo "<br><br>Test - keine Übernahme der Daten ins CLM!";
+
 	$new_ID = 0;
 if ($debug > 0) { echo "<br><br>-- allgemeine Daten --";	}
 if ($debug > 0) echo "<br><br>datei: ".$filename; 		//echo "<br>end"; //die();
 if ($debug > 0) echo "<br>saison: ".$season; 	//echo "<br>end"; //die();
 if ($debug > 0) echo "<br>turnier: ".$turnier; 	//echo "<br>end"; //die();
 
+	if ($update) {
+		if ($group) {
+			$select_query = " SELECT * FROM #__clm_liga WHERE id = ".$turnier;
+			$uliga = clm_core::$db->loadObjectList($select_query);
+		} else {
+			$select_query = " SELECT * FROM #__clm_turniere WHERE id = ".$turnier;
+			$uturnier = clm_core::$db->loadObjectList($select_query);
+		}
+	}
+	
 	if (!$file) {
 		echo '<p>Please choose a filename! / Bitte wählen Sie einen Dateinamen aus!</p>';
 		return false;
@@ -80,7 +91,9 @@ if ($debug > 1) { echo "<br>tournament2: ";	var_dump($tournament2); }
 	if ($tournament_fk[0] > $tournament["out"][213][0]) $tournament["out"][213][0] = $tournament_fk[0];
 	$bem_int = 'SWM-Importdatei'.$filename.';';
 	
-	If ($group) { 	// Mannschaftsturniere
+	If ($group) { 	
+		
+		// Mannschaftsturniere
 		$typ = '3'; 														   // Mannschaft-Schweizer Sytem .TUM
 		if (strpos($file,'.TUT') > 0 OR strpos($file,'.tut') > 0 ) $typ = '1'; // Mannschaft-Rundenturnier	 .TUT
 		$tiebr1 = $tournament["out"][201][0];
@@ -100,28 +113,53 @@ if ($debug > 1) { echo "<br>tournament2: ";	var_dump($tournament2); }
 if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 		clm_core::$db->query($sql);
 		$new_swt_tid = clm_core::$db->insert_id();
-	} else { 		// Einzelturniere
+	} else { 		
+	
+		// Einzelturniere
 		$typ = '1'; 														   // Einzel-Schweizer Sytem .TUN
 		if (strpos($file,'.TUR') > 0 OR strpos($file,'.tur') > 0 ) $typ = '2'; // Einzel-Rundenturnier	 .TUR
 		$keyS = '`sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `name`, `bezirkTur`, `checked_out_time`, `bem_int`';
 		$valueS = $season.", '".$typ."', 1, 1, 0, 1, '".$name."', '0', '1970-01-01 00:00:00', '".$bem_int."'";
-		$params_array = array();
+		$str_params = '';
+		$params = new clm_class_params($str_params);
 		foreach ($tournament['out'] as $tour) {
 if ($debug > 1) { echo "<br>tour: ";	var_dump($tour); }
 			if ($tour[1][2] == '0') continue;
 			if (substr($tour[1][2],0,6) == 'params') {
-				$params_array[] = substr($tour[1][2],7).'='.$tour[0];
+if ($debug > 1) { echo "<br>pour: ";	var_dump($tour); }
+				$params->set(substr($tour[1][2],7),$tour[0]);	
 			} else {
 				$keyS .= ',`'.$tour[1][2].'`';
 				$valueS .= ",'".clm_core::$db->escape($tour[0])."'";
 			}
 		}
-		$params_array[] = 'playerViewDisplaySex=0';
-		$params_array[] = 'playerViewDisplayBirthYear=0';	
-if ($debug > 2) { echo "<br>params_array: ";	var_dump($params_array); }
-		$params = implode("\n", $params_array);
+		$params->set("playerViewDisplaySex",'0');	
+		$params->set("playerViewDisplayBirthYear",'0');	
+		if ($update) {
+			$old_params = new clm_class_params($uturnier[0]->params);
+			$params->set("qualiUp",$old_params->get("qualiUp",'0'));
+			$params->set("qualiUpPoss",$old_params->get("qualiUpPoss",'0'));
+			$params->set("qualiDown",$old_params->get("qualiDown",'0'));
+			$params->set("qualiDownPoss",$old_params->get("qualiDownPoss",'0'));
+			$params->set("displayRoundDate",$old_params->get("displayRoundDate",'0'));
+			$params->set("displayPlayerSnr",$old_params->get("displayPlayerSnr",'0'));
+			$params->set("displayPlayerTitle",$old_params->get("displayPlayerTitle",'0'));
+			$params->set("displayPlayerClub",$old_params->get("displayPlayerClub",'0'));
+			$params->set("displayPlayerRating",$old_params->get("displayPlayerRating",'0'));
+			$params->set("displayPlayerElo",$old_params->get("displayPlayerElo",'0'));
+			$params->set("displayPlayerFideLink",$old_params->get("displayPlayerFideLink",'0'));
+			$params->set("displayPlayerFederation",$old_params->get("displayPlayerFederation",'0'));
+			$params->set("displayTlOK",$old_params->get("displayTlOK",'0'));
+			$params->set("pgnInput",$old_params->get("pgnInput",'0'));
+			$params->set("pgnPublic",$old_params->get("pgnPublic",'0'));
+			$params->set("pgnDownload",$old_params->get("pgnDownload",'0'));
+			$params->set("playerViewDisplaySex",$old_params->get("playerViewDisplaySex",'0'));
+			$params->set("playerViewDisplayBirthYear",$old_params->get("playerViewDisplayBirthYear",'0'));
+		}
+		$str_params = $params->params();
+if ($debug > 2) { echo "<br>str_params: ";	var_dump($str_params); }
 		$keyS .= ', `params`';
-		$valueS .= ", '".$params."'";
+		$valueS .= ", '".$str_params."'";
 if ($debug > 2) { echo "<br>params: ";	var_dump($params); }
 
 		$sql = "INSERT INTO #__clm_swt_turniere (".$keyS.") VALUES (".$valueS.")";
@@ -272,7 +310,7 @@ if ($debug > 2) { echo "<br>tab: ";	var_dump($tab); }
 				$valueS .= ",'".$tab[0]."'";		
 			}
 			$sql = "INSERT INTO #__clm_swt_turniere_tlnr (".$keyS.") VALUES (".$valueS.")";
-if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
+if ($debug > 1) { echo "<br>tlnr-sql: ";	var_dump($sql); }
 			clm_core::$db->query($sql);
 		}
 	}
