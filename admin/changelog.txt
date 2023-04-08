@@ -16,6 +16,7 @@ $ -> Language fix or change
 + Extern-Zugriff: View 'Aktuelle Runde'
 ^ Online-Turnieranmeldung: Ergänzung der Bestätigungsmails
 # Passwort-Rücksetzen: Erhöhen der Sicherheit
+^ Statistik-Views: Designanpassung Joomla 4
 
 - - - - - 4.0.2 - [04-03-2023] - - - - - - - - - - - - - - - - - - - -
 + neuer Menüeintragstyp: Paarungsliste Einzelturnier

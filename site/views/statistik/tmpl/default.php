@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -123,18 +123,18 @@ echo CLMContent::clmWarning(JText::_('LEAGUE_NO_GAMES'));
 
 	<tr class="anfang">
 		<td></td>
-		<td class="punkte border"><?php echo JText::_('LEAGUE_STAT_SUM') ?></td>
+		<td class="punkte clmborder"><?php echo JText::_('LEAGUE_STAT_SUM') ?></td>
 		<td class="punkte"><?php echo JText::_('LEAGUE_STAT_HOME') ?></td>
 		<td class="punkte"><?php echo JText::_('LEAGUE_STAT_PERCENT') ?></td>
 		<td class="punkte"><?php echo JText::_('LEAGUE_STAT_GUEST') ?></td>
 		<td class="punkte"><?php echo JText::_('LEAGUE_STAT_PERCENT') ?></td>
-		<td class="white border"><?php echo JText::_('LEAGUE_STAT_QUANTITY') ?></td>
+		<td class="white clmborder"><?php echo JText::_('LEAGUE_STAT_QUANTITY') ?></td>
 		<td class="white"><?php echo JText::_('LEAGUE_STAT_PERCENT') ?></td>
-		<td class="black border"><?php echo JText::_('LEAGUE_STAT_QUANTITY') ?></td>
+		<td class="black clmborder"><?php echo JText::_('LEAGUE_STAT_QUANTITY') ?></td>
 		<td class="black"><?php echo JText::_('LEAGUE_STAT_PERCENT') ?></td>
-		<td class="remis border"><?php echo JText::_('LEAGUE_STAT_QUANTITY') ?></td>
+		<td class="remis clmborder"><?php echo JText::_('LEAGUE_STAT_QUANTITY') ?></td>
 		<td class="remis"><?php echo JText::_('LEAGUE_STAT_PERCENT') ?></td>
-		<td class="kampflos border"><?php echo JText::_('LEAGUE_STAT_QUANTITY') ?></td>
+		<td class="kampflos clmborder"><?php echo JText::_('LEAGUE_STAT_QUANTITY') ?></td>
 		<td class="kampflos"><?php echo JText::_('LEAGUE_STAT_PERCENT') ?></td>
 	</tr>
 
@@ -157,30 +157,30 @@ $sum_schwarz = 0;
 			} ?>
 	<tr class="<?php echo $zeilenr; ?>">
 		<td align="center"><?php echo $x+1; ?></td>
-		<td class="punkte border"><?php echo $brett[$x]->count; ?></td>
+		<td class="punkte clmborder"><?php echo $brett[$x]->count; ?></td>
 		<td class="punkte"><?php echo str_replace ('.0', '', $brett[$x]->sum); ?></td>
 		<td class="punkte"><?php echo round (100 * ($brett[$x]->sum - $brett[$x]->count * $ligapunkte->antritt) / ($brett[$x]->count * $ligapunkte->sieg), 1); ?></td>
 
 		<td class="punkte"><?php echo str_replace ('.0', '', $gbrett[$x]->sum); ?></td>
 		<td class="punkte"><?php echo round (100 * ($gbrett[$x]->sum - $gbrett[$x]->count * $ligapunkte->antritt) / ($brett[$x]->count * $ligapunkte->sieg), 1); ?></td>
 
-		<td class="white border"><?php echo $brett_all[$x]['w']; $sum_weiss += $brett_all[$x]['w']; ?></td>
+		<td class="white clmborder"><?php echo $brett_all[$x]['w']; $sum_weiss += $brett_all[$x]['w']; ?></td>
 		<td class="white"><?php echo round((($brett_all[$x]['w']*100)/$brett[$x]->count),1); ?></td>
-		<td class="black border"><?php echo $brett_all[$x]['s']; $sum_schwarz += $brett_all[$x]['s']; ?></td>
+		<td class="black clmborder"><?php echo $brett_all[$x]['s']; $sum_schwarz += $brett_all[$x]['s']; ?></td>
 		<td class="black"><?php echo round((($brett_all[$x]['s']*100)/$brett[$x]->count),1); ?></td>
 
 <?php if (isset($rbrett[$r]->brett) AND $rbrett[$r]->brett == $x+1) {  ?>
-		<td class="remis border"><?php echo $rbrett[$r]->sum; ?></td>
+		<td class="remis clmborder"><?php echo $rbrett[$r]->sum; ?></td>
 		<td class="remis"><?php echo round((($rbrett[$r]->sum*100)/$brett[$x]->count),1); ?></td>
 <?php $r++;} else { ?>
-		<td class="remis border">0</td>
+		<td class="remis clmborder">0</td>
 		<td class="remis">0</td>
 <?php } ?>
 <?php if (isset($kbrett[$k]->brett) AND $kbrett[$k]->brett == $x+1) {  ?>
-		<td class="kampflos border"><?php echo $kbrett[$k]->sum; ?></td>
+		<td class="kampflos clmborder"><?php echo $kbrett[$k]->sum; ?></td>
 		<td class="kampflos"><?php echo round((($kbrett[$k]->sum*100)/$brett[$x]->count),1); ?></td>
 <?php $k++;} else { ?>
-		<td class="kampflos border">0</td>
+		<td class="kampflos clmborder">0</td>
 		<td class="kampflos">0</td>
 <?php } ?>
 
@@ -188,7 +188,7 @@ $sum_schwarz = 0;
 <?php } ?>
 	<tr class="ende">
 		<td align="center">&sum;</td>
-		<td class="punkte border"><?php echo $gesamt[0]->gesamt; ?></td>
+		<td class="punkte clmborder"><?php echo $gesamt[0]->gesamt; ?></td>
 		
 		<td class="punkte"><?php echo str_replace ('.0', '', $heim[0]->sum); ?></td>
 <!--		<td class="punkte"><?php echo round((($heim[0]->sum*100)/$gesamt[0]->gesamt),1); ?></td>-->
@@ -198,13 +198,13 @@ $sum_schwarz = 0;
 <!--		<td class="punkte"><?php echo round((($gast[0]->sum*100)/$gesamt[0]->gesamt),1); ?></td>-->
 		<td class="punkte"><?php echo round (100 * ($gast[0]->sum - $gesamt[0]->gesamt * $ligapunkte->antritt) / ($gesamt[0]->gesamt * $ligapunkte->sieg), 0); ?></td>
 		
-		<td class="white border"><?php echo $sum_weiss; ?></td>
+		<td class="white clmborder"><?php echo $sum_weiss; ?></td>
 		<td class="white"><?php echo round((($sum_weiss * 100)/$gesamt[0]->gesamt), 1); ?></td>
-		<td class="black border"><?php echo $sum_schwarz; ?></td>
+		<td class="black clmborder"><?php echo $sum_schwarz; ?></td>
 		<td class="black"><?php echo round((($sum_schwarz * 100)/$gesamt[0]->gesamt), 1); ?></td>
-		<td class="remis border"><?php echo $remis[0]->remis; ?></td>
+		<td class="remis clmborder"><?php echo $remis[0]->remis; ?></td>
 		<td class="remis"><?php echo round((($remis[0]->remis * 100)/$gesamt[0]->gesamt), 1); ?></td>
-		<td class="kampflos border"><?php echo $kampflos[0]->kampflos; ?></td>
+		<td class="kampflos clmborder"><?php echo $kampflos[0]->kampflos; ?></td>
 		<td class="kampflos"><?php echo round((($kampflos[0]->kampflos * 100)/$gesamt[0]->gesamt), 1); ?></td>
 	</tr>
 
