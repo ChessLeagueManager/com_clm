@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -532,6 +532,7 @@ function datei() {
 		
 		if (is_null($spl->Spielername)) $name = explode(",", ',');
 		else $name = explode(",", $spl->Spielername);
+		$spl->Vereinname = str_replace('&', '&amp;', $spl->Vereinname);
 
 		$xml .= '<player>'
 			.'<noPlayer>'.$player[$spl->zps][$spl->spieler].'</noPlayer>'
@@ -652,6 +653,7 @@ function datei() {
 
 	foreach($mannschaften as $man){
 
+		$man->name = str_replace('&', '&amp;', $man->name);
 		$xml .= '<team>'
 			.'<lot>'.$man->tln_nr.'</lot>'
 			.'<teamName>'.$man->name.'</teamName>'

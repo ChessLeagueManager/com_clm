@@ -17,6 +17,7 @@ $ -> Language fix or change
 ^ Online-Turnieranmeldung: Ergänzung der Bestätigungsmails
 # Passwort-Rücksetzen: Erhöhen der Sicherheit
 ^ Statistik-Views: Designanpassung Joomla 4
+# XML-Ausgaben: Behandlung von Sonderzeichen
 
 - - - - - 4.0.2 - [04-03-2023] - - - - - - - - - - - - - - - - - - - -
 + neuer Menüeintragstyp: Paarungsliste Einzelturnier
