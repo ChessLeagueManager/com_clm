@@ -142,7 +142,7 @@ class CLMTournament {
 
 		$turParams = new clm_class_params($this->_db->loadResult());
 		$paramTBFideCorrect = $turParams->get('optionTiebreakersFideCorrect', 0);
-		$param50PercentRule = $turParams->get('option50PercentRule', 1);
+		$param50PercentRule = $turParams->get('option50PercentRule', 0);
 		$paramuseAsTWZ = $turParams->get('useAsTWZ', 0);
 		$query = ' SELECT *'
 			. ' FROM #__clm_turniere'
@@ -302,12 +302,21 @@ class CLMTournament {
 			$gamesCount[$s]->count = 0;
 		}
 		if ($maxround > 4 AND $this->data->typ == 2 AND $param50PercentRule == 1) {		//nur Vollturniere und Prüfung nicht ausgeschaltet
+			$anz_paarungen = 0;
+			$anz_gespielt = 0;
 			foreach ($matchData as $key => $value) {
 				if ($maxround < ((($value->dg - 1) * $runden) + $value->runde)) continue;  // Ignorieren von bereits gesetzten kampflos oder spielfrei in Folgerunden
-				if ($value->ergebnis != 4 AND $value->ergebnis != 6 AND $value->ergebnis != 7 AND $value->ergebnis != 8 AND $value->ergebnis != 11 AND $value->ergebnis != 12 AND $value->ergebnis != 13 AND !is_null($value->ergebnis)) $gamesCount[$value->tln_nr]->count++;
+				$anz_paarungen++;
+				if ($value->ergebnis != 8 AND !is_null($value->ergebnis)) $anz_gespielt++;
 			}
-			for ($s=1; $s<= $teil; $s++) { 		// alle Startnummern durchgehen
-				if ($gamesCount[$s]->count < $maxround/2) $gamesCount[$s]->tab = 0;
+			if (($anz_gespielt / $anz_paarungen) > 0.7) { 
+				foreach ($matchData as $key => $value) {
+					if ($maxround < ((($value->dg - 1) * $runden) + $value->runde)) continue;  // Ignorieren von bereits gesetzten kampflos oder spielfrei in Folgerunden
+					if ($value->ergebnis != 4 AND $value->ergebnis != 6 AND $value->ergebnis != 7 AND $value->ergebnis != 8 AND $value->ergebnis != 11 AND $value->ergebnis != 12 AND $value->ergebnis != 13 AND !is_null($value->ergebnis)) $gamesCount[$value->tln_nr]->count++;
+				}
+				for ($s=1; $s<= $teil; $s++) { 		// alle Startnummern durchgehen
+					if ($gamesCount[$s]->count < $maxround/2) $gamesCount[$s]->tab = 0;
+				}
 			}
 		}
 		

@@ -19,6 +19,7 @@ $ -> Language fix or change
 ^ Statistik-Views: Designanpassung Joomla 4
 # XML-Ausgaben: Behandlung von Sonderzeichen
 + SWM-Import: Ergänzung Update-Modus / Ergänzung ohne Einzelergebnisse
+^ Einzelturniere: Verfeinerung 50%-Regel der FIDE
 
 - - - - - 4.0.2 - [04-03-2023] - - - - - - - - - - - - - - - - - - - -
 + neuer Menüeintragstyp: Paarungsliste Einzelturnier
