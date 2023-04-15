@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
 //echo "<br><br>v-pgn_arr:"; var_dump($this->pgn_arr);
@@ -67,10 +66,13 @@ $pgn_file = clm_core::$load->request_string('pgn_file', '');
 					<th style="text-align:left" ><div><?php echo JText::_('PGN_LEAGUE_BOARD') ?></div></th>
 					<th style="text-align:left" ><div><?php echo JText::_('PGN_LEAGUE_PGNTEXT') ?></div></th>
 				</tr>
-			<?php for ($p = 0; $p < count($pgn_data); $p++) {  
+ 			<?php for ($p = 0; $p < count($pgn_data); $p++) {  
 				if ($pgn_data[$p]['error'] == '') continue;
-//if ($p < 5) { echo "<br><br>v-pgn_data $p:"; var_dump($pgn_data[$p]); 
-//echo "<br><br>vdg: ".$turnier[0]->durchgang; } ?>
+				if ($tkz == 't') { $dg = $turnier[0]->durchgang; 
+								   $brett = $turnier[0]->stamm;}
+				else { $dg = $turnier[0]->dg; 
+					   $brett = ($turnier[0]->teil / 2); }
+				?>
 				<tr>
 					<td width="20%" valign="top">
 						<textarea name="error<?php echo $p; ?>" id="error<?php echo $p; ?>" cols="40" rows="2" style="width:90%"><?php echo $pgn_data[$p]['error']; // str_replace('&','&amp;',$this->bemerkungen);?></textarea>
@@ -81,7 +83,7 @@ $pgn_file = clm_core::$load->request_string('pgn_file', '');
 					</td>
 					<td width="5%" nowrap="nowrap" valign="top">
 						<select name="dg<?php echo $p; ?>" id="dg<?php echo $p; ?>" value="<?php echo $pgn_data[$p]['dg']; ?>" size="1">
-							<?php for ($i = 0; $i <= $turnier[0]->durchgang; $i++) { ?>
+							<?php for ($i = 0; $i <= $dg; $i++) { ?>
 								<option value="<?php echo $i; ?>" <?php if ($pgn_data[$p]['dg'] == $i) {echo 'selected="selected"';} ?>><?php echo $i; ?></option>
 							<?php } ?>
 						</select>
@@ -104,7 +106,7 @@ $pgn_file = clm_core::$load->request_string('pgn_file', '');
 					<?php } ?>
 					<td width="5%" nowrap="nowrap" valign="top">
 						<select name="brett<?php echo $p; ?>" id="brett<?php echo $p; ?>" value="<?php echo $pgn_data[$p]['brett']; ?>" size="1">
-							<?php for ($i = 0; $i <= $turnier[0]->stamm; $i++) { ?>
+							<?php for ($i = 0; $i <= $brett; $i++) { ?>
 								<option value="<?php echo $i; ?>" <?php if ($pgn_data[$p]['brett'] == $i AND $pgn_data[$p]['runde'] > 0) {echo 'selected="selected"';} ?>><?php echo $i; ?></option>
 							<?php } ?>
 						</select>

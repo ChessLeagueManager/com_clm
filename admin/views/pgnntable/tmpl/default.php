@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
 $pgn_data = $this->pgn_arr;
@@ -95,8 +94,10 @@ $pgn_file = clm_core::$load->request_string('pgn_file', '');
 					$ij = $ii + $jj;
 				}
 			}
-			if (isset($aentries[$game['White']])) $game_tWhite = $aentries[$game['White']]; else $game_tWhite = '';
-			if (isset($aentries[$game['Black']])) $game_tBlack = $aentries[$game['Black']]; else $game_tBlack = '';
+			if (!isset($game['White'])) $game['White'] = '';		
+			if (isset($aentries[$game['White']])) $game_tWhite = $aentries[$game['White']]; else { $game_tWhite = ''; }
+			if (!isset($game['Black'])) $game['Black'] = ''; 
+			if (isset($aentries[$game['Black']])) $game_tBlack = $aentries[$game['Black']]; else { $game_tBlack = ''; } 
 ?>
 				<tr>
 					<td width="20%" valign="top">

@@ -200,8 +200,8 @@ if ($test_button > 0) {
 			$brett = $game['Board'];
 		}
 if ($test_button > 0) {		
-		echo "<br>Runde: $runde "; 
-		echo "<br>Brett: $brett "; 
+		echo "<br>Runde: $runde  Brett: $brett  DG: $dg "; 
+		echo "<br>tkz: $tkz  tid: $tid "; 
 }
 		// Liste der möglichen Paarungen entspr. Runde und Brett
 		if ($error_text == '' AND isset($tkz) AND ($tkz == 't' OR $tkz == 's') AND isset($tid) AND $tid > '0' ) {
@@ -230,6 +230,7 @@ if ($test_button > 0) {
 			}
 		} else { $gameslist = array(); }
 if ($test_button > 0) {		
+		echo "<br>query: "; var_dump($query); 
 		echo "<br>Mögl. Paarungen: "; var_dump($gameslist); 
 		echo "<br>Anz. Mögl. Paarungen: "; var_dump(count($gameslist)); 
 }
@@ -250,12 +251,22 @@ if ($test_button > 0) {
 		echo "<br>spieler_name: $spieler_name ";
 		echo "<br>gegner_name: $gegner_name ";
 }
-				if ($gl->weiss == 1) {												
-					if ($white_name == $spieler_name AND $black_name == $gegner_name)
-						$gameslist_name[] = $gl;
+				if ($tkz == 't') { 
+					if ($gl->weiss == 1) {												
+						if ($white_name == $spieler_name AND $black_name == $gegner_name)
+							$gameslist_name[] = $gl;
+					} else {
+						if ($white_name == $gegner_name AND $black_name == $spieler_name)
+							$gameslist_name[] = $gl;
+					}
 				} else {
-					if ($white_name == $gegner_name AND $black_name == $spieler_name)
-						$gameslist_name[] = $gl;
+					if ($gl->heim == 1) {												
+						if ($white_name == $spieler_name AND $black_name == $gegner_name)
+							$gameslist_name[] = $gl;
+					} else {
+						if ($white_name == $gegner_name AND $black_name == $spieler_name)
+							$gameslist_name[] = $gl;
+					}
 				}
 			}
 			if (count($gameslist_name) < 2) { 
