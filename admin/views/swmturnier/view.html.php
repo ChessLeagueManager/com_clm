@@ -23,7 +23,9 @@ class CLMViewSWMTurnier extends JViewLegacy {
 				
 		//Toolbar
 		clm_core::$load->load_css("icons_images");
-		if (strtolower(JFile::getExt($swm_file) ) == 'tumx' OR strtolower(JFile::getExt($swm_file) ) == 'tutx') 
+		if ($swm_file == '')
+			JToolBarHelper::title( JText::_('TITLE_SWM_FILE_IMPORT') ,'clm_headmenu_manager.png' );
+		elseif (strtolower(JFile::getExt($swm_file) ) == 'tumx' OR strtolower(JFile::getExt($swm_file) ) == 'tutx') 
 			JToolBarHelper::title( JText::_('TITLE_SWT_LEAGUE')." - ".$swm_file ,'clm_headmenu_manager.png' );
 		else
 			JToolBarHelper::title( JText::_('TITLE_SWT_TOURNAMENT')." - ".$swm_file ,'clm_headmenu_manager.png' );
@@ -74,7 +76,7 @@ class CLMViewSWMTurnier extends JViewLegacy {
 		foreach($swmFiles as $i => $file)	{
 			$options_swm_files[]		= JHtml::_('select.option', basename($file), basename($file));
 		} 	}
-		$lists['swm_files']	= JHtml::_('select.genericlist', $options_swm_files, 'swm_file', 'class="inputbox"', 'value', 'text', $swm_file );
+		$lists['swm_files']	= JHtml::_('select.genericlist', $options_swm_files, 'swm_file', 'class="inputbox" onchange="document.adminForm.submit();"', 'value', 'text', $swm_file );
 
 		//Daten an Template
 		$this->lists = $lists;

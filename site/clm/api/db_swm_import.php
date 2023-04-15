@@ -105,9 +105,9 @@ if ($debug > 1) { echo "<br>tournament2: ";	var_dump($tournament2); }
 		$params->set("color_order",'1');	
 		$params->set("time_control",$tournament["out"][106][0]);
 		$str_params = $params->params();
-		$keyS = '`name`,`sid`,`runden_modus`,`durchgang`,`rnd`,`sl`,`published`,`stamm`,`ersatz`,`teil`,`runden`,`params`,`liga_mt`,`tiebr1`,`tiebr2`,`tiebr3`,`bem_int`';
+		$keyS = '`name`,`sid`,`runden_modus`,`durchgang`,`rnd`,`sl`,`published`,`stamm`,`ersatz`,`teil`,`runden`,`params`,`liga_mt`,`tiebr1`,`tiebr2`,`tiebr3`,`bem_int`,`man_sieg`,`man_remis`';
 		$valueS = "'".$name."', ".$season.", '".$typ."', 1, 1, 0, 1, '"
-			.$stamm."', '0','".$teil."','".$arunden."','".$str_params."', 1,".$tiebr1.",".$tiebr2.",".$tiebr3.", '".$bem_int."'";
+			.$stamm."', '0','".$teil."','".$arunden."','".$str_params."', 1,".$tiebr1.",".$tiebr2.",".$tiebr3.", '".$bem_int."', 2, 1";
 
 		$sql = "INSERT INTO #__clm_swt_liga (".$keyS.") VALUES (".$valueS.")";
 if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
@@ -486,6 +486,13 @@ if ($debug > 0) { echo "<br><br>-- Mannschafts-Paarungen --";	}
 	$slength = 0;
 	$runde = 1;
 	$table = 0;
+	// Test auf Einzelergebnisse
+	$sum_m_punkte = 0;
+	array_walk_recursive($m_punkte, function($item, $key) use(&$sum_m_punkte) {
+			$sum_m_punkte += $item; }
+		, $sum_m_punkte); 
+if ($debug > 0) { echo "<br>Summe Einzelergebnisse  $sum_m_punkte "; }
+if ($debug > 0) if ($sum_m_punkte == 0) { echo "<br>Einzelergebnisse wurden nicht eingegeben! "; }
 	//for ($i = 0; $i < $tournament["out"][1][0] * $paar_zahl; $i++) {
 	for ($i = 0; $i < 5000; $i++) {
 		$tab_record = zzparse_interpret($contents, 'team_pairing', $group, ($apos[7]+$slength),($apos[8]-$apos[7]-$slength),$debug);
@@ -499,14 +506,19 @@ if ($debug > 1) { echo "<br>tab_record: $i ";	var_dump($tab_record); }
 			if ($runde > $tournament["out"][1][0]) break;
 			$table = 1;
 		}
-if ($debug > 0) { echo " ( Runde: $runde  Tisch: $table ) ";	}
 		$spieler = $tab_record['out'][5007][0];
 		$gegner = $tab_record['out'][5008][0];
+		$brettpunkte_heim = $tab_record['out'][5009][0] / 2;
+		$brettpunkte_gast = $tab_record['out'][5010][0] / 2;
+if ($debug > 0) { echo " ( Runde: $runde  Tisch: $table  Spieler: $spieler  Gegner: $gegner  Brettpunkte Heim $brettpunkte_heim  Brettpunkte Gast $brettpunkte_gast) ";	}
+if ($debug > 1) { echo "<br>m_punkte: "; var_dump($m_punkte); }
 		$heim = 1;
-//		$ergebnis = transcode_ergebnis($tab_record['out'][4002][0],$heim,$gegner);
+
 		if ($gegner < 16000) {			// normaler Kampf
-			$h_punkte = $m_punkte[$runde][$spieler];
-			$g_punkte = $m_punkte[$runde][$gegner];
+			if ($sum_m_punkte == 0) $h_punkte = $brettpunkte_heim;
+			else $h_punkte = $m_punkte[$runde][$spieler];
+			if ($sum_m_punkte == 0) $g_punkte = $brettpunkte_gast;		
+			else $g_punkte = $m_punkte[$runde][$gegner];
 			if ($h_punkte > $g_punkte) $man_punkte = 2;
 			elseif ($h_punkte < $g_punkte) $man_punkte = 0;
 			else $man_punkte = 1;
@@ -531,12 +543,12 @@ if ($debug > 0) { echo " ( Runde: $runde  Tisch: $table ) ";	}
 			$spieler = 0;
 			$gegner = 0;
 		}
-if ($debug > 1) { echo "<br>runde: $runde  brett: $brett  ergebnis: $ergebnis  -- "; var_dump($ergebnis);	}
+if ($debug > 1) { echo "<br><br>runde: $runde  brett: $brett  ergebnis: $ergebnis  -- "; var_dump($ergebnis);	}
 
 		$keyS = '`sid`, `swt_id`, `dg`, `runde`, `paar`, `heim`, `tln_nr`, `gegner`, `kampflos`, `brettpunkte`, `manpunkte`, `comment`, `icomment`';
 		$valueS = $season.",".$new_swt_tid.", 1,".$runde.", ".$table.", ".$heim.",".$spieler.", ".$gegner.", ".$kampflos.", '".$h_punkte."', ".$man_punkte.", '', ''";
 		$sql = "INSERT INTO #__clm_swt_rnd_man (".$keyS.") VALUES (".$valueS.")";
-if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
+if ($debug > 1) { echo "<br><br>sql: ";	var_dump($sql); }
 		clm_core::$db->query($sql);
 		$a_man_paar[1][$runde][$table][$heim] = $spieler;
 //die();
@@ -1047,8 +1059,9 @@ function zzparse_structure_t($part) {
 		$fields = array(
 					array('inb',5007,'spieler'),
 					array('inb',5008,'gegner'),
-					array('int',4002,'ergebnis'),
-					array('ign',10,0)
+					array('inb',5009,0),
+					array('inb',5010,0),
+					array('ign',7,0)
 					);
 
 	return $fields;

@@ -250,7 +250,7 @@ if (is_null($this->turnier->bem_int)) $this->turnier->bem_int = '';
 			<?php echo JText::_('OPTION_50PERCENTRULE'); ?>:
 		</td>
 		<td class="paramlist_value"><fieldset class="radio">
-			<?php echo JHtml::_('select.booleanlist', 'params[option50PercentRule]', 'class="inputbox"', $turParams->get('option50PercentRule', 1)); ?>
+			<?php echo JHtml::_('select.booleanlist', 'params[option50PercentRule]', 'class="inputbox"', $turParams->get('option50PercentRule', 0)); ?>
 		</fieldset></td>
 	</tr>
 
