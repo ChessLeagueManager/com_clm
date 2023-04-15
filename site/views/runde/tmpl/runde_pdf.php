@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -228,6 +228,7 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 			$breite2 = $pdf->GetStringWidth($einzel[$w]->hsnr) + 1;
 			$breite1 = $breite1 + 4 - $pdf->GetStringWidth($einzel[$w]->hsnr) - 1;  }
 		$pdf->Cell($breite2,$zelle,$einzel[$w]->hsnr,'L',0);
+		if (is_null($einzel[$w]->hname)) $einzel[$w]->hname = '';
 		$htext = utf8_decode($einzel[$w]->hname);
 		if ($htext == '') $htext = utf8_decode(JText::_('RESULTS_DETAILS_NOT_NOMINATED'));
 		if ($pdf->GetStringWidth($htext) > $breite1) {
@@ -272,6 +273,7 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 		if ($pdf->GetStringWidth($einzel[$w]->gsnr) > $breite2) {
 			$breite2 = $pdf->GetStringWidth($einzel[$w]->gsnr) + 1;
 			$breite1 = $breite1 + 4 - $pdf->GetStringWidth($einzel[$w]->gsnr) - 1;  }
+		if (is_null($einzel[$w]->gname)) $einzel[$w]->gname = '';
 		$htext = utf8_decode($einzel[$w]->gname);
 		if ($htext == '') $htext = utf8_decode(JText::_('RESULTS_DETAILS_NOT_NOMINATED'));
 		if ($pdf->GetStringWidth($htext) > $breite1) {
@@ -517,6 +519,7 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	
 // Kommentar zur Runde
 $lspalte_comment = 240;
+if (is_null($liga[$runde-1]->comment)) $liga[$runde-1]->comment = '';
 $lcomment = strlen($liga[$runde-1]->comment);  //klkl
 $lspalte_comment = $lspalte_comment - ($lcomment/(60/$zelle));
 if (isset($liga[$runde-1]->comment) AND $liga[$runde-1]->comment <> "") { 

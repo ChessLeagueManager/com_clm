@@ -471,6 +471,7 @@ $pdf->SetFont('Times','',$font);
 //Zeile 08
 	$pdf->Cell(10,$zelle,'',0,0,'C');
 	$pdf->Cell(14,$zelle,JText::_('MELDELISTE_LOCATION'),0,0,'L');
+	if (is_null($mannschaft[$x]->lokal)) $mannschaft[$x]->lokal = '';
 	$man = explode(",", $mannschaft[$x]->lokal);
 	//if (isset($man[0])) $pdf->Cell(51,$zelle,utf8_decode($man[0]),0,0);
 	//else 
@@ -802,6 +803,7 @@ $pdf->SetFont('Times','',$font+1);
 	$pdf->Cell(150,$zelle,JText::_('NOTICE_SL').' :',0,1,'B');
 	$pdf->SetFont('Times','',$font);
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
+	if (is_null($liga[0]->bemerkungen)) $liga[0]->bemerkungen = '';
 	if ($liga[0]->bemerkungen == utf8_decode($liga[0]->bemerkungen))
 		$pdf->MultiCell(150,$zelle,utf8_decode($liga[0]->bemerkungen),0,'L',0);
 	else
@@ -828,6 +830,7 @@ $pdf->SetFont('Times','',$font+1);
 	$pdf->Cell(150,$zelle,JText::_('CHIEF').' :',0,1,'L');
 	$pdf->SetFont('Times','',$font);
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
+	if (is_null($liga[0]->sl)) $liga[0]->sl = '';
 	$pdf->Cell(150,$zelle,utf8_decode($liga[0]->sl),0,1,'L');
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
 	if ($jid > 0 OR $show_sl_mail > 0) {

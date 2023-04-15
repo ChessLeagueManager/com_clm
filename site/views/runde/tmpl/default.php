@@ -490,7 +490,9 @@ if($RESULT_YET>0 && $NO_RESULT_YET>0){
 echo JText::_('RANGLISTE').' '.$liga[$runde-1]->rname.' '.JText::_('NOT_FINISH'); 
 }else if($RESULT_YET>0 && $NO_RESULT_YET==0){
 echo JText::_('RANGLISTE').' '.JText::_('AFTER').' '.$liga[$runde-1]->rname;  
-}else {
+}else if($RESULT_YET==0 && $NO_RESULT_YET==0){
+echo JText::_('RANGLISTE').' '.$liga[$runde-1]->rname;
+}else{
 echo JText::_('RANGLISTE').' '.JText::_('BEFORE').' '.$liga[$runde-1]->rname;
 }
 ?></th></tr><?php //} ?>

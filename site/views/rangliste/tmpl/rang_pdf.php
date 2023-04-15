@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -320,6 +320,7 @@ if ($liga[0]->runden_modus == 3) {
 $pdf->Ln();
 $pdf->Ln();
 
+if (is_null($liga[0]->bemerkungen)) $liga[0]->bemerkungen = '';
 if ($liga[0]->bemerkungen <> "") {
 	$pdf->SetFont('Times','B',$font+2);
 	$pdf->Cell(10,$zelle,' ',0,0,'L');
@@ -330,6 +331,7 @@ if ($liga[0]->bemerkungen <> "") {
 	$pdf->Ln();
 	}
 
+	if (is_null($liga[0]->sl)) $liga[0]->sl = '';
 	$pdf->SetFont('Times','B',$font+2);
 	$pdf->Cell(10,$zelle,' ',0,0,'L');
 	$pdf->Cell(150,$zelle,JText::_('CHIEF').' :',0,1,'L');

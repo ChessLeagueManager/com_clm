@@ -21,6 +21,7 @@ $ -> Language fix or change
 + SWM-Import: Ergänzung Update-Modus / Ergänzung ohne Einzelergebnisse
 ^ Einzelturniere: Verfeinerung 50%-Regel der FIDE
 # PGN-Import: Zuordnung bei Einzelturnier
+^ Code-Anpassung wegen MariaDB(SQL-Mode) / php 8.1
 
 - - - - - 4.0.2 - [04-03-2023] - - - - - - - - - - - - - - - - - - - -
 + neuer Menüeintragstyp: Paarungsliste Einzelturnier

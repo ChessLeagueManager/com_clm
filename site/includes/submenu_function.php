@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 // array(array("Test",modus,get,array("Test",modus,get)),array(...))
 // get ist array(array("option","com_clm"),array(...))
 // modus ist 0=normal, 1=angewählt, 2=keinLink, 3=deaktiviert, 4=abstand
@@ -8,7 +14,7 @@ function clm_submenu($array) {
 	}
 	$out = '<div class="clm-navigator"><ul>';
 	for ($i = 0;$i < count($array);$i++) {
-		$ph = count($array[$i][3])/2;
+		$ph = (integer) (count($array[$i][3])/2);
 
  		$out.= clm_submenu_href($array[$i],(count($array[$i][3]) > 0));
 		if (count($array[$i][3]) > 0) {

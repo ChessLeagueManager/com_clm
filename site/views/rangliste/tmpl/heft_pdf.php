@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -70,8 +70,8 @@ if ($liga[0]->rang > 0) $anz_player = 999;
 else $anz_player = $liga[0]->stamm + $liga[0]->ersatz;
 
 function vergleich($wert_a,$wert_b) {
-	$a = 1000*($wert_a->dg) + 50*($wert_a->runde) + 2*($wert_a->paar) + $wert_a->heim;
-	$b = 1000*($wert_b->dg) + 50*($wert_b->runde) + 2*($wert_b->paar) + $wert_b->heim;
+	$a = 10000*($wert_a->dg) + 200*($wert_a->runde) + 2*($wert_a->paar) + $wert_a->heim;
+	$b = 10000*($wert_b->dg) + 200*($wert_b->runde) + 2*($wert_b->paar) + $wert_b->heim;
 	if ($a == $b) { return 0; }
 	return ($a < $b) ? -1 : +1; 
 }
@@ -476,6 +476,7 @@ $pdf->Ln();
 $pdf->Ln();
 } else $pdf->Ln(10);
 } 
+if (is_null($liga[0]->bemerkungen)) $liga[0]->bemerkungen = '';
 if ($liga[0]->bemerkungen <> "") {
 	$pdf->SetFont('Times','B',$font+2);
 	$pdf->Cell(10,$zelle,' ',0,0,'L');
@@ -485,7 +486,8 @@ if ($liga[0]->bemerkungen <> "") {
 	$pdf->MultiCell(150,$zelle,utf8_decode($liga[0]->bemerkungen),0,'L',0);
 	$pdf->Ln();
 	}
-
+	
+	if (is_null($liga[0]->sl)) $liga[0]->sl = '';
 	$pdf->SetFont('Times','B',$font+2);
 	$pdf->Cell(10,$zelle,' ',0,0,'L');
 	$pdf->Cell(150,$zelle,JText::_('CHIEF').' :',0,1,'L');
@@ -576,6 +578,7 @@ if ($lmax > 60) $lmax = 60;
 				while ($lmax < $pdf->GetStringWidth(utf8_decode($planl->hname)))
 					$planl->hname = substr($planl->hname,0,-1);
 				$pdf->Cell($lmax+2,4,utf8_decode($planl->hname),0,0,'L');
+				if (is_null($planl->gname)) $planl->gname = '';
 				while ($lmax < $pdf->GetStringWidth(utf8_decode($planl->gname)))
 					$planl->gname = substr($planl->gname,0,-1);
 				$pdf->Cell($lmax+2,4,utf8_decode($planl->gname),0,0,'L');

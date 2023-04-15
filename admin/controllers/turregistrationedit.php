@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -105,6 +105,12 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		$pos = strpos($registrationname,',');
 		$row->name = substr($registrationname,0,$pos);
 		$row->vorname = substr($registrationname,($pos + 1));
+		if ($row->dwz_I0 == '') $row->dwz_I0 = 0;
+		if ($row->dwz == '') $row->dwz = NULL;
+		if ($row->elo == '') $row->elo = NULL;
+		if ($row->FIDEid == '') $row->FIDEid = NULL;
+		if ($row->mgl_nr == '') $row->mgl_nr = 0;
+
 		if ($task == 'apply' OR $task == 'save') $row->status  = 1;
 		if ($task == 'copy_to') $row->status  = 2;
 		if (!$row->check($post)) {

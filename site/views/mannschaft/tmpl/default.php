@@ -129,6 +129,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 	$maps_zoom			= $config->maps_zoom;
 
 	// Aufbereitung Googledaten 1. Spiellokal
+	if (is_null($mannschaft[0]->lokal)) $mannschaft[0]->lokal = '';
 	$mannschaft[0]->lokal = str_replace(chr(10),"",$mannschaft[0]->lokal);
 	$mannschaft[0]->lokal = str_replace(chr(13),"",$mannschaft[0]->lokal);
 	$spiellokal1G = explode(",", $mannschaft[0]->lokal); 

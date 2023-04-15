@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -26,8 +26,8 @@ class CLMViewMTurniere
 
 	public static function mturnier(&$row, $lists, $option, $new)
 	{
+	JFactory::getApplication()->input->set('hidemainmenu', true);
 	CLMViewMTurniere::setMTurnierToolbar($new, $row->sid);
-	$_REQUEST['hidemainmenu'] = 1;
 
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
@@ -827,6 +827,7 @@ class CLMViewMTurniere
 	<legend><?php echo JText::_( 'REMARKS_PUBLIC' ); ?></legend>
 	<tr>
 	<td width="100%" valign="top">
+	<?php if (is_null($row->bemerkungen)) $row->bemerkungen = ''; ?>
 	<textarea class="inputbox" name="bemerkungen" id="bemerkungen" cols="40" rows="4" style="width:90%"><?php echo str_replace('&','&amp;',$row->bemerkungen);?></textarea>
 	</td>
 	</tr>
@@ -836,6 +837,7 @@ class CLMViewMTurniere
 	<legend><?php echo JText::_( 'REMARKS_INTERNAL' ); ?></legend>
 	<tr>
 	<td width="100%" valign="top">
+	<?php if (is_null($row->bem_int)) $row->bem_int = ''; ?>
 	<textarea class="inputbox" name="bem_int" id="bem_int" cols="40" rows="4" style="width:90%"><?php echo str_replace('&','&amp;',$row->bem_int);?></textarea>
 	</td>
 	</tr>
