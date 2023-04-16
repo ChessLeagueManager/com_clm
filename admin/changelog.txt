@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 4.0.3 - [xx-xx-2023] - - - - - - - - - - - - - - - - - - - -
+- - - - - 4.0.3 - [16-04-2023] - - - - - - - - - - - - - - - - - - - -
 + Extern-Zugriff: View 'Aktuelle Runde'
 ^ Online-Turnieranmeldung: Ergänzung der Bestätigungsmails
 # Passwort-Rücksetzen: Erhöhen der Sicherheit

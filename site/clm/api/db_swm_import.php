@@ -89,7 +89,7 @@ if ($debug > 1) { echo "<br>tournament2: ";	var_dump($tournament2); }
 	if ($tournament_fk[0] > $tournament["out"][213][0]) $tournament["out"][213][0] = $tournament_fk[0];
 	$tournament_fk = transcode_fidecorrect($tournament2["out"][215]); // optionTiebreakersFideCorrect
 	if ($tournament_fk[0] > $tournament["out"][213][0]) $tournament["out"][213][0] = $tournament_fk[0];
-	$bem_int = 'SWM-Importdatei'.$filename.';';
+	$bem_int = 'SWM-Importdatei: '.$filename.';';
 	
 	If ($group) { 	
 		
