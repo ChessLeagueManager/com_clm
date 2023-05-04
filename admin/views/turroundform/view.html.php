@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -18,6 +18,10 @@ class CLMViewTurRoundForm extends JViewLegacy {
 		
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
 		$model =   $this->getModel();
+
+		// das MainMenu abschalten
+		$app = JFactory::getApplication();
+		$app->input->set('hidemainmenu', 1);
 		
 		// Die Toolbar erstellen, die über der Seite angezeigt wird
 		clm_core::$load->load_css("icons_images");
@@ -28,8 +32,6 @@ class CLMViewTurRoundForm extends JViewLegacy {
 		JToolBarHelper::spacer();
 		JToolBarHelper::cancel();
 
-		// das MainMenu abschalten
-		$_GET['hidemainmenu'] = 1;
 		
 		// Document/Seite
 		$document =JFactory::getDocument();

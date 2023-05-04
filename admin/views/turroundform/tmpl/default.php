@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2016 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -96,16 +96,21 @@ defined('_JEXEC') or die('Restricted access');
 	<br>
 	<tr>
 	<td width="100%" valign="top">
-	<textarea class="inputbox" name="bemerkungen" id="bemerkungen" cols="40" rows="5" style="width:90%"><?php echo str_replace('&','&amp;',$this->roundData->bemerkungen);?></textarea>
+	<textarea class="inputbox" name="bemerkungen" id="bemerkungen" cols="40" rows="5" style="width:90%"><?php
+		if (is_null($this->roundData->bemerkungen) ) $this->roundData->bemerkungen = ''; echo str_replace('&','&amp;',$this->roundData->bemerkungen);
+	?></textarea>
 	</td>
 	</tr>
 	</table>
 
+	<br>
 	<table class="adminlist">
 	<tr><legend><?php echo JText::_( 'REMARKS_INTERNAL' ); ?></legend>
 	<br>
 	<td width="100%" valign="top">
-	<textarea class="inputbox" name="bem_int" id="bem_int" cols="40" rows="5" style="width:90%"><?php echo str_replace('&','&amp;',$this->roundData->bem_int);?></textarea>
+	<textarea class="inputbox" name="bem_int" id="bem_int" cols="40" rows="5" style="width:90%"><?php 
+		if (is_null($this->roundData->bem_int) ) $this->roundData->bem_int = ''; echo str_replace('&','&amp;',$this->roundData->bem_int);
+	?></textarea>
 	</td>
 	</tr>
 	</table>

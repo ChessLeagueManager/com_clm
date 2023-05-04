@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 4.0.4 - [xx-xx-2023] - - - - - - - - - - - - - - - - - - - -
+^ Code-Anpassung wegen MariaDB(SQL-Mode) / php 8.1
+
 - - - - - 4.0.3 - [16-04-2023] - - - - - - - - - - - - - - - - - - - -
 + Extern-Zugriff: View 'Aktuelle Runde'
 ^ Online-Turnieranmeldung: Ergänzung der Bestätigungsmails
