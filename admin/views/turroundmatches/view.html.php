@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -32,6 +32,7 @@ class CLMViewTurRoundMatches extends JViewLegacy {
 			JToolBarHelper::apply( 'apply' );
 			JToolBarHelper::spacer();
 			JToolBarHelper::trash( 'reset', JText::_('RESET_RESULTS'), FALSE );
+			JToolBarHelper::trash( 'p_reset', JText::_('RESET_PAIRINGS'), FALSE );
 			JToolBarHelper::spacer();
 		}
 		if ($model->round->tl_ok == 1) {
@@ -40,6 +41,15 @@ class CLMViewTurRoundMatches extends JViewLegacy {
 			JToolBarHelper::custom( 'approve', 'default.png', 'default.png', JText::_('SET_APPROVAL'), FALSE );
 		}
 		JToolBarHelper::spacer();
+		
+		//drawing parameter auslesen
+		$turParams = new clm_class_params($model->turnier->params);
+		$drawing_mode = $turParams->get('drawing_mode', 0);
+		if (JComponentHelper::isInstalled ( 'com_clm_pairing' ) AND $model->turnier->typ == 1) {
+			if ($drawing_mode > 0) {
+				JToolBarHelper::custom('draw','add.png','add_f2.png', JText::_('DRAW_PAIRINGS'), false);
+			}
+		}
 		JToolBarHelper::cancel();
 
 		// das MainMenu abschalten

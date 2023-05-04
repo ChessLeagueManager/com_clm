@@ -435,6 +435,34 @@ if (is_null($this->turnier->bem_int)) $this->turnier->bem_int = '';
 
 			</table>
 		</fieldset>
+	<?php if (JComponentHelper::isInstalled ( 'com_clm_pairing' ) AND $this->turnier->typ == 1) { ?>
+ 
+	<fieldset class="adminform">
+	<legend><?php echo "<br>".JText::_( 'DRAWING' ); ?></legend>
+      <table class="paramlist admintable">
+	
+		<tr>
+			<td width="30%" class="paramlist_key">
+				<?php echo JText::_('DRAWING_MODE'); ?>:
+			</td>
+			<td class="paramlist_value">
+				<?php 
+				$options = array();
+				$options[0] = JText::_('DRAWING_MODE_0');
+				$options[1] = JText::_('DRAWING_MODE_1');
+//				$options[2] = JText::_('DRAWING_MODE_2');
+				$optionlist = array();
+				foreach ($options as $key => $val) {
+					$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
+				}
+				echo JHtml::_('select.genericlist', $optionlist, 'params[drawing_mode]', 'class="inputbox"', 'id', 'name', $turParams->get('drawing_mode', 0)); ?>
+			</td>
+		</tr>
+	
+	  </table>
+	</fieldset>
+	<?php } ?>
+	
 	</div>
 
 	<div class="width-40 fltrt">

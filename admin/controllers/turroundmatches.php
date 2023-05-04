@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -457,8 +455,17 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 	
 	}
 
+	function p_reset() {
+	
+		$this->_resetDo('P');
+	
+		$this->adminLink->makeURL();
+		$this->setRedirect( $this->adminLink->url );
+	
+	}
 
-	function _resetDo() {
+
+	function _resetDo($typ = 'R') {
 		
 		// Check for request forgeries
 		defined('_JEXEC') or die( 'Invalid Token' );
@@ -489,25 +496,25 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 			return false;
 		}
 	
-		// sind überhaupt Ergebnisse eingetragen?
-		$query = "SELECT COUNT(*) FROM #__clm_turniere_rnd_spl"
+		if ($typ == 'R') {	
+			// sind überhaupt Ergebnisse eingetragen?
+			$query = "SELECT COUNT(*) FROM #__clm_turniere_rnd_spl"
 				. " WHERE turnier = ".$this->turnierid." AND runde = ".$runde." AND dg = ".$dg." AND ergebnis IS NOT NULL"
 				;
-		$this->_db->setQuery($query);
-		$resultCount = $this->_db->loadResult();
-		if ($resultCount == 0) {
-			$this->app->enqueueMessage( CLMText::errorText('RESULTS', 'NOTEXISTING'),'warning' );
-			return false;
+			$this->_db->setQuery($query);
+			$resultCount = $this->_db->loadResult();
+			if ($resultCount == 0) {
+				$this->app->enqueueMessage( CLMText::errorText('RESULTS', 'NOTEXISTING'),'warning' );
+				return false;
+			}
 		}
-	
+ 
 		// Runde anpassen
 		$query = "UPDATE #__clm_turniere_rnd_termine"
-				. " SET gemeldet = NULL, zeit ='000e0-00-00 00:00:00', editor = ".$user->id.", edit_zeit = NOW()"
+				. " SET gemeldet = NULL, zeit ='1970-01-01 00:00:00', editor = ".$user->id.", edit_zeit = NOW()"
 				. " WHERE id = ".$this->roundid
 				;
 		clm_core::$db->query($query);
-//		$this->_db->setQuery($query);
-//		$this->_db->query();
 		
 		// Ergebnisse löschen
 		$query = "UPDATE #__clm_turniere_rnd_spl"
@@ -515,9 +522,18 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 				. " WHERE turnier = ".$this->turnierid." AND runde = ".$runde." AND dg = ".$dg
 				;
 		clm_core::$db->query($query);
-//		$this->_db->setQuery($query);
-//		$this->_db->query();
+		$anz_result = clm_core::$db->affected_rows();					   						
 		
+		if ($typ == 'P') {
+			// Ansetzungen löschen
+			$query = "UPDATE #__clm_turniere_rnd_spl"
+				. " SET tln_nr = NULL, spieler = NULL, gegner = NULL, kampflos = NULL, pgn = NULL "
+				. " WHERE turnier = ".$this->turnierid." AND runde = ".$runde." AND dg = ".$dg
+				;
+			clm_core::$db->query($query);
+			$anz_pair = clm_core::$db->affected_rows();					   
+		}
+	
 		// Teilnehmer zurücksetzen bei KO-Turnier
 		if ($row->typ == '3' or $row->typ == '5') {
 			$query = "UPDATE #__clm_turniere_tlnr"
@@ -530,7 +546,10 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		
 		}
 		
-		$this->app->enqueueMessage( CLMText::sgpl(($resultCount/2), JText::_('RESULT'), JText::_('RESULTS') )." ".JText::_('RESET'),'notice' );
+		if ($typ == 'P') 
+			$this->app->enqueueMessage(CLMText::sgpl(($anz_pair/2), JText::_('PAIRING'), JText::_('PAIRINGS') )." ".JText::_('RESET'),'notice' );
+		else 
+			$this->app->enqueueMessage( CLMText::sgpl(($anz_result/2), JText::_('RESULT'), JText::_('RESULTS') )." ".JText::_('RESET'),'notice' );
 	
 		// Rangliste neu berechnen!
 		$tournament = new CLMTournament($this->turnierid, true);
@@ -540,7 +559,10 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 	
 		// Log schreiben
 		$clmLog = new CLMLog();
-		$clmLog->aktion = JText::_('RESULTS')." ".JText::_('RESET');
+		if ($typ == 'P') 
+			$clmLog->aktion = JText::_('PAIRINGS')." ".JText::_('RESET');
+		else 
+			$clmLog->aktion = JText::_('RESULTS')." ".JText::_('RESET');
 		$clmLog->params = array('tid' => $this->turnierid, 'rnd' => $runde); // TurnierID wird als LigaID gespeichert
 		$clmLog->write();
 	
@@ -605,9 +627,9 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 	
 	
 		// jetzt schreiben
-		$round->tl_ok = $approve;
+		if ($approve) $round->tl_ok = 1; else $round->tl_ok = 0;
 		if (!$round->store()) {
-			$this->app->enqueueMessage( $row->getError(),'error' );
+			$this->app->enqueueMessage( $round->getError(),'error' );
 			return false;
 		}
 									   
@@ -717,5 +739,42 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		return true;
 	
 	}
- 
+
+	function draw() {
+	
+		$this->_drawDo();
+	
+		$this->adminLink->makeURL();
+		$this->setRedirect( $this->adminLink->url );
+	
+	}
+
+	function _drawDo() {
+		
+		// Check for request forgeries
+		defined('_JEXEC') or die( 'Invalid Token' );
+//echo "<br>turnierid:"; var_dump($this->turnierid);
+//echo "<br>roundid:"; var_dump($this->roundid);
+
+		// Reale RundenNummer, DG aus RundenID ermitteln, tl_ok
+		$query = 'SELECT nr, dg, tl_ok'
+				. ' FROM #__clm_turniere_rnd_termine'
+				. ' WHERE id = '.$this->roundid
+				;
+		$this->_db->setQuery($query);
+		list($runde, $dg, $tl_ok) = $this->_db->loadRow();
+//echo "<br>runde:"; var_dump($runde);
+//echo "<br>dg:"; var_dump($dg);
+//die('');
+		$result = clm_core::$api->db_draw_ch($this->turnierid,$dg,$runde,false,true);
+//var_dump($result);
+		if ($result[0] == false)
+			$this->app->enqueueMessage( $result[1],'warning' );
+		else
+			$this->app->enqueueMessage( $result[1],'notice' );
+
+//die('napi');
+		
+	}
+	
  }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -151,4 +151,10 @@ $config["maps_resolver"]=array(130,9,2,array(1,2));
 $config["maps_zoom"]=array(131,9,15,array(11,12,13,14,15,16));
 $config["ikommentarfeld"]=array(132,9,0,array(0,1,2));
 $config["show_sl_mail"]=array(133,9,1,array(0,1));
+$config["tourn_ch_system"]=array(134,9,0,array(0,1,2,3));
+$config["tourn_ch_server"]=array(135,7,"",null);
+$config["tourn_ch_url"]=array(136,7,"",null);
+$config["tourn_ch_key"]=array(137,7,"",null);
+$config["tourn_ch_ip"]=array(138,7,"",null);
+$config["tourn_ch_mail"]=array(139,7,"",null);
 ?>
