@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -76,6 +76,7 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 				$teilnehmer->set('zps'			, CLMSWT::readName($swt,$offset+153	,5));
 				$teilnehmer->set('mgl_nr'		, CLMSWT::readName($swt,$offset+159	,4));
 				$teilnehmer->set('geschlecht'	, CLMSWT::readName($swt,$offset+184	,1));
+				if ($teilnehmer->geschlecht == 'F') $teilnehmer->set('geschlecht'	, 'W');
 				$teilnehmer->set('tlnrStatus'	, (CLMSWT::readName($swt,$offset+184	,1)=="*" ? "0" : "1"));
 				if ($modus == 3 OR $modus == 5) $teilnehmer->set('tlnrStatus'	, 1);
 				$teilnehmer->set('FIDEid'   	, CLMSWT::readName($swt,$offset+324	,12));
