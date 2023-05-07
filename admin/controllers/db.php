@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -801,6 +801,7 @@ class CLMControllerDB extends JControllerLegacy {
 		$path = JPath::clean(JPATH_ADMINISTRATOR . DS . 'components' . DS . $option . DS . 'upload');
 		//$content = JFile::read($path . DS . $datei);
 		$content = file_get_contents($path . DS . $datei);
+		$content = html_entity_decode($content);
 		// Inhalt in Teile zerlegen
 		$part = explode("#", $content);
 		// Zählmarken holen. Bspl.: $part[1] ist Zählmarke der Liga, dann ist $part[2] der Datenteil usw.
@@ -1121,6 +1122,7 @@ class CLMControllerDB extends JControllerLegacy {
 			$row->load($liga);
 		}
 		$row->name = utf8_encode(substr($liga_daten[0], 3));
+		if (substr($row->name,0,1) == "'") $row->name = substr($row->name, 1);
 		$row->sid = $saison;
 		$row->teil = $liga_daten[2];
 		$row->stamm = $liga_daten[3];
