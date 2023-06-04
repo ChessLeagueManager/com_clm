@@ -17,6 +17,7 @@ $ -> Language fix or change
 + Einzelturniere: Einbau Ansetzungsroutine für CH-Modus (in Vorbereitung)
 # Import/Export Ligen: Behandlung von codierten html-Zeichen
 # SWT-Import: Anpassung Geschlechtskennzeichen
+# SWT-Import Liga: Parameterbehandlung bei Update
 
 - - - - - 4.0.3 - [16-04-2023] - - - - - - - - - - - - - - - - - - - -
 + Extern-Zugriff: View 'Aktuelle Runde'

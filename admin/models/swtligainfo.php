@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -369,10 +369,16 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		// DB-Zugriff
 		$db		=JFactory::getDBO ();
 		
+		// load the row from the db table
+		$lid = clm_core::$load->request_string('lid');
+		$row 		=JTable::getInstance( 'ligen', 'TableCLM' );	
+		$row->load( $lid );
+
 		//Liga-Parameter aufbereiten
 		$default['params'] = clm_core::$load->request_string('str_params');
 //		$paramsStringArray = explode("\n", $default['params']);
-		$paramsStringArray = explode(PHP_EOL, $default['params']);
+		$paramsStringArray = explode("\n", $row->params);
+//		$paramsStringArray = explode(PHP_EOL, $default['params']);
 		$default_params = array();
 		foreach ($paramsStringArray as $value) {
 			$ipos = strpos ($value, '=');
