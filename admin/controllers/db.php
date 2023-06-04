@@ -870,7 +870,8 @@ class CLMControllerDB extends JControllerLegacy {
 					$rnd_anz += pow(2,$i);
 				}
 				if ($runden_modus == 5) $rnd_anz += 2;
-				if (($cnt_rnd_man != $rnd_anz) OR (count($man_rnd_daten) - 1 != $rnd_anz)) {
+//				if (($cnt_rnd_man != $rnd_anz) OR (count($man_rnd_daten) - 1 != $rnd_anz)) {
+				if (($cnt_rnd_man != (0.5 * $rnd_anz)) OR (count($man_rnd_daten) - 1 != (0.5 * $rnd_anz))) {
 					$mainframe->enqueueMessage(JText::_('DB_ANZAHL_MR_FALSCH'),'warning');
 					$fehler++;
 				}
@@ -905,8 +906,11 @@ class CLMControllerDB extends JControllerLegacy {
 				$fehler++;
 			}
 			if ($fehler > 0) {
-				$mainframe->enqueueMessage(JText::_('DB_IMPORT'),'notice');
-				$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+//				$mainframe->enqueueMessage(JText::_('DB_IMPORT'),'notice');
+//				$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+				$msg = JText::_('DB_IMPORT') . ' ' . $datei . ' <b>nicht</b> ' . JText::_('DB_ERFOLGREICH');
+				$mainframe->enqueueMessage($msg,'error');
+				$mainframe->redirect('index.php?option=com_clm&view=db');
 			}
 		}
 		// User anlegen
