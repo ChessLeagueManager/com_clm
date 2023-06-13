@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -109,7 +108,7 @@ class CLMControllerSonderranglistenForm extends JControllerLegacy {
 		// Log schreiben
 		$clmLog = new CLMLog();
 		$clmLog->aktion = $stringAktion.": ".$row->name;
-		$clmLog->params = array('sid' => $row->sid, 'tid' => $row->id); // TurnierID wird als LigaID gespeichert
+		$clmLog->params = array('id' => $row->id, 'tid' => $row->turnier); // TurnierID wird als LigaID gespeichert
 		$clmLog->write();
 		
 		// wenn 'apply', weiterleiten in form

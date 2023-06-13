@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -32,6 +32,7 @@ class CLMViewTurnier_Teilnehmer extends JViewLegacy {
 		$tourn_linkclub=$config->tourn_linkclub;
 		$this->tourn_linkclub = $tourn_linkclub;
 		$this->players = $model->players;
+		$this->s_gruppen = $model->s_gruppen;
 		
 		parent::display($tpl);
 	

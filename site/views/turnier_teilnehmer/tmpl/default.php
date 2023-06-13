@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -104,6 +104,14 @@ echo CLMContent::createPDFLink('turnier_teilnehmer', JText::_('TOURNAMENT_PARTIC
 		}
 		?>
 	
+		<?php
+		if ($this->s_gruppen == 1) {
+		?>
+			<th class="tt_col_4"><?php echo JText::_('TOURNAMENT_GRUPPEN'); ?></th>
+		<?php
+		}
+		?>
+	
 	
 	</tr>
 	
@@ -183,6 +191,10 @@ echo CLMContent::createPDFLink('turnier_teilnehmer', JText::_('TOURNAMENT_PARTIC
 				echo '</td>';
 			}
 			
+			// Gruppen
+			if ($this->s_gruppen == 1) {
+				echo '<td class="tt_col_3">'.$value->gruppen.'</td>';
+			}
 			?>
 		
 		</tr>

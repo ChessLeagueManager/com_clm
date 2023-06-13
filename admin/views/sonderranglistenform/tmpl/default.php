@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -101,6 +101,16 @@ function showTournaments(){
 								<input class="inputbox" type="text" name="name" 
 								id="name" size="48" maxlength="255" 
 								value="<?php echo $this->sonderrangliste->name;?>" /> 
+							</td> 
+						</tr> 
+						<tr> 
+							<td width="100" align="right" class="key" title="<?php echo JText::_( 'SPECIALRANKING_SHORTNAME_HINT' ); ?>"> 
+								<label for="shortname"><?php echo JText::_( 'SPECIALRANKING_SHORTNAME' ); ?></label> 
+							</td> 
+							<td> 
+								<input class="inputbox" type="text" name="shortname" 
+								id="shortname" size="10" maxlength="10" 
+								value="<?php echo $this->sonderrangliste->shortname;?>" title="<?php echo JText::_( 'SPECIALRANKING_SHORTNAME_HINT' ); ?>" /> 
 							</td> 
 						</tr> 
 						<tr> 
