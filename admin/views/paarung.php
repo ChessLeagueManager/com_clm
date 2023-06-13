@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -62,7 +62,7 @@ public static function paarung( &$row, $paarung, $man, $count_man, $option, $cid
 	<br>
 
 	<form action="index.php" method="post" name="adminForm" id="adminForm">
-	<div class="width-40 fltlft">
+	<div class="width-45 fltlft">
 
 	<fieldset class="adminform">
 	<legend><?php echo JText::_( 'PAARUNG_AKTUELL' ); ?></legend>
@@ -98,7 +98,7 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 
 	<?php for ($y = 0; $y < $pairings; $y++ ) { ?>
 	<tr>
-		<td class="key" nowrap="nowrap" height="37"><?php echo $paarung[$count]->dg; ?></td>
+		<td class="key" nowrap="nowrap" height="27"><?php echo $paarung[$count]->dg; ?></td>
 		<td class="key" nowrap="nowrap"><?php echo $paarung[$count]->runde; ?></td>
 		<td class="key" nowrap="nowrap"><?php echo $paarung[$count]->paar; ?></td>
 		<td class="key" nowrap="nowrap"><?php echo $paarung[$count]->tln_nr; ?></td>
@@ -116,7 +116,7 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 	</fieldset>
 	</div>
 
-	<div class="width-60 fltrt">
+	<div class="width-55 fltrt">
 
 	<fieldset class="adminform">
 	<legend><?php echo JText::_( 'PAARUNG_CHANGED' ); ?></legend>
@@ -162,7 +162,8 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 	<?php for ($y = 0; $y < $pairings; $y++ ) { ?>
 	<tr>
 		<td class="key" nowrap="nowrap" height="24">
-		  <select size="1" name="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Heim'; ?>" id="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Heim'; ?>">
+		  <select size="1" name="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Heim'; ?>" id="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Heim'; ?>" style="line-height: 1.7 !important; margin-bottom: 0;"> -->
+<!--		  <select size="1" name="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Heim'; ?>" id="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Heim'; ?>"> -->
 			<option value="0"><?php echo JText::_( 'PAARUNG_HEIM_WAEHLEN' ); ?></option>
 			<?php for ($z=0; $z < $count_man[0]->tln_nr; $z++){ 
 				if (($row->runden_modus != 4 AND $row->runden_modus != 5) OR 
@@ -175,7 +176,8 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 		</td>
 
 		<td class="key" nowrap="nowrap">
-		  <select size="1" name="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Gast'; ?>" id="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Gast'; ?>">
+		  <select size="1" name="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Gast'; ?>" id="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Gast'; ?>" style="line-height: 1.7 !important; margin-bottom: 0;">
+<!--		  <select size="1" name="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Gast'; ?>" id="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Gast'; ?>"> -->
 			<option value="0"><?php echo JText::_( 'PAARUNG_GAST_WAEHLEN' ); ?></option>
 			<?php for ($z=0; $z < $count_man[0]->tln_nr; $z++){ 
 				if (($row->runden_modus != 4 AND $row->runden_modus != 5) OR 

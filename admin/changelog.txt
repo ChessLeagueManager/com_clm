@@ -19,6 +19,7 @@ $ -> Language fix or change
 # SWT-Import: Anpassung Geschlechtskennzeichen
 # SWT-Import Liga: Parameterbehandlung bei Update
 # Liga Export/Import: KO-Modus (Nachbesserung)
+# Liga Paarungen: Designverbesserung
 
 - - - - - 4.0.3 - [16-04-2023] - - - - - - - - - - - - - - - - - - - -
 + Extern-Zugriff: View 'Aktuelle Runde'
