@@ -21,6 +21,7 @@ $ -> Language fix or change
 # Liga Export/Import: KO-Modus (Nachbesserung)
 # Liga Paarungen: Designverbesserung
 + Einzelturniere: optionale Darstellung der Wertungsgruppen in Teilnehmerliste
++ Ligen/Mannschaftsturniere: neue Hinweis-Texte beim Anlegen
 
 - - - - - 4.0.3 - [16-04-2023] - - - - - - - - - - - - - - - - - - - -
 + Extern-Zugriff: View 'Aktuelle Runde'

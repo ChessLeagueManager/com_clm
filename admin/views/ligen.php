@@ -735,6 +735,10 @@ class CLMViewLigen
   <fieldset class="adminform">
    <legend><?php echo JText::_( 'REMARKS' ); ?></legend>
 	<table class="adminlist">
+	<?php if ($new) { ?>
+		<tr><font color=red><b>Hinweis:</b></font> Manchmal ist es sinnvoll bzw. nötig, eine Punktspielliga als Mannschaftsturnier anzulegen. Siehe auch<b><a href="https://clm4.de/faq/item/190-punktspielligen-als-liga-oder-als-mannschaftsturnier"><?php echo JText::_(' hier'); ?></a></b></tr>
+		<p>&nbsp;&nbsp;</p>
+	<?php } ?>
 	<legend><?php echo JText::_( 'REMARKS_PUBLIC' ); ?></legend>
 	<tr>
 	<td width="100%" valign="top">
