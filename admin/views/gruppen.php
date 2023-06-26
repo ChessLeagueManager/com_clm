@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -225,7 +225,7 @@ public static function gruppe( &$row,$lists, $option, $jid)
 			</td>
 			<td>
 			<select name="geschlecht" id="geschlecht">" size="1">
-			<option>- wählen -</option>
+			<option value="9">- wählen -</option>
 			<option <?php if ($row->geschlecht == "1") {echo 'selected="selected"';} ?> value="1"><?php echo JText::_( 'GROUPS_OVERVIEW_SEX_DD1' );?></option>
 			<option <?php if ($row->geschlecht == "2") {echo 'selected="selected"';} ?> value="2"><?php echo JText::_( 'GROUPS_OVERVIEW_SEX_DD2' );?></option>
 			<option <?php if ($row->geschlecht == 0) {echo 'selected="selected"';} ?> value="0"><?php echo JText::_( 'GROUPS_OVERVIEW_SEX_DD3' );?></option>
