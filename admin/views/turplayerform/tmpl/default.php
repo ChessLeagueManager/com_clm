@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -14,6 +14,9 @@ defined('_JEXEC') or die('Restricted access');
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
+	
+	$turParams = new clm_class_params($this->turnier->params);
+	$optionEloAnalysis = $turParams->get('optionEloAnalysis', 0);
 
 ?>
 
@@ -187,6 +190,12 @@ defined('_JEXEC') or die('Restricted access');
 					<td class="key" nowrap="nowrap"><?php echo JText::_('FIDE_ELO'); ?>:</td>
 					<td><input class="inputbox" type="text" name="fideelo" id="fideelo" size="4" maxlength="4" /></td>
 				</tr>
+				<?php if ($optionEloAnalysis == 1) { ?>
+					<tr>
+						<td class="key" nowrap="nowrap"><?php echo JText::_('FIDE_ID'); ?>:</td>
+						<td><input class="inputbox" type="text" name="FIDEid" id="FIDEid" size="8" maxlength="8" /></td>
+					</tr>
+				<?php } ?>
 				<tr>
 					<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_TITLE'); ?>:</td>
 					<td><input class="inputbox" type="text" name="titel" id="titel" size="3" maxlength="3" /></td>

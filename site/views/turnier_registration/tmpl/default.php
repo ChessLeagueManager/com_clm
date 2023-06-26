@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -54,6 +54,7 @@ if ( $this->turnier->published == 0) {
 		$turParams = new clm_class_params($this->turnier->params);
 		$typeRegistration = $turParams->get('typeRegistration', 0);
 		$typeAccount 	= $turParams->get('typeAccount', 0);
+		$optionEloAnalysis = $turParams->get('optionEloAnalysis', 0);
 		$reg_name 		= clm_core::$load->request_string('reg_name','');		
 		$reg_vorname 	= clm_core::$load->request_string('reg_vorname','');		
 		$reg_jahr 		= clm_core::$load->request_string('reg_jahr','');		
@@ -64,6 +65,7 @@ if ( $this->turnier->published == 0) {
 		$reg_account 	= clm_core::$load->request_string('reg_account','');		
 		$reg_dwz 		= clm_core::$load->request_string('reg_dwz','');		
 		$reg_elo 		= clm_core::$load->request_string('reg_elo','');		
+		$reg_FIDEid 		= clm_core::$load->request_string('reg_FIDEid','');		
 		$reg_comment 	= clm_core::$load->request_string('reg_comment','');		
 		$reg_dsgvo 	= clm_core::$load->request_string('reg_dsgvo',0);		
 
@@ -166,6 +168,14 @@ if ( $this->turnier->published == 0) {
 			<input class="inputbox" type="text" name="reg_elo" id="reg_elo" size="4" maxlength="4" value="<?php echo $reg_elo; ?>" />
 			</td>
 		</tr>
+		<?php if ($optionEloAnalysis == 1) { ?>
+		<tr>
+			<td align="left" width="100"><?php echo JText::_('REGISTRATION_FIDEID'); ?>:</td>
+			<td>
+			<input class="inputbox" type="text" name="reg_FIDEid" id="reg_FIDEid" size="8" maxlength="8" value="<?php echo $reg_FIDEid; ?>" />
+			</td>
+		</tr>
+		<?php } ?>
 		<tr>
 			<td align="left" width="100"><?php echo JText::_('REGISTRATION_SEX'); ?>:</td>
 			<td class="paramlist_value">
@@ -226,6 +236,7 @@ if ( $this->turnier->published == 0) {
 		<input type="hidden" name="turnier" value="<?php echo $this->turnier->id; ?>" />
 		<input type="hidden" name="typeRegistration" value="<?php echo $typeRegistration; ?>" />
 		<input type="hidden" name="typeAccount" value="<?php echo $typeAccount; ?>" />
+		<input type="hidden" name="optionEloAnalysis" value="<?php echo $optionEloAnalysis; ?>" />
 		<input type="hidden" name="privacy_notice" value="<?php echo $privacy_notice; ?>" />
 		<input type="hidden" name="task" value="" />
 		<?php echo JHTML::_( 'form.token' ); ?>

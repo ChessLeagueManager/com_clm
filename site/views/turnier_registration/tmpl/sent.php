@@ -24,6 +24,7 @@ $user =JFactory::getUser();
 // Variablen holen - get variables
 $turParams = new clm_class_params($this->turnier->params);
 $typeRegistration = $turParams->get('typeRegistration', 0);
+$optionEloAnalysis	= clm_core::$load->request_string('optionEloAnalysis', 0);
 $typeAccount	= $turParams->get('typeAccount', 0);
 $reg_dsgvo 		= clm_core::$load->request_int('reg_dsgvo',0);
 $reg_check01 	= clm_core::$load->request_string('reg_check01','');
@@ -37,13 +38,13 @@ $reg_tel_no 	= clm_core::$load->request_string('reg_tel_no','');
 $reg_account 	= clm_core::$load->request_string('reg_account','');
 $reg_dwz 		= clm_core::$load->request_string('reg_dwz','');
 $reg_elo 		= clm_core::$load->request_string('reg_elo','');
+$reg_FIDEid 	= clm_core::$load->request_string('reg_FIDEid','');
 $reg_comment 	= clm_core::$load->request_string('reg_comment','');
 $reg_PKZ 		= '';
 $reg_zps 		= '';
 $reg_titel 		= '';
 $reg_mgl_nr		= 0;
 $reg_dwz_I0 	= 0;
-$reg_FIDEid 	= 0;
 $reg_FIDEcco	= '';
 
 if ($typeRegistration == 5) {
@@ -98,6 +99,10 @@ if ($reg_dwz != '' AND (!is_numeric($reg_dwz) OR $reg_dwz < 0 OR $reg_dwz > 3000
 	$msg .= '<br>'.JText::_('REGISTRATION_E_NWZ');
 if ($reg_elo != '' AND (!is_numeric($reg_elo) OR $reg_elo < 0 OR $reg_elo > 3000))
 	$msg .= '<br>'.JText::_('REGISTRATION_E_ELO');
+if ($optionEloAnalysis == 1) {
+	if ($reg_FIDEid != '' AND (!is_numeric($reg_FIDEid) OR $reg_FIDEid < 10000))
+		$msg .= '<br>'.JText::_('REGISTRATION_E_FIDEID');
+}
 if ($reg_check01 == '') 
 	$msg .= '<br>'.JText::_('REGISTRATION_E_SPAM');
 elseif ($reg_check01 != $reg_wert) 
@@ -124,7 +129,8 @@ if ($msg != '') {
 		$link .= '&layout=selection&f_source=sent&reg_spieler='.$reg_spieler;
 	}
 	$link .= '&reg_name='.$reg_name.'&reg_vorname='.$reg_vorname.'&reg_club='.$reg_club.'&reg_mail='.$reg_mail.'&reg_jahr='.$reg_birthYear.'&reg_geschlecht='.$reg_geschlecht;
-	$link .= '&reg_dwz='.$reg_dwz.'&reg_elo='.$reg_elo.'&reg_tel_no='.$reg_tel_no.'&reg_account='.$reg_account.'&reg_comment='.$reg_comment.'&reg_dsgvo='.$reg_dsgvo;
+	$link .= '&reg_dwz='.$reg_dwz.'&reg_elo='.$reg_elo.'&reg_FIDEid='.$reg_FIDEid.'&reg_tel_no='.$reg_tel_no.'&reg_account='.$reg_account.'&reg_comment='.$reg_comment.'&reg_dsgvo='.$reg_dsgvo;
+	$link .= '&optionEloAnalysis='.$optionEloAnalysis;
 	$msg = substr($msg,4);
 	$mainframe->enqueueMessage( $msg, "error" );
 	$mainframe->redirect( $link );
@@ -157,7 +163,7 @@ if ($msg != '') {
 			$link .= '&layout=selection&f_source=sent&reg_spieler='.$reg_spieler;
 		}
 		$link .= '&reg_name='.$reg_name.'&reg_vorname='.$reg_vorname.'&reg_club='.$reg_club.'&reg_mail='.$reg_mail.'&reg_jahr='.$reg_birthYear.'&reg_geschlecht='.$reg_geschlecht;
-		$link .= '&reg_dwz='.$reg_dwz.'&reg_elo='.$reg_elo.'&reg_tel_no='.$reg_tel_no.'&reg_account='.$reg_account.'&reg_comment='.$reg_comment.'&reg_dsgvo='.$reg_dsgvo;
+		$link .= '&reg_dwz='.$reg_dwz.'&reg_elo='.$reg_elo.'&reg_FIDEid='.$reg_FIDEid.'&reg_tel_no='.$reg_tel_no.'&reg_account='.$reg_account.'&reg_comment='.$reg_comment.'&reg_dsgvo='.$reg_dsgvo;
 		$msg = 'Speicherfehler clm_online_registration';
 		$mainframe->enqueueMessage( $msg, "error" );
 		$mainframe->redirect( $link );
@@ -177,6 +183,7 @@ if ($msg != '') {
 				. JText::_('REGISTRATION_MAIL').': '.$reg_mail."\n";
 	if ($reg_dwz != '') $body_daten .=  JText::_('REGISTRATION_DWZ').': '.$reg_dwz."\n";
 	if ($reg_elo != '') $body_daten .=  JText::_('REGISTRATION_ELO').': '.$reg_elo."\n";
+	if ($reg_FIDEid != '') $body_daten .=  JText::_('REGISTRATION_FIDEID').': '.$reg_FIDEid."\n";
 	if ($reg_tel_no != '') $body_daten .=  JText::_('REGISTRATION_TEL_NO').': '.$reg_tel_no."\n";
 	if ($reg_account != '') $body_daten .=  JText::_('REGISTRATION_ACCOUNT_'.$typeAccount).': '.$reg_account." \n\n";
 	if ($reg_comment != '') $body_daten .=  JText::_('REGISTRATION_COMMENT').': '."\n".$reg_comment."\n";

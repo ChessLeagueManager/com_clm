@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -99,6 +99,10 @@ class CLMModelTurRegistrations extends JModelLegacy {
 		$this->registrationsTotal = $this->_getListCount($query);
 		
 		if ($this->limit > 0) {
+			if ($this->limitstart > $this->registrationsTotal) {
+				$this->limitstart = $this->registrationsTotal - $this->limit;
+				if ($this->limitstart < 0) $this->limitstart = 0;
+			}
 			$query .= $this->_sqlOrder().' LIMIT '.$this->limitstart.', '.$this->limit;
 		}
 		

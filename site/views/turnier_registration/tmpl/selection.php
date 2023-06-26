@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -29,6 +29,7 @@ $user =JFactory::getUser();
 // Variablen holen - get variables
 $typeRegistration = clm_core::$load->request_string('typeRegistration','');
 $typeAccount	= clm_core::$load->request_string('typeAccount','');
+$optionEloAnalysis	= clm_core::$load->request_string('optionEloAnalysis', 0);
 $privacy_notice = clm_core::$load->request_string('privacy_notice','');
 $reg_dsgvo 		= clm_core::$load->request_int('reg_dsgvo',0);
 $reg_check01 	= clm_core::$load->request_string('reg_check01','');
@@ -41,6 +42,7 @@ $reg_account 	= clm_core::$load->request_string('reg_account','');
 $reg_club 		= clm_core::$load->request_string('reg_club','');
 $reg_dwz 		= clm_core::$load->request_string('reg_dwz','');
 $reg_elo 		= clm_core::$load->request_string('reg_elo','');
+$reg_FIDEid 	= clm_core::$load->request_string('reg_FIDEid','');
 $reg_geschlecht	= clm_core::$load->request_string('reg_geschlecht','');
 $reg_comment 	= clm_core::$load->request_string('reg_comment','');
 $f_source 		= clm_core::$load->request_string('f_source','');
@@ -96,6 +98,7 @@ if ($f_source != 'sent') {
 	$reg_club = '';
 	$reg_dwz = '';
 	$reg_elo = '';
+	$reg_FIDEid = '';
 	$reg_geschlecht = '';
 	$reg_comment = '';
 }
@@ -179,6 +182,14 @@ $heading = $this->turnier->name;
 			<input class="inputbox" type="text" name="reg_elo" id="reg_elo" size="4" maxlength="4" value="<?php echo $reg_elo; ?>" />
 			</td>
 		</tr>
+		<?php if ($optionEloAnalysis == 1) { ?>
+		<tr>
+			<td align="left" width="100" class="anfang"><?php echo JText::_('REGISTRATION_FIDEID'); ?>:</td>
+			<td>
+			<input class="inputbox" type="text" name="reg_FIDEid" id="reg_FIDEid" size="8" maxlength="8" value="<?php echo $reg_FIDEid; ?>" />
+			</td>
+		</tr>
+		<?php } ?>
 		<tr>
 			<td align="left" width="100" class="anfang"><?php echo JText::_('REGISTRATION_SEX'); ?>:</td>
 			<td class="paramlist_value">
@@ -224,6 +235,7 @@ $heading = $this->turnier->name;
 		<input type="hidden" name="option" value="com_clm" />
 		<input type="hidden" name="turnier" value="<?php echo $this->turnier->id; ?>" />
 		<input type="hidden" name="typeRegistration" value="<?php echo $typeRegistration; ?>" />
+		<input type="hidden" name="optionEloAnalysis" value="<?php echo $optionEloAnalysis; ?>" />
 		<input type="hidden" name="reg_name" value="<?php echo $reg_name; ?>" />
 		<input type="hidden" name="reg_vorname" value="<?php echo $reg_vorname; ?>" />
 		<input type="hidden" name="reg_jahr" value="<?php echo $reg_jahr; ?>" />

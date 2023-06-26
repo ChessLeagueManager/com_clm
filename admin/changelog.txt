@@ -23,6 +23,7 @@ $ -> Language fix or change
 + Einzelturniere: optionale Darstellung der Wertungsgruppen in Teilnehmerliste
 + Ligen/Mannschaftsturniere: neue Hinweis-Texte beim Anlegen
 # Mannschaft: Löschen einer Mannschaft
++ Einzelturniere: Erfassung der FIDE-Id zur Elo-Auswertung
 
 - - - - - 4.0.3 - [16-04-2023] - - - - - - - - - - - - - - - - - - - -
 + Extern-Zugriff: View 'Aktuelle Runde'

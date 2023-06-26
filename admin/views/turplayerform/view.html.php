@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -45,9 +45,10 @@ class CLMViewTurPlayerForm extends JViewLegacy {
 		$this->param = $model->param;
 
 		$this->pagination = $model->pagination;
+
+		$this->turnier = $model->turnier;
 		
 		// zusätzliche Funktionalitäten
-//		JHtml::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 
 

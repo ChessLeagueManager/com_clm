@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -88,6 +88,15 @@ $turParams = new clm_class_params($this->turnier->params);
 					<th width="5%">
 						<?php echo JHtml::_('grid.sort', JText::_('FIDE_ELO'), 'FIDEelo', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
+					<?php 
+					if ($turParams->get('optionEloAnalysis', 0) == 1) {
+					?>
+					<th width="3%">
+						<?php echo JHtml::_('grid.sort', JText::_('FIDE_ID'), 'FIDEid', $this->param['order_Dir'], $this->param['order'] ); ?>
+					</th>
+					<?php 
+					} 
+					?>
 					
 					<th width="5%">
 						<?php 
@@ -253,6 +262,18 @@ $turParams = new clm_class_params($this->turnier->params);
 						}
 						?>
 					</td>
+					<?php 
+					if ($turParams->get('optionEloAnalysis', 0) == 1) {
+					?>
+					<td align="center">
+						<?php if ($row->FIDEid > 0) { ?>
+							<a href="https://ratings.fide.com/profile/<?php echo $row->FIDEid;?>" target="_blank"><?php echo $row->FIDEid; ?></a>
+						<?php } else {  
+							echo '-'; } ?>
+					</td>
+					<?php 
+					} 
+					?>
 					
 						<?php 
 						if ($this->turnier->typ != 3) { // Punkte

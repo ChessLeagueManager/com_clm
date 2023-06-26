@@ -244,6 +244,12 @@ if (is_null($this->turnier->bem_int)) $this->turnier->bem_int = '';
 		<td class="paramlist_value"><fieldset class="radio">
 			<?php echo JHtml::_('select.booleanlist', 'params[optionTiebreakersFideCorrect]', 'class="inputbox"', $turParams->get('optionTiebreakersFideCorrect', 0)); ?>
 		</fieldset></td>
+		<td class="paramlist_key" title="<?php echo JText::_( 'OPTION_ELO_ANALYSIS_HINT' );?>" >
+			<?php echo JText::_('OPTION_ELO_ANALYSIS'); ?>:
+		</td>
+		<td class="paramlist_value"><fieldset class="radio">
+			<?php echo JHtml::_('select.booleanlist', 'params[optionEloAnalysis]', 'class="inputbox"', $turParams->get('optionEloAnalysis', 0)); ?>
+		</fieldset></td>
 	</tr>
 	<tr>
 		<td class="paramlist_key" title="<?php echo JText::_( 'OPTION_50PERCENTRULE_HINT' );?>" >
