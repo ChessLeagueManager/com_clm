@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -581,16 +581,19 @@ function remove()
 				." AND sid =".$row->sid
 				;
 			$db->setQuery($query);
-			$db->query();
+//			$db->query();
+			clm_core::$db->query($query); 
 			}
 		$query = " DELETE FROM #__clm_mannschaften "
 		. ' WHERE id IN ( '. $cids .' )';
 
 		$db->setQuery( $query );
-		if (!$db->query()) {
+//		if (!$db->query()) {
+		if (!clm_core::$db->query($query)) {
 		echo "<script> alert('".$db->getErrorMsg(true)."'); window.history.go(-1); </script>\n";}
 
-		if (count($cid) == 1) { $msg = JText::_( 'MANNSCHAFT_MSG_DEL_ENTRY' ); }
+//		if (count($cid) == 1) { $msg = JText::_( 'MANNSCHAFT_MSG_DEL_ENTRY' ); }
+		if(!is_array($cid)) { $msg = JText::_( 'MANNSCHAFT_MSG_DEL_ENTRY' ); }
 		else { $msg = count($cid).JText::_( 'MANNSCHAFT_MSG_DEL_ENTRYS' ); }
 			}
 		else {
@@ -602,14 +605,15 @@ function remove()
 				." AND sid =".$row->sid
 				;
 			$db->setQuery($query);
-			$db->query();
-
+//			$db->query();
+			clm_core::$db->query($query); 
 		$query = " DELETE FROM #__clm_mannschaften WHERE id = ".$cid[0];
 		$msg = JText::_( 'MANNSCHAFT_MSG_DEL_ENTRY' );
 			}
 		}
 		$db->setQuery( $query );
-		if (!$db->query()) {
+//		if (!$db->query()) {
+		if (!clm_core::$db->query($query)) {
 		echo "<script> alert('".$db->getErrorMsg(true)."'); window.history.go(-1); </script>\n"; }
 
 	// Log schreiben
