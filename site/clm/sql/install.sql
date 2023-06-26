@@ -1,6 +1,6 @@
 --
 -- @ Chess League Manager (CLM) Component 
--- @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+-- @Copyright (C) 2008-2023 CLM Team.  All rights reserved
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 -- @link http://www.chessleaguemanager.de
 --
@@ -1188,6 +1188,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere_sonderranglisten` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `turnier` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
+  `shortname` varchar(10) NOT NULL DEFAULT '',
   `use_rating_filter` enum('0','1') DEFAULT '0',
   `rating_type` tinyint(1) DEFAULT '0',
   `rating_higher_than` smallint(4) DEFAULT '0',
