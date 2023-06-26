@@ -24,6 +24,7 @@ $ -> Language fix or change
 + Ligen/Mannschaftsturniere: neue Hinweis-Texte beim Anlegen
 # Mannschaft: Löschen einer Mannschaft
 + Einzelturniere: Erfassung der FIDE-Id zur Elo-Auswertung
+# Mannschaft/Ligaheft: Anzeigen Spielplan
 
 - - - - - 4.0.3 - [16-04-2023] - - - - - - - - - - - - - - - - - - - -
 + Extern-Zugriff: View 'Aktuelle Runde'

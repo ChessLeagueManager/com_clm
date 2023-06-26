@@ -66,7 +66,8 @@ $countryversion = $config->countryversion;
 	$telefon= $config->man_tel;
 	$mobil	= $config->man_mobil;
 	$mail	= $config->man_mail;
-
+	$man_spielplan = $config->man_spielplan;
+	
 	// Userkennung holen
 	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
@@ -431,6 +432,7 @@ for ($x=0; $x< 100; $x++){
 }
 
 // Spielplan
+if ($man_spielplan == "1") {
 $pdf->SetFont('Times','B',$font);
 	//$pdf->Ln();
 	$pdf->Cell(10,8,' ',0,0);
@@ -478,7 +480,7 @@ $pdf->SetFont('Times','',$font);
 		}
 	}
 }
- 
+}
 // Ausgabe
 $pdf->Output(JText::_('TEAM').' '.utf8_decode($mannschaft[0]->name).'.pdf','D');
 exit;

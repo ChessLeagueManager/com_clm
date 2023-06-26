@@ -85,7 +85,8 @@ usort($bpr, 'vergleich');
 	$mobil	= $config->man_mobil;
 	$mail	= $config->man_mail;
 	$show_sl_mail = $config->show_sl_mail;
-
+	$man_spielplan = $config->man_spielplan;
+	
 	// Userkennung holen
 	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
@@ -505,6 +506,7 @@ if ($liga[0]->bemerkungen <> "") {
 
 // --------------------------------------------------------------
 // Paarungen pro Spieltag
+if ($man_spielplan == "1") {
 $pdf_orientation = 'P';
 	$_REQUEST['pdf_orientation'] = $pdf_orientation;
 $pdf->AddPage($pdf_orientation);
@@ -596,7 +598,7 @@ if ($lmax > 60) $lmax = 60;
 		
 		}}
 	}
-
+}
 // -----------------------------------------------------------
 //Mannschaften
 $ic = 0;
@@ -941,6 +943,7 @@ else {
 	$pdf->Ln();
 
 // Spielplan
+if ($man_spielplan == "1") {
 $pdf->SetFont('Times','B',$font);
 	//$pdf->Ln();
 	$pdf->Cell(10,8,' ',0,0);
@@ -1004,6 +1007,7 @@ if ($lmax > 70) $lmax = 70;
 		}
 	}
 }}
+}
 // Ausgabe
 $pdf->Output(JText::_('RANGLISTE_LIGAHEFT').' '.utf8_decode($liga[0]->name).'.pdf','D');
 exit;

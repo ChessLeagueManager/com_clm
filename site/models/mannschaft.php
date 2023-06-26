@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -215,6 +215,15 @@ class CLMModelMannschaft extends JModelLegacy
 	$sid = clm_core::$load->request_int('saison',1);
 	$liga = clm_core::$load->request_int('liga',1);
 	$tln = clm_core::$load->request_int('tlnr');
+		$db			= JFactory::getDBO();
+
+		// Rundenanzahl pro Durchgang aus Liga
+		$query = "SELECT a.* FROM #__clm_liga as a"
+			." WHERE id = ".$liga
+			;
+		$db->setQuery($query);
+ 		$sliga = $db->loadObjectList();
+		if (isset($sliga[0]->runden)) $arunden = $sliga[0]->runden; else $arunden = 0;
 
 		$query = " SELECT a.dg,a.lid,a.sid,a.runde,a.paar,a.tln_nr,a.gegner "
 			//." ,t.name as dat_name, t.datum as datum "
@@ -223,11 +232,12 @@ class CLMModelMannschaft extends JModelLegacy
 			." FROM #__clm_rnd_man as a "
 			." LEFT JOIN #__clm_mannschaften as m ON m.tln_nr = a.tln_nr AND m.sid = a.sid AND m.liga = a.lid "
 			." LEFT JOIN #__clm_mannschaften as n ON n.tln_nr = a.gegner AND n.sid = a.sid AND n.liga = a.lid"
-			//." LEFT JOIN #__clm_runden_termine as t ON t.nr = a.runde AND t.liga = $liga AND t.sid = a.sid "
+			." LEFT JOIN #__clm_runden_termine as t ON t.nr = (((a.dg - 1) * $arunden) + a.runde) AND t.liga = $liga AND t.sid = a.sid "
 			." WHERE a.lid =".$liga
 			." AND a.sid =".$sid
 			." AND a.heim = 1"
 			." AND (a.tln_nr = $tln OR a.gegner = $tln) "
+			." AND t.published = 1"
 			." ORDER BY a.dg ASC,a.runde ASC, a.paar ASC "
 			;
 		return $query;
