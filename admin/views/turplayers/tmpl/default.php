@@ -182,11 +182,10 @@ $turParams = new clm_class_params($this->turnier->params);
 						<td align="center">
 					<?php 
 						// Teilnehmer aktiv
-						//echo "<br>ii:".$i; var_dump($row);
-						if ($row->tlnrStatus == '1') { 
-							echo '<a href="javascript:void(0);" onclick="return listItemTask(\'cb'.($i).'\', \'unactive\')" title="'.JText::_('SET_DEACTIVE').'"><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /></a>';
+						if ($row->tlnrStatus == 1) { 
+							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'unactive\')" title="'.JText::_('SET_DEACTIVE').'"><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /></a>';
 						} else {
-							echo '<a href="javascript:void(0);" onclick="return listItemTask(\'cb'.($i).'\', \'active\')" title="'.JText::_('SET_ACTIVE').'"><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /></a>';
+							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'active\')" title="'.JText::_('SET_ACTIVE').'"><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /></a>';
 						}
 					?>
 					</td>

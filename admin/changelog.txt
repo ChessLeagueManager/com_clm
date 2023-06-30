@@ -27,6 +27,8 @@ $ -> Language fix or change
 # Mannschaft/Ligaheft: Anzeigen Spielplan
 # Ranglistengruppen/Vereinsranglisten: Verbesserung Log-Einträge
 + Ranglistenpflege im FE: Bestätigungsmail an Melder, ML und SL
+# Einzelturniere: Löschen und Deaktivieren von Teilnehmern
+# Einzelturniere: Deaktivieren von Runden
 
 - - - - - 4.0.3 - [16-04-2023] - - - - - - - - - - - - - - - - - - - -
 + Extern-Zugriff: View 'Aktuelle Runde'

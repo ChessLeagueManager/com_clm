@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -151,9 +151,17 @@ class CLMControllerTurPlayers extends JControllerLegacy {
 	
 	
 		$cids = implode(',', $cid );
-		$query = 'DELETE FROM #__clm_turniere_tlnr'
-				.' WHERE turnier = '.$turnier->id.' AND id IN ( '. $cids .' )'
-			;
+		for ($i=0; $i<count($cid); $i++) {
+			$query='SELECT * FROM #__clm_turniere_tlnr'
+				. ' WHERE id = '. $cid[$i];
+			$tlnr	= clm_core::$db->loadObjectList($query);
+			$query = 'DELETE FROM #__clm_turniere_tlnr'
+				.' WHERE turnier = '.$turnier->id.' AND id = '. $cid[$i];
+			clm_core::$db->query($query);
+			$query='UPDATE #__clm_turniere_tlnr  SET snr = (snr - 1) '	
+				.' WHERE turnier = '. $turnier->id.' AND snr > '.$tlnr[0]->snr;
+			clm_core::$db->query($query);
+		}
 //		$this->_db->setQuery($query);
 //		if (!$this->_db->query()) { 
 		if (!clm_core::$db->query($query)) { 
@@ -458,9 +466,9 @@ class CLMControllerTurPlayers extends JControllerLegacy {
 		$task		= clm_core::$load->request_string('task');
 		$active	= ($task == 'active'); // zu vergebender Wert 0/1
 		// jetzt schreiben
-		$tlnr->tlnrStatus = $active;
+		if ($active) $tlnr->tlnrStatus = 1; else $tlnr->tlnrStatus = 0;
 		if (!$tlnr->store()) {
-			$this->app->enqueueMessage( $row->getError(),'error' );
+			$this->app->enqueueMessage( 'Fehler beim Speichern','error' );
 			return false;
 		}
 									   
@@ -498,6 +506,14 @@ class CLMControllerTurPlayers extends JControllerLegacy {
 			}
 		}
 		return $twz;
+	}
+
+	// Weiterleitung!
+	function goto_rounds() {		
+		$this->adminLink->view = "turrounds";
+		$this->adminLink->more = array('id' => $this->id);
+		$this->adminLink->makeURL();		
+		$this->app->redirect( $this->adminLink->url );	
 	}
 
 	// Weiterleitung!

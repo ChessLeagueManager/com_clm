@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -152,11 +152,11 @@ $clmAccess = clm_core::$access;
 				
 				<td align="center">
 					<?php 
-						// tl_ok/director approval
+						// meldung nicht erlaubt
 						if ($value->abgeschlossen == '1') { 
-							echo '<a href="javascript:void(0);" onclick="return listItemTask(\'cb'.($i).'\', \'disbale\')" title="'.JText::_('DISABLE_ENTRY').'"><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /></a>';
+							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'disbale\')" title="'.JText::_('DISABLE_ENTRY').'"><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /></a>';
 						} else {
-							echo '<a href="javascript:void(0);" onclick="return listItemTask(\'cb'.($i).'\', \'enable\')" title="'.JText::_('ENABLE_ENTRY').'"><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /></a>';
+							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'enable\')" title="'.JText::_('ENABLE_ENTRY').'"><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /></a>';
 						}
 					?>
 				</td>
@@ -165,9 +165,9 @@ $clmAccess = clm_core::$access;
 					<?php 
 						// tl_ok/director approval
 						if ($row->tl_ok == '1') { 
-							echo '<a href="javascript:void(0);" onclick="return listItemTask(\'cb'.($i).'\', \'unapprove\')" title="'.JText::_('REMOVE_APPROVAL').'"><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /></a>';
+							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'unapprove\')" title="'.JText::_('REMOVE_APPROVAL').'"><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /></a>';
 						} else {
-							echo '<a href="javascript:void(0);" onclick="return listItemTask(\'cb'.($i).'\', \'approve\')" title="'.JText::_('SET_APPROVAL').'"><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /></a>';
+							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'approve\')" title="'.JText::_('SET_APPROVAL').'"><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /></a>';
 						}
 					?>
 				</td>

@@ -650,7 +650,15 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 	
 	}
 
-
+	function goto_players() {
+		
+		$this->adminLink->more = array('id' => $this->turnierid);
+		$this->adminLink->view = "turplayers";
+		$this->adminLink->makeURL();
+		
+		$this->app->redirect( $this->adminLink->url );
+	}
+	
 	function cancel() {
 		
 		$this->adminLink->more = array('id' => $this->turnierid);

@@ -48,8 +48,11 @@ class CLMViewTurRoundMatches extends JViewLegacy {
 		if (JComponentHelper::isInstalled ( 'com_clm_pairing' ) AND $model->turnier->typ == 1) {
 			if ($drawing_mode > 0) {
 				JToolBarHelper::custom('draw','add.png','add_f2.png', JText::_('DRAW_PAIRINGS'), false);
+				JToolBarHelper::spacer();
 			}
 		}
+		// Goto Teilnehmern
+		JToolBarHelper::custom( 'goto_players', 'forward.png', 'forward_f2.png', JText::_('GOTO_PLAYERS'), false);
 		JToolBarHelper::cancel();
 
 		// das MainMenu abschalten

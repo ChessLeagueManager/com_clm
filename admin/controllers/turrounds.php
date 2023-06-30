@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -215,7 +213,8 @@ class CLMControllerTurRounds extends JControllerLegacy {
 		}
 		
 		$task		= clm_core::$load->request_string('task');
-		$enable	= ($task == 'enable'); // zu vergebender Wert 0/1
+//		$enable	= ($task == 'enable'); // zu vergebender Wert 0/1
+		if ($task == 'enable') $enable = 1; else $enable = 0; // zu vergebender Wert 0/1
 	
 		// jetzt schreiben
 		$round->abgeschlossen = $enable;
@@ -287,7 +286,8 @@ class CLMControllerTurRounds extends JControllerLegacy {
 		}
 		
 		$task		= clm_core::$load->request_string('task');
-		$approve	= ($task == 'approve'); // zu vergebender Wert 0/1
+//		$approve	= ($task == 'approve'); // zu vergebender Wert 0/1
+		if ($task == 'approve') $approve = 1; else $approve = 0; // zu vergebender Wert 0/1
 	
 		// weiterer Check: Ergebnisse vollständig?
 		if ($approve == 1) {
