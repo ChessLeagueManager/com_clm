@@ -15,7 +15,6 @@ function clm_api_db_trf_import($file,$season,$turnier,$group=false,$update=false
     $lang = clm_core::$lang->imports;
 //echo "<br>season:"; var_dump($season); //die('ende-controller');	
 	if ($test) $debug = 1; else $debug = 0;
-//	$debug = 1;
 	if ($test)	echo "<br><br>Test - keine Übernahme der Daten ins CLM!"; 
 	$new_ID = 0;
 if ($debug > 0) { echo "<br><br>-- allgemeine Daten --";	}
@@ -53,6 +52,8 @@ if ($debug > 1) { echo "<br>line:"; var_dump($line); }
 if ($debug > 1) { echo "<br>din:"; var_dump($din); }
 		if ($din == '001') { $a_spielerdaten[] = str_replace("’","'",$line); continue; }
 		if ($din == '013') { $a_teamdaten[] = str_replace("’","'",$line); continue; }
+		if ($din == '132') { $rundendata = substr($line,91); continue; }
+		if ($din == 'XCT') { $rundentime = substr($line,91); continue; }
 		$value = trim(substr($line,4));
 if ($debug > 1) { echo "<br>value:"; var_dump($value); }
 		switch ($din) {
@@ -60,28 +61,44 @@ if ($debug > 1) { echo "<br>value:"; var_dump($value); }
 if ($debug > 1) { echo "<br>name:"; var_dump($name); } 
 						break;
 			case '042': $adate = $value; 
-						// Aufbereiten des Startdatums DD.MM.YYYY
-						$yyyy = substr($adate,6,4);
-						$mm = substr($adate,3,2);
-						$dd = substr($adate,0,2);
-						$adate = $yyyy.'-'.$mm.'-'.$dd;
+						if (substr($adate,2,1) == '.') {
+							// Aufbereiten des Startdatums DD.MM.YYYY
+							$yyyy = substr($adate,6,4);
+							$mm = substr($adate,3,2);
+							$dd = substr($adate,0,2);
+							$adate = $yyyy.'-'.$mm.'-'.$dd;
+						}
+						if (substr($adate,2,1) == '/') {
+							// Aufbereiten des Startdatums DD/MM/YYYY
+							$yyyy = substr($adate,6,4);
+							$mm = substr($adate,3,2);
+							$dd = substr($adate,0,2);
+							$adate = $yyyy.'-'.$mm.'-'.$dd;
+						}
 						if (!clm_core::$load->is_date($adate,'Y-m-d')) {
 							$adate = '1970-01-01'; }
 if ($debug > 0) { echo "<br>adate:"; var_dump($adate); }
 						break;
 			case '052': $edate = $value; 
-						// Aufbereiten des Enddatums DD.MM.YYYY
-						$yyyy = substr($edate,6,4);
-						$mm = substr($edate,3,2);
-						$dd = substr($edate,0,2);
-						$edate = $yyyy.'-'.$mm.'-'.$dd;
+						if (substr($edate,2,1) == '.') {
+							// Aufbereiten des Enddatums DD.MM.YYYY
+							$yyyy = substr($edate,6,4);
+							$mm = substr($edate,3,2);
+							$dd = substr($edate,0,2);
+							$edate = $yyyy.'-'.$mm.'-'.$dd;
+						}
+						if (substr($edate,2,1) == '/') {
+							// Aufbereiten des Enddatums DD/MM/YYYY
+							$yyyy = substr($edate,6,4);
+							$mm = substr($edate,3,2);
+							$dd = substr($edate,0,2);
+							$edate = $yyyy.'-'.$mm.'-'.$dd;
+						}
 if ($debug > 0) { echo "<br>edate:"; var_dump($edate); }
 						if (!clm_core::$load->is_date($edate,'Y-m-d')) {
 							$edate = '1970-01-01'; }
-//die();
 						break;
 			case '062': $teil = $value; break;
-			case '132': $rundendata = $value; break;
 			case 'XXR': $rundenzahl = $value; break;
 			case 'XXS': $a_xxs = explode(' ', $value);
 						if (count($a_xxs) > 0) {
@@ -146,6 +163,7 @@ if ($debug > 0) { echo "<br>e_xxs"; var_dump($e_xxs); }
 	else $erg_pab = 13;
 if ($debug > 0) { echo "<br>xxs_pab: $xxs_pab   erg: $erg_pab "; }
 	if (!isset($rundendata)) $rundendata = '';
+	if (!isset($rundentime)) $rundentime = '';
 if ($debug > 0) { echo "<br>name:"; var_dump($name); }
 //die('endeende');
 
@@ -187,24 +205,44 @@ if ($debug > 0) { echo "<br>neue Turnier-ID (trf): ";	var_dump($new_swt_tid); }
 
 //	Rundendaten -> Tabelle clm_turniere_rnd_termine
 if ($debug > 0) { echo "<br><br>-- Rundendaten --";	}
-		$rundendata = substr($rundendata,87);
+//		$rundendata = substr($rundendata,87);
 if ($debug > 0) { echo "<br>Rundendaten: $rundendata ";	}
 	for ($i = 0; $i < $rundenzahl; $i++) {
-		// Aufbereiten der Rundendata YY/MM/DD
-		$yy = substr($rundendata,($i * 10),2);
-		$mm = substr($rundendata,(3+($i * 10)),2);
-		$dd = substr($rundendata,(6+($i * 10)),2);
-		$rdate = '20'.$yy.'-'.$mm.'-'.$dd;
+		// Aufbereiten der Rundendata YY/MM/DD oder tt.mm.jj
+		if (substr($rundendata,($i * 10)+2,1) == "/") {
+			$yy = substr($rundendata,($i * 10),2);
+			$mm = substr($rundendata,(3+($i * 10)),2);
+			$dd = substr($rundendata,(6+($i * 10)),2);
+			$rdate = '20'.$yy.'-'.$mm.'-'.$dd;
+		}
+		if (substr($rundendata,($i * 10)+2,1) == ".") {
+			$dd = substr($rundendata,($i * 10),2);
+			$mm = substr($rundendata,(3+($i * 10)),2);
+			$yy = substr($rundendata,(6+($i * 10)),2);
+			$rdate = '20'.$yy.'-'.$mm.'-'.$dd;
+		}
 if ($debug > 0) { echo "<br>rdate:"; var_dump($rdate); }
 		if (!clm_core::$load->is_date($rdate,'Y-m-d')) {
 			$rdate = '1970-01-01';
 		}
 if ($debug > 0) { echo "<br>Runde ".($i+1)."  Datum: $rdate ";	}
+		$rtime = "00:00:00";
+		if ((substr($rundentime,($i * 10)+2,1) == ":") && (substr($rundentime,($i * 10)+5,1) == ":")) {
+			$rtime = substr($rundentime,($i * 10),8);
+			if (!clm_core::$load->is_date("2001-01-01 " . $rtime, "Y-m-d H:i:s")) {
+if ($debug > 0) { echo "<br>rtime vorher: >" . $rtime . "<"; }
+				$dttme = DateTime::createFromFormat("Y-m-d H:i:s", "2001-01-01 " . $rtime);
+				echo "<br>datetime(rtime): >" . $dttme . "<"; 
+				$rtime = "00:00:00";
+if ($debug > 0) { echo "<br>rtime nachher: >" . $rtime . "<"; }
+			}
+		}
+if ($debug > 0) { echo "<br>Rundenzeiten: $rundentime ";	}
+if ($debug > 0) { echo "<br>rtime:"; var_dump($rtime); }
 		If ($group) { 	// Mannschaftsturniere
 		} else { 		// Einzelturniere
-			$keyS = '`sid`, `name`, `swt_tid`, `dg`, `nr`, `datum`, `published`';
-			
-			$valueS = $season.", 'Runde ".($i+1)."', ".$new_swt_tid.", 1, ".($i+1).", '".$rdate."', 1";
+			$keyS = '`sid`, `name`, `swt_tid`, `dg`, `nr`, `datum`, `startzeit`, `published`';
+			$valueS = $season.", 'Runde ".($i+1)."', ".$new_swt_tid.", 1, ".($i+1).", '".$rdate."','".$rtime."', 1";
 			$sql = "INSERT INTO #__clm_swt_turniere_rnd_termine (".$keyS.") VALUES (".$valueS.")";
 if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 			clm_core::$db->query($sql);

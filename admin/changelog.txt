@@ -30,6 +30,7 @@ $ -> Language fix or change
 # Einzelturniere: Löschen und Deaktivieren von Teilnehmern
 # Einzelturniere: Deaktivieren von Runden
 + Mannschaftsturniere: Stichtag Mannschaftsaufstellung möglich
++ TRF-Import: kleine Erweiterung um Rundenstartzeit
 
 - - - - - 4.0.3 - [16-04-2023] - - - - - - - - - - - - - - - - - - - -
 + Extern-Zugriff: View 'Aktuelle Runde'
