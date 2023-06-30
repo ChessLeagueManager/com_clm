@@ -29,6 +29,7 @@ $ -> Language fix or change
 + Ranglistenpflege im FE: Bestätigungsmail an Melder, ML und SL
 # Einzelturniere: Löschen und Deaktivieren von Teilnehmern
 # Einzelturniere: Deaktivieren von Runden
++ Mannschaftsturniere: Stichtag Mannschaftsaufstellung möglich
 
 - - - - - 4.0.3 - [16-04-2023] - - - - - - - - - - - - - - - - - - - -
 + Extern-Zugriff: View 'Aktuelle Runde'

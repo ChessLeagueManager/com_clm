@@ -62,6 +62,8 @@ class CLMViewMTurniere
 		$row->params['pgnlname'] = ''; }
 	if (!isset($row->params['anz_sgp']))  {   //Standardbelegung
 		$row->params['anz_sgp'] = 1; }
+	if (!isset($row->params['deadline_roster']))  {   //Standardbelegung
+		$row->params['deadline_roster'] = '1970-01-01'; }
 	if (!isset($row->params['color_order']))  {   //Standardbelegung
 		$row->params['color_order'] = '1'; }
 	if (!isset($row->params['incl_to_season']))  {   //Standardbelegung
@@ -282,9 +284,17 @@ class CLMViewMTurniere
 	<tr>
 	<td nowrap="nowrap">
 	<label for="teil"><?php echo JText::_( 'LEAGUE_TEAMS' ); ?></label>
-	</td><td colspan="5">
+	</td><td colspan="2">
 	<input class="inputbox" type="text" name="teil" id="teil" size="4" maxlength="4" value="<?php echo $row->teil; ?>" />
 	</td>
+        <td width="20" class="key" title="<?php echo JText::_( 'LEAGUE_DEADLINE_ROSTER_HINT' ); ?>">
+           	<label for="params[deadline_roster]">
+               	<?php echo JText::_( 'LEAGUE_DEADLINE_ROSTER' ); ?> 
+           	</label>
+        </td>
+        <td>
+			<?php echo CLMForm::calendar($row->params['deadline_roster'], "params[deadline_roster]", "params[deadline_roster]", '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
+        </td>
 	</tr>
 	
 	<tr>
@@ -526,7 +536,7 @@ class CLMViewMTurniere
 		<td nowrap="nowrap">
 			<label for="params[waiting_period]"><?php echo JText::_( 'LEAGUE_WAITING_PERIOD' ); ?></label>
 		</td><td colspan="2">
-		<input class="inputbox" type="text" name="params[waiting_period]" id="params[waiting_period]" size="30" maxlength="50" value="<?php echo $row->params['waiting_period']; ?>" />
+		<input class="inputbox" type="text" name="params[waiting_period]" id="params[waiting_period]" size="15" maxlength="50" value="<?php echo $row->params['waiting_period']; ?>" />
 		</td>
 	</tr>
 		</table>
@@ -825,7 +835,7 @@ class CLMViewMTurniere
    <legend><?php echo JText::_( 'REMARKS' ); ?></legend>
 	<table class="adminlist">
 	<?php if ($new) { ?>
-		<tr><font color=red><b>Hinweis:</b></font> Manchmal ist es sinnvoll bzw. nötig, eine Punktspielliga als Mannschaftsturnier anzulegen. Siehe auch<b><a href="https://clm4.de/faq/item/190-punktspielligen-als-liga-oder-als-mannschaftsturnier"><?php echo JText::_(' hier'); ?></a></b></tr>
+		<tr><font color=red><b>Hinweis:</b></font> Manchmal ist es sinnvoll bzw. nötig, eine Punktspielliga als Mannschaftsturnier anzulegen. Siehe auch<b><a href="https://chessleaguemanager.de/faq/item/190-punktspielligen-als-liga-oder-als-mannschaftsturnier"><?php echo JText::_(' hier'); ?></a></b></tr>
 		<p>&nbsp;&nbsp;</p>
 	<?php } ?>
 	<legend><?php echo JText::_( 'REMARKS_PUBLIC' ); ?></legend>
