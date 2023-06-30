@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 // Eingang: Saison, Club
 function clm_api_db_schedule($season, $club) {
 	$season = clm_core::$load->make_valid($season, 0, -1);
@@ -38,6 +44,7 @@ function clm_api_db_schedule($season, $club) {
 		." LEFT JOIN #__clm_runden_termine AS r ON a.lid = r.liga AND (((a.dg - 1) * l.runden) + a.runde) = r.nr "
 		." WHERE a.sid = ".$season 
 		." AND a.heim = 1 "
+		." AND r.published = 1 "
 		." AND ( g.zps = '".$club."' OR h.zps = '".$club."' ) "
 		." ORDER BY rdate, rtime, a.lid, a.dg, a.runde, a.paar "
 		//." ORDER BY a.lid, a.dg, a.runde, a.paar "
