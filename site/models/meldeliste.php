@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
@@ -74,42 +73,52 @@ class CLMModelMeldeliste extends JModelLegacy
 	if (($layout =="rangliste") OR ($layout =="sent_rangliste")) {
 
 	$sql = " SELECT * "
+		." FROM #__clm_rangliste_id"
+		." WHERE gid =".$gid
+		." AND sid = ".$sid
+		." AND zps = ".$zps
+		;
+	$db->setQuery($sql);
+	$rid	= $db->loadObjectList();
+	if (isset($rid[0])) $sg_zps = $rid[0]->sg_zps; else $sg_zps = '0';
+	
+	$sql = " SELECT * "
 		." FROM #__clm_rangliste_name"
 		." WHERE id =".$gid
 		." AND sid = ".$sid
 		;
 	$db->setQuery($sql);
 	$gid	= $db->loadObjectList();
+	if (isset($gid[0])) {
+		$melde = explode ("-",$gid[0]->Meldeschluss);
+		$jahr = $melde[0];
+		$gid1 = $gid[0]->id;
 
-	$melde = explode ("-",$gid[0]->Meldeschluss);
-	$jahr = $melde[0];
-	$gid1 = $gid[0]->id;
-
-
-	$geb = "";
-	$ges = "";
-	if ($gid[0]->alter_grenze == "1") {
-		$geb = " AND a.Geburtsjahr < ".($jahr - $gid[0]->alter);
+		$geb = "";
+		$ges = "";
+		if ($gid[0]->alter_grenze == "1") {
+			$geb = " AND a.Geburtsjahr < ".($jahr - $gid[0]->alter);
 		}
-	if ($gid[0]->alter_grenze == "2") {
-		$geb = " AND a.Geburtsjahr > ".($jahr - ( $gid[0]->alter + 1));
+		if ($gid[0]->alter_grenze == "2") {
+			$geb = " AND a.Geburtsjahr > ".($jahr - ( $gid[0]->alter + 1));
 		}
-	if ($gid[0]->geschlecht == 1) {
-		$ges = " AND a.Geschlecht = 'W' ";
+		if ($gid[0]->geschlecht == 1) {
+			$ges = " AND a.Geschlecht = 'W' ";
 		}
-	if ($gid[0]->geschlecht == 2) {
-		$ges = " AND a.Geschlecht = 'M' ";
+		if ($gid[0]->geschlecht == 2) {
+			$ges = " AND a.Geschlecht = 'M' ";
 		}
 
-	$query = " SELECT l.man_nr,l.Rang,a.sid,a.ZPS,a.Mgl_Nr,a.PKZ,a.DWZ,a.DWZ_Index,a.Geburtsjahr,a.Spielername"
-		." FROM #__clm_dwz_spieler as a"
-		." LEFT JOIN #__clm_rangliste_spieler as l ON l.Gruppe = $gid1 AND l.sid = $sid AND l.ZPS = '$zps' AND l.Mgl_Nr = a.Mgl_Nr "
-		." WHERE a.ZPS = '$zps'"
-		." AND a.sid =".$sid
-		.$geb.$ges
-		." ORDER BY IFNULL(l.man_nr,999) ASC,IFNULL(l.Rang,999) ASC,a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
-		;
-			}
+		$query = " SELECT l.man_nr,l.Rang,a.sid,a.ZPS,a.Mgl_Nr,a.PKZ,a.DWZ,a.DWZ_Index,a.Geburtsjahr,a.Spielername"
+			." FROM #__clm_dwz_spieler as a"
+			." LEFT JOIN #__clm_rangliste_spieler as l ON l.Gruppe = $gid1 AND l.sid = $sid AND (l.ZPSmgl = a.ZPS) AND l.Mgl_Nr = a.Mgl_Nr AND (l.ZPS = '$zps')"
+			." WHERE (a.ZPS = '$zps' OR a.ZPS = '$sg_zps') "
+			." AND a.sid =".$sid
+			.$geb.$ges
+			." ORDER BY IFNULL(l.man_nr,999) ASC,IFNULL(l.Rang,999) ASC,a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
+			;
+		}
+	}
 	else {
 		if ($val == 1) { $order = "IFNULL(l.snr,999), a.Spielername ASC"; }
 		else { $order = "IFNULL(l.snr,999), a.DWZ DESC";}
@@ -140,14 +149,14 @@ class CLMModelMeldeliste extends JModelLegacy
 			$query .= " WHERE a.zps = '$zps' "; }
 		$query  .= " AND a.sid = ".$sid              
 			." ORDER BY $order ";
-		}
+	}
 	return $query;
 	}
 	function getCLMSpieler( $options=array() )
 	{
 		$query	= $this->_getCLMSpieler( $options );
 		$result = $this->_getList( $query );
-	return @$result;
+		return @$result;
 	}
 
 	function _getCLMCount( &$options )

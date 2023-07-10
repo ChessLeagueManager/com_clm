@@ -523,6 +523,7 @@ for ($x=0; $x< 100; $x++){
          else { ?>
     <td class="rnd">&nbsp;</td>
     <?php 		}}}
+	if (is_null($sumbp[0]->summe)) $sumbp[0]->summe = 0;
     ?>
     <td class="punkte"><?php echo str_replace ('.0', '', $sumbp[0]->summe); ?></td>
     <td class="spiele"><?php $sumspl = $mannschaft[0]->stamm * $ibe;

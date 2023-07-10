@@ -26,13 +26,17 @@ $user 		=JFactory::getUser();
 $meldung 	= $user->get('id');
 
 // Prüfen ob Datensatz schon vorhanden ist
-	$query	= "SELECT r.*, g.Gruppe, g.Meldeschluss FROM #__clm_rangliste_id as r "
-		." LEFT JOIN #__clm_rangliste_name as g ON g.id = r.gid "  
-		." WHERE r.sid = $sid AND r.zps = '$zps' AND r.gid = $gid ";
+	$query	= "SELECT * "
+		." FROM #__clm_rangliste_id "
+		." WHERE sid = $sid AND zps = '$zps' AND gid = $gid ";
 	$db->setQuery( $query );
 	$abgabe=$db->loadObjectList();
+	if (isset($abgabe[0])) $sg_zps = $abgabe[0]->sg_zps; else $sg_zps = '0';
 
 	$today = date("Y-m-d");
+	// Datum der Erstellung
+	$date =JFactory::getDate();
+	$now = $date->toSQL();
 /* if (count($abgabe) > 0) {
 
 	$link = 'index.php?option=com_clm&view=info';
@@ -60,7 +64,7 @@ $meldung 	= $user->get('id');
 	$query	=" DELETE FROM #__clm_meldeliste_spieler "
 		." WHERE status = ".$gid
 		." AND sid = ".$sid
-		." AND ZPS = '$zps'"
+		." AND (ZPS = '$zps' OR ZPS = '$sg_zps') "
 		;
 	$db->setQuery($query);
 	clm_core::$db->query($query);
@@ -83,36 +87,38 @@ $meldung 	= $user->get('id');
 	$change		= clm_core::$load->request_string('MA0');
 
 	for ($y=0; $y < $count; $y++) {
-	$mgl	= clm_core::$load->request_string('MGL'.$y);
-	$pkz	= clm_core::$load->request_string('PKZ'.$y);
-	$mnr	= clm_core::$load->request_string('MA'.$y);
-	$rang	= clm_core::$load->request_string('RA'.$y);
+		$ZPSmgl	= trim(clm_core::$load->request_string('ZPSM'.$y));
+		$mgl	= clm_core::$load->request_string('MGL'.$y);
+		$pkz	= clm_core::$load->request_string('PKZ'.$y);
+		$mnr	= clm_core::$load->request_string('MA'.$y);
+		$rang	= clm_core::$load->request_string('RA'.$y);
 
-	if ($y !="0" AND $mnr > $change) {
-		$liga_count++;
-		$liga	= $lid_rang[$liga_count]->liga;
-		 }
-	$change	= $mnr;
-
-	if ($mnr !=="99" AND $mnr !=="0" AND $mnr !=="") {
-	$query = " INSERT INTO #__clm_rangliste_spieler "
-		." (`Gruppe`, `ZPS`, `Mgl_Nr`, `PKZ`, `Rang`, `man_nr`, `sid`) "
-		." VALUES ('$gid','$zps','$mgl','$pkz','$rang','$mnr','$sid') "
-		;
-	$db->setQuery($query);
-	clm_core::$db->query($query);
-
-	$query = " INSERT INTO #__clm_meldeliste_spieler "
-		." (`sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`,`status`) "
-		." VALUES ('$sid','$liga','$mnr','$rang','$mgl','$zps','$gid') "
-		;
-	$db->setQuery($query);
-	clm_core::$db->query($query);
-	}}
+		if ($y !="0" AND $mnr > $change) {
+			$liga_count++;
+			if (isset($lid_rang[$liga_count])) $liga = $lid_rang[$liga_count]->liga;
+			else $liga = -1;
+		}
+		$change	= $mnr;
+		if (is_null($pkz) OR $pkz == '' OR $pkz == ' ') $pkz = '0';
+		if ($mnr !=="99" AND $mnr !=="0" AND $mnr !=="") {
+			$query = " INSERT INTO #__clm_rangliste_spieler "
+				." (`Gruppe`, `ZPS`, `ZPSmgl`, `Mgl_Nr`, `PKZ`, `Rang`, `man_nr`, `sid`) "
+				." VALUES ('$gid','$zps','$ZPSmgl','$mgl','$pkz','$rang','$mnr','$sid') "
+			;					   
+			clm_core::$db->query($query);
+			if ($liga > -1) {
+				$query = " INSERT INTO #__clm_meldeliste_spieler "
+					." (`sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`,`status`) "
+					." VALUES ('$sid','$liga','$mnr','$rang','$mgl','$ZPSmgl','$gid') "
+				;					   
+				clm_core::$db->query($query);
+			}
+		}
+	}
 
 	$query = " INSERT INTO #__clm_rangliste_id "
-		." (`gid`, `sid`, `zps`, `rang`, `published`, `bemerkungen`, `bem_int`) "
-		." VALUES ('$gid','$sid','$zps','0','0','','') "
+		." (`gid`, `sid`, `zps`, `sg_zps`, `rang`, `published`, `bemerkungen`, `bem_int`) "
+		." VALUES ('$gid','$sid','$zps','$sg_zps','0','0','','') "
 		;
 	$db->setQuery($query);
 	clm_core::$db->query($query);
@@ -213,11 +219,11 @@ if ( $send == 1 ) {
 // Spielerrangliste
 	$query	= "SELECT a.*, p.DWZ as pDWZ, Spielername, Vereinname FROM #__clm_rangliste_spieler as a";
 	if ($countryversion =="de") {
-		$query .= " LEFT JOIN #__clm_dwz_spieler as p ON (p.sid = a.sid AND p.ZPS = a.zps AND p.Mgl_Nr = a.mgl_nr) ";
+		$query .= " LEFT JOIN #__clm_dwz_spieler as p ON (p.sid = a.sid AND p.ZPS = a.ZPSmgl AND p.Mgl_Nr = a.mgl_nr) ";
 	} else{
-		$query .= " LEFT JOIN #__clm_dwz_spieler as p ON (p.sid = a.sid AND p.ZPS = a.zps AND p.PKZ = a.PKZ) ";
+		$query .= " LEFT JOIN #__clm_dwz_spieler as p ON (p.sid = a.sid AND p.ZPS = a.ZPSmgl AND p.PKZ = a.PKZ) ";
 	}
-	$query .= " LEFT JOIN #__clm_dwz_vereine as v ON (v.sid = a.sid AND v.ZPS = a.zps) "
+	$query .= " LEFT JOIN #__clm_dwz_vereine as v ON (v.sid = a.sid AND v.ZPS = a.ZPSmgl) "
 		." WHERE a.sid = ".$sid
 		." AND a.Gruppe = ".$gid
 		." AND a.ZPS = '".$zps."'"
@@ -246,6 +252,9 @@ if ( $send == 1 ) {
 		</tr>
 		<tr>
 			<td bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;" colspan="6"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_RANG_MAIL_HEADLINE' ).' '.JText::_( 'OF_DAY' ).JHTML::_('date', date("Y-m-d"), JText::_('DATE_FORMAT_CLM_F')). '</strong></div></td>
+		</tr>
+		<tr>
+			<td bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;" colspan="6"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_RANG_MAIL_HEADLINE' ).' '.JText::_( 'OF_DAY' ).JHTML::_('date', $now, JText::_('DATE_FORMAT_CLM_PDF')). '</strong></div></td>
 		</tr>
 		<tr>
 			<td width="120">&nbsp;</td>

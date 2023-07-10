@@ -319,7 +319,7 @@ function edit()
 		}
 		if($runde[0]->rang !="0") {
 			$sql = $sql
-		." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) ";
+		." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPSmgl = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) ";
 		}
 		$sql = $sql
 		." WHERE a.sid = ".$runde[0]->sid
@@ -413,7 +413,7 @@ function edit()
 		}
 		if($runde[0]->rang !="0") {
 			$sql = $sql
-		." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) ";
+		." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPSmgl = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) ";
 		}
 		$sql = $sql
 		." WHERE a.sid = ".$runde[0]->sid

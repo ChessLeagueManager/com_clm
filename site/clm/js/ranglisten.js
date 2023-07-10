@@ -1,6 +1,6 @@
 /*
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -123,9 +123,11 @@ function Spielerschreiben(i)
     document.getElementById('MGL'+i).innerHTML=Spieler[i][3];
     document.getElementById('DWZ'+i).innerHTML=Spieler[i][4];
     document.getElementById('DWI'+i).innerHTML=Spieler[i][5];
+    document.getElementsByName('ZPSM'+i)[0].value=Spieler[i][6];
+    document.getElementById('ZPSM'+i).innerHTML=Spieler[i][6];
     if (clm_ranglisten_usepkz == 1) { 
-		document.getElementById('PKZ'+i).innerHTML=Spieler[i][6];
-		document.getElementsByName('PKZ'+i)[0].innerHTML=Spieler[i][6];
+		document.getElementById('PKZ'+i).innerHTML=Spieler[i][7];
+		document.getElementsByName('PKZ'+i)[0].value=Spieler[i][7];
     } 
 }
 function QSort(l,r,Tiefe)
@@ -155,7 +157,7 @@ function Sortieren()
   Spieler=new Array;
   i=0;
   while (document.getElementsByName('MA'+i)[0]) {
-    Spieler[i]=new Array(5)
+	Spieler[i]=new Array(8)
     Spieler[i][0]=document.getElementsByName('MA'+i)[0].value-0;
     if (Spieler[i][0]==0) Spieler[i][0]=999;
     Spieler[i][1]=document.getElementsByName('RA'+i)[0].value-0;
@@ -164,8 +166,9 @@ function Sortieren()
     Spieler[i][3]=document.getElementById('MGL'+i).innerHTML-0;
     Spieler[i][4]=document.getElementById('DWZ'+i).innerHTML-0;
     Spieler[i][5]=document.getElementById('DWI'+i).innerHTML-0;
+    Spieler[i][6]=document.getElementById('ZPSM'+i).innerHTML;
     if (clm_ranglisten_usepkz == 1) { 
-		Spieler[i][6]=document.getElementById('PKZ'+i).innerHTML-0;
+		Spieler[i][7]=document.getElementById('PKZ'+i).innerHTML-0;
     } 
     i++;    
    }

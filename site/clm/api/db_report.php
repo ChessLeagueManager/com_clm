@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -134,7 +134,7 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 		}
 		if($someData[0]->rang !="0") {
 			$Heim = $Heim
-		." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) ";
+		." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPSmgl = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) ";
 		}
 		$Heim = $Heim
 		." WHERE a.sid = ".$someData[0]->sid
@@ -179,7 +179,7 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 		}
 		if($someData[0]->rang !="0") {
 			$Gast = $Gast
-		." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPS = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) ";
+		." LEFT JOIN #__clm_rangliste_spieler as r ON ( r.ZPSmgl = a.zps AND r.Mgl_Nr= a.mgl_nr AND r.sid = a.sid AND a.status = r.Gruppe ) ";
 		}
 		$Gast = $Gast
 		." WHERE a.sid = ".$someData[0]->sid

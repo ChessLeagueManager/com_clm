@@ -40,6 +40,7 @@ function display($cachable = false, $urlparams = array())
 	$filter_state		= $mainframe->getUserStateFromRequest( "$option.filter_state",'filter_state','','word' );
 	$filter_sid		= $mainframe->getUserStateFromRequest( "$option.filter_sid",'filter_sid',0,'int' );
 	$filter_vid		= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
+	$filter_sg_vid	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid",'filter_sg_vid',0,'var' );
 	$filter_catid		= $mainframe->getUserStateFromRequest( "$option.filter_catid",'filter_catid',0,'int' );
 	$search			= $mainframe->getUserStateFromRequest( "$option.search",'search','','string' );
 	$search			= strtolower( $search );
@@ -123,6 +124,7 @@ function display($cachable = false, $urlparams = array())
 	// Vereinefilter laden
 	$vereinefilter = CLMFilterVerein::vereine_filter(0);
 	$lists['vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
+	$lists['sg_vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_sg_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid );
 
 	// Suchefilter
 	$lists['search']= $search;
@@ -141,6 +143,7 @@ function edit()
 	$section	= clm_core::$load->request_string('section');
 
 	$filter_vid	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
+	$filter_sg_vid	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid",'filter_sg_vid',0,'var' );
 	$filter_sid	= $mainframe->getUserStateFromRequest( "$option.filter_sid",'filter_sid',0,'int' );
 	$filter_gid	= $mainframe->getUserStateFromRequest( "$option.filter_gid",'filter_gid',0,'int' );
 
@@ -152,6 +155,7 @@ function edit()
 										 
 	$row =JTable::getInstance( 'ranglisten', 'TableCLM' );
 	$vname="";
+	$sg_vname="";
 	$gname="";
 	$sname="";
 
@@ -179,6 +183,17 @@ function edit()
 	$vid 	= $db->loadObjectList();
 	$vname	= $vid[0]->vname;
 
+	if ($row->sg_zps > '00000') {
+		$sql = " SELECT Vereinname as vname FROM #__clm_dwz_vereine "
+			." WHERE ZPS ='".$row->sg_zps."'"
+			." AND sid =".$row->sid
+			;
+		$db->setQuery($sql);
+		$sg_vid 	= $db->loadObjectList();
+		$sg_vname	= $sg_vid[0]->vname;
+	} else {
+		$sg_vname	= '';
+	}
 	$sql = " SELECT Gruppe as gname FROM #__clm_rangliste_name "
 		." WHERE id =".$row->gid
 		." AND sid =".$row->sid
@@ -207,6 +222,32 @@ function edit()
 		else { $exist = $gid_check[0]->id; }
 	}
 	else { $exist = 0; }
+	// Prüfen ob der Verein bereits als Partnerverein existiert
+	if($filter_gid AND $filter_vid AND $filter_sid ) {
+	$sql = " SELECT id FROM #__clm_rangliste_id "
+		." WHERE gid =".intval( $filter_gid )
+		." AND sid = ".intval( $filter_sid )
+		." AND sg_zps = '$filter_vid'"
+		;
+	$db->setQuery($sql);
+	$gid_check = $db->loadObjectList();
+		if(count($gid_check) == 0) { $pa_exist = 0; }
+		else { $pa_exist = $gid_check[0]->id; }
+	}
+	else { $pa_exist = 0; }
+	// Prüfen ob eine Liste für den Partnerverein bereits existiert
+	if($filter_gid AND $filter_sg_vid AND $filter_sid ) {
+	$sql = " SELECT id FROM #__clm_rangliste_id "
+		." WHERE gid =".intval( $filter_gid )
+		." AND sid = ".intval( $filter_sid )
+		." AND zps = '$filter_sg_vid'"
+		;
+	$db->setQuery($sql);
+	$gid_check = $db->loadObjectList();
+		if(count($gid_check) == 0) { $sg_exist = 0; }
+		else { $sg_exist = $gid_check[0]->id; }
+	}
+	else { $sg_exist = 0; }
 	// Prüfen ob Gruppe existiert
 	if($filter_gid AND $filter_sid) {
 	$sql = " SELECT id FROM #__clm_rangliste_name "
@@ -229,6 +270,7 @@ function edit()
 		." AND sid = ".$row->sid
 		;
 	$sql_zps	= $row->zps;
+	$sql_sg_zps	= $row->sg_zps;
 	$sql_gid	= $row->gid;
 	$sql_sid	= $row->sid;
 		}
@@ -239,6 +281,7 @@ function edit()
 		." AND sid = ".intval( $filter_sid )
 		;
 	$sql_zps	= $filter_vid;
+	$sql_sg_zps	= $filter_sg_vid;
 	$sql_gid	= intval( $filter_gid );
 	$sql_sid	= intval( $filter_sid );
 		}
@@ -268,10 +311,11 @@ function edit()
 	$sql = " SELECT r.Rang, r.man_nr, a.sid,a.ZPS,a.Mgl_Nr,a.PKZ, a.DWZ,"
 		." a.DWZ_Index,a.Geburtsjahr,a.Spielername"
 		." FROM #__clm_dwz_spieler as a"
-		." LEFT JOIN #__clm_rangliste_id as i ON i.sid = a.sid AND i.zps = a.ZPS "
-		." LEFT JOIN #__clm_rangliste_spieler as r ON r.sid = a.sid AND r.ZPS = a.ZPS AND r.Mgl_Nr = a.Mgl_Nr AND r.Gruppe = i.gid "
-		." WHERE a.ZPS = '$sql_zps'"
+		." LEFT JOIN #__clm_rangliste_id as i ON i.sid = a.sid AND (i.zps = '$sql_zps') "
+		." LEFT JOIN #__clm_rangliste_spieler as r ON r.sid = a.sid AND r.ZPSmgl = a.ZPS AND r.Mgl_Nr = a.Mgl_Nr AND r.Gruppe = i.gid AND r.ZPS = i.zps "
+		." WHERE (a.ZPS = '$sql_zps' OR a.ZPS = '$sql_sg_zps')"
 		." AND i.id = ".$cid[0]
+		." AND a.sid =".$sql_sid
 		.$geb.$ges
 		." ORDER BY r.man_nr,r.Rang ASC, a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
 		;
@@ -279,7 +323,7 @@ function edit()
 	else {
 	$sql = " SELECT a.sid,a.ZPS,a.Mgl_Nr,a.PKZ,a.DWZ,a.DWZ_Index,a.Geburtsjahr,a.Spielername"
 		." FROM #__clm_dwz_spieler as a"
-		." WHERE a.ZPS = '$sql_zps'"
+		." WHERE (a.ZPS = '$sql_zps' OR a.ZPS = '$sql_sg_zps')"
 		." AND sid =".$sql_sid
 		.$geb.$ges
 		." ORDER BY a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
@@ -347,10 +391,11 @@ function edit()
 	// Vereinefilter laden
 	$vereinlist	= CLMFilterVerein::vereine_filter(0);
 	$lists['vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_vid', 'class="inputbox" size="1" onchange="javascript:edit();"','zps', 'name', $filter_vid );
+	$lists['sg_vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_sg_vid', 'class="inputbox" size="1" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid );
 
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'ranglisten.php');
 	$jid = 0;
-	CLMViewRanglisten::Rangliste( $spieler,$row,$lists,$option,$jid,$vname,$gname,$sname,$cid,$exist,$count,$gid_exist);
+	CLMViewRanglisten::Rangliste( $spieler,$row,$lists,$option,$jid,$vname,$sg_vname,$gname,$sname,$cid,$exist,$sg_exist,$pa_exist,$count,$gid_exist);
 	}
 
 function save()
@@ -366,10 +411,11 @@ function save()
 	$db		= JFactory::getDBO();
 	$task		= clm_core::$load->request_string( 'task');
 	$pre_task	= clm_core::$load->request_string( 'pre_task');
-	$row		= JTable::getInstance( 'ranglisten', 'TableCLM' );
 	$msg		= clm_core::$load->request_int( 'id');
 	$exist		= clm_core::$load->request_string( 'exist');
-
+	$row		= JTable::getInstance( 'ranglisten', 'TableCLM' );
+	if ($pre_task == 'edit' and is_numeric($msg)) 
+		$row->load( $msg );
 	if ( $exist != "0" AND $pre_task !="edit") {
 		$mainframe->enqueueMessage( JText::_( 'RANGLISTE_LISTE_IST' ), 'warning' );		
 		$mainframe->enqueueMessage( JText::_( 'RANGLISTE_AENDERN' ), 'notice' );		
@@ -391,21 +437,26 @@ function save()
 	}
 	if ($pre_task == "add" ) {
 		$filter_vid	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
+		$filter_sg_vid	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid",'filter_sg_vid',0,'var' );
 		$filter_sid	= $mainframe->getUserStateFromRequest( "$option.filter_sid",'filter_sid',0,'int' );
 		$filter_gid	= $mainframe->getUserStateFromRequest( "$option.filter_gid",'filter_gid',0,'int' );
 
 		$zps = $filter_vid ;
+		$sg_zps = $filter_sg_vid ;
 		$sid = intval( $filter_sid );
 		$gid = intval( $filter_gid );
 
 		$row->zps = $zps;
+		$row->sg_zps = $sg_zps;
 		$row->sid = $sid;
 		$row->gid = $gid;
 
 		$aktion = JText::_( 'RANGLISTE_LOG_ADDED');
 	}
 	else {
+		
 		$zps = $row->zps;
+		$sg_zps = $row->sg_zps;
 		$sid = $row->sid;
 		$gid = $row->gid;
 
@@ -438,7 +489,7 @@ function save()
 	//vor Löschen der Meldelisten Start-DWZ, u.a. sichern
 	$query	=" SELECT * FROM #__clm_meldeliste_spieler "
 		." WHERE status = ".$gid
-		." AND ZPS = '$zps'"
+		." AND (ZPS = '$zps' OR ZPS = '$sg_zps')"
 		." AND sid =".$sid
 		;
 	$db->setQuery($query);
@@ -451,7 +502,7 @@ function save()
 	//Löschen der Meldelisten
 	$query	=" DELETE FROM #__clm_meldeliste_spieler "
 		." WHERE status = ".$gid
-		." AND ZPS = '$zps'"
+		." AND (ZPS = '$zps' OR ZPS = '$sg_zps')"
 		." AND sid =".$sid
 		;
 	//$db->setQuery($query);
@@ -468,6 +519,7 @@ function save()
 	$db->setQuery($query);
 	$lid_rang	= $db->loadObjectList();
 
+	$ZPSmgl	= array();
 	$mgl	= array();
 	$pkz	= array();
 	$mnr	= array();
@@ -475,6 +527,7 @@ function save()
 
 	// Rangliste und Arrays schreiben
 	for ($y=0; $y < $count; $y++) {
+		$ZPSmgl[]	= trim(clm_core::$load->request_string('ZPSM'.$y));
 		$mgl[]	= clm_core::$load->request_string('MGL'.$y);
 		$pkz[]	= clm_core::$load->request_string('PKZ'.$y);
 		$mnr[]	= clm_core::$load->request_string('MA'.$y);
@@ -482,8 +535,8 @@ function save()
 
 		if ($mnr[$y] !=="99" AND $mnr[$y] !=="0" AND $mnr[$y] !=="") {
 			$query = " INSERT INTO #__clm_rangliste_spieler "
-				." (`Gruppe`, `ZPS`, `Mgl_Nr`, `PKZ`, `Rang`, `man_nr`, `sid`) "
-				." VALUES ('$gid','$zps','$mgl[$y]','$pkz[$y]','$rang[$y]','$mnr[$y]','$sid') "
+				." (`Gruppe`, `ZPS`, `ZPSmgl`, `Mgl_Nr`, `PKZ`, `Rang`, `man_nr`, `sid`) "
+				." VALUES ('$gid','$zps','$ZPSmgl[$y]','$mgl[$y]','$pkz[$y]','$rang[$y]','$mnr[$y]','$sid') "
 				;
 			//$db->setQuery($query);
 			clm_core::$db->query($query);
@@ -499,7 +552,8 @@ function save()
 	$snr_counter =1;
 
 	for ($y=0; $y < $count; $y++) {
-		$dkey = $liga.' '.$man_nr.' '.$zps.' '.intval($mgl[$y]);
+//		$dkey = $liga.' '.$man_nr.' '.$zps.' '.intval($mgl[$y]);
+		$dkey = $liga.' '.$man_nr.' '.$ZPSmgl[$y].' '.intval($mgl[$y]);
 		if (isset($old_ml[$dkey])) {
 			$z_ordering	 = $old_ml[$dkey]->ordering; 
 			$z_start_dwz = $old_ml[$dkey]->start_dwz; 
@@ -531,22 +585,22 @@ function save()
 			$z_gesperrt	 = 0; 
 		}
 	//if (($mnr[$y] >= $lid_rang[$x]->man_nr AND $rang[$y] < 1000 ) OR ($mnr[$y] == $lid_rang[$x]->man_nr) ) {
+	if (is_null($z_gesperrt) OR $z_gesperrt == '') $z_gesperrt = '0'; 
 	if ($mnr[$y] >= $lid_rang[$x]->man_nr) {
 	  if ($z_start_dwz == NULL OR $z_start_dwz == 0) 
 		$query = " INSERT INTO #__clm_meldeliste_spieler "
 			." (`sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`,`status`,`ordering`,`start_dwz`,`start_I0`"
 			.",`DWZ`, `I0`, `Punkte`, `Partien`, `We`, `Leistung`,`EFaktor`,`Niveau`,`sum_saison`,`gesperrt`)"
-			." VALUES ('$sid','$liga','$man_nr','$snr_counter','$mgl[$y]','$zps','$gid','$z_ordering',NULL,NULL"
+			." VALUES ('$sid','$liga','$man_nr','$snr_counter','$mgl[$y]','$ZPSmgl[$y]','$gid','$z_ordering',NULL,NULL"
 			.",'$z_DWZ','$z_I0','$z_Punkte','$z_Partien','$z_We','$z_Leistung','$z_EFaktor','$z_Niveau','$z_sum_saison','$z_gesperrt') "
 			;
 	  else
 		$query = " INSERT INTO #__clm_meldeliste_spieler "
 			." (`sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`,`status`,`ordering`,`start_dwz`,`start_I0`"
 			.",`DWZ`, `I0`, `Punkte`, `Partien`, `We`, `Leistung`,`EFaktor`,`Niveau`,`sum_saison`,`gesperrt`)"
-			." VALUES ('$sid','$liga','$man_nr','$snr_counter','$mgl[$y]','$zps','$gid','$z_ordering','$z_start_dwz','$z_start_I0'"
+			." VALUES ('$sid','$liga','$man_nr','$snr_counter','$mgl[$y]','$ZPSmgl[$y]','$gid','$z_ordering','$z_start_dwz','$z_start_I0'"
 			.",'$z_DWZ','$z_I0','$z_Punkte','$z_Partien','$z_We','$z_Leistung','$z_EFaktor','$z_Niveau','$z_sum_saison','$z_gesperrt') "
 			;
-		//$db->setQuery($query);
 		clm_core::$db->query($query);
 		$sn_cnt++;
 		$snr_counter++;
@@ -664,7 +718,7 @@ function remove()
 
 		$query = " DELETE FROM #__clm_meldeliste_spieler "
 			." WHERE status = ".$row->gid
-			." AND zps = '$row->zps'"
+			." AND (zps = '$row->zps' OR zps = '$row->sg_zps')"
 			." AND sid =".$row->sid
 			;
 		//$db->setQuery( $query );

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -19,6 +19,7 @@ class TableCLMRanglisten extends JTable
 	var $gid		= 0;
 	var $sid		= 0;
 	var $zps		= '';
+	var $sg_zps		= '';
 	var $rang		= 0;
 	var $published		= 0;
 	var $bemerkungen	= '';

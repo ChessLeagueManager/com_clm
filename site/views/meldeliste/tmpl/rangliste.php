@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
 $document = JFactory::getDocument();
@@ -143,8 +142,10 @@ function Spielerschreiben(i)
     document.getElementById('MGL'+i).innerHTML=Spieler[i][3];
     document.getElementById('DWZ'+i).innerHTML=Spieler[i][4];
     document.getElementById('DWI'+i).innerHTML=Spieler[i][5];
-    <?php if (isset($UsePKZ) AND $UsePKZ == 1) { ?>document.getElementById('PKZ'+i).innerHTML=Spieler[i][6];
-    document.getElementsByName('PKZ'+i)[0].innerHTML=Spieler[i][6];
+    document.getElementsByName('ZPSM'+i)[0].value=Spieler[i][6];
+    document.getElementById('ZPSM'+i).innerHTML=Spieler[i][6];
+    <?php if (isset($UsePKZ) AND $UsePKZ == 1) { ?>document.getElementById('PKZ'+i).innerHTML=Spieler[i][7];
+    document.getElementsByName('PKZ'+i)[0].innerHTML=Spieler[i][7];
     <?php } ?>
 }
 function QSort(l,r,Tiefe)
@@ -174,7 +175,7 @@ function Sortieren()
   Spieler=new Array;
   i=0;
   while (document.getElementsByName('MA'+i)[0]) {
-    Spieler[i]=new Array(5)
+    Spieler[i]=new Array(8)
     Spieler[i][0]=document.getElementsByName('MA'+i)[0].value-0;
     if (Spieler[i][0]==0) Spieler[i][0]=999;
     Spieler[i][1]=document.getElementsByName('RA'+i)[0].value-0;
@@ -183,7 +184,8 @@ function Sortieren()
     Spieler[i][3]=document.getElementById('MGL'+i).innerHTML-0;
     Spieler[i][4]=document.getElementById('DWZ'+i).innerHTML-0;
     Spieler[i][5]=document.getElementById('DWI'+i).innerHTML-0;
-    <?php if (isset($UsePKZ) AND $UsePKZ == 1) { ?>Spieler[i][6]=document.getElementById('PKZ'+i).innerHTML-0;<?php } ?>
+    Spieler[i][6]=document.getElementById('ZPSM'+i).innerHTML;
+    <?php if (isset($UsePKZ) AND $UsePKZ == 1) { ?>Spieler[i][7]=document.getElementById('PKZ'+i).innerHTML-0;<?php } ?>
     i++;    
    }
   QSort(0,i-1,0)
@@ -374,6 +376,7 @@ Liste absenden !
 		<td width="8%" class="key" nowrap="nowrap">Mnr</td>
 		<td width="10%" class="key" nowrap="nowrap">Rang</td>
 		<td class="key" nowrap="nowrap">Name</td>
+		<td width="20%" class="key" nowrap="nowrap">Verein</td>
 		<td width="7%" class="key" nowrap="nowrap">MglNr</td>
 		<td width="7%" class="key" nowrap="nowrap">PKZ</td>
 		<td colspan="2" width="15%" class="key" nowrap="nowrap">DWZ</td>
@@ -384,6 +387,7 @@ Liste absenden !
 	for($x=0; $x < count($spieler); $x++) { ?>
 
 	<input type="hidden" name="PKZ<?php echo $x; ?>" value="<?php echo $spieler[$x]->PKZ; ?>" />
+	<input type="hidden" name="ZPSM<?php echo $x; ?>" value="<?php echo $spieler[$x]->ZPS; ?>" />
 	<input type="hidden" name="MGL<?php echo $x; ?>" value="<?php echo $spieler[$x]->Mgl_Nr; ?>" />
 
 	<tr>
@@ -395,6 +399,8 @@ Liste absenden !
 	</td>
 	<td id="SP<?php echo $x; ?>" name="SP<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->Spielername; ?></td>
+	<td id="ZPSM<?php echo $x; ?>" class="key" nowrap="nowrap">
+		<?php echo $spieler[$x]->ZPS; ?></td>
 	<td id="MGL<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->Mgl_Nr; ?></td>
 	<td id="PKZ<?php echo $x; ?>" class="key" nowrap="nowrap">

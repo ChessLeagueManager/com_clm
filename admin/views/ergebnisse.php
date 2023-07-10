@@ -229,7 +229,7 @@ static function setErgebnisToolbar($runde)
 static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter, $ergebnis, $option, $hvoraufstellung, $gvoraufstellung)
 	{
 		CLMViewErgebnisse::setErgebnisToolbar($runde);
-		$_REQUEST['hidemainmenu'] = 1;
+		JFactory::getApplication()->input->set('hidemainmenu', true);
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
@@ -544,7 +544,7 @@ public static function setWertungToolbar($row)
 public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $lists)
 	{
 		CLMViewErgebnisse::setWertungToolbar($row);
-		$_REQUEST['hidemainmenu'] = 1;
+		JFactory::getApplication()->input->set('hidemainmenu', true);
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 	?>
 
@@ -558,7 +558,7 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 	</div>
 
 	<form action="index.php" method="post" name="adminForm" id="adminForm">
-
+	<br>
 <!--	<div> -->
 	<div class="width-60 fltlft">
 	<fieldset class="adminform">
@@ -699,6 +699,7 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 	if (($picomment == 1) OR ($picomment == 2 AND ($runde[0]->runden_modus == 4 OR $runde[0]->runden_modus == 5))) {    // internes Kommentarfeld ?>			
 	<div class="width-40 fltrt">
 	  <fieldset class="adminform">
+		<br>
 		<legend><?php echo JText::_( 'RESULTS_ICOMMENT_LEGEND' ); ?></legend>
 		<table class="admintable">
 		<tr>
@@ -714,7 +715,7 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 	</div>		
 <?php } ?> 		
 
-		<div class="width-100">
+		<div class="width-40 fltrt">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'RESULTS_DETAILS_DETAILS' ); ?></legend>
 
