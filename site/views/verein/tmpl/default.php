@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -141,43 +141,50 @@ if ($conf_vereinsdaten == 1) {
 				<table class="vereinstats" width="100%">
 					<tr><td><h4><?php echo JText::_('CLUB_CHIEF'); ?></h4></td></tr>
 					<tr><td><?php echo $verein[0]->vs; ?></td></tr>
-					<?php if ($verein[0]->vs_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->vs_mail ).'</td></tr>'; } ?>
-					<tr><td><?php echo $verein[0]->vs_tel; ?></td></tr>         
+					<?php if ($user->get('id') > 0) {
+					  if ($verein[0]->vs_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->vs_mail ).'</td></tr>'; } ?>
+					  <tr><td><?php echo $verein[0]->vs_tel; ?></td></tr>         
+					<?php } ?>
 
 					<?php if ( ($verein[0]->tl ==! false) or ($verein[0]->tl_mail ==! false) or ($verein[0]->tl_tel ==! false) ) { ?>
 						<tr><td><h4><?php echo JText::_('CLUB_TOURNAMENTS'); ?></h4></td></tr>
 						<tr><td><?php echo $verein[0]->tl; ?></td></tr>
-						<?php if ($verein[0]->tl_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->tl_mail ).'</td></tr>'; } ?>
-						<tr><td><?php echo $verein[0]->tl_tel; ?></td></tr>            
-					<?php } ?>
+						<?php if ($user->get('id') > 0) {
+						  if ($verein[0]->tl_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->tl_mail ).'</td></tr>'; } ?>
+						  <tr><td><?php echo $verein[0]->tl_tel; ?></td></tr>            
+					<?php } } ?>
             
 					<?php if ( ($verein[0]->jw ==! false) or ($verein[0]->jw_mail ==! false) or ($verein[0]->jw_tel ==! false) ) { ?>
 						<tr><td><h4><?php echo JText::_('CLUB_YOUTH') ?></h4></td></tr>
 						<tr><td><?php echo $verein[0]->jw; ?></td></tr>
-						<?php if ($verein[0]->jw_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->jw_mail ).'</td></tr>'; } ?>
-						<tr><td><?php echo $verein[0]->jw_tel; ?></td></tr>
-					<?php } ?>
+						<?php if ($user->get('id') > 0) {
+						  if ($verein[0]->jw_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->jw_mail ).'</td></tr>'; } ?>
+						  <tr><td><?php echo $verein[0]->jw_tel; ?></td></tr>
+					<?php } } ?>
             
 					<?php if ( ($verein[0]->pw ==! false) or ($verein[0]->pw_mail ==! false) or ($verein[0]->pw_tel ==! false) ) { ?>
 						<tr><td><h4><?php echo JText::_('CLUB_PRESS') ?></h4></td></tr>
 						<tr><td><?php echo $verein[0]->pw; ?></td></tr>
-						<?php if ($verein[0]->pw_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->pw_mail ).'</td></tr>'; } ?>
-						<tr><td><?php echo $verein[0]->pw_tel; ?></td></tr>
-					<?php } ?>
+						<?php if ($user->get('id') > 0) {
+						  if ($verein[0]->pw_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->pw_mail ).'</td></tr>'; } ?>
+						  <tr><td><?php echo $verein[0]->pw_tel; ?></td></tr>
+					<?php } } ?>
             
 					<?php if ( ($verein[0]->kw ==! false) or ($verein[0]->kw_mail ==! false) or ($verein[0]->kw_tel ==! false) ) { ?>
 						<tr><td><h4><?php echo JText::_('CLUB_MONEY') ?></h4></td></tr>
 						<tr><td><?php echo $verein[0]->kw; ?></td></tr>
-						<?php if ($verein[0]->kw_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->kw_mail ).'</td></tr>'; } ?>
-						<tr><td><?php echo $verein[0]->kw_tel; ?></td></tr>            </div>
-					<?php } ?>
+						<?php if ($user->get('id') > 0) {
+						  if ($verein[0]->kw_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->kw_mail ).'</td></tr>'; } ?>
+						  <tr><td><?php echo $verein[0]->kw_tel; ?></td></tr>            </div>
+					<?php } } ?>
             
 					<?php if ( ($verein[0]->sw ==! false) or ($verein[0]->sw_mail ==! false) or ($verein[0]->sw_tel ==! false) ) { ?>
 						<tr><td><h4><?php echo JText::_('CLUB_SENIOR') ?></h4></td></tr>
 						<tr><td><?php echo $verein[0]->sw; ?></td></tr>
-						<?php if ($verein[0]->sw_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->sw_mail ).'</td></tr>'; } ?>
-						<tr><td><?php echo $verein[0]->sw_tel; ?></td></tr>
-					<?php } ?>
+						<?php if ($user->get('id') > 0) {
+						  if ($verein[0]->sw_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->sw_mail ).'</td></tr>'; } ?>
+						  <tr><td><?php echo $verein[0]->sw_tel; ?></td></tr>
+					<?php } } ?>
 				</table>
              
 			<?php if ( $verein[0]->bemerkungen <> '') { ?>
