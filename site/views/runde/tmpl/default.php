@@ -195,28 +195,26 @@ if (isset($liga[$runde-1]->datum) AND ($liga[$runde-1]->datum =='0000-00-00' OR 
     
     <?php } ?>
     
-    <div id="pdf">
-	
-	<?php 
-	
-	// PGN eigene Paarung
-	if (($params['pgntype'] > 0) AND ($jid != 0) AND ($club_jid == true)) { 
-		echo CLMContent::createPGNLink('runde', JText::_('ROUND_PGN_CLUB'), array('saison' => $liga[0]->sid, 'liga' => $liga[0]->id, 'runde' => $runde_orig, 'dg' => $dg) );
-	} 
-	
-	// PGN gesamte Runde
-	if (($params['pgntype'] > 0) AND ($jid != 0)) {
-		echo CLMContent::createPGNLink('runde', JText::_('ROUND_PGN_ALL'), array('saison' => $liga[0]->sid, 'liga' => $liga[0]->id, 'runde' => $runde_orig, 'dg' => $dg), 2 );
-   } 
-    
-	// PDF
-	echo CLMContent::createPDFLink('runde', JText::_('PDF_ROUND'), array('saison' => $liga[0]->sid, 'layout' => 'runde', 'liga' => $liga[0]->id, 'runde' => $runde_orig, 'dg' => $dg));
-	?>
-	<?php if ($liga[0]->runden_modus != 4 OR (isset($liga[$runde-1]->datum) AND ($liga[$runde-1]->datum > '2014-05-31'))) { ?>
-		<div class="pdf"><a href="index.php?option=com_clm&view=runde&Itemid=<?php echo $item ?>&saison=<?php echo $liga[0]->sid ?>&liga=<?php echo $liga[0]->id ?>&runde=<?php echo $runde_orig ?>&dg=<?php echo $dg ?>&detail=<?php echo $detailp ?>"><img src="<?php echo CLMImage::imageURL('lupe.png') ?>" width="16" height="19" alt="PDF" class="CLMTooltip" title="<?php echo JText::_('Details ein/aus') ?>"  /></a>
+    <?php if (isset($liga) AND $liga[0]->published == 1 AND $liga[0]->rnd == 1 AND $liga[$runde - 1]->pub == 1) { ?>
+		<div id="pdf">	
+			<?php 	
+			// PGN eigene Paarung
+			if (($params['pgntype'] > 0) AND ($jid != 0) AND ($club_jid == true)) { 
+				echo CLMContent::createPGNLink('runde', JText::_('ROUND_PGN_CLUB'), array('saison' => $liga[0]->sid, 'liga' => $liga[0]->id, 'runde' => $runde_orig, 'dg' => $dg) );
+			} 	
+			// PGN gesamte Runde
+			if (($params['pgntype'] > 0) AND ($jid != 0)) {
+				echo CLMContent::createPGNLink('runde', JText::_('ROUND_PGN_ALL'), array('saison' => $liga[0]->sid, 'liga' => $liga[0]->id, 'runde' => $runde_orig, 'dg' => $dg), 2 );
+			}  
+			// PDF
+			echo CLMContent::createPDFLink('runde', JText::_('PDF_ROUND'), array('saison' => $liga[0]->sid, 'layout' => 'runde', 'liga' => $liga[0]->id, 'runde' => $runde_orig, 'dg' => $dg));
+			
+			if ($liga[0]->runden_modus != 4 OR (isset($liga[$runde-1]->datum) AND ($liga[$runde-1]->datum > '2014-05-31'))) { ?>
+			<div class="pdf"><a href="index.php?option=com_clm&view=runde&Itemid=<?php echo $item ?>&saison=<?php echo $liga[0]->sid ?>&liga=<?php echo $liga[0]->id ?>&runde=<?php echo $runde_orig ?>&dg=<?php echo $dg ?>&detail=<?php echo $detailp ?>"><img src="<?php echo CLMImage::imageURL('lupe.png') ?>" width="16" height="19" alt="PDF" class="CLMTooltip" title="<?php echo JText::_('Details ein/aus') ?>"  /></a>
+			</div>
+			<?php } ?>
 		</div>
     <?php } ?>
-	</div>
 </div>
 <div class="clr"></div>
 
@@ -237,6 +235,7 @@ echo "<br>". CLMContent::clmWarning(JText::_('ROUND_UNPUBLISHED').'<br>'.JText::
 else {   ?>
 
 <?php // Kommentare zur Liga
+if (is_null($liga[$runde-1]->comment)) $liga[$runde-1]->comment = '';
 if (isset($liga[$runde-1]->comment) AND $liga[$runde-1]->comment <> "") { ?>
 <div id="desc">
     <p class="run_note_title"><?php echo JText::_('NOTICE_SL') ?></p>
@@ -401,6 +400,7 @@ for ($x=0; $x<$liga[0]->stamm; $x++) {
  		<td class="paarung"><span class="editlinktip hasTip" title="<?php echo JText::_('PGN_SHOWMATCH'); //echo $erg_text[$einzel[$w]->ergebnis]->erg_text; ?>">
 			<a onclick="startPgnMatch(<?php echo $w; ?>, 'pgnArea<?php echo $y ?>');" class="pgn"><?php echo $erg_text[$einzel[$w]->ergebnis]->erg_text; ?></a>
 			</span>
+			<?php if (is_null($einzel[$w]->text)) $einzel[$w]->text = ''; ;?>
 			<input type='hidden' name='pgn[<?php echo $w; ?>]' id='pgnhidden<?php echo $w; ?>' value='<?php echo str_replace("'","&#039", $einzel[$w]->text); ?>'>
 		</td>
        <?php } ?>

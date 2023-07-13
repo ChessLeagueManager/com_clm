@@ -19,6 +19,7 @@ $ -> Language fix or change
 ^ Vereinsview im FE: keine Anzeige von Mail-Adressen und Telefon-Nr. für nicht angemeldete Besucher
 ^ Info-View: kleine Erweiterung
 + Mitgliederverwaltung: weitere Sortiermöglichkeiten
+# Teamwettbewerbe im FE: Nichtanzeige nicht freigegebener Runden
  
 - - - - - 4.0.4 - [30-06-2023] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung wegen MariaDB(SQL-Mode) / php 8.1
