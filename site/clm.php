@@ -93,7 +93,9 @@ if (clm_core::$access->getSeason() != -1) {
 			$controller = '';
 		}
 	}
-	if((!isset($_GET["format"]) || $_GET["format"]!="pdf") &&
+
+//	if((!isset($_GET["format"]) || $_GET["format"]!="pdf") &&
+	if((!isset($_GET["format"]) || ($_GET["format"]!="pdf" && $_GET["format"]!="svg")) &&
 		(!isset($_GET["pgn"]) || $_GET["pgn"]==0)) { echo '<div class="clm">'; }	
 	// Erzeugen eines Objekts der Klasse controller
 	$classname = 'CLMController' . ucfirst($controller);
@@ -102,14 +104,17 @@ if (clm_core::$access->getSeason() != -1) {
 	$controller->execute(clm_core::$load->request_string('task'));
 	// Redirect aus dem controller
 	$controller->redirect();
-	if((!isset($_GET["format"]) || $_GET["format"]!="pdf") &&
+//	if((!isset($_GET["format"]) || $_GET["format"]!="pdf") &&
+	if((!isset($_GET["format"]) || ($_GET["format"]!="pdf" && $_GET["format"]!="svg")) &&
 		(!isset($_GET["pgn"]) || $_GET["pgn"]==0)) { echo '</div>'; }
 } else {
-	if((!isset($_GET["format"]) || $_GET["format"]!="pdf") &&
+//	if((!isset($_GET["format"]) || $_GET["format"]!="pdf") &&
+	if((!isset($_GET["format"]) || ($_GET["format"]!="pdf" && $_GET["format"]!="svg")) &&
 		(!isset($_GET["pgn"]) || $_GET["pgn"]==0)) { echo '<div class="clm">'; }	
 	$fix = clm_core::$load->load_view("notification", array("e_noSeason"));
 	echo $fix[1];
-	if((!isset($_GET["format"]) || $_GET["format"]!="pdf") &&
+//	if((!isset($_GET["format"]) || $_GET["format"]!="pdf") &&
+	if((!isset($_GET["format"]) || ($_GET["format"]!="pdf" && $_GET["format"]!="svg")) &&
 		(!isset($_GET["pgn"]) || $_GET["pgn"]==0)) { echo '</div>'; }
 }
 ?>

@@ -21,6 +21,7 @@ $ -> Language fix or change
 + Mitgliederverwaltung: weitere Sortiermöglichkeiten
 # Teamwettbewerbe im FE: Nichtanzeige nicht freigegebener Runden
 # Rundenmanager: Termine pro Paarung auch ohne Rundentermin möglich
++ Importe: Erweiterung der Teilnehmerdaten (Vorbereitung)
  
 - - - - - 4.0.4 - [30-06-2023] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung wegen MariaDB(SQL-Mode) / php 8.1
