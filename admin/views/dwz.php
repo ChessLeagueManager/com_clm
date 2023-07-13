@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -84,6 +84,14 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 			Joomla.submitform( pressbutton );
 		}
 	}
+	
+	function change_vid()	{
+		var form = document.adminForm;
+
+		form.filter_mgl.value = 0;
+		document.adminForm.submit();
+	}
+
  
 </script>
 
@@ -105,6 +113,12 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 		<option value="Spielername ASC" <?php if ($filter_sort =="Spielername ASC") { ?>selected="selected"<?php } ?>><?php echo JText::_( 'MEMBER_DD_5');?></option>
 		<option value="DWZ DESC" <?php if ($filter_sort =="DWZ DESC") { ?>selected="selected"<?php } ?>><?php echo JText::_( 'MEMBER_DD_6');?></option>
 		<option value="DWZ ASC" <?php if ($filter_sort =="DWZ ASC") { ?>selected="selected"<?php } ?>><?php echo JText::_( 'MEMBER_DD_7');?></option>
+		<option value="Geburtsjahr DESC" <?php if ($filter_sort =="Geburtsjahr DESC") { ?>selected="selected"<?php } ?>><?php echo JText::_( 'MEMBER_DD_8');?></option>
+		<option value="Geburtsjahr ASC" <?php if ($filter_sort =="Geburtsjahr ASC") { ?>selected="selected"<?php } ?>><?php echo JText::_( 'MEMBER_DD_9');?></option>
+		<option value="Geschlecht DESC, Spielername ASC" <?php if ($filter_sort =="Geschlecht DESC, Spielername ASC") { ?>selected="selected"<?php } ?>><?php echo JText::_( 'MEMBER_DD_10');?></option>
+		<option value="Geschlecht ASC, Spielername ASC" <?php if ($filter_sort =="Geschlecht ASC, Spielername ASC") { ?>selected="selected"<?php } ?>><?php echo JText::_( 'MEMBER_DD_11');?></option>
+		<option value="Status DESC, Spielername ASC" <?php if ($filter_sort =="Status DESC, Spielername ASC") { ?>selected="selected"<?php } ?>><?php echo JText::_( 'MEMBER_DD_12');?></option>
+		<option value="Status ASC, Spielername ASC" <?php if ($filter_sort =="Status ASC, Spielername ASC") { ?>selected="selected"<?php } ?>><?php echo JText::_( 'MEMBER_DD_13');?></option>
 		</select>
 		</fieldset>
 		</td>

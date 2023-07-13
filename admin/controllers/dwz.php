@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -105,7 +103,8 @@ function display($cachable = false, $urlparams = array())
 
 	// Vereinefilter laden
 	$vlist = CLMFilterVerein::vereine_filter(0);
-	$lists['vid']	= JHTML::_('select.genericlist', $vlist, 'filter_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
+//	$lists['vid']	= JHTML::_('select.genericlist', $vlist, 'filter_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
+	$lists['vid']	= JHTML::_('select.genericlist', $vlist, 'filter_vid', 'class="inputbox" size="1" onchange="change_vid();"','zps', 'name', $filter_vid );
 	$lists['vid_to']	= JHTML::_('select.genericlist', $vlist, 'filter_vid_to', 'class="inputbox" size="1" ','zps', 'name', $filter_vid_to );
 	$lists['vid_from']	= JHTML::_('select.genericlist', $vlist, 'filter_vid_from', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid_from );
 	
