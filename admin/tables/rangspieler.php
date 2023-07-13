@@ -16,7 +16,7 @@ class TableCLMRangspieler extends JTable
 {
 	var $Gruppe		= '';
 	var $ZPS		= '';
-	var $ZPSmgl		= '';
+	var $ZPSmgl		= '00000';
 	var $Mgl_Nr		= '';
 	var $PKZ		= '';
 	var $Rang		= '';
