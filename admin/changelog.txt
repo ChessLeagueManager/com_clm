@@ -17,6 +17,7 @@ $ -> Language fix or change
 + Ranglistenpflege im FE: Bestätigungsmail ergänzt um Uhrzeit
 ^ Ranglistenpflege im FE: auch ohne PKZ möglich
 ^ Vereinsview im FE: keine Anzeige von Mail-Adressen und Telefon-Nr. für nicht angemeldete Besucher
+^ Info-View: kleine Erweiterung
  
 - - - - - 4.0.4 - [30-06-2023] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung wegen MariaDB(SQL-Mode) / php 8.1
