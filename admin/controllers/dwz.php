@@ -203,6 +203,12 @@ static function nachmeldung_delete()
 
 	$zps	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
 
+	$filter_mgl	= $mainframe->getUserStateFromRequest( "$option.filter_mgl",'filter_mgl',0,'int' );
+	if ($filter_mgl == $spieler) {
+		$mainframe->setUserState( "$option.filter_mgl", 0 );
+		$filter_mgl	= $mainframe->getUserState( "$option.filter_mgl",'filter_mgl',0,'int' );
+	}
+
 	$query	= "DELETE FROM #__clm_dwz_spieler"
 		." WHERE ZPS = '$zps'"
 		." AND sid =".$sid;
@@ -314,6 +320,8 @@ static function nachmeldung()
 		}
 	}
 	// Prüfen ob DWZ vorhanden ist
+	if (!is_numeric($geburtsjahr))  $geburtsjahr = '0000';
+	if ($geschlecht == '0') $geschlecht = 'M';
 	if (!$dwz) {
 	$query	= "INSERT INTO #__clm_dwz_spieler"
 		." ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Status`, `Spielername`, `Geschlecht`, `Geburtsjahr` ) "
@@ -486,6 +494,11 @@ static function spieler_delete()
 	//$db->setQuery($query);
 	clm_core::$db->query($query);
 
+	$filter_mgl	= $mainframe->getUserStateFromRequest( "$option.filter_mgl",'filter_mgl',0,'int' );
+	if ($filter_mgl == $spieler) {
+		$mainframe->setUserState( "$option.filter_mgl", 0 );
+		$filter_mgl	= $mainframe->getUserState( "$option.filter_mgl",'filter_mgl',0,'int' );
+	}
 	// Log schreiben
 	$clmLog = new CLMLog();
 	$clmLog->aktion = "Spielerdaten gelöscht";
