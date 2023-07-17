@@ -193,7 +193,7 @@ public static function gruppe( &$row,$lists, $option, $jid)
 
 		<form action="index.php" method="post" name="adminForm" id="adminForm">
 
-		<div class="width-50 fltlft">
+		<div class="width-40 fltlft">
 		<fieldset class="adminform">
 		<legend><?php echo JText::_( 'GROUPS_OVERVIEW_DETAILS' ); ?></legend>
 
@@ -203,7 +203,7 @@ public static function gruppe( &$row,$lists, $option, $jid)
 			<label for="Gruppe"><?php echo JText::_( 'GROUPS_OVERVIEW_GROUP_NAME' ); ?></label>
 			</td>
 			<td>
-			<input class="inputbox" type="text" name="Gruppe" id="Gruppe" size="50" maxlength="60" value="<?php echo $row->Gruppe; ?>" />
+			<input class="inputbox" type="text" name="Gruppe" id="Gruppe" size="40" maxlength="60" value="<?php echo $row->Gruppe; ?>" />
 			</td>
 		</tr>
 
@@ -235,7 +235,7 @@ public static function gruppe( &$row,$lists, $option, $jid)
 
 		<tr>
 			<td class="key" nowrap="nowrap">
-			<label for="durchgang">
+			<label for="alter_grenze">
 			<?php echo JText::_( 'GROUPS_OVERVIEW_AGE_DD1' ); ?>
 			</label>
 			</td>
@@ -261,29 +261,27 @@ public static function gruppe( &$row,$lists, $option, $jid)
 		</tr>
 
 		<tr>
+			<td class="key" nowrap="nowrap">
+			<label for="status">
+			<?php echo JText::_( 'GROUPS_OVERVIEW_STATUS_DD1' ); ?>
+			</label>
+			</td>
+			<td>
+			<select name="status" id="status" >" size="1">
+			<option <?php if ($row->status == "") {echo 'selected="selected"';} ?> value=""><?php echo JText::_( 'GROUPS_OVERVIEW_STATUS_DD2' );?></option>
+			<option <?php if ($row->status == "A") {echo 'selected="selected"';} ?> value="A"><?php echo JText::_( 'GROUPS_OVERVIEW_STATUS_DD3' );?></option>
+			</select>
+			</td>
+		</tr>
+
+		<tr>
 			<td class="key" nowrap="nowrap"><label for="sid"><?php echo JText::_( 'GROUPS_OVERVIEW_TEXT_SEASON' ); ?></label>
 			</td>
 			<td>
 			<?php echo $lists['saison']; ?>
 			</td>
 		</tr>
-<!---
-		<tr>
-			<td class="key" nowrap="nowrap"><label for="delete"><?php echo JText::_( 'GROUPS_OVERVIEW_TEXT_DELETE' ); ?></label>
-			</td>
-			<td>
-				<input type="checkbox" id="delete" name="delete" value="1" /><?php echo JText::_( 'GROUPS_OVERVIEW_TEXT_DELETE_HINT' );?>
-			</td>
-		</tr>
 
-		<tr>
-			<td class="key" nowrap="nowrap"><label for="create"><?php echo JText::_( 'GROUPS_OVERVIEW_TEXT_LEVEL' ); ?></label>
-			</td>
-			<td>
-				<input type="checkbox" id="create" name="create" value="1" /><?php echo JText::_( 'GROUPS_OVERVIEW_TEXT_LEVEL_HINT' );?>
-			</td>
-		</tr>
---->		
 		<tr>
 			<td class="key" nowrap="nowrap"><label for="published"><?php echo JText::_( 'JPUBLISHED' ); ?></label>
 			</td>

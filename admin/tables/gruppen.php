@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -21,6 +21,7 @@ class TableCLMGruppen extends JTable
 	var $geschlecht		= '';
 	var $alter_grenze	= '';
 	var $alter		= 0;
+	var $status		= '';
 	var $sid		= 0;
 	var $user		= 0;
 	var $bemerkungen	= '';

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,14 +9,11 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.model');
 
-
 class CLMModelDWZ_Liga extends JModelLegacy
 {
-	
 	function _getCLMLiga( &$options )
 	{
 	$sid	= clm_core::$load->request_int('saison',1);
@@ -35,10 +32,13 @@ $countryversion = $config->countryversion;
 		$query = "SELECT  l.rang, l.name as lname, m.tln_nr, m.name, d.Spielername,d.DWZ as dsbDWZ,d.DWZ_Index, a.*, l.anzeige_ma"
 			.",r.man_nr as rmnr, r.Rang as rrang, l.params "
 			." FROM #__clm_meldeliste_spieler as a "
-			." LEFT JOIN #__clm_rangliste_spieler as r on r.Gruppe = $row->rang AND r.ZPS = a.zps AND r.Mgl_Nr = a.mgl_nr AND r.sid = a.sid "
-			." LEFT JOIN #__clm_rangliste_id as i on i.ZPS = a.zps AND i.gid = r.Gruppe AND i.sid = a.sid "
+//			." LEFT JOIN #__clm_rangliste_spieler as r on r.Gruppe = $row->rang AND r.ZPS = a.zps AND r.Mgl_Nr = a.mgl_nr AND r.sid = a.sid "
+			." LEFT JOIN #__clm_rangliste_spieler as r on r.Gruppe = $row->rang AND r.ZPSmgl = a.zps AND r.Mgl_Nr = a.mgl_nr AND r.sid = a.sid "
+//			." LEFT JOIN #__clm_rangliste_id as i on i.ZPS = a.zps AND i.gid = r.Gruppe AND i.sid = a.sid "
+			." LEFT JOIN #__clm_rangliste_id as i on i.ZPS = r.zps AND i.gid = r.Gruppe AND i.sid = a.sid "
 			." LEFT JOIN #__clm_dwz_spieler as d on d.ZPS = a.zps AND d.Mgl_Nr = a.mgl_nr AND d.sid = a.sid"
-			." LEFT JOIN #__clm_mannschaften as m on m.zps = a.zps AND m.man_nr = a.mnr AND m.sid = a.sid AND m.liga = a.lid"
+//			." LEFT JOIN #__clm_mannschaften as m on m.zps = a.zps AND m.man_nr = a.mnr AND m.sid = a.sid AND m.liga = a.lid"
+			." LEFT JOIN #__clm_mannschaften as m on m.zps = r.zps AND m.man_nr = a.mnr AND m.sid = a.sid AND m.liga = a.lid"
 			." LEFT JOIN #__clm_liga AS l ON l.id = m.liga  AND l.sid = m.sid "
 			." WHERE a.sid = ".$sid
 			." AND a.lid = ".$lid

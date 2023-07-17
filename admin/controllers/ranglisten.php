@@ -260,11 +260,8 @@ function edit()
 	else { $gid_exist = 0; }
 	// Rangliste in Abhängigkeit der Auswahl von vid,lid,sid ausgeben
 	if ($task == 'edit') {
-	$sql = " ALTER TABLE #__clm_rangliste_spieler order by sid desc,gruppe asc,zps asc,man_nr asc,Rang asc ";
-	//$db->setQuery($sql);
-	clm_core::$db->query($sql);
 
-	$sql = " SELECT Meldeschluss, geschlecht, alter_grenze, `alter` "
+	$sql = " SELECT Meldeschluss, geschlecht, alter_grenze, `alter`, status "
 		." FROM #__clm_rangliste_name"
 		." WHERE id =".$row->gid
 		." AND sid = ".$row->sid
@@ -275,7 +272,7 @@ function edit()
 	$sql_sid	= $row->sid;
 		}
 	else {
-	$sql = " SELECT Meldeschluss, geschlecht, alter_grenze, `alter` "
+	$sql = " SELECT Meldeschluss, geschlecht, alter_grenze, `alter`, status "
 		." FROM #__clm_rangliste_name"
 		." WHERE id =".intval( $filter_gid )
 		." AND sid = ".intval( $filter_sid )
@@ -290,6 +287,7 @@ function edit()
 
 	$ges ="";
 	$geb ="";
+	$sta ="";
 	if($gid) {
 	$melde = explode ("-",$gid[0]->Meldeschluss);
 	$jahr = $melde[0];
@@ -306,26 +304,30 @@ function edit()
 	if ($gid[0]->geschlecht == 2) {
 		$ges = " AND a.Geschlecht = 'M' ";
 		}
+	if ($gid[0]->status == 'A') {
+		$sta = " AND a.Status = 'A' ";
+		}
 	}
 	if ($task == 'edit') {
 	$sql = " SELECT r.Rang, r.man_nr, a.sid,a.ZPS,a.Mgl_Nr,a.PKZ, a.DWZ,"
-		." a.DWZ_Index,a.Geburtsjahr,a.Spielername"
+		." a.DWZ_Index,a.Geburtsjahr,a.Spielername,a.Status"
 		." FROM #__clm_dwz_spieler as a"
 		." LEFT JOIN #__clm_rangliste_id as i ON i.sid = a.sid AND (i.zps = '$sql_zps') "
 		." LEFT JOIN #__clm_rangliste_spieler as r ON r.sid = a.sid AND r.ZPSmgl = a.ZPS AND r.Mgl_Nr = a.Mgl_Nr AND r.Gruppe = i.gid AND r.ZPS = i.zps "
 		." WHERE (a.ZPS = '$sql_zps' OR a.ZPS = '$sql_sg_zps')"
 		." AND i.id = ".$cid[0]
 		." AND a.sid =".$sql_sid
-		.$geb.$ges
-		." ORDER BY r.man_nr,r.Rang ASC, a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
+		.$geb.$ges.$sta
+//		." ORDER BY r.man_nr,r.Rang ASC, a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
+		." ORDER BY IFNULL(r.man_nr,999),r.Rang ASC, a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
 		;
 		}
 	else {
-	$sql = " SELECT a.sid,a.ZPS,a.Mgl_Nr,a.PKZ,a.DWZ,a.DWZ_Index,a.Geburtsjahr,a.Spielername"
+	$sql = " SELECT a.sid,a.ZPS,a.Mgl_Nr,a.PKZ,a.DWZ,a.DWZ_Index,a.Geburtsjahr,a.Spielername,a.Status"
 		." FROM #__clm_dwz_spieler as a"
 		." WHERE (a.ZPS = '$sql_zps' OR a.ZPS = '$sql_sg_zps')"
 		." AND sid =".$sql_sid
-		.$geb.$ges
+		.$geb.$ges.$sta
 		." ORDER BY a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
 		;
 		}
@@ -333,7 +335,7 @@ function edit()
 	$spieler = $db->loadObjectList();
 
 	// Anzahl Einträge zählen
-	$sql = " SELECT COUNT(ZPS) as ZPS FROM #__clm_rangliste_spieler "
+/*	$sql = " SELECT COUNT(ZPS) as ZPS FROM #__clm_rangliste_spieler "
 		." WHERE Gruppe =".$sql_gid
 		." AND sid = ".$sql_sid
 		." AND zps = '$sql_zps'"
@@ -341,7 +343,8 @@ function edit()
 	$db->setQuery($sql);
 	$count_id	= $db->loadObjectList();
 	$count		= $count_id[0]->ZPS;
-
+*/
+	if (is_null($spieler)) $count = 0; else $count = count($spieler);
 	if (isset($row->liga)) {
 		$sql = " SELECT sl FROM #__clm_liga "
 			." WHERE id =".$row->liga

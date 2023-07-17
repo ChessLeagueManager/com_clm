@@ -405,6 +405,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_rangliste_name` (
   `geschlecht` varchar(1) DEFAULT NULL,
   `alter_grenze` varchar(1) DEFAULT NULL,
   `alter` smallint(3) DEFAULT NULL,
+  `status` varchar(3) NOT NULL DEFAULT '',
   `sid` mediumint(3) unsigned DEFAULT '0',
   `user` int(11) NOT NULL unsigned DEFAULT '0',
   `bemerkungen` text,

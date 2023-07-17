@@ -251,9 +251,6 @@ if ( $send == 1 ) {
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<td bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;" colspan="6"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_RANG_MAIL_HEADLINE' ).' '.JText::_( 'OF_DAY' ).JHTML::_('date', date("Y-m-d"), JText::_('DATE_FORMAT_CLM_F')). '</strong></div></td>
-		</tr>
-		<tr>
 			<td bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;" colspan="6"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_RANG_MAIL_HEADLINE' ).' '.JText::_( 'OF_DAY' ).JHTML::_('date', $now, JText::_('DATE_FORMAT_CLM_PDF')). '</strong></div></td>
 		</tr>
 		<tr>

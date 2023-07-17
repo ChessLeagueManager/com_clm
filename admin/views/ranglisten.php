@@ -365,6 +365,7 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 		<td width="9%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_ZPSM' ); ?></td>
 		<td width="7%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_MGL_NR' ); ?></td>
 		<td width="11%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_PKZ' ); ?></td>
+		<td width="3%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_STATUS' ); ?></td>
 		<td colspan="2" width="10%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_DWZ' ); ?></td>
 	</tr>
 
@@ -406,6 +407,8 @@ for ($x=0; $x < (count($spieler)-$count); $x++) {
 		<?php echo $spieler[$rang[$x]]->Mgl_Nr; ?></td>
 	<td id="PKZ<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$rang[$x]]->PKZ; ?></td>
+	<td id="Status<?php echo $x; ?>" class="key" nowrap="nowrap">
+		<?php echo $spieler[$rang[$x]]->Status; ?></td>
 	<td id="DWZ<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$rang[$x]]->DWZ; ?></td>
 	<td id="DWI<?php echo $x; ?>" class="key" nowrap="nowrap">
@@ -435,6 +438,8 @@ for ($x=0; $x < (count($spieler)-$count); $x++) {
 		<?php echo $spieler[$x]->Mgl_Nr; ?></td>
 	<td id="PKZ<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->PKZ; ?></td>
+	<td id="Status<?php echo $x; ?>" class="key" nowrap="nowrap">
+		<?php echo $spieler[$x]->Status; ?></td>
 	<td id="DWZ<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->DWZ; ?></td>
 	<td id="DWI<?php echo $x; ?>" class="key" nowrap="nowrap">
@@ -460,6 +465,7 @@ for ($x=0; $x < (count($spieler)-$count); $x++) {
 		<td width="9%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_ZPSM' ); ?></td>
 		<td width="7%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_MGL_NR' ); ?></td>
 		<td width="11%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_PKZ' ); ?></td>
+		<td width="3%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_STATUS' ); ?></td>
 		<td colspan="2" width="10%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_DWZ' ); ?></td>
 	</tr>
 	
@@ -487,6 +493,8 @@ if (clm_core::$load->request_string( 'task') == 'edit' ) {
 		<?php echo $spieler[$rang[$x]]->Mgl_Nr; ?></td>
 	<td id="PKZ<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$rang[$x]]->PKZ; ?></td>
+	<td id="Status<?php echo $x; ?>" class="key" nowrap="nowrap">
+		<?php echo $spieler[$rang[$x]]->Status; ?></td>
 	<td id="DWZ<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$rang[$x]]->DWZ; ?></td>
 	<td id="DWI<?php echo $x; ?>" class="key" nowrap="nowrap">
@@ -516,6 +524,8 @@ if (clm_core::$load->request_string( 'task') == 'edit' ) {
 		<?php echo $spieler[$x]->Mgl_Nr; ?></td>
 	<td id="PKZ<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->PKZ; ?></td>
+	<td id="Status<?php echo $x; ?>" class="key" nowrap="nowrap">
+		<?php echo $spieler[$x]->Status; ?></td>
 	<td id="DWZ<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->DWZ; ?></td>
 	<td id="DWI<?php echo $x; ?>" class="key" nowrap="nowrap">

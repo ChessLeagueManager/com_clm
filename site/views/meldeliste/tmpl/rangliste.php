@@ -147,6 +147,7 @@ function Spielerschreiben(i)
     <?php if (isset($UsePKZ) AND $UsePKZ == 1) { ?>document.getElementById('PKZ'+i).innerHTML=Spieler[i][7];
     document.getElementsByName('PKZ'+i)[0].innerHTML=Spieler[i][7];
     <?php } ?>
+    document.getElementById('Status'+i).innerHTML=Spieler[i][8];
 }
 function QSort(l,r,Tiefe)
  {
@@ -186,6 +187,7 @@ function Sortieren()
     Spieler[i][5]=document.getElementById('DWI'+i).innerHTML-0;
     Spieler[i][6]=document.getElementById('ZPSM'+i).innerHTML;
     <?php if (isset($UsePKZ) AND $UsePKZ == 1) { ?>Spieler[i][7]=document.getElementById('PKZ'+i).innerHTML-0;<?php } ?>
+    Spieler[i][8]=document.getElementById('Status'+i).innerHTML;
     i++;    
    }
   QSort(0,i-1,0)
@@ -378,7 +380,8 @@ Liste absenden !
 		<td class="key" nowrap="nowrap">Name</td>
 		<td width="20%" class="key" nowrap="nowrap">Verein</td>
 		<td width="7%" class="key" nowrap="nowrap">MglNr</td>
-		<td width="7%" class="key" nowrap="nowrap">PKZ</td>
+		<td width="9%" class="key" nowrap="nowrap">PKZ</td>
+		<td width="3%" class="key" nowrap="nowrap">ST</td>
 		<td colspan="2" width="15%" class="key" nowrap="nowrap">DWZ</td>
 	</tr>
 
@@ -405,6 +408,8 @@ Liste absenden !
 		<?php echo $spieler[$x]->Mgl_Nr; ?></td>
 	<td id="PKZ<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->PKZ; ?></td>
+	<td id="Status<?php echo $x; ?>" class="key" nowrap="nowrap">
+		<?php echo $spieler[$x]->Status; ?></td>
 	<td id="DWZ<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->DWZ; ?></td>
 	<td id="DWI<?php echo $x; ?>" class="key" nowrap="nowrap">

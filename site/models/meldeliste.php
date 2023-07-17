@@ -96,6 +96,7 @@ class CLMModelMeldeliste extends JModelLegacy
 
 		$geb = "";
 		$ges = "";
+		$sta = "";
 		if ($gid[0]->alter_grenze == "1") {
 			$geb = " AND a.Geburtsjahr < ".($jahr - $gid[0]->alter);
 		}
@@ -108,13 +109,16 @@ class CLMModelMeldeliste extends JModelLegacy
 		if ($gid[0]->geschlecht == 2) {
 			$ges = " AND a.Geschlecht = 'M' ";
 		}
+		if ($gid[0]->status == 'A') {
+			$sta = " AND a.Status = 'A' ";
+		}
 
-		$query = " SELECT l.man_nr,l.Rang,a.sid,a.ZPS,a.Mgl_Nr,a.PKZ,a.DWZ,a.DWZ_Index,a.Geburtsjahr,a.Spielername"
+		$query = " SELECT l.man_nr,l.Rang,a.sid,a.ZPS,a.Mgl_Nr,a.PKZ,a.DWZ,a.DWZ_Index,a.Geburtsjahr,a.Spielername,a.Status"
 			." FROM #__clm_dwz_spieler as a"
 			." LEFT JOIN #__clm_rangliste_spieler as l ON l.Gruppe = $gid1 AND l.sid = $sid AND (l.ZPSmgl = a.ZPS) AND l.Mgl_Nr = a.Mgl_Nr AND (l.ZPS = '$zps')"
 			." WHERE (a.ZPS = '$zps' OR a.ZPS = '$sg_zps') "
 			." AND a.sid =".$sid
-			.$geb.$ges
+			.$geb.$ges.$sta
 			." ORDER BY IFNULL(l.man_nr,999) ASC,IFNULL(l.Rang,999) ASC,a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
 			;
 		}
