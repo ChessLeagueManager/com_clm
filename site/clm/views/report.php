@@ -1,7 +1,7 @@
 <?php
 /**
  * @ CLM Extern Component
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -9,7 +9,6 @@ function clm_view_report($out) {
 	clm_core::$load->load_css("report");
 	clm_core::$load->load_css("buttons");
 	clm_core::$load->load_css("notification");
-	clm_core::$load->load_js("report");
 	$lang = clm_core::$lang->report;
 	clm_core::$cms->setTitle($lang->title.' '.$out["liga"][0]->name);
 
@@ -17,6 +16,11 @@ function clm_view_report($out) {
 	$dg 		= $out["input"]["dg"];
 	$runde 		= $out["input"]["runde"];
 	$liga 		= $out["liga"];
+	$_POST['clm_p_sieg'] = $liga[0]->sieg;
+	$_POST['clm_p_remis'] = $liga[0]->remis;
+	$_POST['clm_p_nieder'] = $liga[0]->nieder;
+	$_POST['clm_p_antritt'] = $liga[0]->antritt; //die();
+	clm_core::$load->load_js("report");
 	$paar 		= $out["paar"];
 	$oldresult 	= $out["oldresult"];
 	$heim 		= $out["heim"];

@@ -1,3 +1,10 @@
+/*
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2023 CLM Team  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
+	
 // author: Simon Willison (addLoadEvent)
 function clm_report_addLoadEvent(func) {http://blog.simonwillison.net/
   var oldonload = window.onload;
@@ -39,17 +46,23 @@ function clm_report_change_result(box,mother) {
 	nothing = 0;
 	for (i = 0; i < elements.length; i++) {
 		r = elements[i].options[elements[i].selectedIndex].value;
-		if(r == "1" || r == "5") {
-			h++;
-		} else if (r == "0" || r == "4") {
-			g++;
+		if(r == "1") {
+			h = h + clm_p_sieg*1 + clm_p_antritt*1; 
+			g = g + clm_p_antritt*1; 
+		} else if (r == "5") {
+			h = h + clm_p_sieg*1 + clm_p_antritt*1; 
+		} else if (r == "0") {
+			h = h + clm_p_antritt*1; 
+			g = g + clm_p_sieg*1 + clm_p_antritt*1; 
+		} else if (r == "4") {
+			g = g + clm_p_sieg*1 + clm_p_antritt*1; 
 		} else if (r == "2") {
-			h=h+0.5;
-			g=g+0.5;
+			h = h + clm_p_remis*1 + clm_p_antritt*1; 
+			g = g + clm_p_remis*1 + clm_p_antritt*1; 
 		} else if (r == "9") {
-			g=g+0.5;
+			g = g + clm_p_remis*1 + clm_p_antritt*1; 
 		} else if (r == "10") {
-			h=h+0.5;
+			h = h + clm_p_remis*1 + clm_p_antritt*1; 
 		} else if (r == "-2") {
 			nothing++;
 		}

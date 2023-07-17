@@ -24,7 +24,7 @@ $ -> Language fix or change
 + Importe: Erweiterung der Teilnehmerdaten (Vorbereitung)
 + Ranglistensystem: Auswahl und Anzeige Mitgliederstatus
 # Sonderranglisten: Korrektur Platzierung und kleine Designänderung
- 
+# Ergebnismeldung im FE: Anzeige Mannschaftsergebnis
 - - - - - 4.0.4 - [30-06-2023] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung wegen MariaDB(SQL-Mode) / php 8.1
 + Einzelturniere: Einbau Ansetzungsroutine für CH-Modus (in Vorbereitung)
