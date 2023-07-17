@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -80,12 +80,16 @@ class CLMModelTurnier_Rangliste extends JModelLegacy {
 			if($this->spRang != 0){
 				$spRankingPos = 0;		
 				$rankingPosBefor = 0;	
+				$spRankingPosZ = 0;
 				foreach($this->players as $key => $player) {
-					if($rankingPosBefor != $player->rankingPos){
-						$spRankingPos++;
-					}
-					$rankingPosBefor = $player->rankingPos;
-					$this->players[$key]->rankingPos = $spRankingPos;
+					$spRankingPos++;
+					if($rankingPosBefor == $player->rankingPos){
+						$this->players[$key]->rankingPos = $spRankingPosZ;
+					} else {
+						$rankingPosBefor = $player->rankingPos;
+						$this->players[$key]->rankingPos = $spRankingPos;
+						$spRankingPosZ = $spRankingPos;
+					}		
 				}
 			}
 		}

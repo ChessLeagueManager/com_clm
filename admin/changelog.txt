@@ -23,6 +23,7 @@ $ -> Language fix or change
 # Rundenmanager: Termine pro Paarung auch ohne Rundentermin möglich
 + Importe: Erweiterung der Teilnehmerdaten (Vorbereitung)
 + Ranglistensystem: Auswahl und Anzeige Mitgliederstatus
+# Sonderranglisten: Korrektur Platzierung und kleine Designänderung
  
 - - - - - 4.0.4 - [30-06-2023] - - - - - - - - - - - - - - - - - - - -
 ^ Code-Anpassung wegen MariaDB(SQL-Mode) / php 8.1
