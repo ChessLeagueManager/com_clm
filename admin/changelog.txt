@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 4.1.0 - [xx-xx-2023] - - - - - - - - - - - - - - - - - - - -
+- - - - - 4.1.0 - [17-07-2023] - - - - - - - - - - - - - - - - - - - -
 + Ranglistensystem: Spielgemeinschaften möglich
 + Ranglistenpflege im FE: Bestätigungsmail ergänzt um Uhrzeit
 ^ Ranglistenpflege im FE: auch ohne PKZ möglich
