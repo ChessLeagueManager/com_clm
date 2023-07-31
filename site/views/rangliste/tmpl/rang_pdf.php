@@ -153,8 +153,8 @@ if ($lmax < (50-$nbreite)) $lmax = 45 - $nbreite;
 if ($lmax > 50) $lmax = 50;
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(6-$rbreite,$zelle,JText::_('RANG'),1,0,'C',1);
-	$pdf->Cell(6-$rbreite,$zelle,JText::_('TLN'),1,0,'C',1);
-	//$pdf->Cell(55-$nbreite-$breite,$zelle,JText::_('TEAM'),1,0,'L',1);
+	if (($liga[0]->runden * $liga[0]->durchgang) < 14 )
+		$pdf->Cell(6-$rbreite,$zelle,JText::_('TLN'),1,0,'C',1);
 	$pdf->Cell($lmax+11-$breite,$zelle,JText::_('TEAM'),1,0,'L',1);
 	
 	if ($liga[0]->runden_modus == 1 OR $liga[0]->runden_modus == 2) {    // vollrundig
@@ -208,8 +208,8 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	if ($x%2 != 0) { $fc = 1; } else { $fc = 0; }
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(6-$rbreite,$zelle,$x+1,1,0,'C',$fc);
-	$pdf->Cell(6-$rbreite,$zelle,$punkte[$x]->tln_nr,1,0,'C',$fc);
-	//$pdf->Cell(45-$nbreite,$zelle,utf8_decode($punkte[$x]->name),1,0,'L',$fc);
+	if (($liga[0]->runden * $liga[0]->durchgang) < 14 )
+		$pdf->Cell(6-$rbreite,$zelle,$punkte[$x]->tln_nr,1,0,'C',$fc);
 	while (($lmax) < $pdf->GetStringWidth(utf8_decode($punkte[$x]->name)))
 		$punkte[$x]->name = substr($punkte[$x]->name,0,-1);
 	$pdf->Cell($lmax+1,$zelle,utf8_decode($punkte[$x]->name),1,0,'L',$fc);

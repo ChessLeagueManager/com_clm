@@ -12,6 +12,10 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 4.1.1 - [xx-xx-2023] - - - - - - - - - - - - - - - - - - - -
++ Ranglistensystem: Spielgemeinschaften möglich (Ergänzung)
+# Teamwettbewerbe pdf-Ausgaben: Darstellung von 3:1 u.ä. Partieergebnissen 
+
 - - - - - 4.1.0 - [17-07-2023] - - - - - - - - - - - - - - - - - - - -
 + Ranglistensystem: Spielgemeinschaften möglich
 + Ranglistenpflege im FE: Bestätigungsmail ergänzt um Uhrzeit

@@ -156,6 +156,17 @@ if (isset($liga[0]->mf_name)) {
 		$pdf->Cell(175,$zelle-1,utf8_decode($hint_freenew),0,1,'R'); }
 	$pdf->Ln();
 // Teilnehmerschleife
+$erg0 = substr((string)($liga[0]->nieder + $liga[0]->antritt),0,1)."-".substr((string)($liga[0]->sieg + $liga[0]->antritt),0,1);
+$erg1 = substr((string)($liga[0]->sieg + $liga[0]->antritt),0,1)."-".substr((string)($liga[0]->nieder + $liga[0]->antritt),0,1);
+if (($liga[0]->remis + $liga[0]->antritt) == 0.5) {
+	$erg2 = chr(189);
+	$erg9 = "0-".chr(189);
+	$erg10 = chr(189)."-0";
+} else {
+	$erg2 = substr((string)($liga[0]->remis + $liga[0]->antritt),0,1)."-".substr((string)($liga[0]->remis + $liga[0]->antritt),0,1);
+	$erg9 = "0-".substr((string)($liga[0]->remis + $liga[0]->antritt),0,1);
+	$erg10 = substr((string)($liga[0]->remis + $liga[0]->antritt),0,1)."-0";
+}
 $w=0;
 $z2=0;
 $zz=0;
@@ -237,33 +248,33 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 		else $pdf->Cell($breite1,$zelle,$htext,0,0,'L');
  
 		$dr_einzel = "?";
-		if ($einzel[$w]->ergebnis==0) $dr_einzel = "0-1";
-		if ($einzel[$w]->ergebnis==1) $dr_einzel = "1-0";
-		if ($einzel[$w]->ergebnis==2) $dr_einzel = chr(189); 		
+		if ($einzel[$w]->ergebnis==0) $dr_einzel = $erg0;
+		if ($einzel[$w]->ergebnis==1) $dr_einzel = $erg1;
+		if ($einzel[$w]->ergebnis==2) $dr_einzel = $erg2; 		
 		if ($einzel[$w]->ergebnis==3) $dr_einzel = "0-0";
 		if ($einzel[$w]->ergebnis==4) $dr_einzel = "-/+";
 		if ($einzel[$w]->ergebnis==5) $dr_einzel = "+/-";
 		if ($einzel[$w]->ergebnis==6) $dr_einzel = "-/-";
 		if ($einzel[$w]->ergebnis==7) $dr_einzel = "---";
 		if ($einzel[$w]->ergebnis==8) $dr_einzel = "spf";
-		if ($einzel[$w]->ergebnis==9) $dr_einzel = "0-".chr(189);
-		if ($einzel[$w]->ergebnis==10) $dr_einzel = chr(189)."-0";
+		if ($einzel[$w]->ergebnis==9) $dr_einzel = $erg9;
+		if ($einzel[$w]->ergebnis==10) $dr_einzel = $erg10;
 		//
 		if ($einzel[$w]->dwz_edit == "") { 
 			$pdf->Cell(5,$zelle,$dr_einzel,'LR',0,'C');
 		} else {
 			$dr1_einzel = "?";
-			if ($einzel[$w]->dwz_edit==0) $dr1_einzel = "0-1";
-			if ($einzel[$w]->dwz_edit==1) $dr1_einzel = "1-0";
-			if ($einzel[$w]->dwz_edit==2) $dr1_einzel = chr(189); 		
+			if ($einzel[$w]->dwz_edit==0) $dr1_einzel = $erg0;
+			if ($einzel[$w]->dwz_edit==1) $dr1_einzel = $erg1;
+			if ($einzel[$w]->dwz_edit==2) $dr1_einzel = $erg2; 		
 			if ($einzel[$w]->dwz_edit==3) $dr1_einzel = "0-0";
 			if ($einzel[$w]->dwz_edit==4) $dr1_einzel = "-/+";
 			if ($einzel[$w]->dwz_edit==5) $dr1_einzel = "+/-";
 			if ($einzel[$w]->dwz_edit==6) $dr1_einzel = "-/-";
 			if ($einzel[$w]->dwz_edit==7) $dr1_einzel = "---";
 			if ($einzel[$w]->dwz_edit==8) $dr1_einzel = "spf";
-			if ($einzel[$w]->dwz_edit==9) $dr1_einzel = "0-".chr(189);
-			if ($einzel[$w]->dwz_edit==10) $dr1_einzel = chr(189)."-0";
+			if ($einzel[$w]->dwz_edit==9) $dr1_einzel = $erg9;
+			if ($einzel[$w]->dwz_edit==10) $dr1_einzel = $erg10;
 			$pdf->Cell(5,$zelle,$dr1_einzel,'LR',0,'C');
 		}
 		//

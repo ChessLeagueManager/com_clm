@@ -27,9 +27,10 @@ class CLMModelMeldeliste extends JModelLegacy
 		$id	= @$options['id'];
 
  	if($layout =="rangliste"){
-		$query = "SELECT a.name as vname, r.Gruppe as gruppe "
+		$query = "SELECT a.name as vname, r.Gruppe as gruppe, i.bemerkungen, i.bem_int, i.published, i.ordering "
 			." FROM #__clm_vereine as a"
 			." LEFT JOIN #__clm_rangliste_name as r ON r.id =".$gid
+			." LEFT JOIN #__clm_rangliste_id as i ON i.sid = $sid AND i.zps = '$zps' AND i.gid = $gid "
 			." WHERE a.sid = $sid AND a.zps = '$zps' AND r.id = $gid "
 			." AND a.published = 1 "
 			;

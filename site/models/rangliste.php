@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
@@ -222,16 +221,14 @@ class CLMModelRangliste extends JModelLegacy
 		$ersatz_regel	=$man[0]->ersatz_regel;
 		
 	if ($rang > 0) {
-		$query = " SELECT m.tln_nr as tln_nr,a.snr,a.dwz,a.mgl_nr,a.PKZ,a.zps, d.Spielername as name,d.DWZ as dwz,a.start_dwz "
+		$query = " SELECT m.tln_nr as tln_nr,a.snr,a.dwz,a.mgl_nr,a.PKZ,m.ZPS as zps,a.zps as ZPSmgl,d.Spielername as name,d.DWZ as dwz,a.start_dwz "
 			.",r.man_nr as rmnr, r.Rang as rrang "
 			." FROM #__clm_meldeliste_spieler as a "
-			." LEFT JOIN #__clm_rangliste_spieler as r on r.ZPS = a.zps AND r.Mgl_Nr = a.mgl_nr AND r.sid = a.sid "
-			." LEFT JOIN #__clm_rangliste_id as i on i.ZPS = a.zps AND i.gid = r.Gruppe AND i.sid = a.sid "
+			." LEFT JOIN #__clm_rangliste_spieler as r on r.ZPSmgl = a.zps AND r.Mgl_Nr = a.mgl_nr AND r.sid = a.sid "
 			." LEFT JOIN #__clm_dwz_spieler as d on d.zps = a.zps AND d.mgl_nr = a.mgl_nr AND d.sid = a.sid"
-//			." LEFT JOIN #__clm_mannschaften as m on m.liga = a.lid AND (m.zps = a.zps OR m.sg_zps = a.zps) AND m.man_nr = a.mnr AND m.sid = a.sid"
-			." LEFT JOIN #__clm_mannschaften as m on m.liga = a.lid AND (m.zps = a.zps OR FIND_IN_SET(a.zps,m.sg_zps) != 0) AND m.man_nr = a.mnr AND m.sid = a.sid"
+			." LEFT JOIN #__clm_mannschaften as m on m.liga = a.lid AND m.zps = r.ZPS AND m.man_nr = a.mnr AND m.sid = a.sid"
 			." WHERE a.lid = ".$liga
-			//." AND a.sid = ".$sid
+			." AND a.mnr < 100 "
 			." AND r.Gruppe = $rang ";
 		if ($ersatz_regel == 0) 
 			$query .= " AND r.man_nr NOT IN ( SELECT aa.man_nr FROM #__clm_mannschaften as aa "
@@ -241,7 +238,7 @@ class CLMModelRangliste extends JModelLegacy
 					." AND aa.man_nr <> a.mnr )";
 		$query .= " ORDER BY tln_nr ASC, rmnr ASC, rrang ASC ";
 	} else {
-		$query = " SELECT m.tln_nr as tln_nr,a.snr,a.dwz,a.mgl_nr,a.PKZ,a.zps, d.Spielername as name,d.DWZ as dwz,a.start_dwz "
+		$query = " SELECT m.tln_nr as tln_nr,a.snr,a.dwz,a.mgl_nr,a.PKZ,m.ZPS as zps,a.zps as ZPSmgl, d.Spielername as name,d.DWZ as dwz,a.start_dwz "
 			." FROM #__clm_meldeliste_spieler as a ";
 		if ($countryversion == "de")
 			$query .= " LEFT JOIN #__clm_dwz_spieler as d on d.zps = a.zps AND d.mgl_nr = a.mgl_nr AND d.sid = a.sid";
@@ -417,7 +414,7 @@ class CLMModelRangliste extends JModelLegacy
 		$rang	=$man[0]->rang;
 		
 	if ($rang > 0) {
-		$query = " SELECT a.tln_nr,a.dg,a.lid,a.sid,a.runde,a.brett,a.spieler,a.punkte,a.kampflos,a.zps, "
+		$query = " SELECT a.tln_nr,a.dg,a.lid,a.sid,a.runde,a.brett,a.spieler,a.punkte,a.kampflos,a.zps,a.ergebnis,a.heim,a.weiss, "
 			." m.snr as snr ,r.man_nr as rmnr, r.Rang as rrang "
 			." FROM #__clm_rnd_spl as a "
 			." LEFT JOIN #__clm_mannschaften as m1 ON m1.sid = a.sid AND m1.liga = a.lid AND m1.tln_nr = a.tln_nr"
@@ -432,7 +429,7 @@ class CLMModelRangliste extends JModelLegacy
 			." ORDER BY a.tln_nr ASC, rmnr ASC, rrang ASC, a.dg ASC, a.runde ASC "
 			;
 	} else {
-		$query = " SELECT a.tln_nr,a.dg,a.lid,a.sid,a.runde,a.brett,a.spieler,a.PKZ,a.punkte,a.kampflos,a.zps, "
+		$query = " SELECT a.tln_nr,a.dg,a.lid,a.sid,a.runde,a.brett,a.spieler,a.PKZ,a.punkte,a.kampflos,a.zps,a.ergebnis,a.heim,a.weiss, "
 			." m.snr as snr "
 			." FROM #__clm_rnd_spl as a "
 			." LEFT JOIN #__clm_mannschaften as m1 ON m1.sid = a.sid AND m1.liga = a.lid AND m1.tln_nr = a.tln_nr";

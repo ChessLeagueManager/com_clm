@@ -93,10 +93,7 @@ usort($bpr, 'vergleich');
 
 // DWZ Durchschnitte - Aufstellung
 $result = clm_core::$api->db_nwz_average($lid);
-//echo "<br>lid:"; var_dump($lid);
-//echo "<br>result:"; var_dump($result);
 $a_average_dwz_lineup = $result[2];
-//echo "<br>a_average_dwz_p:"; var_dump($a_average_dwz_p);
 
 // Spielfreie Teilnehmer finden
 $diff = $spielfrei[0]->count;
@@ -308,8 +305,8 @@ if ($lmax < (50-$nbreite)) $lmax = 45 - $nbreite;
 if ($lmax > 50) $lmax = 50;
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(6-$rbreite,$zelle,JText::_('RANG'),1,0,'C',1);
-	$pdf->Cell(6-$rbreite,$zelle,JText::_('TLN'),1,0,'C',1);
-	//$pdf->Cell(55-$nbreite-$breite,$zelle,JText::_('TEAM'),1,0,'L',1);
+	if (($liga[0]->runden * $liga[0]->durchgang) < 14 )
+		$pdf->Cell(6-$rbreite,$zelle,JText::_('TLN'),1,0,'C',1);
 	$pdf->Cell($lmax+11-$breite,$zelle,JText::_('TEAM'),1,0,'L',1);
 
 	if ($liga[0]->runden_modus == 1 OR $liga[0]->runden_modus == 2) {    // vollrundig
@@ -363,8 +360,8 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	if ($x%2 != 0) { $fc = 1; } else { $fc = 0; }
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(6-$rbreite,$zelle,$x+1,1,0,'C',$fc);
-	$pdf->Cell(6-$rbreite,$zelle,$punkte[$x]->tln_nr,1,0,'C',$fc);
-	//$pdf->Cell(45-$nbreite,$zelle,utf8_decode($punkte[$x]->name),1,0,'L',$fc);
+	if (($liga[0]->runden * $liga[0]->durchgang) < 14 )
+		$pdf->Cell(6-$rbreite,$zelle,$punkte[$x]->tln_nr,1,0,'C',$fc);
 	while (($lmax) < $pdf->GetStringWidth(utf8_decode($punkte[$x]->name)))
 		$punkte[$x]->name = substr($punkte[$x]->name,0,-1);
 	$pdf->Cell($lmax+1,$zelle,utf8_decode($punkte[$x]->name),1,0,'L',$fc);
@@ -708,6 +705,7 @@ $pdf->SetFont('Times','',$font);
 	else $pdf->Cell(80,4,'',0,1);
 $pdf->SetFont('Times','U',$font);	
 	$pdf->Cell(10,4,' ',0,0);
+	if (is_null($mf_email)) $mf_email = '';
 	$pdf->Cell(80,4,utf8_decode($mf_email),0,0,'L');
 $pdf->SetFont('Times','',$font);
 	if (isset($man[1])) $pdf->Cell(80,4,utf8_decode($man[1]),0,1);
@@ -757,10 +755,12 @@ $pdf->SetFillColor(120);
 $pdf->SetTextColor(255);
 	$pdf->Cell($breite1,8,' ',0,0);
 	$pdf->Cell(12,$zelle,JText::_('DWZ_NR'),0,0,'C',1);
-	if (($o_nr == 0) or ($mannschaft[$m]->sg_zps <= "0"))
+	if ($o_nr == 0)
 		$pdf->Cell(40,$zelle,JText::_('DWZ_NAME'),0,0,'L',1);
+	elseif ($mannschaft[$m]->sg_zps > "0")
+		$pdf->Cell(51,$zelle,JText::_('DWZ_NAME'),0,0,'L',1);
 	else
-		$pdf->Cell(48,$zelle,JText::_('DWZ_NAME'),0,0,'L',1);
+		$pdf->Cell(41,$zelle,JText::_('DWZ_NAME'),0,0,'L',1);
 	if ($countryversion == "de")
 		$pdf->Cell(10,$zelle,JText::_('LEAGUE_STAT_DWZ'),0,0,'C',1);
 	else
@@ -823,12 +823,12 @@ for ($x=0; $x< $anz_player; $x++){
 	elseif ($mannschaft[$m]->sg_zps > "0") {
 		$pdf->Cell(33,$zelle,utf8_decode($count[$ic]->name),1,0,'L',$fc);
 		$pdf->SetFont('Times','',$font-1);
-		$pdf->Cell(15,$zelle,"(".$count[$ic]->zps."-".$count[$ic]->mgl_nr.")",1,0,'L',$fc);
+		$pdf->Cell(18,$zelle,"(".$count[$ic]->ZPSmgl."-".$count[$ic]->mgl_nr.")",1,0,'L',$fc);
 		$pdf->SetFont('Times','',$font);
 	} else {
 		$pdf->Cell(33,$zelle,utf8_decode($count[$ic]->name),1,0,'L',$fc);
 		$pdf->SetFont('Times','',7);
-		$pdf->Cell(7,$zelle,"(".$count[$ic]->mgl_nr.")",1,0,'L',$fc);
+		$pdf->Cell(8,$zelle,"(".$count[$ic]->mgl_nr.")",1,0,'L',$fc);
 		$pdf->SetFont('Times','',8);
 	}
 	if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') $pdf->Cell(10,$zelle,$count[$ic]->dwz,1,0,'C',$fc);
@@ -842,13 +842,29 @@ for ($x=0; $x< $anz_player; $x++){
 			($einzel[$ie]->tln_nr==$mannschaft[$m]->tln_nr)&&($count[$ic]->zps==$einzel[$ie]->zps)&&
 			((($countryversion == "de")&&($count[$ic]->mgl_nr==$einzel[$ie]->spieler))||(($countryversion == "en")&&($count[$ic]->PKZ==$einzel[$ie]->PKZ)))) {
 		$dr_einzel = "?";
-		if (($einzel[$ie]->punkte==0)&&($einzel[$ie]->kampflos==0)) $dr_einzel = "0";
-		if (($einzel[$ie]->punkte==0)&&($einzel[$ie]->kampflos==1)) $dr_einzel = "-";
-		if (($einzel[$ie]->punkte==0)&&($einzel[$ie]->kampflos==2)) $dr_einzel = "-";
-		if (($einzel[$ie]->punkte==1)&&($einzel[$ie]->kampflos==0)) $dr_einzel = "1";
-		if (($einzel[$ie]->punkte==1)&&($einzel[$ie]->kampflos==1)) $dr_einzel = "+";
-		if (($einzel[$ie]->punkte==1)&&($einzel[$ie]->kampflos==2)) $dr_einzel = "+";
-		if ($einzel[$ie]->punkte==0.5) $dr_einzel = chr(189);
+		if ($einzel[$ie]->heim==0) {
+			if ($einzel[$ie]->ergebnis==0) $einzel[$ie]->ergebnis = 1;
+			elseif ($einzel[$ie]->ergebnis==1) $einzel[$ie]->ergebnis = 0;
+			if ($einzel[$ie]->ergebnis==4) $einzel[$ie]->ergebnis = 5;
+			elseif ($einzel[$ie]->ergebnis==5) $einzel[$ie]->ergebnis = 4;
+			if ($einzel[$ie]->ergebnis==9) $einzel[$ie]->ergebnis = 10;
+			elseif ($einzel[$ie]->ergebnis==10) $einzel[$ie]->ergebnis = 9;
+		}
+		if ($einzel[$ie]->ergebnis==0) $dr_einzel = $liga[0]->nieder + $liga[0]->antritt;
+		if ($einzel[$ie]->ergebnis==1) $dr_einzel = $liga[0]->sieg + $liga[0]->antritt;
+		if ($einzel[$ie]->ergebnis==2) $dr_einzel = $liga[0]->remis + $liga[0]->antritt;
+		if ($einzel[$ie]->ergebnis==3) $dr_einzel = $liga[0]->nieder + $liga[0]->antritt;
+		if ($einzel[$ie]->ergebnis==4) $dr_einzel = "-";
+		if ($einzel[$ie]->ergebnis==5) $dr_einzel = "+";
+		if ($einzel[$ie]->ergebnis==6) $dr_einzel = "-";
+		if ($einzel[$ie]->ergebnis==7) $dr_einzel = "-";
+		if ($einzel[$ie]->ergebnis==8) $dr_einzel = " ";
+		if ($einzel[$ie]->ergebnis==9) $dr_einzel = $liga[0]->nieder + $liga[0]->antritt;
+		if ($einzel[$ie]->ergebnis==10) $dr_einzel = $liga[0]->remis + $liga[0]->antritt;
+		if ($einzel[$ie]->ergebnis==11) $dr_einzel = "+";
+		if ($einzel[$ie]->ergebnis==12) $dr_einzel = "=";
+		if ($einzel[$ie]->ergebnis==13) $dr_einzel = "-";
+		if ($dr_einzel==0.5) $dr_einzel = chr(189);								 
 		$pdf->Cell($breite,$zelle,$dr_einzel,1,0,'C',$fc);
 		$spl++;
 		$sumspl++;
