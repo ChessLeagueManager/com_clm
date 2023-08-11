@@ -85,8 +85,11 @@ if ($detail == 0) $detailp = '1'; else $detailp = '0';
 		$clmuser = $this->clmuser;
 		$club_jid = false;
 		foreach ($einzel as $einz) {
-			if ($einz->zps == $clmuser[0]->zps OR $einz->gzps == $clmuser[0]->zps) {
-				$club_jid = true; }
+			if (isset($clmuser[0])) {
+				if ($einz->zps == $clmuser[0]->zps OR $einz->gzps == $clmuser[0]->zps) {
+					$club_jid = true;
+				}
+			}
 		}
 	}
 	$config		= clm_core::$db->config();

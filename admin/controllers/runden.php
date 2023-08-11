@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -312,7 +312,8 @@ function save()
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 	
-	if ($row->startzeit != '00:00') {
+//	if ($row->startzeit != '00:00') {
+	if ($row->startzeit != '00:00:00') {
 		$startzeit = $row->startzeit.':00';
 		$query = " UPDATE #__clm_runden_termine "
 			." SET startzeit = '".$startzeit."' "

@@ -310,13 +310,13 @@ static function nachmeldung()
 			$mainframe->enqueueMessage( JText::_( 'DWZ_SPIELER_AUSWAHL' ), 'warning' );
 			$mainframe->enqueueMessage( JText::_( 'DWZ_DATEN_AENDERN' ), 'notice' );
 			$link = 'index.php?option='.$option.'&section='.$section;
-			$mainframe->redirect( $link, $msg );
+			$mainframe->redirect( $link );
 		}
 		if($PKZ_exist[0]->PKZ !="") {
 			$mainframe->enqueueMessage( JText::_( 'DWZ_EXISTIERT_PKZ' ), 'warning' );
 			$mainframe->enqueueMessage( JText::_( 'DWZ_DATEN_AENDERN' ), 'notice' );
 			$link = 'index.php?option='.$option.'&section='.$section;
-			$mainframe->redirect( $link, $msg );
+			$mainframe->redirect( $link );
 		}
 	}
 	// Prüfen ob DWZ vorhanden ist
@@ -401,7 +401,7 @@ static function daten_edit()
 			$mainframe->enqueueMessage( JText::_( 'DWZ_SPIELER_NO' ), 'warning' );
 			$mainframe->enqueueMessage( JText::_( 'DWZ_NACHM' ), 'notice' );
 			$link = 'index.php?option='.$option.'&section='.$section;
-			$mainframe->redirect( $link, $msg );
+			$mainframe->redirect( $link );
 		}
 	} else {
 		$filter_PKZ	= $mainframe->getUserStateFromRequest( "$option.filter_PKZ",'filter_PKZ',0,'string' );
@@ -416,7 +416,7 @@ static function daten_edit()
 			$mainframe->enqueueMessage( JText::_( 'DWZ_SPIELER_NO' ), 'warning' );
 			$mainframe->enqueueMessage( JText::_( 'DWZ_NACHM' ), 'notice' );
 			$link = 'index.php?option='.$option.'&section='.$section;
-			$mainframe->redirect( $link, $msg );
+			$mainframe->redirect( $link );
 		}
 	}
 	// Datensatz updaten
@@ -471,7 +471,7 @@ static function spieler_delete()
 	if($clmAccess->access('BE_database_general') === false) {
 		$mainframe->enqueueMessage( JText::_( 'DWZ_REFERENT').clm_core::$access->getType(), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
-		$mainframe->redirect( $link, $msg );
+		$mainframe->redirect( $link );
 	}
 
 	// Spieler muß ausgewählt sein
@@ -532,7 +532,7 @@ static function player_move_to()
 	if($clmAccess->access('BE_database_general') === false) {
 		$mainframe->enqueueMessage( JText::_( 'DWZ_REFERENT' ).clm_core::$access->getType(), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
-		$mainframe->redirect( $link, $msg );
+		$mainframe->redirect( $link );
 	}
 
 	// Spieler muß ausgewählt sein

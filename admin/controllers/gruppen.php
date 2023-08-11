@@ -47,7 +47,7 @@ function display($cachable = false, $urlparams = array())
 	$where[]=' c.archiv = 0';
 	if ( $filter_catid ) {	$where[] = 'a.published = '.(int) $filter_catid; }
 	if ( $filter_sid ) {	$where[] = 'a.sid = '.(int) $filter_sid; }
-	if ($search) {	$where[] = 'LOWER(a.name) LIKE "'.$db->escape('%'.$search.'%').'"';	}
+	if ($search) {	$where[] = 'LOWER(a.Gruppe) LIKE "'.$db->escape('%'.$search.'%').'"';	}
 
 	if ( $filter_state ) {
 		if ( $filter_state == 'P' ) {

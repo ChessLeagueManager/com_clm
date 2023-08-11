@@ -31,7 +31,11 @@ $spielfrei=$this->spielfrei;
 //$dwzschnitt=$this->dwzschnitt;
 $mannschaft	=$this->mannschaft; 
 $mleiter	=$this->mleiter; 
-$count		=$this->count;  
+//$count		=$this->count;  
+//Bereinigung count
+foreach ( $this->count as $c1 ) {
+	if (!is_null($c1->tln_nr)) $count[] = $c1;
+}
 	if ($params['dwz_date'] != '0000-00-00' AND $params['dwz_date'] != '1970-01-01') {
 		for ($i=0; $i < (count($count)); $i++){
 			$count[$i]->dwz = $count[$i]->start_dwz; }
@@ -731,6 +735,7 @@ $pdf->SetFont('Times','',$font);
 		$pdf->Cell(50,$zelle,'',0,1,'C');
 	}
 //Zeile 14ff
+	if ($zl < 0) $zl = 0; 
 	while ((isset($count[$zl+1]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > '')) AND (($zn+1) <= $liga[0]->stamm)) OR
 		   (isset($count[$yl+1]) AND (($countryversion == "de" AND $count[$yl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$yl]->PKZ > '')) AND ($count[$yl+1]->tln_nr==$mannschaft[$x]->tln_nr))) {	
 	$pdf->Cell(10,$zelle,'',0,0,'C');

@@ -31,6 +31,12 @@
 	which piece was taken.
 */
 
+/** Updated by
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2023 CLM Team. All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 
 function Converter(pgn) {
 	this.pgn = pgn;
@@ -1916,7 +1922,7 @@ function Move(white, black) {
 		this.opts['altPlayMove'] = "Play one move";
 		this.opts['altFastForward'] = "Fast-forward to the end";
 		this.opts['moveBorder'] = "0px solid #000000";
-		this.opts['downloadURL'] = "http://www.chesspastebin.com/asPgn.php?PGN=";
+		this.opts['downloadURL'] = "https://www.chesspastebin.com/asPgn.php?PGN=";
 		this.opts['skipToMove'] = null;
 
 		var optionNames = ['flipped', 'moveFontSize', 'moveFontColor',
