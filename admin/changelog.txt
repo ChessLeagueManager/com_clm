@@ -18,6 +18,7 @@ $ -> Language fix or change
 + Ranglisteneingabe im FE: Pflege Bemerkungsfeld
 + Pflege der eigenen Kontaktdaten durch angemeldete Benutzer im FE einschl. Logging
 + Ligen/MTurniere Ranglistensystem: Abgleich Stichtag Aufstellung mit Meldeschlussrangliste
++ Submenue Turniere: Anpassung mobile Geräte
 
 - - - - - 4.1.0 - [17-07-2023] - - - - - - - - - - - - - - - - - - - -
 + Ranglistensystem: Spielgemeinschaften möglich
