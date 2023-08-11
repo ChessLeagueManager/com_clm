@@ -121,6 +121,18 @@ class CLMControllerMTurniere extends JControllerLegacy
 	$glist		= array_merge( $glist, $db->loadObjectList() );
 	$lists['gruppe']= JHtml::_('select.genericlist',   $glist, 'rang', 'class="inputbox" size="1"', 'id', 'Gruppe', $row->rang );
 
+	// ggf. Info, wenn Stichtag der Aufstellung nicht mit Meldeschluss der Rangliste übereinstimmt.
+	if($row->rang > 0){
+		$query = " SELECT * FROM #__clm_rangliste_name "
+			." WHERE id = '" .$row->rang. "'" . " AND sid = " .$row->sid;
+		$gruppe = clm_core::$db->loadObjectList($query);
+		$params = new clm_class_params($row->params);
+		$deadline_roster = $params->get("deadline_roster",'1970-01-01');
+		if ($deadline_roster != $gruppe[0]->Meldeschluss) {
+			$mainframe->enqueueMessage( JText::_( 'LEAGUE_RANG_MELDESCHLUSS').' ('.$gruppe[0]->Meldeschluss.') ' );
+		}
+	} 
+
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'mturniere.php');
 	CLMViewMTurniere::mturnier( $row, $lists, $option, ($cid[0]==0 ? true : false) );
 	}

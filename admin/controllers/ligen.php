@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -120,6 +120,18 @@ function display($cachable = false, $urlparams = array())
 	$glist[]	= JHTML::_('select.option',  '0', JText::_( 'LIGEN_ML' ), 'id', 'Gruppe' );
 	$glist		= array_merge( $glist, $db->loadObjectList() );
 	$lists['gruppe']= JHTML::_('select.genericlist',   $glist, 'rang', 'class="inputbox" size="1"', 'id', 'Gruppe', $row->rang );
+
+	// ggf. Info, wenn Stichtag der Aufstellung nicht mit Meldeschluss der Rangliste übereinstimmt.
+	if($row->rang > 0){
+		$query = " SELECT * FROM #__clm_rangliste_name "
+			." WHERE id = '" .$row->rang. "'" . " AND sid = " .$row->sid;
+		$gruppe = clm_core::$db->loadObjectList($query);
+		$params = new clm_class_params($row->params);
+		$deadline_roster = $params->get("deadline_roster",'1970-01-01');
+		if ($deadline_roster != $gruppe[0]->Meldeschluss) {
+			$mainframe->enqueueMessage( JText::_( 'LEAGUE_RANG_MELDESCHLUSS').' ('.$gruppe[0]->Meldeschluss.') ' );
+		}
+	} 
 
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'ligen.php');
 	CLMViewLigen::liga( $row, $lists, $option,($cid[0]==0 ? true : false));

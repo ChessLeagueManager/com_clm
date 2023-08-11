@@ -17,6 +17,7 @@ $ -> Language fix or change
 # Teamwettbewerbe pdf-Ausgaben: Darstellung von 3:1 u.ä. Partieergebnissen 
 + Ranglisteneingabe im FE: Pflege Bemerkungsfeld
 + Pflege der eigenen Kontaktdaten durch angemeldete Benutzer im FE einschl. Logging
++ Ligen/MTurniere Ranglistensystem: Abgleich Stichtag Aufstellung mit Meldeschlussrangliste
 
 - - - - - 4.1.0 - [17-07-2023] - - - - - - - - - - - - - - - - - - - -
 + Ranglistensystem: Spielgemeinschaften möglich
