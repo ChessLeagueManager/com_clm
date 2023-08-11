@@ -15,6 +15,7 @@ $ -> Language fix or change
 - - - - - 4.1.1 - [xx-xx-2023] - - - - - - - - - - - - - - - - - - - -
 + Ranglistensystem: Spielgemeinschaften möglich (Ergänzung)
 # Teamwettbewerbe pdf-Ausgaben: Darstellung von 3:1 u.ä. Partieergebnissen 
++ Ranglisteneingabe im FE: Pflege Bemerkungsfeld
 
 - - - - - 4.1.0 - [17-07-2023] - - - - - - - - - - - - - - - - - - - -
 + Ranglistensystem: Spielgemeinschaften möglich

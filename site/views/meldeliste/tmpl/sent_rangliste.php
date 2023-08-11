@@ -18,6 +18,10 @@ $lid 	= clm_core::$load->request_int('liga');
 $zps 	= clm_core::$load->request_string('zps');
 $gid 	= clm_core::$load->request_int('gid');
 $count 	= clm_core::$load->request_int('count');
+$published 	= clm_core::$load->request_string('published');
+$ordering 	= clm_core::$load->request_string('ordering');
+$bemerkungen 	= clm_core::$load->request_string('bemerkungen');
+$bem_int 	= clm_core::$load->request_string('bem_int');
 
 	$option = clm_core::$load->request_string('option' );
 	$db	= JFactory::getDBO();
@@ -61,6 +65,20 @@ $meldung 	= $user->get('id');
 	$db->setQuery($query);
 	clm_core::$db->query($query);
 
+	//vor Löschen der Meldelisten Start-DWZ, u.a. sichern
+	$query	=" SELECT * FROM #__clm_meldeliste_spieler "
+		." WHERE status = ".$gid
+		." AND (ZPS = '$zps' OR ZPS = '$sg_zps')"
+		." AND sid =".$sid
+		;
+	$db->setQuery($query);
+	$dwz_meldeliste	= $db->loadObjectList();
+	$old_ml = array();
+	foreach ($dwz_meldeliste as $dwz_ml){
+		$old_ml[$dwz_ml->lid.' '.$dwz_ml->mnr.' '.$dwz_ml->zps.' '.$dwz_ml->mgl_nr] = $dwz_ml;
+	}
+
+	//Löschen der Meldelisten
 	$query	=" DELETE FROM #__clm_meldeliste_spieler "
 		." WHERE status = ".$gid
 		." AND sid = ".$sid
@@ -70,9 +88,13 @@ $meldung 	= $user->get('id');
 	clm_core::$db->query($query);
 
 	// Liganummer ermitteln
-	$query	=" SELECT liga FROM #__clm_mannschaften "
-		." WHERE zps = '$zps'"
-		." GROUP BY man_nr"
+	$query	=" SELECT a.liga, a.man_nr FROM #__clm_mannschaften as a"
+		." LEFT JOIN #__clm_liga as l ON l.id = a.liga and l.sid = a.sid"
+		." WHERE a.zps = '$zps'"
+		." AND a.sid =".$sid
+		." AND l.rang = ".$gid
+		." GROUP BY a.man_nr "
+		." ORDER BY a.man_nr ASC "
 		;
 	$db->setQuery($query);
 	$lid_rang	= $db->loadObjectList();
@@ -86,39 +108,102 @@ $meldung 	= $user->get('id');
 	$liga		= $lid_rang[0]->liga;
 	$change		= clm_core::$load->request_string('MA0');
 
-	for ($y=0; $y < $count; $y++) {
-		$ZPSmgl	= trim(clm_core::$load->request_string('ZPSM'.$y));
-		$mgl	= clm_core::$load->request_string('MGL'.$y);
-		$pkz	= clm_core::$load->request_string('PKZ'.$y);
-		$mnr	= clm_core::$load->request_string('MA'.$y);
-		$rang	= clm_core::$load->request_string('RA'.$y);
+	$ZPSmgl	= array();
+	$mgl	= array();
+	$pkz	= array();
+	$mnr	= array();
+	$rang	= array();
 
-		if ($y !="0" AND $mnr > $change) {
-			$liga_count++;
-			if (isset($lid_rang[$liga_count])) $liga = $lid_rang[$liga_count]->liga;
-			else $liga = -1;
-		}
-		$change	= $mnr;
-		if (is_null($pkz) OR $pkz == '' OR $pkz == ' ') $pkz = '0';
-		if ($mnr !=="99" AND $mnr !=="0" AND $mnr !=="") {
+	// Rangliste und Arrays schreiben
+	for ($y=0; $y < $count; $y++) {
+		$ZPSmgl[]	= trim(clm_core::$load->request_string('ZPSM'.$y));
+		$mgl[]	= clm_core::$load->request_string('MGL'.$y);
+		$pkz[]	= clm_core::$load->request_string('PKZ'.$y);
+		$mnr[]	= clm_core::$load->request_string('MA'.$y);
+		$rang[]	= clm_core::$load->request_string('RA'.$y);
+
+		if ($mnr[$y] !=="99" AND $mnr[$y] !=="0" AND $mnr[$y] !=="") {
 			$query = " INSERT INTO #__clm_rangliste_spieler "
 				." (`Gruppe`, `ZPS`, `ZPSmgl`, `Mgl_Nr`, `PKZ`, `Rang`, `man_nr`, `sid`) "
-				." VALUES ('$gid','$zps','$ZPSmgl','$mgl','$pkz','$rang','$mnr','$sid') "
-			;					   
-			clm_core::$db->query($query);
-			if ($liga > -1) {
-				$query = " INSERT INTO #__clm_meldeliste_spieler "
-					." (`sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`,`status`) "
-					." VALUES ('$sid','$liga','$mnr','$rang','$mgl','$ZPSmgl','$gid') "
+				." VALUES ('$gid','$zps','$ZPSmgl[$y]','$mgl[$y]','$pkz[$y]','$rang[$y]','$mnr[$y]','$sid') "
 				;					   
-				clm_core::$db->query($query);
-			}
+			clm_core::$db->query($query);
 		}
 	}
 
+	// Meldelisten schreiben
+	for ($x=0; $x < count($lid_rang); $x++) {
+		$liga	= $lid_rang[$x]->liga;
+		$man_nr	= $lid_rang[$x]->man_nr;
+
+		$sn_cnt = 1;
+		$snr_counter =1;
+
+		for ($y=0; $y < $count; $y++) {
+			$dkey = $liga.' '.$man_nr.' '.$ZPSmgl[$y].' '.intval($mgl[$y]);
+			if (isset($old_ml[$dkey])) {
+				$z_ordering	 = $old_ml[$dkey]->ordering; 
+				$z_start_dwz = $old_ml[$dkey]->start_dwz; 
+				$z_start_I0	 = $old_ml[$dkey]->start_I0; 
+				$z_DWZ		 = $old_ml[$dkey]->DWZ; 
+				$z_I0	 	 = $old_ml[$dkey]->I0; 
+				$z_Punkte	 = $old_ml[$dkey]->Punkte; 
+				$z_Partien	 = $old_ml[$dkey]->Partien; 
+				$z_We		 = $old_ml[$dkey]->We; 
+				$z_Leistung	 = $old_ml[$dkey]->Leistung; 
+				$z_EFaktor	 = $old_ml[$dkey]->EFaktor; 
+				$z_Niveau	 = $old_ml[$dkey]->Niveau; 
+				$z_sum_saison = $old_ml[$dkey]->sum_saison; 
+				$z_gesperrt	 = $old_ml[$dkey]->gesperrt; 
+			} else {
+				$z_ordering = 0;
+				$z_start_dwz = NULL;
+				$z_start_I0 = NULL;
+				$z_DWZ		 = 0; 
+				$z_I0	 	 = 0; 
+				$z_Punkte	 = 0; 
+				$z_Partien	 = 0; 
+				$z_We		 = 0; 
+				$z_Leistung	 = 0; 
+				$z_EFaktor	 = 0; 
+				$z_Niveau	 = 0; 
+				$z_sum_saison = 0; 
+				$z_gesperrt	 = 0; 
+			}
+			if (is_null($z_gesperrt) OR $z_gesperrt == '') $z_gesperrt = '0'; 
+			if ($mnr[$y] >= $lid_rang[$x]->man_nr) {
+				if ($z_start_dwz == NULL OR $z_start_dwz == 0) 
+					$query = " INSERT INTO #__clm_meldeliste_spieler "
+						." (`sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`,`status`,`ordering`,`start_dwz`,`start_I0`"
+						.",`DWZ`, `I0`, `Punkte`, `Partien`, `We`, `Leistung`,`EFaktor`,`Niveau`,`sum_saison`,`gesperrt`)"
+						." VALUES ('$sid','$liga','$man_nr','$snr_counter','$mgl[$y]','$ZPSmgl[$y]','$gid','$z_ordering',NULL,NULL"
+						.",'$z_DWZ','$z_I0','$z_Punkte','$z_Partien','$z_We','$z_Leistung','$z_EFaktor','$z_Niveau','$z_sum_saison','$z_gesperrt') "
+						;
+				else
+					$query = " INSERT INTO #__clm_meldeliste_spieler "
+						." (`sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`,`status`,`ordering`,`start_dwz`,`start_I0`"
+						.",`DWZ`, `I0`, `Punkte`, `Partien`, `We`, `Leistung`,`EFaktor`,`Niveau`,`sum_saison`,`gesperrt`)"
+						." VALUES ('$sid','$liga','$man_nr','$snr_counter','$mgl[$y]','$ZPSmgl[$y]','$gid','$z_ordering','$z_start_dwz','$z_start_I0'"
+						.",'$z_DWZ','$z_I0','$z_Punkte','$z_Partien','$z_We','$z_Leistung','$z_EFaktor','$z_Niveau','$z_sum_saison','$z_gesperrt') "
+						;
+				clm_core::$db->query($query);
+				$sn_cnt++;
+				$snr_counter++;
+			}
+		}
+		if($sn_cnt > 1) {
+			$query = " UPDATE #__clm_mannschaften "
+				." SET  liste = 1"
+				." WHERE sid = $sid AND liga = $liga AND man_nr = $man_nr AND zps = '$zps' "
+				;
+			clm_core::$db->query($query);
+		}
+	}
+
+
 	$query = " INSERT INTO #__clm_rangliste_id "
-		." (`gid`, `sid`, `zps`, `sg_zps`, `rang`, `published`, `bemerkungen`, `bem_int`) "
-		." VALUES ('$gid','$sid','$zps','$sg_zps','0','0','','') "
+		." (`gid`, `sid`, `zps`, `sg_zps`, `rang`, `published`, `bemerkungen`, `bem_int`, `ordering`) "
+		." VALUES ('$gid','$sid','$zps','$sg_zps','0','$published','".$bemerkungen."','".$bem_int."', '$ordering') "
 		;
 	$db->setQuery($query);
 	clm_core::$db->query($query);
@@ -314,6 +399,18 @@ if ( $send == 1 ) {
 			} 
 	}
 	$body_html .= 	  '
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>	
+		<tr>
+			<td width="700" colspan="6"><div align="left" ><strong>'.'Bemerkung'.'</strong></div></td>
+		</tr>	
+		<tr>
+			<td width="700" nowrap="nowrap" valign="top" size="1" colspan="6">
+				<textarea cols="30" rows="2" style="border: solid 1px #999999; width:90%">'.str_replace('&','&amp;',$bemerkungen).'</textarea>
+			</td>
+		</tr>	
 		<tr>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>

@@ -325,31 +325,34 @@ echo $bar->render();
 ?>
 <table class="toolbar"><tr>
  
-<td class="button" id="Ranglisten-pruefen">
+<td class="button" id="Ranglisten-pruefen" width="15%" style="background-color:#E6E6E6;">
 <a href="#" onclick="javascript:Pruefbutton(); return false;" class="toolbar">
 <span class="icon-32-trash" title="Prüfen">
 </span>
 Prüfen
 </a>
 </td>
+<td width="10%">&nbsp;&nbsp;&nbsp;</td>
  
-<td class="button" id="Ranglisten-sortieren">
+<td class="button" id="Ranglisten-sortieren" width="15%" style="background-color:#E6E6E6;">
 <a href="#" onclick="javascript:Sortieren(); return false;" class="toolbar">
 <span class="icon-32-pruefen" title="Sortieren">
 </span>
 Sortieren
 </a>
 </td>
+<td width="10%">&nbsp;&nbsp;&nbsp;</td>
 
-<td class="button" id="Ranglisten-neuladen">
+<td class="button" id="Ranglisten-neuladen" width="15%" style="background-color:#E6E6E6;">
 <a href="#" onclick="javascript: window.location.href=window.location.href; return false;" class="toolbar">
 <span class="icon-32-pruefen" title="Neu laden">
 </span>
 Neu laden
 </a>
 </td>
+<td width="10%">&nbsp;&nbsp;&nbsp;</td>
 
-<td class="button" id="Ranglisten-speichern">
+<td class="button" id="Ranglisten-speichern" width="18%" style="background-color:#E6E6E6;">
 <!-- <a href="#" onclick="javascript:document.adminForm.submit(); return false;" class="toolbar"> -->
 <a href="#" onclick="javascript:Sendbutton(); return false;" class="toolbar"> 
 
@@ -358,8 +361,9 @@ Neu laden
 Liste absenden !
 </a>
 </td>
+<td>&nbsp;&nbsp;&nbsp;</td>
 
-<tr>
+</tr>
 </table>
 
 <br><br>
@@ -375,14 +379,14 @@ Liste absenden !
 	<table class="admintable meldeliste_rangliste">
 
 	<tr>
-		<td width="8%" class="key" nowrap="nowrap">Mnr</td>
-		<td width="10%" class="key" nowrap="nowrap">Rang</td>
+		<td width="6%" class="key" nowrap="nowrap">Mnr</td>
+		<td width="7%" class="key" nowrap="nowrap">Rang</td>
 		<td class="key" nowrap="nowrap">Name</td>
-		<td width="20%" class="key" nowrap="nowrap">Verein</td>
-		<td width="7%" class="key" nowrap="nowrap">MglNr</td>
-		<td width="9%" class="key" nowrap="nowrap">PKZ</td>
-		<td width="3%" class="key" nowrap="nowrap">ST</td>
-		<td colspan="2" width="15%" class="key" nowrap="nowrap">DWZ</td>
+		<td width="10%" class="key" nowrap="nowrap">Verein</td>
+		<td width="9%" class="key" nowrap="nowrap">MglNr</td>
+		<td width="14%" class="key" nowrap="nowrap">PKZ</td>
+		<td width="4%" class="key" nowrap="nowrap">ST</td>
+		<td colspan="2" width="12%" class="key" nowrap="nowrap">DWZ</td>
 	</tr>
 
 <?php 
@@ -418,6 +422,17 @@ Liste absenden !
 
 <?php } ?>
 	</table>
+	
+	<table class="adminlist">
+	<legend><?php echo 'Bemerkung'; ?></legend>
+	<tr>
+	<td width="100%" valign="top">
+	<?php if (is_null($liga[0]->bemerkungen)) $liga[0]->bemerkungen = ''; ?>
+	<textarea class="inputbox" name="bemerkungen" id="bemerkungen" cols="40" rows="4" style="width:90%"><?php echo str_replace('&','&amp;',$liga[0]->bemerkungen);?></textarea>
+	</td>
+	</tr>
+	</table>
+	
   </fieldset>
   </div>
 		<div class="clr"></div>
@@ -428,6 +443,12 @@ Liste absenden !
 		<input type="hidden" name="zps" value="<?php echo $spieler[0]->ZPS; ?>" />
 		<input type="hidden" name="saison" value="<?php echo $spieler[0]->sid; ?>" />
 		<input type="hidden" name="gid" value="<?php echo clm_core::$load->request_int('gid'); ?>" />
+		<?php if (is_null($liga[0]->published)) $liga[0]->published ='1'; ?>
+		<input type="hidden" name="published" value="<?php echo $liga[0]->published; ?>" />
+		<?php if (is_null($liga[0]->ordering)) $liga[0]->ordering ='0'; ?>
+		<input type="hidden" name="ordering" value="<?php echo $liga[0]->ordering; ?>" />
+		<?php if (is_null($liga[0]->bem_int)) $liga[0]->bem_int =''; ?>
+		<input type="hidden" name="bem_int" value="<?php echo $liga[0]->bem_int; ?>" />
 
 		<?php echo JHTML::_( 'form.token' ); ?>
 		</form>
