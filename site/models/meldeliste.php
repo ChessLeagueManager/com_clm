@@ -272,7 +272,7 @@ class CLMModelMeldeliste extends JModelLegacy
 		$db	= JFactory::getDBO();
 		$id	= @$options['id'];
 
-	$query	= "SELECT zps,published "
+	$query	= "SELECT * "
 		." FROM #__clm_user "
 		." WHERE jid = $jid "
 		." AND sid = $sid "

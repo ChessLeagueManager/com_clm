@@ -24,7 +24,8 @@ $ -> Language fix or change
 ^ Pflege techn.Funktionen
 ^ Code-Anpassung wegen MariaDB(SQL-Mode) / php 8.1
 + Admin-View Vereine: neue Schaltflächen
-^ Mizgliederliste: Details wegen DSGVO
+^ Mitgliederliste: Details wegen DSGVO
+# Erhöhung Datensicherheit im FE
 
 - - - - - 4.1.0 - [17-07-2023] - - - - - - - - - - - - - - - - - - - -
 + Ranglistensystem: Spielgemeinschaften möglich

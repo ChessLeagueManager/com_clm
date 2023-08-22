@@ -18,8 +18,8 @@ $lid 	= clm_core::$load->request_int('liga');
 $zps 	= clm_core::$load->request_string('zps');
 $gid 	= clm_core::$load->request_int('gid');
 $count 	= clm_core::$load->request_int('count');
-$published 	= clm_core::$load->request_string('published');
-$ordering 	= clm_core::$load->request_string('ordering');
+$published 	= clm_core::$load->request_int('published');
+$ordering 	= clm_core::$load->request_int('ordering');
 $bemerkungen 	= clm_core::$load->request_string('bemerkungen');
 $bem_int 	= clm_core::$load->request_string('bem_int');
 
@@ -28,6 +28,29 @@ $bem_int 	= clm_core::$load->request_string('bem_int');
 
 $user 		=JFactory::getUser();
 $meldung 	= $user->get('id');
+$clmuser        = $this->clmuser;
+$link = 'index.php?option=com_clm&view=info';
+
+// Login Status prüfen
+if (!$user->get('id')) {
+        $msg = JText::_( 'CLUB_DATA_SENT_LOGIN' );
+        $mainframe->enqueueMessage( $msg );
+        $mainframe->redirect( $link );
+                        }
+if ($clmuser[0]->published < 1) {
+        $msg = JText::_( 'CLUB_DATA_SENT_ACCOUNT' );
+        $mainframe->enqueueMessage( $msg );
+        $mainframe->redirect( $link );
+}
+
+if (($clmuser[0]->zps <> $zps)  || ($clmuser[0]->usertype == "spl")) {
+        $msg = JText::_( 'CLUB_DATA_SENT_FALSE' );
+        $mainframe->enqueueMessage( $msg );
+        $mainframe->redirect( $link );
+                        }
+// Login Status prüfen
+if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps OR $clmuser[0]->usertype == "admin")
+        {
 
 // Prüfen ob Datensatz schon vorhanden ist
 	$query	= "SELECT * "
@@ -95,7 +118,7 @@ $meldung 	= $user->get('id');
 		." AND l.rang = ".$gid
 		." GROUP BY a.man_nr "
 		." ORDER BY a.man_nr ASC "
-		;
+ 		;
 	$db->setQuery($query);
 	$lid_rang	= $db->loadObjectList();
 
@@ -123,7 +146,7 @@ $meldung 	= $user->get('id');
 		$rang[]	= clm_core::$load->request_string('RA'.$y);
 
 		if ($mnr[$y] !=="99" AND $mnr[$y] !=="0" AND $mnr[$y] !=="") {
-			$query = " INSERT INTO #__clm_rangliste_spieler "
+ 			$query = " INSERT INTO #__clm_rangliste_spieler "
 				." (`Gruppe`, `ZPS`, `ZPSmgl`, `Mgl_Nr`, `PKZ`, `Rang`, `man_nr`, `sid`) "
 				." VALUES ('$gid','$zps','$ZPSmgl[$y]','$mgl[$y]','$pkz[$y]','$rang[$y]','$mnr[$y]','$sid') "
 				;					   
@@ -573,6 +596,12 @@ if ( $send == 1 ) {
 	}
 	$msg = "<h5>".$countmail++. ' '.JText::_( 'Mail wurden gesendet' )."</h5>";
 	$mainframe->enqueueMessage( $msg, 'message' );
+
+}
+} else {
+        $msg = JText::_( 'CLUB_DATA_SENT_FALSE' );
+        $mainframe->enqueueMessage( $msg );
+	$mainframe->redirect($link);
 
 }	
 	$mainframe->redirect( 'index.php' );
