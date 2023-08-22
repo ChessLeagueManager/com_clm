@@ -21,6 +21,7 @@ $ -> Language fix or change
 + Submenue Turniere: Anpassung mobile Geräte
 + Einzeltuniere: Turnierorganisator mit DB-Erweiterung
 # Admin-View Logging: Nachbesserung Berechtigungen
+^ Pflege techn.Funktionen
 
 - - - - - 4.1.0 - [17-07-2023] - - - - - - - - - - - - - - - - - - - -
 + Ranglistensystem: Spielgemeinschaften möglich
