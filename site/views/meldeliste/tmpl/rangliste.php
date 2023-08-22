@@ -32,19 +32,23 @@ $user		= JFactory::getUser();
 
 if ($conf_meldeliste != 1) {
 	$msg = JText::_( '<h2>Die Eingabe von Ranglisten wurde durch den Administrator gesperrt !</h2>');
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
 			}
 if (!$user->get('id')) {
 	$msg = JText::_( '<h1>Sie sind nicht angemeldet !</h1> <h2>Loggen Sie sich zuerst ein, bevor Sie eine Rangliste abgeben.</h2>' );
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
  			}
 if ($clmuser[0]->published < 1) {
 	$msg = JText::_( '<h1>Ihr Account wurde gesperrt !</h1> <h2>Wenden Sie sich umgehend an einen Administrator.</h2>' );
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
 				}
 if ($clmuser[0]->zps <> $zps) {
 	$msg = JText::_( '<h1>Sie können nicht für einen anderen Verein melden !</h1>' );
-	$mainframe->redirect( $link, $msg );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
 				}
 
 // Prüfen ob Datensatz schon vorhanden ist

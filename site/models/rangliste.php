@@ -58,22 +58,29 @@ class CLMModelRangliste extends JModelLegacy
 		return @$result;
 	}
 
-	function _getCLMPunkte( &$options )
-	{
-	$sid	= clm_core::$load->request_int('saison',1);
-	$liga	= clm_core::$load->request_int('liga',1);
-	$runde	= clm_core::$load->request_int('runde');
-	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
-	// ordering für Rangliste -> Ersatz für direkten Vergleich
+	function _getCLMPunkte( &$options )	{
+		$sid	= clm_core::$load->request_int('saison',1);
+		$liga	= clm_core::$load->request_int('liga',1);
+		$runde	= clm_core::$load->request_int('runde');
+		$db	= JFactory::getDBO();
+		$id	= @$options['id'];
+		// ordering für Rangliste -> Ersatz für direkten Vergleich
 		$query = "SELECT a.* FROM #__clm_liga as a"
 			." WHERE id = ".$liga
 			;
 		$db->setQuery($query);
- 		$order = $db->loadObjectList();
- 			if ($order[0]->order == 1) { $ordering = " , m.ordering ASC";}
-			//else { $ordering =', a.tln_nr ASC ';} 
-			else { $ordering =' ';} 
+		$order = $db->loadObjectList();
+
+		if (!isset($order[0])) {
+			return null;
+		}
+
+		if ($order[0]->order == 1) {
+			$ordering = " , m.ordering ASC";
+		} else {
+			$ordering =' ';
+		}
+
 		//$query = " SELECT a.tln_nr as tln_nr,m.name as name, SUM(a.manpunkte) as mp, "
 		$query = " SELECT a.tln_nr as tln_nr,m.name as name, (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
 			." (SUM(a.brettpunkte) - m.bpabzug) as bp, m.bpabzug, SUM(a.wertpunkte) as wp, m.published, m.man_nr, COUNT(DISTINCT a.runde, a.dg) as spiele, "
@@ -109,7 +116,11 @@ class CLMModelRangliste extends JModelLegacy
 	function getCLMPunkte( $options=array() )
 	{
 		$query	= $this->_getCLMPunkte( $options );
-		$result = $this->_getList( $query );
+		if ($query != null) {
+			$result = $this->_getList( $query );
+		} else {
+			$result = array();
+		}
 		return @$result;
 	}
 

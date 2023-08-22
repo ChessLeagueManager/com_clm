@@ -60,7 +60,8 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 	function edit_registration() {
 		// ausgewählte Einträge
 		$cid = clm_core::$load->request_array_int('cid');
-		$count = count($cid);
+		if (is_null($cid)) $count = 0;
+		else $count = count($cid);
 
 		if ($count < 1) {
 			$this->app->enqueueMessage( JText::_('NO_ITEM_SELECTED'), 'warning' );

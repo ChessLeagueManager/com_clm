@@ -104,7 +104,8 @@ if ($f_source != 'sent') {
 }
 $result = clm_core::$api->db_dewis_player_by_name($reg_name, $reg_vorname, $reg_jahr); 
 $names = $result[3];
-$ii = count($names);
+if (is_null($names)) $ii = 0;
+else $ii = count($names);
 
 echo "<div><div id='turnier_info'>";
 // componentheading vorbereiten - prepare componentheading
