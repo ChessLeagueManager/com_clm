@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -15,6 +15,7 @@ $sid	= clm_core::$load->request_int('saison',1);
 $rating_type = clm_core::$db->saison->get($sid)->rating_type;
 $itemid	= clm_core::$load->request_int('Itemid',1);
 $urlzps	= clm_core::$load->request_string('zps');
+$cuser = (integer) clm_core::$access->getId();
 $zps	= $this->zps;
 $liga	= $this->liga;
 $saisons	 	= $this->saisons;
@@ -122,21 +123,24 @@ echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
 
     <tr>
     <th class="dwz_1"><?php echo JText::_('CLUB_NR') ?></th>
-   <?php if ($countryversion =="de") { ?>
+    <?php if ($countryversion =="de") {
+     if ($cuser != -1) { ?>
     <th class="dwz_2"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER', 'Mgl_Nr', $this->lists['order_Dir'], $this->lists['order']); ?></a></th>
-   <?php } else { ?>
+    <?php } } else { ?>
     <th class="dwz_2"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_PKZ', 'PKZ', $this->lists['order_Dir'], $this->lists['order']); ?></a></th>
    <?php } ?>
+    <th class="dwz_8"><?php echo JText::_('CLUB_MEMBER_TITEL') ?></th>
 	<th class="dwz_3"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_NAME', 'Spielername', $this->lists['order_Dir'], $this->lists['order']); ?></a></th>
-    <th class="dwz_4"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_STATUS', 'Status', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-    <th class="dwz_5"><?php echo JHtml::_( 'grid.sort', 'CLUB_MEMBER_GESCHL', 'Geschlecht', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+     <?php if ($cuser != -1) { ?>
+     <th class="dwz_4"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_STATUS', 'Status', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+     <th class="dwz_5"><?php echo JHtml::_( 'grid.sort', 'CLUB_MEMBER_GESCHL', 'Geschlecht', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+     <?php } ?>
     <?php if ($countryversion == "de") { ?>
 		<th class="dwz_6"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_RATING', 'DWZ', $this->lists['order_Dir'], $this->lists['order']); ?></th>
     <?php } else { ?>
 		<th class="dwz_6"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_RATING_EN', 'DWZ', $this->lists['order_Dir'], $this->lists['order']); ?></th>
     <?php } ?>
     <th class="dwz_7"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_ELO', 'FIDE_Elo', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-    <th class="dwz_8"><?php echo JText::_('CLUB_MEMBER_TITEL') ?></th>
     </tr>
 
 	<?php
@@ -148,23 +152,26 @@ echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
 	else { $zeilenr = 'zeile1'; } ?>
     <tr class="<?php echo $zeilenr; ?>">
     <td class="dwz_1"><?php echo $x; ?></td>
-   <?php if ($countryversion =="de") { ?>
+    <?php if ($countryversion =="de") {
+     if ($cuser != -1) { ?>
     <td class="dwz_2"><?php echo $zps->Mgl_Nr; ?></td>
-   <?php } else { ?>
+    <?php  }} else { ?>
     <td class="dwz_2"><?php echo $zps->PKZ; ?></td>
    <?php } ?>
+    <td class="dwz_8"><?php echo $zps->FIDE_Titel; ?></td>
     <td class="dwz_3"><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $zps->ZPS; ?>&mglnr=<?php echo $zps->Mgl_Nr; ?>&PKZ=<?php echo $zps->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php  echo $zps->Spielername; ?></a></td>
-    <td class="dwz_4"><?php echo $zps->Status; ?></td>
-    <td class="dwz_5"><?php echo $zps->Geschlecht; ?></td>
+     <?php if ($cuser != -1) { ?>
+     <td class="dwz_4"><?php echo $zps->Status; ?></td>
+     <td class="dwz_5"><?php echo $zps->Geschlecht; ?></td>
+    <?php } ?>
    <?php if ($countryversion =="de") { ?>	
-    <td class="dwz_6"><a href="http://schachbund.de/spieler.html?zps=<?php echo $zps->ZPS; ?>-<?php echo $zps->Mgl_Nr; ?>" target="_blank"><?php echo $zps->DWZ; ?></a> - <?php echo $zps->DWZ_Index; ?></td>
+    <td class="dwz_6"><a href="https://schachbund.de/spieler.html?zps=<?php echo $zps->ZPS; ?>-<?php echo $zps->Mgl_Nr; ?>" target="_blank"><?php echo $zps->DWZ; ?></a> - <?php echo $zps->DWZ_Index; ?></td>
    <?php } elseif ($countryversion == "en" AND $rating_type == 0) { ?>
     <td class="dwz_6"><?php echo $zps->DWZ; echo '<font size="1"> ('.(600 + ($zps->DWZ * 8)).')</font>'; ?></td>
    <?php } elseif ($countryversion == "en" AND $rating_type == 1) { ?>
     <td class="dwz_6"><a href="https://www.ecfrating.org.uk/v2/new/player.php?ECF_code=<?php echo $zps->PKZ; ?>" target="_blank"><?php echo $zps->DWZ; ?></td>
    <?php } ?>
     <td class="dwz_7"><?php if ( $zps->FIDE_Elo == 0 ) { echo "-"; } else { echo '<a href="http://ratings.fide.com/card.phtml?event=' . $zps->FIDE_ID . '" target="_blank">' . $zps->FIDE_Elo .'</a>'; } ?></td>
-    <td class="dwz_8"><?php echo $zps->FIDE_Titel; ?></td>
     </tr>
     
 <?php $x++; }} ?>
@@ -175,9 +182,9 @@ echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
 </form>
   <?php if (isset($liga[0]) AND $urlzps != '-1') {
     if ($countryversion =="de") { ?>
-	<div class="hint">DWZ Liste: <a href="http://schachbund.de/verein.html?zps=<?php echo $urlzps; ?>" target="_blank">http://schachbund.de/verein.html?zps=<?php echo $urlzps; ?></a></div>   
+	<div class="hint">DWZ Liste: <a href="https://schachbund.de/verein.html?zps=<?php echo $urlzps; ?>" target="_blank">https://schachbund.de/verein.html?zps=<?php echo $urlzps; ?></a></div>   
    <?php } elseif ($countryversion =="en") { ?>
-	<div class="hint">The ECF Grading Database: <a href="http://www.ecfgrading.org.uk/new/menu.php" target="_blank">http://www.ecfgrading.org.uk/new/menu.php</a></div>   
+	<div class="hint">The ECF Grading Database: <a href="https://www.ecfgrading.org.uk/new/menu.php" target="_blank">https://www.ecfgrading.org.uk/new/menu.php</a></div>   
   <?php } } ?>
 <br>
 

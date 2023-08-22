@@ -19,6 +19,8 @@ $itemid	= clm_core::$load->request_int('Itemid',19);
 // Variablen aus dem Model initialisieren
 $zps	= $this->zps;
 $liga	= $this->liga;
+// aktuellen Benutzer ermitteln
+$cuser = (integer) clm_core::$access->getId();
 
 // Prüfen ob Verein vorhanden ist
  if (!$liga[0]->Vereinname) { ?>
@@ -109,7 +111,9 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(7,$zelle,utf8_decode(JText::_('CLUB_NR')),1,0,'C');
 	if ($countryversion =="de") {
-		$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER')),1,0,'C');
+		if ($cuser != -1) {
+			$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER')),1,0,'C');
+		}
 	} else {
 		$pdf->Cell(18,$zelle,utf8_decode(JText::_('CLUB_MEMBER_PKZ')),1,0,'C');
 	}
@@ -132,7 +136,9 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(7,$zelle,$x,1,0,'C');
 	if ($countryversion =="de") {
-		$pdf->Cell(16,$zelle,$zps->Mgl_Nr,1,0,'C');
+		if ($cuser != -1) {
+			$pdf->Cell(16,$zelle,$zps->Mgl_Nr,1,0,'C');
+		}
 	} else {
 		$pdf->Cell(18,$zelle,$zps->PKZ,1,0,'C');
 	}
