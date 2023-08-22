@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -197,9 +197,13 @@ public static function vereine ( $rows, $lists, $pageNav, $option )
 
 public static function setVereinToolbar()
 	{
+	//CLM parameter auslesen
+	$config = clm_core::$db->config();
+	$countryversion = $config->countryversion;
 	// Menubilder laden
 		clm_core::$load->load_css("icons_images");
-
+		$clmAccess = clm_core::$access;
+		
 		//$zps = $row->zps;
 		$cid = clm_core::$load->request_array_int( 'cid');
 		if (clm_core::$load->request_string( 'task') == 'edit') { $text = JText::_( 'Edit' );}
@@ -207,6 +211,14 @@ public static function setVereinToolbar()
 		JToolBarHelper::title(  JText::_( 'VEREIN' ).': [ '. $text.' ]', 'clm_headmenu_vereine.png' );
 		JToolBarHelper::save();
 		JToolBarHelper::apply();
+		if ($countryversion =="de") {
+			if($clmAccess->access('BE_club_general') === true) {
+				JToolBarHelper::custom('rangliste','edit.png','edit_f2.png','VEREIN_BUTTON_RANG_EDIT',false);
+				} 
+		}
+		if($clmAccess->access('BE_club_edit_member') === true) {
+			JToolBarHelper::custom('dwz','list.png','list_f2.png','VEREIN_BUTTON_MEMBER_EDIT',false);
+		}
 		JToolBarHelper::cancel();
 		JToolBarHelper::help( 'screen.clm.edit' );
 	}
@@ -467,8 +479,8 @@ public static function verein( &$row, $lists, $option )
 		<input type="hidden" name="option" value="com_clm" />
 		<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
 		<input type="hidden" name="ordering" value="<?php echo $row->ordering; ?>" />
-<!---		<input type="hidden" name="cid" value="<?php //echo $row->cid; ?>" />
-		<input type="hidden" name="client_id" value="<?php //echo $row->cid; ?>" />
+		<input type="hidden" name="cid[0]" value="<?php echo $lists['cid']; ?>" />
+<!--		<input type="hidden" name="client_id" value="<?php //echo $row->cid; ?>" />
 --->		<input type="hidden" name="task" value="" />
 		<?php echo JHtml::_( 'form.token' ); ?>
 		</form>

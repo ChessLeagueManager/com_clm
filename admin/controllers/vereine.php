@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -217,6 +217,7 @@ function edit()
 	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="inputbox" size="1"','sid', 'name', $row->sid );
 	
 	$lists['published']	= JHTML::_('select.booleanlist',  'published', 'class="inputbox"', $row->published );
+	$lists['cid']	= $cid[0];
 
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'vereine.php');
 	CLMViewVereine::verein ( $row, $lists, $option );
