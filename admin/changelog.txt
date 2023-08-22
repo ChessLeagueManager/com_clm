@@ -20,6 +20,7 @@ $ -> Language fix or change
 + Ligen/MTurniere Ranglistensystem: Abgleich Stichtag Aufstellung mit Meldeschlussrangliste
 + Submenue Turniere: Anpassung mobile Geräte
 + Einzeltuniere: Turnierorganisator mit DB-Erweiterung
+# Admin-View Logging: Nachbesserung Berechtigungen
 
 - - - - - 4.1.0 - [17-07-2023] - - - - - - - - - - - - - - - - - - - -
 + Ranglistensystem: Spielgemeinschaften möglich
