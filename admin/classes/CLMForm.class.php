@@ -128,7 +128,8 @@ class CLMForm {
 		if($userlist === false) {
 			echo "<br>cl: "; var_dump($userlist); die('clcl'); }
 		
-		$tllist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_DIRECTOR' )), 'jid', 'name' );
+		if ($name == 'torg') $tllist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_ORGANIZER' )), 'jid', 'name' );
+		else $tllist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_DIRECTOR' )), 'jid', 'name' );
 		$tllist		= array_merge( $tllist, $userlist);
 		
 		return JHTML::_('select.genericlist', $tllist, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter), 'jid', 'name', $value );

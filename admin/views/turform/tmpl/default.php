@@ -352,7 +352,7 @@ if (is_null($this->turnier->bem_int)) $this->turnier->bem_int = '';
   
   
   <fieldset class="adminform">
-   <legend><?php echo JText::_( 'PERSONALIA' ); ?></legend>
+   <legend><?php echo "<br>".JText::_( 'PERSONALIA' ); ?></legend>
       <table class="paramlist admintable">
 	
 	<tr>
@@ -365,7 +365,16 @@ if (is_null($this->turnier->bem_int)) $this->turnier->bem_int = '';
 			<?php echo $this->form['tl']; ?>
 		</td>
 	</tr>
-
+	<tr>
+	<td width="40%" class="paramlist_key">
+			<label for="torg">
+				<?php echo JText::_( 'TOURNAMENT_ORGANIZER' ); ?>:
+			</label>
+		</td>
+		<td class="paramlist_value">
+			<?php echo $this->form['torg']; ?>
+		</td>
+	</tr>
 
 	<tr>
 		<td width="40%" class="paramlist_key">

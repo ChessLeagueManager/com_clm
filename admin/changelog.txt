@@ -19,6 +19,7 @@ $ -> Language fix or change
 + Pflege der eigenen Kontaktdaten durch angemeldete Benutzer im FE einschl. Logging
 + Ligen/MTurniere Ranglistensystem: Abgleich Stichtag Aufstellung mit Meldeschlussrangliste
 + Submenue Turniere: Anpassung mobile Geräte
++ Einzeltuniere: Turnierorganisator mit DB-Erweiterung
 
 - - - - - 4.1.0 - [17-07-2023] - - - - - - - - - - - - - - - - - - - -
 + Ranglistensystem: Spielgemeinschaften möglich
