@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
 $sid			= clm_core::$load->request_int('saison', 1);
@@ -103,7 +102,7 @@ $date = date("Y-m-d");
 				$content_detail = utf8_decode($termine[$t]->typ); }       
 		else {
 			$content_termin = utf8_decode($termine[$t]->typ).", ".utf8_decode($termine[$t]->name);        
-			while (($termine[$t]->datum > $plan[$pp]->datum) AND isset($plan[$pp]->datum)) {
+			while (isset($plan[$pp]->datum) AND ($termine[$t]->datum > $plan[$pp]->datum)) {
 				$pp++; }
 			$content_detail = "";
 			$szelle = 0;

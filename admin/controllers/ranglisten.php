@@ -659,7 +659,7 @@ function cancel()
 	$id		= clm_core::$load->request_int('id');	
 	$row 		=JTable::getInstance( 'ranglisten', 'TableCLM' );
 	$filter_vid	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
-	$msg = JText::_( 'RANGLISTE_AKTION').$filter_vid;
+	$msg = JText::_( 'RANGLISTE_AKTION'); //$filter_vid;
 	$mainframe->enqueueMessage($msg, 'message');
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}

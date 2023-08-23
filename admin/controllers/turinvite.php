@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -33,7 +31,6 @@ class CLMControllerTurInvite extends JControllerLegacy {
 		$clmAccess = clm_core::$access;      
 		$row = JTable::getInstance( 'turniere', 'TableCLM' );
 		$row->load($this->id);
-		echo "<br>invrow: "; var_dump($row);
 		//$tournament = new CLMTournament($this->id, true);
 		//die('    tinvite');
 		//if (!$tournament->checkAccess(0,0,$row->tl)) {

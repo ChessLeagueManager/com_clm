@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -35,6 +35,10 @@ function clm_api_db_nwz_average($lid,$runde=0,$dg=1) {
 		$a_count_nnplayer[$s] = 0;
 		$a_average_dwz[$s] = 0;
 		$a_average_dwz_p[$s] = '-';
+	}
+
+	if ($l[0]->anzeige_ma == 1) {
+		return array(true, $a_average_dwz, $a_average_dwz_p);	
 	}
 	
 	// Ligaparameter bereitstellen

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 //JHtml::_('behavior.tooltip', '.CLMTooltip');
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
@@ -263,9 +262,13 @@ if ($y%2 != 0) { $zeilenr = 'zeile2'; }
 			//{ if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') echo round($dwzgespielt[$z2]->dwz); 
 			//	else echo round($dwzgespielt[$z2]->start_dwz); }
 			//else { if (isset($dwz[$paar[$z]->htln])) echo round($dwz[($paar[$z]->htln)]); } ?>
-        <?php if ($a_average_dwz_round[$paar[$z]->htln] != '-' AND $paar[$z]->htln !=0 AND $paar[$z]->gtln != 0)
-                { echo $a_average_dwz_round[$paar[$z]->htln]; }
-                else { echo $a_average_dwz_lineup[$paar[$z]->htln];} ?>
+		<?php	if (isset($a_average_dwz_round[$paar[$z]->htln]) && ($a_average_dwz_round[$paar[$z]->htln] != '-' AND $paar[$z]->htln !=0 AND $paar[$z]->gtln != 0)) {
+					echo $a_average_dwz_round[$paar[$z]->htln];
+				} else {
+					if (isset($a_average_dwz_lineup[$paar[$z]->htln])) {
+						echo $a_average_dwz_lineup[$paar[$z]->htln];
+					}
+				} ?>
 		</td>
 		<?php
 		// Wenn Paarung existiert dann Ergebnis-Summen anzeigen
@@ -295,9 +298,13 @@ else { echo $paar[$z]->gname; } ?>
 			//$z2++;
 		//}
 		//else { if (isset($dwz[$paar[$z]->gtln])) echo round($dwz[($paar[$z]->gtln)]); } ?>
-        <?php if ($a_average_dwz_round[$paar[$z]->gtln] != '-' AND $paar[$z]->htln !=0 AND $paar[$z]->gtln != 0)
-                { echo $a_average_dwz_round[$paar[$z]->gtln]; $z2++; }
-                else { echo $a_average_dwz_lineup[$paar[$z]->gtln];} ?>
+	<?php	if ((isset($a_average_dwz_round[$paar[$z]->gtln])) && ($a_average_dwz_round[$paar[$z]->gtln] != '-' AND $paar[$z]->htln !=0 AND $paar[$z]->gtln != 0)) {
+				echo $a_average_dwz_round[$paar[$z]->gtln]; $z2++;
+			} else {
+				if (isset($a_average_dwz_lineup[$paar[$z]->gtln])) {
+					echo $a_average_dwz_lineup[$paar[$z]->gtln];
+				}
+			} ?>
 	</td>
 	<?php if ($params['round_date'] == '1') { ?>
 	<td class="heim">

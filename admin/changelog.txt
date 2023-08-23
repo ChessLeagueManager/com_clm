@@ -26,6 +26,7 @@ $ -> Language fix or change
 + Admin-View Vereine: neue Schaltflächen
 ^ Mitgliederliste: Details wegen DSGVO
 # Erhöhung Datensicherheit im FE
+# Bugfixing (pdf-Terminliste, View Turniereinladung, u.a.)
 
 - - - - - 4.1.0 - [17-07-2023] - - - - - - - - - - - - - - - - - - - -
 + Ranglistensystem: Spielgemeinschaften möglich
