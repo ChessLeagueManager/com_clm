@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -212,8 +212,8 @@ $pdf->SetFont('Times','B',$date_font+4);
 	if (isset($paar[$y]->hpublished) AND $paar[$y]->hpublished == 1 and isset($paar[$y]->hname)) {
 //		if ($ms) {
 			$pdf->Cell($breite0,$zelle+1,'','LTB',0);
-			$pdf->Cell($breite1,$zelle+1,utf8_decode($paar[$y]->hname),'TB',0,'L'); 
-//		} else $pdf->Cell($breite1+7,$zelle+1,utf8_decode($paar[$y]->hname),'LTB',0,'L');
+//			$pdf->Cell($breite1,$zelle+1,utf8_decode($paar[$y]->hname),'TB',0,'L'); 
+			$pdf->Cell($breite1,$zelle+1,utf8_decode($paar[$y]->hname),'TB',0,'R'); 
 	} else $pdf->Cell($breite1+7,$zelle+1,'',0,0);
 
 	$pdf->Cell(16,$zelle+1,' - ','TB',0,'C');
@@ -238,7 +238,13 @@ $pdf->SetFont('Times','',$date_font);
 			if ($params['ReportForm'] == '1') { 	//mit Melde-Nr.
 				$breite2 = 7;
 				$breite1 = 71;
-				$htext = JText::_('PAIRING_ST_NO');
+				if ($ms) {
+					$htext = JText::_('PAIRING_ST_NO');
+				} else {
+					$htext = JText::_('PAIRING_RANK_NO');
+					$breite2 = 14;
+					$breite1 = 64;
+				}
 			} else {								// 2 mit Mitgl.Nr.
 				$breite2 = 11;
 				$breite1 = 67;
@@ -331,7 +337,13 @@ $pdf->SetFont('Times','',$date_font);
 		if ($i > 30) break;
 		$pdf->SetX($xxl);
 		if ($params['ReportForm'] == '1') { 	//mit Melde-Nr.
-			$pdf->Cell(3,$zelle/2,$team[$i]->snr,0,0,'C');
+			if ($ms) {
+				$pdf->Cell(3,$zelle/2,$team[$i]->snr,0,0,'C');
+			} else {
+				// oder Rangnummer
+				// $pdf->Cell(3,$zelle/2,$team[$i]->tman_nr . "-" . $team[$i]->trang,0,0,'C');
+				$pdf->Cell(6,$zelle/2,$team[$i]->trang,0,0,'C');
+			}
 			$pdf->Cell(32,$zelle/2,utf8_decode($team[$i]->Spielername),0,0,'L');	
 		} else {								// 2 mit Mitgl.Nr.
 			$pdf->Cell(5,$zelle/2,$team[$i]->mgl_nr,0,0,'C');
@@ -347,7 +359,13 @@ $pdf->SetFont('Times','',$date_font);
 		if ($i > 30) break;
 		$pdf->SetX($xxr);
 		if ($params['ReportForm'] == '1') { 	//mit Melde-Nr.
-			$pdf->Cell(3,$zelle/2,$team[$i]->snr,0,0,'C');
+			if ($ms) {
+				$pdf->Cell(3,$zelle/2,$team[$i]->snr,0,0,'C');
+			} else {
+				// oder Rangnummer
+				// $pdf->Cell(3,$zelle/2,$team[$i]->tman_nr . "-" . $team[$i]->trang,0,0,'C');
+				$pdf->Cell(6,$zelle/2,$team[$i]->trang,0,0,'C');
+			}
 			$pdf->Cell(32,$zelle/2,utf8_decode($team[$i]->Spielername),0,0,'L');	
 		} else {								// 2 mit Mitgl.Nr.
 			$pdf->Cell(5,$zelle/2,$team[$i]->mgl_nr,0,0,'C');
