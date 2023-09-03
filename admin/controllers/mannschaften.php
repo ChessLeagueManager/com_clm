@@ -455,7 +455,7 @@ function save()
 			." WHERE sid = ".$row->sid
 			." AND lid = ".$row->liga
 			." AND mnr = ".$pre_man
-			." AND zps = '".$row->zps."'"
+			." AND (zps = '".$row->zps."' OR zps = '".$row->sg_zps."')"
 			;
 		//$db->setQuery($query);
 		clm_core::$db->query($query);

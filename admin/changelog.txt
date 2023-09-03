@@ -15,6 +15,7 @@ $ -> Language fix or change
 - - - - - 4.1.2 - [xx-xx-2023] - - - - - - - - - - - - - - - - - - - -
 # Teamwettbewerbe: Berechnung Direkter Vergleich bei 3-2-1-0 u.ä. Wertungen 
 ^ Spielbericht: kleine Designänderung
+# Admin View Mannschaften: Umsetzen von Mannschaften bei Spielgemeinschaften
 
 - - - - - 4.1.1 - [23-08-2023] - - - - - - - - - - - - - - - - - - - -
 + Ranglistensystem: Spielgemeinschaften möglich (Ergänzung)
