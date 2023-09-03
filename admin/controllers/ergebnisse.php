@@ -1886,7 +1886,8 @@ function save_wertung()
 	$countryversion = $config->countryversion;
 	// Optionales Mannschaftsergebnis prüfen ggf. Nachricht absetzen
 	if ($countryversion == "en" AND ($runden_modus == 4 OR $runden_modus == 5)) $limit = $stamm * 2;
-	else $limit = $stamm;
+//	else $limit = $stamm;
+	else $limit = $stamm * ($sieg+$antritt);
 	$err = 0;
 	if($w_erg + $s_erg > $limit ) {
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_ME_HOCH'),'warning' );
@@ -2013,7 +2014,7 @@ function save_wertung()
 		." , manpunkte = '".$hman_punkte."'"
 		." , wertpunkte = '".$hwpunkte."'"
 		." , comment = '".$comment."'"
-		." , icomment = '".$icomment."'"
+//		." , icomment = '".$icomment."'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd
@@ -2039,7 +2040,7 @@ function save_wertung()
 		." , manpunkte = '".$gman_punkte."'"
 		." , wertpunkte = '".$gwpunkte."'"
 		." , comment = '".$comment."'"
-		." , icomment = '".$icomment."'"
+//		." , icomment = '".$icomment."'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd
@@ -2097,7 +2098,7 @@ function save_wertung()
 		$query	= "UPDATE #__clm_rnd_man"
 			." SET ko_decision = ".$ko_decision
 			." , comment = '".$comment."'"
-			." , icomment = '".$icomment."'"
+//			." , icomment = '".$icomment."'"
 			." WHERE sid = ".$sid
 			." AND lid = ".$lid
 			." AND runde = ".$rnd
@@ -2111,7 +2112,7 @@ function save_wertung()
 		$query	= "UPDATE #__clm_rnd_man"
 			." SET ko_decision = ".$ko_decision
 			." , comment = '".$comment."'"
-			." , icomment = '".$icomment."'"
+//			." , icomment = '".$icomment."'"
 			." WHERE sid = ".$sid
 			." AND lid = ".$lid
 			." AND runde = ".$rnd
@@ -2530,7 +2531,7 @@ function kampflos($gast)
 		." , zeit = '$now'"
 		." , gemeldet = '$meldung'"
 		." , comment = '$comment'"
-		." , icomment = '$icomment'"
+//		." , icomment = '$icomment'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd
@@ -2550,7 +2551,7 @@ function kampflos($gast)
 		." , zeit = '$now'"
 		." , gemeldet = '$meldung'"
 		." , comment = '$comment'"
-		." , icomment = '$icomment'"
+//		." , icomment = '$icomment'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd

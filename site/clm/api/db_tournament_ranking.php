@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -79,7 +79,9 @@
 		// Wertpunkte berechnen (ENDE)
 
 		$query = " SELECT l.sid as sid, a.tln_nr,a.zps as zps, a.sg_zps as sgzps, a.man_nr as man_nr, a.name, a.ordering, "
-				." l.teil, l.stamm, l.liga_mt, l.runden_modus, l.man_sieg, l.man_remis, l.sieg, l.remis, l.tiebr1, l.tiebr2, l.tiebr3 "
+				." l.teil, l.stamm, l.liga_mt, l.runden_modus, "
+				." l.man_sieg, l.man_remis, l.man_nieder, l.man_antritt, l.sieg, l.remis, l.nieder, l.antritt, "
+				." l.tiebr1, l.tiebr2, l.tiebr3 "
 			." FROM #__clm_mannschaften as a "
 			." LEFT JOIN #__clm_liga as l ON l.id =".$id
 			." WHERE a.liga = ".$id
@@ -102,6 +104,7 @@
 		$mbrett_remis	= $team[0]->remis * $team[0]->stamm;
 		$id_stamm 	= $team[0]->stamm;
 		$sid = $team[0]->sid;
+		$mbrett_max	= ($team[0]->sieg + $team[0]->antritt) * $team[0]->stamm;
 		
 		// "spielfrei(e)" Mannschaft suchen
 		$query = " SELECT COUNT(id) FROM #__clm_mannschaften as a "
@@ -141,6 +144,7 @@
 					." LEFT JOIN #__clm_mannschaften as n ON n.liga = a.lid AND n.sid = a.sid AND n.tln_nr = a.gegner"
 					. " WHERE a.lid = ".$id
 					. " AND a.tln_nr = ".$spielfrei->tln_nr   //.") OR (a.gegner =".$spielfrei."))"
+					. " AND dwz_zeit = '1970-01-01 00:00:00' " // neu
 					;
 				if (($runden_modus == 4) OR ($runden_modus == 5))
 					$query .= " AND a.dg = ".$dg_max." AND a.runde = ".$runde_max;
@@ -161,7 +165,8 @@
 				   clm_core::$db->query($query);
 					
 					$query = "UPDATE `#__clm_rnd_man`"
-						. " SET ergebnis = 5, kampflos = 1, manpunkte = ".$man_sieg.", brettpunkte = ".$id_stamm.", gemeldet = 62, zeit = '$now'";
+//						. " SET ergebnis = 5, kampflos = 1, manpunkte = ".$man_sieg.", brettpunkte = ".$id_stamm.", gemeldet = 62, zeit = '$now'";
+						. " SET ergebnis = 5, kampflos = 1, manpunkte = ".$man_sieg.", brettpunkte = ".$mbrett_max.", gemeldet = 62, zeit = '$now'";
 					if (($runden_modus == 4) OR ($runden_modus == 5)) 
 						$query .= " , ko_decision = 1";	
 					$query .= " WHERE lid = ".$id
@@ -635,8 +640,12 @@
 						$matchesdirect = clm_core::$db->loadObjectList($query);		
 						$zdirect = count($matchesdirect);
 						foreach ($matchesdirect as $mdvalue) {
-							if ($mdvalue->manpunkte == $team[0]->man_remis) $sum_erg += 1;
-							elseif ($mdvalue->manpunkte == $team[0]->man_sieg) $sum_erg += 2;
+//							if ($mdvalue->manpunkte == $team[0]->man_remis) $sum_erg += 1;
+//							elseif ($mdvalue->manpunkte == $team[0]->man_sieg) $sum_erg += 2;
+							if ($mdvalue->ergebnis == '0' ) $sum_erg += $team[0]->man_nieder + $team[0]->man_antritt;
+							elseif ($mdvalue->ergebnis == '1' ) $sum_erg += $team[0]->man_sieg + $team[0]->man_antritt;
+							elseif ($mdvalue->ergebnis == '2' ) $sum_erg += $team[0]->man_remis + $team[0]->man_antritt;
+							elseif ($mdvalue->ergebnis == '5' ) $sum_erg += $team[0]->man_sieg + $team[0]->man_antritt;
 						}
 					}
 				}
