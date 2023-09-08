@@ -43,6 +43,7 @@ public static function runden( $rows, $lists, $pageNav, $option )
 	{
 		$mainframe	= JFactory::getApplication();
 		$cliga 		= clm_core::$load->request_int('liga'); 
+		JFactory::getApplication()->input->set('hidemainmenu', true);
 
 		// Liga-Parameter holen 
 		$db 		=JFactory::getDBO();
@@ -108,10 +109,10 @@ public static function runden( $rows, $lists, $pageNav, $option )
 			<table class="adminlist">
 			<thead>
 				<tr>
-					<th width="3%">
+					<th width="2%">
 						#
 					</th>
-					<th width="3%">
+					<th width="2%">
 						<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 					</th>
 					<th class="title">
@@ -121,7 +122,7 @@ public static function runden( $rows, $lists, $pageNav, $option )
 						<?php echo JHtml::_('grid.sort',   'RUNDE_NR', 'a.nr', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 
-					<th width="7%">
+					<th width="6%">
 						<?php echo JHtml::_('grid.sort',   'JDATE', 'a.datum', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 				<?php if ($lparams['round_date'] == '0')  { ?>
@@ -130,17 +131,20 @@ public static function runden( $rows, $lists, $pageNav, $option )
 					</th>
 				<?php }
 					if ($lparams['round_date'] == '1')  { ?>
-					<th width="7%">
+					<th width="6%">
 						<?php echo JHtml::_('grid.sort',   'RUNDE_ENDDATUM', 'a.enddatum', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 				<?php } ?>
+					<th width="10%" colspan="2">
+						<?php echo JText::_( 'RUNDE_MELDETERMIN' ); ?>
+					</th>
 					<th width="8%">
 						<?php echo JHtml::_('grid.sort',   'ERGEBNISSE', 'e.name', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="15%">
 						<?php echo JHtml::_('grid.sort',   'RUNDE_LIGA', 'd.name', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
-					<th width="9%">
+					<th width="6%">
 						<?php echo JHtml::_('grid.sort',   'RUNDE_SAISON', 'c.name', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="4%">
@@ -155,7 +159,7 @@ public static function runden( $rows, $lists, $pageNav, $option )
 					<th width="4%">
 						<?php echo JHtml::_('grid.sort',   'JPUBLISHED', 'a.published', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
-					<th width="9%" nowrap="nowrap">
+					<th width="11%" nowrap="nowrap">
 						<?php echo JHtml::_('grid.sort',   'JGRID_HEADING_ORDERING', 'a.ordering', @$lists['order_Dir'], @$lists['order'] ); ?>
 						<?php echo JHtml::_('grid.order',  $rows ); ?>
 					</th>
@@ -202,7 +206,7 @@ public static function runden( $rows, $lists, $pageNav, $option )
 						<?php echo $pageNav->getRowOffset( $i ); ?>
 					</td>
 
-					<td>
+					<td align="center">
 						<?php echo $checked; ?>
 					</td>
 
@@ -218,18 +222,24 @@ public static function runden( $rows, $lists, $pageNav, $option )
 						<?php echo $row->nr;?>
 					</td>
 					<td align="center">
-						<?php echo $row->datum;?>
+						<?php if ($row->datum == '1970-01-01') echo ''; else echo $row->datum; ?>
 					</td>
 				<?php if ($lparams['round_date'] == '0')  { ?>
 					<td align="center">
-						<?php echo substr($row->startzeit,0,5);?>
+						<?php if (substr($row->startzeit,0,5) == '00:00') echo ''; else echo substr($row->startzeit,0,5); ?>
 					</td>
 				<?php } 
 					if ($lparams['round_date'] == '1')  { ?>
 					<td align="center">
-						<?php echo $row->enddatum;?>
+						<?php if ($row->enddatum == '1970-01-01') echo ''; else echo $row->enddatum; ?>
 					</td>
 				<?php } ?>
+					<td align="center">
+						<?php if ($row->deadlineday == '1970-01-01') echo ''; else echo $row->deadlineday; ?>
+					</td>
+					<td align="center">
+						<?php if (substr($row->deadlinetime,0,5) == '00:00') echo ''; else echo substr($row->deadlinetime,0,5); ?>
+					</td>
 					<td align="center">
 						<a href="<?php echo $link; ?>"><?php echo JText::_( 'ERGEBNISSE' );?></a>
 					</td>
@@ -240,14 +250,24 @@ public static function runden( $rows, $lists, $pageNav, $option )
 						<?php echo $rows[$i]->saison;?>
 					</td>
 					<td align="center">
-						<?php if ($row->meldung=='1') 
-							{ ?><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /> <?php }
-						else 	{ ?><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /> <?php }?>
+					<?php 
+						// Ergebnismeldung möglich
+						if ($rows[$i]->meldung == 1) { 
+							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'notpossible\')" title="'.JText::_('RUNDE_REMOVE_RESULTINPUT').'"><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /></a>';
+						} else {
+							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'possible\')" title="'.JText::_('RUNDE_SET_RESULTINPUT').'"><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /></a>';
+						}
+					?>
 					</td>
 					<td align="center">
-						<?php if ($row->sl_ok=='1') 
-							{ ?><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /> <?php }
-						else 	{ ?><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /> <?php }?>
+					<?php 
+						// tl_ok/director approval
+						if ($rows[$i]->sl_ok == 1) { 
+							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'unapprove\')" title="'.JText::_('RUNDE_REMOVE_APPROVAL').'"><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /></a>';
+						} else {
+							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'approve\')" title="'.JText::_('RUNDE_SET_APPROVAL').'"><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /></a>';
+						}
+					?>
 					</td>
 					<td align="center">
 						<?php if ($row->bemerkungen<>'') 

@@ -24,6 +24,8 @@ function __construct( $config = array() )
 		$this->registerTask( 'add','edit' );
 		$this->registerTask( 'apply','save' );
 		$this->registerTask( 'unpublish','publish' );
+		$this->registerTask( 'unapprove','approve' );
+		$this->registerTask( 'notpossible','possible' );
 	}
 
 function display($cachable = false, $urlparams = array())
@@ -828,5 +830,141 @@ function check()
 	// Link MUSS hardcodiert sein !!!
 	$mainframe->redirect( 'index.php?option='.$option.'&section=check&task=edit&id='.$cid[0]);
 	}
+
+
+	function approve() {
+	
+		$rc = $this->_approveDo();
+
+		$this->adminLink = new AdminLink();
+		$this->adminLink->more = array('section' => 'runden', 'liga' => $rc[1], 'clm_backend' => 1, 'session_language' => 'de-DE');
+		$this->adminLink->makeURL();
+		$mainframe	= JFactory::getApplication();
+		$mainframe->redirect( $this->adminLink->url );
+	
+	}
+	
+
+	function _approveDo() {
+
+		// Check for request forgeries
+		defined('_JEXEC') or die( 'Invalid Token' );
+
+		$cid = clm_core::$load->request_array_int('cid');							
+		$roundID = $cid[0];
+
+		// Rundendaten holen
+		$round =JTable::getInstance( 'runden', 'TableCLM' );
+		$round->load( $roundID ); // Daten zu dieser ID laden
+
+		// Runde existent?
+		if (!$round->id) {
+			$this->app->enqueueMessage( CLMText::errorText('ROUND', 'NOTEXISTING'),'warning' );
+			return array(false,0);
+		}
+		// Liga/MTurnier holen
+		$row = JTable::getInstance( 'ligen', 'TableCLM' );
+		$row->load( $round->liga ); // Daten zu dieser ID laden
+
+	    $clmAccess = clm_core::$access;      
+		if (($row->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'),'warning' );
+		return array(false,$round->liga);
+		}
+			
+		$task		= clm_core::$load->request_string('task');
+		if ($task == 'approve') $approve = 1; else $approve = 0; // zu vergebender Wert 0/1
+	
+		// jetzt schreiben
+		$round->sl_ok = $approve;
+		if (!$round->store()) {
+			$this->app->enqueueMessage( $row->getError(),'error' );
+			return array(false,$round->liga);
+		}
+									   
+		if ($approve) {
+			$log_ext = $round->name." ".JText::_('RUNDE_APPROVED');
+			$this->app->enqueueMessage( $round->name." ".JText::_('RUNDE_APPROVED') );
+		} else {
+			$log_text = $round->name." ".JText::_('RUNDE_UNAPPROVED');
+			$this->app->enqueueMessage( $round->name." ".JText::_('RUNDE_UNAPPROVED') );
+		}
+
+		// Log
+		$clmLog = new CLMLog();
+		$clmLog->aktion = $log_text;
+		$clmLog->params = array('lid' => $round->liga, 'runde' => $round->nr); 
+		$clmLog->write();
+		
+		return array(true,$round->liga);
+	}
+
+	function possible() {
+	
+		$rc = $this->_possibleDo();
+
+		$this->adminLink = new AdminLink();
+		$this->adminLink->more = array('section' => 'runden', 'liga' => $rc[1], 'clm_backend' => 1, 'session_language' => 'de-DE');
+		$this->adminLink->makeURL();
+		$mainframe	= JFactory::getApplication();
+		$mainframe->redirect( $this->adminLink->url );
+	
+	}
+	
+
+	function _possibleDo() {
+
+		// Check for request forgeries
+		defined('_JEXEC') or die( 'Invalid Token' );
+
+		$cid = clm_core::$load->request_array_int('cid');							
+		$roundID = $cid[0];
+
+		// Rundendaten holen
+		$round =JTable::getInstance( 'runden', 'TableCLM' );
+		$round->load( $roundID ); // Daten zu dieser ID laden
+
+		// Runde existent?
+		if (!$round->id) {
+			$this->app->enqueueMessage( CLMText::errorText('ROUND', 'NOTEXISTING'),'warning' );
+			return array(false,0);
+		}
+		// Liga/MTurnier holen
+		$row = JTable::getInstance( 'ligen', 'TableCLM' );
+		$row->load( $round->liga ); // Daten zu dieser ID laden
+
+	    $clmAccess = clm_core::$access;      
+		if (($row->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'),'warning' );
+			return array(false,$round->liga);
+		}
+			
+		$task		= clm_core::$load->request_string('task');
+		if ($task == 'possible') $possible = 1; else $possible = 0; // zu vergebender Wert 0/1
+	
+		// jetzt schreiben
+		$round->meldung = $possible;
+		if (!$round->store()) {
+			$this->app->enqueueMessage( $row->getError(),'error' );
+			return array(false,$round->liga);
+		}
+									   
+		if ($possible) {
+			$log_ext = $round->name." ".JText::_('RUNDE_INPUT_RELEASED');
+			$this->app->enqueueMessage( $round->name." ".JText::_('RUNDE_INPUT_RELEASED') );
+		} else {
+			$log_text = $round->name." ".JText::_('RUNDE_INPUT_BLOCKED');
+			$this->app->enqueueMessage( $round->name." ".JText::_('RUNDE_INPUT_BLOCKED') );
+		}
+
+		// Log
+		$clmLog = new CLMLog();
+		$clmLog->aktion = $log_text;
+		$clmLog->params = array('lid' => $round->liga, 'runde' => $round->nr); 
+		$clmLog->write();
+		
+		return array(true,$round->liga);
+	}
+
 }
  
