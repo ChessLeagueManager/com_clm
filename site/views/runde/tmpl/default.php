@@ -389,7 +389,8 @@ for ($x=0; $x<$liga[0]->stamm; $x++) {
 	<?php } ?>
     <td class="paarung2" colspan ="1"><div><?php if ($einzel[$w]->zps =="ZZZZZ") {echo "N.N.";} else { 
 		if ($einzel[$w]->zps != "-2") { ?>
-			<a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->zps; ?>&mglnr=<?php echo $einzel[$w]->spieler; ?>&PKZ=<?php echo $einzel[$w]->PKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->hname; } 
+			<a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->zps; ?>&mglnr=<?php echo $einzel[$w]->spieler; ?>&PKZ=<?php echo $einzel[$w]->PKZ; ?>&amp;Itemid=<?php echo $item; ?>">
+			<?php echo $einzel[$w]->hname; if ($einzel[$w]->hstatus != 'A' AND $einzel[$w]->hstatus != '') echo ' ('.$einzel[$w]->hstatus.')'; } 
 		else echo $einzel[$w]->hname; } ?></div></td>
  
  <td class="paarung"><div><?php if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') echo $einzel[$w]->hdwz; else echo $einzel[$w]->hstart_dwz;?></div></td>
@@ -417,7 +418,9 @@ for ($x=0; $x<$liga[0]->stamm; $x++) {
 		<td class="paarung" ><div><?php echo $einzel[$w]->gattr; ?></div></td>
 	<?php } ?>
     <td class="paarung2" colspan ="1"><div><?php if ($einzel[$w]->gzps =="ZZZZZ") {echo "N.N.";} else { 
-		if ($einzel[$w]->gzps != "-2") { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->gzps; ?>&mglnr=<?php echo $einzel[$w]->gegner; ?>&PKZ=<?php echo $einzel[$w]->gPKZ; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $einzel[$w]->gname; } 
+		if ($einzel[$w]->gzps != "-2") { ?>
+			<a href="index.php?option=com_clm&view=spieler&saison=<?php echo $liga[0]->sid; ?>&zps=<?php echo $einzel[$w]->gzps; ?>&mglnr=<?php echo $einzel[$w]->gegner; ?>&PKZ=<?php echo $einzel[$w]->gPKZ; ?>&amp;Itemid=<?php echo $item; ?>">
+			<?php echo $einzel[$w]->gname; if ($einzel[$w]->gstatus != 'A' AND $einzel[$w]->gstatus != '') echo ' ('.$einzel[$w]->gstatus.')'; } 
 		else echo $einzel[$w]->gname; } ?></div></td>
     <td class="paarung"><div><?php if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') echo $einzel[$w]->gdwz; else echo $einzel[$w]->gstart_dwz; ?></div></td>
     </tr>

@@ -367,7 +367,8 @@ for ($x=0; $x< 100; $x++){
     <?php } ?>
 		<td class="dwz"><?php echo $count[$x]->FIDE_Titel; ?></td>
 	<?php if($count[$x]->zps != "-2") { ?>
-		<td class="name"><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $count[$x]->zps; ?>&mglnr=<?php echo $count[$x]->mgl_nr; ?>&PKZ=<?php echo $count[$x]->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $count[$x]->name; ?></a></td>
+		<td class="name"><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $count[$x]->zps; ?>&mglnr=<?php echo $count[$x]->mgl_nr; ?>&PKZ=<?php echo $count[$x]->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>">
+		<?php echo $count[$x]->name; if ($count[$x]->Status != 'A') echo " (".$count[$x]->Status.")"; ?></a></td>
 	<?php } else { ?>
 		<td class="name"><?php echo $count[$x]->name; ?></td>
 	<?php } ?>

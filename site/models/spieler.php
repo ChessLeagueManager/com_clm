@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,10 +9,8 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
-
 
 class CLMModelSpieler extends JModelLegacy
 {
@@ -30,7 +28,7 @@ class CLMModelSpieler extends JModelLegacy
 	$id	= @$options['id'];
 
 	$query = "SELECT a.Spielername,l.name as liga_name,l.id as liga,a.ZPS,a.Mgl_Nr,a.PKZ,"
-		." a.DWZ as dsbDWZ,a.DWZ_Index,a.FIDE_ELO,a.FIDE_ID,"
+		." a.DWZ as dsbDWZ,a.DWZ_Index,a.FIDE_ELO,a.FIDE_ID,a.Status,"
 		." n.name,n.tln_nr, m.*, s.datum as dsb_datum, s.name as s_name";      
 	if ($zps != '-1') $query .= ", d.Vereinname";     
 	$query .= " FROM #__clm_dwz_spieler as a ";

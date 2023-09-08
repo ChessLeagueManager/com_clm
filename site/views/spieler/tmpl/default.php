@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 //JHtml::_('behavior.tooltip', '.CLMTooltip');
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
@@ -175,8 +174,14 @@ else {  ?>
 				<td class="det_col4"><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $spieler[0]->Vereinname; ?></a></td>
             <?php } ?>
             </tr>
+            <?php if (isset($spieler[0]->Status) AND $spieler[0]->Status != 'A' ) { ?>
             <tr>
-            <td class="det_col3" valign="top"><?php echo JText::_('PLAYER_TEAMS') ?></td>
+				<td class="det_col3"><?php echo 'Spielberechtigung:'; ?></td>
+				<td class="det_col4"><?php echo $spieler[0]->Status; ?></td>
+            </tr>
+            <?php } ?>
+			<tr>
+			<td class="det_col3" valign="top"><?php echo JText::_('PLAYER_TEAMS') ?></td>
             <td class="det_col4" valign="top">
                 <?php if (count($erg) > 0) {
                 $c = 0;
