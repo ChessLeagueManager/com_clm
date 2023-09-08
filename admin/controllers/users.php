@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -975,21 +975,22 @@ function send()
 		$this->setMessage(JText::_( 'USERS_NO_SEND'),'warning');
 		return;
 	}
-	if ($clmAccess->access('BE_user_copy') === true) {
 
-	$cids = implode( ',', $cid );
-	$query = "SELECT a.jid,a.name,a.email,a.username,a.aktive, b.name as funktion, u.activation"
-	." FROM #__clm_user as a"
-	." LEFT JOIN #__clm_usertype AS b ON b.usertype = a.usertype"
-	." LEFT JOIN #__users AS u ON u.id = a.jid "
-	. " WHERE a.id IN ( '". $cids ."' )";
+	if ($n > 1) {
+		$cids = implode( ',', $cid );
+		$query = "SELECT a.jid,a.name,a.email,a.username,a.aktive, b.name as funktion, u.activation"
+			." FROM #__clm_user as a"
+			." LEFT JOIN #__clm_usertype AS b ON b.usertype = a.usertype"
+			." LEFT JOIN #__users AS u ON u.id = a.jid "
+			. " WHERE a.id IN ( ". $cids ." )";
+//			. " WHERE a.id IN ( '". $cids ."' )";
 	} else {
-	$query = "SELECT a.jid,a.name,a.email,a.username,a.aktive, b.name as funktion, u.activation"
-	." FROM #__clm_user as a"
-	." LEFT JOIN #__clm_usertype AS b ON b.usertype = a.usertype"
-	." LEFT JOIN #__users AS u ON u.id = a.jid "
-	." WHERE a.id = ".$cid[0];
-	$n=1;
+		$query = "SELECT a.jid,a.name,a.email,a.username,a.aktive, b.name as funktion, u.activation"
+			." FROM #__clm_user as a"
+			." LEFT JOIN #__clm_usertype AS b ON b.usertype = a.usertype"
+			." LEFT JOIN #__users AS u ON u.id = a.jid "
+			." WHERE a.id = ".$cid[0];
+			$n=1;
 	}
 	try {
 		$db->setQuery( $query );

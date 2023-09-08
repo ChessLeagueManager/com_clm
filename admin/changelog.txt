@@ -16,6 +16,7 @@ $ -> Language fix or change
 # Teamwettbewerbe: Berechnung Direkter Vergleich bei 3-2-1-0 u.ä. Wertungen 
 ^ Spielbericht: kleine Designänderung
 # Admin View Mannschaften: Umsetzen von Mannschaften bei Spielgemeinschaften
+# Admin View Benutzer: Accountdaten an mehrere Benutzer
 
 - - - - - 4.1.1 - [23-08-2023] - - - - - - - - - - - - - - - - - - - -
 + Ranglistensystem: Spielgemeinschaften möglich (Ergänzung)
