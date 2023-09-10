@@ -19,6 +19,7 @@ $ -> Language fix or change
 # Admin View Benutzer: Accountdaten an mehrere Benutzer
 + Frontend Views: Ergänzung um Spielberechtigung
 ^ Rundenmanager: Funktions- und Designerweiterung
+^ Bereitstellung der Pairing-Routinen als Plugin
 
 - - - - - 4.1.1 - [23-08-2023] - - - - - - - - - - - - - - - - - - - -
 + Ranglistensystem: Spielgemeinschaften möglich (Ergänzung)

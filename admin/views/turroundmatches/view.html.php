@@ -45,7 +45,8 @@ class CLMViewTurRoundMatches extends JViewLegacy {
 		//drawing parameter auslesen
 		$turParams = new clm_class_params($model->turnier->params);
 		$drawing_mode = $turParams->get('drawing_mode', 0);
-		if (JComponentHelper::isInstalled ( 'com_clm_pairing' ) AND $model->turnier->typ == 1) {
+//		if (JComponentHelper::isInstalled ( 'com_clm_pairing' ) AND $model->turnier->typ == 1) {
+		if (JPluginHelper::isEnabled('xxx', 'clm_pairing_files') AND $model->turnier->typ == 1) { 
 			if ($drawing_mode > 0) {
 				JToolBarHelper::custom('draw','add.png','add_f2.png', JText::_('DRAW_PAIRINGS'), false);
 				JToolBarHelper::spacer();

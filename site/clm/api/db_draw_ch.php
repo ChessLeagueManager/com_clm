@@ -335,8 +335,11 @@ echo "<br>plines:"; var_dump($lines_player);
 	$nl = "\n";
 	$file_name = 'TRFXInput';
 	$file_name .= '.txt'; 
-	if (!file_exists('components'.DS.'com_clm_pairing'.DS.'draw'.DS)) mkdir('components'.DS.'com_clm'.DS.'draw'.DS);
-	$pdatei = fopen('components'.DS.'com_clm_pairing'.DS.'draw'.DS.$file_name,"wt");
+//	if (!file_exists('components'.DS.'com_clm_pairing'.DS.'draw'.DS)) mkdir('components'.DS.'com_clm'.DS.'draw'.DS);
+//	$pdatei = fopen('components'.DS.'com_clm_pairing'.DS.'draw'.DS.$file_name,"wt");
+	$str_url = '..'.DS.'plugins'.DS.'xxx'.DS.'clm_pairing_files'.DS.'draw'.DS;
+	if (!file_exists($str_url)) mkdir($str_url);
+	$pdatei = fopen($str_url.$file_name,"wt");
 	foreach($lines_common as $line) {
 		fputs($pdatei, utf8_decode($line).$nl);
 	}
@@ -345,26 +348,6 @@ echo "<br>plines:"; var_dump($lines_player);
 	}
 	fclose($pdatei);
 
-	$str_url = 'components'.DS.'com_clm_pairing'.DS.'draw'.DS;
-/*
-	$result = shell_exec ( $cmd );
-echo "<br>cmd:"; var_dump($cmd);
-echo "<br>result:"; var_dump($result);
-// result ist immer NULL, egal ob erfolgreich oder nicht, deshalb siehe unten ca. 380ff	
-*/
-/*	alternativ mit exec
-	$output = null;
-	$retval = null;
-	$result = exec ( $cmd, $output, $retval );
-	
-echo "<br>result:"; var_dump($result);
-echo "<br>output:"; var_dump($output);
-echo "<br>retval:"; var_dump($retval);
-die();
-*/
-
-//	alternativ mit exec mit JaVaFo nach Thomas
-// exec("java -Xmx256m -jar javafo.jar TRFX_Poke_R2.txt -p outfile_php_Sample_Poke_R2.txt 2>&1", $output);
 	$output = null;
 	$retval = null;
 
@@ -427,7 +410,8 @@ else{
 	$file_name = 'TRFXInput';
 	$file_name .= '.txt'; 
 	echo "<br><br>File:"; var_dump($file_name);
-	$idatei = fopen('components'.DS.'com_clm_pairing'.DS.'draw'.DS.$file_name,"r");
+//	$idatei = fopen('components'.DS.'com_clm_pairing'.DS.'draw'.DS.$file_name,"r");
+	$idatei = fopen($str_url.$file_name,"r");
 
 	$lines = array();
 	while (($line = fgets($idatei, 4096)) !== false) {
@@ -476,7 +460,8 @@ else{
 	$file_name = 'TRFXOutfile';
 	$file_name .= '.txt'; 
 	echo "<br><br>File:"; var_dump($file_name);
-	$odatei = fopen('components'.DS.'com_clm_pairing'.DS.'draw'.DS.$file_name,"r");
+//	$odatei = fopen('components'.DS.'com_clm_pairing'.DS.'draw'.DS.$file_name,"r");
+	$odatei = fopen($str_url.$file_name,"r");
 	$lines = array();
 	while (($line = fgets($odatei, 4096)) !== false) {
 		echo '<br>'.$line;
