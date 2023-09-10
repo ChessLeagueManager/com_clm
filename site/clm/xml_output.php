@@ -1,13 +1,14 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
 // Eingang: Liga-Index
 
 require ("index.php");
+
 	$view = $_GET["plgview"];
 	$view = clm_core::$load->make_valid($view, 0, -1);
 	$lid = $_GET["lid"];
@@ -147,7 +148,9 @@ if ($view == 0 or $view == 1) {		// Rangliste (Kreuztabelle/Tabelle)
 		$teamsNode->appendChild($dom->createElement("count_S", $mannschaft[$m]->count_S));
 		$teamsNode->appendChild($dom->createElement("count_R", $mannschaft[$m]->count_R));
 		$teamsNode->appendChild($dom->createElement("count_V", $mannschaft[$m]->count_V));
+		if (is_null($mannschaft[$m]->mp)) $mannschaft[$m]->mp = '';
 		$teamsNode->appendChild($dom->createElement("mp", $mannschaft[$m]->mp));
+		if (is_null($mannschaft[$m]->bp)) $mannschaft[$m]->bp = '';
 		$teamsNode->appendChild($dom->createElement("bp", $mannschaft[$m]->bp));
 	}
 }
@@ -172,7 +175,9 @@ if ($view == 2 OR $view == 4 OR $view == 14) {		// Paarungsliste / Spielplan Man
 		$teamsNode->appendChild($dom->createElement("gname", $paar0->gname));
 		$teamsNode->appendChild($dom->createElement("dg", $paar0->dg));
 		$teamsNode->appendChild($dom->createElement("runde", $paar0->runde));
+		if (is_null($paar0->brettpunkte)) $paar0->brettpunkte = '';
 		$teamsNode->appendChild($dom->createElement("brettpunkte", $paar0->brettpunkte));
+		if (is_null($paar0->gbrettpunkte)) $paar0->gbrettpunkte = '';
 		$teamsNode->appendChild($dom->createElement("gbrettpunkte", $paar0->gbrettpunkte));
 		if ($view != 14) {
 /*			if (isset($arrayDWZ[$paar0->dg][$paar0->runde][$paar0->paar])) 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -219,7 +219,7 @@ echo "<br>published ".$clmuser[0]->published;
 	<td>
 		<?php echo $spieler[$i]->dwz; ?>
 	</td>
-	<?php $j = $i + (count($spieler)/2) + (count($spieler) % 2); // +1; 
+	<?php $j = intval($i + (count($spieler)/2) + (count($spieler) % 2)); // +1; 
 		if (isset($spieler[$j]) AND $spieler[$j]->snr > "0" AND $spieler[$j]->snr < "999") { $checked_marker = ' checked="checked"'; $spieler[$j]->checked_out = "1"; }
 		else $checked_marker = '';
 		if (isset($spieler[$j])) $spieler_id = $spieler[$j]->id; else $spieler_id = '';

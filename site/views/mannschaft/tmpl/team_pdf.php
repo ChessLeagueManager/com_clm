@@ -183,6 +183,7 @@ $pdf->SetFont('Times','',$font);
 	else $pdf->Cell(80,4,'',0,1);
 $pdf->SetFont('Times','U',$font);	
 	$pdf->Cell(10,4,' ',0,0);
+	if (is_null($mannschaft[0]->email)) $mannschaft[0]->email = '';
 	if ($mail=="1" OR ($mail =="0" AND $jid !="0")) $pdf->Cell(80,4,utf8_decode($mannschaft[0]->email),0,0,'L');
 	else $pdf->Cell(80,4,utf8_decode(JText::_('TEAM_MAIL')." ".JText::_('TEAM_REGISTERED')),0,0,'L');
 $pdf->SetFont('Times','',$font);
