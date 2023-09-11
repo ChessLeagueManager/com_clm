@@ -6,9 +6,6 @@
 */
 
 $(document).ready(function() {
-	//$("#zps").select2();
-	//$("#vl").select2();
-
 	$('.js-example-basic-single').each(function () {
 		$("#" + this.id).select2();
 	});

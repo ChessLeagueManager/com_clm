@@ -182,7 +182,7 @@ function edit()
 	// Vereinefilter laden
 	// 1 = Auswahl DB obwohl manuell aktiviert wurde !
 	$vereinlist	= CLMFilterVerein::vereine_filter(1);
-	$lists['verein']= JHTML::_('select.genericlist',   $vereinlist, 'zps', 'class="inputbox" size="1" onchange="Tausch(this.id)"','zps', 'name', $row->zps );
+	$lists['verein']= JHTML::_('select.genericlist',   $vereinlist, 'zps', 'class="js-example-basic-single" size="1" style="width:300px" onchange="Tausch(this.id)"','zps', 'name', $row->zps );
 
 	// Vereinsleiterliste
 	if ($task == 'edit') { $where = "WHERE ZPS = '".$row->zps."'";}
@@ -199,7 +199,7 @@ function edit()
 	}
 	$vllist[]	= JHTML::_('select.option',  '0', JText::_( 'VEREINE_VEREINSLEITER' ), 'vl', 'name' );
 	$vllist	= array_merge( $vllist, $db->loadObjectList() );
-	$lists['vl']= JHTML::_('select.genericlist',   $vllist, 'vl', 'class="inputbox" size="1" onchange="VSTausch(this.id)"','vl', 'name', $row->vl );
+	$lists['vl']= JHTML::_('select.genericlist',   $vllist, 'vl', 'class="js-example-basic-single" size="1" style="width:300px"  onchange="VSTausch(this.id)"','vl', 'name', $row->vl );
 	
 	// Saisonliste
 	if($task =="edit"){ $sql = 'SELECT id as sid, name FROM #__clm_saison WHERE id='.$sid;} 
@@ -214,7 +214,7 @@ function edit()
 	$saisonlist[]	= JHTML::_('select.option',  '0', JText::_( 'VEREINE_SAISON' ), 'sid', 'name' );
 	$saisonlist	= array_merge( $saisonlist, $db->loadObjectList() );
 		} else { $saisonlist	= $db->loadObjectList(); }
-	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="inputbox" size="1"','sid', 'name', $row->sid );
+	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1" style="width:300px" ','sid', 'name', $row->sid );
 	
 	$lists['published']	= JHTML::_('select.booleanlist',  'published', 'class="inputbox"', $row->published );
 	$lists['cid']	= $cid[0];
