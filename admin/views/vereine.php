@@ -19,7 +19,7 @@ public static function setVereineToolbar()
 	
 	$clmAccess = clm_core::$access;
 	// Menubilder laden
-		clm_core::$load->load_css("icons_images");
+	clm_core::$load->load_css("icons_images");
 	JToolBarHelper::title( JText::_( 'TITLE_VEREIN' ), 'clm_headmenu_vereine.png' );
 
 	if($clmAccess->access('BE_club_copy') === true) {
@@ -237,6 +237,8 @@ public static function verein( &$row, $lists, $option )
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 		
 		clm_core::$load->load_js("vereine");
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
 		?>
 
 		<form action="index.php" method="post" name="adminForm" id="adminForm">
