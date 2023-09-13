@@ -2014,7 +2014,7 @@ function save_wertung()
 		." , manpunkte = '".$hman_punkte."'"
 		." , wertpunkte = '".$hwpunkte."'"
 		." , comment = '".$comment."'"
-//		." , icomment = '".$icomment."'"
+		." , icomment = '".$icomment."'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd
@@ -2040,7 +2040,7 @@ function save_wertung()
 		." , manpunkte = '".$gman_punkte."'"
 		." , wertpunkte = '".$gwpunkte."'"
 		." , comment = '".$comment."'"
-//		." , icomment = '".$icomment."'"
+		." , icomment = '".$icomment."'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd
@@ -2098,7 +2098,7 @@ function save_wertung()
 		$query	= "UPDATE #__clm_rnd_man"
 			." SET ko_decision = ".$ko_decision
 			." , comment = '".$comment."'"
-//			." , icomment = '".$icomment."'"
+			." , icomment = '".$icomment."'"
 			." WHERE sid = ".$sid
 			." AND lid = ".$lid
 			." AND runde = ".$rnd
@@ -2112,7 +2112,7 @@ function save_wertung()
 		$query	= "UPDATE #__clm_rnd_man"
 			." SET ko_decision = ".$ko_decision
 			." , comment = '".$comment."'"
-//			." , icomment = '".$icomment."'"
+			." , icomment = '".$icomment."'"
 			." WHERE sid = ".$sid
 			." AND lid = ".$lid
 			." AND runde = ".$rnd
@@ -2531,7 +2531,7 @@ function kampflos($gast)
 		." , zeit = '$now'"
 		." , gemeldet = '$meldung'"
 		." , comment = '$comment'"
-//		." , icomment = '$icomment'"
+		." , icomment = '$icomment'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd
@@ -2551,7 +2551,7 @@ function kampflos($gast)
 		." , zeit = '$now'"
 		." , gemeldet = '$meldung'"
 		." , comment = '$comment'"
-//		." , icomment = '$icomment'"
+		." , icomment = '$icomment'"
 		." WHERE sid = ".$sid
 		." AND lid = ".$lid
 		." AND runde = ".$rnd

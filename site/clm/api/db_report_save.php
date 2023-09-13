@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -27,6 +27,7 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 		return array(false, "e_reportSaveInconsistent");
 	}
 	/* Start: Kontrolle der Daten */
+	$rang = $out["liga"][0]->rang;
 	$gast = array();
 	for ($i = 0;$i < count($out["gast"]);$i++) {
 	 if ($countryversion =="de") {
@@ -63,8 +64,8 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 		}
 	}
 	/* Ende: Kontrolle der Daten*/
-//	$comment = clm_core::$load->make_valid($comment, 8, "");
-//	$icomment = clm_core::$load->make_valid($icomment, 8, "");
+	$comment = clm_core::$load->make_valid($comment, 18, "");
+	$icomment = clm_core::$load->make_valid($icomment, 18, "");
 	$ko_decision = intval(clm_core::$load->make_valid($ko_decision, 9, 1, array(1, 2, 3, 4, 5)));
 	$id = $out["access"];
 	$lid = $out["input"]["liga"];
@@ -200,9 +201,12 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 		if ($y1 >= strlen($colorstr)) $y1 = 0;
 		// $sid macht hier keinen Sinn, die ID der Liga ist bereits eindeutig!
 		$sid = $out["liga"][0]->sid;
+		if (is_null($hmgl) OR $hmgl == '') $hmgl = '0'; 
+		if (is_null($gmgl) OR $gmgl == '') $gmgl = '0'; 
 		$query = "INSERT INTO #__clm_rnd_spl " . " ( `sid`, `lid`, `runde`, `paar`, `dg`, `tln_nr`, `brett`, `heim`, `weiss`, `spieler`, `PKZ` " . " , `zps`, `gegner`, `gPKZ`, `gzps`, `ergebnis` , `kampflos`, `punkte`, `gemeldet`) " 
 				." VALUES ('$sid','$lid','$rnd','$paarung','$dg','" . $out["paar"][0]->htln . "','" . ($y + 1) . "',1,'$weiss','$hmgl','$hPKZ','$hzps'," . " '$gmgl','$gPKZ','$gzps','$ergebnis', '$kampflos','$erg_h','$jid') "
 				.	  " , ('$sid','$lid','$rnd','$paarung','$dg','" . $out["paar"][0]->gtln . "','" . ($y + 1) . "','0','$schwarz','$gmgl','$gPKZ','$gzps'," . " '$hmgl','$hPKZ','$hzps','$ergebnis', '$kampflos','$erg_g','$jid') ";
+//clm_core::$api->test_print('clm_rnd_spl',$query);
 		clm_core::$db->query($query);
 		$hmpunkte+= $erg_h;
 		$gmpunkte+= $erg_g;
@@ -298,11 +302,13 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 	$query = "UPDATE #__clm_rnd_man" . " SET gemeldet = " . $jid . " , zeit = '$now'" . " , ergebnis = " . $hergebnis . " , kampflos = " . $hkampflos
 		. " , brettpunkte = " . $hmpunkte . " , manpunkte = " . $hman_punkte . " , wertpunkte = " . $hwpunkte . " , comment = '" . $comment . "', icomment = '" . $icomment . "'" 
 		. " WHERE lid = " . $lid . " AND runde = " . $rnd . " AND paar = " . $paarung . " AND dg = " . $dg . " AND heim = 1 ";
+//clm_core::$api->test_print('clm_rnd_man',$query);
 	clm_core::$db->query($query);
 	// Für Gastmannschaft updaten
 	$query = "UPDATE #__clm_rnd_man" . " SET gemeldet = " . $jid . " , zeit = '$now'" . " , ergebnis = " . $gergebnis . " , kampflos = " . $gkampflos
 		. " , brettpunkte = " . $gmpunkte . " , manpunkte = " . $gman_punkte . " , wertpunkte = " . $gwpunkte . " , comment = '" . $comment . "', icomment = '" . $icomment . "'" 
 		. " WHERE lid = " . $lid . " AND runde = " . $rnd . " AND paar = " . $paarung . " AND dg = " . $dg . " AND heim = 0 ";
+//clm_core::$api->test_print('clm_rnd_man',$query);
 	clm_core::$db->query($query);
 	//mtmt start
 	if ($out["liga"][0]->runden_modus == 4 OR $out["liga"][0]->runden_modus == 5) { // KO Turnier
@@ -386,7 +392,12 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 		$player[$i][1] = '';
 		$player[$i][2] = '';
 	  } else {
-		$player[$i][0] = $out["heim"][$p]->snr;
+//		$player[$i][0] = $out["heim"][$p]->snr;
+		if ($rang === '0') {
+			$player[$i][0] = $out["heim"][$p]->snr;
+		} else {
+			$player[$i][0] = $out["heim"][$p]->rmnr . "-" . $out["heim"][$p]->rang;
+		}
 		if ($countryversion == "de")
 			$player[$i][1] = $out["heim"][$p]->mgl_nr;
 		else
@@ -400,7 +411,12 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 		$player[$i][5] = '';
 		$player[$i][6] = '';
 	  } else {
-		$player[$i][4] = $out["gast"][$q]->snr;
+//		$player[$i][4] = $out["gast"][$q]->snr;
+		if ($rang === '0') {
+			$player[$i][4] = $out["gast"][$q]->snr;
+		} else {
+			$player[$i][4] = $out["gast"][$q]->rmnr . "-" . $out["gast"][$q]->rang;
+		}
 		if ($countryversion == "de")
 			$player[$i][5] = $out["gast"][$q]->mgl_nr;
 		else

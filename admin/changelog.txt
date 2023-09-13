@@ -20,6 +20,10 @@ $ -> Language fix or change
 + Frontend Views: Ergänzung um Spielberechtigung
 ^ Rundenmanager: Funktions- und Designerweiterung
 ^ Bereitstellung der Pairing-Routinen als Plugin
++ Dateien zur Anpassung der Suchfeldfunktion in Dropdowns
++ Dropdown + Suchfunktion Vereine
+# Ergebnismeldung: kein Spieler (php 8.1)
+^ Ergebnismail: kleine Anpassung bzgl. Ranglistensystem
 
 - - - - - 4.1.1 - [23-08-2023] - - - - - - - - - - - - - - - - - - - -
 + Ranglistensystem: Spielgemeinschaften möglich (Ergänzung)

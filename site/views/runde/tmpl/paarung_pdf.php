@@ -178,7 +178,8 @@ $pdf->SetFont('Times','B',$head_font);
 	$pdf->Cell(50,6,'',0,1);
 $pdf->SetFont('Times','',$head_font-1);
 	$pdf->Cell(10,5,' ',0,0);
-	if ($params['round_date'] == '1' AND $paar[$paarung]->pdate > '1970-01-01') { 
+//	if ($params['round_date'] == '1' AND $paar[$paarung]->pdate > '1970-01-01') { 
+	if ($params['round_date'] == '1' AND $paar[$paarung-1]->pdate > '1970-01-01') { 
 		$pdf_title = utf8_decode($runden_text).JText::_('PAIRING').$paarung.' '.JText::_('ON_DAY').' '.utf8_decode(JHTML::_('date', $paar[$paarung-1]->pdate, JText::_('DATE_FORMAT_CLM_F')));
 		if(isset($paar[$paarung-1]->ptime) and $paar[$paarung-1]->ptime != '00:00:00') { $pdf_title .= '  '.substr($paar[$paarung-1]->ptime,0,5).' Uhr'; } 		
 		$pdf->Cell(($pdf_width-25),5,$pdf_title,0,1,'C'); }

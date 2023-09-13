@@ -113,7 +113,8 @@ function clm_view_report($out) {
 				<?php echo $lang->notice; ?>
 			</div>
 			<div class="text">
-				<textarea class="comment" ><?php echo str_replace('&','&amp;',$paar[0]->comment);?></textarea>
+<!--				<textarea class="comment" ><?php echo str_replace('&','&amp;',$paar[0]->comment);?></textarea> -->
+				<textarea class="comment" ><?php echo $paar[0]->comment;?></textarea>
 			</div>
 	</div>
 <?php } 
@@ -123,7 +124,8 @@ function clm_view_report($out) {
 				<?php echo $lang->inotice; ?>
 			</div>
 			<div class="text">
-				<textarea class="icomment" ><?php echo str_replace('&','&amp;',$paar[0]->icomment);?></textarea>
+<!--				<textarea class="icomment" ><?php echo str_replace('&','&amp;',$paar[0]->icomment);?></textarea> -->
+				<textarea class="icomment" ><?php echo $paar[0]->icomment;?></textarea>
 			</div>
 	</div>
 <?php } 

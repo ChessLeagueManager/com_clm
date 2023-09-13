@@ -418,7 +418,8 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 			<label for="comment"><?php echo JText::_( 'RESULTS_COMMENT' ); ?></label>
 			</td>
 			<td class="inputbox" nowrap="nowrap" width="100%" valign="top">
-			<textarea name="comment" id="comment" cols="40" rows="3" style="width:90%"><?php echo str_replace('&','&amp;',$runde[0]->comment);?></textarea>
+<!--			<textarea name="comment" id="comment" cols="40" rows="3" style="width:90%"><?php echo str_replace('&','&amp;',$runde[0]->comment);?></textarea> -->
+			<textarea name="comment" id="comment" cols="40" rows="3" style="width:90%"><?php echo $runde[0]->comment;?></textarea>
 			</td>
 		</tr>
 		</table>
@@ -436,7 +437,8 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 			<label for="icomment"><?php echo JText::_( 'RESULTS_COMMENT' ); ?></label>
 			</td>
 			<td class="inputbox" nowrap="nowrap" width="100%" valign="top">
-			<textarea name="icomment" id="icomment" cols="40" rows="3" style="width:90%"><?php echo str_replace('&','&amp;',$runde[0]->icomment);?></textarea>
+<!--			<textarea name="icomment" id="icomment" cols="40" rows="3" style="width:90%"><?php echo str_replace('&','&amp;',$runde[0]->icomment);?></textarea> -->
+			<textarea name="icomment" id="icomment" cols="40" rows="3" style="width:90%"><?php echo $runde[0]->icomment;?></textarea>
 			</td>
 		</tr>
 		</table>

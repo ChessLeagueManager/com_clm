@@ -18,6 +18,12 @@ function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hn
 	$lid	= $out["paar"][0]->lid;
 	$rnd	= $out["paar"][0]->runde;
 	$dg		= $out["paar"][0]->dg; 
+	$rang = $out["liga"][0]->rang;
+	if ($rang === '0') {
+		$rmnr = "melde_nr";
+	} else {
+		$rmnr = "rang_nr";
+	}
 	if (isset($out["hmf"][0])) {
 		$hmf_name	= $out["hmf"][0]->name;
 		$hmf_email	= $out["hmf"][0]->email;
@@ -129,11 +135,13 @@ function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hn
 		<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px;">
 		<tr>
 			<td width="50" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.$lang->raw("board").'</strong></div></td>
-			<td width="75" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.$lang->raw("melde_nr").'</strong></div></td>
+<!--		<td width="75" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.$lang->raw("melde_nr").'</strong></div></td> -->
+			<td width="75" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.$lang->raw($rmnr).'</strong></div></td>
 			<td width="60" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.$lang->raw("mgl_nr").'</strong></div></td>
 			<td width="210" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.$lang->raw("player").'</strong>'.$lang->raw("home").'</div></td>
 			<td width="75" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.$lang->raw("result").'</strong></div></td>
-			<td width="75" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.$lang->raw("melde_nr").'</strong></div></td>
+<!--		<td width="75" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.$lang->raw("melde_nr").'</strong></div></td> -->
+			<td width="75" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.$lang->raw($rmnr).'</strong></div></td>
 			<td width="60" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.$lang->raw("mgl_nr").'</strong></div></td>
 			<td width="215" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.$lang->raw("player").'</strong> '.$lang->raw("guest").'</div></td>
 		</tr>
