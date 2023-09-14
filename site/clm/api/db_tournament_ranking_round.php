@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -626,7 +626,7 @@
 			} else {				
 				$query = "UPDATE #__clm_mannschaften"
 					. " SET summanpunkte = ".$array_PlayerMPunkte[$s].", sumbrettpunkte = ".$array_PlayerBPunkte[$s].", sumwins = ".$array_PlayerWins[$s].", "
-					. " sumtiebr1 = ".$sumTiebr[1].", sumtiebr2 = ".$sumtiebr[2].", sumtiebr3 = ".$sumtiebr[3]
+					. " sumtiebr1 = ".$sumTiebr[1].", sumtiebr2 = ".$sumTiebr[2].", sumtiebr3 = ".$sumTiebr[3]
 					. " WHERE liga = ".$id
 					. " AND tln_nr = ".$s
 					;

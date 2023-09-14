@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 4.1.2 - [xx-xx-2023] - - - - - - - - - - - - - - - - - - - -
+- - - - - 4.1.2 - [13-09-2023] - - - - - - - - - - - - - - - - - - - -
 # Teamwettbewerbe: Berechnung Direkter Vergleich bei 3-2-1-0 u.ä. Wertungen 
 ^ Spielbericht: kleine Designänderung
 # Admin View Mannschaften: Umsetzen von Mannschaften bei Spielgemeinschaften
@@ -24,6 +24,7 @@ $ -> Language fix or change
 + Dropdown + Suchfunktion Vereine
 # Ergebnismeldung: kein Spieler (php 8.1)
 ^ Ergebnismail: kleine Anpassung bzgl. Ranglistensystem
+# kleine Bugfixes und Tippfehler
 
 - - - - - 4.1.1 - [23-08-2023] - - - - - - - - - - - - - - - - - - - -
 + Ranglistensystem: Spielgemeinschaften möglich (Ergänzung)

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -149,7 +149,7 @@ class CLMText {
 			case 6: // Elo Schnitt
 				$format = "%01.0f";
 				break;
-			case 7: // Summenwertung
+			case 7: // Buchholz BP
 				$format = "%01.1f";
 				break;
 			case 8: // DWZ Schnitt
@@ -172,6 +172,9 @@ class CLMText {
 				break;
 			case 16: // Elo Schnitt 1 Streichresultat
 				$format = "%01.0f";
+				break;
+			case 17: // Buchholz BP 1 Streichresultat
+				$format = "%01.1f";
 				break;
 			case 18: // DWZ Schnitt 1 Streichresultat
 				$format = "%01.0f";

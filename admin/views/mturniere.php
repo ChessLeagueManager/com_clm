@@ -401,7 +401,7 @@ class CLMViewMTurniere
 	<label for="tiebr2"><?php echo '2.'.JText::_( 'MTURN_TIEBREAKER' ); ?></label>
 	</td>
 	<td colspan="2">
-		<select name="tiebr2" id="tiebr1" value="<?php echo $row->tiebr2; ?>" size="1">
+		<select name="tiebr2" id="tiebr2" value="<?php echo $row->tiebr2; ?>" size="1">
 		<!--<option>- wählen -</option>-->
 		<option value="0" <?php if ($row->tiebr2 == 0) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_SELECT_TIEBR_0' );?></option>
 		<option value="1" <?php if ($row->tiebr2 == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_1' );?></option>
@@ -427,7 +427,7 @@ class CLMViewMTurniere
 	<td nowrap="nowrap">
 	<label for="tiebr3"><?php echo '3.'.JText::_( 'MTURN_TIEBREAKER' ); ?></label>
 	</td><td colspan="2">
-		<select name="tiebr3" id="tiebr1" value="<?php echo $row->tiebr3; ?>" size="1">
+		<select name="tiebr3" id="tiebr3" value="<?php echo $row->tiebr3; ?>" size="1">
 		<!--<option>- wählen -</option>-->
 		<option value="0" <?php if ($row->tiebr3 == 0) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_SELECT_TIEBR_0' );?></option>
 		<option value="1" <?php if ($row->tiebr3 == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_1' );?></option>
