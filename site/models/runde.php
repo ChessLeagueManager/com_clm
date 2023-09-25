@@ -173,8 +173,8 @@ class CLMModelRunde extends JModelLegacy
 		." LEFT JOIN #__clm_ergebnis AS q ON q.eid = a.dwz_edit "
 		." LEFT JOIN #__clm_meldeliste_spieler as k ON k.sid = a.sid AND k.lid = a.lid AND k.mgl_nr = a.spieler AND k.zps = a.zps AND k.mnr=m.man_nr "  //klkl2
 		." LEFT JOIN #__clm_meldeliste_spieler as l ON l.sid = a.sid AND l.lid = a.lid AND l.mgl_nr = a.gegner AND l.zps = a.gzps AND l.mnr=n.man_nr "  //klkl2
-		." LEFT JOIN #__clm_rangliste_spieler as t on t.ZPS = a.zps AND t.Mgl_Nr = a.spieler AND t.sid = a.sid AND t.Gruppe = ".$rang
-		." LEFT JOIN #__clm_rangliste_spieler as s on s.ZPS = a.gzps AND s.Mgl_Nr = a.gegner AND s.sid = a.sid AND s.Gruppe = ".$rang
+		." LEFT JOIN #__clm_rangliste_spieler as t on t.ZPSmgl = a.zps AND t.Mgl_Nr = a.spieler AND t.sid = a.sid AND t.Gruppe = ".$rang
+		." LEFT JOIN #__clm_rangliste_spieler as s on s.ZPSmgl = a.gzps AND s.Mgl_Nr = a.gegner AND s.sid = a.sid AND s.Gruppe = ".$rang
 		." LEFT JOIN #__clm_pgn AS pg ON ( pg.id = a.pgnnr) "
 			." WHERE a.sid =  ".$sid
 			." AND a.lid = ".$liga
