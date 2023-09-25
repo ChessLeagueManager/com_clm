@@ -111,7 +111,9 @@ if ($conf_vereinsdaten == 1) {
  ?>
 <div class="componentheading"><?php if (isset($verein[0]->name)) echo $verein[0]->name; ?></div>
 
-<?php if (isset($verein[0]->name)){ ?>
+<?php if (isset($verein[0]->name)){ 
+	if (is_null($vereinstats[0]->DWZ)) $vereinstats[0]->DWZ = '';
+	if (is_null($vereinstats[0]->FIDE_Elo)) $vereinstats[0]->FIDE_Elo = ''; ?>
 	<table cellpadding="0" cellspacing="0" width="100%">
     	<tr>
         <td width="30%" valign="top">

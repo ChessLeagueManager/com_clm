@@ -343,7 +343,7 @@ public static function mannschaft( &$row,$lists, $option )
 			<input class="inputbox" type="text" name="bpabzug" id="bpabzug" size="10" maxlength="10" value="<?php echo $row->bpabzug; ?>" />
 			</td>
 		</tr>
-<tr><td colspan="2"><hr></td></tr>
+		<tr><td colspan="2"><hr></td></tr>
 
 		<tr>
 			<td class="key" nowrap="nowrap">
@@ -389,12 +389,14 @@ public static function mannschaft( &$row,$lists, $option )
  <div class="width-50 fltrt">
   <fieldset class="adminform">
    <legend><?php echo JText::_( 'REMARKS' ); ?></legend>
+	<?php if (is_null($row->bemerkungen)) $row->bemerkungen = ''; ?>
+	<?php if (is_null($row->bem_int)) $row->bem_int = ''; ?>
 	<table class="adminlist">
 	<legend><?php echo JText::_( 'REMARKS_PUBLIC' ); ?></legend>
 	<br>
 	<tr>
 	<td width="100%" valign="top">
-	<textarea class="inputbox" name="bemerkungen" id="bemerkungen" cols="40" rows="5" style="width:90%"><?php echo str_replace('&','&amp;',$row->bemerkungen);?></textarea>
+	<textarea class="inputbox" name="bemerkungen" id="bemerkungen" cols="40" rows="5" style="width:90%"><?php echo $row->bemerkungen;?></textarea>
 	</td>
 	</tr>
 	</table>
@@ -403,7 +405,7 @@ public static function mannschaft( &$row,$lists, $option )
 	<tr><legend><?php echo JText::_( 'REMARKS_INTERNAL' ); ?></legend>
 	<br>
 	<td width="100%" valign="top">
-	<textarea class="inputbox" name="bem_int" id="bem_int" cols="40" rows="5" style="width:90%"><?php echo str_replace('&','&amp;',$row->bem_int);?></textarea>
+	<textarea class="inputbox" name="bem_int" id="bem_int" cols="40" rows="5" style="width:90%"><?php echo $row->bem_int;?></textarea>
 	</td>
 	</tr>
 	</table>
