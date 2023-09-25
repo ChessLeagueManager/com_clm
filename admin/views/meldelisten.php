@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -191,8 +191,9 @@ public static function setMeldelisteToolbar($row)
 		
 public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abgabe, $option)
 	{
+//		$_REQUEST['hidemainmenu'] = 1;
+		JFactory::getApplication()->input->set('hidemainmenu', true);
 		CLMViewMeldelisten::setMeldelisteToolbar($row);
-		$_REQUEST['hidemainmenu'] = 1;
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 		$number = $liga[0]->stamm + $liga[0]->ersatz;
 		$insert_key = array();
@@ -200,7 +201,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		$config = clm_core::$db->config();
 		$countryversion=$config->countryversion;
 
-		$_REQUEST['clm_number'] = $number;
+		$_POST['clm_number'] = $number;
 		clm_core::$load->load_js("meldelisten");
 		?>
 
@@ -276,6 +277,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		</table>
 		</fieldset>
 </div>
+<br>
 <div>
  <fieldset class="adminform">
    <legend><?php echo JText::_( 'MELDELISTE_DETAILS' ); ?></legend>

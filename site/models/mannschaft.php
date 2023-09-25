@@ -136,6 +136,7 @@ class CLMModelMannschaft extends JModelLegacy
 		$query .= " WHERE a.sid = ".$sid
 			." AND (( a.zps = '$zps' AND a.mnr = $mnr) OR ( '$sgzps' LIKE CONCAT('%', a.zps, '%') AND a.mnr = $mnr )) " //neu
 			." AND a.lid = ".$liga
+			." AND a.zps != '' "
 			." ORDER BY a.mnr ASC, a.snr ASC ";
 	  } else {	//Schulschach u.ä.
 		$zps = "-1";
