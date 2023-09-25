@@ -114,7 +114,10 @@ if ($view == 0 or $view == 1) {		// Rangliste (Kreuztabelle/Tabelle)
 		}
 	  }
 	$root->appendChild($ranglisteNode = $dom->createElement("rangliste"));
-	for ($m = 0; $m <= $liga[0]->runden; $m++) { 
+//	for ($m = 0; $m <= $liga[0]->runden; $m++) { 
+	for ($m = 0; $m <= $liga[0]->teil; $m++) {
+		if (!isset($mannschaft[$m])) continue;
+		if (is_null($mannschaft[$m])) continue;
 		$ranglisteNode->appendChild($teamsNode = $dom->createElement("teams"));
 		$teamsNode->appendChild($dom->createElement("platz", $mannschaft[$m]->rankingpos));
 		$teamsNode->appendChild($dom->createElement("team", $mannschaft[$m]->name));

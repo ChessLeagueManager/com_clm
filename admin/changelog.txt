@@ -15,6 +15,7 @@ $ -> Language fix or change
 - - - - - 4.1.3 - [xx-xx-2023] - - - - - - - - - - - - - - - - - - - -
 # Admin View Meldeliste: Einfügen Spieler und Prüfung Doppeleintrag
 # View Runde: Spielgemeinschaften (Nachbesserung) 
+# Datenbereitstellung für Content-Plugin
 
 - - - - - 4.1.2 - [13-09-2023] - - - - - - - - - - - - - - - - - - - -
 # Teamwettbewerbe: Berechnung Direkter Vergleich bei 3-2-1-0 u.ä. Wertungen 
