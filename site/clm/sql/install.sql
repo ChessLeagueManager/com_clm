@@ -407,7 +407,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_rangliste_name` (
   `alter` smallint(3) DEFAULT NULL,
   `status` varchar(3) NOT NULL DEFAULT '',
   `sid` mediumint(3) unsigned DEFAULT '0',
-  `user` int(11) NOT NULL unsigned DEFAULT '0',
+  `user` int(11) unsigned NOT NULL DEFAULT '0',
   `bemerkungen` text,
   `bem_int` text,
   `checked_out` int(11) unsigned DEFAULT '0',
