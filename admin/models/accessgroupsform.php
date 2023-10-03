@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -121,17 +121,17 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 		$cids = clm_core::$load->request_array_int('cid');
 		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
 		if (!$row->publish( $cids )) { 
-			$this->setError( $row->_db->getErrorMsg() ); 
+			$this->setError( 'Fehler beim Freigeben' ); 
 			return false; 
 		}
 		return true; 
 	} 
 	
 	function unpublish() {
-		clm_core::$load->request_array_int('cid');
+		$cids = clm_core::$load->request_array_int('cid');
 		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
 		if (!$row->publish($cids,0)) { 
-			$this->setError( $row->_db->getErrorMsg() ); 
+			$this->setError( 'Fehler beim Sperren' ); 
 			return false; 
 		}
 		return true; 
@@ -146,13 +146,13 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 			if($row->ordering != $order[$i]) {
 				$row->ordering = $order[$i];
 				if(!$row->store()) {
-					$this->setError( $this->_db->getErrorMsg() );
+					$this->setError( 'Fehler beim Speichern' ); 
 					return false;
 				}
 			}
 		}
 		if(!$row->reorderAll()) {
-			$this->setError( $this->_db->getErrorMsg() );
+			$this->setError( 'Fehler beim Speichern' ); 
 			return false;
 		}
 		return true;

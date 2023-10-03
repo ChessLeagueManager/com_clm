@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -18,23 +16,44 @@ class CLMControllerAccessgroupsMain extends JControllerLegacy {
 
 	function __construct() {
 		parent::__construct();		
+
+		$this->_db	= JFactory::getDBO();
+		$this->app	= JFactory::getApplication();
+		
+		// Register Extra tasks
+		$this->registerTask( 'apply','save' );
+	
+		$this->adminLink = new AdminLink();
+		$this->adminLink->view = "accessgroupsmain";
 	}
 	
 	function display($cachable = false, $urlparams = array()) { 
-		$_REQUEST['view'] = 'accessgroupsmain';
+
 		parent::display(); 
+		
+		// Register Extra tasks
+		$this->registerTask( 'apply','save' );
+		$this->registerTask( 'unpublish','publish' );
+	
+		$this->adminLink = new AdminLink();
+		$this->adminLink->view = "accessgroupsmain";
 	} 
 	
 	function add() { 
-		$_REQUEST['view'] = 'accessgroupsform';
-		$_REQUEST['hidemainmenu'] = 1; 
-		parent::display(); 
+		$this->adminLink->view = "accessgroupsform";
+		$this->adminLink->makeURL();
+		
+		$this->app->redirect( $this->adminLink->url );
 	}
 	
 	function edit() { 
-		$_REQUEST['view'] = 'accessgroupsform';
-		$_REQUEST['hidemainmenu'] = 1; 
-		parent::display(); 
+		$cid	= clm_core::$load->request_array_int('cid');
+		
+		$this->adminLink->view = "accessgroupsform";
+		$this->adminLink->more = array('task' => 'edit', 'id' => $cid[0]);
+		$this->adminLink->makeURL();
+		
+		$this->app->redirect( $this->adminLink->url );
 	}
 	function copy() { 
 		$model = $this->getModel('accessgroupsform'); 
@@ -71,9 +90,10 @@ class CLMControllerAccessgroupsMain extends JControllerLegacy {
 		if($model->publish()) {
 			$msg = 'Freigeben war erfolgreich';
 		} else {
-			$msg = 'Fehler beim freigeben';
+			$msg = 'Fehler beim Freigeben';
 		}
-		$this->setRedirect( 'index.php?option=com_clm&view=accessgroupsmain', $msg ); 
+		$this->app->enqueueMessage( $msg );
+		$this->app->redirect( 'index.php?option=com_clm&view=accessgroupsmain' );
 		
 	}
 	
@@ -82,9 +102,10 @@ class CLMControllerAccessgroupsMain extends JControllerLegacy {
 		if($model->unpublish()) {
 			$msg = 'Sperren war erfolgreich';
 		} else {
-			$msg = 'Fehler beim sperren';
+			$msg = 'Fehler beim Sperren';
 		}
-		$this->setRedirect( 'index.php?option=com_clm&view=accessgroupsmain', $msg ); 
+		$this->app->enqueueMessage( $msg );
+		$this->app->redirect( 'index.php?option=com_clm&view=accessgroupsmain' );
 		
 	}
 	
@@ -95,7 +116,8 @@ class CLMControllerAccessgroupsMain extends JControllerLegacy {
 		} else {
 			$msg = 'Fehler beim speichern der Reihenfolge';
 		}
-		$this->setRedirect( 'index.php?option=com_clm&view=accessgroupsmain', $msg ); 
+		$this->app->enqueueMessage( $msg );
+		$this->app->redirect( 'index.php?option=com_clm&view=accessgroupsmain' );
 	}
 	
 	function orderUp() {
@@ -105,7 +127,8 @@ class CLMControllerAccessgroupsMain extends JControllerLegacy {
 		} else {
 			$msg = 'Fehler beim speichern der Reihenfolge';
 		}
-		$this->setRedirect( 'index.php?option=com_clm&view=accessgroupsmain', $msg ); 
+		$this->app->enqueueMessage( $msg );
+		$this->app->redirect( 'index.php?option=com_clm&view=accessgroupsmain' );
 	}
 	
 	function orderDown() {
@@ -115,11 +138,13 @@ class CLMControllerAccessgroupsMain extends JControllerLegacy {
 		} else {
 			$msg = 'Fehler beim speichern der Reihenfolge';
 		}
-		$this->setRedirect( 'index.php?option=com_clm&view=accessgroupsmain', $msg ); 
+		$this->app->enqueueMessage( $msg );
+		$this->app->redirect( 'index.php?option=com_clm&view=accessgroupsmain' );
 	}
 		
 	function cancel() { 
 		$msg = 'Aktion abgebrochen'; 
-		$this->setRedirect( 'index.php?option=com_clm&view=accessgroupsmain', $msg ); 
+		$this->app->enqueueMessage( $msg );
+		$this->app->redirect( 'index.php?option=com_clm&view=accessgroupsmain' );
 	} 
 } 

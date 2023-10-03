@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -23,6 +21,7 @@ class CLMControllerAccessgroupsForm extends JControllerLegacy {
 		parent::__construct( $config );
 		
 		$this->_db		= JFactory::getDBO();
+		$this->app = JFactory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -36,24 +35,21 @@ class CLMControllerAccessgroupsForm extends JControllerLegacy {
 	function save() {
 
 		$result = $this->_saveDo();
-		$app =JFactory::getApplication();
 		
 		if ($result[0]) { // erfolgreich?
 						
-			$app =JFactory::getApplication();
-			
 			if ($this->neu) { // new access group?
-				$app->enqueueMessage( JText::_('ACCESSGROUP_CREATED') );
+				$this->app->enqueueMessage( JText::_('ACCESSGROUP_CREATED') );
 			} else {
-				$app->enqueueMessage( JText::_('ACCESSGROUP_EDITED') );
+				$this->app->enqueueMessage( JText::_('ACCESSGROUP_EDITED') );
 			}
 		
 		} else {
-			$app->enqueueMessage( $result[2],$result[1] );					
+			$this->app->enqueueMessage( $result[2],$result[1] );					
 		}
 
 		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$this->app->redirect( $this->adminLink->url );
 	
 	}
 
@@ -127,7 +123,7 @@ class CLMControllerAccessgroupsForm extends JControllerLegacy {
 			$this->adminLink->view = "accessgroupsmain"; // WL in Liste
 		}
 	
-		return true;
+		return array(true,'message','Speichern war erfolgreich');
 	
 	}
 
