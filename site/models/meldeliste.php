@@ -114,7 +114,7 @@ class CLMModelMeldeliste extends JModelLegacy
 			$sta = " AND a.Status = 'A' ";
 		}
 
-		$query = " SELECT l.man_nr,l.Rang,a.sid,a.ZPS,a.Mgl_Nr,a.PKZ,a.DWZ,a.DWZ_Index,a.Geburtsjahr,a.Spielername,a.Status"
+		$query = " SELECT l.man_nr,l.Rang,a.sid,a.ZPS,a.Mgl_Nr,a.PKZ,a.DWZ,a.DWZ_Index,a.Geburtsjahr,a.Spielername,a.Status,l.gesperrt"
 			." FROM #__clm_dwz_spieler as a"
 			." LEFT JOIN #__clm_rangliste_spieler as l ON l.Gruppe = $gid1 AND l.sid = $sid AND (l.ZPSmgl = a.ZPS) AND l.Mgl_Nr = a.Mgl_Nr AND (l.ZPS = '$zps')"
 			." WHERE (a.ZPS = '$zps' OR a.ZPS = '$sg_zps') "
@@ -135,9 +135,9 @@ class CLMModelMeldeliste extends JModelLegacy
 			$team = $db->loadObjectList();
 			$liga = $team[0]->liga;
 		if ($countryversion =="de") {
-			$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.Mgl_Nr) as id, a.zps, a.Mgl_Nr, a.PKZ, a.DWZ as dwz, a.DWZ_Index as dwz_I0, 0 as checked_out, l.attr, IFNULL(l.snr,999) as snr "; 
+			$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.Mgl_Nr) as id, a.zps, a.Mgl_Nr, a.PKZ, a.DWZ as dwz, a.DWZ_Index as dwz_I0, 0 as checked_out, l.attr, IFNULL(l.snr,999) as snr, l.gesperrt "; 
 		} else {
-			$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.PKZ) as id, a.zps, a.Mgl_Nr, a.PKZ, a.DWZ as dwz, a.DWZ_Index as dwz_I0, 0 as checked_out, l.attr, IFNULL(l.snr,999) as snr "; 
+			$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.PKZ) as id, a.zps, a.Mgl_Nr, a.PKZ, a.DWZ as dwz, a.DWZ_Index as dwz_I0, 0 as checked_out, l.attr, IFNULL(l.snr,999) as snr, l.gesperrt "; 
 		}
 		$query .= " FROM #__clm_dwz_spieler as a "
 			." LEFT JOIN #__clm_meldeliste_spieler as l ON l.lid = $liga AND l.sid = $sid AND l.mnr = $man "

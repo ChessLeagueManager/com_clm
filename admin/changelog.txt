@@ -18,6 +18,7 @@ $ -> Language fix or change
 # Datenbereitstellung für Content-Plugin
 ^ Code-Anpassung wegen MariaDB(SQL-Mode) / php 8.1
 ^ Code-Anpassung Joomla 4: Admin-View Benutzergruppen
++ Rangfolgesystem: Sperren von Spieler möglich
 
 - - - - - 4.1.2 - [13-09-2023] - - - - - - - - - - - - - - - - - - - -
 # Teamwettbewerbe: Berechnung Direkter Vergleich bei 3-2-1-0 u.ä. Wertungen 

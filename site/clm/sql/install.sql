@@ -432,6 +432,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_rangliste_spieler` (
   `Rang` int(10) unsigned NOT NULL DEFAULT '0',
   `man_nr` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `sid` mediumint(3) unsigned DEFAULT '0',
+  `gesperrt` tinyint(1) unsigned DEFAULT NULL,
   PRIMARY KEY (`Gruppe`,`ZPS`,`man_nr`,`Rang`),
   KEY `sid_ZPS_mannr_mglnr` (`sid`,`ZPS`,`man_nr`,`Mgl_Nr`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -152,6 +152,7 @@ function Spielerschreiben(i)
     document.getElementsByName('PKZ'+i)[0].innerHTML=Spieler[i][7];
     <?php } ?>
     document.getElementById('Status'+i).innerHTML=Spieler[i][8];
+    document.getElementById('check'+i).checked=Spieler[i][9];
 }
 function QSort(l,r,Tiefe)
  {
@@ -180,7 +181,7 @@ function Sortieren()
   Spieler=new Array;
   i=0;
   while (document.getElementsByName('MA'+i)[0]) {
-    Spieler[i]=new Array(8)
+    Spieler[i]=new Array(10)
     Spieler[i][0]=document.getElementsByName('MA'+i)[0].value-0;
     if (Spieler[i][0]==0) Spieler[i][0]=999;
     Spieler[i][1]=document.getElementsByName('RA'+i)[0].value-0;
@@ -192,6 +193,7 @@ function Sortieren()
     Spieler[i][6]=document.getElementById('ZPSM'+i).innerHTML;
     <?php if (isset($UsePKZ) AND $UsePKZ == 1) { ?>Spieler[i][7]=document.getElementById('PKZ'+i).innerHTML-0;<?php } ?>
     Spieler[i][8]=document.getElementById('Status'+i).innerHTML;
+    Spieler[i][9]=document.getElementById('check'+i).checked;
     i++;    
    }
   QSort(0,i-1,0)
@@ -308,7 +310,11 @@ function Sendbutton()
 <br><b>(3)</b> Mit dem "Sortieren" Knopf können Sie die Liste in die aktuelle Reihenfolge bringen.
 <br><b>(4)</b> Der "Neu laden" Knopf <u><i>verwirft ALLE Änderungen</i></u> und lädt die Seite neu !
 <br><b>(5)</b> Sobald "Liste absenden" gedrückt wurde ist die Rangliste verbindlich gemeldet.
-<br><br><br>
+<br><br>
+<small><u><b>Update-Hinweis</u></b> : 
+<br><b>(*)</b> Spieler, die den Verein während der Saison verlassen haben, sollten nicht aus der Rangliste gelöscht werden, sondern 'gesperrt' ist zu setzen.
+<br>Damit wird die Zuordnung bereits gespielter Partien ermöglicht und gleichzeitig der aktive Einsatz während der restlichen Saison verhindert.
+</small><br><br><br>
 
 <center>
 
@@ -391,6 +397,7 @@ Liste absenden !
 		<td width="14%" class="key" nowrap="nowrap">PKZ</td>
 		<td width="4%" class="key" nowrap="nowrap">ST</td>
 		<td colspan="2" width="12%" class="key" nowrap="nowrap">DWZ</td>
+		<td width="8" class="key" nowrap="nowrap"><?php echo JText::_( 'gesperrt' ); ?></td>
 	</tr>
 
 <?php 
@@ -422,6 +429,9 @@ Liste absenden !
 		<?php echo $spieler[$x]->DWZ; ?></td>
 	<td id="DWI<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->DWZ_Index; ?></td>
+	<td align="center">
+		<input type="checkbox" name="check<?php echo $x; ?>" id="check<?php echo $x; ?>" value="1" <?php if ($spieler[$x]->gesperrt =="1") { echo 'checked="checked"'; }?>>
+	</td>
 	</tr>
 
 <?php } ?>

@@ -309,7 +309,7 @@ function edit()
 		}
 	}
 	if ($task == 'edit') {
-	$sql = " SELECT r.Rang, r.man_nr, a.sid,a.ZPS,a.Mgl_Nr,a.PKZ, a.DWZ,"
+	$sql = " SELECT r.Rang, r.man_nr, a.sid,a.ZPS,a.Mgl_Nr,a.PKZ, a.DWZ, r.gesperrt,"
 		." a.DWZ_Index,a.Geburtsjahr,a.Spielername,a.Status"
 		." FROM #__clm_dwz_spieler as a"
 		." LEFT JOIN #__clm_rangliste_id as i ON i.sid = a.sid AND (i.zps = '$sql_zps') "
@@ -527,6 +527,7 @@ function save()
 	$pkz	= array();
 	$mnr	= array();
 	$rang	= array();
+	$block	= array();
 
 	// Rangliste und Arrays schreiben
 	for ($y=0; $y < $count; $y++) {
@@ -535,11 +536,12 @@ function save()
 		$pkz[]	= clm_core::$load->request_string('PKZ'.$y);
 		$mnr[]	= clm_core::$load->request_string('MA'.$y);
 		$rang[]	= clm_core::$load->request_string('RA'.$y);
+		$block[]	= clm_core::$load->request_int('check'.$y);
 
 		if ($mnr[$y] !=="99" AND $mnr[$y] !=="0" AND $mnr[$y] !=="") {
 			$query = " INSERT INTO #__clm_rangliste_spieler "
-				." (`Gruppe`, `ZPS`, `ZPSmgl`, `Mgl_Nr`, `PKZ`, `Rang`, `man_nr`, `sid`) "
-				." VALUES ('$gid','$zps','$ZPSmgl[$y]','$mgl[$y]','$pkz[$y]','$rang[$y]','$mnr[$y]','$sid') "
+				." (`Gruppe`, `ZPS`, `ZPSmgl`, `Mgl_Nr`, `PKZ`, `Rang`, `man_nr`, `sid`, `gesperrt`) "
+				." VALUES ('$gid','$zps','$ZPSmgl[$y]','$mgl[$y]','$pkz[$y]','$rang[$y]','$mnr[$y]','$sid','$block[$y]') "
 				;
 			//$db->setQuery($query);
 			clm_core::$db->query($query);
@@ -595,14 +597,14 @@ function save()
 			." (`sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`,`status`,`ordering`,`start_dwz`,`start_I0`"
 			.",`DWZ`, `I0`, `Punkte`, `Partien`, `We`, `Leistung`,`EFaktor`,`Niveau`,`sum_saison`,`gesperrt`)"
 			." VALUES ('$sid','$liga','$man_nr','$snr_counter','$mgl[$y]','$ZPSmgl[$y]','$gid','$z_ordering',NULL,NULL"
-			.",'$z_DWZ','$z_I0','$z_Punkte','$z_Partien','$z_We','$z_Leistung','$z_EFaktor','$z_Niveau','$z_sum_saison','$z_gesperrt') "
+			.",'$z_DWZ','$z_I0','$z_Punkte','$z_Partien','$z_We','$z_Leistung','$z_EFaktor','$z_Niveau','$z_sum_saison','$block[$y]') "
 			;
 	  else
 		$query = " INSERT INTO #__clm_meldeliste_spieler "
 			." (`sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`,`status`,`ordering`,`start_dwz`,`start_I0`"
 			.",`DWZ`, `I0`, `Punkte`, `Partien`, `We`, `Leistung`,`EFaktor`,`Niveau`,`sum_saison`,`gesperrt`)"
 			." VALUES ('$sid','$liga','$man_nr','$snr_counter','$mgl[$y]','$ZPSmgl[$y]','$gid','$z_ordering','$z_start_dwz','$z_start_I0'"
-			.",'$z_DWZ','$z_I0','$z_Punkte','$z_Partien','$z_We','$z_Leistung','$z_EFaktor','$z_Niveau','$z_sum_saison','$z_gesperrt') "
+			.",'$z_DWZ','$z_I0','$z_Punkte','$z_Partien','$z_We','$z_Leistung','$z_EFaktor','$z_Niveau','$z_sum_saison','$block[$y]') "
 			;
 		clm_core::$db->query($query);
 		$sn_cnt++;

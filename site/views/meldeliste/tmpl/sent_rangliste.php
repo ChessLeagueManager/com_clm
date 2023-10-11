@@ -144,11 +144,12 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 		$pkz[]	= clm_core::$load->request_string('PKZ'.$y);
 		$mnr[]	= clm_core::$load->request_string('MA'.$y);
 		$rang[]	= clm_core::$load->request_string('RA'.$y);
+		$block[]	= clm_core::$load->request_int('check'.$y);
 
 		if ($mnr[$y] !=="99" AND $mnr[$y] !=="0" AND $mnr[$y] !=="") {
  			$query = " INSERT INTO #__clm_rangliste_spieler "
-				." (`Gruppe`, `ZPS`, `ZPSmgl`, `Mgl_Nr`, `PKZ`, `Rang`, `man_nr`, `sid`) "
-				." VALUES ('$gid','$zps','$ZPSmgl[$y]','$mgl[$y]','$pkz[$y]','$rang[$y]','$mnr[$y]','$sid') "
+				." (`Gruppe`, `ZPS`, `ZPSmgl`, `Mgl_Nr`, `PKZ`, `Rang`, `man_nr`, `sid`, gesperrt) "
+				." VALUES ('$gid','$zps','$ZPSmgl[$y]','$mgl[$y]','$pkz[$y]','$rang[$y]','$mnr[$y]','$sid','$block[$y]') "
 				;					   
 			clm_core::$db->query($query);
 		}
@@ -200,14 +201,14 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 						." (`sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`,`status`,`ordering`,`start_dwz`,`start_I0`"
 						.",`DWZ`, `I0`, `Punkte`, `Partien`, `We`, `Leistung`,`EFaktor`,`Niveau`,`sum_saison`,`gesperrt`)"
 						." VALUES ('$sid','$liga','$man_nr','$snr_counter','$mgl[$y]','$ZPSmgl[$y]','$gid','$z_ordering',NULL,NULL"
-						.",'$z_DWZ','$z_I0','$z_Punkte','$z_Partien','$z_We','$z_Leistung','$z_EFaktor','$z_Niveau','$z_sum_saison','$z_gesperrt') "
+						.",'$z_DWZ','$z_I0','$z_Punkte','$z_Partien','$z_We','$z_Leistung','$z_EFaktor','$z_Niveau','$z_sum_saison','$block[$y]') "
 						;
 				else
 					$query = " INSERT INTO #__clm_meldeliste_spieler "
 						." (`sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`,`status`,`ordering`,`start_dwz`,`start_I0`"
 						.",`DWZ`, `I0`, `Punkte`, `Partien`, `We`, `Leistung`,`EFaktor`,`Niveau`,`sum_saison`,`gesperrt`)"
 						." VALUES ('$sid','$liga','$man_nr','$snr_counter','$mgl[$y]','$ZPSmgl[$y]','$gid','$z_ordering','$z_start_dwz','$z_start_I0'"
-						.",'$z_DWZ','$z_I0','$z_Punkte','$z_Partien','$z_We','$z_Leistung','$z_EFaktor','$z_Niveau','$z_sum_saison','$z_gesperrt') "
+						.",'$z_DWZ','$z_I0','$z_Punkte','$z_Partien','$z_We','$z_Leistung','$z_EFaktor','$z_Niveau','$z_sum_saison','$block[$y]') "
 						;
 				clm_core::$db->query($query);
 				$sn_cnt++;
@@ -325,7 +326,7 @@ if ( $send == 1 ) {
 	$db->setQuery($query);
 	$mannschaft = $db->loadObjectList();
 // Spielerrangliste
-	$query	= "SELECT a.*, p.DWZ as pDWZ, Spielername, Vereinname FROM #__clm_rangliste_spieler as a";
+	$query	= "SELECT a.*, p.DWZ as pDWZ, Spielername, Vereinname FROM #__clm_rangliste_spieler as a ";
 	if ($countryversion =="de") {
 		$query .= " LEFT JOIN #__clm_dwz_spieler as p ON (p.sid = a.sid AND p.ZPS = a.ZPSmgl AND p.Mgl_Nr = a.mgl_nr) ";
 	} else{
@@ -339,6 +340,15 @@ if ( $send == 1 ) {
 		;
 	$db->setQuery($query);
 	$rangliste=$db->loadObjectList();
+// Anzahl gesperrter Spieler
+	$query	= "SELECT SUM(a.gesperrt) as sum_sp FROM #__clm_rangliste_spieler as a "
+		." WHERE a.sid = ".$sid
+		." AND a.Gruppe = ".$gid
+		." AND a.ZPS = '".$zps."'"
+		;
+	$db->setQuery($query);
+	$sperr_count=$db->loadObjectList();
+	if ($sperr_count[0]->sum_sp < 1) $str_sp = ''; else $str_sp = 'gesperrt';
 
 // Mailbody HTML Header
 	$body_html_header = '
@@ -359,7 +369,7 @@ if ( $send == 1 ) {
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<td bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;" colspan="6"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_RANG_MAIL_HEADLINE' ).' '.JText::_( 'OF_DAY' ).JHTML::_('date', $now, JText::_('DATE_FORMAT_CLM_PDF')). '</strong></div></td>
+			<td bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;" colspan="7"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_RANG_MAIL_HEADLINE' ).' '.JText::_( 'OF_DAY' ).JHTML::_('date', $now, JText::_('DATE_FORMAT_CLM_PDF')). '</strong></div></td>
 		</tr>
 		<tr>
 			<td width="120">&nbsp;</td>
@@ -367,6 +377,7 @@ if ( $send == 1 ) {
 			<td width="5">&nbsp;</td>
 			<td width="5">&nbsp;</td>
 			<td width="80">&nbsp;</td>
+			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
@@ -376,6 +387,7 @@ if ( $send == 1 ) {
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
 			<td width="80" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_SEASON' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$saison[0]->name. '&nbsp;</td>
+			<td>&nbsp;</td>
 		</tr>
 		<tr>
 			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_CLUB' ).'</strong></td>
@@ -384,6 +396,7 @@ if ( $send == 1 ) {
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
 			<td width="80" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( '' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .''. '&nbsp;</td>
+			<td>&nbsp;</td>
 		</tr>';
 	
 	$body_html .=	' 
@@ -394,78 +407,83 @@ if ( $send == 1 ) {
 			<td width="5">&nbsp;</td>
 			<td width="80">&nbsp;</td>
 			<td>&nbsp;</td>
+			<td>&nbsp;</td>
 		</tr>
 		</table>';
 	$body_html .=	'
 		<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px;">
 		<tr>
-			<td width="50" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_RANG_MAIL_MNR' ).'</strong></div></td>
-			<td width="75" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_RANG_MAIL_RNR' ).'</strong></div></td>
-			<td width="210" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_NAME' ).'</strong></div></td>
-			<td width="75" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_RATING' ).'</strong></div></td>
-			<td width="75" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_NUMBER' ).'</strong></div></td>
+			<td width="40" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_RANG_MAIL_MNR' ).'</strong></div></td>
+			<td width="60" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_RANG_MAIL_RNR' ).'</strong></div></td>
+			<td width="170" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_NAME' ).'</strong></div></td>
+			<td width="15" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.$str_sp.'</strong></div></td>
+			<td width="60" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_RATING' ).'</strong></div></td>
+			<td width="60" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_NUMBER' ).'</strong></div></td>
 			<td width="210" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_CLUBL' ).'</strong></div></td>
 		</tr>
 	';
 	foreach ($rangliste as $rangliste1) {
 			if ($rangliste1->Mgl_Nr > 0) {
+				if ($rangliste1->gesperrt == 1) $sperrkz = 'ja'; else $sperrkz = '';
 				$body_html .=   '
 					<tr>
-					<td width="50" style="border-bottom: solid 1px #999999;"><div align="center"><strong>'.$rangliste1->man_nr.'</strong></div></td>
-					<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .$rangliste1->Rang. '&nbsp;</div></td>
-					<td width="210" style="border-bottom: solid 1px #999999;"><div align="center">' .$rangliste1->Spielername. '&nbsp;</div></td>
-					<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .$rangliste1->pDWZ. '&nbsp;</div></td>
-					<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .str_pad($rangliste1->Mgl_Nr,3,"0",STR_PAD_LEFT). '&nbsp;</div></td>
-					<td width="210" style="border-bottom: solid 1px #999999;"><div align="center">' .$rangliste1->Vereinname. '&nbsp;</div></td>
+					<td style="border-bottom: solid 1px #999999;"><div align="center"><strong>'.$rangliste1->man_nr.'</strong></div></td>
+					<td style="border-bottom: solid 1px #999999;"><div align="center">' .$rangliste1->Rang. '&nbsp;</div></td>
+					<td style="border-bottom: solid 1px #999999;"><div align="center">' .$rangliste1->Spielername. '&nbsp;</div></td>
+					<td style="border-bottom: solid 1px #999999;"><div align="center">' .$sperrkz. '&nbsp;</div></td>
+					<td style="border-bottom: solid 1px #999999;"><div align="center">' .$rangliste1->pDWZ. '&nbsp;</div></td>
+					<td style="border-bottom: solid 1px #999999;"><div align="center">' .str_pad($rangliste1->Mgl_Nr,3,"0",STR_PAD_LEFT). '&nbsp;</div></td>
+					<td style="border-bottom: solid 1px #999999;"><div align="center">' .$rangliste1->Vereinname. '&nbsp;</div></td>
 					</tr>
 				';
 			} 
 	}
 	$body_html .= 	  '
 		<tr>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
+			<td width="700" colspan="7">&nbsp;</td>
 		</tr>	
 		<tr>
-			<td width="700" colspan="6"><div align="left" ><strong>'.'Bemerkung'.'</strong></div></td>
+			<td width="700" colspan="7"><div align="left" ><strong>'.'Bemerkung'.'</strong></div></td>
 		</tr>	
 		<tr>
-			<td width="700" nowrap="nowrap" valign="top" size="1" colspan="6">
+			<td width="700" nowrap="nowrap" valign="top" size="1" colspan="7">
 				<textarea cols="30" rows="2" style="border: solid 1px #999999; width:90%">'.str_replace('&','&amp;',$bemerkungen).'</textarea>
 			</td>
 		</tr>	
 		<tr>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
+			<td  width="700" colspan="7">&nbsp;</td>
 		</tr>	
 		</table>
 		<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px;">
 		<tr>
-			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_SENDER' ).'</strong></td>
-			<td style="border-bottom: solid 1px #999999;">' .$melder[0]->name. '&nbsp;</td>
+			<td width="100" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_SENDER' ).'</strong></td>
+			<td width="150" style="border-bottom: solid 1px #999999;">' .$melder[0]->name. '&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
-			<td width="80" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( '' ).'</strong></td>
-			<td style="border-bottom: solid 1px #999999;">' .''. '&nbsp;</td>
+			<td width="100" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( '' ).'</strong></td>
+			<td width="150" style="border-bottom: solid 1px #999999;">' .''. '&nbsp;</td>
+			<td width="20" style="border-bottom: solid 1px #999999;">&nbsp;</td>
 		</tr>';
 	foreach ($mannschaft as $mannschaft1) { 
 	  $z_liga = $mannschaft1->liga;
 	  $body_html .=	'
 		<tr>
-			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_LEAGUE' ).'</strong></td>
+			<td style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_LEAGUE' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$a_ligen[$z_liga]->name. '&nbsp;</td>
-			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
-			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
-			<td width="80" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_CONTROLLER' ).'</strong></td>
+			<td style="border-bottom: solid 1px #999999;">&nbsp;</td>
+			<td style="border-bottom: solid 1px #999999;">&nbsp;</td>
+			<td style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_CONTROLLER' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$a_ligen[$z_liga]->sl_name. '&nbsp;</td>
+			<td style="border-bottom: solid 1px #999999;">&nbsp;</td>
 		</tr>
 		<tr>
-			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_TEAM' ).'</strong></td>
+			<td style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_TEAM' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$mannschaft1->name. '&nbsp;</td>
-			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
-			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
-			<td width="80" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_CAPTAIN' ).'</strong></td>
+			<td style="border-bottom: solid 1px #999999;">&nbsp;</td>
+			<td style="border-bottom: solid 1px #999999;">&nbsp;</td>
+			<td style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_CAPTAIN' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$mannschaft1->mf_name. '&nbsp;</td>
+			<td style="border-bottom: solid 1px #999999;">&nbsp;</td>
 		</tr>
 		';
 	}

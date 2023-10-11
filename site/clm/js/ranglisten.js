@@ -129,6 +129,8 @@ function Spielerschreiben(i)
 		document.getElementById('PKZ'+i).innerHTML=Spieler[i][7];
 		document.getElementsByName('PKZ'+i)[0].value=Spieler[i][7];
     } 
+    document.getElementById('Status'+i).innerHTML=Spieler[i][8];
+    document.getElementById('check'+i).checked=Spieler[i][9];
 }
 function QSort(l,r,Tiefe)
  {
@@ -157,7 +159,7 @@ function Sortieren()
   Spieler=new Array;
   i=0;
   while (document.getElementsByName('MA'+i)[0]) {
-	Spieler[i]=new Array(8)
+	Spieler[i]=new Array(10)
     Spieler[i][0]=document.getElementsByName('MA'+i)[0].value-0;
     if (Spieler[i][0]==0) Spieler[i][0]=999;
     Spieler[i][1]=document.getElementsByName('RA'+i)[0].value-0;
@@ -170,6 +172,8 @@ function Sortieren()
     if (clm_ranglisten_usepkz == 1) { 
 		Spieler[i][7]=document.getElementById('PKZ'+i).innerHTML-0;
     } 
+    Spieler[i][8]=document.getElementById('Status'+i).innerHTML;
+    Spieler[i][9]=document.getElementById('check'+i).checked;
     i++;    
    }
   QSort(0,i-1,0);
