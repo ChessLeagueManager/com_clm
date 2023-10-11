@@ -345,10 +345,20 @@ $pdf->SetFont('Times','',$date_font);
 				// $pdf->Cell(3,$zelle/2,$team[$i]->tman_nr . "-" . $team[$i]->trang,0,0,'C');
 				$pdf->Cell(6,$zelle/2,$team[$i]->trang,0,0,'C');
 			}
+			$strikeout_x = $pdf->GetX();
 			$pdf->Cell(32,$zelle/2,utf8_decode($team[$i]->Spielername),0,0,'L');	
+			if ($team[$i]->gesperrt == 1) {
+				$pdf->SetX($strikeout_x);
+				$pdf->Cell(32,$zelle/2,'------------------------',0,0,'L');
+			}
 		} else {								// 2 mit Mitgl.Nr.
 			$pdf->Cell(5,$zelle/2,$team[$i]->mgl_nr,0,0,'C');
+			$strikeout_x = $pdf->GetX();
 			$pdf->Cell(30,$zelle/2,utf8_decode($team[$i]->Spielername),0,0,'L');	
+			if ($team[$i]->gesperrt == 1) {
+				$pdf->SetX($strikeout_x);
+				$pdf->Cell(30,$zelle/2,'------------------------',0,0,'L');
+			}
 		}
 		$pdf->Cell(7,$zelle/2,$team[$i]->dwz,0,1,'C');	
 	}
@@ -367,10 +377,20 @@ $pdf->SetFont('Times','',$date_font);
 				// $pdf->Cell(3,$zelle/2,$team[$i]->tman_nr . "-" . $team[$i]->trang,0,0,'C');
 				$pdf->Cell(6,$zelle/2,$team[$i]->trang,0,0,'C');
 			}
-			$pdf->Cell(32,$zelle/2,utf8_decode($team[$i]->Spielername),0,0,'L');	
+			$strikeout_x = $pdf->GetX();
+			$pdf->Cell(32,$zelle/2,utf8_decode($team[$i]->Spielername),0,0,'L');
+			if ($team[$i]->gesperrt == 1) {
+				$pdf->SetX($strikeout_x);
+				$pdf->Cell(32,$zelle/2,'------------------------',0,0,'L');
+			}
 		} else {								// 2 mit Mitgl.Nr.
 			$pdf->Cell(5,$zelle/2,$team[$i]->mgl_nr,0,0,'C');
+			$strikeout_x = $pdf->GetX();
 			$pdf->Cell(30,$zelle/2,utf8_decode($team[$i]->Spielername),0,0,'L');	
+			if ($team[$i]->gesperrt == 1) {
+				$pdf->SetX($strikeout_x);
+				$pdf->Cell(30,$zelle/2,'------------------------',0,0,'L');
+			}
 		}
 		$pdf->Cell(7,$zelle/2,$team[$i]->dwz,0,1,'C');	
 	}
