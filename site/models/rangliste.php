@@ -430,13 +430,9 @@ class CLMModelRangliste extends JModelLegacy
 			." FROM #__clm_rnd_spl as a "
 			." LEFT JOIN #__clm_mannschaften as m1 ON m1.sid = a.sid AND m1.liga = a.lid AND m1.tln_nr = a.tln_nr"
 			." LEFT JOIN #__clm_meldeliste_spieler as m ON m.sid = a.sid AND m.lid = a.lid AND m.mgl_nr = a.spieler AND m.zps = a.zps AND m.mnr = m1.man_nr"
-			//." LEFT JOIN #__clm_rangliste_spieler as r on r.ZPS = a.zps AND r.Mgl_Nr = a.spieler AND r.sid = a.sid "
-			." LEFT JOIN #__clm_rangliste_spieler as r on r.ZPS = a.zps AND r.Mgl_Nr = a.spieler AND r.sid = a.sid AND r.Gruppe = ".$rang
-			//." LEFT JOIN #__clm_rangliste_id as i on i.ZPS = a.zps AND i.gid = r.Gruppe AND i.sid = a.sid "
+			." LEFT JOIN #__clm_rangliste_spieler as r on r.ZPSmgl = a.zps AND r.Mgl_Nr = a.spieler AND r.sid = a.sid AND r.Gruppe = ".$rang
 			." WHERE m.lid = ".$liga
-			//." AND m.sid =".$sid
 			." AND a.lid =".$liga
-			//." AND a.sid =".$sid
 			." ORDER BY a.tln_nr ASC, rmnr ASC, rrang ASC, a.dg ASC, a.runde ASC "
 			;
 	} else {
@@ -449,9 +445,7 @@ class CLMModelRangliste extends JModelLegacy
 		else	
 			$query .= " LEFT JOIN #__clm_meldeliste_spieler as m ON m.sid = a.sid AND m.lid = a.lid AND m.PKZ = a.PKZ AND m.zps = a.zps AND m.mnr = m1.man_nr";
 		$query .= " WHERE m.lid = ".$liga
-			//." AND m.sid =".$sid
 			." AND a.lid =".$liga
-			//." AND a.sid =".$sid
 			." ORDER BY a.tln_nr ASC, snr ASC,a.dg ASC,a.runde ASC "
 			;
 	}

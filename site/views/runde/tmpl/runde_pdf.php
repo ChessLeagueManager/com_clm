@@ -15,8 +15,6 @@ defined('_JEXEC') or die('Restricted access');
 $liga	=$this->liga;
 if ($liga[0]->rang == 0) $ms = true;
 else $ms = false;
-//$dwzschnitt=$this->dwzschnitt;
-//$dwzgespielt=$this->dwzgespielt;
 $paar=$this->paar;
 $paar1=$this->paar1;
 $einzel=$this->einzel;
@@ -132,8 +130,6 @@ if (!$liga OR $liga[0]->published == "0") {
 } else {
 
 
-//$anzspl = $mannschaft[0]->runden * $mannschaft[0]->dg;
-
 // Rundentext anpassen
 $runden_text = $liga[$runde_t-1]->rname; 
 if ($dg >1) { $runde = $runde + $liga[0]->runden; }
@@ -241,6 +237,7 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 		$pdf->Cell($breite2,$zelle,$einzel[$w]->hsnr,'L',0);
 		if (is_null($einzel[$w]->hname)) $einzel[$w]->hname = '';
 		$htext = utf8_decode($einzel[$w]->hname);
+		if ($einzel[$w]->hstatus != 'A' AND $einzel[$w]->hstatus != '') $htext .= ' ('.$einzel[$w]->hstatus.')';
 		if ($htext == '') $htext = utf8_decode(JText::_('RESULTS_DETAILS_NOT_NOMINATED'));
 		if ($pdf->GetStringWidth($htext) > $breite1) {
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
@@ -286,6 +283,7 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 			$breite1 = $breite1 + 4 - $pdf->GetStringWidth($einzel[$w]->gsnr) - 1;  }
 		if (is_null($einzel[$w]->gname)) $einzel[$w]->gname = '';
 		$htext = utf8_decode($einzel[$w]->gname);
+		if ($einzel[$w]->gstatus != 'A' AND $einzel[$w]->gstatus != '') $htext .= ' ('.$einzel[$w]->gstatus.')';
 		if ($htext == '') $htext = utf8_decode(JText::_('RESULTS_DETAILS_NOT_NOMINATED'));
 		if ($pdf->GetStringWidth($htext) > $breite1) {
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1); }
@@ -346,9 +344,6 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 			foreach ($a_comment as $comment) { 
 				$ztext = JText::_('PAAR_COMMENT').$comment; 		
 				if (!$cr) $pdf->SetX($xx1); else $pdf->SetX($xx2);
-				//$pdf->Cell(4,$zelle+1,'','LTB',0);
-				//$pdf->Cell($breite1*2+5,$zelle+1,utf8_decode($ztext),'TB',0,'L');
-				//$pdf->Cell(4,$zelle+1,'','RTB',1); }
 				$pdf->Multicell($breite1*2+13,$zelle,utf8_decode($ztext),1); }
 		}
 	$z2+=2;

@@ -20,6 +20,8 @@ class CLMControllerRunden extends JControllerLegacy
 function __construct( $config = array() )
 	{
 		parent::__construct( $config );
+		$this->app = JFactory::getApplication();
+
 		// Register Extra tasks
 		$this->registerTask( 'add','edit' );
 		$this->registerTask( 'apply','save' );

@@ -810,7 +810,8 @@ for ($x=0; $x< $anz_player; $x++){
 		if ($count[$ic]->rmnr > $mannschaft[$m]->man_nr) {
 			if ((!isset($einzel[$ie])) or ($count[$ic]->tln_nr < $einzel[$ie]->tln_nr) or 
 			    (($count[$ic]->tln_nr == $einzel[$ie]->tln_nr) and 
-				(($count[$ic]->zps !== $einzel[$ie]->zps)||($count[$ic]->mgl_nr !== $einzel[$ie]->spieler)))) {
+//				(($count[$ic]->zps !== $einzel[$ie]->zps)||($count[$ic]->mgl_nr !== $einzel[$ie]->spieler)))) {
+				(($count[$ic]->ZPSmgl !== $einzel[$ie]->zps)||($count[$ic]->mgl_nr !== $einzel[$ie]->spieler)))) {
 			$ic++;
 			continue;
 		  }
@@ -839,7 +840,8 @@ for ($x=0; $x< $anz_player; $x++){
   for ($c=0; $c<$mannschaft[$m]->dg; $c++) {
 	for ($b=0; $b<$mannschaft[$m]->runden; $b++) {
 	if ((isset($einzel[$ie]) AND $einzel[$ie])&&($einzel[$ie]->dg==$c+1)&&($einzel[$ie]->runde==$b+1)&&
-			($einzel[$ie]->tln_nr==$mannschaft[$m]->tln_nr)&&($count[$ic]->zps==$einzel[$ie]->zps)&&
+//			($einzel[$ie]->tln_nr==$mannschaft[$m]->tln_nr)&&($count[$ic]->zps==$einzel[$ie]->zps)&&
+			($einzel[$ie]->tln_nr==$mannschaft[$m]->tln_nr)&&
 			((($countryversion == "de")&&($count[$ic]->mgl_nr==$einzel[$ie]->spieler))||(($countryversion == "en")&&($count[$ic]->PKZ==$einzel[$ie]->PKZ)))) {
 		$dr_einzel = "?";
 		if ($einzel[$ie]->heim==0) {
