@@ -5,10 +5,12 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
-function mb_str_pad( $input, $pad_length, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
-{
-    $diff = strlen( $input ) - mb_strlen( $input );
-    return str_pad( $input, $pad_length + $diff, $pad_string, $pad_type );
+if (!function_exists('mb_str_pad')) {
+	function mb_str_pad( $input, $pad_length, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
+	{
+		$diff = strlen( $input ) - mb_strlen( $input );
+		return str_pad( $input, $pad_length + $diff, $pad_string, $pad_type );
+	}
 }
 // Eingang: Verband
 // Ausgang: Alle Vereine in diesem

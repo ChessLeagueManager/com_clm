@@ -22,6 +22,7 @@ $ -> Language fix or change
 + Spielberichtsformular: Kennzeichnung gesperrter Spieler
 ^ Einstellungen: Standard für Verzögerung beim Übernahme von DSB verringert
 + Admin View Benutzer: Mailerstellung
+^ Ergebnismeldung: Codeanpassung J 4.4
 
 - - - - - 4.1.2 - [13-09-2023] - - - - - - - - - - - - - - - - - - - -
 # Teamwettbewerbe: Berechnung Direkter Vergleich bei 3-2-1-0 u.ä. Wertungen 
