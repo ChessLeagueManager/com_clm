@@ -1229,5 +1229,64 @@ function showaccessgroups() {
 		$this->setRedirect( 'index.php?option=com_clm&view=accessgroupsmain' );
 	}
 
+// freie Mail an ausgewählte Benutzer
+function email()
+	{
+	$mainframe = JFactory::getApplication();
+	// Check for request forgeries
+	defined('_JEXEC') or die( 'Invalid Token' );
+	$db		= JFactory::getDBO();
+	$cid    = clm_core::$load->request_array_int('cid');
+	$option		= clm_core::$load->request_string('option', '');
+	$section	= clm_core::$load->request_string('section', '');
+	$user	= JFactory::getUser();
+	if (is_null($cid)) $n = 0;
+	else {
+		$n = count($cid);
+		$cids = implode( ',', $cid );
+	}
+	// minimum 1 Empfänger
+	if ($n < 1) {
+		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
+		$this->setMessage(JText::_( 'USERS_AN_WEN'),'warning');
+		return;
+	}
+	// Prüfen ob User Berechtigung zum Mailversand hat
+	$row =JTable::getInstance( 'users', 'TableCLM' );
+
+	$clmAccess = clm_core::$access;
+	if ($clmAccess->access('BE_user_general') === false) {
+		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
+		$this->setMessage(JText::_( 'USERS_NO_SEND'),'warning');
+		return;
+	}
+	// Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$from = $config->email_from;
+	$fromname = $config->email_fromname;
+	if ( $from == '' ) {
+		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
+		$this->setMessage(JText::_( 'USER_ERGEBNISDIENST_KEINE_ADRESSE'),'warning');
+		return;
+	}
+	if ( $fromname == '' ) {
+		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
+		$this->setMessage(JText::_( 'USER_ERGEBNISDIENST_KEIN_NAME'),'warning');
+		return;
+	}
+
+	// Log schreiben
+	$clmLog = new CLMLog();
+	$clmLog->aktion = "Mail versand";
+	$clmLog->params = array('cids' => $cids);
+	$clmLog->write();
+
+	$adminLink = new AdminLink();
+	$adminLink->more = array('return_section' => 'users', 'return_view' => 'xxx', 'cids' => $cids );
+	$adminLink->view = "view_mail";
+	$adminLink->makeURL();
+	$mainframe->redirect( $adminLink->url );
+	}
+
 }
  

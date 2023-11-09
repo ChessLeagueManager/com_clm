@@ -74,6 +74,9 @@ $rights["db_xml_data"]=array();
 $rights["db_xml_round"]=array();
 $rights["db_nwz_average"]=array();
 $rights["db_tournament_ranking_round"]=array(); // Rangliste aktualisieren für Rundenbericht
+$rights["db_mail"]=array(0,"BE_user_general",true);
+$rights["db_mail_save"]=array(0,"BE_user_general",true);
+$rights["view_mail"]=array(0,"BE_user_general",true);
 
 $rights["test_print"]=array();
 //************************

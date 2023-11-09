@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -25,13 +25,14 @@ public static function setUsersToolbar()
 		if($clmAccess->access('BE_accessgroup_general') === true) {
 			JToolBarHelper::custom('showaccessgroups','specialrankings.png','specialrankings_f2.png', JText::_('ACCESSGROUPS_BUTTON'), false);
 			}
-		JToolBarHelper::custom('send','send.png','send_f2.png','USER_ACCOUNT');
+		JToolBarHelper::custom('send','mail.png','mail_f2.png','USER_ACCOUNT');
 		JToolBarHelper::publishList();
 		JToolBarHelper::unpublishList();
 		JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', JText::_('COPY') ); 
 		JToolBarHelper::deleteList();
 		JToolBarHelper::editList();
 		JToolBarHelper::addNew();
+		JToolBarHelper::custom( 'email', 'mail.png', 'mail_f2.png', JText::_('USER_MAIL') ); 
 	}
 	JToolBarHelper::help( 'screen.clm.user' );
 	}

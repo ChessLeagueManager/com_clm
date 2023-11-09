@@ -1,0 +1,73 @@
+/*
+ * @ CLM Component
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
+/********************/
+/****** mail   ******/
+/********************/
+
+
+#clm .clm .clm_view_mail .outer_mail_subj .info, #clm .clm .clm_view_mail .outer_mail_body .info  {
+	font-size: 110%;
+	font-weight:bold;
+	text-align:left;
+	padding:5px;
+	word-wrap: break-word;
+}
+#clm .clm .clm_view_mail .outer_mail_subj .info_text  {
+	font-size: 140%;
+/*	font-weight:bold; */
+	text-align:left;
+	padding:5px;
+	word-wrap: break-word;
+}
+
+#clm .clm .clm_view_mail .outer_mail_subj .text, #clm .clm .clm_view_mail .outer_mail_body .text  {
+	border: 1px solid #cccccc;
+}
+
+#clm .clm .clm_view_mail .outer_mail_subj .text textarea  {
+	width:100%;
+	height:25px;
+	font-size: 140%;
+	padding:5px;
+	margin:0;
+	resize:vertical;
+}
+
+#clm .clm .clm_view_mail .outer_mail_body .text textarea  {
+	width:100%;
+	height:120px;
+	font-size: 140%;
+	padding:5px;
+	margin:0;
+	resize:vertical;
+}
+
+#clm .clm .clm_view_mail .clm_view_notification .notice {
+	margin-top:20px;
+}
+
+ 
+ /* Anpassung für die Buttons */
+ 
+#clm .clm .clm_view_mail .button_container {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-flow: row wrap;
+	-moz-flex-flow: row wrap;
+	-ms-flex-flow: row wrap;
+	flex-flow: row wrap;
+	width:100%;
+}
+
+#clm .clm .clm_view_mail .button_container .clm_button {
+	-webkit-flex: 1 0 auto;
+	-ms-flex: 1 0 auto; 
+	flex: 1 0 auto; 
+}

@@ -16,4 +16,5 @@ $bindings["view_schedule_pdf"]=array("season","club");
 $bindings["view_schedule_xls"]=array("season","club");
 $bindings["view_paarungsliste_xls"]=array("liga");
 $bindings["view_terminliste_xls"]=array("cid");
+$bindings["view_mail"]=array("return_section","return_view","cids");
 ?>

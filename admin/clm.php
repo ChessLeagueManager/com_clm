@@ -209,9 +209,94 @@ if (substr($joomlaVersion,0,1) > 3) {  ?>
 			</div>
 		</div> <?php 
 }
-if (substr($joomlaVersion,0,1) < 4) {
+if (substr($joomlaVersion,0,1) < 4) {  ?>
+		<div>
+			<div>
+				<ul id="submenu" class="nav nav-list">
+					<li <?php if (clm_core::$load->request_string('view') == 'info') echo 'class="active"'; ?>>
+						<a href="index.php?option=com_clm&amp;view=info" style="padding: 2px 7px"><?php echo JText::_('INFO'); ?></a>
+					</li>
+					<?php if($clmAccess->access('BE_season_general')) { ?>
+					<li <?php if (clm_core::$load->request_string('section') == 'saisons') echo 'class="active"'; ?>>
+						<a href="index.php?option=com_clm&amp;section=saisons" style="padding: 2px 7px"><?php echo JText::_('SAISON'); ?></a>
+					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_event_general')) { ?>
+					<li <?php if (clm_core::$load->request_string('view') == 'terminemain') echo 'class="active"'; ?>>
+						<a href="index.php?option=com_clm&amp;view=terminemain" style="padding: 2px 7px"><?php echo JText::_('TERMINE'); ?></a>
+					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_tournament_general')) { ?>
+					<li <?php if (clm_core::$load->request_string('view') == 'view_tournament') echo 'class="active"'; ?>>
+						<a href="index.php?option=com_clm&amp;view=view_tournament" style="padding: 2px 7px"><?php echo JText::_('TURNIERE'); ?></a>
+					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_league_general')) { ?>
+					<li <?php if (clm_core::$load->request_string('view') == 'view_tournament_group' AND clm_core::$load->request_int('liga') == 1) echo 'class="active"'; ?>>
+						<a href="index.php?option=com_clm&amp;view=view_tournament_group&amp;liga=1" style="padding: 2px 7px"><?php echo JText::_('LIGEN'); ?>&nbsp;&nbsp;</a>
+					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_teamtournament_general')) { ?>
+					<li <?php if (clm_core::$load->request_string('view') == 'view_tournament_group' AND clm_core::$load->request_int('liga') == 0) echo 'class="active"'; ?>>
+						<a href="index.php?option=com_clm&amp;view=view_tournament_group&amp;liga=0" style="padding: 2px 7px"><?php echo JText::_('MTURNIERE'); ?>&nbsp;&nbsp;</a>
+					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_club_general')) { ?>
+					<li <?php if (clm_core::$load->request_string('section') == 'vereine') echo 'class="active"'; ?>>
+						<a href="index.php?option=com_clm&amp;section=vereine" style="padding: 2px 7px"><?php echo JText::_('VEREINE'); ?>&nbsp;&nbsp;</a>
+					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_team_general')) { ?>
+					<li <?php if (clm_core::$load->request_string('section') == 'mannschaften') echo 'class="active"'; ?>>
+						<a href="index.php?option=com_clm&amp;section=mannschaften" style="padding: 2px 7px"><?php echo JText::_('MANNSCHAFTEN'); ?>&nbsp;&nbsp;</a>
+					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_user_general')) { ?>
+					<li <?php if (clm_core::$load->request_string('section') == 'users') echo 'class="active"'; ?>>
+						<a href="index.php?option=com_clm&amp;section=users" style="padding: 2px 7px"><?php echo JText::_('USER'); ?>&nbsp;&nbsp;</a>
+					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_swt_general')) { ?>
+					<li <?php if (clm_core::$load->request_string('view') == 'swt') echo 'class="active"'; ?>>
+						<a href="index.php?option=com_clm&amp;view=swt" style="padding: 2px 7px"><?php echo JText::_('SWT'); ?>&nbsp;&nbsp;</a>
+					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_dewis_general')) { ?>
+					<li <?php if (clm_core::$load->request_string('view') == 'auswertung') echo 'class="active"'; ?>>
+						<?php if ($countryversion =="de") { ?>
+						<a href="index.php?option=com_clm&amp;view=auswertung" style="padding: 2px 7px"><?php echo JText::_('DeWIS'); ?>&nbsp;&nbsp;</a>
+						<?php } ?>
+						<?php if ($countryversion =="en") { ?>
+						<a href="index.php?option=com_clm&amp;view=auswertung" style="padding: 2px 7px"><?php echo JText::_('GRADING_EXPORT'); ?>&nbsp;&nbsp;</a>
+						<?php } ?>
+					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_database_general')) { ?>
+					<li <?php if (clm_core::$load->request_string('view') == 'db') echo 'class="active"'; ?>>
+						<a href="index.php?option=com_clm&amp;view=db" style="padding: 2px 7px"><?php echo JText::_('DATABASE'); ?>&nbsp;&nbsp;</a>
+					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_logfile_general')) { ?>
+					<li <?php if (clm_core::$load->request_string('view') == 'view_logging') echo 'class="active"'; ?>>
+						<a href="index.php?option=com_clm&amp;view=view_logging" style="padding: 2px 7px"><?php echo JText::_('LOGFILE'); ?>&nbsp;&nbsp;</a>
+					</li>
+					<?php } ?>
+					<?php if($clmAccess->access('BE_config_general')) { ?>
+					<li <?php if (clm_core::$load->request_string('view') == 'view_config') echo 'class="active"'; ?>>
+						<a href="index.php?option=com_clm&amp;view=view_config" style="padding: 2px 7px"><?php echo JText::_('CONFIG_TITLE'); ?></a>
+					</li>
+					<?php } ?>
+				</ul>
+				<ul id="hsubmenu" class="nav nav-list">
+					<li><a href="index.php?option=com_clm&amp;view=info" style="padding: 8px 7px"><?php echo JText::_(''); ?></a>
+					</li>
+				</ul>
+			</div>
+		</div> <?php 
+}
+if (substr($joomlaVersion,0,1) < 1) {
 JSubMenuHelper::addEntry(JText::_('INFO'), 'index.php?option=com_clm&view=info', (clm_core::$load->request_string('view')) == 'info'?true:false);
-				
+
 if ($val == 0) {
 	JSubMenuHelper::addEntry(JText::_('ERGEBNISSE'),  'index.php?option=com_clm&section=ergebnisse', (clm_core::$load->request_string('section')) == 'ergebnisse'?true:false); 
 }
@@ -468,6 +553,19 @@ if($view == "view_config") {
 	return;
 } else if($view == "view_logging") {
 	$fix = clm_core::$api->view_logging(array());
+	clm_core::$load->load_css("icons_images");
+	JToolBarHelper::title(JText::_('TITLE_INFO'));
+	echo '<div id="clm">';
+	if($fix[0]) {
+		echo $fix[2]; // array dereferencing fix php 5.3
+	} else {
+		$fix = clm_core::$load->load_view("notification",array($fix[1]));
+		echo "<div class='clm'>".$fix[1]."</div>";
+	}
+	echo "</div>";
+	return;
+} else if($view == "view_mail") {
+	$fix = clm_core::$api->callStandalone("view_mail");
 	clm_core::$load->load_css("icons_images");
 	JToolBarHelper::title(JText::_('TITLE_INFO'));
 	echo '<div id="clm">';
