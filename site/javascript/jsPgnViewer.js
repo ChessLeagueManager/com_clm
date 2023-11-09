@@ -2089,6 +2089,7 @@ function Move(white, black) {
 			var input = this.getImg("rwind","btns");
 			input.alt = this.opts['altRewind'];
 			input.title = this.opts['altRewind'];;
+			input.style.display = 'inline';
 			href.appendChild(input);
 			
 			input.onclick = function() {
@@ -2100,6 +2101,7 @@ function Move(white, black) {
 			input = this.getImg("back","btns");
 			input.alt = this.opts['altBack'];
 			input.title = this.opts['altBack'];
+			input.style.display = 'inline';
 			href = hrefS.cloneNode(false);
 			href.appendChild(input);
 			
@@ -2113,6 +2115,7 @@ function Move(white, black) {
 			input = this.getImg("flip","btns");
 			input.alt = this.opts['altFlip'];
 			input.title = this.opts['altFlip'];
+			input.style.display = 'inline';
 			href = hrefS.cloneNode(false);
 			href.appendChild(input);
 			
@@ -2137,6 +2140,7 @@ function Move(white, black) {
 			input = this.getImg("toggle","btns");
 			input.alt = this.opts['altShowMoves'];
 			input.title = this.opts['altShowMoves'];
+			input.style.display = 'inline';
 			href = hrefS.cloneNode(false);
 			href.appendChild(input);
 
@@ -2150,6 +2154,7 @@ function Move(white, black) {
 			input = this.getImg("comments","btns");
 			input.alt = this.opts['altComments'];
 			input.title = this.opts['altComments'];
+			input.style.display = 'inline';
 			href = hrefS.cloneNode(false);
 			href.appendChild(input);
 
@@ -2163,6 +2168,7 @@ function Move(white, black) {
 			input = this.getImg("forward","btns");
 			input.alt = this.opts['altPlayMove'];
 			input.title = this.opts['altPlayMove'];
+			input.style.display = 'inline';
 			href = hrefS.cloneNode(false);
 			href.appendChild(input);
 
@@ -2176,6 +2182,7 @@ function Move(white, black) {
 			input = this.getImg("ffward","btns");
 			input.alt = this.opts['altFastForward'];
 			input.title = this.opts['altFastForward'];
+			input.style.display = 'inline';
 			href = hrefS.cloneNode(false);
 			href.appendChild(input);
 
