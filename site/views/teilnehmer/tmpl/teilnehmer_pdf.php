@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -102,11 +102,11 @@ $pdf->AddPage();
 
 $pdf->SetFont('Times','',$date_font);
 	$pdf->Cell(10,3,' ',0,0);
-	$pdf->Cell(175,2,utf8_decode(JText::_('WRITTEN')).' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
+	$pdf->Cell(175,2,clm_core::$load->utf8decode(JText::_('WRITTEN')).' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.clm_core::$load->utf8decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
 
 $pdf->SetFont('Times','B',$head_font+2);	
-	$pdf->Cell(180,15,utf8_decode($liga[0]->name),0,1,'C');
-	$pdf->Cell(180,10,utf8_decode($saison[0]->name),0,1,'C');
+	$pdf->Cell(180,15,clm_core::$load->utf8decode($liga[0]->name),0,1,'C');
+	$pdf->Cell(180,10,clm_core::$load->utf8decode($saison[0]->name),0,1,'C');
 	$pdf->Ln(30);    	
 $pdf->SetFont('Times','',$font+2);
 $pdf->SetFillColor(100);
@@ -145,7 +145,7 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 //	$pdf->Cell(7-$rbreite,$zelle,$x+1,1,0,'C',$fc);
 	$pdf->Cell(7-$rbreite,$zelle,$punkte[$x]->tln_nr,1,0,'C',$fc);
 	if (substr($punkte[$x]->name,0,10) == 'Mannschaft') $punkte[$x]->name = '';
-	$pdf->Cell(70-$nbreite,$zelle,utf8_decode($punkte[$x]->name),1,0,'L',$fc);
+	$pdf->Cell(70-$nbreite,$zelle,clm_core::$load->utf8decode($punkte[$x]->name),1,0,'L',$fc);
 	//if (isset($dwz[($punkte[$x]->tln_nr)])) $pdf->Cell(10-$breite,$zelle,round($dwz[($punkte[$x]->tln_nr)]),1,0,'C',$fc);
 	//else $pdf->Cell(10-$breite,$zelle,'',1,0,'C',$fc);
 	$pdf->Cell(10-$breite,$zelle,$a_average_dwz_lineup[$punkte[$x]->tln_nr],1,0,'C',$fc);
@@ -186,10 +186,10 @@ $pdf->Ln();
 if ($liga[0]->bemerkungen <> "") {
 	$pdf->SetFont('Times','B',$font+2);
 	$pdf->Cell(10,$zelle,' ',0,0,'L');
-	$pdf->Cell(150,$zelle,' '.utf8_decode(JText::_('NOTICE_SL')).' :',0,1,'B');
+	$pdf->Cell(150,$zelle,' '.clm_core::$load->utf8decode(JText::_('NOTICE_SL')).' :',0,1,'B');
 	$pdf->SetFont('Times','',$font);
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
-	$pdf->MultiCell(150,$zelle,utf8_decode($liga[0]->bemerkungen),0,'L',0);
+	$pdf->MultiCell(150,$zelle,clm_core::$load->utf8decode($liga[0]->bemerkungen),0,'L',0);
 	$pdf->Ln();
 	}
 
@@ -198,7 +198,7 @@ if ($liga[0]->bemerkungen <> "") {
 	$pdf->Cell(150,$zelle,JText::_('CHIEF').' :',0,1,'L');
 	$pdf->SetFont('Times','',$font);
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
-	$pdf->Cell(150,$zelle,utf8_decode($liga[0]->sl),0,1,'L');
+	$pdf->Cell(150,$zelle,clm_core::$load->utf8decode($liga[0]->sl),0,1,'L');
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
 	if ($jid > 0 OR $show_sl_mail > 0) {
 		$pdf->Cell(150,$zelle,$liga[0]->email,0,1,'L');
@@ -208,7 +208,7 @@ if ($liga[0]->bemerkungen <> "") {
 	$pdf->Ln();
 
 // Ausgabe
-$pdf->Output(JText::_('TEILNEHMER').' '.utf8_decode($liga[0]->name).'.pdf','D');
+$pdf->Output(JText::_('TEILNEHMER').' '.clm_core::$load->utf8decode($liga[0]->name).'.pdf','D');
 exit;
 ?>
 

@@ -98,10 +98,10 @@ $date = date("Y-m-d");
 		if ( $t1 == 1 OR ( $datum_arr[$t][1] > $datum_arr[$t-1][1]) OR ( $datum_arr[$t][0] > $datum_arr[$t-1][0]) ) {
 			$termin_length += $zelle; }
 		if ($termine[$t]->source != 'liga') {
-				$content_termin = utf8_decode($termine[$t]->name);        
-				$content_detail = utf8_decode($termine[$t]->typ); }       
+				$content_termin = clm_core::$load->utf8decode($termine[$t]->name);        
+				$content_detail = clm_core::$load->utf8decode($termine[$t]->typ); }       
 		else {
-			$content_termin = utf8_decode($termine[$t]->typ).", ".utf8_decode($termine[$t]->name);        
+			$content_termin = clm_core::$load->utf8decode($termine[$t]->typ).", ".clm_core::$load->utf8decode($termine[$t]->name);        
 			while (isset($plan[$pp]->datum) AND ($termine[$t]->datum > $plan[$pp]->datum)) {
 				$pp++; }
 			$content_detail = "";
@@ -110,7 +110,7 @@ $date = date("Y-m-d");
 				if ($content_detail !== "") {
 					$termin_length += $zelle; 
 					$content_detail .= "\n"; }
-				$content_detail .= utf8_decode($plan[$pp]->hname)." - ".utf8_decode($plan[$pp]->gname); 
+				$content_detail .= clm_core::$load->utf8decode($plan[$pp]->hname)." - ".clm_core::$load->utf8decode($plan[$pp]->gname); 
 				$pp++; } 
 		}
 		$termin_length = $termin_length * 5; 
@@ -120,11 +120,11 @@ $date = date("Y-m-d");
 			$pdf->AddPage();
 			$pdf->SetFont('Times','',$date_font);
 			$pdf->Cell(10,3,' ',0,0);
-			$pdf->Cell(175,3,utf8_decode(JText::_('WRITTEN')).' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
+			$pdf->Cell(175,3,clm_core::$load->utf8decode(JText::_('WRITTEN')).' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.clm_core::$load->utf8decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
 	
 			$pdf->SetFont('Times','',$head_font);
 			$pdf->Cell(10,10,' ',0,0);
-			$pdf->Cell(150,10,utf8_decode(JText::_('TERMINE_HEAD')),0,1,'L');
+			$pdf->Cell(150,10,clm_core::$load->utf8decode(JText::_('TERMINE_HEAD')),0,1,'L');
 		}
 		$pdf->SetFont('Times','',$font);
 		$pdf->SetTextColor(0);
@@ -142,14 +142,14 @@ $date = date("Y-m-d");
 				$pdf->SetTextColor(0);
 				$pdf->SetFillColor(240); 
 				$pdf->Cell($br00,$zelle," ",0,0,'C');    
-				$pdf->Cell($br99,$zelle,utf8_decode($arrMonth[date('F',$monatsausgabe)]),1,1,'L',1);    
+				$pdf->Cell($br99,$zelle,clm_core::$load->utf8decode($arrMonth[date('F',$monatsausgabe)]),1,1,'L',1);    
 			} 
 			$tt++;
 			$pdf->SetTextColor(0);
 			$pdf->SetFillColor(255); 
 			$pdf->Cell($br00,$zelle," ",0,0,'C');    
-			//$pdf->Cell($br01,$zelle,utf8_decode($arrWochentag[date("l",$datum[$t])]). ", " . $datum_arr[$t][2].".".$datum_arr[$t][1].".".$datum_arr[$t][0],1,0,'L',1); 
-			$ttext = utf8_decode($arrWochentag[date("l",$datum[$t])]). ", " . $datum_arr[$t][2].".".$datum_arr[$t][1].".".$datum_arr[$t][0]; 
+			//$pdf->Cell($br01,$zelle,clm_core::$load->utf8decode($arrWochentag[date("l",$datum[$t])]). ", " . $datum_arr[$t][2].".".$datum_arr[$t][1].".".$datum_arr[$t][0],1,0,'L',1); 
+			$ttext = clm_core::$load->utf8decode($arrWochentag[date("l",$datum[$t])]). ", " . $datum_arr[$t][2].".".$datum_arr[$t][1].".".$datum_arr[$t][0]; 
 			if ($termine[$t]->starttime != '00:00:00') $ttext .= '  '.substr($termine[$t]->starttime,0,5); 
 			$pdf->Cell($br01,$zelle,$ttext,1,0,'L',1); 
 			//$pdf->Cell($br02,$zelle,$content_termin,1,0,'L',1);        
@@ -173,12 +173,12 @@ if ($t1 < 1) {
 	$pdf->AddPage();
 	$pdf->SetFont('Times','',$date_font);
 	$pdf->Cell(10,3,' ',0,0);
-	$pdf->Cell(175,3,utf8_decode(JText::_('WRITTEN')).' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
+	$pdf->Cell(175,3,clm_core::$load->utf8decode(JText::_('WRITTEN')).' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.clm_core::$load->utf8decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
 	
 	$pdf->SetFont('Times','',$head_font);
 	$pdf->Cell(10,10,' ',0,0);
-	$pdf->Cell(150,10,utf8_decode(JText::_('NO_TERMINE')),0,1,'L');
+	$pdf->Cell(150,10,clm_core::$load->utf8decode(JText::_('NO_TERMINE')),0,1,'L');
 }
-$pdf->Output(utf8_decode(JText::_('TERMINE_FIXTURES')).'.pdf','D');
+$pdf->Output(clm_core::$load->utf8decode(JText::_('TERMINE_FIXTURES')).'.pdf','D');
 exit;
 ?>

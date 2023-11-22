@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -56,10 +56,10 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 <?php
 if (!isset($params['dwz_date']) OR $params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
-	if (isset($dwz[0]) && $dwz[0]->dsb_datum  > '1970-01-01') $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $dwz[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F')); 
+	if (isset($dwz[0]) && $dwz[0]->dsb_datum  > '1970-01-01') $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $dwz[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F')); 
 	else $hint_dwzdsb = ''; 
 } else {
-	$hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_LEAGUE').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $params['dwz_date'], JText::_('DATE_FORMAT_CLM_F'));  
+	$hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_LEAGUE').' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $params['dwz_date'], JText::_('DATE_FORMAT_CLM_F'));  
 }
 
 $archive_check = clm_core::$api->db_check_season_user($sid);

@@ -35,7 +35,7 @@ $ex = 0;
 
 if (isset($spieler[0]->Spielername)){ 
 	if (($spieler[0]->dsb_datum == '0000-00-00') || ($spieler[0]->dsb_datum == '1970-01-01') || (!isset($spieler))) $hint_dwzdsb = '';  
-	else $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $spieler[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F')); 
+	else $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $spieler[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F')); 
 }
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');

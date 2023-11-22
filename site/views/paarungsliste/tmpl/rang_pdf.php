@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -70,7 +70,7 @@ $pdf->AddPage();
 $pdf->SetFont('Times','',16);
 
 	$pdf->Cell(10,15,' ',0,0);
-	$pdf->Cell(80,15,utf8_decode($liga[0]->name),0,1,'L');
+	$pdf->Cell(80,15,clm_core::$load->utf8decode($liga[0]->name),0,1,'L');
 
 $pdf->SetFont('Times','',$font);
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
@@ -99,7 +99,7 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(7-$breite,$zelle,$x+1,1,0,'C');
 	$pdf->Cell(7-$breite,$zelle,$punkte[$x]->tln_nr,1,0,'C');
-	$pdf->Cell(50-$breite,$zelle,utf8_decode($punkte[$x]->name),1,0,'L');
+	$pdf->Cell(50-$breite,$zelle,clm_core::$load->utf8decode($punkte[$x]->name),1,0,'L');
 	$pdf->Cell(10-$breite,$zelle,round($dwz[($punkte[$x]->tln_nr)]),1,0,'C');
 
 // unschön aber läuft bis ich eine bessere Lösung gefunden habe  --> eine SQL Abfrage im MODEL
@@ -166,7 +166,7 @@ if ($liga[0]->bemerkungen <> "") {
 	$pdf->Cell(150,$zelle,' Hinweis des Staffelleiters :',0,1,'B');
 	$pdf->SetFont('Times','',$font-2);
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
-	$pdf->MultiCell(150,$zelle,utf8_decode($liga[0]->bemerkungen),0,'L',0);
+	$pdf->MultiCell(150,$zelle,clm_core::$load->utf8decode($liga[0]->bemerkungen),0,'L',0);
 $pdf->Ln();
 				}
 
@@ -182,7 +182,7 @@ $pdf->Ln();
 
 $pdf->SetFont('Times','',5);
 	$pdf->Cell(10,2,' ',0,0);
-	$pdf->Cell(80,2,'erstellt am '.utf8_decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'L');
+	$pdf->Cell(80,2,'erstellt am '.clm_core::$load->utf8decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'L');
 
 // Ende Teilnehmer
 $pdf->Output('Rangliste '.$liga[0]->name.'.pdf','D');

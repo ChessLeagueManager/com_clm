@@ -47,11 +47,14 @@
  *
  * @author  Matthias Sommerfeld <mso@phlylabs.de>
  * @copyright 2004-2014 phlyLabs Berlin, http://phlylabs.de
- * @version 0.9.0 2014-12-12    @version 0.9.0a 2020-04-17 !!!!!!!!!!!!
+ * @version 0.9.0 2014-12-12    
+ * @version 0.9.0a 2020-04-17 
+ * @version 0.9.0b 2023-11-12 !!!!!!!!!!!!
  */
-class idna_convert {
+class idna_convert extends stdClass {
 
-    private $version = '0.9.0a';	// due to php 7.4: 4 statements changed with {} replaced by []
+//    private $version = '0.9.0a';	// due to php 7.4: 4 statements changed with {} replaced by []
+    private $version = '0.9.0b';	// due to php 8.2: extends stdClass
     protected $sub_version = 'main';
 
     // NP See below

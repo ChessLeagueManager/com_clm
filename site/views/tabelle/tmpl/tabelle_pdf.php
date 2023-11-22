@@ -106,11 +106,11 @@ $pdf->AddPage();
 
 $pdf->SetFont('Times','',$date_font);
 	$pdf->Cell(10,3,' ',0,0);
-	$pdf->Cell(175,2,utf8_decode(JText::_('WRITTEN')).' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
+	$pdf->Cell(175,2,clm_core::$load->utf8decode(JText::_('WRITTEN')).' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.clm_core::$load->utf8decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
 
 $pdf->SetFont('Times','B',$head_font+2);	
-	$pdf->Cell(180,15,utf8_decode($liga[0]->name),0,1,'C');
-	$pdf->Cell(180,10,utf8_decode($saison[0]->name),0,1,'C');
+	$pdf->Cell(180,15,clm_core::$load->utf8decode($liga[0]->name),0,1,'C');
+	$pdf->Cell(180,10,clm_core::$load->utf8decode($saison[0]->name),0,1,'C');
 	$pdf->Ln(30);    	
 $pdf->SetFont('Times','',$font+2);
 $pdf->SetFillColor(100);
@@ -118,7 +118,7 @@ $pdf->SetTextColor(255);
 // max. Länge des Names bestimmen
 $lmax = 0;
 for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
-	$n = $pdf->GetStringWidth(utf8_decode($punkte[$x]->name));
+	$n = $pdf->GetStringWidth(clm_core::$load->utf8decode($punkte[$x]->name));
 	if ($n > $lmax) $lmax = $n;
 }
 if ($lmax < (50-$nbreite)) $lmax = 50 - $nbreite;
@@ -159,10 +159,10 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(7-$rbreite,$zelle,$x+1,1,0,'C',$fc);
 	$pdf->Cell(7-$rbreite,$zelle,$punkte[$x]->tln_nr,1,0,'C',$fc);
-	//$pdf->Cell(50-$nbreite,$zelle,utf8_decode($punkte[$x]->name),1,0,'L',$fc);
-	while (($lmax) < $pdf->GetStringWidth(utf8_decode($punkte[$x]->name)))
+	//$pdf->Cell(50-$nbreite,$zelle,clm_core::$load->utf8decode($punkte[$x]->name),1,0,'L',$fc);
+	while (($lmax) < $pdf->GetStringWidth(clm_core::$load->utf8decode($punkte[$x]->name)))
 		$punkte[$x]->name = substr($punkte[$x]->name,0,-1);
-	$pdf->Cell($lmax+2,$zelle,utf8_decode($punkte[$x]->name),1,0,'L',$fc);
+	$pdf->Cell($lmax+2,$zelle,clm_core::$load->utf8decode($punkte[$x]->name),1,0,'L',$fc);
 	//if (isset($dwz[($punkte[$x]->tln_nr)])) $pdf->Cell(10-$breite,$zelle,round($dwz[($punkte[$x]->tln_nr)]),1,0,'C',$fc);
 	//else $pdf->Cell(10-$breite,$zelle,'',1,0,'C',$fc);
 	$pdf->Cell(10-$breite,$zelle,$a_average_dwz_lineup[$punkte[$x]->tln_nr],1,0,'C',$fc);
@@ -206,10 +206,10 @@ if (is_null($liga[0]->bemerkungen)) $liga[0]->bemerkungen = '';
 if ($liga[0]->bemerkungen <> "") {
 	$pdf->SetFont('Times','B',$font+2);
 	$pdf->Cell(10,$zelle,' ',0,0,'L');
-	$pdf->Cell(150,$zelle,' '.utf8_decode(JText::_('NOTICE_SL')).' :',0,1,'B');
+	$pdf->Cell(150,$zelle,' '.clm_core::$load->utf8decode(JText::_('NOTICE_SL')).' :',0,1,'B');
 	$pdf->SetFont('Times','',$font);
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
-	$pdf->MultiCell(150,$zelle,utf8_decode($liga[0]->bemerkungen),0,'L',0);
+	$pdf->MultiCell(150,$zelle,clm_core::$load->utf8decode($liga[0]->bemerkungen),0,'L',0);
 	$pdf->Ln();
 	}
 
@@ -219,7 +219,7 @@ if ($liga[0]->bemerkungen <> "") {
 	$pdf->Cell(150,$zelle,JText::_('CHIEF').' :',0,1,'L');
 	$pdf->SetFont('Times','',$font);
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
-	$pdf->Cell(150,$zelle,utf8_decode($liga[0]->sl),0,1,'L');
+	$pdf->Cell(150,$zelle,clm_core::$load->utf8decode($liga[0]->sl),0,1,'L');
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
 	if ($jid > 0 OR $show_sl_mail > 0) {
 		$pdf->Cell(150,$zelle,$liga[0]->email,0,1,'L');
@@ -229,7 +229,7 @@ if ($liga[0]->bemerkungen <> "") {
 	$pdf->Ln();
 
 // Ausgabe
-$pdf->Output(JText::_('TABELLE').' '.utf8_decode($liga[0]->name).'.pdf','D');
+$pdf->Output(JText::_('TABELLE').' '.clm_core::$load->utf8decode($liga[0]->name).'.pdf','D');
 exit;
 ?>
 

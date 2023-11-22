@@ -117,11 +117,11 @@ $pdf->AddPage();
 
 $pdf->SetFont('Times','',7);
 	$pdf->Cell(10,3,' ',0,0);
-	$pdf->Cell(175,3,utf8_decode(JText::_('WRITTEN')).' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
+	$pdf->Cell(175,3,clm_core::$load->utf8decode(JText::_('WRITTEN')).' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.clm_core::$load->utf8decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
 	
 $pdf->SetFont('Times','',14);
 	$pdf->Cell(10,15,' ',0,0);
-	$pdf->Cell(80,15,utf8_decode($liga[0]->name)." ".utf8_decode($saison[0]->name),0,1,'L');
+	$pdf->Cell(80,15,clm_core::$load->utf8decode($liga[0]->name)." ".clm_core::$load->utf8decode($saison[0]->name),0,1,'L');
 		
 $pdf->SetFont('Times','',$font);
 	$pdf->Cell(10,$zelle,JText::_('MELDELISTE_NR'),0,0,'C');
@@ -154,11 +154,11 @@ $pdf->SetFont('Times','',$font);
 //Zeile 01
 	$pdf->SetFont('Times','BU',$font+1);
 	$pdf->Cell(10,$zelle,$x+1,0,0,'C');
-	$pdf->Cell(65,$zelle,utf8_decode($mannschaft[$x]->name),0,0,'L');
+	$pdf->Cell(65,$zelle,clm_core::$load->utf8decode($mannschaft[$x]->name),0,0,'L');
 	$pdf->SetFont('Times','',$font);
 	$zn++;
 	if ($liga[0]->anzeige_ma == 1) {
-		$pdf->Cell(80,8,utf8_decode(JText::_('TEAM_FORMATION_BLOCKED')),0,0,'C');
+		$pdf->Cell(80,8,clm_core::$load->utf8decode(JText::_('TEAM_FORMATION_BLOCKED')),0,0,'C');
 	}
 	if (isset($count[$zl]) AND (($countryversion == "de" AND $count[$zl]->mgl_nr !== '0') OR ($countryversion != "de" AND $count[$zl]->PKZ > ''))
 		&&($zn <= $liga[0]->stamm)&&($count[$zl]->tln_nr==$mannschaft[$x]->tln_nr)) {
@@ -167,11 +167,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$zl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$zl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$zl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$zl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$zl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$zl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$zl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$zl]->dwz,0,0,'R');
 	} else { 
 		$pdf->Cell(50,$zelle,'',0,0,'C');
@@ -187,11 +187,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$yl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$yl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$yl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$yl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$yl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$yl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$yl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$yl]->dwz,0,1,'R');
 	} else {
 		$yl--;
@@ -209,11 +209,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$zl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$zl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$zl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$zl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$zl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$zl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$zl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$zl]->dwz,0,0,'R');
 	} else { 
 		$pdf->Cell(50,$zelle,'',0,0,'C');
@@ -229,11 +229,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$yl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$yl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$yl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$yl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$yl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$yl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$yl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$yl]->dwz,0,1,'R');
 	} else {
 		$yl--;
@@ -243,7 +243,7 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(10,$zelle,'',0,0,'C');
 	$pdf->Cell(14,$zelle,JText::_('MELDELISTE_CAPTAIN'),0,0,'L');
 	if (is_null($mleiter[$ml]->mf_name)) $mleiter[$ml]->mf_name = '';
-	if ($ml<99) $pdf->Cell(51,$zelle,utf8_decode($mleiter[$ml]->mf_name),0,0,'L');
+	if ($ml<99) $pdf->Cell(51,$zelle,clm_core::$load->utf8decode($mleiter[$ml]->mf_name),0,0,'L');
 	else $pdf->Cell(51,$zelle,JText::_('MELDELISTE_NOT_YET'),0,0,'L');
 	$zn++;
 	$zl++;
@@ -254,11 +254,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$zl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$zl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$zl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$zl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$zl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$zl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$zl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$zl]->dwz,0,0,'R');
 	} else { 
 		$pdf->Cell(50,$zelle,'',0,0,'C');
@@ -274,11 +274,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$yl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$yl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$yl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$yl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$yl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$yl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$yl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$yl]->dwz,0,1,'R');
 	} else {
 		$yl--;
@@ -289,9 +289,9 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(14,$zelle,JText::_('MELDELISTE_PHONE'),0,0,'L');
 	if ($ml<99) 
 		if ($telefon =="1" OR ($telefon =="0" AND $jid !="0")) {
-			if (($mleiter[$ml]->tel_fest) <> '') $pdf->Cell(51,$zelle,utf8_decode($mleiter[$ml]->tel_fest),0,0,'L');
+			if (($mleiter[$ml]->tel_fest) <> '') $pdf->Cell(51,$zelle,clm_core::$load->utf8decode($mleiter[$ml]->tel_fest),0,0,'L');
 			else $pdf->Cell(51,$zelle,JText::_('MELDELISTE_NO_DATA'),0,0,'L'); }
-		else $pdf->Cell(51,$zelle,utf8_decode(JText::_('TEAM_REGISTERED')),0,0,'L'); 
+		else $pdf->Cell(51,$zelle,clm_core::$load->utf8decode(JText::_('TEAM_REGISTERED')),0,0,'L'); 
 	else $pdf->Cell(51,$zelle,'',0,0,'L');
 	$zn++;
 	$zl++;
@@ -302,11 +302,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$zl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$zl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$zl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$zl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$zl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$zl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$zl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$zl]->dwz,0,0,'R');
 	} else { 
 		$pdf->Cell(50,$zelle,'',0,0,'C');
@@ -322,11 +322,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$yl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$yl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$yl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$yl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$yl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$yl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$yl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$yl]->dwz,0,1,'R');
 	} else {
 		$yl--;
@@ -337,9 +337,9 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(14,$zelle,JText::_('MELDELISTE_MOBIL'),0,0,'L');
 	if ($ml<99)
 		if ($mobil =="1" OR ($mobil =="0" AND $jid !="0")) {
-			if (($mleiter[$ml]->tel_mobil) <> '') $pdf->Cell(51,$zelle,utf8_decode($mleiter[$ml]->tel_mobil),0,0,'L');
+			if (($mleiter[$ml]->tel_mobil) <> '') $pdf->Cell(51,$zelle,clm_core::$load->utf8decode($mleiter[$ml]->tel_mobil),0,0,'L');
 			else $pdf->Cell(51,$zelle,JText::_('MELDELISTE_NO_DATA'),0,0,'L'); }
-		else $pdf->Cell(51,$zelle,utf8_decode(JText::_('TEAM_REGISTERED')),0,0,'L');
+		else $pdf->Cell(51,$zelle,clm_core::$load->utf8decode(JText::_('TEAM_REGISTERED')),0,0,'L');
 	else $pdf->Cell(51,$zelle,'',0,0,'L');
 	$zn++;
 	$zl++;
@@ -350,11 +350,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$zl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$zl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$zl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$zl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$zl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$zl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$zl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$zl]->dwz,0,0,'R');
 	} else { 
 		$pdf->Cell(50,$zelle,'',0,0,'C');
@@ -370,11 +370,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$yl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$yl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$yl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$yl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$yl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$yl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$yl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$yl]->dwz,0,1,'R');
 	} else {
 		$yl--;
@@ -386,9 +386,9 @@ $pdf->SetFont('Times','',$font);
 	if (($ml<99)&&($mleiter[$ml]->email <> '')) {
 		if ($mail=="1" OR ($mail =="0" AND $jid !="0")) {
 			$pdf->SetFont('Times','U',$font);
-			$pdf->Cell(51,$zelle,utf8_decode($mleiter[$ml]->email),0,0,'L',0,'mailto:'.utf8_decode($mleiter[$x]->email));
+			$pdf->Cell(51,$zelle,clm_core::$load->utf8decode($mleiter[$ml]->email),0,0,'L',0,'mailto:'.clm_core::$load->utf8decode($mleiter[$x]->email));
 			$pdf->SetFont('Times','',$font); }
-		else $pdf->Cell(51,$zelle,utf8_decode(JText::_('TEAM_REGISTERED')),0,0,'L');
+		else $pdf->Cell(51,$zelle,clm_core::$load->utf8decode(JText::_('TEAM_REGISTERED')),0,0,'L');
 	}
 	else $pdf->Cell(51,$zelle,'',0,0,'L');
 	$zn++;
@@ -400,11 +400,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$zl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$zl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$zl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$zl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$zl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$zl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$zl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$zl]->dwz,0,0,'R');
 	} else { 
 		$pdf->Cell(50,$zelle,'',0,0,'C');
@@ -420,11 +420,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$yl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$yl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$yl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$yl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$yl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$yl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$yl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$yl]->dwz,0,1,'R');
 	} else {
 		$yl--;
@@ -442,11 +442,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$zl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$zl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$zl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$zl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$zl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$zl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$zl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$zl]->dwz,0,0,'R');
 	} else { 
 		$pdf->Cell(50,$zelle,'',0,0,'C');
@@ -462,11 +462,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$yl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$yl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$yl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$yl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$yl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$yl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$yl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$yl]->dwz,0,1,'R');
 	} else {
 		$yl--;
@@ -477,7 +477,7 @@ $pdf->SetFont('Times','',$font);
 	$pdf->Cell(14,$zelle,JText::_('MELDELISTE_LOCATION'),0,0,'L');
 	if (is_null($mannschaft[$x]->lokal)) $mannschaft[$x]->lokal = '';
 	$man = explode(",", $mannschaft[$x]->lokal);
-	//if (isset($man[0])) $pdf->Cell(51,$zelle,utf8_decode($man[0]),0,0);
+	//if (isset($man[0])) $pdf->Cell(51,$zelle,clm_core::$load->utf8decode($man[0]),0,0);
 	//else 
 	$pdf->Cell(51,$zelle,'',0,0);
 	$zn++;
@@ -489,11 +489,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$zl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$zl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$zl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$zl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$zl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$zl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$zl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$zl]->dwz,0,0,'R');
 	} else { 
 		$pdf->Cell(50,$zelle,'',0,0,'C');
@@ -509,11 +509,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$yl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$yl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$yl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$yl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$yl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$yl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$yl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$yl]->dwz,0,1,'R');
 	} else {
 		$yl--;
@@ -521,7 +521,7 @@ $pdf->SetFont('Times','',$font);
 	}
 //Zeile 09	
 	$pdf->Cell(14,$zelle,'',0,0,'C');
-	if (isset($man[0])) $pdf->Cell(61,$zelle,ltrim(utf8_decode($man[0])),0,0);
+	if (isset($man[0])) $pdf->Cell(61,$zelle,ltrim(clm_core::$load->utf8decode($man[0])),0,0);
 	else $pdf->Cell(61,$zelle,'',0,0);
 	$zn++;
 	$zl++;
@@ -532,11 +532,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$zl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$zl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$zl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$zl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$zl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$zl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$zl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$zl]->dwz,0,0,'R');
 	} else { 
 		$pdf->Cell(50,$zelle,'',0,0,'C');
@@ -552,11 +552,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$yl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$yl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$yl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$yl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$yl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$yl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$yl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$yl]->dwz,0,1,'R');
 	} else {
 		$yl--;
@@ -564,7 +564,7 @@ $pdf->SetFont('Times','',$font);
 	}
 //Zeile 10	
 	$pdf->Cell(14,$zelle,'',0,0,'C');
-	if (isset($man[1])) $pdf->Cell(61,$zelle,ltrim(utf8_decode($man[1])),0,0);
+	if (isset($man[1])) $pdf->Cell(61,$zelle,ltrim(clm_core::$load->utf8decode($man[1])),0,0);
 	else $pdf->Cell(61,$zelle,'',0,0);
 	$zn++;
 	$zl++;
@@ -575,11 +575,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$zl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$zl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$zl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$zl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$zl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$zl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$zl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$zl]->dwz,0,0,'R');
 	} else { 
 		$pdf->Cell(50,$zelle,'',0,0,'C');
@@ -595,11 +595,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$yl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$yl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$yl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$yl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$yl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$yl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$yl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$yl]->dwz,0,1,'R');
 	} else {
 		$yl--;
@@ -607,7 +607,7 @@ $pdf->SetFont('Times','',$font);
 	}
 //Zeile 11	
 	$pdf->Cell(14,$zelle,'',0,0,'C');
-	if (isset($man[2])) $pdf->Cell(61,$zelle,ltrim(utf8_decode($man[2])),0,0);
+	if (isset($man[2])) $pdf->Cell(61,$zelle,ltrim(clm_core::$load->utf8decode($man[2])),0,0);
 	else $pdf->Cell(61,$zelle,'',0,0);
 	$zn++;
 	$zl++;
@@ -618,11 +618,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$zl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$zl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$zl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$zl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$zl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$zl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$zl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$zl]->dwz,0,0,'R');
 	} else { 
 		$pdf->Cell(50,$zelle,'',0,0,'C');
@@ -638,11 +638,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$yl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$yl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$yl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$yl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$yl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$yl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$yl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$yl]->dwz,0,1,'R');
 	} else {
 		$yl--;
@@ -650,7 +650,7 @@ $pdf->SetFont('Times','',$font);
 	}
 //Zeile 12	
 	$pdf->Cell(14,$zelle,'',0,0,'C');
-	if (isset($man[3])) $pdf->Cell(61,$zelle,ltrim(utf8_decode($man[3])),0,0);
+	if (isset($man[3])) $pdf->Cell(61,$zelle,ltrim(clm_core::$load->utf8decode($man[3])),0,0);
 	else $pdf->Cell(61,$zelle,'',0,0);
 	$zn++;
 	$zl++;
@@ -661,11 +661,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$zl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$zl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$zl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$zl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$zl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$zl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$zl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$zl]->dwz,0,0,'R');
 	} else { 
 		$pdf->Cell(50,$zelle,'',0,0,'C');
@@ -681,11 +681,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$yl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$yl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$yl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$yl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$yl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$yl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$yl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$yl]->dwz,0,1,'R');
 	} else {
 		$yl--;
@@ -693,7 +693,7 @@ $pdf->SetFont('Times','',$font);
 	}
 //Zeile 13	
 	$pdf->Cell(14,$zelle,'',0,0,'C');
-	if (isset($man[4])) $pdf->Cell(61,$zelle,ltrim(utf8_decode($man[4])),0,0);
+	if (isset($man[4])) $pdf->Cell(61,$zelle,ltrim(clm_core::$load->utf8decode($man[4])),0,0);
 	else $pdf->Cell(61,$zelle,'',0,0);
 	$zn++;
 	$zl++;
@@ -704,11 +704,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$zl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$zl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$zl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$zl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$zl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$zl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$zl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$zl]->dwz,0,0,'R');
 	} else { 
 		$pdf->Cell(50,$zelle,'',0,0,'C');
@@ -724,11 +724,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$yl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$yl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$yl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$yl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$yl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$yl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$yl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$yl]->dwz,0,1,'R');
 	} else {
 		$yl--;
@@ -749,11 +749,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$zn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$zl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$zl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$zl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$zl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$zl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$zl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$zl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$zl]->dwz,0,0,'R');
 	} else { 
 		$pdf->Cell(50,$zelle,'',0,0,'C');
@@ -769,11 +769,11 @@ $pdf->SetFont('Times','',$font);
 			$pdf->Cell(10,$zelle,$yn,0,0,'C');
 		else
 			$pdf->Cell(10,$zelle,($count[$yl]->rrang),0,0,'C');
-		if ($pdf->GetStringWidth(utf8_decode($count[$yl]->name)) > $breite1) {
-			$htext = utf8_decode($count[$yl]->name);
+		if ($pdf->GetStringWidth(clm_core::$load->utf8decode($count[$yl]->name)) > $breite1) {
+			$htext = clm_core::$load->utf8decode($count[$yl]->name);
 			while($pdf->GetStringWidth($htext)>$breite1) $htext = substr($htext,0,-1);
 			$pdf->Cell($breite1,$zelle,$htext,0,0,'L'); }
-		else $pdf->Cell($breite1,$zelle,utf8_decode($count[$yl]->name),0,0,'L');
+		else $pdf->Cell($breite1,$zelle,clm_core::$load->utf8decode($count[$yl]->name),0,0,'L');
 		$pdf->Cell(10,$zelle,$count[$yl]->dwz,0,1,'R');
 	} else {
 		$yl--;
@@ -796,11 +796,11 @@ $pdf->AddPage();
 
 $pdf->SetFont('Times','',7);
 	$pdf->Cell(10,3,' ',0,0);
-	$pdf->Cell(175,3,utf8_decode(JText::_('WRITTEN')).' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
+	$pdf->Cell(175,3,clm_core::$load->utf8decode(JText::_('WRITTEN')).' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.clm_core::$load->utf8decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
 	
 $pdf->SetFont('Times','',14);
 	$pdf->Cell(10,15,' ',0,0);
-	$pdf->Cell(80,15,utf8_decode($liga[0]->name)." ".utf8_decode($saison[0]->name),0,1,'L');
+	$pdf->Cell(80,15,clm_core::$load->utf8decode($liga[0]->name)." ".clm_core::$load->utf8decode($saison[0]->name),0,1,'L');
 	$pdf->Ln();
 	}		
 $pdf->SetFont('Times','',$font+1);
@@ -809,8 +809,8 @@ $pdf->SetFont('Times','',$font+1);
 	$pdf->SetFont('Times','',$font);
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
 	if (is_null($liga[0]->bemerkungen)) $liga[0]->bemerkungen = '';
-	if ($liga[0]->bemerkungen == utf8_decode($liga[0]->bemerkungen))
-		$pdf->MultiCell(150,$zelle,utf8_decode($liga[0]->bemerkungen),0,'L',0);
+	if ($liga[0]->bemerkungen == clm_core::$load->utf8decode($liga[0]->bemerkungen))
+		$pdf->MultiCell(150,$zelle,clm_core::$load->utf8decode($liga[0]->bemerkungen),0,'L',0);
 	else
 		$pdf->MultiCell(150,$zelle,iconv("UTF-8", "CP1252", $liga[0]->bemerkungen),0,'L',0);
 $pdf->Ln();
@@ -823,11 +823,11 @@ $pdf->AddPage();
 
 $pdf->SetFont('Times','',7);
 	$pdf->Cell(10,3,' ',0,0);
-	$pdf->Cell(175,3,utf8_decode(JText::_('WRITTEN')).' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
+	$pdf->Cell(175,3,clm_core::$load->utf8decode(JText::_('WRITTEN')).' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.clm_core::$load->utf8decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
 	
 $pdf->SetFont('Times','',14);
 	$pdf->Cell(10,15,' ',0,0);
-	$pdf->Cell(80,15,utf8_decode($liga[0]->name)." ".utf8_decode($saison[0]->name),0,1,'L');
+	$pdf->Cell(80,15,clm_core::$load->utf8decode($liga[0]->name)." ".clm_core::$load->utf8decode($saison[0]->name),0,1,'L');
 	$pdf->Ln();
 	}			
 $pdf->SetFont('Times','',$font+1);
@@ -836,7 +836,7 @@ $pdf->SetFont('Times','',$font+1);
 	$pdf->SetFont('Times','',$font);
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
 	if (is_null($liga[0]->sl)) $liga[0]->sl = '';
-	$pdf->Cell(150,$zelle,utf8_decode($liga[0]->sl),0,1,'L');
+	$pdf->Cell(150,$zelle,clm_core::$load->utf8decode($liga[0]->sl),0,1,'L');
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
 	if ($jid > 0 OR $show_sl_mail > 0) {
 		$pdf->Cell(150,$zelle,$liga[0]->email,0,1,'L');
@@ -847,6 +847,6 @@ $pdf->SetFont('Times','',$font+1);
 }
 
 // Ausgabe
-$pdf->Output(JText::_('MELDELISTE').' '.utf8_decode($liga[0]->name).'.pdf','D');
+$pdf->Output(JText::_('MELDELISTE').' '.clm_core::$load->utf8decode($liga[0]->name).'.pdf','D');
 exit;
 ?>

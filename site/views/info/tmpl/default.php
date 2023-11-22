@@ -23,7 +23,7 @@ $db->setQuery ($sql);
 $saisonpunkte = $db->loadObjectList ();
 if (isset($saisonpunkte[0])) $ligapunkte = $saisonpunkte[0];
 
-if ($saison[0]->dsb_datum  > 0) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $saison[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F'));  
+if ($saison[0]->dsb_datum  > 0) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $saison[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F'));  
 if (($saison[0]->dsb_datum == 0) || (!isset($saison))) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_UNCLEAR');  
 
 // Stylesheet laden
@@ -308,7 +308,6 @@ if ($count == 1) { ?>
 <div class="hint">* <?php echo JText::_('SEASON_RATING_MORE_I') ?> <?php echo $count; ?> <?php echo JText::_('SEASON_RATING_MORE_TEAMS') ?> <?php echo $mannschaft[4]->mp; ?>  <?php echo JText::_('SEASON_RATING_MORE_TEAM_II') ?></div>
 <?php } ?>
 
-</div>
 <?php }   // count mannschaft?> 
 
 <br>
@@ -317,9 +316,9 @@ if ($count == 1) { ?>
 //echo "<div id='wrong'>" . JText::_('SEASON_NO_LEAGUES') ."</div>";  } 
 echo "<div>" . ' ' ."</div>";  } ?>
 
-<?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); ?>
 <?php } ?>
 <div class="clr"></div>
+<?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); ?>
 </div>
 </div>
  

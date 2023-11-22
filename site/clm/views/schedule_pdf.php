@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -74,10 +74,10 @@ $first = true;
 			$pdf->SetFillColor(240);
 			$pdf->SetTextColor(0);
 				$pdf->Cell(10,3,' ',0,0);
-				$pdf->Cell($pdf_width-20,4,utf8_decode($lang->written.' '.$lang->date_on.' '.clm_core::$cms->showDate($now, $lang->date_format_clm_pdf)),0,1,'R');
+				$pdf->Cell($pdf_width-20,4,clm_core::$load->utf8decode($lang->written.' '.$lang->date_on.' '.clm_core::$cms->showDate($now, $lang->date_format_clm_pdf)),0,1,'R');
 			$pdf->SetFont('Arial','B',$head_font);
 				$pdf->Cell($breite0,3,' ',0,0);
-				$pdf->Cell($pdf_width-20,7,utf8_decode($club[0]->name." - ".$club[0]->season_name),0,1,'L');
+				$pdf->Cell($pdf_width-20,7,clm_core::$load->utf8decode($club[0]->name." - ".$club[0]->season_name),0,1,'L');
 				$pdf->Cell(10,2,' ',0,1);
 			$pdf->SetFont('Times','',$font);
 			$pdf->SetFillColor(120);
@@ -100,20 +100,20 @@ $first = true;
 		if ($paar1->rdate > "1970-01-01") { $prdate = clm_core::$cms->showDate($paar1->rdate, "d M Y"); 
 								if ($paar1->rtime != "00:00:00" AND $paar1->rtime != "24:00:00") $prdate .= ' '.substr($paar1->rtime,0,5); }
 		else $prdate ='';
-		$pdf->Cell($br_date,$zelle,utf8_decode($prdate),1,0,'C',$fc);
-		$pdf->Cell($br_lname,$zelle,utf8_decode($paar1->lname),1,0,'C',$fc);
+		$pdf->Cell($br_date,$zelle,clm_core::$load->utf8decode($prdate),1,0,'C',$fc);
+		$pdf->Cell($br_lname,$zelle,clm_core::$load->utf8decode($paar1->lname),1,0,'C',$fc);
 		$pdf->Cell($br_dg,$zelle,$paar1->dg,1,0,'C',$fc);
 		$pdf->Cell($br_rd,$zelle,$paar1->runde,1,0,'C',$fc);
-		$pdf->Cell($br_team,$zelle,utf8_decode($paar1->hname),1,0,'C',$fc);
+		$pdf->Cell($br_team,$zelle,clm_core::$load->utf8decode($paar1->hname),1,0,'C',$fc);
 		$pdf->Cell($br_result,$zelle,($paar1->brettpunkte." : ".$paar1->gbrettpunkte),1,0,'C',$fc);
 		//$pdf->Cell(10,$zelle,$pdf->GetY(),1,0,'C',$fc);
-		$pdf->Cell($br_team,$zelle,utf8_decode($paar1->gname),1,1,'C',$fc);
+		$pdf->Cell($br_team,$zelle,clm_core::$load->utf8decode($paar1->gname),1,1,'C',$fc);
     } 
 
 // Ausgabe
-$filename = clm_core::$load->make_valid(utf8_decode($club[0]->name." - ".$club[0]->season_name), 20, 'outputfile');
+$filename = clm_core::$load->make_valid(clm_core::$load->utf8decode($club[0]->name." - ".$club[0]->season_name), 20, 'outputfile');
 $pdf->Output($filename.'.pdf','D');
-//$pdf->Output(utf8_decode($club[0]->name." - ".$club[0]->season_name).'.pdf','D');
+//$pdf->Output(clm_core::$load->utf8decode($club[0]->name." - ".$club[0]->season_name).'.pdf','D');
 exit();
 return;
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -25,7 +25,7 @@ $jid	= $user->get('id');
 
   if ($pgn == 1) { 
 	$nl = "\n";
-	$file_name = utf8_decode($this->turnier->name);
+	$file_name = clm_core::$load->utf8decode($this->turnier->name);
 	$file_name = strtr($file_name,' ./','___');
 	$file_name .= '.pgn'; 
 	$pdatei = fopen($file_name,"wt");
@@ -36,15 +36,15 @@ $jid	= $user->get('id');
 		if ( ($matches->spieler != 0 AND $matches->gegner != 0) OR !is_null($matches->ergebnis)) {
 			$gtmarker = "*";
 			$resulthint = "";
-			fputs($pdatei, '[Event "'.utf8_decode($this->turnier->name).'"]'.$nl);
+			fputs($pdatei, '[Event "'.clm_core::$load->utf8decode($this->turnier->name).'"]'.$nl);
 			fputs($pdatei, '[Site "?"]'.$nl);
 			fputs($pdatei, '[Date "'.JHTML::_('date',  $value->datum, JText::_('Y.m.d')).'"]'.$nl);
 			fputs($pdatei, '[Round "'.$value->nr.'"]'.$nl);
 			fputs($pdatei, '[Board "'.$matches->brett.'"]'.$nl);
-			fputs($pdatei, '[White "'.utf8_decode($matches->wname).'"]'.$nl);
-			fputs($pdatei, '[Black "'.utf8_decode($matches->sname).'"]'.$nl);
-			fputs($pdatei, '[WhiteTeam "'.utf8_decode($matches->wverein).'"]'.$nl);
-			fputs($pdatei, '[BlackTeam "'.utf8_decode($matches->sverein).'"]'.$nl);
+			fputs($pdatei, '[White "'.clm_core::$load->utf8decode($matches->wname).'"]'.$nl);
+			fputs($pdatei, '[Black "'.clm_core::$load->utf8decode($matches->sname).'"]'.$nl);
+			fputs($pdatei, '[WhiteTeam "'.clm_core::$load->utf8decode($matches->wverein).'"]'.$nl);
+			fputs($pdatei, '[BlackTeam "'.clm_core::$load->utf8decode($matches->sverein).'"]'.$nl);
 			fputs($pdatei, '[WhiteElo "'.$matches->welo.'"]'.$nl);
 			fputs($pdatei, '[BlackElo "'.$matches->selo.'"]'.$nl);
 			fputs($pdatei, '[WhiteDWZ "'.$matches->wdwz.'"]'.$nl);
@@ -52,9 +52,9 @@ $jid	= $user->get('id');
 			if ($matches->ergebnis == "2") { fputs($pdatei, '[Result "1/2-1/2"]'.$nl); $gtmarker = "1/2-1/2"; }
 			elseif ($matches->ergebnis == "0") { fputs($pdatei, '[Result "0-1"]'.$nl); $gtmarker = "0-1"; }
 			elseif ($matches->ergebnis == "1") { fputs($pdatei, '[Result "1-0"]'.$nl); $gtmarker = "1-0"; }
-			elseif ($matches->ergebnis == "5") { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".utf8_decode(JText::_('PAAR_RESULT_HINT_1'))."}"; $gtmarker = "1-0"; }
-			elseif ($matches->ergebnis == "4") { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{".utf8_decode(JText::_('PAAR_RESULT_HINT_2'))."}"; $gtmarker = "0-1"; }
-			elseif ($matches->ergebnis == "6") { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{".utf8_decode(JText::_('PAAR_RESULT_HINT_3'))."}"; $gtmarker = "*"; }
+			elseif ($matches->ergebnis == "5") { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".clm_core::$load->utf8decode(JText::_('PAAR_RESULT_HINT_1'))."}"; $gtmarker = "1-0"; }
+			elseif ($matches->ergebnis == "4") { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{".clm_core::$load->utf8decode(JText::_('PAAR_RESULT_HINT_2'))."}"; $gtmarker = "0-1"; }
+			elseif ($matches->ergebnis == "6") { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{".clm_core::$load->utf8decode(JText::_('PAAR_RESULT_HINT_3'))."}"; $gtmarker = "*"; }
 			else fputs($pdatei, '[Result "'.$matches->ergebnis.'"]'.$nl);		
 			fputs($pdatei, '[PlyCount "0"]'.$nl);
 			fputs($pdatei, '[EventDate "'.JHTML::_('date',  $this->turnier->dateStart, JText::_('Y.m.d')).'"]'.$nl);

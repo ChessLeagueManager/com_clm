@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -39,13 +39,13 @@ function clm_view_schedule_xls($out) {
 								if ($paar1->rtime != "00:00:00" AND $paar1->rtime != "24:00:00") $prdate .= ' '.substr($paar1->rtime,0,5); }
 		else $prdate ='';
 		$event = array();	
-		$event[1] = utf8_decode($prdate);
-		$event[2] = utf8_decode($paar1->lname);
+		$event[1] = clm_core::$load->utf8decode($prdate);
+		$event[2] = clm_core::$load->utf8decode($paar1->lname);
 		$event[3] = $paar1->dg;
 		$event[4] = $paar1->runde;
-		$event[5] = utf8_decode($paar1->hname);
+		$event[5] = clm_core::$load->utf8decode($paar1->hname);
 		$event[6] = $paar1->brettpunkte." : ".$paar1->gbrettpunkte;
-		$event[7] = utf8_decode($paar1->gname);
+		$event[7] = clm_core::$load->utf8decode($paar1->gname);
 		$schedule[] = $event;
     } 
 
@@ -58,7 +58,7 @@ function clm_view_schedule_xls($out) {
 	}
 		
 	$nl = "\n";
-	$file_name = 'Schedule'.'_'.utf8_decode($club[0]->name."_".$club[0]->season_name);   
+	$file_name = 'Schedule'.'_'.clm_core::$load->utf8decode($club[0]->name."_".$club[0]->season_name);   
 	$file_name .= '.csv'; 
 //	$file_name = strtr($file_name,' ','_');
 //	$file_name = strtr($file_name,"/","_");

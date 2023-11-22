@@ -665,7 +665,7 @@ if ($debug > 2) { echo "<br>len: $len   substring: $substring"; }
 if ($debug > 2) { echo "<br>len: $len   output: $output  line2: ".$line[2]; }
 			$substring = hexToStr($output);
 			if (($line[2] === 'startzeit') AND (strlen($substring) < 6)) $substring .= ':00';
-			$data['out'][$line[1]][0] = addslashes(utf8_encode($substring));
+			$data['out'][$line[1]][0] = addslashes(clm_core::$load->utf8encode($substring));
 			$tnr = 't'.$line[1];
 if ($debug > 1) echo "<br>".$tnr.'/'.$lang->{$tnr}.'/'.$substring.'/'.$data['out'][$line[1]][0];
 			break;

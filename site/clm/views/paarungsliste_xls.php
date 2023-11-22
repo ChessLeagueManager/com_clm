@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -37,11 +37,11 @@ function clm_view_paarungsliste_xls($out) {
 								if ($paar1->ptime != "00:00:00" AND $paar1->ptime != "24:00:00") $prdate .= ' '.substr($paar1->ptime,0,5); }
 		else $prdate ='';
 		$line = array();	
-		$line[1] = utf8_decode($paar1->rname);
-		$line[2] = utf8_decode($paar1->paar);
-		$line[3] = utf8_decode($prdate);
-		$line[4] = utf8_decode($paar1->hname);
-		$line[5] = utf8_decode($paar1->gname);
+		$line[1] = clm_core::$load->utf8decode($paar1->rname);
+		$line[2] = clm_core::$load->utf8decode($paar1->paar);
+		$line[3] = clm_core::$load->utf8decode($prdate);
+		$line[4] = clm_core::$load->utf8decode($paar1->hname);
+		$line[5] = clm_core::$load->utf8decode($paar1->gname);
 		$output[] = $line;
     } 
 
@@ -51,7 +51,7 @@ function clm_view_paarungsliste_xls($out) {
 	}
 		
 	$nl = "\n";
-	$file_name = utf8_decode($lang->title.'_'.$liga[0]->name."_".$liga[0]->sname);   
+	$file_name = clm_core::$load->utf8decode($lang->title.'_'.$liga[0]->name."_".$liga[0]->sname);   
 	$file_name .= '.csv'; 
 	$file_name = strtr($file_name,' ','_');
 	$file_name = strtr($file_name,"/","_");

@@ -25,6 +25,7 @@ $ -> Language fix or change
 ^ Ergebnismeldung: Codeanpassung J 4.4
 ^ pgn-Anzeige: Nachbesserung der Robustheit wegen Templates
 ^ pgn-Verfahren: Routinen entsprechend Dokumentation
+^ Frontend: Codeanpassung php 8.2
 
 - - - - - 4.1.2 - [13-09-2023] - - - - - - - - - - - - - - - - - - - -
 # Teamwettbewerbe: Berechnung Direkter Vergleich bei 3-2-1-0 u.ä. Wertungen 

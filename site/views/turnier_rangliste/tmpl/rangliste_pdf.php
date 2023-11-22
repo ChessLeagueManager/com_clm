@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -81,14 +81,14 @@ for ($p=0; $p<$this->turnier->playersCount; $p++) {
 $pdf->AddPage($sformat);
 $pdf->SetFont('Times','',7);
 	$pdf->Cell($br00,3,' ',0,0);
-	$pdf->Cell(175,3,utf8_decode(JText::_('WRITTEN')).' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
+	$pdf->Cell(175,3,clm_core::$load->utf8decode(JText::_('WRITTEN')).' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.clm_core::$load->utf8decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
 	
 $pdf->SetFont('Times','',14);
 	$pdf->Cell($br00,15,' ',0,0);
 	if (isset($this->turnier->spRangName) AND $this->turnier->spRangName > '')
-		$pdf->Cell(150,15,utf8_decode($this->turnier->name).": ".utf8_decode($this->turnier->spRangName)." ".utf8_decode(JText::_('TOURNAMENT_RANKING')),0,1,'L');
+		$pdf->Cell(150,15,clm_core::$load->utf8decode($this->turnier->name).": ".clm_core::$load->utf8decode($this->turnier->spRangName)." ".clm_core::$load->utf8decode(JText::_('TOURNAMENT_RANKING')),0,1,'L');
 	else
-		$pdf->Cell(150,15,utf8_decode($this->turnier->name).": ".utf8_decode(JText::_('TOURNAMENT_RANKING')),0,1,'L');
+		$pdf->Cell(150,15,clm_core::$load->utf8decode($this->turnier->name).": ".clm_core::$load->utf8decode(JText::_('TOURNAMENT_RANKING')),0,1,'L');
 		
 $pdf->SetFont('Times','',$font);
 $pdf->SetTextColor(255);
@@ -125,7 +125,7 @@ $pdf->SetTextColor(0);
 	$pdf->Cell($br01,$zelle,CLMText::getPosString($this->players[$p]->rankingPos),1,0,'C',1);
 	if ($turParams->get('displayPlayerSnr', 1) == 1) {
 		$pdf->Cell($br02,$zelle,$this->players[$p]->snr,1,0,'C',1); }
-	$pdf->Cell($br03,$zelle,utf8_decode($this->players[$p]->name),1,0,'L',1);
+	$pdf->Cell($br03,$zelle,clm_core::$load->utf8decode($this->players[$p]->name),1,0,'L',1);
 	$pdf->Cell($br04,$zelle,$this->players[$p]->twz,1,0,'C',1); 
 	for ($rnd=1; $rnd<=$this->turnier->runden; $rnd++) {
 		if (isset($this->matrix[$this->players[$p]->snr][$rnd]->ergebnis)) {
@@ -172,14 +172,14 @@ for ($p=0; $p<$this->turnier->teil; $p++) {
 $pdf->AddPage($sformat);
 $pdf->SetFont('Times','',7);
 	$pdf->Cell($br00,3,' ',0,0);
-	$pdf->Cell(175,3,utf8_decode(JText::_('WRITTEN')).' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
+	$pdf->Cell(175,3,clm_core::$load->utf8decode(JText::_('WRITTEN')).' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.clm_core::$load->utf8decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
 	
 $pdf->SetFont('Times','',14);
 	$pdf->Cell($br00,15,' ',0,0);
 	if (isset($this->turnier->spRangName) AND $this->turnier->spRangName > '')
-		$pdf->Cell(150,15,utf8_decode($this->turnier->name).": ".utf8_decode($this->turnier->spRangName)." ".utf8_decode(JText::_('TOURNAMENT_RANKING')),0,1,'L');
+		$pdf->Cell(150,15,clm_core::$load->utf8decode($this->turnier->name).": ".clm_core::$load->utf8decode($this->turnier->spRangName)." ".clm_core::$load->utf8decode(JText::_('TOURNAMENT_RANKING')),0,1,'L');
 	else
-		$pdf->Cell(150,15,utf8_decode($this->turnier->name).": ".utf8_decode(JText::_('TOURNAMENT_RANKING')),0,1,'L');
+		$pdf->Cell(150,15,clm_core::$load->utf8decode($this->turnier->name).": ".clm_core::$load->utf8decode(JText::_('TOURNAMENT_RANKING')),0,1,'L');
 		
 $pdf->SetFont('Times','',$font);
 $pdf->SetTextColor(255);
@@ -216,7 +216,7 @@ $pdf->SetTextColor(0);
 	$pdf->Cell($br01,$zelle,CLMText::getPosString($this->players[$p]->rankingPos),1,0,'C',1);
 	if ($turParams->get('displayPlayerSnr', 1) == 1) {
 		$pdf->Cell($br02,$zelle,$this->players[$p]->snr,1,0,'C',1); }
-	$pdf->Cell($br03,$zelle,utf8_decode($this->players[$p]->name),1,0,'L',1);
+	$pdf->Cell($br03,$zelle,clm_core::$load->utf8decode($this->players[$p]->name),1,0,'L',1);
 	$pdf->Cell($br04,$zelle,$this->players[$p]->twz,1,0,'C',1); 
 	for ($rnd=1; $rnd<=$this->turnier->teil; $rnd++) {
 		if ($rnd == ($p+1)) { $pdf->Cell($br11,$zelle,"X",1,0,'C',1); }
@@ -249,8 +249,8 @@ $pdf->SetTextColor(0);
 
 // Ausgabe
 if (isset($this->turnier->spRangName) AND $this->turnier->spRangName > '')
-	$pdf->Output(utf8_decode(JText::_('TOURNAMENT_RANKING')).' '.utf8_decode($this->turnier->name).' '.utf8_decode($this->turnier->spRangName).'.pdf','D');
+	$pdf->Output(clm_core::$load->utf8decode(JText::_('TOURNAMENT_RANKING')).' '.clm_core::$load->utf8decode($this->turnier->name).' '.clm_core::$load->utf8decode($this->turnier->spRangName).'.pdf','D');
 else
-	$pdf->Output(utf8_decode(JText::_('TOURNAMENT_RANKING')).' '.utf8_decode($this->turnier->name).'.pdf','D');
+	$pdf->Output(clm_core::$load->utf8decode(JText::_('TOURNAMENT_RANKING')).' '.clm_core::$load->utf8decode($this->turnier->name).'.pdf','D');
 exit;
 ?>

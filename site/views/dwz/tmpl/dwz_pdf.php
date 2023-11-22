@@ -24,7 +24,7 @@ $cuser = (integer) clm_core::$access->getId();
 
 // Prüfen ob Verein vorhanden ist
  if (!$liga[0]->Vereinname) { ?>
-<div class="componentheading"><?php echo utf8_decode(JText::_('CLUB_UNKNOWN')) ?></div>
+<div class="componentheading"><?php echo clm_core::$load->utf8decode(JText::_('CLUB_UNKNOWN')) ?></div>
 <?php	} else {
 
 // Konfigurationsparameter auslesen
@@ -68,24 +68,24 @@ $pdf->AddPage();
 // Datum und Uhrzeit schreiben
 $pdf->SetFont('Times','',5);
 	$pdf->Cell(10,2,' ',0,0);
-	$pdf->Cell(175,4,utf8_decode(JText::_('WRITTEN')).' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
+	$pdf->Cell(175,4,clm_core::$load->utf8decode(JText::_('WRITTEN')).' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.clm_core::$load->utf8decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
 	
 // Überschrift
 $pdf->SetFont('Times','',16);
 	$pdf->Cell(10,15,' ',0,0);
 	if ($countryversion =="de") {
-		$pdf->Cell(80,15,utf8_decode(JText::_('CLUB_RATING')).' '.utf8_decode($liga[0]->Vereinname),0,1,'L');
+		$pdf->Cell(80,15,clm_core::$load->utf8decode(JText::_('CLUB_RATING')).' '.clm_core::$load->utf8decode($liga[0]->Vereinname),0,1,'L');
 	} else {
-		$pdf->Cell(80,15,utf8_decode(JText::_('CLUB_RATING_EN')).' '.utf8_decode($liga[0]->Vereinname),0,1,'L');
+		$pdf->Cell(80,15,clm_core::$load->utf8decode(JText::_('CLUB_RATING_EN')).' '.clm_core::$load->utf8decode($liga[0]->Vereinname),0,1,'L');
 	}
 // User und Saison
 $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
 	$pdf->SetFont('Times','',12);
 	$pdf->Cell(10,10,' ',0,0);
-	$pdf->Cell(80,10,utf8_decode(JText::_('NO_ACCESS')),0,1,'L');
+	$pdf->Cell(80,10,clm_core::$load->utf8decode(JText::_('NO_ACCESS')),0,1,'L');
 	$pdf->Cell(10,10,' ',0,0);
-	$pdf->Cell(80,10,utf8_decode(JText::_('NOT_REGISTERED')),0,1,'L');
+	$pdf->Cell(80,10,clm_core::$load->utf8decode(JText::_('NOT_REGISTERED')),0,1,'L');
 //	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
 }
 else {
@@ -109,22 +109,22 @@ $pdf->SetFont('Times','',$font);
 	///////////////////////////////////////////////////////////////
 
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
-	$pdf->Cell(7,$zelle,utf8_decode(JText::_('CLUB_NR')),1,0,'C');
+	$pdf->Cell(7,$zelle,clm_core::$load->utf8decode(JText::_('CLUB_NR')),1,0,'C');
 	if ($countryversion =="de") {
 		if ($cuser != -1) {
-			$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER')),1,0,'C');
+			$pdf->Cell(16,$zelle,clm_core::$load->utf8decode(JText::_('CLUB_MEMBER')),1,0,'C');
 		}
 	} else {
-		$pdf->Cell(18,$zelle,utf8_decode(JText::_('CLUB_MEMBER_PKZ')),1,0,'C');
+		$pdf->Cell(18,$zelle,clm_core::$load->utf8decode(JText::_('CLUB_MEMBER_PKZ')),1,0,'C');
 	}
-	$pdf->Cell(80,$zelle,utf8_decode(JText::_('CLUB_MEMBER_NAME')),1,0,'C');
+	$pdf->Cell(80,$zelle,clm_core::$load->utf8decode(JText::_('CLUB_MEMBER_NAME')),1,0,'C');
 	if ($countryversion =="de") {
-		$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER_RATING')),1,0,'C');
+		$pdf->Cell(16,$zelle,clm_core::$load->utf8decode(JText::_('CLUB_MEMBER_RATING')),1,0,'C');
 	} else {
-		$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER_RATING_EN')),1,0,'C');
+		$pdf->Cell(16,$zelle,clm_core::$load->utf8decode(JText::_('CLUB_MEMBER_RATING_EN')),1,0,'C');
 	}
-	$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER_RATINGS')),1,0,'C');
-	$pdf->Cell(16,$zelle,utf8_decode(JText::_('CLUB_MEMBER_ELO')),1,0,'C');
+	$pdf->Cell(16,$zelle,clm_core::$load->utf8decode(JText::_('CLUB_MEMBER_RATINGS')),1,0,'C');
+	$pdf->Cell(16,$zelle,clm_core::$load->utf8decode(JText::_('CLUB_MEMBER_ELO')),1,0,'C');
 	// Zeilenumbruch
 	$pdf->Ln();
 
@@ -143,8 +143,8 @@ $pdf->SetFont('Times','',$font);
 		$pdf->Cell(18,$zelle,$zps->PKZ,1,0,'C');
 	}
 	if (is_null($zps->FIDE_Titel)) $zps->FIDE_Titel = '';
-	$pdf->Cell(8,$zelle,utf8_decode($zps->FIDE_Titel),'BT',0,'L');
-	$pdf->Cell(72,$zelle,utf8_decode($zps->Spielername),'BT',0,'L');
+	$pdf->Cell(8,$zelle,clm_core::$load->utf8decode($zps->FIDE_Titel),'BT',0,'L');
+	$pdf->Cell(72,$zelle,clm_core::$load->utf8decode($zps->Spielername),'BT',0,'L');
 	$pdf->Cell(16,$zelle,$zps->DWZ,1,0,'C');
 	if ($countryversion =="de") {
 		$pdf->Cell(16,$zelle,$zps->DWZ_Index,1,0,'C');
@@ -165,7 +165,7 @@ $pdf->SetFont('Times','',$font);
 	}
 }
 // PDF an Browser senden
-$pdf->Output(utf8_decode(JText::_('CLUB_RATING')).' '.utf8_decode($liga[0]->Vereinname).'.pdf','D');
+$pdf->Output(clm_core::$load->utf8decode(JText::_('CLUB_RATING')).' '.clm_core::$load->utf8decode($liga[0]->Vereinname).'.pdf','D');
 exit;
 }
 ?>

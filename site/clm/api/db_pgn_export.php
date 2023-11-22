@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -52,14 +52,14 @@ function clm_api_db_pgn_export($id,$group=true) {
 	}
 		
 	$nl = "\n";
-	$file_name = utf8_decode($turnier[0]->name);
+	$file_name = clm_core::$load->utf8decode($turnier[0]->name);
 	$file_name .= '.pgn'; 
 	$file_name = strtr($file_name,' ','_');
 	$file_name = strtr($file_name,"/","_");
 	if (!file_exists('components'.DS.'com_clm'.DS.'pgn'.DS)) mkdir('components'.DS.'com_clm'.DS.'pgn'.DS);
 	$pdatei = fopen('components'.DS.'com_clm'.DS.'pgn'.DS.$file_name,"wt");
 	foreach($pgn as $pgn1) {
-		fputs($pdatei, utf8_decode($pgn1->text).$nl);
+		fputs($pdatei, clm_core::$load->utf8decode($pgn1->text).$nl);
 	}
 	fclose($pdatei);
     header('Content-Disposition: attachment; filename='.$file_name);

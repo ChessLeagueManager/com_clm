@@ -86,10 +86,10 @@ $db->setQuery ($sql);
 $ligapunkte = $db->loadObject ();
 
 if ($lparams['dwz_date'] == '0000-00-00' OR $lparams['dwz_date'] == '1970-01-01') {
-	if ($saison[0]->dsb_datum  > '1970-01-01') $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $saison[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F'));  
+	if ($saison[0]->dsb_datum  > '1970-01-01') $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $saison[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F'));  
 	else $hint_dwzdsb = ''; 
 } else {
-	$hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_LEAGUE').' '.utf8_decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $lparams['dwz_date'], JText::_('DATE_FORMAT_CLM_F'));  
+	$hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_LEAGUE').' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $lparams['dwz_date'], JText::_('DATE_FORMAT_CLM_F'));  
 }
 if ( !$mannschaft OR $mannschaft[0]->lpublished == 0) {
 	$msg = JText::_('NOT_PUBLISHED').JText::_('GEDULD');

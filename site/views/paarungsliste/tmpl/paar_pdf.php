@@ -68,9 +68,9 @@ if ( $liga[0]->published == 0) {
 	$pdf->AddPage();
 	$pdf->SetFont('Times','',16);
 
-	$pdf->Cell(10,15,utf8_decode(JText::_('NOT_PUBLISHED')),0,0);
+	$pdf->Cell(10,15,clm_core::$load->utf8decode(JText::_('NOT_PUBLISHED')),0,0);
 	$pdf->Ln();
-	$pdf->Cell(10,15,utf8_decode(JText::_('GEDULD')),0,0);
+	$pdf->Cell(10,15,clm_core::$load->utf8decode(JText::_('GEDULD')),0,0);
 } else {
 	// DWZ Durchschnitte - Aufstellung 
 	$lid = $liga[0]->id;
@@ -124,12 +124,12 @@ if ( $liga[0]->published == 0) {
 
 	$pdf->SetFont('Times','',6);
 	$pdf->Cell(10,2,' ',0,0);
-	$pdf->Cell(175,4,utf8_decode(JText::_('WRITTEN')).' '.utf8_decode(JText::_('ON_DAY')).' '.utf8_decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
+	$pdf->Cell(175,4,clm_core::$load->utf8decode(JText::_('WRITTEN')).' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.clm_core::$load->utf8decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
 	
 	$pdf->SetFont('Times','',16);
 
 	$pdf->Cell(10,10,' ',0,0);
-	$pdf->Cell(80,10,utf8_decode(JText::_('PAAR_OVERVIEW')).' : '.utf8_decode($liga[0]->name),0,1,'L');
+	$pdf->Cell(80,10,clm_core::$load->utf8decode(JText::_('PAAR_OVERVIEW')).' : '.clm_core::$load->utf8decode($liga[0]->name),0,1,'L');
 
 	// Rundenschleife
 	$z=0;
@@ -146,13 +146,13 @@ if ( $liga[0]->published == 0) {
 			$pdf->Cell(10,15,' ',0,0);
 		}
 		if ( $liga[0]->durchgang == 2 AND $dd == 0) {
-			$pdf->Cell(80,15,utf8_decode(JText::_('PAAR_HIN')),0,1,'L');
+			$pdf->Cell(80,15,clm_core::$load->utf8decode(JText::_('PAAR_HIN')),0,1,'L');
 		}
 		if ( $liga[0]->durchgang == 2 AND $dd == 1) {
-			$pdf->Cell(80,15,utf8_decode(JText::_('PAAR_RUECK')),0,1,'L');
+			$pdf->Cell(80,15,clm_core::$load->utf8decode(JText::_('PAAR_RUECK')),0,1,'L');
 		}
 		if ( $liga[0]->durchgang > 2 ) {
-			$pdf->Cell(80,15,utf8_decode(JText::_('PAAR_DG'))." ".($dd+1),0,1,'L');
+			$pdf->Cell(80,15,clm_core::$load->utf8decode(JText::_('PAAR_DG'))." ".($dd+1),0,1,'L');
 		}
 
 		for ($x=0; $x< ($liga[0]->runden); $x++) {
@@ -185,22 +185,22 @@ if ( $liga[0]->published == 0) {
 				} 
 				$pdf->SetFont('Times','',$head_font-1);
 				$pdf->Cell(10,15,' ',0,0);
-				$pdf->Cell(173-(8*$breite),$zelle,utf8_decode($termin[$term-1]->name).utf8_decode($datum),1,0,'L');
+				$pdf->Cell(173-(8*$breite),$zelle,clm_core::$load->utf8decode($termin[$term-1]->name).clm_core::$load->utf8decode($datum),1,0,'L');
 				$pdf->Ln();
 	
 				$pdf->SetFont('Times','',$font);
 				$pdf->Cell(10,15,' ',0,0);
-				$pdf->Cell(8-$breite,$zelle,utf8_decode(JText::_('PAAR')),1,0,'C');
-				$pdf->Cell(8-$breite,$zelle,utf8_decode(JText::_('TLN')),1,0,'C');
-				$pdf->Cell($nbreite-$breite,$zelle,utf8_decode(JText::_('HOME')),1,0,'C');
-				$pdf->Cell(12-$breite,$zelle,utf8_decode(JText::_('DWZ')),1,0,'C');
-				$pdf->Cell($rbreite-$breite,$zelle,utf8_decode(JText::_('RESULT')),1,0,'C');
-				$pdf->Cell(8-$breite,$zelle,utf8_decode(JText::_('TLN')),1,0,'C');
-				$pdf->Cell($nbreite-$breite,$zelle,utf8_decode(JText::_('GUEST')),1,0,'C');
-				$pdf->Cell(12-$breite,$zelle,utf8_decode(JText::_('DWZ')),1,0,'C');
+				$pdf->Cell(8-$breite,$zelle,clm_core::$load->utf8decode(JText::_('PAAR')),1,0,'C');
+				$pdf->Cell(8-$breite,$zelle,clm_core::$load->utf8decode(JText::_('TLN')),1,0,'C');
+				$pdf->Cell($nbreite-$breite,$zelle,clm_core::$load->utf8decode(JText::_('HOME')),1,0,'C');
+				$pdf->Cell(12-$breite,$zelle,clm_core::$load->utf8decode(JText::_('DWZ')),1,0,'C');
+				$pdf->Cell($rbreite-$breite,$zelle,clm_core::$load->utf8decode(JText::_('RESULT')),1,0,'C');
+				$pdf->Cell(8-$breite,$zelle,clm_core::$load->utf8decode(JText::_('TLN')),1,0,'C');
+				$pdf->Cell($nbreite-$breite,$zelle,clm_core::$load->utf8decode(JText::_('GUEST')),1,0,'C');
+				$pdf->Cell(12-$breite,$zelle,clm_core::$load->utf8decode(JText::_('DWZ')),1,0,'C');
 
 				if ($params['round_date'] == '1') { 
-					$pdf->Cell(25-$breite,$zelle,utf8_decode(JText::_('FIXTURE_DATE')),1,0,'C');
+					$pdf->Cell(25-$breite,$zelle,clm_core::$load->utf8decode(JText::_('FIXTURE_DATE')),1,0,'C');
 				} 
 
 				$tbreite = (2 * (8+50+12)) + 25 - 7*$breite;
@@ -214,7 +214,7 @@ if ( $liga[0]->published == 0) {
 					$pdf->Cell(10,15,' ',0,0);
 					$pdf->Cell(8-$breite,$zelle,$paar[$z]->paar,1,0,'C');
 					$pdf->Cell(8-$breite,$zelle,$paar[$z]->tln_nr,1,0,'C');
-					$pdf->Cell($nbreite-$breite,$zelle,utf8_decode($paar[$z]->hname),1,0,'C');
+					$pdf->Cell($nbreite-$breite,$zelle,clm_core::$load->utf8decode($paar[$z]->hname),1,0,'C');
 
 					if ($a_average_dwz_round[$paar[$z]->htln] != '-' AND $paar[$z]->htln !=0 AND $paar[$z]->gtln != 0) {
 						$pdf->Cell(12-$breite,$zelle,$a_average_dwz_round[$paar[$z]->htln],1,0,'C');
@@ -240,7 +240,7 @@ if ( $liga[0]->published == 0) {
 					}
 
 					$pdf->Cell(8-$breite,$zelle,$paar[$z]->gtln,1,0,'C');
-					$pdf->Cell($nbreite-$breite,$zelle,utf8_decode($paar[$z]->gname),1,0,'C');
+					$pdf->Cell($nbreite-$breite,$zelle,clm_core::$load->utf8decode($paar[$z]->gname),1,0,'C');
 
 					if ($a_average_dwz_round[$paar[$z]->htln] != '-' AND $paar[$z]->htln !=0 AND $paar[$z]->gtln != 0) {
 						$pdf->Cell(12-$breite,$zelle,$a_average_dwz_round[$paar[$z]->gtln],1,0,'C'); $z2++;
@@ -279,7 +279,7 @@ if ( $liga[0]->published == 0) {
 						if ($paar[$z]->ko_decision == 4) $ztext = JText::_('ROUND_DECISION_LOS_HEIM')." ".$paar[$z]->hname;
 						if ($paar[$z]->ko_decision == 5) $ztext = JText::_('ROUND_DECISION_LOS_GAST')." ".$paar[$z]->gname; 		
 						$pdf->SetFont('Times','',$font);
-						$pdf->Cell($tbreite,$zelle,utf8_decode($ztext),'TBR',0,'C');
+						$pdf->Cell($tbreite,$zelle,clm_core::$load->utf8decode($ztext),'TBR',0,'C');
 						$pdf->SetFont('Times','',$font);
 					}
 					if ($paar[$z]->comment != "") { 
@@ -290,7 +290,7 @@ if ( $liga[0]->published == 0) {
 						$pdf->SetXY(($xx+8-$breite),$yy);
 						$ztext = JText::_('PAAR_COMMENT').$paar[$z]->comment; 		
 						$pdf->SetFont('Times','',$font);
-						$pdf->MultiCell($tbreite,$zelle,utf8_decode($ztext),'LTBR','L');
+						$pdf->MultiCell($tbreite,$zelle,clm_core::$load->utf8decode($ztext),'LTBR','L');
 						$pdf->SetFont('Times','',$font);
 						$yy1 = $pdf->GetY();
 						$pdf->SetXY($xx,$yy);
@@ -310,6 +310,6 @@ if ( $liga[0]->published == 0) {
 	}
 }
 
-$pdf->Output(utf8_decode(JText::_('PAAR_OVERVIEW')).' '.utf8_decode($liga[0]->name).'.pdf','D');
+$pdf->Output(clm_core::$load->utf8decode(JText::_('PAAR_OVERVIEW')).' '.clm_core::$load->utf8decode($liga[0]->name).'.pdf','D');
 exit;
 ?>

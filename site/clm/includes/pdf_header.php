@@ -1,7 +1,7 @@
 <?php
 /*
  * @Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -23,7 +23,7 @@ $pdf_orientation = clm_core::$load->request_string('pdf_orientation','P');
 	}
 //Titel
     $this->SetFont('Arial','',12);
-	$this->Cell($pdf_width-15,2,utf8_decode($fromname),0,1,'C');
+	$this->Cell($pdf_width-15,2,clm_core::$load->utf8decode($fromname),0,1,'C');
 	$this->SetFont('Arial','B',8);
 // Include the class
 	//include_once('idna_convert.class.php');
@@ -37,7 +37,7 @@ $pdf_orientation = clm_core::$load->request_string('pdf_orientation','P');
 	$input = $_SERVER['HTTP_HOST'];
 // Encode it to its punycode presentation
 	$output = $IDN->decode($input);
-	$this->Cell($pdf_width-15,5,utf8_decode($output),0,1,'C');
+	$this->Cell($pdf_width-15,5,clm_core::$load->utf8decode($output),0,1,'C');
 
 //Logo der Organisation (Landesverband, Verein, ...; über Einstellungen vorgegeben)  rechts 
 //	$file_headers = @get_headers($org_logo);

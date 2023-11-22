@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -196,7 +196,7 @@ function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hn
 		<tr>
 			<td width="80" valign="top"><strong>'.$lang->raw("comment").'</strong></td>
 			<td  width="420" nowrap="nowrap" valign="top" size="1">
-				<textarea cols="30" rows="2" style="width:90%">'.utf8_decode($comment).'</textarea>
+				<textarea cols="30" rows="2" style="width:90%">'.clm_core::$load->utf8decode($comment).'</textarea>
 			</td>
   		</tr>
 	  ';

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2023 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,13 +9,11 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
-
 /**
- * erstellt einen Link innerhalb des Administrationsbereichs
+ * erstellt einen Link innerhalb des Frontends
 */
 	
-class CLMcLink {
+class CLMcLink extends stdClass {
 
 	function __construct($option = 'com_clm') {
 
@@ -72,7 +70,6 @@ class CLMcLink {
 		return $html_string;
 
 	}
-
 
 }
 ?>
