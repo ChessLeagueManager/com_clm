@@ -531,7 +531,7 @@ class CLMViewMTurniere
 		<td width="20%" nowrap="nowrap">
 			<label for="params[time_control]"><?php echo JText::_( 'LEAGUE_TIME_CONTROL' ); ?></label>
 		</td><td colspan="2">
-		<input class="inputbox" type="text" name="params[time_control]" id="params[time_control]" size="40" maxlength="120" value="<?php echo $row->params['time_control']; ?>" />
+		<input class="inputbox" type="text" name="params[time_control]" id="params[time_control]" size="36" maxlength="120" value="<?php echo $row->params['time_control']; ?>" />
 		</td>
 		<td nowrap="nowrap">
 			<label for="params[waiting_period]"><?php echo JText::_( 'LEAGUE_WAITING_PERIOD' ); ?></label>
@@ -772,20 +772,29 @@ class CLMViewMTurniere
 	<?php if ($import_pgn == 1) { ?>
 	<tr>
 		<td nowrap="nowrap">
-			<label for="pgninput"><?php echo JText::_( 'OPTION_PGNINPUT' ); ?></label>
+<!--			<label for="pgninput"><?php echo JText::_( 'OPTION_PGNINPUT' ); ?></label> -->
+			<label for="pgninput">
+				<span class="editlinktip hasTip" title="<?php echo JText::_( 'OPTION_PGNINPUT_HINT' );?>">
+				<?php echo JText::_( 'OPTION_PGNINPUT' )." : "; ?></span></label>
 		</td><td colspan="1"><fieldset class="radio">
 			<?php echo JHtml::_('select.booleanlist', 'params[pgnInput]', 'class="inputbox"', $row->params['pgnInput']); ?>
 		</fieldset></td>
 		<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td nowrap="nowrap">
-			<label for="pgnpublic"><?php echo JText::_( 'OPTION_PGNPUBLIC' ); ?></label>
+<!--			<label for="pgnpublic"><?php echo JText::_( 'OPTION_PGNPUBLIC' ); ?></label> -->
+			<label for="pgnpublic">
+				<span class="editlinktip hasTip" title="<?php echo JText::_( 'OPTION_PGNPUBLIC_HINT' );?>">
+				<?php echo JText::_( 'OPTION_PGNPUBLIC' )." : "; ?></span></label>
 		</td><td colspan="1"><fieldset class="radio">
 			<?php echo JHtml::_('select.booleanlist', 'params[pgnPublic]', 'class="inputbox"', $row->params['pgnPublic']); ?>
 		</fieldset></td>
 	</tr>
 	<tr>
 		<td nowrap="nowrap">
-			<label for="pgndownload"><?php echo JText::_( 'OPTION_PGNDOWNLOAD' ); ?></label>
+<!--			<label for="pgndownload"><?php echo JText::_( 'OPTION_PGNDOWNLOAD' ); ?></label> -->
+			<label for="pgndownload">
+				<span class="editlinktip hasTip" title="<?php echo JText::_( 'OPTION_PGNDOWNLOAD_HINT' );?>">
+				<?php echo JText::_( 'OPTION_PGNDOWNLOAD' )." : "; ?></span></label>
 		</td><td colspan="1"><fieldset class="radio">
 			<?php echo JHtml::_('select.booleanlist', 'params[pgnDownload]', 'class="inputbox"', $row->params['pgnDownload']); ?>
 		</fieldset></td>
@@ -830,7 +839,7 @@ class CLMViewMTurniere
   </fieldset>
   </div>
 
-  <div class="width-40 fltrt">
+  <div class="width-30 fltrt">
   <fieldset class="adminform">
    <legend><?php echo JText::_( 'REMARKS' ); ?></legend>
 	<table class="adminlist">
@@ -842,7 +851,7 @@ class CLMViewMTurniere
 	<tr>
 	<td width="100%" valign="top">
 	<?php if (is_null($row->bemerkungen)) $row->bemerkungen = ''; ?>
-	<textarea class="inputbox" name="bemerkungen" id="bemerkungen" cols="40" rows="4" style="width:90%"><?php echo str_replace('&','&amp;',$row->bemerkungen);?></textarea>
+	<textarea class="inputbox" name="bemerkungen" id="bemerkungen" cols="30" rows="4" style="width:90%"><?php echo str_replace('&','&amp;',$row->bemerkungen);?></textarea>
 	</td>
 	</tr>
 	</table>
@@ -852,7 +861,7 @@ class CLMViewMTurniere
 	<tr>
 	<td width="100%" valign="top">
 	<?php if (is_null($row->bem_int)) $row->bem_int = ''; ?>
-	<textarea class="inputbox" name="bem_int" id="bem_int" cols="40" rows="4" style="width:90%"><?php echo str_replace('&','&amp;',$row->bem_int);?></textarea>
+	<textarea class="inputbox" name="bem_int" id="bem_int" cols="30" rows="4" style="width:90%"><?php echo str_replace('&','&amp;',$row->bem_int);?></textarea>
 	</td>
 	</tr>
 	</table>

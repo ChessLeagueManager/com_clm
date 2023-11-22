@@ -23,18 +23,9 @@ $option 	= clm_core::$load->request_string( 'option' );
 if ($option == '') $option = 'com_clm';
 $mainframe	= JFactory::getApplication();
 
-$pgn		= clm_core::$load->request_int('pgn',0); 
-if ($pgn == 1) { 
-	$result = clm_core::$api->db_pgn_export($lid,true);
-	$_POST['pgn'] = 0;
-	if (!$result[0]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
-	$link = 'index.php?option='.$option.'&view=rangliste&liga='.$lid.'&pgn=0';
-	if ($item != 0) $link .= '&Itemid='.$item;
-	if ($typeid != 0) $link .= '&typeid='.$typeid;
-	$mainframe->enqueueMessage( $msg );
-	$mainframe->redirect( $link );
-	//JFactory::getApplication()->close();
-}
+// Userkennung holen
+$user	=JFactory::getUser();
+$jid	= $user->get('id');
 
 //Liga-Parameter aufbereiten
 if (!isset($liga[0])) {
@@ -53,6 +44,25 @@ if (!isset($params['dwz_date'])) $params['dwz_date'] = '1970-01-01';
 if (!isset($params['noBoardResults'])) $params['noBoardResults'] = '0';
 if (!isset($params['pgnPublic'])) $params['pgnPublic'] = '0';
 if (!isset($params['pgnDownload'])) $params['pgnDownload'] = '0';
+
+
+$pgn		= clm_core::$load->request_int('pgn',0); 
+if ($pgn == 1) {
+	if (($jid != 0 AND $params['pgnPublic'] == '1') OR $params['pgnDownload'] == '1') {
+		$result = clm_core::$api->db_pgn_export($lid,true);
+		if (!$result[0]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
+	} else {
+		$msg = JText::_('NO_PERMISSION');
+	}
+	$_POST['pgn'] = 0;
+	$link = 'index.php?option='.$option.'&view=rangliste&liga='.$lid.'&pgn=0';
+	if ($item != 0) $link .= '&Itemid='.$item;
+	if ($typeid != 0) $link .= '&typeid='.$typeid;
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
+	
+}
+
 
 $punkte		= $this->punkte;
 $spielfrei	= $this->spielfrei;
@@ -88,10 +98,6 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 	$pdf_melde = $config->pdf_meldelisten;
 	$man_showdwz = $config->man_showdwz;
 	$show_sl_mail = $config->show_sl_mail;
-
-		// Userkennung holen
-	$user	=JFactory::getUser();
-	$jid	= $user->get('id');
 
 echo '<div id="clm"><div id="rangliste">';
 
@@ -143,8 +149,8 @@ elseif ($liga[0]->runden_modus == "4" OR $liga[0]->runden_modus == "5") {
 	}
 	echo CLMContent::createViewLink('tabelle', JText::_('RANGLISTE_GOTO_TABELLE'), array('saison' => $sid, 'liga' => $lid, 'Itemid' => $item));
 	// PGN gesamtes Turnier
-	//if (($jid != 0 AND $params['pgnPublic'] == '1') OR $params['pgnDownload'] == '1') {
-	if ($jid != 0 AND $params['pgnDownload'] == '1') {
+	if (($jid != 0 AND $params['pgnPublic'] == '1') OR $params['pgnDownload'] == '1') {
+	//if ($jid != 0 AND $params['pgnDownload'] == '1') {
 		echo CLMContent::createPGNLink('rangliste', JText::_('RANGLISTE_PGN_ALL'), array('liga' => $liga[0]->id), 1 );
 	} 
 	
