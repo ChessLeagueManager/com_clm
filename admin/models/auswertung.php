@@ -1020,8 +1020,7 @@ function xml_dateien()
 			$dateien .= '<tr>'
 				.'<td width="60%"><a href="components/com_clm/dewis/'.utf8_encode($files[$x]).'" target="_blank">'.utf8_encode($files[$x]).'</a></td>'
 				.'<td width="10%">&nbsp;&nbsp;</td>'
-				.'<td width="15%"><a href="index.php?option=com_clm&view=auswertung&task=delete&datei='.$files[$x].'" '
-				//.'onClick="submitform();"'
+				.'<td width="15%"><a href="index.php?option=com_clm&view=auswertung&task=delete&datei='.str_replace("+", "%2B",$files[$x]).'" '
 				.'>'.JText::_( 'DELETE').'</a></td>';
 			if ($countryversion =="en-out") {  //download funktioniert so nicht, deshalb deaktiviert für 3.2.4
 				$dateien .= '<td width="15%"><a href="index.php?option=com_clm&view=auswertung&task=download&datei='.$files[$x].'" '
@@ -1075,9 +1074,11 @@ function delete()
 	if($datei){
 		$filesDir 	= 'components'.DS.$option.DS.'dewis';
 		jimport('joomla.filesystem.file');
-		JFile::delete( $filesDir.DS.$datei );
-		$msg =JText::_( 'DB_DEL_SUCCESS');
-	}else{	$msg =JText::_( 'Keine Datei gefunden !');}
+		$rc = JFile::delete( $filesDir.DS.str_replace("%2B","+",$datei ));
+		if ($rc) $msg =JText::_( 'DB_DEL_SUCCESS');
+		else $msg = JText::_( 'Fehler beim Löschen!');
+	} else {
+		$msg =JText::_( 'Keine Datei gefunden!');}
 
 	$app->enqueueMessage( $msg, 'warning');	
 

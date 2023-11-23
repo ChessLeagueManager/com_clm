@@ -26,6 +26,7 @@ $ -> Language fix or change
 ^ pgn-Anzeige: Nachbesserung der Robustheit wegen Templates
 ^ pgn-Verfahren: Routinen entsprechend Dokumentation
 ^ Frontend: Codeanpassung php 8.2
+# Auswertungsdatei: Dateinamen mit Pluszeichen
 
 - - - - - 4.1.2 - [13-09-2023] - - - - - - - - - - - - - - - - - - - -
 # Teamwettbewerbe: Berechnung Direkter Vergleich bei 3-2-1-0 u.ä. Wertungen 
