@@ -334,6 +334,12 @@ function edit()
 	$db->setQuery($sql);
 	$spieler = $db->loadObjectList();
 
+	if ($task == 'add') {
+		foreach ($spieler as $spl) {
+			if (!isset($spl->gesperrt)) $spl->gesperrt = '0';
+		}
+	}
+
 	// Anzahl Einträge zählen
 /*	$sql = " SELECT COUNT(ZPS) as ZPS FROM #__clm_rangliste_spieler "
 		." WHERE Gruppe =".$sql_gid
