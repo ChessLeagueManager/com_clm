@@ -157,4 +157,6 @@ $config["tourn_ch_url"]=array(136,7,"",null);
 $config["tourn_ch_key"]=array(137,7,"",null);
 $config["tourn_ch_ip"]=array(138,7,"",null);
 $config["tourn_ch_mail"]=array(139,7,"",null);
+$config["verein_mail"]=array(140,9,0,array(0,1));
+$config["verein_tel"]=array(141,9,0,array(0,1));
 ?>

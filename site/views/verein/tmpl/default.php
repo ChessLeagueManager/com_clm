@@ -37,6 +37,9 @@ $googlemaps   		= $config->googlemaps;
 $googlemaps_rtype   = $config->googlemaps_rtype;
 $googlemaps_vrout   = $config->googlemaps_vrout;
 $maps_zoom			= $config->maps_zoom;
+$verein_mail 		= $config->verein_mail;
+$verein_tel 		= $config->verein_tel;
+
 // Browsertitelzeile setzen
 $doc =JFactory::getDocument();
 if (isset($verein[0])) { $daten['title'] = $verein[0]->name; }
@@ -143,48 +146,54 @@ if ($conf_vereinsdaten == 1) {
 				<table class="vereinstats" width="100%">
 					<tr><td><h4><?php echo JText::_('CLUB_CHIEF'); ?></h4></td></tr>
 					<tr><td><?php echo $verein[0]->vs; ?></td></tr>
-					<?php if ($user->get('id') > 0) {
-					  if ($verein[0]->vs_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->vs_mail ).'</td></tr>'; } ?>
+					<?php if ($user->get('id') > 0 OR $verein_mail == 1)
+						if ($verein[0]->vs_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->vs_mail ).'</td></tr>'; } ?>
+					<?php if ($user->get('id') > 0 OR $verein_tel == 1) { ?>
 					  <tr><td><?php echo $verein[0]->vs_tel; ?></td></tr>         
 					<?php } ?>
 
 					<?php if ( ($verein[0]->tl ==! false) or ($verein[0]->tl_mail ==! false) or ($verein[0]->tl_tel ==! false) ) { ?>
 						<tr><td><h4><?php echo JText::_('CLUB_TOURNAMENTS'); ?></h4></td></tr>
-						<tr><td><?php echo $verein[0]->tl; ?></td></tr>
-						<?php if ($user->get('id') > 0) {
+						<?php if ($verein[0]->tl ==! false) ?> <tr><td><?php echo $verein[0]->tl; ?></td></tr>
+						<?php if ($user->get('id') > 0 OR $verein_mail == 1)
 						  if ($verein[0]->tl_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->tl_mail ).'</td></tr>'; } ?>
+						<?php if ($user->get('id') > 0 OR $verein_tel == 1) { ?>
 						  <tr><td><?php echo $verein[0]->tl_tel; ?></td></tr>            
 					<?php } } ?>
             
 					<?php if ( ($verein[0]->jw ==! false) or ($verein[0]->jw_mail ==! false) or ($verein[0]->jw_tel ==! false) ) { ?>
 						<tr><td><h4><?php echo JText::_('CLUB_YOUTH') ?></h4></td></tr>
-						<tr><td><?php echo $verein[0]->jw; ?></td></tr>
-						<?php if ($user->get('id') > 0) {
+						<?php if ($verein[0]->jw ==! false) ?> <tr><td><?php echo $verein[0]->jw; ?></td></tr>
+						<?php if ($user->get('id') > 0 OR $verein_mail == 1)
 						  if ($verein[0]->jw_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->jw_mail ).'</td></tr>'; } ?>
+						<?php if ($user->get('id') > 0 OR $verein_tel == 1) { ?>
 						  <tr><td><?php echo $verein[0]->jw_tel; ?></td></tr>
 					<?php } } ?>
             
 					<?php if ( ($verein[0]->pw ==! false) or ($verein[0]->pw_mail ==! false) or ($verein[0]->pw_tel ==! false) ) { ?>
 						<tr><td><h4><?php echo JText::_('CLUB_PRESS') ?></h4></td></tr>
-						<tr><td><?php echo $verein[0]->pw; ?></td></tr>
-						<?php if ($user->get('id') > 0) {
+						<?php if ($verein[0]->pw ==! false) ?> <tr><td><?php echo $verein[0]->pw; ?></td></tr>
+						<?php if ($user->get('id') > 0 OR $verein_mail == 1)
 						  if ($verein[0]->pw_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->pw_mail ).'</td></tr>'; } ?>
+						<?php if ($user->get('id') > 0 OR $verein_tel == 1) { ?>
 						  <tr><td><?php echo $verein[0]->pw_tel; ?></td></tr>
 					<?php } } ?>
             
 					<?php if ( ($verein[0]->kw ==! false) or ($verein[0]->kw_mail ==! false) or ($verein[0]->kw_tel ==! false) ) { ?>
 						<tr><td><h4><?php echo JText::_('CLUB_MONEY') ?></h4></td></tr>
-						<tr><td><?php echo $verein[0]->kw; ?></td></tr>
-						<?php if ($user->get('id') > 0) {
+						<?php if ($verein[0]->kw ==! false) ?> <tr><td><?php echo $verein[0]->kw; ?></td></tr>
+						<?php if ($user->get('id') > 0 OR $verein_mail == 1)
 						  if ($verein[0]->kw_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->kw_mail ).'</td></tr>'; } ?>
+						<?php if ($user->get('id') > 0 OR $verein_tel == 1) { ?>
 						  <tr><td><?php echo $verein[0]->kw_tel; ?></td></tr>            </div>
 					<?php } } ?>
             
 					<?php if ( ($verein[0]->sw ==! false) or ($verein[0]->sw_mail ==! false) or ($verein[0]->sw_tel ==! false) ) { ?>
 						<tr><td><h4><?php echo JText::_('CLUB_SENIOR') ?></h4></td></tr>
-						<tr><td><?php echo $verein[0]->sw; ?></td></tr>
-						<?php if ($user->get('id') > 0) {
+						<?php if ($verein[0]->sw ==! false) ?> <tr><td><?php echo $verein[0]->sw; ?></td></tr>
+						<?php if ($user->get('id') > 0 OR $verein_mail == 1)
 						  if ($verein[0]->sw_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->sw_mail ).'</td></tr>'; } ?>
+						<?php if ($user->get('id') > 0 OR $verein_tel == 1) { ?>
 						  <tr><td><?php echo $verein[0]->sw_tel; ?></td></tr>
 					<?php } } ?>
 				</table>
