@@ -249,6 +249,11 @@ function edit()
 		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SPIELFREIE'),'notice' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
+	// Runde durch SWT-Import auf spielfrei gesetzt -> kann nicht gemeldet / bearbeitet werden
+	if ($row->gemeldet == "9997" AND is_null($row->ergebnis)) {
+		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SPIELFREI_DURCH_SWT'),'warnung' );
+		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+	}
 
 	// illegaler Einbruchversuch über URL !
 	// evtl. mitschneiden !?!
@@ -502,34 +507,35 @@ function remove()
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 	
-	// Daten sammeln
-	$data = "SELECT a.gemeldet,l.sl as sl,a.sid, a.lid, a.runde, a.dg, a.paar, l.liga_mt "
-		." FROM #__clm_rnd_man as a "
-		." LEFT JOIN #__clm_liga AS l ON (l.id = a.lid ) "
-		." WHERE a.id = ".$cid[0]
-		;
-	$db->setQuery( $data);
-	$data		= $db->loadObjectList();
+	for ($i = 0; $i < count($cid); $i++) { 
+		// Daten sammeln
+		$query = "SELECT a.gemeldet,l.sl as sl,a.sid, a.lid, a.runde, a.dg, a.paar, l.liga_mt "
+			." FROM #__clm_rnd_man as a "
+			." LEFT JOIN #__clm_liga AS l ON (l.id = a.lid ) "
+			." WHERE a.id = ".$cid[$i]
+			;
+		$db->setQuery( $query);
+		$data		= $db->loadObjectList();
 
-	// Prüfen ob User Berechtigung zum löschen hat
-	$clmAccess = clm_core::$access;      
-	if ($data[0]->liga_mt == "0") {
-		$mppoint = 'league';
-		$csection = 'ligen';
-	} else {
-		$mppoint = 'teamtournament';
-		$csection = 'mturniere';
-	}
-	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
-		$mainframe->enqueueMessage( JText::_('LIGEN_STAFFEL_TOTAL'),'warning' );
-		$section = 'runden';
-		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
-	} 
-	if ($data[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_LOESCH'),'warning' );
-		$link = 'index.php?option='.$option.'&section='.$section;
-		$mainframe->redirect( $link);
-	}
+		// Prüfen ob User Berechtigung zum löschen hat
+		$clmAccess = clm_core::$access;      
+		if ($data[0]->liga_mt == "0") {
+			$mppoint = 'league';
+			$csection = 'ligen';
+		} else {
+			$mppoint = 'teamtournament';
+			$csection = 'mturniere';
+		}
+		if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
+			$mainframe->enqueueMessage( JText::_('LIGEN_STAFFEL_TOTAL'),'warning' );
+			$section = 'runden';
+			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+		} 
+		if ($data[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+			$mainframe->enqueueMessage( JText::_('ERGEBNISSE_LOESCH'),'warning' );
+			$link = 'index.php?option='.$option.'&section='.$section;
+			$mainframe->redirect( $link);
+		}
 
 		// Für Heimmannschaft updaten
 		$query	=" UPDATE #__clm_rnd_man"
@@ -599,15 +605,16 @@ function remove()
 		clm_core::$db->query($query);
 
 		if (!clm_core::$db->query($query)) {
-		echo "<script> alert('".$db->getErrorMsg(true)."'); window.history.go(-1); </script>\n";
-				}
+			echo "<script> alert('".$db->getErrorMsg(true)."'); window.history.go(-1); </script>\n";
+		}
+	}
 	clm_core::$api->db_tournament_ranking($data[0]->lid,true); 
 	//CLMControllerErgebnisse::calculateRanking($data[0]->sid,$data[0]->lid);
 	
 	// Log schreiben
 	$clmLog = new CLMLog();
 	$clmLog->aktion = "Ergebnis gelöscht";
-	$clmLog->params = array('cids' => $cids, 'sid' => $data[0]->sid, 'lid' => $data[0]->lid, 'rnd' => $data[0]->runde, 'paar' => $data[0]->paar, 'dg' => $data[0]->dg);
+	$clmLog->params = array('cid' => $cid, 'sid' => $data[0]->sid, 'lid' => $data[0]->lid, 'rnd' => $data[0]->runde, 'paar' => $data[0]->paar, 'dg' => $data[0]->dg);
 	$clmLog->write();
 
 	$msg = JText::_( 'ERGEBNISSE_GELOESCHT');
@@ -1301,6 +1308,7 @@ function save()
 	// Datum und Uhrzeit für Editorzeit
 	$now = $date->toSQL();
 	// Für Heimmannschaft updaten
+	if (is_null($hmpunkte)) $hmpunkte = 0;	// nur zur Absicherung										
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET editor = ".$meldung
 		." , edit_zeit = '$now'"
@@ -1327,6 +1335,7 @@ function save()
 	$db->setQuery($query);
 	clm_core::$db->query($query);
 	// Für Gastmannschaft updaten
+	if (is_null($gmpunkte)) $gmpunkte = 0; // nur zur Absicherung									
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET editor = ".$meldung
 		." , edit_zeit = '$now'"
