@@ -10,14 +10,17 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip');
+
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
 $lid		= clm_core::$load->request_int('liga',0); 
 $sid		= clm_core::$load->request_int('saison',0);
 $item		= clm_core::$load->request_int('Itemid',1);
 $liga		= $this->liga;
-	//Liga-Parameter aufbereiten
+//Liga-Parameter aufbereiten
+if(isset($liga[0])){
+	$paramsStringArray = explode("\n", $liga[0]->params);
+
 	$paramsStringArray = explode("\n", $liga[0]->params);
 	$params = array();
 	foreach ($paramsStringArray as $value) {
@@ -29,69 +32,85 @@ $liga		= $this->liga;
 	if (!isset($params['dwz_date'])) $params['dwz_date'] = '1970-01-01';
 	if (!isset($params['round_date'])) $params['round_date'] = '0';
 	if (!isset($params['noBoardResults'])) $params['noBoardResults'] = '0';
+} else {
+	$paramsStringArray = array();
+}
 
 $termin		= $this->termin;
-//$dwzschnitt	= $this->dwzschnitt;
-//$dwzgespielt= $this->dwzgespielt;
 $paar		= $this->paar;
 $summe		= $this->summe;
 $rundensumme= $this->rundensumme;
-$runden_modus = $liga[0]->runden_modus;
 
-if ($sid == 0) {
-	$db	= JFactory::getDBO();
-	$query = " SELECT a.* FROM #__clm_liga as a"
-			." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
-			." WHERE a.id = ".$lid
-			." AND s.published = 1"
-			;
-	$db->setQuery($query);
-	$zz	=$db->loadObjectList();
-	if (isset($zz)) {
-		$_GET['saison'] = $zz[0]->sid;
-		$sid = $zz[0]->sid;
-	}
-}
-
-$runde_t = $liga[0]->runden + 1;  
-// Test alte/neue Standardrundenname bei 2 Durchgängen
-if ($liga[0]->durchgang > 1) {
-	if ($termin[$runde_t-1]->name == JText::_('ROUND').' '.$runde_t) {  //alt
-		for ($xr=0; $xr< ($liga[0]->runden); $xr++) { 
-				$termin[$xr]->name = JText::_('ROUND').' '.($xr+1)." (".JText::_('PAAR_HIN').")";
-				$termin[$xr+$liga[0]->runden]->name = JText::_('ROUND').' '.($xr+1)." (".JText::_('PAAR_RUECK').")";
+if(isset($liga[0])){
+	$runden_modus = $liga[0]->runden_modus;
+	if ($sid == 0) {
+		$db	= JFactory::getDBO();
+		$query = " SELECT a.* FROM #__clm_liga as a"
+				." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
+				." WHERE a.id = ".$lid
+				." AND s.published = 1"
+				;
+		$db->setQuery($query);
+		$zz	=$db->loadObjectList();
+		if (isset($zz)) {
+			$_GET['saison'] = $zz[0]->sid;
+			$sid = $zz[0]->sid;
 		}
-    }
+	}
+
+	$runde_t = $liga[0]->runden + 1;  
+	// Test alte/neue Standardrundenname bei 2 Durchgängen
+	if ($liga[0]->durchgang > 1) {
+		if ($termin[$runde_t-1]->name == JText::_('ROUND').' '.$runde_t) {  //alt
+			for ($xr=0; $xr< ($liga[0]->runden); $xr++) { 
+					$termin[$xr]->name = JText::_('ROUND').' '.($xr+1)." (".JText::_('PAAR_HIN').")";
+					$termin[$xr+$liga[0]->runden]->name = JText::_('ROUND').' '.($xr+1)." (".JText::_('PAAR_RUECK').")";
+			}
+		}
+	}
+	
+	// DWZ Durchschnitte - Aufstellung 
+	$result = clm_core::$api->db_nwz_average($lid);
+	$a_average_dwz_lineup = $result[2];
 }
+// Stylesheet laden
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 // Browsertitelzeile setzen
 $doc =JFactory::getDocument();
-$doc->setTitle(JText::_('PAAR_OVERVIEW').' '.$liga[0]->name);
-
-// Stylesheet laden
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
+if(isset($liga[0])){
+	$doc->setTitle(JText::_('PAAR_OVERVIEW').' '.$liga[0]->name);
+} else {
+	$doc->setTitle(JText::_('PAAR_OVERVIEW'));
+}
 
 // Konfigurationsparameter auslesen
 $config			= clm_core::$db->config();
 $fe_runde_tln	= $config->fe_runde_tln;
 $countryversion	= $config->countryversion;
 
-	// DWZ Durchschnitte - Aufstellung 
-	$result = clm_core::$api->db_nwz_average($lid);
-//echo "<br>lid:"; var_dump($lid);
-//echo "<br>result:"; var_dump($result);
-	$a_average_dwz_lineup = $result[2];
-//echo "<br>a_average_dwz_lineup:"; var_dump($a_average_dwz_lineup);
-//die();
-
 ?>
 
 <div id="clm">
 <div id="paarungsliste">
-<?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
+<?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); 
 
+$archive_check = clm_core::$api->db_check_season_user($sid);
+if (!$archive_check) {
+	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+}
+// existiert die Liga
+elseif (!$liga) {	
+	echo "<div id='wrong'>".JText::_('NOT_EXIST')." (".$lid.")<br>".JText::_('GEDULDA')."</div>";
+}
+// schon veröffentlicht
+elseif ($liga[0]->published == "0") {	
+	echo "<div id='wrong'>".JText::_('NOT_PUBLISHED')."<br>".JText::_('GEDULD')."</div>";
+
+} else { 
+?>
 <div class="componentheading">
-<?php echo JText::_('PAAR_OVERVIEW') ?> : <?php echo $liga[0]->name; ?>
+<?php echo JText::_('PAAR_OVERVIEW') ?> : <?php if(isset($liga[0])){ echo $liga[0]->name; } ?>
 
 <div id="pdf">
 <?php
@@ -102,17 +121,8 @@ if ($countryversion == 'en')
 </div></div>
 <div class="clr"></div>
 
-<?php //require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); 
+<?php 
 
-$archive_check = clm_core::$api->db_check_season_user($sid);
-if (!$archive_check) {
-	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
-}
-// schon veröffentlicht
-elseif (!$liga OR $liga[0]->published == 0) {
-echo "<br>".CLMContent::clmWarning(JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD'))."<br>"; }
-
-else {
     if ($fe_runde_tln =="1") {
 		$ohne_tln = "8";
 	}
@@ -122,18 +132,6 @@ else {
 	if ($params['round_date'] == '1') $ohne_tln++;
 	$item		= clm_core::$load->request_int('Itemid',1);
 
-	// Array für DWZ Schnitt setzen
-/*	$dwz = array();
-	for ($y=1; $y< ($liga[0]->teil)+1; $y++){
-		if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
-			if(isset($dwzschnitt[($y-1)]->dwz)) {
-			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->dwz; }
-		} else {
-			if(isset($dwzschnitt[($y-1)]->start_dwz)) {
-			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; }
-		}
-	}
-*/
 ?>
  
 <br>
@@ -180,13 +178,7 @@ if ( $liga[0]->durchgang > 2 AND $xx > 0) { ?><br><?php } ?>
 	$runde1 = $x + 1;
 	$dg1 = $xx +1;
 	$result = clm_core::$api->db_nwz_average($lid,$runde1,$dg1);
-//echo "<br>lid:"; var_dump($lid);
-//echo "<br><br>runde:"; var_dump($runde1);
-//echo "<br>result:"; var_dump($result);
 	$a_average_dwz_round = $result[2];
-//echo "<br>a_average_dwz_round:"; var_dump($a_average_dwz_round);
-//die();
-//echo "<br>termin:"; var_dump($termin);
 
 if ($termin[$term]->published =="1") { ?>
 	<table cellpadding="0" cellspacing="0" class="paarungsliste">
@@ -292,12 +284,6 @@ else { echo $paar[$z]->gname; } ?>
 </td>
 
 	<td class="dwz">
-	<?php //if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 1 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
-		//	{ if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') echo round($dwzgespielt[$z2]->gdwz); 
-		//		else echo round($dwzgespielt[$z2]->gstart_dwz); 
-			//$z2++;
-		//}
-		//else { if (isset($dwz[$paar[$z]->gtln])) echo round($dwz[($paar[$z]->gtln)]); } ?>
 	<?php	if ((isset($a_average_dwz_round[$paar[$z]->gtln])) && ($a_average_dwz_round[$paar[$z]->gtln] != '-' AND $paar[$z]->htln !=0 AND $paar[$z]->gtln != 0)) {
 				echo $a_average_dwz_round[$paar[$z]->gtln]; $z2++;
 			} else {
@@ -379,452 +365,7 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 <br>
 <?php
 }}
-}
-///////////////////////
-// zweiter Durchgang //
-///////////////////////
-
-if ( $liga[0]->durchgang > 6) { if ( $liga[0]->durchgang == 2) {?>
-<br><h4><?php echo JText::_('PAAR_RUECK') ?></h4>
-<?php }
-for ($x=0; $x< ($liga[0]->runden); $x++){
-if ($termin[$term]->published =="1") {
-?>
-
-<table cellpadding="0" cellspacing="0" class="paarungsliste">
-<tr>
-<td colspan="<?php echo $ohne_tln; ?>">
-<?php 
-// Wenn Rundensumme existiert dann  Rundensymbol (Lupe) anzeigen
-if ($rundensumme[$rund_sum]->nr == ($x+1+$liga[0]->runden) ) { ?>
-<div>
-<div class="left" style="width: 70%;">
-<?php 
-if ($termin[$term]->bemerkungen <> "") { ?>
-	<span class="editlinktip hasTip"><img src="<?php echo CLMImage::imageURL('con_info.png'); ?>" class="CLMTooltip" title="<?php echo JText::_( 'CHIEF_NOTE') ?>" /></span><?php }
-// Wenn SL_OK dann Haken anzeigen
-if ($rundensumme[$rund_sum]->sl_ok > 0) { ?>
-	<span class="editlinktip hasTip"><img  src="<?php echo CLMImage::imageURL('accept.png'); ?>" class="CLMTooltip" title="<?php echo JText::_( 'CHIEF_OK') ?>" /></span><?php } ?>
-	<b>&nbsp;<?php if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1+$liga[0]->runden)) { 
-		if ($termin[$term]->datum > 0) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); 
-		if($params['round_date'] == '0' and isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { echo '  '.substr($termin[$term]->startzeit,0,5); }
-		if($params['round_date'] == '1' and isset($termin[$term]->enddatum) and $termin[$term]->enddatum > '1970-01-01' and $termin[$term]->enddatum != $termin[$term]->datum) { 
-						echo ' - '.JHTML::_('date',  $termin[$term]->enddatum, JText::_('DATE_FORMAT_CLM_F')); }
-		} $term++; }		
-else {  }?></b>	
-</div>
-
-<div class="paa_titel"><a href="index.php?option=com_clm&amp;view=runde&amp;liga=<?php echo $liga[0]->id ?>&amp;runde=<?php echo $x+1; ?>&amp;saison=<?php echo $liga[0]->sid; ?>&amp;dg=2&amp;Itemid=<?php echo $item; ?>"> <?php echo $termin[$term-1]->name; ?><img width="16" height="16" src="<?php echo CLMImage::imageURL('lupe.png'); ?>" /></a></div> <?php
-$rund_sum++; }
-
-else {	?>
-<div class="left"><b><?php echo $termin[$x]->datum;?></b></div>
-<div style="text-align: right; padding: 0 10px 0 0;"><b> <?php echo $termin[$x]->name; ?></b></div>
-<?php } 
-/////////////////////////////
-?>
-<div class="clr"></div>
-</div>
-</td>
-<tr>
-	<th class="paar"><?php echo JText::_('PAAR') ?></th>
-	<?php if ($fe_runde_tln =="1") { ?>
-	<th class="tln"><?php echo JText::_('TLN') ?></th>
-    <?php } ?>
-	<th class="heim"><?php echo JText::_('HOME') ?></th>
-	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
-	<th class="erg"><?php echo JText::_('RESULT') ?></th>
-	<?php if ($fe_runde_tln =="1") { ?>
-	<th class="tln"><?php echo JText::_('TLN') ?></th>
-    <?php } ?>
-	<th class="gast"><?php echo JText::_('GUEST') ?></th>
-	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
-	<?php if ($params['round_date'] == '1') { ?>
-	<th class="heim"><?php echo JText::_('FIXTURE_DATE') ?></th>
-	<?php } ?>
-</tr>
-<?php
-
-// Teilnehmerschleife
-for ($y=0; $y< ($liga[0]->teil)/2; $y++){
-	if (!isset($paar[$z])) break; 
-	if ($paar[$z]->runde > ($x+1)) break;
-if ($y%2 != 0) { $zeilenr = 'zeile1'; }
-	else { $zeilenr = 'zeile2'; } ?>
-
-<tr class="<?php echo $zeilenr; ?>">
-<td class="paar"><?php echo $paar[$z]->paar; ?></td>
-	<?php if ($fe_runde_tln =="1") { ?>
-    <td class="tln"><?php echo $paar[$z]->tln_nr; ?></td>
-    <?php } ?>
-<td class="heim">
-<?php if ($paar[$z]->hpublished == 1) { ?>
-<a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $liga[0]->sid; ?>&amp;liga=<?php echo $liga[0]->id; ?>&amp;tlnr=<?php echo $paar[$z]->htln; ?>"><?php echo $paar[$z]->hname; ?></a><?php }
-else { echo $paar[$z]->hname; } ?>
-</td>
-<td class="dwz">
-	<?php if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 2 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
-		{ echo round($dwzgespielt[$z2]->dwz); }
-		else { if (isset($dwz[($paar[$z]->htln)])) echo round($dwz[($paar[$z]->htln)]); } ?>
-</td>
-<?php
-// Wenn Paarung existiert dann Ergebnis-Summen anzeigen
-while ( $summe[$sum_paar]->runde < ($x+1) ) $sum_paar++;
-if ( $summe[$sum_paar]->runde == ($x+1) AND $summe[$sum_paar]->paarung == ($y+1)) { ?>
-<td class="erg"><?php echo $summe[$sum_paar]->sum.' : '.$summe[$sum_paar+1]->sum; ?></td>
-<?php $sum_paar = $sum_paar+2;
-
-}
-else { ?><td class="erg"> : </td><?php }
-/////////////////////////////
-?>
-		<?php if ($fe_runde_tln =="1") { ?>
-			<td class="tln"><?php echo $paar[$z]->gtln; ?></td>
-		<?php } ?>
-<td class="gast">
-<?php if ($paar[$z]->gpublished == 1) { ?>
-<a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $liga[0]->sid; ?>&amp;liga=<?php echo $liga[0]->id; ?>&amp;tlnr=<?php echo $paar[$z]->gtln; ?>"><?php echo $paar[$z]->gname; ?></a><?php }
-else { echo $paar[$z]->gname; } ?>
-</td>
-<td class="dwz">
-	<?php if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 2 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
-		{ echo round($dwzgespielt[$z2]->gdwz);
-			$z2++;
-		}
-		else { if (isset($dwz[($paar[$z]->gtln)])) echo round($dwz[($paar[$z]->gtln)]); } ?></td>
-</td>
-	<?php if ($params['round_date'] == '1') { ?>
-	<td class="heim">
-	<?php 
-			if (isset($paar[$z]->pdate) AND $paar[$z]->pdate > '1970-01-01') {
-			echo JHTML::_('date',  $paar[$z]->pdate, JText::_('DATE_FORMAT_CLM_Y2')); 
-			if($paar[$z]->ptime > '00:00:00') { echo '  '.substr($paar[$z]->ptime,0,5); } }
-	?>
-	</td>
-	<?php } ?>
-</tr>
-<?php $z++; } ?>
-</table>
-<br>
-<?php } else { ?>
-<table cellpadding="0" cellspacing="0" class="paarungsliste">
-<tr>
-<td colspan="<?php echo $ohne_tln; ?>"><b>
-<div><div class="left">
-<?php
-if ($rundensumme[$rund_sum]->nr == ($x+1+$liga[0]->runden) ) { $rund_sum++; }
-if ($termin[$term]->datum AND $termin[$term]->nr == ($x+1+$liga[0]->runden)) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); $term++;} ?>
-</div><div style="text-align: right; padding: 0 10px 0 0;"> <?php echo $termin[$x+$liga[0]->runden]->name; ?></div></b>
-</td>
-</tr>
-<?php
-for ($y=0; $y< ($liga[0]->teil)/2; $y++){
-	if (!isset($summe[$sum_paar])) break;
-	if ( $summe[$sum_paar]->runde == ($x+1+$liga[0]->runden) AND $summe[$sum_paar]->paarung == ($y+1)) { $sum_paar = $sum_paar+2; }
-	if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->dwz AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 2 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0) { $z2++; }
-	$z++;
-	} ?>
-<tr><td><?php echo CLMContent::clmWarning(JText::_('PAAR_UNPUBLISHED')); ?></td></tr>
-</table>
-
-<?php
-}}} 
-
-///////////////////////
-// dritter Durchgang //
-///////////////////////
-
-if ( $liga[0]->durchgang > 10) { 
-for ($x=0; $x< ($liga[0]->runden); $x++){
-if ($termin[$term]->published =="1") {
-?>
-
-<table cellpadding="0" cellspacing="0" class="paarungsliste">
-<tr>
-<td colspan="<?php echo $ohne_tln; ?>">
-<?php 
-// Wenn Rundensumme existiert dann  Rundensymbol (Lupe) anzeigen
-if ($rundensumme[$rund_sum]->nr == ($x+1+(2 * $liga[0]->runden)) ) { ?>
-<div>
-<div class="left">
-<?php 
-if ($termin[$term]->bemerkungen <> "") { ?>
-	<span class="editlinktip hasTip"><img  src="<?php echo CLMImage::imageURL('con_info.png'); ?>" class="CLMTooltip" title="<?php echo JText::_( 'CHIEF_NOTE') ?>" /></span><?php }
-// Wenn SL_OK dann Haken anzeigen
-if ($rundensumme[$rund_sum]->sl_ok > 0) { ?>
-	<span class="editlinktip hasTip"><img  src="<?php echo CLMImage::imageURL('accept.png'); ?>" class="CLMTooltip" title="<?php echo JText::_( 'CHIEF_OK') ?>" /></span><?php } ?>
-	<b>&nbsp;<?php if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1+(2 * $liga[0]->runden))) { 
-		if ($termin[$term]->datum > 0) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); 
-		if($params['round_date'] == '0' and isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { echo '  '.substr($termin[$term]->startzeit,0,5); }
-		if($params['round_date'] == '1' and isset($termin[$term]->enddatum) and $termin[$term]->enddatum > '1970-01-01' and $termin[$term]->enddatum != $termin[$term]->datum) { 
-						echo ' - '.JHTML::_('date',  $termin[$term]->enddatum, JText::_('DATE_FORMAT_CLM_F')); }
-			} $term++; }		
-else {  }?></b>	
-</div>
-
-<div class="paa_titel"><a href="index.php?option=com_clm&amp;view=runde&amp;liga=<?php echo $liga[0]->id ?>&amp;runde=<?php echo $x+1; ?>&amp;saison=<?php echo $liga[0]->sid; ?>&amp;dg=3&amp;Itemid=<?php echo $item; ?>"> <?php echo $termin[$term-1]->name; ?><img width="16" height="16" src="<?php echo CLMImage::imageURL('lupe.png'); ?>" /></a></div> <?php
-$rund_sum++; }
-
-else {	?>
-<div class="left"><b><?php echo $termin[$x]->datum;?></b></div>
-<div style="text-align: right; padding: 0 10px 0 0;"><b> <?php echo $termin[$x]->name; ?></b></div>
-<?php } 
-/////////////////////////////
-?>
-<div class="clr"></div>
-</div>
-</td>
-<tr>
-	<th class="paar"><?php echo JText::_('PAAR') ?></th>
-	<?php if ($fe_runde_tln =="1") { ?>
-	<th class="tln"><?php echo JText::_('TLN') ?></th>
-    <?php } ?>
-	<th class="heim"><?php echo JText::_('HOME') ?></th>
-	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
-	<th class="erg"><?php echo JText::_('RESULT') ?></th>
-	<?php if ($fe_runde_tln =="1") { ?>
-	<th class="tln"><?php echo JText::_('TLN') ?></th>
-    <?php } ?>
-	<th class="gast"><?php echo JText::_('GUEST') ?></th>
-	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
-	<?php if ($params['round_date'] == '1') { ?>
-	<th class="heim"><?php echo JText::_('FIXTURE_DATE') ?></th>
-	<?php } ?>
-</tr>
-<?php
-
-// Teilnehmerschleife
-for ($y=0; $y< ($liga[0]->teil)/2; $y++){
-	if (!isset($paar[$z])) break; 
-	if ($paar[$z]->runde > ($x+1)) break;
-if ($y%2 != 0) { $zeilenr = 'zeile1'; }
-	else { $zeilenr = 'zeile2'; } ?>
-
-<tr class="<?php echo $zeilenr; ?>">
-<td class="paar"><?php echo $paar[$z]->paar; ?></td>
-	<?php if ($fe_runde_tln =="1") { ?>
-    <td class="tln"><?php echo $paar[$z]->tln_nr; ?></td>
-    <?php } ?>
-<td class="heim">
-<?php if ($paar[$z]->hpublished == 1) { ?>
-<a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $liga[0]->sid; ?>&amp;liga=<?php echo $liga[0]->id; ?>&amp;tlnr=<?php echo $paar[$z]->htln; ?>"><?php echo $paar[$z]->hname; ?></a><?php }
-else { echo $paar[$z]->hname; } ?>
-</td>
-<td class="dwz">
-	<?php if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 3 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
-		{ echo round($dwzgespielt[$z2]->dwz); }
-		else { if (isset($dwz[($paar[$z]->htln)])) echo round($dwz[($paar[$z]->htln)]); } ?>
-</td>
-<?php
-// Wenn Paarung existiert dann Ergebnis-Summen anzeigen
-while ( $summe[$sum_paar]->runde < ($x+1) ) $sum_paar++;
-if ( $summe[$sum_paar]->runde == ($x+1) AND $summe[$sum_paar]->paarung == ($y+1)) { ?>
-<td class="erg"><?php echo $summe[$sum_paar]->sum.' : '.$summe[$sum_paar+1]->sum; ?></td>
-<?php $sum_paar = $sum_paar+2;
-
-}
-else { ?><td class="erg"> : </td><?php }
-/////////////////////////////
-?>
-		<?php if ($fe_runde_tln =="1") { ?>
-			<td class="tln"><?php echo $paar[$z]->gtln; ?></td>
-		<?php } ?>
-<td class="gast">
-<?php if ($paar[$z]->gpublished == 1) { ?>
-<a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $liga[0]->sid; ?>&amp;liga=<?php echo $liga[0]->id; ?>&amp;tlnr=<?php echo $paar[$z]->gtln; ?>"><?php echo $paar[$z]->gname; ?></a><?php }
-else { echo $paar[$z]->gname; } ?>
-</td>
-<td class="dwz">
-	<?php if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 3 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
-		{ echo round($dwzgespielt[$z2]->gdwz);
-			$z2++;
-		}
-		else { if (isset($dwz[($paar[$z]->gtln)])) echo round($dwz[($paar[$z]->gtln)]); } ?></td>
-</td>
-	<?php if ($params['round_date'] == '1') { ?>
-	<td class="heim">
-	<?php 
-			if (isset($paar[$z]->pdate) AND $paar[$z]->pdate > '1970-01-01') {
-			echo JHTML::_('date',  $paar[$z]->pdate, JText::_('DATE_FORMAT_CLM_Y2')); 
-			if($paar[$z]->ptime > '00:00:00') { echo '  '.substr($paar[$z]->ptime,0,5); } }
-	?>
-	</td>
-	<?php } ?>
-</tr>
-<?php $z++; } ?>
-</table>
-<br>
-<?php } else { ?>
-<table cellpadding="0" cellspacing="0" class="paarungsliste">
-<tr>
-<td colspan="<?php echo $ohne_tln; ?>"><b>
-<div><div class="left">
-<?php
-if ($rundensumme[$rund_sum]->nr == ($x+1+(2 * $liga[0]->runden)) ) { $rund_sum++; }
-if ($termin[$term]->datum AND $termin[$term]->nr == ($x+1+(2 * $liga[0]->runden))) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); $term++;} ?>
-</div><div style="text-align: right; padding: 0 10px 0 0;"> <?php echo $termin[$x]->name; ?></div></b>
-</td>
-</tr>
-<?php
-for ($y=0; $y< ($liga[0]->teil)/2; $y++){
-	if (!isset($summe[$sum_paar])) break;
-	if ( $summe[$sum_paar]->runde == ($x+1+(2 * $liga[0]->runden)) AND $summe[$sum_paar]->paarung == ($y+1)) { $sum_paar = $sum_paar+2; }
-	if ($dwzgespielt[$z2]->dwz AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 3 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0) { $z2++; }
-	$z++;
-	} ?>
-<tr><td><?php echo CLMContent::clmWarning(JText::_('PAAR_UNPUBLISHED')); ?></td></tr>
-</table>
-
-<?php
-}}} 
-
-///////////////////////
-// vierter Durchgang //
-///////////////////////
-
-if ( $liga[0]->durchgang > 10) { 
-for ($x=0; $x< ($liga[0]->runden); $x++){
-if ($termin[$term]->published =="1") {
-?>
-
-<table cellpadding="0" cellspacing="0" class="paarungsliste">
-<tr>
-<td colspan="<?php echo $ohne_tln; ?>">
-<?php 
-// Wenn Rundensumme existiert dann  Rundensymbol (Lupe) anzeigen
-if ($rundensumme[$rund_sum]->nr == ($x+1+(3 * $liga[0]->runden)) ) { ?>
-<div>
-<div class="left">
-<?php 
-if ($termin[$term]->bemerkungen <> "") { ?>
-	<span class="editlinktip hasTip"><img  src="<?php echo CLMImage::imageURL('con_info.png'); ?>" class="CLMTooltip" title="<?php echo JText::_( 'CHIEF_NOTE') ?>" /></span><?php }
-// Wenn SL_OK dann Haken anzeigen
-if ($rundensumme[$rund_sum]->sl_ok > 0) { ?>
-	<span class="editlinktip hasTip"><img  src="<?php echo CLMImage::imageURL('accept.png'); ?>" class="CLMTooltip" title="<?php echo JText::_( 'CHIEF_OK') ?>" /></span><?php } ?>
-	<b>&nbsp;<?php if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1+(3 * $liga[0]->runden))) { 
-		if ($termin[$term]->datum > 0) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); 
-		if($params['round_date'] == '0' and isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { echo '  '.substr($termin[$term]->startzeit,0,5); }
-		if($params['round_date'] == '1' and isset($termin[$term]->enddatum) and $termin[$term]->enddatum > '1970-01-01' and $termin[$term]->enddatum != $termin[$term]->datum) { 
-						echo ' - '.JHTML::_('date',  $termin[$term]->enddatum, JText::_('DATE_FORMAT_CLM_F')); }
-			} $term++; }		
-else {  }?></b>	
-</div>
-
-<div class="paa_titel"><a href="index.php?option=com_clm&amp;view=runde&amp;liga=<?php echo $liga[0]->id ?>&amp;runde=<?php echo $x+1; ?>&amp;saison=<?php echo $liga[0]->sid; ?>&amp;dg=4&amp;Itemid=<?php echo $item; ?>"> <?php echo $termin[$term-1]->name; ?><img width="16" height="16" src="<?php echo CLMImage::imageURL('lupe.png'); ?>" /></a></div> <?php
-$rund_sum++; }
-
-else {	?>
-<div class="left"><b><?php echo $termin[$x]->datum;?></b></div>
-<div style="text-align: right; padding: 0 10px 0 0;"><b> <?php echo $termin[$x]->name; ?></b></div>
-<?php } 
-/////////////////////////////
-?>
-<div class="clr"></div>
-</div>
-</td>
-<tr>
-	<th class="paar"><?php echo JText::_('PAAR') ?></th>
-	<?php if ($fe_runde_tln =="1") { ?>
-	<th class="tln"><?php echo JText::_('TLN') ?></th>
-    <?php } ?>
-	<th class="heim"><?php echo JText::_('HOME') ?></th>
-	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
-	<th class="erg"><?php echo JText::_('RESULT') ?></th>
-	<?php if ($fe_runde_tln =="1") { ?>
-	<th class="tln"><?php echo JText::_('TLN') ?></th>
-    <?php } ?>
-	<th class="gast"><?php echo JText::_('GUEST') ?></th>
-	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
-	<?php if ($params['round_date'] == '1') { ?>
-	<th class="heim"><?php echo JText::_('FIXTURE_DATE') ?></th>
-	<?php } ?>
-</tr>
-<?php
-
-// Teilnehmerschleife
-for ($y=0; $y< ($liga[0]->teil)/2; $y++){
-	if (!isset($paar[$z])) break; 
-	if ($paar[$z]->runde > ($x+1)) break;
-if ($y%2 != 0) { $zeilenr = 'zeile1'; }
-	else { $zeilenr = 'zeile2'; } ?>
-
-<tr class="<?php echo $zeilenr; ?>">
-<td class="paar"><?php echo $paar[$z]->paar; ?></td>
-	<?php if ($fe_runde_tln =="1") { ?>
-    <td class="tln"><?php echo $paar[$z]->tln_nr; ?></td>
-    <?php } ?>
-<td class="heim">
-<?php if ($paar[$z]->hpublished == 1) { ?>
-<a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $liga[0]->sid; ?>&amp;liga=<?php echo $liga[0]->id; ?>&amp;tlnr=<?php echo $paar[$z]->htln; ?>"><?php echo $paar[$z]->hname; ?></a><?php }
-else { echo $paar[$z]->hname; } ?>
-</td>
-<td class="dwz">
-	<?php if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 4 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
-		{ echo round($dwzgespielt[$z2]->dwz); }
-		else { if (isset($dwz[($paar[$z]->htln)])) echo round($dwz[($paar[$z]->htln)]); } ?>
-</td>
-<?php
-// Wenn Paarung existiert dann Ergebnis-Summen anzeigen
-while ( $summe[$sum_paar]->runde < ($x+1) ) $sum_paar++;
-if ( $summe[$sum_paar]->runde == ($x+1) AND $summe[$sum_paar]->paarung == ($y+1)) { ?>
-<td class="erg"><?php echo $summe[$sum_paar]->sum.' : '.$summe[$sum_paar+1]->sum; ?></td>
-<?php $sum_paar = $sum_paar+2;
-
-}
-else { ?><td class="erg"> : </td><?php }
-/////////////////////////////
-?>
-		<?php if ($fe_runde_tln =="1") { ?>
-			<td class="tln"><?php echo $paar[$z]->gtln; ?></td>
-		<?php } ?>
-<td class="gast">
-<?php if ($paar[$z]->gpublished == 1) { ?>
-<a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $liga[0]->sid; ?>&amp;liga=<?php echo $liga[0]->id; ?>&amp;tlnr=<?php echo $paar[$z]->gtln; ?>"><?php echo $paar[$z]->gname; ?></a><?php }
-else { echo $paar[$z]->gname; } ?>
-</td>
-<td class="dwz">
-	<?php if (isset($dwzgespielt[$z2]) AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 4 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0)
-		{ echo round($dwzgespielt[$z2]->gdwz);
-			$z2++;
-		}
-		else { if (isset($dwz[($paar[$z]->gtln)])) echo round($dwz[($paar[$z]->gtln)]); } ?></td>
-</td>
-	<?php if ($params['round_date'] == '1') { ?>
-	<td class="heim">
-	<?php 
-			if (isset($paar[$z]->pdate) AND $paar[$z]->pdate > '1970-01-01') {
-			echo JHTML::_('date',  $paar[$z]->pdate, JText::_('DATE_FORMAT_CLM_Y2')); 
-			if($paar[$z]->ptime > '00:00:00') { echo '  '.substr($paar[$z]->ptime,0,5); } }
-	?>
-	</td>
-	<?php } ?>
-</tr>
-<?php $z++; } ?>
-</table>
-<br>
-<?php } else { ?>
-<table cellpadding="0" cellspacing="0" class="paarungsliste">
-<tr>
-<td colspan="<?php echo $ohne_tln; ?>"><b>
-<div><div class="left">
-<?php
-if ($rundensumme[$rund_sum]->nr == ($x+1+(3 * $liga[0]->runden)) ) { $rund_sum++; }
-if ($termin[$term]->datum AND $termin[$term]->nr == ($x+1+(3 * $liga[0]->runden))) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); $term++;} ?>
-</div><div style="text-align: right; padding: 0 10px 0 0;"> <?php echo $termin[$x]->name; ?></div></b>
-</td>
-</tr>
-<?php
-for ($y=0; $y< ($liga[0]->teil)/2; $y++){
-	if (!isset($summe[$sum_paar])) break;
-	if ( $summe[$sum_paar]->runde == ($x+1+(3 * $liga[0]->runden)) AND $summe[$sum_paar]->paarung == ($y+1)) { $sum_paar = $sum_paar+2; }
-	if ($dwzgespielt[$z2]->dwz AND $dwzgespielt[$z2]->runde == ($x+1) AND $dwzgespielt[$z2]->paar == ($y+1) AND $dwzgespielt[$z2]->dg == 4 AND $paar[$z]->hmnr !=0 AND $paar[$z]->gmnr != 0) { $z2++; }
-	$z++;
-	} ?>
-<tr><td><?php echo CLMContent::clmWarning(JText::_('PAAR_UNPUBLISHED')); ?></td></tr>
-</table>
-
-<?php
-}}} ?>
+} ?>
 
 <div class="legend">
 <p><img src="<?php echo CLMImage::imageURL('accept.png'); ?>" width="16" height="16"/> = <?php echo JText::_('CHIEF_OK') ?></p>
@@ -832,9 +373,9 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 <p><img src="<?php echo CLMImage::imageURL('lupe.png'); ?>" width="16" height="16"/> = <?php echo JText::_('CHIEF_DETAIL') ?></p>
 </div>
 <br />
-<?php } ?>
+<?php } 
 
-<?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); ?>
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); ?>
 
 <div class="clr"></div>
 </div>
