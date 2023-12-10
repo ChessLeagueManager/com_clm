@@ -25,7 +25,7 @@ $ -> Language fix or change
 ^ Ergebnismeldung: Codeanpassung J 4.4
 ^ pgn-Anzeige: Nachbesserung der Robustheit wegen Templates
 ^ pgn-Verfahren: Routinen entsprechend Dokumentation
-^ Frontend: Codeanpassung php 8.2
+^ Frontend/Backend: Codeanpassung php 8.2
 # Auswertungsdatei: Dateinamen mit Pluszeichen
 ^ View Verein: Anzeige von Mailadressen und Tel-Nummern parametergesteuert
 ^ Admin Ergebnisse: Löschen mehrerer Ergebnisse

@@ -122,7 +122,7 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		
 		// Allgemeine Turnierdaten
 		//$swt_data['liga_name']				= $this->_SWTReadName ($swt, 245, 60);
-		$swt_data['liga_name']				= utf8_encode($this->_SWTReadName ($swt, 245, 60));
+		$swt_data['liga_name']				= clm_core::$load->utf8encode($this->_SWTReadName ($swt, 245, 60));
 		$swt_data['anz_mannschaften']		= $this->_SWTReadInt ($swt, 602);
 		$swt_data['anz_bretter']			= $this->_SWTReadInt ($swt, 604);
 		$swt_data['anz_spieler']			= $this->_SWTReadInt ($swt, 1327);

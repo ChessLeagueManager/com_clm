@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 jimport( 'joomla.filesystem.file' );
 
 class CLMSWT {
@@ -23,7 +22,7 @@ class CLMSWT {
 			$i++;
 		}
 		
-		return utf8_encode($name);
+		return clm_core::$load->utf8encode($name);
 	}
 	
 	static function readName ($file, $offset, $length = 1) {

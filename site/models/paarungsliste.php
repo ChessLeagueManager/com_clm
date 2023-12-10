@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -94,7 +94,8 @@ class CLMModelPaarungsliste extends JModelLegacy
 			;
 		$db->setQuery( $query);
 		$row_tln=$db->loadObjectList();
-		$tln	= $row_tln[0]->teil;
+		if (isset($row_tln[0])) $tln = $row_tln[0]->teil;
+		else $tln = 0;
 
 	$query = " SELECT a.*,g.id as gid, g.name as gname, g.tln_nr as gtln, g.published as gpublished, g.rankingpos as grank, "
 		." g.man_nr as gmnr, h.id as hid, h.name as hname, h.tln_nr as htln, h.rankingpos as hrank, b.wertpunkte as gwertpunkte, "

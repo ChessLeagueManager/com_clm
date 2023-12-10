@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -62,7 +62,8 @@ class CLMModelTurnier_Tabelle extends JModelLegacy {
 		$this->_db->setQuery($query);
 		$this->players = $this->_db->loadObjectList();
 		
-		$this->turnier->playersCount = count($this->players);
+		if (is_null($this->players)) $this->turnier->playersCount = 0;
+		else $this->turnier->playersCount = count($this->players);
 		
 		
 		//RankingPos neu berechnen für Sonderranglisten
@@ -112,7 +113,8 @@ class CLMModelTurnier_Tabelle extends JModelLegacy {
 		$this->_db->setQuery($query);
 		$this->teams = $this->_db->loadObjectList();
 		
-		$this->turnier->teamsCount = count($this->teams);
+		if (is_null($this->teams)) $this->turnier->teamsCount = 0;
+		else $this->turnier->teamsCount = count($this->teams);
 		$this->a_teams = array();
 		foreach ($this->teams as $key => $value) {
 			$this->a_teams[$value->tln_nr] = new stdClass();

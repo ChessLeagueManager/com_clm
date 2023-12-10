@@ -78,7 +78,7 @@ if ($test_button > 0) {
 			return $msg;
 		}
 		if (mb_detect_encoding($pgn_data, 'UTF-8', true) === false) {
-			$pgn_data = utf8_encode($pgn_data);
+			$pgn_data = clm_core::$load->utf8encode($pgn_data);
 		}
 		$length = strlen($pgn_data);
 		for ($ii = 0; $ii < $length; $ii++) {

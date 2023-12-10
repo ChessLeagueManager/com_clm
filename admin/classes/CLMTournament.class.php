@@ -14,7 +14,7 @@
  * Turnier
 */
 	
-class CLMTournament {
+class CLMTournament extends stdClass {
 
 	function __construct($turnierid, $getData = FALSE) {
 		// $turnierid übergibt id des Turniers
