@@ -64,6 +64,8 @@ class CLMSWT {
 			} else {
 				if(isset($data[$keys])){
 					$data = $data[$keys];
+				} else {
+					$data = array();
 				}
 			}
 		} else {

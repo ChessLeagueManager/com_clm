@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -196,7 +196,11 @@ foreach($this->runden as $rnd => $runde) {
 								<tbody>";
 
 								$k = 0;
-								foreach($this->matches[$rnd] as $brett => $match) {
+								if (!isset($this->matches)) $max_rnd = 0;
+								elseif (is_null($this->matches)) $max_rnd = 0;
+								else $max_rnd = max(array_keys($this->matches));
+								if ($max_rnd >= $rnd) {
+								  foreach($this->matches[$rnd] as $brett => $match) {
 									echo "<tr class='row".$k."'>";
 										echo "<td align='center'>".$brett."<input type='hidden' name='brett[".$rnd."][".$brett."]' 	value='".$match->brett."' /></td>";
 										echo "<td>".JHtml::_('select.genericlist', $this->teilnehmer_options, 'spieler['.$rnd.']['.$brett.']', 'class="inputbox" autocomplete="off"', 'value', 'text', $match->spieler, false)."</td>";
@@ -204,9 +208,9 @@ foreach($this->runden as $rnd => $runde) {
 										echo "<td>".JHtml::_('select.genericlist', $this->ergebnis_options, 'ergebnisWhite['.$rnd.']['.$brett.']', 'class="inputbox" autocomplete="off"', 'value', 'text', $match->ergebnisWhite, false)."
 												<input type='hidden' name='ergebnisBlack[".$rnd."][".$brett."]' 	value='".$match->ergebnisBlack."' /></td>";
 									echo "</tr>";
-								$k = 1 - $k;
+								    $k = 1 - $k;
+								  }
 								}
-	
 	
 	echo"
 									</tbody>

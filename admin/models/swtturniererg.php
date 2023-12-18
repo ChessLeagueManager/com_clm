@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -65,7 +65,8 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 				if($modus == 2){ //Vollrundig
 					$swt_runden = $anz_runden * $anz_durchgaenge;
 				} else {
-					$swt_runden = $ausgeloste_runden;
+//					$swt_runden = $ausgeloste_runden;
+					$swt_runden = $anz_runden;
 				}
 			} else { 
 				$swt_runden = 0;
@@ -89,11 +90,13 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 				$runde->bemerkungen 	= '';
 				$runde->bem_int 		= '';
 				$runde->ordering		= 0;
+				$runde->datum = '';
+				$runde->startzeit = '';
 
 				if($update == 1) {
 					$this->_setRundenDetailsByDatabase($tid,$runde);
 				}
-				if (!isset($runde->datum)) $runde->datum = '';
+//				if (!isset($runde->datum)) $runde->datum = '';
 				if ($runde->datum == '0000-00-00' OR $runde->datum == '1970-01-01') $runde->datum = '';
 				if ($runde->datum == '') {
 					$test = 'datum'.$rnd;
@@ -111,7 +114,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 						$runde->startzeit = sprintf('%02d', $hh).':'.sprintf('%02d', $mm).':00';
 					}
 				}
-				if (!isset($runde->startzeit)) $runde->startzeit = '';
+//				if (!isset($runde->startzeit)) $runde->startzeit = '';
  
 				$this->_runden[$rnd] = $runde;
 				$rnd += 1;
@@ -543,15 +546,18 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 		$rlast  = clm_core::$load->request_int('rlast', 0);
 		
 		if(!empty($this->_runden)) {
+			$ispl = 0;
 			$insert_query = "INSERT IGNORE INTO 
 									#__clm_swt_turniere_rnd_spl" . " 
 									( `sid`, `turnier`, `swt_tid`, `runde`, `brett`, `dg`, `tln_nr`, `heim`, `spieler`, `gegner`, `ergebnis`) "
 						  . " 	VALUES";
+																	 
 			foreach($this->_runden as $rnd => $runde) {
 			  $i = $runde->nr;
 			  if ($i >= $rfirst AND $i <= $rlast) {
 				$bretter = CLMSWT::getFormValue('brett',array(),'array',$rnd);
-				foreach($bretter as $brett) {
+				if (count($bretter) > 0) {
+				  foreach($bretter as $brett) {
 					if(CLMSWT::getFormValue('ergebnisWhite',null,'int',array( $rnd, $brett)) == 7) {
 						$ergWhite = "NULL";
 					} else {
@@ -591,14 +597,15 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 											".CLMSWT::getFormValue('spieler',null,'int',array( $rnd, $brett)).",  
 											".$ergBlack."
 										),";
+					$ispl++;
+				  }
 				}
 			  }
 			}
 			$insert_query = substr ($insert_query, 0, -1);
 			$insert_query .= ";";
 			
-			//$db->setQuery($insert_query);
-			
+			if ($ispl == 0) return true;
 			if(clm_core::$db->query($insert_query)) {
 				//Daten wurden erfolgreich in die Datenbank geschrieben
 				return true;
@@ -869,7 +876,8 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 		$db->setQuery($select_query);
 		//$teilnehmer = $db->loadObjectList('','JObject');		ab Joomla 1.6
 		$paarungen = $db->loadObjectList();
-		foreach($paarungen as $paarung){
+		if (!is_null($paarungen)) {
+		  foreach($paarungen as $paarung){
 			unset($paarung->id);
 			unset($paarung->swt_tid);
 			//$paarung->set('turnier',$tid);					ab Joomla 1.6
@@ -883,6 +891,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			if(!$db->insertObject('#__clm_turniere_rnd_spl',$paarung,'id')) {
 				return false;
 			}
+		  }
 		}
 		return true;
 	}
