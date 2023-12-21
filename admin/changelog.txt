@@ -31,6 +31,7 @@ $ -> Language fix or change
 ^ Admin Ergebnisse: Löschen mehrerer Ergebnisse
 # View Rangliste,Paarungsliste: Behandlung von Extern Zugriff mit ungültiger ID
 # SWT-Import Einzelturniere: Anzeige noch nicht gespielter Runden bei CH-Modus
+# Admin View Ausschreibung: Formatierung
 
 - - - - - 4.1.2 - [13-09-2023] - - - - - - - - - - - - - - - - - - - -
 # Teamwettbewerbe: Berechnung Direkter Vergleich bei 3-2-1-0 u.ä. Wertungen 

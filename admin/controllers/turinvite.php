@@ -82,8 +82,8 @@ class CLMControllerTurInvite extends JControllerLegacy {
 			return false;
 		}
 	
-		$invitationText = clm_core::$load->request_string('invitationText');	
-
+//		$invitationText = clm_core::$load->request_string('invitationText');	
+		$invitationText = $_POST["invitationText"];	
 		$query = "UPDATE #__clm_turniere"
 					. " SET invitationText = ".$this->_db->Quote($invitationText)
 					. " WHERE id = ".$this->id
@@ -94,7 +94,7 @@ class CLMControllerTurInvite extends JControllerLegacy {
 			$this->app->enqueueMessage( JText::_('DB_ERROR'), 'warning' );
 			return false;
 		}
-		$this->app->enqueueMessage( JText::_('INVITATION_EDITED') );
+		$this->app->enqueueMessage( JText::_('INVITATION_EDITED'), 'message' );
 
 		// Log schreiben
 		$clmLog = new CLMLog();
