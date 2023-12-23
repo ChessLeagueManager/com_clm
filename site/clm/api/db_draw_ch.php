@@ -95,7 +95,7 @@ if ($debug > 0) echo "<br>Aktuelle Runde: ".$round;
 		// Aufbau der allgemeinen Turnierzeilen für bbpPairing als Array
 		function common_lines($turnier,$players) {	
 			$lines = array();
-			$lines[] 	= '012 '.utf8_decode($turnier->name);
+			$lines[] 	= '012 '.clm_core::$load->utf8decode($turnier->name);
 			$lines[] 	= '042 '.substr($turnier->dateStart,8,2).'/'.substr($turnier->dateStart,5,2).'/'.substr($turnier->dateStart,0,4);
 			$lines[] 	= '052 '.substr($turnier->dateEnd,8,2).'/'.substr($turnier->dateEnd,5,2).'/'.substr($turnier->dateEnd,0,4);
 			$lines[] 	= '062 '.count($players);
@@ -341,10 +341,10 @@ echo "<br>plines:"; var_dump($lines_player);
 	if (!file_exists($str_url)) mkdir($str_url);
 	$pdatei = fopen($str_url.$file_name,"wt");
 	foreach($lines_common as $line) {
-		fputs($pdatei, utf8_decode($line).$nl);
+		fputs($pdatei, clm_core::$load->utf8decode($line).$nl);
 	}
 	foreach($lines_player as $line) {
-		fputs($pdatei, utf8_decode($line).$nl);
+		fputs($pdatei, clm_core::$load->utf8decode($line).$nl);
 	}
 	fclose($pdatei);
 

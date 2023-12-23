@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  *
@@ -41,9 +41,9 @@ if ($debug > 0) { echo "<br>znr $ii :"; var_dump($znr); }
 			}
 			continue;	
 		}
-		$line[0] = utf8_encode($line[0]);
-		$line[1] = utf8_encode($line[1]);
-		$line[2] = utf8_encode($line[2]);
+		$line[0] = clm_core::$load->utf8encode($line[0]);
+		$line[1] = clm_core::$load->utf8encode($line[1]);
+		$line[2] = clm_core::$load->utf8encode($line[2]);
 		if (substr($line[5],2,1) == '.')
 			$line[5] = substr($line[5],6,4).'-'.substr($line[5],3,2).'-'.substr($line[5],0,2);
 		if (substr($line[8],2,1) == '.')

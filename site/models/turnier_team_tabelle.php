@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -119,24 +119,25 @@ class CLMModelTurnier_Team_Tabelle extends JModelLegacy {
 			$this->a_teams[$value->tln_nr]->name = $value->name;
 		}
 		// Punkte pro team ermitteln
-		$a_points = array();
+		$this->a_points = array();
 		foreach ($this->players as $key => $value) {
 			if ($value->mtln_nr < 1) continue;
 			if (!isset($this->a_teams[$value->mtln_nr])) continue;
 			$this->a_points[$value->mtln_nr][] = $value->sum_punkte;
 		}
-		foreach ($this->a_points as $key => $value) {
+		if (!is_null($this->a_points)) {
+		  foreach ($this->a_points as $key => $value) {
 			rsort($value);
-		}
-		foreach ($this->a_points as $key => $value) {
+		  }
+		  foreach ($this->a_points as $key => $value) {
 			$i = 0;
 			foreach ($value as $vkey => $vvalue) {
 				$i++;
 				if ($i > $this->params_teamranking) break;
 				$this->a_teams[$key]->points += $vvalue;
 			}
+		  }
 		}
-
 		rsort($this->a_teams);
 	}
 		

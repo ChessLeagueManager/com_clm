@@ -1,12 +1,12 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip');
+
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
 // Stylesheet laden
@@ -31,7 +31,7 @@ echo '<div id="clm"><div id="turnier_tabelle">';
 if($spRang != 0){			//Sonderranglisten
 	$heading = $this->turnier->name.": ".$this->turnier->spRangName." ".JText::_('TOURNAMENT_TABLE'); 
 } else {
-	$heading = $this->turnier->name.": ".JText::_('TOURNAMENT_TABLE');
+	$heading = $this->turnier->name.": ".JText::_('TOURNAMENT_TEAM');
 }
 
 $archive_check = clm_core::$api->db_check_season_user($this->turnier->sid);

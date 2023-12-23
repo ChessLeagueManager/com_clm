@@ -88,6 +88,7 @@ if ($fe_submenu_t == 1) {
 	}
 	
 	// Alle Sonderanglisten
+	if (is_null($sub_spRang)) $sub_spRang = array();
 	if(count($sub_spRang)>0) {	
 		$j = -1;
 		for ($i = $i0;$i < (count($sub_spRang)+$i0);$i++) {
@@ -106,6 +107,8 @@ if ($fe_submenu_t == 1) {
 				$array[1][3][$i][2][] = array("Itemid", $itemid);
 			}
 		}
+	} else {
+		$i = $i0;
 	}
 	if ($params_teamranking > 1) {  // Einzelturnier mit Mannschaftswertung
 		$array[1][3][$i][0] = JText::_('TOURNAMENT_TEAM');
