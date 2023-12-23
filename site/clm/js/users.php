@@ -13,6 +13,7 @@ clm_core::$cms->addScriptDeclaration('var clm_users_url = "'.clm_core::$url.clm_
 clm_core::$cms->addScriptDeclaration('var clm_users_name = "'.html_entity_decode($lang->name_angeben).'";');
 clm_core::$cms->addScriptDeclaration('var clm_users_user = "'.html_entity_decode($lang->user_angeben).'";');
 clm_core::$cms->addScriptDeclaration('var clm_users_mail = "'.html_entity_decode($lang->mail_angeben).'";');
+clm_core::$cms->addScriptDeclaration('var clm_users_wrong_mail = "'.html_entity_decode($lang->wrong_mail).'";');
 clm_core::$cms->addScriptDeclaration('var clm_users_func = "'.html_entity_decode($lang->func_auswaehlen).'";');
 clm_core::$cms->addScriptDeclaration('var clm_users_zps = "'.html_entity_decode($lang->zps_auswaehlen).'";');
 clm_core::$cms->addScriptDeclaration('var clm_users_sid = "'.html_entity_decode($lang->sid_auswaehlen).'";');

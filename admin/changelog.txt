@@ -35,6 +35,7 @@ $ -> Language fix or change
 + Vereinsdaten: Änderung im FE mit optionaler Mailausgabe ergänzt 
 # Einzelturnier:  Abbruch bei Mannschaftswertung ohne Mannschaften beseitigt
 # Auswertungsdatei: verbotene Zeichen in Dateinamen verhindern
+# Admin View User: Feldprüfungen verbessert
 
 - - - - - 4.1.2 - [13-09-2023] - - - - - - - - - - - - - - - - - - - -
 # Teamwettbewerbe: Berechnung Direkter Vergleich bei 3-2-1-0 u.ä. Wertungen 
