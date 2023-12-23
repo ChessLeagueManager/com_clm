@@ -13,7 +13,7 @@ $config_order = array(
 			array("results", 0,"conf_ergebnisse", "meldung_heim", "meldung_verein", "kommentarfeld", "ikommentarfeld", "app_security"),
 			array("register", 0, "conf_meldeliste", "pdf_meldelisten"),
 			array("database", 0, "execute_swt", "upload_swt","import_pgn", "upload_pgn","dsb_import_amount","dewis_import_delay"),
-			array("clubs", 0, "conf_vereinsdaten", "verein_mail", "verein_tel",
+			array("clubs", 0,  "verein_mail","verein_tel","conf_vereinsdaten","verein_fe_mail",
 				array("club_list", 0, "fe_vereinsliste_vs","fe_vereinsliste_hpage","fe_vereinsliste_dwz","fe_vereinsliste_elo")),
 			array("tournaments", 0, "tourn_linkclub", "tourn_showtlok"),
 

@@ -159,4 +159,5 @@ $config["tourn_ch_ip"]=array(138,7,"",null);
 $config["tourn_ch_mail"]=array(139,7,"",null);
 $config["verein_mail"]=array(140,9,0,array(0,1));
 $config["verein_tel"]=array(141,9,0,array(0,1));
+$config["verein_fe_mail"]=array(142,9,0,array(0,1));
 ?>
