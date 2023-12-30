@@ -119,12 +119,12 @@ function display($cachable = false, $urlparams = array())
 	$db->setQuery($sql);
 	$saisonlist[]	= JHtml::_('select.option',  '0', JText::_( 'RANGLISTE_SAISON_WAE' ), 'id', 'name' );
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
-	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 
 	// Vereinefilter laden
 	$vereinefilter = CLMFilterVerein::vereine_filter(0);
-	$lists['vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
-	$lists['sg_vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_sg_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid );
+	$lists['vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
+	$lists['sg_vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_sg_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid );
 
 	// Suchefilter
 	$lists['search']= $search;
@@ -309,7 +309,7 @@ function edit()
 		}
 	}
 	if ($task == 'edit') {
-	$sql = " SELECT r.Rang, r.man_nr, a.sid,a.ZPS,a.Mgl_Nr,a.PKZ, a.DWZ, r.gesperrt,"
+	$sql = " SELECT r.Rang, r.man_nr, a.sid,a.ZPS,a.Mgl_Nr,a.PKZ, a.DWZ,"
 		." a.DWZ_Index,a.Geburtsjahr,a.Spielername,a.Status"
 		." FROM #__clm_dwz_spieler as a"
 		." LEFT JOIN #__clm_rangliste_id as i ON i.sid = a.sid AND (i.zps = '$sql_zps') "
@@ -333,12 +333,6 @@ function edit()
 		}
 	$db->setQuery($sql);
 	$spieler = $db->loadObjectList();
-
-	if ($task == 'add') {
-		foreach ($spieler as $spl) {
-			if (!isset($spl->gesperrt)) $spl->gesperrt = '0';
-		}
-	}
 
 	// Anzahl Einträge zählen
 /*	$sql = " SELECT COUNT(ZPS) as ZPS FROM #__clm_rangliste_spieler "
@@ -379,7 +373,7 @@ function edit()
 	$db->setQuery($sql);
 	$saisonlist[]	= JHtml::_('select.option',  '0', JText::_( 'RANGLISTE_SAISON_WAE' ), 'id', 'name' );
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
-	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="inputbox" size="1" onchange="javascript:edit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" style="width:300px" onchange="javascript:edit();"','id', 'name', intval( $filter_sid ) );
 
 	if ($filter_sid == 0) $filter_sid = clm_core::$access->getSeason();
 	// Gruppenliste //
@@ -394,13 +388,13 @@ function edit()
 	}
 	$gruppenlist[]	= JHtml::_('select.option',  '0', JText::_( 'RANGLISTE_GRUPPE_AUS' ), 'gid', 'Gruppe' );
 	$gruppenlist	= array_merge( $gruppenlist, $db->loadObjectList() );
-	$lists['gruppe']= JHtml::_('select.genericlist',   $gruppenlist, 'filter_gid', 'class="inputbox" size="1" onchange="javascript:edit();"','gid', 'Gruppe', intval( $filter_gid ) );
+	$lists['gruppe']= JHtml::_('select.genericlist',   $gruppenlist, 'filter_gid', 'class="js-example-basic-single" size="1" style="width:300px" onchange="javascript:edit();"','gid', 'Gruppe', intval( $filter_gid ) );
 
 	// Vereinliste
 	// Vereinefilter laden
 	$vereinlist	= CLMFilterVerein::vereine_filter(0);
-	$lists['vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_vid', 'class="inputbox" size="1" onchange="javascript:edit();"','zps', 'name', $filter_vid );
-	$lists['sg_vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_sg_vid', 'class="inputbox" size="1" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid );
+	$lists['vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_vid', 'class="js-example-basic-single" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_vid );
+	$lists['sg_vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_sg_vid', 'class="js-example-basic-single" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid );
 
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'ranglisten.php');
 	$jid = 0;
@@ -533,7 +527,6 @@ function save()
 	$pkz	= array();
 	$mnr	= array();
 	$rang	= array();
-	$block	= array();
 
 	// Rangliste und Arrays schreiben
 	for ($y=0; $y < $count; $y++) {
@@ -542,12 +535,11 @@ function save()
 		$pkz[]	= clm_core::$load->request_string('PKZ'.$y);
 		$mnr[]	= clm_core::$load->request_string('MA'.$y);
 		$rang[]	= clm_core::$load->request_string('RA'.$y);
-		$block[]	= clm_core::$load->request_int('check'.$y);
 
 		if ($mnr[$y] !=="99" AND $mnr[$y] !=="0" AND $mnr[$y] !=="") {
 			$query = " INSERT INTO #__clm_rangliste_spieler "
-				." (`Gruppe`, `ZPS`, `ZPSmgl`, `Mgl_Nr`, `PKZ`, `Rang`, `man_nr`, `sid`, `gesperrt`) "
-				." VALUES ('$gid','$zps','$ZPSmgl[$y]','$mgl[$y]','$pkz[$y]','$rang[$y]','$mnr[$y]','$sid','$block[$y]') "
+				." (`Gruppe`, `ZPS`, `ZPSmgl`, `Mgl_Nr`, `PKZ`, `Rang`, `man_nr`, `sid`) "
+				." VALUES ('$gid','$zps','$ZPSmgl[$y]','$mgl[$y]','$pkz[$y]','$rang[$y]','$mnr[$y]','$sid') "
 				;
 			//$db->setQuery($query);
 			clm_core::$db->query($query);
@@ -603,14 +595,14 @@ function save()
 			." (`sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`,`status`,`ordering`,`start_dwz`,`start_I0`"
 			.",`DWZ`, `I0`, `Punkte`, `Partien`, `We`, `Leistung`,`EFaktor`,`Niveau`,`sum_saison`,`gesperrt`)"
 			." VALUES ('$sid','$liga','$man_nr','$snr_counter','$mgl[$y]','$ZPSmgl[$y]','$gid','$z_ordering',NULL,NULL"
-			.",'$z_DWZ','$z_I0','$z_Punkte','$z_Partien','$z_We','$z_Leistung','$z_EFaktor','$z_Niveau','$z_sum_saison','$block[$y]') "
+			.",'$z_DWZ','$z_I0','$z_Punkte','$z_Partien','$z_We','$z_Leistung','$z_EFaktor','$z_Niveau','$z_sum_saison','$z_gesperrt') "
 			;
 	  else
 		$query = " INSERT INTO #__clm_meldeliste_spieler "
 			." (`sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `zps`,`status`,`ordering`,`start_dwz`,`start_I0`"
 			.",`DWZ`, `I0`, `Punkte`, `Partien`, `We`, `Leistung`,`EFaktor`,`Niveau`,`sum_saison`,`gesperrt`)"
 			." VALUES ('$sid','$liga','$man_nr','$snr_counter','$mgl[$y]','$ZPSmgl[$y]','$gid','$z_ordering','$z_start_dwz','$z_start_I0'"
-			.",'$z_DWZ','$z_I0','$z_Punkte','$z_Partien','$z_We','$z_Leistung','$z_EFaktor','$z_Niveau','$z_sum_saison','$block[$y]') "
+			.",'$z_DWZ','$z_I0','$z_Punkte','$z_Partien','$z_We','$z_Leistung','$z_EFaktor','$z_Niveau','$z_sum_saison','$z_gesperrt') "
 			;
 		clm_core::$db->query($query);
 		$sn_cnt++;
