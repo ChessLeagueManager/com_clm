@@ -126,18 +126,18 @@ function display($cachable = false, $urlparams = array())
 	$state[2]	= new stdClass();
 	$state[2]->id = 'U';
 	$state[2]->name = JText::_('JUNPUBLISHED'); 
-	$lists['state']	= JHTML::_('select.genericlist', $state, 'filter_state', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_state );
+	$lists['state']	= JHTML::_('select.genericlist', $state, 'filter_state', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_state );
 	// Saisonfilter
 	$sql = 'SELECT id, name FROM #__clm_saison WHERE published=1';
 	$db->setQuery($sql);
 	$saisonlist[]		= JHTML::_('select.option',  '0', JText::_( 'USERS_SAISON' ), 'id', 'name' );
 	$saisonlist		= array_merge( $saisonlist, $db->loadObjectList() );
 	
-	$lists['sid']		= JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_sid );
+	$lists['sid']		= JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_sid );
 
 	// Vereinefilter laden
 	$vereinlist	= CLMFilterVerein::vereine_filter(0);
-	$lists['vid']	= JHTML::_('select.genericlist', $vereinlist, 'filter_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
+	$lists['vid']	= JHTML::_('select.genericlist', $vereinlist, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
 
 
 	// Funktionsliste
@@ -154,7 +154,7 @@ function display($cachable = false, $urlparams = array())
 	//$usertypelist		= array_merge( $usertypelist, $db->loadObjectList() );
 	$usertypelist		= array_merge( $usertypelist, $utlist );
 	//$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'filter_usertype', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','usertype', 'name', intval ($filter_usertype) );
-	$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'filter_usertype', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','usertype', 'name', $filter_usertype );
+	$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'filter_usertype', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','usertype', 'name', $filter_usertype );
 	// Ordering
 	$lists['order_Dir']	= $filter_order_Dir;
 	$lists['order']		= $filter_order;
@@ -258,9 +258,9 @@ function edit()
 
 	$filter_vid		= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'string' );
 	if ($filter_vid !="0") {
-		$lists['verein']= JHTML::_('select.genericlist',$vereinlist,'zps','class="inputbox" size="1"','zps', 'name', $filter_vid );
+		$lists['verein']= JHTML::_('select.genericlist',$vereinlist,'zps','class="js-example-basic-single" size="1" style="width:300px"','zps', 'name', $filter_vid );
 		} else {
-		$lists['verein']= JHTML::_('select.genericlist',$vereinlist,'zps','class="inputbox" size="1"','zps', 'name', $row->zps );
+		$lists['verein']= JHTML::_('select.genericlist',$vereinlist,'zps','class="js-example-basic-single" size="1" style="width:300px"','zps', 'name', $row->zps );
 		}
 
 	// Publishliste
@@ -268,13 +268,13 @@ function edit()
 	// Saisonliste
 	if($task =="edit"){ 
 	$season_list[]	= JHTML::_('select.option',  $sid, clm_core::$db->saison->get($sid)->name, 'sid', 'name' );
-	$lists['saison']= JHTML::_('select.genericlist',   $season_list, 'sid', 'class="inputbox" size="1"','sid', 'name', $row->sid );
+	$lists['saison']= JHTML::_('select.genericlist',   $season_list, 'sid', 'class="js-example-basic-single" size="1" style="width:300px"','sid', 'name', $row->sid );
 	$sql = " SELECT u.* FROM #__users as u "
 		." LEFT JOIN #__clm_user as a ON u.id = a.jid AND a.sid IN ('".$sid."')"
 		." WHERE a.name IS NULL";
 	} else { 
 	$season_list[]	= JHTML::_('select.option',  clm_core::$access->getSeason(), clm_core::$db->saison->get(clm_core::$access->getSeason())->name, 'sid', 'name' );
-	$lists['saison']= JHTML::_('select.genericlist',  $season_list, 'sid', 'class="inputbox" size="1"','sid', 'name', clm_core::$access->getSeason() );
+	$lists['saison']= JHTML::_('select.genericlist',  $season_list, 'sid', 'class="js-example-basic-single" size="1" style="width:300px"','sid', 'name', clm_core::$access->getSeason() );
 	$sql = " SELECT u.* FROM #__users as u "
 		." LEFT JOIN #__clm_user as a ON u.id = a.jid AND a.sid IN ('".clm_core::$access->getSeason()."')"
 		." WHERE a.name IS NULL";
@@ -287,7 +287,7 @@ function edit()
 	}
 	$jid_list[]	= JHTML::_('select.option',  '0', JText::_( 'USERS_USER_AUSW' ), 'id', 'name' );
 	$jid_list	= array_merge( $jid_list, $db->loadObjectList() );
-	$lists['jid']	= JHTML::_('select.genericlist',   $jid_list, 'pid', 'class="inputbox" size="1"','id', 'name', $row->jid );
+	$lists['jid']	= JHTML::_('select.genericlist',   $jid_list, 'pid', 'class="js-example-basic-single" size="1" style="width:300px"','id', 'name', $row->jid );
 
 	// Funktionsliste
 	$sql = 'SELECT usertype, name, kind FROM #__clm_usertype ';
@@ -303,7 +303,7 @@ function edit()
 	$usertypelist[]		= JHTML::_('select.option',  '', JText::_( 'USERS_TYP' ), 'usertype', 'name' );
 	//$usertypelist		= array_merge( $usertypelist, $db->loadObjectList() );
 	$usertypelist		= array_merge( $usertypelist, $utlist );
-	$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'usertype', 'class="inputbox" size="1"','usertype', 'name', $row->usertype );
+	$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'usertype', 'class="js-example-basic-single" size="1" style="width:300px"','usertype', 'name', $row->usertype );
 
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'users.php');
 	CLMViewUsers::user( $row, $lists, $option);
@@ -1227,65 +1227,6 @@ function showaccessgroups() {
 		}
 		
 		$this->setRedirect( 'index.php?option=com_clm&view=accessgroupsmain' );
-	}
-
-// freie Mail an ausgewählte Benutzer
-function email()
-	{
-	$mainframe = JFactory::getApplication();
-	// Check for request forgeries
-	defined('_JEXEC') or die( 'Invalid Token' );
-	$db		= JFactory::getDBO();
-	$cid    = clm_core::$load->request_array_int('cid');
-	$option		= clm_core::$load->request_string('option', '');
-	$section	= clm_core::$load->request_string('section', '');
-	$user	= JFactory::getUser();
-	if (is_null($cid)) $n = 0;
-	else {
-		$n = count($cid);
-		$cids = implode( ',', $cid );
-	}
-	// minimum 1 Empfänger
-	if ($n < 1) {
-		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
-		$this->setMessage(JText::_( 'USERS_AN_WEN'),'warning');
-		return;
-	}
-	// Prüfen ob User Berechtigung zum Mailversand hat
-	$row =JTable::getInstance( 'users', 'TableCLM' );
-
-	$clmAccess = clm_core::$access;
-	if ($clmAccess->access('BE_user_general') === false) {
-		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
-		$this->setMessage(JText::_( 'USERS_NO_SEND'),'warning');
-		return;
-	}
-	// Konfigurationsparameter auslesen
-	$config = clm_core::$db->config();
-	$from = $config->email_from;
-	$fromname = $config->email_fromname;
-	if ( $from == '' ) {
-		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
-		$this->setMessage(JText::_( 'USER_ERGEBNISDIENST_KEINE_ADRESSE'),'warning');
-		return;
-	}
-	if ( $fromname == '' ) {
-		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
-		$this->setMessage(JText::_( 'USER_ERGEBNISDIENST_KEIN_NAME'),'warning');
-		return;
-	}
-
-	// Log schreiben
-	$clmLog = new CLMLog();
-	$clmLog->aktion = "Mail versand";
-	$clmLog->params = array('cids' => $cids);
-	$clmLog->write();
-
-	$adminLink = new AdminLink();
-	$adminLink->more = array('return_section' => 'users', 'return_view' => 'xxx', 'cids' => $cids );
-	$adminLink->view = "view_mail";
-	$adminLink->makeURL();
-	$mainframe->redirect( $adminLink->url );
 	}
 
 }

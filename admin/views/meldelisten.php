@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -191,9 +191,8 @@ public static function setMeldelisteToolbar($row)
 		
 public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abgabe, $option)
 	{
-//		$_REQUEST['hidemainmenu'] = 1;
-		JFactory::getApplication()->input->set('hidemainmenu', true);
 		CLMViewMeldelisten::setMeldelisteToolbar($row);
+		$_REQUEST['hidemainmenu'] = 1;
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 		$number = $liga[0]->stamm + $liga[0]->ersatz;
 		$insert_key = array();
@@ -201,8 +200,10 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		$config = clm_core::$db->config();
 		$countryversion=$config->countryversion;
 
-		$_POST['clm_number'] = $number;
+		$_REQUEST['clm_number'] = $number;
 		clm_core::$load->load_js("meldelisten");
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
 		?>
 
 
@@ -252,7 +253,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		  </label>
 		</td>
 		<td>
-		  <select size="1" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo 'spieler'.($i+1); ?>" onChange="insertPosition(this,'<?php echo $insert_key[$i]; ?>') ">
+		  <select size="1" class="js-example-basic-single" style="width:300px;" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo 'spieler'.($i+1); ?>" onChange="insertPosition(this,'<?php echo $insert_key[$i]; ?>') ">
 			<option value="0"><?php echo JText::_( 'MELDELISTE_SPIELER_AUSWAEHLEN'); ?></option>
 			<?php for ($x=0; $x < $max[0]->max; $x++) { ?>
 			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps.'-'.$row_spl[$x]->dwz.'-'.$row_spl[$x]->dwz_I0; ?>" <?php
@@ -277,7 +278,6 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		</table>
 		</fieldset>
 </div>
-<br>
 <div>
  <fieldset class="adminform">
    <legend><?php echo JText::_( 'MELDELISTE_DETAILS' ); ?></legend>
@@ -358,7 +358,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 			<td class="key" nowrap="nowrap"><label for="sid"><?php echo JText::_( 'MELDELISTE_BRETT_NR' ).' '.($i+1).' : '; ?></label>
 			</td>
 		<td>
-		  <select size="1" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo 'spieler'.($i+1); ?>" onChange="insertPosition(this,'<?php echo $insert_key[$i]; ?>') ">
+		  <select size="1" class="js-example-basic-single" style="width:300px;" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo 'spieler'.($i+1); ?>" onChange="insertPosition(this,'<?php echo $insert_key[$i]; ?>') ">
 			<option value="0"><?php echo JText::_( 'MELDELISTE_SPIELER_AUSWAEHLEN'); ?></option>
 			<?php for ($x=0; $x < $max[0]->max; $x++) { ?>
 			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps.'-'.$row_spl[$x]->dwz.'-'.$row_spl[$x]->dwz_I0;; ?>" <?php 
