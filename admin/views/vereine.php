@@ -59,8 +59,6 @@ public static function vereine ( $rows, $lists, $pageNav, $option )
 
 //		JHtml::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
-		// Auswahlfelder durchsuchbar machen
-		clm_core::$load->load_js("suche_liste");
 		?>
 		<form action="index.php?option=com_clm&section=vereine" method="post" name="adminForm" id="adminForm">
 

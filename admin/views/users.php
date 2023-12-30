@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -25,13 +25,14 @@ public static function setUsersToolbar()
 		if($clmAccess->access('BE_accessgroup_general') === true) {
 			JToolBarHelper::custom('showaccessgroups','specialrankings.png','specialrankings_f2.png', JText::_('ACCESSGROUPS_BUTTON'), false);
 			}
-		JToolBarHelper::custom('send','send.png','send_f2.png','USER_ACCOUNT');
+		JToolBarHelper::custom('send','mail.png','mail_f2.png','USER_ACCOUNT');
 		JToolBarHelper::publishList();
 		JToolBarHelper::unpublishList();
 		JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', JText::_('COPY') ); 
 		JToolBarHelper::deleteList();
 		JToolBarHelper::editList();
 		JToolBarHelper::addNew();
+		JToolBarHelper::custom( 'email', 'mail.png', 'mail_f2.png', JText::_('USER_MAIL') ); 
 	}
 	JToolBarHelper::help( 'screen.clm.user' );
 	}
@@ -45,8 +46,6 @@ public static function users( &$rows, &$lists, &$pageNav, $option )
 		$ordering = ($lists['order'] == 'a.ordering');
 //		JHtml::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
-		// Auswahlfelder durchsuchbar machen
-		clm_core::$load->load_js("suche_liste");
 		?>
 		<form action="index.php?option=com_clm&section=users" method="post" name="adminForm" id="adminForm">
 
@@ -227,11 +226,9 @@ public static function user( &$row,$lists, $option )
 	$config = clm_core::$db->config();
 	$conf_user_member	= $config->user_member;
 	$countryversion = $config->countryversion;
-
+	
 		$_REQUEST['clm_user_member'] = $conf_user_member;
 		clm_core::$load->load_js("users");
-		// Auswahlfelder durchsuchbar machen
-		clm_core::$load->load_js("suche_liste");
 		?>
 
 
