@@ -107,13 +107,13 @@ function display($cachable = false, $urlparams = array())
 	// state filter
 	//$lists['state']	= JHTML::_('grid.state',  $filter_state );
 	$lists['state'] = CLMForm::selectState( $filter_state );
-
+	
 	// Saisonfilter
 	$sql = 'SELECT id, name FROM #__clm_saison WHERE archiv =0';
 	$db->setQuery($sql);
 	$saisonlist[]	= JHTML::_('select.option',  '0', JText::_( 'VEREINE_SAISON' ), 'id', 'name' );
 	$saisonlist	= array_merge( $saisonlist, $db->loadObjectList() );
-	$lists['sid']	= JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']	= JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 
 	// table ordering
 	$lists['order_Dir']	= $filter_order_Dir;

@@ -39,10 +39,9 @@ public static function Ranglisten ( &$rows, &$lists, &$pageNav, $option )
 	$check = $db->loadObjectList();
 	CLMViewRanglisten::setRanglistenToolbar($check);
 
-	//Ordering allowed ?
-	$ordering = ($lists['order'] == 'a.ordering');
-	// Auswahlfelder durchsuchbar machen
-	clm_core::$load->load_js("suche_liste");
+		//Ordering allowed ?
+		$ordering = ($lists['order'] == 'a.ordering');
+
 ?>
 		<form action="index.php?option=com_clm&section=ranglisten" method="post" name="adminForm" id="adminForm">
 
@@ -202,8 +201,6 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 
 		clm_core::$load->load_js("ranglisten");
 		$s_error = 0;
-		// Auswahlfelder durchsuchbar machen
-		clm_core::$load->load_js("suche_liste");
 		?>
 
 <?php if ($exist AND clm_core::$load->request_string( 'task') == "add") { ?>
@@ -362,14 +359,15 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 	<table class="admintable">
 
 	<tr>
-		<td width="8%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_M_NR' ); ?></td>
-		<td width="10%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_RANG' ); ?></td>
+		<td width="5%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_M_NR' ); ?></td>
+		<td width="7%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_RANG' ); ?></td>
 		<td class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_NAME' ); ?></td>
 		<td width="9%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_ZPSM' ); ?></td>
 		<td width="7%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_MGL_NR' ); ?></td>
 		<td width="11%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_PKZ' ); ?></td>
 		<td width="3%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_STATUS' ); ?></td>
 		<td colspan="2" width="10%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_DWZ' ); ?></td>
+		<td width="8" class="key" nowrap="nowrap"><?php echo JText::_( 'MELDELISTE_BLOCK' ); ?></td>
 	</tr>
 
 <?php 
@@ -397,10 +395,10 @@ for ($x=0; $x < (count($spieler)-$count); $x++) {
 
 	<tr>
 	<td class="key" nowrap="nowrap">
-		<input type="text" name="MA<?php echo $x ?>" size="3" maxLength="3" value="<?php echo $spieler[$rang[$x]]->man_nr; ?>" onChange="Mcheck(this)">
+		<input type="text" name="MA<?php echo $x ?>" size="2" maxLength="2" value="<?php echo $spieler[$rang[$x]]->man_nr; ?>" onChange="Mcheck(this)">
 	</td>
 	<td class="key" nowrap="nowrap">
-	<input type="text" name="RA<?php echo $x ?>" size="5" maxLength="5" value="<?php echo $spieler[$rang[$x]]->Rang; ?>" onChange="Rcheck(this)">
+	<input type="text" name="RA<?php echo $x ?>" size="4" maxLength="4" value="<?php echo $spieler[$rang[$x]]->Rang; ?>" onChange="Rcheck(this)">
 	</td>
 	<td id="SP<?php echo $x; ?>" name="SP<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$rang[$x]]->Spielername; ?></td>
@@ -416,6 +414,9 @@ for ($x=0; $x < (count($spieler)-$count); $x++) {
 		<?php echo $spieler[$rang[$x]]->DWZ; ?></td>
 	<td id="DWI<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$rang[$x]]->DWZ_Index; ?></td>
+	<td align="center">
+		<input type="checkbox" name="check<?php echo $x; ?>" id="check<?php echo $x; ?>" value="1" <?php if ($spieler[$rang[$x]]->gesperrt =="1") { echo 'checked="checked"'; }?>>
+	</td>
 	</tr>
 
 <?php }} else {
@@ -428,10 +429,10 @@ for ($x=0; $x < (count($spieler)-$count); $x++) {
 
 	<tr>
 	<td class="key" nowrap="nowrap">
-		<input type="text" name="MA<?php echo $x ?>" size="3" maxLength="3" <?php if(isset($spieler[$x]->man_nr)) { ?> value="<?php echo $spieler[$x]->man_nr; ?>"<?php } ?> onChange="Mcheck(this)">
+		<input type="text" name="MA<?php echo $x ?>" size="2" maxLength="2" <?php if(isset($spieler[$x]->man_nr)) { ?> value="<?php echo $spieler[$x]->man_nr; ?>"<?php } ?> onChange="Mcheck(this)">
 	</td>
 	<td class="key" nowrap="nowrap">
-	<input type="text" name="RA<?php echo $x ?>" size="5" maxLength="5" <?php if(isset($spieler[$x]->Rang)) { ?> value="<?php echo $spieler[$x]->Rang; ?>" <?php } ?> onChange="Rcheck(this)">
+		<input type="text" name="RA<?php echo $x ?>" size="4" maxLength="4" <?php if(isset($spieler[$x]->Rang)) { ?> value="<?php echo $spieler[$x]->Rang; ?>" <?php } ?> onChange="Rcheck(this)">
 	</td>
 	<td id="SP<?php echo $x; ?>" name="SP<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->Spielername; ?></td>
@@ -447,6 +448,9 @@ for ($x=0; $x < (count($spieler)-$count); $x++) {
 		<?php echo $spieler[$x]->DWZ; ?></td>
 	<td id="DWI<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->DWZ_Index; ?></td>
+	<td align="center">
+		<input type="checkbox" name="check<?php echo $x; ?>" id="check<?php echo $x; ?>" value="1" <?php if ($spieler[$x]->gesperrt =="1") { echo 'checked="checked"'; }?>>
+	</td>
 	</tr>
 
 <?php }} ?>
@@ -462,14 +466,15 @@ for ($x=0; $x < (count($spieler)-$count); $x++) {
 	<table class="admintable">
 
 	<tr>
-		<td width="8%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_M_NR' ); ?></td>
-		<td width="10%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_RANG' ); ?></td>
+		<td width="5%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_M_NR' ); ?></td>
+		<td width="7%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_RANG' ); ?></td>
 		<td class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_NAME' ); ?></td>
 		<td width="9%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_ZPSM' ); ?></td>
 		<td width="7%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_MGL_NR' ); ?></td>
 		<td width="11%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_PKZ' ); ?></td>
 		<td width="3%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_STATUS' ); ?></td>
 		<td colspan="2" width="10%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_DWZ' ); ?></td>
+		<td width="8" class="key" nowrap="nowrap"><?php echo JText::_( 'MELDELISTE_BLOCK' ); ?></td>
 	</tr>
 	
 <?php
@@ -483,10 +488,10 @@ if (clm_core::$load->request_string( 'task') == 'edit' ) {
 
 	<tr>
 	<td class="key" nowrap="nowrap">
-		<input type="text" name="MA<?php echo $x ?>" size="3" maxLength="3" value="<?php echo $spieler[$rang[$x]]->man_nr; ?>" onChange="Mcheck(this)">
+		<input type="text" name="MA<?php echo $x ?>" size="2" maxLength="2" value="<?php echo $spieler[$rang[$x]]->man_nr; ?>" onChange="Mcheck(this)">
 	</td>
 	<td class="key" nowrap="nowrap">
-	<input type="text" name="RA<?php echo $x ?>" size="5" maxLength="5" value="<?php echo $spieler[$rang[$x]]->Rang; ?>" onChange="Rcheck(this)">
+	<input type="text" name="RA<?php echo $x ?>" size="4" maxLength="4" value="<?php echo $spieler[$rang[$x]]->Rang; ?>" onChange="Rcheck(this)">
 	</td>
 	<td id="SP<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$rang[$x]]->Spielername; ?></td>
@@ -502,6 +507,9 @@ if (clm_core::$load->request_string( 'task') == 'edit' ) {
 		<?php echo $spieler[$rang[$x]]->DWZ; ?></td>
 	<td id="DWI<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$rang[$x]]->DWZ_Index; ?></td>
+	<td align="center">
+		<input type="checkbox" name="check<?php echo $x; ?>" id="check<?php echo $x; ?>" value="1" <?php if ($spieler[$rang[$x]]->gesperrt =="1") { echo 'checked="checked"'; }?>>
+	</td>
 	</tr>
 
 <?php }} else {
@@ -514,10 +522,10 @@ if (clm_core::$load->request_string( 'task') == 'edit' ) {
 
 	<tr>
 	<td class="key" nowrap="nowrap">
-		<input type="text" name="MA<?php echo $x ?>" size="3" maxLength="3" <?php if(isset($spieler[$x]->man_nr)) { ?> value="<?php echo $spieler[$x]->man_nr; ?>"<?php } ?> onChange="Mcheck(this)">
+		<input type="text" name="MA<?php echo $x ?>" size="2" maxLength="2" <?php if(isset($spieler[$x]->man_nr)) { ?> value="<?php echo $spieler[$x]->man_nr; ?>"<?php } ?> onChange="Mcheck(this)">
 	</td>
 	<td class="key" nowrap="nowrap">
-	<input type="text" name="RA<?php echo $x ?>" size="5" maxLength="5" <?php if(isset($spieler[$x]->Rang)) { ?> value="<?php echo $spieler[$x]->Rang; ?>" <?php } ?> onChange="Rcheck(this)">
+		<input type="text" name="RA<?php echo $x ?>" size="4" maxLength="4" <?php if(isset($spieler[$x]->Rang)) { ?> value="<?php echo $spieler[$x]->Rang; ?>" <?php } ?> onChange="Rcheck(this)">
 	</td>
 	<td id="SP<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->Spielername; ?></td>
@@ -533,6 +541,9 @@ if (clm_core::$load->request_string( 'task') == 'edit' ) {
 		<?php echo $spieler[$x]->DWZ; ?></td>
 	<td id="DWI<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->DWZ_Index; ?></td>
+	<td align="center">
+		<input type="checkbox" name="check<?php echo $x; ?>" id="check<?php echo $x; ?>" value="1" <?php if ($spieler[$x]->gesperrt =="1") { echo 'checked="checked"'; }?>>
+	</td>
 	</tr>
 
 <?php }} ?>
