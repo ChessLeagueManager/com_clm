@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -19,7 +19,7 @@ class CLMModelVerein extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison', 1);
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
  
 	$query = " SELECT a.ZPS, a.sid, a.Geschlecht, a.DWZ, a.FIDE_Elo, a.FIDE_ID,"
 		." COUNT(Geschlecht) as Mgl,"
@@ -50,7 +50,7 @@ class CLMModelVerein extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison', 1);
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
  
 	$query = " SELECT a.* "
 		." FROM #__clm_vereine as a "
@@ -73,7 +73,7 @@ class CLMModelVerein extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison');
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
  
 	$query = "SELECT a.*, l.name as liga_name "
 		." FROM #__clm_mannschaften as a "
@@ -98,7 +98,7 @@ class CLMModelVerein extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison', 1);
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
 
 	$query  = 'SELECT DISTINCT a.zps, a.name, a.published FROM #__clm_vereine as a'
 		.' WHERE published = 1'
@@ -121,7 +121,7 @@ class CLMModelVerein extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison', 1);
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
 
 	$query  = ' SELECT a.name, a.id, a.archiv FROM #__clm_saison AS a'
 		." ORDER BY a.name DESC "
@@ -142,7 +142,7 @@ class CLMModelVerein extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison', 1);
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
 
 	$query  = ' SELECT a.name, a.id, a.sid, a.vereinZPS FROM #__clm_turniere AS a'
 		." WHERE a.vereinZPS = '$zps'"
@@ -167,7 +167,7 @@ class CLMModelVerein extends JModelLegacy
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 
 		$db			= JFactory::getDBO();
-		$id			= @$options['id'];
+//		$id			= @$options['id'];
 
 	$query	= "SELECT * "
 		." FROM #__clm_vereine "
@@ -191,7 +191,7 @@ class CLMModelVerein extends JModelLegacy
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 
 		$db			= JFactory::getDBO();
-		$id			= @$options['id'];
+//		$id			= @$options['id'];
 
 	$query	= "SELECT Vereinname "
 		." FROM #__clm_dwz_vereine "
@@ -217,7 +217,7 @@ class CLMModelVerein extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison', 1);
 
 		$db			= JFactory::getDBO();
-		$id			= @$options['id'];
+//		$id			= @$options['id'];
 
 	$query	= "SELECT * "
 		." FROM #__clm_user "

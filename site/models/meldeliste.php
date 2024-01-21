@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -24,7 +24,7 @@ class CLMModelMeldeliste extends JModelLegacy
 
 		// TODO: Cache on the fingerprint of the arguments
 		$db	= JFactory::getDBO();
-		$id	= @$options['id'];
+//		$id	= @$options['id'];
 
  	if($layout =="rangliste"){
 		$query = "SELECT a.name as vname, r.Gruppe as gruppe, i.bemerkungen, i.bem_int, i.published, i.ordering "
@@ -66,7 +66,7 @@ class CLMModelMeldeliste extends JModelLegacy
 	$countryversion = $config->countryversion;
 		// TODO: Cache on the fingerprint of the arguments
 		$db	= JFactory::getDBO();
-		$id	= @$options['id'];
+//		$id	= @$options['id'];
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
 	$val=$config->meldeliste;
@@ -169,7 +169,7 @@ class CLMModelMeldeliste extends JModelLegacy
 
 		// TODO: Cache on the fingerprint of the arguments
 		$db	= JFactory::getDBO();
-		$id	= @$options['id'];
+//		$id	= @$options['id'];
 		$sid	= clm_core::$load->request_int('saison','1');
 		$zps	= clm_escape(clm_core::$load->request_string('zps'));
 		$man	= clm_core::$load->request_int('man','1');
@@ -204,7 +204,7 @@ class CLMModelMeldeliste extends JModelLegacy
 	$gid	= clm_core::$load->request_int('gid');
 
 		$db	= JFactory::getDBO();
-		$id	= @$options['id'];
+//		$id	= @$options['id'];
 	if($layout =="rangliste"){
 	$query	= "SELECT COUNT(snr) as snr "
 		." FROM #__clm_meldeliste_spieler as a"
@@ -236,7 +236,7 @@ class CLMModelMeldeliste extends JModelLegacy
 	$gid	= clm_core::$load->request_int('gid','1');
 
 		$db	= JFactory::getDBO();
-		$id	= @$options['id'];
+//		$id	= @$options['id'];
 
 	if($layout =="rangliste"){
 	$query	= "SELECT id "
@@ -270,7 +270,7 @@ class CLMModelMeldeliste extends JModelLegacy
 
 
 		$db	= JFactory::getDBO();
-		$id	= @$options['id'];
+//		$id	= @$options['id'];
 
 	$query	= "SELECT * "
 		." FROM #__clm_user "

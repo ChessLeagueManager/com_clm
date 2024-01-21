@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -25,7 +25,7 @@ class CLMModelSpieler extends JModelLegacy
 	$countryversion = $config->countryversion;
 
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
 
 	$query = "SELECT a.Spielername,l.name as liga_name,l.id as liga,a.ZPS,a.Mgl_Nr,a.PKZ,"
 		." a.DWZ as dsbDWZ,a.DWZ_Index,a.FIDE_ELO,a.FIDE_ID,a.Status,"
@@ -78,7 +78,7 @@ class CLMModelSpieler extends JModelLegacy
 	$countryversion = $config->countryversion;
 
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
 
 	// Array zum speichern von Liga,Tlnr und Mannschaftsname
 	$erg = array();
@@ -135,7 +135,7 @@ class CLMModelSpieler extends JModelLegacy
 	$countryversion = $config->countryversion;
 
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
 
 	$query = " SELECT l.name as league, s.gegner as Mgl_Nr,s.gPKZ,s.gzps,s.lid,s.runde,s.heim,s.weiss,s.brett,"
 		." s.kampflos,s.punkte,d.Spielername,m.name,d.DWZ,a.dg,a.gegner as tln, ml.start_dwz"
@@ -176,7 +176,7 @@ class CLMModelSpieler extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison','1');
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
 
 	$query  = 'SELECT DISTINCT a.zps, a.name FROM #__clm_vereine as a'
 		." WHERE a.published = 1"
@@ -197,7 +197,7 @@ class CLMModelSpieler extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison','1');
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
 
 	$query  = ' SELECT a.name, a.id, a.archiv FROM #__clm_saison AS a'
 		." ORDER BY a.name DESC "
@@ -219,7 +219,7 @@ class CLMModelSpieler extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison','1');
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
 
 	$query  = " SELECT DISTINCT a.Spielername, a.ZPS, a.Mgl_Nr, a.PKZ, a.sid FROM #__clm_dwz_spieler AS a"
 		." WHERE a.sid= '$sid'"

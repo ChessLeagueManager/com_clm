@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -22,7 +22,7 @@ class CLMModelVereinsliste extends JModelLegacy
 
 	$sid	= clm_core::$load->request_int('saison', 0);
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
  
 	if ( !$sid OR $sid < 1) { // keine Saison vorgegeben
 		// aktuelle Saison holen
@@ -103,7 +103,7 @@ class CLMModelVereinsliste extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison', 1);
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
 
 	$query = 'SELECT DISTINCT a.zps, a.name, a.sid FROM #__clm_vereine as a'
 		." WHERE a.published = 1"
@@ -136,7 +136,7 @@ class CLMModelVereinsliste extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison', 1);
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
 
 	$query  = ' SELECT a.name, a.id, a.archiv FROM #__clm_saison AS a'
 		." ORDER BY a.name DESC "

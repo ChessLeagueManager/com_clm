@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -19,7 +19,7 @@ class CLMModelDWZ_Liga extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison',1);
 	$lid	= clm_core::$load->request_int('liga',1);
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
 
 	$row	= JTable::getInstance( 'ligen', 'TableCLM' );
 	$row->load( $lid );
@@ -88,7 +88,7 @@ $countryversion = $config->countryversion;
 	$sid	= clm_core::$load->request_int('saison',1);
 	$lid	= clm_core::$load->request_int('liga',1);
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
 // Konfigurationsparameter auslesen
 $config = clm_core::$db->config();
 $countryversion = $config->countryversion;
@@ -122,7 +122,7 @@ $countryversion = $config->countryversion;
 	$sid	= clm_core::$load->request_int('saison',1);
 	$lid	= clm_core::$load->request_int('liga',1);
 	$db	= JFactory::getDBO();
-	$id	= @$options['id'];
+//	$id	= @$options['id'];
  
 	$query = " SELECT a.name, a.published, s.datum as dsb_datum "
 		." FROM #__clm_liga as a "

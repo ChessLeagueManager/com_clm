@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -22,7 +22,7 @@ class CLMModelMannschaft extends JModelLegacy
 	$tln = clm_core::$load->request_int('tlnr');
 	
 		$db			= JFactory::getDBO();
-		$id			= @$options['id'];
+//		$id			= @$options['id'];
  
 		$query = "SELECT a.zps,a.sg_zps,u.name as mf_name,u.email as email, "
 			." u.tel_mobil,u.tel_fest, l.durchgang as dg, l.rang as lrang, l.params, l.stamm, "
@@ -53,7 +53,7 @@ class CLMModelMannschaft extends JModelLegacy
 	$tln = clm_core::$load->request_int('tlnr');
 	
 		$db			= JFactory::getDBO();
-		$id			= @$options['id'];
+//		$id			= @$options['id'];
  
 		$query = "SELECT a.zps,a.sg_zps,v.zps as vzps,v.name "
 			." FROM #__clm_mannschaften as a "
@@ -84,7 +84,7 @@ class CLMModelMannschaft extends JModelLegacy
 	$countryversion=$config->countryversion;
 
 		$db			= JFactory::getDBO();
-		$id			= @$options['id'];
+//		$id			= @$options['id'];
 
 		$query = " SELECT l.rang,a.zps as zps, a.sg_zps as sgzps, a.man_nr as man_nr, l.ersatz_regel as ersatz_regel"
 			." FROM #__clm_mannschaften as a "
@@ -166,7 +166,7 @@ class CLMModelMannschaft extends JModelLegacy
 	$tln = clm_core::$load->request_int('tlnr');
 
 		$db			= JFactory::getDBO();
-		$id			= @$options['id'];
+//		$id			= @$options['id'];
 
 		$query = " SELECT a.tln_nr,a.gegner,a.brettpunkte,a.runde,a.dg,a.paar,a.heim "
 			." FROM #__clm_rnd_man as a "
@@ -192,7 +192,7 @@ class CLMModelMannschaft extends JModelLegacy
 	$tln = clm_core::$load->request_int('tlnr');
 
 		$db			= JFactory::getDBO();
-		$id			= @$options['id'];
+//		$id			= @$options['id'];
 
 		$query = " SELECT SUM(a.brettpunkte) as summe "
 			." FROM #__clm_rnd_man as a "
@@ -257,7 +257,7 @@ class CLMModelMannschaft extends JModelLegacy
 	$tln = clm_core::$load->request_int('tlnr');
 	
 		$db			= JFactory::getDBO();
-		$id			= @$options['id'];
+//		$id			= @$options['id'];
  
 		$query = "SELECT a.nr, a.datum, a.startzeit, m.pdate, m.ptime FROM #__clm_runden_termine as a "
 			." LEFT JOIN #__clm_liga as l ON l.id = a.liga "
@@ -286,7 +286,7 @@ class CLMModelMannschaft extends JModelLegacy
 	$countryversion=$config->countryversion;
 
 		$db			= JFactory::getDBO();
-		$id			= @$options['id'];
+//		$id			= @$options['id'];
 
 		$query = " SELECT l.rang,a.zps as zps, a.sg_zps as sgzps, a.man_nr as man_nr"
 			." FROM #__clm_mannschaften as a "
@@ -347,7 +347,7 @@ class CLMModelMannschaft extends JModelLegacy
 	$sid = clm_core::$load->request_int('saison',1);
 	
 		$db			= JFactory::getDBO();
-		$id			= @$options['id'];
+//		$id			= @$options['id'];
 
 		$query = " SELECT s.name, s.datum as dsb_datum "
 			." FROM #__clm_saison as s "
