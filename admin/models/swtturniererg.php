@@ -61,16 +61,16 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			$modus = $this->_calculateCLMModus(CLMSWT::readInt($swt,596,1));
 			
 			//Anzahl der in der SWT-Datei gespeicherten Runden berechnen
-			if($aktuelle_runde != 0) { //Turnier ist bereits angefangen
+//			if($aktuelle_runde != 0) { //Turnier ist bereits angefangen
 				if($modus == 2){ //Vollrundig
 					$swt_runden = $anz_runden * $anz_durchgaenge;
 				} else {
 //					$swt_runden = $ausgeloste_runden;
 					$swt_runden = $anz_runden;
 				}
-			} else { 
-				$swt_runden = 0;
-			}
+//			} else { 
+//				$swt_runden = 0;
+//			}
 			
 			$rnd = 1;
 			while($rnd <= $swt_runden) {
@@ -555,8 +555,10 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			foreach($this->_runden as $rnd => $runde) {
 			  $i = $runde->nr;
 			  if ($i >= $rfirst AND $i <= $rlast) {
-				$bretter = CLMSWT::getFormValue('brett',array(),'array',$rnd);
-				if (count($bretter) > 0) {
+				$t_brett 	= clm_escape(clm_core::$load->request_string('brett', '989'));
+				if ($t_brett == '989') $bretter = array();
+				else $bretter = CLMSWT::getFormValue('brett',array(),'array',$rnd);
+				if (!is_null($bretter) AND count($bretter) > 0) {
 				  foreach($bretter as $brett) {
 					if(CLMSWT::getFormValue('ergebnisWhite',null,'int',array( $rnd, $brett)) == 7) {
 						$ergWhite = "NULL";
@@ -596,6 +598,39 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 											".CLMSWT::getFormValue('gegner',null,'int',array( $rnd, $brett)).",  
 											".CLMSWT::getFormValue('spieler',null,'int',array( $rnd, $brett)).",  
 											".$ergBlack."
+										),";
+					$ispl++;
+				  }
+				} else {
+				  for ($ii = 1; $ii <= 13; $ii++) { 
+					
+					//Paarungsdaten f�r Wei�
+					$insert_query .= 	" ( 
+											".CLMSWT::getFormValue('sid',null,'int').", 										
+											".CLMSWT::getFormValue('tid',null,'int').", 
+											".CLMSWT::getFormValue('swt_tid',null,'int').", 
+											".CLMSWT::getFormValue('runde',null,'int',$rnd).", 
+											".$ii.",
+											".CLMSWT::getFormValue('dg',null,'int',$rnd).", 
+											NULL, 
+											1, 
+											NULL,  
+											NULL,  
+											NULL
+										),";
+					//Paarungsdaten f�r Schwarz
+					$insert_query .= 	" ( 
+											".CLMSWT::getFormValue('sid',null,'int').", 										
+											".CLMSWT::getFormValue('tid',null,'int').", 
+											".CLMSWT::getFormValue('swt_tid',null,'int').", 
+											".CLMSWT::getFormValue('runde',null,'int',$rnd).",
+											".$ii.",
+											".CLMSWT::getFormValue('dg',null,'int',$rnd).",
+											NULL, 
+											0, 
+											NULL,  
+											NULL,  
+											NULL
 										),";
 					$ispl++;
 				  }

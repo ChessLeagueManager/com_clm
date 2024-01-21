@@ -62,7 +62,7 @@ function showRounds(){
 <?php
 
 //if (isset($this->runden) AND count($this->runden) > 0) {
-if (isset($rcount) AND $rcount > 0) {
+//if (isset($rcount) AND $rcount > 0) {
 foreach($this->runden as $rnd => $runde) {
 	if ($runde->nr < $rfirst) continue;
 	if ($runde->nr > ($rfirst + $rrange - 1)) { $rlast = ($runde->nr - 1); break;}
@@ -223,7 +223,7 @@ foreach($this->runden as $rnd => $runde) {
 		</fieldset>";
 	
 	}
-	} else echo "<br>Es liegen keine Ergebnisse vor!";
+//	} else echo "<br>Es liegen keine Ergebnisse vor!";
 	?>
 	
 

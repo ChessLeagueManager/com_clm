@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -114,11 +114,13 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 		
 			
 			//rnd
-			if(CLMSWT::readInt($swt,3,2) == 0) {
+/*			if(CLMSWT::readInt($swt,3,2) == 0) {
 				$this->_turnier->set('rnd'			, 0);
 			} else {
 				$this->_turnier->set('rnd'			, 1);
 			}
+*/
+			$this->_turnier->set('rnd'			, 1);		// immer!						   
 			
 			
 			//Anz. Runden und Anz. Durchg�nge
