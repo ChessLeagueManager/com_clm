@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -20,25 +20,22 @@ class CLMControllerCatMain extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->_db	= JFactory::getDBO();
 		$this->app	= JFactory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply','save' );
 		$this->registerTask( 'unpublish','publish' );
 	
-		$this->adminLink = new AdminLink();
-		$this->adminLink->view = "catmain";
-	
 	}
 
 	// Weiterleitung!
 	function add() {
 		
-		$this->adminLink->view = "catform";
-		$this->adminLink->makeURL();
+		$adminLink = new AdminLink();
+		$adminLink->view = "catform";
+		$adminLink->makeURL();
 		
-		$this->app->redirect( $this->adminLink->url );
+		$this->app->redirect( $adminLink->url );
 	
 	}
 
@@ -51,8 +48,10 @@ class CLMControllerCatMain extends JControllerLegacy {
 
 		$this->_copyDo();
 
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "catmain";
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 
 	}
 
@@ -121,11 +120,12 @@ class CLMControllerCatMain extends JControllerLegacy {
 		
 		$cid	= clm_core::$load->request_array_int('cid');
 		
-		$this->adminLink->view = "catform";
-		$this->adminLink->more = array('task' => 'edit', 'id' => $cid[0]);
-		$this->adminLink->makeURL();
+		$adminLink = new AdminLink();
+		$adminLink->view = "catform";
+		$adminLink->more = array('task' => 'edit', 'id' => $cid[0]);
+		$adminLink->makeURL();
 		
-		$this->app->redirect( $this->adminLink->url );
+		$this->app->redirect( $adminLink->url );
 	
 	}
 
@@ -205,8 +205,10 @@ class CLMControllerCatMain extends JControllerLegacy {
 	
 		}
 	
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "catmain";
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 	
 	}
 
@@ -220,8 +222,10 @@ class CLMControllerCatMain extends JControllerLegacy {
 
 		$this->_deleteDo();
 
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "catmain";
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 
 	}
 	
@@ -295,8 +299,10 @@ class CLMControllerCatMain extends JControllerLegacy {
 		
 		$this->_order(1);
 		
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "catmain";
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 	
 	}
 
@@ -305,8 +311,10 @@ class CLMControllerCatMain extends JControllerLegacy {
 		
 		$this->_order(-1);
 		
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "catmain";
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 	
 	}
 
@@ -383,8 +391,10 @@ class CLMControllerCatMain extends JControllerLegacy {
 		
 		$this->app->enqueueMessage( JText::_('NEW_ORDERING_SAVED') );
 	
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "catmain";
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 	
 	}
 

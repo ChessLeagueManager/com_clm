@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -22,29 +20,28 @@ class CLMControllerTurForm extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= JFactory::getDBO();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save', 'edit' );
 	
-		$this->adminLink = new AdminLink();
-		$this->adminLink->view = "turform";
 	
 	}
 
 
 	function edit() {
+		$adminLink = new AdminLink();
 			// wenn 'apply', weiterleiten in form
 		if ($task == 'apply') {
 			// Weiterleitung bleibt im Formular
-			$this->adminLink->more = array('task' => 'edit', 'id' => $row->id);
+			$adminLink->view = "turform";
+			$adminLink->more = array('task' => 'edit', 'id' => $row->id);
 		} else {
 			// Weiterleitung in Liste
-			$this->adminLink->view = "turmain"; // WL in Liste
+			$adminLink->view = "turmain"; // WL in Liste
 		}
-		$this->adminLink->makeURL();
+		$adminLink->makeURL();
 		$app =JFactory::getApplication();
-		$app->redirect( $this->adminLink->url );
+		$app->redirect( $adminLink->url );
 	}
 
 
@@ -52,19 +49,23 @@ class CLMControllerTurForm extends JControllerLegacy {
 	
 		$result = $this->_saveDo();   
 		$app =JFactory::getApplication();
+		$adminLink = new AdminLink();
 		
 		if ($result[0]) { // erfolgreich?
 		
-			if ($this->neu) { // neues Turnier?
+			if ($result[1]) { // neues Turnier?
 				$app->enqueueMessage( JText::_('TOURNAMENT_CREATED') );
 			} else {
 				$app->enqueueMessage( JText::_('TOURNAMENT_EDITED') );
 			}
+			$adminLink->view = $result[2];
+			$adminLink->more = $result[3];
 		} else {
 			$app->enqueueMessage( $result[2],$result[1] );					
+			$adminLink->view = "turmain"; // WL in Liste
 		}
-		$this->adminLink->makeURL();
-		$app->redirect( $this->adminLink->url );
+		$adminLink->makeURL();
+		$app->redirect( $adminLink->url );
 	
 	}
 
@@ -86,7 +87,6 @@ class CLMControllerTurForm extends JControllerLegacy {
 		}
 		
 	    $clmAccess = clm_core::$access;
-		$clmAccess->accesspoint = 'BE_tournament_edit_detail';
 		if ($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) {
 			return array(false,'warning',JText::_('TOURNAMENT_NO_ACCESS'));
 		}
@@ -130,12 +130,12 @@ class CLMControllerTurForm extends JControllerLegacy {
 		
 		// if new item, order last in appropriate group
 		if (!$row->id) {
-			$this->neu = true; // Flag für neues Turnier
+			$neu = true; // Flag für neues Turnier
 			$stringAktion = JText::_('TOURNAMENT_CREATED');
 			// $where = "sid = " . (int) $row->sid; warum nur in Saison?
 			$row->ordering = $row->getNextOrder(); // ( $where );
 		} else {
-			$this->neu = false;
+			$neu = false;
 			$stringAktion = JText::_('TOURNAMENT_EDITED');
 		}
 		
@@ -145,7 +145,7 @@ class CLMControllerTurForm extends JControllerLegacy {
 		}
 				
 		// bei bereits bestehendem Turnier noch calculateRanking
-		if (!$this->neu) {
+		if (!$neu) {
 			$tournament = new CLMTournament($row->id, true);
 			$tournament->calculateRanking();
 			$tournament->setRankingPositions();
@@ -160,23 +160,26 @@ class CLMControllerTurForm extends JControllerLegacy {
 		// wenn 'apply', weiterleiten in form
 		if ($task == 'apply') {
 			// Weiterleitung bleibt im Formular
-			$this->adminLink->more = array('task' => 'edit', 'id' => $row->id);
+			$view = "turform"; // WL in Liste
+			$more = array('task' => 'edit', 'id' => $row->id);
 		} else {
 			// Weiterleitung in Liste
-			$this->adminLink->view = "turmain"; // WL in Liste
+			$view = "turmain"; // WL in Liste
+			$more = array();
 		}
 	
-		return array(true);
+		return array(true,$neu,$view,$more);
 	
 	}
 
 
 	function cancel() {
 		
-		$this->adminLink->view = "turmain";
-		$this->adminLink->makeURL();
+		$adminLink = new AdminLink();
+		$adminLink->view = "turmain";
+		$adminLink->makeURL();
 		$app =JFactory::getApplication();
-		$app->redirect( $this->adminLink->url );
+		$app->redirect( $adminLink->url );
 		
 	}
 

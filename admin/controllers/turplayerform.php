@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -21,19 +20,10 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		// turnierid
-		$this->turnierid = clm_core::$load->request_int('id');
-		
-		$this->_db		= JFactory::getDBO();
-		
 		$this->app = JFactory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
-	
-		$this->adminLink = new AdminLink();
-		$this->adminLink->more = array('id' => $this->turnierid);
-		$this->adminLink->view = "turplayerform";
 	
 	}
 
@@ -52,12 +42,22 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 	
 	function save() {
 	
-		$this->_saveDo();
+		$result = $this->_saveDo();
+
+		// turnierid
+		$turnierid = clm_core::$load->request_int('id');
+		$task		= clm_core::$load->request_string('task');
 
 		// abschließend offene Restteilnehmerzahl
 
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->more = array('id' => $turnierid);
+		if ($task == 'apply' OR $result === false)
+			$adminLink->view = "turplayerform";
+		else
+			$adminLink->view = "turplayers";
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 	
 	}
 	
@@ -69,9 +69,14 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 		$config = clm_core::$db->config();
 		$countryversion = $config->countryversion;
 	
+		// turnierid
+		$turnierid = clm_core::$load->request_int('id');
+
+		$db		= JFactory::getDBO();
+
 		// Instanz der Tabelle
 		$row = JTable::getInstance( 'turniere', 'TableCLM' );
-		$row->load( $this->turnierid ); // Daten zu dieser ID laden
+		$row->load( $turnierid ); // Daten zu dieser ID laden
 
 		$clmAccess = clm_core::$access;      
 		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
@@ -79,22 +84,21 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 			return false;
 		}
 	
-		$turnier = $this->turnierid;
 		$task		= clm_core::$load->request_string('task');
 		$cid 		= clm_core::$load->request_array_string('cid');
 	
 		// weiteren Daten aus TlnTabelle
 		$query = "SELECT MAX(mgl_nr), MAX(snr) FROM `#__clm_turniere_tlnr`"
-			." WHERE turnier = ".$this->turnierid
+			." WHERE turnier = ".$turnierid
 			;
-		$this->_db->setQuery($query);
-		list($maxFzps, $maxSnr) = $this->_db->loadRow();
+		$db->setQuery($query);
+		list($maxFzps, $maxSnr) = $db->loadRow();
 		$maxFzps++; // fiktive ZPS für manuell eingegeben Spieler
 		$maxSnr++; // maximale snr für alle Spieler
 		
 	
 		// Turnierdaten
-		$tournament = new CLMTournament($this->turnierid, true);
+		$tournament = new CLMTournament($turnierid, true);
 		$playersIn = $tournament->getPlayersIn();
 		$turParams = new clm_class_params($tournament->data->params);
 		$param_useastwz = $turParams->get('useAsTWZ', 0);
@@ -125,7 +129,7 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 			$query = " INSERT INTO #__clm_turniere_tlnr"
 				." (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `titel`, `mgl_nr` ,`zps`)"
 				." VALUES"
-				." ('".$tournament->data->sid."', '".$this->turnierid."', '".$maxSnr++."', '$name', '$birthYear', '$geschlecht', '$verein', '$twz', '$natrating', '$fideelo', '$titel', '".$maxFzps."', '99999')";
+				." ('".$tournament->data->sid."', '".$turnierid."', '".$maxSnr++."', '$name', '$birthYear', '$geschlecht', '$verein', '$twz', '$natrating', '$fideelo', '$titel', '".$maxFzps."', '99999')";
 //		$this->_db->setQuery($query);
 //		if ($this->_db->query()) {
 		if (clm_core::$db->query($query)) { 
@@ -173,20 +177,20 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 					$query .= " AND a.PKZ = '".$PKZ."'";
 				}
 
-				$this->_db->setQuery($query);
-				$data	= $this->_db->loadObject();
+				$db->setQuery($query);
+				$data	= $db->loadObject();
 				if (isset($data->Spielername)) {
 					if ($PKZ == '') $PKZ = $data->PKZ;
 					// checken ob Spieler schon eingetragen, um Doppelungen zu vermeiden
 					$query = "SELECT COUNT(*) FROM #__clm_turniere_tlnr"
-							. " WHERE `turnier` = '".$this->turnierid."' AND `zps` = '$zps'";
+							. " WHERE `turnier` = '".$turnierid."' AND `zps` = '$zps'";
 					if ($countryversion =="de") {
 						$query .= " AND mgl_nr = ".$mgl;
 					} else {
 						$query .= " AND PKZ = '".$PKZ."'";
 					}
-					$this->_db->setQuery($query);
-					if ($this->_db->loadResult() > 0) {
+					$db->setQuery($query);
+					if ($db->loadResult() > 0) {
 						$this->app->enqueueMessage(JText::_('PLAYER')." ".$data->Spielername." ".JText::_('ALREADYIN'), 'warning');
 					} else {
 					
@@ -199,7 +203,7 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 						$query = " INSERT INTO #__clm_turniere_tlnr"
 								. " (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `FIDEid`, `FIDEcco`, `titel`,`mgl_nr` ,`PKZ` ,`zps`) "
 								. " VALUES"
-								. " ('".$tournament->data->sid."','".$this->turnierid."', '".$maxSnr++."', '".clm_escape( $data->Spielername )."', '".$data->Geburtsjahr."', '".$data->Geschlecht."','".clm_escape( $data->Vereinname )."', '".$twz."', '".$data->DWZ."', '".$data->FIDE_Elo."', '".$data->FIDE_ID."', '".$data->FIDE_Land."', '".$data->FIDE_Titel."', '$mgl', '$PKZ', '$zps')";
+								. " ('".$tournament->data->sid."','".$turnierid."', '".$maxSnr++."', '".clm_escape( $data->Spielername )."', '".$data->Geburtsjahr."', '".$data->Geschlecht."','".clm_escape( $data->Vereinname )."', '".$twz."', '".$data->DWZ."', '".$data->FIDE_Elo."', '".$data->FIDE_ID."', '".$data->FIDE_Land."', '".$data->FIDE_Titel."', '$mgl', '$PKZ', '$zps')";
 //						$this->_db->setQuery($query);
 //						if ($this->_db->query()) { 
 						if (clm_core::$db->query($query)) { 
@@ -227,7 +231,6 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 			case 'save':
 			default:
 				$stringAktion = JText::_('PLAYERS_SAVED');
-				$this->adminLink->view = "turplayers"; // WL in Liste
 				break;
 		}
 	
@@ -237,6 +240,7 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 			$this->app->enqueueMessage(JText::_('PARTICIPANTS_WANTED').": ".$openSpots, 'notice' );
 		} else {
 			$this->app->enqueueMessage(CLMText::errorText('PARTICIPANTLIST', 'FULL'), 'notice' );
+			$_POST['task'] = 'save';
 		}
 	
 	
@@ -246,7 +250,7 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 		// Log schreiben
 		$clmLog = new CLMLog();
 		$clmLog->aktion = $stringAktion;
-		$clmLog->params = array('sid' => $tournament->data->sid, 'tid' => $this->turnierid); // TurnierID wird als LigaID gespeichert
+		$clmLog->params = array('sid' => $tournament->data->sid, 'tid' => $turnierid); // TurnierID wird als LigaID gespeichert
 		$clmLog->write();
 
 		return true;
@@ -254,16 +258,21 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 	}
 
 	function cancel() {
+
+		// turnierid
+		$turnierid = clm_core::$load->request_int('id');
+
 		$add_nz = clm_core::$load->request_int('add_nz');
 		if ($add_nz == '1') {
-			$tournament = new CLMTournament($this->turnierid, true);
+			$tournament = new CLMTournament($turnierid, true);
 			$tournament->makeMinusTln(); // Message werden dort erstellt
 		}
 		
-		$this->adminLink->view = "turplayers";
-		$this->adminLink->more = array('id' => $this->turnierid);
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "turplayers";
+		$adminLink->more = array('id' => $turnierid);
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 		
 	}
 

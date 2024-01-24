@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -22,20 +20,10 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		// turnierid
-		$this->playerid = clm_core::$load->request_int('playerid');
-		$this->turnierid = clm_core::$load->request_int('turnierid');
-		
-		$this->_db		= JFactory::getDBO();
-		
 		$this->app =JFactory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
-	
-		$this->adminLink = new AdminLink();
-		$this->adminLink->more = array('playerid' => $this->playerid);
-		$this->adminLink->view = "turplayeredit";
 	
 	}
 
@@ -45,8 +33,24 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 	
 		$this->_saveDo();
 
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		// playerid
+		$playerid = clm_core::$load->request_int('playerid');
+		$turnierid = clm_core::$load->request_int('turnierid');
+		// Task
+		$task = clm_core::$load->request_string('task');
+
+		$adminLink = new AdminLink();
+		if ($task == 'apply') {
+			// Weiterleitung bleibt im Formular
+			$adminLink->more = array('playerid' => $playerid);
+			$adminLink->view = "turplayeredit";
+		} else {
+			// Weiterleitung in Liste
+			$adminLink->more = array('id' => $turnierid);
+			$adminLink->view = "turplayers"; // WL in Liste
+		}
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 	
 	}
 	
@@ -55,9 +59,13 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 	
 		defined('_JEXEC') or die( 'Invalid Token' );
 	
+		// turnierid
+		$playerid = clm_core::$load->request_int('playerid');
+		$turnierid = clm_core::$load->request_int('turnierid');
+
 		// Instanz der Tabelle
 		$row = JTable::getInstance( 'turniere', 'TableCLM' );
-		$row->load( $this->turnierid ); // Daten zu dieser ID laden
+		$row->load( $turnierid ); // Daten zu dieser ID laden
 
 		$clmAccess = clm_core::$access;      
 		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
@@ -70,7 +78,7 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		
 		// Instanz der Tabelle
 		$row = JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
-		$row->load( $this->playerid ); // Daten zu dieser ID laden
+		$row->load( $playerid ); // Daten zu dieser ID laden
 
 		// Spieler existent?
 		if (!$row->id) {
@@ -78,7 +86,7 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 			return false;
 		
 		// Runde gehört zu Turnier?
-		} elseif ($row->turnier != $this->turnierid) {
+		} elseif ($row->turnier != $turnierid) {
 			$this->app->enqueueMessage(CLMText::errorText('PLAYER', 'NOACCESS'),'warning');
 			return false;
 		}
@@ -102,37 +110,32 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		}
 	
 		
-	 	clm_core::$api->direct("db_tournament_delDWZ",array($this->turnierid,false));
+	 	clm_core::$api->direct("db_tournament_delDWZ",array($turnierid,false));
 
 		$text = JText::_('PARTICIPANT_EDITED').": ".$row->name;
 
 		// Log schreiben
 		$clmLog = new CLMLog();
 		$clmLog->aktion = $text;
-		$clmLog->params = array('sid' => $row->sid, 'tid' => $this->turnierid); // TurnierID wird als LigaID gespeichert
+		$clmLog->params = array('sid' => $row->sid, 'tid' => $turnierid); // TurnierID wird als LigaID gespeichert
 		$clmLog->write();
 		
 		$this->app->enqueueMessage( $text );
 
-		// wenn 'apply', weiterleiten in form
-		if ($task == 'apply') {
-			// Weiterleitung bleibt im Formular
-			$this->adminLink->more = array('playerid' => $this->playerid);
-		} else {
-			// Weiterleitung in Liste
-			$this->adminLink->more = array('id' => $this->turnierid);
-			$this->adminLink->view = "turplayers"; // WL in Liste
-		}
 		return true;
 	
 	}
 
 	function cancel() {
 		
-		$this->adminLink->view = "turplayers";
-		$this->adminLink->more = array('id' => $this->turnierid);
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		// turnierid
+		$turnierid = clm_core::$load->request_int('turnierid');
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turplayers";
+		$adminLink->more = array('id' => $turnierid);
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 		
 	}
 

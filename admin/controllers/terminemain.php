@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -21,25 +19,21 @@ class CLMControllerTermineMain extends JControllerLegacy {
 	function __construct( $config = array() ) {
 		
 		parent::__construct( $config );
-		
-		$this->_db		= JFactory::getDBO();
-		
+				
 		// Register Extra tasks
 		$this->registerTask( 'apply','save' );
 		$this->registerTask( 'unpublish','publish' );
-	
-		$this->adminLink = new AdminLink();
-		$this->adminLink->view = "terminemain";
-	
+		
 	}
 
 	// Weiterleitung!
 	function add() {
 		
-		$this->adminLink->view = "termineform";
-		$this->adminLink->makeURL();
+		$adminLink = new AdminLink();
+		$adminLink->view = "termineform";
+		$adminLink->makeURL();
 		
-		$this->setRedirect( $this->adminLink->url );
+		$this->setRedirect( $adminLink->url );
 	
 	}
 
@@ -58,8 +52,10 @@ class CLMControllerTermineMain extends JControllerLegacy {
 		} else {
 			$app->enqueueMessage( $result[2],$result[1] );					
 		}
-		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "terminemain";
+		$adminLink->makeURL();
+		$this->setRedirect( $adminLink->url );
 
 	}
 
@@ -109,11 +105,12 @@ class CLMControllerTermineMain extends JControllerLegacy {
 		
 		$cid = clm_core::$load->request_array_int('cid');
 		
-		$this->adminLink->view = "termineform";
-		$this->adminLink->more = array('task' => 'edit', 'id' => $cid[0]);
-		$this->adminLink->makeURL();
+		$adminLink = new AdminLink();
+		$adminLink->view = "termineform";
+		$adminLink->more = array('task' => 'edit', 'id' => $cid[0]);
+		$adminLink->makeURL();
 		
-		$this->setRedirect( $this->adminLink->url );
+		$this->setRedirect( $adminLink->url );
 	
 	}
 
@@ -184,8 +181,10 @@ class CLMControllerTermineMain extends JControllerLegacy {
 	
 		}
 	
-		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "terminemain";
+		$adminLink->makeURL();
+		$this->setRedirect( $adminLink->url );
 	
 	}
 
@@ -202,8 +201,10 @@ class CLMControllerTermineMain extends JControllerLegacy {
 
 		$app->enqueueMessage( $result[2],$result[1] );					
 
-		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "terminemain";
+		$adminLink->makeURL();
+		$this->setRedirect( $adminLink->url );
 
 	}
 	
@@ -264,8 +265,10 @@ class CLMControllerTermineMain extends JControllerLegacy {
 		
 		$this->_order(1);
 		
-		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "terminemain";
+		$adminLink->makeURL();
+		$this->setRedirect( $adminLink->url );
 	
 	}
 
@@ -274,8 +277,10 @@ class CLMControllerTermineMain extends JControllerLegacy {
 		
 		$this->_order(-1);
 		
-		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "terminemain";
+		$adminLink->makeURL();
+		$this->setRedirect( $adminLink->url );
 	
 	}
 
@@ -349,8 +354,10 @@ class CLMControllerTermineMain extends JControllerLegacy {
 		$app =JFactory::getApplication();
 		$app->enqueueMessage( JText::_('NEW_ORDERING_SAVED') );
 	
-		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "terminemain";
+		$adminLink->makeURL();
+		$this->setRedirect( $adminLink->url );
 	
 	}
 
@@ -363,10 +370,11 @@ class CLMControllerTermineMain extends JControllerLegacy {
 	// Weiterleitung!
 	function import() {
 		
-		$this->adminLink->view = "termineimport";
-		$this->adminLink->makeURL();
+		$adminLink = new AdminLink();
+		$adminLink->view = "termineimport";
+		$adminLink->makeURL();
 		
-		$this->setRedirect( $this->adminLink->url );
+		$this->setRedirect( $adminLink->url );
 	
 	}
 
@@ -390,8 +398,10 @@ class CLMControllerTermineMain extends JControllerLegacy {
 
 		$app->enqueueMessage( JText::_('TERMINE_TASK_EXPORTED'),'message' );					
 
-		$this->adminLink->more = array('file_name' => $file_name);
-		$this->adminLink->makeURL();
+		$adminLink = new AdminLink();
+		$adminLink->view = "terminemain";
+		$adminLink->more = array('file_name' => $file_name);
+		$adminLink->makeURL();
 
 		$_POST["task"] = 'download';
 		$app->redirect( $this->adminLink->url );
@@ -424,9 +434,10 @@ class CLMControllerTermineMain extends JControllerLegacy {
 			$app->enqueueMessage( JText::_('TERMINE_TASK')." ".JText::_('CLM_KEINE'),'warning' );					
 		}
 		
-		$this->adminLink->view = "terminemain";
-		$this->adminLink->makeURL();		
-		$app->redirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "terminemain";
+		$adminLink->makeURL();		
+		$app->redirect( $adminLink->url );
 	
 	}
 

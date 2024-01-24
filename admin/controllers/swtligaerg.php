@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -50,7 +50,7 @@ class CLMControllerSWTLigaerg extends JControllerLegacy
 				$_GET['runde'] = 0;
 				$_GET['dgang'] = $dgang + 1; }
 			else $_GET['runde'] = $runde + 1;
-			$this->_message = JText::_( 'SWT_STORE_SUCCESS' );
+//			$this->_message = JText::_( 'SWT_STORE_SUCCESS' );
 			parent::display ();
 		}
 		else {

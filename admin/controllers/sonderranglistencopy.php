@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,40 +9,19 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
 class CLMControllerSonderranglistenCopy extends JControllerLegacy {
 	
-
 	// Konstruktor
 	function __construct( $config = array() ) {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= JFactory::getDBO();
-		
 		// Register Extra tasks
 		$this->registerTask( 'apply`', 'save' );
 	
-		$this->adminLink = new AdminLink();
-		$this->adminLink->view = "sonderranglistenmain";
-	
-	}
-
-
-	function edit() {
-			// wenn 'apply', weiterleiten in form
-		if ($task == 'apply') {
-			// Weiterleitung bleibt im Formular
-			$this->adminLink->more = array('task' => 'edit', 'id' => $row->id);
-		} else {
-			// Weiterleitung in Liste
-			$this->adminLink->view = "sonderranglistenmain"; // WL in Liste
-		}
-		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
 	}
 
 
@@ -57,8 +35,10 @@ class CLMControllerSonderranglistenCopy extends JControllerLegacy {
 		}
 		// sonst Fehlermeldung schon geschrieben
 
-		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "sonderranglistenmain";
+		$adminLink->makeURL();
+		$this->setRedirect( $adminLink->url );
 	
 	}
 
@@ -101,9 +81,6 @@ class CLMControllerSonderranglistenCopy extends JControllerLegacy {
 		$clmLog->aktion = JText::_( 'SPECIALRANKING_COPY' );
 		$clmLog->params = array('tid_from' => $turnier_source, 'tid_to' => $turnier_target); // TurnierID wird als LigaID gespeichert
 		$clmLog->write();
-
-		// Weiterleitung in Liste
-		$this->adminLink->view = "sonderranglistenmain"; // WL in Liste
 			
 		return true;
 	
@@ -112,9 +89,10 @@ class CLMControllerSonderranglistenCopy extends JControllerLegacy {
 
 	function cancel() {
 		
-		$this->adminLink->view = "sonderranglistenmain";
-		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "sonderranglistenmain";
+		$adminLink->makeURL();
+		$this->setRedirect( $adminLink->url );
 		
 	}
 

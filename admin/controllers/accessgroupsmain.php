@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -17,43 +17,37 @@ class CLMControllerAccessgroupsMain extends JControllerLegacy {
 	function __construct() {
 		parent::__construct();		
 
-		$this->_db	= JFactory::getDBO();
 		$this->app	= JFactory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply','save' );
 	
-		$this->adminLink = new AdminLink();
-		$this->adminLink->view = "accessgroupsmain";
 	}
 	
 	function display($cachable = false, $urlparams = array()) { 
 
 		parent::display(); 
 		
-		// Register Extra tasks
-		$this->registerTask( 'apply','save' );
-		$this->registerTask( 'unpublish','publish' );
-	
-		$this->adminLink = new AdminLink();
-		$this->adminLink->view = "accessgroupsmain";
 	} 
 	
 	function add() { 
-		$this->adminLink->view = "accessgroupsform";
-		$this->adminLink->makeURL();
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "accessgroupsform";
+		$adminLink->makeURL();
 		
-		$this->app->redirect( $this->adminLink->url );
+		$this->app->redirect( $adminLink->url );
 	}
 	
 	function edit() { 
 		$cid	= clm_core::$load->request_array_int('cid');
 		
-		$this->adminLink->view = "accessgroupsform";
-		$this->adminLink->more = array('task' => 'edit', 'id' => $cid[0]);
-		$this->adminLink->makeURL();
+		$adminLink = new AdminLink();
+		$adminLink->view = "accessgroupsform";
+		$adminLink->more = array('task' => 'edit', 'id' => $cid[0]);
+		$adminLink->makeURL();
 		
-		$this->app->redirect( $this->adminLink->url );
+		$this->app->redirect( $adminLink->url );
 	}
 	function copy() { 
 		$model = $this->getModel('accessgroupsform'); 
@@ -62,7 +56,8 @@ class CLMControllerAccessgroupsMain extends JControllerLegacy {
 		} else { 
 			$msg = 'Fehler beim Kopieren'; 
 		} 
-		$this->setRedirect('index.php?option=com_clm&view=accessgroupsmain',$msg); 
+		$this->app->enqueueMessage( $msg );
+		$this->setRedirect('index.php?option=com_clm&view=accessgroupsmain'); 
 	} 
 	
 	function save() { 
@@ -72,7 +67,8 @@ class CLMControllerAccessgroupsMain extends JControllerLegacy {
 		} else { 
 			$msg = 'Fehler beim Speichern'; 
 		} 
-		$this->setRedirect('index.php?option=com_clm&view=accessgroupsmain',$msg); 
+		$this->app->enqueueMessage( $msg );
+		$this->setRedirect('index.php?option=com_clm&view=accessgroupsmain'); 
 	} 
 	
 	function remove() { 
@@ -82,7 +78,8 @@ class CLMControllerAccessgroupsMain extends JControllerLegacy {
 		} else { 
 			$msg = 'Fehler beim Löschen'; 
 		} 
-		$this->setRedirect('index.php?option=com_clm&view=accessgroupsmain',$msg); 
+		$this->app->enqueueMessage( $msg );
+		$this->setRedirect('index.php?option=com_clm&view=accessgroupsmain'); 
 	}
 
 	function publish() {

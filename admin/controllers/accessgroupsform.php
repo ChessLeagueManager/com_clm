@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -20,14 +20,11 @@ class CLMControllerAccessgroupsForm extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= JFactory::getDBO();
 		$this->app = JFactory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
 	
-		$this->adminLink = new AdminLink();
-		$this->adminLink->view = "accessgroupsform";
 	
 	}
 
@@ -36,9 +33,14 @@ class CLMControllerAccessgroupsForm extends JControllerLegacy {
 
 		$result = $this->_saveDo();
 		
+		if (isset($result[4])) $id = $result[4]; else $id = 0;
+		
+		// Task
+		$task = clm_core::$load->request_string('task');
+
 		if ($result[0]) { // erfolgreich?
 						
-			if ($this->neu) { // new access group?
+			if ($result[3]) { // new access group?
 				$this->app->enqueueMessage( JText::_('ACCESSGROUP_CREATED') );
 			} else {
 				$this->app->enqueueMessage( JText::_('ACCESSGROUP_EDITED') );
@@ -48,8 +50,18 @@ class CLMControllerAccessgroupsForm extends JControllerLegacy {
 			$this->app->enqueueMessage( $result[2],$result[1] );					
 		}
 
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		// wenn 'apply', weiterleiten in form
+		if ($task == 'save' AND $result[0]) {
+			// Weiterleitung in Liste
+			$adminLink->view = "accessgroupsmain"; // WL in Liste
+		} else {
+			// Weiterleitung bleibt im Formular
+			$adminLink->view = "accessgroupsform"; // WL in Liste
+			$adminLink->more = array('task' => 'edit', 'id' => $id);
+		}
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 	
 	}
 
@@ -72,7 +84,7 @@ class CLMControllerAccessgroupsForm extends JControllerLegacy {
 		
 		$post = $_POST; 
 		if (!$row->bind($post)) {
-			return array(false,'error',$row->getError());
+			return array(false,'error',$row->getError(),0,$row->id);
 		}
 		
 		// Parameter
@@ -87,24 +99,23 @@ class CLMControllerAccessgroupsForm extends JControllerLegacy {
 		if (!$row->checkData()) {
 			// pre-save checks
 			// Weiterleitung bleibt im Formular !!
-			$this->adminLink->more = array('task' => $task, 'id' => $row->id, 'row' => $row);
-			return array(false,'warning',$row->getError());
+			return array(false,'warning',$row->getError(),0,$row->id);
 		}
 		
 		// if new item, order last in appropriate group
 		if (!$row->id) {
-			$this->neu = true; // Flag für neue accessgruppe
+			$neu = true; // Flag für neue accessgruppe
 			$stringAktion = JText::_('ACCESSGROUP_CREATED');
 			// $where = "sid = " . (int) $row->sid; warum nur in Saison?
 			$row->ordering = $row->getNextOrder(); // ( $where );
 		} else {
-			$this->neu = false;
+			$neu = false;
 			$stringAktion = JText::_('ACCESSGROUP_EDITED');
 		}
 		
 		// save the changes
 		if (!$row->store()) {
-			return array(false,'error',$row->getError());
+			return array(false,'error',$row->getError(),0,$row->id);
 		}
 				
 
@@ -114,25 +125,17 @@ class CLMControllerAccessgroupsForm extends JControllerLegacy {
 		$clmLog->params = array('sid' => clm_core::$access->getSeason(), 'cids' => $row->usertype); 
 		$clmLog->write();
 		
-		// wenn 'apply', weiterleiten in form
-		if ($task == 'apply') {
-			// Weiterleitung bleibt im Formular
-			$this->adminLink->more = array('task' => 'edit', 'id' => $row->id);
-		} else {
-			// Weiterleitung in Liste
-			$this->adminLink->view = "accessgroupsmain"; // WL in Liste
-		}
-	
-		return array(true,'message','Speichern war erfolgreich');
+		return array(true,'message','Speichern war erfolgreich',$neu,$row->id);
 	
 	}
 
 
 	function cancel() {
 		
-		$this->adminLink->view = "accessgroupsmain";
-		$this->adminLink->makeURL();
-		$this->setRedirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "accessgroupsmain";
+		$adminLink->makeURL();
+		$this->setRedirect( $adminLink->url );
 		
 	}
 

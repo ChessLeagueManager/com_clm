@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -19,8 +19,6 @@ class CLMControllerSonderranglistenMain extends JControllerLegacy {
 		parent::__construct();		
 
 		$this->app	= JFactory::getApplication();
-		$this->adminLink = new AdminLink();
-		$this->adminLink->view = "sonderranglistenmain";
 	}
 	
 	function display($cachable = false, $urlparams = array()) { 
@@ -29,18 +27,20 @@ class CLMControllerSonderranglistenMain extends JControllerLegacy {
 	} 
 	
 	function add() { 
-		$this->adminLink->view = "sonderranglistenform";
 		$_REQUEST['hidemainmenu'] = 1;
-		$this->adminLink->makeURL();		
-		$this->app->redirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "sonderranglistenform";
+		$adminLink->makeURL();		
+		$this->app->redirect( $adminLink->url );
 	}
 	
 	function edit() { 
 		$cids = clm_core::$load->request_array_int('cid'); 
-		$this->adminLink->view = "sonderranglistenform";
-		$this->adminLink->more = array('id' => $cids[0]);
-		$this->adminLink->makeURL();		
-		$this->app->redirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "sonderranglistenform";
+		$adminLink->more = array('id' => $cids[0]);
+		$adminLink->makeURL();		
+		$this->app->redirect( $adminLink->url );
 	}
 	
 	function save() { 

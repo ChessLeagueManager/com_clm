@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -20,40 +20,21 @@ class CLMControllerSonderranglistenForm extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->_db	= JFactory::getDBO();
 		$this->app	= JFactory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save', 'edit' );
 	
-		$this->adminLink = new AdminLink();
-		$this->adminLink->view = "sonderranglistenform";
-	
-	}
-
-
-	function edit() {
-			// wenn 'apply', weiterleiten in form
-		if ($task == 'apply') {
-			// Weiterleitung bleibt im Formular
-			$this->adminLink->more = array('task' => 'edit', 'id' => $row->id);
-		} else {
-			// Weiterleitung in Liste
-			$this->adminLink->view = "sonderranglistenmain"; // WL in Liste
-		}
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
 	}
 
 
 	function save() {
 	
 		$result = $this->_saveDo();   
-//		$app =JFactory::getApplication();
 		
 		if ($result[0]) { // erfolgreich?
 			
-			if ($this->neu) { // neues Turnier?
+			if ($result[1]) { // neues Turnier?
 				$this->app->enqueueMessage( JText::_('SP_RANKING_CREATED') );
 			} else {
 				$this->app->enqueueMessage( JText::_('SP_RANKING_EDITED') );
@@ -61,8 +42,22 @@ class CLMControllerSonderranglistenForm extends JControllerLegacy {
 		} else {
 			$this->app->enqueueMessage( $result[2],$result[1] );					
 		}
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+
+		// Task
+		$task = clm_core::$load->request_string('task');
+
+		$adminLink = new AdminLink();
+		// wenn 'apply', weiterleiten in form
+		if ($task == 'apply' AND $result[0]) {
+			// Weiterleitung bleibt im Formular
+			$adminLink->view = "sonderranglistenform";
+			$adminLink->more = array('task' => 'edit', 'id' => $result[2]);
+		} else {
+			// Weiterleitung in Liste
+			$adminLink->view = "sonderranglistenmain"; // WL in Liste
+		}
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 	
 	}
 
@@ -90,12 +85,12 @@ class CLMControllerSonderranglistenForm extends JControllerLegacy {
 		
 		// if new item, order last in appropriate group
 		if (!$row->id) {
-			$this->neu = true; // Flag für neues Turnier
+			$neu = true; // Flag für neues Turnier
 			$stringAktion = JText::_('SP_RANKING_CREATED');
 			// $where = "sid = " . (int) $row->sid; warum nur in Saison?
 			$row->ordering = $row->getNextOrder(); // ( $where );
 		} else {
-			$this->neu = false;
+			$neu = false;
 			$stringAktion = JText::_('SP_RANKING_EDITED');
 		}
 		
@@ -111,25 +106,17 @@ class CLMControllerSonderranglistenForm extends JControllerLegacy {
 		$clmLog->params = array('id' => $row->id, 'tid' => $row->turnier); // TurnierID wird als LigaID gespeichert
 		$clmLog->write();
 		
-		// wenn 'apply', weiterleiten in form
-		if ($task == 'apply') {
-			// Weiterleitung bleibt im Formular
-			$this->adminLink->more = array('task' => 'edit', 'id' => $row->id);
-		} else {
-			// Weiterleitung in Liste
-			$this->adminLink->view = "sonderranglistenmain"; // WL in Liste
-		}
-	
-		return array(true);
+		return array(true,$neu,$row->id);
 	
 	}
 
 
 	function cancel() {
 		
-		$this->adminLink->view = "sonderranglistenmain";
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "sonderranglistenmain";
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 		
 	}
 

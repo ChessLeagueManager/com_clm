@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -20,33 +20,42 @@ class CLMControllerCatForm extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= JFactory::getDBO();
 		$this->app =JFactory::getApplication();
 					
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
-	
-		$this->adminLink = new AdminLink();
-		$this->adminLink->view = "catform";
 	
 	}
 
 
 	function save() {
 	
-		if ($this->_saveDo()) { // erfolgreich?
+		$result = $this->_saveDo();
+
+		if ($result[0]) { // erfolgreich?
 			
-			if ($this->neu) { // neue Kategorie?
+			if ($result[1]) { // neue Kategorie?
 				$this->app->enqueueMessage( JText::_('CATEGORY_CREATED') );
 			} else {
 				$this->app->enqueueMessage( JText::_('CATEGORY_EDITED') );
-			}
-		
+			}		
 		}
 		// sonst Fehlermeldung schon geschrieben
 
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		$task = clm_core::$load->request_string('task');
+
+		$adminLink = new AdminLink();
+		// wenn 'apply', weiterleiten in form
+		if ($task == 'save' OR !$result[0]) {
+			// Weiterleitung in Liste
+			$adminLink->view = "catmain"; // WL in Liste
+		} else {
+			// Weiterleitung bleibt im Formular
+			$adminLink->view = "catform"; // WL in Liste
+			$adminLink->more = array('task' => 'edit', 'id' => $result[2]);
+		}
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 	
 	}
 
@@ -58,7 +67,7 @@ class CLMControllerCatForm extends JControllerLegacy {
 	
 		if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
 			$this->app->enqueueMessage( JText::_('SECTION_NO_ACCESS'),'warning' );
-			return false;
+			return array(false);
 		}
 	
 		// Task
@@ -70,42 +79,42 @@ class CLMControllerCatForm extends JControllerLegacy {
 		$post = $_POST; 
 		if (!$row->bind($post)) {
 			$this->app->enqueueMessage( $row->getError(),'error' );
-			return false;
+			return array(false);
 		}
 		if ($row->dateStart == '') $row->dateStart = '1970-01-01';
 		if ($row->dateEnd == '') $row->dateEnd = '1970-01-01';		
 		// Parameter
-		$paramsStringArray = array();
+/*		$paramsStringArray = array();
 		foreach ($row->params as $key => $value) {
 			$paramsStringArray[] = $key.'='.intval($value);
 		}
 		$row->params = implode("\n", $paramsStringArray);
-		
+*/		
 		
 		if (!$row->checkData()) {
 			// pre-save checks
 			$this->app->enqueueMessage( $row->getError(),'warning' );
 			// Weiterleitung bleibt im Formular !!
-			$this->adminLink->more = array('task' => $task, 'id' => $row->id);
-			return false;
+//			$this->adminLink->more = array('task' => $task, 'id' => $row->id);
+			return array(false,false,$row->id);
 		
 		}
 		
 		// if new item, order last in appropriate group
 		if (!$row->id) {
-			$this->neu = true; // Flag für neue Kategorie
+			$neu = true; // Flag für neue Kategorie
 			$stringAktion = JText::_('CATEGORY_CREATED');
 			// $where = "sid = " . (int) $row->sid; warum nur in Saison?
 			$row->ordering = $row->getNextOrder(); // ( $where );
 		} else {
-			$this->neu = false;
+			$neu = false;
 			$stringAktion = JText::_('CATEGORY_EDITED');
 		}
 		
 		// save the changes
 		if (!$row->store()) {
 			$this->app->enqueueMessage( $row->getError(),'error' );
-			return false;
+			return array(false,$neu,$row->id);
 		}
 		
 
@@ -115,26 +124,17 @@ class CLMControllerCatForm extends JControllerLegacy {
 		$clmLog->params = array('catid' => $row->id); 
 		$clmLog->write();
 		
-
-		// wenn 'apply', weiterleiten in form
-		if ($task == 'apply') {
-			// Weiterleitung bleibt im Formular
-			$this->adminLink->more = array('task' => 'edit', 'id' => $row->id);
-		} else {
-			// Weiterleitung in Liste
-			$this->adminLink->view = "catmain"; // WL in Liste
-		}
-	
-		return true;
+		return array(true,$neu,$row->id);
 	
 	}
 
 
 	function cancel() {
 		
-		$this->adminLink->view = "catmain";
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "catmain";
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 		
 	}
 

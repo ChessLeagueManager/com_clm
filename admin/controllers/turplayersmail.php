@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -19,13 +19,8 @@ class CLMControllerTurPlayersMail extends JControllerLegacy
 		
 		parent::__construct( $config );
 		
-		// turnierid
-		$this->turnierid = clm_core::$load->request_int('turnierid');
-		
 		$this->app 	= JFactory::getApplication();
 			
-		$this->adminLink = new AdminLink();
-		$this->adminLink->view = "turplayers";
 	}
 
 	
@@ -79,10 +74,15 @@ class CLMControllerTurPlayersMail extends JControllerLegacy
 			$this->app->enqueueMessage(substr($msg,4),'warning');
 		if ($count_mail > 0)
 			$this->app->enqueueMessage($count_mail.' '.JText::_('MAIL_SENT'),'message');
-		$this->adminLink->view = "turplayers";
-		$this->adminLink->more = array('id' => $this->turnierid);
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		
+		// turnierid
+		$turnierid = clm_core::$load->request_int('turnierid');
+		
+		$adminLink = new AdminLink();
+		$adminLink->view = "turplayers";
+		$adminLink->more = array('id' => $turnierid);
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 	
 	}
 	
@@ -90,10 +90,14 @@ class CLMControllerTurPlayersMail extends JControllerLegacy
 
 	function cancel() {
 		
-		$this->adminLink->view = "turplayers";
-		$this->adminLink->more = array('id' => $this->turnierid);
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		// turnierid
+		$turnierid = clm_core::$load->request_int('turnierid');
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turplayers";
+		$adminLink->more = array('id' => $turnierid);
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 		
 	}
 

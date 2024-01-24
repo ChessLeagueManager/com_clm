@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
@@ -22,26 +20,24 @@ class CLMControllerTermineForm extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= JFactory::getDBO();
-		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
-	
-		$this->adminLink = new AdminLink();
-		$this->adminLink->view = "termineform";
 	
 	}
 
 
 	function save() {
 	
+		// Task
+		$task = clm_core::$load->request_string('task', '');
+
 		$result = $this->_saveDo();
 		$app =JFactory::getApplication();
 		
 		if ($result[0]) { // erfolgreich?
 			
 			
-			if ($this->neu) { // neues termine?
+			if ($result[1]) { // neues termine?
 				$app->enqueueMessage( JText::_('TERMINE_TASK_CREATED') );
 			} else {
 				$app->enqueueMessage( JText::_('TERMINE_TASK_EDITED') );
@@ -50,8 +46,19 @@ class CLMControllerTermineForm extends JControllerLegacy {
 		} else {
 			$app->enqueueMessage( $result[2],$result[1] );					
 		}
-		$this->adminLink->makeURL();
-		$app->redirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		// wenn 'apply', weiterleiten in form
+		if ($task == 'apply') {
+			// Weiterleitung bleibt im Formular
+			$adminLink->view = "termineform";
+			$adminLink->more = array('task' => 'edit', 'id' => $result[3]);
+		} else {
+			// Weiterleitung in Liste
+			$adminLink->view = "terminemain"; // WL in Liste
+		}
+		$adminLink->makeURL();
+
+		$app->redirect( $adminLink->url );
 	
 	}
 
@@ -81,11 +88,11 @@ class CLMControllerTermineForm extends JControllerLegacy {
 		
 		// if new item, order last in appropriate group
 		if (!$row->id) {
-			$this->neu = true; // Flag für neues termine
+			$neu = true; // Flag für neues termine
 			$stringAktion = JText::_('TERMINE_TASK_CREATED');
 			$row->ordering = $row->getNextOrder(); // ( $where );
 		} else {
-			$this->neu = false;
+			$neu = false;
 			$stringAktion = JText::_('TERMINE_TASK_EDITED');
 		}
 		
@@ -98,31 +105,23 @@ class CLMControllerTermineForm extends JControllerLegacy {
 		
 		// save the changes
 		if (!$row->store()) {
-			return array(false,'error',$row->getError());
+			return array(false,'error',$row->getError(),$row->id);
 		}
 		
 
 
-		// wenn 'apply', weiterleiten in form
-		if ($task == 'apply') {
-			// Weiterleitung bleibt im Formular
-			$this->adminLink->more = array('task' => 'edit', 'id' => $row->id);
-		} else {
-			// Weiterleitung in Liste
-			$this->adminLink->view = "terminemain"; // WL in Liste
-		}
-	
-		return array(true);
+		return array(true,$neu,'message',$row->id);
 	
 	}
 
 
 	function cancel() {
 		
-		$this->adminLink->view = "terminemain";
-		$this->adminLink->makeURL();
+		$adminLink = new AdminLink();
+		$adminLink->view = "terminemain";
+		$adminLink->makeURL();
 		$app = JFactory::getApplication();
-		$app->redirect( $this->adminLink->url );
+		$app->redirect( $adminLink->url );
 		
 	}
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -20,21 +20,11 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		// turnierid
-		$this->registrationid = clm_core::$load->request_int('registrationid');
-		$this->turnierid = clm_core::$load->request_int('turnierid');
-		$this->snrmax = clm_core::$load->request_int('snrmax');
-		
-		$this->_db	= JFactory::getDBO();		
 		$this->app 	= JFactory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
 		$this->registerTask( 'copy_to', 'save' );
-	
-		$this->adminLink = new AdminLink();
-		$this->adminLink->more = array('registrationid' => $this->registrationid);
-		$this->adminLink->view = "turregistrationedit";
 	
 	}
 
@@ -44,8 +34,23 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 	
 		$this->_saveDo();
 
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		// turnierid
+		$registrationid = clm_core::$load->request_int('registrationid');
+		$turnierid = clm_core::$load->request_int('turnierid');
+		
+		$adminLink = new AdminLink();
+		// wenn 'apply', weiterleiten in form
+		if ($task == 'apply' OR $task == 'copy_to') {
+			// Weiterleitung bleibt im Formular
+			$adminLink->more = array('registrationid' => $registrationid);
+			$adminLink->view = "turregistrationedit";
+		} else {
+			// Weiterleitung in Liste
+			$adminLink->more = array('id' => $turnierid);
+			$adminLink->view = "turregistrations"; // WL in Liste
+		}
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 	
 	}
 	
@@ -54,9 +59,14 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 	
 		defined('_JEXEC') or die( 'Invalid Token' );
 	
+		// turnierid
+		$registrationid = clm_core::$load->request_int('registrationid');
+		$turnierid = clm_core::$load->request_int('turnierid');
+		$snrmax = clm_core::$load->request_int('snrmax');
+
 		// Instanz der Tabelle
 		$rowt = JTable::getInstance( 'turniere', 'TableCLM' );
-		$rowt->load( $this->turnierid ); // Daten zu dieser Turnier-ID laden
+		$rowt->load( $turnierid ); // Daten zu dieser Turnier-ID laden
 
 		$clmAccess = clm_core::$access;      
 		if (($rowt->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
@@ -69,7 +79,7 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		
 		// Instanz der Tabelle
 		$row = JTable::getInstance( 'registrations', 'TableCLM' );
-		$row->load( $this->registrationid ); // Daten zu dieser ID laden
+		$row->load( $registrationid ); // Daten zu dieser ID laden
 
 		if ($task == 'copy_to') {
 			// Turnierdaten
@@ -85,8 +95,6 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 			if ($text != '') {
 				$this->app->enqueueMessage( $text );
 				// Weiterleitung zurück in Liste
-				$this->adminLink->more = array('id' => $this->turnierid);
-				$this->adminLink->view = "turregistrations"; // WL in Liste
 				return false;
 			}
 		}
@@ -130,7 +138,7 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 			$tlnr = JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
 			$tlnr->sid		= $rowt->sid;
 			$tlnr->turnier	= $row->tid;
-			$tlnr->snr		= $this->snrmax + 1;  // 0
+			$tlnr->snr		= $snrmax + 1;  // 0
 			$tlnr->name		= $registrationname;
 			$tlnr->birthYear = $row->birthYear;
 			$tlnr->geschlecht = $row->geschlecht;
@@ -182,30 +190,25 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		// Log schreiben
 		$clmLog = new CLMLog();
 		$clmLog->aktion = $text;
-		$clmLog->params = array('tid' => $this->turnierid, 'rid' => $this->registrationid, 'name' => $registrationname); // TurnierID wird als LigaID gespeichert
+		$clmLog->params = array('tid' => $turnierid, 'rid' => $registrationid, 'name' => $registrationname); // TurnierID wird als LigaID gespeichert
 		$clmLog->write();
 								   
 		$this->app->enqueueMessage( $text );
 
-		// wenn 'apply', weiterleiten in form
-		if ($task == 'apply') {
-			// Weiterleitung bleibt im Formular
-			$this->adminLink->more = array('registrationid' => $this->registrationid);
-		} else {
-			// Weiterleitung in Liste
-			$this->adminLink->more = array('id' => $this->turnierid);
-			$this->adminLink->view = "turregistrations"; // WL in Liste
-		}
 		return true;
 	
 	}
 
 	function cancel() {
 		
-		$this->adminLink->view = "turregistrations";
-		$this->adminLink->more = array('id' => $this->turnierid);
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		// turnierid
+		$turnierid = clm_core::$load->request_int('turnierid');
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turregistrations";
+		$adminLink->more = array('id' => $turnierid);
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 		
 	}
 

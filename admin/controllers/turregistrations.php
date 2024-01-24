@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team. All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -19,63 +19,71 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		// turnierid
-		$this->id = clm_core::$load->request_int('id');
-		
-		$this->_db	= JFactory::getDBO();
 		$this->app 	= JFactory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'unactive','active' );
 
-		$this->adminLink = new AdminLink();
-		$this->adminLink->view = "turregistrations";
-		$this->adminLink->more = array('id' => $this->id);
-	
 	}
 
 	function turform() {
 		
-		$this->adminLink->view = "turform";
-		$this->adminLink->makeURL();
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turform";
+		$adminLink->more = array('id' => $id);
+		$adminLink->makeURL();
 		
-		$this->app->redirect( $this->adminLink->url );
+		$this->app->redirect( $adminLink->url );
 	
 	}
 
 
 	function del_registrations() {
+
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+
 		// ausgewählte Einträge
 		$cid = clm_core::$load->request_array_int('cid');
-		$output = clm_core::$api->db_tournament_registration_del($this->id,$cid);
+		$output = clm_core::$api->db_tournament_registration_del($id,$cid);
 		$error = clm_core::$load->load_view("notification", array($output[1],false));	
 
 		// Message
 		$this->app->enqueueMessage($error[0][0]);
 
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		$adminLink = new AdminLink();
+		$adminLink->view = "turregistrations";
+		$adminLink->more = array('id' => $id);
+		$adminLink->makeURL();
+		
+		$this->app->redirect( $adminLink->url );
 	}
 
 	function edit_registration() {
+
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+
 		// ausgewählte Einträge
 		$cid = clm_core::$load->request_array_int('cid');
 		if (is_null($cid)) $count = 0;
 		else $count = count($cid);
 
+		$adminLink = new AdminLink();
 		if ($count < 1) {
 			$this->app->enqueueMessage( JText::_('NO_ITEM_SELECTED'), 'warning' );
-			$this->adminLink = new AdminLink();
-			$this->adminLink->view = "turregistrations";
-			$this->adminLink->more = array('id' => $this->id);
-			$this->adminLink->makeURL();
-			$this->setRedirect( $this->adminLink->url );
+			$adminLink->view = "turregistrations";
+			$adminLink->more = array('id' => $id);
 		} else {
-			$this->adminLink->view = "turregistrationedit";
-			$this->adminLink->more = array('registrationid' => $cid[0]);
-			$this->adminLink->makeURL();
-			$this->app->redirect( $this->adminLink->url );
+			$adminLink->view = "turregistrationedit";
+			$adminLink->more = array('registrationid' => $cid[0]);
 		}
+		$adminLink->makeURL();
+		
+		$this->app->redirect( $adminLink->url );
 	}
 
 
@@ -83,8 +91,15 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 	
 		$this->_removeDo();
 
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turregistrations";
+		$adminLink->more = array('id' => $id);
+		$adminLink->makeURL();
+		
+		$this->app->redirect( $adminLink->url );
 	
 	}
 
@@ -94,9 +109,11 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		// Check for request forgeries
 		defined('_JEXEC') or die( 'Invalid Token' );
 	
+		// turnierid
+		$id = clm_core::$load->request_int('id');
 		// Turnierdaten holen
 		$turnier =JTable::getInstance( 'turniere', 'TableCLM' );
-		$turnier->load( $this->id ); // Daten zu dieser ID laden
+		$turnier->load( $id ); // Daten zu dieser ID laden
 
 		// Turnier existent?
 		if (!$turnier->id) {
@@ -111,7 +128,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		}
 	
 		// Wenn Ergebnisse gemeldet keine nachträgliche Löschung erlauben
-		$tournament = new CLMTournament($this->id);
+		$tournament = new CLMTournament($id);
 		$tournament->checkTournamentStarted();
 		if ($tournament->started) {
 			$this->app->enqueueMessage( JText::_( 'DELETION_NOT_POSSIBLE' ).": ".JText::_('RESULTS_ENTERED'), 'warning' );
@@ -120,6 +137,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 	
 		// ausgewählte Einträge
 		$cid = clm_core::$load->request_array_int('cid');
+		if (is_null($cid)) $cid = array();
 	
 		if (count($cid) < 1) {
 			$this->app->enqueueMessage( JText::_('NO_ITEM_SELECTED'), 'warning' );
@@ -160,8 +178,15 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		
 		$this->_order(1);
 		
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turregistrations";
+		$adminLink->more = array('id' => $id);
+		$adminLink->makeURL();
+		
+		$this->app->redirect( $adminLink->url );
 	
 	}
 
@@ -170,8 +195,15 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		
 		$this->_order(-1);
 		
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turregistrations";
+		$adminLink->more = array('id' => $id);
+		$adminLink->makeURL();
+		
+		$this->app->redirect( $adminLink->url );
 	
 	}
 
@@ -249,28 +281,59 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 										   
 		$this->app->enqueueMessage( JText::_('NEW_ORDERING_SAVED') );
 	
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turregistrations";
+		$adminLink->more = array('id' => $id);
+		$adminLink->makeURL();
+		
+		$this->app->redirect( $adminLink->url );
 	
 	}
 
 
 	function sortByTWZ() {
 		$this->_sortBy('twz');
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turregistrations";
+		$adminLink->more = array('id' => $id);
+		$adminLink->makeURL();
+		
+		$this->app->redirect( $adminLink->url );
 	}
 	
 	function sortByRandom() {
 		$this->_sortBy('random');
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turregistrations";
+		$adminLink->more = array('id' => $id);
+		$adminLink->makeURL();
+		
+		$this->app->redirect( $adminLink->url );
 	}
 	
 	function sortByOrdering() {
 		$this->_sortBy('ordering');
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turregistrations";
+		$adminLink->more = array('id' => $id);
+		$adminLink->makeURL();
+		
+		$this->app->redirect( $adminLink->url );
 	}
 	
 	function _sortBy($by) {
@@ -292,34 +355,35 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		}
 	
 		// Anzahl gemeldeter Spiele -> maximale Snr
+		$db	= JFactory::getDBO();
 		$query = "SELECT COUNT(id) FROM `#__clm_turniere_tlnr`"
-			." WHERE turnier =".$this->id
+			." WHERE turnier =".$id
 			;
-		$this->_db->setQuery($query);
-		$maximum = $this->_db->loadResult();
+		$db->setQuery($query);
+		$maximum = $db->loadResult();
 	
 		// alle Spieler in Reihenfolge laden
 		if ($by == 'ordering') {
 			$queryOrderBy = 'SELECT id FROM `#__clm_turniere_tlnr`'
-								.' WHERE turnier = '.$this->id
+								.' WHERE turnier = '.$id
 								.' ORDER BY ordering ASC'
 								;
 			$stringMessage = JText::_('ORDERED_BY_ORDERING');
 		} elseif ($by == 'twz') {
 			$queryOrderBy = 'SELECT id FROM `#__clm_turniere_tlnr`'
-								.' WHERE turnier = '.$this->id
+								.' WHERE turnier = '.$id
 								.' ORDER BY twz DESC'
 								;
 			$stringMessage = JText::_('ORDERED_BY_TWZ');
 		} elseif ($by == 'random') {
 			$queryOrderBy = 'SELECT id FROM `#__clm_turniere_tlnr`'
-								.' WHERE turnier = '.$this->id
+								.' WHERE turnier = '.$id
 								.' ORDER BY RAND()'
 								;
 			$stringMessage = JText::_('ORDERED_BY_RANDOM');
 		}
-		$this->_db->setQuery($queryOrderBy);
-		$players = $this->_db->loadObjectList();
+		$db->setQuery($queryOrderBy);
+		$players = $db->loadObjectList();
 	
 		$table	=JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
 		// Snr umsortieren
@@ -335,7 +399,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		// Log schreiben
 		$clmLog = new CLMLog();
 		$clmLog->aktion = $stringMessage;
-		$clmLog->params = array('sid' => $turnier->sid, 'tid' => $this->id, 'cids' => count($cid));
+		$clmLog->params = array('sid' => $turnier->sid, 'tid' => $id, 'cids' => count($cid));
 		$clmLog->write();
 		
 		$this->app->enqueueMessage( $stringMessage );
@@ -345,8 +409,15 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 
 	function setRanking() {
 		$this->_setRankingDo();
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turregistrations";
+		$adminLink->more = array('id' => $id);
+		$adminLink->makeURL();
+		
+		$this->app->redirect( $adminLink->url );
 	}
 
 
@@ -361,7 +432,10 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 			return false;
 		}
 	
-		$tournament = new CLMTournament($this->id, true);
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+
+		$tournament = new CLMTournament($id, true);
 		$tournament->checkTournamentStarted();
 		if (!$tournament->started) {
 			$this->app->enqueueMessage( JText::_( 'RANKING_NOT_POSSIBLE' ).": ".JText::_('NO_RESULTS_ENTERED'), 'warning' );
@@ -379,7 +453,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		// Log schreiben
 		$clmLog = new CLMLog();
 		$clmLog->aktion = $stringMessage;
-		$clmLog->params = array('sid' => $tournament->data->sid, 'tid' => $this->id);
+		$clmLog->params = array('sid' => $tournament->data->sid, 'tid' => $id);
 		$clmLog->write();
 		
 		$this->app->enqueueMessage( $stringMessage );
@@ -392,19 +466,30 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 
 	function cancel() {
 		
-		$this->adminLink->view = "turplayers";
-		$this->adminLink->makeURL();
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turplayers";
+		$adminLink->more = array('id' => $id);
+		$adminLink->makeURL();
 		
-		$this->app->redirect( $this->adminLink->url );
+		$this->app->redirect( $adminLink->url );
 		
 	}
 	function active() {
 
 		$this->_activeDo();
 
-		$this->adminLink->view = "turplayers";
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turplayers";
+		$adminLink->more = array('id' => $id);
+		$adminLink->makeURL();
+		
+		$this->app->redirect( $adminLink->url );
 		
 	}
 
@@ -413,6 +498,8 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		// Check for request forgeries
 		defined('_JEXEC') or die( 'Invalid Token' );
 
+		// turnierid
+		$id = clm_core::$load->request_int('id');
 		$cid = clm_core::$load->request_array_int('cid');
 		$tlnrID = $cid[0];
 	
@@ -448,7 +535,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		// Log
 		$clmLog = new CLMLog();
 		$clmLog->aktion = JText::_('PLAYER')." ".$tlnr->name." (ID: ".$tlnrID."): ".$task;
-		$clmLog->params = array('tid' => $this->id); // TurnierID wird als LigaID gespeichert
+		$clmLog->params = array('tid' => $id); // TurnierID wird als LigaID gespeichert
 		$clmLog->write();
 	
 	
@@ -478,9 +565,15 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 	// Weiterleitung!
 	function onlineRegList() {
 		
-		$this->adminLink->view = "turregistrations";
-		$this->adminLink->makeURL();		
-		$this->app->redirect( $this->adminLink->url );
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turregistrations";
+		$adminLink->more = array('id' => $id);
+		$adminLink->makeURL();
+		
+		$this->app->redirect( $adminLink->url );
 	
 	}
 

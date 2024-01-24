@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -15,16 +15,11 @@ class CLMControllerTurTeams extends JControllerLegacy
 		
 		parent::__construct( $config );
 		
-		// turnierid
-		$this->turnierid = clm_core::$load->request_int('turnierid');
-		
 		$this->app 	= JFactory::getApplication();
 			
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
 
-		$this->adminLink = new AdminLink();
-		$this->adminLink->view = "turplayers";
 	}
 
 	
@@ -33,14 +28,29 @@ class CLMControllerTurTeams extends JControllerLegacy
 		$result = $this->_saveDo();   
 		$app =JFactory::getApplication();
 		
-		if ($result[0]) { // erfolgreich?
-		
+		if ($result[0]) { // erfolgreich?		
 			$app->enqueueMessage( JText::_('TOURNAMENT_TEAMS_EDITED') );
 		} else {
 			$app->enqueueMessage( $result[2],$result[1] );					
 		}
-		$this->adminLink->makeURL();
-		$app->redirect( $this->adminLink->url );
+
+		// Task
+		$task = clm_core::$load->request_string('task');
+		$tid = clm_core::$load->request_string('tid');
+
+		$adminLink = new AdminLink();
+		// wenn 'apply', weiterleiten in form
+		if ($task == 'apply') {
+			// Weiterleitung bleibt im Formular
+			$adminLink->view = "turteams"; // WL in Liste
+			$adminLink->more = array('turnierid' => $tid);
+		} else {
+			// Weiterleitung in Liste
+			$adminLink->view = "turplayers"; // WL in Liste
+			$adminLink->more = array('id' => $tid);
+		}
+		$adminLink->makeURL();
+		$app->redirect( $adminLink->url );
 	
 	}
 
@@ -75,17 +85,6 @@ class CLMControllerTurTeams extends JControllerLegacy
 		$clmLog->params = array('sid' => $sid, 'tid' => $tid); 
 		$clmLog->write();
 		
-		// wenn 'apply', weiterleiten in form
-		if ($task == 'apply') {
-			// Weiterleitung bleibt im Formular
-			$this->adminLink->view = "turteams"; // WL in Liste
-			$this->adminLink->more = array('turnierid' => $tid);
-		} else {
-			// Weiterleitung in Liste
-			$this->adminLink->view = "turplayers"; // WL in Liste
-			$this->adminLink->more = array('id' => $tid);
-		}
-	
 		return array(true);
 	
 	}
@@ -94,10 +93,13 @@ class CLMControllerTurTeams extends JControllerLegacy
 
 	function cancel() {
 		
-		$this->adminLink->view = "turplayers";
-		$this->adminLink->more = array('id' => $this->turnierid);
-		$this->adminLink->makeURL();
-		$this->app->redirect( $this->adminLink->url );
+		$tid = clm_core::$load->request_string('tid');
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turplayers";
+		$adminLink->more = array('id' => $tid);
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
 		
 	}
 
