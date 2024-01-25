@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -19,6 +19,7 @@ $logs[]="db_ecf_club";
 $logs[]="db_ecf_player";
 $logs[]="db_ecf_org";
 $logs[]="db_logging_del";
+$logs[]="db_logging_del2";
 $logs[]="db_report_save";
 $logs[]="db_season_enable";
 $logs[]="db_season_delete";

@@ -1,3 +1,9 @@
+/*
+ * @ CLM Component
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 /* Ikonen  */
 #clm .clm .clm_button_big,  #clm .clm .clm_button_big:disabled{
 	-webkit-border-radius: 0;
@@ -71,6 +77,9 @@
 }
 #clm .clm .clm_button_big_cancel span {
 	background-image:url(../images/bluestork/cancel.png);
+}
+#clm .clm .clm_button_big_cancel2 span {
+	background-image:url(../images/bluestork/cancel2.png);
 }
 #clm .clm .clm_button_big:disabled span{
      	background-position: 0 32px; 
