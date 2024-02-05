@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -100,12 +100,17 @@ $pdf->SetTextColor(0);
 		$pdf->SetFillColor(240); }	
 if ( ($value->spieler != 0 AND $value->gegner != 0) OR !is_null($value->ergebnis)) {
 
+	if (is_null($value->wname)) $value->wname = '';
+	if (is_null($value->sname)) $value->sname = '';
 	$pdf->Cell($br00,$zelle," ",0,0,'C');
 	$pdf->Cell($br00,$zelle,$value->brett,1,0,'C',1); 
 	if ($this->turnier->typ != '3' AND $this->turnier->typ != '5') {
 		if (isset($this->points[$value->spieler])) { $points = $this->points[$value->spieler]; }
 		else { $points = 0; }
-		$pdf->Cell($br01,$zelle,clm_core::$load->utf8decode($value->wname)." (".$points.")",1,0,'L',1);
+		if ($value->wname != '')
+			$pdf->Cell($br01,$zelle,clm_core::$load->utf8decode($value->wname)." (".$points.")",1,0,'L',1);
+		else
+			$pdf->Cell($br01,"",1,0,'L',1);
 	} else {
 		$pdf->Cell($br01,$zelle,clm_core::$load->utf8decode($value->wname),1,0,'L',1);
 	}
@@ -114,7 +119,10 @@ if ( ($value->spieler != 0 AND $value->gegner != 0) OR !is_null($value->ergebnis
 	if ($this->turnier->typ != '3' AND $this->turnier->typ != '5') {
 		if (isset($this->points[$value->gegner])) { $points = $this->points[$value->gegner]; }
 		else { $points = 0; }
-		$pdf->Cell($br04,$zelle,clm_core::$load->utf8decode($value->sname)." (".$points.")",1,0,'L',1); 
+		if ($value->sname != '')
+			$pdf->Cell($br04,$zelle,clm_core::$load->utf8decode($value->sname)." (".$points.")",1,0,'L',1); 
+		else
+			$pdf->Cell($br04,$zelle,"",1,0,'L',1); 
 	} else {
 		$pdf->Cell($br01,$zelle,clm_core::$load->utf8decode($value->sname),1,0,'L',1);
 	}

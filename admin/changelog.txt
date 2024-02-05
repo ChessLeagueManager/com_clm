@@ -19,6 +19,7 @@ $ -> Language fix or change
 + Loggimg: neue Löschfunktion, fast alles löschen
 ^ Rangfolgemeldung im FE: Eine Mail je Person und Funktion
 # Teamwettbewerbe: Berechnung Wertpunkte nach Annullieren
+^ Copyright 2008-2024
 
 - - - - - 4.1.3 - [24-12-2023] - - - - - - - - - - - - - - - - - - - -
 # Admin View Meldeliste: Einfügen Spieler und Prüfung Doppeleintrag
