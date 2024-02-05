@@ -20,6 +20,7 @@ $ -> Language fix or change
 ^ Rangfolgemeldung im FE: Eine Mail je Person und Funktion
 # Teamwettbewerbe: Berechnung Wertpunkte nach Annullieren
 ^ Copyright 2008-2024
+# Rundenbericht: Anzeige Brettergebnis nach TO-Korrektur bei 3-2-1-Wertung							
 
 - - - - - 4.1.3 - [24-12-2023] - - - - - - - - - - - - - - - - - - - -
 # Admin View Meldeliste: Einfügen Spieler und Prüfung Doppeleintrag
