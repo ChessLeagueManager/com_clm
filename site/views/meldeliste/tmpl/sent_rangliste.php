@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -531,9 +531,12 @@ if ( $send == 1 ) {
 	}
 	
 		// Mail Mannschaftsleiter
+	$a_mail = array();
 	foreach ($mannschaft as $mannschaft1) { 
-	  if (isset($mannschaft1->mf_email) AND clm_core::$load->is_email($mannschaft1->mf_email)) {
+	  if (in_array($mannschaft1->mf_email, $a_mail)) continue;
+	  if (isset($mannschaft1->mf_email) AND clm_core::$load->is_email($mannschaft1->mf_email)) {	
 		$recipient = $mannschaft1->mf_email;
+		$a_mail[] = $recipient;
 		$body_html_mf = '
 		<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px;">
 		<tr>
@@ -562,10 +565,13 @@ if ( $send == 1 ) {
 	}
 
 	// Mail Staffelleiter
+	$a_mail = array();
 	foreach ($mannschaft as $mannschaft1) { 
 	  $z_liga = $mannschaft1->liga;
+	  if (in_array($a_ligen[$z_liga]->sl_email, $a_mail)) continue;
 	  if ($sl_mail == 1 AND isset($a_ligen[$z_liga]->sl_email) AND clm_core::$load->is_email($a_ligen[$z_liga]->sl_email)) {
 		$recipient = $a_ligen[$z_liga]->sl_email;
+		$a_mail[] = $recipient;
 		$body_html_sl = '
 		<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px;">
 		<tr>';
