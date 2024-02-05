@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -43,7 +43,7 @@
 		$stamm = clm_core::$db->liga->get($id)->stamm;
 	
 		// Mannschaftsdaten sammeln
-		$query = "SELECT a.sid, a.lid, a.runde, a.dg, a.paar, a.heim, a.dwz_editor "
+		$query = "SELECT a.sid, a.lid, a.runde, a.dg, a.paar, a.heim, a.dwz_editor, a.brettpunkte "
 			." FROM #__clm_rnd_man as a "
 			." WHERE a.lid = ".$id;
 		if ($p_runde != 0)
@@ -54,18 +54,22 @@
 			// nur Paarung neu berechnen, wenn nicht korrigiert durch 'Turnierwertung ändern'
 			if (is_null($mdata->dwz_editor) OR $mdata->dwz_editor == 0) {
 				// Wertpunkte Heim berechnen
-				$query	= "SELECT punkte, brett "
-					." FROM #__clm_rnd_spl "
-					." WHERE sid = ".$mdata->sid
-					." AND lid = ".$mdata->lid
-					." AND runde = ".$mdata->runde
-					." AND paar = ".$mdata->paar
-					." AND dg = ".$mdata->dg
-					." AND heim = ".$mdata->heim;
-				$sdata	= clm_core::$db->loadObjectList($query);
-				$wpunkte=0;
-				foreach ($sdata as $sdata) {
-					$wpunkte = $wpunkte + (($stamm + 1 - $sdata->brett) * $sdata->punkte);
+				if ($mdata->brettpunkte == 0) {
+					$wpunkte = 0;
+				} else {
+					$query	= "SELECT punkte, brett "
+						." FROM #__clm_rnd_spl "
+						." WHERE sid = ".$mdata->sid
+						." AND lid = ".$mdata->lid
+						." AND runde = ".$mdata->runde
+						." AND paar = ".$mdata->paar
+						." AND dg = ".$mdata->dg
+						." AND heim = ".$mdata->heim;
+					$sdata	= clm_core::$db->loadObjectList($query);
+					$wpunkte=0;
+					foreach ($sdata as $sdata) {
+						$wpunkte = $wpunkte + (($stamm + 1 - $sdata->brett) * $sdata->punkte);
+					}
 				}
 				// Mannschaftstabelle updaten
 				$query	= "UPDATE #__clm_rnd_man"
