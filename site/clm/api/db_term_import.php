@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  *
@@ -14,22 +14,28 @@ function clm_api_db_term_import($file,$test=false) {
 	if ($test)	echo "<br><br>Test - keine Übernahme der Daten ins CLM!"; 
 if ($debug > 0) { echo "<br><br>-- allgemeine Daten --";	}
 if ($debug > 0) { echo "<br><br>datei: ".$file; } 		//echo "<br>end"; //die();
-
+	$csvText = '';
 	$fp = fopen($file, 'r+');
 	fputs($fp, $csvText);
 	rewind($fp);
 
 	$lines = [];
+if ($debug > 0) { echo "<br><br>1lines :"; var_dump($lines); }
 	while ( ($data = fgetcsv($fp) ) !== FALSE ) {
+if ($debug > 0) { echo "<br><br>1data :"; var_dump($data); }
     $lines[] = $data;
 	}
+if ($debug > 0) { echo "<br><br>2lines :"; var_dump($lines); }
+if ($debug > 0) { echo "<br><br> $lang->name : $lang->beschreibung"; }
 	$znr = 0;
 	$ii = 0;
 	$counter = 0;
 	// Durchgehen des Zeilen-Arrays 
-	foreach ($lines as $line) {
+	foreach ($lines as $line1) {
 		$ii++;
-if ($debug > 0) { echo "<br><br>line $ii :"; var_dump($line); }
+		$line = explode(',',$line1[0]);
+if ($debug > 0) { echo "<br><br>line1 $ii :"; var_dump($line1); }
+if ($debug > 0) { echo "<br>line $ii :"; var_dump($line); }
 if ($debug > 0) { echo "<br>line0 $ii :"; var_dump($line[0]); }
 		if (!isset($line[0]) OR $line[0] == '' OR $line[0] == ' ') continue;
 		$znr++;

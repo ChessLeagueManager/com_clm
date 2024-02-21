@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -53,15 +53,18 @@ class CLMControllertermineimport extends JControllerLegacy
 		$filename = clm_core::$load->request_string('termine_file', '');
 		//pgn-Verzeichnis
 		$path = JPATH_COMPONENT . DS . "pgn" . DS;
-		$result = clm_core::$api->db_term_import($path.$filename,false);		
-		
+		if ( strtolower(JFile::getExt($filename) ) == 'ics') {
+			$result = clm_core::$api->db_term_import_ics($path.$filename,false);		
+		} else {
+			$result = clm_core::$api->db_term_import($path.$filename,false);		
+		}
 		$adminLink = new AdminLink();
 		$adminLink->view = "terminemain";
 		$adminLink->makeURL();
 		if($result[0] === true ) {
 			$msg = $result[2].' '.$lang->{$result[1]};
 		} else {			
-			$msg = $lang->error.': '.$lang->$result[1]; 
+			$msg = $lang->error.': '.$lang->{$result[1]}; 
 		}	
 		$this->app->enqueueMessage( $msg );
 		$this->app->redirect($adminLink->url); 		

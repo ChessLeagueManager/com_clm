@@ -57,6 +57,9 @@ $rights["db_schedule"]=array();
 $rights["view_schedule"]=array();
 $rights["view_schedule_pdf"]=array();
 $rights["view_schedule_xls"]=array();
+$rights["view_schedule_ics"]=array();
+$rights["db_termine"]=array();
+$rights["view_termine_ics"]=array();
 $rights["db_paarungsliste"]=array();
 $rights["view_paarungsliste_xls"]=array();
 $rights["db_terminliste"]=array();
@@ -112,5 +115,6 @@ $rights["db_arena_import"]=array(); // Turnier aus lechess importieren
 $rights["db_dewis_user"]=array(); // Online Club Check für User
 $rights["db_check_season_user"]=array(); // Online Season Check für Ligen und Turniere
 $rights["db_term_import"]=array(); // Calenderdatei im csv-Format importieren
+$rights["db_term_import_ics"]=array(); // Calenderdatei im ics-Format importieren (iCal)
 $rights["db_draw_ch"]=array(); // Auslosung Schweizer System
 ?>

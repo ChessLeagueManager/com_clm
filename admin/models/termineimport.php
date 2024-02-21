@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -20,7 +20,7 @@ class CLMModeltermineimport extends JModelLegacy {
 		
 		$filesDir = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "pgn" . DIRECTORY_SEPARATOR;
 		if (!file_exists($filesDir)) mkdir($filesDir);
-		$this->TermineFiles = JFolder::files( $filesDir, '.CSV$|.csv$', false, true );
+		$this->TermineFiles = JFolder::files( $filesDir, '.CSV$|.csv$|.ics$', false, true );
 		
 		return $this->TermineFiles;
 	}
@@ -38,7 +38,7 @@ class CLMModeltermineimport extends JModelLegacy {
 		$src = $file['tmp_name'];
 		$dest = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "pgn" . DIRECTORY_SEPARATOR . $filename;
 		//Datei wird auf dem Server gespeichert (abfrage auf .csv Endung)
-		if ( strtolower(JFile::getExt($filename) ) == 'csv') {
+		if ( strtolower(JFile::getExt($filename) ) == 'csv' OR strtolower(JFile::getExt($filename) ) == 'ics') {
 			if ( JFile::upload($src, $dest) ) {
 				$msg = JText::_( 'SWT_UPLOAD_SUCCESS' ); 
 			} else {
@@ -68,7 +68,7 @@ class CLMModeltermineimport extends JModelLegacy {
 		return $msg;
 	}
 	
-	function import() {
+	function import1() {
 		//Name der zu importierenden Datei wird geladen
 		$filename = clm_core::$load->request_string('termine_file', '');
 		//pgn-Verzeichnis

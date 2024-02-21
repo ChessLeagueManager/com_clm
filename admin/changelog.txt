@@ -21,6 +21,9 @@ $ -> Language fix or change
 # Teamwettbewerbe: Berechnung Wertpunkte nach Annullieren
 ^ Copyright 2008-2024
 # Rundenbericht: Anzeige Brettergebnis nach TO-Korrektur bei 3-2-1-Wertung							
+# Einzelturniere: pdf-Rundenbericht Darstellung kampflose Paarungen
+^ Termine: Export und Import im iCal-format
++ Saisonüberblick: Ausgabe Kalenderdatei
 
 - - - - - 4.1.3 - [24-12-2023] - - - - - - - - - - - - - - - - - - - -
 # Admin View Meldeliste: Einfügen Spieler und Prüfung Doppeleintrag

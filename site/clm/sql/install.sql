@@ -1,6 +1,6 @@
 --
 -- @ Chess League Manager (CLM) Component 
--- @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+-- @Copyright (C) 2008-2024 CLM Team.  All rights reserved
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 -- @link http://www.chessleaguemanager.de
 --
@@ -1075,6 +1075,9 @@ CREATE TABLE IF NOT EXISTS `#__clm_termine` (
   `checked_out_time` datetime NOT NULL DEFAULT '1970-01-01 00:00:00',
   `ordering` int(11) NOT NULL DEFAULT '0',
   `event_link` varchar(500) NOT NULL,
+  `uid` varchar(256) NOT NULL DEFAULT '',
+  `created` varchar(33) NOT NULL DEFAULT '',
+  `last_modified` varchar(16) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `published` (`published`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

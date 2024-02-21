@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Fjodor Schäfer
@@ -10,6 +10,7 @@
 defined('_JEXEC') or die('Restricted access');
 //JHtml::_('behavior.tooltip', '.CLMTooltip');
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
+$lang = clm_core::$lang->schedule;
 
 $sid	= clm_core::$load->request_int('saison', 1);	
 $liga	= clm_core::$load->request_int('liga', 1);
@@ -135,8 +136,10 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
 				$linkname = "index.php?option=com_clm&amp;view=turnier_runde&amp;runde=". $termine[$t]->nr ."&amp;turnier=". $termine[$t]->typ_id; }
                 
             // Veranstaltungsbereich / Ort verlinken
+			$ics_link = '';
             if ($termine[$t]->source == 'termin') { 
 				$linktyp = $termine[$t]->typ; 
+				$ics_link = clm_core::$load->create_link_ics('termine', $lang->ics, array('layout' => 'termine', 'id' => $termine[$t]->id));
 			} elseif ($termine[$t]->source == 'liga') { 
 				$linktyp = '<a href="index.php?option=com_clm&amp;view=rangliste&amp;saison='. $termine[$t]->sid .'&amp;liga='. $termine[$t]->typ_id;
 				if ($itemid <>'') { $linktyp .= "&Itemid=". $itemid; }
@@ -178,7 +181,7 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
 						<a href="<?php echo $linkname0; if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php  echo $termine[$t]->zname; ?></a>
 					<?php echo ' - '; } ?>
 				<a href="<?php echo $linkname; if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php  echo $termine[$t]->name; ?></a></td>
-                <td width="120" class="typ"><?php echo $linktyp; ?></td>
+                <td width="120" class="typ"><?php echo $ics_link; echo $linktyp; ?></td>
             </tr>
             
         <?php  }}  // ENDE : Terminschleife ?>
