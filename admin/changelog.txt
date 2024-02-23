@@ -24,6 +24,7 @@ $ -> Language fix or change
 # Einzelturniere: pdf-Rundenbericht Darstellung kampflose Paarungen
 ^ Termine: Export und Import im iCal-format
 + Saisonüberblick: Ausgabe Kalenderdatei
+^ Ligastatistik: Diagramme - Ersatz von apis.ggogle durch gstatic
 
 - - - - - 4.1.3 - [24-12-2023] - - - - - - - - - - - - - - - - - - - -
 # Admin View Meldeliste: Einfügen Spieler und Prüfung Doppeleintrag

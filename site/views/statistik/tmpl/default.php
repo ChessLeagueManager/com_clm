@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -210,6 +210,7 @@ $sum_schwarz = 0;
 
 <!-- Google Charts-->
 <?php if ( $googlecharts == "1" ) { ?>
+<!-- bisherige google charts ausblenden
     <tr>
     	<td colspan="14">
         <br />
@@ -244,10 +245,113 @@ for ($x=0; $x < $bretter; $x++) { echo $x+1; if ( $x < $bretter-1) { echo "|"; }
 <img src="http://chart.apis.google.com/chart
 ?chs=300x225
 &cht=p
-&chd=t:<?php echo $sum_weiss/2; ?>,<?php echo $sum_schwarz/2; ?>,<?php echo $remis[0]->remis; ?>,<?php echo $kampflos[0]->kampflos; ?>
+&chd=t:<?php echo $sum_weiss/1; ?>,<?php echo $sum_schwarz/1; ?>,<?php echo $remis[0]->remis; ?>,<?php echo $kampflos[0]->kampflos; ?>
 &chdl=<?php echo JText::_('LEAGUE_STAT_WHITE') ?>|<?php echo JText::_('LEAGUE_STAT_BLACK') ?>|<?php echo JText::_('LEAGUE_STAT_REMIS') ?>|<?php echo JText::_('LEAGUE_STAT_UNCONTESTED') ?>
 &chdlp=b" width="300" height="225" alt="" />
+-->
+	
+<?php
+//------------- neuer Ansatz
+$brett_all2 = array();
+	foreach ($rbrett as $rbrett1) {
+		$brett_all2[($rbrett1->brett - 1)]['r'] = $rbrett1->sum;
+	}
+//echo "<br><br>rstring ".$wstring; //die();
+	foreach ($kbrett as $kbrett1) {
+		$brett_all2[($kbrett1->brett - 1)]['k'] = $kbrett1->sum;
+	}
+//echo "<br><br>brett_all2 "; var_dump($brett_all2); //die();
 
+	for ($x=0; $x < $bretter; $x++) {
+//echo "<br><br>$x"; echo ' w '.$brett_all[$x]['w']; echo ' s '.$brett_all[$x]['s']; var_dump($rbrett[$r]->sum);
+		if ($x == 0) {
+			$wstring = ''; $wsum = 0;
+			$sstring = ''; $ssum = 0;
+			$rstring = ''; $rsum = 0;
+			$kstring = ''; $ksum = 0;
+		}
+		$wstring .= ' '.$brett_all[$x]['w'].',';
+		$sstring .= ' '.$brett_all[$x]['s'].',';
+		if (isset($brett_all2[$x]['r'])) $rstring .= ' '.$brett_all2[$x]['r'].','; else $rstring .= ' 0,';
+		if (isset($brett_all2[$x]['k'])) $kstring .= ' '.$brett_all2[$x]['k'].','; else $kstring .= ' 0,';
+	}
+?>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawPieChart);
+	  google.charts.setOnLoadCallback(drawBarChart);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawPieChart() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows([
+          ['<?php echo JText::_('LEAGUE_STAT_WHITE'); ?>', <?php echo $sum_weiss/1; ?>],
+          ['<?php echo JText::_('LEAGUE_STAT_BLACK') ?>', <?php echo $sum_schwarz/1; ?>],
+          ['<?php echo JText::_('LEAGUE_STAT_REMIS') ?>', <?php echo $remis[0]->remis; ?>],
+          ['<?php echo JText::_('LEAGUE_STAT_UNCONTESTED') ?>', <?php echo $kampflos[0]->kampflos; ?>],
+        ]);
+
+        // Set chart options
+        var options = {'title':'prozentuale Verteilung',
+                       'width':450,
+                       'height':450};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+
+   function drawBarChart() {
+    var data = google.visualization.arrayToDataTable([
+        ['Ergebnis', 'Brett 1', 'Brett 2', 'Brett 3', 'Brett 4',
+         'Brett 5', 'Brett 6', 'Brett 7', 'Brett 8', { role: 'annotation' } ],
+        ['<?php echo JText::_('LEAGUE_STAT_WHITE'); ?>',<?php echo $wstring; ?> ''],
+        ['<?php echo JText::_('LEAGUE_STAT_BLACK') ?>',<?php echo $sstring; ?> ''],
+        ['<?php echo JText::_('LEAGUE_STAT_REMIS') ?>',<?php echo $rstring; ?> ''],
+        ['<?php echo JText::_('LEAGUE_STAT_UNCONTESTED') ?>',<?php echo $kstring; ?> '']
+     ]);
+
+
+      var view = new google.visualization.DataView(data);
+      view.setColumns([0, 1, 2, 3, 4, 5, 6, 7,
+                       { calc: "stringify",
+//                         sourceColumn: 1,
+                         type: "string",
+                         role: "annotation" },
+                       8]);
+
+      var options = {
+        title: "in absoluten Zahlen",
+        width: 600,
+        height: 450,
+        bar: {groupWidth: "95%"},
+           isStacked: true,
+		   legend: { position: 'top', maxLines: 2 },
+      };
+      var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+      chart.draw(view, options);
+  }
+  </script>
+	<table><tr>
+    <!--Div that will hold the pie chart-->
+    <td><div id="chart_div"></div></td>
+	<td><div id="columnchart_values" style="width: 900px; height: 300px;"></div></td>
+	</tr></table>
+<?php
+//------------- Ende neuer Ansatz
+?>
         </td>
     </tr>
 <?php } ?>
@@ -257,7 +361,7 @@ for ($x=0; $x < $bretter; $x++) { echo $x+1; if ( $x < $bretter-1) { echo "|"; }
 <?php } 
 $count = count($bestenliste);
 ?>
-<br>
+<br><br><br><br>
 
 <a title="<?php echo JText::_('LEAGUE_STAT_PLAYERLIST') ?>" href="index.php?option=com_clm&amp;view=statistik&amp;saison=<?php echo $sid; ?>&amp;liga=<?php echo $lid; ?>&amp;layout=bestenliste<?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><h4><?php echo JText::_('LEAGUE_RATING_BEST_PLAYER_I') ?> <?php if ($count < 10 AND $count >0) { echo $count; } else { ?> 10<?php } ?> <?php echo JText::_('LEAGUE_RATING_BEST_PLAYER_II') ?> <?php echo $liga[0]->name; ?></h4></a>
 <?php if (!$bestenliste) {
