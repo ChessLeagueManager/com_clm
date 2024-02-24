@@ -209,6 +209,15 @@ static function nachmeldung_delete()
 		$filter_mgl	= $mainframe->getUserState( "$option.filter_mgl",'filter_mgl',0,'int' );
 	}
 
+	if ($countryversion =="de") {
+		$result = clm_core::$api->db_player_check($sid,$zps,$spieler);
+		if (!$result[0]) {
+			$mainframe->enqueueMessage( 'Löschen von '.$zps.'-'.$spieler.' nicht möglich, '.$result[1], 'warning' );
+			$link = 'index.php?option='.$option.'&section='.$section;
+			$mainframe->redirect( $link );
+		}
+	}
+
 	$query	= "DELETE FROM #__clm_dwz_spieler"
 		." WHERE ZPS = '$zps'"
 		." AND sid =".$sid;
@@ -482,6 +491,15 @@ static function spieler_delete()
 	}
 
 	$zps	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
+
+	if ($countryversion =="de") {
+		$result = clm_core::$api->db_player_check($sid,$zps,$spieler);
+		if (!$result[0]) {
+			$mainframe->enqueueMessage( 'Löschen von '.$zps.'-'.$spieler.' nicht möglich, '.$result[1], 'warning' );
+			$link = 'index.php?option='.$option.'&section='.$section;
+			$mainframe->redirect( $link );
+		}
+	}
 
 	$query	= "DELETE FROM #__clm_dwz_spieler"
 		." WHERE ZPS = '$zps'"

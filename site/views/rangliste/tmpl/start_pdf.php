@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -28,12 +28,12 @@ $liga=$this->liga;
 	if (!isset($params['dwz_date'])) $params['dwz_date'] = '1970-01-01';
 $punkte=$this->punkte;
 $spielfrei=$this->spielfrei;
-//$dwzschnitt=$this->dwzschnitt;
 $mannschaft	=$this->mannschaft; 
 $mleiter	=$this->mleiter; 
-//$count		=$this->count;  
+
 //Bereinigung count
 foreach ( $this->count as $c1 ) {
+	if (is_null($c1->name)) $c1->name = '';	
 	if (!is_null($c1->tln_nr)) $count[] = $c1;
 }
 	if ($params['dwz_date'] != '0000-00-00' AND $params['dwz_date'] != '1970-01-01') {

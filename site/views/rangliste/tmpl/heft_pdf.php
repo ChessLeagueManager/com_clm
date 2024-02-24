@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -802,6 +802,7 @@ for ($x=0; $x< $anz_player; $x++){
 		$ic++; }
 	if (!isset($count[$ic])) break;
 	if ($count[$ic]->PKZ === NULL) { $count[$ic]->PKZ = ""; }
+	if (is_null($count[$ic]->name)) { $count[$ic]->name = ""; }
 	if ($count[$ic]->tln_nr != $mannschaft[$m]->tln_nr) break;
 	if (!isset($count[$ic]->rrang)) {
 		$pdf->Cell($breite1,$zelle,' ',0,0);
