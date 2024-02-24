@@ -26,6 +26,7 @@ $ -> Language fix or change
 + Saisonüberblick: Ausgabe Kalenderdatei
 ^ Ligastatistik: Diagramme - Ersatz von apis.ggogle durch gstatic
 # Mitgliederverwaltung: Prüfung vor dem Löschen von Spielern
+# Ligaauswertung: keine Warnung bei kampflosen Paarungen 
 
 - - - - - 4.1.3 - [24-12-2023] - - - - - - - - - - - - - - - - - - - -
 # Admin View Meldeliste: Einfügen Spieler und Prüfung Doppeleintrag

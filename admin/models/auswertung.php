@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -148,11 +148,24 @@ function datei() {
 			if (isset($rnd_proof[0])) $rnd_count = $rnd_proof[0]->cnt_runde;
 			else $rnd_count = 0;
 			$all_count += $rnd_count;
+ 			
+			// kampflose Paarungen vermindern die Anzahl der zu erwarteten Einzelergebnisse
+			$sql = " SELECT * FROM `#__clm_rnd_man` as me"
+				." WHERE me.lid = ".$liga_name[0]->id
+				." AND me.dg = ".$dg
+				." AND me.runde = ".$rnd
+				." AND me.ergebnis = 5 "
+				;
+			$db->setQuery($sql);
+			$rnd_kampflos =$db->loadObjectList();
+			if (is_null($rnd_kampflos)) $count_kampflos = 0;
+			else $count_kampflos = count($rnd_kampflos) * $liga_name[0]->stamm;
+			
 			$fehler	= 0;
-			if($rnd_count < $counter AND $rnd_count == 0){
+			if($rnd_count < ($counter - $count_kampflos) AND $rnd_count == 0){
 				$app->enqueueMessage(JText::_( 'DB_WTEXT0' ).JText::_( 'DB_ROUND' ).$rnd.JText::_( 'DB_DG' ).$dg, 'warning');
 				$fehler = 1;
-			} elseif($rnd_count < $counter){
+			} elseif($rnd_count < ($counter - $count_kampflos)){
 				$app->enqueueMessage(JText::_( 'DB_WTEXT1' ).JText::_( 'DB_ROUND' ).$rnd.JText::_( 'DB_DG' ).$dg, 'warning');
 				$fehler = 1;
 			}
