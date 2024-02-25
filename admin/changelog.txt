@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 4.1.4 - [xx-xx-2024] - - - - - - - - - - - - - - - - - - - -
+- - - - - 4.1.4 - [25-02-2024] - - - - - - - - - - - - - - - - - - - -
 # SWT-Import Einzelturniere: Anzeige noch nicht gespielter Runden bei CH-Modus (Nachtrag)
 ^ Backend: Codeanpassung php 8.2 für Einzelturniere einschl. Sonderranglisten
 ^ Backend: Codeanpassung php 8.2 für Termine und Kategorien
