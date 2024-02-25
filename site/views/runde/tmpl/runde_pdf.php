@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -20,7 +20,17 @@ $paar1=$this->paar1;
 $einzel=$this->einzel;
 $summe=$this->summe;
 $ok=$this->ok;
-//$saison		=$this->saison;
+	//Liga-Parameter aufbereiten
+	$paramsStringArray = explode("\n", $liga[0]->params);
+	$params = array();
+	foreach ($paramsStringArray as $value) {
+		$ipos = strpos ($value, '=');
+		if ($ipos !==false) {
+			$params[substr($value,0,$ipos)] = substr($value,$ipos+1);
+		}
+	}	
+	if (!isset($params['round_date'])) $params['round_date'] = '0';
+
 // Variblen aus URL holen
 $sid 		= clm_core::$load->request_int('saison',1);
 $runde		= clm_core::$load->request_int( 'runde',1);
@@ -194,6 +204,15 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 	if (!$cr) $pdf->SetX($xx1); else $pdf->SetX($xx2);
 	$pdf->Cell(5,1,'',0,1);
 	if (!$cr) $pdf->SetX($xx1); else $pdf->SetX($xx2);
+	
+	if ($params['round_date'] == '1' AND $paar[$y]->pdate > '1970-01-01') { 
+		$htext = JHTML::_('date',  $paar[$y]->pdate, JText::_('DATE_FORMAT_CLM_F')); 
+		if ($paar[$y]->ptime > '00:00:00') $htext .= '  '.substr($paar[$y]->ptime,0,5); 
+		$pdf->SetFont('Times','',$date_font);
+		$pdf->Cell(89,$zelle,$htext,1,1,'R'); 
+		$pdf->SetFont('Times','',$font);
+		if (!$cr) $pdf->SetX($xx1); else $pdf->SetX($xx2);
+	}
 	$htext = clm_core::$load->utf8decode($paar[$y]->hname);
 	while (($breite1-1) < $pdf->GetStringWidth($htext))
 		$htext = substr($htext,0,-1);
