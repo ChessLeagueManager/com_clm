@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -555,8 +555,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			foreach($this->_runden as $rnd => $runde) {
 			  $i = $runde->nr;
 			  if ($i >= $rfirst AND $i <= $rlast) {
-				$t_brett 	= clm_escape(clm_core::$load->request_string('brett', '989'));
-				if ($t_brett == '989') $bretter = array();
+				if (!isset($_POST["brett"])) $bretter = array();
 				else $bretter = CLMSWT::getFormValue('brett',array(),'array',$rnd);
 				if (!is_null($bretter) AND count($bretter) > 0) {
 				  foreach($bretter as $brett) {
@@ -571,7 +570,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 						$ergBlack = CLMSWT::getFormValue('ergebnisBlack',null,'int',array( $rnd, $brett));
 					} 
 					
-					//Paarungsdaten f�r Wei�
+					//Paarungsdaten f�r Weiß
 					$insert_query .= 	" ( 
 											".CLMSWT::getFormValue('sid',null,'int').", 										
 											".CLMSWT::getFormValue('tid',null,'int').", 
