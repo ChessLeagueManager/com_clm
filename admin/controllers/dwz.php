@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -271,6 +271,9 @@ static function nachmeldung()
 	$geburtsjahr	= clm_core::$load->request_string('geburtsjahr');
 	$zps		= clm_core::$load->request_string('zps');
 	$status		= clm_core::$load->request_string('status');	
+	$joiningdate = clm_core::$load->request_string('joiningdate', '1970-01-01');	
+	$leavingdate = clm_core::$load->request_string('leavingdate', '1970-01-01');	
+
 	if (!isset($status) OR $status == "") $status = "N";
 	// Prüfen ob Name und Mitgliedsnummer/PKZ angegeben wurden
 	if ( $countryversion == "de" AND ($name == "" OR $mglnr =="" OR $mglnr=="0") ) {
@@ -333,15 +336,16 @@ static function nachmeldung()
 	if ($geschlecht == '0') $geschlecht = 'M';
 	if (!$dwz) {
 	$query	= "INSERT INTO #__clm_dwz_spieler"
-		." ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Status`, `Spielername`, `Geschlecht`, `Geburtsjahr` ) "
-		." VALUES ('".clm_escape($sid)."','".clm_escape($zps)."','".clm_escape($mglnr)."','".clm_escape($PKZ)."','".clm_escape($status)."','".clm_escape($name)."','".clm_escape($geschlecht)."','".clm_escape($geburtsjahr)."')"
+		." ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Status`, `Spielername`, `Geschlecht`, `Geburtsjahr` , `joiningdate`, `leavingdate` ) "
+		." VALUES ('".clm_escape($sid)."','".clm_escape($zps)."','".clm_escape($mglnr)."','".clm_escape($PKZ)."','".clm_escape($status)."','".clm_escape($name)."','"
+		.clm_escape($geschlecht)."','".clm_escape($geburtsjahr)."','".$joiningdate."','".$leavingdate."')"
 		;
 		}
 	else {
 	$query	= "INSERT INTO #__clm_dwz_spieler"
-		." ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Status`, `Spielername`, `Geschlecht`, `Geburtsjahr`, `DWZ`, `DWZ_Index`) "
-		." VALUES ('".clm_escape($sid)."', '".clm_escape($zps)."','".clm_escape($mglnr)."','".clm_escape($PKZ)."','".clm_escape($status)."','".clm_escape($name)."','".clm_escape($geschlecht)."',"
-		." '".clm_escape($geburtsjahr)."','".clm_escape($dwz)."','".clm_escape($dwz_index)."')"
+		." ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Status`, `Spielername`, `Geschlecht`, `Geburtsjahr`, `joiningdate`, `leavingdate`, `DWZ`, `DWZ_Index`) "
+		." VALUES ('".clm_escape($sid)."', '".clm_escape($zps)."','".clm_escape($mglnr)."','".clm_escape($PKZ)."','".clm_escape($status)."','".clm_escape($name)."','"
+		.clm_escape($geschlecht)."','".clm_escape($geburtsjahr)."','".$joiningdate."','".$leavingdate."','".clm_escape($dwz)."','".clm_escape($dwz_index)."')"
 		;
 		}
 	//$db->setQuery($query);
@@ -383,6 +387,8 @@ static function daten_edit()
 	$geburtsjahr	= clm_core::$load->request_string('geburtsjahr');
 	$zps		= clm_core::$load->request_string('zps');
 	$status		= clm_core::$load->request_string('status');	
+	$joiningdate = clm_core::$load->request_string('joiningdate', '1970-01-01');	
+	$leavingdate = clm_core::$load->request_string('leavingdate', '1970-01-01');	
 
 	// Prüfen ob Name und Mitgliedsnummer/PKZ angegeben wurden
 	if ( $countryversion == "de" AND ($name == "" OR $mglnr =="" OR $mglnr=="0") ) {
@@ -438,6 +444,8 @@ static function daten_edit()
 		." , Geschlecht = '".clm_escape($geschlecht)."' "
 		." , Geburtsjahr = '".clm_escape($geburtsjahr)."' "
 		." , Status = '".clm_escape($status)."' "
+		." , joiningdate = '".$joiningdate."' "
+		." , leavingdate = '".$leavingdate."' "
 		." WHERE ZPS = '".clm_escape($zps)."' "
 		." AND sid = '".clm_escape($sid)."' ";
 	if ( $countryversion == "de") {

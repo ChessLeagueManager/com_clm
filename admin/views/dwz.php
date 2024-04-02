@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -305,6 +305,26 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 			<input class="inputbox" type="text" name="status" id="status" size="1" maxlength="1" <?php if (isset($filter_mgl) AND $filter_mgl !="0") {?> value="<?php echo $spieler[0]->Status ?>"<?php }?>/>
 			</td>
 			<td><?php echo JText::_( 'MEMBER_TABLE_33' ); ?></td>
+		</tr>
+		<tr>
+			<td class="key" nowrap="nowrap" title="<?php echo JText::_( 'MEMBER_TABLE_JOIN_HINT' ); ?>">
+			<label for="joiningdate"><?php echo JText::_( 'MEMBER_TABLE_JOIN' ); ?></label>
+			</td>
+			<td>
+				<?php if (isset($spieler[0]->joiningdate) AND $spieler[0]->joiningdate > '1970-01-01') $zjoiningdate = $spieler[0]->joiningdate; else $zjoiningdate = ''; ?>
+				<?php echo CLMForm::calendar($zjoiningdate, "joiningdate", "joiningdate", '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
+			</td>
+			<td><?php echo JText::_( 'MEMBER_TABLE_JOIN_BEM' ); ?></td>
+		</tr>
+		<tr>
+			<td class="key" nowrap="nowrap" title="<?php echo JText::_( 'MEMBER_TABLE_LEAVE_HINT' ); ?>">
+			<label for="leavingdate"><?php echo JText::_( 'MEMBER_TABLE_LEAVE' ); ?></label>
+			</td>
+			<td>
+				<?php if (isset($spieler[0]->leavingdate) AND $spieler[0]->leavingdate > '1970-01-01') $zleavingdate = $spieler[0]->leavingdate; else $zleavingdate = ''; ?>
+				<?php echo CLMForm::calendar($zleavingdate, "leavingdate", "leavingdate", '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
+			</td>
+			<td><?php echo JText::_( 'MEMBER_TABLE_LEAVE_BEM' ); ?></td>
 		</tr>
 		<tr>
 			<td colspan="2"><?php echo JText::_( 'MEMBER_TABLE_24' ); ?></td>
