@@ -17,8 +17,8 @@ class CLMModelPaarungsliste extends JModelLegacy
 
 	function _getCLMLiga( &$options )
 	{
-	$sid	= clm_core::$load->request_int('saison',1);
-	$liga	= clm_core::$load->request_int('liga',1);
+//	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',0);
 	$db	= JFactory::getDBO();
 //	$id	= @$options['id'];
  
@@ -40,8 +40,8 @@ class CLMModelPaarungsliste extends JModelLegacy
 
 	function _getCLMTermin( &$options )
 	{
-	$sid	= clm_core::$load->request_int('saison',1);
-	$liga	= clm_core::$load->request_int('liga',1);
+//	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',0);
 	$db	= JFactory::getDBO();
 //	$id	= @$options['id'];
  
@@ -61,8 +61,8 @@ class CLMModelPaarungsliste extends JModelLegacy
 
 	function _getCLMMannschaft( &$options )
 	{
-	$sid	= clm_core::$load->request_int('saison',1);
-	$liga	= clm_core::$load->request_int('liga',1);
+//	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',0);
 	$db	= JFactory::getDBO();
 //	$id	= @$options['id'];
  
@@ -83,8 +83,8 @@ class CLMModelPaarungsliste extends JModelLegacy
 
 	function _getCLMPaar ( &$options )
 	{
-	$sid	= clm_core::$load->request_int('saison',1);
-	$liga	= clm_core::$load->request_int('liga',1);
+//	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',0);
 	$db	= JFactory::getDBO();
 //	$id	= @$options['id'];
 
@@ -103,7 +103,8 @@ class CLMModelPaarungsliste extends JModelLegacy
 			." FROM #__clm_rnd_man as a"
 			." LEFT JOIN #__clm_mannschaften AS g ON g.tln_nr = a.gegner"
 			." LEFT JOIN #__clm_mannschaften AS h ON h.tln_nr = a.tln_nr"
-			." LEFT JOIN #__clm_rnd_man AS b ON b.sid = ".$sid." AND b.lid = ".$liga." AND b.runde = a.runde AND b.dg = a.dg AND b.paar = a.paar AND b.heim = 0 "
+//			." LEFT JOIN #__clm_rnd_man AS b ON b.sid = ".$sid." AND b.lid = ".$liga." AND b.runde = a.runde AND b.dg = a.dg AND b.paar = a.paar AND b.heim = 0 "
+			." LEFT JOIN #__clm_rnd_man AS b ON b.lid = ".$liga." AND b.runde = a.runde AND b.dg = a.dg AND b.paar = a.paar AND b.heim = 0 "
 			." WHERE g.liga = ".$liga
 			//." AND g.sid = ".$sid
 			." AND h.liga = ".$liga
@@ -125,8 +126,8 @@ class CLMModelPaarungsliste extends JModelLegacy
 
 	function _getCLMSumme ( &$options )
 	{
-	$sid	= clm_core::$load->request_int('saison',1);
-	$liga	= clm_core::$load->request_int('liga',1);
+//	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',0);
 	$runde	= clm_core::$load->request_int('runde');
 	$db	= JFactory::getDBO();
 //	$id	= @$options['id'];
@@ -148,8 +149,8 @@ class CLMModelPaarungsliste extends JModelLegacy
 
 	function _getCLMRundensumme ( &$options )
 	{
-	$sid	= clm_core::$load->request_int('saison',1);
-	$liga	= clm_core::$load->request_int('liga',1);
+//	$sid	= clm_core::$load->request_int('saison',1);
+	$liga	= clm_core::$load->request_int('liga',0);
 	$db	= JFactory::getDBO();
 //	$id	= @$options['id'];
 
