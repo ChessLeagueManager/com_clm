@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -36,6 +36,7 @@ defined('_JEXEC') or die('Restricted access');
 	
 	<div class="col width-50">
 		<fieldset class="adminform">
+		<br>
 		<legend><?php echo JText::_( 'PLAYER_DATA' ); ?></legend>
 
 		<table class="admintable">
@@ -46,6 +47,18 @@ defined('_JEXEC') or die('Restricted access');
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('CLUB'); ?>:</td>
 				<td><input class="inputbox" type="text" name="verein" id="verein" size="20" maxlength="60" value="<?php echo $this->player->verein; ?>" /></td>
+			</tr>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_PKZ'); ?>:</td>
+				<td><input class="inputbox" type="text" name="PKZ" id="PKZ" size="9" maxlength="9" value="<?php echo $this->player->PKZ; ?>" /></td>
+			</tr>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_ZPS'); ?>:</td>
+				<td><input class="inputbox" type="text" name="zps" id="zps" size="5" maxlength="5" value="<?php if ($this->player->zps != '0') echo $this->player->zps; else echo ""; ?>" /></td>
+		
+	   
+				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_MGLNR'); ?>:</td>
+				<td><input class="inputbox" type="text" name="mgl_nr" id="mgl_nr" size="4" maxlength="4" value="<?php if ($this->player->mgl_nr != 0) echo $this->player->mgl_nr; else echo ""; ?>" /></td>
 			</tr>
 			<?php if ($param_teamranking > 0 ) { ?>
 			<tr>
@@ -144,6 +157,7 @@ defined('_JEXEC') or die('Restricted access');
 
 	<div class="col width-50">
 		<fieldset class="adminform">
+		<br>
 		<legend><?php echo JText::_( 'RESULT' ); ?></legend>
 
 		<table class="admintable">

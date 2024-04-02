@@ -120,16 +120,25 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 			$titel = clm_core::$load->request_string('titel');
 			$geschlecht = clm_core::$load->request_string('geschlecht', 'NULL');
 			$birthYear = clm_core::$load->request_string('birthYear', '0000');
+			if (!is_numeric($birthYear)) $birthYear = '0000';
 			
 			$twz = clm_core::$load->gen_twz($param_useastwz, $natrating, $fideelo);
 			if (is_null($twz) OR $twz == '') $twz = 0;						
 			if (is_null($natrating) OR $natrating == '') $natrating = 0;						
-			if (is_null($fideelo) OR $fideelo == '') $fideelo = 0;						
+			if (is_null($fideelo) OR $fideelo == '') $fideelo = 0;		
+
+			$mgl_nr = clm_core::$load->request_int('mgl_nr');
+			$zps = clm_core::$load->request_string('zps');
+			if (strlen($zps) != 5 ) { 
+				$zps = '99999';
+				$mgl_nr = $maxFzps;
+			}
 
 			$query = " INSERT INTO #__clm_turniere_tlnr"
 				." (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `titel`, `mgl_nr` ,`zps`)"
 				." VALUES"
-				." ('".$tournament->data->sid."', '".$turnierid."', '".$maxSnr++."', '$name', '$birthYear', '$geschlecht', '$verein', '$twz', '$natrating', '$fideelo', '$titel', '".$maxFzps."', '99999')";
+//				." ('".$tournament->data->sid."', '".$turnierid."', '".$maxSnr++."', '$name', '$birthYear', '$geschlecht', '$verein', '$twz', '$natrating', '$fideelo', '$titel', '".$maxFzps."', '99999')";
+				." ('".$tournament->data->sid."', '".$turnierid."', '".$maxSnr++."', '$name', '$birthYear', '$geschlecht', '$verein', '$twz', '$natrating', '$fideelo', '$titel', '$mgl_nr', '".$zps."')";
 //		$this->_db->setQuery($query);
 //		if ($this->_db->query()) {
 		if (clm_core::$db->query($query)) { 

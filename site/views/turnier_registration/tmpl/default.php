@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -63,6 +63,8 @@ if ( $this->turnier->published == 0) {
 		$reg_mail 		= clm_core::$load->request_string('reg_mail','');		
 		$reg_tel_no 	= clm_core::$load->request_string('reg_tel_no','');		
 		$reg_account 	= clm_core::$load->request_string('reg_account','');		
+		$reg_zps 		= clm_core::$load->request_string('reg_zps','');		
+		$reg_mgl_nr 		= clm_core::$load->request_string('reg_mgl_nr','');		
 		$reg_dwz 		= clm_core::$load->request_string('reg_dwz','');		
 		$reg_elo 		= clm_core::$load->request_string('reg_elo','');		
 		$reg_FIDEid 		= clm_core::$load->request_string('reg_FIDEid','');		
@@ -99,41 +101,42 @@ if ( $this->turnier->published == 0) {
 		<table>
 	
 		<tr>
-			<th align="left" colspan="2" class="anfang"><?php echo $headline; ?><br>
+			<th align="left" colspan="4" class="anfang"><?php echo $headline; ?><br>
 				<span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_MANDATORY'); ?> </span><br>
+				<span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_DWZ_EVALUATION'); ?> </span><br>
 			</th>
 		</tr>
 	
 		<tr>
 			<td align="left" width="100"><?php echo JText::_('REGISTRATION_PLAYER'); ?>(*):</td>
-			<td>
+			<td colspan="3">
 			<input class="inputbox" type="text" name="reg_name" id="reg_name" size="50" maxlength="100" value="<?php echo $reg_name; ?>" />
 			</td>
 		</tr>
 	
 		<tr>
 			<td align="left" width="100"><?php echo JText::_('REGISTRATION_VORNAME'); ?>(*):</td>
-			<td>
+			<td colspan="3">
 			<input class="inputbox" type="text" name="reg_vorname" id="reg_vorname" size="50" maxlength="100" value="<?php echo $reg_vorname; ?>" />
 			</td>
 		</tr>
 	
 		<tr>
 			<td align="left" width="100"><?php echo JText::_('REGISTRATION_JAHR'); ?>(*):</td>
-			<td>
+			<td colspan="3">
 			<input class="inputbox" type="text" name="reg_jahr" id="reg_jahr" size="4" maxlength="4" value="<?php echo $reg_jahr; ?>" />
 			</td>
 		</tr>
 	
 		<tr>
 			<td align="left" width="100"><?php echo JText::_('REGISTRATION_MAIL'); ?>(*):</td>
-			<td>
+			<td colspan="3">
 			<input class="inputbox" type="text" name="reg_mail" id="reg_mail" size="50" maxlength="100" value="<?php echo $reg_mail; ?>" />
 			</td>
 		</tr>
 		<tr>
 			<td align="left" width="100"><?php echo JText::_('REGISTRATION_TEL_NO'); ?>:</td>
-			<td>
+			<td colspan="3">
 			<input class="inputbox" type="text" name="reg_tel_no" id="reg_tel_no" size="30" maxlength="30" value="<?php echo $reg_tel_no; ?>" />
 			</td>
 		</tr>
@@ -141,7 +144,7 @@ if ( $this->turnier->published == 0) {
 	?>
 		<tr>
 			<td align="left" width="100" title="<?php echo JText::_('REGISTRATION_ACCOUNT_HINT'); ?>"><?php echo JText::_('REGISTRATION_ACCOUNT_'.$typeAccount); ?>(*):</td>
-			<td>
+			<td colspan="3">
 			<input class="inputbox" type="text" name="reg_account" id="reg_account" size="30" maxlength="50" value="<?php echo $reg_account; ?>" />
 			</td>
 		</tr>
@@ -150,19 +153,27 @@ if ( $this->turnier->published == 0) {
 	?>
 		<tr>
 			<td align="left" width="100"><?php echo JText::_('REGISTRATION_CLUB'); ?>(*):</td>
-			<td>
+			<td colspan="3">
 			<input class="inputbox" type="text" name="reg_club" id="reg_club" size="50" maxlength="100" value="<?php echo $reg_club; ?>" />
 			</td>
 		</tr>
 
 		<tr>
-			<td align="left" width="100"><?php echo JText::_('REGISTRATION_DWZ'); ?>:</td>
+			<td align="left" width="100"><?php echo JText::_('REGISTRATION_ZPS'); ?>(**):</td>
+			<td width="40%">
+			<input class="inputbox" type="text" name="reg_zps" id="reg_zps" size="5" maxlength="5" value="<?php echo $reg_zps; ?>" />
+			</td>
+			<td align="left" width="100"><?php echo JText::_('REGISTRATION_MGLNR'); ?>(**):</td>
 			<td>
-			<input class="inputbox" type="text" name="reg_dwz" id="reg_dwz" size="4" maxlength="4" value="<?php echo $reg_dwz; ?>" />
+			<input class="inputbox" type="text" name="reg_mgl_nr" id="reg_mgl_nr" size="4" maxlength="4" value="<?php echo $reg_mgl_nr; ?>" />
 			</td>
 		</tr>
 
 		<tr>
+			<td align="left" width="100"><?php echo JText::_('REGISTRATION_DWZ'); ?>:</td>
+			<td width="40%">
+			<input class="inputbox" type="text" name="reg_dwz" id="reg_dwz" size="4" maxlength="4" value="<?php echo $reg_dwz; ?>" />
+			</td>
 			<td align="left" width="100"><?php echo JText::_('REGISTRATION_ELO'); ?>:</td>
 			<td>
 			<input class="inputbox" type="text" name="reg_elo" id="reg_elo" size="4" maxlength="4" value="<?php echo $reg_elo; ?>" />
@@ -171,14 +182,14 @@ if ( $this->turnier->published == 0) {
 		<?php if ($optionEloAnalysis == 1) { ?>
 		<tr>
 			<td align="left" width="100"><?php echo JText::_('REGISTRATION_FIDEID'); ?>:</td>
-			<td>
+			<td colspan="3">
 			<input class="inputbox" type="text" name="reg_FIDEid" id="reg_FIDEid" size="8" maxlength="8" value="<?php echo $reg_FIDEid; ?>" />
 			</td>
 		</tr>
 		<?php } ?>
 		<tr>
 			<td align="left" width="100"><?php echo JText::_('REGISTRATION_SEX'); ?>:</td>
-			<td class="paramlist_value">
+			<td class="paramlist_value" colspan="3">
 					<?php
 					$options = array();
 					$options[''] = '';
@@ -194,7 +205,7 @@ if ( $this->turnier->published == 0) {
 		</tr>
 		<tr>
 			<td align="left" width="100"><?php echo JText::_('REGISTRATION_COMMENT'); ?>:</td>
-			<td>
+			<td colspan="3">
 			<textarea class="inputbox" name="reg_comment" id="reg_comment" cols="50" rows="4" placeholder="<?php echo JText::_('REGISTRATION_PLACEHOLDER'); ?>"><?php echo $reg_comment; ?></textarea>
 			</td>
 		</tr>
@@ -207,7 +218,7 @@ if ( $this->turnier->published == 0) {
 		  <tr>
 			<th style="align: center;" class="anfang">&nbsp;&nbsp;&nbsp;<input type="checkbox" id="reg_dsgvo" name="reg_dsgvo" value="1">
 				<span style="font-size: 80%; font-weight: lighter;">&nbsp;<?php echo JText::_('REGISTRATION_COMMENT_0'); ?></span></th>
-			<th align="left" colspan="1" class="anfang">
+			<th align="left" colspan="3" class="anfang">
 				<span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_COMMENT_2A'); ?><a href="<?php echo $privacy_notice; ?>" target="_blank"><span style="color: black;"><?php echo JText::_('REGISTRATION_COMMENT_2B'); ?></span></a></span>
 				<span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_COMMENT_3'); ?></span>
 			</th>

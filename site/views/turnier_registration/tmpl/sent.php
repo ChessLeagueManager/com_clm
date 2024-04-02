@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -41,9 +41,9 @@ $reg_elo 		= clm_core::$load->request_string('reg_elo','');
 $reg_FIDEid 	= clm_core::$load->request_string('reg_FIDEid','');
 $reg_comment 	= clm_core::$load->request_string('reg_comment','');
 $reg_PKZ 		= '';
-$reg_zps 		= '';
+$reg_zps 		= clm_core::$load->request_string('reg_zps','');
 $reg_titel 		= '';
-$reg_mgl_nr		= 0;
+$reg_mgl_nr		= clm_core::$load->request_string('reg_mgl_nr','');
 $reg_dwz_I0 	= 0;
 $reg_FIDEcco	= '';
 
@@ -139,7 +139,7 @@ if ($msg != '') {
 	$randomUid = md5(uniqid('', true) . '|' . microtime());
 	if (!is_numeric($reg_elo)) $reg_elo = 0; else $reg_elo = (int) $reg_elo;
 	if (!is_numeric($reg_dwz)) $reg_dwz = 0; else $reg_dwz = (int) $reg_dwz;
-	if (!is_numeric($reg_mgl_nr)) $reg_dwz = 0; else $reg_mgl_nr = (int) $reg_mgl_nr;
+	if (!is_numeric($reg_mgl_nr)) $reg_mgl_nr = 0; else $reg_mgl_nr = (int) $reg_mgl_nr;
 
 	$sql = "INSERT INTO #__clm_online_registration "
 		." ( `tid`, `name`, `vorname`, `club`, `email`, `elo`, `dwz`,"

@@ -37,6 +37,8 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		// turnierid
 		$registrationid = clm_core::$load->request_int('registrationid');
 		$turnierid = clm_core::$load->request_int('turnierid');
+		// Task
+		$task = clm_core::$load->request_string('task');
 		
 		$adminLink = new AdminLink();
 		// wenn 'apply', weiterleiten in form
@@ -169,6 +171,20 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 			$tlnr->mgl_nr	= $row->mgl_nr;
 			$tlnr->PKZ		= $row->PKZ;
 			$tlnr->zps		= $row->zps;
+			if (strlen($tlnr->zps) != 5 OR $tlnr->mgl_nr < 1) {
+				// weiteren Daten aus TlnTabelle
+				$db		= JFactory::getDBO();
+				$query = "SELECT MAX(mgl_nr), MAX(snr) FROM `#__clm_turniere_tlnr`"
+					." WHERE turnier = ".$tlnr->turnier
+					." AND zps = 99999 "
+					;
+				$db->setQuery($query);
+				list($maxFzps, $maxSnr) = $db->loadRow();
+				$maxFzps++; // fiktive ZPS für manuell eingegeben Spieler
+				//$maxSnr++; // maximale snr für alle Spieler
+				$tlnr->zps = '99999';
+				$tlnr->mgl_nr = $maxFzps;
+			}
 			$tlnr->tel_no	= $row->tel_no;
 			$tlnr->account	= $row->account;
 			$tlnr->titel	= $row->titel;
@@ -182,7 +198,10 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 				$this->app->enqueueMessage( $tlnr->getError(), 'error' );
 				return false;
 			}
-			$text = JText::_('REGISTRATION_MOVED');
+			if ($tlnr->zps == '99999') 
+				$text = JText::_('REGISTRATION_MOVED9');
+			else 
+				$text = JText::_('REGISTRATION_MOVED');
 		} else {
 			$text = JText::_('REGISTRATION_EDITED');
 		}

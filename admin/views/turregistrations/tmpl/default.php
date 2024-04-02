@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -40,6 +40,12 @@ $turParams = new clm_class_params($this->turnier->params);
 					</th>
 					<th width="20%">
 						<?php echo JHtml::_('grid.sort', JText::_('CLUB'), 'club', $this->param['order_Dir'], $this->param['order'] ); ?>
+					</th>
+					<th width="5%">
+						<?php echo JHtml::_('grid.sort', JText::_('PLAYER_ZPS'), 'twz', $this->param['order_Dir'], $this->param['order'] ); ?>
+					</th>
+					<th width="5%">
+						<?php echo JHtml::_('grid.sort', JText::_('PLAYER_MGLNR'), 'start_dwz', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<?php
 					?>
@@ -135,6 +141,24 @@ $turParams = new clm_class_params($this->turnier->params);
 					</td>
 					<td align="left">
 						<?php echo $row->club; ?>
+					</td>
+					<td align="center">
+						<?php 
+						if ($row->zps > '') {
+							echo $row->zps;
+						} else {
+							echo '-';
+						}
+						?>
+					</td>
+					<td align="center">
+						<?php 
+						if ($row->mgl_nr > 0) {
+							echo $row->mgl_nr;
+						} else {
+							echo '-';
+						}
+						?>
 					</td>
 					<?php
 					?>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -183,6 +183,14 @@ defined('_JEXEC') or die('Restricted access');
 					<td><input class="inputbox" type="text" name="verein" id="verein" size="20" maxlength="60"  /></td>
 				</tr>
 				<tr>
+					<td class="key" nowrap="nowrap"><?php echo '** '.JText::_('PLAYER_ZPS'); ?>:</td>
+					<td><input class="inputbox" type="text" name="zps" id="zps" size="5" maxlength="5" /></td>
+				</tr>
+				<tr>
+					<td class="key" nowrap="nowrap"><?php echo '** '.JText::_('PLAYER_MGLNR'); ?>:</td>
+					<td><input class="inputbox" type="text" name="mgl_nr" id="mgl_nr" size="4" maxlength="4" /></td>
+				</tr>
+				<tr>
 					<td class="key" nowrap="nowrap"><?php echo JText::_('RATING'); ?>:</td>
 					<td><input class="inputbox" type="text" name="natrating" id="natrating" size="4" maxlength="4" /></td>
 				</tr>
@@ -217,11 +225,12 @@ defined('_JEXEC') or die('Restricted access');
 					</td>
 				</tr>
 				<tr>
-					<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_BIRTH_YEAR'); ?>:</td>
+					<td class="key" nowrap="nowrap"><?php echo '** '.JText::_('PLAYER_BIRTH_YEAR'); ?>:</td>
 					<td><input class="inputbox" type="text" name="birthYear" id="birthYear" size="4" maxlength="4" /></td>
 				</tr>
 			</table>
-		* <?php echo JText::_('MANDATORY_ITEM'); ?>
+		* <span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('MANDATORY_ITEM'); ?></span><br>
+		** <span style="font-size: 80%; font-weight: lighter;"´><?php echo JText::_('Notwendig, wenn DWZ-Auswertung geplant ist'); ?></span>
 		</fieldset>
 	</div>
 

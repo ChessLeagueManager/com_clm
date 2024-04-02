@@ -16,6 +16,7 @@ $ -> Language fix or change
 # Paarungsliste: Aufruf über Menüeintragstyp nachgebessert
 + Mitgliederverwaltung: Eintritts- und Austrittsdatum während der Saison manuell eingebbar (optional)
 # Rangliste im Rundenbericht: Fehler direkter Vergleich
++ Online Turnieranmeldung/Pflege Turnierteilnehmer: Ergänzung ZPS und Mitgliedsnummer 
 
 - - - - - 4.1.4 - [25-02-2024] - - - - - - - - - - - - - - - - - - - -
 # SWT-Import Einzelturniere: Anzeige noch nicht gespielter Runden bei CH-Modus (Nachtrag)
