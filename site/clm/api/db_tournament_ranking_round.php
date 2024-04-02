@@ -86,7 +86,9 @@
 		// Wertpunkte berechnen (ENDE)
 
 		$query = " SELECT l.sid as sid, a.tln_nr,a.zps as zps, a.sg_zps as sgzps, a.man_nr as man_nr, a.name, a.ordering, "
-				." l.teil, l.stamm, l.liga_mt, l.runden_modus, l.man_sieg, l.man_remis, l.sieg, l.remis, l.tiebr1, l.tiebr2, l.tiebr3 "
+				." l.teil, l.stamm, l.liga_mt, l.runden_modus, "
+				." l.man_sieg, l.man_remis, l.man_nieder, l.man_antritt, l.sieg, l.remis, l.nieder, l.antritt, "
+				." l.tiebr1, l.tiebr2, l.tiebr3 "
 			." FROM #__clm_mannschaften as a "
 			." LEFT JOIN #__clm_liga as l ON l.id =".$id
 			." WHERE a.liga = ".$id
@@ -675,8 +677,10 @@
 						$matchesdirect = clm_core::$db->loadObjectList($query);		
 						$zdirect = count($matchesdirect);
 						foreach ($matchesdirect as $mdvalue) {
-							if ($mdvalue->manpunkte == $team[0]->man_remis) $sum_erg += 1;
-							elseif ($mdvalue->manpunkte == $team[0]->man_sieg) $sum_erg += 2;
+							if ($mdvalue->ergebnis == '0' ) $sum_erg += $team[0]->man_nieder + $team[0]->man_antritt;
+							elseif ($mdvalue->ergebnis == '1' ) $sum_erg += $team[0]->man_sieg + $team[0]->man_antritt;
+							elseif ($mdvalue->ergebnis == '2' ) $sum_erg += $team[0]->man_remis + $team[0]->man_antritt;
+							elseif ($mdvalue->ergebnis == '5' ) $sum_erg += $team[0]->man_sieg + $team[0]->man_antritt;
 						}
 					}
 				}
