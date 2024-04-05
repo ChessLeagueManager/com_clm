@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Fjodor Schäfer
@@ -109,7 +109,7 @@ $enddate[0] = strtotime($termine_detail[0]->enddate);
             	<td colspan="2"><?php echo JText::_('TERMINE_DESC') ?></td>
             </tr>
         	<tr>
-            	<td colspan="2"><?php echo $termine_detail[0]->beschreibung; ?></td>
+            	<td colspan="2"><?php echo nl2br($termine_detail[0]->beschreibung); ?></td>
             </tr>
         </table>
 		<?php  } ?>

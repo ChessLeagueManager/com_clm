@@ -62,6 +62,7 @@ $rights["db_termine"]=array();
 $rights["view_termine_ics"]=array();
 $rights["db_paarungsliste"]=array();
 $rights["view_paarungsliste_xls"]=array();
+$rights["view_paarungsliste_ics"]=array();
 $rights["db_terminliste"]=array();
 $rights["view_terminliste_xls"]=array();
 $rights["db_be_menu"]=array();

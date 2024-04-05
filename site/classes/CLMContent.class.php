@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2015 CLM Team.  Dorn. All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 
 /**
 * CLMContent 
@@ -63,6 +62,30 @@ class CLMContent {
 		
 		// Format ergänzen
 		$params['format'] = 'pdf';
+		
+		$string .= CLMText::createCLMLink($imageTag, $view, $params);
+		
+		// close div
+		$string .= '</div>';
+	
+		return $string;
+	
+	}
+	
+	/**
+	* createICSLink()
+	* erstellt Link auf PDF
+	*/
+	public static function createICSLink($view, $title, $params = array()) {
+	
+		// open div
+		$string = '<div class="pdf">';
+		
+		// imageTag zusammensetzen
+		$imageTag = '<img src="'.CLMImage::imageURL('ics_button.png').'" width="16" height="19" title="'.JText::_('ICS_OUTPUT').$title.'" alt="ICS" class="CLMTooltip" />';
+		
+		// Format ergänzen
+		$params['format'] = 'ics';
 		
 		$string .= CLMText::createCLMLink($imageTag, $view, $params);
 		

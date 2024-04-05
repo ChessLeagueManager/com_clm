@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -40,7 +40,7 @@ function clm_api_db_paarungsliste($liga) {
 	
   	$paarModel = " SELECT a.*,g.id as gid, g.name as gname, g.tln_nr as gtln, g.published as gpublished, g.rankingpos as grank, "
 		." g.man_nr as gmnr, h.id as hid, h.name as hname, h.tln_nr as htln, h.rankingpos as hrank, b.wertpunkte as gwertpunkte, "
-		." h.published as hpublished, h.man_nr as hmnr, t.name as rname "
+		." h.published as hpublished, h.man_nr as hmnr, t.name as rname, t.datum as rdate, t.startzeit as rtime "
 		." FROM #__clm_rnd_man as a"
 		." LEFT JOIN #__clm_mannschaften AS g ON g.tln_nr = a.gegner"
 		." LEFT JOIN #__clm_mannschaften AS h ON h.tln_nr = a.tln_nr"

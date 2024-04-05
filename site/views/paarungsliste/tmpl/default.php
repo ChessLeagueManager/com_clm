@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -117,6 +117,7 @@ elseif ($liga[0]->published == "0") {
 echo CLMContent::createPDFLink('paarungsliste', JText::_('PDF_PAAR'), array('saison' => $sid, 'layout' => 'paar', 'saison' => $liga[0]->sid, 'liga' => $liga[0]->id));
 if ($countryversion == 'en')
 	echo clm_core::$load->create_link_xls('paarungsliste', JText::_('CSV_PAAR'), array('layout' => 'paarungsliste', 'liga' => $liga[0]->id));
+echo CLMContent::createICSLink('paarungsliste', JText::_('ICS_TERM'), array('saison' => $sid, 'layout' => 'ics', 'saison' => $liga[0]->sid, 'liga' => $liga[0]->id));
 ?>
 </div></div>
 <div class="clr"></div>

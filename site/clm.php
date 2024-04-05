@@ -60,6 +60,10 @@ if (clm_core::$access->getSeason() != -1) {
 			clm_core::$api->callStandalone("view_paarungsliste_xls");
 			return;
 	}
+	elseif ($view == "paarungsliste" AND $format == "ics") {
+			clm_core::$api->callStandalone("view_paarungsliste_ics");
+			return;
+	}
 	elseif ($view == "terminliste" AND $format == "xls") {
 			clm_core::$api->callStandalone("view_terminliste_xls");
 			return;
