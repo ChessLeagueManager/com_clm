@@ -1,8 +1,20 @@
+/*
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2024 CLM Team  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
+
 function clm_dewis_import_player(object, p) {
-    unit = object.parentElement.getElementsByClassName("clm_view_form_select_options")[0];  
+    unit = object.parentElement.getElementsByClassName("clm_view_form_select_options")[0];
+	var selopt = unit.options[unit.selectedIndex].text;
+	while ( selopt.substr(0,1) == '-' ) {
+		selopt = selopt.substr(1);
+	}
     update = object.parentElement.parentElement.getElementsByClassName("clm_view_dewis_import_update")[0];
     update_buttons = object.parentElement.getElementsByTagName("button");
-    update.innerHTML = clm_dewis_import_update+" "+unit.options[unit.selectedIndex].text.replace(/(.*-)/g, '')+"<br/>"+clm_dewis_import_loadingClubs;
+//  update.innerHTML = clm_dewis_import_update+" "+unit.options[unit.selectedIndex].text.replace(/(.*-)/g, '')+"<br/>"+clm_dewis_import_loadingClubs;
+    update.innerHTML = clm_dewis_import_update+" "+selopt+"<br/>"+clm_dewis_import_loadingClubs;
 	 clm_dewis_import_start(update, update_buttons);
 	 
     var xmlhttp;
@@ -43,9 +55,14 @@ function clm_dewis_import_player(object, p) {
 
 function clm_dewis_import_club(object) {
     unit = object.parentElement.getElementsByClassName("clm_view_form_select_options")[0];  
+	var selopt = unit.options[unit.selectedIndex].text;
+	while ( selopt.substr(0,1) == '-' ) {
+		selopt = selopt.substr(1);
+	}
     update = object.parentElement.parentElement.getElementsByClassName("clm_view_dewis_import_update")[0];
     update_buttons = object.parentElement.getElementsByTagName("button");
-    update.innerHTML = clm_dewis_import_update+" "+unit.options[unit.selectedIndex].text.replace(/(.*-)/g, '')+"<br/>"+clm_dewis_import_updateClub;
+//  update.innerHTML = clm_dewis_import_update+" "+unit.options[unit.selectedIndex].text.replace(/(.*-)/g, '')+"<br/>"+clm_dewis_import_updateClub;
+    update.innerHTML = clm_dewis_import_update+" "+selopt+"<br/>"+clm_dewis_import_updateClub;
 	 clm_dewis_import_start(update, update_buttons);
 	 
     var xmlhttp;
@@ -69,7 +86,8 @@ function clm_dewis_import_club(object) {
                     return;
                 }
 
-		clm_dewis_import_end(update, update_buttons, clm_dewis_import_update+" "+unit.options[unit.selectedIndex].text.replace(/(.*-)/g, '')+"<br/>"+clm_dewis_import_finishedClub+" "+out[0][2]);
+//		clm_dewis_import_end(update, update_buttons, clm_dewis_import_update+" "+unit.options[unit.selectedIndex].text.replace(/(.*-)/g, '')+"<br/>"+clm_dewis_import_finishedClub+" "+out[0][2]);
+		clm_dewis_import_end(update, update_buttons, clm_dewis_import_update+" "+selopt+"<br/>"+clm_dewis_import_finishedClub+" "+out[0][2]);
             } else {
                 clm_dewis_import_end(update, update_buttons, clm_dewis_import_errorHttp + " " + xmlhttp.status);
             }
@@ -81,7 +99,12 @@ function clm_dewis_import_club(object) {
 }
 
 function clm_dewis_import_player_one(obj, update, update_buttons, unit, p, i, player,count) {
-    update.innerHTML = clm_dewis_import_update+" "+unit.options[unit.selectedIndex].text.replace(/(.*-)/g, '')+"<br/>"+clm_dewis_import_alreadyFinishedClubs+" "+i + " " + clm_dewis_import_of + " " + obj.length + "<br/>" + clm_dewis_import_alreadyFinishedPlayers + " " + (player) +"<br/>"+clm_dewis_import_working+" "+obj[i].Vereinname;
+	var selopt = unit.options[unit.selectedIndex].text;
+	while ( selopt.substr(0,1) == '-' ) {
+		selopt = selopt.substr(1);
+	}
+//  update.innerHTML = clm_dewis_import_update+" "+unit.options[unit.selectedIndex].text.replace(/(.*-)/g, '')+"<br/>"+clm_dewis_import_alreadyFinishedClubs+" "+i + " " + clm_dewis_import_of + " " + obj.length + "<br/>" + clm_dewis_import_alreadyFinishedPlayers + " " + (player) +"<br/>"+clm_dewis_import_working+" "+obj[i].Vereinname;
+    update.innerHTML = clm_dewis_import_update+" "+selopt+"<br/>"+clm_dewis_import_alreadyFinishedClubs+" "+i + " " + clm_dewis_import_of + " " + obj.length + "<br/>" + clm_dewis_import_alreadyFinishedPlayers + " " + (player) +"<br/>"+clm_dewis_import_working+" "+obj[i].Vereinname;
 
     var xmlhttp;
     if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
@@ -108,7 +131,8 @@ function clm_dewis_import_player_one(obj, update, update_buttons, unit, p, i, pl
                 }
 
                 if (i + 1 == obj.length) {
-                    clm_dewis_import_end(update, update_buttons, update.innerHTML = clm_dewis_import_finished+" "+unit.options[unit.selectedIndex].text.replace(/(.*-)/g, '')+"<br/>"+clm_dewis_import_alreadyFinishedClubs+" "+ (i+1) + " " + clm_dewis_import_of + " " + obj.length + "<br/>" + clm_dewis_import_alreadyFinishedPlayers + " " + (player + out[0][2]));
+//                  clm_dewis_import_end(update, update_buttons, update.innerHTML = clm_dewis_import_finished+" "+unit.options[unit.selectedIndex].text.replace(/(.*-)/g, '')+"<br/>"+clm_dewis_import_alreadyFinishedClubs+" "+ (i+1) + " " + clm_dewis_import_of + " " + obj.length + "<br/>" + clm_dewis_import_alreadyFinishedPlayers + " " + (player + out[0][2]));
+                    clm_dewis_import_end(update, update_buttons, update.innerHTML = clm_dewis_import_finished+" "+selopt+"<br/>"+clm_dewis_import_alreadyFinishedClubs+" "+ (i+1) + " " + clm_dewis_import_of + " " + obj.length + "<br/>" + clm_dewis_import_alreadyFinishedPlayers + " " + (player + out[0][2]));
                 } else {
                     clm_dewis_import_player_one(obj, update, update_buttons, unit, p, (i + 1), (player + out[0][2]),0);
                 }
