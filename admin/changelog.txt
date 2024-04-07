@@ -18,6 +18,7 @@ $ -> Language fix or change
 # Rangliste im Rundenbericht: Fehler direkter Vergleich
 + Online Turnieranmeldung/Pflege Turnierteilnehmer: Ergänzung ZPS und Mitgliedsnummer 
 + Paarungsliste: Ausgabe Kalenderdatei
+# Liga Feinwertung: Buchholz auf Basis Brettpunkte mit Streichwertung
 
 - - - - - 4.1.4 - [25-02-2024] - - - - - - - - - - - - - - - - - - - -
 # SWT-Import Einzelturniere: Anzeige noch nicht gespielter Runden bei CH-Modus (Nachtrag)

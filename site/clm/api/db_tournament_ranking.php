@@ -493,12 +493,12 @@
 			for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
 				//$array_PlayerBuch[$s] = array_sum($array_PlayerBuchOpp[$s]) - min($array_PlayerBuchOpp[$s]);
 				if (!isset($array_PlayerBuchOppBP[$s])) 
-					$array_PlayerBuch1St[$s] = 0;
+					$array_PlayerBuch1StBP[$s] = 0;
 				elseif (count($array_PlayerBuchOppBP[$s]) == 0) 
-					$array_PlayerBuch1St[$s] = 0;
-				elseif (count($array_PlayerBuchOpp[$s]) == 1) 
+					$array_PlayerBuch1StBP[$s] = 0;
+				elseif (count($array_PlayerBuchOppBP[$s]) == 1) 
 					$array_PlayerBuch1StBP[$s] = $array_PlayerBuchOppBP[$s][0];
-				elseif (count($array_PlayerBuchOpp[$s]) > 2) //== ($dg * $runden)) 
+				elseif (count($array_PlayerBuchOppBP[$s]) > 2) //== ($dg * $runden)) 
 					$array_PlayerBuch1StBP[$s] = array_sum($array_PlayerBuchOppBP[$s]) - min($array_PlayerBuchOppBP[$s]);
 				else $array_PlayerBuch1StBP[$s] = array_sum($array_PlayerBuchOppBP[$s]);
 			}
@@ -593,7 +593,7 @@
 						$sumTiebr[$tb] = $array_PlayerBuSum1St[$s];
 						break;
 					case 17: // bhhlz mit 1 streichresultat BP
-						$sumTiebr[$tb] = $array_PlayerBuch1St[$s];
+						$sumTiebr[$tb] = $array_PlayerBuch1StBP[$s];
 						break;
 					case 18: // bhhlz-sum mit 1 streichresultat BP
 						$sumTiebr[$tb] = $array_PlayerBuSum1St[$s];
