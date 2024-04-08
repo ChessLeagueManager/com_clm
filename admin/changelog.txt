@@ -21,6 +21,7 @@ $ -> Language fix or change
 # Liga Feinwertung: Buchholz auf Basis Brettpunkte mit Streichwertung
 ^ Funktion utf8decode: Parameter mit init-Wert
 # Direkte Aktualisierung Vereine, Spieler: Anzeigefehler bei Namen mit Bindestrich
+# pgn-Eingabe: Problem mit "" bei manueller Zuordnung
 
 - - - - - 4.1.4 - [25-02-2024] - - - - - - - - - - - - - - - - - - - -
 # SWT-Import Einzelturniere: Anzeige noch nicht gespielter Runden bei CH-Modus (Nachtrag)
