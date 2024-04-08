@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -27,7 +27,7 @@ class clm_class_cms_standalone extends clm_class_cms {
 	public function sendMail($from, $fromname, $recipient, $subject, $body, $mode=0, $cc=null, $bcc=null, $attachment=null, $replyto=null, $replytoname=null) {
 		$this->initJoomla();
 		jimport( 'joomla.mail.mail' );
-		$mail = JFactory::getMailer();
+		$mail = \Joomla\CMS\Factory::getMailer();
 		return $mail->sendMail($from, $fromname, $recipient, $subject, $body, $mode, $cc, $bcc, $attachment, $replyto, $replytoname);
 	}
 	public function setTitle($title) {
@@ -71,9 +71,9 @@ class clm_class_cms_standalone extends clm_class_cms {
 	}
 	public function getUserData() {
 		$this->initJoomla();
-		$id = JFactory::getUser()->get('id');
+		$id = \Joomla\CMS\Factory::getUser()->get('id');
 		if (isset($id) && $id > 0) {
-			return array($id, JFactory::getUser()->get('username'), JFactory::getUser()->get('name'), JFactory::getUser()->get('email'));
+			return array($id, \Joomla\CMS\Factory::getUser()->get('username'), \Joomla\CMS\Factory::getUser()->get('name'), \Joomla\CMS\Factory::getUser()->get('email'));
 		}
 		return array(0);
 	}
@@ -89,19 +89,20 @@ class clm_class_cms_standalone extends clm_class_cms {
 	}
 	public function getNowDate($format = "Y-m-d H:i:s") {
 		$this->initJoomla();
-		$date = JFactory::getDate(); 
+		$date = \Joomla\CMS\Factory::getDate();
 		$now = date( $format, strtotime( $date->toSQL() ) );
 		return $now;
 	}
 	public function showDate($date_time, $format = "") {
 		$this->initJoomla();
 		if ($format == "") $format = JText::_('DATE_FORMAT_LC2');
-		$output = JHtml::_('date',  $date_time, $format);
+//		$output = JHtml::_('date',  $date_time, $format);
+		$output = \Joomla\CMS\HTML\HTMLHelper::_('date',  $date_time, $format);
 		return $output;
 	}
 	public function isRoot() {
 		$this->initJoomla();
-		if (JFactory::getUser()->get('isRoot')) {
+		if (\Joomla\CMS\Factory::getUser()->get('isRoot')) {
 			return true;
 		}
 		return false;
@@ -109,7 +110,7 @@ class clm_class_cms_standalone extends clm_class_cms {
 	public function login($name,$password) {
 		$this->initJoomla();
 		ob_start();
-		$mainframe = JFactory::getApplication();
+		$mainframe = \Joomla\CMS\Factory::getApplication();
 		$credentials = array( 'username' => $name, 'password' => $password);
 		$this->logout();
  	   	$success = $mainframe->login($credentials, array("silent" => true));
@@ -124,7 +125,7 @@ class clm_class_cms_standalone extends clm_class_cms {
 		if(clm_core::$access->getJid()!=-1) {
 			ob_start();
 			$this->initJoomla();
-			$mainframe = JFactory::getApplication();
+			$mainframe = \Joomla\CMS\Factory::getApplication();
 			$mainframe->logout();
 			ob_end_clean();
 			return parent::logout();
@@ -142,6 +143,7 @@ class clm_class_cms_standalone extends clm_class_cms {
 			$query	= "SELECT * FROM #__clm_config"
 				." WHERE id = 1001 ";
 			$record = clm_core::$db->loadObjectList($query);
+
 			if (isset($record[0]->value) AND substr($record[0]->value,0,1) > 3) {
 				// Joomla 4.0
 				if (isset($_GET["clm_backend"]) && $_GET["clm_backend"] == "1") {
@@ -158,6 +160,8 @@ class clm_class_cms_standalone extends clm_class_cms {
 
 					// Instantiate the application.
 					$app = $container->get(\Joomla\CMS\Application\AdministratorApplication::class);
+
+					$app->createExtensionNamespaceMap();
 
 					// Set the application as global app
 					\Joomla\CMS\Factory::$application = $app;
@@ -179,15 +183,19 @@ class clm_class_cms_standalone extends clm_class_cms {
 					->alias(\Joomla\Session\Session::class, 'session.web.site')
 					->alias(\Joomla\Session\SessionInterface::class, 'session.web.site');
 					$app = $container->get(\Joomla\CMS\Application\SiteApplication::class);
+
+					$app->createExtensionNamespaceMap();
+
 					// Set the application as global app
 					\Joomla\CMS\Factory::$application = $app;
+
 				}
 			} else {
 				// Joomla 3.x
 				if (isset($_GET["clm_backend"]) && $_GET["clm_backend"] == "1") {
-					$mainframe = JFactory::getApplication('administrator');
+					$mainframe = \Joomla\CMS\Factory::getApplication('administrator');
 				} else {
-					$mainframe = JFactory::getApplication('site');
+					$mainframe = \Joomla\CMS\Factory::getApplication('site');
 				}
 				$mainframe->initialise();
 			}

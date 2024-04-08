@@ -22,7 +22,7 @@ $ -> Language fix or change
 ^ Funktion utf8decode: Parameter mit init-Wert
 # Direkte Aktualisierung Vereine, Spieler: Anzeigefehler bei Namen mit Bindestrich
 # pgn-Eingabe: Problem mit "" bei manueller Zuordnung
-
+^ standalone class: Anpassung an Joomla 4 und Joomla 5
 - - - - - 4.1.4 - [25-02-2024] - - - - - - - - - - - - - - - - - - - -
 # SWT-Import Einzelturniere: Anzeige noch nicht gespielter Runden bei CH-Modus (Nachtrag)
 ^ Backend: Codeanpassung php 8.2 für Einzelturniere einschl. Sonderranglisten
