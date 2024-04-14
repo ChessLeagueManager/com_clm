@@ -104,7 +104,7 @@ function display($cachable = false, $urlparams = array())
 	// Vereinefilter laden
 	$vlist = CLMFilterVerein::vereine_filter(0);
 //	$lists['vid']	= JHTML::_('select.genericlist', $vlist, 'filter_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
-	$lists['vid']	= JHTML::_('select.genericlist', $vlist, 'filter_vid', 'class="inputbox" size="1" onchange="change_vid();"','zps', 'name', $filter_vid );
+	$lists['vid']	= JHTML::_('select.genericlist', $vlist, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="change_vid();"','zps', 'name', $filter_vid );
 	$lists['vid_to']	= JHTML::_('select.genericlist', $vlist, 'filter_vid_to', 'class="inputbox" size="1" ','zps', 'name', $filter_vid_to );
 	$lists['vid_from']	= JHTML::_('select.genericlist', $vlist, 'filter_vid_from', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid_from );
 	
@@ -122,7 +122,7 @@ function display($cachable = false, $urlparams = array())
 		$db->setQuery($sql);
 		$mlist[]	= JHTML::_('select.option',  '0', JText::_( 'DWZ_SPIELER' ), 'Mgl_Nr', 'Spielername' );
 		$mlist		= array_merge( $mlist, $db->loadObjectList() );
-		$lists['mgl']	= JHTML::_('select.genericlist', $mlist, 'filter_mgl', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','Mgl_Nr', 'Spielername', $filter_mgl );
+		$lists['mgl']	= JHTML::_('select.genericlist', $mlist, 'filter_mgl', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','Mgl_Nr', 'Spielername', $filter_mgl );
 	  } else {
 		$sql = 'SELECT PKZ, Spielername FROM #__clm_dwz_spieler as a'
 			.' LEFT JOIN #__clm_saison AS s ON s.id = a.sid'
@@ -133,7 +133,7 @@ function display($cachable = false, $urlparams = array())
 		$db->setQuery($sql);
 		$mlist[]	= JHTML::_('select.option',  '0', JText::_( 'DWZ_SPIELER' ), 'PKZ', 'Spielername' );
 		$mlist		= array_merge( $mlist, $db->loadObjectList() );
-		$lists['PKZ']	= JHTML::_('select.genericlist', $mlist, 'filter_PKZ', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','PKZ', 'Spielername', $filter_PKZ );
+		$lists['PKZ']	= JHTML::_('select.genericlist', $mlist, 'filter_PKZ', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','PKZ', 'Spielername', $filter_PKZ );
 	  }	
 	}
 
