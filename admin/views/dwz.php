@@ -48,6 +48,8 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 		$spieler[0] = new stdClass();
 		$spieler[0]->Geschlecht = "";
 	}
+	// Auswahlfelder durchsuchbar machen
+	clm_core::$load->load_js("suche_liste");
 		?>
 
 <script language="javascript" type="text/javascript">
