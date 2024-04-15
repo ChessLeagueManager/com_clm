@@ -46,6 +46,9 @@ public static function users( &$rows, &$lists, &$pageNav, $option )
 		$ordering = ($lists['order'] == 'a.ordering');
 //		JHtml::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
+
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
 		?>
 		<form action="index.php?option=com_clm&section=users" method="post" name="adminForm" id="adminForm">
 
@@ -229,6 +232,9 @@ public static function user( &$row,$lists, $option )
 	
 		$_REQUEST['clm_user_member'] = $conf_user_member;
 		clm_core::$load->load_js("users");
+
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
 		?>
 
 
