@@ -37,6 +37,9 @@ public static function gruppen( &$rows, &$lists, &$pageNav, $option )
 
 //		JHtml::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
+
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
 		?>
 		<form action="index.php?option=com_clm&section=gruppen" method="post" name="adminForm" id="adminForm">
 
@@ -189,6 +192,9 @@ public static function gruppe( &$row,$lists, $option, $jid)
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 		
 		clm_core::$load->load_js("gruppen");
+
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
 		?>
 
 		<form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -224,7 +230,7 @@ public static function gruppe( &$row,$lists, $option, $jid)
 			</label>
 			</td>
 			<td>
-			<select name="geschlecht" id="geschlecht">" size="1">
+			<select name="geschlecht" id="geschlecht" size="1" class="js-example-basic-single" style="width:300px">
 			<option value="9">- wählen -</option>
 			<option <?php if ($row->geschlecht == "1") {echo 'selected="selected"';} ?> value="1"><?php echo JText::_( 'GROUPS_OVERVIEW_SEX_DD1' );?></option>
 			<option <?php if ($row->geschlecht == "2") {echo 'selected="selected"';} ?> value="2"><?php echo JText::_( 'GROUPS_OVERVIEW_SEX_DD2' );?></option>
@@ -240,7 +246,7 @@ public static function gruppe( &$row,$lists, $option, $jid)
 			</label>
 			</td>
 			<td>
-			<select name="alter_grenze" id="alter_grenze" >" size="1">
+			<select name="alter_grenze" id="alter_grenze" size="1" class="js-example-basic-single" style="width:300px">
 			<option>- wählen -</option>
 			<option <?php if ($row->alter_grenze == "1") {echo 'selected="selected"';} ?> value="1"><?php echo JText::_( 'GROUPS_OVERVIEW_AGE_DD2' );?></option>
 			<option <?php if ($row->alter_grenze == "2") {echo 'selected="selected"';} ?> value="2"><?php echo JText::_( 'GROUPS_OVERVIEW_AGE_DD3' );?></option>
@@ -267,7 +273,7 @@ public static function gruppe( &$row,$lists, $option, $jid)
 			</label>
 			</td>
 			<td>
-			<select name="status" id="status" >" size="1">
+			<select name="status" id="status" size="1" class="js-example-basic-single" style="width:300px">
 			<option <?php if ($row->status == "") {echo 'selected="selected"';} ?> value=""><?php echo JText::_( 'GROUPS_OVERVIEW_STATUS_DD2' );?></option>
 			<option <?php if ($row->status == "A") {echo 'selected="selected"';} ?> value="A"><?php echo JText::_( 'GROUPS_OVERVIEW_STATUS_DD3' );?></option>
 			</select>

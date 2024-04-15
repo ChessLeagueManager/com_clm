@@ -105,7 +105,7 @@ function display($cachable = false, $urlparams = array())
 	$db->setQuery($sql);
 	$saisonlist[]	= JHTML::_('select.option',  '0', JText::_( 'GRUPPEN_SAISON' ), 'id', 'name' );
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
-	$lists['sid']      = JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']      = JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 
 	// table ordering
 	$lists['order_Dir']	= $filter_order_Dir;
@@ -172,7 +172,7 @@ function edit()
 		$row->published 	= 0;
 	}
 
-	$lists['published']	= JHTML::_('select.booleanlist',  'published', 'class="inputbox"', $row->published );
+	$lists['published']	= JHTML::_('select.booleanlist',  'published', 'class="js-example-basic-single"', $row->published );
 
 	// Saisonlist //
 	$sql = 'SELECT id as sid, name FROM #__clm_saison WHERE archiv =0';
@@ -183,7 +183,7 @@ function edit()
 	}
 	$saisonlist[]	= JHTML::_('select.option',  '0', JText::_( 'GRUPPEN_SAISON' ), 'sid', 'name' );
 	$saisonlist	= array_merge( $saisonlist, $db->loadObjectList() );
-	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="inputbox" size="1"','sid', 'name', $row->sid );
+	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1"','sid', 'name', $row->sid );
 
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'gruppen.php');
 	$jid = 0; $user_group = 0;
