@@ -39,8 +39,11 @@ public static function Ranglisten ( &$rows, &$lists, &$pageNav, $option )
 	$check = $db->loadObjectList();
 	CLMViewRanglisten::setRanglistenToolbar($check);
 
-		//Ordering allowed ?
-		$ordering = ($lists['order'] == 'a.ordering');
+	//Ordering allowed ?
+	$ordering = ($lists['order'] == 'a.ordering');
+
+	// Auswahlfelder durchsuchbar machen
+	clm_core::$load->load_js("suche_liste");
 
 ?>
 		<form action="index.php?option=com_clm&section=ranglisten" method="post" name="adminForm" id="adminForm">
@@ -194,14 +197,16 @@ public static function setRanglisteToolbar($vname)
 
 public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$sg_vname,$gname,$sname,$cid,$exist,$sg_exist,$pa_exist,$count,$gid_exist)
 	{
-		JFactory::getApplication()->input->set('hidemainmenu', true);
-		CLMViewRanglisten::setRanglisteToolbar($vname);
+	JFactory::getApplication()->input->set('hidemainmenu', true);
+	CLMViewRanglisten::setRanglisteToolbar($vname);
 
-		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
+	JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 
-		clm_core::$load->load_js("ranglisten");
-		$s_error = 0;
-		?>
+	clm_core::$load->load_js("ranglisten");
+	$s_error = 0;
+	// Auswahlfelder durchsuchbar machen
+	clm_core::$load->load_js("suche_liste");
+	?>
 
 <?php if ($exist AND clm_core::$load->request_string( 'task') == "add") { ?>
 

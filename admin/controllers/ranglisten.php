@@ -119,12 +119,12 @@ function display($cachable = false, $urlparams = array())
 	$db->setQuery($sql);
 	$saisonlist[]	= JHtml::_('select.option',  '0', JText::_( 'RANGLISTE_SAISON_WAE' ), 'id', 'name' );
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
-	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 
 	// Vereinefilter laden
 	$vereinefilter = CLMFilterVerein::vereine_filter(0);
-	$lists['vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
-	$lists['sg_vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_sg_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid );
+	$lists['vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
+	$lists['sg_vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_sg_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid );
 
 	// Suchefilter
 	$lists['search']= $search;
@@ -379,7 +379,7 @@ function edit()
 	$db->setQuery($sql);
 	$saisonlist[]	= JHtml::_('select.option',  '0', JText::_( 'RANGLISTE_SAISON_WAE' ), 'id', 'name' );
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
-	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="inputbox" size="1" onchange="javascript:edit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" style="width:300px onchange="javascript:edit();"','id', 'name', intval( $filter_sid ) );
 
 	if ($filter_sid == 0) $filter_sid = clm_core::$access->getSeason();
 	// Gruppenliste //
@@ -394,13 +394,13 @@ function edit()
 	}
 	$gruppenlist[]	= JHtml::_('select.option',  '0', JText::_( 'RANGLISTE_GRUPPE_AUS' ), 'gid', 'Gruppe' );
 	$gruppenlist	= array_merge( $gruppenlist, $db->loadObjectList() );
-	$lists['gruppe']= JHtml::_('select.genericlist',   $gruppenlist, 'filter_gid', 'class="inputbox" size="1" onchange="javascript:edit();"','gid', 'Gruppe', intval( $filter_gid ) );
+	$lists['gruppe']= JHtml::_('select.genericlist',   $gruppenlist, 'filter_gid', 'class="js-example-basic-single" size="1" style="width:300px onchange="javascript:edit();"','gid', 'Gruppe', intval( $filter_gid ) );
 
 	// Vereinliste
 	// Vereinefilter laden
 	$vereinlist	= CLMFilterVerein::vereine_filter(0);
-	$lists['vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_vid', 'class="inputbox" size="1" onchange="javascript:edit();"','zps', 'name', $filter_vid );
-	$lists['sg_vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_sg_vid', 'class="inputbox" size="1" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid );
+	$lists['vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_vid', 'class="js-example-basic-single" size="1" style="width:300px onchange="javascript:edit();"','zps', 'name', $filter_vid );
+	$lists['sg_vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_sg_vid', 'class="js-example-basic-single" size="1" style="width:300px onchange="javascript:edit();"','zps', 'name', $filter_sg_vid );
 
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'ranglisten.php');
 	$jid = 0;
