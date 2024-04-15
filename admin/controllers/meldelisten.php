@@ -108,7 +108,7 @@ function display($cachable = false, $urlparams = array())
 	$db->setQuery($sql);
 	$saisonlist[]	= JHtml::_('select.option',  '0', JText::_( 'MELDELISTEN_SAISON' ), 'id', 'name' );
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
-	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 	// Ligafilter
 	$sql = 'SELECT id AS cid, name FROM #__clm_liga'
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
@@ -117,7 +117,7 @@ function display($cachable = false, $urlparams = array())
 
 	$ligalist[]	= JHtml::_('select.option',  '0', JText::_( 'MELDELISTEN_LIGA' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
-	$lists['lid']	= JHtml::_('select.genericlist', $ligalist, 'filter_lid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
+	$lists['lid']	= JHtml::_('select.genericlist', $ligalist, 'filter_lid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
 	// Vereinefilter
 	$sql = 'SELECT id, name FROM #__clm_vereine'
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
@@ -126,7 +126,7 @@ function display($cachable = false, $urlparams = array())
 
 	$vlist[]	= JHtml::_('select.option',  '0', JText::_( 'MELDELISTEN_VEREIN' ), 'id', 'name' );
 	$vlist		= array_merge( $vlist, $db->loadObjectList() );
-	$lists['vid']	= JHtml::_('select.genericlist', $vlist, 'filter_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_vid );
+	$lists['vid']	= JHtml::_('select.genericlist', $vlist, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_vid );
 
 	// Ordering
 	$lists['order_Dir']	= $filter_order_Dir;
