@@ -43,6 +43,9 @@ public static function mannschaften( $rows, $lists, $pageNav, $option )
 
 //		JHtml::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
+
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
 		?>
 		<form action="index.php?option=com_clm&section=mannschaften" method="post" name="adminForm" id="adminForm">
 
@@ -235,6 +238,9 @@ public static function mannschaft( &$row,$lists, $option )
 
 		$_POST['clm_noOrgReference'] = $lists['noOrgReference'];
 		clm_core::$load->load_js("mannschaft");
+
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
 		?>
 
 		<form action="index.php" method="post" name="adminForm" id="adminForm">
