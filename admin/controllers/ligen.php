@@ -99,7 +99,7 @@ function display($cachable = false, $urlparams = array())
 		echo "<br>cl: "; var_dump($clmAccess->userlist()); die('clcl'); }
 	$sllist[]	= JHTML::_('select.option',  '0', JText::_( 'LIGEN_SL' ), 'jid', 'name' );
 	$sllist		= array_merge( $sllist, $out);
-	$lists['sl']	= JHTML::_('select.genericlist',   $sllist, 'sl', 'class="inputbox" size="1"', 'jid', 'name', $row->sl );
+	$lists['sl']	= JHTML::_('select.genericlist',   $sllist, 'sl', 'class="js-example-basic-single" style="width:300px" size="1"', 'jid', 'name', $row->sl );
 	// Saisonliste
 	$sql = "SELECT id as sid, name FROM #__clm_saison WHERE archiv = 0";
 	$db->setQuery($sql);
@@ -109,7 +109,7 @@ function display($cachable = false, $urlparams = array())
 	}
 	$saisonlist[]	= JHTML::_('select.option',  '0', JText::_( 'LIGEN_SAISON' ), 'sid', 'name' );
 	$saisonlist	= array_merge( $saisonlist, $db->loadObjectList() );
-	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="inputbox" size="1"','sid', 'name', $row->sid );
+	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" style="width:300px" size="1"','sid', 'name', $row->sid );
 	// Rangliste
 	$query = " SELECT id, Gruppe FROM #__clm_rangliste_name ";
 	$db->setQuery($query);
@@ -119,7 +119,7 @@ function display($cachable = false, $urlparams = array())
 	}
 	$glist[]	= JHTML::_('select.option',  '0', JText::_( 'LIGEN_ML' ), 'id', 'Gruppe' );
 	$glist		= array_merge( $glist, $db->loadObjectList() );
-	$lists['gruppe']= JHTML::_('select.genericlist',   $glist, 'rang', 'class="inputbox" size="1"', 'id', 'Gruppe', $row->rang );
+	$lists['gruppe']= JHTML::_('select.genericlist',   $glist, 'rang', 'class="js-example-basic-single" style="width:300px" size="1"', 'id', 'Gruppe', $row->rang );
 
 	// ggf. Info, wenn Stichtag der Aufstellung nicht mit Meldeschluss der Rangliste übereinstimmt.
 	if($row->rang > 0){
