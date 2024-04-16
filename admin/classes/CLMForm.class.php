@@ -310,7 +310,7 @@ class CLMForm {
 			$pllist[]	= JHTML::_('select.option', $value['snr'], $value['snr']." - ".$value['name'], 'snr', 'name');
 		}
 	
-		return JHTML::_('select.genericlist', $pllist, $name, 'class="inputbox" size="1"', 'snr', 'name', $selected );
+		return JHTML::_('select.genericlist', $pllist, $name, 'class="js-example-basic-single" size="1" style="width:250px"', 'snr', 'name', $selected );
 	
 	}
 
@@ -324,7 +324,7 @@ class CLMForm {
 			$resultlist[] = JHTML::_('select.option', $r, JText::_( 'RESULT_EID_'.$r ), 'eid', 'ergebnis' );
 		}
 	
-		return JHTML::_('select.genericlist', $resultlist, $name, 'class="inputbox" size="1"', 'eid', 'ergebnis', $value );
+		return JHTML::_('select.genericlist', $resultlist, $name, 'class="js-example-basic-single" size="1" style="width:170px"', 'eid', 'ergebnis', $value );
 	
 	}
 

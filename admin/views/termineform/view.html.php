@@ -52,6 +52,9 @@ class CLMViewTermineForm extends JViewLegacy {
 		// Script
 		$document->addScript(CLM_PATH_JAVASCRIPT.'termineform.js');
 		
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
+
 		// Daten an Template übergeben
 		$this->user = $model->user;		
 		$this->termine = $model->termine;

@@ -80,6 +80,9 @@ class CLMViewTurRoundMatches extends JViewLegacy {
 
 		$this->param = $model->param;
 
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
+
 		// zusätzliche Funktionalitäten
 //		JHtml::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
