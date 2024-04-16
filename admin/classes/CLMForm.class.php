@@ -165,7 +165,7 @@ class CLMForm {
 		$verbandlist[] = JHTML::_('select.option',  '0', JText::_( 'SELECT_ASSOCIATION' ), 'Verband', 'Verbandname' );
 		$verbandlist = array_merge( $verbandlist, $_db->loadObjectList() );
 		
-		return JHTML::_('select.genericlist', $verbandlist, $name, 'class="inputbox" size="1" onchange="document.adminForm.submit();"','Verband', 'Verbandname', $value );
+		return JHTML::_('select.genericlist', $verbandlist, $name, 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','Verband', 'Verbandname', $value );
 
 	}
 
@@ -233,7 +233,7 @@ class CLMForm {
 		$veranstalter[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_CLUB' )), 'ZPS', 'Vereinname' );
 		$veranstalter	= array_merge( $veranstalter, $_db->loadObjectList() );
 		
-		return JHTML::_('select.genericlist', $veranstalter, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
+		return JHTML::_('select.genericlist', $veranstalter, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
 	
 	}
 
@@ -347,7 +347,7 @@ class CLMForm {
 			}
 		}
 	
-		return JHTML::_('select.genericlist', $dwzlist, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+		return JHTML::_('select.genericlist', $dwzlist, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
 	
 	}
 

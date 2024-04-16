@@ -35,19 +35,17 @@ class CLMViewTurPlayerForm extends JViewLegacy {
 
 		// das MainMenu abschalten
 		$_GET['hidemainmenu'] = 1;
-		
 
 		// Daten an Template übergeben
 		$this->user = $model->user;
-		
 		$this->playerlist = $model->PlayersList;
-
 		$this->param = $model->param;
-
 		$this->pagination = $model->pagination;
-
 		$this->turnier = $model->turnier;
 		
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
+
 		// zusätzliche Funktionalitäten
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 
