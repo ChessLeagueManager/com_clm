@@ -85,7 +85,9 @@ class CLMViewTurForm extends JViewLegacy {
 
 		$this->form = $model->form;
 
-		
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
+
 		parent::display($tpl);
 
 	}

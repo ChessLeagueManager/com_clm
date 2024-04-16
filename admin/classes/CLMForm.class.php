@@ -50,7 +50,7 @@ class CLMForm {
 		$_db->setQuery($query);
 		$saisonlist		= array_merge( $saisonlist, $_db->loadObjectList() );
 		
-		return JHTML::_('select.genericlist', $saisonlist, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+		return JHTML::_('select.genericlist', $saisonlist, $name, 'class="js-example-basic-single" style="width:350px" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
 	
 	}
 	
@@ -68,7 +68,7 @@ class CLMForm {
 			$modilist[]	= JHTML::_('select.option', $key, $val, 'id', 'name' );
 		}
 	
-		return JHTML::_('select.genericlist', $modilist, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter).$more,'id', 'name', intval($value) );
+		return JHTML::_('select.genericlist', $modilist, $name, 'class="js-example-basic-single" style="width:350px" size="1"'.CLMText::stringOnchange($filter).$more,'id', 'name', intval($value) );
 		
 	}
 
@@ -101,7 +101,7 @@ class CLMForm {
 			$tiebrlist[]	= JHTML::_('select.option', $key, $val, 'id', 'name' );
 		}
 	
-		return JHTML::_('select.genericlist', $tiebrlist, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+		return JHTML::_('select.genericlist', $tiebrlist, $name, 'class="class="js-example-basic-single" style="width:350px" size="1"" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
 		
 	}
 	
@@ -132,7 +132,7 @@ class CLMForm {
 		else $tllist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_DIRECTOR' )), 'jid', 'name' );
 		$tllist		= array_merge( $tllist, $userlist);
 		
-		return JHTML::_('select.genericlist', $tllist, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter), 'jid', 'name', $value );
+		return JHTML::_('select.genericlist', $tllist, $name, 'class="js-example-basic-single" style="width:300px" size="1"'.CLMText::stringOnchange($filter), 'jid', 'name', $value );
 	
 	}
 
@@ -212,7 +212,7 @@ class CLMForm {
 		$veranstalter[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_HOST' )), 'ZPS', 'Vereinname' );
 		$veranstalter	= array_merge( $veranstalter, $_db->loadObjectList() );
 		
-		return JHTML::_('select.genericlist', $veranstalter, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
+		return JHTML::_('select.genericlist', $veranstalter, $name, 'class="js-example-basic-single" style="width:300px" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
 	
 	}
 
