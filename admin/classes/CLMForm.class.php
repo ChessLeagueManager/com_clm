@@ -276,7 +276,7 @@ class CLMForm {
 		$vlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_CLUB' )), 'zps', 'name' );
 		$vlist		= array_merge( $vlist, $vereine);
 	
-		return JHTML::_('select.genericlist', $vlist, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
+		return JHTML::_('select.genericlist', $vlist, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
 	
 	}
 
@@ -297,7 +297,7 @@ class CLMForm {
 		$vlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_CLUB' )), 'zps', 'name' );
 		$vlist		= array_merge( $vlist, $vereine);
 	
-		return JHTML::_('select.genericlist', $vlist, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
+		return JHTML::_('select.genericlist', $vlist, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
 	
 	}
 
