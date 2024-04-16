@@ -101,7 +101,7 @@ class CLMForm {
 			$tiebrlist[]	= JHTML::_('select.option', $key, $val, 'id', 'name' );
 		}
 	
-		return JHTML::_('select.genericlist', $tiebrlist, $name, 'class="class="js-example-basic-single" style="width:350px" size="1"" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+		return JHTML::_('select.genericlist', $tiebrlist, $name, 'class="js-example-basic-single" size="1" style="width:350px;"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
 		
 	}
 	
@@ -114,7 +114,7 @@ class CLMForm {
 		$stagelist[]	= JHTML::_('select.option',  '3', '3', 'id', 'name' );
 		$stagelist[]	= JHTML::_('select.option',  '4', '4', 'id', 'name' );
 	
-		return JHTML::_('select.genericlist', $stagelist, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+		return JHTML::_('select.genericlist', $stagelist, $name, 'class="js-example-basic-single" size="1" style="width:50px"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
 	
 	}
 
