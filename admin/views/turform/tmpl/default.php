@@ -234,7 +234,7 @@ if (is_null($this->turnier->bem_int)) $this->turnier->bem_int = '';
 			foreach ($options as $key => $val) {
 				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
 			}
-			echo JHtml::_('select.genericlist', $optionlist, 'params[teamranking]', 'class="inputbox"', 'id', 'name', $turParams->get('teamranking', 0)); ?>
+			echo JHtml::_('select.genericlist', $optionlist, 'params[teamranking]', 'class="js-example-basic-single" size="1" style="width:250px"', 'id', 'name', $turParams->get('teamranking', 0)); ?>
 		</td>
 	</tr>
 	<tr>
@@ -290,7 +290,7 @@ if (is_null($this->turnier->bem_int)) $this->turnier->bem_int = '';
 			foreach ($options as $key => $val) {
 				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
 			}
-			echo JHtml::_('select.genericlist', $optionlist, 'params[useAsTWZ]', 'class="inputbox"', 'id', 'name', $turParams->get('useAsTWZ', 0)); ?>
+			echo JHtml::_('select.genericlist', $optionlist, 'params[useAsTWZ]', 'class="js-example-basic-single" size="1" style="width:350px"', 'id', 'name', $turParams->get('useAsTWZ', 0)); ?>
 		</td>
 	</tr>
 	<tr>
@@ -307,7 +307,7 @@ if (is_null($this->turnier->bem_int)) $this->turnier->bem_int = '';
 			foreach ($options as $key => $val) {
 				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
 			}
-			echo JHtml::_('select.genericlist', $optionlist, 'params[autoDWZ]', 'class="inputbox"', 'id', 'name', $turParams->get('autoDWZ', 0)); ?>
+			echo JHtml::_('select.genericlist', $optionlist, 'params[autoDWZ]', 'class="js-example-basic-single" size="1" style="width:350px"', 'id', 'name', $turParams->get('autoDWZ', 0)); ?>
 		</td>
 	</tr>
 
@@ -426,7 +426,7 @@ if (is_null($this->turnier->bem_int)) $this->turnier->bem_int = '';
 			foreach ($options as $key => $val) {
 				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
 			}
-			echo JHtml::_('select.genericlist', $optionlist, 'params[typeRegistration]', 'class="inputbox"', 'id', 'name', $turParams->get('typeRegistration', 0)); ?>
+			echo JHtml::_('select.genericlist', $optionlist, 'params[typeRegistration]', 'class="js-example-basic-single" size="1" style="width:350px"', 'id', 'name', $turParams->get('typeRegistration', 0)); ?>
 		</td>
 	</tr>
 
@@ -444,7 +444,7 @@ if (is_null($this->turnier->bem_int)) $this->turnier->bem_int = '';
 			foreach ($options as $key => $val) {
 				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
 			}
-			echo JHtml::_('select.genericlist', $optionlist, 'params[typeAccount]', 'class="inputbox"', 'id', 'name', $turParams->get('typeAccount', 0)); ?>
+			echo JHtml::_('select.genericlist', $optionlist, 'params[typeAccount]', 'class="js-example-basic-single" size="1" style="width:350px"', 'id', 'name', $turParams->get('typeAccount', 0)); ?>
 		</td>
 	</tr>
 
