@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  *
@@ -123,7 +123,8 @@ function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true) {
 	$nl = "\n";
 	$file_name = clm_core::$load->utf8decode($turnier->name).'_'.clm_core::$load->utf8decode($runde->name);
 	if ($type == 1) $file_name .= '_'.clm_core::$load->utf8decode($user_zps);
-	$file_name = strtr($file_name,' ./','___');
+//	$file_name = strtr($file_name,' ./','___');
+	$file_name 	= clm_core::$load->file_name($file_name);
 	$file_name .= '.pgn'; 
 	if (!file_exists('components'.DS.'com_clm'.DS.'pgn'.DS)) mkdir('components'.DS.'com_clm'.DS.'pgn'.DS);
 	$pdatei = fopen('components'.DS.'com_clm'.DS.'pgn'.DS.$file_name,"wt");
@@ -164,6 +165,10 @@ function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true) {
 		fputs($pdatei, '[Date "'.clm_core::$cms->showDate($runde->datum, 'Y.m.d').'"]'.$nl);
 		fputs($pdatei, '[Round "'.$round.'.'.$einz->paar.'"]'.$nl);
 		fputs($pdatei, '[Board "'.$einz->brett.'"]'.$nl);
+		if (is_null($einz->gelo) OR $einz->gelo == 0) $einz->gelo =''; 
+		if (is_null($einz->helo) OR $einz->helo == 0) $einz->helo =''; 
+		if (is_null($einz->gdwz) OR $einz->gdwz == 0) $einz->gdwz =''; 
+		if (is_null($einz->hdwz) OR $einz->hdwz == 0) $einz->hdwz =''; 
 		if ($einz->weiss == "0") {
 			fputs($pdatei, '[White "'.clm_core::$load->utf8decode($einz->gname).'"]'.$nl);
 			fputs($pdatei, '[Black "'.clm_core::$load->utf8decode($einz->hname).'"]'.$nl);
