@@ -15,16 +15,17 @@ defined('_JEXEC') or die('Restricted access');
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
 $liga		= $this->liga;
-$itemid		= clm_core::$load->request_int('Itemid','1');
-$sid		= clm_core::$load->request_int( 'saison','1');
-$lid		= clm_core::$load->request_int('liga','1');
+$itemid		= clm_core::$load->request_int('Itemid',0);
+$sid		= clm_core::$load->request_int( 'saison',0);
+$lid		= clm_core::$load->request_int('liga',0);
 
-$sql = ' SELECT `sieg`, `remis`, `nieder`, `antritt`, `man_sieg`, `man_remis`, `man_nieder`, `man_antritt`'
+if (isset($liga[0])) {
+	$sql = ' SELECT `sieg`, `remis`, `nieder`, `antritt`, `man_sieg`, `man_remis`, `man_nieder`, `man_antritt`'
 		. ' FROM #__clm_liga'
 		. ' WHERE `id` = "' . $lid . '"';
-$db =JFactory::getDBO ();
-$db->setQuery ($sql);
-$ligapunkte = $db->loadObject ();
+	$db =JFactory::getDBO ();
+	$db->setQuery ($sql);
+	$ligapunkte = $db->loadObject ();
 
 	//Parameter aufbereiten
 	$paramsStringArray = explode("\n", $liga[0]->params);
@@ -46,7 +47,7 @@ $ligapunkte = $db->loadObject ();
 	if (!isset($params['bnhtml']) OR $params['bnhtml'] == 0) {   //Standardbelegung
 		$params['bnhtml'] = round(($liga[0]->teil)/2);
 	}
- 
+} 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
@@ -59,11 +60,19 @@ $googlecharts   = $config->googlecharts;
 
 // Browsertitelzeile setzen
 $doc =JFactory::getDocument();
-$doc->setTitle(JText::_('LEAGUE_STATISTIK').' '.$liga[0]->name);
-	
+if (isset($liga[0])) {
+	$doc->setTitle(JText::_('LEAGUE_STATISTIK').' '.$liga[0]->name);
+} else {
+	$doc->setTitle(JText::_('LEAGUE_STATISTIK'));
+}
 ?>
 <div class="componentheading">
-<?php echo JText::_('LEAGUE_STATISTIK'); echo "&nbsp;".$liga[0]->name; ?>
+<?php if (isset($liga[0])) { 
+	echo JText::_('LEAGUE_STATISTIK'); echo "&nbsp;".$liga[0]->name;
+} else {
+	echo JText::_('LEAGUE_STATISTIK');
+}
+?>
 <div id="pdf">
 <?php
 echo CLMContent::createPDFLink('statistik', JText::_('LEAGUE_STAT_PDF'), array('layout' => 'brettbeste', 'saison' => $liga[0]->sid, 'liga' => $liga[0]->id));
@@ -77,9 +86,11 @@ echo CLMContent::createPDFLink('statistik', JText::_('LEAGUE_STAT_PDF'), array('
 <?php
 $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
-	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
-}
-elseif ( !$liga OR $liga[0]->published == "0") { echo '<br>'.CLMContent::clmWarning(JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD')); } 
+	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>"; }
+elseif (!isset($liga[0])) {
+	echo "<br>". CLMContent::clmWarning(JText::_('NOT_EXIST').'<br>'.JText::_('GEDULDA'))."<br>"; }
+elseif ( !$liga OR $liga[0]->published == "0") { 
+	echo '<br>'.CLMContent::clmWarning(JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD')); } 
 else { ?>
 	<div>
 <?php

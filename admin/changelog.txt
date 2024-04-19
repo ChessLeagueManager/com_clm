@@ -25,6 +25,7 @@ $ -> Language fix or change
 ^ standalone class: Anpassung an Joomla 4 und Joomla 5
 ^ Adminviews: Durchsuchbare Dropdown Menues
 # Erstellung pgn-Vorlagedatei: keine Wertzahl immer als leere Zeichenkette
+# Rundenbericht, Tabelle, DWZ-Liga, Ligastatistik: Anpassung bei ungültiger Liga-Id bei Extern Zugriff
 
 - - - - - 4.1.4 - [25-02-2024] - - - - - - - - - - - - - - - - - - - -
 # SWT-Import Einzelturniere: Anzeige noch nicht gespielter Runden bei CH-Modus (Nachtrag)

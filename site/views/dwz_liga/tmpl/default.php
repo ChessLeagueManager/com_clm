@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -10,7 +10,7 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip');
+
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
 $liga		= $this->liga;
@@ -32,16 +32,20 @@ $liga		= $this->liga;
 	else { $old=false; } // dwz aus Meldeliste
 $dwz		= $this->dwz;
 $spieler	= $this->spieler;
-$sid		= clm_core::$load->request_int( 'saison',1);
-$lid		= clm_core::$load->request_int('liga',1);
-$item		= clm_core::$load->request_int('Itemid',1);
+$sid		= clm_core::$load->request_int( 'saison',0);
+$lid		= clm_core::$load->request_int('liga',0);
+$item		= clm_core::$load->request_int('Itemid',0);
  
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 	// Browsertitelzeile setzen
 	$doc =JFactory::getDocument();
-	$doc->setTitle(JText::_('DWZ_LIGA').' '.(isset($dwz[0]) ? $dwz[0]->name : ""));
+	if(isset($dwz[0])){
+		$doc->setTitle(JText::_('DWZ_LIGA').' '.(isset($dwz[0]) ? $dwz[0]->name : ""));
+	} else {
+		$doc->setTitle(JText::_('DWZ_LIGA'));
+	}
 	
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
@@ -66,7 +70,14 @@ $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
 	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
 }
-elseif ( !$dwz OR $dwz[0]->published == "0") { echo '<br><div class="wrong">'. JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD') .'</div><br>'; } 
+// existiert die Liga
+elseif (!isset($dwz[0])) {	
+	echo "<div id='wrong'>".JText::_('NOT_EXIST')." (".$lid.")<br>".JText::_('GEDULDA')."</div>";
+}
+// schon veröffentlicht
+elseif ( !$dwz OR $dwz[0]->published == "0") { 
+	echo '<br><div class="wrong">'. JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD') .'</div><br>'; 
+} 
 else {
 
 ?>

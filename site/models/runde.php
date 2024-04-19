@@ -16,8 +16,8 @@ class CLMModelRunde extends JModelLegacy
 {
 	function _getCLMLiga( &$options )
 	{
-	$sid	= clm_core::$load->request_int('saison',1);
-	$liga	= clm_core::$load->request_int('liga',1);
+	$sid	= clm_core::$load->request_int('saison',0);
+	$liga	= clm_core::$load->request_int('liga',0);
 	$db	= JFactory::getDBO();
 //	$id	= @$options['id'];
  
@@ -43,8 +43,8 @@ class CLMModelRunde extends JModelLegacy
 
 	function _getCLMMannschaft( &$options )
 	{
-	$sid	= clm_core::$load->request_int('saison',1);
-	$liga	= clm_core::$load->request_int('liga',1);
+	$sid	= clm_core::$load->request_int('saison',0);
+	$liga	= clm_core::$load->request_int('liga',0);
 		// TODO: Cache on the fingerprint of the arguments
 		$db			= JFactory::getDBO();
 //		$id			= @$options['id'];
@@ -66,8 +66,8 @@ class CLMModelRunde extends JModelLegacy
 
 	function _getCLMPaar ( &$options )
 	{
-	$sid	= clm_core::$load->request_int('saison',1);
-	$liga	= clm_core::$load->request_int('liga',1);
+	$sid	= clm_core::$load->request_int('saison',0);
+	$liga	= clm_core::$load->request_int('liga',0);
 	$dg 	= clm_core::$load->request_int('dg');
 	$runde = clm_core::$load->request_int('runde');
 
@@ -105,8 +105,8 @@ class CLMModelRunde extends JModelLegacy
 
 	function _getCLMEinzel ( &$options )
 	{
-	$sid	= clm_core::$load->request_int('saison',1);
-	$liga	= clm_core::$load->request_int('liga',1);
+	$sid	= clm_core::$load->request_int('saison',0);
+	$liga	= clm_core::$load->request_int('liga',0);
 	$dg 	= clm_core::$load->request_int('dg');
 	$runde = clm_core::$load->request_int('runde');
 	//CLM parameter auslesen
@@ -122,7 +122,7 @@ class CLMModelRunde extends JModelLegacy
 			;
 	$db->setQuery($query);
 	$man	=$db->loadObjectList();
-	$rang	=$man[0]->rang;
+	if (isset($man[0])) $rang = $man[0]->rang; else $rang = 0;
 	
 	if ($rang == 0) 
 	{	$query = "  SELECT a.zps, a.gzps, a.paar,a.brett,a.spieler,a.PKZ,a.gegner,a.gPKZ,a.ergebnis,a.kampflos, a.dwz_edit, a.dwz_editor, a.weiss,"
@@ -299,10 +299,10 @@ class CLMModelRunde extends JModelLegacy
 			;
 		$db->setQuery($query);
 		$order = $db->loadObjectList();
- 			if ($order[0]->order == 1) { $ordering = " , m.ordering ASC";}
-			//else { $ordering =', a.tln_nr ASC ';} 
-			else { $ordering =' ';}
-		if ($order[0]->liga_mt == 0) { // Liga
+ 		if (isset($order[0]) AND  $order[0]->order == 1) {
+			$ordering = " , m.ordering ASC"; }
+		else { $ordering =' '; }
+		if (isset($order[0]) AND $order[0]->liga_mt == 0) { // Liga
 			$query = " SELECT a.tln_nr as tln_nr,m.name as name, (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
 			." (SUM(a.brettpunkte) - m.bpabzug) as bp, m.bpabzug, SUM(a.wertpunkte) as wp, m.published, m.man_nr, "  
 			." COUNT(DISTINCT case when a.gemeldet > 1 then CONCAT(a.dg,' ',a.runde) else null end) as spiele, "  
@@ -313,7 +313,7 @@ class CLMModelRunde extends JModelLegacy
 			." AND m.man_nr <> 0 ";
 		} else { // Mannschaftsturnier
 			$rc = 999;
-			$rc = clm_core::$api->db_tournament_ranking_round($liga,true,$runde,$dg);
+			if (isset($order[0])) $rc = clm_core::$api->db_tournament_ranking_round($liga,true,$runde,$dg);
 			$query = " SELECT a.tln_nr as tln_nr,m.name as name, (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
 			." (SUM(a.brettpunkte) - m.bpabzug) as bp, m.bpabzug, SUM(a.wertpunkte) as wp, m.published, m.man_nr, "  
 			." COUNT(DISTINCT case when a.gemeldet > 1 then CONCAT(a.dg,' ',a.runde) else null end) as spiele, "  
@@ -328,16 +328,16 @@ class CLMModelRunde extends JModelLegacy
 			 
 		$query = $query	
 			." GROUP BY a.tln_nr ";
-		if ($order[0]->b_wertung == 0 AND $order[0]->liga_mt == 0) {   
+		if (isset($order[0]) AND $order[0]->b_wertung == 0 AND $order[0]->liga_mt == 0) {   
 			$query = $query
 			." ORDER BY mp DESC, bp DESC".$ordering; }
-		if ($order[0]->b_wertung == 3 AND $order[0]->liga_mt == 0) { 
+		if (isset($order[0]) AND $order[0]->b_wertung == 3 AND $order[0]->liga_mt == 0) { 
 			$query = $query
 			." ORDER BY mp DESC, bp DESC, wp DESC".$ordering; }
-		if ($order[0]->b_wertung == 4 AND $order[0]->liga_mt == 0) { 
+		if (isset($order[0]) AND $order[0]->b_wertung == 4 AND $order[0]->liga_mt == 0) { 
 			$query = $query
 			." ORDER BY mp DESC, bp DESC ".$ordering.", wp DESC"; }
-		if ($order[0]->liga_mt == 1) {                       //mtmt
+		if (isset($order[0]) AND $order[0]->liga_mt == 1) {                       //mtmt
 			if ($runde = 0) $query = $query." ORDER BY rankingpos ASC"; 
 			else $query = $query." ORDER BY z_rankingpos ASC"; 
 		}

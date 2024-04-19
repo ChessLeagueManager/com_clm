@@ -176,7 +176,10 @@ class CLMModelStatistik extends JModelLegacy
 	$db->setQuery( $query);
 	$result=$db->loadObjectList();
 	//Parameter aufbereiten
-	$rang = $result[0]->rang;
+	if (isset($result[0])) 
+		$rang = $result[0]->rang;
+	else
+		$rang = 0;
 	$paramsStringArray = explode("\n", $result[0]->params);
 	$params = array();
 	foreach ($paramsStringArray as $value) {

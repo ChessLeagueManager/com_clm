@@ -43,20 +43,25 @@ $dg			= clm_core::$load->request_int('dg',1);
 $item		= clm_core::$load->request_int('Itemid',0);
 $typeid		= clm_core::$load->request_int('typeid',0);
 $liga		= $this->liga;
-$option 	= clm_core::$load->request_string( 'option' );
+$option 	= 'com_clm';
 $mainframe	= JFactory::getApplication();
 $pgn		= clm_core::$load->request_int('pgn',0); 
-  if (($pgn == 1) OR ($pgn == 2)) { 
-	$result = clm_core::$api->db_pgn_template($lid,$dg,$runde,$pgn,true);
-	//JRequest::setVar('pgn',0);
-	if (!$result[1]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
-	$link = 'index.php?option='.$option.'&view=runde&saison='.$sid.'&liga='.$lid.'&dg='.$dg.'&runde='.$runde.'&pgn=0';
-	if ($item != 0) $link .= '&Itemid='.$item;
-	if ($typeid != 0) $link .= '&typeid='.$typeid;
-	$mainframe->redirect( $link, $msg );
-  }	
 
-$attr = clm_core::$api->db_lineup_attr($lid);
+$config		= clm_core::$db->config();
+
+if(isset($liga[0])){
+
+	if (($pgn == 1) OR ($pgn == 2)) { 
+		$result = clm_core::$api->db_pgn_template($lid,$dg,$runde,$pgn,true);
+		if (!$result[1]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
+		$link = 'index.php?option='.$option.'&view=runde&saison='.$sid.'&liga='.$lid.'&dg='.$dg.'&runde='.$runde.'&pgn=0';
+		if ($item != 0) $link .= '&Itemid='.$item;
+		if ($typeid != 0) $link .= '&typeid='.$typeid;
+		$mainframe->enqueueMessage( $msg );
+		$mainframe->redirect( $link );
+	}	
+
+	$attr = clm_core::$api->db_lineup_attr($lid);
 
 	//Liga-Parameter aufbereiten
 	$paramsStringArray = explode("\n", $liga[0]->params);
@@ -73,9 +78,10 @@ $attr = clm_core::$api->db_lineup_attr($lid);
 	if (!isset($params['noBoardResults'])) $params['noBoardResults'] = '0';
 	if (!isset($params['ReportForm'])) $params['ReportForm'] = '0';
 	if (!isset($params['pgnPublic'])) $params['pgnPublic'] = '0';
-$einzel		= $this->einzel;
-$detail		= clm_core::$load->request_int('detail',0);
-if ($detail == 0) $detailp = '1'; else $detailp = '0';
+	
+	$einzel		= $this->einzel;
+	$detail		= clm_core::$load->request_int('detail',0);
+	if ($detail == 0) $detailp = '1'; else $detailp = '0';
 
 	// Userkennung holen
 	$user	=JFactory::getUser();
@@ -92,30 +98,38 @@ if ($detail == 0) $detailp = '1'; else $detailp = '0';
 			}
 		}
 	}
-	$config		= clm_core::$db->config();
 
-$runde_t = $runde + (($dg - 1) * $liga[0]->runden);  
-// Test alte/neue Standardrundenname bei 2 Durchgängen, nur bei Ligen/Turniere vor 2013 (Archiv!)
-if ($liga[$runde_t-1]->datum < '2013-01-01') {
-if ($liga[0]->durchgang > 1) {
-	if ($liga[$runde_t-1]->rname == JText::_('ROUND').' '.$runde_t) {  //alt
-		if ($dg == 1) { $liga[$runde_t-1]->rname = JText::_('ROUND').' '.$runde." (".JText::_('PAAR_HIN').")";}
-		if ($dg == 2) { $liga[$runde_t-1]->rname = JText::_('ROUND').' '.$runde." (".JText::_('PAAR_RUECK').")";}
-    }
-} }
+	$runde_t = $runde + (($dg - 1) * $liga[0]->runden);  
+	// Test alte/neue Standardrundenname bei 2 Durchgängen, nur bei Ligen/Turniere vor 2013 (Archiv!)
+	if ($liga[$runde_t-1]->datum < '2013-01-01') {
+		if ($liga[0]->durchgang > 1) {
+			if ($liga[$runde_t-1]->rname == JText::_('ROUND').' '.$runde_t) {  //alt
+				if ($dg == 1) { $liga[$runde_t-1]->rname = JText::_('ROUND').' '.$runde." (".JText::_('PAAR_HIN').")";}
+				if ($dg == 2) { $liga[$runde_t-1]->rname = JText::_('ROUND').' '.$runde." (".JText::_('PAAR_RUECK').")";}
+			}
+		}
+	}
 
-$runden_modus = $liga[0]->runden_modus;
-$runde_orig = $runde;
-if ($dg == 2) { $runde = $runde + $liga[0]->runden; }
-if ($dg == 3) { $runde = $runde + (2 * $liga[0]->runden); }
-if ($dg == 4) { $runde = $runde + (3 * $liga[0]->runden); }
- 
+		$runden_modus = $liga[0]->runden_modus;
+	$runde_orig = $runde;
+	if ($dg == 2) { $runde = $runde + $liga[0]->runden; }
+	if ($dg == 3) { $runde = $runde + (2 * $liga[0]->runden); }
+	if ($dg == 4) { $runde = $runde + (3 * $liga[0]->runden); }
+}
+// Stylesheet laden
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
+
 // Browsertitelzeile setzen
 $doc =JFactory::getDocument();
-$daten['title'] = $liga[0]->name.', '.$liga[$runde-1]->rname;      // JText::_('ROUND').' '.$runde; 
-if(isset($liga[$runde-1]->datum)) { $daten['title'] .= ' '.JText::_('ON_DAY').' '.JHTML::_('date',  $liga[$runde-1]->datum, JText::_('DATE_FORMAT_CLM_F'));
-	if(isset($liga[$runde-1]->startzeit)) { $daten['title'] .= '  '.substr($liga[$runde-1]->startzeit,0,5).' Uhr'; } }
-$doc->setTitle($daten['title']);
+if(isset($liga[0])){
+	$daten['title'] = $liga[0]->name.', '.$liga[$runde-1]->rname;      // JText::_('ROUND').' '.$runde; 
+	if(isset($liga[$runde-1]->datum)) { 
+		$daten['title'] .= ' '.JText::_('ON_DAY').' '.JHTML::_('date',  $liga[$runde-1]->datum, JText::_('DATE_FORMAT_CLM_F'));
+		if(isset($liga[$runde-1]->startzeit)) { $daten['title'] .= '  '.substr($liga[$runde-1]->startzeit,0,5).' Uhr'; } }
+} else {
+	$daten['title'] = '';
+}
+	$doc->setTitle($daten['title']);
 
 			$doc->addScript(JURI::base().'components/com_clm/javascript/jsPgnViewer.js');
 			$doc->addScript(JURI::base().'components/com_clm/javascript/showPgnViewer.js');
@@ -142,9 +156,6 @@ $doc->setTitle($daten['title']);
 			$doc->addScriptDeclaration("var imagepath = '".JURI::base()."components/com_clm/images/pgnviewer/'");
 
 
-// Stylesheet laden
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
-
 // Konfigurationsparameter auslesen
 $config		= clm_core::$db->config();
 $rang_runde	= $config->fe_runde_rang;
@@ -153,50 +164,40 @@ $clm_zeile2			= $config->zeile2;
 $clm_zeile1D			= RGB($clm_zeile1);
 $clm_zeile2D			= RGB($clm_zeile2);
 
+if(isset($liga[0])){
 	// DWZ Durchschnitte - Aufstellung 
 	$result = clm_core::$api->db_nwz_average($lid);
-//echo "<br>lid:"; var_dump($lid);
-//echo "<br>result:"; var_dump($result);
 	$a_average_dwz_lineup = $result[2];
-//echo "<br>a_average_dwz_lineup:"; var_dump($a_average_dwz_lineup);
-//die();
 	// DWZ Durchschnitte - gespielt in Runde 
 	$result = clm_core::$api->db_nwz_average($lid,$runde_orig,$dg);
-//echo "<br>lid:"; var_dump($lid);
-//echo "<br>runde:"; var_dump($runde_orig);
-//echo "<br>dg:"; var_dump($dg);
-//echo "<br>result:"; var_dump($result);
 	$a_average_dwz_round = $result[2];
-//echo "<br>a_average_dwz_round:"; var_dump($a_average_dwz_round);
-//die();
-
+}
 ?>
 
 <div id="clm">
 <div id="runde">
 
 <?php
-$ok=$this->ok;
+if(isset($liga[0])){
+	$ok=$this->ok;
 
-if ((isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok > 0)) $hint_freenew = JText::_('CHIEF_OK');  
-if ((isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok == 0)) $hint_freenew = JText::_('CHIEF_NOK');  
-if ((!isset($ok[0]->sl_ok))) $hint_freenew = JText::_('CHIEF_NOK');  
+	if ((isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok > 0)) $hint_freenew = JText::_('CHIEF_OK');  
+	if ((isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok == 0)) $hint_freenew = JText::_('CHIEF_NOK');  
+	if ((!isset($ok[0]->sl_ok))) $hint_freenew = JText::_('CHIEF_NOK');  
 
-if (isset($liga[$runde-1]->datum) AND ($liga[$runde-1]->datum =='0000-00-00' OR $liga[$runde-1]->datum =='1970-01-01' )) {
+	if (isset($liga[$runde-1]->datum) AND ($liga[$runde-1]->datum =='0000-00-00' OR $liga[$runde-1]->datum =='1970-01-01' )) {
 ?>
+		<div class="componentheading"><?php echo $liga[0]->name.', '.$liga[$runde-1]->rname;      // JText::_('ROUND').' '.$runde; ?>
 
-<div class="componentheading"><?php echo $liga[0]->name.', '.$liga[$runde-1]->rname;      // JText::_('ROUND').' '.$runde; 
-?>
 <?php } else { ?>
-<div class="componentheading">
-	<?php echo $liga[0]->name.', '.$liga[$runde-1]->rname;      // JText::_('ROUND').' '.$runde; 
-	if(isset($liga[$runde-1]->datum)) { echo ' '.JText::_('ON_DAY').' '.JHTML::_('date',  $liga[$runde-1]->datum, JText::_('DATE_FORMAT_CLM_F')); 
-		if($params['round_date'] == '0' and isset($liga[$runde-1]->startzeit) and $liga[$runde-1]->startzeit != '00:00:00') { echo '  '.substr($liga[$runde-1]->startzeit,0,5); } 
-		if($params['round_date'] == '1' and isset($liga[$runde-1]->enddatum) and $liga[$runde-1]->enddatum > '1970-01-01' and $liga[$runde-1]->enddatum != $liga[$runde-1]->datum) { 
-			echo ' - '.JHTML::_('date',  $liga[$runde-1]->enddatum, JText::_('DATE_FORMAT_CLM_F'));} }
-    ?>
-    
-    <?php } ?>
+		<div class="componentheading"><?php echo $liga[0]->name.', '.$liga[$runde-1]->rname;      // JText::_('ROUND').' '.$runde; 
+			if(isset($liga[$runde-1]->datum)) {
+				echo ' '.JText::_('ON_DAY').' '.JHTML::_('date',  $liga[$runde-1]->datum, JText::_('DATE_FORMAT_CLM_F')); 
+				if($params['round_date'] == '0' and isset($liga[$runde-1]->startzeit) and $liga[$runde-1]->startzeit != '00:00:00') { echo '  '.substr($liga[$runde-1]->startzeit,0,5); } 
+				if($params['round_date'] == '1' and isset($liga[$runde-1]->enddatum) and $liga[$runde-1]->enddatum > '1970-01-01' and $liga[$runde-1]->enddatum != $liga[$runde-1]->datum) { 
+					echo ' - '.JHTML::_('date',  $liga[$runde-1]->enddatum, JText::_('DATE_FORMAT_CLM_F'));}
+			}   
+		}	?>
     
     <?php if (isset($liga) AND $liga[0]->published == 1 AND $liga[0]->rnd == 1 AND $liga[$runde - 1]->pub == 1) { ?>
 		<div id="pdf">	
@@ -217,7 +218,11 @@ if (isset($liga[$runde-1]->datum) AND ($liga[$runde-1]->datum =='0000-00-00' OR 
 			</div>
 			<?php } ?>
 		</div>
-    <?php } ?>
+    <?php } 
+} else {	?>
+
+		<div class="componentheading"><?php echo JText::_('ROUND'); ?>
+<?php } ?>
 </div>
 <div class="clr"></div>
 
@@ -227,14 +232,15 @@ $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
 	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
 }
+elseif (!isset($liga[0])) {
+	echo "<br>". CLMContent::clmWarning(JText::_('NOT_EXIST').'<br>'.JText::_('GEDULDA'))."<br>"; }
 // schon veröffentlicht
 elseif (!$liga OR $liga[0]->published == 0) {
-
-echo "<br>". CLMContent::clmWarning(JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD'))."<br>"; }
+	echo "<br>". CLMContent::clmWarning(JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD'))."<br>"; }
 elseif ($liga[0]->rnd == 0){ 
-echo "<br>". CLMContent::clmWarning(JText::_('NO_ROUND_CREATED').'<br>'.JText::_('NO_ROUND_CREATED_HINT'))."<br>"; }
+	echo "<br>". CLMContent::clmWarning(JText::_('NO_ROUND_CREATED').'<br>'.JText::_('NO_ROUND_CREATED_HINT'))."<br>"; }
 elseif ($liga[$runde - 1]->pub == 0){ 
-echo "<br>". CLMContent::clmWarning(JText::_('ROUND_UNPUBLISHED').'<br>'.JText::_('ROUND_UNPUBLISHED_HINT'))."<br>"; } 
+	echo "<br>". CLMContent::clmWarning(JText::_('ROUND_UNPUBLISHED').'<br>'.JText::_('ROUND_UNPUBLISHED_HINT'))."<br>"; } 
 else {   ?>
 
 <?php // Kommentare zur Liga

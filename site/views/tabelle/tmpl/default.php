@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -18,7 +18,9 @@ $sid		= clm_core::$load->request_int('saison',0);
 $runde		= clm_core::$load->request_int('runde');
 $item		= clm_core::$load->request_int('Itemid',1);
 $liga		= $this->liga;
-	//Liga-Parameter aufbereiten
+
+//Liga-Parameter aufbereiten
+if(isset($liga[0])){
 	$paramsStringArray = explode("\n", $liga[0]->params);
 	$params = array();
 	foreach ($paramsStringArray as $value) {
@@ -28,26 +30,31 @@ $liga		= $this->liga;
 		}
 	}	
 	if (!isset($params['dwz_date'])) $params['dwz_date'] = '1970-01-01';
+} else {
+	$paramsStringArray = array();
+}
+
 $punkte		= $this->punkte;
 $spielfrei	= $this->spielfrei;
-//$dwzschnitt	= $this->dwzschnitt;
 
-// Test MP als Feinwertung -> d.h. Spalte MP als Hauptwertung wird dann unterdrückt
-if ($liga[0]->tiebr1 == 9 OR $liga[0]->tiebr2 == 9 OR $liga[0]->tiebr3 == 9) $columnMP = 0;
-else $columnMP = 1;
+if(isset($liga[0])){
+	// Test MP als Feinwertung -> d.h. Spalte MP als Hauptwertung wird dann unterdrückt
+	if ($liga[0]->tiebr1 == 9 OR $liga[0]->tiebr2 == 9 OR $liga[0]->tiebr3 == 9) $columnMP = 0;
+	else $columnMP = 1;
 
-if ($sid == 0) {
-	$db	= JFactory::getDBO();
-	$query = " SELECT a.* FROM #__clm_liga as a"
+	if ($sid == 0) {
+		$db	= JFactory::getDBO();
+		$query = " SELECT a.* FROM #__clm_liga as a"
 			." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 			." WHERE a.id = ".$lid
 			." AND s.published = 1"
 			;
-	$db->setQuery($query);
-	$zz	=$db->loadObjectList();
-	if (isset($zz)) {
-		$_GET['saison'] = $zz[0]->sid;
-		$sid = $zz[0]->sid;
+		$db->setQuery($query);
+		$zz	=$db->loadObjectList();
+		if (isset($zz)) {
+			$_GET['saison'] = $zz[0]->sid;
+			$sid = $zz[0]->sid;
+		}
 	}
 }
  
@@ -56,7 +63,11 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 	
 	// Browsertitelzeile setzen
 	$doc =JFactory::getDocument();
-	$doc->setTitle(JText::_('Tabelle').' '.$liga[0]->name);
+	if(isset($liga[0])){
+		$doc->setTitle(JText::_('Tabelle').' '.$liga[0]->name);
+	} else {
+		$doc->setTitle(JText::_('Tabelle'));
+	}
 
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
@@ -75,6 +86,12 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php');
 $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
 	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+}
+// existiert die Liga
+elseif (!$liga) {
+	
+	echo "<div id='wrong'>".JText::_('NOT_EXIST')." (".$lid.")<br>".JText::_('GEDULDA')."</div>";
+
 }
 // schon veröffentlicht
 elseif (!$liga OR $liga[0]->published == 0) {
