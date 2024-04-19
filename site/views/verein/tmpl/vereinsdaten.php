@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -105,7 +105,7 @@ if (!isset($row[0]->name)) { ?>
 			</td>
 		</tr>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="homepage"><?php echo JText::_( 'CLUB_DATA_HOMEPAGE' ); ?></label>
+			<td class="key" nowrap="nowrap"><label for="homepage" title="<?php echo JText::_( 'CLUB_HOMEPAGE_HINT' );?>"><?php echo JText::_( 'CLUB_DATA_HOMEPAGE' ); ?></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="homepage" id="homepage" size="70" maxlength="100" value="<?php echo $row[0]->homepage; ?>" />

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -296,20 +296,20 @@ public static function verein( &$row, $lists, $option )
 			</td>
 		</tr>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="lokal"><?php echo JText::_( 'VEREIN_ADRESSE' ).' : '; ?></label>
+			<td class="key" nowrap="nowrap"><label for="adresse"><?php echo JText::_( 'VEREIN_ADRESSE' ).' : '; ?></label>
 			</td>
 			<td>
 			<textarea class="inputbox" name="adresse" id="adresse" cols="40" rows="2" style="width:100%"><?php echo $row->adresse; ?></textarea>
 			</td>
 		</tr>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="lokal"><?php echo JText::_( 'VEREIN_TERMINE' ).' : '; ?></label>
+			<td class="key" nowrap="nowrap"><label for="termine"><?php echo JText::_( 'VEREIN_TERMINE' ).' : '; ?></label>
 			</td>
 			<td>
 			<textarea class="inputbox" name="termine" id="termine" cols="40" rows="4" style="width:99%"><?php echo $row->termine; ?></textarea>
 		</tr>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="lokal"><?php echo JText::_( 'VEREIN_HOMEPAGE' ).' : '; ?></label>
+			<td class="key" nowrap="nowrap"><label for="homepage" title="<?php echo JText::_( 'VEREIN_HOMEPAGE_HINT' ) ?>"><?php echo JText::_( 'VEREIN_HOMEPAGE' ).' : '; ?></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="homepage" id="homepage"  size="50" value="<?php echo $row->homepage; ?>" />

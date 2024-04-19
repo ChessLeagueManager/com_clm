@@ -26,7 +26,7 @@ $ -> Language fix or change
 ^ Adminviews: Durchsuchbare Dropdown Menues
 # Erstellung pgn-Vorlagedatei: keine Wertzahl immer als leere Zeichenkette
 # Rundenbericht, Tabelle, DWZ-Liga, Ligastatistik: Anpassung bei ungültiger Liga-Id bei Extern Zugriff
-
+^ View Verein: Hint-Text zur Angabe Homepage
 - - - - - 4.1.4 - [25-02-2024] - - - - - - - - - - - - - - - - - - - -
 # SWT-Import Einzelturniere: Anzeige noch nicht gespielter Runden bei CH-Modus (Nachtrag)
 ^ Backend: Codeanpassung php 8.2 für Einzelturniere einschl. Sonderranglisten
