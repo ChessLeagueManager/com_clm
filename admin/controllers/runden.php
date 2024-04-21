@@ -120,7 +120,7 @@ function display($cachable = false, $urlparams = array())
 	$db->setQuery($sql);
 	$saisonlist[]	= JHtml::_('select.option',  '0', JText::_( 'RUNDE_SAISON_WAE' ), 'id', 'name' );
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
-	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 	// Nur ausführen wenn Saison published = 1 !!
 
 	//Zugangscheck
@@ -149,7 +149,7 @@ function display($cachable = false, $urlparams = array())
 
 	$ligalist[]	= JHtml::_('select.option',  '0', JText::_( 'RUNDE_LIGA_WAE' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
-	$lists['lid']	= JHtml::_('select.genericlist', $ligalist, 'filter_lid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
+	$lists['lid']	= JHtml::_('select.genericlist', $ligalist, 'filter_lid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
 	// Ordering
 	$lists['order_Dir']	= $filter_order_Dir;
 	$lists['order']		= $filter_order;
@@ -252,7 +252,7 @@ function edit()
 	$ligalist[]	= JHtml::_('select.option',  '0', JText::_( 'RUNDE_LIGA_WAE') , 'liga', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
 	$lists['liga']	= JHtml::_('select.genericlist',   $ligalist, 'liga', 'class="inputbox" size="1"','liga', 'name', $row->liga );
-	$lists['published']	= JHtml::_('select.booleanlist',  'published', 'class="inputbox"', $row->published );
+	$lists['published']	= JHtml::_('select.booleanlist',  'published', 'class="js-example-basic-single"', $row->published );
 	// Saisonliste
 	$sql = 'SELECT id as sid, name FROM #__clm_saison WHERE archiv = 0';
 	$db->setQuery($sql);
@@ -262,7 +262,7 @@ function edit()
 	}
 	$saisonlist[]	= JHtml::_('select.option',  '0', JText::_( 'RUNDE_SAISON_WAE' ), 'sid', 'name' );
 	$saisonlist	= array_merge( $saisonlist, $db->loadObjectList() );
-	$lists['saison']= JHtml::_('select.genericlist',   $saisonlist, 'sid', 'class="inputbox" size="1"','sid', 'name', $row->sid );
+	$lists['saison']= JHtml::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1"','sid', 'name', $row->sid );
 	// Liste Meldung
 	$lists['complete']= JHtml::_('select.booleanlist',  'meldung', 'class="inputbox"', $row->meldung );
 	// Liste SL OK

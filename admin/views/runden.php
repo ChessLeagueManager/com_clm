@@ -41,43 +41,46 @@ public static function setRundenToolbar($sid, $params_round_date)
 
 public static function runden( $rows, $lists, $pageNav, $option )
 	{
-		$mainframe	= JFactory::getApplication();
-		$cliga 		= clm_core::$load->request_int('liga'); 
-		JFactory::getApplication()->input->set('hidemainmenu', true);
+	$mainframe	= JFactory::getApplication();
+	$cliga 		= clm_core::$load->request_int('liga');
+	JFactory::getApplication()->input->set('hidemainmenu', true);
 
-		// Liga-Parameter holen 
-		$db 		=JFactory::getDBO();
-		$sql = "SELECT params FROM #__clm_liga as l"
-			." WHERE l.id = ".$rows[0]->liga;
-		$db->setQuery( $sql );
-		$tparams = $db->loadObjectList();
-		//Liga-Parameter aufbereiten
-		$paramsStringArray = explode("\n", $tparams[0]->params);
-		$lparams = array();
-		foreach ($paramsStringArray as $value) {
-			$ipos = strpos ($value, '=');
-			if ($ipos !==false) {
-				$key = substr($value,0,$ipos);
-				if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
-				if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
-				$lparams[$key] = substr($value,$ipos+1);
-			}
-		}	
-		if (!isset($lparams['round_date']))  {   //Standardbelegung
-			$lparams['round_date'] = '0'; }
+	// Liga-Parameter holen
+	$db 		=JFactory::getDBO();
+	$sql = "SELECT params FROM #__clm_liga as l"
+		." WHERE l.id = ".$rows[0]->liga;
+	$db->setQuery( $sql );
+	$tparams = $db->loadObjectList();
+	//Liga-Parameter aufbereiten
+	$paramsStringArray = explode("\n", $tparams[0]->params);
+	$lparams = array();
+	foreach ($paramsStringArray as $value) {
+		$ipos = strpos ($value, '=');
+		if ($ipos !==false) {
+			$key = substr($value,0,$ipos);
+			if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
+			if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
+			$lparams[$key] = substr($value,$ipos+1);
+		}
+	}
+	if (!isset($lparams['round_date']))  {   //Standardbelegung
+		$lparams['round_date'] = '0'; }
 
-		CLMViewRunden::setRundenToolbar($rows[0]->sid, $lparams['round_date']);
-		$user =JFactory::getUser();
+	CLMViewRunden::setRundenToolbar($rows[0]->sid, $lparams['round_date']);
+	$user =JFactory::getUser();
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
 	$val=$config->menue;
 	$dropdown=$config->dropdown;
 
-		//Ordering allowed ?
-		$ordering = ($lists['order'] == 'a.ordering');
+	//Ordering allowed ?
+	$ordering = ($lists['order'] == 'a.ordering');
 
-//		JHtml::_('behavior.tooltip');
-		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
+	// Auswahlfelder durchsuchbar machen
+	clm_core::$load->load_js("suche_liste");
+
+//	JHtml::_('behavior.tooltip');
+	require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 
 	if(isset($rows[0]) && $rows[0]->sid_pub =="0" AND $val !=0) {
 	JError::raiseNotice( 6000,  JText::_( 'RUNDE_ERROR_SAISON_UNPUBLISHED' ));
@@ -355,6 +358,8 @@ public static function runde( &$row,$lists, $option )
 		if (!isset($lparams['round_date']))  {   //Standardbelegung
 			$lparams['round_date'] = '0'; }
 
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
 		?>
 	<script language="javascript" type="text/javascript">
 
