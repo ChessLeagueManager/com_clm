@@ -251,7 +251,7 @@ function edit()
 	}
 	$ligalist[]	= JHtml::_('select.option',  '0', JText::_( 'RUNDE_LIGA_WAE') , 'liga', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
-	$lists['liga']	= JHtml::_('select.genericlist',   $ligalist, 'liga', 'class="inputbox" size="1"','liga', 'name', $row->liga );
+	$lists['liga']	= JHtml::_('select.genericlist',   $ligalist, 'liga', 'class="js-example-basic-single" size="1"','liga', 'name', $row->liga );
 	$lists['published']	= JHtml::_('select.booleanlist',  'published', 'class="js-example-basic-single"', $row->published );
 	// Saisonliste
 	$sql = 'SELECT id as sid, name FROM #__clm_saison WHERE archiv = 0';
