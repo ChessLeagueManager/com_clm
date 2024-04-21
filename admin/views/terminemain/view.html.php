@@ -54,6 +54,9 @@ class CLMViewTermineMain extends JViewLegacy {
 //		JHtml::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
+
 		parent::display();
 	}
 

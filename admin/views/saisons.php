@@ -52,6 +52,8 @@ public static function saisons ( &$rows, &$lists, &$pageNav, $option )
 		//Ordering allowed ?
 		$ordering = ($lists['order'] == 'a.ordering');
 
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
 //		JHtml::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 		?>
