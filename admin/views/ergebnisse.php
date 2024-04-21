@@ -52,6 +52,9 @@ static function ergebnisse ( $rows, $lists, $pageNav, $option )
 	//Ordering allowed ?
 	$ordering = ($lists['order'] == 'a.ordering');
 
+	// Auswahlfelder durchsuchbar machen
+	clm_core::$load->load_js("suche_liste");
+
 //	JHtml::_('behavior.tooltip');
 	require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 	?>
@@ -234,6 +237,9 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
+
+	// Auswahlfelder durchsuchbar machen
+	clm_core::$load->load_js("suche_liste");
 	?>
 
 	<form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -265,7 +271,7 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 		  </label>
 		</td>
 		<td class="key" nowrap="nowrap">
-		  <select size="1" name="<?php echo 'heim'.($i+1); ?>" id="<?php echo 'heim'.($i+1); ?>">
+		  <select size="1" name="<?php echo 'heim'.($i+1); ?>" id="<?php echo 'heim'.($i+1); ?>" class="js-example-basic-single" >
  		<option value="0"><?php echo JText::_('RESULTS_DETAILS_DD_1');?></option>
 
 			<?php for ($x=0; $x < $hcount; $x++){
@@ -313,7 +319,7 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 		</td>
 
 		<td class="key" nowrap="nowrap">
-		  <select size="1" name="<?php echo 'gast'.($i+1); ?>" id="<?php echo 'gast'.($i+1); ?>">
+		  <select size="1" name="<?php echo 'gast'.($i+1); ?>" id="<?php echo 'gast'.($i+1); ?>" class="js-example-basic-single">
  		<option value="0"><?php echo JText::_('RESULTS_DETAILS_DD_2');?></option>
 			<?php for ($x=0; $x < $gcount; $x++) {
 			if ($runde[0]->rang !="0") {
@@ -333,7 +339,7 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 			<?php }}
 			else { ?>
 			  <?php if ($countryversion == "de") { ?>
-				<option value="<?php echo $gast[$x]->mgl_nr.'-'.$gast[$x]->zps; ?>" 
+				<option value="<?php echo $gast[$x]->mgl_nr.'-'.$gast[$x]->zps; ?>"
 			 	  <?php if (($bretter AND ((int)$gast[$x]->mgl_nr) == ((int)$bretter[$i]->gegner) AND $gast[$x]->zps == $bretter[$i]->gzps)
 			 		// Bedingungen Voreinstellung
 			 			OR (!$bretter AND $x == $i AND isset($bretter[$i]) AND $bretter[$i]->gzps !="ZZZZZ")
@@ -360,7 +366,7 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 		</td>
 
 		<td class="key" nowrap="nowrap">
-		  <select size="1" name="<?php echo 'ergebnis'.($i+1); ?>" id="<?php echo 'ergebnis'.($i+1); ?>">
+		  <select size="1" class="js-example-basic-single" name="<?php echo 'ergebnis'.($i+1); ?>" id="<?php echo 'ergebnis'.($i+1); ?>">
 			<option value="8"><?php echo JText::_('RESULTS_DETAILS_DD_3');?></option>
 			<?php for ($x=0; $x < 11; $x++) { ?>
 			 <option value="<?php echo ($ergebnis[$x]->id); ?>" 
@@ -390,7 +396,7 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 			<label for="ko_decision"><?php echo JText::_( 'RESULTS_MT_KO_DECISION' ); ?></label>
 			</td>
 			<td class="key" nowrap="nowrap">
-			<select name="ko_decision" id="ko_decision" value="<?php echo $runde[0]->ko_decision; ?>" size="1">
+			<select name="ko_decision" id="ko_decision" value="<?php echo $runde[0]->ko_decision; ?>" class="js-example-basic-single" size="1">
 			<!--<option>- wählen -</option>-->
 			<option value="1" <?php if ($runde[0]->ko_decision == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_BW' );?></option>
 			<option value="2" <?php if ($runde[0]->ko_decision == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_BLITZ' ).$runde[0]->hname;?></option>
