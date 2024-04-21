@@ -316,7 +316,7 @@ class CLMViewLigen
 	<td nowrap="nowrap">
 	<label for="params[color_order]"><?php echo JText::_( 'LEAGUE_COLOR_ORDER' ); ?></label>
 	</td><td colspan="2">
-		<select name="params[color_order]" id="params[color_order]" class="js-example-basic-single" value="<?php echo $row->params['color_order']; ?>" size="1">
+		<select name="params[color_order]" id="params-color_order" class="js-example-basic-single" value="<?php echo $row->params['color_order']; ?>" size="1">
 		<!--<option>- wählen -</option>-->
 		<option value="1" <?php if ($row->params['color_order'] == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_COLOR_ORDER_1' );?></option>
 		<option value="2" <?php if ($row->params['color_order'] == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_COLOR_ORDER_2' );?></option>
@@ -329,7 +329,7 @@ class CLMViewLigen
 	<td nowrap="nowrap">
 	<label for="params[round_date]"><?php echo JText::_( 'LEAGUE_ROUND_DATE' ); ?></label>
 	</td><td colspan="2">
-		<select name="params[round_date]" id="params[round_date]" class="js-example-basic-single" value="<?php echo $row->params['round_date']; ?>" size="1">
+		<select name="params[round_date]" id="params-round_date" class="js-example-basic-single" value="<?php echo $row->params['round_date']; ?>" size="1">
 		<option value="0" <?php if ($row->params['round_date'] == 0) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_ROUND_DATE_0' );?></option>
 		<option value="1" <?php if ($row->params['round_date'] == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_ROUND_DATE_1' );?></option>
 		</select>
@@ -415,7 +415,7 @@ class CLMViewLigen
 		<td nowrap="nowrap">
 		<label for="params[pseudo_dwz]"><?php echo JText::_( 'LEAGUE_PSEUDO_DWZ' ); ?></label>
 		</td><td colspan="2">
-		<input class="inputbox" type="text" name="params[pseudo_dwz]" id="params[pseudo_dwz]" size="4" maxlength="4" value="<?php echo $row->params['pseudo_dwz']; ?>" />
+		<input class="inputbox" type="text" name="params[pseudo_dwz]" id="params-pseudo_dwz" size="4" maxlength="4" value="<?php echo $row->params['pseudo_dwz']; ?>" />
 		</td>
 		<td class="paramlist_key">
 			<?php echo JText::_('ANNUL_PROC'); ?>:
@@ -436,12 +436,12 @@ class CLMViewLigen
 		<td width="20%" nowrap="nowrap">
 			<label for="params[time_control]"><?php echo JText::_( 'LEAGUE_TIME_CONTROL' ); ?></label>
 		</td><td colspan="2">
-		<input class="inputbox" type="text" name="params[time_control]" id="params[time_control]" size="36" maxlength="120" value="<?php echo $row->params['time_control']; ?>" />
+		<input class="inputbox" type="text" name="params[time_control]" id="params-time_control" size="36" maxlength="120" value="<?php echo $row->params['time_control']; ?>" />
 		</td>
 		<td nowrap="nowrap">
 			<label for="params[waiting_period]"><?php echo JText::_( 'LEAGUE_WAITING_PERIOD' ); ?></label>
 		</td><td colspan="2">
-		<input class="inputbox" type="text" name="params[waiting_period]" id="params[waiting_period]" size="20" maxlength="50" value="<?php echo $row->params['waiting_period']; ?>" />
+		<input class="inputbox" type="text" name="params[waiting_period]" id="params-waiting_period" size="20" maxlength="50" value="<?php echo $row->params['waiting_period']; ?>" />
 		</td>
 	</tr>
       </table>
@@ -536,7 +536,7 @@ class CLMViewLigen
 	<td nowrap="nowrap">
 	<label for="params[btiebr1]"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION1' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
-		<select name="params[btiebr1]" id="params[btiebr1]" class="js-example-basic-single" value="<?php echo $row->params['btiebr1']; ?>" size="1">
+		<select name="params[btiebr1]" id="params-btiebr1" class="js-example-basic-single" value="<?php echo $row->params['btiebr1']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
 		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr1'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
@@ -545,7 +545,7 @@ class CLMViewLigen
 	<td nowrap="nowrap">
 	<label for="params[btiebr2]"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION2' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
-		<select name="params[btiebr2]" id="params[btiebr2]" class="js-example-basic-single" value="<?php echo $row->params['btiebr2']; ?>" size="1">
+		<select name="params[btiebr2]" id="params-btiebr2" class="js-example-basic-single" value="<?php echo $row->params['btiebr2']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
 		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr2'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
@@ -556,7 +556,7 @@ class CLMViewLigen
 	<td nowrap="nowrap">
 	<label for="params[btiebr3]"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION3' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
-		<select name="params[btiebr3]" id="params[btiebr3]" class="js-example-basic-single" value="<?php echo $row->params['btiebr3']; ?>" size="1">
+		<select name="params[btiebr3]" id="params-btiebr3" class="js-example-basic-single" value="<?php echo $row->params['btiebr3']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
 		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr3'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
@@ -565,7 +565,7 @@ class CLMViewLigen
 	<td nowrap="nowrap">
 	<label for="params[btiebr4]"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION4' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
-		<select name="params[btiebr4]" id="params[btiebr4]" class="js-example-basic-single" value="<?php echo $row->params['btiebr4']; ?>" size="1">
+		<select name="params[btiebr4]" id="params-btiebr4" class="js-example-basic-single" value="<?php echo $row->params['btiebr4']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
 		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr4'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
@@ -576,7 +576,7 @@ class CLMViewLigen
 	<td nowrap="nowrap">
 	<label for="params[btiebr5]"><?php echo JText::_( 'LEAGUE_BOARD_COLUMN5' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
-		<select name="params[btiebr5]" id="params[btiebr5]" class="js-example-basic-single" value="<?php echo $row->params['btiebr5']; ?>" size="1">
+		<select name="params[btiebr5]" id="params-btiebr5" class="js-example-basic-single" value="<?php echo $row->params['btiebr5']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
 		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr5'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
@@ -585,7 +585,7 @@ class CLMViewLigen
 	<td nowrap="nowrap">
 	<label for="params[btiebr6]"><?php echo JText::_( 'LEAGUE_BOARD_COLUMN6' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
-		<select name="params[btiebr6]" id="params[btiebr6]" class="js-example-basic-single" value="<?php echo $row->params['btiebr6']; ?>" size="1">
+		<select name="params[btiebr6]" id="params-btiebr6" class="js-example-basic-single" value="<?php echo $row->params['btiebr6']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
 		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr6'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
@@ -597,12 +597,12 @@ class CLMViewLigen
 	<td nowrap="nowrap">
 	<label for="params[bnhtml]"><?php echo JText::_( 'LEAGUE_BOARD_POSITIONS_LIST' ); ?></label>
 	</td><td colspan="2">
-	<input class="inputbox" type="text" name="params[bnhtml]" id="params[bnhtml]" size="2" maxlength="2" value="<?php echo $row->params['bnhtml']; ?>" />
+	<input class="inputbox" type="text" name="params[bnhtml]" id="params-bnhtml" size="2" maxlength="2" value="<?php echo $row->params['bnhtml']; ?>" />
 	</td>
 	<td nowrap="nowrap">
 	<label for="params[bnpdf]"><?php echo JText::_( 'LEAGUE_BOARD_POSITIONS_PDF' ); ?></label>
 	</td><td colspan="2">
-	<input class="inputbox" type="text" name="params[bnpdf]" id="params[bnpdf]" size="2" maxlength="2" value="<?php echo $row->params['bnpdf']; ?>" />
+	<input class="inputbox" type="text" name="params[bnpdf]" id="params-bnpdf" size="2" maxlength="2" value="<?php echo $row->params['bnpdf']; ?>" />
 	</td>
 	</tr>
 	
@@ -631,7 +631,7 @@ class CLMViewLigen
 	<td nowrap="nowrap">
 	<label for="params[ReportForm]"><?php echo JText::_( 'LEAGUE_REPORT_FORM' ); ?></label>
 	</td><td colspan="5">
-		<select name="params[ReportForm]" id="params[ReportForm]" class="js-example-basic-single" value="<?php echo $row->params['ReportForm']; ?>" size="1">
+		<select name="params[ReportForm]" id="params-ReportForm" class="js-example-basic-single" value="<?php echo $row->params['ReportForm']; ?>" size="1">
 		<option value="0" <?php if ($row->params['ReportForm'] == 0) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FORM_NO' );?></option>
 		<option value="1" <?php if ($row->params['ReportForm'] == 1) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FORM_LINEUP_NO' );?></option>
 		<option value="2" <?php if ($row->params['ReportForm'] == 2) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FORM_MEMBER_NO' );?></option>
@@ -643,7 +643,7 @@ class CLMViewLigen
 	<td nowrap="nowrap">
 	<label for="params[firstView]"><?php echo JText::_( 'LEAGUE_FIRST_VIEW' ); ?></label>
 	</td><td colspan="5">
-		<select name="params[firstView]" id="params[firstView]" class="js-example-basic-single" value="<?php echo $row->params['firstView']; ?>" size="1">
+		<select name="params[firstView]" id="params-firstView" class="js-example-basic-single" value="<?php echo $row->params['firstView']; ?>" size="1">
 		<option value="0" <?php if ($row->params['firstView'] == 0) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FV_RANGLISTE' );?></option>
 		<option value="1" <?php if ($row->params['firstView'] == 1) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FV_TABELLE' );?></option>
 		<option value="2" <?php if ($row->params['firstView'] == 2) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FV_PAARUNGSLISTE' );?></option>
@@ -656,7 +656,7 @@ class CLMViewLigen
 	<td nowrap="nowrap">
 	<label for="params[pgntype]"><?php echo JText::_( 'LEAGUE_PGN_TYPE' ); ?></label>
 	</td><td colspan="5">
-		<select name="params[pgntype]" id="params[pgntype]" class="js-example-basic-single" value="<?php echo $row->params['pgntype']; ?>" size="1">
+		<select name="params[pgntype]" id="params-pgntype" class="js-example-basic-single" value="<?php echo $row->params['pgntype']; ?>" size="1">
 		<option value="0" <?php if ($row->params['pgntype'] == 0) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_PGN_NO' );?></option>
 		<option value="1" <?php if ($row->params['pgntype'] == 1) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_PGN_LEAGUE_NAME' );?></option>
 		<option value="2" <?php if ($row->params['pgntype'] == 2) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_PGN_SHORT_LEAGUE_NAME' );?></option>
@@ -670,7 +670,7 @@ class CLMViewLigen
 	<td nowrap="nowrap">
 	<label for="params[pgnlname]"><?php echo JText::_( 'LEAGUE_SHORT_NAME' ); ?></label>
 	</td><td colspan="5">
-	<input class="inputbox" type="text" name="params[pgnlname]" id="params[pgnlname]" size="30" maxlength="30" value="<?php echo $row->params['pgnlname']; ?>" />
+	<input class="inputbox" type="text" name="params[pgnlname]" id="params-pgnlname" size="30" maxlength="30" value="<?php echo $row->params['pgnlname']; ?>" />
 	</td>
 	</tr>
 

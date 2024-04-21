@@ -101,6 +101,9 @@ class CLMViewMTurniere
 		$row->params['dwz_date'] = '1970-01-01'; }
 	if (!isset($row->params['import_date']))  {   //Standardbelegung
 		$row->params['import_date'] = '1970-01-01'; }
+
+	// Auswahlfelder durchsuchbar machen
+	clm_core::$load->load_js("suche_liste");
 	?>
 	
 	<script language="javascript" type="text/javascript">
