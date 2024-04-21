@@ -56,7 +56,7 @@ class CLMModelCatForm extends JModelLegacy {
 			}
 		}
 		if (!isset($this->form) OR is_null($this->form)) $this->form = array();
-		$this->form['parent'] = JHTML::_('select.genericlist', $parentlist, 'parentid', 'class="inputbox" size="1"', 'id', 'name', intval($this->category->parentid));
+		$this->form['parent'] = JHTML::_('select.genericlist', $parentlist, 'parentid', 'class="js-example-basic-single" size="1"', 'id', 'name', intval($this->category->parentid));
 		
 	
 	
