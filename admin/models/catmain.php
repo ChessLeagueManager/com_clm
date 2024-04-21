@@ -69,7 +69,7 @@ class CLMModelCatMain extends JModelLegacy {
 		foreach ($this->parentArray as $key => $value) {
 			$parentlist[]	= JHTML::_('select.option',  $key, $value, 'id', 'name' );
 		}
-		$this->form['parent'] = JHTML::_('select.genericlist', $parentlist, 'filter_parentid', 'class="inputbox" size="1" style="max-width: 250px;"'.CLMText::stringOnchange(true), 'id', 'name', $this->param['parentid']);
+		$this->form['parent'] = JHTML::_('select.genericlist', $parentlist, 'filter_parentid', 'class="js-example-basic-single" size="1" style="max-width: 250px;"'.CLMText::stringOnchange(true), 'id', 'name', $this->param['parentid']);
 	
 	
 		// Statusfilter
