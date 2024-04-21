@@ -50,7 +50,9 @@ class CLMViewSonderranglistenMain extends JViewLegacy {
 		
 //		JHtml::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
-		
+
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
 		//Suche und Filter
 		$filter_saison		= $state->get( 'filter_saison' );
 		$filter_turnier		= $state->get( 'filter_turnier' );
@@ -69,13 +71,13 @@ class CLMViewSonderranglistenMain extends JViewLegacy {
 		foreach($filter_turniere as $tur)	{
 			$options_filter_tur[]		= JHtml::_('select.option', $tur->id, $tur->name);
 		}
-		$lists['filter_turnier']	= JHtml::_('select.genericlist', $options_filter_tur, 'filter_turnier', 'class="inputbox" onchange="this.form.submit();"', 'value', 'text', $filter_turnier );
+		$lists['filter_turnier']	= JHtml::_('select.genericlist', $options_filter_tur, 'filter_turnier', 'class="js-example-basic-single" onchange="this.form.submit();"', 'value', 'text', $filter_turnier );
 		
 		$options_filter_sai[]		= JHtml::_('select.option', '', JText::_( 'SPECIALRANKINGS_SEASONS' ));
 		foreach($filter_saisons as $sai)	{
 			$options_filter_sai[]		= JHtml::_('select.option', $sai->id, $sai->name);
 		}
-		$lists['filter_saison']	= JHtml::_('select.genericlist', $options_filter_sai, 'filter_saison', 'class="inputbox" onchange="this.form.submit();"', 'value', 'text', $filter_saison );
+		$lists['filter_saison']	= JHtml::_('select.genericlist', $options_filter_sai, 'filter_saison', 'class="js-example-basic-single" onchange="this.form.submit();"', 'value', 'text', $filter_saison );
 		
 		
 		//Reihenfolge

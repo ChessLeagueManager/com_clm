@@ -57,7 +57,9 @@ class CLMViewSonderranglistenForm extends JViewLegacy {
 		$_REQUEST['hidemainmenu'] = 1; 
 
 		$config = clm_core::$db->config();
-		
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
+
 		//Listen
 		$lists['published']			= JHtml::_('select.booleanlist', 'published', 'class="inputbox"', $sonderrangliste->published );
 		
@@ -68,7 +70,7 @@ class CLMViewSonderranglistenForm extends JViewLegacy {
 		$options_rat[]				= JHtml::_('select.option', 3, JText::_( 'SPECIALRANKING_OPTION_RATING_TYPE_3' ));
 		$options_rat[]				= JHtml::_('select.option', 4, JText::_( 'SPECIALRANKING_OPTION_RATING_TYPE_4' ));
 		$options_rat[]				= JHtml::_('select.option', 5, JText::_( 'SPECIALRANKING_OPTION_RATING_TYPE_5' ));
-		$lists['rating_type']		= JHtml::_('select.genericlist', $options_rat, 'rating_type', 'class="inputbox"', 'value', 'text', $sonderrangliste->rating_type );
+		$lists['rating_type']		= JHtml::_('select.genericlist', $options_rat, 'rating_type', 'class="js-example-basic-single"', 'value', 'text', $sonderrangliste->rating_type );
 		
 		$lists['use_birthYear_filter']	= JHtml::_('select.booleanlist', 'use_birthYear_filter', 'class="inputbox"', $sonderrangliste->use_birthYear_filter );
 		$lists['use_sex_year_filter']	= JHtml::_('select.booleanlist', 'use_sex_year_filter', 'class="inputbox"', $sonderrangliste->use_sex_year_filter );
@@ -77,7 +79,7 @@ class CLMViewSonderranglistenForm extends JViewLegacy {
 		$options_sex[]				= JHtml::_('select.option', '', JText::_( 'SPECIALRANKING_OPTION_SEX_0' ));
 		$options_sex[]				= JHtml::_('select.option', 'M', JText::_( 'SPECIALRANKING_OPTION_SEX_1' ));
 		$options_sex[]				= JHtml::_('select.option', 'W', JText::_( 'SPECIALRANKING_OPTION_SEX_2' ));
-		$lists['sex']				= JHtml::_('select.genericlist', $options_sex, 'sex', 'class="inputbox"', 'value', 'text', $sonderrangliste->sex );
+		$lists['sex']				= JHtml::_('select.genericlist', $options_sex, 'sex', 'class="js-example-basic-single"', 'value', 'text', $sonderrangliste->sex );
 		
 		$lists['use_zps_filter']	= JHtml::_('select.booleanlist', 'use_zps_filter', 'class="inputbox"', $sonderrangliste->use_zps_filter );
 
@@ -92,7 +94,7 @@ class CLMViewSonderranglistenForm extends JViewLegacy {
 			}
 			$options_o[] = JHtml::_('select.option',$orderingMax, $orderingMax.' '.JText::_('ORDERING_LAST'));
 			
-			$lists['ordering']	= JHtml::_('select.genericlist',$options_o, 'ordering', 'class="inputbox"','value','text', $sonderrangliste->ordering);
+			$lists['ordering']	= JHtml::_('select.genericlist',$options_o, 'ordering', 'class="js-example-basic-single"','value','text', $sonderrangliste->ordering);
 		}
 		else {
 			$lists['ordering']	= JText::_('SPECIALRANKING_ORDERING_NEW'); // Neue Sonderranglisten werden standardmäßig an den Anfang gesetzt. Die Sortierung kann nach dem Speichern dieser Sonderrangliste geändert werden. 
@@ -100,7 +102,7 @@ class CLMViewSonderranglistenForm extends JViewLegacy {
 		
  
 		//Listen für Turniere (Joomla 1.5 bietet keine wirklich befriedigende Lösung)
-		$turnier_str = "<select id='turnier' class='inputbox' name='turnier'>";
+		$turnier_str = "<select id='turnier' class='js-example-basic-single' name='turnier'>";
 		
 		if($sonderrangliste->turnier == 0) {
 			$selected = "selected='selected' ";
@@ -128,7 +130,7 @@ class CLMViewSonderranglistenForm extends JViewLegacy {
 		foreach($saisons as $saison){
 			$options_s[] = JHtml::_('select.option',$saison->id,$saison->name);
 		}
-		$lists['saison']	= JHtml::_('select.genericlist',$options_s, 'saison', 'class="inputbox" onchange="showTournaments()"','value','text', $sonderrangliste->sid);
+		$lists['saison']	= JHtml::_('select.genericlist',$options_s, 'saison', 'class="js-example-basic-single" onchange="showTournaments()"','value','text', $sonderrangliste->sid);
 
 				
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
