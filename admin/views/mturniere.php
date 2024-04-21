@@ -215,8 +215,8 @@ class CLMViewMTurniere
 		foreach ($parentArray as $key => $value) {
 			$parentlist[]	= JHtml::_('select.option',  $key, $value, 'id', 'name' );
 		}
-		$catidAlltime = JHtml::_('select.genericlist', $parentlist, 'catidAlltime', 'class="inputbox" size="1" style="max-width: 250px;"', 'id', 'name', intval($row->catidAlltime));
-		$catidEdition = JHtml::_('select.genericlist', $parentlist, 'catidEdition', 'class="inputbox" size="1" style="max-width: 250px;"', 'id', 'name', intval($row->catidEdition));
+		$catidAlltime = JHtml::_('select.genericlist', $parentlist, 'catidAlltime', 'class="js-example-basic-single" size="1" style="max-width: 250px;"', 'id', 'name', intval($row->catidAlltime));
+		$catidEdition = JHtml::_('select.genericlist', $parentlist, 'catidEdition', 'class="js-example-basic-single" size="1" style="max-width: 250px;"', 'id', 'name', intval($row->catidEdition));
 	}
 	if (isset($catidAlltime)) { 
 	?>
@@ -252,7 +252,7 @@ class CLMViewMTurniere
 				foreach ($options as $key => $val) {
 					$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
 				}
-				echo JHtml::_('select.genericlist', $optionlist, 'params[addCatToName]', 'class="inputbox"', 'id', 'name', (isset($row->params['addCatToName']) ? $row->params['addCatToName'] : "0"));
+				echo JHtml::_('select.genericlist', $optionlist, 'params[addCatToName]', 'class="js-example-basic-single"', 'id', 'name', (isset($row->params['addCatToName']) ? $row->params['addCatToName'] : "0"));
 				?>
 			</td>
 		</tr>
@@ -322,7 +322,7 @@ class CLMViewMTurniere
 	<td nowrap="nowrap">
 	<label for="durchgang"><?php echo JText::_( 'LEAGUE_DG' ); ?></label>
 	</td><td colspan="2">
-		<select name="durchgang" id="durchgang" value="<?php echo $row->durchgang; ?>" size="1">
+		<select name="durchgang" id="durchgang" class="js-example-basic-single" value="<?php echo $row->durchgang; ?>" size="1">
 		<option <?php if ($row->durchgang < 2) {echo 'selected="selected"';} ?>>1</option>
 		<option <?php if ($row->durchgang == 2) {echo 'selected="selected"';} ?>>2</option>
 		<option <?php if ($row->durchgang == 3) {echo 'selected="selected"';} ?>>3</option>
@@ -455,7 +455,7 @@ class CLMViewMTurniere
 						<?php echo JText::_('MTURN_TIEBREAKERSFIDECORRECT'); ?>:
 					</td>
 					<td class="paramlist_value"><fieldset class="radio">
-						<?php echo JHtml::_('select.booleanlist', 'params[optionTiebreakersFideCorrect]', 'class="inputbox"', $row->params['optionTiebreakersFideCorrect']); ?>
+						<?php echo JHtml::_('select.booleanlist', 'params[optionTiebreakersFideCorrect]', 'class="js-example-basic-single"', $row->params['optionTiebreakersFideCorrect']); ?>
 					</fieldset></td>
 	</tr>
 	
