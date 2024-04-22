@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -18,8 +18,8 @@ class TableCLMGruppen extends JTable
 	var $id			= 0;
 	var $Gruppe		= '';
 	var $Meldeschluss	= '1970-01-01';
-	var $geschlecht		= '';
-	var $alter_grenze	= '';
+	var $geschlecht		= '0';
+	var $alter_grenze	= '0';
 	var $alter		= 0;
 	var $status		= '';
 	var $sid		= 0;

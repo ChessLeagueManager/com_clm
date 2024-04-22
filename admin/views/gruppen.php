@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -217,10 +217,10 @@ public static function gruppe( &$row,$lists, $option, $jid)
 			<td class="key" nowrap="nowrap">
 			<label for="Meldeschluss"><?php echo JText::_( 'GROUPS_OVERVIEW_END' ); ?></label>
 			</td>
-            		<td>
-					<?php echo CLMForm::calendar($row->Meldeschluss, JText::_( 'GROUPS_OVERVIEW_END_CALENDAR' ), JText::_( 'GROUPS_OVERVIEW_END_CALENDAR' ), '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
-            		</td>
-
+            	<td>
+					<?php //echo CLMForm::calendar($row->Meldeschluss, JText::_( 'GROUPS_OVERVIEW_END_CALENDAR' ), JText::_( 'GROUPS_OVERVIEW_END_CALENDAR' ), '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
+ 					<?php echo CLMForm::calendar($row->Meldeschluss, "Meldeschluss", "Meldeschluss", '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
+           		</td>
 		</tr>
 
 		<tr>
@@ -234,7 +234,7 @@ public static function gruppe( &$row,$lists, $option, $jid)
 			<option value="9">- wählen -</option>
 			<option <?php if ($row->geschlecht == "1") {echo 'selected="selected"';} ?> value="1"><?php echo JText::_( 'GROUPS_OVERVIEW_SEX_DD1' );?></option>
 			<option <?php if ($row->geschlecht == "2") {echo 'selected="selected"';} ?> value="2"><?php echo JText::_( 'GROUPS_OVERVIEW_SEX_DD2' );?></option>
-			<option <?php if ($row->geschlecht == 0) {echo 'selected="selected"';} ?> value="0"><?php echo JText::_( 'GROUPS_OVERVIEW_SEX_DD3' );?></option>
+			<option <?php if ($row->geschlecht == "0") {echo 'selected="selected"';} ?> value="0"><?php echo JText::_( 'GROUPS_OVERVIEW_SEX_DD3' );?></option>
 			</select>
 			</td>
 		</tr>
@@ -247,10 +247,10 @@ public static function gruppe( &$row,$lists, $option, $jid)
 			</td>
 			<td>
 			<select name="alter_grenze" id="alter_grenze" size="1" class="js-example-basic-single">
-			<option>- wählen -</option>
+			<option value="9">- wählen -</option>
 			<option <?php if ($row->alter_grenze == "1") {echo 'selected="selected"';} ?> value="1"><?php echo JText::_( 'GROUPS_OVERVIEW_AGE_DD2' );?></option>
 			<option <?php if ($row->alter_grenze == "2") {echo 'selected="selected"';} ?> value="2"><?php echo JText::_( 'GROUPS_OVERVIEW_AGE_DD3' );?></option>
-			<option <?php if ($row->alter_grenze == 0) {echo 'selected="selected"';} ?> value="0"><?php echo JText::_( 'GROUPS_OVERVIEW_AGE_DD4' );?></option>
+			<option <?php if ($row->alter_grenze == "0") {echo 'selected="selected"';} ?> value="0"><?php echo JText::_( 'GROUPS_OVERVIEW_AGE_DD4' );?></option>
 			</select>
 			</td>
 		</tr>
