@@ -31,6 +31,7 @@ $ -> Language fix or change
 # Turnierauswertung Einzelturnier: Warnung bei Teilnehmer ohne Vereinscode bzw. Mitgliedsnummer 
 # Auswertungsdateien: angebotene Wettbewerbe nicht korrekt sortiert
 # Auswertungsdateien Teamwettbewerbe: Behandlung spielfreier Paarungen
+# Ergebnismeldung KO-Teamturnier: Qualifikation für nächste Runde bei Ergebniskorrektur 
 
 - - - - - 4.1.4 - [25-02-2024] - - - - - - - - - - - - - - - - - - - -
 # SWT-Import Einzelturniere: Anzeige noch nicht gespielter Runden bei CH-Modus (Nachtrag)

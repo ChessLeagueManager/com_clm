@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -1725,9 +1725,10 @@ function save_wertung()
 	$sw_erg		= clm_core::$load->request_string('sw_erg',-1);
 	$ko_decision = clm_core::$load->request_string( 'ko_decision');
 	$comment = addslashes(clm_core::$load->request_string( 'comment'));
+	$icomment = addslashes(clm_core::$load->request_string( 'icomment'));
 	
 	// Punktemodus aus #__clm_liga holen
-	$query = " SELECT a.stamm, a.sieg, a.sieg_bed, a.remis, a.nieder, a.antritt, a.runden_modus, "
+	$query = " SELECT a.stamm, a.sieg, a.sieg_bed, a.remis, a.nieder, a.antritt, a.runden_modus, a.runden, "
 		." a.man_sieg, a.man_remis, a.man_nieder, a.man_antritt "
 		." FROM #__clm_liga as a"
 		." WHERE a.id = ".$lid
@@ -1745,6 +1746,7 @@ function save_wertung()
 		$man_nieder	= $liga[0]->man_nieder;
 		$man_antritt	= $liga[0]->man_antritt;
 		$runden_modus	= $liga[0]->runden_modus;
+		$runden		= $liga[0]->runden;
 
 	// Arrays zur Punktevergabe
 	$heim_erg = array();
@@ -1775,7 +1777,7 @@ function save_wertung()
 		$gast_erg[9]=$remis+$antritt;
 		$gast_erg[10]=$nieder+$antritt;
 
-	// Anzahl kampflose Partien (Heim) z�hlen
+	// Anzahl kampflose Partien (Heim) zählen
 	$query	= "SELECT COUNT(kampflos) as kl "
 		." FROM #__clm_rnd_spl "
 		." WHERE sid = ".$sid
@@ -1790,7 +1792,7 @@ function save_wertung()
 	$man_kl=$db->loadObjectList();
 	$man_kl_punkte=$man_kl[0]->kl;
 
-	// Anzahl kampflose Partien (Gast) z�hlen
+	// Anzahl kampflose Partien (Gast) zählen
 	$query	= "SELECT COUNT(kampflos) as kl "
 		." FROM #__clm_rnd_spl "
 		." WHERE sid = ".$sid
@@ -2059,7 +2061,7 @@ function save_wertung()
 		;
 	clm_core::$db->query($query);
 
-		if (($runden_modus == 4) OR ($runden_modus == 5)) {    // KO Turnier
+	if (($runden_modus == 4) OR ($runden_modus == 5)) {    // KO Turnier
 		if (($runden_modus == 4) OR ($runden_modus == 5 and $rnd < $runden)) {    // KO Turnierif ($ko_decision == 1) {
 			if ($ko_decision == 1) {
 				if ($hmpunkte > $gmpunkte) $ko_par = 2;			// Sieger Heim nach Brettpunkte
