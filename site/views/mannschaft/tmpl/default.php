@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -593,7 +593,7 @@ for ($x=0; $x< 100; $x++){
 				if (($bpr[$ibpr]->runde == $plan->runde) AND ($bpr[$ibpr]->tln_nr == $plan->tln_nr)) $hpkt = $bpr[$ibpr]->brettpunkte;
 				$ibpr++; 
 			} ?>
-		<td><?php if ($hpkt != '' AND $gpkt != '') echo $hpkt.' : '.$gpkt; ?></td	
+		<td><?php if ($hpkt != '' AND $gpkt != '') echo $hpkt.' : '.$gpkt; ?></td>	
     </tr>
     <?php } ?>
     </table>

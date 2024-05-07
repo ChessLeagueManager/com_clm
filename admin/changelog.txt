@@ -32,6 +32,7 @@ $ -> Language fix or change
 # Auswertungsdateien: angebotene Wettbewerbe nicht korrekt sortiert
 # Auswertungsdateien Teamwettbewerbe: Behandlung spielfreier Paarungen
 # Ergebnismeldung KO-Teamturnier: Qualifikation für nächste Runde bei Ergebniskorrektur 
++ Joomla 5.x: Zuordnung einer css-atei im Backend
 
 - - - - - 4.1.4 - [25-02-2024] - - - - - - - - - - - - - - - - - - - -
 # SWT-Import Einzelturniere: Anzeige noch nicht gespielter Runden bei CH-Modus (Nachtrag)

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -45,7 +45,7 @@ if(isset($_GET["view"]) && $_GET["view"]=="forceUpdate") {
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 // Bei Standalone Verbindung wird das Backend Login verwendet
-$_GET["clm_backend"]=1;
+$_GET["clm_backend"]="1";
 // Bei Standalone Verbindung wird die Anmeldesprache aus Joomla verwendet ?!?
 $jlang = JFactory::getLanguage(); 
 $_GET["session_language"] = $jlang->getTag();
@@ -106,7 +106,7 @@ if(substr(JVERSION,0,1) < '4') {
 		$document->addStyleSheet("../components/com_clm/includes/clm_isis.css");
 	}
 }
-if(substr(JVERSION,0,1) == '4') {
+if(substr(JVERSION,0,1) == '4' OR substr(JVERSION,0,1) == '5') {
 		$document = JFactory::getDocument();
 		$document->addStyleSheet("../components/com_clm/includes/clm_backend.css");
 }	
