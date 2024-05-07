@@ -195,9 +195,9 @@ function datei() {
 	// Unterscheidung Einzel- und Mannschaftsturnier mit verschiedenen Ausgabemodi
 	if(!is_null($et)) {
 		if ($countryversion == "de")
-			$format = 2;  // Nur XML für deutsche Einzelturniere
+			$format = "2";  // Nur XML für deutsche Einzelturniere
 		else
-			$format = 3;  // Nur XLS für englische Einzelturniere
+			$format = "3";  // Nur XLS für englische Einzelturniere
 		$typ	= $liga_name[0]->typ;
 		if($typ =="1"){ $turnier_typ = 'SR'; } // SR: Einzelturnier; jeder gegen jeden
 		if($typ =="2"){ $turnier_typ = 'SR'; }
@@ -208,9 +208,9 @@ function datei() {
 	if(!is_null($liga)) {
 		if(!is_null($mt)){ 
 			if ($countryversion == "de")
-				$format	= 2;  // Nur XML für deutsche Mannschaftsturniere. KEINE LIGA !
+				$format	= "2";  // Nur XML für deutsche Mannschaftsturniere. KEINE LIGA !
 			else
-				$format = 3;  // Nur XLS für englische Mannschaftsturniere
+				$format = "3";  // Nur XLS für englische Mannschaftsturniere
 		}
 		$typ	= $liga_name[0]->runden_modus;
 		if($typ =="1"){ $turnier_typ = 'TR'; } // TR: Mannschaftsturnier; jeder gegen jeden
@@ -285,6 +285,7 @@ function datei() {
 		$app->enqueueMessage(JText::_( 'DB_FILE_NOSUCCESS' ), 'warning');
 		$app->redirect( $adminLink->url);
 	}
+
 	// Dateikopf
 	$xml = clm_core::$load->utf8decode($liga_name[0]->name)."\n"; // Turnierbezeichnung
 	$xml .= "Erstellt mit CLM - ChessLeagueManager\n"; // Details zum Turnier oder Leerzeile
@@ -294,11 +295,13 @@ function datei() {
 	$cnt = 1;
 	$player = array();
 	foreach($spieler as $spl){
+		if ($spl->Spielername == '') continue;
 		
 		$name = explode(",", $spl->Spielername);
 		if (is_null($name[0])) $name[0] = '';
 		if (is_null($name[1])) $name[1] = '';
 		if (is_null($spl->Vereinname)) $spl->Vereinname = '';
+		if (strlen($spl->Vereinname) > 32) $spl->Vereinname = substr($spl->Vereinname,0,32);
 		if (is_null($spl->FIDE_Land)) $spl->FIDE_Land = '';
 		if (is_null($spl->PKZ)) $spl->PKZ = '';
 		if (is_null($spl->Geburtsjahr)) $spl->Geburtsjahr = '';
@@ -382,7 +385,10 @@ function datei() {
 	$erg_bl[10]="0";  // 0,5:0
 
 	foreach($runden_daten as $rnd_data){
-		$addy_1 = $fill[(3-strlen($player[$rnd_data->gzps][$rnd_data->gegner]))].$player[$rnd_data->gzps][$rnd_data->gegner];
+		if (strlen($rnd_data->zps) != 5 OR $rnd_data->zps == 'ZZZZZ') continue;
+		if (isset($player[$rnd_data->gzps][$rnd_data->gegner]))
+			$addy_1 = $fill[(3-strlen($player[$rnd_data->gzps][$rnd_data->gegner]))].$player[$rnd_data->gzps][$rnd_data->gegner];
+		else $addy_1 = '  0';
 		
 		if($rnd_data->heim =="1"){
 			$ergebnis_1 = $erg[$rnd_data->ergebnis]."W".$addy_1;
@@ -462,6 +468,7 @@ function datei() {
 	//////////////////////
 
 	if($format =="2"){
+
 	$xml ='<?xml version="1.0" encoding="UTF-8"?>'
 		.'<dewis xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
 		.'xmlns:dwz="https://dwz.svw.info/services/files/xml/tournamentImport.xsd">'
@@ -473,7 +480,10 @@ function datei() {
 		;
 	
 	// Ligadaten
-	$xml .= '<label>'.$liga_name[0]->name.'</label>'
+	$liganame = str_replace(' ', '_', $liga_name[0]->name);
+	$liganame = preg_replace('/[^A-Za-z0-9\-_]/', '', $liganame);
+
+	$xml .= '<label>'.$liganame.'</label>'
 		.'<type>'.$turnier_typ.'</type>'
 		.'<rounds>'.$anzahl_runden.'</rounds>'
 		.'<endDate>'.$end_date.'</endDate>'
@@ -561,7 +571,10 @@ function datei() {
 	$player	= array();
 	foreach($spieler as $spl){
 		//if($spl->zps !="" AND $spl->spieler !=""){   
-		if((!$et AND $spl->zps !="" AND $spl->spieler !="") OR ($et AND $spl->Geburtsjahr > '0000')){   //bei Einzelturnieren auch vereinslose Spieler zulassen
+		if((!$et AND strlen($spl->zps) == 5 AND $spl->zps !="ZZZZZ" AND $spl->spieler !="") OR ($et AND $spl->Geburtsjahr > '0000')){   //bei Einzelturnieren auch vereinslose Spieler zulassen
+			if ($spl->spieler < 1 OR strlen($spl->zps) != 5 OR $spl->zps == '99999') { 
+				$app->enqueueMessage('Teilnehmer '.$spl->Spielername.' ggf. vereinslos' , 'warning');
+			}
 			// laufende Nummer für Spieler erzeugen
 			$player[$spl->zps][$spl->spieler] = $cnt;
 			$cnt++;
@@ -703,6 +716,7 @@ function datei() {
 			." WHERE a.sid = '$sid' "
 			." AND a.liga = '".$liga_name[0]->id."'"
 			." AND a.tln_nr = '".$man->tln_nr."'"
+			." AND r.spieler > 0 and r.spieler < 99999 "
 			." GROUP BY r.zps, r.spieler "
 			." ORDER BY a.tln_nr ASC, r.brett ASC, r.spieler  "
 			;
@@ -1132,7 +1146,8 @@ function liga_filter() {
 	$sql = 'SELECT d.id AS cid, d.name FROM #__clm_liga as d'
 		." LEFT JOIN #__clm_saison as s ON s.id = d.sid"
 		." WHERE s.archiv = 0 AND d.liga_mt = 0 "
-		." AND d.published = 1 ";
+		." AND d.published = 1 "
+		." ORDER BY d.ordering ";
 	$db->setQuery($sql);
 	$ligalist[]	= JHTML::_('select.option',  '0', JText::_( 'MANNSCHAFTEN_LIGA' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
@@ -1146,7 +1161,8 @@ function turnier_filter() {
 	// Ligafilter
 	$sql = 'SELECT d.id AS cid, d.name FROM #__clm_turniere as d'
 		." LEFT JOIN #__clm_saison as s ON s.id = d.sid"
-		." WHERE s.archiv = 0 ";
+		." WHERE s.archiv = 0 "
+		." ORDER BY d.ordering ";
 	$db->setQuery($sql);
 	$ligalist[]	= JHTML::_('select.option',  '0', JText::_( 'DB_FILE_TOURNAMENT_0' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
@@ -1161,7 +1177,8 @@ function mannschaftsturnier_filter() {
 	$sql = 'SELECT d.id AS cid, d.name FROM #__clm_liga as d'
 		." LEFT JOIN #__clm_saison as s ON s.id = d.sid"
 		." WHERE s.archiv = 0 AND d.liga_mt = 1 "
-		." AND d.published = 1 ";
+		." AND d.published = 1 "
+		." ORDER BY d.ordering ";
 	$db->setQuery($sql);
 	$ligalist[]	= JHTML::_('select.option',  '0', JText::_( 'DB_FILE_TEAMTOURNAMENT_0' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );

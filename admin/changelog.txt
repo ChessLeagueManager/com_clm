@@ -28,6 +28,9 @@ $ -> Language fix or change
 # Rundenbericht, Tabelle, DWZ-Liga, Ligastatistik: Anpassung bei ungültiger Liga-Id bei Extern Zugriff
 ^ View Verein: Hint-Text zur Angabe Homepage
 ^ Admin-View Ranglistengruppe: Nachbesserung
+# Turnierauswertung Einzelturnier: Warnung bei Teilnehmer ohne Vereinscode bzw. Mitgliedsnummer 
+# Auswertungsdateien: angebotene Wettbewerbe nicht korrekt sortiert
+# Auswertungsdateien Teamwettbewerbe: Behandlung spielfreier Paarungen
 
 - - - - - 4.1.4 - [25-02-2024] - - - - - - - - - - - - - - - - - - - -
 # SWT-Import Einzelturniere: Anzeige noch nicht gespielter Runden bei CH-Modus (Nachtrag)
