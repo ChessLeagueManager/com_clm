@@ -85,8 +85,7 @@ function clm_api_db_paarungsliste($liga) {
 		." LEFT JOIN #__clm_meldeliste_spieler AS dm ON ( dm.lid = a.lid AND dm.zps = r.zps AND dm.PKZ = r.PKZ )"
 		." LEFT JOIN #__clm_meldeliste_spieler AS gm ON ( gm.lid = a.lid AND gm.zps = r.gzps AND gm.PKZ = r.gPKZ )";
 	$DWZgespieltModel .= " WHERE a.lid = $liga AND a.heim = 1 AND r.heim = 1 "
-//		." GROUP BY a.dg ASC, a.runde ASC, a.paar ASC"
-		." GROUP BY a.dg, a.runde, a.paar"
+		." GROUP BY a.sid, a.lid, a.dg, a.runde, a.paar"
 		;
 	$out["DWZgespielt"] = clm_core::$db->loadObjectList($DWZgespieltModel);
 

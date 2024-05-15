@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 4.1.6 - [xx-xx-2024] - - - - - - - - - - - - - - - - - - - -
+^ Paarungsliste: iCal-Ausgabe Anpassung wegen sql_mode=only_full_group_by
+
 - - - - - 4.1.5 - [07-05-2024] - - - - - - - - - - - - - - - - - - - -
 # Paarungsliste: Aufruf über Menüeintragstyp nachgebessert
 + Mitgliederverwaltung: Eintritts- und Austrittsdatum während der Saison manuell eingebbar (optional)
