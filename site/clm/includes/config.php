@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -160,4 +160,5 @@ $config["tourn_ch_mail"]=array(139,7,"",null);
 $config["verein_mail"]=array(140,9,0,array(0,1));
 $config["verein_tel"]=array(141,9,0,array(0,1));
 $config["verein_fe_mail"]=array(142,9,0,array(0,1));
+$config["field_search"]=array(143,9,0,array(0,1));
 ?>

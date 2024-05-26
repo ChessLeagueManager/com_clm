@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -53,6 +53,10 @@ class CLMViewSonderranglistenMain extends JViewLegacy {
 
 		// Auswahlfelder durchsuchbar machen
 		clm_core::$load->load_js("suche_liste");
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
 		//Suche und Filter
 		$filter_saison		= $state->get( 'filter_saison' );
 		$filter_turnier		= $state->get( 'filter_turnier' );
@@ -71,13 +75,15 @@ class CLMViewSonderranglistenMain extends JViewLegacy {
 		foreach($filter_turniere as $tur)	{
 			$options_filter_tur[]		= JHtml::_('select.option', $tur->id, $tur->name);
 		}
-		$lists['filter_turnier']	= JHtml::_('select.genericlist', $options_filter_tur, 'filter_turnier', 'class="js-example-basic-single" onchange="this.form.submit();"', 'value', 'text', $filter_turnier );
+//		$lists['filter_turnier']	= JHtml::_('select.genericlist', $options_filter_tur, 'filter_turnier', 'class="js-example-basic-single" onchange="this.form.submit();"', 'value', 'text', $filter_turnier );
+		$lists['filter_turnier']	= JHtml::_('select.genericlist', $options_filter_tur, 'filter_turnier', 'class="'.$field_search.'" onchange="this.form.submit();"', 'value', 'text', $filter_turnier );
 		
 		$options_filter_sai[]		= JHtml::_('select.option', '', JText::_( 'SPECIALRANKINGS_SEASONS' ));
 		foreach($filter_saisons as $sai)	{
 			$options_filter_sai[]		= JHtml::_('select.option', $sai->id, $sai->name);
 		}
-		$lists['filter_saison']	= JHtml::_('select.genericlist', $options_filter_sai, 'filter_saison', 'class="js-example-basic-single" onchange="this.form.submit();"', 'value', 'text', $filter_saison );
+//		$lists['filter_saison']	= JHtml::_('select.genericlist', $options_filter_sai, 'filter_saison', 'class="js-example-basic-single" onchange="this.form.submit();"', 'value', 'text', $filter_saison );
+		$lists['filter_saison']	= JHtml::_('select.genericlist', $options_filter_sai, 'filter_saison', 'class="'.$field_search.'" onchange="this.form.submit();"', 'value', 'text', $filter_saison );
 		
 		
 		//Reihenfolge

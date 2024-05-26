@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -208,6 +208,11 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 
 		// Auswahlfelder durchsuchbar machen
 		clm_core::$load->load_js("suche_liste");
+	
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
 		?>
 
 
@@ -257,7 +262,8 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		  </label>
 		</td>
 		<td>
-		  <select size="1" class="js-example-basic-single" style="width:300px;" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo 'spieler'.($i+1); ?>" onChange="insertPosition(this,'<?php echo $insert_key[$i]; ?>') ">
+<!--		  <select size="1" class="js-example-basic-single" style="width:300px;" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo 'spieler'.($i+1); ?>" onChange="insertPosition(this,'<?php echo $insert_key[$i]; ?>') "> -->
+		  <select size="1" class="<?php echo $field_search; ?>" style="width:300px;" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo 'spieler'.($i+1); ?>" onChange="insertPosition(this,'<?php echo $insert_key[$i]; ?>') ">
 			<option value="0"><?php echo JText::_( 'MELDELISTE_SPIELER_AUSWAEHLEN'); ?></option>
 			<?php for ($x=0; $x < $max[0]->max; $x++) { ?>
 			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps.'-'.$row_spl[$x]->dwz.'-'.$row_spl[$x]->dwz_I0; ?>" <?php
@@ -363,7 +369,8 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 			<td class="key" nowrap="nowrap"><label for="sid"><?php echo JText::_( 'MELDELISTE_BRETT_NR' ).' '.($i+1).' : '; ?></label>
 			</td>
 		<td>
-		  <select size="1" class="js-example-basic-single" style="width:300px;" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo 'spieler'.($i+1); ?>" onChange="insertPosition(this,'<?php echo $insert_key[$i]; ?>') ">
+<!--		  <select size="1" class="js-example-basic-single" style="width:300px;" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo 'spieler'.($i+1); ?>" onChange="insertPosition(this,'<?php echo $insert_key[$i]; ?>') "> -->
+		  <select size="1" class="<?php echo $field_search; ?>" style="width:300px;" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo 'spieler'.($i+1); ?>" onChange="insertPosition(this,'<?php echo $insert_key[$i]; ?>') ">
 			<option value="0"><?php echo JText::_( 'MELDELISTE_SPIELER_AUSWAEHLEN'); ?></option>
 			<?php for ($x=0; $x < $max[0]->max; $x++) { ?>
 			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps.'-'.$row_spl[$x]->dwz.'-'.$row_spl[$x]->dwz_I0;; ?>" <?php 

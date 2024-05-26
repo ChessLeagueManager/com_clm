@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -42,6 +42,11 @@ function display($cachable = false, $urlparams = array())
 	$search			= strtolower( $search );
 	$limit			= $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
 	$limitstart		= $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
+
+	//CLM parameter auslesen
+	$clm_config = clm_core::$db->config();
+	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+	else $field_search = "inputbox";
 
 	$where = array();
 	$where[]=' c.archiv = 0';
@@ -105,7 +110,8 @@ function display($cachable = false, $urlparams = array())
 	$db->setQuery($sql);
 	$saisonlist[]	= JHTML::_('select.option',  '0', JText::_( 'GRUPPEN_SAISON' ), 'id', 'name' );
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
-	$lists['sid']      = JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+//	$lists['sid']      = JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']      = JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 
 	// table ordering
 	$lists['order_Dir']	= $filter_order_Dir;
@@ -133,6 +139,11 @@ function edit()
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');
 										 
+	//CLM parameter auslesen
+	$clm_config = clm_core::$db->config();
+	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+	else $field_search = "inputbox";
+	
 	$row =JTable::getInstance( 'gruppen', 'TableCLM' );
 	// load the row from the db table
 	$row->load( $cid[0] );
@@ -172,7 +183,8 @@ function edit()
 		$row->published 	= 0;
 	}
 
-	$lists['published']	= JHTML::_('select.booleanlist',  'published', 'class="js-example-basic-single"', $row->published );
+//	$lists['published']	= JHTML::_('select.booleanlist',  'published', 'class="js-example-basic-single"', $row->published );
+	$lists['published']	= JHTML::_('select.booleanlist',  'published', 'class="'.$field_search.'"', $row->published );
 
 	// Saisonlist //
 	$sql = 'SELECT id as sid, name FROM #__clm_saison WHERE archiv =0';
@@ -183,7 +195,8 @@ function edit()
 	}
 	$saisonlist[]	= JHTML::_('select.option',  '0', JText::_( 'GRUPPEN_SAISON' ), 'sid', 'name' );
 	$saisonlist	= array_merge( $saisonlist, $db->loadObjectList() );
-	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1"','sid', 'name', $row->sid );
+//	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1"','sid', 'name', $row->sid );
+	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1"','sid', 'name', $row->sid );
 
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'gruppen.php');
 	$jid = 0; $user_group = 0;

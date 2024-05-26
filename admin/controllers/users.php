@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -47,6 +47,10 @@ function display($cachable = false, $urlparams = array())
 	$limit			= $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
 	$limitstart		= $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
 
+	//CLM parameter auslesen
+	$clm_config = clm_core::$db->config();
+	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+	else $field_search = "inputbox";
 
 	$where = array();
 	$where[]=' c.published = 1';
@@ -126,18 +130,21 @@ function display($cachable = false, $urlparams = array())
 	$state[2]	= new stdClass();
 	$state[2]->id = 'U';
 	$state[2]->name = JText::_('JUNPUBLISHED'); 
-	$lists['state']	= JHTML::_('select.genericlist', $state, 'filter_state', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_state );
+//	$lists['state']	= JHTML::_('select.genericlist', $state, 'filter_state', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_state );
+	$lists['state']	= JHTML::_('select.genericlist', $state, 'filter_state', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_state );
 	// Saisonfilter
 	$sql = 'SELECT id, name FROM #__clm_saison WHERE published=1';
 	$db->setQuery($sql);
 	$saisonlist[]		= JHTML::_('select.option',  '0', JText::_( 'USERS_SAISON' ), 'id', 'name' );
 	$saisonlist		= array_merge( $saisonlist, $db->loadObjectList() );
 	
-	$lists['sid']		= JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_sid );
+//	$lists['sid']		= JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_sid );
+	$lists['sid']		= JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_sid );
 
 	// Vereinefilter laden
 	$vereinlist	= CLMFilterVerein::vereine_filter(0);
-	$lists['vid']	= JHTML::_('select.genericlist', $vereinlist, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
+//	$lists['vid']	= JHTML::_('select.genericlist', $vereinlist, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
+	$lists['vid']	= JHTML::_('select.genericlist', $vereinlist, 'filter_vid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
 
 
 	// Funktionsliste
@@ -154,7 +161,8 @@ function display($cachable = false, $urlparams = array())
 	//$usertypelist		= array_merge( $usertypelist, $db->loadObjectList() );
 	$usertypelist		= array_merge( $usertypelist, $utlist );
 	//$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'filter_usertype', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','usertype', 'name', intval ($filter_usertype) );
-	$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'filter_usertype', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','usertype', 'name', $filter_usertype );
+//	$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'filter_usertype', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','usertype', 'name', $filter_usertype );
+	$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'filter_usertype', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','usertype', 'name', $filter_usertype );
 	// Ordering
 	$lists['order_Dir']	= $filter_order_Dir;
 	$lists['order']		= $filter_order;
@@ -179,6 +187,11 @@ function edit()
 	$option 	= clm_core::$load->request_string('option', '');
 	$section 	= clm_core::$load->request_string('section', '');
 
+	//CLM parameter auslesen
+	$clm_config = clm_core::$db->config();
+	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+	else $field_search = "inputbox";
+	
 	// Prüfen ob User Berechtigung zum editieren hat //
 	$row	= JTable::getInstance( 'users', 'TableCLM' );
 	$row->load( $cid[0] );
@@ -258,9 +271,11 @@ function edit()
 
 	$filter_vid		= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'string' );
 	if ($filter_vid !="0") {
-		$lists['verein']= JHTML::_('select.genericlist',$vereinlist,'zps','class="js-example-basic-single" size="1" style="width:300px"','zps', 'name', $filter_vid );
+//		$lists['verein']= JHTML::_('select.genericlist',$vereinlist,'zps','class="js-example-basic-single" size="1" style="width:300px"','zps', 'name', $filter_vid );
+		$lists['verein']= JHTML::_('select.genericlist',$vereinlist,'zps','class="'.$field_search.'" size="1" style="width:300px"','zps', 'name', $filter_vid );
 		} else {
-		$lists['verein']= JHTML::_('select.genericlist',$vereinlist,'zps','class="js-example-basic-single" size="1" style="width:300px"','zps', 'name', $row->zps );
+//		$lists['verein']= JHTML::_('select.genericlist',$vereinlist,'zps','class="js-example-basic-single" size="1" style="width:300px"','zps', 'name', $row->zps );
+		$lists['verein']= JHTML::_('select.genericlist',$vereinlist,'zps','class="'.$field_search.'" size="1" style="width:300px"','zps', 'name', $row->zps );
 		}
 
 	// Publishliste
@@ -268,13 +283,15 @@ function edit()
 	// Saisonliste
 	if($task =="edit"){ 
 	$season_list[]	= JHTML::_('select.option',  $sid, clm_core::$db->saison->get($sid)->name, 'sid', 'name' );
-	$lists['saison']= JHTML::_('select.genericlist',   $season_list, 'sid', 'class="js-example-basic-single" size="1" style="width:300px"','sid', 'name', $row->sid );
+//	$lists['saison']= JHTML::_('select.genericlist',   $season_list, 'sid', 'class="js-example-basic-single" size="1" style="width:300px"','sid', 'name', $row->sid );
+	$lists['saison']= JHTML::_('select.genericlist',   $season_list, 'sid', 'class="'.$field_search.'" size="1" style="width:300px"','sid', 'name', $row->sid );
 	$sql = " SELECT u.* FROM #__users as u "
 		." LEFT JOIN #__clm_user as a ON u.id = a.jid AND a.sid IN ('".$sid."')"
 		." WHERE a.name IS NULL";
 	} else { 
 	$season_list[]	= JHTML::_('select.option',  clm_core::$access->getSeason(), clm_core::$db->saison->get(clm_core::$access->getSeason())->name, 'sid', 'name' );
-	$lists['saison']= JHTML::_('select.genericlist',  $season_list, 'sid', 'class="js-example-basic-single" size="1" style="width:300px"','sid', 'name', clm_core::$access->getSeason() );
+//	$lists['saison']= JHTML::_('select.genericlist',  $season_list, 'sid', 'class="js-example-basic-single" size="1" style="width:300px"','sid', 'name', clm_core::$access->getSeason() );
+	$lists['saison']= JHTML::_('select.genericlist',  $season_list, 'sid', 'class="'.$field_search.'" size="1" style="width:300px"','sid', 'name', clm_core::$access->getSeason() );
 	$sql = " SELECT u.* FROM #__users as u "
 		." LEFT JOIN #__clm_user as a ON u.id = a.jid AND a.sid IN ('".clm_core::$access->getSeason()."')"
 		." WHERE a.name IS NULL";
@@ -287,7 +304,8 @@ function edit()
 	}
 	$jid_list[]	= JHTML::_('select.option',  '0', JText::_( 'USERS_USER_AUSW' ), 'id', 'name' );
 	$jid_list	= array_merge( $jid_list, $db->loadObjectList() );
-	$lists['jid']	= JHTML::_('select.genericlist',   $jid_list, 'pid', 'class="js-example-basic-single" size="1" style="width:300px"','id', 'name', $row->jid );
+//	$lists['jid']	= JHTML::_('select.genericlist',   $jid_list, 'pid', 'class="js-example-basic-single" size="1" style="width:300px"','id', 'name', $row->jid );
+	$lists['jid']	= JHTML::_('select.genericlist',   $jid_list, 'pid', 'class="'.$field_search.'" size="1" style="width:300px"','id', 'name', $row->jid );
 
 	// Funktionsliste
 	$sql = 'SELECT usertype, name, kind FROM #__clm_usertype ';
@@ -303,7 +321,8 @@ function edit()
 	$usertypelist[]		= JHTML::_('select.option',  '', JText::_( 'USERS_TYP' ), 'usertype', 'name' );
 	//$usertypelist		= array_merge( $usertypelist, $db->loadObjectList() );
 	$usertypelist		= array_merge( $usertypelist, $utlist );
-	$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'usertype', 'class="js-example-basic-single" size="1" style="width:300px"','usertype', 'name', $row->usertype );
+//	$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'usertype', 'class="js-example-basic-single" size="1" style="width:300px"','usertype', 'name', $row->usertype );
+	$lists['usertype']	= JHTML::_('select.genericlist',   $usertypelist, 'usertype', 'class="'.$field_search.'" size="1" style="width:300px"','usertype', 'name', $row->usertype );
 
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'users.php');
 	CLMViewUsers::user( $row, $lists, $option);

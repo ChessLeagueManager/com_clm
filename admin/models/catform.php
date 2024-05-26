@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -42,6 +42,11 @@ class CLMModelCatForm extends JModelLegacy {
 	// alle vorhandenen Filter
 	function _getForms() {
 	
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
+	
 		// get Tree
 		list($this->parentArray, $this->parentKeys) = CLMCategoryTree::getTree();
 		
@@ -56,7 +61,8 @@ class CLMModelCatForm extends JModelLegacy {
 			}
 		}
 		if (!isset($this->form) OR is_null($this->form)) $this->form = array();
-		$this->form['parent'] = JHTML::_('select.genericlist', $parentlist, 'parentid', 'class="js-example-basic-single" size="1"', 'id', 'name', intval($this->category->parentid));
+//		$this->form['parent'] = JHTML::_('select.genericlist', $parentlist, 'parentid', 'class="js-example-basic-single" size="1"', 'id', 'name', intval($this->category->parentid));
+		$this->form['parent'] = JHTML::_('select.genericlist', $parentlist, 'parentid', 'class="'.$field_search.'" size="1"', 'id', 'name', intval($this->category->parentid));
 		
 	
 	

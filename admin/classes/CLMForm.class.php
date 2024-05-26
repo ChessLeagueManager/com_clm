@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -38,6 +38,11 @@ class CLMForm {
 	
 	public static function selectSeason ($name, $value = 0, $filter = FALSE, $only = true) {
 	
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
+
 		$_db				= JFactory::getDBO();
 		
 		$saisonlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_SEASON' )), 'id', 'name' );
@@ -50,12 +55,18 @@ class CLMForm {
 		$_db->setQuery($query);
 		$saisonlist		= array_merge( $saisonlist, $_db->loadObjectList() );
 		
-		return JHTML::_('select.genericlist', $saisonlist, $name, 'class="js-example-basic-single" style="width:350px" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+//		return JHTML::_('select.genericlist', $saisonlist, $name, 'class="js-example-basic-single" style="width:350px" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+		return JHTML::_('select.genericlist', $saisonlist, $name, 'class="'.$field_search.'" style="width:350px" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
 	
 	}
 	
 
 	public static function selectModus ($name, $value = 0, $filter = FALSE, $more = '') {
+	
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
 	
 		$modi = array();
 		$modi[0] = CLMText::selectOpener(JText::_('SELECT_MODUS'));
@@ -68,14 +79,20 @@ class CLMForm {
 			$modilist[]	= JHTML::_('select.option', $key, $val, 'id', 'name' );
 		}
 	
-		return JHTML::_('select.genericlist', $modilist, $name, 'class="js-example-basic-single" style="width:350px" size="1"'.CLMText::stringOnchange($filter).$more,'id', 'name', intval($value) );
+//		return JHTML::_('select.genericlist', $modilist, $name, 'class="js-example-basic-single" style="width:350px" size="1"'.CLMText::stringOnchange($filter).$more,'id', 'name', intval($value) );
+		return JHTML::_('select.genericlist', $modilist, $name, 'class="'.$field_search.'" style="width:350px" size="1"'.CLMText::stringOnchange($filter).$more,'id', 'name', intval($value) );
 		
 	}
 
 	
 	public static function selectTiebreakers ($name, $value = 0, $filter = FALSE) {
 	
-		$modi = array();
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
+	
+		$tiebr = array();
 		$tiebr[0] = CLMText::selectOpener(JText::_('SELECT_TIEBREAKER'));
 		$tiebr[1] = JText::_('TIEBR_1');
 		$tiebr[11] = JText::_('TIEBR_11');
@@ -101,12 +118,18 @@ class CLMForm {
 			$tiebrlist[]	= JHTML::_('select.option', $key, $val, 'id', 'name' );
 		}
 	
-		return JHTML::_('select.genericlist', $tiebrlist, $name, 'class="js-example-basic-single" size="1" style="width:350px;"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+//		return JHTML::_('select.genericlist', $tiebrlist, $name, 'class="js-example-basic-single" size="1" style="width:350px;"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+		return JHTML::_('select.genericlist', $tiebrlist, $name, 'class="'.$field_search.'" size="1" style="width:350px;"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
 		
 	}
 	
 	
 	public static function selectStages ($name, $value = 0, $filter = FALSE) {
+	
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
 	
 		// $stagelist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_STAGES' )), 'id', 'name' );
 		$stagelist[]	= JHTML::_('select.option',  '1', '1', 'id', 'name' );
@@ -114,13 +137,19 @@ class CLMForm {
 		$stagelist[]	= JHTML::_('select.option',  '3', '3', 'id', 'name' );
 		$stagelist[]	= JHTML::_('select.option',  '4', '4', 'id', 'name' );
 	
-		return JHTML::_('select.genericlist', $stagelist, $name, 'class="js-example-basic-single" size="1" style="width:50px"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+//		return JHTML::_('select.genericlist', $stagelist, $name, 'class="js-example-basic-single" size="1" style="width:50px"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+		return JHTML::_('select.genericlist', $stagelist, $name, 'class="'.$field_search.'" size="1" style="width:50px"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
 	
 	}
 
 
 	public static function selectDirector ($name, $value = 0, $filter = FALSE) {
 
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
+	
 		$clmAccess = clm_core::$access;
 		
 		$userlist = $clmAccess->userlist('BE_tournament_edit_result','>0');
@@ -132,7 +161,8 @@ class CLMForm {
 		else $tllist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_DIRECTOR' )), 'jid', 'name' );
 		$tllist		= array_merge( $tllist, $userlist);
 		
-		return JHTML::_('select.genericlist', $tllist, $name, 'class="js-example-basic-single" style="width:300px" size="1"'.CLMText::stringOnchange($filter), 'jid', 'name', $value );
+//		return JHTML::_('select.genericlist', $tllist, $name, 'class="js-example-basic-single" style="width:300px" size="1"'.CLMText::stringOnchange($filter), 'jid', 'name', $value );
+		return JHTML::_('select.genericlist', $tllist, $name, 'class="'.$field_search.'" style="width:300px" size="1"'.CLMText::stringOnchange($filter), 'jid', 'name', $value );
 	
 	}
 
@@ -157,6 +187,11 @@ class CLMForm {
 
 	public static function selectAssociation ($name, $value = '0', $filter = FALSE) {
 		
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
+	
 		$_db				= JFactory::getDBO();
 		
 		// Verbandfilter
@@ -165,7 +200,8 @@ class CLMForm {
 		$verbandlist[] = JHTML::_('select.option',  '0', JText::_( 'SELECT_ASSOCIATION' ), 'Verband', 'Verbandname' );
 		$verbandlist = array_merge( $verbandlist, $_db->loadObjectList() );
 		
-		return JHTML::_('select.genericlist', $verbandlist, $name, 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','Verband', 'Verbandname', $value );
+//		return JHTML::_('select.genericlist', $verbandlist, $name, 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','Verband', 'Verbandname', $value );
+		return JHTML::_('select.genericlist', $verbandlist, $name, 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','Verband', 'Verbandname', $value );
 
 	}
 
@@ -199,6 +235,11 @@ class CLMForm {
 
 	public static function selectVereinZPSuVerband ($name, $value = NULL, $filter = FALSE) {
 	
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
+	
 		$_db				= JFactory::getDBO();
 		
 		$query = " (SELECT v2.Verband AS ZPS, v2.Verbandname AS Vereinname FROM #__clm_dwz_verbaende AS v2 GROUP BY ZPS) "
@@ -212,11 +253,17 @@ class CLMForm {
 		$veranstalter[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_HOST' )), 'ZPS', 'Vereinname' );
 		$veranstalter	= array_merge( $veranstalter, $_db->loadObjectList() );
 		
-		return JHTML::_('select.genericlist', $veranstalter, $name, 'class="js-example-basic-single" style="width:300px" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
+//		return JHTML::_('select.genericlist', $veranstalter, $name, 'class="js-example-basic-single" style="width:300px" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
+		return JHTML::_('select.genericlist', $veranstalter, $name, 'class="'.$field_search.'" style="width:300px" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
 	
 	}
 
 	public static function selectVereinZPSinAssoc ($name, $value = NULL, $verband = '000', $filter = FALSE) {
+	
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
 	
 		$_db				= JFactory::getDBO();
 		
@@ -233,7 +280,8 @@ class CLMForm {
 		$veranstalter[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_CLUB' )), 'ZPS', 'Vereinname' );
 		$veranstalter	= array_merge( $veranstalter, $_db->loadObjectList() );
 		
-		return JHTML::_('select.genericlist', $veranstalter, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
+//		return JHTML::_('select.genericlist', $veranstalter, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
+		return JHTML::_('select.genericlist', $veranstalter, $name, 'class="'.$field_search.'" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
 	
 	}
 
@@ -247,6 +295,11 @@ class CLMForm {
 	// ersetzt CLMFilterVerein::filter_vereine, aber ohne Option von $vl = 1, also nur DB-Auswahl
 	public static function selectVerein ($name, $value = 0, $filter = FALSE) {
 		
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
+	
 		$_db				= JFactory::getDBO();
 	
 		$config = clm_core::$db->config();
@@ -276,7 +329,8 @@ class CLMForm {
 		$vlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_CLUB' )), 'zps', 'name' );
 		$vlist		= array_merge( $vlist, $vereine);
 	
-		return JHTML::_('select.genericlist', $vlist, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
+//		return JHTML::_('select.genericlist', $vlist, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
+		return JHTML::_('select.genericlist', $vlist, $name, 'class="'.$field_search.'" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
 	
 	}
 
@@ -284,6 +338,11 @@ class CLMForm {
 	// neu
 	public static function selectVereinTournament ($name, $value = 0, $turnier = 0, $filter = FALSE) {
 		
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
+
 			$sql = "SELECT a.zps, v.Vereinname as name FROM #__clm_turniere_tlnr as a "
 				." LEFT JOIN #__clm_dwz_vereine as v ON v.sid= a.sid AND v.ZPS = a.zps"
 				." WHERE a.turnier = '$turnier'"
@@ -297,11 +356,17 @@ class CLMForm {
 		$vlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_CLUB' )), 'zps', 'name' );
 		$vlist		= array_merge( $vlist, $vereine);
 	
-		return JHTML::_('select.genericlist', $vlist, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
+//		return JHTML::_('select.genericlist', $vlist, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
+		return JHTML::_('select.genericlist', $vlist, $name, 'class="'.$field_search.'" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
 	
 	}
 
 	public static function selectMatchPlayer($name, $selected, $players = array()) {
+	
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
 	
 		$pllist[] = JHTML::_('select.option', '0', CLMText::selectOpener(JText::_( 'SELECT_PLAYER_'.strtoupper(substr($name, 0, 1)) ) ), 'snr', 'name' );
 		$pllist[] = JHTML::_('select.option', '-1', JText::_( ' ---------------------------- ' ), 'snr', 'name');
@@ -310,12 +375,18 @@ class CLMForm {
 			$pllist[]	= JHTML::_('select.option', $value['snr'], $value['snr']." - ".$value['name'], 'snr', 'name');
 		}
 	
-		return JHTML::_('select.genericlist', $pllist, $name, 'class="js-example-basic-single" size="1" style="width:250px"', 'snr', 'name', $selected );
+//		return JHTML::_('select.genericlist', $pllist, $name, 'class="js-example-basic-single" size="1" style="width:250px"', 'snr', 'name', $selected );
+		return JHTML::_('select.genericlist', $pllist, $name, 'class="'.$field_search.'" size="1" style="width:250px"', 'snr', 'name', $selected );
 	
 	}
 
 
 	public static function selectMatchResult($name, $value) {
+	
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
 	
 		$resultlist[] = JHTML::_('select.option', '-1', CLMText::selectOpener(JText::_( 'SELECT_RESULT' ) ), 'eid', 'ergebnis' );
 		$resultlist[] = JHTML::_('select.option', '-2', JText::_( ' ---------------- ' ), 'eid', 'ergebnis');
@@ -324,15 +395,19 @@ class CLMForm {
 			$resultlist[] = JHTML::_('select.option', $r, JText::_( 'RESULT_EID_'.$r ), 'eid', 'ergebnis' );
 		}
 	
-		return JHTML::_('select.genericlist', $resultlist, $name, 'class="js-example-basic-single" size="1" style="width:170px"', 'eid', 'ergebnis', $value );
+//		return JHTML::_('select.genericlist', $resultlist, $name, 'class="js-example-basic-single" size="1" style="width:170px"', 'eid', 'ergebnis', $value );
+		return JHTML::_('select.genericlist', $resultlist, $name, 'class="'.$field_search.'" size="1" style="width:170px"', 'eid', 'ergebnis', $value );
 	
 	}
 
 	public static function selectDWZRanges ($name, $value = 0, $filter = FALSE) {
 	
 		//CLM parameter auslesen
-		$config = clm_core::$db->config();
-		$countryversion = $config->countryversion;
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";	
+
+		$countryversion = $clm_config->countryversion;
 		if ($countryversion =="de") {
 			$dwzlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_RATING' )), 'id', 'name' );
 			$dwzlist[]	= JHTML::_('select.option',  '56', 'DWZ >= 2600', 'id', 'name' );
@@ -347,7 +422,8 @@ class CLMForm {
 			}
 		}
 	
-		return JHTML::_('select.genericlist', $dwzlist, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+//		return JHTML::_('select.genericlist', $dwzlist, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+		return JHTML::_('select.genericlist', $dwzlist, $name, 'class="'.$field_search.'" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
 	
 	}
 
@@ -390,6 +466,11 @@ class CLMForm {
 	 */
 	public static function selectState($filterState = '*', $published = 'JPUBLISHED', $unpublished = 'JUNPUBLISHED', $archived = null, $trashed = null)
 	{
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
+
 		$state = array('' => '- ' . JText::_('JLIB_HTML_SELECT_STATE') . ' -', 'P' => JText::_($published), 'U' => JText::_($unpublished));
 
 		if ($archived)
@@ -407,7 +488,7 @@ class CLMForm {
 			$state,
 			'filter_state',
 			array(
-				'list.attr' => 'class="js-example-basic-single" size="1" onchange="Joomla.submitform();"',
+				'list.attr' => 'class="'.$field_search.'" size="1" onchange="Joomla.submitform();"',
 				'list.select' => $filterState,
 				'option.key' => null,
 			)

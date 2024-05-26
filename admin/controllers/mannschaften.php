@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -127,6 +127,12 @@ function display($cachable = false, $urlparams = array())
 	catch (Exception $e) {
 		$mainframe->enqueueMessage($db->stderr(), 'error');
 	}
+	
+	//CLM parameter auslesen
+	$clm_config = clm_core::$db->config();
+	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+	else $field_search = "inputbox";
+	
 	// Filter
 	// Statsusfilter
 	//$lists['state']	= JHTML::_('grid.state',  $filter_state );
@@ -136,7 +142,8 @@ function display($cachable = false, $urlparams = array())
 	$db->setQuery($sql);
 	$saisonlist[]	= JHtml::_('select.option',  '0', JText::_( 'MANNSCHAFTEN_SAISON' ), 'id', 'name' );
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
-	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+//	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 	// Ligafilter
 	$sql = 'SELECT d.id AS cid, d.name FROM #__clm_liga as d'
 		." LEFT JOIN #__clm_saison as s ON s.id = d.sid"
@@ -144,11 +151,13 @@ function display($cachable = false, $urlparams = array())
 	$db->setQuery($sql);
 	$ligalist[]	= JHtml::_('select.option',  '0', JText::_( 'MANNSCHAFTEN_LIGA' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
-	$lists['lid']	= JHtml::_('select.genericlist', $ligalist, 'filter_lid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
+//	$lists['lid']	= JHtml::_('select.genericlist', $ligalist, 'filter_lid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
+	$lists['lid']	= JHtml::_('select.genericlist', $ligalist, 'filter_lid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
 
 	// Vereinefilter laden
 	$vlist	= CLMFilterVerein::vereine_filter(0);
-	$lists['vid']	= JHtml::_('select.genericlist', $vlist, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
+//	$lists['vid']	= JHtml::_('select.genericlist', $vlist, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
+	$lists['vid']	= JHtml::_('select.genericlist', $vlist, 'filter_vid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
 
 	// Ordering
 	$lists['order_Dir']	= $filter_order_Dir;
@@ -173,6 +182,11 @@ function edit()
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');
 
+	//CLM parameter auslesen
+	$clm_config = clm_core::$db->config();
+	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+	else $field_search = "inputbox";
+	
 	$row =JTable::getInstance( 'mannschaften', 'TableCLM' );
 	// load the row from the db table
 	$row->load( $cid[0] );
@@ -252,12 +266,14 @@ function edit()
 	}
 	$ligalist[]	= JHtml::_('select.option',  '0', JText::_( 'MANNSCHAFTEN_LIGA') , 'liga', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
-	$lists['liga']	= JHtml::_('select.genericlist',   $ligalist, 'liga', 'class="js-example-basic-single" size="1" style="width:300px"','liga', 'name', $row->liga );
+//	$lists['liga']	= JHtml::_('select.genericlist',   $ligalist, 'liga', 'class="js-example-basic-single" size="1" style="width:300px"','liga', 'name', $row->liga );
+	$lists['liga']	= JHtml::_('select.genericlist',   $ligalist, 'liga', 'class="'.$field_search.'" size="1" style="width:300px"','liga', 'name', $row->liga );
 	$lists['published']	= JHtml::_('select.booleanlist',  'published', 'class="inputbox"', $row->published );
 
 	// Vereinefilter laden
 	$vereinlist	= CLMFilterVerein::vereine_filter(0);
-	$lists['verein']= JHtml::_('select.genericlist',   $vereinlist, 'zps', 'class="js-example-basic-single" size="1" style="width:300px"','zps', 'name', $row->zps );
+//	$lists['verein']= JHtml::_('select.genericlist',   $vereinlist, 'zps', 'class="js-example-basic-single" size="1" style="width:300px"','zps', 'name', $row->zps );
+	$lists['verein']= JHtml::_('select.genericlist',   $vereinlist, 'zps', 'class="'.$field_search.'" size="1" style="width:300px"','zps', 'name', $row->zps );
 
 	// Spielgemeinschaft
 	//$lists['sg']= JHtml::_('select.genericlist',   $vereinlist, 'sg_zps', 'class="inputbox" size="1" ','zps', 'name', $row->sg_zps );
@@ -277,7 +293,8 @@ function edit()
 	}
 	$mflist[]		= JHtml::_('select.option',  '0', JText::_( 'MANNSCHAFTEN_MANNSCHAFTFUEHRER' ), 'mf', 'mfname' );
 	$mflist			= array_merge( $mflist, $db->loadObjectList() );
-	$lists['mf']	= JHtml::_('select.genericlist',   $mflist, 'mf', 'class="js-example-basic-single" size="1" style="width:300px"', 'mf', 'mfname', $row->mf );
+//	$lists['mf']	= JHtml::_('select.genericlist',   $mflist, 'mf', 'class="js-example-basic-single" size="1" style="width:300px"', 'mf', 'mfname', $row->mf );
+	$lists['mf']	= JHtml::_('select.genericlist',   $mflist, 'mf', 'class="'.$field_search.'" size="1" style="width:300px"', 'mf', 'mfname', $row->mf );
 	// Saisonliste
 	if($task =="edit"){ 
 		$sql = 'SELECT id as sid, name FROM #__clm_saison WHERE id='.$sid;
@@ -296,7 +313,8 @@ function edit()
 	} else { 
 		$saisonlist	= $db->loadObjectList(); 
 	}
-	$lists['saison']= JHtml::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1" style="width:300px"','sid', 'name', $row->sid );
+//	$lists['saison']= JHtml::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1" style="width:300px"','sid', 'name', $row->sid );
+	$lists['saison']= JHtml::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1" style="width:300px"','sid', 'name', $row->sid );
 
 	//Liga-Parameter aufbereiten
 	$lid_params = array();
@@ -322,7 +340,8 @@ function edit()
 	$row->sg_zps = explode(',',$sg_string);
 	for ($i = 0; $i < $lists['anz_sgp']; $i++) { 
 		if (!isset($row->sg_zps[$i]) OR $row->sg_zps[$i] === 0) $row->sg_zps[$i] = '0';
-		$lists['sg'.$i]= JHtml::_('select.genericlist',   $vereinlist, 'sg_zps['.$i.']', 'class="js-example-basic-single" size="1" style="width:300px"','zps', 'name', $row->sg_zps[$i] );
+//		$lists['sg'.$i]= JHtml::_('select.genericlist',   $vereinlist, 'sg_zps['.$i.']', 'class="js-example-basic-single" size="1" style="width:300px"','zps', 'name', $row->sg_zps[$i] );
+		$lists['sg'.$i]= JHtml::_('select.genericlist',   $vereinlist, 'sg_zps['.$i.']', 'class="'.$field_search.'" size="1" style="width:300px"','zps', 'name', $row->sg_zps[$i] );
 	}
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'mannschaft.php');
 	CLMViewMannschaften::mannschaft( $row, $lists, $option );

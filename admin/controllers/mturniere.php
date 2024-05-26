@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -79,6 +79,11 @@ class CLMControllerMTurniere extends JControllerLegacy
 		$row->checkout( $user->get('id') );
 	}
 
+	//CLM parameter auslesen
+	$clm_config = clm_core::$db->config();
+	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+	else $field_search = "inputbox";
+	
 	// Listen
 	// Heimrecht vertauscht
 	$lists['heim']	= JHtml::_('select.booleanlist',  'heim', 'class="inputbox"', $row->heim );
@@ -99,7 +104,8 @@ class CLMControllerMTurniere extends JControllerLegacy
 		echo "<br>cl: "; var_dump($userlist); die('clcl'); }
 	$sllist[]	= JHtml::_('select.option',  '0', JText::_( 'MTURN_TL' ), 'jid', 'name' );
 	$sllist		= array_merge( $sllist, $userlist );
-	$lists['sl']	= JHtml::_('select.genericlist',   $sllist, 'sl', 'class="js-example-basic-single" size="1"', 'jid', 'name', $row->sl );
+//	$lists['sl']	= JHtml::_('select.genericlist',   $sllist, 'sl', 'class="js-example-basic-single" size="1"', 'jid', 'name', $row->sl );
+	$lists['sl']	= JHtml::_('select.genericlist',   $sllist, 'sl', 'class="'.$field_search.'" size="1"', 'jid', 'name', $row->sl );
 	// Saisonliste
 	$sql = "SELECT id as sid, name FROM #__clm_saison WHERE archiv = 0";
 	$db->setQuery($sql);
@@ -109,7 +115,8 @@ class CLMControllerMTurniere extends JControllerLegacy
 	}
 	$saisonlist[]	= JHtml::_('select.option',  '0', JText::_( 'LIGEN_SAISON' ), 'sid', 'name' );
 	$saisonlist	= array_merge( $saisonlist, $db->loadObjectList() );
-	$lists['saison']= JHtml::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1"','sid', 'name', $row->sid );
+//	$lists['saison']= JHtml::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1"','sid', 'name', $row->sid );
+	$lists['saison']= JHtml::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1"','sid', 'name', $row->sid );
 	// Rangliste
 	$query = " SELECT id, Gruppe FROM #__clm_rangliste_name ";
 	$db->setQuery($query);
@@ -119,7 +126,8 @@ class CLMControllerMTurniere extends JControllerLegacy
 	}
 	$glist[]	= JHtml::_('select.option',  '0', JText::_( 'LIGEN_ML' ), 'id', 'Gruppe' );
 	$glist		= array_merge( $glist, $db->loadObjectList() );
-	$lists['gruppe']= JHtml::_('select.genericlist',   $glist, 'rang', 'class="js-example-basic-single" size="1"', 'id', 'Gruppe', $row->rang );
+//	$lists['gruppe']= JHtml::_('select.genericlist',   $glist, 'rang', 'class="js-example-basic-single" size="1"', 'id', 'Gruppe', $row->rang );
+	$lists['gruppe']= JHtml::_('select.genericlist',   $glist, 'rang', 'class="'.$field_search.'" size="1"', 'id', 'Gruppe', $row->rang );
 
 	// ggf. Info, wenn Stichtag der Aufstellung nicht mit Meldeschluss der Rangliste übereinstimmt.
 	if($row->rang > 0){

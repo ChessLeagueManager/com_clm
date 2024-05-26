@@ -52,6 +52,11 @@ class CLMModelCatMain extends JModelLegacy {
 	// alle vorhandenen Parameter auslesen
 	function _getParameters() {
 	
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
+	
 		$mainframe =JFactory::getApplication();
 		global $option;
 	
@@ -69,7 +74,8 @@ class CLMModelCatMain extends JModelLegacy {
 		foreach ($this->parentArray as $key => $value) {
 			$parentlist[]	= JHTML::_('select.option',  $key, $value, 'id', 'name' );
 		}
-		$this->form['parent'] = JHTML::_('select.genericlist', $parentlist, 'filter_parentid', 'class="js-example-basic-single" size="1" style="max-width: 250px;"'.CLMText::stringOnchange(true), 'id', 'name', $this->param['parentid']);
+//		$this->form['parent'] = JHTML::_('select.genericlist', $parentlist, 'filter_parentid', 'class="js-example-basic-single" size="1" style="max-width: 250px;"'.CLMText::stringOnchange(true), 'id', 'name', $this->param['parentid']);
+		$this->form['parent'] = JHTML::_('select.genericlist', $parentlist, 'filter_parentid', 'class="'.$field_search.'" size="1" style="max-width: 250px;"'.CLMText::stringOnchange(true), 'id', 'name', $this->param['parentid']);
 	
 	
 		// Statusfilter

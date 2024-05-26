@@ -53,7 +53,11 @@ function display($cachable = false, $urlparams = array())
 	$limit			= $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
 	$limitstart		= $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
 	$filter_vid		= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
-
+	//CLM parameter auslesen
+	$clm_config = clm_core::$db->config();
+	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+	else $field_search = "inputbox";
+	
 	$where = array();
 	$where[]=' c.archiv = 0';
 	if ( $filter_sid ) {	$where[] = 'a.sid = '.(int) $filter_sid; }
@@ -113,7 +117,8 @@ function display($cachable = false, $urlparams = array())
 	$db->setQuery($sql);
 	$saisonlist[]	= JHTML::_('select.option',  '0', JText::_( 'VEREINE_SAISON' ), 'id', 'name' );
 	$saisonlist	= array_merge( $saisonlist, $db->loadObjectList() );
-	$lists['sid']	= JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+//	$lists['sid']	= JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']	= JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 
 	// table ordering
 	$lists['order_Dir']	= $filter_order_Dir;
@@ -137,6 +142,11 @@ function edit()
 		$cid[0] = clm_core::$load->request_int('id');
 	$option 	= clm_core::$load->request_string( 'option' );
 	$section 	= clm_core::$load->request_string( 'section' );
+
+	//CLM parameter auslesen
+	$clm_config = clm_core::$db->config();
+	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+	else $field_search = "inputbox";
 
 	$row =JTable::getInstance( 'vereine', 'TableCLM' );
 	// load the row from the db table
@@ -182,7 +192,8 @@ function edit()
 	// Vereinefilter laden
 	// 1 = Auswahl DB obwohl manuell aktiviert wurde !
 	$vereinlist	= CLMFilterVerein::vereine_filter(1);
-	$lists['verein']= JHTML::_('select.genericlist',   $vereinlist, 'zps', 'class="js-example-basic-single" size="1" style="width:300px" onchange="Tausch(this.id)"','zps', 'name', $row->zps );
+//	$lists['verein']= JHTML::_('select.genericlist',   $vereinlist, 'zps', 'class="js-example-basic-single" size="1" style="width:300px" onchange="Tausch(this.id)"','zps', 'name', $row->zps );
+	$lists['verein']= JHTML::_('select.genericlist',   $vereinlist, 'zps', 'class="'.$field_search.'" size="1" style="width:300px" onchange="Tausch(this.id)"','zps', 'name', $row->zps );
 
 	// Vereinsleiterliste
 	if ($task == 'edit') { $where = "WHERE ZPS = '".$row->zps."'";}
@@ -199,7 +210,8 @@ function edit()
 	}
 	$vllist[]	= JHTML::_('select.option',  '0', JText::_( 'VEREINE_VEREINSLEITER' ), 'vl', 'name' );
 	$vllist	= array_merge( $vllist, $db->loadObjectList() );
-	$lists['vl']= JHTML::_('select.genericlist',   $vllist, 'vl', 'class="js-example-basic-single" size="1" style="width:300px"  onchange="VSTausch(this.id)"','vl', 'name', $row->vl );
+//	$lists['vl']= JHTML::_('select.genericlist',   $vllist, 'vl', 'class="js-example-basic-single" size="1" style="width:300px"  onchange="VSTausch(this.id)"','vl', 'name', $row->vl );
+	$lists['vl']= JHTML::_('select.genericlist',   $vllist, 'vl', 'class="'.$field_search.'" size="1" style="width:300px"  onchange="VSTausch(this.id)"','vl', 'name', $row->vl );
 	
 	// Saisonliste
 	if($task =="edit"){ $sql = 'SELECT id as sid, name FROM #__clm_saison WHERE id='.$sid;} 
@@ -214,7 +226,8 @@ function edit()
 	$saisonlist[]	= JHTML::_('select.option',  '0', JText::_( 'VEREINE_SAISON' ), 'sid', 'name' );
 	$saisonlist	= array_merge( $saisonlist, $db->loadObjectList() );
 		} else { $saisonlist	= $db->loadObjectList(); }
-	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1" style="width:300px" ','sid', 'name', $row->sid );
+//	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1" style="width:300px" ','sid', 'name', $row->sid );
+	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1" style="width:300px" ','sid', 'name', $row->sid );
 	
 	$lists['published']	= JHTML::_('select.booleanlist',  'published', 'class="inputbox"', $row->published );
 	$lists['cid']	= $cid[0];

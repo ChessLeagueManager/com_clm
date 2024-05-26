@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -53,7 +53,7 @@ static function ergebnisse ( $rows, $lists, $pageNav, $option )
 	$ordering = ($lists['order'] == 'a.ordering');
 
 	// Auswahlfelder durchsuchbar machen
-	clm_core::$load->load_js("suche_liste");
+//	clm_core::$load->load_js("suche_liste");
 
 //	JHtml::_('behavior.tooltip');
 	require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
@@ -239,7 +239,7 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 	$countryversion = $config->countryversion;
 
 	// Auswahlfelder durchsuchbar machen
-	clm_core::$load->load_js("suche_liste");
+//	clm_core::$load->load_js("suche_liste");
 	?>
 
 	<form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -257,10 +257,10 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 	<table class="admintable">
 
 	<tr>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'RESULTS_DETAILS_BOARD' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo $runde[0]->hname; ?></td>
-		<td class="key" nowrap="nowrap"><?php echo $runde[0]->gname; ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'RESULTS_DETAILS_RESULT' ); ?></td>
+		<th class="key" nowrap="nowrap"><?php echo JText::_( 'RESULTS_DETAILS_BOARD' ); ?></th>
+		<th class="key" nowrap="nowrap" style="width: 250px"><?php echo $runde[0]->hname; ?></th>
+		<th class="key" nowrap="nowrap" style="width: 250px"><?php echo $runde[0]->gname; ?></th>
+		<th class="key" nowrap="nowrap"><?php echo JText::_( 'RESULTS_DETAILS_RESULT' ); ?></th>
 	<tr>
 <?php 	for ($i=0; $i<$runde[0]->stamm; $i++) { ?>
 	
@@ -270,8 +270,9 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 			<?php echo JText::_('RESULTS_DETAILS_NO').'&nbsp;&nbsp;'.($i+1).'&nbsp;&nbsp;'; ?>
 		  </label>
 		</td>
-		<td class="key" nowrap="nowrap">
-		  <select size="1" name="<?php echo 'heim'.($i+1); ?>" id="<?php echo 'heim'.($i+1); ?>" class="js-example-basic-single" >
+		<td class="key" nowrap="nowrap" style="width: 250px">
+<!--	  <select size="1" name="<?php echo 'heim'.($i+1); ?>" id="<?php echo 'heim'.($i+1); ?>" class="js-example-basic-single" style="width: 250px"> -->
+		  <select size="1" name="<?php echo 'heim'.($i+1); ?>" id="<?php echo 'heim'.($i+1); ?>">
  		<option value="0"><?php echo JText::_('RESULTS_DETAILS_DD_1');?></option>
 
 			<?php for ($x=0; $x < $hcount; $x++){
@@ -318,8 +319,9 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 		  </select>
 		</td>
 
-		<td class="key" nowrap="nowrap">
-		  <select size="1" name="<?php echo 'gast'.($i+1); ?>" id="<?php echo 'gast'.($i+1); ?>" class="js-example-basic-single">
+		<td class="key" nowrap="nowrap" style="width: 250px">
+<!--	  <select size="1" name="<?php echo 'gast'.($i+1); ?>" id="<?php echo 'gast'.($i+1); ?>" class="js-example-basic-single" style="width: 250px"> -->
+		  <select size="1" name="<?php echo 'gast'.($i+1); ?>" id="<?php echo 'gast'.($i+1); ?>">
  		<option value="0"><?php echo JText::_('RESULTS_DETAILS_DD_2');?></option>
 			<?php for ($x=0; $x < $gcount; $x++) {
 			if ($runde[0]->rang !="0") {
@@ -366,7 +368,8 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 		</td>
 
 		<td class="key" nowrap="nowrap">
-		  <select size="1" class="js-example-basic-single" name="<?php echo 'ergebnis'.($i+1); ?>" id="<?php echo 'ergebnis'.($i+1); ?>">
+<!--	  <select size="1" name="<?php echo 'ergebnis'.($i+1); ?>" id="<?php echo 'ergebnis'.($i+1); ?>" class="js-example-basic-single"> -->
+		  <select size="1" name="<?php echo 'ergebnis'.($i+1); ?>" id="<?php echo 'ergebnis'.($i+1); ?>">
 			<option value="8"><?php echo JText::_('RESULTS_DETAILS_DD_3');?></option>
 			<?php for ($x=0; $x < 11; $x++) { ?>
 			 <option value="<?php echo ($ergebnis[$x]->id); ?>" 
@@ -396,7 +399,8 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 			<label for="ko_decision"><?php echo JText::_( 'RESULTS_MT_KO_DECISION' ); ?></label>
 			</td>
 			<td class="key" nowrap="nowrap">
-			<select name="ko_decision" id="ko_decision" value="<?php echo $runde[0]->ko_decision; ?>" class="js-example-basic-single" size="1">
+<!--			<select name="ko_decision" id="ko_decision" value="<?php echo $runde[0]->ko_decision; ?>" class="js-example-basic-single" size="1"> -->
+			<select name="ko_decision" id="ko_decision" value="<?php echo $runde[0]->ko_decision; ?>" size="1">
 			<!--<option>- wählen -</option>-->
 			<option value="1" <?php if ($runde[0]->ko_decision == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_BW' );?></option>
 			<option value="2" <?php if ($runde[0]->ko_decision == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_BLITZ' ).$runde[0]->hname;?></option>
