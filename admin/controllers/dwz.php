@@ -264,15 +264,16 @@ static function nachmeldung()
 	$name 		= clm_core::$load->request_string('name');
 	$mglnr		= clm_core::$load->request_string('mglnr');
 	$PKZ		= clm_core::$load->request_string('PKZ');
-	$dwz 		= clm_core::$load->request_string('dwz');
-	$dwz_index 	= clm_core::$load->request_string('dwz_index', '0');
-	if (!isset($dwz_index)) $dwz_index = 0;
+	$dwz 		= clm_core::$load->request_int('dwz', 0);
+	$dwz_index 	= clm_core::$load->request_int('dwz_index', 0);
 	$geschlecht	= clm_core::$load->request_string('geschlecht');
 	$geburtsjahr	= clm_core::$load->request_string('geburtsjahr');
 	$zps		= clm_core::$load->request_string('zps');
 	$status		= clm_core::$load->request_string('status');	
 	$joiningdate = clm_core::$load->request_string('joiningdate', '1970-01-01');	
+	if ($joiningdate == '') $joiningdate = '1970-01-01';	
 	$leavingdate = clm_core::$load->request_string('leavingdate', '1970-01-01');	
+	if ($leavingdate == '') $leavingdate = '1970-01-01';	
 
 	if (!isset($status) OR $status == "") $status = "N";
 	// Prüfen ob Name und Mitgliedsnummer/PKZ angegeben wurden
@@ -334,21 +335,18 @@ static function nachmeldung()
 	// Prüfen ob DWZ vorhanden ist
 	if (!is_numeric($geburtsjahr))  $geburtsjahr = '0000';
 	if ($geschlecht == '0') $geschlecht = 'M';
-	if (!$dwz) {
+	
 	$query	= "INSERT INTO #__clm_dwz_spieler"
-		." ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Status`, `Spielername`, `Geschlecht`, `Geburtsjahr` , `joiningdate`, `leavingdate` ) "
+		." ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Status`, `Spielername`, `Geschlecht`, `Geburtsjahr` , `joiningdate`, `leavingdate`, `DWZ`, `DWZ_Index` ) "
 		." VALUES ('".clm_escape($sid)."','".clm_escape($zps)."','".clm_escape($mglnr)."','".clm_escape($PKZ)."','".clm_escape($status)."','".clm_escape($name)."','"
-		.clm_escape($geschlecht)."','".clm_escape($geburtsjahr)."','".$joiningdate."','".$leavingdate."')"
-		;
-		}
-	else {
-	$query	= "INSERT INTO #__clm_dwz_spieler"
-		." ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Status`, `Spielername`, `Geschlecht`, `Geburtsjahr`, `joiningdate`, `leavingdate`, `DWZ`, `DWZ_Index`) "
-		." VALUES ('".clm_escape($sid)."', '".clm_escape($zps)."','".clm_escape($mglnr)."','".clm_escape($PKZ)."','".clm_escape($status)."','".clm_escape($name)."','"
-		.clm_escape($geschlecht)."','".clm_escape($geburtsjahr)."','".$joiningdate."','".$leavingdate."','".clm_escape($dwz)."','".clm_escape($dwz_index)."')"
-		;
-		}
-	//$db->setQuery($query);
+		.clm_escape($geschlecht)."','".clm_escape($geburtsjahr)."','".$joiningdate."','".$leavingdate."'";
+	if (!is_numeric($dwz) OR ($dwz == 0))
+		$query	.= " , NULL, NULL)";
+	elseif (!is_numeric($dwz_index) OR ($dwz_index == 0))
+		$query	.= " , NULL, NULL)";
+	else 
+		$query	.= " , $dwz, $dwz_index )";
+
 	clm_core::$db->query($query);
 
 	// Log schreiben
@@ -381,14 +379,16 @@ static function daten_edit()
 	$name 		= clm_core::$load->request_string('name');
 	$mglnr		= clm_core::$load->request_string('mglnr');
 	$PKZ		= clm_core::$load->request_string('PKZ');
-	$dwz 		= clm_core::$load->request_string('dwz');
-	$dwz_index 	= clm_core::$load->request_string('dwz_index','0');
+	$dwz 		= clm_core::$load->request_int('dwz', 0);
+	$dwz_index 	= clm_core::$load->request_int('dwz_index', 0);
 	$geschlecht	= clm_core::$load->request_string('geschlecht');
 	$geburtsjahr	= clm_core::$load->request_string('geburtsjahr');
 	$zps		= clm_core::$load->request_string('zps');
 	$status		= clm_core::$load->request_string('status');	
 	$joiningdate = clm_core::$load->request_string('joiningdate', '1970-01-01');	
+	if ($joiningdate == '') $joiningdate = '1970-01-01';	
 	$leavingdate = clm_core::$load->request_string('leavingdate', '1970-01-01');	
+	if ($leavingdate == '') $leavingdate = '1970-01-01';	
 
 	// Prüfen ob Name und Mitgliedsnummer/PKZ angegeben wurden
 	if ( $countryversion == "de" AND ($name == "" OR $mglnr =="" OR $mglnr=="0") ) {
@@ -435,15 +435,26 @@ static function daten_edit()
 		}
 	}
 	// Datensatz updaten
+	if ($geschlecht == '0') $geschlecht = 'M';
 	$query	= "UPDATE #__clm_dwz_spieler "
 		." SET Spielername = '".clm_escape($name)."' "
 		." , Mgl_Nr = '".clm_escape($mglnr)."' "
-		." , PKZ = '".clm_escape($PKZ)."' "
-		." , DWZ = '".clm_escape($dwz)."' "
-		." , DWZ_Index = '".clm_escape($dwz_index)."' "
-		." , Geschlecht = '".clm_escape($geschlecht)."' "
-		." , Geburtsjahr = '".clm_escape($geburtsjahr)."' "
-		." , Status = '".clm_escape($status)."' "
+		." , PKZ = '".clm_escape($PKZ)."' ";
+	if (!is_numeric($dwz) OR ($dwz == 0))
+		$query	.= " , DWZ = NULL "
+			." , DWZ_Index = NULL ";
+	elseif (!is_numeric($dwz_index) OR ($dwz_index == 0))
+		$query	.= " , DWZ = $dwz "
+			." , DWZ_Index = NULL ";
+	else 
+		$query	.= " , DWZ = $dwz "
+			." , DWZ_Index = $dwz_index ";
+	$query	.= " , Geschlecht = '".clm_escape($geschlecht)."' ";
+	if (!is_numeric($geburtsjahr) OR ($geburtsjahr == 0))
+		$query	.= " , Geburtsjahr = '0000' ";
+	else
+		$query	.= " , Geburtsjahr = '".clm_escape($geburtsjahr)."' ";
+	$query	.= " , Status = '".clm_escape($status)."' "
 		." , joiningdate = '".$joiningdate."' "
 		." , leavingdate = '".$leavingdate."' "
 		." WHERE ZPS = '".clm_escape($zps)."' "
