@@ -37,6 +37,13 @@ function display($cachable = false, $urlparams = array())
 	$filter_vid_from	= $mainframe->getUserStateFromRequest( "$option.filter_vid_from",'filter_vid_from',0,'var' );
 
 	$filter_sort		= $mainframe->getUserStateFromRequest( "$option.filter_sort",'filter_sort',0,'string' );
+	
+	//CLM parameter auslesen
+	$clm_config = clm_core::$db->config();
+	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+	else $field_search = "inputbox";
+	
+
 	if ($countryversion == "de") {
 		$filter_mgl		= $mainframe->getUserStateFromRequest( "$option.filter_mgl",'filter_mgl',0,'int' );
 		// Wenn Verein und Spieler gewählt wurden dann Daten für Anzeige laden
@@ -104,7 +111,8 @@ function display($cachable = false, $urlparams = array())
 	// Vereinefilter laden
 	$vlist = CLMFilterVerein::vereine_filter(0);
 //	$lists['vid']	= JHTML::_('select.genericlist', $vlist, 'filter_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
-	$lists['vid']	= JHTML::_('select.genericlist', $vlist, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="change_vid();"','zps', 'name', $filter_vid );
+//	$lists['vid']	= JHTML::_('select.genericlist', $vlist, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="change_vid();"','zps', 'name', $filter_vid );
+	$lists['vid']	= JHTML::_('select.genericlist', $vlist, 'filter_vid', 'class="'.$field_search.'" size="1" onchange="change_vid();"','zps', 'name', $filter_vid );
 	$lists['vid_to']	= JHTML::_('select.genericlist', $vlist, 'filter_vid_to', 'class="inputbox" size="1" ','zps', 'name', $filter_vid_to );
 	$lists['vid_from']	= JHTML::_('select.genericlist', $vlist, 'filter_vid_from', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid_from );
 	
@@ -122,7 +130,8 @@ function display($cachable = false, $urlparams = array())
 		$db->setQuery($sql);
 		$mlist[]	= JHTML::_('select.option',  '0', JText::_( 'DWZ_SPIELER' ), 'Mgl_Nr', 'Spielername' );
 		$mlist		= array_merge( $mlist, $db->loadObjectList() );
-		$lists['mgl']	= JHTML::_('select.genericlist', $mlist, 'filter_mgl', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','Mgl_Nr', 'Spielername', $filter_mgl );
+//		$lists['mgl']	= JHTML::_('select.genericlist', $mlist, 'filter_mgl', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','Mgl_Nr', 'Spielername', $filter_mgl );
+		$lists['mgl']	= JHTML::_('select.genericlist', $mlist, 'filter_mgl', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','Mgl_Nr', 'Spielername', $filter_mgl );
 	  } else {
 		$sql = 'SELECT PKZ, Spielername FROM #__clm_dwz_spieler as a'
 			.' LEFT JOIN #__clm_saison AS s ON s.id = a.sid'
@@ -133,7 +142,8 @@ function display($cachable = false, $urlparams = array())
 		$db->setQuery($sql);
 		$mlist[]	= JHTML::_('select.option',  '0', JText::_( 'DWZ_SPIELER' ), 'PKZ', 'Spielername' );
 		$mlist		= array_merge( $mlist, $db->loadObjectList() );
-		$lists['PKZ']	= JHTML::_('select.genericlist', $mlist, 'filter_PKZ', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','PKZ', 'Spielername', $filter_PKZ );
+//		$lists['PKZ']	= JHTML::_('select.genericlist', $mlist, 'filter_PKZ', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','PKZ', 'Spielername', $filter_PKZ );
+		$lists['PKZ']	= JHTML::_('select.genericlist', $mlist, 'filter_PKZ', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','PKZ', 'Spielername', $filter_PKZ );
 	  }	
 	}
 
@@ -264,15 +274,16 @@ static function nachmeldung()
 	$name 		= clm_core::$load->request_string('name');
 	$mglnr		= clm_core::$load->request_string('mglnr');
 	$PKZ		= clm_core::$load->request_string('PKZ');
-	$dwz 		= clm_core::$load->request_string('dwz');
-	$dwz_index 	= clm_core::$load->request_string('dwz_index', '0');
-	if (!isset($dwz_index)) $dwz_index = 0;
+	$dwz 		= clm_core::$load->request_int('dwz', 0);
+	$dwz_index 	= clm_core::$load->request_int('dwz_index', 0);
 	$geschlecht	= clm_core::$load->request_string('geschlecht');
 	$geburtsjahr	= clm_core::$load->request_string('geburtsjahr');
 	$zps		= clm_core::$load->request_string('zps');
 	$status		= clm_core::$load->request_string('status');	
 	$joiningdate = clm_core::$load->request_string('joiningdate', '1970-01-01');	
+	if ($joiningdate == '') $joiningdate = '1970-01-01';	
 	$leavingdate = clm_core::$load->request_string('leavingdate', '1970-01-01');	
+	if ($leavingdate == '') $leavingdate = '1970-01-01';	
 
 	if (!isset($status) OR $status == "") $status = "N";
 	// Prüfen ob Name und Mitgliedsnummer/PKZ angegeben wurden
@@ -334,21 +345,18 @@ static function nachmeldung()
 	// Prüfen ob DWZ vorhanden ist
 	if (!is_numeric($geburtsjahr))  $geburtsjahr = '0000';
 	if ($geschlecht == '0') $geschlecht = 'M';
-	if (!$dwz) {
+
 	$query	= "INSERT INTO #__clm_dwz_spieler"
-		." ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Status`, `Spielername`, `Geschlecht`, `Geburtsjahr` , `joiningdate`, `leavingdate` ) "
+		." ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Status`, `Spielername`, `Geschlecht`, `Geburtsjahr` , `joiningdate`, `leavingdate`, `DWZ`, `DWZ_Index` ) "
 		." VALUES ('".clm_escape($sid)."','".clm_escape($zps)."','".clm_escape($mglnr)."','".clm_escape($PKZ)."','".clm_escape($status)."','".clm_escape($name)."','"
-		.clm_escape($geschlecht)."','".clm_escape($geburtsjahr)."','".$joiningdate."','".$leavingdate."')"
-		;
-		}
-	else {
-	$query	= "INSERT INTO #__clm_dwz_spieler"
-		." ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Status`, `Spielername`, `Geschlecht`, `Geburtsjahr`, `joiningdate`, `leavingdate`, `DWZ`, `DWZ_Index`) "
-		." VALUES ('".clm_escape($sid)."', '".clm_escape($zps)."','".clm_escape($mglnr)."','".clm_escape($PKZ)."','".clm_escape($status)."','".clm_escape($name)."','"
-		.clm_escape($geschlecht)."','".clm_escape($geburtsjahr)."','".$joiningdate."','".$leavingdate."','".clm_escape($dwz)."','".clm_escape($dwz_index)."')"
-		;
-		}
-	//$db->setQuery($query);
+		.clm_escape($geschlecht)."','".clm_escape($geburtsjahr)."','".$joiningdate."','".$leavingdate."'";
+	if (!is_numeric($dwz) OR ($dwz == 0))
+		$query	.= " , NULL, NULL)";
+	elseif (!is_numeric($dwz_index) OR ($dwz_index == 0))
+		$query	.= " , NULL, NULL)";
+	else 
+		$query	.= " , $dwz, $dwz_index )";
+
 	clm_core::$db->query($query);
 
 	// Log schreiben
@@ -381,14 +389,16 @@ static function daten_edit()
 	$name 		= clm_core::$load->request_string('name');
 	$mglnr		= clm_core::$load->request_string('mglnr');
 	$PKZ		= clm_core::$load->request_string('PKZ');
-	$dwz 		= clm_core::$load->request_string('dwz');
-	$dwz_index 	= clm_core::$load->request_string('dwz_index','0');
+	$dwz 		= clm_core::$load->request_int('dwz', 0);
+	$dwz_index 	= clm_core::$load->request_int('dwz_index', 0);
 	$geschlecht	= clm_core::$load->request_string('geschlecht');
 	$geburtsjahr	= clm_core::$load->request_string('geburtsjahr');
 	$zps		= clm_core::$load->request_string('zps');
 	$status		= clm_core::$load->request_string('status');	
 	$joiningdate = clm_core::$load->request_string('joiningdate', '1970-01-01');	
+	if ($joiningdate == '') $joiningdate = '1970-01-01';	
 	$leavingdate = clm_core::$load->request_string('leavingdate', '1970-01-01');	
+	if ($leavingdate == '') $leavingdate = '1970-01-01';	
 
 	// Prüfen ob Name und Mitgliedsnummer/PKZ angegeben wurden
 	if ( $countryversion == "de" AND ($name == "" OR $mglnr =="" OR $mglnr=="0") ) {
@@ -435,15 +445,26 @@ static function daten_edit()
 		}
 	}
 	// Datensatz updaten
+	if ($geschlecht == '0') $geschlecht = 'M';
 	$query	= "UPDATE #__clm_dwz_spieler "
 		." SET Spielername = '".clm_escape($name)."' "
 		." , Mgl_Nr = '".clm_escape($mglnr)."' "
-		." , PKZ = '".clm_escape($PKZ)."' "
-		." , DWZ = '".clm_escape($dwz)."' "
-		." , DWZ_Index = '".clm_escape($dwz_index)."' "
-		." , Geschlecht = '".clm_escape($geschlecht)."' "
-		." , Geburtsjahr = '".clm_escape($geburtsjahr)."' "
-		." , Status = '".clm_escape($status)."' "
+		." , PKZ = '".clm_escape($PKZ)."' ";
+	if (!is_numeric($dwz) OR ($dwz == 0))
+		$query	.= " , DWZ = NULL "
+			." , DWZ_Index = NULL ";
+	elseif (!is_numeric($dwz_index) OR ($dwz_index == 0))
+		$query	.= " , DWZ = $dwz "
+			." , DWZ_Index = NULL ";
+	else 
+		$query	.= " , DWZ = $dwz "
+			." , DWZ_Index = $dwz_index ";
+	$query	.= " , Geschlecht = '".clm_escape($geschlecht)."' ";
+	if (!is_numeric($geburtsjahr) OR ($geburtsjahr == 0))
+		$query	.= " , Geburtsjahr = '0000' ";
+	else
+		$query	.= " , Geburtsjahr = '".clm_escape($geburtsjahr)."' ";
+	$query	.= " , Status = '".clm_escape($status)."' "
 		." , joiningdate = '".$joiningdate."' "
 		." , leavingdate = '".$leavingdate."' "
 		." WHERE ZPS = '".clm_escape($zps)."' "

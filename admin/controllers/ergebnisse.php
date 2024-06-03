@@ -57,6 +57,11 @@ function display($cachable = false, $urlparams = array())
 	$limit			= $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
 	$limitstart		= $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
 
+	//CLM parameter auslesen
+	$clm_config = clm_core::$db->config();
+	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+	else $field_search = "inputbox";
+
 	$where = array();
 	$where[]=' s.archiv = 0';
 	if ( $filter_catid ) {	$where[] = 'a.published = '.(int) $filter_catid; }
@@ -156,7 +161,7 @@ function display($cachable = false, $urlparams = array())
 	$saisonlist[]	= JHTML::_('select.option',  '0', JText::_( 'ERGEBNISSE_SAISON_SELECT' ), 'id', 'name' );
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
 //	$lists['sid']      = JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
-	$lists['sid']      = JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']      = JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 	// Nur ausführen wenn Saison published = 1 !!
 	if ( isset($rows[0]->liga) AND is_string($rows[0]->liga) ) {
 	
@@ -191,7 +196,7 @@ function display($cachable = false, $urlparams = array())
 	$ligalist[]	= JHTML::_('select.option',  '0', JText::_( 'ERGEBNISSE_LIGA' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
 //	$lists['lid']	= JHTML::_('select.genericlist', $ligalist, 'filter_lid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
-	$lists['lid']	= JHTML::_('select.genericlist', $ligalist, 'filter_lid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
+	$lists['lid']	= JHTML::_('select.genericlist', $ligalist, 'filter_lid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
 	// Rundenfilter
 	$sql = 'SELECT id, runde as name FROM #__clm_rnd_man '
 		." WHERE lid =".($rows[0]->lid)." AND paar =1 AND heim = 1 AND dg = 1"
@@ -200,7 +205,7 @@ function display($cachable = false, $urlparams = array())
 	$rlist[]	= JHTML::_('select.option',  '0', JText::_( 'ERGEBNISSE_RUNDE' ), 'name', 'name' );
 	$rlist		= array_merge( $rlist, $db->loadObjectList() );
 //	$lists['runde']	= JHTML::_('select.genericlist', $rlist, 'filter_runde', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','name', 'name', intval( $filter_runde ) );
-	$lists['runde']	= JHTML::_('select.genericlist', $rlist, 'filter_runde', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','name', 'name', intval( $filter_runde ) );
+	$lists['runde']	= JHTML::_('select.genericlist', $rlist, 'filter_runde', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','name', 'name', intval( $filter_runde ) );
 	// Durchgangsfilter
 	$dg_menu = array();
 	$dg_menu[]	= JHTML::_('select.option',  '0', JText::_( 'ERGEBNISSE_DURCHGANG' ), 'name', 'name' );
@@ -209,7 +214,7 @@ function display($cachable = false, $urlparams = array())
 	$dg_menu[]	= JHTML::_('select.option',  '3', JText::_( 'ERGEBNISSE_DGC' ), 'name', 'name' );
 	$dg_menu[]	= JHTML::_('select.option',  '4', JText::_( 'ERGEBNISSE_DGD' ), 'name', 'name' );
 //	$lists['dg_menu']	= JHTML::_('select.genericlist', $dg_menu, 'filter_dg', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','name', 'name', intval( $filter_dg ) );
-	$lists['dg_menu']	= JHTML::_('select.genericlist', $dg_menu, 'filter_dg', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','name', 'name', intval( $filter_dg ) );
+	$lists['dg_menu']	= JHTML::_('select.genericlist', $dg_menu, 'filter_dg', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','name', 'name', intval( $filter_dg ) );
 	}
 	// Ordering
 	$lists['order_Dir']	= $filter_order_Dir;

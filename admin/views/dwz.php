@@ -50,7 +50,12 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 	}
 	// Auswahlfelder durchsuchbar machen
 	clm_core::$load->load_js("suche_liste");
-		?>
+
+	//CLM parameter auslesen
+	$clm_config = clm_core::$db->config();
+	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+	else $field_search = "inputbox";
+	?>
 
 <script language="javascript" type="text/javascript">
 
@@ -107,7 +112,8 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 		<?php if (isset($lists['mgl'])) echo $lists['mgl'];  ?>&nbsp;&nbsp;
 		<?php $mainframe	= JFactory::getApplication();
 		$filter_sort	= $mainframe->getUserStateFromRequest( "$option.filter_sort",'filter_sort',0,'string' ); ?>
-		<select name="filter_sort" id="filter_sort" class="js-example-basic-single" size="1" onchange="document.adminForm.submit();">
+<!--		<select name="filter_sort" id="filter_sort" class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"> -->
+		<select name="filter_sort" id="filter_sort" class="<?php echo $field_search;?>" size="1" onchange="document.adminForm.submit();">
 		<option value="0"  <?php if ($filter_sort =="0") { ?>selected="selected"<?php } ?>><?php echo JText::_( 'MEMBER_DD_1');?></option>
 		<option value="(0+Mgl_Nr) DESC" <?php if ($filter_sort =="(0+Mgl_Nr) DESC") { ?>selected="selected"<?php } ?>><?php echo JText::_( 'MEMBER_DD_2');?></option>
 		<option value="(0+Mgl_Nr) ASC" <?php if ($filter_sort =="(0+Mgl_Nr) ASC") { ?>selected="selected"<?php } ?>><?php echo JText::_( 'MEMBER_DD_3');?></option>
@@ -283,7 +289,8 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 			<label for="geschlecht"><?php echo JText::_( 'MEMBER_TABLE_18' ); ?></label>
 			</td>
 			<td>
-				<select class="js-example-basic-single" size="1" name="geschlecht" id="geschlecht">
+<!--				<select class="js-example-basic-single" size="1" name="geschlecht" id="geschlecht"> -->
+				<select class="<?php echo $field_search;?>" size="1" name="geschlecht" id="geschlecht">
 				<option value="0" <?php if (isset($filter_mgl) AND $spieler[0]->Geschlecht !="M" AND $spieler[0]->Geschlecht !="W"){ ?> selected="selected"<?php } ?>><?php echo JText::_( 'MEMBER_TABLE_19' ); ?></option>
 				<option value="M" <?php if (isset($filter_mgl) AND $spieler[0]->Geschlecht =="M"){ ?> selected="selected"<?php } ?>><?php echo JText::_( 'MEMBER_TABLE_20' ); ?></option> 
 				<option value="W" <?php if (isset($filter_mgl) AND $spieler[0]->Geschlecht =="W"){ ?> selected="selected"<?php } ?>><?php echo JText::_( 'MEMBER_TABLE_21' ); ?></option> 
@@ -348,7 +355,8 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 		<table class="admintable">
 			<tr>
 				<td class="key" nowrap="nowrap">
-	  			<select class="js-example-basic-single" style="width:300px" size="1" name="spieler" id="spieler">
+<!--	  			<select class="js-example-basic-single" style="width:300px" size="1" name="spieler" id="spieler"> -->
+	  			<select class="<?php echo $field_search;?>" style="width:300px" size="1" name="spieler" id="spieler">
 					<option value="0"><?php echo JText::_( 'MEMBER_TABLE_28' ); ?></option>
 				<?php for ($x=0; $x < count($spl); $x++) { ?>
 		 		<?php if ($countryversion == "de") { ?>
@@ -374,7 +382,8 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 		<table class="admintable">
 			<tr>
 				<td class="key" nowrap="nowrap">
-	  			<select class="js-example-basic-single" style="width:300px" size="1" name="del_spieler" id="del_spieler">
+<!--	  			<select class="js-example-basic-single" style="width:300px" size="1" name="del_spieler" id="del_spieler"> -->
+	  			<select class="<?php echo $field_search;?>" style="width:300px" size="1" name="del_spieler" id="del_spieler">
 					<option value="0"><?php echo JText::_( 'MEMBER_TABLE_28' ); ?></option>
 				<?php for ($x=0; $x < count($verein); $x++) { ?>
 		 		<?php if ($countryversion == "de") { ?>
@@ -401,7 +410,8 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 		<table class="admintable">
 			<tr>
 				<td class="key" nowrap="nowrap">
-	  			<select class="js-example-basic-single" size="1" name="spieler_to" id="spieler_to">
+<!--	  			<select class="js-example-basic-single" size="1" name="spieler_to" id="spieler_to"> -->
+	  			<select class="<?php echo $field_search;?>" size="1" name="spieler_to" id="spieler_to">
 					<option value="0"><?php echo JText::_( 'MEMBER_TABLE_28' ); ?></option>
 				<?php for ($x=0; $x < count($verein); $x++) { ?>
 		 		<?php if ($countryversion == "de") { ?>
@@ -433,7 +443,8 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 				<td><?php echo $lists['vid_from'];  ?></td>
 				<td><?php echo '&nbsp;&nbsp;'; ?></td>
 				<td class="key" nowrap="nowrap">
-	  			<select class="js-example-basic-single" size="1" name="spieler_from" id="spieler_from">
+<!--	  			<select class="js-example-basic-single" size="1" name="spieler_from" id="spieler_from"> -->
+	  			<select class="<?php echo $field_search;?>" size="1" name="spieler_from" id="spieler_from">
 					<option value="0"><?php echo JText::_( 'MEMBER_TABLE_28' ); ?></option>
 				<?php for ($x=0; $x < count($verein_from); $x++) { ?>
 		 		<?php if ($countryversion == "de") { ?>
