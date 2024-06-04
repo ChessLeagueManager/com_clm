@@ -553,10 +553,11 @@ function datei() {
 			." ORDER BY a.zps ASC , a.brett ASC, spieler ASC "
 			;
 	} else {
-		$sql = " SELECT t.verein as Vereinname,t.zps, t.mgl_nr as spieler, t.name as Spielername, t.birthYear as Geburtsjahr, "
-			." s.FIDE_ID, s.PKZ, s.DWZ "
+//		$sql = " SELECT t.verein as Vereinname,t.zps, t.mgl_nr as spieler, t.name as Spielername, t.birthYear as Geburtsjahr"
+		$sql = " SELECT t.verein as Vereinname,t.zps, t.mgl_nr as spieler, t.name as Spielername, t.birthYear as Geburtsjahr, t.snr"
+			." ,s.FIDE_ID, s.PKZ, s.DWZ "
 			." FROM `#__clm_turniere_rnd_spl` as a "
-			." LEFT JOIN #__clm_turniere_tlnr as t ON t.sid = a.sid AND t.snr = a.spieler AND t.turnier = a.turnier "
+			." LEFT JOIN #__clm_turniere_tlnr as t ON t.sid = a.sid AND t.snr = a.tln_nr AND t.turnier = a.turnier "
 			." LEFT JOIN #__clm_dwz_spieler as s ON s.sid = a.sid AND s.ZPS = t.zps AND s.Mgl_Nr = t.mgl_nr "
 			." WHERE a.sid = ".$sid
 			." AND a.turnier = ".$liga_name[0]->id
@@ -570,22 +571,29 @@ function datei() {
 	$cnt	= 1;
 	$player	= array();
 	foreach($spieler as $spl){
-		//if($spl->zps !="" AND $spl->spieler !=""){   
-		if((!$et AND strlen($spl->zps) == 5 AND $spl->zps !="ZZZZZ" AND $spl->spieler !="") OR ($et AND $spl->Geburtsjahr > '0000')){   //bei Einzelturnieren auch vereinslose Spieler zulassen
-			if ($spl->spieler < 1 OR strlen($spl->zps) != 5 OR $spl->zps == '99999') { 
-				$app->enqueueMessage('Teilnehmer '.$spl->Spielername.' ggf. vereinslos' , 'warning');
+		if ($et AND (!isset($spl->snr) OR $spl->snr < 1)) continue; 
+//		if((is_null($et) AND strlen($spl->zps) == 5 AND $spl->zps !="ZZZZZ" AND $spl->spieler !="") OR ($et AND $spl->Geburtsjahr > '0000')){   //bei Einzelturnieren auch vereinslose Spieler zulassen
+		if((is_null($et) AND strlen($spl->zps) == 5 AND $spl->zps !="ZZZZZ" AND $spl->spieler !="") OR ($et)){   //bei Einzelturnieren auch vereinslose Spieler zulassen
+			if ($et AND ($spl->spieler < 1 OR strlen($spl->zps) != 5 OR $spl->zps == '99999') AND $spl->Geburtsjahr == '0000') {
+				$error = 1;
+				$app->enqueueMessage('Teilnehmer '.$spl->Spielername.' vereinslos und ohne Geburtsjahr!' , 'error');
+			} else $error = 0;
+			if ($error == 0 AND ($spl->spieler < 1 OR strlen($spl->zps) != 5 OR $spl->zps == '99999')) { 
+				$app->enqueueMessage('Teilnehmer '.$spl->Spielername.' eventuell vereinslos, da ZPS/Mitgliedsnummer unvollständig' , 'warning');
 			}
 			// laufende Nummer für Spieler erzeugen
-			$player[$spl->zps][$spl->spieler] = $cnt;
+			if ($et) $player[$spl->snr] = $cnt;
+			else $player[$spl->zps][$spl->spieler] = $cnt;
 			$cnt++;
 		
 		if (is_null($spl->Spielername)) $name = explode(",", ',');
 		else $name = explode(",", $spl->Spielername);
-		$spl->Vereinname = str_replace('&', '&amp;', $spl->Vereinname);
+		if (!is_null($spl->Vereinname)) $spl->Vereinname = str_replace('&', '&amp;', $spl->Vereinname);
 
-		$xml .= '<player>'
-			.'<noPlayer>'.$player[$spl->zps][$spl->spieler].'</noPlayer>'
-			.'<id>'.$spl->PKZ.'</id>'
+		$xml .= '<player>';
+		if ($et) $xml .= '<noPlayer>'.$player[$spl->snr].'</noPlayer>';
+		else $xml .= '<noPlayer>'.$player[$spl->zps][$spl->spieler].'</noPlayer>';
+		$xml .= '<id>'.$spl->PKZ.'</id>'
 			.'<surname>'.$name[0].'</surname>'
 			.'<forename>'.$name[1].'</forename>'
 			.'<dob>'.$spl->Geburtsjahr.'</dob>'
@@ -601,7 +609,7 @@ function datei() {
 	$xml .= '</players>';
 
 	// Begegnungen
-	if(!$et){
+	if(is_null($et)){
 		$sql = " SELECT * FROM `#__clm_rnd_spl` as a "
 			." WHERE sid = ".$sid
 			." AND lid = ".$liga_name[0]->id
@@ -616,12 +624,13 @@ function datei() {
 		$sql .=	" ORDER BY dg ASC, runde ASC, paar ASC, brett ASC "
 			;
 	} else {
-		$sql = " SELECT a.*, t.mgl_nr as spieler, t.zps as zps, u.mgl_nr as gegner, u.zps as gzps FROM `#__clm_turniere_rnd_spl` as a "
+		$sql = " SELECT a.*, a.spieler as aspieler, a.gegner as agegner, t.mgl_nr as spieler, t.zps as zps, u.mgl_nr as gegner, u.zps as gzps FROM `#__clm_turniere_rnd_spl` as a "
 			." LEFT JOIN #__clm_turniere_tlnr as t ON t.sid = a.sid AND t.turnier = a.turnier AND t.snr = a.spieler "
 			." LEFT JOIN #__clm_turniere_tlnr as u ON u.sid = a.sid AND u.turnier = a.turnier AND u.snr = a.gegner "
 			." WHERE a.sid = ".$sid
 			." AND a.turnier = ".$liga_name[0]->id
 			." AND a.heim = 1 "
+			." AND a.spieler > 0 "
 			." ORDER BY a.dg ASC, a.runde ASC, a.paar ASC, a.brett ASC "
 			;
 	}
@@ -670,10 +679,14 @@ function datei() {
 		if($rnd->heim == "0" AND $rnd->weiss == "1") { $erg_temp = $erg_bl[$rnd->ergebnis];}
 			else { $erg_temp = $erg[$rnd->ergebnis];}
 		$xml .= '<game>'
-			.'<round>'.$runde_temp.'</round>'
-			.'<noWhite>'.$player[$rnd->zps][$rnd->spieler].'</noWhite>'
-			.'<noBlack>'.$player[$rnd->gzps][$rnd->gegner].'</noBlack>'
-			.'<result>'.$erg_temp.'</result>'
+			.'<round>'.$runde_temp.'</round>';
+		if ($et) 
+			$xml .= '<noWhite>'.$player[$rnd->aspieler].'</noWhite>'
+					.'<noBlack>'.$player[$rnd->agegner].'</noBlack>';
+		else	
+			$xml .= '<noWhite>'.$player[$rnd->zps][$rnd->spieler].'</noWhite>'
+					.'<noBlack>'.$player[$rnd->gzps][$rnd->gegner].'</noBlack>';
+		$xml .=	'<result>'.$erg_temp.'</result>'
 			.'</game>'
 			;
 	}
