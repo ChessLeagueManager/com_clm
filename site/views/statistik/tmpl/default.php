@@ -11,7 +11,7 @@
 */
 
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip');
+
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
 $liga		= $this->liga;
@@ -280,11 +280,15 @@ $brett_all2 = array();
 			$sstring = ''; $ssum = 0;
 			$rstring = ''; $rsum = 0;
 			$kstring = ''; $ksum = 0;
+			$brettstr = ''; 
+			$textstr = ''; 
 		}
 		$wstring .= ' '.$brett_all[$x]['w'].',';
 		$sstring .= ' '.$brett_all[$x]['s'].',';
 		if (isset($brett_all2[$x]['r'])) $rstring .= ' '.$brett_all2[$x]['r'].','; else $rstring .= ' 0,';
 		if (isset($brett_all2[$x]['k'])) $kstring .= ' '.$brett_all2[$x]['k'].','; else $kstring .= ' 0,';
+		$brettstr .= $x.',';
+		$textstr .= "'Brett ".($x+1)."', ";
 	}
 ?>
     <!--Load the AJAX API-->
@@ -308,7 +312,7 @@ $brett_all2 = array();
         data.addColumn('string', 'Topping');
         data.addColumn('number', 'Slices');
         data.addRows([
-          ['<?php echo JText::_('LEAGUE_STAT_WHITE'); ?>', <?php echo $sum_weiss/1; ?>],
+          ['<?php echo JText::_('LEAGUE_STAT_WHITE') ?>', <?php echo $sum_weiss/1; ?>],
           ['<?php echo JText::_('LEAGUE_STAT_BLACK') ?>', <?php echo $sum_schwarz/1; ?>],
           ['<?php echo JText::_('LEAGUE_STAT_REMIS') ?>', <?php echo $remis[0]->remis; ?>],
           ['<?php echo JText::_('LEAGUE_STAT_UNCONTESTED') ?>', <?php echo $kampflos[0]->kampflos; ?>],
@@ -316,8 +320,8 @@ $brett_all2 = array();
 
         // Set chart options
         var options = {'title':'prozentuale Verteilung',
-                       'width':450,
-                       'height':450};
+                       'width':350,
+                       'height':350};
 
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
@@ -325,9 +329,10 @@ $brett_all2 = array();
       }
 
    function drawBarChart() {
-    var data = google.visualization.arrayToDataTable([
-        ['Ergebnis', 'Brett 1', 'Brett 2', 'Brett 3', 'Brett 4',
-         'Brett 5', 'Brett 6', 'Brett 7', 'Brett 8', { role: 'annotation' } ],
+    var data = new google.visualization.arrayToDataTable([
+//        ['Ergebnis', 'Brett 1', 'Brett 2', 'Brett 3', 'Brett 4',
+//         'Brett 5', 'Brett 6', 'Brett 7', 'Brett 8', { role: 'annotation' } ],
+        ['Ergebnis', <?php echo $textstr; ?>{ role: 'annotation' } ],
         ['<?php echo JText::_('LEAGUE_STAT_WHITE'); ?>',<?php echo $wstring; ?> ''],
         ['<?php echo JText::_('LEAGUE_STAT_BLACK') ?>',<?php echo $sstring; ?> ''],
         ['<?php echo JText::_('LEAGUE_STAT_REMIS') ?>',<?php echo $rstring; ?> ''],
@@ -336,20 +341,28 @@ $brett_all2 = array();
 
 
       var view = new google.visualization.DataView(data);
-      view.setColumns([0, 1, 2, 3, 4, 5, 6, 7,
+//      view.setColumns([0, 1, 2, 3, 4, 5, 6, 7,
+      view.setColumns([<?php echo $brettstr; ?>
                        { calc: "stringify",
 //                         sourceColumn: 1,
                          type: "string",
                          role: "annotation" },
-                       8]);
+//                       8]);
+                       <?php echo $bretter; ?>]);
 
       var options = {
         title: "in absoluten Zahlen",
-        width: 600,
-        height: 450,
-        bar: {groupWidth: "95%"},
-           isStacked: true,
-		   legend: { position: 'top', maxLines: 2 },
+        width: 350,
+        height: 350,
+        bar: {groupWidth: "60%"},
+        isStacked: true,
+		legend: { position: 'top', maxLines: 2 },
+		chartArea:{
+			left: 5,
+			top: 50,
+			width: '100%',
+			height: '250',
+		}
       };
       var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
       chart.draw(view, options);
@@ -358,7 +371,8 @@ $brett_all2 = array();
 	<table><tr>
     <!--Div that will hold the pie chart-->
     <td><div id="chart_div"></div></td>
-	<td><div id="columnchart_values" style="width: 900px; height: 300px;"></div></td>
+	<td><div id="columnchart_values"></div></td>
+<!--	<td><div id="columnchart_values" style="width: 600px; height: 450px;"></div></td> -->
 	</tr></table>
 <?php
 //------------- Ende neuer Ansatz
