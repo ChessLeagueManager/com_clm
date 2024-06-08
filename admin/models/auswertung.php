@@ -199,11 +199,12 @@ function datei() {
 		else
 			$format = "3";  // Nur XLS für englische Einzelturniere
 		$typ	= $liga_name[0]->typ;
-		if($typ =="1"){ $turnier_typ = 'SR'; } // SR: Einzelturnier; jeder gegen jeden
-		if($typ =="2"){ $turnier_typ = 'SR'; }
-		if($typ =="3"){ $turnier_typ = 'SW'; } // SW: Einzelturnier; Schweizer System
+		if($typ =="1"){ $turnier_typ = 'SW'; } // SW: Einzelturnier; Schweizer System
+		if($typ =="2"){ $turnier_typ = 'SR'; } // SR: Einzelturnier; jeder gegen jeden
+		if($typ =="3"){ $turnier_typ = 'SC'; } // SC: Einzelturnier; K.O. System (Pokal)
 		if($typ =="4"){ $turnier_typ = 'SC'; } 
 		if($typ =="5"){ $turnier_typ = 'SC'; } // SC: Einzelturnier; K.O. System (Pokal)
+		if($typ =="6"){ $turnier_typ = 'SR'; } // SR: Einzelturnier; jeder gegen jeden
 	}
 	if(!is_null($liga)) {
 		if(!is_null($mt)){ 
