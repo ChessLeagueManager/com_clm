@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 4.1.6 - [xx-xx-2024] - - - - - - - - - - - - - - - - - - - -
+- - - - - 4.1.6 - [08-06-2024] - - - - - - - - - - - - - - - - - - - -
 ^ Paarungsliste: iCal-Ausgabe Anpassung wegen sql_mode=only_full_group_by
 # SWT-Import Einzelturniere: Geschlechtszuordnung
 ^ Mitgliederverwaltung: Anpassung wegen sql_mode=strict_trans_tables
