@@ -13,6 +13,9 @@ defined('_JEXEC') or die('Restricted access');
 
 	$mainframe	= JFactory::getApplication();
 
+// Include the AddressHandler class
+require_once JPATH_COMPONENT . '/helpers/addresshandler.php';
+
 // Variablen holen
 $sid 		= clm_core::$load->request_int('saison');
 $zps 		= clm_core::$load->request_string('zps');
@@ -76,8 +79,17 @@ $sw_tel		= clm_core::$load->request_string('sw_tel');
 
 // Vereinsdaten exisitieren
 if ($new < 1) {
+	// Create instance of AddressHandler
+	try{
+		$addressHandler = new AddressHandler();
+		$lokal_coord = $addressHandler->convertAddress($lokal);
+	}
+	catch (Exception $e) {
+		echo "Error: " . $e->getMessage();
+	}
 	$query	= "UPDATE #__clm_vereine"
 		." SET lokal = '$lokal' "
+		." , lokal_coord = ST_GeomFromText('$lokal_coord')"
 		." , homepage = '$homepage' "
 		." , adresse = '$adresse' "
 		." , termine = '$termine' "

@@ -289,6 +289,33 @@ function save()
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect($link);
 	}
+	else{
+		//		
+		$addressHandler = new AddressHandler();
+		$lokal_coord = $addressHandler->convertAddress($row->lokal);
+		if(is_null($lokal_coord)){
+			$mainframe->enqueueMessage(JTEXT::_('WARNING_ADDRESS_LOOKUP'), 'warning');
+			$query = "UPDATE #__clm_vereine "
+			. " SET lokal_coord = NULL"
+			. " WHERE id = $row->id";
+			clm_core::$db->query($query);
+		}
+		elseif($lokal_coord==-1){
+			//Service deactivated
+			//Write NULL to overwrite old address, but do not give a warning
+			$query = "UPDATE #__clm_vereine "
+			. " SET lokal_coord = NULL"
+			. " WHERE id = $row->id";
+			clm_core::$db->query($query);
+		}
+		else{
+			//Store in db
+			$query = "UPDATE #__clm_vereine "
+				. " SET lokal_coord = ST_GeomFromText('$lokal_coord')"
+				. " WHERE id = $row->id";
+			clm_core::$db->query($query);
+		}
+	}
 	
 
 	switch ($task)

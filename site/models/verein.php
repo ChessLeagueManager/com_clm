@@ -23,7 +23,7 @@ class CLMModelVerein extends JModelLegacy
  
 	$query = " SELECT a.ZPS, a.sid, a.Geschlecht, a.DWZ, a.FIDE_Elo, a.FIDE_ID,"
 		." COUNT(Geschlecht) as Mgl,"
-		." COUNT(case Geschlecht when 'M' then 1 else NULL end) as Mgl_m," // Männliche Mitglieder
+		." COUNT(case Geschlecht when 'M' then 1 else NULL end) as Mgl_m," // Mï¿½nnliche Mitglieder
 		." COUNT(case Geschlecht when 'W' then 1 when 'F' then 1 else NULL end) as Mgl_w," // Weibliche Miglieder
 		." avg(case DWZ when 0 then NULL else DWZ end) as DWZ," // DWZ Durchschnitt
 		." avg(case FIDE_Elo when 0 then NULL else FIDE_Elo end) as FIDE_Elo," // ELO Durchschnitt
@@ -52,7 +52,7 @@ class CLMModelVerein extends JModelLegacy
 	$db	= JFactory::getDBO();
 //	$id	= @$options['id'];
  
-	$query = " SELECT a.* "
+	$query = " SELECT a.*, ST_AsText(a.lokal_coord) as lokal_coord_text"
 		." FROM #__clm_vereine as a "
 		." WHERE a.zps = '$zps'"
 		." AND a.sid = ".$sid
@@ -61,10 +61,31 @@ class CLMModelVerein extends JModelLegacy
 	return $query;
 	}
 
+	private function parseLocation($result)
+    {
+        if (isset($result[0]->lokal_coord_text)) {
+            preg_match('/POINT\(([-\d\.]+) ([-\d\.]+)\)/', $result[0]->lokal_coord_text, $matches);
+            if ($matches) {
+                $lat = $matches[1];
+                $long = $matches[2];
+				$result[0]->lokal_coord_lat = $lat;
+				$result[0]->lokal_coord_long = $long;
+            } else {
+				$result[0]->lokal_coord_lat = null;
+				$result[0]->lokal_coord_long = null;
+            }
+        } else {
+			$result[0]->lokal_coord_lat = null;
+			$result[0]->lokal_coord_long = null;
+        }
+		return $result;
+    }
+
 	function getCLMVerein( $options=array() )
 	{
 	$query	= $this->_getCLMVerein( $options );
 	$result = $this->_getList( $query );
+	$result = $this->parseLocation( $result );
 	return @$result;
 	}
 
@@ -209,7 +230,7 @@ class CLMModelVerein extends JModelLegacy
 		return @$result;
 	}
 
-////// Prüfen ob User berechtigt ist Daten zu ändern ///////////////////////////////////
+////// Prï¿½fen ob User berechtigt ist Daten zu ï¿½ndern ///////////////////////////////////
 	function _getCLMClmuser ( &$options )
 	{
 	$user =JFactory::getUser();

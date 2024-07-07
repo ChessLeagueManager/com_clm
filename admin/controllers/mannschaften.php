@@ -11,6 +11,8 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+// Include the AddressHandler class
+require_once JPATH_COMPONENT_ADMINISTRATOR. '/helpers/addresshandler.php';
 
 class CLMControllerMannschaften extends JControllerLegacy
 {
@@ -466,7 +468,33 @@ function save()
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect($link);
 	}
-
+	else{
+		//		
+		$addressHandler = new AddressHandler();
+		$lokal_coord = $addressHandler->convertAddress($row->lokal);
+		if(is_null($lokal_coord)){
+			$mainframe->enqueueMessage(JTEXT::_('WARNING_ADDRESS_LOOKUP'), 'warning');
+			$query = "UPDATE #__clm_mannschaften"
+			. " SET lokal_coord = NULL"
+			. " WHERE id = $row->id";
+			clm_core::$db->query($query);
+		}
+		elseif($lokal_coord==-1){
+			//Service deactivated
+			//Write NULL to overwrite old address, but do not give a warning
+			$query = "UPDATE #__clm_mannschaften"
+			. " SET lokal_coord = NULL"
+			. " WHERE id = $row->id";
+			clm_core::$db->query($query);
+		}
+		else{
+			//Store in db
+			$query = "UPDATE #__clm_mannschaften"
+				. " SET lokal_coord = ST_GeomFromText('$lokal_coord')"
+				. " WHERE id = $row->id";
+			clm_core::$db->query($query);
+		}
+	}
 	// Wenn Meldelistenmodus dann bei Änderung der Mannschaftsnummer Meldeliste updaten
 	if ($liga_dat->rang == 0 AND $pre_man != $row->man_nr) {
 		$query = " UPDATE #__clm_meldeliste_spieler "
