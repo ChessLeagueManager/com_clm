@@ -170,6 +170,60 @@ function display($cachable = false, $urlparams = array())
 	CLMViewMannschaften::mannschaften( $rows, $lists, $pageNav, $option );
 }
 
+function geo(){
+	$mainframe	= JFactory::getApplication();
+	// Check for request forgeries
+	defined('clm') or die( 'Invalid Token' );
+	$option 	= clm_core::$load->request_string('option');
+	$section	= clm_core::$load->request_string('section');
+	$this->setRedirect( 'index.php?option='.$option.'&section='.$section );
+	$cid		= clm_core::$load->request_array_int( 'cid');
+	$db		=JFactory::getDBO();
+	$table		=JTable::getInstance('mannschaften', 'TableCLM');
+	$user		= JFactory::getUser();
+	$n		= count( $cid );
+	$unsuccessArray = array();
+	$addressHandler = new AddressHandler();
+
+	if ($n > 0) {
+		foreach ($cid as $id) {
+			if ($table->load( (int)$id )) {
+				$lokal_coord = $addressHandler->convertAddress($table->lokal);
+
+				if(is_null($lokal_coord)||$lokal_coord==-1){
+					$unsuccessArray[] = $table->name;
+
+				}
+				else{
+					$addressHandler->updateTeamCoordinates($lokal_coord, $table->id);
+				}
+			} else {
+				$mainframe->enqueueMessage( $table->getError(), 'error' );
+				$link = 'index.php?option='.$option.'&section='.$section;
+				$mainframe->redirect( $link);
+			}
+		}
+	} else {
+		$mainframe->enqueueMessage( JText::_( 'MANNSCHAFTEN_SELECT' ), 'warning' );
+		$link = 'index.php?option='.$option.'&section='.$section;
+		$mainframe->redirect( $link);
+	}
+
+	$msg=($n-count($unsuccessArray)) . "/" . $n . " Kartendaten erfolgreich geupdated!<br>";
+	if(count($unsuccessArray)>0){
+		$msg = $msg . "Fehlgeschlagene Mannschaften:<br>" . implode("<br>", $unsuccessArray);
+	}
+	
+	// Log schreiben
+	$clmLog = new CLMLog();
+	$clmLog->aktion = "Geodaten geupdated";
+	$clmLog->params = array('rnd' => $cid[0], 'cids' => implode( ',', $cid ));
+	$clmLog->write();
+	
+	$this->setMessage( JText::_( $msg ) );
+	$mainframe->enqueueMessage( JText::_( $msg ) );
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+}
 
 function edit()
 	{
@@ -469,30 +523,13 @@ function save()
 		$mainframe->redirect($link);
 	}
 	else{
-		//		
+		//Geometry points need to be safed manually		
 		$addressHandler = new AddressHandler();
 		$lokal_coord = $addressHandler->convertAddress($row->lokal);
-		if(is_null($lokal_coord)){
+		$addressHandler->updateTeamCoordinates($lokal_coord, $row->id);
+
+		if(is_null($lokal_coord)||$lokal_coord==-1){
 			$mainframe->enqueueMessage(JTEXT::_('WARNING_ADDRESS_LOOKUP'), 'warning');
-			$query = "UPDATE #__clm_mannschaften"
-			. " SET lokal_coord = NULL"
-			. " WHERE id = $row->id";
-			clm_core::$db->query($query);
-		}
-		elseif($lokal_coord==-1){
-			//Service deactivated
-			//Write NULL to overwrite old address, but do not give a warning
-			$query = "UPDATE #__clm_mannschaften"
-			. " SET lokal_coord = NULL"
-			. " WHERE id = $row->id";
-			clm_core::$db->query($query);
-		}
-		else{
-			//Store in db
-			$query = "UPDATE #__clm_mannschaften"
-				. " SET lokal_coord = ST_GeomFromText('$lokal_coord')"
-				. " WHERE id = $row->id";
-			clm_core::$db->query($query);
 		}
 	}
 	// Wenn Meldelistenmodus dann bei Änderung der Mannschaftsnummer Meldeliste updaten

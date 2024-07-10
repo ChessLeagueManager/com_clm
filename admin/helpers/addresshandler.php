@@ -104,6 +104,44 @@ class AddressHandler
         }
     }
 
+    public function updateClubCoordinates($coord, $rowId)
+    {
+        $club=1;
+        $this->updateCoordinates($coord, $rowId, $club);
+    }
+
+    public function updateTeamCoordinates($coord, $rowId)
+    {
+        $club=0;
+        $this->updateCoordinates($coord, $rowId, $club);
+    }
+
+    private function updateCoordinates($coord, $rowId, $club)
+    {
+        $db 	=JFactory::getDBO();
+
+        if($club==1){
+            $table = '#__clm_vereine';
+        }
+        else
+        {
+            $table = '#__clm_mannschaften';
+        }
+        if(is_null($coord) or $coord==-1){
+			$query = "UPDATE $table "
+			. " SET lokal_coord = NULL"
+			. " WHERE id = $rowId";
+			clm_core::$db->query($query);
+		}
+		else{
+			//Store in db
+			$query = "UPDATE $table"
+				. " SET lokal_coord = ST_GeomFromText('$coord')"
+				. " WHERE id = $rowId";
+			clm_core::$db->query($query);
+		}  
+    }
+
 
 }
 ?>

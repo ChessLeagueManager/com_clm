@@ -24,7 +24,7 @@ class CLMModelMannschaft extends JModelLegacy
 		$db			= JFactory::getDBO();
 //		$id			= @$options['id'];
  
-		$query = "SELECT a.zps,a.sg_zps,u.name as mf_name,u.email as email, ST_AsText(a.lokal_coord) as lokal_coord_text "
+		$query = "SELECT a.zps,a.sg_zps,u.name as mf_name,u.email as email, ST_AsText(a.lokal_coord) as lokal_coord_text, "
 			." u.tel_mobil,u.tel_fest, l.durchgang as dg, l.rang as lrang, l.params, l.stamm, "
 			." l.name as liga_name, l.runden as runden, l.published as lpublished, l.anzeige_ma as anzeige_ma, a.* "
 			." FROM #__clm_mannschaften as a "
@@ -43,8 +43,29 @@ class CLMModelMannschaft extends JModelLegacy
 	{
 		$query	= $this->_getCLMMannschaft( $options );
 		$result = $this->_getList( $query );
+		$result = $this->parseLocation( $result );
 		return @$result;
 	}
+
+	private function parseLocation($result)
+    {
+        if (isset($result[0]->lokal_coord_text)) {
+            preg_match('/POINT\(([-\d\.]+) ([-\d\.]+)\)/', $result[0]->lokal_coord_text, $matches);
+            if ($matches) {
+                $lat = $matches[1];
+                $long = $matches[2];
+				$result[0]->lokal_coord_lat = $lat;
+				$result[0]->lokal_coord_long = $long;
+            } else {
+				$result[0]->lokal_coord_lat = null;
+				$result[0]->lokal_coord_long = null;
+            }
+        } else {
+			$result[0]->lokal_coord_lat = null;
+			$result[0]->lokal_coord_long = null;
+        }
+		return $result;
+    }
 
 	function _getCLMVereine( &$options )
 	{

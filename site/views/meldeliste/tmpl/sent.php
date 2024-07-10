@@ -9,7 +9,8 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
+// Include the AddressHandler class
+require_once JPATH_COMPONENT_ADMINISTRATOR. '/helpers/addresshandler.php';
 defined('clm') or die('Restricted access'); 
 
 $mainframe	= JFactory::getApplication();
@@ -91,11 +92,23 @@ if ($abgabe[0]->liste > 0 AND $abgabe[0]->params['deadline_roster'] < $today) {
 	$date =JFactory::getDate();
 	$now = $date->toSQL();
 
+// Koordinatenholen
+$addressHandler = new AddressHandler();
+$lokal_coord = $addressHandler->convertAddress($liga_lokal);
+if(is_null($lokal_coord) or $lokal_coord==-1){
+	$geo_query = " , lokal_coord = null";
+	$lokal_coord = null;
+}
+else
+{
+	$geo_query = " , lokal_coord = ST_GeomFromPoint('$lokal_coord')";
+}
 // Datensätze in Meldelistentabelle schreiben
 	$query	= "UPDATE #__clm_mannschaften"
 		." SET liste = ".$meldung
 		." , mf = $liga_mf"
 		." , lokal = '$liga_lokal'"
+		. "$geo_query"
 		." , datum = '$now'"
 		." WHERE sid = ".$sid
 		." AND man_nr = ".$man

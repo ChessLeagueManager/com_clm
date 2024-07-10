@@ -14,7 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 	$mainframe	= JFactory::getApplication();
 
 // Include the AddressHandler class
-require_once JPATH_COMPONENT . '/helpers/addresshandler.php';
+require_once JPATH_COMPONENT_ADMINISTRATOR. '/helpers/addresshandler.php';
 
 // Variablen holen
 $sid 		= clm_core::$load->request_int('saison');
