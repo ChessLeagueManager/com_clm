@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -52,10 +52,10 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 					$name = $lang->ROUND_KO_S3;
 				}
 				$query = " INSERT INTO #__clm_runden_termine (`sid`,`name`,`liga`,`nr`,`meldung`,`sl_ok` "
-					. " ,`datum`,`enddatum`,`deadlineday`,`zeit`,`edit_zeit`,`checked_out_time`,`published` ) " 
+					. " ,`datum`,`enddatum`,`deadlineday`,`zeit`,`edit_zeit`,`checked_out`,`checked_out_time`,`published` ) " 
 					. " VALUES ('".$sid."','"
 					. clm_core::$db->escape($name)."','".$id."','".$nr."','0','0'"
-					. " ,'1970-01-01','1970-01-01','1970-01-01','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','".clm_core::$db->liga->get($id)->published."') ";
+					. " ,'1970-01-01','1970-01-01','1970-01-01','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'".clm_core::$db->liga->get($id)->published."') ";
 				clm_core::$db->query($query);
 			}
 		}
@@ -95,11 +95,11 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 						}
 						$query = "INSERT INTO #__clm_rnd_man " 
 							. " ( `sid`, `lid`, `runde`, `paar`, `dg`, `heim`, `tln_nr`, `gegner`"
-							. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
+							. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
 							. " VALUES ('$sid','$id','$rnd_one','$f','$dg_dg','$dgh','$heim','$gast'"
-							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01'), " 
+							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01'), " 
 							. " ('$sid','$id','$rnd_one','$f','$dg_dg','$dgg','$gast','$heim'"
-							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01')";
+							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01')";
 						clm_core::$db->query($query);
 					}
 					// Ende Runde 1
@@ -140,11 +140,11 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 						}
 						$query = "INSERT INTO #__clm_rnd_man " 
 							. " ( `sid`, `lid`, `runde`, `paar`, `dg`, `heim`, `tln_nr`, `gegner`" 
-							. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
+							. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
 							. " VALUES ('$sid','$id','$rnd_cnt','1','$dg_dg','$dgh','$heim','$gast' " 
-							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01'), " 
+							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01'), " 
 							. " ('$sid','$id','$rnd_cnt','1','$dg_dg','$dgg','$gast','$heim' "
-							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01')";
+							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01')";
 						clm_core::$db->query($query);
 						///////////////////
 						// ab 2. Element //
@@ -161,11 +161,11 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 								}
 								$query = "INSERT INTO #__clm_rnd_man " 
 									. " ( `sid`, `lid`, `runde`, `paar`, `dg`, `heim`, `tln_nr`, `gegner`" 
-									. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
+									. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
 									. " VALUES ('$sid','$id','$rnd_cnt','$z','$dg_dg','$dgh','$heim','$gast' " 
-									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01'), " 
+									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01'), " 
 									. " ('$sid','$id','$rnd_cnt','$z','$dg_dg','$dgg','$gast','$heim' "
-									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01')";
+									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01')";
 								clm_core::$db->query($query);
 							}
 							for ($z = ($y + 1);$z < (($n / 2) + 1);$z++) {
@@ -178,11 +178,11 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 								}
 								$query = "INSERT INTO #__clm_rnd_man " 
 									. " ( `sid`, `lid`, `runde`, `paar`, `dg`, `heim`, `tln_nr`, `gegner`" 
-									. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
+									. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
 									. " VALUES ('$sid','$id','$rnd_cnt','$z','$dg_dg','$dgh','$heim','$gast' " 
-									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01'), " 
+									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01'), " 
 									. " ('$sid','$id','$rnd_cnt','$z','$dg_dg','$dgg','$gast','$heim' "
-									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01')";
+									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01')";
 								clm_core::$db->query($query);
 							}
 						}
@@ -198,11 +198,11 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 								}
 								$query = "INSERT INTO #__clm_rnd_man " 
 									. " ( `sid`, `lid`, `runde`, `paar`, `dg`, `heim`, `tln_nr`, `gegner` " 
-									. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
+									. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
 									. " VALUES ('$sid','$id','$rnd_cnt','$z','$dg_dg','$dgh','$heim','$gast' " 
-									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01'), " 
+									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01'), " 
 									. " ('$sid','$id','$rnd_cnt','$z','$dg_dg','$dgg','$gast','$heim' "
-									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01')";
+									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01')";
 								clm_core::$db->query($query);
 							}
 							for ($z = (($n / 2) - $y + 1);$z < ($n / 2) + 1;$z++) {
@@ -215,11 +215,11 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 								}
 								$query = "INSERT INTO #__clm_rnd_man " 
 									. " ( `sid`, `lid`, `runde`, `paar`, `dg`, `heim`, `tln_nr`, `gegner` " 
-									. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
+									. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
 									. " VALUES ('$sid','$id','$rnd_cnt','$z','$dg_dg','$dgh','$heim','$gast' " 
-									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01'), " 
+									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01'), " 
 									. " ('$sid','$id','$rnd_cnt','$z','$dg_dg','$dgg','$gast','$heim' "
-									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01')";
+									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01')";
 								clm_core::$db->query($query);
 							}
 						}
@@ -234,11 +234,11 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 							for ($z = 1; $z < ($n/2)+1; $z++) {
 								$query	= "INSERT INTO #__clm_rnd_man "
 									." ( `sid`, `lid`, `runde`, `paar`, `dg`, `heim`, `tln_nr`, `gegner` "
-									. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
-									." VALUES ('$sid','$id','$rnd_cnt','$z','$dg_dg','$dgh',0,0 "
-									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01'), " 
-									." ('$sid','$id','$rnd_cnt','$z','$dg_dg','$dgg',0,0 "
-									." ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01')";
+									. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
+									. " VALUES ('$sid','$id','$rnd_cnt','$z','$dg_dg','$dgh',0,0 "
+									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01'), " 
+									. " ('$sid','$id','$rnd_cnt','$z','$dg_dg','$dgg',0,0 "
+									. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01')";
 								clm_core::$db->query($query);
 							}
 						}	
@@ -257,11 +257,11 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 						}
 						$query = "INSERT INTO #__clm_rnd_man " 
 							. " ( `sid`, `lid`, `runde`, `paar`, `dg`, `heim`, `tln_nr`, `gegner` " 
-							. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
+							. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
 							. " VALUES ('$sid','$id','$rnd_cnt','$f','$dg_dg','$dgh','$heim','$gast' " 
-							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01'), " 
+							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01'), " 
 							. " ('$sid','$id','$rnd_cnt','$f','$dg_dg','$dgg','$gast','$heim' "
-							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01')";
+							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01')";
 						clm_core::$db->query($query);
 					}
 					// Ende Runde 1
@@ -272,11 +272,11 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 							$gast = 0;
 							$query = "INSERT INTO #__clm_rnd_man " 
 							. " ( `sid`, `lid`, `runde`, `paar`, `dg`, `heim`, `tln_nr`, `gegner` " 
-							. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
+							. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
 							. " VALUES ('$sid','$id','$rnd_cnt','$f','$dg_dg','$dgh','$heim','$gast' " 
-							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01'), " 
+							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01'), " 
 							. " ('$sid','$id','$rnd_cnt','$f','$dg_dg','$dgg','$gast','$heim' "
-							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01')";
+							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01')";
 							clm_core::$db->query($query);
 						}
 					}
@@ -302,11 +302,11 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 							}
 							$query = "INSERT INTO #__clm_rnd_man " 
 								. " ( `sid`, `lid`, `runde`, `paar`, `dg`, `heim`, `tln_nr`, `gegner` " 
-								. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
+								. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
 								. " VALUES ('$sid','$id','$rnd_cnt','$f','$dg_dg','$dgh','$heim','$gast' " 
-								. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01'), " 
+								. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01'), " 
 								. " ('$sid','$id','$rnd_cnt','$f','$dg_dg','$dgg','$gast','$heim' "
-								. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01')";
+								. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01')";
 							clm_core::$db->query($query);
 						}
 					}
@@ -315,11 +315,11 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 						$f = 1; // kleines Finale ist einzige Paarung in zus. Runde
 						$query = "INSERT INTO #__clm_rnd_man " 
 							. " ( `sid`, `lid`, `runde`, `paar`, `dg`, `heim`, `tln_nr`, `gegner` " 
-							. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
+							. ", `zeit`, `edit_zeit`, `dwz_zeit`, `checked_out`, `checked_out_time`, `comment`, `icomment`, `pdate`) " 
 							. " VALUES ('$sid','$id','$rnd_cnt','$f','$dg_dg','$dgh','$heim','$gast' " 
-							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01'), " 
+							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01'), " 
 							. " ('$sid','$id','$rnd_cnt','$f','$dg_dg','$dgg','$gast','$heim' "
-							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00','','','1970-01-01')";
+							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01')";
 							clm_core::$db->query($query);
 					}
 					// Ende Runde 1
@@ -329,7 +329,12 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 		}
 
 		// Rundenbyte setzen
-		clm_core::$db->liga->get($id)->rnd = 1;
+//		clm_core::$db->liga->get($id)->rnd = 1;
+		$query = " UPDATE #__clm_liga "
+			." SET rnd = 1 "
+			." WHERE id = ".$id
+			;
+		clm_core::$db->query($query);
 
 	// ************************************* //
 	// ************* Turniere ************** //
@@ -624,11 +629,11 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 					$t = 'ROUND_KO_' . ($runden - $nr);
 					$name = $lang->$t;
 				}
-				$sqlValuesStrings[] = "('$sid', '$name', '$datum', '$turnierid', '$y', '$nr', '0', '0', '$publish', '1970-01-01 00:00:00', '1970-01-01 00:00:00', '1970-01-01 00:00:00')";
+				$sqlValuesStrings[] = "('$sid', '$name', '$datum', '$turnierid', '$y', '$nr', '0', '0', '$publish', '1970-01-01 00:00:00', '1970-01-01 00:00:00', NULL,NULL)";
 			}
 		}
 		// alle abspeichern
-		$query = "INSERT INTO #__clm_turniere_rnd_termine" . " (`sid`, `name`, `datum`, `turnier`, `dg`, `nr`, `abgeschlossen`, `tl_ok`, `published`, `zeit`, `edit_zeit`, `checked_out_time`)" . " VALUES " . implode(", ", $sqlValuesStrings);
+		$query = "INSERT INTO #__clm_turniere_rnd_termine" . " (`sid`, `name`, `datum`, `turnier`, `dg`, `nr`, `abgeschlossen`, `tl_ok`, `published`, `zeit`, `edit_zeit`, `checked_out`, `checked_out_time`)" . " VALUES " . implode(", ", $sqlValuesStrings);
 		clm_core::$db->query($query);
 		// Rundenbyte setzen
 		clm_core::$db->turniere->get($id)->rnd = 1;

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -32,8 +32,8 @@ class TableCLMRunden extends JTable
 	var $editor		= 0;
 	var $zeit		= '1970-01-01 00:00:00';
 	var $edit_zeit	= '1970-01-01 00:00:00';
-	var $checked_out	= 0;
-	var $checked_out_time	= '1970-01-01 00:00:00';
+	var $checked_out	= null;
+	var $checked_out_time	= null;
 	var $ordering		= 0;
 	var $enddatum		= '1970-01-01';
 

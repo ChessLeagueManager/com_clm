@@ -2,7 +2,7 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -41,8 +41,8 @@ class TableCLMTurniere extends JTable
 	// var $invitationText = ''; // soll nicht aus turform heraus gelöscht werden...
 	var $bemerkungen	= '';
 	var $bem_int		= '';
-	var $checked_out	= 0;
-	var $checked_out_time	= '1970-01-01 00:00:00';
+	var $checked_out	= null;
+	var $checked_out_time	= null;
 	var $ordering		= 0;
 	var $params 		= '';
 	var $sieg			= 1.0;

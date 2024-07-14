@@ -737,7 +737,7 @@ function publish()
 		.' SET published = '.(int) $publish
 		.' WHERE id IN ( '. $cids .' )'
 		.' AND jid <> '.clm_core::$access->getJid()
-		.' AND ( checked_out = 0 OR ( checked_out = '.(int) $user->get('id') .' ) )'
+		.' AND ( checked_out IS NULL OR checked_out = 0 OR ( checked_out = '.(int) $user->get('id') .' ) )'
 		;
 	if ($task =='publish') { $block = 0; }
 	else { $block = 1; }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -371,7 +371,7 @@ class CLMControllerTurRounds extends JControllerLegacy {
 			$query = 'UPDATE #__clm_turniere_rnd_termine'
 				. ' SET published = '.(int) $publish
 				. ' WHERE id IN ( '. $cids .' )'
-				. ' AND ( checked_out = 0 OR ( checked_out = '.(int) $user->get('id') .' ) )';
+				. ' AND ( checked_out IS NULL OR checked_out = 0 OR ( checked_out = '.(int) $user->get('id') .' ) )';
 			if (!clm_core::$db->query($query)) { 
 				$this->app->enqueueMessage( JText::_( 'DB_ERROR', true ),'warning' );
 				return;
