@@ -19,6 +19,8 @@ $ -> Language fix or change
 ^ Teamwettbewerbe: gleiche Platzierung möglich
 + Mitgliederverwaltung: Pflege auch der FIDE-Details möglich
 # Benutzerverwaltung: Textanpassung bei Accountdaten
+# Bugfix Tabelleneinträge sortieren
+# Bugfix Kontrollroutine Spieler löschen
 
 - - - - - 4.2.0 - [17-06-2024] - - - - - - - - - - - - - - - - - - - -
 - - - - - 4.1.6 - [08-06-2024] - - - - - - - - - - - - - - - - - - - -
