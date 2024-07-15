@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -207,7 +207,8 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	if (!isset($punkte[$x])) continue; 
 	if ($x%2 != 0) { $fc = 1; } else { $fc = 0; }
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
-	$pdf->Cell(6-$rbreite,$zelle,$x+1,1,0,'C',$fc);
+//	$pdf->Cell(6-$rbreite,$zelle,$x+1,1,0,'C',$fc);
+	$pdf->Cell(6-$rbreite,$zelle,$punkte[$x]->rankingpos,1,0,'C',$fc);
 	if (($liga[0]->runden * $liga[0]->durchgang) < 14 )
 		$pdf->Cell(6-$rbreite,$zelle,$punkte[$x]->tln_nr,1,0,'C',$fc);
 	while (($lmax) < $pdf->GetStringWidth(clm_core::$load->utf8decode($punkte[$x]->name)))

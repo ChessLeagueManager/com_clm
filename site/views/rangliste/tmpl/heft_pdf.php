@@ -217,7 +217,8 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	if (!isset($punkte[$x])) continue; 
 	if ($x%2 != 0) { $fc = 1; } else { $fc = 0; }
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
-	$pdf->Cell(7-$rbreite,$zelle,$x+1,1,0,'C',$fc);
+//	$pdf->Cell(7-$rbreite,$zelle,$x+1,1,0,'C',$fc);
+	$pdf->Cell(7-$rbreite,$zelle,$punkte[$x]->rankingpos,1,0,'C',$fc);
 	$pdf->Cell(7-$rbreite,$zelle,$punkte[$x]->tln_nr,1,0,'C',$fc);
 
 	//$pdf->Cell(50-$nbreite,$zelle,clm_core::$load->utf8decode($punkte[$x]->name),1,0,'L',$fc);
@@ -359,7 +360,8 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	if (!isset($punkte[$x])) continue; 
 	if ($x%2 != 0) { $fc = 1; } else { $fc = 0; }
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
-	$pdf->Cell(6-$rbreite,$zelle,$x+1,1,0,'C',$fc);
+//	$pdf->Cell(6-$rbreite,$zelle,$x+1,1,0,'C',$fc);
+	$pdf->Cell(7-$rbreite,$zelle,$punkte[$x]->rankingpos,1,0,'C',$fc);
 	if (($liga[0]->runden * $liga[0]->durchgang) < 14 )
 		$pdf->Cell(6-$rbreite,$zelle,$punkte[$x]->tln_nr,1,0,'C',$fc);
 	while (($lmax) < $pdf->GetStringWidth(clm_core::$load->utf8decode($punkte[$x]->name)))

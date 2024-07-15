@@ -676,6 +676,7 @@
 		}
 	
 		$query = "SELECT id, name, tln_nr"
+			." , summanpunkte, sumbrettpunkte, sumtiebr1, sumtiebr2, sumtiebr3, ordering "   
 			." FROM `#__clm_mannschaften`"
 			." WHERE liga = ".$id;
 		if ($liga_mt == 0) {
@@ -692,18 +693,39 @@
 		$players = clm_core::$db->loadObjectList($query); 
 		// rankingPos umsortieren
 		$rankingPos = 0;
+		$rankingPos0 = 0;
 		// alle Spieler durchgehen
 		foreach ($players as $value) {
 			if ($value->name != "spielfrei") {
-				$rankingPos++;
+				if ( $rankingPos == 0) {
+					$rankingPos++;
+				} else {
+					$s_rankingPos = 1;
+					if ($liga_mt == 0) {
+						if ( $value->summanpunkte == $value0->summanpunkte AND $value->sumbrettpunkte == $value0->sumbrettpunkte AND $value->sumtiebr1 == $value0->sumtiebr1 )  
+							if ($order = 0) $s_rankingPos = 0;
+							else if ( $value->order == $value0->order) $s_rankingPos = 0;
+					} else {
+						if ( $value->summanpunkte == $value0->summanpunkte AND $value->sumtiebr1 == $value0->sumtiebr1 AND $value->sumtiebr2 == $value0->sumtiebr2 AND $value->sumtiebr3 == $value0->sumtiebr3 )   
+							$s_rankingPos = 0;
+					}
+					if ($s_rankingPos == 0) {
+						$rankingPos0++;
+					} else {
+						$rankingPos++;
+						$rankingPos += $rankingPos0;
+						$rankingPos0 = 0;
+					}
+				}
+				$value0 = $value;
 				$out = $rankingPos;
-				} else { $out = 0; }
-						$query = "UPDATE #__clm_mannschaften"
-					. " SET rankingpos = " . $out
-					. " WHERE liga = ".$id
-					. " AND tln_nr = ".$value->tln_nr
-					;
-					clm_core::$db->query($query);
+			} else { $out = 0; }
+			$query = "UPDATE #__clm_mannschaften"
+				. " SET rankingpos = " . $out
+				. " WHERE liga = ".$id
+				. " AND tln_nr = ".$value->tln_nr
+				;
+			clm_core::$db->query($query);
 		}
 	} else {
 		// Für Turniere noch nicht umgestellt
