@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -301,7 +301,29 @@ function Sendbutton()
 
 </script>
 
-<div class="componentheading">Rangliste abgeben : <?php if (isset($liga[0]->vname)) echo $liga[0]->vname; else echo $zps; ?></div>
+<?php
+$a_sg_vname = array();
+if ($liga[0]->sg_zps > '00000') {
+	$a_sg_zps = explode(',',$liga[0]->sg_zps);
+	if (is_array($a_sg_zps) AND count($a_sg_zps) > 0) {
+		for ($i = 0; $i <= count($a_sg_zps); $i++) {
+			if (!isset($a_sg_zps[$i])) continue;
+			$query = "SELECT * FROM #__clm_dwz_vereine "
+				." WHERE sid = $sid AND ZPS = '".$a_sg_zps[$i]."'";
+			$sg_vname = clm_core::$db->loadObject($query);	
+			if (isset($sg_vname->Vereinname)) $a_sg_vname[] = $sg_vname->Vereinname;
+		}
+	}
+}
+?>
+
+<div class="componentheading">Rangliste abgeben : <?php if (isset($liga[0]->vname)) echo $liga[0]->vname; else echo $zps; ?>
+<?php if (count($a_sg_vname) > 0) { ?>
+<br>in Spielgemeinschaft mit <?php echo $a_sg_vname[0]; } ?>
+<?php if (count($a_sg_vname) > 1) { ?>
+, <?php echo $a_sg_vname[1]; } ?>
+</div>
+
 <div><h2>Gruppe : <?php if (isset($liga[0]->gruppe)) echo $liga[0]->gruppe; else echo $gid; ?></h2></div>
 <br>
 <u><b>Hinweise</u></b> : 
@@ -311,6 +333,12 @@ function Sendbutton()
 <br><b>(4)</b> Der "Neu laden" Knopf <u><i>verwirft ALLE Änderungen</i></u> und lädt die Seite neu !
 <br><b>(5)</b> Sobald "Liste absenden" gedrückt wurde ist die Rangliste verbindlich gemeldet.
 <br><br>
+<?php if (is_array($abgabe) AND count($abgabe) == 0 AND $liga[0]->anz_sgp > 0) { ?>
+<u><b>Hinweis zu Spielgemeinschaften</u></b> : 
+<br>Die Erstanlage von Rangfolgen für Spielgemeinschaften muss in Admin-Bereich durch Admin oder Spielleiter erfolgen.
+<br>Die weitere Pflege, also Erfassen aller Spieler bzw. Korrekturen sind hier im Frontend möglich.
+<br><br>
+<?php } ?>
 <small><u><b>Update-Hinweis</u></b> : 
 <br><b>(*)</b> Spieler, die den Verein während der Saison verlassen haben, sollten nicht aus der Rangliste gelöscht werden, sondern 'gesperrt' ist zu setzen.
 <br>Damit wird die Zuordnung bereits gespielter Partien ermöglicht und gleichzeitig der aktive Einsatz während der restlichen Saison verhindert.
@@ -318,21 +346,6 @@ function Sendbutton()
 
 <center>
 
-<?php
-/**
-jimport('joomla.html.toolbar');
-
-$bar =& new JToolBar( 'Ranglisten' );
-
-	$bar->appendButton( 'Custom','Prüfen','IDPruefbutton','<a href="#" onclick="javascript:Pruefbutton"',true,true);
-	$bar->appendButton( 'Standard','pruefen', 'Prüfen','pruefen');
-	$bar->appendButton( 'Standard','review','review','review');
-	$bar->appendButton( 'Standard','print', 'print','print');
-	$bar->appendButton( 'Standard','save', 'save','save');
-
-echo $bar->render();
-**/
-?>
 <table class="toolbar"><tr>
  
 <td class="button" id="Ranglisten-pruefen" width="15%" style="background-color:#E6E6E6;">

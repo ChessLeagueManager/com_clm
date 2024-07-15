@@ -436,6 +436,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_rangliste_name` (
   `checked_out_time` datetime DEFAULT NULL,
   `ordering` int(11) NOT NULL DEFAULT 0,
   `published` tinyint(1) NOT NULL DEFAULT 0,
+  `anz_sgp` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

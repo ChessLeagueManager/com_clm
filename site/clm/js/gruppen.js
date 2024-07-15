@@ -21,6 +21,8 @@
 			alert( unescape(clm_gruppen_alter_grenze) ); return;
 		} else if (isNaN(form.alter.value) || (form.alter.value == "") ) {
 			alert( unescape(clm_gruppen_alter) ); return;
+		} else if (isNaN(form.anz_sgp.value) || (form.anz_sgp.value > 4) ) {
+			alert( unescape('Nur 0 bis 4 Partnervereine sind unterstützt') ); return;
 		} else {
 			// get references to select list and display text box
 			var sel = document.getElementById('sid');			
