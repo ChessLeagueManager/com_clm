@@ -17,6 +17,7 @@ $ -> Language fix or change
 ^ DB-Update: Anpassung wegen Globalen Freigeben von Joomla-Core
 + Rangfolgesystem: Spielgemeinschaften von mehr als 2 Vereinen
 ^ Teamwettbewerbe: gleiche Platzierung möglich
++ Mitgliederverwaltung: Pflege auch der FIDE-Details möglich
 
 - - - - - 4.2.0 - [17-06-2024] - - - - - - - - - - - - - - - - - - - -
 - - - - - 4.1.6 - [08-06-2024] - - - - - - - - - - - - - - - - - - - -
