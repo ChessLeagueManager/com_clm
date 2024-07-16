@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  *
@@ -118,8 +118,8 @@ if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 		// Einzelturniere
 		$typ = '1'; 														   // Einzel-Schweizer Sytem .TUN
 		if (strpos($file,'.TUR') > 0 OR strpos($file,'.tur') > 0 ) $typ = '2'; // Einzel-Rundenturnier	 .TUR
-		$keyS = '`sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `name`, `bezirkTur`, `checked_out_time`, `bem_int`';
-		$valueS = $season.", '".$typ."', 1, 1, 0, 1, '".$name."', '0', '1970-01-01 00:00:00', '".$bem_int."'";
+		$keyS = '`sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `name`, `bezirkTur`, `checked_out`, `checked_out_time`, `bem_int`';
+		$valueS = $season.", '".$typ."', 1, 1, 0, 1, '".$name."', '0', NULL, NULL, '".$bem_int."'";
 		$str_params = '';
 		$params = new clm_class_params($str_params);
 		foreach ($tournament['out'] as $tour) {

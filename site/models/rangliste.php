@@ -82,7 +82,7 @@ class CLMModelRangliste extends JModelLegacy
 		}
 
 		//$query = " SELECT a.tln_nr as tln_nr,m.name as name, SUM(a.manpunkte) as mp, "
-		$query = " SELECT a.tln_nr as tln_nr,m.name as name, (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
+		$query = " SELECT m.rankingpos, a.tln_nr as tln_nr,m.name as name, (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
 			." (SUM(a.brettpunkte) - m.bpabzug) as bp, m.bpabzug, SUM(a.wertpunkte) as wp, m.published, m.man_nr, COUNT(DISTINCT a.runde, a.dg) as spiele, "
 			." SUM(case when a.manpunkte IS NULL then 0 else 1 end) as count_G, "
 			." SUM(case when a.manpunkte = ".($order[0]->man_sieg+$order[0]->man_antritt)." then 1 else 0 end) as count_S, "

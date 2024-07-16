@@ -1,9 +1,15 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link https://www.chessleaguemanager.de
+*/
 function clm_view_dsb_import() {
 	clm_core::$load->load_css("dsb_import");
 	clm_core::$load->load_js("dsb_import");
 	$lang = clm_core::$lang->dsb_import;
-	echo $lang->infotext1 . "<br/>" . $lang->infotext2 . "<br/>" . $lang->infotext3 . "<br/>" . $lang->infotext4;
+	echo $lang->infotext1 . "<br/>" . $lang->infotext2 . "<br/>" . $lang->infotext2a . "<br/>" . $lang->infotext3 . "<br/>" . $lang->infotext4;
 ?>
 <div class="clm_view_dsb_import_div">
 <input type="file" onchange="clm_dsb_import_check(this)" name="file" />

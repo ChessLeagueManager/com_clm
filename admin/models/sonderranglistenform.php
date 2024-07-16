@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -63,8 +63,8 @@ class CLMModelSonderranglistenForm extends JModelLegacy {
 			$this->_sonderrangliste->zps_higher_than 		= '';
 			$this->_sonderrangliste->zps_lower_than 		= 'ZZZZZ';			
 			$this->_sonderrangliste->published					= 0;
-			$this->_sonderrangliste->checked_out				= 0;
-			$this->_sonderrangliste->checked_out_time			= 0;
+			$this->_sonderrangliste->checked_out				= null;
+			$this->_sonderrangliste->checked_out_time			= null;
 			$this->_sonderrangliste->ordering					= null;		
 			$this->_sonderrangliste->tl						= 0;		
 			

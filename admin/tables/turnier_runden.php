@@ -2,9 +2,9 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -34,8 +34,8 @@ class TableCLMTurnier_Runden extends JTable
 	var $editor			= '';
 	var $zeit			= '1970-01-01 00:00:00';
 	var $edit_zeit		= '1970-01-01 00:00:00';
-	var $checked_out	= 0;
-	var $checked_out_time	= '1970-01-01 00:00:00';
+	var $checked_out	= null;
+	var $checked_out_time	= null;
 	var $ordering		= null;
 
 	function __construct( &$_db ) {

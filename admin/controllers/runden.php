@@ -527,7 +527,7 @@ function publish()
 		$query = 'UPDATE #__clm_runden_termine'
 			. ' SET published = '.(int) $publish
 			. ' WHERE id IN ( '. $cids .' )'
-			. ' AND ( checked_out = 0 OR ( checked_out = '.(int) $user->get('id') .' ) )';
+			. ' AND ( checked_out IS NULL OR checked_out = 0 OR ( checked_out = '.(int) $user->get('id') .' ) )';
 		$db->setQuery( $query );
 	if (!clm_core::$db->query($query)) { 
 		$mainframe->enqueueMessage($db->getErrorMsg(), 'error');

@@ -61,7 +61,8 @@ class CLMControllerSonderranglistenCopy extends JControllerLegacy {
 		if (count($source) > 0) {
 			$counter = 0;
 			for ($i = 0;$i < count($source);$i++) {
-				if ($source[$i]->checked_out_time == '0000-00-00 00:00:00') $source[$i]->checked_out_time = '1970-01-01 00:00:00';
+				if ($source[$i]->checked_out_time == '0000-00-00 00:00:00' OR $source[$i]->checked_out_time == '1970-01-01 00:00:00') $source[$i]->checked_out_time = NULL;
+				if ($source[$i]->checked_out == 0 ) $source[$i]->checked_out = NULL;
 				$sql = "INSERT INTO #__clm_turniere_sonderranglisten ( `turnier`, `name`, `use_rating_filter`, `rating_type`, `rating_higher_than`, `rating_lower_than`, "
 					." `use_birthYear_filter`, `birthYear_younger_than`, `birthYear_older_than`, "
 					." `use_sex_filter`, `sex`, `published`, `checked_out`, `checked_out_time`, `ordering`, "

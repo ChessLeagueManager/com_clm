@@ -198,7 +198,8 @@ elseif (!$liga OR $liga[0]->published == 0) {
 					$class .= "_ab_evtl"; 
 				}
 			
-				echo '<td class="'.$class.'">'.($x+1).'</td>';
+//				echo '<td class="'.$class.'">'.($x+1).'</td>';
+				echo '<td class="'.$class.'">'.$punkte[$x]->rankingpos.'</td>';
 			
 				echo '<td class="team">';
 			
