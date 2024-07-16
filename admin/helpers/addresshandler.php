@@ -3,16 +3,65 @@
 class AddressHandler
 {
     private $config;
-    
+    private $geo_enabled;
     public function __construct()
     {
         $this->config = clm_core::$db->config();
+        $this->geo_enabled = $this->config->googlemaps;
+    }
+
+    public function queryLocation($result,$club)
+    {
+        if($this->geo_enabled){
+            $coord = $this->extractCoordinatesFromText($result[0]->lokal_coord_text);
+            if(is_null($coord[0])||is_null($coord[1]))
+            {
+                $lokal_coord = $this->convertAddress($result[0]->lokal);
+                if(is_null($lokal_coord)|$lokal_coord=-1){
+                    $this->updateCoordinates("POINT(0 0)",$result[0]->id,$club);
+                }
+    
+                    else{
+                    $this->updateCoordinates($lokal_coord,$result[0]->id,$club);
+                }
+                $coord = $this->extractCoordinatesFromText($lokal_coord);
+            }
+            if($coord[0]==0 && $coord[1]==0){
+                $result[0]->lokal_coord_lat = null;
+                $result[0]->lokal_coord_long = null;
+            }
+            else{
+                $result[0]->lokal_coord_lat = $coord[0];
+                $result[0]->lokal_coord_long = $coord[1];
+            }
+        }
+        else{
+            $result[0]->lokal_coord_lat = null;
+            $result[0]->lokal_coord_long = null;
+        }
+    }
+
+    private function extractCoordinatesFromText($coord_text){
+        if (!is_null($coord_text)) {
+            preg_match('/POINT\(([-\d\.]+) ([-\d\.]+)\)/', $coord_text, $matches);
+            if ($matches) {
+                $lat = $matches[1];
+                $long = $matches[2];
+            } else {
+			$lat = null;
+				$long = null;
+            }
+        } else {
+			$lat = null;
+			$long = null;
+        }
+		return array($lat, $long);
     }
 
     public function convertAddress($address)
     {
         // First check if user enabled adress conversion
-        if(!$this->config->googlemaps){
+        if(!$this->geo_enabled){
             return -1; //Map Services (external) not enabled
         }
 
@@ -57,7 +106,7 @@ class AddressHandler
     {
         $service = $this->config->maps_resolver;
 
-        if ($service == 1) {
+        if ($service == 1) { // Google Maps
             $gAPIKey = $this->config->googlemaps_api;
             if (!is_null($gAPIKey)) {
                 return $this->getCoordinatesFromGoogle($address, $gAPIKey);
@@ -69,13 +118,12 @@ class AddressHandler
 
     private function getCoordinatesFromOSM($address)
     {
-        $options = array(
-            'http' => array(
-                'method' => "GET",
-                'header' => "Accept-language: en\r\n" .
-                            "User-Agent: Test-Developer\r\n"
-            )
-        );
+        $options = [
+            'http' => [
+                'method' => 'GET',
+                'header' => 'User-Agent: ' . $_SERVER['HTTP_HOST']
+            ]
+        ];
 
         $userAgent = stream_context_create($options);
         $url = "https://nominatim.openstreetmap.org/?format=json&addressdetails=1&q={$address}&format=json&limit=1";

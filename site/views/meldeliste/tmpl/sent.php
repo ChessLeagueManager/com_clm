@@ -98,6 +98,11 @@ $lokal_coord = $addressHandler->convertAddress($liga_lokal);
 if(is_null($lokal_coord) or $lokal_coord==-1){
 	$geo_query = " , lokal_coord = null";
 	$lokal_coord = null;
+	if($config->googlemaps)//Only output a message if geo service is enabled
+	{
+		$mainframe->enqueueMessage( JText::_( 'CLUB_LIST_GEO_WARNING_SENT' ), 'warning' );
+	}
+
 }
 else
 {

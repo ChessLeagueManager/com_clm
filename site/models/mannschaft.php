@@ -12,6 +12,8 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
+require_once JPATH_COMPONENT_ADMINISTRATOR. '/helpers/addresshandler.php';
+
 class CLMModelMannschaft extends JModelLegacy
 {
 
@@ -43,29 +45,10 @@ class CLMModelMannschaft extends JModelLegacy
 	{
 		$query	= $this->_getCLMMannschaft( $options );
 		$result = $this->_getList( $query );
-		$result = $this->parseLocation( $result );
+		$addressHandler = new AddressHandler();
+		$addressHandler->queryLocation($result,0);
 		return @$result;
 	}
-
-	private function parseLocation($result)
-    {
-        if (isset($result[0]->lokal_coord_text)) {
-            preg_match('/POINT\(([-\d\.]+) ([-\d\.]+)\)/', $result[0]->lokal_coord_text, $matches);
-            if ($matches) {
-                $lat = $matches[1];
-                $long = $matches[2];
-				$result[0]->lokal_coord_lat = $lat;
-				$result[0]->lokal_coord_long = $long;
-            } else {
-				$result[0]->lokal_coord_lat = null;
-				$result[0]->lokal_coord_long = null;
-            }
-        } else {
-			$result[0]->lokal_coord_lat = null;
-			$result[0]->lokal_coord_long = null;
-        }
-		return $result;
-    }
 
 	function _getCLMVereine( &$options )
 	{
