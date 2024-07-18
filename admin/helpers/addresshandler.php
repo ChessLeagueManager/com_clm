@@ -12,12 +12,12 @@ class AddressHandler
 
     public function queryLocation($result,$club)
     {
-        if($this->geo_enabled){
+        if($this->geo_enabled && !empty($result[0]->lokal)){
             $coord = $this->extractCoordinatesFromText($result[0]->lokal_coord_text);
             if(is_null($coord[0])||is_null($coord[1]))
             {
                 $lokal_coord = $this->convertAddress($result[0]->lokal);
-                if(is_null($lokal_coord)|$lokal_coord=-1){
+                if(is_null($lokal_coord)||$lokal_coord==-1){
                     $this->updateCoordinates("POINT(0 0)",$result[0]->id,$club);
                 }
     
