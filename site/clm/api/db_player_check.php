@@ -17,7 +17,7 @@ function clm_api_db_player_check($sid,$zps,$mglnr) {
 	
 	$query = "SELECT * FROM  #__clm_rnd_spl "
 			." WHERE sid = ".$sid
-			." AND zps = ".$zps
+			." AND zps = '".$zps."'"
 			." AND spieler = ".$mglnr
 			;
 	$result = clm_core::$db->loadObjectList($query);
@@ -25,7 +25,7 @@ function clm_api_db_player_check($sid,$zps,$mglnr) {
 	
 	$query = "SELECT * FROM  #__clm_rangliste_spieler "
 			." WHERE sid = ".$sid
-			." AND (ZPS = ".$zps." OR ZPSmgl = ".$zps.")"
+			." AND (ZPS = '".$zps."' OR ZPSmgl = '".$zps."')"
 			." AND Mgl_Nr = ".$mglnr
 			;
 	$result = clm_core::$db->loadObjectList($query);
@@ -33,7 +33,7 @@ function clm_api_db_player_check($sid,$zps,$mglnr) {
 	
 	$query = "SELECT * FROM  #__clm_meldeliste_spieler "
 			." WHERE sid = ".$sid
-			." AND zps = ".$zps
+			." AND zps = '".$zps."'"
 			." AND mgl_nr = ".$mglnr
 			;
 	$result = clm_core::$db->loadObjectList($query);
@@ -41,7 +41,7 @@ function clm_api_db_player_check($sid,$zps,$mglnr) {
 
 	$query = "SELECT * FROM  #__clm_user "
 			." WHERE sid = ".$sid
-			." AND zps = ".$zps
+			." AND zps = '".$zps."'"
 			." AND mglnr = ".$mglnr
 			;
 	$result = clm_core::$db->loadObjectList($query);
@@ -49,7 +49,7 @@ function clm_api_db_player_check($sid,$zps,$mglnr) {
 	
 	$query = "SELECT * FROM  #__clm_turniere_tlnr "
 			." WHERE sid = ".$sid
-			." AND zps = ".$zps
+			." AND zps = '".$zps."'"
 			." AND mgl_nr = ".$mglnr
 			;
 	$result = clm_core::$db->loadObjectList($query);

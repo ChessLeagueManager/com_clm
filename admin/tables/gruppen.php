@@ -27,9 +27,10 @@ class TableCLMGruppen extends JTable
 	var $bemerkungen	= '';
 	var $bem_int		= '';
 	var $published		= 0;
-	var $checked_out	= 0;
-	var $checked_out_time	= '1970-01-01 00:00:00';
+	var $checked_out	= null;
+	var $checked_out_time	= null;
 	var $ordering		= 0;
+	var $anz_sgp		= 0;
 
 	function __construct( &$_db ) {
 		parent::__construct( '#__clm_rangliste_name', 'id', $_db );

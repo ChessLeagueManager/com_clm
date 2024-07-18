@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 defined('clm') or die('Restricted access');
 
 $lang = clm_core::$lang->dsb_import;
@@ -11,6 +17,7 @@ clm_core::$cms->addScriptDeclaration('var clm_dsb_import_fileProblem1 = "'.$lang
 clm_core::$cms->addScriptDeclaration('var clm_dsb_import_fileProblem2 = "'.$lang->fileProblem2.'";');
 clm_core::$cms->addScriptDeclaration('var clm_dsb_import_uploadProblem = "'.$lang->uploadProblem.'";');
 clm_core::$cms->addScriptDeclaration('var clm_dsb_import_playerFile = "'.$lang->playerFile.'";');
+clm_core::$cms->addScriptDeclaration('var clm_dsb_import_playerFileV2 = "'.$lang->playerFileV2.'";');
 clm_core::$cms->addScriptDeclaration('var clm_dsb_import_clubFile = "'.$lang->clubFile.'";');
 clm_core::$cms->addScriptDeclaration('var clm_dsb_import_updatePlayer = "'.$lang->updatePlayer.'";');
 clm_core::$cms->addScriptDeclaration('var clm_dsb_import_percentage = "'.$lang->percentage.'";');

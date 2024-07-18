@@ -289,6 +289,17 @@ public static function gruppe( &$row,$lists, $option, $jid)
 		</tr>
 
 		<tr>
+			<td class="key" nowrap="nowrap">
+			<label for="anz_sgp">
+			<?php echo JText::_( 'LEAGUE_ANZ_SGP' ); ?>
+			</label>
+			</td>
+			<td>
+			<input class="inputbox" type="text" name="anz_sgp" id="anz_sgp" size="1" maxlength="1" value="<?php echo $row->anz_sgp; ?>" />
+			</td>
+		</tr>
+
+		<tr>
 			<td class="key" nowrap="nowrap"><label for="sid"><?php echo JText::_( 'GROUPS_OVERVIEW_TEXT_SEASON' ); ?></label>
 			</td>
 			<td>

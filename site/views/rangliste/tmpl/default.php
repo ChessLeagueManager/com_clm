@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -256,7 +256,8 @@ elseif ($liga[0]->runden_modus == "4" OR $liga[0]->runden_modus == "5") {
 					$class .= "_ab_evtl"; 
 				}
 			
-				echo '<td class="'.$class.'">'.($x+1).'</td>';
+//				echo '<td class="'.$class.'">'.($x+1).'</td>';
+				echo '<td class="'.$class.'">'.$punkte[$x]->rankingpos.'</td>';
 			/*
 			?>
 			

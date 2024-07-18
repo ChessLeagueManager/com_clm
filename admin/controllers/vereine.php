@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -471,7 +471,7 @@ function publish()
 	$query = 'UPDATE #__clm_vereine'
 	. ' SET published = '.(int) $publish
 	. ' WHERE id IN ( '. $cids .' )'
-	. ' AND ( checked_out = 0 OR ( checked_out = '.(int) $user->get('id') .' ) )';
+	. ' AND ( checked_out IS NULL OR checked_out = 0 OR ( checked_out = '.(int) $user->get('id') .' ) )';
 	//$db->setQuery( $query );
 	if (!clm_core::$db->query($query)) { 
 		$mainframe->enqueueMessage($db->getErrorMsg(), 'warning');

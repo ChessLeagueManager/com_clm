@@ -105,7 +105,7 @@ function display($cachable = false, $urlparams = array())
 	$sllist[]	= JHTML::_('select.option',  '0', JText::_( 'LIGEN_SL' ), 'jid', 'name' );
 	$sllist		= array_merge( $sllist, $out);
 //	$lists['sl']	= JHTML::_('select.genericlist',   $sllist, 'sl', 'class="js-example-basic-single" style="width:300px" size="1"', 'jid', 'name', $row->sl );
-	$lists['sl']	= JHTML::_('select.genericlist',   $sllist, 'sl', 'class=".$field_search." style="width:300px" size="1"', 'jid', 'name', $row->sl );
+	$lists['sl']	= JHTML::_('select.genericlist',   $sllist, 'sl', 'class="'.$field_search.'" style="width:300px" size="1"', 'jid', 'name', $row->sl );
 	// Saisonliste
 	$sql = "SELECT id as sid, name FROM #__clm_saison WHERE archiv = 0";
 	$db->setQuery($sql);
@@ -116,7 +116,7 @@ function display($cachable = false, $urlparams = array())
 	$saisonlist[]	= JHTML::_('select.option',  '0', JText::_( 'LIGEN_SAISON' ), 'sid', 'name' );
 	$saisonlist	= array_merge( $saisonlist, $db->loadObjectList() );
 //	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" style="width:300px" size="1"','sid', 'name', $row->sid );
-	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class=".$field_search." style="width:300px" size="1"','sid', 'name', $row->sid );
+	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" style="width:300px" size="1"','sid', 'name', $row->sid );
 	// Rangliste
 	$query = " SELECT id, Gruppe FROM #__clm_rangliste_name ";
 	$db->setQuery($query);
@@ -127,7 +127,7 @@ function display($cachable = false, $urlparams = array())
 	$glist[]	= JHTML::_('select.option',  '0', JText::_( 'LIGEN_ML' ), 'id', 'Gruppe' );
 	$glist		= array_merge( $glist, $db->loadObjectList() );
 //	$lists['gruppe']= JHTML::_('select.genericlist',   $glist, 'rang', 'class="js-example-basic-single" style="width:300px" size="1"', 'id', 'Gruppe', $row->rang );
-	$lists['gruppe']= JHTML::_('select.genericlist',   $glist, 'rang', 'class=".$field_search." style="width:300px" size="1"', 'id', 'Gruppe', $row->rang );
+	$lists['gruppe']= JHTML::_('select.genericlist',   $glist, 'rang', 'class="'.$field_search.'" style="width:300px" size="1"', 'id', 'Gruppe', $row->rang );
 
 	// ggf. Info, wenn Stichtag der Aufstellung nicht mit Meldeschluss der Rangliste übereinstimmt.
 	if($row->rang > 0){
@@ -289,9 +289,9 @@ function saveIt($apply=false)
 			if ($x < 10) $man_nr = $liga_man.'0'.$x; else $man_nr = $liga_man.$x;
 			$query = " INSERT INTO #__clm_mannschaften "
 				." (`sid`,`name`,`liga`,`zps`,`liste`,`edit_liste`,`man_nr`,`tln_nr`,`mf` "
-				." ,`sg_zps`,`datum`,`edit_datum`,`lokal`,`bemerkungen`,`bem_int`,`published`,`checked_out_time`) "
+				." ,`sg_zps`,`datum`,`edit_datum`,`lokal`,`bemerkungen`,`bem_int`,`published`,`checked_out`,`checked_out_time`) "
 				." VALUES ('$sid','$man_name','$liga_man','1','0','0','$man_nr','$x','0' "
-				." ,'','1970-01-01 00:00:00','1970-01-01 00:00:00','','','','$publish','1970-01-01 00:00:00') "
+				." ,'','1970-01-01 00:00:00','1970-01-01 00:00:00','','','','$publish',NULL,NULL) "
 				;
 			$db->setQuery($query);
 			clm_core::$db->query($query);

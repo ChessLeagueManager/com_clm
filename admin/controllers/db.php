@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -233,7 +233,7 @@ class CLMControllerDB extends JControllerLegacy {
 			$ligadaten = $ligadaten . clm_core::$load->utf8decode($neu) . "'";
 			$neu = str_replace($replace, ' ', $liga_name[0]->bem_int);
 			$neu = str_replace($_surch, '\r\n', $neu);
-			$ligadaten .= ",'" . clm_core::$load->utf8decode($neu) . "','1970-01-01 00:00:00','" . $liga_name[0]->ordering . "','" . $liga_name[0]->b_wertung . "','" . $liga_name[0]->liga_mt;
+			$ligadaten .= ",'" . clm_core::$load->utf8decode($neu) . "',NULL,'" . $liga_name[0]->ordering . "','" . $liga_name[0]->b_wertung . "','" . $liga_name[0]->liga_mt;
 			$ligadaten .= "','" . $liga_name[0]->tiebr1 . "','" . $liga_name[0]->tiebr2 . "','" . $liga_name[0]->tiebr3 . "','" . $liga_name[0]->ersatz_regel . "','" . $liga_name[0]->anzeige_ma . "','" . $liga_name[0]->params . "');";
 		} else {
 			if ($clm_cuser != "1") {
@@ -1164,7 +1164,7 @@ class CLMControllerDB extends JControllerLegacy {
 		$bem = clm_core::$load->utf8encode($liga_daten[26]);
 		$neu = str_replace('\r\n', "\n", $bem);
 		$row->bem_int = $neu;
-		$row->checked_out_time = $liga_daten[27];
+		$row->checked_out_time = null;
 		$row->ordering = 0;  //substr($liga_daten[28], 0, -4);
 		$row->b_wertung = $liga_daten[29];
 		$row->liga_mt = $liga_daten[30];
