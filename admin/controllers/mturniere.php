@@ -119,6 +119,10 @@ class CLMControllerMTurniere extends JControllerLegacy
 	$lists['saison']= JHtml::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1"','sid', 'name', $row->sid );
 	// Rangliste
 	$query = " SELECT id, Gruppe FROM #__clm_rangliste_name ";
+	if ($row->sid > 0)
+		$query .= " WHERE sid = ".$row->sid;
+	else
+		$query .= " WHERE sid = ".clm_core::$access->getSeason();
 	$db->setQuery($query);
 	if (!clm_core::$db->query($query)) { 
 		$mainframe->enqueueMessage($row->getErrorMsg(), 'warning');

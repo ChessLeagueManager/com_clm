@@ -59,7 +59,9 @@ public static function Ranglisten ( &$rows, &$lists, &$pageNav, $option )
 			<td nowrap="nowrap">
 				<?php
 		// eigenes Dropdown Menue
-			echo "&nbsp;&nbsp;&nbsp;".$lists['sid'];
+			echo $lists['tgid'];
+			echo "&nbsp;&nbsp;&nbsp;"."&nbsp;&nbsp;&nbsp;"."&nbsp;&nbsp;&nbsp;"."&nbsp;&nbsp;&nbsp;"."&nbsp;&nbsp;&nbsp;"."&nbsp;&nbsp;&nbsp;".$lists['sid'];
+			echo "&nbsp;&nbsp;&nbsp;".$lists['gid'];
 			echo "&nbsp;&nbsp;&nbsp;".$lists['vid'];
 			?>
 			</td>

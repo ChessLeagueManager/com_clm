@@ -77,7 +77,7 @@ public static function gruppen( &$rows, &$lists, &$pageNav, $option )
 						<?php echo JHtml::_('grid.sort',   JText::_( 'GROUPS_OVERVIEW_END'), 'a.Meldeschluss', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="15%">
-						<?php echo JHtml::_('grid.sort',   JText::_( 'GROUPS_OVERVIEW_BY'), 'a.user', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo JHtml::_('grid.sort',   JText::_( 'GROUPS_OVERVIEW_BY'), 'a.uname', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="11%">
 						<?php echo JHtml::_('grid.sort',   JText::_( 'GROUPS_OVERVIEW_SEASON'), 'c.name', @$lists['order_Dir'], @$lists['order'] ); ?>
@@ -137,7 +137,7 @@ public static function gruppen( &$rows, &$lists, &$pageNav, $option )
 						<?php echo $row->Meldeschluss;?>
 					</td>
 					<td align="center">
-						<?php echo $row->user;?>
+						<?php echo $row->uname;?>
 					</td>
 					<td align="center">
 						<?php echo $row->saison;?>
@@ -349,7 +349,8 @@ public static function gruppe( &$row,$lists, $option, $jid)
 		<input type="hidden" name="section" value="gruppen" />
 		<input type="hidden" name="option" value="com_clm" />
 		<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
-		<input type="hidden" name="user" value="<?php echo $jid; ?>" />
+		<?php if (is_null($row->user) OR $row->user < 1) $row->user = clm_core::$access->getJid(); ?>
+		<input type="hidden" name="user" value="<?php echo $row->user; ?>" />
 		<input type="hidden" name="task" value="" />
 		<?php echo JHtml::_( 'form.token' ); ?>
 		</form>
