@@ -9,4 +9,4 @@
 --
 
 ALTER TABLE `#__clm_vereine` ADD COLUMN `lokal_coord` GEOMETRY NULL AFTER lokal;
-ALTER TABLE `#__clm_mannschaften`  ADD COLUMN lokal_coord GEOMETRY NULL AFTER lokal;
+ALTER TABLE `#__clm_mannschaften`  ADD COLUMN `lokal_coord` GEOMETRY NULL AFTER lokal;

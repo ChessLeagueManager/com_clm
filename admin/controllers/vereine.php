@@ -171,9 +171,9 @@ function geo(){
 		$mainframe->redirect( $link);
 	}
 
-	$msg=($n-count($unsuccessArray)) . "/" . $n . " Kartendaten erfolgreich geupdated!<br>";
+	$msg=($n-count($unsuccessArray)) . "/" . $n . JText::_('VEREINE_GEO_UPDATE') . "!<br>";
 	if(count($unsuccessArray)>0){
-		$msg = $msg . "Fehlgeschlagene Vereine:<br>" . implode("<br>", $unsuccessArray);
+		$msg = $msg . JText::_('VEREINE_GEO_FAILURE') . implode("<br>", $unsuccessArray);
 	}
 	
 	// Log schreiben
