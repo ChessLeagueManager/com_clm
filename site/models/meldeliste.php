@@ -27,7 +27,7 @@ class CLMModelMeldeliste extends JModelLegacy
 //		$id	= @$options['id'];
 
  	if($layout =="rangliste"){
-		$query = "SELECT a.name as vname, r.Gruppe as gruppe, i.bemerkungen, i.bem_int, i.published, i.ordering "
+		$query = "SELECT a.name as vname, r.Gruppe as gruppe, r.anz_sgp as anz_sgp, i.bemerkungen, i.bem_int, i.published, i.ordering, i.sg_zps "
 			." FROM #__clm_vereine as a"
 			." LEFT JOIN #__clm_rangliste_name as r ON r.id =".$gid
 			." LEFT JOIN #__clm_rangliste_id as i ON i.sid = $sid AND i.zps = '$zps' AND i.gid = $gid "
@@ -117,7 +117,8 @@ class CLMModelMeldeliste extends JModelLegacy
 		$query = " SELECT l.man_nr,l.Rang,a.sid,a.ZPS,a.Mgl_Nr,a.PKZ,a.DWZ,a.DWZ_Index,a.Geburtsjahr,a.Spielername,a.Status,l.gesperrt"
 			." FROM #__clm_dwz_spieler as a"
 			." LEFT JOIN #__clm_rangliste_spieler as l ON l.Gruppe = $gid1 AND l.sid = $sid AND (l.ZPSmgl = a.ZPS) AND l.Mgl_Nr = a.Mgl_Nr AND (l.ZPS = '$zps')"
-			." WHERE (a.ZPS = '$zps' OR a.ZPS = '$sg_zps') "
+//			." WHERE (a.ZPS = '$zps' OR a.ZPS = '$sg_zps') "
+			." WHERE (a.ZPS = '$zps' OR FIND_IN_SET(a.ZPS,'".$sg_zps."') != 0) "
 			." AND a.sid =".$sid
 			.$geb.$ges.$sta
 			." ORDER BY IFNULL(l.man_nr,999) ASC,IFNULL(l.Rang,999) ASC,a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "

@@ -74,7 +74,7 @@ class CLMModelTabelle extends JModelLegacy
  			if ($order[0]->order == 1) { $ordering = " , m.ordering ASC";}
 			//else { $ordering =', a.tln_nr ASC ';} 
 			else { $ordering =' ';} 
-		$query = " SELECT a.tln_nr as tln_nr,m.name as name, "
+		$query = " SELECT m.rankingpos, a.tln_nr as tln_nr,m.name as name, "
 			." (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
 			." (SUM(a.brettpunkte) - m.bpabzug) as bp, m.bpabzug, SUM(a.wertpunkte) as wp, m.published, m.man_nr, COUNT(DISTINCT a.runde, a.dg) as spiele, "
 			." SUM(case when a.manpunkte IS NULL then 0 else 1 end) as count_G, "

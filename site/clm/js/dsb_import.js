@@ -1,5 +1,12 @@
+/*
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2024 CLM Team  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 	var clm_dsb_import_file = new Array();
 	var clm_dsb_import_button = 0;
+	var clm_dsb_import_playerV = 1;
 
 	function clm_dsb_import_chunk(array, chunkSize) {
 	    var R = [];
@@ -41,6 +48,14 @@
 	            out.splice(0, 1);
 	            if (csv_head == "ZPS,Mgl-Nr,Status,Spielername,Geschlecht,Spielberechtigung,Geburtsjahr,Letzte-Auswertung,DWZ,Index,FIDE-Elo,FIDE-Titel,FIDE-ID,FIDE-Land") {
 	                update.innerHTML = clm_dsb_import_playerFile;
+					clm_dsb_import_playerV = 1;
+	                update.style.display = "block";
+	                clm_dsb_import_file = clm_dsb_import_chunk(out, clm_dsb_import_amount);
+	                clm_dsb_import_button = 2;
+	                clm_dsb_import_button_update(object);
+	            } else if (csv_head == "ID,VKZ,Mgl-Nr,Status,Spielername,Geschlecht,Spielberechtigung,Geburtsjahr,Letzte-Auswertung,DWZ,Index,FIDE-Elo,FIDE-Titel,FIDE-ID,FIDE-Land") {
+	                update.innerHTML = clm_dsb_import_playerFileV2;
+					clm_dsb_import_playerV = 2;
 	                update.style.display = "block";
 	                clm_dsb_import_file = clm_dsb_import_chunk(out, clm_dsb_import_amount);
 	                clm_dsb_import_button = 2;
@@ -112,6 +127,7 @@
 	    command[1][0] = "db_dsb_player";
 	    command[1][1][0] = clm_dsb_import_file[i];
 	    command[1][1][1] = p;
+	    command[1][1][2] = clm_dsb_import_playerV;
 	    xmlhttp.send('command=' + encodeURIComponent(JSON.stringify(command)));
 	}
 

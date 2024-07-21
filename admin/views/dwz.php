@@ -230,7 +230,7 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 		</tr>
 		<tr>
 			<td class="key" nowrap="nowrap">
-			<label for="mglnr"><?php echo JText::_( 'MEMBER_TABLE_121' ); ?></label>
+			<label for="PKZ"><?php echo JText::_( 'MEMBER_TABLE_121' ); ?></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="PKZ" id="PKZ" size="10" maxlength="10" <?php if (isset($filter_mgl) AND $filter_mgl !="0") {?> value="<?php echo $spieler[0]->PKZ ?>"<?php }?>/>
@@ -284,6 +284,42 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 			<td><?php echo JText::_( 'MEMBER_TABLE_15E' ); ?></td>
 		</tr>
 	  <?php } ?>
+		<tr>
+			<td class="key" nowrap="nowrap">
+			<label for="FIDE_Elo"><?php echo JText::_( 'Elo' ); ?></label>
+			</td>
+			<td>
+			<input class="inputbox" type="text" name="FIDE_Elo" id="FIDE_Elo" size="7" maxlength="4" <?php if (isset($filter_mgl) AND $filter_mgl !="0") {?> value="<?php echo $spieler[0]->FIDE_Elo ?>"<?php }?>/>
+			</td>
+			<td><?php echo JText::_( 'Bspl. 1355' ); ?></td>
+		</tr>
+		<tr>
+			<td class="key" nowrap="nowrap">
+			<label for="FIDE_ID"><?php echo JText::_( 'Fide-ID' ); ?></label>
+			</td>
+			<td>
+			<input class="inputbox" type="text" name="FIDE_ID" id="FIDE_ID" size="9" maxlength="8" <?php if (isset($filter_mgl) AND $filter_mgl !="0") {?> value="<?php echo $spieler[0]->FIDE_ID ?>"<?php }?>/>
+			</td>
+			<td><?php echo JText::_( 'Bspl. 1503015' ); ?></td>
+		</tr>
+		<tr>
+			<td class="key" nowrap="nowrap">
+			<label for="FIDE_Titel"><?php echo JText::_( 'Fide-Titel' ); ?></label>
+			</td>
+			<td>
+			<input class="inputbox" type="text" name="FIDE_Titel" id="FIDE_Titel" size="7" maxlength="3" <?php if (isset($filter_mgl) AND $filter_mgl !="0") {?> value="<?php echo $spieler[0]->FIDE_Titel ?>"<?php }?>/>
+			</td>
+			<td><?php echo JText::_( 'Bspl. IM' ); ?></td>
+		</tr>
+		<tr>
+			<td class="key" nowrap="nowrap">
+			<label for="FIDE_Land"><?php echo JText::_( 'Fide-Föderation' ); ?></label>
+			</td>
+			<td>
+			<input class="inputbox" type="text" name="FIDE_Land" id="FIDE_Land" size="7" maxlength="3" <?php if (isset($filter_mgl) AND $filter_mgl !="0") {?> value="<?php echo $spieler[0]->FIDE_Land ?>"<?php }?>/>
+			</td>
+			<td><?php echo JText::_( 'Bspl. GER' ); ?></td>
+		</tr>
 		<tr>
 			<td class="key" nowrap="nowrap">
 			<label for="geschlecht"><?php echo JText::_( 'MEMBER_TABLE_18' ); ?></label>

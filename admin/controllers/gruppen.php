@@ -85,11 +85,11 @@ function display($cachable = false, $urlparams = array())
 	$pageNav = new JPagination( $total, $limitstart, $limit );
 
 	// get the subset (based on limits) of required records
-	$query = 'SELECT a.*, c.name AS saison '
+	$query = 'SELECT a.*, c.name AS saison, u.name as uname '
 	. ' FROM #__clm_rangliste_name AS a'
 	. ' LEFT JOIN #__clm_saison AS c ON c.id = a.sid'
 	//. ' LEFT JOIN #__clm_liga AS d ON a.liga = d.id'
-	. ' LEFT JOIN #__users AS u ON u.id = a.checked_out'
+	. ' LEFT JOIN #__users AS u ON u.id = a.user'
 	. $where
 	. $orderby	;
 	
@@ -381,7 +381,7 @@ function publish()
 	$query = 'UPDATE #__clm_rangliste_name'
 		. ' SET published = '.(int) $publish
 		. ' WHERE id IN ( '. $cids .' )'
-		. ' AND ( checked_out = 0 OR ( checked_out = '.(int) $user->get('id') .' ) )';
+		. ' AND ( checked_out IS NULL OR checked_out = 0 OR ( checked_out = '.(int) $user->get('id') .' ) )';
 	$db->setQuery( $query );
 
 	if (!clm_core::$db->query($query)) { 

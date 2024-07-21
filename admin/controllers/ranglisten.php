@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -39,8 +39,12 @@ function display($cachable = false, $urlparams = array())
 	$filter_order_Dir	= $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",'filter_order_Dir','','word' );
 	$filter_state		= $mainframe->getUserStateFromRequest( "$option.filter_state",'filter_state','','word' );
 	$filter_sid		= $mainframe->getUserStateFromRequest( "$option.filter_sid",'filter_sid',0,'int' );
+	$filter_gid		= $mainframe->getUserStateFromRequest( "$option.filter_gid",'filter_gid',0,'int' );
 	$filter_vid		= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
-	$filter_sg_vid	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid",'filter_sg_vid',0,'var' );
+	$filter_sg_vid1	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid1",'filter_sg_vid1',0,'var' );
+	$filter_sg_vid2	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid2",'filter_sg_vid2',0,'var' );
+	$filter_sg_vid3	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid3",'filter_sg_vid3',0,'var' );
+	$filter_sg_vid4	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid4",'filter_sg_vid4',0,'var' );
 	$filter_catid		= $mainframe->getUserStateFromRequest( "$option.filter_catid",'filter_catid',0,'int' );
 	$search			= $mainframe->getUserStateFromRequest( "$option.search",'search','','string' );
 	$search			= strtolower( $search );
@@ -60,6 +64,7 @@ function display($cachable = false, $urlparams = array())
 			}
 	if ( $filter_catid ) {	$where[] = 'a.published = '.(int) $filter_catid; }
 	if ( $filter_sid ) {	$where[] = 'a.sid = '.(int) $filter_sid; }
+	if ( $filter_gid ) {	$where[] = 'a.gid = '.(int) $filter_gid; }
 	if ( $filter_vid ) {	$where[] = "a.zps = '$filter_vid'"; }
 
 
@@ -127,12 +132,28 @@ function display($cachable = false, $urlparams = array())
 //	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 
+	// Gruppenfilter
+	$sql = 'SELECT id, Gruppe FROM #__clm_rangliste_name WHERE published =1'.' AND sid = '.$filter_sid;
+	$db->setQuery($sql);
+	$gruppenlist[]	= JHtml::_('select.option',  '0', JText::_( 'RANGLISTE_GRUPPE_AUS' ), 'id', 'Gruppe' );
+	$gruppenlist         = array_merge( $gruppenlist, $db->loadObjectList() );
+//	$lists['gid']      = JHtml::_('select.genericlist', $gruppenlist, 'filter_gid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'Gruppe', intval( $filter_gid ) );
+	$lists['gid']      = JHtml::_('select.genericlist', $gruppenlist, 'filter_gid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'Gruppe', intval( $filter_gid ) );
+
+	$db->setQuery($sql);
+	$gruppenlistt[]	= JHtml::_('select.option',  '0', JText::_( 'neue Rangfolgegruppe auswählen \n nur nötig beim Kopieren' ), 'id', 'Gruppe' );
+	$gruppenlistt         = array_merge( $gruppenlistt, $db->loadObjectList() );
+	$lists['tgid']      = JHtml::_('select.genericlist', $gruppenlistt, 'filter_tgid', 'class="'.$field_search.'" size="1" ','id', 'Gruppe', 0 );
+
 	// Vereinefilter laden
 	$vereinefilter = CLMFilterVerein::vereine_filter(0);
 //	$lists['vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
 	$lists['vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_vid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
 //	$lists['sg_vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_sg_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid );
-	$lists['sg_vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_sg_vid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid );
+	$lists['sg_vid1']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_sg_vid1', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid1 );
+	$lists['sg_vid2']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_sg_vid2', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid2 );
+	$lists['sg_vid3']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_sg_vid3', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid3 );
+	$lists['sg_vid4']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_sg_vid4', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid4 );
 
 	// Suchefilter
 	$lists['search']= $search;
@@ -151,7 +172,10 @@ function edit()
 	$section	= clm_core::$load->request_string('section');
 
 	$filter_vid	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
-	$filter_sg_vid	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid",'filter_sg_vid',0,'var' );
+	$filter_sg_vid1	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid1",'filter_sg_vid1',0,'var' );
+	$filter_sg_vid2	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid2",'filter_sg_vid2',0,'var' );
+	$filter_sg_vid3	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid3",'filter_sg_vid3',0,'var' );
+	$filter_sg_vid4	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid4",'filter_sg_vid4',0,'var' );
 	$filter_sid	= $mainframe->getUserStateFromRequest( "$option.filter_sid",'filter_sid',0,'int' );
 	$filter_gid	= $mainframe->getUserStateFromRequest( "$option.filter_gid",'filter_gid',0,'int' );
 
@@ -168,95 +192,104 @@ function edit()
 										 
 	$row =JTable::getInstance( 'ranglisten', 'TableCLM' );
 	$vname="";
-	$sg_vname="";
+	$sg_vname= array();
 	$gname="";
 	$sname="";
 
 	if ($task == 'edit') {
-	// illegaler Einbruchversuch über URL !
-	// evtl. mitschneiden !?!
-	$saison		=JTable::getInstance( 'saisons', 'TableCLM' );
-	$saison->load( $row->sid );
-	if ($saison->archiv == "1") {  // AND clm_core::$access->getType() !== 'admin') {
-		$mainframe->enqueueMessage( JText::_( 'RANGLISTE_ARCHIV' ), 'warning' );		
-		$mainframe->redirect( 'index.php?option='. $option.'&section=vereine' );
-	}
-	if ($cid[0]== "" AND $task =='edit') {
-		$mainframe->enqueueMessage( JText::_( 'RANGLISTE_FALSCH' ), 'warning' );		
-		$mainframe->redirect( 'index.php?option='. $option.'&section=vereine' );
-	}
-	// load the row from the db table
-	$row->load( $cid[0] );
+		// illegaler Einbruchversuch über URL !
+		// evtl. mitschneiden !?!
+		$saison		=JTable::getInstance( 'saisons', 'TableCLM' );
+		$saison->load( $row->sid );
+		if ($saison->archiv == "1") {  // AND clm_core::$access->getType() !== 'admin') {
+			$mainframe->enqueueMessage( JText::_( 'RANGLISTE_ARCHIV' ), 'warning' );		
+			$mainframe->redirect( 'index.php?option='. $option.'&section=vereine' );
+		}
+		if ($cid[0]== "" AND $task =='edit') {
+			$mainframe->enqueueMessage( JText::_( 'RANGLISTE_FALSCH' ), 'warning' );		
+			$mainframe->redirect( 'index.php?option='. $option.'&section=vereine' );
+		}
+		// load the row from the db table
+		$row->load( $cid[0] );
 
-	$sql = " SELECT Vereinname as vname FROM #__clm_dwz_vereine "
-		." WHERE ZPS ='".$row->zps."'"
-		." AND sid =".$row->sid
-		;
-	$db->setQuery($sql);
-	$vid 	= $db->loadObjectList();
-	$vname	= $vid[0]->vname;
-
-	if ($row->sg_zps > '00000') {
 		$sql = " SELECT Vereinname as vname FROM #__clm_dwz_vereine "
-			." WHERE ZPS ='".$row->sg_zps."'"
+			." WHERE ZPS ='".$row->zps."'"
 			." AND sid =".$row->sid
 			;
 		$db->setQuery($sql);
-		$sg_vid 	= $db->loadObjectList();
-		$sg_vname	= $sg_vid[0]->vname;
-	} else {
-		$sg_vname	= '';
-	}
-	$sql = " SELECT Gruppe as gname FROM #__clm_rangliste_name "
-		." WHERE id =".$row->gid
-		." AND sid =".$row->sid
-		;
-	$db->setQuery($sql);
-	$gruppe	= $db->loadObjectList();
-	$gname	= $gruppe[0]->gname;
+		$vid 	= $db->loadObjectList();
+		$vname	= $vid[0]->vname;
 
-	$sql = " SELECT name as sname FROM #__clm_saison "
-		." WHERE id =".$row->sid
-		;
-	$db->setQuery($sql);
-	$saison	= $db->loadObjectList();
-	$sname	= $saison[0]->sname;
-		}
+		$sg_vname	= array();
+		if ($row->sg_zps > '00000') {
+//			$sql = " SELECT Vereinname as vname FROM #__clm_dwz_vereine "
+			$sql = " SELECT ZPS, Vereinname as vname FROM #__clm_dwz_vereine "
+//				." WHERE ZPS ='".$row->sg_zps."'"
+				." WHERE ( FIND_IN_SET(ZPS,'".$row->sg_zps."') != 0 )"
+				." AND sid =".$row->sid
+				;
+			$db->setQuery($sql);
+			$sg_vid 	= $db->loadObjectList();
+//			$sg_vname	= $sg_vid[0]->vname;
+			$i = 0;
+			foreach ($sg_vid as $sgvid) {
+				$i++;
+				$sg_vname[$i]	= $sgvid->vname;
+			}
+		} 
+
+		$sql = " SELECT Gruppe as gname FROM #__clm_rangliste_name "
+			." WHERE id =".$row->gid
+			." AND sid =".$row->sid
+			;
+		$db->setQuery($sql);
+		$gruppe	= $db->loadObjectList();
+		$gname	= $gruppe[0]->gname;
+
+		$sql = " SELECT name as sname FROM #__clm_saison "
+			." WHERE id =".$row->sid
+			;
+		$db->setQuery($sql);
+		$saison	= $db->loadObjectList();
+		$sname	= $saison[0]->sname;
+	}
 	// Prüfen ob die gewählte Liste bereits existiert
 	if($filter_gid AND $filter_vid AND $filter_sid ) {
-	$sql = " SELECT id FROM #__clm_rangliste_id "
-		." WHERE gid =".intval( $filter_gid )
-		." AND sid = ".intval( $filter_sid )
-		." AND zps = '$filter_vid'"
-		;
-	$db->setQuery($sql);
-	$gid_check = $db->loadObjectList();
+		$sql = " SELECT id FROM #__clm_rangliste_id "
+			." WHERE gid =".intval( $filter_gid )
+			." AND sid = ".intval( $filter_sid )
+			." AND zps = '$filter_vid'"
+			;
+		$db->setQuery($sql);
+		$gid_check = $db->loadObjectList();
 		if(count($gid_check) == 0) { $exist = 0; }
 		else { $exist = $gid_check[0]->id; }
 	}
 	else { $exist = 0; }
 	// Prüfen ob der Verein bereits als Partnerverein existiert
 	if($filter_gid AND $filter_vid AND $filter_sid ) {
-	$sql = " SELECT id FROM #__clm_rangliste_id "
-		." WHERE gid =".intval( $filter_gid )
-		." AND sid = ".intval( $filter_sid )
-		." AND sg_zps = '$filter_vid'"
-		;
-	$db->setQuery($sql);
-	$gid_check = $db->loadObjectList();
+		$sql = " SELECT id FROM #__clm_rangliste_id "
+			." WHERE gid =".intval( $filter_gid )
+			." AND sid = ".intval( $filter_sid )
+			." AND sg_zps = '$filter_vid'"
+			;
+		$db->setQuery($sql);
+		$gid_check = $db->loadObjectList();
 		if(count($gid_check) == 0) { $pa_exist = 0; }
 		else { $pa_exist = $gid_check[0]->id; }
 	}
 	else { $pa_exist = 0; }
 	// Prüfen ob eine Liste für den Partnerverein bereits existiert
-	if($filter_gid AND $filter_sg_vid AND $filter_sid ) {
-	$sql = " SELECT id FROM #__clm_rangliste_id "
-		." WHERE gid =".intval( $filter_gid )
-		." AND sid = ".intval( $filter_sid )
-		." AND zps = '$filter_sg_vid'"
-		;
-	$db->setQuery($sql);
-	$gid_check = $db->loadObjectList();
+	if($filter_gid AND $filter_sg_vid1 AND $filter_sid ) {
+		$sql_sg_zps = $filter_sg_vid1.','.$filter_sg_vid2.','.$filter_sg_vid3.','.$filter_sg_vid4;
+		$sql = " SELECT id FROM #__clm_rangliste_id "
+			." WHERE gid =".intval( $filter_gid )
+			." AND sid = ".intval( $filter_sid )
+//			." AND (zps = '$filter_sg_vid1' OR zps = '$filter_sg_vid2' OR zps = '$filter_sg_vid3' OR zps = '$filter_sg_vid4'"
+			." AND (FIND_IN_SET(ZPS,'".$sql_sg_zps."') != 0 )"
+			;
+		$db->setQuery($sql);
+		$gid_check = $db->loadObjectList();
 		if(count($gid_check) == 0) { $sg_exist = 0; }
 		else { $sg_exist = $gid_check[0]->id; }
 	}
@@ -274,76 +307,85 @@ function edit()
 	// Rangliste in Abhängigkeit der Auswahl von vid,lid,sid ausgeben
 	if ($task == 'edit') {
 
-	$sql = " SELECT Meldeschluss, geschlecht, alter_grenze, `alter`, status "
-		." FROM #__clm_rangliste_name"
-		." WHERE id =".$row->gid
-		." AND sid = ".$row->sid
-		;
-	$sql_zps	= $row->zps;
-	$sql_sg_zps	= $row->sg_zps;
-	$sql_gid	= $row->gid;
-	$sql_sid	= $row->sid;
-		}
-	else {
-	$sql = " SELECT Meldeschluss, geschlecht, alter_grenze, `alter`, status "
-		." FROM #__clm_rangliste_name"
-		." WHERE id =".intval( $filter_gid )
-		." AND sid = ".intval( $filter_sid )
-		;
-	$sql_zps	= $filter_vid;
-	$sql_sg_zps	= $filter_sg_vid;
-	$sql_gid	= intval( $filter_gid );
-	$sql_sid	= intval( $filter_sid );
-		}
+		$sql = " SELECT Gruppe, Meldeschluss, geschlecht, alter_grenze, `alter`, status, anz_sgp "
+			." FROM #__clm_rangliste_name"
+			." WHERE id =".$row->gid
+			." AND sid = ".$row->sid
+			;
+		$sql_zps	= $row->zps;
+		$sql_sg_zps	= $row->sg_zps;
+		$sql_gid	= $row->gid;
+		$sql_sid	= $row->sid;
+   
+	} else {
+		$sql = " SELECT Gruppe, Meldeschluss, geschlecht, alter_grenze, `alter`, status, anz_sgp "
+			." FROM #__clm_rangliste_name"
+			." WHERE id =".intval( $filter_gid )
+			." AND sid = ".intval( $filter_sid )
+			;
+		$sql_zps	= $filter_vid;
+		$sql_gid	= intval( $filter_gid );
+		$sql_sid	= intval( $filter_sid );
+	}
 	$db->setQuery($sql);
 	$gid	= $db->loadObjectList();
 
 	$ges ="";
 	$geb ="";
 	$sta ="";
+	$anz_sgp = 0;
+	
 	if($gid) {
-	$melde = explode ("-",$gid[0]->Meldeschluss);
-	$jahr = $melde[0];
+		$anz_sgp = $gid[0]->anz_sgp;
+		$melde = explode ("-",$gid[0]->Meldeschluss);
+		$jahr = $melde[0];
 
-	if ($gid[0]->alter_grenze == "1") {
-		$geb = " AND a.Geburtsjahr < ".($jahr - $gid[0]->alter);
+		if ($gid[0]->alter_grenze == "1") {
+			$geb = " AND a.Geburtsjahr < ".($jahr - $gid[0]->alter);
 		}
-	if ($gid[0]->alter_grenze == "2") {
-		$geb = " AND a.Geburtsjahr > ".($jahr - ( $gid[0]->alter + 1));
+		if ($gid[0]->alter_grenze == "2") {
+			$geb = " AND a.Geburtsjahr > ".($jahr - ( $gid[0]->alter + 1));
 		}
-	if ($gid[0]->geschlecht == 1) {
-		$ges = " AND a.Geschlecht = 'W' ";
+		if ($gid[0]->geschlecht == 1) {
+			$ges = " AND a.Geschlecht = 'W' ";
 		}
-	if ($gid[0]->geschlecht == 2) {
-		$ges = " AND a.Geschlecht = 'M' ";
+		if ($gid[0]->geschlecht == 2) {
+			$ges = " AND a.Geschlecht = 'M' ";
 		}
-	if ($gid[0]->status == 'A') {
-		$sta = " AND a.Status = 'A' ";
+		if ($gid[0]->status == 'A') {
+			$sta = " AND a.Status = 'A' ";
 		}
 	}
 	if ($task == 'edit') {
-	$sql = " SELECT r.Rang, r.man_nr, a.sid,a.ZPS,a.Mgl_Nr,a.PKZ, a.DWZ, r.gesperrt,"
-		." a.DWZ_Index,a.Geburtsjahr,a.Spielername,a.Status"
-		." FROM #__clm_dwz_spieler as a"
-		." LEFT JOIN #__clm_rangliste_id as i ON i.sid = a.sid AND (i.zps = '$sql_zps') "
-		." LEFT JOIN #__clm_rangliste_spieler as r ON r.sid = a.sid AND r.ZPSmgl = a.ZPS AND r.Mgl_Nr = a.Mgl_Nr AND r.Gruppe = i.gid AND r.ZPS = i.zps "
-		." WHERE (a.ZPS = '$sql_zps' OR a.ZPS = '$sql_sg_zps')"
-		." AND i.id = ".$cid[0]
-		." AND a.sid =".$sql_sid
-		.$geb.$ges.$sta
-//		." ORDER BY r.man_nr,r.Rang ASC, a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
-		." ORDER BY IFNULL(r.man_nr,999),r.Rang ASC, a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
-		;
-		}
-	else {
-	$sql = " SELECT a.sid,a.ZPS,a.Mgl_Nr,a.PKZ,a.DWZ,a.DWZ_Index,a.Geburtsjahr,a.Spielername,a.Status"
-		." FROM #__clm_dwz_spieler as a"
-		." WHERE (a.ZPS = '$sql_zps' OR a.ZPS = '$sql_sg_zps')"
-		." AND sid =".$sql_sid
-		.$geb.$ges.$sta
-		." ORDER BY a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
-		;
-		}
+		$sql = " SELECT r.Rang, r.man_nr, a.sid,a.ZPS,a.Mgl_Nr,a.PKZ, a.DWZ, r.gesperrt,"
+			." a.DWZ_Index,a.Geburtsjahr,a.Spielername,a.Status"
+			." FROM #__clm_dwz_spieler as a"
+			." LEFT JOIN #__clm_rangliste_id as i ON i.sid = a.sid AND (i.zps = '$sql_zps') "
+			." LEFT JOIN #__clm_rangliste_spieler as r ON r.sid = a.sid AND r.ZPSmgl = a.ZPS AND r.Mgl_Nr = a.Mgl_Nr AND r.Gruppe = i.gid AND r.ZPS = i.zps "
+//			." WHERE (a.ZPS = '$sql_zps' OR a.ZPS = '$sql_sg_zps')"
+			." WHERE (a.ZPS ='".$sql_zps."' OR FIND_IN_SET(a.ZPS,'".$sql_sg_zps."') != 0 )"
+			." AND i.id = ".$cid[0]
+			." AND a.sid =".$sql_sid
+			.$geb.$ges.$sta
+//			." ORDER BY r.man_nr,r.Rang ASC, a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
+			." ORDER BY IFNULL(r.man_nr,999),r.Rang ASC, a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
+			;
+   
+	} else {
+		$sql_sg_zps	= '00000';
+		if ($anz_sgp > 0) $sql_sg_zps = $filter_sg_vid1;
+		if ($anz_sgp > 1) $sql_sg_zps .= ','.$filter_sg_vid2;
+		if ($anz_sgp > 2) $sql_sg_zps .= ','.$filter_sg_vid3;
+		if ($anz_sgp > 3) $sql_sg_zps .= ','.$filter_sg_vid4;
+		$sql = " SELECT a.sid,a.ZPS,a.Mgl_Nr,a.PKZ,a.DWZ,a.DWZ_Index,a.Geburtsjahr,a.Spielername,a.Status"
+			." FROM #__clm_dwz_spieler as a"
+//			." WHERE (a.ZPS = '$sql_zps' OR a.ZPS = '$sql_sg_zps')"
+			." WHERE (a.ZPS ='".$sql_zps."' OR FIND_IN_SET(a.ZPS,'".$sql_sg_zps."') != 0 )"
+			." AND sid =".$sql_sid
+			.$geb.$ges.$sta
+			." ORDER BY a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
+			;
+	}
 	$db->setQuery($sql);
 	$spieler = $db->loadObjectList();
 
@@ -376,7 +418,7 @@ function edit()
 		$mainframe->enqueueMessage( JText::_( 'RANGLISTE_STAFFEL' ), 'warning' );		
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
-					}
+	}
 	if ($task == 'edit') {
 	// do stuff for existing records
 		$row->checkout( $user->get('id') );
@@ -402,7 +444,7 @@ function edit()
 		." AND published = 1"
 		;
 	$db->setQuery($sql);
-	if (!clm_core::$db->query($sql)){
+	if (!clm_core::$db->query($sql)) {
 		$mainframe->enqueueMessage( $db->getErrorMsg(), 'warning' );		
 		$mainframe->redirect( 'index.php?option='.$option.'&section='.$section );
 	}
@@ -417,7 +459,11 @@ function edit()
 //	$lists['vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_vid', 'class="js-example-basic-single" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_vid );
 	$lists['vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_vid', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_vid );
 //	$lists['sg_vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_sg_vid', 'class="js-example-basic-single" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid );
-	$lists['sg_vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_sg_vid', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid );
+	$lists['sg_vid1']	= JHtml::_('select.genericlist', $vereinlist, 'filter_sg_vid1', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid1 );
+	$lists['sg_vid2']	= JHtml::_('select.genericlist', $vereinlist, 'filter_sg_vid2', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid2 );
+	$lists['sg_vid3']	= JHtml::_('select.genericlist', $vereinlist, 'filter_sg_vid3', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid3 );
+	$lists['sg_vid4']	= JHtml::_('select.genericlist', $vereinlist, 'filter_sg_vid4', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid4 );
+	$lists['anz_sgp']	= $anz_sgp;
 
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'ranglisten.php');
 	$jid = 0;
@@ -463,12 +509,18 @@ function save()
 	}
 	if ($pre_task == "add" ) {
 		$filter_vid	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
-		$filter_sg_vid	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid",'filter_sg_vid',0,'var' );
+		$filter_sg_vid1	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid1",'filter_sg_vid1',0,'var' );
+		$filter_sg_vid2	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid2",'filter_sg_vid2',0,'var' );
+		$filter_sg_vid3	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid3",'filter_sg_vid3',0,'var' );
+		$filter_sg_vid4	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid4",'filter_sg_vid4',0,'var' );
 		$filter_sid	= $mainframe->getUserStateFromRequest( "$option.filter_sid",'filter_sid',0,'int' );
 		$filter_gid	= $mainframe->getUserStateFromRequest( "$option.filter_gid",'filter_gid',0,'int' );
 
 		$zps = $filter_vid ;
-		$sg_zps = $filter_sg_vid ;
+		if ($filter_sg_vid1 > '00000') $sg_zps = $filter_sg_vid1; else $sg_zps = '00000';
+		if ($filter_sg_vid2 > '00000') $sg_zps .= ','.$filter_sg_vid2;
+		if ($filter_sg_vid3 > '00000') $sg_zps .= ','.$filter_sg_vid3;
+		if ($filter_sg_vid3 > '00000') $sg_zps .= ','.$filter_sg_vid4;
 		$sid = intval( $filter_sid );
 		$gid = intval( $filter_gid );
 
@@ -811,7 +863,7 @@ function publish()
 		$query = 'UPDATE #__clm_rangliste_id'
 			. ' SET published = '.(int) $publish
 			. ' WHERE id IN ( '. $cids .' )'
-			. ' AND ( checked_out = 0 OR ( checked_out = '.(int) $user->get('id') .' ) )';
+			. ' AND ( checked_out IS NULL OR checked_out = 0 OR ( checked_out = '.(int) $user->get('id') .' ) )';
 		}
 		//$db->setQuery( $query );
 	if (!clm_core::$db->query($query)) { 
@@ -930,10 +982,11 @@ function copy()
 	$section	= clm_core::$load->request_string('section');
 	$cid		= clm_core::$load->request_array_int('cid');
 	$db		= JFactory::getDBO();
-	$table		= &JTable::getInstance('ranglisten', 'TableCLM');
+	$table		= JTable::getInstance('ranglisten', 'TableCLM');
 	$user		= JFactory::getUser();
 	$n		= count( $cid );
 	$this->setRedirect( 'index.php?option='.$option.'&section='.$section );
+	$tgid	= clm_core::$load->request_int('filter_tgid',0);
 
 	// Prüfen ob User Berechtigung zum kopieren hat
 	$clmAccess = clm_core::$access;
@@ -941,21 +994,71 @@ function copy()
 		$mainframe->enqueueMessage(JText::_( 'RANGLISTE_ADMIN', true ), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
-	else {
+	if ($tgid == 0) {
+		$mainframe->enqueueMessage(JText::_( 'keine Zielrangfolgegruppe ausgewählt', true ), 'warning');
+		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+	}
+	$table->load( (int)$cid[0] );
+echo "<br>table  sid ".$table->sid." gid ".$table->gid; //die();
+	$query = "SELECT * FROM  #__clm_rangliste_name "
+		." WHERE sid = ".$table->sid
+		." AND id = ".$table->gid
+		;
+	$rg_source = clm_core::$db->loadObjectList($query);	
+	$query = "SELECT * FROM  #__clm_rangliste_name "
+		." WHERE sid = ".$table->sid
+		." AND id = ".$tgid
+		;
+	$rg_target = clm_core::$db->loadObjectList($query);	
 
+	if ($rg_source[0]->geschlecht != $rg_target[0]->geschlecht OR $rg_source[0]->alter_grenze != $rg_target[0]->alter_grenze OR 
+			$rg_source[0]->alter != $rg_target[0]->alter OR $rg_source[0]->status != $rg_target[0]->status OR $rg_source[0]->anz_sgp != $rg_target[0]->anz_sgp ) {
+		$mainframe->enqueueMessage(JText::_( 'Eigenschaften der Zielranggruppe weichen ab', true ), 'warning');
+		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+	}
+
+	$nn = 0;
 	if ($n > 0)
 	{
 		foreach ($cid as $id)
 		{
 			if ($table->load( (int)$id )) {
 	
+				$query = "SELECT * FROM  #__clm_rangliste_id "
+					." WHERE sid = ".$table->sid
+					." AND zps = '".$table->zps."'"
+					." AND gid = ".$tgid
+					;
+				$rangfolge = clm_core::$db->loadObjectList($query);	
+				if (is_null($rangfolge) OR count($rangfolge) > 0) {
+					$mainframe->enqueueMessage(JText::_( 'Zielrangfolge existiert bereits', true ), 'warning');
+					continue;
+				}
 				$table->id			= 0;
 				$table->published		= 0;
+				$qugid		= $table->gid;
+				$table->gid		= $tgid;
 
 				if (!$table->store()) {	
 					$mainframe->enqueueMessage($table->getError(), 'warning');
 					$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 				}
+				$nn++;
+				$query = "SELECT * FROM  #__clm_rangliste_spieler "
+					." WHERE sid = ".$table->sid
+					." AND ZPS = '".$table->zps."'"
+					." AND Gruppe = ".$qugid
+					;
+				$rangfolge = clm_core::$db->loadObjectList($query);	
+				foreach ($rangfolge as $rf) {
+					if (is_null($rf->gesperrt)) $rf->gesperrt = 0;
+					$query = " REPLACE INTO #__clm_rangliste_spieler "
+						." (`Gruppe`, `ZPS`, `ZPSmgl`, `Mgl_Nr`, `PKZ`, `Rang`, `man_nr`, `sid`, `gesperrt`) "
+						." VALUES ('$tgid','$rf->ZPS','$rf->ZPSmgl','$rf->Mgl_Nr','$rf->PKZ','$rf->Rang','$rf->man_nr','$rf->sid','$rf->gesperrt') "
+						;
+					clm_core::$db->query($query);
+				}
+
 			} else {	
 				$mainframe->enqueueMessage($table->getError(), 'warning');
 				$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
@@ -968,19 +1071,19 @@ function copy()
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
-	if ($n >1) { $msg=JText::_( 'RANGLISTE_MSG_COPY_ENTRYS');}
+	if ($nn == 0) { $msg=JText::_( 'Rangfolge nicht kopiert');}
+	elseif ($nn > 1) { $msg=JText::_( 'RANGLISTE_MSG_COPY_ENTRYS');}
 		else {$msg=JText::_( 'RANGLISTE_MSG_COPY_ENTRY');}
 	
 	// Log schreiben
 	$clmLog = new CLMLog();
 	$clmLog->aktion = JText::_( 'RANGLISTE_LOG_COPIED');
-	$table		= &JTable::getInstance( 'ranglisten', 'TableCLM');
+	$table		= JTable::getInstance( 'ranglisten', 'TableCLM');
 	$table->load($cid[0]);
 	$clmLog->params = array('sid' => $table->sid, 'lid' => $lid, 'zps' => $table->zps, 'cids' => implode( ',', $cid ));
 	$clmLog->write();
 	
-	$mainframe->enqueueMessage($n.$msg, 'message');
+	$mainframe->enqueueMessage($nn.' '.$msg, 'message');
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
-	}
 	}
 }

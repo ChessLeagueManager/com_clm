@@ -119,6 +119,10 @@ class CLMControllerMTurniere extends JControllerLegacy
 	$lists['saison']= JHtml::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1"','sid', 'name', $row->sid );
 	// Rangliste
 	$query = " SELECT id, Gruppe FROM #__clm_rangliste_name ";
+	if ($row->sid > 0)
+		$query .= " WHERE sid = ".$row->sid;
+	else
+		$query .= " WHERE sid = ".clm_core::$access->getSeason();
 	$db->setQuery($query);
 	if (!clm_core::$db->query($query)) { 
 		$mainframe->enqueueMessage($row->getErrorMsg(), 'warning');
@@ -318,9 +322,9 @@ function saveIt($apply=false)
 			if ($x < 10) $man_nr = $liga_man.'0'.$x; else $man_nr = $liga_man.$x;
 			$query = " INSERT INTO #__clm_mannschaften "
 				." (`sid`,`name`,`liga`,`zps`,`liste`,`edit_liste`,`man_nr`,`tln_nr`,`mf` "
-				." ,`sg_zps`,`datum`,`edit_datum`,`lokal`,`bemerkungen`,`bem_int`,`published`,`checked_out_time`) "
+				." ,`sg_zps`,`datum`,`edit_datum`,`lokal`,`bemerkungen`,`bem_int`,`published`,`checked_out`,`checked_out_time`) "
 				." VALUES ('$sid','$man_name','$liga_man','1','0','0','$man_nr','$x','0' "
-				." ,'','1970-01-01 00:00:00','1970-01-01 00:00:00','','','','$publish','1970-01-01 00:00:00') "
+				." ,'','1970-01-01 00:00:00','1970-01-01 00:00:00','','','','$publish',NULL,NULL) "
 				;
 			$db->setQuery($query);
 			clm_core::$db->query($query);

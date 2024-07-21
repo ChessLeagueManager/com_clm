@@ -276,6 +276,10 @@ static function nachmeldung()
 	$PKZ		= clm_core::$load->request_string('PKZ');
 	$dwz 		= clm_core::$load->request_int('dwz', 0);
 	$dwz_index 	= clm_core::$load->request_int('dwz_index', 0);
+	$FIDE_Elo 	= clm_core::$load->request_int('FIDE_Elo', 0);
+	$FIDE_ID 	= clm_core::$load->request_int('FIDE_ID', 0);
+	$FIDE_Titel	= clm_core::$load->request_string('FIDE_Titel', '');
+	$FIDE_Land 	= clm_core::$load->request_string('FIDE_Land', '');
 	$geschlecht	= clm_core::$load->request_string('geschlecht');
 	$geburtsjahr	= clm_core::$load->request_string('geburtsjahr');
 	$zps		= clm_core::$load->request_string('zps');
@@ -314,7 +318,7 @@ static function nachmeldung()
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link );
 		}
-		if($mgl_exist[0]->Mgl_Nr !="") {
+		if(isset($mgl_exist[0]) AND $mgl_exist[0]->Mgl_Nr !="") {
 			$mainframe->enqueueMessage( JText::_( 'DWZ_EXISTIERT' ), 'warning' );
 			$mainframe->enqueueMessage( JText::_( 'DWZ_DATEN_AENDERN' ), 'notice' );
 			$link = 'index.php?option='.$option.'&section='.$section;
@@ -347,16 +351,32 @@ static function nachmeldung()
 	if ($geschlecht == '0') $geschlecht = 'M';
 
 	$query	= "INSERT INTO #__clm_dwz_spieler"
-		." ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Status`, `Spielername`, `Geschlecht`, `Geburtsjahr` , `joiningdate`, `leavingdate`, `DWZ`, `DWZ_Index` ) "
+		." ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Status`, `Spielername`, `Geschlecht`, `Geburtsjahr` , `joiningdate`, `leavingdate`, `DWZ`, `DWZ_Index` , `FIDE_Elo`, `FIDE_ID`, `FIDE_Titel`, `FIDE_Land` ) "
 		." VALUES ('".clm_escape($sid)."','".clm_escape($zps)."','".clm_escape($mglnr)."','".clm_escape($PKZ)."','".clm_escape($status)."','".clm_escape($name)."','"
 		.clm_escape($geschlecht)."','".clm_escape($geburtsjahr)."','".$joiningdate."','".$leavingdate."'";
 	if (!is_numeric($dwz) OR ($dwz == 0))
-		$query	.= " , NULL, NULL)";
+		$query	.= " , NULL, NULL ";
 	elseif (!is_numeric($dwz_index) OR ($dwz_index == 0))
-		$query	.= " , NULL, NULL)";
+		$query	.= " , NULL, NULL ";
 	else 
-		$query	.= " , $dwz, $dwz_index )";
-
+		$query	.= " , $dwz, $dwz_index ";
+	if (!is_numeric($FIDE_Elo) OR ($FIDE_Elo == 0))
+		$query	.= " ,NULL ";
+	else 
+		$query	.= " , $FIDE_Elo ";
+	if (!is_numeric($FIDE_ID) OR ($FIDE_ID == 0))
+		$query	.= " ,NULL ";
+	else 
+		$query	.= " , $FIDE_ID ";
+	if ($FIDE_Titel == '')
+		$query	.= " ,NULL ";
+	else 
+		$query	.= " , '$FIDE_Titel' ";
+	if ($FIDE_Land == '')
+		$query	.= " ,NULL ";
+	else 
+		$query	.= " , '$FIDE_Land' ";
+	$query	.= " )";
 	clm_core::$db->query($query);
 
 	// Log schreiben
@@ -391,6 +411,10 @@ static function daten_edit()
 	$PKZ		= clm_core::$load->request_string('PKZ');
 	$dwz 		= clm_core::$load->request_int('dwz', 0);
 	$dwz_index 	= clm_core::$load->request_int('dwz_index', 0);
+	$FIDE_Elo 	= clm_core::$load->request_int('FIDE_Elo', 0);
+	$FIDE_ID 	= clm_core::$load->request_int('FIDE_ID', 0);
+	$FIDE_Titel	= clm_core::$load->request_string('FIDE_Titel', '');
+	$FIDE_Land 	= clm_core::$load->request_string('FIDE_Land', '');
 	$geschlecht	= clm_core::$load->request_string('geschlecht');
 	$geburtsjahr	= clm_core::$load->request_string('geburtsjahr');
 	$zps		= clm_core::$load->request_string('zps');
@@ -459,6 +483,22 @@ static function daten_edit()
 	else 
 		$query	.= " , DWZ = $dwz "
 			." , DWZ_Index = $dwz_index ";
+	if (!is_numeric($FIDE_Elo) OR ($FIDE_Elo == 0))
+		$query	.= " , FIDE_Elo = NULL ";
+	else 
+		$query	.= " , FIDE_Elo = $FIDE_Elo ";
+	if (!is_numeric($FIDE_ID) OR ($FIDE_ID == 0))
+		$query	.= " , FIDE_ID = NULL ";
+	else 
+		$query	.= " , FIDE_ID = $FIDE_ID ";
+	if ($FIDE_Titel == '')
+		$query	.= " , FIDE_Titel = NULL ";
+	else 
+		$query	.= " , FIDE_Titel = '$FIDE_Titel' ";
+	if ($FIDE_Land == '')
+		$query	.= " , FIDE_Land = NULL ";
+	else 
+		$query	.= " , FIDE_Land = '$FIDE_Land' ";
 	$query	.= " , Geschlecht = '".clm_escape($geschlecht)."' ";
 	if (!is_numeric($geburtsjahr) OR ($geburtsjahr == 0))
 		$query	.= " , Geburtsjahr = '0000' ";

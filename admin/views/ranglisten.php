@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -59,7 +59,9 @@ public static function Ranglisten ( &$rows, &$lists, &$pageNav, $option )
 			<td nowrap="nowrap">
 				<?php
 		// eigenes Dropdown Menue
-			echo "&nbsp;&nbsp;&nbsp;".$lists['sid'];
+			echo $lists['tgid'];
+			echo "&nbsp;&nbsp;&nbsp;"."&nbsp;&nbsp;&nbsp;"."&nbsp;&nbsp;&nbsp;"."&nbsp;&nbsp;&nbsp;"."&nbsp;&nbsp;&nbsp;"."&nbsp;&nbsp;&nbsp;".$lists['sid'];
+			echo "&nbsp;&nbsp;&nbsp;".$lists['gid'];
 			echo "&nbsp;&nbsp;&nbsp;".$lists['vid'];
 			?>
 			</td>
@@ -201,7 +203,7 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 	CLMViewRanglisten::setRanglisteToolbar($vname);
 
 	JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
-
+	$anz_sgp = $lists['anz_sgp'];
 	clm_core::$load->load_js("ranglisten");
 	$s_error = 0;
 	// Auswahlfelder durchsuchbar machen
@@ -268,14 +270,46 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 			</td>
 		</tr>
 
+		<?php if ($anz_sgp > 0) { ?>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="filter_sg_vid"><?php echo JText::_( 'RANGLISTE_VEREIN2' ).' : '; ?></label>
+			<td class="key" nowrap="nowrap"><label for="sg_vid"><?php echo JText::_( 'RANGLISTE_VEREIN2' ).' : '; ?></label>
 			</td>
 			<td>
-			<?php if (clm_core::$load->request_string( 'task') == 'edit' ) { echo $sg_vname; }
-				else { echo $lists['sg_vid']; } ?>
+			<?php if (clm_core::$load->request_string( 'task') == 'edit' ) { if (isset($sg_vname[1])) echo $sg_vname[1]; else echo ''; }
+				else { echo $lists['sg_vid1']; } ?>
 			</td>
 		</tr>
+		<?php } ?>
+		<?php if ($anz_sgp > 1) { ?>
+		<tr>
+			<td class="key" nowrap="nowrap"><label for="sg_vid"><?php echo JText::_( 'RANGLISTE_VEREIN2' ).' : '; ?></label>
+			</td>
+			<td>
+			<?php if (clm_core::$load->request_string( 'task') == 'edit' ) { if (isset($sg_vname[2])) echo $sg_vname[2]; else echo ''; }
+				else { echo $lists['sg_vid2']; } ?>
+			</td>
+		</tr>
+		<?php } ?>
+		<?php if ($anz_sgp > 2) { ?>
+		<tr>
+			<td class="key" nowrap="nowrap"><label for="sg_vid"><?php echo JText::_( 'RANGLISTE_VEREIN2' ).' : '; ?></label>
+			</td>
+			<td>
+			<?php if (clm_core::$load->request_string( 'task') == 'edit' ) { if (isset($sg_vname[3])) echo $sg_vname[3]; else echo ''; }
+				else { echo $lists['sg_vid3']; } ?>
+			</td>
+		</tr>
+		<?php } ?>
+		<?php if ($anz_sgp > 3) { ?>
+		<tr>
+			<td class="key" nowrap="nowrap"><label for="sg_vid"><?php echo JText::_( 'RANGLISTE_VEREIN2' ).' : '; ?></label>
+			</td>
+			<td>
+			<?php if (clm_core::$load->request_string( 'task') == 'edit' ) { if (isset($sg_vname[4])) echo $sg_vname[4]; else echo ''; }
+				else { echo $lists['sg_vid4']; } ?>
+			</td>
+		</tr>
+		<?php } ?>
 
 		<tr>
 			<td class="key" nowrap="nowrap"><label for="filter_sid"><?php echo JText::_( 'RANGLISTE_SAISON' ).' : '; ?></label>
