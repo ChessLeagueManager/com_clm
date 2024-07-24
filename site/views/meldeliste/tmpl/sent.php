@@ -106,7 +106,7 @@ if(is_null($lokal_coord) or $lokal_coord==-1){
 }
 else
 {
-	$geo_query = " , lokal_coord = ST_GeomFromPoint('$lokal_coord')";
+	$geo_query = " , lokal_coord = ST_GeomFromText('$lokal_coord')";
 }
 // Datensätze in Meldelistentabelle schreiben
 	$query	= "UPDATE #__clm_mannschaften"
