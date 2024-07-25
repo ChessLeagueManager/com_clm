@@ -182,47 +182,54 @@ function geo(){
 	$table		=JTable::getInstance('mannschaften', 'TableCLM');
 	$user		= JFactory::getUser();
 	$n		= count( $cid );
+	$clm_config = clm_core::$db->config();
 	$unsuccessArray = array();
 	$addressHandler = new AddressHandler();
 
-	if ($n > 0) {
-		foreach ($cid as $id) {
-			if ($table->load( (int)$id )) {
-				$lokal_coord = $addressHandler->convertAddress($table->lokal);
+	if(!$clm_config->googlemaps){
+		$mainframe->enqueueMessage( JText::_('MANNSCHAFT_GEO_OFF'), 'warning' );
+		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+	} 
+	else{
+		if ($n > 0) {
+			foreach ($cid as $id) {
+				if ($table->load( (int)$id )) {
+					$lokal_coord = $addressHandler->convertAddress($table->lokal);
 
-				if(is_null($lokal_coord)||$lokal_coord==-1){
-					$unsuccessArray[] = $table->name;
+					if(is_null($lokal_coord)||$lokal_coord==-1){
+						$unsuccessArray[] = $table->name;
 
+					}
+					else{
+						$addressHandler->updateTeamCoordinates($lokal_coord, $table->id);
+					}
+				} else {
+					$mainframe->enqueueMessage( $table->getError(), 'error' );
+					$link = 'index.php?option='.$option.'&section='.$section;
+					$mainframe->redirect( $link);
 				}
-				else{
-					$addressHandler->updateTeamCoordinates($lokal_coord, $table->id);
-				}
-			} else {
-				$mainframe->enqueueMessage( $table->getError(), 'error' );
-				$link = 'index.php?option='.$option.'&section='.$section;
-				$mainframe->redirect( $link);
 			}
+		} else {
+			$mainframe->enqueueMessage( JText::_( 'MANNSCHAFTEN_SELECT' ), 'warning' );
+			$link = 'index.php?option='.$option.'&section='.$section;
+			$mainframe->redirect( $link);
 		}
-	} else {
-		$mainframe->enqueueMessage( JText::_( 'MANNSCHAFTEN_SELECT' ), 'warning' );
-		$link = 'index.php?option='.$option.'&section='.$section;
-		$mainframe->redirect( $link);
-	}
 
-	$msg=($n-count($unsuccessArray)) . "/" . $n . JText::_('MANNSCHAFT_GEO_UPDATE') . "!<br>";
-	if(count($unsuccessArray)>0){
-		$msg = $msg . JText::_('MANNSCHAFT_GEO_FAILURE') . implode("<br>", $unsuccessArray);
+		$msg=($n-count($unsuccessArray)) . "/" . $n . " " . JText::_('MANNSCHAFT_GEO_UPDATE') . "!<br>";
+		if(count($unsuccessArray)>0){
+			$msg = $msg . JText::_('MANNSCHAFT_GEO_FAILURE') . implode("<br>", $unsuccessArray);
+		}
+		
+		// Log schreiben
+		$clmLog = new CLMLog();
+		$clmLog->aktion = "Geodaten geupdated";
+		$clmLog->params = array('rnd' => $cid[0], 'cids' => implode( ',', $cid ));
+		$clmLog->write();
+		
+		$this->setMessage( JText::_( $msg ) );
+		$mainframe->enqueueMessage( JText::_( $msg ) );
+		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
-	
-	// Log schreiben
-	$clmLog = new CLMLog();
-	$clmLog->aktion = "Geodaten geupdated";
-	$clmLog->params = array('rnd' => $cid[0], 'cids' => implode( ',', $cid ));
-	$clmLog->write();
-	
-	$this->setMessage( JText::_( $msg ) );
-	$mainframe->enqueueMessage( JText::_( $msg ) );
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 }
 
 function edit()
@@ -528,7 +535,7 @@ function save()
 		$lokal_coord = $addressHandler->convertAddress($row->lokal);
 		$addressHandler->updateTeamCoordinates($lokal_coord, $row->id);
 
-		if(is_null($lokal_coord)||$lokal_coord==-1){
+		if(is_null($lokal_coord)){
 			$mainframe->enqueueMessage(JTEXT::_('WARNING_ADDRESS_LOOKUP'), 'warning');
 		}
 	}
