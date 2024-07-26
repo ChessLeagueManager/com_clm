@@ -21,6 +21,8 @@ $ -> Language fix or change
 # Benutzerverwaltung: Textanpassung bei Accountdaten
 # Bugfix Tabelleneinträge sortieren
 # Bugfix Kontrollroutine Spieler löschen
++ Admin View Rangfolgen: neu Auswahlfeld Ranggruppe
++ Admin View Rangfolgen: neu Kopieren nach Zielranggruppe
 
 - - - - - 4.2.0 - [17-06-2024] - - - - - - - - - - - - - - - - - - - -
 - - - - - 4.1.6 - [08-06-2024] - - - - - - - - - - - - - - - - - - - -
