@@ -23,6 +23,7 @@ $ -> Language fix or change
 # Bugfix Kontrollroutine Spieler löschen
 + Admin View Rangfolgen: neu Auswahlfeld Ranggruppe
 + Admin View Rangfolgen: neu Kopieren nach Zielranggruppe
+# Admin View Rangfolgegruppe: Anzeige User
 
 - - - - - 4.2.0 - [17-06-2024] - - - - - - - - - - - - - - - - - - - -
 - - - - - 4.1.6 - [08-06-2024] - - - - - - - - - - - - - - - - - - - -
