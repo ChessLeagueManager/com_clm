@@ -35,6 +35,7 @@ if(isset($liga[0])){
 }
 
 $punkte		= $this->punkte;
+if (is_null($punkte[0]->mp) OR $punkte[0]->mp == 0) $s_tln = 1; else $s_tln = 0;
 $spielfrei	= $this->spielfrei;
 
 if(isset($liga[0])){
@@ -141,6 +142,9 @@ elseif (!$liga OR $liga[0]->published == 0) {
 	<table cellpadding="0" cellspacing="0" class="rangliste">
 		<tr>
 			<th class="rang"><div><?php echo JText::_('RANG') ?></div></th>
+			<?php if ($s_tln == 1) { ?>
+				<th class="rang"><div><?php echo JText::_('TLN') ?></div></th>
+			<?php } ?>
 			<th class="team"><div><?php echo JText::_('TEAM') ?></div></th>
 				
 			<th class="gsrv"><div><?php echo JText::_('TABELLE_GAMES_PLAYED') ?></div></th>
@@ -200,7 +204,9 @@ elseif (!$liga OR $liga[0]->published == 0) {
 			
 //				echo '<td class="'.$class.'">'.($x+1).'</td>';
 				echo '<td class="'.$class.'">'.$punkte[$x]->rankingpos.'</td>';
-			
+				if ($s_tln == 1) { 
+					echo '<td class="rang">'.$punkte[$x]->tln_nr.'</td>';
+				}
 				echo '<td class="team">';
 			
 					if ($punkte[$x]->published == 1) {

@@ -24,6 +24,8 @@ $ -> Language fix or change
 + Admin View Rangfolgen: neu Auswahlfeld Ranggruppe
 + Admin View Rangfolgen: neu Kopieren nach Zielranggruppe
 # Admin View Rangfolgegruppe: Anzeige User
+^ Teamwettbewerbe Rangliste und Tabelle: Minidesignanpassung zu Saisonstart
+
 
 - - - - - 4.2.0 - [17-06-2024] - - - - - - - - - - - - - - - - - - - -
 - - - - - 4.1.6 - [08-06-2024] - - - - - - - - - - - - - - - - - - - -
