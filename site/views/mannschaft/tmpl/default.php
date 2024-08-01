@@ -605,9 +605,8 @@ for ($x=0; $x< 100; $x++){
 	if ( ($mannschaft[0]->lokal ==! false) and (($googlemaps_msch == "3") || ($googlemaps_msch == "1"))  and ($googlemaps == "1") ) { ?>
 	<h4><?php echo JText::_('OSM_MAPS') ?></h4>
     <?php 
-	$coordinates = getCoordinates($mannschaft[0]->lokal); //Get Coordinates from Address
-	$lat = $coordinates[0];
-	$lon = $coordinates[1];
+		$lat = $mannschaft[0]->lokal_coord_lat;
+		$lon = $mannschaft[0]->lokal_coord_long;
 	if ($spiellokal1G[0] ==! false ) $loc_text = $spiellokal1G[0]; else $loc_text = '';
 	if (isset($spiellokal1G[1])) $loc_text .= '<br>'.$spiellokal1G[1]; 
 	if (isset($spiellokal1G[2])) $loc_text .= '<br>'.$spiellokal1G[2]; 
@@ -636,7 +635,7 @@ for ($x=0; $x< 100; $x++){
 		var Lat=<?php printf( '%0.7f', $lat ); ?>;
 		var Lon=<?php printf( '%0.7f', $lon ); ?>;
 		if (Lat == 0 && Lon == 0) {
-			console.log("Die Adresse des Spiellokals wird nicht gefunden.");
+			console.log("Zu dieser Adresse sind keine Koordinaten hinterlegt.");
 			document.getElementById('mapdiv1').innerHTML = "Die Adresse des Spiellokals wird nicht gefunden.<br>Vielleicht entspricht die Angabe nicht der Vorgabe " + "<?php echo $error_text; ?>" + "<br><br>" + '<?php echo $loc_text; ?>';
 		} else {
 			<?php if ($googlemaps_msch == 1) {?>

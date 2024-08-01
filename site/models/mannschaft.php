@@ -12,6 +12,8 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
+require_once JPATH_COMPONENT_ADMINISTRATOR. '/helpers/addresshandler.php';
+
 class CLMModelMannschaft extends JModelLegacy
 {
 
@@ -24,7 +26,7 @@ class CLMModelMannschaft extends JModelLegacy
 		$db			= JFactory::getDBO();
 //		$id			= @$options['id'];
  
-		$query = "SELECT a.zps,a.sg_zps,u.name as mf_name,u.email as email, "
+		$query = "SELECT a.zps,a.sg_zps,u.name as mf_name,u.email as email, ST_AsText(a.lokal_coord) as lokal_coord_text, "
 			." u.tel_mobil,u.tel_fest, l.durchgang as dg, l.rang as lrang, l.params, l.stamm, "
 			." l.name as liga_name, l.runden as runden, l.published as lpublished, l.anzeige_ma as anzeige_ma, a.* "
 			." FROM #__clm_mannschaften as a "
@@ -43,6 +45,8 @@ class CLMModelMannschaft extends JModelLegacy
 	{
 		$query	= $this->_getCLMMannschaft( $options );
 		$result = $this->_getList( $query );
+		$addressHandler = new AddressHandler();
+		$addressHandler->queryLocation($result,0);
 		return @$result;
 	}
 
@@ -138,7 +142,7 @@ class CLMModelMannschaft extends JModelLegacy
 			." AND a.lid = ".$liga
 			." AND a.zps != '' "
 			." ORDER BY a.mnr ASC, a.snr ASC ";
-	  } else {	//Schulschach u.ä.
+	  } else {	//Schulschach u.ï¿½.
 		$zps = "-1";
 		$query = " SELECT a.start_dwz,a.mgl_nr,a.zps,a.PKZ,a.attr, d.Spielername as name,d.DWZ as dwz,d.FIDE_Titel "
 			." FROM #__clm_meldeliste_spieler as a ";

@@ -29,6 +29,8 @@ public static function setMannschaftenToolbar()
 		JToolBarHelper::deleteList();
 		JToolBarHelper::editList();
 		JToolBarHelper::addNew();
+		JToolBarHelper::custom('geo','edit.png','delete_f2.png','MANNSCHAFT_BUTTON_GEO');
+
 		}
 		JToolBarHelper::help( 'screen.clm.mannschaft' );
 	}

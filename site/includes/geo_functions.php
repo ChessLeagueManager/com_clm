@@ -128,8 +128,8 @@ function getCoordinatesFromOSM($address)
         'http'=>array(
         'method'=>"GET",
         'header'=>"Accept-language: en\r\n" .
-                    "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36\r\n"
-        ));
+            "User-Agent: Test-Developer\r\n"
+    ));
 
     
     $userAgent = stream_context_create($options);     

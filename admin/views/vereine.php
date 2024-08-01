@@ -35,6 +35,7 @@ public static function setVereineToolbar()
 	if($clmAccess->access('BE_club_edit_member') === true) {
 	//if (clm_core::$access->getType() === 'admin' OR clm_core::$access->getType() === 'dv' OR clm_core::$access->getType() === 'dwz') {
 		JToolBarHelper::custom('dwz','list.png','list_f2.png','VEREIN_BUTTON_MEMBER_EDIT');
+
 	}
 	if($clmAccess->access('BE_club_general') === true) {
 		JToolBarHelper::publishList();
@@ -45,6 +46,7 @@ public static function setVereineToolbar()
 		JToolBarHelper::custom('remove','delete.png','delete_f2.png','VEREIN_BUTTON_DEL');
 		JToolBarHelper::editList();
 		JToolBarHelper::custom('add','new.png','new_f2.png','VEREIN_BUTTON_NEW',false);
+		JToolBarHelper::custom('geo','edit.png','delete_f2.png','VEREIN_BUTTON_GEO');
 	}
 		JToolBarHelper::help( 'screen.clm.verein' );
 	}
