@@ -13,11 +13,15 @@ defined('_JEXEC') or die('Restricted access');
 
 	$mainframe	= JFactory::getApplication();
 
+// Include the AddressHandler class
+require_once JPATH_COMPONENT_ADMINISTRATOR. '/helpers/addresshandler.php';
+
 // Variablen holen
 $sid 		= clm_core::$load->request_int('saison');
 $zps 		= clm_core::$load->request_string('zps');
 $name 		= clm_core::$load->request_string('name');
 $new 		= clm_core::$load->request_string('new');
+$config = clm_core::$db->config();
 
 // Variablen initialisieren
 $clmuser 	= $this->clmuser;
@@ -25,7 +29,6 @@ $row 		= $this->row;
 
 $user =JFactory::getUser();
 	$link = JURI::base() .'index.php?option=com_clm&view=verein&saison='. $sid .'&zps='. $zps;
-
 // Login Status prüfen
 if (!$user->get('id')) {
 	$msg = JText::_( 'CLUB_DATA_SENT_LOGIN' );
@@ -76,8 +79,23 @@ $sw_tel		= clm_core::$load->request_string('sw_tel');
 
 // Vereinsdaten exisitieren
 if ($new < 1) {
+	// Create instance of AddressHandler
+	$addressHandler = new AddressHandler();
+	$lokal_coord = $addressHandler->convertAddress($lokal);
+	if(is_null($lokal_coord)||$lokal_coord == -1){
+		$geo_query = " , lokal_coord = null";
+		$lokal_coord = null;
+		if($config->googlemaps)//Only output a message if geo service is enabled
+		{
+			$mainframe->enqueueMessage( JText::_( 'CLUB_DATA_GEO_WARNING' ), 'warning' );
+		}
+	}
+	else{
+		$geo_query = " , lokal_coord = ST_GeomFromText('$lokal_coord')";
+	}
 	$query	= "UPDATE #__clm_vereine"
 		." SET lokal = '$lokal' "
+		." $geo_query "
 		." , homepage = '$homepage' "
 		." , adresse = '$adresse' "
 		." , termine = '$termine' "
@@ -107,7 +125,7 @@ if ($new < 1) {
 // Vereinsdaten exisitieren NICHT
 else {
 	$query	= "INSERT INTO #__clm_vereine "
-		." ( `name`, `sid`, `zps`, `vl`, `lokal`, `homepage`, `adresse`, "
+		." ( `name`, `sid`, `zps`, `vl`, `lokal`, `lokal_coord`, `homepage`, `adresse`, "
 		." `vs`, `vs_mail`, `vs_tel`, `tl`, `tl_mail`, `tl_tel`, "
 		." `jw`, `jw_mail`, `jw_tel`, `pw`, `pw_mail`, `pw_tel`, "
 		." `kw`, `kw_mail`, `kw_tel`, `sw`, `sw_mail`, `sw_tel`, `termine`,`published` ) "

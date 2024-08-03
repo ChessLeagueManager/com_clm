@@ -12,6 +12,8 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
+require_once JPATH_COMPONENT_ADMINISTRATOR. '/helpers/addresshandler.php';
+
 class CLMModelVerein extends JModelLegacy
 {
 	function _getCLMVereinstats( &$options )
@@ -23,7 +25,7 @@ class CLMModelVerein extends JModelLegacy
  
 	$query = " SELECT a.ZPS, a.sid, a.Geschlecht, a.DWZ, a.FIDE_Elo, a.FIDE_ID,"
 		." COUNT(Geschlecht) as Mgl,"
-		." COUNT(case Geschlecht when 'M' then 1 else NULL end) as Mgl_m," // Männliche Mitglieder
+		." COUNT(case Geschlecht when 'M' then 1 else NULL end) as Mgl_m," // MÃ¤nnliche Mitglieder
 		." COUNT(case Geschlecht when 'W' then 1 when 'F' then 1 else NULL end) as Mgl_w," // Weibliche Miglieder
 		." avg(case DWZ when 0 then NULL else DWZ end) as DWZ," // DWZ Durchschnitt
 		." avg(case FIDE_Elo when 0 then NULL else FIDE_Elo end) as FIDE_Elo," // ELO Durchschnitt
@@ -52,7 +54,7 @@ class CLMModelVerein extends JModelLegacy
 	$db	= JFactory::getDBO();
 //	$id	= @$options['id'];
  
-	$query = " SELECT a.* "
+	$query = " SELECT a.*, ST_AsText(a.lokal_coord) as lokal_coord_text"
 		." FROM #__clm_vereine as a "
 		." WHERE a.zps = '$zps'"
 		." AND a.sid = ".$sid
@@ -61,10 +63,15 @@ class CLMModelVerein extends JModelLegacy
 	return $query;
 	}
 
+
+
 	function getCLMVerein( $options=array() )
 	{
 	$query	= $this->_getCLMVerein( $options );
 	$result = $this->_getList( $query );
+	//Adress Handling
+	$addressHandler = new AddressHandler();
+	$addressHandler->queryLocation($result,1);
 	return @$result;
 	}
 
@@ -209,7 +216,7 @@ class CLMModelVerein extends JModelLegacy
 		return @$result;
 	}
 
-////// Prüfen ob User berechtigt ist Daten zu ändern ///////////////////////////////////
+////// PrÃ¼fen ob User berechtigt ist Daten zu Ã¤ndern ///////////////////////////////////
 	function _getCLMClmuser ( &$options )
 	{
 	$user =JFactory::getUser();

@@ -11,6 +11,8 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+// Include the AddressHandler class
+require_once JPATH_COMPONENT_ADMINISTRATOR. '/helpers/addresshandler.php';
 
 class CLMControllerVereine extends JControllerLegacy
 {
@@ -128,6 +130,68 @@ function display($cachable = false, $urlparams = array())
 	$lists['search']= $search;
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'vereine.php');
 	CLMViewVereine::vereine ( $rows, $lists, $pageNav, $option );
+}
+
+function geo(){
+	$mainframe	= JFactory::getApplication();
+	// Check for request forgeries
+	defined('clm') or die( 'Invalid Token' );
+	$option 	= clm_core::$load->request_string('option');
+	$section	= clm_core::$load->request_string('section');
+	$this->setRedirect( 'index.php?option='.$option.'&section='.$section );
+	$cid		= clm_core::$load->request_array_int( 'cid');
+	$db		=JFactory::getDBO();
+	$table		=JTable::getInstance('vereine', 'TableCLM');
+	$user		= JFactory::getUser();
+	$n		= count( $cid );
+	$clm_config = clm_core::$db->config();
+	$unsuccessArray = array();
+	$addressHandler = new AddressHandler();
+	
+	if(!$clm_config->googlemaps){
+		$mainframe->enqueueMessage( JText::_('VEREINE_GEO_OFF'), 'warning' );
+		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+	} 
+	else{
+		if ($n > 0) {
+			foreach ($cid as $id) {
+				if ($table->load( (int)$id )) {
+					$lokal_coord = $addressHandler->convertAddress($table->lokal);
+
+					if(is_null($lokal_coord)||$lokal_coord==-1){
+						$unsuccessArray[] = $table->name;
+
+					}
+					else{
+						$addressHandler->updateClubCoordinates($lokal_coord, $table->id);
+					}
+				} else {
+					$mainframe->enqueueMessage( $table->getError(), 'error' );
+					$link = 'index.php?option='.$option.'&section='.$section;
+					$mainframe->redirect( $link);
+				}
+			}
+		} else {
+			$mainframe->enqueueMessage( JText::_( 'VEREINE_NO_ITEMS' ), 'warning' );
+			$link = 'index.php?option='.$option.'&section='.$section;
+			$mainframe->redirect( $link);
+		}
+
+		$msg=($n-count($unsuccessArray)) . "/" . $n . " " . JText::_('VEREINE_GEO_UPDATE') . "!<br>";
+		if(count($unsuccessArray)>0){
+			$msg = $msg . JText::_('VEREINE_GEO_FAILURE') . implode("<br>", $unsuccessArray);
+		}
+		
+		// Log schreiben
+		$clmLog = new CLMLog();
+		$clmLog->aktion = "Geodaten geupdated";
+		$clmLog->params = array('rnd' => $cid[0], 'cids' => implode( ',', $cid ));
+		$clmLog->write();
+		
+		$this->setMessage( JText::_( $msg ) );
+		$mainframe->enqueueMessage( JText::_( $msg ) );
+		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+	}
 }
 
 function edit()
@@ -288,6 +352,16 @@ function save()
 		$mainframe->enqueueMessage($row->getError(), 'error');
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect($link);
+	}
+	else{
+		//Geometry points need to be safed manually		
+		$addressHandler = new AddressHandler();
+		$lokal_coord = $addressHandler->convertAddress($row->lokal);
+		$addressHandler->updateClubCoordinates($lokal_coord, $row->id);
+
+		if(is_null($lokal_coord)){
+			$mainframe->enqueueMessage(JTEXT::_('WARNING_ADDRESS_LOOKUP'), 'warning');
+		}
 	}
 	
 

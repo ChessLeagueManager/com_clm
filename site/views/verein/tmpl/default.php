@@ -63,7 +63,7 @@ if (isset($verein[0])) {
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
-// Load functions for map and address lookup
+// Load functions for map
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'geo_functions.php');
 
 echo '<div ><div id="verein">';
@@ -218,9 +218,8 @@ if ($conf_vereinsdaten == 1) {
 	if ( ($verein[0]->lokal ==! false) and (($googlemaps_ver == "3") || ($googlemaps_ver == "1")) and ($googlemaps == "1") ) { ?>
 	<tr><td>
 		<?php
-		$coordinates = getCoordinates($verein[0]->lokal);
-		$lat = $coordinates[0];
-		$lon = $coordinates[1];
+		$lat = $verein[0]->lokal_coord_lat;
+		$lon = $verein[0]->lokal_coord_long;
 		if ($spiellokal1G[0] ==! false ) $loc_text = $spiellokal1G[0]; else $loc_text = '';
 		if (isset($spiellokal1G[1])) $loc_text .= '<br>'.$spiellokal1G[1]; 
 		if (isset($spiellokal1G[2])) $loc_text .= '<br>'.$spiellokal1G[2]; 
@@ -248,7 +247,7 @@ if ($conf_vereinsdaten == 1) {
 		var Lat=<?php printf( '%0.7f', $lat ); ?>;
 		var Lon=<?php printf( '%0.7f', $lon ); ?>;
 		if (Lat == 0 && Lon == 0) {
-			console.log("Die Adresse des Spiellokals wird nicht gefunden.");
+			console.log("Zu dieser Adresse sind keine Koordinaten hinterlegt.");
 			document.getElementById('mapdiv1').innerHTML = "Die Adresse des Spiellokals wird nicht gefunden.<br>Vielleicht entspricht die Angabe nicht der Vorgabe " + "<?php echo $error_text; ?>" + "<br><br>" + '<?php echo $loc_text; ?>';
 		} else {
 			<?php if ($googlemaps_ver == 1) {?>
