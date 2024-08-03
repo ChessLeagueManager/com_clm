@@ -141,7 +141,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
         $google_address = $spiellokal1G[0].','.$spiellokal1G[1]; }
 	else $google_address = $mannschaft[0]->lokal;
 	
-// Load functions for map and address lookup
+// Load functions for map display
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'geo_functions.php');
 
 	// Userkennung holen

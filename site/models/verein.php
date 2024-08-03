@@ -25,7 +25,7 @@ class CLMModelVerein extends JModelLegacy
  
 	$query = " SELECT a.ZPS, a.sid, a.Geschlecht, a.DWZ, a.FIDE_Elo, a.FIDE_ID,"
 		." COUNT(Geschlecht) as Mgl,"
-		." COUNT(case Geschlecht when 'M' then 1 else NULL end) as Mgl_m," // M�nnliche Mitglieder
+		." COUNT(case Geschlecht when 'M' then 1 else NULL end) as Mgl_m," // Männliche Mitglieder
 		." COUNT(case Geschlecht when 'W' then 1 when 'F' then 1 else NULL end) as Mgl_w," // Weibliche Miglieder
 		." avg(case DWZ when 0 then NULL else DWZ end) as DWZ," // DWZ Durchschnitt
 		." avg(case FIDE_Elo when 0 then NULL else FIDE_Elo end) as FIDE_Elo," // ELO Durchschnitt
@@ -216,7 +216,7 @@ class CLMModelVerein extends JModelLegacy
 		return @$result;
 	}
 
-////// Pr�fen ob User berechtigt ist Daten zu �ndern ///////////////////////////////////
+////// Prüfen ob User berechtigt ist Daten zu ändern ///////////////////////////////////
 	function _getCLMClmuser ( &$options )
 	{
 	$user =JFactory::getUser();

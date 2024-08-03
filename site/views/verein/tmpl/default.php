@@ -63,7 +63,7 @@ if (isset($verein[0])) {
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
-// Load functions for map and address lookup
+// Load functions for map
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'geo_functions.php');
 
 echo '<div ><div id="verein">';

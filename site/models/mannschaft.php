@@ -142,7 +142,7 @@ class CLMModelMannschaft extends JModelLegacy
 			." AND a.lid = ".$liga
 			." AND a.zps != '' "
 			." ORDER BY a.mnr ASC, a.snr ASC ";
-	  } else {	//Schulschach u.�.
+	  } else {	//Schulschach u.ä.
 		$zps = "-1";
 		$query = " SELECT a.start_dwz,a.mgl_nr,a.zps,a.PKZ,a.attr, d.Spielername as name,d.DWZ as dwz,d.FIDE_Titel "
 			." FROM #__clm_meldeliste_spieler as a ";
