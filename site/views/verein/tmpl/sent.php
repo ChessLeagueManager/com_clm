@@ -55,6 +55,7 @@ $db	=JFactory::getDBO();
 
 // Variablen holen
 $lokal 		= clm_core::$load->request_string('lokal');
+$lokal_coord 		= clm_core::$load->request_string('lokal_coord');
 $homepage 	= clm_core::$load->request_string('homepage');
 $adresse 	= clm_core::$load->request_string('adresse');
 $termine 	= clm_core::$load->request_string('termine');
@@ -91,7 +92,7 @@ if ($new < 1) {
 		}
 	}
 	else{
-		$geo_query = " , lokal_coord = ST_GeomFromText('$lokal_coord')";
+		$geo_query = " , lokal_coord = '$lokal_coord'";
 	}
 	$query	= "UPDATE #__clm_vereine"
 		." SET lokal = '$lokal' "
@@ -129,7 +130,7 @@ else {
 		." `vs`, `vs_mail`, `vs_tel`, `tl`, `tl_mail`, `tl_tel`, "
 		." `jw`, `jw_mail`, `jw_tel`, `pw`, `pw_mail`, `pw_tel`, "
 		." `kw`, `kw_mail`, `kw_tel`, `sw`, `sw_mail`, `sw_tel`, `termine`,`published` ) "
-		." VALUES ('$name','$sid','$zps','0','$lokal','$homepage','$adresse', "
+		." VALUES ('$name','$sid','$zps','0','$lokal', '$lokal_coord', '$homepage','$adresse', "
 		." '$vs','$vs_mail','$vs_tel','$tl','$tl_mail','$tl_tel', "
 		." '$jw','$jw_mail','$jw_tel','$pw','$pw_mail','$pw_tel', "
 		." '$kw','$kw_mail','$kw_tel','$sw','$sw_mail','$sw_tel', '$termine', '1') "

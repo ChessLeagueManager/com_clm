@@ -26,7 +26,7 @@ class AddressHandler
     public function queryLocation($result, $club)
     {
         if ($this->geo_enabled && !empty($result[0]->lokal)) { // Check if map services are enabled and the location is not empty
-            $coord = $this->extractCoordinatesFromText($result[0]->lokal_coord_text); //Extract coordinates from text
+            $coord = $this->extractCoordinatesFromText($result[0]->lokal_coord); //Extract coordinates from text
 
             if (is_null($coord[0]) || is_null($coord[1])) { // Check if coordinates are null -> Coordinates not stored in db
                 $lokal_coord = $this->convertAddress($result[0]->lokal); // Convert address to coordinates
@@ -255,7 +255,7 @@ class AddressHandler
         else{
             //Store in db
             $query = "UPDATE $table"
-                . " SET lokal_coord = ST_GeomFromText('$coord')"
+                . " SET lokal_coord = '$coord'"
                 . " WHERE id = $rowId";
             clm_core::$db->query($query);
         }  

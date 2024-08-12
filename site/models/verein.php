@@ -54,7 +54,7 @@ class CLMModelVerein extends JModelLegacy
 	$db	= JFactory::getDBO();
 //	$id	= @$options['id'];
  
-	$query = " SELECT a.*, ST_AsText(a.lokal_coord) as lokal_coord_text"
+	$query = " SELECT a.* "
 		." FROM #__clm_vereine as a "
 		." WHERE a.zps = '$zps'"
 		." AND a.sid = ".$sid
