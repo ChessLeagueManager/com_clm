@@ -1280,6 +1280,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere_tlnr` (
   `snr` mediumint(5) UNSIGNED DEFAULT NULL,
   `name` varchar(150) DEFAULT NULL,
   `birthYear` year(4) NOT NULL DEFAULT 0000,
+  `birthDay` date DEFAULT NULL,
   `geschlecht` char(1) DEFAULT NULL,
   `verein` varchar(150) DEFAULT NULL,
   `email` varchar(100) NOT NULL DEFAULT '',

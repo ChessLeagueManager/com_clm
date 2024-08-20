@@ -69,9 +69,11 @@ class CLMModelVerein extends JModelLegacy
 	{
 	$query	= $this->_getCLMVerein( $options );
 	$result = $this->_getList( $query );
-	//Adress Handling
-	$addressHandler = new AddressHandler();
-	$addressHandler->queryLocation($result,1);
+	if(is_array($result) AND count($result) == 1) {
+		//Adress Handling
+		$addressHandler = new AddressHandler();
+		$addressHandler->queryLocation($result,1);
+	}
 	return @$result;
 	}
 

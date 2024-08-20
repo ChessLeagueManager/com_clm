@@ -5,8 +5,8 @@
 -- @link http://www.chessleaguemanager.de
 
 --
--- 4.2.X  Caching von Adresskoordinaten 
+-- 4.2.1  Caching von Adresskoordinaten (GEOMETRY)
 --
 
-ALTER TABLE `#__clm_vereine` ADD COLUMN `lokal_coord` text NULL AFTER lokal;
-ALTER TABLE `#__clm_mannschaften`  ADD COLUMN `lokal_coord` text NULL AFTER lokal;
+ALTER TABLE `#__clm_vereine` ADD COLUMN `lokal_coord` GEOMETRY NULL AFTER lokal;
+ALTER TABLE `#__clm_mannschaften`  ADD COLUMN `lokal_coord` GEOMETRY NULL AFTER lokal;

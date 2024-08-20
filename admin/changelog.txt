@@ -26,6 +26,7 @@ $ -> Language fix or change
 # Admin View Rangfolgegruppe: Anzeige User
 ^ Teamwettbewerbe Rangliste und Tabelle: Minidesignanpassung zu Saisonstart
 # Admin Views Ligen/Mannschaftsturniere: nur Listung der Ranglisten der jeweiligen Saison
++ BE/FE: Caching für Geo-Locationing eingebaut (Mannschaft, Verein, Meldeliste)
 
 - - - - - 4.2.0 - [17-06-2024] - - - - - - - - - - - - - - - - - - - -
 - - - - - 4.1.6 - [08-06-2024] - - - - - - - - - - - - - - - - - - - -
