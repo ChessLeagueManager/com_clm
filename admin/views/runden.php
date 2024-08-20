@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -19,7 +19,7 @@ public static function setRundenToolbar($sid, $params_round_date)
 	clm_core::$load->load_css("icons_images");
 	JToolBarHelper::title( JText::_( 'TITLE_RUNDE' ), 'clm_settings.png' );
 	if (clm_core::$db->saison->get($sid)->published == 1 AND clm_core::$db->saison->get($sid)->archiv == 0) {
-		if($clmAccess->access('BE_league_edit_fixture') !== false) {
+		if($clmAccess->access('BE_league_edit_fixture') !== false OR $clmAccess->access('BE_teamtournament_edit_fixture') !== false) {
 			JToolBarHelper::custom('paarung','edit.png','edit_f2.png',JText::_( 'LEAGUE_BUTTON_1' ),false);
 			if  ($params_round_date == '1') {
 				JToolBarHelper::custom('pairingdates','edit.png','edit_f2.png',JText::_( 'ROUND_EDIT_PAIRING_DATES' ),false);

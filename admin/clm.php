@@ -390,13 +390,13 @@ switch ($controllerName) {
 		}
 		break;
 	case 'paarung';
-		if(!$clmAccess->access('BE_league_edit_fixture')) {		
+		if(!$clmAccess->access('BE_league_edit_fixture') AND !$clmAccess->access('BE_teamtournament_edit_fixture')) {		
 			$app->enqueueMessage( JText::_( 'NO_PERMISSION' ),'warning' );
 			$controllerName = 'info';
 		}
 		break;
 	case 'pairingdates';
-		if(!$clmAccess->access('BE_league_edit_fixture')) {		
+		if(!$clmAccess->access('BE_league_edit_fixture') AND !$clmAccess->access('BE_teamtournament_edit_fixture')) {		
 			$app->enqueueMessage( JText::_( 'NO_PERMISSION' ),'warning' );
 			$controllerName = 'info';
 		}

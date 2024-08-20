@@ -657,7 +657,7 @@ public static function paarung()
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section);
 	}
 	// Ligadaten und Paarungsdaten holen
-	$query	= "SELECT a.id as lid, a.sid, a.sl "
+	$query	= "SELECT a.id as lid, a.sid, a.sl, a.liga_mt "
 		." FROM #__clm_liga as a"
 		." WHERE a.id = ".$cid
 		;
@@ -667,11 +667,19 @@ public static function paarung()
 	$clmAccess = clm_core::$access;      
 
 	// Prüfen ob User Berechtigung hat
-	if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
-		$msg = JText::_( 'LIGEN_NO_FIXTURE');
-		$mainframe->enqueueMessage($msg, 'warning');
-		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid);
-	}
+	if ( $liga[0]->liga_mt == 0 ) {
+		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
+			$msg = JText::_( 'LIGEN_NO_FIXTURE');
+			$mainframe->enqueueMessage($msg, 'warning');
+			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid);
+		}
+	} else {
+		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
+			$msg = JText::_( 'LIGEN_NO_FIXTURE');
+			$mainframe->enqueueMessage($msg, 'warning');
+			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid);
+		}
+	}	
 
 	// Link MUSS hardcodiert sein !!!
 	$mainframe->redirect( 'index.php?option='.$option.'&section=paarung&task=edit&id='.$cid);
@@ -696,7 +704,7 @@ public static function pairingdates()
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid);
 	}
 	// Ligadaten und Paarungsdaten holen
-	$query	= "SELECT a.id as lid, a.sid, a.sl "
+	$query	= "SELECT a.id as lid, a.sid, a.sl, a.liga_mt "
 		." FROM #__clm_liga as a"
 		." WHERE a.id = ".$cid
 		;
@@ -706,11 +714,19 @@ public static function pairingdates()
 	$clmAccess = clm_core::$access;      
 
 	// Prüfen ob User Berechtigung hat
-	if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
-		$msg = JText::_( 'LIGEN_NO_FIXTURE');
-		$mainframe->enqueueMessage($msg, 'warning');
-		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid);
-	}
+	if ( $liga[0]->liga_mt == 0 ) {
+		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
+			$msg = JText::_( 'LIGEN_NO_FIXTURE');
+			$mainframe->enqueueMessage($msg, 'warning');
+			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid);
+		}
+	} else {
+		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
+			$msg = JText::_( 'LIGEN_NO_FIXTURE');
+			$mainframe->enqueueMessage($msg, 'warning');
+			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid);
+		}
+	}	
 
 	// Link MUSS hardcodiert sein !!!
 	$mainframe->redirect( 'index.php?option='.$option.'&section=pairingdates&task=edit&id='.$cid);

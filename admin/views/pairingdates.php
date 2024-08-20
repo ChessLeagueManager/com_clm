@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -36,7 +36,7 @@ public static function pairingdates( &$row, $paarung, $man, $count_man, $option,
 <!--- <br> --->
 
 	<form action="index.php" method="post" name="adminForm" id="adminForm">
-	<div class="width-50 fltlft">
+	<div class="width-60 fltlft">
 
 	<fieldset class="adminform">
 <!---	<legend><?php echo JText::_( 'PAARUNG_AKTUELL' ); ?></legend> --->

@@ -28,6 +28,7 @@ $ -> Language fix or change
 # Admin Views Ligen/Mannschaftsturniere: nur Listung der Ranglisten der jeweiligen Saison
 + BE/FE: Caching für Geo-Locationing eingebaut (Mannschaft, Verein, Meldeliste)
 ^ pgn-Import: Saisonauswahhl möglich
+# Admin View Runden: Berechtigungen TL Mannschaftsturniere
 - - - - - 4.2.0 - [17-06-2024] - - - - - - - - - - - - - - - - - - - -
 - - - - - 4.1.6 - [08-06-2024] - - - - - - - - - - - - - - - - - - - -
 ^ Paarungsliste: iCal-Ausgabe Anpassung wegen sql_mode=only_full_group_by
