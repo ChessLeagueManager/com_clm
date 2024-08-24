@@ -36,7 +36,7 @@ function clm_api_db_dsb_player($spieler = array(), $incl_pd = 0, $file_v = 0) {
 		} else {
 			//ID,VKZ,Mgl-Nr,Status,Spielername,Geschlecht,Spielberechtigung,Geburtsjahr,Letzte-Auswertung,DWZ,Index,FIDE-Elo,FIDE-Titel,FIDE-ID,FIDE-Land
 			$einSpieler = str_getcsv($spieler[$i], ",", '"');
-			if (count($einSpieler) != 15 || ($einSpieler[2] == 'P' && $incl_pd == 0)) {
+			if (count($einSpieler) != 15 || ($einSpieler[3] == 'P' && $incl_pd == 0)) {
 				continue;
 			}
 			$out = clm_core::$load->player_dewis_to_clm($einSpieler[4], null, $einSpieler[2], $einSpieler[5], $einSpieler[13], $einSpieler[14]);
