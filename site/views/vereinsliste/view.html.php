@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -37,7 +37,8 @@ class CLMViewVereinsliste extends JViewLegacy
 		$document =JFactory::getDocument();
 		$document->setTitle($mainframe->getCfg('sitename')." - ".JText::_('CLUBS_LIST'));
 		
-		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
+//		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
+		clm_core::$cms->addScript(clm_core::$url."includes/jquery-3.7.1.min.js");
 		$document->addScript(JURI::base().'components/com_clm/javascript/updateTableHeaders.js');
 		
 		/* Call the state object */

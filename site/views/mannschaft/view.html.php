@@ -37,7 +37,8 @@ class CLMViewMannschaft extends JViewLegacy
 			}
 		}
 		
-		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
+//		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
+		clm_core::$cms->addScript(clm_core::$url."includes/jquery-3.7.1.min.js");
 		$document->addScript(JURI::base().'components/com_clm/javascript/updateTableHeaders.js');
 		
 		$model	  = $this->getModel();
