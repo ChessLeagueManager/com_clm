@@ -106,6 +106,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_dwz_spieler` (
   `joiningdate` date NOT NULL DEFAULT '1970-01-01',
   `leavingdate` date NOT NULL DEFAULT '1970-01-01',
   `synflag` tinyint(1) NOT NULL DEFAULT 0,
+  `inofFIDEelo` smallint(4) UNSIGNED DEFAULT NULL,
+  `K` smallint(4) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sid_zps_mglnr` (`sid`,`ZPS`,`Mgl_Nr`),
   KEY `sid` (`sid`),
@@ -153,6 +155,10 @@ CREATE TABLE IF NOT EXISTS `#__clm_ergebnis` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `eid` mediumint(5) UNSIGNED DEFAULT NULL,
   `erg_text` varchar(10) NOT NULL DEFAULT '',
+  `dsb_w` char(1) NOT NULL DEFAULT '',
+  `dsb_s` char(1) NOT NULL DEFAULT '',
+  `xml_w` varchar(3) NOT NULL DEFAULT '',
+  `xml_s` varchar(3) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -315,6 +321,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_meldeliste_spieler` (
   `sum_saison` decimal(5,1) NOT NULL DEFAULT 0.0,
   `gesperrt` tinyint(1) UNSIGNED DEFAULT NULL,
   `attr` varchar(4) DEFAULT NULL,
+  `inofFIDEelo` smallint(4) UNSIGNED DEFAULT NULL,
+  `K` smallint(4) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `lid_zps_mglnr` (`lid`,`zps`,`mgl_nr`),
   KEY `lid` (`lid`)
@@ -1325,6 +1333,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere_tlnr` (
   `checked_out` int(11) UNSIGNED DEFAULT NULL,
   `checked_out_time` datetime DEFAULT NULL,
   `ordering` int(11) NOT NULL DEFAULT 0,
+  `inofFIDEelo` smallint(4) UNSIGNED DEFAULT NULL,
+  `K` smallint(4) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`,`zps`,`mgl_nr`,`status`),
   KEY `turnier_snr` (`turnier`,`snr`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

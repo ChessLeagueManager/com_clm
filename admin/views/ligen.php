@@ -83,6 +83,8 @@ class CLMViewLigen
 		$row->params['noBoardResults'] = '0'; }
 	if (!isset($row->params['inofDWZ']))  {   //Standardbelegung
 		$row->params['inofDWZ'] = '0'; }
+	if (!isset($row->params['optionEloAnalysis']))  {   //Standardbelegung
+		$row->params['optionEloAnalysis'] = '0'; }
 	if (!isset($row->params['ReportForm']))  {   //Standardbelegung
 		$row->params['ReportForm'] = '0'; }
 	if (!isset($row->params['pgnInput']))  {   //Standardbelegung
@@ -423,6 +425,16 @@ class CLMViewLigen
 //			echo JHtml::_('select.genericlist', $optionlist, 'params[autoRANKING]', 'class="js-example-basic-single"', 'id', 'name', (isset($row->params['autoRANKING']) ? $row->params['autoRANKING'] : "0"));
 			echo JHtml::_('select.genericlist', $optionlist, 'params[autoRANKING]', 'class="'.$field_search.'"', 'id', 'name', (isset($row->params['autoRANKING']) ? $row->params['autoRANKING'] : "0"));
 			?>
+		</td>
+	</tr>
+	<tr>
+		<td nowrap="nowrap" colspan="2" title="<?php echo JText::_( 'OPTION_ELO_ANALYSIS_HINT' );?>">
+			<label for="params[optionEloAnalysis]"><?php echo JText::_( 'OPTION_ELO_ANALYSIS' ); ?></label>
+		</td>
+		<td colspan="1">
+			<fieldset class="radio">
+				<?php echo JHtml::_('select.booleanlist', 'params[optionEloAnalysis]', 'class="inputbox"', $row->params['optionEloAnalysis']); ?>
+			</fieldset>
 		</td>
 	</tr>
 	<tr>
