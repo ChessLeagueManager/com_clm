@@ -124,7 +124,7 @@ function datei() {
 			$counter= intval(($liga_name[0]->teil - $count)/2)*$liga_name[0]->stamm;
 		} else {
 			$counter= 0;
-	}
+		}
 	
 		// 2.	Einzelergebnisse pro Durchgang/Runde
 		$all_count = 0;
@@ -180,10 +180,11 @@ function datei() {
 	
 	// Grunddaten für Einzelturniere laden
 	if(!is_null($et)){
-		$liga = $et;
+//		$liga = $et;
 		$sql = " SELECT a.* FROM #__clm_turniere as a"
 			." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
-			." WHERE s.archiv = 0 AND a.id = ".$liga
+//			." WHERE s.archiv = 0 AND a.id = ".$liga
+			." WHERE s.archiv = 0 AND a.id = ".$et
 			;
 		$db->setQuery($sql);
 		$liga_name = $db->loadObjectList();
@@ -355,7 +356,7 @@ function datei() {
 		;
 	$db->setQuery($sql);
 	$runden_daten =$db->loadObjectList();
-
+/*
 	// Ergebnis ID vom CLM auf Dewis umschreiben
 	// Die Kommentare sind CLM Ergebnisse im Klartext !
 	$erg[0]="0";	// 0 - 1
@@ -384,6 +385,17 @@ function datei() {
 	// NEUE ErgebnisID's
 	$erg_bl[9]="R";   // 0:0,5 
 	$erg_bl[10]="0";  // 0,5:0
+*/
+	$query = "SELECT * FROM #__clm_ergebnis";
+	$elist = clm_core::$db->loadObjectList($query);	
+	$erg_w = array();
+	$erg_s = array();
+	foreach ($elist as $el) {
+		$erg_w[$el->eid] = $el->dsb_w;
+		$erg_s[$el->eid] = $el->dsb_s;
+	}
+	$erg = $erg_w;
+	$erg_bl = $erg_s;
 
 	foreach($runden_daten as $rnd_data){
 		if (strlen($rnd_data->zps) != 5 OR $rnd_data->zps == 'ZZZZZ') continue;
@@ -493,7 +505,7 @@ function datei() {
 		;
 
 	// Rundendaten ermitteln
-	if(!$et){
+	if(is_null($et)){
 		$sql = " SELECT * FROM #__clm_runden_termine "
 			." WHERE sid = '$sid' AND liga = '".$liga_name[0]->id."'"
 			." ORDER BY nr ASC "
@@ -516,7 +528,7 @@ function datei() {
 	/////////////////////////////////
 		
 	foreach($runden as $rdata){
-		if(!$et){
+		if(is_null($et)){
 			$temp_nr = $rdata->nr;
 		} else {
 			$temp_nr = $rdata->nr + (($rdata->dg - 1) * $liga_name[0]->runden);
@@ -537,7 +549,7 @@ function datei() {
 		.'<players>'
 		;
 
-	if(!$et){
+	if(is_null($et)){
 		$sql = " SELECT a.*,v.Vereinname,s.PKZ,s.Geburtsjahr,s.Spielername,s.DWZ,s.FIDE_ID FROM `#__clm_rnd_spl` as a "
 			." LEFT JOIN #__clm_dwz_spieler as s ON s.sid = a.sid AND s.ZPS = a.zps AND s.Mgl_Nr = a.spieler "
 			." LEFT JOIN #__clm_dwz_vereine as v ON v.sid = a.sid AND v.ZPS = a.zps "
@@ -554,8 +566,8 @@ function datei() {
 			." ORDER BY a.zps ASC , a.brett ASC, spieler ASC "
 			;
 	} else {
-//		$sql = " SELECT t.verein as Vereinname,t.zps, t.mgl_nr as spieler, t.name as Spielername, t.birthYear as Geburtsjahr"
-		$sql = " SELECT t.verein as Vereinname,t.zps, t.mgl_nr as spieler, t.name as Spielername, t.birthYear as Geburtsjahr, t.snr"
+//		$sql = " SELECT t.verein as Vereinname,t.zps, t.mgl_nr as spieler, t.name as Spielername, t.birthYear as Geburtsjahr, t.snr"
+		$sql = " SELECT t.verein as Vereinname,t.zps, t.mgl_nr as spieler, t.name as Spielername, t.birthYear as Geburtsjahr, t.snr, t.birthDay, t.FIDEid, t.FIDEelo"
 			." ,s.FIDE_ID, s.PKZ, s.DWZ "
 			." FROM `#__clm_turniere_rnd_spl` as a "
 			." LEFT JOIN #__clm_turniere_tlnr as t ON t.sid = a.sid AND t.snr = a.tln_nr AND t.turnier = a.turnier "
@@ -572,10 +584,11 @@ function datei() {
 	$cnt	= 1;
 	$player	= array();
 	foreach($spieler as $spl){
-		if ($et AND (!isset($spl->snr) OR $spl->snr < 1)) continue; 
-//		if((is_null($et) AND strlen($spl->zps) == 5 AND $spl->zps !="ZZZZZ" AND $spl->spieler !="") OR ($et AND $spl->Geburtsjahr > '0000')){   //bei Einzelturnieren auch vereinslose Spieler zulassen
-		if((is_null($et) AND strlen($spl->zps) == 5 AND $spl->zps !="ZZZZZ" AND $spl->spieler !="") OR ($et)){   //bei Einzelturnieren auch vereinslose Spieler zulassen
-			if ($et AND ($spl->spieler < 1 OR strlen($spl->zps) != 5 OR $spl->zps == '99999') AND $spl->Geburtsjahr == '0000') {
+		if (!is_null($et) AND (!isset($spl->snr) OR $spl->snr < 1)) continue; 
+		if (!is_null($et) AND is_null($spl->FIDE_ID) AND !is_null($spl->FIDEid) AND $spl->FIDEid > 0) $spl->FIDE_ID = $spl->FIDEid; 
+		if((is_null($et) AND strlen($spl->zps) == 5 AND $spl->zps !="ZZZZZ" AND $spl->spieler !="") OR (!is_null($et))){   //bei Einzelturnieren auch vereinslose Spieler zulassen
+//			if ($et AND ($spl->spieler < 1 OR strlen($spl->zps) != 5 OR $spl->zps == '99999') AND $spl->Geburtsjahr == '0000') {
+			if (!is_null($et) AND ($spl->spieler < 1 OR strlen($spl->zps) != 5 OR $spl->zps == '99999') AND $spl->Geburtsjahr == '0000' AND is_null($spl->birthDay)) {
 				$error = 1;
 				$app->enqueueMessage('Teilnehmer '.$spl->Spielername.' vereinslos und ohne Geburtsjahr!' , 'error');
 			} else $error = 0;
@@ -583,7 +596,7 @@ function datei() {
 				$app->enqueueMessage('Teilnehmer '.$spl->Spielername.' eventuell vereinslos, da ZPS/Mitgliedsnummer unvollständig' , 'warning');
 			}
 			// laufende Nummer für Spieler erzeugen
-			if ($et) $player[$spl->snr] = $cnt;
+			if (!is_null($et)) $player[$spl->snr] = $cnt;
 			else $player[$spl->zps][$spl->spieler] = $cnt;
 			$cnt++;
 		
@@ -592,13 +605,16 @@ function datei() {
 		if (!is_null($spl->Vereinname)) $spl->Vereinname = str_replace('&', '&amp;', $spl->Vereinname);
 
 		$xml .= '<player>';
-		if ($et) $xml .= '<noPlayer>'.$player[$spl->snr].'</noPlayer>';
+		if (!is_null($et)) $xml .= '<noPlayer>'.$player[$spl->snr].'</noPlayer>';
 		else $xml .= '<noPlayer>'.$player[$spl->zps][$spl->spieler].'</noPlayer>';
 		$xml .= '<id>'.$spl->PKZ.'</id>'
 			.'<surname>'.$name[0].'</surname>'
-			.'<forename>'.$name[1].'</forename>'
-			.'<dob>'.$spl->Geburtsjahr.'</dob>'
-			.'<vkz>'.$spl->zps.'</vkz>'
+			.'<forename>'.$name[1].'</forename>';
+		if (!is_null($et)) {
+			if (is_null($spl->birthDay)) $xml .= '<dob>'.$spl->Geburtsjahr.'</dob>';
+			else $xml .= '<dob>'.$spl->birthDay.'</dob>';
+		} else $xml .= '<dob>'.$spl->Geburtsjahr.'</dob>';
+		$xml .=	'<vkz>'.$spl->zps.'</vkz>'
 			.'<club>'.$spl->Vereinname.'</club>'
 			.'<noMember>'.$spl->spieler.'</noMember>'
 			.'<idFide>'.$spl->FIDE_ID.'</idFide>'
@@ -641,7 +657,7 @@ function datei() {
 //$app->enqueueMessage( 'SQL '.print_r($player).'-----'.$sql, 'warning');
 	// Ergebnis ID vom CLM auf Dewis umschreiben
 	// Die Kommentare sind CLM Ergebnisse im Klartext !
-	$erg[0]="0:1";	// 0 - 1
+/*	$erg[0]="0:1";	// 0 - 1
 	$erg[1]="1:0";	// 1 - 0
 	$erg[2]="½:½";	// 0.5 - 0.5
 	$erg[3]="0:0";	// 0-0
@@ -671,6 +687,29 @@ function datei() {
 	$erg_bl[10]="½:0";// 0:½
 	$erg_bl[11]="-:0";// 0:-
 	$erg_bl[12]="0:-";// -:0
+*/
+	$query = "SELECT * FROM #__clm_ergebnis";
+	$elist = clm_core::$db->loadObjectList($query);	
+//echo "<br>elist"; var_dump($elist);
+	$erg_w = array();
+	$erg_s = array();
+	foreach ($elist as $el) {
+		$erg_w[$el->eid] = $el->xml_w;
+		$erg_s[$el->eid] = $el->xml_s;
+	}
+	$erg = $erg_w;
+	$erg_bl = $erg_s;
+/*
+echo "<br>erg"; var_dump($erg);
+echo "<br>erg_w"; var_dump($erg_w);
+echo "<br>erg_bl"; var_dump($erg_bl);
+echo "<br>erg_s"; var_dump($erg_s);
+for ($i = 0; $i <= 12; $i++) { 
+	echo "<br>$i ".$erg[$i]." / ".$erg_w[$i]." / ".$erg_bl[$i]." / ".$erg_s[$i];
+}
+//die();
+*/
+
 
 	$xml .= '<games>';
 
@@ -681,10 +720,12 @@ function datei() {
 			else { $erg_temp = $erg[$rnd->ergebnis];}
 		$xml .= '<game>'
 			.'<round>'.$runde_temp.'</round>';
-		if ($et) 
-			$xml .= '<noWhite>'.$player[$rnd->aspieler].'</noWhite>'
-					.'<noBlack>'.$player[$rnd->agegner].'</noBlack>';
-		else	
+		if (!is_null($et)) { 
+			$xml .= '<noWhite>'.$player[$rnd->aspieler].'</noWhite>';
+			if (isset($player[$rnd->agegner]) AND !is_null($player[$rnd->agegner]) AND $player[$rnd->agegner] > 0)
+				$xml .= '<noBlack>'.$player[$rnd->agegner].'</noBlack>';
+			else $xml .= '<noBlack></noBlack>';
+		} else	
 			$xml .= '<noWhite>'.$player[$rnd->zps][$rnd->spieler].'</noWhite>'
 					.'<noBlack>'.$player[$rnd->gzps][$rnd->gegner].'</noBlack>';
 		$xml .=	'<result>'.$erg_temp.'</result>'
