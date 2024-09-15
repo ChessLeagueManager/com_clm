@@ -208,8 +208,8 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 	
 		// Datensätze in Spielertabelle schreiben
 		// convert Array nur für SCHWARZ !!
-		$convert = array(0 => 1, 0, 2, 3, 5, 4, 6, 7, 8, 10, 9);
-		// andere Matrix für eid
+//		$convert = array(0 => 1, 0, 2, 3, 5, 4, 6, 7, 8, 10, 9);
+		$convert = array(0 => 1, 0, 2, 3, 5, 4, 6, 7, 4, 10, 9, 4, 4, 4);		// andere Matrix für eid
 	
 		// daten ermitteln
 		$array_w = clm_core::$load->request_array_string('w');
