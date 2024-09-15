@@ -16,6 +16,7 @@ $ -> Language fix or change
 # Frontend-Views: Nachladen von jquery 1.4.2 ersetzt durch internes jquery 3.7.1 (TabellenHeader) 
 # Einzelturniere: Abbruch bei Eingabe von Bye-Ergebnisse
 # Ligen- und Turnier-Manager BE: Änderung der Liga- bzw. Turnier-Details bei Funktionen  
+# Vereindaten FE: Sperren nicht freigegebener Saisons entspr. Datenschutzparameter
 
 - - - - - 4.2.1 - [21-08-2024] - - - - - - - - - - - - - - - - - - - -
 + Datenbank: Import auch von Spielerdaten im V2-Format mit Spieler-Id

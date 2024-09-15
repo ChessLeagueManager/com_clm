@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -24,6 +24,9 @@ $fe_vereinsliste_vs 	= $config->fe_vereinsliste_vs;
 $fe_vereinsliste_hpage 	= $config->fe_vereinsliste_hpage;
 $fe_vereinsliste_dwz 	= $config->fe_vereinsliste_dwz;
 $fe_vereinsliste_elo 	= $config->fe_vereinsliste_elo;
+$verein_mail 			= $config->verein_mail;
+$auser = (integer) clm_core::$access->getId(); // aktueller CLM-User
+$archive_check = clm_core::$api->db_check_season_user($sid);
 
 // Browsertitelzeile setzen
 $doc =JFactory::getDocument();
@@ -121,9 +124,13 @@ function tableOrdering( order, dir, task )
 			
 		 ?>
     <tr>
-        <td class="col_1"><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $vereine[$z]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $vereine[$z]->name; ?></a></td>
-        <?php if ($fe_vereinsliste_vs == 1) { ?><td class="col_2"><?php // Wenn Email
-		 if (  $vereine[$z]->vs_mail ==! false ) { echo '<a href="mailto:'.$vereine[$z]->vs_mail.'">'.$vereine[$z]->vs.'</a>'; }
+		<?php if ($archive_check) { ?>	
+		<td class="col_1"><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $vereine[$z]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $vereine[$z]->name; ?></a></td>
+		<?php } else { ?>	
+		<td class="col_1"><?php echo $vereine[$z]->name; ?></td>
+ 		<?php } ?>	
+       <?php if ($fe_vereinsliste_vs == 1) { ?><td class="col_2"><?php // Wenn Email
+		 if (  ($auser > 0 OR $verein_mail == 1) AND $vereine[$z]->vs_mail ==! false ) { echo '<a href="mailto:'.$vereine[$z]->vs_mail.'">'.$vereine[$z]->vs.'</a>'; }
 		 else { echo $vereine[$z]->vs; }
 		?></td><?php } ?>
         <?php if ($fe_vereinsliste_hpage == 1) { ?><td class="col_3"><a href="<?php echo $vereine[$z]->homepage; ?>" target="_blank"><?php echo str_replace ( "http://" , "" , $vereine[$z]->homepage ); ?></a></td><?php } ?>

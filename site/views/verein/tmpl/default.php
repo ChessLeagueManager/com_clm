@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -113,6 +113,13 @@ if ($conf_vereinsdaten == 1) {
 } 
  ?>
 <div class="componentheading"><?php if (isset($verein[0]->name)) echo $verein[0]->name; ?></div>
+
+<?php
+$archive_check = clm_core::$api->db_check_season_user($sid);
+if (!$archive_check) {
+	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+} else {
+?>
 
 <?php if (isset($verein[0]->name)){ 
 	if (is_null($vereinstats[0]->DWZ)) $vereinstats[0]->DWZ = '';
@@ -369,7 +376,7 @@ if ($conf_vereinsdaten == 1) {
     </table>
 	
 	<div class="clr"></div>
-
+<?php } ?>
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); ?>
 
 </div>
