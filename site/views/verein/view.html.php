@@ -65,17 +65,13 @@ class CLMViewVerein extends JViewLegacy
 		
 		if ($googlemaps == 1) {
 			if ($googlemaps_ver == 1){ //Load Leaflet
-				$document->addScript($prot.'://unpkg.com/leaflet@1.7.1/dist/leaflet.js');
-				$document->addStyleSheet($prot.'://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
+				$document->addScript($prot.'://unpkg.com/leaflet@1.9.4/dist/leaflet.js');
+				$document->addStyleSheet($prot.'://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
 			}
 			elseif ($googlemaps_ver == 3){ //Load OSM
 				$document->addScript($prot.'://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js');
 				$document->addStyleSheet($prot.'://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css');
 			}
-		}
-		if ($googlemaps == 1) {
-			$document->addScript($prot.'://unpkg.com/leaflet@1.7.1/dist/leaflet.js');
-			$document->addStyleSheet($prot.'://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
 		}
 		// Title in Browser
 		if (isset($verein[0])) {
