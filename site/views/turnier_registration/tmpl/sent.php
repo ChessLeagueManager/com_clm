@@ -190,7 +190,8 @@ if ($msg != '') {
 	//$body_TL = $turnier->name."\n".'Eine neue Online-Anmeldung liegt vor: '."\n".$body_daten;
 	$email_TL = $turnier->tlemail;
 	$htmlMail = 0;
-	$url = JURI::base().'components/com_clm/clm/mail_approve.php?parameter='.$randomUid;
+//	$url = JURI::base().'components/com_clm/clm/mail_approve.php?parameter='.$randomUid;
+	$url = JURI::base().'index.php?option=com_clm&view=mailapprove&parameter='.$randomUid;
 	$msg = '';
 	// Email an TL - e-mail to tournament controller
 	if ($email_TL != "") {
