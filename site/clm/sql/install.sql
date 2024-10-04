@@ -656,6 +656,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_swt_liga` (
   `lid` int(11) DEFAULT NULL,
   `name` varchar(100) NOT NULL DEFAULT '',
   `sid` mediumint(3) UNSIGNED DEFAULT NULL,
+  `catidAlltime` smallint(6) UNSIGNED NOT NULL DEFAULT 0,
+  `catidEdition` smallint(6) UNSIGNED NOT NULL DEFAULT 0,
   `teil` mediumint(5) UNSIGNED DEFAULT NULL,
   `stamm` mediumint(5) UNSIGNED DEFAULT NULL,
   `ersatz` mediumint(5) UNSIGNED DEFAULT NULL,

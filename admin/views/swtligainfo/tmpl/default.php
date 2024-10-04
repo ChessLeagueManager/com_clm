@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -19,6 +19,8 @@ $noBoardResults = clm_core::$load->request_string('noBoardResults', '0');
 $lid = clm_core::$load->request_int('lid', 0);
 $ordering = $this->default['ordering'];
 $str_params = clm_core::$load->request_string('str_params');
+$catidAlltime = $this->default['catidAlltime'];
+$catidEdition = $this->default['catidEdition'];
 ?>
 
 <script language="javascript" type="text/javascript">
@@ -603,6 +605,8 @@ $str_params = clm_core::$load->request_string('str_params');
 	<input type="hidden" name="noBoardResults" value="<?php echo $noBoardResults; ?>" />
 	<input type="hidden" name="lid" value="<?php echo $lid; ?>" />
 	<input type="hidden" name="ordering" value="<?php echo $ordering; ?>" />
+	<input type="hidden" name="catidAlltime" value="<?php echo $catidAlltime; ?>" />
+	<input type="hidden" name="catidEdition" value="<?php echo $catidEdition; ?>" />
 	<input type="hidden" name="str_params" value="<?php echo $str_params; ?>" />
 	<?php echo JHtml::_( 'form.token' ); ?>
 </form>

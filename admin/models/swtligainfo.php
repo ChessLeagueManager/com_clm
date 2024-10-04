@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -43,8 +43,9 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 	
 	function getDefault () {
 	
+		$default['catidAlltime'] 			= '0';
+		$default['catidEdition'] 			= '0';
 		$default['sl']						= '0';
-		
 		$default['runden_modus']			= '0';
 		$default['anz_aufsteiger']			= '0';
 		$default['anz_moegl_aufsteiger']	= '0';
@@ -69,6 +70,8 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 				//Standardwerte werden überschrieben
 				$default['name'] 		= $ligaFromDatabase->name;
 				$default['sid'] 		= $ligaFromDatabase->sid;
+				$default['catidAlltime'] 		= $ligaFromDatabase->catidAlltime;
+				$default['catidEdition'] 		= $ligaFromDatabase->catidEdition;
 				$default['sl'] 			= $ligaFromDatabase->sl;
 				$default['runden_modus']			= $ligaFromDatabase->runden_modus;
 				$default['anz_aufsteiger']			= $ligaFromDatabase->auf;
@@ -423,7 +426,7 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		$mturnier = clm_core::$load->request_int('mturnier', 0);
 		$_POST['liga_mt'] = (string) $mturnier;
 		
-		$spalten = array ( 'lid', 'name', 'sl', 'sid', 'rang', 'teil', 'stamm', 'ersatz', 'runden', 'durchgang', 'runden_modus', 'heim',
+		$spalten = array ( 'lid', 'name', 'catidEdition', 'catidAlltime', 'sl', 'sid', 'rang', 'teil', 'stamm', 'ersatz', 'runden', 'durchgang', 'runden_modus', 'heim',
 		                   'sieg', 'remis', 'nieder', 'antritt', 'man_sieg', 'man_remis', 'man_nieder', 'man_antritt', 'sieg_bed',
 						   'b_wertung', 'auf', 'auf_evtl', 'ab', 'ab_evtl', 'mail', 'sl_mail', 'order', 
 						   'published', 'ordering', 'bem_int', 'liga_mt', 'tiebr1', 'tiebr2', 'tiebr3', 'ersatz_regel', 'anzeige_ma', 'params' );
