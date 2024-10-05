@@ -1034,8 +1034,6 @@ function send()
 	
 	$subject_neu = "[".$config->email_fromname."]: ".JText::_('USER_MAIL_SUBJECT_NEWACCOUNT');
 	
-	$msg = JText::_( 'USERS_VERSCHICKT');
-
 	
 	for ($i=0; $i<$n; $i++){
 		//////////////////////////////////////////
@@ -1060,12 +1058,20 @@ function send()
 				.JText::_('USER_MAIL_10')
 				;
 			// Email mit Accountdaten schicken
-			jimport( 'joomla.mail.mail' );
-			$mail = JFactory::getMailer();
+//			jimport( 'joomla.mail.mail' );
+//			$mail = JFactory::getMailer();
 			if ($bcc == '') 
-				$mail->sendMail($from, $fromname, $recipient, $subject_neu, $body);
+//				$mail->sendMail($from, $fromname, $recipient, $subject_neu, $body);
+				$result = clm_core::$api->mail_send($recipient,$subject_neu,$body);
 			else
-				$mail->sendMail($from, $fromname, $recipient, $subject_neu, $body, 0, null, $bcc);
+//				$mail->sendMail($from, $fromname, $recipient, $subject_neu, $body, 0, null, $bcc);
+				$result = clm_core::$api->mail_send($recipient,$subject_neu,$body, 0, null, $bcc);
+			if ($result[0] !== true) {
+				$msg = '<br>'.'Fehler bei Mailausgabe: '.'<br>'.$result[1];
+				$mainframe->enqueueMessage( $msg, 'warning' );
+			}
+		
+			$msg = JText::_( 'USERS_VERSCHICKT');
 
 		}
 		////////////////////////////////////////////////
@@ -1091,12 +1097,18 @@ function send()
 				;
 
 			// Erinnerungsmail schicken
-			jimport( 'joomla.mail.mail' );
-			$mail = JFactory::getMailer();
+//			jimport( 'joomla.mail.mail' );
+//			$mail = JFactory::getMailer();
 			if ($bcc == '') 
-				$mail->sendMail($from,$fromname,$recipient,$subject_remind,$body);
+//				$mail->sendMail($from,$fromname,$recipient,$subject_remind,$body);
+				$result = clm_core::$api->mail_send($recipient,$subject_remind,$body);
 			else 
-				$mail->sendMail($from,$fromname,$recipient,$subject_remind,$body,0,null,$bcc);
+//				$mail->sendMail($from,$fromname,$recipient,$subject_remind,$body,0,null,$bcc);
+				$result = clm_core::$api->mail_send($recipient,$subject_remind,$body, 0, null, $bcc);
+			if ($result[0] !== true) {
+				$msg = '<br>'.'Fehler bei Mailausgabe: '.'<br>'.$result[1];
+				$mainframe->enqueueMessage( $msg, 'warning' );
+			}
 
 			$msg = JText::_( 'USERS_MIDESTENS');
 		}

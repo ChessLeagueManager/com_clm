@@ -161,4 +161,6 @@ $config["verein_mail"]=array(140,9,0,array(0,1));
 $config["verein_tel"]=array(141,9,0,array(0,1));
 $config["verein_fe_mail"]=array(142,9,0,array(0,1));
 $config["field_search"]=array(143,9,0,array(0,1));
+$config["email_suppress"]=array(144,9,0,array(0,1,2));
+$config["email_replace"]=array(145,12,"",null);
 ?>

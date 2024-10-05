@@ -196,8 +196,10 @@ if ($msg != '') {
 	// Email an TL - e-mail to tournament controller
 	if ($email_TL != "") {
 		$body_TL = $turnier->name."\n\n".JText::_('REG_TC_HELLO_1')."\n".JText::_('REG_TC_HELLO_2')."\n".$body_daten;
-		$result = clm_core::$cms->sendMail($from, $fromname, $email_TL, $subject, $body_TL, $htmlMail);
-		if ($result !== true) $msg .= '<br>'.JText::_('REG_MAIL_NOT_TO_TL');
+//		$result = clm_core::$cms->sendMail($from, $fromname, $email_TL, $subject, $body_TL, $htmlMail);
+		$result = clm_core::$api->mail_send($email_TL, $subject, $body_TL, $htmlMail);
+		if ($result[0] !== true) 
+			$msg .= '<br>'.JText::_('REG_MAIL_NOT_TO_TL').'<br>'.$result[1];
 	}
 	// Info-E-mail an den Spieler - info e-mail to player
 	if ($reg_mail != "") {
@@ -205,8 +207,10 @@ if ($msg != '') {
 		$body_AM .= "\n".JText::_('REG_PLAYER_HELLO_4');
 		$body_AM .= "\n".$url;
 		$body_AM .= "\n".JText::_('REG_PLAYER_HELLO_5');
-		$result = clm_core::$cms->sendMail($from, $fromname, $reg_mail, $subject, $body_AM, $htmlMail);
-		if ($result !== true) $msg .= '<br>'.JText::_('REG_MAIL_NOT_TO_PL');
+//		$result = clm_core::$cms->sendMail($from, $fromname, $reg_mail, $subject, $body_AM, $htmlMail);
+		$result = clm_core::$api->mail_send($reg_mail, $subject, $body_AM, $htmlMail);
+		if ($result[0] !== true) 
+			$msg .= '<br>'.JText::_('REG_MAIL_NOT_TO_PL').'<br>'.$result[1];
 	}
 	
 	if ($msg == '') {

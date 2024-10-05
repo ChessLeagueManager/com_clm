@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -391,7 +391,8 @@ $attr = clm_core::$api->db_lineup_attr($lid);
 
 	$body_name = JText::_('RESULT_NAME').$melder[0]->name.",";
 	$countmail = 0;
-
+	$msg = '';
+	
 	// Textparameter setzen
 	if ($abgabe[0]->liste > 0) $erstmeldung = 0;	// Erstmeldung nein
 	else $erstmeldung = 1;  						// Erstmeldung ja
@@ -423,9 +424,10 @@ $attr = clm_core::$api->db_lineup_attr($lid);
 		$body_name = JText::_('RESULT_NAME').$melder[0]->name.",";
 		$body = $body_html_header.$body_name.$body_html_md.$body_html.$body_html_footer;
 		$recipient = $melder[0]->email;
-		jimport( 'joomla.mail.mail' );
-		$mail = JFactory::getMailer();
-		$mail->sendMail($from,$fromname,$recipient,$subject,$body,1,null,$bcc);
+
+		$result = clm_core::$api->mail_send($recipient,$subject,$body,1,null,$bcc);
+		if ($result[0] !== true) 
+			$msg .= '<br>'.'Fehler bei Mailausgabe: '.'<br>'.$result[1];
 		$countmail++;
 	}
 	// Mail Mannschaftsleiter
@@ -451,9 +453,10 @@ $attr = clm_core::$api->db_lineup_attr($lid);
 		$body_name = JText::_('RESULT_NAME').$mannschaft[0]->mf_name.",";
 		$body = $body_html_header.$body_name.$body_html_mf.$body_html.$body_html_footer;
 		$recipient = $mannschaft[0]->mf_email;
-		jimport( 'joomla.mail.mail' );
-		$mail = JFactory::getMailer();
-		$mail->sendMail($from,$fromname,$recipient,$subject,$body,1,null,$bcc);
+		$result = clm_core::$api->mail_send($recipient,$subject,$body,1,null,$bcc);
+
+		if ($result[0] !== true) 
+			$msg .= '<br>'.'Fehler bei Mailausgabe: '.'<br>'.$result[1];
 		$countmail++;
 	}
 	// Mail Staffelleiter
@@ -476,9 +479,10 @@ $attr = clm_core::$api->db_lineup_attr($lid);
 		$body_name = JText::_('RESULT_NAME').$liga[0]->sl_name.",";
 		$body = $body_html_header.$body_name.$body_html_sl.$body_html.$body_html_footer;
 		$recipient = $liga[0]->sl_email;
-		jimport( 'joomla.mail.mail' );
-		$mail = JFactory::getMailer();
-		$mail->sendMail($from,$fromname,$recipient,$subject,$body,1,null,$bcc);
+
+		$result = clm_core::$api->mail_send($recipient,$subject,$body,1,null,$bcc);
+		if ($result[0] !== true) 
+			$msg .= '<br>'.'Fehler bei Mailausgabe: '.'<br>'.$result[1];
 		$countmail++;
 	}
 	if ($bcc_mail != "") {
@@ -498,14 +502,15 @@ $attr = clm_core::$api->db_lineup_attr($lid);
 		$body_name = JText::_('RESULT_NAME').$bcc_name.",";
 		$body = $body_html_header.$body_name.$body_html_ad.$body_html.$body_html_footer;
 		$recipient = $bcc_mail;
-		jimport( 'joomla.mail.mail' );
-		$mail = JFactory::getMailer();
-		$mail->sendMail($from,$fromname,$recipient,$subject,$body,1);
+
+		$result = clm_core::$api->mail_send($recipient,$subject,$body,1);
+		if ($result[0] !== true) 
+			$msg .= '<br>'.'Fehler bei Mailausgabe: '.'<br>'.$result[1];
 		$countmail++;
 	}
 
 }
-$msg = JText::_( 'CLUB_LIST_SEND_OK' );
+$msg .= JText::_( 'CLUB_LIST_SEND_OK' );
 if ($countmail > 0) $msg .= JText::_( 'CLUB_LIST_SEND_MAIL' );
 $mainframe->enqueueMessage( $msg );
 $mainframe->redirect( $link );
