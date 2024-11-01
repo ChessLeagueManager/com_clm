@@ -1,4 +1,12 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+ * @author Florian Huber
+ * @email huberflorian2@googlemail.com
+*/
 
 class AddressHandler
 {
@@ -87,9 +95,6 @@ class AddressHandler
             return -1; // Map Services (external) not enabled
         }
 
-        // Prepare address for geo lookup
-        $address = $this->prepareAddress($address);
-
         // Lookup based on activated service
         $coordinates = $this->getCoordinates($address);
 
@@ -167,19 +172,60 @@ class AddressHandler
             ]
         ];
 
-        $userAgent = stream_context_create($options);
-        $url = "https://nominatim.openstreetmap.org/?format=json&addressdetails=1&q={$address}&format=json&limit=1";
-        $resp_json = file_get_contents($url, false, $userAgent);
-        $resp = json_decode($resp_json, true);
+        // Prepare address for geo lookup
+        $encoded_address = $this->prepareAddress($address);
 
-        if (is_null($resp)) {
-            return NULL;
-        } elseif (isset($resp[0]['lat']) && isset($resp[0]['lon'])) {
-            return array($resp[0]['lat'], $resp[0]['lon']);
-        } else {
+        $userAgent = stream_context_create($options);
+        $url = "https://nominatim.openstreetmap.org/?search&q={$encoded_address}&format=json&adressdetails=1";
+        $resp_json = file_get_contents($url, false, $userAgent);
+
+        //Check if the response is empty
+        if (empty($resp_json) || $resp_json == "[]") {
             return NULL;
         }
-    }
+        else
+        {
+            //Search for the PLZ (Postleitzahl) in the response
+            //There were some occurences by CLM user, where the highest response of OSM was in a different city (other PLZ)
+            preg_match('/\b\d{5}\b/', $address, $matches);
+            if (!empty($matches)) {
+                $postal_code = $matches[0];
+            
+                $places = json_decode($resp_json, true);
+            
+                // Track place with highest importance
+                $highestImportancePlace = null;
+                $maxImportance = -1; // OSM returns only values between 0 and 1 
+            
+                // Loop through the response and check if the PLZ exists in the display_name
+                foreach ($places as &$place) {
+                    if (strpos($place['display_name'], $postal_code) !== false) {
+                        $place['importance'] += 0.5; // Arbitrary value to increase importance of the place
+                    }
+            
+                    // Track highest importance place
+                    if ($place['importance'] > $maxImportance) {
+                        $maxImportance = $place['importance'];
+                        $highestImportancePlace = $place;
+                    }
+                }
+                        
+            }
+            else {
+                $resp = json_decode($resp_json, true);
+                //take first response which has the highest importance
+                $highestImportancePlace = $resp[0];
+            }
+
+            if (is_null($highestImportancePlace)) {
+                return NULL;
+            } elseif (isset($highestImportancePlace['lat']) && isset($highestImportancePlace['lon'])) {
+                return array($highestImportancePlace['lat'], $highestImportancePlace['lon']);
+            } else {
+                return NULL;
+            }
+        }
+}
 
     /**
      * Retrieves the coordinates (latitude and longitude) of a given address using the Google Geocoding API.
@@ -190,7 +236,9 @@ class AddressHandler
      */
     private function getCoordinatesFromGoogle($address, $gAPIKey)
     {
-        $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key={$gAPIKey}";
+        // Prepare address for geo lookup
+        $encoded_address = $this->prepareAddress($address);
+        $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$encoded_address}&key={$gAPIKey}";
         $resp_json = file_get_contents($url, false);
         $resp = json_decode($resp_json, true);
 
