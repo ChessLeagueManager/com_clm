@@ -30,24 +30,32 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 		//Array f�r JObjects erzeugen;
 		$this->_teilnehmer = array();
 		
+		//Datei-Version
+		$file_version			= CLMSWT::readInt($swt,609,2);
+		
 		//Einstellungen zur Berechnung des offset auslesen
 		$anz_teilnehmer 		= CLMSWT::readInt($swt,7,2);
 		$anz_runden		 		= CLMSWT::readInt($swt,1,2);
 		$anz_durchgaenge 		= CLMSWT::readInt($swt,599,1);
-		$aktuelle_runde			= CLMSWT::readInt($swt,3,2);
+		if ($file_version == 724)
+			$aktuelle_runde			= $anz_runden;
+		else 
+			$aktuelle_runde			= CLMSWT::readInt($swt,3,2);
 		$aktueller_durchgang	= CLMSWT::readInt($swt,598,1);
 		$ausgeloste_runden		= CLMSWT::readInt($swt,5,2);
 		$modus = $this->_calculateCLMModus(CLMSWT::readInt($swt,596,1));
 				
 		//offset f�r Teilnehmerdaten berechnen
+		if ($file_version == 724) $offset_eerg = 3894;
+		else $offset_eerg = 13384;
 		if($aktuelle_runde != 0) { //Turnier ist bereits angefangen
 			if($modus == 2){ //Vollrundig
-				$offset = 13384 + $anz_teilnehmer * $anz_runden * $anz_durchgaenge * 19;
+				$offset = $offset_eerg + $anz_teilnehmer * $anz_runden * $anz_durchgaenge * 19;
 			} else { 
-				$offset = 13384 + $anz_teilnehmer * $anz_runden * 19;
+				$offset = $offset_eerg + $anz_teilnehmer * $anz_runden * 19;
 			} 
 		} else { //Turnier ist noch nicht angefangen
-			$offset = 13384;
+			$offset = $offset_eerg;
 		}
 		
 		//TWZ-Bestimmen Parameter lesen
@@ -79,7 +87,10 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 				if ($teilnehmer->geschlecht == 'F' OR $teilnehmer->geschlecht == 'f' OR $teilnehmer->geschlecht == 'w') $teilnehmer->set('geschlecht'	, 'W');
 				$teilnehmer->set('tlnrStatus'	, (CLMSWT::readName($swt,$offset+184	,1)=="*" ? "0" : "1"));
 				if ($modus == 3 OR $modus == 5) $teilnehmer->set('tlnrStatus'	, 1);
-				$teilnehmer->set('FIDEid'   	, CLMSWT::readName($swt,$offset+324	,12));
+				if ($file_version == 724)
+					$teilnehmer->set('FIDEid'   	, 0);
+				else
+					$teilnehmer->set('FIDEid'   	, CLMSWT::readName($swt,$offset+324	,12));
 
 				$s_points = CLMSWT::readInt($swt,$offset+273,1);
 				$s_sign = CLMSWT::readInt($swt,$offset+274,1);
@@ -108,7 +119,10 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 			$this->_teilnehmer[$i] = $teilnehmer;
 			
 			//Offset und index f�r n�chsten Teilnehmer erh�hen
-			$offset += 655;
+			if ($file_version == 724)
+				$offset += 292;
+			else
+				$offset += 655;
 			$i++;
 		}
 		

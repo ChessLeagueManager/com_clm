@@ -23,8 +23,9 @@ $ -> Language fix or change
 ^ DeWIS-Datei: Geburtstag anstelle Geburtsjahr vorrangig verwenden, wenn gegeben
 # Online-Turnieranmeldung: Bestätigung unter J 5.x
 ^ Update Leaflet Version
-^ SWT-Import Liga: Erhaltung er Kategorien bei Update
+^ SWT-Import Liga: Erhaltung der Kategorien bei Update
 ^ Vereinheitlichung der Mailausgaben mit Möglichkeit der Unterdrückung
++ SWT-Import Einzel: Import von SwissChess-Version 7.24
 
 - - - - - 4.2.1 - [21-08-2024] - - - - - - - - - - - - - - - - - - - -
 + Datenbank: Import auch von Spielerdaten im V2-Format mit Spieler-Id
@@ -43,6 +44,7 @@ $ -> Language fix or change
 + BE/FE: Caching für Geo-Locationing eingebaut (Mannschaft, Verein, Meldeliste)
 ^ pgn-Import: Saisonauswahhl möglich
 # Admin View Runden: Berechtigungen TL Mannschaftsturniere
+
 - - - - - 4.2.0 - [17-06-2024] - - - - - - - - - - - - - - - - - - - -
 - - - - - 4.1.6 - [08-06-2024] - - - - - - - - - - - - - - - - - - - -
 ^ Paarungsliste: iCal-Ausgabe Anpassung wegen sql_mode=only_full_group_by

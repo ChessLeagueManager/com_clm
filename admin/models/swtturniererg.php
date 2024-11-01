@@ -52,10 +52,16 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			$path 		= JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 			$swt 		= $path.$filename;
 					
+			//Datei-Version
+			$file_version			= CLMSWT::readInt($swt,609,2);
+		
 			//Einstellungen auslesen
 			$anz_runden		 		= CLMSWT::readInt($swt,1,2);
 			$anz_durchgaenge 		= CLMSWT::readInt($swt,599,1);
-			$aktuelle_runde			= CLMSWT::readInt($swt,3,2);
+			if ($file_version == 724)
+				$aktuelle_runde			= $anz_runden;
+			else 
+				$aktuelle_runde			= CLMSWT::readInt($swt,3,2);
 			$aktueller_durchgang	= CLMSWT::readInt($swt,598,1);		
 			$ausgeloste_runden		= CLMSWT::readInt($swt,5,2);
 			$modus = $this->_calculateCLMModus(CLMSWT::readInt($swt,596,1));
@@ -99,19 +105,24 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 //				if (!isset($runde->datum)) $runde->datum = '';
 				if ($runde->datum == '0000-00-00' OR $runde->datum == '1970-01-01') $runde->datum = '';
 				if ($runde->datum == '') {
-					$test = 'datum'.$rnd;
-					$d1 = CLMSWT::readInt($swt,11457 +(($rnd-1) * 4),1);
-					$d2 = CLMSWT::readInt($swt,11457 +(($rnd-1) * 4)+1,1);
-					$hh = CLMSWT::readInt($swt,11457 +(($rnd-1) * 4)+2,1);
-					$mm = CLMSWT::readInt($swt,11457 +(($rnd-1) * 4)+3,1);
-					$lt = $d1 + ($d2 * 256);
-					if ($lt > 0) {
-					$rdate = date_create('1899-12-30');
+					if ($file_version == 724) {
+						$runde->datum = '';
+						$runde->startzeit = '';
+					} else {
+						$test = 'datum'.$rnd;
+						$d1 = CLMSWT::readInt($swt,11457 +(($rnd-1) * 4),1);
+						$d2 = CLMSWT::readInt($swt,11457 +(($rnd-1) * 4)+1,1);
+						$hh = CLMSWT::readInt($swt,11457 +(($rnd-1) * 4)+2,1);
+							$mm = CLMSWT::readInt($swt,11457 +(($rnd-1) * 4)+3,1);
+						$lt = $d1 + ($d2 * 256);
+						if ($lt > 0) {
+						$rdate = date_create('1899-12-30');
 						$ltstring = $lt." days";
 						//date_add($rdate, date_interval_create_from_date_string($ltstring));  	// for >= php 5.3.0 
 						date_modify($rdate, '+'.$lt.' days');									// for >= php 5.2.0 too
 						$runde->datum = date_format($rdate, 'Y-m-d');
 						$runde->startzeit = sprintf('%02d', $hh).':'.sprintf('%02d', $mm).':00';
+						}
 					}
 				}
 //				if (!isset($runde->startzeit)) $runde->startzeit = '';
@@ -217,11 +228,17 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 		$path 		= JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		$swt 		= $path.$filename;
 				
+		//Datei-Version
+		$file_version			= CLMSWT::readInt($swt,609,2);
+		
 		//Einstellungen zur Berechnung des offset auslesen
 		$anz_teilnehmer 		= CLMSWT::readInt($swt,7,2);
 		$anz_runden		 		= CLMSWT::readInt($swt,1,2);
 		$anz_durchgaenge 		= CLMSWT::readInt($swt,599,1);
-		$aktuelle_runde			= CLMSWT::readInt($swt,3,2);
+			if ($file_version == 724)
+				$aktuelle_runde			= $anz_runden;
+			else 
+				$aktuelle_runde			= CLMSWT::readInt($swt,3,2);
 		$aktueller_durchgang	= CLMSWT::readInt($swt,598,1);
 		$ausgeloste_runden		= CLMSWT::readInt($swt,5,2);
 		$modus = $this->_calculateCLMModus(CLMSWT::readInt($swt,596,1));
@@ -239,7 +256,9 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 		
 		
 		//offset f�r Spielerpaarungen setzen
-		$offset = 13384;
+//		$offset = 13384;
+		if ($file_version == 724) $offset = 3894;
+		else $offset = 13384;
 		
 		//Paarungen auslesen
 		$sp = 1;
