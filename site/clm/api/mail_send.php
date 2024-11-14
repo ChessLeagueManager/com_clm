@@ -68,15 +68,15 @@ function clm_api_mail_send($mail_to, $mail_subj, $mail_body, $htmlMail=0, $mail_
 		if ($htmlMail == 1) $nl = '<br>';
 		$mail_body2 = $nl;
 		$mail_body2 .= $nl."-------------------------------------";
-		$mail_body2 .= $nl."Orig.Empfänger:".$mail_to;
+		$mail_body2 .= $nl."Orig.Empfänger: ".$mail_to;
 		$mail_to	= $replace;
 		if (!is_null($mail_cc) AND $mail_cc > ' ') {
 			if ($htmlMail == 0) $mail_body2 .= $nl;
-			$mail_body2 .= $nl."Orig.CC-Empfänger:".$mail_cc;
+			$mail_body2 .= $nl."Orig.CC-Empfänger: ".$mail_cc;
 		}
 		if (!is_null($mail_bcc) AND $mail_bcc > ' ') {
 			if ($htmlMail == 0) $mail_body2 .= $nl;
-			$mail_body2 .= $nl."Orig.BCC-Empfänger:".$mail_bcc;
+			$mail_body2 .= $nl."Orig.BCC-Empfänger: ".$mail_bcc;
 		}
 	}
 
