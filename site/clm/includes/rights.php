@@ -84,6 +84,7 @@ $rights["db_mail_save"]=array(0,"BE_user_general",true);
 $rights["view_mail"]=array(0,"BE_user_general",true);
 $rights["db_player_check"]=array(); // Prüfung, ob spieler im Spielbetrieb verankert
 $rights["mail_send"]=array(); // Mailversand
+$rights["db_syn_player_block"]=array(); // Synchronisation Sperrkennzeichen
 
 $rights["test_print"]=array();
 //************************

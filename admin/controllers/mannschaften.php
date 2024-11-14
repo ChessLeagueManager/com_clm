@@ -1260,6 +1260,33 @@ public static function save_meldeliste()
 		}
 	}
 
+	//Sperrkennzeichen synchronisieren
+	for ($y=1; $y< 1+($stamm+$ersatz); $y++){
+		$spl	= clm_core::$load->request_string( 'spieler'.$y, '');
+		$block	= clm_core::$load->request_int( 'check'.$y, -1);
+		if ($spl >0) {
+			$teil	= explode("-", $spl);
+			if ($countryversion == "de") {
+				$mgl_nr	= $teil[0];
+				$PKZ    = '';
+			} else {
+				$mgl_nr	= 0;
+				$PKZ    = $teil[0];
+			}
+			$tzps	= $teil[1];
+//			if ($block[$y] != $z_gesperrt) {
+				$rc = clm_core::$api->db_syn_player_block($sid,$tzps,$mgl_nr,$block);
+				if ($rc[0] === false) {
+					$msg = "m_updateError".$rc[1];
+					$mainframe->enqueueMessage( $msg, 'error' );
+				} else {
+					$msg = $rc[1];
+					$mainframe->enqueueMessage( $msg, 'message' );
+				}
+//			}
+		}
+	}
+
 	$msg = $editor;
 	switch ($task)
 	{

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -295,15 +295,28 @@ for ($x=0; $x< 100; $x++){
 		$pdf->Cell(10,$zelle,$count[$x]->attr,1,0,'C',$fc);
     } 
 	$pdf->Cell(10,$zelle,$count[$x]->FIDE_Titel,1,0,'C',$fc);
-	if ($o_nr == 0) 
+	$strikeout_x = $pdf->GetX();
+	if ($o_nr == 0) {
 		$pdf->Cell(40,$zelle,clm_core::$load->utf8decode($count[$x]->name),1,0,'L',$fc);
-	elseif ($mannschaft[0]->sg_zps > "0") {
+		if ($count[$x]->gesperrt == 1) {
+			$pdf->SetX($strikeout_x);
+			$pdf->Cell(40,$zelle,'------------------------',0,0,'L');
+		}
+	} elseif ($mannschaft[0]->sg_zps > "0") {
 		$pdf->Cell(33,$zelle,clm_core::$load->utf8decode($count[$x]->name),1,0,'L',$fc);
+		if ($count[$x]->gesperrt == 1) {
+			$pdf->SetX($strikeout_x);
+			$pdf->Cell(33,$zelle,'------------------------',0,0,'L');
+		}
 		$pdf->SetFont('Times','',7);
 		$pdf->Cell(15,$zelle,"(".$count[$x]->zps."-".$count[$x]->mgl_nr.")",1,0,'L',$fc);
 		$pdf->SetFont('Times','',8);
 	} else {
 		$pdf->Cell(33,$zelle,clm_core::$load->utf8decode($count[$x]->name),1,0,'L',$fc);
+		if ($count[$x]->gesperrt == 1) {
+			$pdf->SetX($strikeout_x);
+			$pdf->Cell(33,$zelle,'------------------------',0,0,'L');
+		}
 		$pdf->SetFont('Times','',7);
 		$pdf->Cell(7,$zelle,"(".$count[$x]->mgl_nr.")",1,0,'L',$fc);
 		$pdf->SetFont('Times','',8);

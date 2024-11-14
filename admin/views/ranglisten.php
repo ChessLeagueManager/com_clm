@@ -431,6 +431,7 @@ for ($x=0; $x < (count($spieler)-$count); $x++) {
 	<input type="hidden" name="PKZ<?php echo $x; ?>" value="<?php echo $spieler[$rang[$x]]->PKZ; ?>" />
 	<input type="hidden" name="ZPSM<?php echo $x; ?>" value="<?php echo $spieler[$rang[$x]]->ZPS; ?>" />
 	<input type="hidden" name="MGL<?php echo $x; ?>" value="<?php echo $spieler[$rang[$x]]->Mgl_Nr; ?>" />
+	<input type="hidden" name="BLOCK_A<?php echo $x; ?>" value="<?php echo $spieler[$rang[$x]]->gesperrt; ?>" />
 
 	<tr>
 	<td class="key" nowrap="nowrap">
@@ -440,7 +441,8 @@ for ($x=0; $x < (count($spieler)-$count); $x++) {
 	<input type="text" name="RA<?php echo $x ?>" size="4" maxLength="4" value="<?php echo $spieler[$rang[$x]]->Rang; ?>" onChange="Rcheck(this)">
 	</td>
 	<td id="SP<?php echo $x; ?>" name="SP<?php echo $x; ?>" class="key" nowrap="nowrap">
-		<?php echo $spieler[$rang[$x]]->Spielername; ?></td>
+		<?php if ($spieler[$rang[$x]]->gesperrt != 1) echo $spieler[$rang[$x]]->Spielername; 
+				else echo '<del>'.$spieler[$rang[$x]]->Spielername.'</del>';?></td>
 	<td id="ZPSM<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$rang[$x]]->ZPS; ?></td>
 	<td id="MGL<?php echo $x; ?>" class="key" nowrap="nowrap">
@@ -465,6 +467,7 @@ for ($x=0; $x < (count($spieler)-$count); $x++) {
 	<input type="hidden" name="PKZ<?php echo $x; ?>" value="<?php echo $spieler[$x]->PKZ; ?>" />
 	<input type="hidden" name="ZPSM<?php echo $x; ?>" value="<?php echo $spieler[$x]->ZPS; ?>" />
 	<input type="hidden" name="MGL<?php echo $x; ?>" value="<?php echo $spieler[$x]->Mgl_Nr; ?>" />
+	<input type="hidden" name="BLOCK_A<?php echo $x; ?>" value="<?php echo $spieler[$x]->gesperrt; ?>" />
 
 	<tr>
 	<td class="key" nowrap="nowrap">
@@ -474,7 +477,8 @@ for ($x=0; $x < (count($spieler)-$count); $x++) {
 		<input type="text" name="RA<?php echo $x ?>" size="4" maxLength="4" <?php if(isset($spieler[$x]->Rang)) { ?> value="<?php echo $spieler[$x]->Rang; ?>" <?php } ?> onChange="Rcheck(this)">
 	</td>
 	<td id="SP<?php echo $x; ?>" name="SP<?php echo $x; ?>" class="key" nowrap="nowrap">
-		<?php echo $spieler[$x]->Spielername; ?></td>
+		<?php if ($spieler[$x]->gesperrt != 1) echo $spieler[$x]->Spielername; 
+				else echo '<del>'.$spieler[$x]->Spielername.'</del>';?></td>
 	<td id="ZPSM<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->ZPS; ?></td>
 	<td id="MGL<?php echo $x; ?>" class="key" nowrap="nowrap">
@@ -524,6 +528,7 @@ if (clm_core::$load->request_string( 'task') == 'edit' ) {
 	<input type="hidden" name="PKZ<?php echo $x; ?>" value="<?php echo $spieler[$rang[$x]]->PKZ; ?>" />
 	<input type="hidden" name="ZPSM<?php echo $x; ?>" value="<?php echo $spieler[$rang[$x]]->ZPS; ?>" />
 	<input type="hidden" name="MGL<?php echo $x; ?>" value="<?php echo $spieler[$rang[$x]]->Mgl_Nr; ?>" />
+	<input type="hidden" name="BLOCK_A<?php echo $x; ?>" value="<?php echo $spieler[$rang[$x]]->gesperrt; ?>" />
 
 	<tr>
 	<td class="key" nowrap="nowrap">
@@ -533,7 +538,8 @@ if (clm_core::$load->request_string( 'task') == 'edit' ) {
 	<input type="text" name="RA<?php echo $x ?>" size="4" maxLength="4" value="<?php echo $spieler[$rang[$x]]->Rang; ?>" onChange="Rcheck(this)">
 	</td>
 	<td id="SP<?php echo $x; ?>" class="key" nowrap="nowrap">
-		<?php echo $spieler[$rang[$x]]->Spielername; ?></td>
+		<?php if ($spieler[$rang[$x]]->gesperrt != 1) echo $spieler[$rang[$x]]->Spielername; 
+				else echo '<del>'.$spieler[$rang[$x]]->Spielername.'</del>';?></td>
 	<td id="ZPSM<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$rang[$x]]->ZPS; ?></td>
 	<td id="MGL<?php echo $x; ?>" class="key" nowrap="nowrap">
@@ -558,6 +564,7 @@ if (clm_core::$load->request_string( 'task') == 'edit' ) {
 	<input type="hidden" name="PKZ<?php echo $x; ?>" value="<?php echo $spieler[$x]->PKZ; ?>" />
 	<input type="hidden" name="ZPSM<?php echo $x; ?>" value="<?php echo $spieler[$x]->ZPS; ?>" />
 	<input type="hidden" name="MGL<?php echo $x; ?>" value="<?php echo $spieler[$x]->Mgl_Nr; ?>" />
+	<input type="hidden" name="BLOCK_A<?php echo $x; ?>" value="<?php echo $spieler[$x]->gesperrt; ?>" />
 
 	<tr>
 	<td class="key" nowrap="nowrap">
@@ -567,7 +574,8 @@ if (clm_core::$load->request_string( 'task') == 'edit' ) {
 		<input type="text" name="RA<?php echo $x ?>" size="4" maxLength="4" <?php if(isset($spieler[$x]->Rang)) { ?> value="<?php echo $spieler[$x]->Rang; ?>" <?php } ?> onChange="Rcheck(this)">
 	</td>
 	<td id="SP<?php echo $x; ?>" class="key" nowrap="nowrap">
-		<?php echo $spieler[$x]->Spielername; ?></td>
+		<?php if ($spieler[$x]->gesperrt != 1) echo $spieler[$x]->Spielername; 
+				else echo '<del>'.$spieler[$x]->Spielername.'</del>';?></td>
 	<td id="ZPSM<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->ZPS; ?></td>
 	<td id="MGL<?php echo $x; ?>" class="key" nowrap="nowrap">

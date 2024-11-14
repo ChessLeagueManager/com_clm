@@ -136,7 +136,8 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 	$pkz	= array();
 	$mnr	= array();
 	$rang	= array();
-
+	$block	= array();
+	
 	// Rangliste und Arrays schreiben
 	for ($y=0; $y < $count; $y++) {
 		$ZPSmgl[]	= trim(clm_core::$load->request_string('ZPSM'.$y));
@@ -231,6 +232,24 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 		;
 	$db->setQuery($query);
 	clm_core::$db->query($query);
+
+	//Sperrkennzeichen synchronisieren
+	for ($y=0; $y < $count; $y++) {
+		$ZPSmgl	= trim(clm_core::$load->request_string('ZPSM'.$y));
+		$mgl	= clm_core::$load->request_string('MGL'.$y);
+		$block	= clm_core::$load->request_int('check'.$y);
+		$block_a	= clm_core::$load->request_int('BLOCK_A'.$y);
+		if ($block != $block_a) {
+			$rc = clm_core::$api->db_syn_player_block($sid,$ZPSmgl,$mgl,$block);
+			if ($rc[0] === false) {
+				$msg = "m_updateError".$rc[1];
+				$mainframe->enqueueMessage( $msg, 'error' );
+			} else {
+				$msg = $rc[1];
+				$mainframe->enqueueMessage( $msg, 'message' );
+			}
+		}
+	}
 
 	// Log schreiben
 	$jid_aktion =  ($user->get('id'));

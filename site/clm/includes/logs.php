@@ -40,4 +40,5 @@ $logs[]="db_swm_import";
 $logs[]="db_swt_to_clm";
 $logs[]="db_term_import";
 $logs[]="db_mail_save";
+$logs[]="db_syn_player_block"; // Synchronisation Sperrkennzeichen
 ?>

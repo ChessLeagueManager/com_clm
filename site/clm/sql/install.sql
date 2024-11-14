@@ -106,6 +106,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_dwz_spieler` (
   `joiningdate` date NOT NULL DEFAULT '1970-01-01',
   `leavingdate` date NOT NULL DEFAULT '1970-01-01',
   `synflag` tinyint(1) NOT NULL DEFAULT 0,
+  `gesperrt` tinyint(1) UNSIGNED DEFAULT NULL,
   `inofFIDEelo` smallint(4) UNSIGNED DEFAULT NULL,
   `K` smallint(4) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`),

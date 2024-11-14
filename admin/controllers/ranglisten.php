@@ -357,8 +357,8 @@ function edit()
 		}
 	}
 	if ($task == 'edit') {
-		$sql = " SELECT r.Rang, r.man_nr, a.sid,a.ZPS,a.Mgl_Nr,a.PKZ, a.DWZ, r.gesperrt,"
-			." a.DWZ_Index,a.Geburtsjahr,a.Spielername,a.Status"
+		$sql = " SELECT r.Rang, r.man_nr, a.sid,a.ZPS,a.Mgl_Nr,a.PKZ, a.DWZ,"
+			." a.DWZ_Index,a.Geburtsjahr,a.Spielername,a.Status, a.gesperrt"
 			." FROM #__clm_dwz_spieler as a"
 			." LEFT JOIN #__clm_rangliste_id as i ON i.sid = a.sid AND (i.zps = '$sql_zps') "
 			." LEFT JOIN #__clm_rangliste_spieler as r ON r.sid = a.sid AND r.ZPSmgl = a.ZPS AND r.Mgl_Nr = a.Mgl_Nr AND r.Gruppe = i.gid AND r.ZPS = i.zps "
@@ -377,7 +377,7 @@ function edit()
 		if ($anz_sgp > 1) $sql_sg_zps .= ','.$filter_sg_vid2;
 		if ($anz_sgp > 2) $sql_sg_zps .= ','.$filter_sg_vid3;
 		if ($anz_sgp > 3) $sql_sg_zps .= ','.$filter_sg_vid4;
-		$sql = " SELECT a.sid,a.ZPS,a.Mgl_Nr,a.PKZ,a.DWZ,a.DWZ_Index,a.Geburtsjahr,a.Spielername,a.Status"
+		$sql = " SELECT a.sid,a.ZPS,a.Mgl_Nr,a.PKZ,a.DWZ,a.DWZ_Index,a.Geburtsjahr,a.Spielername,a.Status, a.gesperrt"
 			." FROM #__clm_dwz_spieler as a"
 //			." WHERE (a.ZPS = '$sql_zps' OR a.ZPS = '$sql_sg_zps')"
 			." WHERE (a.ZPS ='".$sql_zps."' OR FIND_IN_SET(a.ZPS,'".$sql_sg_zps."') != 0 )"
@@ -701,7 +701,22 @@ function save()
 		$mainframe->enqueueMessage(JText::_( 'RANGLISTE_ERGEBNIS' ), 'notice');
 		$mainframe->enqueueMessage(JText::_( 'RANGLISTE_MN_MANAGER' ), 'notice');
 	}
-	
+
+	//Sperrkennzeichen sybchronisieren
+	for ($y=0; $y < $count; $y++) {
+		$block_a	= clm_core::$load->request_int('BLOCK_A'.$y);
+		if ($block[$y] != $block_a) {
+			$rc = clm_core::$api->db_syn_player_block($sid,$ZPSmgl[$y],intval($mgl[$y]),$block[$y]);
+			if ($rc[0] === false) {
+				$msg = "m_updateError".$rc[1];
+				$mainframe->enqueueMessage( $msg, 'error' );
+			} else {
+				$msg = $rc[1];
+				$mainframe->enqueueMessage( $msg, 'message' );
+			}
+		}
+	}
+		
 	switch ($task)
 	{
 		case 'apply':

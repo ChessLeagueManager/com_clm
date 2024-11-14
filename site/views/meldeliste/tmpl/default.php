@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -189,13 +189,16 @@ echo "<br>published ".$clmuser[0]->published;
 <table class="adminlist" cellpadding="0" cellspacing="0">
 <tr> 
 	<th class="anfang"><b><input type="hidden" name="toggle" value=""  /></b></th> 
-	<th class="anfang"><?php echo JText::_('CLUB_LIST_NAME') ?></th>
-	<th class="anfang"><?php echo JText::_('CLUB_LIST_ATTR') ?></th>
-	<th class="anfang"><?php echo JText::_('CLUB_LIST_DWZ') ?></th>
+	<th class="anfang" style="width:25%"><?php echo JText::_('CLUB_LIST_NAME') ?></th>
+	<th class="anfang" style="width:10%;"><?php echo JText::_('CLUB_LIST_ATTR') ?></th>
+	<th class="anfang" style="width:10%;"><?php echo JText::_('CLUB_LIST_DWZ') ?></th>
+	<th class="anfang" style="width:5%;"><?php echo JText::_('gesperrt') ?></th>
+	<th class="anfang" style="width:10%;"><?php echo '  '; ?></th>
 	<th class="anfang"><b><input type="hidden" name="toggle" value=""  /></b></th> 
-	<th class="anfang"><?php echo JText::_('CLUB_LIST_NAME') ?></th>
-	<th class="anfang"><?php echo JText::_('CLUB_LIST_ATTR') ?></th>
-	<th class="anfang"><?php echo JText::_('CLUB_LIST_DWZ') ?></th>
+	<th class="anfang" style="width:25%;"><?php echo JText::_('CLUB_LIST_NAME') ?></th>
+	<th class="anfang" style="width:10%;"><?php echo JText::_('CLUB_LIST_ATTR') ?></th>
+	<th class="anfang" style="width:10%;"><?php echo JText::_('CLUB_LIST_DWZ') ?></th>
+	<th class="anfang" style="width:5%;"><?php echo JText::_('gesperrt') ?></th>
 </tr>
 
 <?php $i = 0;
@@ -211,7 +214,8 @@ echo "<br>published ".$clmuser[0]->published;
 	</td>
 	<td>
 		<input type="hidden" name="mglnr<?php echo $i+1; ?>" value="<?php echo $spieler[$i]->id; ?>" />
-		<?php echo $spieler[$i]->name; ?>
+		<?php if ($spieler[$i]->gesperrt =="1") echo '<del>'.$spieler[$i]->name.'</del>';
+				else echo $spieler[$i]->name; ?>	
 	</td>
 	<td>
 		<input class="inputbox" style="width:auto;" type="text" name="attr[<?php echo $spieler[$i]->id; ?>]" id="attr<?php echo $i+1; ?>" size="1" maxlength="4" value="<?php echo $spieler[$i]->attr; ?>" />
@@ -219,6 +223,14 @@ echo "<br>published ".$clmuser[0]->published;
 	<td>
 		<?php echo $spieler[$i]->dwz; ?>
 	</td>
+	<td align="center">
+		<input type="hidden" name="BLOCK_A<?php echo $i; ?>" value="<?php echo $spieler[$i]->gesperrt; ?>" />
+		<input type="checkbox" name="check[<?php echo $spieler[$i]->id; ?>]" id="check<?php echo $i; ?>" value="1" <?php if ($spieler[$i]->gesperrt =="1") { echo 'checked="checked" style="display:none;"'; } ?>>
+	</td>
+	<td align="center"
+		<b><?php echo '  '; ?></b>
+	</td>
+
 	<?php $j = intval($i + (count($spieler)/2) + (count($spieler) % 2)); // +1; 
 		if (isset($spieler[$j]) AND $spieler[$j]->snr > "0" AND $spieler[$j]->snr < "999") { $checked_marker = ' checked="checked"'; $spieler[$j]->checked_out = "1"; }
 		else $checked_marker = '';
@@ -236,6 +248,10 @@ echo "<br>published ".$clmuser[0]->published;
 	</td>
 	<td>
 		<?php if (isset($spieler[$j])) echo $spieler[$j]->dwz; ?>
+	</td>
+	<td align="center">
+		<input type="hidden" name="BLOCK_A[<?php if (isset($spieler[$j])) echo $spieler[$j]->id; ?>]" id="BLOCK_A<?php echo $j+1; ?>" value="<?php if (isset($spieler[$j])) echo $spieler[$j]->gesperrt; ?>" />
+		<input type="checkbox" name="check[<?php if (isset($spieler[$j])) echo $spieler[$j]->id; ?>]" id="check<?php echo $j; ?>" value="1" <?php if (isset($spieler[$j])) if ($spieler[$j]->gesperrt =="1") { echo 'checked="checked" style="display:none;"'; } ?>>
 	</td>
 	</tr>
 	<?php } ?>  

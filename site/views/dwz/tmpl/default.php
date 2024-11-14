@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -159,7 +159,9 @@ echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
     <td class="dwz_2"><?php echo $zps->PKZ; ?></td>
    <?php } ?>
     <td class="dwz_8"><?php echo $zps->FIDE_Titel; ?></td>
-    <td class="dwz_3"><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $zps->ZPS; ?>&mglnr=<?php echo $zps->Mgl_Nr; ?>&PKZ=<?php echo $zps->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php  echo $zps->Spielername; ?></a></td>
+    <td class="dwz_3"><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $zps->ZPS; ?>&mglnr=<?php echo $zps->Mgl_Nr; ?>&PKZ=<?php echo $zps->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>">
+		<?php if ($zps->gesperrt == 1) echo '<del>'.$zps->Spielername.'<del>';
+			else echo $zps->Spielername; ?></a></td>
      <?php if ($cuser != -1) { ?>
      <td class="dwz_4"><?php echo $zps->Status; ?></td>
      <td class="dwz_5"><?php echo $zps->Geschlecht; ?></td>

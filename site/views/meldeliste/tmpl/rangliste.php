@@ -153,6 +153,10 @@ function Spielerschreiben(i)
     <?php } ?>
     document.getElementById('Status'+i).innerHTML=Spieler[i][8];
     document.getElementById('check'+i).checked=Spieler[i][9];
+    if (Spieler[i][9] == 1) 
+		document.getElementById('check'+i).style["display"]="none";
+    else 
+		document.getElementById('check'+i).style["display"]="";
 }
 function QSort(l,r,Tiefe)
  {
@@ -420,6 +424,7 @@ Liste absenden !
 	<input type="hidden" name="PKZ<?php echo $x; ?>" value="<?php echo $spieler[$x]->PKZ; ?>" />
 	<input type="hidden" name="ZPSM<?php echo $x; ?>" value="<?php echo $spieler[$x]->ZPS; ?>" />
 	<input type="hidden" name="MGL<?php echo $x; ?>" value="<?php echo $spieler[$x]->Mgl_Nr; ?>" />
+	<input type="hidden" name="BLOCK_A<?php echo $x; ?>" value="<?php echo $spieler[$x]->gesperrt; ?>" />
 
 	<tr>
 	<td class="key" nowrap="nowrap">
@@ -429,7 +434,8 @@ Liste absenden !
 	<input type="text" name="RA<?php echo $x ?>" size="5" maxLength="5" value="<?php if(isset($spieler[$x]->Rang)) { echo $spieler[$x]->Rang; } ?>" onChange="Rcheck(this)">
 	</td>
 	<td id="SP<?php echo $x; ?>" name="SP<?php echo $x; ?>" class="key" nowrap="nowrap">
-		<?php echo $spieler[$x]->Spielername; ?></td>
+		<?php if ($spieler[$x]->gesperrt !="1") echo $spieler[$x]->Spielername; 
+			else echo '<del>'.$spieler[$x]->Spielername.'</del>'; ?></td>
 	<td id="ZPSM<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->ZPS; ?></td>
 	<td id="MGL<?php echo $x; ?>" class="key" nowrap="nowrap">
@@ -443,7 +449,7 @@ Liste absenden !
 	<td id="DWI<?php echo $x; ?>" class="key" nowrap="nowrap">
 		<?php echo $spieler[$x]->DWZ_Index; ?></td>
 	<td align="center">
-		<input type="checkbox" name="check<?php echo $x; ?>" id="check<?php echo $x; ?>" value="1" <?php if ($spieler[$x]->gesperrt =="1") { echo 'checked="checked"'; }?>>
+		<input type="checkbox" name="check<?php echo $x; ?>" id="check<?php echo $x; ?>" value="1" <?php if ($spieler[$x]->gesperrt =="1") { echo 'checked="checked" style="display:none;"'; } ?>>
 	</td>
 	</tr>
 

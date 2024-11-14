@@ -134,31 +134,49 @@ else
 	clm_core::$db->query($query);
 	}
 	
-// neue Meldeliste schreiben
-for ($y=1; $y< (1+$stamm+$ersatz) ; $y++){ 
-	$stm		= clm_core::$load->request_int('name'.$y);
-	$attr		= clm_core::$load->request_string('hidden_attr'.$y);
-	if ($attr == '') $attr = NULL;
+	// neue Meldeliste schreiben
+	for ($y=1; $y< (1+$stamm+$ersatz) ; $y++){ 
+		$stm		= clm_core::$load->request_int('name'.$y);
+		$attr		= clm_core::$load->request_string('hidden_attr'.$y);
+		if ($attr == '') $attr = NULL;
 
-	$dwz		= clm_core::$load->request_int('hidden_dwz'.$y);
-	$dwz_I0		= clm_core::$load->request_int('hidden_dwz_I0'.$y);
-	$mgl		= clm_core::$load->request_int('hidden_mglnr'.$y);
-	$PKZ		= clm_core::$load->request_string('hidden_PKZ'.$y);
-	$hidden_zps		= clm_core::$load->request_string('hidden_zps'.$y);
-	if ($countryversion =="de") {
-		if ($mgl == 0) break;
-	} else {
-		if ($PKZ == '' OR $PKZ == NULL) break;
+		$dwz		= clm_core::$load->request_int('hidden_dwz'.$y);
+		$dwz_I0		= clm_core::$load->request_int('hidden_dwz_I0'.$y);
+		$mgl		= clm_core::$load->request_int('hidden_mglnr'.$y);
+		$PKZ		= clm_core::$load->request_string('hidden_PKZ'.$y);
+		$hidden_zps		= clm_core::$load->request_string('hidden_zps'.$y);
+		if ($countryversion =="de") {
+			if ($mgl == 0) break;
+		} else {
+			if ($PKZ == '' OR $PKZ == NULL) break;
+		}
+		$query	= "INSERT INTO #__clm_meldeliste_spieler "
+			." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `PKZ`, `zps`, `ordering`, `start_dwz`, `start_I0`, `attr`) "
+			." VALUES ('$sid','$lid','$man','$y','$mgl','$PKZ','$hidden_zps','0','$dwz','$dwz_I0'";
+		if (!is_null($attr))
+			$query	.= ",'$attr') ";
+		else
+			$query	.= ", NULL) ";
+		$db->setQuery($query);
+		clm_core::$db->query($query);
+		
 	}
-	$query	= "INSERT INTO #__clm_meldeliste_spieler "
-		." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `PKZ`, `zps`, `ordering`, `start_dwz`, `start_I0`, `attr`) "
-		." VALUES ('$sid','$lid','$man','$y','$mgl','$PKZ','$hidden_zps','0','$dwz','$dwz_I0'";
-	if (!is_null($attr))
-		$query	.= ",'$attr') ";
-	else
-		$query	.= ", NULL) ";
-	$db->setQuery($query);
-	clm_core::$db->query($query);
+	//Sperrkennzeichen synchronisieren
+	for ($y=1; $y< (1+$stamm+$ersatz) ; $y++){ 
+		$mgl		= clm_core::$load->request_int('hidden_mglnr'.$y);
+		$zps		= clm_core::$load->request_string('hidden_zps'.$y);
+		$check		= clm_core::$load->request_int('hidden_check'.$y);
+		$gesperrt	= clm_core::$load->request_int('hidden_gesperrt'.$y);
+		if ($check != $gesperrt) {
+			$rc = clm_core::$api->db_syn_player_block($sid,$zps,$mgl,$check);
+			if ($rc[0] === false) {
+				$msg = "m_updateError".$rc[1];
+				$mainframe->enqueueMessage( $msg, 'error' );
+			} else {
+				$msg = $rc[1];
+				$mainframe->enqueueMessage( $msg, 'message' );
+			}
+		}
 	}
 
 // Log
@@ -182,10 +200,7 @@ for ($y=1; $y< (1+$stamm+$ersatz) ; $y++){
 		;
 	$db->setQuery($query);
 	$liga = $db->loadObjectList();
-	//echo "<br>liga: "; var_dump($liga);
-	//echo "<br>query: ".$query; 
-	//echo "<br>error: ".mysql_errno() . ": " . mysql_error(). "\n";
-	//die('<br> abfrage');
+	$msg = '';
 
 if ( $liga[0]->mail > 0 ) {
 	// Konfigurationsparameter auslesen
@@ -204,7 +219,7 @@ if ( $liga[0]->mail > 0 ) {
 	clm_core::$db->query($query);
 
 // Daten für Email sammeln
-$attr = clm_core::$api->db_lineup_attr($lid);
+	$attr = clm_core::$api->db_lineup_attr($lid);
 // Melder
 	$query	= "SELECT a.* FROM #__clm_user as a "
 		." WHERE a.sid =".$sid

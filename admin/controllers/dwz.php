@@ -407,6 +407,7 @@ static function daten_edit()
 
 	$sid		= clm_core::$load->request_int('sid');
 	$name 		= clm_core::$load->request_string('name');
+	$gesperrt	= clm_core::$load->request_int('gesperrt');
 	$mglnr		= clm_core::$load->request_string('mglnr');
 	$PKZ		= clm_core::$load->request_string('PKZ');
 	$dwz 		= clm_core::$load->request_int('dwz', 0);
@@ -516,6 +517,13 @@ static function daten_edit()
 	}
 	//$db->setQuery($query);
 	clm_core::$db->query($query);
+	
+	//Synchronisation Sperrkennzeichen
+	$rc = clm_core::$api->db_syn_player_block($sid,$zps,$mglnr,$gesperrt);
+	if ($rc[0] === false) {
+		$msg = "m_updateError".$rc[1];
+		$mainframe->enqueueMessage( $msg, 'error' );
+	}
 
 	// Log schreiben
 	$clmLog = new CLMLog();

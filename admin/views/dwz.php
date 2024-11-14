@@ -47,6 +47,7 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 	if (count($spieler) == 0) {
 		$spieler[0] = new stdClass();
 		$spieler[0]->Geschlecht = "";
+		$spieler[0]->gesperrt = 0;
 	}
 	// Auswahlfelder durchsuchbar machen
 	clm_core::$load->load_js("suche_liste");
@@ -162,7 +163,8 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 				<?php echo $x+1; ?>
 			</td>
 			<td class="key" width="25%" nowrap="nowrap">
-				<?php echo $verein[$x]->Spielername; ?>
+				<?php if ($verein[$x]->gesperrt == 1) echo '<del>'.$verein[$x]->Spielername.'</del>';
+					else echo $verein[$x]->Spielername; ?>
 			</td>
 			<?php if ($countryversion == "de") { ?>
 				<td class="key" nowrap="nowrap">
@@ -230,6 +232,15 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 		</tr>
 		<tr>
 			<td class="key" nowrap="nowrap">
+			<label for="gesperrt"><?php echo JText::_( 'MELDELISTE_BLOCK' ); ?></label>
+			</td>
+			<td align="left">
+			<input type="checkbox" name="gesperrt" id="gesperrt" value="1" <?php if ($spieler[0]->gesperrt =="1") { echo 'checked="checked"'; }?>>
+			</td>
+			<td><?php echo JText::_( '' ); ?></td>
+		</tr>
+		<tr>
+			<td class="key" nowrap="nowrap">
 			<label for="PKZ"><?php echo JText::_( 'MEMBER_TABLE_121' ); ?></label>
 			</td>
 			<td>
@@ -267,7 +278,7 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 		</tr>
 		<tr>
 			<td class="key" nowrap="nowrap">
-			<label for="mglnr"><?php echo JText::_( 'MEMBER_TABLE_121E' ); ?></label>
+			<label for="PKZ"><?php echo JText::_( 'MEMBER_TABLE_121E' ); ?></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="PKZ" id="PKZ" size="10" maxlength="10" <?php if (isset($filter_mgl) AND $filter_mgl !="0") {?> value="<?php echo $spieler[0]->PKZ ?>"<?php }?>/>

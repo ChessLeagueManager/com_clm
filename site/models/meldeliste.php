@@ -307,9 +307,11 @@ class CLMModelMeldeliste extends JModelLegacy
 	$liga = $team[0]->liga;
 
 	if ($countryversion =="de") {
-		$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.Mgl_Nr) as id, a.zps, a.Mgl_Nr, a.PKZ, a.DWZ as dwz, a.DWZ_Index as dwz_I0, IFNULL(l.snr,999) as snr "; 
+		$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.Mgl_Nr) as id, a.zps, a.Mgl_Nr, a.PKZ"
+				.", a.DWZ as dwz, a.DWZ_Index as dwz_I0, IFNULL(l.snr,999) as snr, a.gesperrt "; 
 	} else {
-		$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.PKZ) as id, a.zps, a.Mgl_Nr, a.PKZ, a.DWZ as dwz, a.DWZ_Index as dwz_I0, IFNULL(l.snr,999) as snr "; 
+		$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.PKZ) as id, a.zps, a.Mgl_Nr, a.PKZ"
+				.", a.DWZ as dwz, a.DWZ_Index as dwz_I0, IFNULL(l.snr,999) as snr, a.gesperrt "; 
 	}
 	$query .= " ,v.Vereinname "
 		." FROM #__clm_dwz_spieler as a "
