@@ -120,12 +120,13 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 			$titel = clm_core::$load->request_string('titel');
 			$geschlecht = clm_core::$load->request_string('geschlecht', 'NULL');
 			$birthYear = clm_core::$load->request_string('birthYear', '0000');
-			if (!is_numeric($birthYear)) $birthYear = '0000';
+			if (is_null($birthYear) OR !is_numeric($birthYear)) $birthYear = '0000';
 			
 			$twz = clm_core::$load->gen_twz($param_useastwz, $natrating, $fideelo);
 			if (is_null($twz) OR $twz == '') $twz = 0;						
 			if (is_null($natrating) OR $natrating == '') $natrating = 0;						
-			if (is_null($fideelo) OR $fideelo == '') $fideelo = 0;		
+			if (is_null($fideelo) OR $fideelo == '') $fideelo = 0;
+			if (is_null($birthYear) OR !is_numeric($birthYear)) $birthYear = '0000';
 
 			$mgl_nr = clm_core::$load->request_int('mgl_nr');
 			$zps = clm_core::$load->request_string('zps');
