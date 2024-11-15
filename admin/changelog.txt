@@ -28,6 +28,7 @@ $ -> Language fix or change
 + SWT-Import Einzel: Import von SwissChess-Version 7.24
 # Geo-Daten: Verfeinerung über PLZ
 + Synchronisation Sperrkennzeichen in Backend und Frontend
++ Ligaheft: Ergänzung um praktische Infos
 
 - - - - - 4.2.1 - [21-08-2024] - - - - - - - - - - - - - - - - - - - -
 + Datenbank: Import auch von Spielerdaten im V2-Format mit Spieler-Id

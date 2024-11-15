@@ -86,7 +86,14 @@ usort($bpr, 'vergleich');
 	$mail	= $config->man_mail;
 	$show_sl_mail = $config->show_sl_mail;
 	$man_spielplan = $config->man_spielplan;
+	$googlemaps   		= $config->googlemaps;
+	$googlemaps_rtype   = $config->googlemaps_rtype;
+	$googlemaps_mrout   = $config->googlemaps_mrout;
 	
+	$session_lang = clm_core::$cms->getLanguage();
+	if ($session_lang == 'en-GB') $google_lang = 'en';
+	else $google_lang = 'de';	
+
 	// Userkennung holen
 	$user	=JFactory::getUser();
 	$jid	= $user->get('id');
@@ -177,6 +184,7 @@ $pdf->SetTextColor(255);
 // max. Länge des Names bestimmen
 $lmax = 0;
 for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
+	if (!isset($punkte[$x])) continue;
 	$n = $pdf->GetStringWidth(clm_core::$load->utf8decode($punkte[$x]->name));
 	if ($n > $lmax) $lmax = $n;
 }
@@ -361,7 +369,7 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	if ($x%2 != 0) { $fc = 1; } else { $fc = 0; }
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 //	$pdf->Cell(6-$rbreite,$zelle,$x+1,1,0,'C',$fc);
-	$pdf->Cell(7-$rbreite,$zelle,$punkte[$x]->rankingpos,1,0,'C',$fc);
+	$pdf->Cell(6-$rbreite,$zelle,$punkte[$x]->rankingpos,1,0,'C',$fc);
 	if (($liga[0]->runden * $liga[0]->durchgang) < 14 )
 		$pdf->Cell(6-$rbreite,$zelle,$punkte[$x]->tln_nr,1,0,'C',$fc);
 	while (($lmax) < $pdf->GetStringWidth(clm_core::$load->utf8decode($punkte[$x]->name)))
@@ -502,6 +510,71 @@ if ($liga[0]->bemerkungen <> "") {
 	}
 	$pdf->Ln();
 // Ende Teilnehmer
+
+// Details zur Liga/Turnier
+if ($pdf_orientation == 'P' AND $pdf->GetY() < 228) {
+	$pdf->SetY(228);
+	$lang = clm_core::$lang->liga_info;
+	$fc = 1;
+	$pdf->Cell($leer,$zelle,' ',0,0,'L');
+	$pdf->Cell(180,$zelle,'Einstellungen',1,1,'L',$fc);
+	$fc = 0;
+	$pdf->SetTextColor(0);
+	$pdf->Cell($leer,$zelle,' ',0,0,'L');
+	$pdf->Cell(40,$zelle,$lang->modus,1,0,'L',$fc);
+	$pdf->Cell(140,$zelle,clm_core::$load->mode_to_name(intval($liga[0]->runden_modus),true),1,1,'L',$fc);
+	$pdf->Cell($leer,$zelle,' ',0,0,'L');
+	$pdf->Cell(40,$zelle,$lang->teams,1,0,'L',$fc);
+	$pdf->Cell(50,$zelle,($liga[0]->teil - $diff),1,0,'L',$fc);
+	if ($liga[0]->durchgang == 1) $drounds = $liga[0]->runden; 
+	else $drounds = $liga[0]->durchgang.' x '.$liga[0]->runden;
+	$pdf->Cell(40,$zelle,$lang->rounds,1,0,'L',$fc);
+	$pdf->Cell(50,$zelle,$drounds,1,1,'L',$fc);
+	$pdf->Cell($leer,$zelle,' ',0,0,'L');
+	$pdf->Cell(40,$zelle,$lang->stamm,1,0,'L',$fc);
+	$pdf->Cell(50,$zelle,$liga[0]->stamm,1,0,'L',$fc);
+	$pdf->Cell(40,$zelle,$lang->ersatz,1,0,'L',$fc);
+	$pdf->Cell(50,$zelle,$liga[0]->ersatz,1,1,'L',$fc);
+
+	$pdf->Cell($leer,$zelle,' ',0,0,'L');
+	$pdf->Cell(40,$zelle,$lang->color_order,1,0,'L',$fc);
+	$pdf->Cell(140,$zelle,clm_core::$load->key_to_name('color_order',intval($params['color_order']),true),1,1,'L',$fc);
+
+	if ($liga[0]->liga_mt == 0) { 	// Liga
+		$dtiebr = clm_core::$load->key_to_name('tiebreak',5,true); 
+		if ($liga[0]->b_wertung == 0 AND $liga[0]->order == 1)  	
+			$dtiebr .= ';'.clm_core::$load->key_to_name('tiebreak',51,true); 
+		if ($liga[0]->b_wertung == 3 AND $liga[0]->order == 1)  	
+			$dtiebr .= ';'.clm_core::$load->key_to_name('tiebreak',10,true).';'.clm_core::$load->key_to_name('tiebreak',51,true); 
+		if ($liga[0]->b_wertung == 3 AND $liga[0]->order == 0)  	
+			$dtiebr .= ';'.clm_core::$load->key_to_name('tiebreak',10,true); 
+		if ($liga[0]->b_wertung == 4 AND $liga[0]->order == 1)  	
+			$dtiebr .= ';'.clm_core::$load->key_to_name('tiebreak',51,true).';'.clm_core::$load->key_to_name('tiebreak',10,true); 
+		if ($liga[0]->b_wertung == 4 AND $liga[0]->order == 0)  	
+			$dtiebr .= ';'.clm_core::$load->key_to_name('tiebreak',10,true); 
+	} else {  						// Mannschaftsturnier
+		if ($liga[0]->tiebr1 > 0)  
+			$dtiebr = clm_core::$load->key_to_name('tiebreak',intval($liga[0]->tiebr1),true); 
+		if ($liga[0]->tiebr2 > 0)  
+			$dtiebr .= ';'.clm_core::$load->key_to_name('tiebreak',intval($liga[0]->tiebr2),true); 
+		if ($liga[0]->tiebr3 > 0)  
+			$dtiebr .= ';'.clm_core::$load->key_to_name('tiebreak',intval($liga[0]->tiebr3),true); 
+	}
+	$pdf->Cell($leer,$zelle,' ',0,0,'L');
+	$pdf->Cell(40,$zelle,$lang->tiebreaks,1,0,'L',$fc);
+	$pdf->Cell(140,$zelle,$dtiebr,1,1,'L',$fc);
+
+	$pdf->Cell($leer,$zelle,' ',0,0,'L');
+	$pdf->Cell(60,$zelle,clm_core::$load->utf8decode(html_entity_decode(str_replace('<br/>',' ',$lang->pseudo_dwz))),1,0,'L',$fc);
+	$pdf->Cell(30,$zelle,$params['pseudo_dwz'],1,0,'L',$fc);
+	$pdf->Cell(40,$zelle,$lang->waiting_period,1,0,'L',$fc);
+	if (!isset($params['waiting_period'])) $params['waiting_period'] = '';
+	$pdf->Cell(50,$zelle,$params['waiting_period'],1,1,'L',$fc);
+	$pdf->Cell($leer,$zelle,' ',0,0,'L');
+	$pdf->Cell(40,$zelle,$lang->time_control,1,0,'L',$fc);
+	if (!isset($params['time_control'])) $params['time_control'] = '';
+	$pdf->Cell(140,$zelle,clm_core::$load->utf8decode($params['time_control']),1,1,'L',$fc);
+}
 
 // --------------------------------------------------------------
 // Paarungen pro Spieltag
@@ -696,15 +769,37 @@ $pdf->SetFont('Times','B',$head_font-2);
 $pdf->SetFont('Times','B',$font);
 	$pdf->Cell(10,6,' ',0,0);
 	$pdf->Cell(80,6,clm_core::$load->utf8decode(Jtext::_('TEAM_LEADER')),0,0);
-	$pdf->Cell(80,6,clm_core::$load->utf8decode(Jtext::_('TEAM_LOCATION')),0,1);
+	$pdf->Cell(60,6,clm_core::$load->utf8decode(Jtext::_('TEAM_LOCATION')),0,0);
+	if ($mannschaft[$m]->lokal <> '') $man = explode(",", $mannschaft[$m]->lokal);
+	else $man = explode(",",clm_core::$load->utf8decode(JText::_('NOT_YET')));
+	if (isset($man[0])) { 
+		if($googlemaps_mrout == 1 ) { 
+				if ($googlemaps_rtype == 1 AND isset($man[2])) {
+					$addr = clm_core::$load->sub_umlaute($man[0].",".$man[1].",".$man[2]);
+				} elseif ($googlemaps_rtype == 2 AND isset($man[2])) {
+					$addr = clm_core::$load->sub_umlaute($man[1].",".$man[2]);
+				} elseif ($googlemaps_rtype == 3 AND isset($man[1])) {
+					$addr = clm_core::$load->sub_umlaute($man[0].",".$man[1]);
+				} elseif (isset($man[2])) {
+					$addr = clm_core::$load->sub_umlaute($man[0].",".$man[1].",".$man[2]);
+				} elseif (isset($man[1])) {
+					$addr = clm_core::$load->sub_umlaute($man[0].",".$man[1]);
+				} else { 
+					$addr = clm_core::$load->sub_umlaute($man[0]);
+				}
+				$droute = "http://maps.google.com/maps?hl=".$google_lang."&saddr=&daddr=".$addr;
+				$pdf->SetTextColor(0, 0, 255);
+				$pdf->SetFont('', 'U');
+				$pdf->Cell(40,6,JText::_('CLM_ROUTE'),0,1,'L',false,$droute);
+				$pdf->SetFont('');
+				$pdf->SetTextColor(0);
+		} else $pdf->Cell(80,6,'',0,1);
+	} else $pdf->Cell(80,6,'',0,1);
 $pdf->SetFont('Times','',$font);	
 	$pdf->Cell(10,4,' ',0,0);
 	if ($mf_name <> '') $pdf->Cell(80,4,clm_core::$load->utf8decode($mf_name),0,0,'L');
 	else $pdf->Cell(80,4,clm_core::$load->utf8decode(JText::_('NOT_YET')),0,0,'L');
-	if ($mannschaft[$m]->lokal <> '') $man = explode(",", $mannschaft[$m]->lokal);
-	else $man = explode(",",clm_core::$load->utf8decode(JText::_('NOT_YET')));
-	if (isset($man[0])) $pdf->Cell(80,4,clm_core::$load->utf8decode($man[0]),0,1);
-	else $pdf->Cell(80,4,'',0,1);
+	$pdf->Cell(75,4,clm_core::$load->utf8decode($man[0]),0,1);
 $pdf->SetFont('Times','U',$font);	
 	$pdf->Cell(10,4,' ',0,0);
 	if (is_null($mf_email)) $mf_email = '';
