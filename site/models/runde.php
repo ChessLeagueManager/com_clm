@@ -306,7 +306,7 @@ class CLMModelRunde extends JModelLegacy
 			$query = " SELECT a.tln_nr as tln_nr,m.name as name, (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
 			." (SUM(a.brettpunkte) - m.bpabzug) as bp, m.bpabzug, SUM(a.wertpunkte) as wp, m.published, m.man_nr, "  
 			." COUNT(DISTINCT case when a.gemeldet > 1 then CONCAT(a.dg,' ',a.runde) else null end) as spiele, "  
-			." m.sumtiebr1, m.sumtiebr2, m.sumtiebr3 "
+			." m.sumtiebr1, m.sumtiebr2, m.sumtiebr3, rankingpos "
 			." FROM #__clm_rnd_man as a "
 			." LEFT JOIN #__clm_mannschaften as m ON m.liga = $liga AND m.tln_nr = a.tln_nr "
 			." WHERE a.lid = ".$liga
@@ -317,7 +317,7 @@ class CLMModelRunde extends JModelLegacy
 			$query = " SELECT a.tln_nr as tln_nr,m.name as name, (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
 			." (SUM(a.brettpunkte) - m.bpabzug) as bp, m.bpabzug, SUM(a.wertpunkte) as wp, m.published, m.man_nr, "  
 			." COUNT(DISTINCT case when a.gemeldet > 1 then CONCAT(a.dg,' ',a.runde) else null end) as spiele, "  
-			." m.z_sumtiebr1 as sumtiebr1, m.z_sumtiebr2  as sumtiebr2, m.z_sumtiebr3 as sumtiebr3 "
+			." m.z_sumtiebr1 as sumtiebr1, m.z_sumtiebr2  as sumtiebr2, m.z_sumtiebr3 as sumtiebr3, m.z_rankingpos as rankingpos "
 			." FROM #__clm_rnd_man as a "
 			." LEFT JOIN #__clm_mannschaften as m ON m.liga = $liga AND m.tln_nr = a.tln_nr "
 			." WHERE a.lid = ".$liga

@@ -427,7 +427,8 @@ $diff = $spielfrei[0]->count;
 	// Anzahl der Teilnehmer durchlaufen
 for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 	if (!$cr) $pdf->SetX($xx1); else $pdf->SetX($xx2);
-	$pdf->Cell(5,$zelle,$x+1,'L',0,'C');
+//	$pdf->Cell(5,$zelle,$x+1,'L',0,'C');
+	$pdf->Cell(5,$zelle,$punkte[$x]->rankingpos,'L',0,'C');
 	$htext = clm_core::$load->utf8decode($punkte[$x]->name);
 	while (($breite1+3) < $pdf->GetStringWidth($htext))
 		$htext = substr($htext,0,-1);

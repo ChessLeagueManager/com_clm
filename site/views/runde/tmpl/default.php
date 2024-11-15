@@ -561,7 +561,8 @@ if ($x%2 != 0) { $zeilenr	= "zeile2";
 	if($x >= $liga[0]->auf AND $x < ($liga[0]->auf + $liga[0]->auf_evtl)) { echo "_auf_evtl"; }
 	if($x >= ($liga[0]->teil-$liga[0]->ab)) { echo "_ab"; }
 	if($x >= ($liga[0]->teil-($liga[0]->ab_evtl + $liga[0]->ab)) AND $x < ($liga[0]->teil-$liga[0]->ab) ) { echo "_ab_evtl"; }
-	?>"><?php echo $x+1; ?></td>
+	?>"><?php // echo $x+1; 
+		echo $punkte[$x]->rankingpos; ?></td>
 	<td class="team">
 	<?php if ($punkte[$x]->published ==1 AND $params['noBoardResults'] == '0') { ?>
 	<div><a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $sid; ?>&liga=<?php echo $lid; ?>&tlnr=<?php echo $punkte[$x]->tln_nr; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $punkte[$x]->name; ?></a></div>
