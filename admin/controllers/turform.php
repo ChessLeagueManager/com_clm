@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -88,7 +88,9 @@ class CLMControllerTurForm extends JControllerLegacy {
 		
 	    $clmAccess = clm_core::$access;
 		if ($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) {
-			return array(false,'warning',JText::_('TOURNAMENT_NO_ACCESS'));
+			if ($clmAccess->access('BE_tournament_create') !== true) {
+				return array(false,'warning',JText::_('TOURNAMENT_NO_ACCESS'));
+			}
 		}
 		
 		// Rundenzahl berechnen!

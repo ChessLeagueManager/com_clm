@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -30,7 +30,7 @@ class CLMViewTurForm extends JViewLegacy {
 		$row = JTable::getInstance( 'turniere', 'TableCLM' );
 		$row->load($id);
 		$clmAccess = clm_core::$access;
-		if (($row->tl == $clmAccess->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR ($clmAccess->access('BE_tournament_edit_detail') === true)) {
+		if (($row->tl == $clmAccess->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR ($clmAccess->access('BE_tournament_edit_detail') === true) OR ($clmAccess->access('BE_tournament_create') === true)) {
 			JToolBarHelper::save( 'save' );
 			JToolBarHelper::apply( 'apply' );
 		}

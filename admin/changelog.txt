@@ -31,6 +31,7 @@ $ -> Language fix or change
 + Ligaheft: Ergänzung um praktische Infos
 # Rundenbericht: In Rangliste punkt- und wertungsgleich -> gleiche Platzierung
 # Einzelturniere: Änderung der Teilnehmerdaten vor Turnierstart
+# Einzelturniere: Berechtigung Turnier anlegen
 
 - - - - - 4.2.1 - [21-08-2024] - - - - - - - - - - - - - - - - - - - -
 + Datenbank: Import auch von Spielerdaten im V2-Format mit Spieler-Id
