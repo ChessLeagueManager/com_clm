@@ -299,21 +299,22 @@ class CLMModelRunde extends JModelLegacy
 			;
 		$db->setQuery($query);
 		$order = $db->loadObjectList();
- 		if (isset($order[0]) AND  $order[0]->order == 1) {
+		if (isset($order[0]) AND  $order[0]->order == 1) {
 			$ordering = " , m.ordering ASC"; }
 		else { $ordering =' '; }
+		if (isset($order[0])) $rc = clm_core::$api->db_tournament_ranking_round($liga,true,$runde,$dg);
 		if (isset($order[0]) AND $order[0]->liga_mt == 0) { // Liga
 			$query = " SELECT a.tln_nr as tln_nr,m.name as name, (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
 			." (SUM(a.brettpunkte) - m.bpabzug) as bp, m.bpabzug, SUM(a.wertpunkte) as wp, m.published, m.man_nr, "  
 			." COUNT(DISTINCT case when a.gemeldet > 1 then CONCAT(a.dg,' ',a.runde) else null end) as spiele, "  
-			." m.sumtiebr1, m.sumtiebr2, m.sumtiebr3, rankingpos "
+			." m.sumtiebr1, m.sumtiebr2, m.sumtiebr3, z_rankingpos as rankingpos"
 			." FROM #__clm_rnd_man as a "
 			." LEFT JOIN #__clm_mannschaften as m ON m.liga = $liga AND m.tln_nr = a.tln_nr "
 			." WHERE a.lid = ".$liga
 			." AND m.man_nr <> 0 ";
 		} else { // Mannschaftsturnier
 			$rc = 999;
-			if (isset($order[0])) $rc = clm_core::$api->db_tournament_ranking_round($liga,true,$runde,$dg);
+//			if (isset($order[0])) $rc = clm_core::$api->db_tournament_ranking_round($liga,true,$runde,$dg);
 			$query = " SELECT a.tln_nr as tln_nr,m.name as name, (SUM(a.manpunkte) - m.abzug) as mp, m.abzug as abzug, "
 			." (SUM(a.brettpunkte) - m.bpabzug) as bp, m.bpabzug, SUM(a.wertpunkte) as wp, m.published, m.man_nr, "  
 			." COUNT(DISTINCT case when a.gemeldet > 1 then CONCAT(a.dg,' ',a.runde) else null end) as spiele, "  

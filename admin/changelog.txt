@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 4.2.3 - [xx-xx-2024] - - - - - - - - - - - - - - - - - - - -
+# Rundenbericht: In Rangliste punkt- und wertungsgleich -> gleiche Platzierung (Nachbesserung)
+
 - - - - - 4.2.2 - [20-11-2024] - - - - - - - - - - - - - - - - - - - -
 # Frontend-Views: Nachladen von jquery 1.4.2 ersetzt durch internes jquery 3.7.1 (TabellenHeader) 
 # Einzelturniere: Abbruch bei Eingabe von Bye-Ergebnisse
@@ -24,7 +27,7 @@ $ -> Language fix or change
 # Online-Turnieranmeldung: Bestätigung unter J 5.x
 ^ Update Leaflet Version
 ^ SWT-Import Liga: Erhaltung der Kategorien bei Update
-^ Vereinheitlichung der Mailausgaben mit Möglichkeit der Unterdrückung
+^ Vereinheitlichung der Mailausgaben mit Möglichkeit der Unterdrückung (Teil 1)
 + SWT-Import Einzel: Import von SwissChess-Version 7.24
 # Geo-Daten: Verfeinerung über PLZ
 + Synchronisation Sperrkennzeichen in Backend und Frontend

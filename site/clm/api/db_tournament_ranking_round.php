@@ -565,7 +565,7 @@
 				$array_PlayerBPunkte[$s] = $array_PlayerBPunkte[$s] - $abzug[0]->bpabzug;
 			}
 			if ($liga_mt == 0) {	// Liga hat keine Feinwertungen, FW1 wird genutzt, um Berliner Wertung abzuspeichern!
-				$arrayFW[1] = 10;
+				if ($b_wertung > 0) $arrayFW[1] = 10;
 			}
 			// den TiebrSummen ihre Werte zuordnen
 			$rankingData = array();
@@ -776,7 +776,7 @@
 					if ($p_runde == 0) { 
 						if ($liga_mt == 0) {
 							if ( $value->summanpunkte == $value0->summanpunkte AND $value->sumbrettpunkte == $value0->sumbrettpunkte AND $value->sumtiebr1 == $value0->sumtiebr1 )  
-								if ($order = 0) $s_rankingPos = 0;
+								if ($order == 0) $s_rankingPos = 0;
 								else if ( $value->order == $value0->order) $s_rankingPos = 0;
 						} else {
 							if ( $value->summanpunkte == $value0->summanpunkte AND $value->sumtiebr1 == $value0->sumtiebr1 AND $value->sumtiebr2 == $value0->sumtiebr2 AND $value->sumtiebr3 == $value0->sumtiebr3 )   
