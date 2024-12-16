@@ -14,6 +14,7 @@ $ -> Language fix or change
 
 - - - - - 4.2.3 - [xx-xx-2024] - - - - - - - - - - - - - - - - - - - -
 # Rundenbericht: In Rangliste punkt- und wertungsgleich -> gleiche Platzierung (Nachbesserung)
+# Rundenbericht: Darstellung bei mehr als einer Mannschaft spielfrei
 
 - - - - - 4.2.2 - [20-11-2024] - - - - - - - - - - - - - - - - - - - -
 # Frontend-Views: Nachladen von jquery 1.4.2 ersetzt durch internes jquery 3.7.1 (TabellenHeader) 

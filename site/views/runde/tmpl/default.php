@@ -348,7 +348,9 @@ if (isset($paar[$y]->htln)) {  // Leere Begegnungen ausblenden
         // Ergebnis Mannschaft
         $paar_exist = 0;
 		$remis_com = 0;
-        if ($summe[$z2]->sum !="" AND $summe[$z2]->paarung == ($y+1)) {
+//        if ($summe[$z2]->sum !="" AND $summe[$z2]->paarung == ($y+1)) {
+        if ($summe[$z2]->paarung < $paar[$y]->paar) $z2 = $z2 +2;
+		if ($summe[$z2]->sum !="" AND $summe[$z2]->paarung == $paar[$y]->paar) {
             $paar_exist = 1;
             echo $summe[$z2]->sum.' : '.$summe[$z2+1]->sum;
 			if (($runden_modus == 4 OR $runden_modus == 5) AND ($summe[$z2]->sum == $summe[$z2+1]->sum)) $remis_com = 1; else $remis_com = 0;
@@ -374,7 +376,8 @@ if (isset($paar[$y]->htln)) {  // Leere Begegnungen ausblenden
     </tr>
 <?php
 }
-if (isset($einzel[$w]->paar) AND $einzel[$w]->paar == ($y+1)) {
+//if (isset($einzel[$w]->paar) AND $einzel[$w]->paar == ($y+1)) {
+if (isset($einzel[$w]->paar) AND $einzel[$w]->paar == $paar[$y]->paar) {
 // Bretter
 for ($x=0; $x<$liga[0]->stamm; $x++) {
 
