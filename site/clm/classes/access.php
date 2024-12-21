@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -331,7 +331,8 @@ class clm_class_access {
 			} else {
 				$right = $right[3];
 			}
-			if ((clm_core::$db->liga->get($id)->tl != clm_core::$access->getJid() && clm_core::$access->access($right) !== true) || (clm_core::$access->access($right) === false)) {
+//			if ((clm_core::$db->liga->get($id)->tl != clm_core::$access->getJid() && clm_core::$access->access($right) !== true) || (clm_core::$access->access($right) === false)) {
+			if ((clm_core::$db->liga->get($id)->sl != clm_core::$access->getJid() && clm_core::$access->access($right) !== true) || (clm_core::$access->access($right) === false)) {
 				return false;
 			}
 		} else {
