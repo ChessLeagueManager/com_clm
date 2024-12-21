@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleagueamanager.de
  * @author Thomas Schwietert
@@ -213,6 +213,14 @@ $turParams = new clm_class_params($this->turnier->params);
 						<?php echo JHtml::_('select.booleanlist', 'params[optionTiebreakersFideCorrect]', 'class="inputbox"', $this->turnier->optionTiebreakersFideCorrect); ?>
 					</fieldset></td>
 				</tr>
+				<tr>
+					<td class="paramlist_key" title="<?php echo JText::_( 'OPTION_50PERCENTRULE_HINT' );?>" >
+						<?php echo JText::_('OPTION_50PERCENTRULE'); ?>:
+					</td>
+					<td class="paramlist_value"><fieldset class="radio">
+						<?php echo JHtml::_('select.booleanlist', 'params[option50PercentRule]', 'class="inputbox"', $this->turnier->option50PercentRule); ?>
+					</fieldset></td>
+				</tr>
 	<tr>
 		<td nowrap="nowrap">
 			<label for="punkte_modus"><?php echo JText::_( 'LEAGUE_MATCH_VALUATION' ); ?></label>
@@ -239,8 +247,8 @@ $turParams = new clm_class_params($this->turnier->params);
 						foreach ($options as $key => $val) {
 							$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
 						}
-//						echo JHtml::_('select.genericlist', $optionlist, 'params[useAsTWZ]', 'class="inputbox"', 'id', 'name', $this->turnier->useAsTWZ); 
-						echo JHtml::_('select.genericlist', $optionlist, 'params[useAsTWZ]', 'class="inputbox"', 'id', 'name', $turParams->get('useAsTWZ', 0)); ?>
+						echo JHtml::_('select.genericlist', $optionlist, 'params[useAsTWZ]', 'class="inputbox"', 'id', 'name', $this->turnier->useAsTWZ); 
+//						echo JHtml::_('select.genericlist', $optionlist, 'params[useAsTWZ]', 'class="inputbox"', 'id', 'name', $turParams->get('useAsTWZ', 0)); ?>
 					</td>
 				</tr>
 

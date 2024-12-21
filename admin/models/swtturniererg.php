@@ -564,6 +564,13 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 		$rfirst = clm_core::$load->request_int('rfirst', 0);
 		$rlast  = clm_core::$load->request_int('rlast', 0);
 		
+		//Name und Verzeichnis der SWT-Datei
+		$filename 	= clm_core::$load->request_string('swt_file', '');
+		$path 		= JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
+		$swt 		= $path.$filename;
+		//Anzahl der Teilnehmer aus der Turnierdatei
+		$anz_teilnehmer 		= CLMSWT::readInt($swt,7,2);
+
 		if(!empty($this->_runden)) {
 			$ispl = 0;
 			$insert_query = "INSERT IGNORE INTO 
@@ -620,8 +627,8 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 					$ispl++;
 				  }
 				} else {
-				  for ($ii = 1; $ii <= 13; $ii++) { 
-					
+//				  for ($ii = 1; $ii <= 13; $ii++) { 
+				  for ($ii = 1; $ii <= intdiv(($anz_teilnehmer + 1),2); $ii++) { 					
 					//Paarungsdaten f�r Wei�
 					$insert_query .= 	" ( 
 											".CLMSWT::getFormValue('sid',null,'int').", 										

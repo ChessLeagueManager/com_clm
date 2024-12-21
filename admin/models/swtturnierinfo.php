@@ -255,8 +255,13 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 				}				
 			}
 			
-			//Ranglistenkorrektur
+			//Ranglistenkorrektur FIDE
 			$this->_turnier->set('optionTiebreakersFideCorrect', CLMSWT::readBool($swt,675));
+			//50%-Regel FIDE
+			if (CLMSWT::readBool($swt,605) == 1)
+				$this->_turnier->set('option50PercentRule', 0);
+			else
+				$this->_turnier->set('option50PercentRule', 1);
 			
 			//Partiewertung
 			$pwertung = CLMSWT::readInt($swt,1336,1);
