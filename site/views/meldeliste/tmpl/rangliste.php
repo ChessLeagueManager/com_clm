@@ -50,9 +50,24 @@ if ($clmuser[0]->zps <> $zps) {
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
 				}
-
+// Prüfen ob Pflege im FE noch zulässig ist
+$ligen 		= $this->ligen;
+$a_ligen = array();
+$today = date("Y-m-d");
+foreach ($ligen as $lig01) {
+	// Ligaparameter bereitstellen
+ 	$params = new clm_class_params($lig01->params);
+	$deadline_roster = $params->get('deadline_roster','1970-01-01');
+	if ($deadline_roster >= $today) {
+		$a_ligen[] = $lig01->lid;
+	}
+}
+if (count($a_ligen) < 1) {
+	$msg = JText::_( '<h2>Sie können diese Rangfolge nicht (mehr) pflegen. Wenden Sie sich an einen Staffelleiter.</h2>' );
+	$mainframe->enqueueMessage( $msg );
+	$mainframe->redirect( $link );
+				}
 // Prüfen ob Datensatz schon vorhanden ist
-
 $abgabe	= $this->abgabe;
 
 //if (isset($abgabe[0]->id) AND $abgabe[0]->id != "") {
