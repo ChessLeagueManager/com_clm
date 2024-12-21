@@ -275,7 +275,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 	$from = $config->email_from;
 	$fromname = $config->email_fromname;
 	$bcc	= $config->email_bcc;
-	$bcc_mail	= $config->bcc;
+	$bcc_mail	= NULL;  /* damit keine direkte Mail an Admin */   
 	$sl_mail	= $config->sl_mail;
 	$countryversion = $config->countryversion;
 	
@@ -511,7 +511,8 @@ if ( $send == 1 ) {
 
 	$body_name = JText::_('RESULT_NAME').$melder[0]->name.",";
 	$countmail = 0;
-
+	$msg = '';
+	
 	// Textparameter setzen
 	if (!is_null($abgabe) ) $erstmeldung = 0;	// Erstmeldung nein
 	else $erstmeldung = 1;  						// Erstmeldung ja
@@ -543,9 +544,9 @@ if ( $send == 1 ) {
 		';
 		$body_name = JText::_('RESULT_NAME').$melder[0]->name.",";
 		$body = $body_html_header.$body_name.$body_html_md.$body_html.$body_html_footer;
-		jimport( 'joomla.mail.mail' );
-		$mail = JFactory::getMailer();
-		$mail->sendMail($from,$fromname,$recipient,$subject,$body,1,null,$bcc);
+		$result = clm_core::$api->mail_send($recipient,$subject,$body,1,null,$bcc);
+		if ($result[0] !== true) 
+			$msg .= '<br>'.'Fehler bei Mailausgabe: '.'<br>'.$result[1];
 		$countmail++;
 	}
 	
@@ -576,9 +577,9 @@ if ( $send == 1 ) {
 		';
 		$body_name = JText::_('RESULT_NAME').$mannschaft1->mf_name.",";
 		$body = $body_html_header.$body_name.$body_html_mf.$body_html.$body_html_footer;
-		jimport( 'joomla.mail.mail' );
-		$mail = JFactory::getMailer();
-		$mail->sendMail($from,$fromname,$recipient,$subject,$body,1,null,$bcc);
+		$result = clm_core::$api->mail_send($recipient,$subject,$body,1,null,$bcc);
+		if ($result[0] !== true) 
+			$msg .= '<br>'.'Fehler bei Mailausgabe: '.'<br>'.$result[1];
 		$countmail++;
 	  }
 	}
@@ -608,9 +609,9 @@ if ( $send == 1 ) {
 		';
 		$body_name = JText::_('RESULT_NAME').$a_ligen[$z_liga]->sl_name.",";
 		$body = $body_html_header.$body_name.$body_html_sl.$body_html.$body_html_footer;
-		jimport( 'joomla.mail.mail' );
-		$mail = JFactory::getMailer();
-		$mail->sendMail($from,$fromname,$recipient,$subject,$body,1,null,$bcc);
+		$result = clm_core::$api->mail_send($recipient,$subject,$body,1,null,$bcc);
+		if ($result[0] !== true) 
+			$msg .= '<br>'.'Fehler bei Mailausgabe: '.'<br>'.$result[1];
 		$countmail++;
 	  }
 	}
@@ -632,18 +633,18 @@ if ( $send == 1 ) {
 		';
 		$body_name = JText::_('RESULT_NAME').$bcc_name.",";
 		$body = $body_html_header.$body_name.$body_html_ad.$body_html.$body_html_footer;
-		jimport( 'joomla.mail.mail' );
-		$mail = JFactory::getMailer();
-		$mail->sendMail($from,$fromname,$recipient,$subject,$body,1);
+		$result = clm_core::$api->mail_send($recipient,$subject,$body,1);
+		if ($result[0] !== true) 
+			$msg .= '<br>'.'Fehler bei Mailausgabe: '.'<br>'.$result[1];
 		$countmail++;
 	}
-	$msg = "<h5>".$countmail++. ' '.JText::_( 'Mail wurden gesendet' )."</h5>";
+	$msg .= "<h5>".$countmail++. ' '.JText::_( 'Mail wurden gesendet' )."</h5>";
 	$mainframe->enqueueMessage( $msg, 'message' );
 
 }
 } else {
-        $msg = JText::_( 'CLUB_DATA_SENT_FALSE' );
-        $mainframe->enqueueMessage( $msg );
+    $msg = JText::_( 'CLUB_DATA_SENT_FALSE' );
+    $mainframe->enqueueMessage( $msg );
 	$mainframe->redirect($link);
 
 }	

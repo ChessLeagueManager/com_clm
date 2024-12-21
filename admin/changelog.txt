@@ -16,6 +16,7 @@ $ -> Language fix or change
 # Rundenbericht: In Rangliste punkt- und wertungsgleich -> gleiche Platzierung (Nachbesserung)
 # Rundenbericht: Darstellung bei mehr als einer Mannschaft spielfrei
 # SWT-Import Einzel: Übernahme 50%-Schalter, Korrektur TWZ-Schalter
+^ Vereinheitlichung der Mailausgaben mit Möglichkeit der Unterdrückung (Teil 2)
 
 - - - - - 4.2.2 - [20-11-2024] - - - - - - - - - - - - - - - - - - - -
 # Frontend-Views: Nachladen von jquery 1.4.2 ersetzt durch internes jquery 3.7.1 (TabellenHeader) 

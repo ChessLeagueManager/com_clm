@@ -58,16 +58,17 @@ class CLMControllerTurPlayersMail extends JControllerLegacy
 		}
 		$count_mail = 0;
 		// mail to TL
-		$result = clm_core::$cms->sendMail($from, $fromname, $mail_to, $mail_subj, $mail_body, $htmlMail);
-		if ($result !== true) $msg .= '<br>'.JText::_('MAIL_ERROR').' '.$mail_to;
+//		$result = clm_core::$cms->sendMail($from, $fromname, $mail_to, $mail_subj, $mail_body, $htmlMail);
+		$result = clm_core::$api->mail_send($mail_to, $mail_subj.' (Kopie für Turnierleiter)', $mail_body, $htmlMail);
+		if ($result[0] !== true) $msg .= '<br>'.JText::_('MAIL_ERROR').' '.$mail_to;
 		else $count_mail++;
 		// mail to participants
 		$a_bcc = explode(';', $mail_bcc);
 		foreach ($a_bcc as $bcc) {
 			if ($bcc == '') continue;
-			$result = clm_core::$cms->sendMail($from, $fromname, $bcc, $mail_subj, $mail_body, $htmlMail);			
-			//$result = clm_core::$cms->sendMail($from, $fromname, $mail_to, $mail_subj, $mail_body, $htmlMail, null, $mail_bcc);
-			if ($result !== true) $msg .= '<br>'.JText::_('MAIL_ERROR').' '.$bcc;
+//			$result = clm_core::$cms->sendMail($from, $fromname, $bcc, $mail_subj, $mail_body, $htmlMail);			
+			$result = clm_core::$api->mail_send($bcc, $mail_subj, $mail_body, $htmlMail);
+			if ($result[0] !== true) $msg .= '<br>'.JText::_('MAIL_ERROR').' '.$bcc;
 			else $count_mail++;
 		}
 		if ($msg != '') 

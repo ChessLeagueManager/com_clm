@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -151,7 +151,7 @@ else {
 	clm_core::$db->query($query);
 
 	$msg = JText::_( 'CLUB_DATA_SENT_SAVED' );
-	$mainframe->enqueueMessage( $msg );
+//	$mainframe->enqueueMessage( $msg );
 	
 // Mails verschicken ?
 	// Konfigurationsparameter auslesen
@@ -189,7 +189,7 @@ if ( $send == 1 ) {
 // Verein
 	$query	= "SELECT a.* FROM #__clm_vereine as a "
 		." WHERE a.sid =".$sid
-		."   AND a.zps =".$zps
+		."   AND a.zps = '$zps' "
 		;
 	$db->setQuery($query);
 	$verein = $db->loadObjectList();
@@ -197,7 +197,7 @@ if ( $send == 1 ) {
 // Vereinsmitglieder mit Benutzeraccount
 	$query	= "SELECT a.* FROM #__clm_user as a "
 		." WHERE a.sid =".$sid
-		."   AND a.zps =".$zps
+		."   AND a.zps = '$zps' "
 		;
 	$db->setQuery($query);
 	$benutzer = $db->loadObjectList();
@@ -206,7 +206,7 @@ if ( $send == 1 ) {
 		." LEFT JOIN #__clm_liga as l ON l.id = m.liga "  
 		." LEFT JOIN #__clm_user as u ON u.jid = l.sl AND u.sid = l.sid "  
 		." WHERE m.sid =".$sid
-		."   AND m.zps =".$zps
+		."   AND m.zps = '$zps' "
 		."   AND m.published = 1 "
 		."   AND l.published = 1 "
 		;
@@ -406,15 +406,9 @@ if ( $send == 1 ) {
 		
 		$body_name = JText::_('RESULT_NAME').$melder[0]->name.",";
 		$body = $body_html_header.$body_name.$body_html_md.$body_html.$body_html_footer;
-		jimport( 'joomla.mail.mail' );
-		$mail = JFactory::getMailer();
-		$mail->sendMail($from,$fromname,$recipient,$subject,$body,1,null,$bcc);
-/*
-echo "<br><br>----------------<br>recipient<br>".$recipient;
-echo "<br>subject<br>".$subject;
-echo "<br>body<br>".$body;
-*/
-		$countmail++;
+		$result = clm_core::$api->mail_send($recipient,$subject,$body,1,null,$bcc);
+		if ($result[0] !== true) $msg .= '<br>'.JText::_('MAIL_ERROR').' '.$recipient;
+		else $countmail++;
 	}
 	
 	// Mail Staffelleiter
@@ -439,15 +433,9 @@ echo "<br>body<br>".$body;
 		
 			$body_name = JText::_('RESULT_NAME').$staffelleiter1->sl_name.",";
 			$body = $body_html_header.$body_name.$body_html_sl.$body_html.$body_html_footer;
-			jimport( 'joomla.mail.mail' );
-			$mail = JFactory::getMailer();
-			$mail->sendMail($from,$fromname,$recipient,$subject,$body,1,null,$bcc);
-/*
-echo "<br><br>----------------<br>recipient<br>".$recipient;
-echo "<br>subject<br>".$subject;
-echo "<br>body<br>".$body;
-*/
-			$countmail++;
+			$result = clm_core::$api->mail_send($recipient,$subject,$body,1,null,$bcc);
+			if ($result[0] !== true) $msg .= '<br>'.JText::_('MAIL_ERROR').' '.$recipient;
+			else $countmail++;
 		}
 	  }
 	}
@@ -455,6 +443,7 @@ echo "<br>body<br>".$body;
 
 //die('ende');
 }	
+	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
 }
 ?>
