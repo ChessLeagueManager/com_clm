@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -424,6 +424,7 @@ public static function mannschaft( &$row,$lists, $option )
 		<input type="hidden" name="section" value="mannschaften" />
 		<input type="hidden" name="option" value="com_clm" />
 		<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
+		<input type="hidden" name="rankingpos" value="<?php echo $row->rankingpos; ?>" />
 		<input type="hidden" name="pre_man" value="<?php echo $row->man_nr; ?>" />
 <!---		<input type="hidden" name="cid" value="<?php //echo $row->cid; ?>" />
 		<input type="hidden" name="client_id" value="<?php //echo $row->cid; ?>" />
