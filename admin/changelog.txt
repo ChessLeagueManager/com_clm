@@ -20,6 +20,7 @@ $ -> Language fix or change
 # Rangfolgepflege im FE: Verbesserung der Berechtigungsprüfung
 # Admin-View Mannschaft: Erhalt der Ranglistenposition
 # Teamwettbewerbe: Berechtigungsproblem für Staffelleiter
+^ Benutzer / Kontaktdaten: bei Änderung der CLM-Mailadresse Anpassung oder keine Anpassung der Joomla-Mailadresse über Schalter
 
 - - - - - 4.2.2 - [20-11-2024] - - - - - - - - - - - - - - - - - - - -
 # Frontend-Views: Nachladen von jquery 1.4.2 ersetzt durch internes jquery 3.7.1 (TabellenHeader) 

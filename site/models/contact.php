@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Fred Baumgarten
@@ -57,6 +57,13 @@ class CLMModelContact extends JModelLegacy
 			// Log - log
 			$aktion = "Kontaktdatenpflege FE";
 			clm_core::addDeprecated($aktion, json_encode($parray));
+		}
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->email_independent == 0 AND $email !== "_ZERO_") {
+			$query = "UPDATE #__users SET ";
+			$query = $query . "email='" . $email . "'";
+			clm_core::$db->query($query);			
 		}
 	}
 }

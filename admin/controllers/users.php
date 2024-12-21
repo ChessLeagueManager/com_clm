@@ -357,6 +357,10 @@ function save() {
  	$usertype	= clm_core::$load->request_string('usertype', '');
 	$published	= clm_core::$load->request_int('published', 0);
 
+	//CLM parameter auslesen
+	$clm_config = clm_core::$db->config();
+	$email_independent = $clm_config->email_independent;
+	
 	// Vorbereitung Admin-Zugang setzen oder prüfen
 	$clmAccess = clm_core::$access;
 	
@@ -492,7 +496,8 @@ function save() {
 		$data			= array();
 		$data['name']		= $name;
 		$data['username']	= $username;
-		$data['email']		= $email;
+		if ($email_independent == 0) 
+			$data['email']		= $email;
 		$gids['2']		= 2;	// Registered immer setzen
 		
 		if ($clmAccess->accessWithType($usertype,'BE_general_general')) {		// Wenn clm-usertype Admin-Zugang hat, dann setze Admin ggf. zusätzlich
