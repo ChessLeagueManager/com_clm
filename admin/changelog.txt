@@ -13,6 +13,7 @@ $ -> Language fix or change
 ! -> Note
 
 - - - - - 4.2.3 - [xx-xx-2024] - - - - - - - - - - - - - - - - - - - -
++ Schiedsrichter-Tabellen: hinzugefügt
 + TRF-Export Einzel: hinzugefügt
 # Rundenbericht: In Rangliste punkt- und wertungsgleich -> gleiche Platzierung (Nachbesserung)
 # Rundenbericht: Darstellung bei mehr als einer Mannschaft spielfrei
