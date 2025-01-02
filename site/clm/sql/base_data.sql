@@ -66,3 +66,28 @@ REPLACE INTO `#__clm_ergebnis` (`id`, `eid`, `erg_text`, `dsb_w`, `dsb_s`, `xml_
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+REPLACE INTO `#__clm_arbiterlicense (`id`, `name`) VALUES 
+(1, 'verein_turnierleiter'),
+(2, 'verein_turnierorganisator'),
+(3, 'bezirk_turnierleiter'),
+(4, 'bezirk_turnierorganisator'),
+(5, 'bezirk_spielleiter'),
+(6, 'bezirk_staffelleiter'),
+(7, 'verband_turnierleiter'),
+(8, 'verband_turnierorganisator'),
+(9, 'verband_spielleiter'),
+(10, 'verband_staffelleiter'),
+(11, 'landesverband_turnierleiter'),
+(12, 'landesverband_turnierorganisator'),
+(13, 'landesverband_spielleiter'),
+(14, 'landesverband_staffelleiter'),
+(15, 'dsb_verbandsschiedsrichter'),
+(16, 'dsb_turnierorganisator'),
+(17, 'dsb_regionalschiedsrichter'),
+(18, 'dsb_nationalschiedsrichter'),
+(19, 'fide_turnierorganisator'),
+(20, 'fide_national_arbiter'),
+(21, 'fide_fide_arbiter'),
+(22, 'fide_international_arbiter');
+
