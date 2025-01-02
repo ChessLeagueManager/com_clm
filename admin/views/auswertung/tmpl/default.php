@@ -34,11 +34,11 @@ defined('_JEXEC') or die('Restricted access');
 		<legend><?php echo JText::_( 'DB_EXPORT_LEAGUE' ); ?></legend>
 			<table width="100%">
 				<tr>
-					<td width="50%"><?php echo $this->lists['lid'] ?></td>
-					<td width="50%"><input type="submit" value="<?php echo JText::_( 'DB_FILE_CREATE' ); ?>"></td>
+					<td width="70%"><?php echo $this->lists['lid'] ?></td>
+					<td width="30%"><input type="submit" value="<?php echo JText::_( 'DB_FILE_CREATE' ); ?>"></td>
 				</tr>
 				<tr>
-					<td width="50%"><select id="filter_format" name="filter_format" class="inputbox" size="1" onchange="">
+					<td width="70%"><select id="filter_format" name="filter_format" class="inputbox" size="1" onchange="">
 						<option value="0"><?php echo JText::_( 'DB_FILE_FORMAT_0' ); ?></option>
 						<?php if ($countryversion =="de") { ?>
 							<option value="1"><?php echo JText::_( 'DB_FILE_FORMAT_1' ); ?></option>
@@ -46,21 +46,21 @@ defined('_JEXEC') or die('Restricted access');
 						<?php } elseif ($countryversion =="en") { ?>
 							<option value="3"><?php echo JText::_( 'DB_FILE_FORMAT_3' ); ?></option>
 						<?php } ?>
-					</select></td>
+					</select></td><td width="30%">
 				</tr>
 				<tr>
-					<td width="50%" nowrap="nowrap" title="<?php echo JText::_( 'DEWIS_FROM_ROUND_HINT' ); ?>">
+					<td width="70%" nowrap="nowrap" title="<?php echo JText::_( 'DEWIS_FROM_ROUND_HINT' ); ?>">
 						<label for="lround"><?php echo JText::_( 'DEWIS_FROM_ROUND' ); ?></label>
 					</td>
-					<td width="50%" nowrap="nowrap" title="<?php echo JText::_( 'DEWIS_FROM_ROUND_HINT' ); ?>">
+					<td width="30%" nowrap="nowrap" title="<?php echo JText::_( 'DEWIS_FROM_ROUND_HINT' ); ?>">
 						<input class="inputbox" type="text" name="lround" id="lround" size="10" maxlength="6" value=""/>
 					</td>
 				</tr>
 				<tr>
-					<td width="50%" nowrap="nowrap" title="<?php echo JText::_( 'DEWIS_AND_PAIRING_HINT' ); ?>">
+					<td width="70%" nowrap="nowrap" title="<?php echo JText::_( 'DEWIS_AND_PAIRING_HINT' ); ?>">
 						<label for="lpairing"><?php echo JText::_( 'DEWIS_AND_PAIRING' ); ?></label>
 					</td>
-					<td width="50%" nowrap="nowrap" title="<?php echo JText::_( 'DEWIS_AND_PAIRING_HINT' ); ?>">
+					<td width="30%" nowrap="nowrap" title="<?php echo JText::_( 'DEWIS_AND_PAIRING_HINT' ); ?>">
 						<input class="inputbox" type="text" name="lpairing" id="lpairing" size="20" maxlength="20" value=""/>
 					</td>
 				</tr>
@@ -77,8 +77,18 @@ defined('_JEXEC') or die('Restricted access');
 		<legend><?php echo JText::_( 'DB_EXPORT_TOURNAMENT' ); ?></legend> 
 			<table width="100%">
 				<tr>
-				<td width="50%"><?php echo $this->lists['et_lid'] ?></td>
-				<td width="50%"><input type="submit" value="<?php echo JText::_( 'DB_FILE_CREATE' ); ?>"></td>	
+					<td width="70%"><select id="filter_format" name="filter_format" class="inputbox" size="1" onchange="">
+					<?php if ($countryversion =="de") { ?>
+						<option value="2"><?php echo JText::_( 'DB_FILE_FORMAT_2' ); ?></option>
+					<?php } elseif ($countryversion =="en") { ?>
+						<option value="3"><?php echo JText::_( 'DB_FILE_FORMAT_3' ); ?></option>
+					<?php } ?>
+						<option value="4"><?php echo JText::_( 'DB_FILE_FORMAT_4' ); ?></option>
+					</select></td><td width="30%"></td>
+				</tr>
+				<tr>
+				<td width="70%"><?php echo $this->lists['et_lid'] ?></td>
+				<td width="30%"><input type="submit" value="<?php echo JText::_( 'DB_FILE_CREATE' ); ?>"></td>
 				</tr>
 			</table>
 		</fieldset>
@@ -94,22 +104,22 @@ defined('_JEXEC') or die('Restricted access');
 		<legend><?php echo JText::_( 'DB_EXPORT_TEAMTOURNAMENT' ); ?></legend> 
 			<table width="100%">
 				<tr>
-				<td width="50%"><?php echo $this->lists['mt_lid'] ?></td>
-				<td width="50%"><input type="submit" value="<?php echo JText::_( 'DB_FILE_CREATE' ); ?>"></td>	
+				<td width="70%"><?php echo $this->lists['mt_lid'] ?></td>
+				<td width="30%"><input type="submit" value="<?php echo JText::_( 'DB_FILE_CREATE' ); ?>"></td>	
 				</tr>
 				<tr>
-					<td width="50%" nowrap="nowrap" title="<?php echo JText::_( 'DEWIS_FROM_ROUND_HINT' ); ?>">
+					<td width="70%" nowrap="nowrap" title="<?php echo JText::_( 'DEWIS_FROM_ROUND_HINT' ); ?>">
 						<label for="mround"><?php echo JText::_( 'DEWIS_FROM_ROUND' ); ?></label>
 					</td>
-					<td width="50%" nowrap="nowrap" title="<?php echo JText::_( 'DEWIS_FROM_ROUND_HINT' ); ?>">
+					<td width="30%" nowrap="nowrap" title="<?php echo JText::_( 'DEWIS_FROM_ROUND_HINT' ); ?>">
 						<input class="inputbox" type="text" name="mround" id="mround" size="10" maxlength="6" value=""/>
 					</td>
 				</tr>
 				<tr>
-					<td width="50%" nowrap="nowrap" title="<?php echo JText::_( 'DEWIS_AND_PAIRING_HINT' ); ?>">
+					<td width="70%" nowrap="nowrap" title="<?php echo JText::_( 'DEWIS_AND_PAIRING_HINT' ); ?>">
 						<label for="mpairing"><?php echo JText::_( 'DEWIS_AND_PAIRING' ); ?></label>
 					</td>
-					<td width="50%" nowrap="nowrap" title="<?php echo JText::_( 'DEWIS_AND_PAIRING_HINT' ); ?>">
+					<td width="30%" nowrap="nowrap" title="<?php echo JText::_( 'DEWIS_AND_PAIRING_HINT' ); ?>">
 						<input class="inputbox" type="text" name="mpairing" id="mpairing" size="20" maxlength="20" value=""/>
 					</td>
 				</tr>

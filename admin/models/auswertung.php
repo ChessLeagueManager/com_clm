@@ -195,10 +195,12 @@ function datei() {
 	
 	// Unterscheidung Einzel- und Mannschaftsturnier mit verschiedenen Ausgabemodi
 	if(!is_null($et)) {
-		if ($countryversion == "de")
-			$format = "2";  // Nur XML für deutsche Einzelturniere
-		else
-			$format = "3";  // Nur XLS für englische Einzelturniere
+		if ($format == "1") {
+			if ($countryversion == "de")
+				$format = "2";  // Nur XML für deutsche Einzelturniere
+			else
+				$format = "3";  // Nur XLS für englische Einzelturniere
+		}
 		$typ	= $liga_name[0]->typ;
 		if($typ =="1"){ $turnier_typ = 'SW'; } // SW: Einzelturnier; Schweizer System
 		if($typ =="2"){ $turnier_typ = 'SR'; } // SR: Einzelturnier; jeder gegen jeden
@@ -473,8 +475,14 @@ function datei() {
 	/////////////////////
 	// ENDE DSB Format //
 	/////////////////////
-	
-	
+
+	/////////////////////
+	// FIDE TRF Format //
+	/////////////////////
+
+	if ($format == "4") {
+		$xml = clm_core::$api->db_trf_export($et, false, false, false, true);
+	}
 	
 	//////////////////////
 	// DEWIS XML Format //
@@ -1093,6 +1101,7 @@ $xml = $xmla->writeData();
 	if($format =="1"){ $datei_endung = "txt";}
 	if($format =="2"){ $datei_endung = "xml";}
 	if($format =="3"){ $datei_endung = "xml";}
+	if($format =="4"){ $datei_endung = "trf";}
 	$write		= $path.DS.$file.'.'.$datei_endung;
 
 	// Datei schreiben ggf. Fehlermeldung absetzen
