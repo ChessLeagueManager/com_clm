@@ -28,6 +28,14 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 
 		$lang = clm_core::$lang->tournament_group;
 		
+		// Sichern eventuell vorhandener Rundentermine
+		$query = "SELECT * FROM #__clm_runden_termine " . " WHERE liga = " . $id;
+		$rtermine = clm_core::$db->loadObjectList($query);	
+		$a_rtermine = array();
+		foreach ($rtermine as $rt1) {
+			$a_rtermine[$rt1->dg][$rt1->nr] = $rt1;
+		}
+
 		// Runden (Termine) anlegen
 		for ($y = 1;$y < 1 + $dg;$y++) {
 			for ($x = 1;$x < 1 + $runden;$x++) {
@@ -56,6 +64,22 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 					. " VALUES ('".$sid."','"
 					. clm_core::$db->escape($name)."','".$id."','".$nr."','0','0'"
 					. " ,'1970-01-01','1970-01-01','1970-01-01','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'".clm_core::$db->liga->get($id)->published."') ";
+				clm_core::$db->query($query);
+			}
+		}
+
+		// Ggf. Details der Rundentermine nachtragen
+		if (!is_null($a_rtermine) AND count($a_rtermine) > 0) {
+			foreach ($rtermine as $rt1) {
+				$query = "UPDATE #__clm_runden_termine "
+					. " SET datum = '".$rt1->datum."', startzeit = '".$rt1->startzeit."', enddatum = '".$rt1->enddatum."',"
+					. " deadlineday = '".$rt1->deadlineday."', deadlinetime = '".$rt1->deadlinetime."'"
+					. " WHERE liga = " . $id
+					. " AND nr = ".$rt1->nr." AND id != ".$rt1->id;
+				clm_core::$db->query($query);
+				$query = " DELETE FROM #__clm_runden_termine "
+					. " WHERE id = ".$rt1->id
+				;
 				clm_core::$db->query($query);
 			}
 		}
@@ -354,6 +378,15 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 			return array(false, "w_tournamentRoundsAlreadyCreated");
 		}
 		clm_core::$api->direct("db_tournament_delDWZ", array($id, false));
+		
+		// Sichern eventuell vorhandener Rundentermine
+		$query = "SELECT * FROM #__clm_turniere_rnd_termine " . " WHERE turnier = " . $id;
+		$rtermine = clm_core::$db->loadObjectList($query);	
+		$a_rtermine = array();
+		foreach ($rtermine as $rt1) {
+			$a_rtermine[$rt1->dg][$rt1->nr] = $rt1;
+		}
+
 		// INIT der Turnierdaten
 		$sid = $row->sid;
 		$dg = $row->dg;
@@ -574,15 +607,17 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 				}
 				// Ende Runde 1
 				// Ab 2. Runde
-				for ($p = 2;$p <= $runden;$p++) { // Bugfix: <= statt <
-					$sqlValuesStrings = array();
-					for ($f = 1;$f <= $gameCount;$f++) {
-						$sqlValuesStrings[] = "('$sid','$turnierid','$p','$f','$dg_dg','$dgh')";
-						$sqlValuesStrings[] = "('$sid','$turnierid','$p','$f','$dg_dg','$dgg')";
+				if ($gameCount > 0) {
+					for ($p = 2;$p <= $runden;$p++) { // Bugfix: <= statt <
+						$sqlValuesStrings = array();
+						for ($f = 1;$f <= $gameCount;$f++) {
+							$sqlValuesStrings[] = "('$sid','$turnierid','$p','$f','$dg_dg','$dgh')";
+							$sqlValuesStrings[] = "('$sid','$turnierid','$p','$f','$dg_dg','$dgg')";
+						}
+						// alle Runden abspeichern
+						$query = "INSERT INTO #__clm_turniere_rnd_spl" . " ( `sid`, `turnier`, `runde`, `brett`,`dg`, `heim`)" . " VALUES " . implode(", ", $sqlValuesStrings);
+						clm_core::$db->query($query);
 					}
-					// alle Runden abspeichern
-					$query = "INSERT INTO #__clm_turniere_rnd_spl" . " ( `sid`, `turnier`, `runde`, `brett`,`dg`, `heim`)" . " VALUES " . implode(", ", $sqlValuesStrings);
-					clm_core::$db->query($query);
 				}
 			}
 			///////////////////
@@ -637,6 +672,22 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 		clm_core::$db->query($query);
 		// Rundenbyte setzen
 		clm_core::$db->turniere->get($id)->rnd = 1;
+		
+		// Ggf. Details der Rundentermine nachtragen
+		if (!is_null($a_rtermine) AND count($a_rtermine) > 0) {
+			foreach ($rtermine as $rt1) {
+				$query = "UPDATE #__clm_turniere_rnd_termine "
+					. " SET datum = '".$rt1->datum."', startzeit = '".$rt1->startzeit."'"
+					. " WHERE turnier = " . $id
+					. " AND dg = ".$rt1->dg." AND nr = ".$rt1->nr." AND id != ".$rt1->id
+				;
+				clm_core::$db->query($query);
+				$query = " DELETE FROM #__clm_turniere_rnd_termine "
+					. " WHERE id = ".$rt1->id
+				;
+				clm_core::$db->query($query);
+			}
+		}
 	}
 	return array(true, "");
 }
