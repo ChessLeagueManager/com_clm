@@ -13,8 +13,6 @@ $ -> Language fix or change
 ! -> Note
 
 - - - - - 4.2.3 - [xx-xx-2024] - - - - - - - - - - - - - - - - - - - -
-+ Schiedsrichter-Tabellen: hinzugefügt
-+ TRF-Export Einzel: hinzugefügt
 # Rundenbericht: In Rangliste punkt- und wertungsgleich -> gleiche Platzierung (Nachbesserung)
 # Rundenbericht: Darstellung bei mehr als einer Mannschaft spielfrei
 # SWT-Import Einzel: Übernahme 50%-Schalter, Korrektur TWZ-Schalter
@@ -23,6 +21,9 @@ $ -> Language fix or change
 # Admin-View Mannschaft: Erhalt der Ranglistenposition
 # Teamwettbewerbe: Berechtigungsproblem für Staffelleiter
 ^ Benutzer / Kontaktdaten: bei Änderung der CLM-Mailadresse Anpassung oder keine Anpassung der Joomla-Mailadresse über Schalter
++ TRF-Export Einzel: hinzugefügt
++ Schiedsrichter-Tabellen: hinzugefügt
+# Admin View Mitgliederverwaltung: Entsperren Verein bei Abbruch
 
 - - - - - 4.2.2 - [20-11-2024] - - - - - - - - - - - - - - - - - - - -
 # Frontend-Views: Nachladen von jquery 1.4.2 ersetzt durch internes jquery 3.7.1 (TabellenHeader) 

@@ -163,6 +163,11 @@ static function cancel()
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
 
+	$query = 'UPDATE #__clm_vereine'
+		. ' SET checked_out = NULL, checked_out_time = NULL '
+		. ' WHERE checked_out = '.clm_core::$access->getJid();
+	$rc = clm_core::$db->query($query);	
+
 	$msg = JText::_( 'DWZ_AKTION');
 	$mainframe->enqueueMessage( $msg, 'message' );
 	$mainframe->redirect( 'index.php?option='. $option.'&section=vereine' );
