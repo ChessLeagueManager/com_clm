@@ -1451,9 +1451,9 @@ CREATE TABLE IF NOT EXISTS `#__clm_vereine` (
 
 CREATE TABLE IF NOT EXISTS `#__clm_arbiter` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `updated` timestamp NOT NULL default_generated on update current_timestamp,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `uuid` varchar(64) NOT NULL DEFAULT 'Fehler',
-  `geloescht` timestamp DEFAULT NULL,
+  `geloescht` timestamp NULL DEFAULT NULL,
   `nurlokal` varchar(1) DEFAULT 'Y',
   `source` varchar(64) DEFAULT NULL,
   `name` varchar(32) DEFAULT NULL,
@@ -1474,14 +1474,14 @@ CREATE TABLE IF NOT EXISTS `#__clm_arbiter` (
 CREATE TABLE IF NOT EXISTS `#__clm_arbiterlicense` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(32) DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `#__clm_arbiter_arbiterlicense` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `r_arbiter` int(11) NOT NULL,
   `r_arbiterlicense` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `#__clm_arbiter_turnier` (
@@ -1489,6 +1489,6 @@ CREATE TABLE IF NOT EXISTS `#__clm_arbiter_turnier` (
   `r_arbiter` int(11) NOT NULL,
   `r_turnier` int(11) NOT NULL,
   `funktion` varchar(32) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

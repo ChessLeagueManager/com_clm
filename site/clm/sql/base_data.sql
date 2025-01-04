@@ -67,7 +67,7 @@ REPLACE INTO `#__clm_ergebnis` (`id`, `eid`, `erg_text`, `dsb_w`, `dsb_s`, `xml_
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
-REPLACE INTO `#__clm_arbiterlicense (`id`, `name`) VALUES 
+REPLACE INTO `#__clm_arbiterlicense` (`id`, `name`) VALUES 
 (1, 'verein_turnierleiter'),
 (2, 'verein_turnierorganisator'),
 (3, 'bezirk_turnierleiter'),
