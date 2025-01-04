@@ -457,7 +457,8 @@ switch ($controllerName) {
 		}
 		break;
 	case 'dwz';
-		if(!$clmAccess->access('BE_database_general')) {		
+//		if(!$clmAccess->access('BE_database_general')) {		
+		if(!$clmAccess->access('BE_club_edit_member')) {		
 			$app->enqueueMessage( JText::_( 'NO_PERMISSION' ),'warning' );
 			$controllerName = 'info';
 		}

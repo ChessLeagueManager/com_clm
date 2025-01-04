@@ -24,6 +24,7 @@ $ -> Language fix or change
 + TRF-Export Einzel: hinzugefügt
 + Schiedsrichter-Tabellen: hinzugefügt
 # Admin View Mitgliederverwaltung: Entsperren Verein bei Abbruch
+^ BE: Spielleiter dürfen Daten der Vereinsmitglieder pflegen
 
 - - - - - 4.2.2 - [20-11-2024] - - - - - - - - - - - - - - - - - - - -
 # Frontend-Views: Nachladen von jquery 1.4.2 ersetzt durch internes jquery 3.7.1 (TabellenHeader) 
