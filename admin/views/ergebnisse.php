@@ -31,7 +31,7 @@ static function setErgebnisseToolbar($val, $rows, $f_lid, $f_runde, $f_dg)
 		JToolBarHelper::custom('gast_kampflos','send.png','send_f2.png',JText::_('RESULTS_GAST_KL'),false);
 		JToolBarHelper::custom('wertung','send.png','send_f2.png',JText::_('RESULTS_CHANGE_VALUATION'),false);
 		JToolBarHelper::editList();
-		JToolBarHelper::deleteList();
+		JToolBarHelper::deleteList('','remove','Ergebnis löschen');
 	if ($val == 1) { JToolBarHelper::custom('back','cancel.png','download_f2.png',JText::_('MEMBER_BUTTON_BACK'),false); }
 		JToolBarHelper::help( 'screen.clm.ergebnisse' );
 	}
