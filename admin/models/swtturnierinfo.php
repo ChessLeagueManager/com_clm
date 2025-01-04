@@ -304,6 +304,8 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 				$this->_turnier->set('useAsTWZ',1);
 			} elseif($twz == 2){
 				$this->_turnier->set('useAsTWZ',0);
+			} else {
+				$this->_turnier->set('useAsTWZ',0);
 			}
 						
 		}
