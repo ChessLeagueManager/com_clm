@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -797,9 +797,18 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 								WHERE id = ".$tid.";";
 			$db->setQuery($select_query);
 			$turnier_orig = $db->loadObject();
-			if ($turnier_orig->teil != $turnier->teil OR $turnier_orig->rnd != $turnier->rnd) {
+			if ($turnier_orig->teil != $turnier->teil OR $turnier_orig->rnd != $turnier->rnd OR
+			    $turnier_orig->dateStart != $turnier->dateStart OR $turnier_orig->dateEnd != $turnier->dateEnd OR
+			    $turnier_orig->name != $turnier->name OR $turnier_orig->tiebr1 != $turnier->tiebr1 OR
+			    $turnier_orig->tiebr2 != $turnier->tiebr2 OR $turnier_orig->tiebr3 != $turnier->tiebr3) {
 				$turnier_orig->teil = $turnier->teil;
 				$turnier_orig->rnd  = $turnier->rnd;
+				$turnier_orig->dateStart = $turnier->dateStart;
+				$turnier_orig->dateEnd  = $turnier->dateEnd;
+				$turnier_orig->name = $turnier->name;
+				$turnier_orig->tiebr1  = $turnier->tiebr1;
+				$turnier_orig->tiebr2  = $turnier->tiebr2;
+				$turnier_orig->tiebr3  = $turnier->tiebr3;
 				if($db->updateObject('#__clm_turniere',$turnier_orig,'id')) {
 					return true;
 				} else {

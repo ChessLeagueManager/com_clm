@@ -30,6 +30,7 @@ $ -> Language fix or change
 ^ Ergebnismeldung: Schaltfläche Löschen wird zu Ergebnis löschen
 ^ Copyright 2008-2025
 # Einzelturniere: Feinwertung Buchholzsumme mit Streichwertung korrigiert
+# SWT-Import Einzel: Übernahme von Turnierdetails erweitert
 
 - - - - - 4.2.2 - [20-11-2024] - - - - - - - - - - - - - - - - - - - -
 # Frontend-Views: Nachladen von jquery 1.4.2 ersetzt durch internes jquery 3.7.1 (TabellenHeader) 

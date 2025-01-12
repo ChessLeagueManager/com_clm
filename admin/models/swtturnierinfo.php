@@ -229,7 +229,7 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 				} elseif($feinwertung2 == 5 AND $anzStreichwertungen == 1) {
 					//Sonneborn-Berger mit 1 Streichergebnis
 					$this->_turnier->set('tiebr2', 13);
-				} elseif($feinwertung1 == 6 AND $anzStreichwertungen == 0) {
+				} elseif($feinwertung2 == 6 AND $anzStreichwertungen == 0) {
 					//mittlere Buchholz 
 					$this->_turnier->set('tiebr2', 5);
 				} elseif($feinwertung2 == 8) {
@@ -339,7 +339,8 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 		$values .= " '".implode("\n", $paramsStringArray)." '";
 		
 		
-		$insert_query = "INSERT IGNORE INTO 
+//		$insert_query = "INSERT IGNORE INTO 
+		$insert_query = "REPLACE INTO  
 								#__clm_swt_turniere" . " 
 								( " . $fields . " ) "
 		              . " 	VALUES 
