@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -561,7 +561,8 @@ class CLMTournament extends stdClass {
 				elseif (count($array_PlayerBuchOpp[$s]) == 0) 
 					$array_PlayerBuch1St[$s] = 0;
 				elseif (count($array_PlayerBuchOpp[$s]) == 1) 
-					$array_PlayerBuch1St[$s] = $array_PlayerBuchOpp[$s][0];
+//					$array_PlayerBuch1St[$s] = $array_PlayerBuchOpp[$s][0];
+					$array_PlayerBuch1St[$s] = array_sum($array_PlayerBuchOpp[$s]);
 				elseif (count($array_PlayerBuchOpp[$s]) > 2) //== ($dg * $runden)) 
 					$array_PlayerBuch1St[$s] = array_sum($array_PlayerBuchOpp[$s]) - min($array_PlayerBuchOpp[$s]);
 				else $array_PlayerBuch1St[$s] = array_sum($array_PlayerBuchOpp[$s]);
@@ -595,7 +596,16 @@ class CLMTournament extends stdClass {
 				} else $array_PlayerBuSumMin[$value->tln_nr] = 0;
 			}
 		}
-		// BuchholzSumme mit Streichresultat
+		// BuchholzSumme mit 1 Streichwertung
+		if ((in_array(12, $arrayFW)) OR (in_array(12, $arrayFW))) { // Buchholz-Summe - 1 als TieBreaker gewünscht?
+			// erneut alle Matches durchgehen -> Spieler erhalten Buchholzsummen - 1
+			foreach ($matchData as $key => $value) {
+				if ($value->gegner >= 1) {
+					$array_PlayerBuSum1St[$value->tln_nr] += $array_PlayerBuch1St[$value->gegner];
+				}
+			}
+		}
+/*		// BuchholzSumme mit Streichresultat - alt
 		if (in_array(12, $arrayFW)) { // als TieBreaker gewünscht?
 			$array_s12 = array();
 			foreach ($matchData as $key => $value) {
@@ -613,7 +623,7 @@ class CLMTournament extends stdClass {
 					$array_PlayerBuSum1St[$s] = $array_PlayerBuSum1St[$s] - $array_PlayerBuSum1StMin[$s];
 			}
 		}
-	
+*/	
 		// Elo-Schnitt
 		if (in_array(6, $arrayFW)) { // Elo-Schnitt als TieBreaker gewünscht?
 			for ($s=1; $s<= $this->data->teil; $s++) { // alle Startnummern durchgehen
