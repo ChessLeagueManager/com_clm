@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -163,6 +163,6 @@ $config["verein_fe_mail"]=array(142,9,0,array(0,1));
 $config["field_search"]=array(143,9,0,array(0,1));
 $config["email_suppress"]=array(144,9,0,array(0,1,2));
 $config["email_replace"]=array(145,12,"",null);
-$config["email_independent"]=array(146,9,1,array(0,1));
+$config["email_independent"]=array(146,9,0,array(0,1));
 
 ?>
