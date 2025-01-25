@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -78,6 +78,7 @@ class CLMText {
 	*/
 	public static function getResultString($erg, $length = 1) {
 	
+		if ($erg == "") return "";
 		$strShort = array("0", "1", "&frac12;", "0", "-", "+", "-", "---", "*", "0", "&frac12;", "+", "=", "-");
 		$strLong = array("0:1", "1:0", "&frac12;:&frac12;", "0:0", "-/+", "+/-", "-/-", "---", "*", "0:&frac12;", "&frac12;:0", "+/-", "&frac12;/-", "-/-");
 		
