@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -304,6 +304,10 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 				$this->_turnier->set('useAsTWZ',1);
 			} elseif($twz == 2){
 				$this->_turnier->set('useAsTWZ',0);
+			} elseif($twz == 3){
+				$this->_turnier->set('useAsTWZ',3);
+			} elseif($twz == 4){
+				$this->_turnier->set('useAsTWZ',4);
 			} else {
 				$this->_turnier->set('useAsTWZ',0);
 			}

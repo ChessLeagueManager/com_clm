@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -292,6 +292,8 @@ else $field_search = "inputbox";
 				$options[0] = JText::_('OPTION_USEASTWZ_0');
 				$options[1] = JText::_('OPTION_USEASTWZ_1');
 				$options[2] = JText::_('OPTION_USEASTWZ_2');
+				$options[3] = JText::_('OPTION_USEASTWZ_3');
+				$options[4] = JText::_('OPTION_USEASTWZ_4');
 			}
 			$optionlist = array();
 			foreach ($options as $key => $val) {

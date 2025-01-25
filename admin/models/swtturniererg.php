@@ -758,7 +758,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 		// Nachdem das Turnier kopiert wurde existiert auf jeden Fall eine Turnier-ID != 0
 		// Diese soll nun f�r die weiteren Aufgaben benutzt werden
 		$tid = $this->_getTid($swt_tid);
-		
+		$_POST["tid"] = $tid;
 		// Teilnehmer kopieren
 		if(!$this->_copyTeilnehmer($swt_tid, $update, $tid)){
 			JFactory::getApplication()->enqueueMessage( JText::_('SWT_STORE_ERROR_COPY_PLAYERS'),'error' );

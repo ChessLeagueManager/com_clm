@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -85,6 +85,7 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 				$teilnehmer->set('mgl_nr'		, CLMSWT::readName($swt,$offset+159	,4));
 				$teilnehmer->set('geschlecht'	, CLMSWT::readName($swt,$offset+184	,1));
 				if ($teilnehmer->geschlecht == 'F' OR $teilnehmer->geschlecht == 'f' OR $teilnehmer->geschlecht == 'w') $teilnehmer->set('geschlecht'	, 'W');
+				if ($teilnehmer->geschlecht == 'm') $teilnehmer->set('geschlecht'	, 'M');
 				$teilnehmer->set('tlnrStatus'	, (CLMSWT::readName($swt,$offset+184	,1)=="*" ? "0" : "1"));
 				if ($modus == 3 OR $modus == 5) $teilnehmer->set('tlnrStatus'	, 1);
 				if ($file_version == 724)
@@ -99,7 +100,9 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 				$teilnehmer->set('s_punkte'   	, $s_punkte);
 
 				//TWZ-Bestimmen
-				if($useAsTWZ == 0) { 
+				$z_twz = clm_core::$load->gen_twz($useAsTWZ, $teilnehmer->start_dwz, $teilnehmer->FIDEelo);
+				$teilnehmer->set('twz'	, $z_twz);
+/*				if($useAsTWZ == 0) { 
 					if ($teilnehmer->FIDEelo >= $teilnehmer->start_dwz) { $teilnehmer->set('twz'	, $teilnehmer->FIDEelo); }
 					else { $teilnehmer->set('twz'	, $teilnehmer->start_dwz); } 
 				} elseif ($useAsTWZ ==1) {
@@ -109,6 +112,7 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 					if ($teilnehmer->FIDEelo > 0) { $teilnehmer->set('twz'	, $teilnehmer->FIDEelo); }
 					else { $teilnehmer->set('twz'	, $teilnehmer->start_dwz); }
 				}
+*/
 				// Geschlecht korrigieren
 				// Keine Angabe = Männlich
 				if($teilnehmer->geschlecht==" ") {

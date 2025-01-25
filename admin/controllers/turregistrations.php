@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team. All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -544,7 +544,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 	}
 
 	// TWZ aus Parameter des Turniers, NWZ und ELO ermitteln
-	function _getTWZ ($param = 0, $natrating = 0, $fideelo = 0) {	
+/*	function _getTWZ ($param = 0, $natrating = 0, $fideelo = 0) {	
 		$twz = 0;
 		if ($param == 0) {
 			$twz = max(array($natrating, $fideelo));
@@ -561,7 +561,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		}
 		return $twz;
 	}
-
+*/
 	// Weiterleitung!
 	function onlineRegList() {
 		

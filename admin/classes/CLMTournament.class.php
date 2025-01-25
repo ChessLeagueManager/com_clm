@@ -177,7 +177,7 @@ class CLMTournament extends stdClass {
 	
 		// TWZ ggf. korrigieren
 		foreach($player as $player1) {
-			if($paramuseAsTWZ == 0) { 
+/*			if($paramuseAsTWZ == 0) { 
 				if ($player1->FIDEelo >= $player1->start_dwz) { $player1->twz = $player1->FIDEelo; }
 				else { $player1->twz = $player1->start_dwz; } 
 			} elseif ($paramuseAsTWZ == 1) {
@@ -187,6 +187,8 @@ class CLMTournament extends stdClass {
 				if ($player1->FIDEelo > 0) { $player1->twz = $player1->FIDEelo; }
 				else { $player1->twz = $player1->start_dwz; }
 			}	
+*/
+			$player1->twz = clm_core::$load->gen_twz($paramuseAsTWZ, $player1->start_dwz, $player1->FIDEelo);
 		}
 
 		//bisherige Rankingdaten löschen

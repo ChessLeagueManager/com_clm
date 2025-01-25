@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  *
@@ -253,7 +253,8 @@ if ($debug > 0) { echo "<br><br>-- Spielerdaten --";	}
 if ($debug > 0) {echo "<br>2060 ".$lang->t2060.': '.$tab_record['out'][2060][0];}
 //if ($debug > 0) { echo "<br>tab: ";	var_dump($tab_record['out'][2060]); }
 		$slength += $tab_record['length'];
-		if($paramuseAsTWZ == 0) { 
+		$twz = clm_core::$load->gen_twz($paramuseAsTWZ, $tab_record['out'][2004][0], $tab_record['out'][2003][0]);
+/*		if($paramuseAsTWZ == 0) { 
 			if ($tab_record['out'][2003][0] >= $tab_record['out'][2004][0]) { $twz = $tab_record['out'][2003][0]; } //FIDEelo; 
 			else { $twz = $tab_record['out'][2004][0]; } //start_dwz;  
 		} elseif ($paramuseAsTWZ == 1) {
@@ -263,6 +264,7 @@ if ($debug > 0) {echo "<br>2060 ".$lang->t2060.': '.$tab_record['out'][2060][0];
 			if ($tab_record['out'][2003][0]  > 0) { $twz = $tab_record['out'][2003][0]; } //FIDEelo; 
 			else { $twz = $tab_record['out'][2004][0]; } //start_dwz;
 		} else $twz = 0;
+*/
 		// Feld Typ überschreibt Feld Titel, falls dieses leer ist													
 		if ($tab_record['out'][2002][0] == '') $tab_record['out'][2002][0] = $tab_record['out'][2045][0];
 		$titel = $tab_record['out'][2002][0];
@@ -1082,9 +1084,9 @@ function transcode_twz($line) {
 		2 ->  2	 Elo international
 		3 ->  2	 Elo int. dann nat.
 		4 ->  0	 Elomaximum (Nat,Int)
-		5 ->  1  Elo national only
-		6 ->  2	 Elo international only  */
-	$clm_twz = array (0 => 0, 1 => 1, 2 => 2, 3 => 2, 4 => 0, 5 => 1, 6 => 2);
+		5 ->  4  Elo national only
+		6 ->  3	 Elo international only  */
+	$clm_twz = array (0 => 0, 1 => 1, 2 => 2, 3 => 2, 4 => 0, 5 => 4, 6 => 3);
 		
 	$line[0] = $clm_twz[$line[0]];
 	$line[1][2] = 'params_useAsTWZ';
