@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  *
@@ -412,8 +412,12 @@ if ($debug > 0) { echo "<br>Runde: ".$i."  Brett: $j   ".$a_name[$a_paarung[$i][
 						$ergebnis = 4; break;
 					case '+':
 						$ergebnis = 5; break;
+					case 'F':
+						$ergebnis = 11; break;
 					case 'H':
 						$ergebnis = 12; break;
+					case 'Z':
+						$ergebnis = 13; break;
 					case 'U':
 						$ergebnis = $erg_pab; break;
 					default:

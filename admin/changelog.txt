@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 4.2.3 - [xx-xx-2024] - - - - - - - - - - - - - - - - - - - -
+- - - - - 4.2.3 - [xx-xx-2025] - - - - - - - - - - - - - - - - - - - -
 # Rundenbericht: In Rangliste punkt- und wertungsgleich -> gleiche Platzierung (Nachbesserung)
 # Rundenbericht: Darstellung bei mehr als einer Mannschaft spielfrei
 # SWT-Import Einzel: Übernahme 50%-Schalter, Korrektur TWZ-Schalter
@@ -31,6 +31,7 @@ $ -> Language fix or change
 ^ Copyright 2008-2025
 # Einzelturniere: Feinwertung Buchholzsumme mit Streichwertung korrigiert
 # SWT-Import Einzel: Übernahme von Turnierdetails erweitert
+# TRF-Import: Bye-Ergebnisse ergänzt
 
 - - - - - 4.2.2 - [20-11-2024] - - - - - - - - - - - - - - - - - - - -
 # Frontend-Views: Nachladen von jquery 1.4.2 ersetzt durch internes jquery 3.7.1 (TabellenHeader) 
