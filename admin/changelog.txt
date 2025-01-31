@@ -34,6 +34,7 @@ $ -> Language fix or change
 # TRF-Import: Bye-Ergebnisse ergänzt
 # Einzelturniere: Anzeige von ausgelosten noch nicht gespielten Paarungen in Rangliste 
 + Einzelturniere: TWZ-Ermittlung erweitert
+# Ergebnismeldung: Nachbesserung Fehlermeldung bei spielfrei-Paarungen
 
 - - - - - 4.2.2 - [20-11-2024] - - - - - - - - - - - - - - - - - - - -
 # Frontend-Views: Nachladen von jquery 1.4.2 ersetzt durch internes jquery 3.7.1 (TabellenHeader) 

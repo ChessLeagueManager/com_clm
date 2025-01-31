@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -159,7 +159,10 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 	
 	// Wurden für die Heimmannschaft schon Spieler gemeldet?
 	if (!isset($out["heim"][0])) {
-		return array(false, "e_reportListHome");
+		if ($someData[0]->hmnr == 0)
+			return array(false, "m_reportListHomeSpielfrei");
+		else
+			return array(false, "e_reportListHome");
 	}
 	
 	// Dürfen nur Heimspieler melden?
@@ -204,7 +207,10 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 	
 	// Wurden für die Gastmannschaft schon Spieler gemeldet?
 	if (!isset($out["gast"][0])) {
-		return array(false, "e_reportListGuest");
+		if ($someData[0]->gmnr == 0)
+			return array(false, "w_reportListGuestSpielfrei");
+		else
+			return array(false, "e_reportListGuest");
 	}
 	
 	$ligaModel = "SELECT a.*,t.datum as datum FROM #__clm_liga as a"
