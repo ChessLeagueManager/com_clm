@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -347,7 +347,7 @@ elseif ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) { ?>
     $ie = 0;
 	$sumspl = 0;
 	$sumgespielt = 0;
-for ($x=0; $x< 100; $x++){
+for ($x=0; $x< 400; $x++){
 	// Überlesen von Null-Sätzen 
 	while (isset($count[$x]) and $count[$x]->mgl_nr == "0" AND $countryversion == "de")  {
 		$x++; }
