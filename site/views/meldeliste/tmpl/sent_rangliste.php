@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -278,6 +278,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 	$bcc_mail	= NULL;  /* damit keine direkte Mail an Admin */   
 	$sl_mail	= $config->sl_mail;
 	$countryversion = $config->countryversion;
+	$email_suppress = $config->email_suppress;
 	
 	if (!clm_core::$load->is_email($bcc)) $bcc = NULL;
 	$send = 1;
@@ -638,7 +639,8 @@ if ( $send == 1 ) {
 			$msg .= '<br>'.'Fehler bei Mailausgabe: '.'<br>'.$result[1];
 		$countmail++;
 	}
-	$msg .= "<h5>".$countmail++. ' '.JText::_( 'Mail wurden gesendet' )."</h5>";
+	if ($email_suppress != 1) 
+		$msg .= "<h5>".$countmail++. ' '.JText::_( 'Mail wurden gesendet' )."</h5>";
 	$mainframe->enqueueMessage( $msg, 'message' );
 
 }
