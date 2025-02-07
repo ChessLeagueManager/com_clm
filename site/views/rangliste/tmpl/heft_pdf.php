@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -540,6 +540,7 @@ if ($pdf_orientation == 'P' AND $pdf->GetY() < 228) {
 	$pdf->Cell(40,$zelle,$lang->color_order,1,0,'L',$fc);
 	$pdf->Cell(140,$zelle,clm_core::$load->key_to_name('color_order',intval($params['color_order']),true),1,1,'L',$fc);
 
+	$dtiebr = '';
 	if ($liga[0]->liga_mt == 0) { 	// Liga
 		$dtiebr = clm_core::$load->key_to_name('tiebreak',5,true); 
 		if ($liga[0]->b_wertung == 0 AND $liga[0]->order == 1)  	
@@ -563,7 +564,8 @@ if ($pdf_orientation == 'P' AND $pdf->GetY() < 228) {
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(40,$zelle,$lang->tiebreaks,1,0,'L',$fc);
 	$pdf->Cell(140,$zelle,$dtiebr,1,1,'L',$fc);
-
+	
+	if (!isset($params['pseudo_dwz'])) $params['pseudo_dwz'] = '';
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(60,$zelle,clm_core::$load->utf8decode(html_entity_decode(str_replace('<br/>',' ',$lang->pseudo_dwz))),1,0,'L',$fc);
 	$pdf->Cell(30,$zelle,$params['pseudo_dwz'],1,0,'L',$fc);

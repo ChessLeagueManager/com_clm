@@ -361,6 +361,7 @@ if ($debug > 1) { echo "<br>runde: $runde  brett: $brett  ergebnis: $ergebnis  -
 			}
 			if ($epaar > $paarprorunde[$runde]) {
 				$runde++;
+				if ($tableprorunde[$runde] == 0) break;
 				$epaar = 1;
 				$paar = 1;
 			} 
@@ -370,7 +371,7 @@ if ($debug > 1) { echo "<br>runde: $runde  brett: $brett  ergebnis: $ergebnis  -
 			$ergebnis = transcode_ergebnis($tab_record['out'][4002][0],$heim,$gegner);
 			$weiss = 0;
 			if ($ergebnis < 3) $kampflos = 0; else $kampflos = 1;
-			if (is_null($ergebnis)) $ergebnis = 8;
+			if (is_null($ergebnis)) { $ergebnis = 8; $kampflos = 1; }
 			if ($heim == 1) {
 				if ($ergebnis == 1 OR $ergebnis == 5 ) $punkte = '1';
 				elseif ($ergebnis == 2) $punkte = '0.5';
@@ -506,6 +507,7 @@ if ($debug > 1) { echo "<br>tab_record: $i ";	var_dump($tab_record); }
 		} else {
 			$runde++;
 			if ($runde > $tournament["out"][1][0]) break;
+			if ($paarprorunde[$runde] == 0) break;
 			$table = 1;
 		}
 		$spieler = $tab_record['out'][5007][0];
