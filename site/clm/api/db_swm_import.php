@@ -361,7 +361,7 @@ if ($debug > 1) { echo "<br>runde: $runde  brett: $brett  ergebnis: $ergebnis  -
 			}
 			if ($epaar > $paarprorunde[$runde]) {
 				$runde++;
-				if ($tableprorunde[$runde] == 0) break;
+				if (!isset($tableprorunde[$runde]) OR $tableprorunde[$runde] == 0) break;
 				$epaar = 1;
 				$paar = 1;
 			} 
