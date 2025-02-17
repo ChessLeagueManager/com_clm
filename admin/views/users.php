@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -229,6 +229,7 @@ public static function user( &$row,$lists, $option )
 	$config = clm_core::$db->config();
 	$conf_user_member	= $config->user_member;
 	$countryversion = $config->countryversion;
+	$email_independent = $config->email_independent;
 	
 		$_REQUEST['clm_user_member'] = $conf_user_member;
 		clm_core::$load->load_js("users");
@@ -262,6 +263,7 @@ public static function user( &$row,$lists, $option )
 			<input class="inputbox" type="text" name="username" id="username" size="30" maxlength="60" value="<?php echo $row->username; ?>" /><?php echo JText::_( 'USER_EXAMPLE_USERNAME' );?>
 			</td>
 		</tr>
+		<?php if ($email_independent == 0 ) { ?>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
 			<label for="name"><?php echo JText::_( 'USER_MAIL' ).' : '; ?></label>
@@ -270,6 +272,25 @@ public static function user( &$row,$lists, $option )
 			<input class="inputbox" type="text" name="email" id="email" size="30" maxlength="60" value="<?php echo $row->email; ?>" /><?php echo JText::_( 'USER_EXAMPLE_MAIL' );?>
 			</td>
 		</tr>
+		<?php }
+			if ($email_independent == 1 ) { ?>
+		<tr>
+			<td class="key" width="20%" nowrap="nowrap">
+			<label for="name"><?php echo JText::_( 'USER_MAIL_CLM' ).' : '; ?></label>
+			</td>
+			<td>
+			<input class="inputbox" type="text" name="email" id="email" size="30" maxlength="60" value="<?php echo $row->email; ?>" /><?php echo JText::_( 'USER_EXAMPLE_MAIL' );?>
+			</td>
+		</tr>
+		<tr>
+			<td class="key" width="20%" nowrap="nowrap">
+			<label for="name"><?php echo JText::_( 'USER_MAIL_JOOMLA' ).' : '; ?></label>
+			</td>
+			<td>
+			<input class="inputbox" type="text" name="jmail" id="jmail" size="30" maxlength="60" value="<?php echo $row->jmail; ?>" /><?php echo JText::_( 'USER_EXAMPLE_MAIL' );?>
+			</td>
+		</tr>
+		<?php } ?>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
 			<label for="name"><?php echo JText::_( 'USER_TELEFON' ).' : '; ?></label>

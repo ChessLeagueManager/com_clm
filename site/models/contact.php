@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Fred Baumgarten
@@ -14,7 +14,9 @@ class CLMModelContact extends JModelLegacy
 	function _getCLMClmuser ( &$options ) {
 		$user	= JFactory::getUser();
 		$jid	= $user->get('id');
-		$query	= "SELECT * FROM #__clm_user WHERE jid = $jid AND sid in (select id from #__clm_saison where published = 1)";
+		$query	= "SELECT c.*, u.email as jmail FROM #__clm_user as c "
+			." LEFT JOIN #__users as u ON c.jid = u.id "
+			." WHERE c.jid = $jid AND c.sid in (select id from #__clm_saison as s where s.published = 1 and s.archiv = 0)";
 		return $query;
 	}
 
@@ -24,7 +26,7 @@ class CLMModelContact extends JModelLegacy
 		return @$result;
 	}
 
-	function updateUser ( $fest, $mobil, $email ) {
+	function updateUser ( $fest, $mobil, $email, $jmail ) {
 		$user	= JFactory::getUser();
 		$jid	= $user->get('id');
 		$parray = array();
@@ -63,6 +65,13 @@ class CLMModelContact extends JModelLegacy
 		if ($clm_config->email_independent == 0 AND $email !== "_ZERO_") {
 			$query = "UPDATE #__users SET ";
 			$query = $query . "email='" . $email . "'";
+			$query = $query . " WHERE id='" . $jid . "'";
+			clm_core::$db->query($query);			
+		}
+		if ($clm_config->email_independent == 1 AND $jmail !== "_ZERO_") {
+			$query = "UPDATE #__users SET ";
+			$query = $query . "email='" . $jmail . "'";
+			$query = $query . " WHERE id='" . $jid . "'";
 			clm_core::$db->query($query);			
 		}
 	}

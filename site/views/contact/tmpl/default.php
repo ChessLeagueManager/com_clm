@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Fred Baumgarten
@@ -289,19 +289,30 @@ function updatephone(id) {
 }
 </script>
 <table class="rangliste" frame="box" border="1">
-<?php echo "<tr><td>" . JText::_('CONTACT_FIXED') ."</td><td> ". $clmuser[0]->tel_fest . "</td><td><input onInput=\"updatephone('fixed')\" id=\"fixed\" name=\"fixed\" value=\"" . $clmuser[0]->tel_fest . "\"/></td></tr>\n";
-      echo "<tr><td>" . JText::_('CONTACT_MOBILE') ."</td><td>" . $clmuser[0]->tel_mobil . "</td><td><input onInput=\"updatephone('mobile')\" id=\"mobile\" name=\"mobile\" value=\"" . $clmuser[0]->tel_mobil . "\"/></td></tr>\n";
+<?php echo "<tr><td>" . JText::_('CONTACT_FIXED') ."</td><td> "
+		. $clmuser[0]->tel_fest . "</td><td><input onInput=\"updatephone('fixed')\" id=\"fixed\" name=\"fixed\" value=\"" . $clmuser[0]->tel_fest . "\"/></td></tr>\n";
+      echo "<tr><td>" . JText::_('CONTACT_MOBILE') ."</td><td>" 
+		. $clmuser[0]->tel_mobil . "</td><td><input onInput=\"updatephone('mobile')\" id=\"mobile\" name=\"mobile\" value=\"" . $clmuser[0]->tel_mobil . "\"/></td></tr>\n";
 	  //CLM parameter auslesen
 	  $clm_config = clm_core::$db->config();
 	  if ($clm_config->email_independent == 0 ) 
-		echo "<tr><td>" . JText::_('CONTACT_EMAIL') ."</td><td>" . $clmuser[0]->email . "</td><td><input onInput=\"updateemail('email')\" id=\"email\" name=\"email\" value=\"" . $clmuser[0]->email . "\"/></td></tr>\n";
-      else
-		echo "<tr><td>" . JText::_('CONTACT_EMAIL_CLM') ."</td><td>" . $clmuser[0]->email . "</td><td><input onInput=\"updateemail('email')\" id=\"email\" name=\"email\" value=\"" . $clmuser[0]->email . "\"/></td></tr>\n";
-      echo "<tr><td colspan=\"2\"><input type=\"hidden\" name=\"view\" value=\"contact\"></td><td><input type=\"submit\" id=\"contactbutton\" value=\"" . JText::_('CONTACT_BUTTON') . "\"></td></tr>\n";
+		echo "<tr><td>"	. JText::_('CONTACT_EMAIL') ."</td><td>" 
+			. $clmuser[0]->email . "</td><td><input onInput=\"updateemail('email')\" id=\"email\" name=\"email\" value=\"" . $clmuser[0]->email . "\"/></td></tr>\n";
+      else {
+		echo "<tr><td>"	. JText::_('CONTACT_EMAIL_CLM') ."</td><td>" 
+			. $clmuser[0]->email . "</td><td><input onInput=\"updateemail('email')\" id=\"email\" name=\"email\" value=\"" . $clmuser[0]->email . "\"/></td></tr>\n";
+		echo "<tr><td>"	. JText::_('CONTACT_EMAIL_JOOMLA') ."</td><td>" 
+			. $clmuser[0]->jmail . "</td><td><input onInput=\"updateemail('jmail')\" id=\"jmail\" name=\"jmail\" value=\"" . $clmuser[0]->jmail . "\"/></td></tr>\n";
+      }
+	  echo "<tr><td colspan=\"2\"><input type=\"hidden\" name=\"view\" value=\"contact\"></td><td><input type=\"submit\" id=\"contactbutton\" value=\"" . JText::_('CONTACT_BUTTON') . "\"></td></tr>\n";
 	      ?>
 </table>
 <br/>
 <?php echo JText::_('CONTACT_HILFE'); ?>
+<br/>
+<?php if ($clm_config->email_independent == 1 ) 
+		echo "<br>".JText::_('CONTACT_HILFE1'); 
+	?>
 
 </form>
 <br>

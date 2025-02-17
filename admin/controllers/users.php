@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -179,7 +179,7 @@ function edit()
 	$mainframe = JFactory::getApplication();
 
 	$db 		= JFactory::getDBO();
-	$user 		= JFactory::getUser();
+	$user 		= JFactory::getUser();				// angemeldeter Benutzer
 	$task 		= clm_core::$load->request_string('task', '');
 	$cid 		= clm_core::$load->request_array_int('cid');
 	$uid 		= clm_core::$load->request_int('id');
@@ -195,6 +195,8 @@ function edit()
 	// Prüfen ob User Berechtigung zum editieren hat //
 	$row	= JTable::getInstance( 'users', 'TableCLM' );
 	$row->load( $cid[0] );
+	$juser 		= JFactory::getUser($row->jid);		// Joomla-user in Bearbeitung
+	$row->jmail	= $juser->get('email');
 	$id	= $row->jid;
 	$jid	= $user->get('id');
 	//$gid 	= key($user->get('groups')); // 6 = Manager ; 7 = Admin; 8 = Superadmin ; 2= registered
@@ -353,6 +355,7 @@ function save() {
 	$name		= clm_core::$load->request_string('name', '');
 	$username	= clm_core::$load->request_string('username', '');
 	$email		= clm_core::$load->request_string('email', '');
+	$jmail		= clm_core::$load->request_string('jmail', '');
 	$mglnr		= clm_core::$load->request_string('mglnr', '');
  	$usertype	= clm_core::$load->request_string('usertype', '');
 	$published	= clm_core::$load->request_int('published', 0);
@@ -371,11 +374,13 @@ function save() {
 		// User wird nicht aus Joomla DB übernommen
  		if ($jid_clm == "0") {
 			// prüfen ob Email schon vergeben wurde
-			$query = "SELECT COUNT(email) as countmail FROM #__users WHERE email = '$email'";
+			if ($email_independent == 0) $vmail = $email;
+			if ($email_independent == 1) $vmail = $jmail;
+			$query = "SELECT COUNT(email) as countmail FROM #__users WHERE email = '$vmail'";
 			$count_mail	= clm_core::$db->loadObjectList($query);
 			if ($count_mail[0]->countmail > 0) {
 				$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
-				$this->setMessage(JText::_( 'USERS_MAIL'),'warning');
+				$this->setMessage(JText::_( 'USERS_MAIL').' - '.$vmail,'warning');
 				return;
 			}
 			// prüfen ob Username schon vergeben wurde
@@ -383,7 +388,7 @@ function save() {
 			$count_uname = clm_core::$db->loadObjectList($query);
 			if ($count_uname[0]->username > 0) {
 				$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
-				$this->setMessage(JText::_( 'USERS_NAME_IST'),'warning');
+				$this->setMessage(JText::_( 'USERS_NAME_IST').' - '.$username,'warning');
 				return;
 			}
 
@@ -401,7 +406,10 @@ function save() {
 			$data			= array();
 			$data['name']		= $name;
 			$data['username']	= $username;
-			$data['email']		= $email;
+			if ($email_independent == 0) 
+				$data['email']		= $email;
+			if ($email_independent == 1) 
+				$data['email']		= $jmail;
 			$groups			= array( $group => $group);
 			$data['groups']		= $groups;
 			$data['block']		= $block;
@@ -498,6 +506,8 @@ function save() {
 		$data['username']	= $username;
 		if ($email_independent == 0) 
 			$data['email']		= $email;
+		if ($email_independent == 1) 
+			$data['email']		= $jmail;
 		$gids['2']		= 2;	// Registered immer setzen
 		
 		if ($clmAccess->accessWithType($usertype,'BE_general_general')) {		// Wenn clm-usertype Admin-Zugang hat, dann setze Admin ggf. zusätzlich
