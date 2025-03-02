@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -50,9 +50,12 @@ $rights["db_config_get"]=array(0,"BE_config_general",true);
 $rights["db_config_save"]=array(0,"BE_config_general",true);
 $rights["db_config_reset"]=array(0,"BE_config_general",true);
 $rights["db_report"]=array();
+$rights["db_report_sl"]=array();
 $rights["db_report_save"]=array();
+$rights["db_report_save_sl"]=array();
 $rights["db_report_overview"]=array();
 $rights["view_report"]=array();
+$rights["view_report_sl"]=array();
 $rights["db_schedule"]=array();
 $rights["view_schedule"]=array();
 $rights["view_schedule_pdf"]=array();

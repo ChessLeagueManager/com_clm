@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -36,6 +36,29 @@ if (clm_core::$access->getSeason() != -1) {
 	if($view == "meldung"){	
 		// API aufrufen, Parameter (GET) werden automatisch zugeordnet --> site/com_clm/clm/includes/bindings.php
 		$fix = clm_core::$api->callStandalone("view_report");
+			// Fehlerfall
+			if(!$fix[0]) {
+				// Spezialbehandlung, Umleitung auf die enstprechende Runde
+				if($fix[1] == "e_reportUnpublished" || $fix[1] == "e_reportAlready") {	
+					$error = clm_core::$load->load_view("notification", array($fix[1],false));	
+					$link = "index.php?option=com_clm&view=paarungsliste&saison=".$fix[2][1]."&liga=".$fix[2][0];
+					$mainframe	= JFactory::getApplication();
+					$mainframe->redirect( $link, $error[1], $error[0]);
+				// sonst Fehlermeldung ausgeben
+				} else {
+					$error = clm_core::$load->load_view("notification", array($fix[1]));	
+					echo '<div class="clm">'.$error[1].'</div>';
+				}
+			} else {
+				// Aufruf war erfolgreich
+				echo $fix[2];
+			}
+			// View wurde bereits ausgegeben -> wir sind fertig
+			return;
+	} 
+	elseif($view == "meldung_sl"){	
+		// API aufrufen, Parameter (GET) werden automatisch zugeordnet --> site/com_clm/clm/includes/bindings.php
+		$fix = clm_core::$api->callStandalone("view_report_sl");
 			// Fehlerfall
 			if(!$fix[0]) {
 				// Spezialbehandlung, Umleitung auf die enstprechende Runde
