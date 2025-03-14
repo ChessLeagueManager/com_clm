@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://www.chessleaguemanager.de
 */
@@ -14,8 +14,8 @@ function clm_view_dsb_import() {
 <div class="clm_view_dsb_import_div">
 <input type="file" onchange="clm_dsb_import_check(this)" name="file" />
 <button type="button" onclick="clm_dsb_import_club(this,0,0)" title="<?php echo $lang->clubUpdateText; ?>" disabled="disabled"><?php echo $lang->clubUpdate; ?></button>
-<button type="button" onclick="clm_dsb_import_player(this,0,0,0)" title="<?php echo $lang->normalUpdateText; ?>" disabled="disabled"><?php echo $lang->normalUpdate; ?></button>
-<button type="button" onclick="clm_dsb_import_player(this,0,1,0)" title="<?php echo $lang->specialUpdateText; ?>" disabled="disabled"><?php echo $lang->specialUpdate; ?></button>
+<button type="button" onclick="clm_dsb_import_player(this,0,0,0,'')" title="<?php echo $lang->normalUpdateText; ?>" disabled="disabled"><?php echo $lang->normalUpdate; ?></button>
+<button type="button" onclick="clm_dsb_import_player(this,0,1,0,'')" title="<?php echo $lang->specialUpdateText; ?>" disabled="disabled"><?php echo $lang->specialUpdate; ?></button>
 </div>
 
 <div class="clm_view_dsb_import_update" style="display:none;">
