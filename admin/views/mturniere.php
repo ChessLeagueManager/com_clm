@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -34,6 +34,7 @@ class CLMViewMTurniere
 	$rang	= $config->rangliste;
 	$sl_mail= $config->sl_mail;
 	$import_pgn = $config->import_pgn;
+	$fe_sl_ergebnisse = $config->fe_sl_ergebnisse;
 	?>
 	<?php 
 	//Liga-Parameter aufbereiten
@@ -103,9 +104,16 @@ class CLMViewMTurniere
 		$row->params['dwz_date'] = '1970-01-01'; }
 	if (!isset($row->params['import_date']))  {   //Standardbelegung
 		$row->params['import_date'] = '1970-01-01'; }
+	if (!isset($row->params['fe_sl_ergebnisse']))  {   //Standardbelegung
+		$row->params['fe_sl_ergebnisse'] = '0'; }
 
 	// Auswahlfelder durchsuchbar machen
 	clm_core::$load->load_js("suche_liste");
+	
+	//CLM parameter auslesen
+	$clm_config = clm_core::$db->config();
+	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+	else $field_search = "inputbox";
 	?>
 	
 	<script language="javascript" type="text/javascript">
@@ -211,19 +219,13 @@ class CLMViewMTurniere
 	</tr>
 	<?php
 	// Kategorien
-		//CLM parameter auslesen
-		$clm_config = clm_core::$db->config();
-		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
-		else $field_search = "inputbox";
 	list($parentArray, $parentKeys) = CLMCategoryTree::getTree();
 	if (count($parentArray) > 0)  { // nur, wenn Kategorien existieren
 		$parentlist[]	= JHtml::_('select.option',  '0', CLMText::selectOpener(JText::_( 'NO_PARENT' )), 'id', 'name' );
 		foreach ($parentArray as $key => $value) {
 			$parentlist[]	= JHtml::_('select.option',  $key, $value, 'id', 'name' );
 		}
-//		$catidAlltime = JHtml::_('select.genericlist', $parentlist, 'catidAlltime', 'class="js-example-basic-single" size="1" style="max-width: 250px;"', 'id', 'name', intval($row->catidAlltime));
 		$catidAlltime = JHtml::_('select.genericlist', $parentlist, 'catidAlltime', 'class="'.$field_search.'" size="1" style="max-width: 250px;"', 'id', 'name', intval($row->catidAlltime));
-//		$catidEdition = JHtml::_('select.genericlist', $parentlist, 'catidEdition', 'class="js-example-basic-single" size="1" style="max-width: 250px;"', 'id', 'name', intval($row->catidEdition));
 		$catidEdition = JHtml::_('select.genericlist', $parentlist, 'catidEdition', 'class="'.$field_search.'" size="1" style="max-width: 250px;"', 'id', 'name', intval($row->catidEdition));
 	}
 	if (isset($catidAlltime)) { 
@@ -848,7 +850,17 @@ class CLMViewMTurniere
 		</fieldset></td>
 	</tr>
 	<?php } ?>
-
+	<?php if ($fe_sl_ergebnisse == 1) { ?>
+	<tr>
+		<td nowrap="nowrap" colspan="1">
+			<label for="fe_sl_ergebnisse">
+				<span class="editlinktip hasTip" title="<?php echo JText::_( 'OPTION_FE_SL_ERGEBNISSE_HINT' );?>">
+				<?php echo JText::_( 'OPTION_FE_SL_ERGEBNISSE' )." : "; ?></span></label>
+		</td><td class="paramlist_value"><fieldset class="radio">
+			<?php echo JHtml::_('select.booleanlist', 'params[fe_sl_ergebnisse]', 'class="inputbox"', $row->params['fe_sl_ergebnisse']); ?>
+		</fieldset></td>
+	</tr>
+	<?php } ?>
     <tr>
 	<td nowrap="nowrap">
 	<label for="mail"><?php echo JText::_( 'LEAGUE_MAIL' ); ?></label>

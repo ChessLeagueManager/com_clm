@@ -13,7 +13,7 @@ $ -> Language fix or change
 ! -> Note
 
 - - - - - 4.2.4 - [xx-xx-2025] - - - - - - - - - - - - - - - - - - - -
-+ Ergebniseingabe durch SL im Frontend möglich
++ Ergebniseingabe durch SL im Frontend freischaltbar
 
 - - - - - 4.2.3 - [18-02-2025] - - - - - - - - - - - - - - - - - - - -
 # Rundenbericht: In Rangliste punkt- und wertungsgleich -> gleiche Platzierung (Nachbesserung)

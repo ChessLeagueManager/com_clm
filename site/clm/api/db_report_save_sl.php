@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -15,13 +15,11 @@ if (!function_exists('mb_str_pad')) {
 // Eingang: Verband
 // Ausgang: Alle Vereine in diesem
 function clm_api_db_report_save_sl($liga, $runde, $dg, $paar, $comment, $ko_decision, $homes, $guests, $results, $icomment, $apaar) {
-clm_core::$api->test_print('liga',$liga);
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
 	// Zu den Angaben gibt es ein Mannschaftsturnier/Liga
 	$out = clm_core::$api->db_report_sl($liga, $runde, $dg, $paar, $apaar);
-clm_core::$api->test_print('out',$out);
 	if (!$out[0]) {
 		return array(false, $out[1]);
 	}
@@ -210,7 +208,6 @@ clm_core::$api->test_print('out',$out);
 		$query = "INSERT INTO #__clm_rnd_spl " . " ( `sid`, `lid`, `runde`, `paar`, `dg`, `tln_nr`, `brett`, `heim`, `weiss`, `spieler`, `PKZ` " . " , `zps`, `gegner`, `gPKZ`, `gzps`, `ergebnis` , `kampflos`, `punkte`, `gemeldet`) " 
 				." VALUES ('$sid','$lid','$rnd','$paarung','$dg','" . $out["paar"][0]->htln . "','" . ($y + 1) . "',1,'$weiss','$hmgl','$hPKZ','$hzps'," . " '$gmgl','$gPKZ','$gzps','$ergebnis', '$kampflos','$erg_h','$jid') "
 				.	  " , ('$sid','$lid','$rnd','$paarung','$dg','" . $out["paar"][0]->gtln . "','" . ($y + 1) . "','0','$schwarz','$gmgl','$gPKZ','$gzps'," . " '$hmgl','$hPKZ','$hzps','$ergebnis', '$kampflos','$erg_g','$jid') ";
-clm_core::$api->test_print('clm_rnd_spl',$query);
 		clm_core::$db->query($query);
 		$hmpunkte+= $erg_h;
 		$gmpunkte+= $erg_g;
@@ -306,13 +303,11 @@ clm_core::$api->test_print('clm_rnd_spl',$query);
 	$query = "UPDATE #__clm_rnd_man" . " SET gemeldet = " . $jid . " , zeit = '$now'" . " , ergebnis = " . $hergebnis . " , kampflos = " . $hkampflos
 		. " , brettpunkte = " . $hmpunkte . " , manpunkte = " . $hman_punkte . " , wertpunkte = " . $hwpunkte . " , comment = '" . $comment . "', icomment = '" . $icomment . "'" 
 		. " WHERE lid = " . $lid . " AND runde = " . $rnd . " AND paar = " . $paarung . " AND dg = " . $dg . " AND heim = 1 ";
-//clm_core::$api->test_print('clm_rnd_man',$query);
 	clm_core::$db->query($query);
 	// Für Gastmannschaft updaten
 	$query = "UPDATE #__clm_rnd_man" . " SET gemeldet = " . $jid . " , zeit = '$now'" . " , ergebnis = " . $gergebnis . " , kampflos = " . $gkampflos
 		. " , brettpunkte = " . $gmpunkte . " , manpunkte = " . $gman_punkte . " , wertpunkte = " . $gwpunkte . " , comment = '" . $comment . "', icomment = '" . $icomment . "'" 
 		. " WHERE lid = " . $lid . " AND runde = " . $rnd . " AND paar = " . $paarung . " AND dg = " . $dg . " AND heim = 0 ";
-//clm_core::$api->test_print('clm_rnd_man',$query);
 	clm_core::$db->query($query);
 	//mtmt start
 	if ($out["liga"][0]->runden_modus == 4 OR $out["liga"][0]->runden_modus == 5) { // KO Turnier

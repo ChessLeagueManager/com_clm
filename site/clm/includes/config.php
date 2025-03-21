@@ -164,5 +164,6 @@ $config["field_search"]=array(143,9,0,array(0,1));
 $config["email_suppress"]=array(144,9,0,array(0,1,2));
 $config["email_replace"]=array(145,12,"",null);
 $config["email_independent"]=array(146,9,0,array(0,1));
+$config["fe_sl_ergebnisse"]=array(147,9,0,array(0,1));
 
 ?>

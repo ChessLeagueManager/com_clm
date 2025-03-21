@@ -198,6 +198,15 @@ function clm_report_genData(box) {
 	output[10] = box.getElementsByClassName("apaar")[0].value;
 	return output;
 }
+function clm_report_genRTarget(box) {
+	var liga	= box.getElementsByClassName("liga")[0].value;
+	var runde	= box.getElementsByClassName("runde")[0].value;
+	var dg		= box.getElementsByClassName("dg")[0].value;
+	var paar	= box.getElementsByClassName("paar")[0].value;
+	var apaar	= box.getElementsByClassName("apaar")[0].value;
+	var rtarget = "index.php/?view=meldung_sl&liga="+liga+"&dg="+dg+"&runde="+runde+"&paar="+paar+"&apaar="+apaar+"&msg=1&Itemid=1";	
+	return rtarget;
+}
 function clm_report_save(box) {
 		 box = box.parentElement.parentElement;
 		 box.getElementsByClassName("button_save")[0].disabled=true;
@@ -226,8 +235,10 @@ function clm_report_save(box) {
 	                	}
 	                  return;
 	                }
-	                clm_report_message(box,clm_report_result_success,"success");
-	            } else {
+//	                clm_report_message(box,clm_report_result_success,"success");
+					var rtarget = clm_report_genRTarget(box);
+					window.location.href = rtarget;
+				} else {
 	                clm_report_message(box,clm_report_result_error0,"error");
 	            }
 	        }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -35,6 +35,7 @@ class CLMViewLigen
 	$sl_mail= $config->sl_mail;
 	$countryversion= $config->countryversion;
 	$import_pgn = $config->import_pgn;
+	$fe_sl_ergebnisse = $config->fe_sl_ergebnisse;
 	?>
 	<?php 
 	//Liga-Parameter aufbereiten
@@ -105,6 +106,8 @@ class CLMViewLigen
 		$row->params['dwz_date'] = '1970-01-01'; }
 	if (!isset($row->params['import_date']))  {   //Standardbelegung
 		$row->params['import_date'] = '1970-01-01'; }
+	if (!isset($row->params['fe_sl_ergebnisse']))  {   //Standardbelegung
+		$row->params['fe_sl_ergebnisse'] = '0'; }
 
 	// Auswahlfelder durchsuchbar machen
 	clm_core::$load->load_js("suche_liste");
@@ -741,6 +744,17 @@ class CLMViewLigen
 				<?php echo JText::_( 'OPTION_PGNDOWNLOAD' )." : "; ?></span></label>
 		</td><td class="paramlist_value"><fieldset class="radio">
 			<?php echo JHtml::_('select.booleanlist', 'params[pgnDownload]', 'class="inputbox"', $row->params['pgnDownload']); ?>
+		</fieldset></td>
+	</tr>
+	<?php } ?>
+	<?php if ($fe_sl_ergebnisse == 1) { ?>
+	<tr>
+		<td nowrap="nowrap" colspan="2">
+			<label for="fe_sl_ergebnisse">
+				<span class="editlinktip hasTip" title="<?php echo JText::_( 'OPTION_FE_SL_ERGEBNISSE_HINT' );?>">
+				<?php echo JText::_( 'OPTION_FE_SL_ERGEBNISSE' )." : "; ?></span></label>
+		</td><td class="paramlist_value"><fieldset class="radio">
+			<?php echo JHtml::_('select.booleanlist', 'params[fe_sl_ergebnisse]', 'class="inputbox"', $row->params['fe_sl_ergebnisse']); ?>
 		</fieldset></td>
 	</tr>
 	<?php } ?>

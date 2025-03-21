@@ -6,6 +6,7 @@
  * @link http://www.chessleaguemanager.de
 */
 function clm_view_report_sl($out) {
+	$msg = clm_core::$load->request_int('msg');
 	clm_core::$load->load_css("report_sl");
 	clm_core::$load->load_css("buttons");
 	clm_core::$load->load_css("notification");
@@ -166,7 +167,12 @@ echo '<input type="hidden" class="runde" value="'.$out["input"]["runde"].'">';
 echo '<input type="hidden" class="dg" value="'.$out["input"]["dg"].'">';
 echo '<input type="hidden" class="paar" value="'.$out["input"]["paar"].'">';
 echo '<input type="hidden" class="apaar" value="'.$out["input"]["apaar"].'">';
-echo '<div class="clm_view_notification"><div class="notice"><span>' . $lang->data_needed . '</div></div>';
+if ($msg == 1) {
+	echo '<div class="clm_view_notification"><div class="notice"><span>' . $lang->result_success_needed . '</div></div>';
+	$_GET["msg"] = 0; $msg = 0;
+} else { 
+	echo '<div class="clm_view_notification"><div class="notice"><span>' . $lang->data_needed . '</div></div>';
+}
 echo '<div class="button_container">';
 echo '<button type="button" onclick="javascript:history.back(1);" class="clm_button button_back">'.$lang->button_back.'</button>';
 echo '<button type="button" onclick="clm_report_block(this)" class="clm_button button_block" disabled>'.$lang->button_block.'</button>';
