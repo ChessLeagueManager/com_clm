@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -269,9 +269,11 @@ function pgn_element($contents, $uelement, $ustart, $debug = 0) {
 			
 			echo '</table>';
 		
-			// Bereich für pgn-Viewer alt - area for pgb-viewer old
-			//echo '<span id="pgnArea'.$value->nr.'"></span>';
-		
+			if ($value->bemerkungen != '') {
+				echo "<div id='desc'>";
+				echo CLMText::formatNote($value->bemerkungen);
+				echo "</div>";
+			}
 			echo '<br>';
 		
 		} else {

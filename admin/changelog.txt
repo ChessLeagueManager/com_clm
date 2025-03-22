@@ -19,6 +19,7 @@ $ -> Language fix or change
 ^ Ergebnismeldung: Mailversand an funktionale Mailadressen bei Entkopplung
 + Benutzer: optional zusätzlich Fide-Id 
 # Datenbank: Korrektur Anzeige Ergebnis 0-0
+^ Einzelturnier Paarungsliste: Rundenkommentar ergänzt
 
 - - - - - 4.2.3 - [18-02-2025] - - - - - - - - - - - - - - - - - - - -
 # Rundenbericht: In Rangliste punkt- und wertungsgleich -> gleiche Platzierung (Nachbesserung)

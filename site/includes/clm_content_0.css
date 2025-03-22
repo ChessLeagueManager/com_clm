@@ -1,6 +1,6 @@
 /**
   * CSS Style for Chess League Manager
-  * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
   * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
   * @link https://www.chessleaguemanager.de
   * Author: Fjodor Schaefer
@@ -202,6 +202,7 @@
 
 #runde #desc {border: 1px solid #DDD; margin: 10px 0 10px 0; padding: 10px; font-size:110%;}
 #turnier_runde #desc {border: 1px solid #DDD; margin: 10px 0 10px 0; padding: 10px; font-size:110%;}
+#turnier_paarungsliste #desc {border: 1px solid #DDD; margin: 10px 0 10px 0; padding: 10px; font-size:110%;}
 
 /****************************************/
 /** Darstellung bei der Spieleransicht **/
