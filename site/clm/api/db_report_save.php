@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -12,8 +12,9 @@ if (!function_exists('mb_str_pad')) {
 		return str_pad( $input, $pad_length + $diff, $pad_string, $pad_type );
 	}
 }
-// Eingang: Verband
-// Ausgang: Alle Vereine in diesem
+// Funktion: Verbuchen einer Ergebnismeldung (Teamwettbewerb)
+// Eingang: Details zur Buchung
+// Ausgang: Erfolgsstatus (true/false) einschl. Bestätigungs- oder Fehlermeldung
 function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decision, $homes, $guests, $results, $icomment) {
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
@@ -479,7 +480,8 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 			$body = clm_core::$load->load_view("liga_mail_body_html", array($player, $hmpunkte . " - " . $gmpunkte, date('Y-m-d H:i:s'), $date, $out["paar"][0]->hname, $out["paar"][0]->gname, $hmf, $gmf, $comment, $icomment, $ko, clm_core::$access->getName(), $out["liga"][0]->name, $gemeldet, $out, 'Admin'),false);
 			$body = $body[1];
 		}
-		clm_core::$cms->sendMail($from, $fromname, $config->email_bcc, $subject, $body, $htmlMail);
+//		clm_core::$cms->sendMail($from, $fromname, $config->email_bcc, $subject, $body, $htmlMail);
+		$result = clm_core::$api->mail_send($config->email_bcc,$subject,$body,$htmlMail);
 	}
 	// Email an SL	
 	if ($config->sl_mail =="1" && isset($out["sl"][0]->email) && $out["sl"][0]->email != "") {
@@ -489,7 +491,8 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 			$body = clm_core::$load->load_view("liga_mail_body_html", array($player, $hmpunkte . " - " . $gmpunkte, date('Y-m-d H:i:s'), $date, $out["paar"][0]->hname, $out["paar"][0]->gname, $hmf, $gmf, $comment, $icomment, $ko, clm_core::$access->getName(), $out["liga"][0]->name, $gemeldet, $out, 'SL'),false);
 			$body = $body[1];
 		}
-		clm_core::$cms->sendMail($from, $fromname, $out["sl"][0]->email, $subject, $body, $htmlMail);
+//		clm_core::$cms->sendMail($from, $fromname, $out["sl"][0]->email, $subject, $body, $htmlMail);
+		$result = clm_core::$api->mail_send($out["sl"][0]->email,$subject,$body,$htmlMail);
 	}
 	
 	// Email an ML Heim
@@ -500,7 +503,8 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 			$body = clm_core::$load->load_view("liga_mail_body_html", array($player, $hmpunkte . " - " . $gmpunkte, date('Y-m-d H:i:s'), $date, $out["paar"][0]->hname, $out["paar"][0]->gname, $hmf, $gmf, $comment, $icomment, $ko, clm_core::$access->getName(), $out["liga"][0]->name, $gemeldet, $out, 'Home'),false);
 			$body = $body[1];
 		}
-		clm_core::$cms->sendMail($from, $fromname, $out["hmf"][0]->email, $subject, $body, $htmlMail);
+//		clm_core::$cms->sendMail($from, $fromname, $out["hmf"][0]->email, $subject, $body, $htmlMail);
+		$result = clm_core::$api->mail_send($out["hmf"][0]->email,$subject,$body,$htmlMail);
 	}
 		
 	// Email an ML Gast
@@ -511,7 +515,8 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 			$body = clm_core::$load->load_view("liga_mail_body_html", array($player, $hmpunkte . " - " . $gmpunkte, date('Y-m-d H:i:s'), $date, $out["paar"][0]->hname, $out["paar"][0]->gname, $hmf, $gmf, $comment, $icomment, $ko, clm_core::$access->getName(), $out["liga"][0]->name, $gemeldet, $out, 'Guest'),false);
 			$body = $body[1];
 		}
-		clm_core::$cms->sendMail($from, $fromname, $out["gmf"][0]->email, $subject, $body, $htmlMail);
+//		clm_core::$cms->sendMail($from, $fromname, $out["gmf"][0]->email, $subject, $body, $htmlMail);
+		$result = clm_core::$api->mail_send($out["gmf"][0]->email,$subject,$body,$htmlMail);
 	}	
 
 	return array(true, "m_reportSaveSuccess");
