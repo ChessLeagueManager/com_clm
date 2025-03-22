@@ -16,6 +16,7 @@ $ -> Language fix or change
 + Ergebniseingabe durch SL im Frontend freischaltbar
 ^ Datenbank: formale Umstellung der DB-Engine auf InnoDB
 ^ Vereinheitlichung der Mailausgaben mit Möglichkeit der Unterdrückung (Ergebnismeldung)
+^ Ergebnismeldung: Mailversand an funktionale Mailadressen bei Entkopplung
 
 - - - - - 4.2.3 - [18-02-2025] - - - - - - - - - - - - - - - - - - - -
 # Rundenbericht: In Rangliste punkt- und wertungsgleich -> gleiche Platzierung (Nachbesserung)
