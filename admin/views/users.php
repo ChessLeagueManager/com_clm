@@ -266,17 +266,17 @@ public static function user( &$row,$lists, $option )
 		<?php if ($email_independent == 0 ) { ?>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'USER_MAIL' ).' : '; ?></label>
+			<label for="email"><?php echo JText::_( 'USER_MAIL' ).' : '; ?></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="email" id="email" size="30" maxlength="60" value="<?php echo $row->email; ?>" /><?php echo JText::_( 'USER_EXAMPLE_MAIL' );?>
 			</td>
 		</tr>
 		<?php }
-			if ($email_independent == 1 ) { ?>
+		if ($email_independent == 1 ) { ?>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'USER_MAIL_CLM' ).' : '; ?></label>
+			<label for="email"><?php echo JText::_( 'USER_MAIL_CLM' ).' : '; ?></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="email" id="email" size="30" maxlength="60" value="<?php echo $row->email; ?>" /><?php echo JText::_( 'USER_EXAMPLE_MAIL' );?>
@@ -284,7 +284,7 @@ public static function user( &$row,$lists, $option )
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'USER_MAIL_JOOMLA' ).' : '; ?></label>
+			<label for="jmail"><?php echo JText::_( 'USER_MAIL_JOOMLA' ).' : '; ?></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="jmail" id="jmail" size="30" maxlength="60" value="<?php echo $row->jmail; ?>" /><?php echo JText::_( 'USER_EXAMPLE_MAIL' );?>
@@ -293,7 +293,7 @@ public static function user( &$row,$lists, $option )
 		<?php } ?>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'USER_TELEFON' ).' : '; ?></label>
+			<label for="tel_fest"><?php echo JText::_( 'USER_TELEFON' ).' : '; ?></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="tel_fest" id="tel_fest" size="30" maxlength="60" value="<?php echo $row->tel_fest; ?>" /><?php echo JText::_( 'USER_EXAMPLE_PHONE' );?>
@@ -301,7 +301,7 @@ public static function user( &$row,$lists, $option )
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'USER_MOBILE' ).' : '; ?></label>
+			<label for="tel_mobil"><?php echo JText::_( 'USER_MOBILE' ).' : '; ?></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="tel_mobil" id="tel_mobil" size="30" maxlength="60" value="<?php echo $row->tel_mobil; ?>" /><?php echo JText::_( 'USER_EXAMPLE_MOBILE' );?>
@@ -316,6 +316,14 @@ public static function user( &$row,$lists, $option )
 			</td>
 		</tr>
 
+		<tr>
+			<td class="key" width="20%" nowrap="nowrap">
+ 			<label for="fideid"><?php echo JText::_( 'USER_FIDEID' ).' : '; ?></label>
+ 			</td>
+ 			<td>
+ 			<input class="inputbox" type="text" name="fideid" id="fideid" size="30" maxlength="9" value="<?php echo $row->fideid; ?>" title="<?php echo JText::_( 'USER_FIDEID_HINT' );?>" /><?php echo JText::_( 'USER_EXAMPLE_FIDEID' );?>
+ 			</td>
+ 		</tr>
 		<tr>
 			<td class="key" nowrap="nowrap"><label for="verein"><?php echo JText::_( 'VEREIN' ).' : '; ?></label>
 			</td>
