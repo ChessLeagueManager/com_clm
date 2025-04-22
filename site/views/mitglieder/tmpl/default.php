@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -13,44 +13,44 @@
 defined('_JEXEC') or die('Restricted access');
 
 // Variablen holen
-$sid = clm_core::$load->request_int( 'saison', '1' ); 
-$zps = clm_core::$load->request_string( 'zps' );
+$sid = clm_core::$load->request_int('saison', '1');
+$zps = clm_core::$load->request_string('zps');
 
 
 // Login Status prüfen
 $clmuser 	= $this->clmuser;
-$user		=JFactory::getUser();
+$user		= JFactory::getUser();
 
 $mainframe = JFactory::getApplication();
 $link = 'index.php';
-	
+
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 // Konfigurationsparameter auslesen
 $config = clm_core::$db->config();
 
 if (!$user->get('id')) {
-	$msg = JText::_( 'CLUB_LIST_LOGIN' );
-	$mainframe->enqueueMessage( $msg );
-	$mainframe->redirect( $link );
- 			}
+    $msg = JText::_('CLUB_LIST_LOGIN');
+    $mainframe->enqueueMessage($msg);
+    $mainframe->redirect($link);
+}
 if ($clmuser[0]->published < 1) {
-	$msg = JText::_( 'CLUB_LIST_ACCOUNT' );
-	$mainframe->enqueueMessage( $msg );
-	$mainframe->redirect( $link );
-				}
+    $msg = JText::_('CLUB_LIST_ACCOUNT');
+    $mainframe->enqueueMessage($msg);
+    $mainframe->redirect($link);
+}
 if ($clmuser[0]->zps <> $zps) {
-	$msg = JText::_( 'CLUB_LIST_FALSE' );
-	$mainframe->enqueueMessage( $msg );
-	$mainframe->redirect( $link );
-				}
+    $msg = JText::_('CLUB_LIST_FALSE');
+    $mainframe->enqueueMessage($msg);
+    $mainframe->redirect($link);
+}
 
-if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps){
+if ($user->get('id') > 0 and  $clmuser[0]->published > 0 and $clmuser[0]->zps == $zps) {
 
-// Variablen initialisieren
-$spieler	= $this->spieler;
+    // Variablen initialisieren
+    $spieler	= $this->spieler;
 
-?>
+    ?>
 <script language="JavaScript">
 function tableOrdering( order, dir, task )
 {
@@ -78,30 +78,40 @@ function tableOrdering( order, dir, task )
 	<table class="admintable">
     
 		<tr class="anfang">
-			<th width="5%" class="key" nowrap="nowrap"><?php echo JText::_( 'Nr' ); ?></th>
-			<th width="5%" class="key" nowrap="nowrap"><?php echo JHTML::_( 'grid.sort', 'Mgl Nr.', 'id', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-			<th width="20%" class="key" nowrap="nowrap"><a href="javascript:tableOrdering('name','asc','');"><?php echo JText::_( 'Name' ); ?></a></th>
-			<th width="5%" class="key" nowrap="nowrap"><?php echo JHTML::_( 'grid.sort', 'G.jahr', 'Geburtsjahr', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-			<th width="5%" class="key" nowrap="nowrap"><?php echo JHTML::_( 'grid.sort', 'DWZ', 'dwz', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-			<th width="5%" class="key" nowrap="nowrap"><?php echo JHTML::_( 'grid.sort', 'ELO', 'elo', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-			<th width="5%" class="key" nowrap="nowrap" align="center"><?php echo JText::_( 'St.' ); ?></th>
-			<th width="5%" class="key" nowrap="nowrap" align="center"><?php echo JText::_( 'Edit' ); ?></th>
-			<th width="5%" class="key" nowrap="nowrap" align="center"><?php echo JText::_( 'Löschen' ); ?></th>
+			<th width="5%" class="key" nowrap="nowrap"><?php echo JText::_('Nr'); ?></th>
+			<th width="5%" class="key" nowrap="nowrap"><?php echo JHTML::_('grid.sort', 'Mgl Nr.', 'id', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+			<th width="20%" class="key" nowrap="nowrap"><a href="javascript:tableOrdering('name','asc','');"><?php echo JText::_('Name'); ?></a></th>
+			<th width="5%" class="key" nowrap="nowrap"><?php echo JHTML::_('grid.sort', 'G.jahr', 'Geburtsjahr', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+			<th width="5%" class="key" nowrap="nowrap"><?php echo JHTML::_('grid.sort', 'DWZ', 'dwz', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+			<th width="5%" class="key" nowrap="nowrap"><?php echo JHTML::_('grid.sort', 'ELO', 'elo', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+			<th width="5%" class="key" nowrap="nowrap" align="center"><?php echo JText::_('St.'); ?></th>
+			<th width="5%" class="key" nowrap="nowrap" align="center"><?php echo JText::_('Edit'); ?></th>
+			<th width="5%" class="key" nowrap="nowrap" align="center"><?php echo JText::_('Löschen'); ?></th>
 		</tr>
         
-		<?php $i = 0; foreach($spieler as $spieler){  ?>
+		<?php $i = 0;
+    foreach ($spieler as $spieler) {  ?>
         <tr>
-            <td><?php echo $i+1; ?></td>
+            <td><?php echo $i + 1; ?></td>
             <td><?php echo $spieler->id; ?></td>
             <td><?php echo $spieler->name; ?></td>
             <td><?php echo $spieler->Geburtsjahr; ?></td>
-            <td><?php if ( $spieler->dwz < 1 ) { echo "-"; } else { echo $spieler->dwz . '&nbsp;(' . $spieler->DWZ_Index .')'; } ?></td>
-            <td><?php if ( $spieler->elo < 1 ) { echo "-"; } else { echo $spieler->elo; } ?></td>
+            <td><?php if ($spieler->dwz < 1) {
+                echo "-";
+            } else {
+                echo $spieler->dwz . '&nbsp;(' . $spieler->DWZ_Index .')';
+            } ?></td>
+            <td><?php if ($spieler->elo < 1) {
+                echo "-";
+            } else {
+                echo $spieler->elo;
+            } ?></td>
             <td><?php echo $spieler->Status; ?></td>
             <td align="center"><a href="index.php?option=com_clm&amp;view=mitglieder_details&amp;saison=<?php echo $sid; ?>&amp;zps=<?php echo $zps; ?>&amp;mglnr=<?php echo $spieler->id; ?>"><img src="<?php echo CLMImage::imageURL('edit_f2.png'); ?>"/></a></td>
             <td align="center"><a href="index.php?option=com_clm&amp;view=mitglieder&amp;saison=<?php echo $sid; ?>&amp;zps=<?php echo $zps; ?>&amp;mglnr=<?php echo $spieler->id; ?>&amp;layout=delete"><img src="<?php echo CLMImage::imageURL('cancel_f2.png'); ?>"/></a></td>
         </tr>
-        <?php $i++;} ?> 
+        <?php $i++;
+    } ?> 
         
 	</table>
     
@@ -110,7 +120,7 @@ function tableOrdering( order, dir, task )
     <input type="hidden" name="zps" value="<?php echo $zps; ?>" />
     <input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
     <input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />
-    <?php echo JHTML::_( 'form.token' ); ?>
+    <?php echo JHTML::_('form.token'); ?>
     </form>
 
     <br>

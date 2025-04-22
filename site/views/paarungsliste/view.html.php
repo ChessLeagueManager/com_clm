@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -10,41 +11,40 @@
  * @email webmaster@sbbl.org
 */
 
-jimport( 'joomla.application.component.view');
+jimport('joomla.application.component.view');
 
 class CLMViewPaarungsliste extends JViewLegacy
 {
-	function display($tpl = null)
-	{
-		$model	  = $this->getModel();
-		$liga     = $model->getCLMLiga();
-		$this->liga = $liga;
+    public function display($tpl = null)
+    {
+        $model	  = $this->getModel();
+        $liga     = $model->getCLMLiga();
+        $this->liga = $liga;
 
-		$model	  = $this->getModel();
-		$termin     = $model->getCLMTermin();
-		$this->termin = $termin;
+        $model	  = $this->getModel();
+        $termin     = $model->getCLMTermin();
+        $this->termin = $termin;
 
-		$model	  = $this->getModel();
-		$paar     = $model->getCLMPaar();
-		$this->paar = $paar;
+        $model	  = $this->getModel();
+        $paar     = $model->getCLMPaar();
+        $this->paar = $paar;
 
-/*		$model	  = $this->getModel();
-		$dwzschnitt     = $model->getCLMDWZSchnitt();
-		$this->dwzschnitt = $dwzschnitt;
-*/
-/*		$model	  = $this->getModel();
-		$dwzgespielt     = $model->getCLMDWZgespielt();
-		$this->dwzgespielt = $dwzgespielt;
-*/
-		$model	  = $this->getModel();
-		$summe     = $model->getCLMSumme();
-		$this->summe = $summe;
+        /*		$model	  = $this->getModel();
+                $dwzschnitt     = $model->getCLMDWZSchnitt();
+                $this->dwzschnitt = $dwzschnitt;
+        */
+        /*		$model	  = $this->getModel();
+                $dwzgespielt     = $model->getCLMDWZgespielt();
+                $this->dwzgespielt = $dwzgespielt;
+        */
+        $model	  = $this->getModel();
+        $summe     = $model->getCLMSumme();
+        $this->summe = $summe;
 
-		$model	  = $this->getModel();
-		$rundensumme     = $model->getCLMRundensumme();
-		$this->rundensumme = $rundensumme;
+        $model	  = $this->getModel();
+        $rundensumme     = $model->getCLMRundensumme();
+        $this->rundensumme = $rundensumme;
 
-		parent::display($tpl);
-	}	
+        parent::display($tpl);
+    }
 }
-?>

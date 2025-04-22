@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -10,263 +11,280 @@
  * @email webmaster@sbbl.org
 */
 // no direct access
-defined( '_JEXEC' ) or die( 'Restricted access' );
+defined('_JEXEC') or die('Restricted access');
 
 class CLMControllerMeldelisten extends JControllerLegacy
 {
-	/**
-	 * Constructor
-	 */
-function __construct( $config = array() )
-	{
-		parent::__construct( $config );
-		// Register Extra tasks
-		$this->registerTask( 'add','edit' );
-		$this->registerTask( 'apply','save' );
-		$this->registerTask( 'unpublish',	'publish' );
-	}
+    /**
+     * Constructor
+     */
+    public function __construct($config = array())
+    {
+        parent::__construct($config);
+        // Register Extra tasks
+        $this->registerTask('add', 'edit');
+        $this->registerTask('apply', 'save');
+        $this->registerTask('unpublish', 'publish');
+    }
 
-function display($cachable = false, $urlparams = array())
-	{
-	$mainframe	= JFactory::getApplication();
-	$option 	= clm_core::$load->request_string('option');
-	$section 	= clm_core::$load->request_string('section');
-	$db=JFactory::getDBO();
+    public function display($cachable = false, $urlparams = array())
+    {
+        $mainframe	= JFactory::getApplication();
+        $option 	= clm_core::$load->request_string('option');
+        $section 	= clm_core::$load->request_string('section');
+        $db = JFactory::getDBO();
 
-	$filter_order		= $mainframe->getUserStateFromRequest( "$option.filter_order",'filter_order','a.id',	'cmd' );
-	$filter_order_Dir	= $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",'filter_order_Dir','','word' );
-	$filter_state		= $mainframe->getUserStateFromRequest( "$option.filter_state",'filter_state','','word' );
-	$filter_sid		= $mainframe->getUserStateFromRequest( "$option.filter_sid",'filter_sid',0,'int' );
-	$filter_lid		= $mainframe->getUserStateFromRequest( "$option.filter_lid",'filter_lid',0,'int' );
-	$filter_vid		= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'int' );
-	$filter_catid		= $mainframe->getUserStateFromRequest( "$option.filter_catid",'filter_catid',0,'int' );
-	$search			= $mainframe->getUserStateFromRequest( "$option.search",'search','','string' );
-	$search			= JString::strtolower( $search );
-	$limit			= $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
-	$limitstart		= $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
+        $filter_order		= $mainframe->getUserStateFromRequest("$option.filter_order", 'filter_order', 'a.id', 'cmd');
+        $filter_order_Dir	= $mainframe->getUserStateFromRequest("$option.filter_order_Dir", 'filter_order_Dir', '', 'word');
+        $filter_state		= $mainframe->getUserStateFromRequest("$option.filter_state", 'filter_state', '', 'word');
+        $filter_sid		= $mainframe->getUserStateFromRequest("$option.filter_sid", 'filter_sid', 0, 'int');
+        $filter_lid		= $mainframe->getUserStateFromRequest("$option.filter_lid", 'filter_lid', 0, 'int');
+        $filter_vid		= $mainframe->getUserStateFromRequest("$option.filter_vid", 'filter_vid', 0, 'int');
+        $filter_catid		= $mainframe->getUserStateFromRequest("$option.filter_catid", 'filter_catid', 0, 'int');
+        $search			= $mainframe->getUserStateFromRequest("$option.search", 'search', '', 'string');
+        $search			= JString::strtolower($search);
+        $limit			= $mainframe->getUserStateFromRequest('global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int');
+        $limitstart		= $mainframe->getUserStateFromRequest($option.'.limitstart', 'limitstart', 0, 'int');
 
-	//CLM parameter auslesen
-	$clm_config = clm_core::$db->config();
-	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
-	else $field_search = "inputbox";
-	
-	$where = array();
-	$where[]=' c.archiv = 0';
-	if ( $filter_catid ) {	$where[] = 'a.published = '.(int) $filter_catid; }
-	if ( $filter_sid ) {	$where[] = 'a.sid = '.(int) $filter_sid; }
-	if ( $filter_lid ) {	$where[] = 'a.liga = '.(int) $filter_lid; }
-	if ( $filter_vid ) {	$where[] = "e.id = '$filter_vid'"; }
-	if ($search) {	$where[] = 'LOWER(a.name) LIKE "'.$db->escape('%'.$search.'%').'"';	}
+        //CLM parameter auslesen
+        $clm_config = clm_core::$db->config();
+        if ($clm_config->field_search == 1) {
+            $field_search = "js-example-basic-single";
+        } else {
+            $field_search = "inputbox";
+        }
 
-	if ( $filter_state ) {
-		if ( $filter_state == 'P' ) {
-			$where[] = 'a.published = 1';
-		} else if ($filter_state == 'U' ) {
-			$where[] = 'a.published = 0';
-		}
-	}
+        $where = array();
+        $where[] = ' c.archiv = 0';
+        if ($filter_catid) {
+            $where[] = 'a.published = '.(int) $filter_catid;
+        }
+        if ($filter_sid) {
+            $where[] = 'a.sid = '.(int) $filter_sid;
+        }
+        if ($filter_lid) {
+            $where[] = 'a.liga = '.(int) $filter_lid;
+        }
+        if ($filter_vid) {
+            $where[] = "e.id = '$filter_vid'";
+        }
+        if ($search) {
+            $where[] = 'LOWER(a.name) LIKE "'.$db->escape('%'.$search.'%').'"';
+        }
 
-	$where 		= ( count( $where ) ? ' WHERE ' . implode( ' AND ', $where ) : '' );
-	if ($filter_order == 'a.id'){
-		$orderby 	= ' ORDER BY id';
-	} else {
-		$orderby 	= ' ORDER BY '. $filter_order .' '. $filter_order_Dir .',  a.id';
-	}
+        if ($filter_state) {
+            if ($filter_state == 'P') {
+                $where[] = 'a.published = 1';
+            } elseif ($filter_state == 'U') {
+                $where[] = 'a.published = 0';
+            }
+        }
 
-	// get the total number of records
-	$query = ' SELECT COUNT(*) '
-		.' FROM #__clm_meldeliste_mannschaft AS a'
-		.' LEFT JOIN #__clm_saison AS c ON c.id = a.sid'
-		. $where
-		;
-	$db->setQuery( $query );
-	$total = $db->loadResult();
+        $where 		= (count($where) ? ' WHERE ' . implode(' AND ', $where) : '');
+        if ($filter_order == 'a.id') {
+            $orderby 	= ' ORDER BY id';
+        } else {
+            $orderby 	= ' ORDER BY '. $filter_order .' '. $filter_order_Dir .',  a.id';
+        }
 
-	jimport('joomla.html.pagination');
-	$pageNav = new JPagination( $total, $limitstart, $limit );
+        // get the total number of records
+        $query = ' SELECT COUNT(*) '
+            .' FROM #__clm_meldeliste_mannschaft AS a'
+            .' LEFT JOIN #__clm_saison AS c ON c.id = a.sid'
+            . $where
+        ;
+        $db->setQuery($query);
+        $total = $db->loadResult();
 
-	// get the subset (based on limits) of required records
-	$query = 'SELECT a.*, c.name AS saison, b.Vereinname as verein, u.name AS editor, d.name AS liga_name'
-	. ' FROM #__clm_mannschaften AS a'
-	. ' LEFT JOIN #__clm_saison AS c ON c.id = a.sid'
-	. ' LEFT JOIN #__clm_liga AS d ON a.liga = d.id'
-	. ' LEFT JOIN #__users AS u ON u.id = a.checked_out'
-	. ' LEFT JOIN #__clm_dwz_vereine AS b ON a.zps = b.ZPS AND a.sid = b.sid'
-	. ' LEFT JOIN #__clm_vereine AS e ON e.zps = a.zps'
-	. $where
-	. $orderby	;
-	try {
-		$db->setQuery( $query, $pageNav->limitstart, $pageNav->limit );
-		$rows = $db->loadObjectList();
-	}
-	catch (Exception $e) {
-		$mainframe->enqueueMessage($db->stderr(), 'error');
-		return false;
-	}
+        jimport('joomla.html.pagination');
+        $pageNav = new JPagination($total, $limitstart, $limit);
 
-	// state filter
-	//$lists['state']	= JHTML::_('grid.state',  $filter_state );
-	$lists['state'] = CLMForm::selectState( $filter_state );
+        // get the subset (based on limits) of required records
+        $query = 'SELECT a.*, c.name AS saison, b.Vereinname as verein, u.name AS editor, d.name AS liga_name'
+        . ' FROM #__clm_mannschaften AS a'
+        . ' LEFT JOIN #__clm_saison AS c ON c.id = a.sid'
+        . ' LEFT JOIN #__clm_liga AS d ON a.liga = d.id'
+        . ' LEFT JOIN #__users AS u ON u.id = a.checked_out'
+        . ' LEFT JOIN #__clm_dwz_vereine AS b ON a.zps = b.ZPS AND a.sid = b.sid'
+        . ' LEFT JOIN #__clm_vereine AS e ON e.zps = a.zps'
+        . $where
+        . $orderby	;
+        try {
+            $db->setQuery($query, $pageNav->limitstart, $pageNav->limit);
+            $rows = $db->loadObjectList();
+        } catch (Exception $e) {
+            $mainframe->enqueueMessage($db->stderr(), 'error');
+            return false;
+        }
 
-	// Saisonfilter
-	$sql = 'SELECT id, name FROM #__clm_saison WHERE archiv =0';
-	$db->setQuery($sql);
-	$saisonlist[]	= JHtml::_('select.option',  '0', JText::_( 'MELDELISTEN_SAISON' ), 'id', 'name' );
-	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
-//	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
-	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
-	// Ligafilter
-	$sql = 'SELECT id AS cid, name FROM #__clm_liga'
-		." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
-		." WHERE s.archiv = 0 ";
-	$db->setQuery($sql);
+        // state filter
+        //$lists['state']	= JHTML::_('grid.state',  $filter_state );
+        $lists['state'] = CLMForm::selectState($filter_state);
 
-	$ligalist[]	= JHtml::_('select.option',  '0', JText::_( 'MELDELISTEN_LIGA' ), 'cid', 'name' );
-	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
-//	$lists['lid']	= JHtml::_('select.genericlist', $ligalist, 'filter_lid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
-	$lists['lid']	= JHtml::_('select.genericlist', $ligalist, 'filter_lid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
-	// Vereinefilter
-	$sql = 'SELECT id, name FROM #__clm_vereine'
-		." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
-		." WHERE s.archiv = 0 ";
-	$db->setQuery($sql);
+        // Saisonfilter
+        $sql = 'SELECT id, name FROM #__clm_saison WHERE archiv =0';
+        $db->setQuery($sql);
+        $saisonlist[]	= JHtml::_('select.option', '0', JText::_('MELDELISTEN_SAISON'), 'id', 'name');
+        $saisonlist         = array_merge($saisonlist, $db->loadObjectList());
+        //	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+        $lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"', 'id', 'name', intval($filter_sid));
+        // Ligafilter
+        $sql = 'SELECT id AS cid, name FROM #__clm_liga'
+            ." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
+            ." WHERE s.archiv = 0 ";
+        $db->setQuery($sql);
 
-	$vlist[]	= JHtml::_('select.option',  '0', JText::_( 'MELDELISTEN_VEREIN' ), 'id', 'name' );
-	$vlist		= array_merge( $vlist, $db->loadObjectList() );
-//	$lists['vid']	= JHtml::_('select.genericlist', $vlist, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_vid );
-	$lists['vid']	= JHtml::_('select.genericlist', $vlist, 'filter_vid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_vid );
+        $ligalist[]	= JHtml::_('select.option', '0', JText::_('MELDELISTEN_LIGA'), 'cid', 'name');
+        $ligalist	= array_merge($ligalist, $db->loadObjectList());
+        //	$lists['lid']	= JHtml::_('select.genericlist', $ligalist, 'filter_lid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
+        $lists['lid']	= JHtml::_('select.genericlist', $ligalist, 'filter_lid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"', 'cid', 'name', intval($filter_lid));
+        // Vereinefilter
+        $sql = 'SELECT id, name FROM #__clm_vereine'
+            ." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
+            ." WHERE s.archiv = 0 ";
+        $db->setQuery($sql);
 
-	// Ordering
-	$lists['order_Dir']	= $filter_order_Dir;
-	$lists['order']		= $filter_order;
+        $vlist[]	= JHtml::_('select.option', '0', JText::_('MELDELISTEN_VEREIN'), 'id', 'name');
+        $vlist		= array_merge($vlist, $db->loadObjectList());
+        //	$lists['vid']	= JHtml::_('select.genericlist', $vlist, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_vid );
+        $lists['vid']	= JHtml::_('select.genericlist', $vlist, 'filter_vid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"', 'id', 'name', $filter_vid);
 
-	// search filter
-	$lists['search']= $search;
-	require_once(JPATH_COMPONENT.DS.'views'.DS.'meldelisten.php');
-	CLMViewMeldelisten::meldelisten( $rows, $lists, $pageNav, $option );
-}
+        // Ordering
+        $lists['order_Dir']	= $filter_order_Dir;
+        $lists['order']		= $filter_order;
 
-
-function edit()
-	{
-	$mainframe	= JFactory::getApplication();
-
-	$db 		=JFactory::getDBO();
-	$user 		=JFactory::getUser();
-	$task 		= clm_core::$load->request_string( 'task');
-	$cid 		= clm_core::$load->request_array_int( 'cid');
-	if (is_null($cid)) 
-		$cid[0] = clm_core::$load->request_int('id');
-	$option 	= clm_core::$load->request_string('option');
-	$section 	= clm_core::$load->request_string('section');
-	$liga 		= clm_core::$load->request_string( 'liga');
-										 
-	$row =JTable::getInstance( 'mannschaften', 'TableCLM' );
-	// load the row from the db table
-	$row->load( $cid[0] );
-
-	// Prüfen ob User Berechtigung zum editieren hat
-	$sql = " SELECT sl FROM #__clm_liga "
-		." WHERE id =".$row->liga
-		;
-	$db->setQuery($sql);
-	$lid = $db->loadObjectList();
-	$clmAccess = clm_core::$access;
-	if ($clmAccess->access('BE_team_registration_list') === false) {
-		$section = 'info';
-		$mainframe->enqueueMessage( JText::_( 'TEAM_NO_ACCESS' ), 'warning' );
-		$link = 'index.php?option='.$option.'&section='.$section;
-		$mainframe->redirect( $link);
-	}
-	if ( isset($lid[0]) && $lid[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_team_registration_list') !== true AND $task == 'edit') {
-		$mainframe->enqueueMessage( JText::_( 'MELDELISTEN_STAFFEL' ), 'warning' );
-		$link = 'index.php?option='.$option.'&section=mannschaften';
-		$mainframe->redirect( $link);
-					}
-	// MaxDaten für DropDown Menue
-	$maxsql = "SELECT COUNT(*) as max FROM #__clm_dwz_spieler"
-		//." WHERE ( ZPS ='".$row->zps."' OR ZPS ='".$row->sg_zps."')"
-		." WHERE ( ZPS ='".$row->zps."' OR FIND_IN_SET(ZPS,'".$row->sg_zps."') != 0 )"
-		." AND sid =".$row->sid
-		;
-	$db->setQuery( $maxsql);
-	$max=$db->loadObjectList();
+        // search filter
+        $lists['search'] = $search;
+        require_once(JPATH_COMPONENT.DS.'views'.DS.'meldelisten.php');
+        CLMViewMeldelisten::meldelisten($rows, $lists, $pageNav, $option);
+    }
 
 
-	// Daten Stamm, Ersatz für DropDown Menue
-	$ligasql = "SELECT stamm, ersatz FROM #__clm_liga"
-		." WHERE id =".$row->liga
-		." AND sid =".$row->sid
-		;
-	$db->setQuery( $ligasql);
-	$liga=$db->loadObjectList();
+    public function edit()
+    {
+        $mainframe	= JFactory::getApplication();
 
-	// Daten für DropDown Menue
-	// Konfigurationsparameter auslesen
-	$config = clm_core::$db->config();
-	$val=$config->meldeliste;
-	$countryversion=$config->countryversion;
-	
-	if ($val == 1) { $order = "Spielername ASC";}
-		else { $order = "DWZ DESC"; }
-	if ($countryversion == "de") 
-		$sql = "SELECT mgl_nr as id, ";
-	else
-		$sql = "SELECT PKZ as id, ";
-	$sql .= "Spielername as name, DWZ as dwz, DWZ_Index as dwz_I0, ZPS as zps FROM #__clm_dwz_spieler"
-		." WHERE ( ZPS ='".$row->zps."' OR FIND_IN_SET(ZPS,'".$row->sg_zps."') != 0 )"
-		." AND sid =".$row->sid
-		." ORDER BY ".$order
-		;
-	$db->setQuery( $sql );
-	$row_spl=$db->loadObjectList();
+        $db 		= JFactory::getDBO();
+        $user 		= JFactory::getUser();
+        $task 		= clm_core::$load->request_string('task');
+        $cid 		= clm_core::$load->request_array_int('cid');
+        if (is_null($cid)) {
+            $cid[0] = clm_core::$load->request_int('id');
+        }
+        $option 	= clm_core::$load->request_string('option');
+        $section 	= clm_core::$load->request_string('section');
+        $liga 		= clm_core::$load->request_string('liga');
 
-	// Daten für Abgabe
-	$sql = "SELECT u.name, a.datum,v.name as editor, a.edit_datum FROM #__clm_mannschaften as a"
-		." LEFT JOIN #__clm_user as u ON  u.jid = a.liste AND u.sid = a.sid"
-		." LEFT JOIN #__clm_user as v ON  v.jid = a.edit_liste AND v.sid = a.sid"
-		." WHERE a.zps = '".$row->zps."'"
-		." AND a.man_nr = ".$row->man_nr
-		." AND a.sid =".$row->sid
-		." AND u.name <> '' "
-	;
-	$db->setQuery( $sql );
-	$abgabe=$db->loadObjectList();
+        $row = JTable::getInstance('mannschaften', 'TableCLM');
+        // load the row from the db table
+        $row->load($cid[0]);
 
-	//Stammspieler
-	$selsql = "SELECT mgl_nr,snr,zps,PKZ, gesperrt, attr FROM #__clm_meldeliste_spieler"
-		//." WHERE ( zps = '".$row->zps."' OR zps='".$row->sg_zps."')"
-		." WHERE ( ZPS ='".$row->zps."' OR FIND_IN_SET(ZPS,'".$row->sg_zps."') != 0 )"
-		." AND mnr = ".$row->man_nr
-		." AND lid = ".$row->liga
-		." AND sid = ".$row->sid
-		." ORDER BY snr ASC"
-		;
-	$db 		=JFactory::getDBO();
-	$db->setQuery( $selsql );
-	$row_sel=$db->loadObjectList();
+        // Prüfen ob User Berechtigung zum editieren hat
+        $sql = " SELECT sl FROM #__clm_liga "
+            ." WHERE id =".$row->liga
+        ;
+        $db->setQuery($sql);
+        $lid = $db->loadObjectList();
+        $clmAccess = clm_core::$access;
+        if ($clmAccess->access('BE_team_registration_list') === false) {
+            $section = 'info';
+            $mainframe->enqueueMessage(JText::_('TEAM_NO_ACCESS'), 'warning');
+            $link = 'index.php?option='.$option.'&section='.$section;
+            $mainframe->redirect($link);
+        }
+        if (isset($lid[0]) && $lid[0]->sl !== clm_core::$access->getJid() and $clmAccess->access('BE_team_registration_list') !== true and $task == 'edit') {
+            $mainframe->enqueueMessage(JText::_('MELDELISTEN_STAFFEL'), 'warning');
+            $link = 'index.php?option='.$option.'&section=mannschaften';
+            $mainframe->redirect($link);
+        }
+        // MaxDaten für DropDown Menue
+        $maxsql = "SELECT COUNT(*) as max FROM #__clm_dwz_spieler"
+            //." WHERE ( ZPS ='".$row->zps."' OR ZPS ='".$row->sg_zps."')"
+            ." WHERE ( ZPS ='".$row->zps."' OR FIND_IN_SET(ZPS,'".$row->sg_zps."') != 0 )"
+            ." AND sid =".$row->sid
+        ;
+        $db->setQuery($maxsql);
+        $max = $db->loadObjectList();
 
-	require_once(JPATH_COMPONENT.DS.'views'.DS.'meldelisten.php');
-	CLMViewMeldelisten::meldeliste( $row, $row_spl, $row_sel, $max, $liga, $abgabe, $option);
-	}
 
-	////////////////////////////////////////////////////////
-	// Save / Apply Funktion ist im MANNSCHAFTSCONTROLLER //
-	////////////////////////////////////////////////////////
+        // Daten Stamm, Ersatz für DropDown Menue
+        $ligasql = "SELECT stamm, ersatz FROM #__clm_liga"
+            ." WHERE id =".$row->liga
+            ." AND sid =".$row->sid
+        ;
+        $db->setQuery($ligasql);
+        $liga = $db->loadObjectList();
 
-function cancel()
-	{
-	$mainframe	= JFactory::getApplication();
-	// Check for request forgeries
-	defined('clm') or die( 'Invalid Token' );
-	
-	$option 	= clm_core::$load->request_string('option');
-	$section 	= clm_core::$load->request_string('section');
-	$id		= clm_core::$load->request_int('id');	
-	$row 		=JTable::getInstance( 'meldelisten', 'TableCLM' );
+        // Daten für DropDown Menue
+        // Konfigurationsparameter auslesen
+        $config = clm_core::$db->config();
+        $val = $config->meldeliste;
+        $countryversion = $config->countryversion;
 
-	$msg = JText::_( 'MELDELISTEN_ML_ABGE').$id;
-	$mainframe->enqueueMessage( $msg );
-	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
-	}
+        if ($val == 1) {
+            $order = "Spielername ASC";
+        } else {
+            $order = "DWZ DESC";
+        }
+        if ($countryversion == "de") {
+            $sql = "SELECT mgl_nr as id, ";
+        } else {
+            $sql = "SELECT PKZ as id, ";
+        }
+        $sql .= "Spielername as name, DWZ as dwz, DWZ_Index as dwz_I0, ZPS as zps FROM #__clm_dwz_spieler"
+            ." WHERE ( ZPS ='".$row->zps."' OR FIND_IN_SET(ZPS,'".$row->sg_zps."') != 0 )"
+            ." AND sid =".$row->sid
+            ." ORDER BY ".$order
+        ;
+        $db->setQuery($sql);
+        $row_spl = $db->loadObjectList();
+
+        // Daten für Abgabe
+        $sql = "SELECT u.name, a.datum,v.name as editor, a.edit_datum FROM #__clm_mannschaften as a"
+            ." LEFT JOIN #__clm_user as u ON  u.jid = a.liste AND u.sid = a.sid"
+            ." LEFT JOIN #__clm_user as v ON  v.jid = a.edit_liste AND v.sid = a.sid"
+            ." WHERE a.zps = '".$row->zps."'"
+            ." AND a.man_nr = ".$row->man_nr
+            ." AND a.sid =".$row->sid
+            ." AND u.name <> '' "
+        ;
+        $db->setQuery($sql);
+        $abgabe = $db->loadObjectList();
+
+        //Stammspieler
+        $selsql = "SELECT mgl_nr,snr,zps,PKZ, gesperrt, attr FROM #__clm_meldeliste_spieler"
+            //." WHERE ( zps = '".$row->zps."' OR zps='".$row->sg_zps."')"
+            ." WHERE ( ZPS ='".$row->zps."' OR FIND_IN_SET(ZPS,'".$row->sg_zps."') != 0 )"
+            ." AND mnr = ".$row->man_nr
+            ." AND lid = ".$row->liga
+            ." AND sid = ".$row->sid
+            ." ORDER BY snr ASC"
+        ;
+        $db 		= JFactory::getDBO();
+        $db->setQuery($selsql);
+        $row_sel = $db->loadObjectList();
+
+        require_once(JPATH_COMPONENT.DS.'views'.DS.'meldelisten.php');
+        CLMViewMeldelisten::meldeliste($row, $row_spl, $row_sel, $max, $liga, $abgabe, $option);
+    }
+
+    ////////////////////////////////////////////////////////
+    // Save / Apply Funktion ist im MANNSCHAFTSCONTROLLER //
+    ////////////////////////////////////////////////////////
+
+    public function cancel()
+    {
+        $mainframe	= JFactory::getApplication();
+        // Check for request forgeries
+        defined('clm') or die('Invalid Token');
+
+        $option 	= clm_core::$load->request_string('option');
+        $section 	= clm_core::$load->request_string('section');
+        $id		= clm_core::$load->request_int('id');
+        $row 		= JTable::getInstance('meldelisten', 'TableCLM');
+
+        $msg = JText::_('MELDELISTEN_ML_ABGE').$id;
+        $mainframe->enqueueMessage($msg);
+        $mainframe->redirect('index.php?option='. $option.'&section='.$section);
+    }
 }

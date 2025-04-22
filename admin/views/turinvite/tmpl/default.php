@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -46,6 +46,6 @@ The parameters of the display method are:
 		<input type="hidden" name="task" value="" />
 		<input type="hidden" name="controller" value="turinvite" />
 		<input type="hidden" name="id" value="<?php echo $this->param['id']; ?>" />
-		<?php echo JHtml::_( 'form.token' ); ?>
+		<?php echo JHtml::_('form.token'); ?>
 
 </form>

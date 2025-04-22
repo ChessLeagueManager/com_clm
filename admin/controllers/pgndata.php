@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -11,58 +12,59 @@
 */
 
 // no direct access
-defined( '_JEXEC' ) or die( 'Restricted access' );
+defined('_JEXEC') or die('Restricted access');
 
 class CLMControllerPGNdata extends JControllerLegacy
 {
-	function __construct() {
-		parent::__construct();
-	}
-	
-	function display($cachable = false, $urlparams = array()) {
-		$_REQUEST['view'] = 'pgndata';
-		parent::display();
-	} 
-	
-	function next() {
-		$app =JFactory::getApplication();	
-		$model = $this->getModel('pgndata');
-		$liga = clm_core::$load->request_string('liga', '');
-		$pgn_file = clm_core::$load->request_string('pgn_file', '');
-		if ($model->store ()) {
-			$adminLink = new AdminLink ();
-			$adminLink->view = 'pgnimport';
-			$adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
-			$adminLink->makeURL ();
-			$app->enqueueMessage( JText::_( 'PGN_STORE_SUCCESS' ),'message' );
-			$app->redirect($adminLink->url);
-		}
-		else
-		{
-			$adminLink = new AdminLink ();
-			$adminLink->view = 'swt';
-			$adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
-			$adminLink->makeURL ();
-			$app->enqueueMessage( JText::_( 'PGN_STORE_ERROR' ),'message' );
-			$app->redirect($adminLink->url);
-		}
-	
-	}
-	
-	function cancel() {		
-		$app =JFactory::getApplication();	
-		$liga = clm_core::$load->request_string('liga', '');
-		$pgn_file = clm_core::$load->request_string('pgn_file', '');
-		$adminLink = new AdminLink ();
-		$adminLink->view = 'pgnimport';
-		$adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
-		$adminLink->makeURL ();
-		
-		$msg = JText::_( 'SWT_CANCEL_MSG' );
-		$app->enqueueMessage( $msg );
-		$app->redirect($adminLink->url);
-	
-	}
-	
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    public function display($cachable = false, $urlparams = array())
+    {
+        $_REQUEST['view'] = 'pgndata';
+        parent::display();
+    }
+
+    public function next()
+    {
+        $app = JFactory::getApplication();
+        $model = $this->getModel('pgndata');
+        $liga = clm_core::$load->request_string('liga', '');
+        $pgn_file = clm_core::$load->request_string('pgn_file', '');
+        if ($model->store()) {
+            $adminLink = new AdminLink();
+            $adminLink->view = 'pgnimport';
+            $adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
+            $adminLink->makeURL();
+            $app->enqueueMessage(JText::_('PGN_STORE_SUCCESS'), 'message');
+            $app->redirect($adminLink->url);
+        } else {
+            $adminLink = new AdminLink();
+            $adminLink->view = 'swt';
+            $adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
+            $adminLink->makeURL();
+            $app->enqueueMessage(JText::_('PGN_STORE_ERROR'), 'message');
+            $app->redirect($adminLink->url);
+        }
+
+    }
+
+    public function cancel()
+    {
+        $app = JFactory::getApplication();
+        $liga = clm_core::$load->request_string('liga', '');
+        $pgn_file = clm_core::$load->request_string('pgn_file', '');
+        $adminLink = new AdminLink();
+        $adminLink->view = 'pgnimport';
+        $adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
+        $adminLink->makeURL();
+
+        $msg = JText::_('SWT_CANCEL_MSG');
+        $app->enqueueMessage($msg);
+        $app->redirect($adminLink->url);
+
+    }
+
 }
-?>

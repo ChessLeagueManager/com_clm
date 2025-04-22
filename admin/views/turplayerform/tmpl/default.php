@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -11,12 +11,12 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-	//CLM parameter auslesen
-	$config = clm_core::$db->config();
-	$countryversion = $config->countryversion;
-	
-	$turParams = new clm_class_params($this->turnier->params);
-	$optionEloAnalysis = $turParams->get('optionEloAnalysis', 0);
+//CLM parameter auslesen
+$config = clm_core::$db->config();
+$countryversion = $config->countryversion;
+
+$turParams = new clm_class_params($this->turnier->params);
+$optionEloAnalysis = $turParams->get('optionEloAnalysis', 0);
 
 ?>
 
@@ -41,27 +41,27 @@ defined('_JEXEC') or die('Restricted access');
 
 	<div class="width-70 fltlft">
 		<fieldset class="adminform">
-			<legend><?php echo JText::_( 'FROM_RATING_DATABASE' ); ?></legend>
+			<legend><?php echo JText::_('FROM_RATING_DATABASE'); ?></legend>
 		
 				<table>
 				<tr>
 					<td align="left" width="40%">
-						<?php echo JText::_( 'FILTER' ); ?>:
+						<?php echo JText::_('FILTER'); ?>:
 				<input type="text" name="search" id="search" value="<?php echo $this->param['search'];?>" class="text_area" onchange="document.adminForm.submit();" />
-				<button onclick="this.form.submit();"><?php echo JText::_( 'GO' ); ?></button>
-				<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo JText::_( 'RESET' ); ?></button>
+				<button onclick="this.form.submit();"><?php echo JText::_('GO'); ?></button>
+				<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo JText::_('RESET'); ?></button>
 					</td>
 					
 					<td align="center" width="20%">
-						<?php echo CLMForm::selectDWZRanges('filter_dwz', $this->param['dwz'], TRUE); ?>
+						<?php echo CLMForm::selectDWZRanges('filter_dwz', $this->param['dwz'], true); ?>
 					</td>
 					
 					<td align="right" width="40%">
 		
 					<?php	// eigenes Dropdown Menue
-						echo CLMForm::selectAssociation('filter_verband', $this->param['verband'], TRUE);
-						echo "<br /><br />".CLMForm::selectVereinZPSinAssoc('filter_vid', $this->param['vid'], $this->param['verband'], TRUE);
-					?>
+                        echo CLMForm::selectAssociation('filter_verband', $this->param['verband'], true);
+echo "<br /><br />".CLMForm::selectVereinZPSinAssoc('filter_vid', $this->param['vid'], $this->param['verband'], true);
+?>
 					</td>
 				</tr>
 				</table>
@@ -76,22 +76,22 @@ defined('_JEXEC') or die('Restricted access');
 								<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 							</th>
 							<th class="title">
-								<?php echo JHtml::_('grid.sort',   JText::_('PLAYER_NAME'), 'Spielername', $this->param['order_Dir'], $this->param['order'] ); ?>
+								<?php echo JHtml::_('grid.sort', JText::_('PLAYER_NAME'), 'Spielername', $this->param['order_Dir'], $this->param['order']); ?>
 							</th>
 							<th width="5%">
-								<?php echo JHtml::_('grid.sort',   JText::_('PLAYER_TITLE'), 'FIDE_Titel', $this->param['order_Dir'], $this->param['order'] ); ?>
+								<?php echo JHtml::_('grid.sort', JText::_('PLAYER_TITLE'), 'FIDE_Titel', $this->param['order_Dir'], $this->param['order']); ?>
 							</th>
 							<th width="5%">
-								<?php echo JHtml::_('grid.sort',   JText::_('CLM_NUMBER_ABB'), 'snr', $this->param['order_Dir'], $this->param['order'] ); ?>
+								<?php echo JHtml::_('grid.sort', JText::_('CLM_NUMBER_ABB'), 'snr', $this->param['order_Dir'], $this->param['order']); ?>
 							</th>
 							<th width="7%">
-								<?php echo JHtml::_('grid.sort',   JText::_('RATING'), 'DWZ', $this->param['order_Dir'], $this->param['order'] ); ?>
+								<?php echo JHtml::_('grid.sort', JText::_('RATING'), 'DWZ', $this->param['order_Dir'], $this->param['order']); ?>
 							</th>
 							<th width="7%">
-								<?php echo JHtml::_('grid.sort',   JText::_('FIDE_ELO'), 'FIDE_Elo', $this->param['order_Dir'], $this->param['order'] ); ?>
+								<?php echo JHtml::_('grid.sort', JText::_('FIDE_ELO'), 'FIDE_Elo', $this->param['order_Dir'], $this->param['order']); ?>
 							</th>
 							<th width="28%">
-								<?php echo JHtml::_('grid.sort',   JText::_('CLUB'), 'Vereinname', $this->param['order_Dir'], $this->param['order'] ); ?>
+								<?php echo JHtml::_('grid.sort', JText::_('CLUB'), 'Vereinname', $this->param['order_Dir'], $this->param['order']); ?>
 							</th>
 						</tr>
 					</thead>
@@ -104,30 +104,33 @@ defined('_JEXEC') or die('Restricted access');
 					</tfoot>
 					<tbody>
 					<?php
-					$k = 0;
-					$count=0;
-					
-					foreach ($this->playerlist as $i => $value) {
-						$row = &$value;
-		
-						?>
+$k = 0;
+$count = 0;
+
+foreach ($this->playerlist as $i => $value) {
+    $row = &$value;
+
+    ?>
 						<tr class="<?php echo 'row'. $k; ?>">
 							<td align="center">
-								<?php echo $this->pagination->getRowOffset( $i ); ?>
+								<?php echo $this->pagination->getRowOffset($i); ?>
 							</td>
 							<td align="center">
-								<?php 
-									if ($row->snr == "" ) { 
-										if ($countryversion =="de") { $hcid = $row->ZPS.$row->Mgl_Nr; }
-										else { $hcid = $row->ZPS.$row->PKZ; }
+								<?php
+                if ($row->snr == "") {
+                    if ($countryversion == "de") {
+                        $hcid = $row->ZPS.$row->Mgl_Nr;
+                    } else {
+                        $hcid = $row->ZPS.$row->PKZ;
+                    }
 
-								?>
+                    ?>
 									<input type="checkbox" id="cb<?php echo $i; ?>" name="cid[]" value="<?php echo $hcid; ?>" onclick="isChecked(this.checked);" />
-								<?php 
-									} else {
-										echo '-';
-									}
-								?>
+								<?php
+                } else {
+                    echo '-';
+                }
+    ?>
 							</td>
 							<td align="left">
 								<?php echo $row->Spielername;?>
@@ -139,22 +142,22 @@ defined('_JEXEC') or die('Restricted access');
 								<?php echo $row->snr;?>
 							</td>
 							<td align="center">
-								<?php 
-								if ($row->DWZ > 0) {
-									echo $row->DWZ;
-								} else {
-									echo "-";
-								}
-								?>
+								<?php
+    if ($row->DWZ > 0) {
+        echo $row->DWZ;
+    } else {
+        echo "-";
+    }
+    ?>
 							</td>
 							<td align="center">
-								<?php 
-								if ($row->FIDE_Elo > 0) {
-									echo $row->FIDE_Elo;
-								} else {
-									echo "-";
-								}
-								?>
+								<?php
+    if ($row->FIDE_Elo > 0) {
+        echo $row->FIDE_Elo;
+    } else {
+        echo "-";
+    }
+    ?>
 							</td>
 							<td align="left">
 								<?php echo $row->Vereinname; ?>
@@ -162,9 +165,9 @@ defined('_JEXEC') or die('Restricted access');
 		
 						</tr>
 						<?php
-						$k = 1 - $k;
-					}
-					?>
+                        $k = 1 - $k;
+}
+?>
 					</tbody>
 					</table>
 		</fieldset>
@@ -172,7 +175,7 @@ defined('_JEXEC') or die('Restricted access');
 	
 	<div class="width-30 fltrt">
 		<fieldset class="adminform">
-			<legend><?php echo JText::_( 'ENTER_PLAYERS_BY_NAME' ); ?></legend>
+			<legend><?php echo JText::_('ENTER_PLAYERS_BY_NAME'); ?></legend>
 			<table class="admintable">
 				<tr>
 					<td class="key" nowrap="nowrap">* <?php echo JText::_('PLAYER_NAME'); ?> (<?php echo JText::_('LASTNAME_FIRSTNAME'); ?>):</td>
@@ -212,16 +215,16 @@ defined('_JEXEC') or die('Restricted access');
 					<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_SEX'); ?>:</td>
 					<td class="paramlist_value">
 						<?php
-						$options = array();
-						$options[''] = '';
-						$options['M'] = JText::_('OPTION_SEX_M');
-						$options['W'] = JText::_('OPTION_SEX_W');
-						$optionlist = array();
-						foreach ($options as $key => $val) {
-							$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
-						}
-						echo JHtml::_('select.genericlist', $optionlist, 'geschlecht', 'class="inputbox"', 'id', 'name', '');
-						?>
+    $options = array();
+$options[''] = '';
+$options['M'] = JText::_('OPTION_SEX_M');
+$options['W'] = JText::_('OPTION_SEX_W');
+$optionlist = array();
+foreach ($options as $key => $val) {
+    $optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name');
+}
+echo JHtml::_('select.genericlist', $optionlist, 'geschlecht', 'class="inputbox"', 'id', 'name', '');
+?>
 					</td>
 				</tr>
 				<tr>
@@ -245,6 +248,6 @@ defined('_JEXEC') or die('Restricted access');
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->param['order_Dir']; ?>" />
 	<input type="hidden" name="id" value="<?php echo $this->param['id']; ?>" />
 	<input type="hidden" name="add_nz" value="<?php echo $this->param['add_nz']; ?>" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo JHtml::_('form.token'); ?>
 
 </form>

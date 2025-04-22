@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -29,4 +30,3 @@ clm_core::$cms->addScriptDeclaration('var clm_dsb_import_updateClub = "'.$lang->
 clm_core::$cms->addScriptDeclaration('var clm_dsb_import_finishedClub = "'.$lang->finishedClub.'";');
 clm_core::$cms->addScriptDeclaration('var clm_dsb_import_amount = '.clm_core::$db->config()->dsb_import_amount.';');
 clm_core::$cms->addScript(clm_core::$url."js/dsb_import.js");
-?>

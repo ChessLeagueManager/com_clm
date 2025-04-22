@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2020 CLM Team  All rights reserved
@@ -35,4 +36,3 @@ clm_core::$cms->addStyleSheet(clm_core::$url."css/select2.min.css");
  * ?? Saison
  *
 */
-?>

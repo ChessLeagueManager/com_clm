@@ -74,16 +74,16 @@ function prepareAddress($address)
     //Users is able to choose from three option
     $addressArray = explode(',', $address);
 
-    if (isset($addressArray[2]) AND $googlemaps_rtype == 1) {  //term1, term2 and term3
-        $address = implode(",", array($addressArray[0], $addressArray[1], $addressArray[2])); }
-    elseif (isset($addressArray[2]) AND $googlemaps_rtype == 2) {  //only term2 and term3
-        $address = implode(",", array($addressArray[1], $addressArray[2])); }
-    elseif (isset($addressArray[1]) AND $googlemaps_rtype == 3) { //only term1 and term2
-        $address =  implode(",", array($addressArray[0], $addressArray[1])); }
-    else {
+    if (isset($addressArray[2]) and $googlemaps_rtype == 1) {  //term1, term2 and term3
+        $address = implode(",", array($addressArray[0], $addressArray[1], $addressArray[2]));
+    } elseif (isset($addressArray[2]) and $googlemaps_rtype == 2) {  //only term2 and term3
+        $address = implode(",", array($addressArray[1], $addressArray[2]));
+    } elseif (isset($addressArray[1]) and $googlemaps_rtype == 3) { //only term1 and term2
+        $address =  implode(",", array($addressArray[0], $addressArray[1]));
+    } else {
         $address = implode(",", $addressArray); //Default, use whole field
     }
-  
+
     // Encode the address
     $address = urlencode($address);
     return ($address);
@@ -96,18 +96,17 @@ function getCoordinates($address)
     // Prepare address (encoding for URL, separating of terms)
     $address = prepareAddress($address);
 
-    
+
     // Read service provider from Config
     $config 			= clm_core::$db->config();
     $service = $config->maps_resolver;
 
-    if ($service == 1){ //Google
+    if ($service == 1) { //Google
         // Get API Key from Config
         $gAPIKey = $config->googlemaps_api;
         // Check if not null
-        if (is_null($gAPIKey)==false)
-        {
-            $coordinates = getCoordinatesFromGoogle($address, $gAPIKey );
+        if (is_null($gAPIKey) == false) {
+            $coordinates = getCoordinatesFromGoogle($address, $gAPIKey);
             return $coordinates;
         }
         // If no API-Key is provided OSM search will be executed outside if-statement

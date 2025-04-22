@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -11,152 +12,155 @@
 */
 defined('_JEXEC') or die('Restricted access');
 //JHtml::_('behavior.tooltip', '.CLMTooltip');
-require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
+require_once(JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 
 // Konfigurationsparameter auslesen
-$itemid 	= clm_core::$load->request_int( 'Itemid' );
+$itemid 	= clm_core::$load->request_int('Itemid');
 $spRang		= clm_core::$load->request_int('spRang');	//Sonderranglisten
-$option 	= clm_core::$load->request_string('option','com_clm');
+$option 	= clm_core::$load->request_string('option', 'com_clm');
 $mainframe	= JFactory::getApplication();
 
 $config = clm_core::$db->config();
 // $pdf_melde = $config->pdf_meldelisten;
 $fixth_ttab = $config->fixth_ttab;
-	
+
 // CLM-Container
 echo '<div id="clm"><div id="turnier_tabelle">';
-	
+
 // Componentheading
-if($spRang != 0){			//Sonderranglisten
-	$heading = $this->turnier->name.": ".$this->turnier->spRangName." ".JText::_('TOURNAMENT_TABLE'); 
+if ($spRang != 0) {			//Sonderranglisten
+    $heading = $this->turnier->name.": ".$this->turnier->spRangName." ".JText::_('TOURNAMENT_TABLE');
 } else {
-	$heading = $this->turnier->name.": ".JText::_('TOURNAMENT_TABLE');
+    $heading = $this->turnier->name.": ".JText::_('TOURNAMENT_TABLE');
 }
 
 $archive_check = clm_core::$api->db_check_season_user($this->turnier->sid);
 if (!$archive_check) {
-	echo CLMContent::componentheading($heading);
-	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('NO_ACCESS')."<br/>".JText::_('NOT_REGISTERED'));
-} elseif ( $this->turnier->published == 0) { 
-	echo CLMContent::componentheading($heading);
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
+    echo CLMContent::componentheading($heading);
+    require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
+    echo CLMContent::clmWarning(JText::_('NO_ACCESS')."<br/>".JText::_('NOT_REGISTERED'));
+} elseif ($this->turnier->published == 0) {
+    echo CLMContent::componentheading($heading);
+    echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
 } elseif ($spRang == 0 and $this->turnier->playersCount < $this->turnier->teil) { //�nderung wegen Sonderranglisten
-	$msg = JText::_('TOURNAMENT_PLAYERLISTNOTCOMPLETE')."<br/>".JText::_('TOURNAMENT_NORANKINGEXISTING');
-	$link = 'index.php?option='.$option.'&view=turnier_teilnehmer&turnier='.$this->turnier->id;
-	if ($itemid != 0) $link .= '&Itemid='.$itemid;
-	$mainframe->enqueueMessage( $msg );
-	$mainframe->redirect( $link );
+    $msg = JText::_('TOURNAMENT_PLAYERLISTNOTCOMPLETE')."<br/>".JText::_('TOURNAMENT_NORANKINGEXISTING');
+    $link = 'index.php?option='.$option.'&view=turnier_teilnehmer&turnier='.$this->turnier->id;
+    if ($itemid != 0) {
+        $link .= '&Itemid='.$itemid;
+    }
+    $mainframe->enqueueMessage($msg);
+    $mainframe->redirect($link);
 
-} elseif($this->turnier->typ == 3) { // KO-System
-	echo CLMContent::componentheading($heading);
-   	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_TABLENOTAVAILABLE'));
-} elseif ($spRang != 0 and $this->turnier->playersCount == 0 ) { //Hinzugef�gt wegen Sonderranglisten
-	echo CLMContent::componentheading($heading);
-   	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_SPECIALRANKING_NOPLAYERS'));
+} elseif ($this->turnier->typ == 3) { // KO-System
+    echo CLMContent::componentheading($heading);
+    require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
+    echo CLMContent::clmWarning(JText::_('TOURNAMENT_TABLENOTAVAILABLE'));
+} elseif ($spRang != 0 and $this->turnier->playersCount == 0) { //Hinzugef�gt wegen Sonderranglisten
+    echo CLMContent::componentheading($heading);
+    require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
+    echo CLMContent::clmWarning(JText::_('TOURNAMENT_SPECIALRANKING_NOPLAYERS'));
 
 } else {
-// PDF-Link
-	echo CLMContent::createPDFLink('turnier_tabelle', JText::_('TOURNAMENT_TABLE'), array('turnier' => $this->turnier->id, 'layout' => 'tabelle', 'spRang' => $spRang) );
-	if($spRang != 0){			//Sonderranglisten
-	  echo CLMContent::createViewLink('turnier_rangliste', JText::_('TABELLE_GOTO_RANGLISTE'), array('turnier' => $this->turnier->id, 'spRang' => $spRang, 'Itemid' => $itemid) );
-	} else {
-	  echo CLMContent::createViewLink('turnier_rangliste', JText::_('TABELLE_GOTO_RANGLISTE'), array('turnier' => $this->turnier->id, 'Itemid' => $itemid) );
-	}
-   echo CLMContent::componentheading($heading);
-   require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
+    // PDF-Link
+    echo CLMContent::createPDFLink('turnier_tabelle', JText::_('TOURNAMENT_TABLE'), array('turnier' => $this->turnier->id, 'layout' => 'tabelle', 'spRang' => $spRang));
+    if ($spRang != 0) {			//Sonderranglisten
+        echo CLMContent::createViewLink('turnier_rangliste', JText::_('TABELLE_GOTO_RANGLISTE'), array('turnier' => $this->turnier->id, 'spRang' => $spRang, 'Itemid' => $itemid));
+    } else {
+        echo CLMContent::createViewLink('turnier_rangliste', JText::_('TABELLE_GOTO_RANGLISTE'), array('turnier' => $this->turnier->id, 'Itemid' => $itemid));
+    }
+    echo CLMContent::componentheading($heading);
+    require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
 
-	$turParams = new clm_class_params($this->turnier->params);
+    $turParams = new clm_class_params($this->turnier->params);
 
-	// Table
-	echo '<table cellpadding="0" cellspacing="0" id="turnier_tabelle"';
-	if ($fixth_ttab =="1") { echo 'class="tableWithFloatingHeader"'; };
+    // Table
+    echo '<table cellpadding="0" cellspacing="0" id="turnier_tabelle"';
+    if ($fixth_ttab == "1") {
+        echo 'class="tableWithFloatingHeader"';
+    };
 
-		// header
-		echo '><tr>';
-			echo '<th class="rang">'.JText::_('TOURNAMENT_RANKABB').'</th>';
-			if ($turParams->get('displayPlayerTitle', 1) == 1) {
-				echo '<th class="titel">'.JText::_('TOURNAMENT_TITLE').'</th>';
-			}
-			echo '<th class="name_float">'.JText::_('TOURNAMENT_PLAYERNAME').'</th>';
-			if ($turParams->get('displayPlayerClub', 1) == 1) {
-				echo '<th class="verein">'.JText::_('TOURNAMENT_CLUB').'</th>';
-			}
-			echo '<th class="twz">'.JText::_('TOURNAMENT_TWZ').'</th>';
-			echo '<th class="fw_col">'.JText::_('TOURNAMENT_GAMES_ABB').'</th>';
-			echo '<th class="fw_col">'.JText::_('TOURNAMENT_POINTS_ABB').'</th>';
-			// mgl. Feinwertungen
-			for ($f=1; $f<=3; $f++) {
-				$fwFieldName = 'tiebr'.$f;
-				if ($this->turnier->$fwFieldName > 0 AND $this->turnier->$fwFieldName < 50) {
-					echo '<th class="fw_col">'.JText::_('TOURNAMENT_TIEBR_ABB_'.$this->turnier->$fwFieldName).'</th>';
-				}
-			}
-		echo '<tr />';
-		
-		// alle Spieler durchgehen
-		$pc = 0;
-		for ($p=0; $p<$this->turnier->playersCount; $p++) {
-			//if ($this->players[$p]->anz_spiele == 0) continue;
-			$pc++;
-			if ($pc%2 != 0) { 
-				$zeilenr = "zeile1"; 
-			} else { 
-				$zeilenr = "zeile2"; 
-			}
+    // header
+    echo '><tr>';
+    echo '<th class="rang">'.JText::_('TOURNAMENT_RANKABB').'</th>';
+    if ($turParams->get('displayPlayerTitle', 1) == 1) {
+        echo '<th class="titel">'.JText::_('TOURNAMENT_TITLE').'</th>';
+    }
+    echo '<th class="name_float">'.JText::_('TOURNAMENT_PLAYERNAME').'</th>';
+    if ($turParams->get('displayPlayerClub', 1) == 1) {
+        echo '<th class="verein">'.JText::_('TOURNAMENT_CLUB').'</th>';
+    }
+    echo '<th class="twz">'.JText::_('TOURNAMENT_TWZ').'</th>';
+    echo '<th class="fw_col">'.JText::_('TOURNAMENT_GAMES_ABB').'</th>';
+    echo '<th class="fw_col">'.JText::_('TOURNAMENT_POINTS_ABB').'</th>';
+    // mgl. Feinwertungen
+    for ($f = 1; $f <= 3; $f++) {
+        $fwFieldName = 'tiebr'.$f;
+        if ($this->turnier->$fwFieldName > 0 and $this->turnier->$fwFieldName < 50) {
+            echo '<th class="fw_col">'.JText::_('TOURNAMENT_TIEBR_ABB_'.$this->turnier->$fwFieldName).'</th>';
+        }
+    }
+    echo '<tr />';
 
-			echo '<tr class="'.$zeilenr.'">';
-				echo '<td class="rang'.$this->players[$p]->quali.'">'.CLMText::getPosString($this->players[$p]->rankingPos).'</td>';
-				
-				if ($turParams->get('displayPlayerTitle', 1) == 1) {
-					echo '<td align="center" class="name_float">'.$this->players[$p]->titel.'</td>';
-				}
-				echo '<td class="verein">';
-					$link = new CLMcLink();
-					$link->view = 'turnier_player';
-					$link->more = array('turnier' => $this->turnier->id, 'snr' => $this->players[$p]->snr, 'Itemid' => $itemid );
-					$link->makeURL();
-					echo $link->makeLink($this->players[$p]->name);
-				echo '</td>';
-				if ($turParams->get('displayPlayerClub', 1) == 1) {
-					if ($this->tourn_linkclub == 1) {
-						$link = new CLMcLink();
-						$link->view = 'verein';
-						$link->more = array('saison' => $this->players[$p]->sid, 'zps' => $this->players[$p]->zps, 'Itemid' => $itemid );
-						$link->makeURL();
-						echo '<td class="name_float">'.$link->makeLink($this->players[$p]->verein).'</td>';
-					} else {
-						echo '<td class="name_float">'.$this->players[$p]->verein.'</td>';
-					}
-				}
-				echo '<td class="twz">'.CLMText::formatRating($this->players[$p]->twz).'</td>';
-				echo '<td class="fw_col">'.$this->players[$p]->anz_spiele.'</td>';
-				echo '<td class="fw_col">'.$this->players[$p]->sum_punkte.'</td>';
-				// mgl. Feinwertungen
-				for ($f=1; $f<=3; $f++) {
-					$fwFieldName = 'tiebr'.$f;
-					$plTiebrField = 'sumTiebr'.$f;
-					if ($this->turnier->$fwFieldName > 0 AND $this->turnier->$fwFieldName < 50) {
-						echo '<td class="fw_col">'.CLMtext::tiebrFormat($this->turnier->$fwFieldName, $this->players[$p]->$plTiebrField).'</td>';
-					}
-				}
-			echo '<tr />';
-		}
-		// ende alle Spieler
+    // alle Spieler durchgehen
+    $pc = 0;
+    for ($p = 0; $p < $this->turnier->playersCount; $p++) {
+        //if ($this->players[$p]->anz_spiele == 0) continue;
+        $pc++;
+        if ($pc % 2 != 0) {
+            $zeilenr = "zeile1";
+        } else {
+            $zeilenr = "zeile2";
+        }
+
+        echo '<tr class="'.$zeilenr.'">';
+        echo '<td class="rang'.$this->players[$p]->quali.'">'.CLMText::getPosString($this->players[$p]->rankingPos).'</td>';
+
+        if ($turParams->get('displayPlayerTitle', 1) == 1) {
+            echo '<td align="center" class="name_float">'.$this->players[$p]->titel.'</td>';
+        }
+        echo '<td class="verein">';
+        $link = new CLMcLink();
+        $link->view = 'turnier_player';
+        $link->more = array('turnier' => $this->turnier->id, 'snr' => $this->players[$p]->snr, 'Itemid' => $itemid );
+        $link->makeURL();
+        echo $link->makeLink($this->players[$p]->name);
+        echo '</td>';
+        if ($turParams->get('displayPlayerClub', 1) == 1) {
+            if ($this->tourn_linkclub == 1) {
+                $link = new CLMcLink();
+                $link->view = 'verein';
+                $link->more = array('saison' => $this->players[$p]->sid, 'zps' => $this->players[$p]->zps, 'Itemid' => $itemid );
+                $link->makeURL();
+                echo '<td class="name_float">'.$link->makeLink($this->players[$p]->verein).'</td>';
+            } else {
+                echo '<td class="name_float">'.$this->players[$p]->verein.'</td>';
+            }
+        }
+        echo '<td class="twz">'.CLMText::formatRating($this->players[$p]->twz).'</td>';
+        echo '<td class="fw_col">'.$this->players[$p]->anz_spiele.'</td>';
+        echo '<td class="fw_col">'.$this->players[$p]->sum_punkte.'</td>';
+        // mgl. Feinwertungen
+        for ($f = 1; $f <= 3; $f++) {
+            $fwFieldName = 'tiebr'.$f;
+            $plTiebrField = 'sumTiebr'.$f;
+            if ($this->turnier->$fwFieldName > 0 and $this->turnier->$fwFieldName < 50) {
+                echo '<td class="fw_col">'.CLMtext::tiebrFormat($this->turnier->$fwFieldName, $this->players[$p]->$plTiebrField).'</td>';
+            }
+        }
+        echo '<tr />';
+    }
+    // ende alle Spieler
 
 
 
-	echo '</table>';
-		
+    echo '</table>';
+
 
 }
 
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); 
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php');
 echo '</div></div>';
-?>

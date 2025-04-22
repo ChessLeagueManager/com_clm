@@ -4,20 +4,20 @@
 <?php
 defined('_JEXEC') or die('Restricted access');
 
-	$config			= JComponentHelper::getParams( 'com_clm' );
-	
-    ?>
+$config			= JComponentHelper::getParams('com_clm');
+
+?>
     
     <table class="noshow">
       <tr>
         <td width="50%">
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_TOURN_BASICS' ); ?></legend>
+			<legend><?php echo JText::_('CONFIG_TOURN_BASICS'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
 						<td valign="top">
-							<?php echo $this->params->render( 'params', 'tournaments'); ?>
+							<?php echo $this->params->render('params', 'tournaments'); ?>
 						</td>
 					</tr>
 				</tbody>
@@ -25,14 +25,14 @@ defined('_JEXEC') or die('Restricted access');
 			</fieldset>
 			
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_PGN' ); ?></legend>
+			<legend><?php echo JText::_('CONFIG_FRONTEND_PGN'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                        	<?php echo $this->params->render( 'params', 'fe_pgn'); ?>
+                        	<?php echo $this->params->render('params', 'fe_pgn'); ?>
                             <br>
-							<?php echo JText::_( 'CONFIG_TEMP_PICKER' ); ?><br />
+							<?php echo JText::_('CONFIG_TEMP_PICKER'); ?><br />
 						<input type="text" id="bau" onclick="startColorPicker(this)" onkeyup="maskedHex(this)">
 						<input type="text" id="baubau" onclick="startColorPicker(this)" >
 						</td>

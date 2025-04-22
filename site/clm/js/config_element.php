@@ -1,4 +1,5 @@
 <?php
+
 defined('clm') or die('Restricted access');
 clm_core::$cms->addScriptDeclaration('var clm_config_element_url = "'.clm_core::$url.clm_core::$load->gen_url().'";');
 $lang = clm_core::$lang->config;
@@ -10,4 +11,3 @@ clm_core::$cms->addScriptDeclaration('var clm_config_element_save_partial = "'.$
 clm_core::$cms->addScriptDeclaration('var clm_config_element_working = "'.$lang->working.'";');
 clm_core::$cms->addScriptDeclaration('var clm_config_element_reset_request = "'.$lang->reset_request.'";');
 clm_core::$cms->addScript(clm_core::$url."js/config_element.js");
-?>

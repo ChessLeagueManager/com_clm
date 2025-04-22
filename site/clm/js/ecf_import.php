@@ -1,4 +1,5 @@
 <?php
+
 defined('clm') or die('Restricted access');
 
 $lang = clm_core::$lang->ecf_import;
@@ -26,4 +27,3 @@ clm_core::$cms->addScriptDeclaration('var clm_ecf_import_updateOrg = "'.$lang->u
 clm_core::$cms->addScriptDeclaration('var clm_ecf_import_finishedOrg = "'.$lang->finishedOrg.'";');
 clm_core::$cms->addScriptDeclaration('var clm_ecf_import_amount = '.clm_core::$db->config()->dsb_import_amount.';');
 clm_core::$cms->addScript(clm_core::$url."js/ecf_import.js");
-?>

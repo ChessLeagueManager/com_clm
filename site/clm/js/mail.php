@@ -1,6 +1,7 @@
 <?php
+
 /*
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2023 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -19,4 +20,3 @@ clm_core::$cms->addScriptDeclaration('var clm_mail_data_needed = "'.$lang->data_
 clm_core::$cms->addScriptDeclaration('var clm_mail_data_filled = "'.$lang->data_filled.'";');
 clm_core::$cms->addScriptDeclaration('var clm_mail_data_ready = "'.$lang->data_ready.'";');
 clm_core::$cms->addScript(clm_core::$url."js/mail.js");
-?>

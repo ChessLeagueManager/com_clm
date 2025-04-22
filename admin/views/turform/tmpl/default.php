@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2025 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -12,38 +12,45 @@
 defined('_JEXEC') or die('Restricted access');
 
 $turParams = new clm_class_params($this->turnier->params);
-if (is_null($this->turnier->bemerkungen)) $this->turnier->bemerkungen = '';
-if (is_null($this->turnier->bem_int)) $this->turnier->bem_int = '';
+if (is_null($this->turnier->bemerkungen)) {
+    $this->turnier->bemerkungen = '';
+}
+if (is_null($this->turnier->bem_int)) {
+    $this->turnier->bem_int = '';
+}
 
 //CLM parameter auslesen
 $clm_config = clm_core::$db->config();
-if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
-else $field_search = "inputbox";
+if ($clm_config->field_search == 1) {
+    $field_search = "js-example-basic-single";
+} else {
+    $field_search = "inputbox";
+}
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 
   <div class="width-60 fltlft">
   <fieldset class="adminform">
-   <legend><?php echo JText::_( 'JDETAILS' ); ?></legend>
+   <legend><?php echo JText::_('JDETAILS'); ?></legend>
       <table class="paramlist admintable">
 
 	<tr>
 		<td width="30%" class="paramlist_key">
-			<label for="name"><?php echo JText::_( 'TOURNAMENT_NAME' ); ?>:</label>
+			<label for="name"><?php echo JText::_('TOURNAMENT_NAME'); ?>:</label>
 		</td>
 		<td class="paramlist_value">
 			<input class="inputbox" type="text" name="name" id="name" size="40" maxlength="60" value="<?php echo $this->turnier->name; ?>" />
 		</td>
 	</tr>
 	
-	<?php 
-	if (isset($this->form['catidAlltime'])) {
-	?>
+	<?php
+    if (isset($this->form['catidAlltime'])) {
+        ?>
 		<tr>
 			<td width="30%" class="paramlist_key">
 				<label for="category">
-					<?php echo JText::_( 'CATEGORY_ALLTIME' ); ?>:
+					<?php echo JText::_('CATEGORY_ALLTIME'); ?>:
 				</label>
 			</td>
 			<td class="paramlist_value">
@@ -51,16 +58,16 @@ else $field_search = "inputbox";
 			</td>
 		</tr>
 	<?php
-	}
-	?>
+    }
+?>
 	
-	<?php 
-	if (isset($this->form['catidEdition'])) {
-	?>
+	<?php
+if (isset($this->form['catidEdition'])) {
+    ?>
 		<tr>
 			<td width="30%" class="paramlist_key">
 				<label for="category">
-					<?php echo JText::_( 'CATEGORY_EDITION' ); ?>:
+					<?php echo JText::_('CATEGORY_EDITION'); ?>:
 				</label>
 			</td>
 			<td class="paramlist_value">
@@ -68,13 +75,13 @@ else $field_search = "inputbox";
 			</td>
 		</tr>
 	<?php
-	}
-	?>
+}
+?>
 	
 	<tr>
 		<td width="30%" class="paramlist_key">
 			<label for="saison">
-				<?php echo JText::_( 'SEASON' ); ?>:
+				<?php echo JText::_('SEASON'); ?>:
 			</label>
 		</td>
 		<td class="paramlist_value">
@@ -86,77 +93,77 @@ else $field_search = "inputbox";
 	<tr>
 		<td width="30%" class="paramlist_key">
 			<label for="dateStart">
-				<?php echo JText::_( 'TOURNAMENT_DAYSTART' ); ?>:
+				<?php echo JText::_('TOURNAMENT_DAYSTART'); ?>:
 			</label>
 		</td>
 		<td class="paramlist_value">
 			<?php
-			echo CLMForm::calendar($this->turnier->dateStart, 'dateStart', 'dateStart', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
+        echo CLMForm::calendar($this->turnier->dateStart, 'dateStart', 'dateStart', '%Y-%m-%d', array('class' => 'text_area', 'size' => '32',  'maxlength' => '19')); ?>
 		</td>
 	</tr>
 	
 	<tr>
 		<td width="30%" class="paramlist_key">
 			<label for="dateEnd">
-				<?php echo JText::_( 'TOURNAMENT_DAYEND' ); ?>:
+				<?php echo JText::_('TOURNAMENT_DAYEND'); ?>:
 			</label>
 		</td>
 		<td class="paramlist_value">
 			<?php
-			echo CLMForm::calendar($this->turnier->dateEnd, 'dateEnd', 'dateEnd', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
+        echo CLMForm::calendar($this->turnier->dateEnd, 'dateEnd', 'dateEnd', '%Y-%m-%d', array('class' => 'text_area', 'size' => '32',  'maxlength' => '19')); ?>
 		</td>
 	</tr>
 	
 	<tr>
 		<td width="30%" class="paramlist_key">
 			<label for="modus">
-				<?php echo JText::_( 'MODUS' ); ?>:
+				<?php echo JText::_('MODUS'); ?>:
 			</label>
 		</td>
 		<td class="paramlist_value">
 			<?php
-			// nur, wenn Runden noch nicht erstellt
-			if (IS_NULL($this->turnier->rnd) OR $this->turnier->rnd == 0) {
-				echo $this->form['modus'];
-			} else {
-				echo JText::_('MODUS_TYP_'.$this->turnier->typ)." (".JText::_('ROUNDS_CREATED')."!)";
-				echo CLMForm::hidden('typ', $this->turnier->typ); // damit JavaScript funktioniert
-			}
-			?>
+        // nur, wenn Runden noch nicht erstellt
+        if (IS_NULL($this->turnier->rnd) or $this->turnier->rnd == 0) {
+            echo $this->form['modus'];
+        } else {
+            echo JText::_('MODUS_TYP_'.$this->turnier->typ)." (".JText::_('ROUNDS_CREATED')."!)";
+            echo CLMForm::hidden('typ', $this->turnier->typ); // damit JavaScript funktioniert
+        }
+?>
 		</td>
 	</tr>
 	
 	<tr>
 		<td width="30%" class="paramlist_key">
 			<label for="runden">
-				<?php echo JText::_( 'ROUNDS_COUNT' ); ?>:
+				<?php echo JText::_('ROUNDS_COUNT'); ?>:
 			</label>
 		</td>
 		<td class="paramlist_value">
 			<span id="formRoundscountValue">
 			<?php
-			// nur, wenn Runden noch nicht erstellt
-			if (IS_NULL($this->turnier->rnd) OR $this->turnier->rnd == '0') {
-				if ($this->turnier->typ != 2 AND $this->turnier->typ != 3 AND $this->turnier->typ != 5) {
-					echo '<input class="inputbox" type="text" name="runden" id="runden" size="10" maxlength="5" value="'.$this->turnier->runden.'" />';
-				} else {
-					echo CLMForm::hidden('runden', $this->turnier->runden); // damit JavaScript funktioniert
-				}
-			} else {
-				echo $this->turnier->runden;
-				echo CLMForm::hidden('runden', $this->turnier->runden); // damit JavaScript funktioniert
-			}
-			?>
+// nur, wenn Runden noch nicht erstellt
+if (IS_NULL($this->turnier->rnd) or $this->turnier->rnd == '0') {
+    if ($this->turnier->typ != 2 and $this->turnier->typ != 3 and $this->turnier->typ != 5) {
+        echo '<input class="inputbox" type="text" name="runden" id="runden" size="10" maxlength="5" value="'.$this->turnier->runden.'" />';
+    } else {
+        echo CLMForm::hidden('runden', $this->turnier->runden); // damit JavaScript funktioniert
+    }
+} else {
+    echo $this->turnier->runden;
+    echo CLMForm::hidden('runden', $this->turnier->runden); // damit JavaScript funktioniert
+}
+?>
 			</span>
 			<span id="formRoundscountText">
 			<?php
-			// nur, wenn Runden noch nicht erstellt
-			if (IS_NULL($this->turnier->rnd) OR $this->turnier->rnd == '0') {
-				if ($this->turnier->typ == 2 OR $this->turnier->typ == 3 OR $this->turnier->typ == 5) {
-					echo $this->turnier->runden." (".JText::_('ROUNDS_COUNT_GENERATED').")";
-				}
-			}
-			?>
+// nur, wenn Runden noch nicht erstellt
+if (IS_NULL($this->turnier->rnd) or $this->turnier->rnd == '0') {
+    if ($this->turnier->typ == 2 or $this->turnier->typ == 3 or $this->turnier->typ == 5) {
+        echo $this->turnier->runden." (".JText::_('ROUNDS_COUNT_GENERATED').")";
+    }
+}
+?>
 			</span>
 		</td>
 	</tr>
@@ -165,93 +172,93 @@ else $field_search = "inputbox";
 	<tr>
 		<td width="30%" class="paramlist_key">
 			<label for="dg">
-				<?php echo JText::_( 'STAGE_COUNT' ); ?>:
+				<?php echo JText::_('STAGE_COUNT'); ?>:
 			</label>
 		</td>
 		<td class="paramlist_value" id="formStagecount">
 			<?php
-			// nur, wenn Runden noch nicht erstellt
-			if (IS_NULL($this->turnier->rnd) OR $this->turnier->rnd == 0) {
-				if ($this->turnier->typ != 1 AND $this->turnier->typ != 3 AND $this->turnier->typ != 5) {
-					echo $this->form['dg'];
-				} else {
-					echo '-';
-					echo CLMForm::hidden('dg', $this->turnier->dg); // damit JavaScript funktioniert
-				}
-			} else {
-				echo $this->turnier->dg;
-				echo CLMForm::hidden('dg', $this->turnier->dg); // damit JavaScript funktioniert
-			}
-			?>
+// nur, wenn Runden noch nicht erstellt
+if (IS_NULL($this->turnier->rnd) or $this->turnier->rnd == 0) {
+    if ($this->turnier->typ != 1 and $this->turnier->typ != 3 and $this->turnier->typ != 5) {
+        echo $this->form['dg'];
+    } else {
+        echo '-';
+        echo CLMForm::hidden('dg', $this->turnier->dg); // damit JavaScript funktioniert
+    }
+} else {
+    echo $this->turnier->dg;
+    echo CLMForm::hidden('dg', $this->turnier->dg); // damit JavaScript funktioniert
+}
+?>
 		</td>
 	</tr>
 
 	<tr>
 		<td width="30%" class="paramlist_key">
 			<label for="teil">
-				<?php echo JText::_( 'PARTICIPANT_COUNT' ); ?>:
+				<?php echo JText::_('PARTICIPANT_COUNT'); ?>:
 			</label>
 		</td>
 		<td class="paramlist_value">
 			<?php
-			if (IS_NULL($this->turnier->rnd) OR $this->turnier->rnd == 0) {
-			?>
+if (IS_NULL($this->turnier->rnd) or $this->turnier->rnd == 0) {
+    ?>
 				<input class="inputbox" onchange="showFormRoundscount();" type="text" name="teil" id="teil" size="10" maxlength="5" value="<?php echo $this->turnier->teil; ?>" />
 			<?php
-			} else {
-				echo $this->turnier->teil;
-				echo CLMForm::hidden('teil', $this->turnier->teil); // damit JavaScript funktioniert
-			}
-			?>
+} else {
+    echo $this->turnier->teil;
+    echo CLMForm::hidden('teil', $this->turnier->teil); // damit JavaScript funktioniert
+}
+?>
 		</td>
 	</tr>
 
 	<tr>
 		<td width="30%" class="paramlist_key">
 			<label for="tiebreakers">
-				<?php echo JText::_( 'TIEBREAKERS' ); ?>:
+				<?php echo JText::_('TIEBREAKERS'); ?>:
 			</label>
 		</td>
 		<td class="paramlist_value" id="formTiebreakers">
 			<?php
-			if ($this->turnier->typ != 3 AND $this->turnier->typ != 5) {
-				echo $this->form['tiebr1'].'<br>';
-				echo $this->form['tiebr2'].'<br>';
-				echo $this->form['tiebr3'];
-			} else {
-				echo '-';
-			}
-			?>
+if ($this->turnier->typ != 3 and $this->turnier->typ != 5) {
+    echo $this->form['tiebr1'].'<br>';
+    echo $this->form['tiebr2'].'<br>';
+    echo $this->form['tiebr3'];
+} else {
+    echo '-';
+}
+?>
 		</td>
 		<td class="paramlist_value">
 			<label for="teamranking">
-				<?php echo JText::_( 'TEAMRANKING' ); ?>:
+				<?php echo JText::_('TEAMRANKING'); ?>:
 			</label>
 			<br>
-			<?php 
-			$options = array();
-			$options[0] = JText::_('TEAMRKG_0');
-			$options[2] = JText::_('TEAMRKG_2');
-			$options[3] = JText::_('TEAMRKG_3');
-			$options[4] = JText::_('TEAMRKG_4');
-			$options[99] = JText::_('TEAMRKG_99');
-			$optionlist = array();
-			foreach ($options as $key => $val) {
-				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
-			}
+			<?php
+$options = array();
+$options[0] = JText::_('TEAMRKG_0');
+$options[2] = JText::_('TEAMRKG_2');
+$options[3] = JText::_('TEAMRKG_3');
+$options[4] = JText::_('TEAMRKG_4');
+$options[99] = JText::_('TEAMRKG_99');
+$optionlist = array();
+foreach ($options as $key => $val) {
+    $optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name');
+}
 //			echo JHtml::_('select.genericlist', $optionlist, 'params[teamranking]', 'class="js-example-basic-single" size="1" style="width:250px"', 'id', 'name', $turParams->get('teamranking', 0));
-			echo JHtml::_('select.genericlist', $optionlist, 'params[teamranking]', 'class="'.$field_search.'" size="1" style="width:250px"', 'id', 'name', $turParams->get('teamranking', 0));
-			?>
+echo JHtml::_('select.genericlist', $optionlist, 'params[teamranking]', 'class="'.$field_search.'" size="1" style="width:250px"', 'id', 'name', $turParams->get('teamranking', 0));
+?>
 		</td>
 	</tr>
 	<tr>
-		<td class="paramlist_key" title="<?php echo JText::_( 'OPTION_TIEBREAKERSFIDECORRECT_HINT' );?>" >
+		<td class="paramlist_key" title="<?php echo JText::_('OPTION_TIEBREAKERSFIDECORRECT_HINT');?>" >
 			<?php echo JText::_('OPTION_TIEBREAKERSFIDECORRECT'); ?>:
 		</td>
 		<td class="paramlist_value"><fieldset class="radio">
 			<?php echo JHtml::_('select.booleanlist', 'params[optionTiebreakersFideCorrect]', 'class="inputbox"', $turParams->get('optionTiebreakersFideCorrect', 0)); ?>
 		</fieldset></td>
-		<td class="paramlist_key" title="<?php echo JText::_( 'OPTION_ELO_ANALYSIS_HINT' );?>" >
+		<td class="paramlist_key" title="<?php echo JText::_('OPTION_ELO_ANALYSIS_HINT');?>" >
 			<?php echo JText::_('OPTION_ELO_ANALYSIS'); ?>:
 		</td>
 		<td class="paramlist_value"><fieldset class="radio">
@@ -259,7 +266,7 @@ else $field_search = "inputbox";
 		</fieldset></td>
 	</tr>
 	<tr>
-		<td class="paramlist_key" title="<?php echo JText::_( 'OPTION_50PERCENTRULE_HINT' );?>" >
+		<td class="paramlist_key" title="<?php echo JText::_('OPTION_50PERCENTRULE_HINT');?>" >
 			<?php echo JText::_('OPTION_50PERCENTRULE'); ?>:
 		</td>
 		<td class="paramlist_value"><fieldset class="radio">
@@ -269,14 +276,14 @@ else $field_search = "inputbox";
 
 	<tr>
 		<td nowrap="nowrap">
-			<label for="punkte_modus"><?php echo JText::_( 'LEAGUE_MATCH_VALUATION' ); ?></label>
+			<label for="punkte_modus"><?php echo JText::_('LEAGUE_MATCH_VALUATION'); ?></label>
 		</td>
-		<td><?php echo JText::_( 'LEAGUE_VALUATION_1' );?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="sieg" id="sieg" size="4" maxlength="4" value="<?php echo $this->turnier->sieg ?>" /><br>
-			<?php echo JText::_( 'LEAGUE_VALUATION_2' );?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="remis" id="remis" size="4" maxlength="4" value="<?php echo $this->turnier->remis ?>" /><br>
-			<?php echo JText::_( 'LEAGUE_VALUATION_3' );?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="nieder" id="nieder" size="4" maxlength="4" value="<?php echo $this->turnier->nieder ?>" /></td>
-		<td><?php echo JText::_( 'LEAGUE_VALUATION_1S' );?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="siegs" id="siegs" size="4" maxlength="4" value="<?php echo $this->turnier->siegs ?>" /><br>
-			<?php echo JText::_( 'LEAGUE_VALUATION_2S' );?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="remiss" id="remiss" size="4" maxlength="4" value="<?php echo $this->turnier->remiss ?>" /><br>
-			<?php echo JText::_( 'LEAGUE_VALUATION_3K' );?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="niederk" id="niederk" size="4" maxlength="4" value="<?php echo $this->turnier->niederk ?>" /></td>
+		<td><?php echo JText::_('LEAGUE_VALUATION_1');?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="sieg" id="sieg" size="4" maxlength="4" value="<?php echo $this->turnier->sieg ?>" /><br>
+			<?php echo JText::_('LEAGUE_VALUATION_2');?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="remis" id="remis" size="4" maxlength="4" value="<?php echo $this->turnier->remis ?>" /><br>
+			<?php echo JText::_('LEAGUE_VALUATION_3');?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="nieder" id="nieder" size="4" maxlength="4" value="<?php echo $this->turnier->nieder ?>" /></td>
+		<td><?php echo JText::_('LEAGUE_VALUATION_1S');?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="siegs" id="siegs" size="4" maxlength="4" value="<?php echo $this->turnier->siegs ?>" /><br>
+			<?php echo JText::_('LEAGUE_VALUATION_2S');?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="remiss" id="remiss" size="4" maxlength="4" value="<?php echo $this->turnier->remiss ?>" /><br>
+			<?php echo JText::_('LEAGUE_VALUATION_3K');?>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="niederk" id="niederk" size="4" maxlength="4" value="<?php echo $this->turnier->niederk ?>" /></td>
 	</tr>
 
 	<tr>
@@ -284,24 +291,24 @@ else $field_search = "inputbox";
 			<?php echo JText::_('OPTION_USEASTWZ'); ?>:
 		</td>
 		<td class="paramlist_value">
-			<?php 
-			$options = array();
-			if ($turParams->get('useAsTWZ', 0) == 8) {
-				$options[8] = JText::_('OPTION_USEASTWZ_8');
-			} else {
-				$options[0] = JText::_('OPTION_USEASTWZ_0');
-				$options[1] = JText::_('OPTION_USEASTWZ_1');
-				$options[2] = JText::_('OPTION_USEASTWZ_2');
-				$options[3] = JText::_('OPTION_USEASTWZ_3');
-				$options[4] = JText::_('OPTION_USEASTWZ_4');
-			}
-			$optionlist = array();
-			foreach ($options as $key => $val) {
-				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
-			}
+			<?php
+$options = array();
+if ($turParams->get('useAsTWZ', 0) == 8) {
+    $options[8] = JText::_('OPTION_USEASTWZ_8');
+} else {
+    $options[0] = JText::_('OPTION_USEASTWZ_0');
+    $options[1] = JText::_('OPTION_USEASTWZ_1');
+    $options[2] = JText::_('OPTION_USEASTWZ_2');
+    $options[3] = JText::_('OPTION_USEASTWZ_3');
+    $options[4] = JText::_('OPTION_USEASTWZ_4');
+}
+$optionlist = array();
+foreach ($options as $key => $val) {
+    $optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name');
+}
 //			echo JHtml::_('select.genericlist', $optionlist, 'params[useAsTWZ]', 'class="js-example-basic-single" size="1" style="width:350px"', 'id', 'name', $turParams->get('useAsTWZ', 0));
-			echo JHtml::_('select.genericlist', $optionlist, 'params[useAsTWZ]', 'class="'.$field_search.'" size="1" style="width:350px"', 'id', 'name', $turParams->get('useAsTWZ', 0));
-			?>
+echo JHtml::_('select.genericlist', $optionlist, 'params[useAsTWZ]', 'class="'.$field_search.'" size="1" style="width:350px"', 'id', 'name', $turParams->get('useAsTWZ', 0));
+?>
 		</td>
 	</tr>
 	<tr>
@@ -309,18 +316,18 @@ else $field_search = "inputbox";
 			<?php echo JText::_('OPTION_AUTODWZ'); ?>:
 		</td>
 		<td class="paramlist_value">
-			<?php 
-			$options = array();
-			$options[0] = JText::_('OPTION_AUTODWZ_0');
-			$options[1] = JText::_('OPTION_AUTODWZ_1');
-			$options[2] = JText::_('OPTION_AUTODWZ_2');
-			$optionlist = array();
-			foreach ($options as $key => $val) {
-				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
-			}
+			<?php
+$options = array();
+$options[0] = JText::_('OPTION_AUTODWZ_0');
+$options[1] = JText::_('OPTION_AUTODWZ_1');
+$options[2] = JText::_('OPTION_AUTODWZ_2');
+$optionlist = array();
+foreach ($options as $key => $val) {
+    $optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name');
+}
 //			echo JHtml::_('select.genericlist', $optionlist, 'params[autoDWZ]', 'class="js-example-basic-single" size="1" style="width:350px"', 'id', 'name', $turParams->get('autoDWZ', 0));
-			echo JHtml::_('select.genericlist', $optionlist, 'params[autoDWZ]', 'class="'.$field_search.'" size="1" style="width:350px"', 'id', 'name', $turParams->get('autoDWZ', 0));
-			?>
+echo JHtml::_('select.genericlist', $optionlist, 'params[autoDWZ]', 'class="'.$field_search.'" size="1" style="width:350px"', 'id', 'name', $turParams->get('autoDWZ', 0));
+?>
 		</td>
 	</tr>
 
@@ -328,7 +335,7 @@ else $field_search = "inputbox";
   </fieldset>
   
   <fieldset class="adminform">
-  <legend><?php echo JText::_( 'QUALIFICATION' ); ?></legend>
+  <legend><?php echo JText::_('QUALIFICATION'); ?></legend>
       <table class="paramlist admintable">
 			<tr>
 				<td class="paramlist_key">
@@ -365,13 +372,13 @@ else $field_search = "inputbox";
   
   
   <fieldset class="adminform">
-   <legend><?php echo "<br>".JText::_( 'PERSONALIA' ); ?></legend>
+   <legend><?php echo "<br>".JText::_('PERSONALIA'); ?></legend>
       <table class="paramlist admintable">
 	
 	<tr>
 		<td width="40%" class="paramlist_key">
 			<label for="tl">
-				<?php echo JText::_( 'TOURNAMENT_DIRECTOR' ); ?>:
+				<?php echo JText::_('TOURNAMENT_DIRECTOR'); ?>:
 			</label>
 		</td>
 		<td class="paramlist_value">
@@ -381,7 +388,7 @@ else $field_search = "inputbox";
 	<tr>
 	<td width="40%" class="paramlist_key">
 			<label for="torg">
-				<?php echo JText::_( 'TOURNAMENT_ORGANIZER' ); ?>:
+				<?php echo JText::_('TOURNAMENT_ORGANIZER'); ?>:
 			</label>
 		</td>
 		<td class="paramlist_value">
@@ -392,7 +399,7 @@ else $field_search = "inputbox";
 	<tr>
 		<td width="40%" class="paramlist_key">
 			<label for="bezirkVer">
-				<?php echo JText::_( 'DISTRICT_EVENT' ); ?>:
+				<?php echo JText::_('DISTRICT_EVENT'); ?>:
 			</label>
 		</td>
 		<td class="paramlist_value">
@@ -405,7 +412,7 @@ else $field_search = "inputbox";
 	<tr>
 		<td width="40%" class="paramlist_key">
 			<label for="vereinZPS">
-				<?php echo JText::_( 'ORGANIZER' ); ?>/<?php echo JText::_( 'HOSTER' ); ?>:
+				<?php echo JText::_('ORGANIZER'); ?>/<?php echo JText::_('HOSTER'); ?>:
 			</label>
 		</td>
 		<td class="paramlist_value">
@@ -416,12 +423,12 @@ else $field_search = "inputbox";
 	<tr>
 		<td width="30%" class="paramlist_key">
 			<label for="dateRegistration">
-				<?php echo JText::_( 'TOURNAMENT_DATE_REGISTRATION' ); ?>:
+				<?php echo JText::_('TOURNAMENT_DATE_REGISTRATION'); ?>:
 			</label>
 		</td>
 		<td class="paramlist_value">
 			<?php
-			echo CLMForm::calendar($this->turnier->dateRegistration, 'dateRegistration', 'dateRegistration', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19')); ?>
+echo CLMForm::calendar($this->turnier->dateRegistration, 'dateRegistration', 'dateRegistration', '%Y-%m-%d', array('class' => 'text_area', 'size' => '32',  'maxlength' => '19')); ?>
 		</td>
 	</tr>
 	
@@ -430,18 +437,18 @@ else $field_search = "inputbox";
 			<?php echo JText::_('OPTION_REGISTRATION'); ?>:
 		</td>
 		<td class="paramlist_value">
-			<?php 
-			$options = array();
-			$options[0] = JText::_('OPTION_REGISTRATION_0');
-			$options[5] = JText::_('OPTION_REGISTRATION_5');
-			//$options[2] = JText::_('OPTION_AUTODWZ_2');
-			$optionlist = array();
-			foreach ($options as $key => $val) {
-				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
-			}
+			<?php
+$options = array();
+$options[0] = JText::_('OPTION_REGISTRATION_0');
+$options[5] = JText::_('OPTION_REGISTRATION_5');
+//$options[2] = JText::_('OPTION_AUTODWZ_2');
+$optionlist = array();
+foreach ($options as $key => $val) {
+    $optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name');
+}
 //			echo JHtml::_('select.genericlist', $optionlist, 'params[typeRegistration]', 'class="js-example-basic-single" size="1" style="width:350px"', 'id', 'name', $turParams->get('typeRegistration', 0));
-			echo JHtml::_('select.genericlist', $optionlist, 'params[typeRegistration]', 'class="'.$field_search.'" size="1" style="width:350px"', 'id', 'name', $turParams->get('typeRegistration', 0));
-			?>
+echo JHtml::_('select.genericlist', $optionlist, 'params[typeRegistration]', 'class="'.$field_search.'" size="1" style="width:350px"', 'id', 'name', $turParams->get('typeRegistration', 0));
+?>
 		</td>
 	</tr>
 
@@ -450,27 +457,27 @@ else $field_search = "inputbox";
 			<?php echo JText::_('OPTION_ACCOUNT'); ?>:
 		</td>
 		<td class="paramlist_value">
-			<?php 
-			$options = array();
-			$options[0] = JText::_('OPTION_ACCOUNT_0');
-			$options[1] = JText::_('OPTION_ACCOUNT_1');
-			//$options[2] = JText::_('OPTION_ACCOUNT_2');
-			$optionlist = array();
-			foreach ($options as $key => $val) {
-				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
-			}
+			<?php
+$options = array();
+$options[0] = JText::_('OPTION_ACCOUNT_0');
+$options[1] = JText::_('OPTION_ACCOUNT_1');
+//$options[2] = JText::_('OPTION_ACCOUNT_2');
+$optionlist = array();
+foreach ($options as $key => $val) {
+    $optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name');
+}
 //			echo JHtml::_('select.genericlist', $optionlist, 'params[typeAccount]', 'class="js-example-basic-single" size="1" style="width:350px"', 'id', 'name', $turParams->get('typeAccount', 0));
-			echo JHtml::_('select.genericlist', $optionlist, 'params[typeAccount]', 'class="'.$field_search.'" size="1" style="width:350px"', 'id', 'name', $turParams->get('typeAccount', 0));
-			?>
+echo JHtml::_('select.genericlist', $optionlist, 'params[typeAccount]', 'class="'.$field_search.'" size="1" style="width:350px"', 'id', 'name', $turParams->get('typeAccount', 0));
+?>
 		</td>
 	</tr>
 
 			</table>
 		</fieldset>
-	<?php // if (JComponentHelper::isInstalled ( 'com_clm_pairing' ) AND $this->turnier->typ == 1) { ?>
-	<?php if (JPluginHelper::isEnabled('xxx', 'clm_pairing_files') AND $this->turnier->typ == 1) { ?>  
+	<?php // if (JComponentHelper::isInstalled ( 'com_clm_pairing' ) AND $this->turnier->typ == 1) {?>
+	<?php if (JPluginHelper::isEnabled('xxx', 'clm_pairing_files') and $this->turnier->typ == 1) { ?>  
 	<fieldset class="adminform">
-	<legend><?php echo "<br>".JText::_( 'DRAWING' ); ?></legend>
+	<legend><?php echo "<br>".JText::_('DRAWING'); ?></legend>
       <table class="paramlist admintable">
 	
 		<tr>
@@ -478,16 +485,16 @@ else $field_search = "inputbox";
 				<?php echo JText::_('DRAWING_MODE'); ?>:
 			</td>
 			<td class="paramlist_value">
-				<?php 
-				$options = array();
-				$options[0] = JText::_('DRAWING_MODE_0');
-				$options[1] = JText::_('DRAWING_MODE_1');
-//				$options[2] = JText::_('DRAWING_MODE_2');
-				$optionlist = array();
-				foreach ($options as $key => $val) {
-					$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
-				}
-				echo JHtml::_('select.genericlist', $optionlist, 'params[drawing_mode]', 'class="inputbox"', 'id', 'name', $turParams->get('drawing_mode', 0)); ?>
+				<?php
+    $options = array();
+	    $options[0] = JText::_('DRAWING_MODE_0');
+	    $options[1] = JText::_('DRAWING_MODE_1');
+	    //				$options[2] = JText::_('DRAWING_MODE_2');
+	    $optionlist = array();
+	    foreach ($options as $key => $val) {
+	        $optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name');
+	    }
+	    echo JHtml::_('select.genericlist', $optionlist, 'params[drawing_mode]', 'class="inputbox"', 'id', 'name', $turParams->get('drawing_mode', 0)); ?>
 			</td>
 		</tr>
 	
@@ -500,13 +507,13 @@ else $field_search = "inputbox";
 	<div class="width-40 fltrt">
 		<fieldset class="adminform">
 	
-			<legend><?php echo JText::_( 'STATUS' ); ?></legend>
+			<legend><?php echo JText::_('STATUS'); ?></legend>
 		
 			<table class="paramlist admintable">
 				<tr>
 					<td width="40%" class="paramlist_key">
 						<label for="published">
-							<?php echo JText::_( 'JPUBLISHED' ); ?>:
+							<?php echo JText::_('JPUBLISHED'); ?>:
 						</label>
 					</td>
 					<td class="paramlist_value"><fieldset class="radio">
@@ -522,34 +529,34 @@ else $field_search = "inputbox";
 	<div class="width-40 fltrt">
 		<fieldset class="adminform">
 	
-			<legend><?php echo JText::_( 'DISPLAY_OPTIONS' ); ?></legend>
+			<legend><?php echo JText::_('DISPLAY_OPTIONS'); ?></legend>
 		
 			<table class="paramlist admintable">
 				
 				<?php
-				if (isset($this->form['catidAlltime']) OR isset($this->form['catidEdition'])) {
-				?>
+	    if (isset($this->form['catidAlltime']) or isset($this->form['catidEdition'])) {
+	        ?>
 					<tr>
 						<td width="40%" class="paramlist_key">
 							<?php echo JText::_('OPTION_ADDCATTONAME'); ?>:
 						</td>
 						<td class="paramlist_value">
 							<?php
-							$options = array();
-							$options[0] = JText::_('OPTION_ADDCATTONAME_0');
-							$options[1] = JText::_('OPTION_ADDCATTONAME_1');
-							$options[2] = JText::_('OPTION_ADDCATTONAME_2');
-							$optionlist = array();
-							foreach ($options as $key => $val) {
-								$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
-							}
-							echo JHtml::_('select.genericlist', $optionlist, 'params[addCatToName]', 'class="inputbox"', 'id', 'name', $turParams->get('addCatToName', 0));
-							?>
+	                    $options = array();
+	        $options[0] = JText::_('OPTION_ADDCATTONAME_0');
+	        $options[1] = JText::_('OPTION_ADDCATTONAME_1');
+	        $options[2] = JText::_('OPTION_ADDCATTONAME_2');
+	        $optionlist = array();
+	        foreach ($options as $key => $val) {
+	            $optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name');
+	        }
+	        echo JHtml::_('select.genericlist', $optionlist, 'params[addCatToName]', 'class="inputbox"', 'id', 'name', $turParams->get('addCatToName', 0));
+	        ?>
 						</td>
 					</tr>
 				<?php
-				}
-				?>
+	    }
+?>
 				
 				<tr>
 					<td width="40%" class="paramlist_key">
@@ -631,7 +638,7 @@ else $field_search = "inputbox";
 	<div class="width-40 fltrt">
 		<fieldset class="adminform">
 	
-			<legend><?php echo JText::_( 'ADDITIONAL_OPTIONS' ); ?></legend>
+			<legend><?php echo JText::_('ADDITIONAL_OPTIONS'); ?></legend>
 		
 			<table class="paramlist admintable">
 	
@@ -668,7 +675,7 @@ else $field_search = "inputbox";
 	<div class="width-40 fltrt">
 		<fieldset class="adminform">
 	
-			<legend><?php echo JText::_( 'PLAYER_VIEW_DISPLAY_OPTIONS' ); ?></legend>
+			<legend><?php echo JText::_('PLAYER_VIEW_DISPLAY_OPTIONS'); ?></legend>
 		
 			<table class="paramlist admintable">
 	
@@ -697,7 +704,7 @@ else $field_search = "inputbox";
 	<div class="width-40 fltrt">
 		<fieldset class="adminform">
 	
-			<legend><?php echo JText::_( 'JOOMGALLERY_OPTIONS' ); ?></legend>
+			<legend><?php echo JText::_('JOOMGALLERY_OPTIONS'); ?></legend>
 		
 			<table class="paramlist admintable">
 	
@@ -737,22 +744,22 @@ else $field_search = "inputbox";
 	<div class="width-60 fltlft">
 		<fieldset class="adminform">
 			<br>
-			<legend><?php echo JText::_( 'REMARKS' ); ?></legend>
+			<legend><?php echo JText::_('REMARKS'); ?></legend>
 		
 			<table class="paramlist admintable">
-				<legend><?php echo JText::_( 'REMARKS_PUBLIC' ); ?></legend>
+				<legend><?php echo JText::_('REMARKS_PUBLIC'); ?></legend>
 				<tr>
 					<td width="100%" valign="top">
-						<textarea class="inputbox" name="bemerkungen" id="bemerkungen" cols="40" rows="5" style="width:90%"><?php echo str_replace('&','&amp;',$this->turnier->bemerkungen);?></textarea>
+						<textarea class="inputbox" name="bemerkungen" id="bemerkungen" cols="40" rows="5" style="width:90%"><?php echo str_replace('&', '&amp;', $this->turnier->bemerkungen);?></textarea>
 					</td>
 				</tr>
 			</table>
 		
 			<table class="adminlist">
-				<legend><?php echo JText::_( 'REMARKS_INTERNAL' ); ?></legend>
+				<legend><?php echo JText::_('REMARKS_INTERNAL'); ?></legend>
 				<tr>
 					<td width="100%" valign="top">
-						<textarea class="inputbox" name="bem_int" id="bem_int" cols="40" rows="5" style="width:90%"><?php echo str_replace('&','&amp;',$this->turnier->bem_int);?></textarea>
+						<textarea class="inputbox" name="bem_int" id="bem_int" cols="40" rows="5" style="width:90%"><?php echo str_replace('&', '&amp;', $this->turnier->bem_int);?></textarea>
 					</td>
 				</tr>
 			</table>
@@ -773,6 +780,6 @@ else $field_search = "inputbox";
 	<input type="hidden" name="ordering" value="<?php echo $this->turnier->ordering; ?>" />
 	<input type="hidden" name="params[inofDWZ]" id="params[inofDWZ]" value="<?php echo $turParams->get('inofDWZ', '0'); ?>" />
 	<input type="hidden" name="params[import_source]" id="params[import_source]" value="<?php echo $turParams->get('import_source', '0'); ?>" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo JHtml::_('form.token'); ?>
 
 </form>

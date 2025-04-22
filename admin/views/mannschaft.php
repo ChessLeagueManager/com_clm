@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -11,62 +11,62 @@
 */
 class CLMViewMannschaften
 {
-public static function setMannschaftenToolbar()
-	{
-	$clmAccess = clm_core::$access;
-	// Menubilder laden
-		clm_core::$load->load_css("icons_images");
+    public static function setMannschaftenToolbar()
+    {
+        $clmAccess = clm_core::$access;
+        // Menubilder laden
+        clm_core::$load->load_css("icons_images");
 
-		JToolBarHelper::title( JText::_( 'TITLE_MANNSCHAFT' ), 'clm_headmenu_mannschaften.png' );
-	if($clmAccess->access('BE_team_registration_list') !== false) {
-		JToolBarHelper::custom('delete_meldeliste','send.png','send_f2.png', JText::_( 'MANNSCHAFT_BUTTON_ML_DEL'));
-		JToolBarHelper::custom('meldeliste','send.png','send_f2.png', JText::_( 'MANNSCHAFT_BUTTON_ML_UPD'));
-		JToolBarHelper::custom('spielfrei','cancel.png','cancel_f2.png', JText::_( 'MANNSCHAFT_BUTTON_SPIELFREI'));
-		JToolBarHelper::custom('annull','cancel.png','cancel_f2.png', JText::_( 'MANNSCHAFT_BUTTON_ANNULL'));
-		JToolBarHelper::publishList();
-		JToolBarHelper::unpublishList();
-		JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', JText::_( 'MANNSCHAFT_BUTTON_COPY' )); 
-		JToolBarHelper::deleteList();
-		JToolBarHelper::editList();
-		JToolBarHelper::addNew();
-		JToolBarHelper::custom('geo','edit.png','delete_f2.png','MANNSCHAFT_BUTTON_GEO');
+        JToolBarHelper::title(JText::_('TITLE_MANNSCHAFT'), 'clm_headmenu_mannschaften.png');
+        if ($clmAccess->access('BE_team_registration_list') !== false) {
+            JToolBarHelper::custom('delete_meldeliste', 'send.png', 'send_f2.png', JText::_('MANNSCHAFT_BUTTON_ML_DEL'));
+            JToolBarHelper::custom('meldeliste', 'send.png', 'send_f2.png', JText::_('MANNSCHAFT_BUTTON_ML_UPD'));
+            JToolBarHelper::custom('spielfrei', 'cancel.png', 'cancel_f2.png', JText::_('MANNSCHAFT_BUTTON_SPIELFREI'));
+            JToolBarHelper::custom('annull', 'cancel.png', 'cancel_f2.png', JText::_('MANNSCHAFT_BUTTON_ANNULL'));
+            JToolBarHelper::publishList();
+            JToolBarHelper::unpublishList();
+            JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', JText::_('MANNSCHAFT_BUTTON_COPY'));
+            JToolBarHelper::deleteList();
+            JToolBarHelper::editList();
+            JToolBarHelper::addNew();
+            JToolBarHelper::custom('geo', 'edit.png', 'delete_f2.png', 'MANNSCHAFT_BUTTON_GEO');
 
-		}
-		JToolBarHelper::help( 'screen.clm.mannschaft' );
-	}
+        }
+        JToolBarHelper::help('screen.clm.mannschaft');
+    }
 
-public static function mannschaften( $rows, $lists, $pageNav, $option )
-	{
-		$mainframe	= JFactory::getApplication();
-		CLMViewMannschaften::setMannschaftenToolbar();
-		$user =JFactory::getUser();
-		//Ordering allowed ?
-		$ordering = ($lists['order'] == 'a.ordering');
+    public static function mannschaften($rows, $lists, $pageNav, $option)
+    {
+        $mainframe	= JFactory::getApplication();
+        CLMViewMannschaften::setMannschaftenToolbar();
+        $user = JFactory::getUser();
+        //Ordering allowed ?
+        $ordering = ($lists['order'] == 'a.ordering');
 
-//		JHtml::_('behavior.tooltip');
-		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
+        //		JHtml::_('behavior.tooltip');
+        require_once(JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 
-		// Auswahlfelder durchsuchbar machen
-		clm_core::$load->load_js("suche_liste");
-		?>
+        // Auswahlfelder durchsuchbar machen
+        clm_core::$load->load_js("suche_liste");
+        ?>
 		<form action="index.php?option=com_clm&section=mannschaften" method="post" name="adminForm" id="adminForm">
 
 		<table>
 		<tr>
 			<td align="left" width="100%">
-				<?php echo JText::_( 'Filter' ); ?>:
+				<?php echo JText::_('Filter'); ?>:
 		<input type="text" name="search" id="search" value="<?php echo $lists['search'];?>" class="text_area" onchange="document.adminForm.submit();" />
-		<button onclick="this.form.submit();"><?php echo JText::_( 'Go' ); ?></button>
-		<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo JText::_( 'Reset' ); ?></button>
+		<button onclick="this.form.submit();"><?php echo JText::_('Go'); ?></button>
+		<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo JText::_('Reset'); ?></button>
 			</td>
 			<td nowrap="nowrap">
 				<?php
-		// eigenes Dropdown Menue
-			echo "&nbsp;&nbsp;&nbsp;".$lists['sid'];
-			echo "&nbsp;&nbsp;&nbsp;".$lists['lid'];
-			echo "&nbsp;&nbsp;&nbsp;".$lists['vid'];
-			echo "&nbsp;&nbsp;&nbsp;".$lists['state'];
-			?>
+        // eigenes Dropdown Menue
+            echo "&nbsp;&nbsp;&nbsp;".$lists['sid'];
+        echo "&nbsp;&nbsp;&nbsp;".$lists['lid'];
+        echo "&nbsp;&nbsp;&nbsp;".$lists['vid'];
+        echo "&nbsp;&nbsp;&nbsp;".$lists['state'];
+        ?>
 			</td>
 		</tr>
 		</table>
@@ -81,40 +81,40 @@ public static function mannschaften( $rows, $lists, $pageNav, $option )
 						<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 					</th>
 					<th class="title">
-						<?php echo JHtml::_('grid.sort',   'MANNSCHAFT', 'a.name', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo JHtml::_('grid.sort', 'MANNSCHAFT', 'a.name', @$lists['order_Dir'], @$lists['order']); ?>
 					</th>
 					<th width="3%">
-						<?php echo JHtml::_('grid.sort',   'MANNSCHAFT_NR', 'a.man_nr', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo JHtml::_('grid.sort', 'MANNSCHAFT_NR', 'a.man_nr', @$lists['order_Dir'], @$lists['order']); ?>
 					</th>
 					<th width="15%">
-						<?php echo JHtml::_('grid.sort',   'MANNSCHAFT_LIGA', 'd.name', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo JHtml::_('grid.sort', 'MANNSCHAFT_LIGA', 'd.name', @$lists['order_Dir'], @$lists['order']); ?>
 					</th>
 					<th width="3%">
-						<?php echo JHtml::_('grid.sort',   'MANNSCHAFT_T_NR', 'a.tln_nr', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo JHtml::_('grid.sort', 'MANNSCHAFT_T_NR', 'a.tln_nr', @$lists['order_Dir'], @$lists['order']); ?>
 					</th>
 					<th width="3%">
-						<?php echo JHtml::_('grid.sort',   'MANNSCHAFT_MF', 'a.mf', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo JHtml::_('grid.sort', 'MANNSCHAFT_MF', 'a.mf', @$lists['order_Dir'], @$lists['order']); ?>
 					</th>
 
 					<th width="3%">
-						<?php echo JHtml::_('grid.sort',   'MANNSCHAFT_MELDELISTE', 'a.liste', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo JHtml::_('grid.sort', 'MANNSCHAFT_MELDELISTE', 'a.liste', @$lists['order_Dir'], @$lists['order']); ?>
 					</th>
 					<th width="22%">
-						<?php echo JHtml::_('grid.sort',   'MANNSCHAFT_VEREIN', 'b.Vereinname', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo JHtml::_('grid.sort', 'MANNSCHAFT_VEREIN', 'b.Vereinname', @$lists['order_Dir'], @$lists['order']); ?>
 					</th>
 					<th width="11%">
-						<?php echo JHtml::_('grid.sort',   'MANNSCHAFT_SAISON', 'c.name', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo JHtml::_('grid.sort', 'MANNSCHAFT_SAISON', 'c.name', @$lists['order_Dir'], @$lists['order']); ?>
 					</th>
 					<th width="6%">
-						<?php echo JHtml::_('grid.sort',   'JPUBLISHED', 'a.published', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo JHtml::_('grid.sort', 'JPUBLISHED', 'a.published', @$lists['order_Dir'], @$lists['order']); ?>
 					</th>
 					<th width="8%" nowrap="nowrap">
-						<?php echo JHtml::_('grid.sort',   'JGRID_HEADING_ORDERING', 'a.ordering', @$lists['order_Dir'], @$lists['order'] ); ?>
-						<?php echo JHtml::_('grid.order',  $rows ); ?>
+						<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ORDERING', 'a.ordering', @$lists['order_Dir'], @$lists['order']); ?>
+						<?php echo JHtml::_('grid.order', $rows); ?>
 					</th>
 
 					<th width="1%" nowrap="nowrap">
-						<?php echo JHtml::_('grid.sort',   'JGRID_HEADING_ID', 'a.id', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', @$lists['order_Dir'], @$lists['order']); ?>
 					</th>
 				</tr>
 			</thead>
@@ -127,22 +127,22 @@ public static function mannschaften( $rows, $lists, $pageNav, $option )
 			</tfoot>
 			<tbody>
 			<?php
-			$k = 0;
-			$row =JTable::getInstance( 'mannschaften', 'TableCLM' );
-			for ($i=0, $n=count( $rows ); $i < $n; $i++) {
-				//$row = &$rows[$i];
-				// load the row from the db table 
-				$row->load( $rows[$i]->id );
-				$link 		= JRoute::_( 'index.php?option=com_clm&section=mannschaften&task=edit&id='. $row->id );
-				$checked 	= JHtml::_('grid.checkedout',   $row, $i );
-//				$published 	= JHtml::_('grid.published', $row, $i );
-				$published 	= JHtml::_('jgrid.published', $row->published, $i );
+        $k = 0;
+        $row = JTable::getInstance('mannschaften', 'TableCLM');
+        for ($i = 0, $n = count($rows); $i < $n; $i++) {
+            //$row = &$rows[$i];
+            // load the row from the db table
+            $row->load($rows[$i]->id);
+            $link 		= JRoute::_('index.php?option=com_clm&section=mannschaften&task=edit&id='. $row->id);
+            $checked 	= JHtml::_('grid.checkedout', $row, $i);
+            //				$published 	= JHtml::_('grid.published', $row, $i );
+            $published 	= JHtml::_('jgrid.published', $row->published, $i);
 
-				?>
+            ?>
 				<tr class="<?php echo 'row'. $k; ?>">
 
 					<td align="center">
-						<?php echo $pageNav->getRowOffset( $i ); ?>
+						<?php echo $pageNav->getRowOffset($i); ?>
 					</td>
 
 					<td>
@@ -151,7 +151,7 @@ public static function mannschaften( $rows, $lists, $pageNav, $option )
 
 					<td>
 
-								<span class="editlinktip hasTip" title="<?php echo JText::_( 'MANNSCHAFT_EDIT' );?>::<?php echo $row->name; ?>">
+								<span class="editlinktip hasTip" title="<?php echo JText::_('MANNSCHAFT_EDIT');?>::<?php echo $row->name; ?>">
 							<a href="<?php echo $link; ?>">
 								<?php echo $row->name; ?></a></span>
 
@@ -168,15 +168,11 @@ public static function mannschaften( $rows, $lists, $pageNav, $option )
 						<?php echo $row->tln_nr;?>
 					</td>
 					<td align="center">
-						<?php if ($row->mf > 0) 
-							{ ?><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /> <?php }
-						else 	{ ?><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /> <?php }?>
+						<?php if ($row->mf > 0) { ?><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /> <?php } else { ?><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /> <?php }?>
 					</td>
 
 					<td align="center">
-						<?php if ($row->liste > 0) 
-							{ ?><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /> <?php }
-						else 	{ ?><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /> <?php }?>
+						<?php if ($row->liste > 0) { ?><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /> <?php } else { ?><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /> <?php }?>
 					</td>
 					<td align="center">
 						<?php echo $rows[$i]->verein;?>
@@ -189,9 +185,9 @@ public static function mannschaften( $rows, $lists, $pageNav, $option )
 						<?php echo $published;?>
 					</td>
 	<td class="order">
-	<span><?php echo $pageNav->orderUpIcon($i, ($row->liga == @$rows[$i-1]->liga), 'orderup', 'Move Up', $ordering ); ?></span>
-	<span><?php echo $pageNav->orderDownIcon($i, $n, ($row->liga == @$rows[$i+1]->liga), 'orderdown', 'Move Down', $ordering ); ?></span>
-	<?php $disabled = $ordering ?  '' : 'disabled="disabled"'; ?>
+	<span><?php echo $pageNav->orderUpIcon($i, ($row->liga == @$rows[$i - 1]->liga), 'orderup', 'Move Up', $ordering); ?></span>
+	<span><?php echo $pageNav->orderDownIcon($i, $n, ($row->liga == @$rows[$i + 1]->liga), 'orderdown', 'Move Down', $ordering); ?></span>
+	<?php $disabled = $ordering ? '' : 'disabled="disabled"'; ?>
 	<input type="text" name="order[]" size="5" value="<?php echo $row->ordering;?>" <?php echo $disabled ?> class="text_area" style="text-align: center" />
 					</td>
 
@@ -200,9 +196,9 @@ public static function mannschaften( $rows, $lists, $pageNav, $option )
 					</td>
 				</tr>
 				<?php
-				$k = 1 - $k;
-			}
-			?>
+            $k = 1 - $k;
+        }
+        ?>
 			</tbody>
 			</table>
 
@@ -211,52 +207,55 @@ public static function mannschaften( $rows, $lists, $pageNav, $option )
 		<input type="hidden" name="boxchecked" value="0" />
 		<input type="hidden" name="filter_order" value="<?php echo $lists['order']; ?>" />
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $lists['order_Dir']; ?>" />
-		<?php echo JHtml::_( 'form.token' ); ?>
+		<?php echo JHtml::_('form.token'); ?>
 		</form>
 		<?php
-	}
+    }
 
-public static function setMannschaftToolbar()
-	{
-	// Menubilder laden
-		clm_core::$load->load_css("icons_images");
+    public static function setMannschaftToolbar()
+    {
+        // Menubilder laden
+        clm_core::$load->load_css("icons_images");
 
-		$cid = clm_core::$load->request_array_int('cid');
-										  
-		if (clm_core::$load->request_string( 'task') == 'edit') { $text = JText::_( 'Edit' );}
-			else { $text = JText::_( 'New' );}
-		JToolBarHelper::title(  JText::_( 'MANNSCHAFT' ).': [ '. $text.' ]' , 'clm_headmenu_mannschaften.png'  );
-		JToolBarHelper::save();
-		JToolBarHelper::apply();
-		JToolBarHelper::cancel();
-		JToolBarHelper::help( 'screen.clm.edit' );
-	}
-		
-public static function mannschaft( &$row,$lists, $option )
-	{
-		CLMViewMannschaften::setMannschaftToolbar();
-		$_REQUEST['hidemainmenu'] = 1;
-		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
+        $cid = clm_core::$load->request_array_int('cid');
 
-		$_POST['clm_noOrgReference'] = $lists['noOrgReference'];
-		clm_core::$load->load_js("mannschaft");
+        if (clm_core::$load->request_string('task') == 'edit') {
+            $text = JText::_('Edit');
+        } else {
+            $text = JText::_('New');
+        }
+        JToolBarHelper::title(JText::_('MANNSCHAFT').': [ '. $text.' ]', 'clm_headmenu_mannschaften.png');
+        JToolBarHelper::save();
+        JToolBarHelper::apply();
+        JToolBarHelper::cancel();
+        JToolBarHelper::help('screen.clm.edit');
+    }
 
-		// Auswahlfelder durchsuchbar machen
-		clm_core::$load->load_js("suche_liste");
-		?>
+    public static function mannschaft(&$row, $lists, $option)
+    {
+        CLMViewMannschaften::setMannschaftToolbar();
+        $_REQUEST['hidemainmenu'] = 1;
+        JFilterOutput::objectHTMLSafe($row, ENT_QUOTES, 'extrainfo');
+
+        $_POST['clm_noOrgReference'] = $lists['noOrgReference'];
+        clm_core::$load->load_js("mannschaft");
+
+        // Auswahlfelder durchsuchbar machen
+        clm_core::$load->load_js("suche_liste");
+        ?>
 
 		<form action="index.php" method="post" name="adminForm" id="adminForm">
 
 		<div class="width-50 fltlft">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'Details' ); ?></legend>
+		<legend><?php echo JText::_('Details'); ?></legend>
 
 		<table class="admintable">
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
 				<label for="name">
-				<span class="editlinktip hasTip" title="<?php echo JText::_( 'MANNSCHAFT_HINT' );?>">
-				<?php echo JText::_( 'MANNSCHAFT' )." : "; ?></span></label>
+				<span class="editlinktip hasTip" title="<?php echo JText::_('MANNSCHAFT_HINT');?>">
+				<?php echo JText::_('MANNSCHAFT')." : "; ?></span></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="name" id="name" size="50" maxlength="60" value="<?php echo $row->name; ?>" />
@@ -265,7 +264,7 @@ public static function mannschaft( &$row,$lists, $option )
 	<?php if ($lists['pgntype'] > 3) { ?>	
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="sname"><?php echo JText::_( 'MANNSCHAFT_SHORT' )." : "; ?></label>
+			<label for="sname"><?php echo JText::_('MANNSCHAFT_SHORT')." : "; ?></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="sname" id="sname" size="50" maxlength="60" value="<?php echo $row->sname; ?>" />
@@ -274,7 +273,7 @@ public static function mannschaft( &$row,$lists, $option )
 	<?php } ?>
 		<tr>
 			<td class="key" nowrap="nowrap">
-			<label for="contact"><?php echo JText::_( 'MANNSCHAFT_NUMMER' )." : "; ?></label>
+			<label for="contact"><?php echo JText::_('MANNSCHAFT_NUMMER')." : "; ?></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="man_nr" id="man_nr" size="50" maxlength="60" value="<?php echo $row->man_nr; ?>" />
@@ -282,14 +281,14 @@ public static function mannschaft( &$row,$lists, $option )
 		</tr>
 
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="tln_nr"><?php echo JText::_( 'MANNSCHAFT_TEILNEHMER_NR' )." : "; ?></label>
+			<td class="key" nowrap="nowrap"><label for="tln_nr"><?php echo JText::_('MANNSCHAFT_TEILNEHMER_NR')." : "; ?></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="tln_nr" id="tln_nr" size="50" maxlength="60" value="<?php echo $row->tln_nr; ?>" />
 			</td>
 		</tr>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="sid"><?php echo JText::_( 'MANNSCHAFT_SAISON' )." : "; ?></label>
+			<td class="key" nowrap="nowrap"><label for="sid"><?php echo JText::_('MANNSCHAFT_SAISON')." : "; ?></label>
 			</td>
 			<td>
 			<?php echo $lists['saison']; ?>
@@ -297,7 +296,7 @@ public static function mannschaft( &$row,$lists, $option )
 		</tr>
 
 		<tr>
-			<td class="key" ><label for="liga"><?php echo JText::_( 'MANNSCHAFT_LIGA' )." :"; ?></label>
+			<td class="key" ><label for="liga"><?php echo JText::_('MANNSCHAFT_LIGA')." :"; ?></label>
 			</td>
 			<td>
 			<?php echo $lists['liga']; ?>
@@ -307,8 +306,8 @@ public static function mannschaft( &$row,$lists, $option )
 		<tr>
 			<td class="key" nowrap="nowrap">
 				<label for="verein">
-				<span class="editlinktip hasTip" title="<?php echo JText::_( 'MANNSCHAFT_HINT' );?>">
-				<?php echo JText::_( 'MANNSCHAFT_VEREIN' )." : "; ?></span></label>
+				<span class="editlinktip hasTip" title="<?php echo JText::_('MANNSCHAFT_HINT');?>">
+				<?php echo JText::_('MANNSCHAFT_VEREIN')." : "; ?></span></label>
 			</td>
 			<td>
 			<?php echo $lists['verein']; ?>
@@ -316,7 +315,7 @@ public static function mannschaft( &$row,$lists, $option )
 		</tr>
 		<?php for ($i = 0; $i < $lists['anz_sgp']; $i++) { ?>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="<?php echo 'sg_zps'.$i; ?>"><?php echo JText::_( 'MANNSCHAFT_PARTNERVEREIN' )." : "; ?></label>
+			<td class="key" nowrap="nowrap"><label for="<?php echo 'sg_zps'.$i; ?>"><?php echo JText::_('MANNSCHAFT_PARTNERVEREIN')." : "; ?></label>
 			</td>
 			<td>
 			<?php echo $lists['sg'.$i]; ?>
@@ -324,28 +323,28 @@ public static function mannschaft( &$row,$lists, $option )
 		</tr>
 		<?php } ?>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="mf"><?php echo JText::_( 'MANNSCHAFT_FUEHRER' )." : "; ?></label>
+			<td class="key" nowrap="nowrap"><label for="mf"><?php echo JText::_('MANNSCHAFT_FUEHRER')." : "; ?></label>
 			</td>
 			<td>
 			<?php echo $lists['mf']; ?>
 			</td>
 		</tr>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="published"><?php echo JText::_( 'JPUBLISHED' )." : "; ?></label>
+			<td class="key" nowrap="nowrap"><label for="published"><?php echo JText::_('JPUBLISHED')." : "; ?></label>
 			</td>
 			<td><fieldset class="radio">
 			<?php echo $lists['published']; ?>
 			</fieldset></td>
 		</tr>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="abzug"><?php echo JText::_( 'MANNSCHAFT_MPABZUG' )." : "; ?></label>
+			<td class="key" nowrap="nowrap"><label for="abzug"><?php echo JText::_('MANNSCHAFT_MPABZUG')." : "; ?></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="abzug" id="abzug" size="10" maxlength="10" value="<?php echo $row->abzug; ?>" />
 			</td>
 		</tr>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="bpabzug"><?php echo JText::_( 'MANNSCHAFT_BPABZUG' )." : "; ?></label>
+			<td class="key" nowrap="nowrap"><label for="bpabzug"><?php echo JText::_('MANNSCHAFT_BPABZUG')." : "; ?></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="bpabzug" id="bpabzug" size="10" maxlength="10" value="<?php echo $row->bpabzug; ?>" />
@@ -356,32 +355,32 @@ public static function mannschaft( &$row,$lists, $option )
 		<tr>
 			<td class="key" nowrap="nowrap">
 				<label for="lokal">
-				<span class="editlinktip hasTip" title="<?php echo JText::_( 'MANNSCHAFT_HINT' );?>">
-				<?php echo JText::_( 'MANNSCHAFT_SPIELLOKAL' )." : "; ?></span></label>
+				<span class="editlinktip hasTip" title="<?php echo JText::_('MANNSCHAFT_HINT');?>">
+				<?php echo JText::_('MANNSCHAFT_SPIELLOKAL')." : "; ?></span></label>
 			</td>
 			<td>
-			<?php  echo JText::_( 'CLM_KOMMA' ) . "<br><br>"; ?>
+			<?php  echo JText::_('CLM_KOMMA') . "<br><br>"; ?>
 			<textarea class="inputbox" name="lokal" id="lokal" cols="40" rows="2" style="width:100%"><?php echo $row->lokal; ?></textarea>
-			<br><?php  echo JText::_( 'CLM_ADDRESS' ) ; ?>
+			<br><?php  echo JText::_('CLM_ADDRESS') ; ?>
 			</td>
 		</tr>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="lokal"><?php echo JText::_( 'MANNSCHAFT_ADRESSE' )." : "; ?></label>
+			<td class="key" nowrap="nowrap"><label for="lokal"><?php echo JText::_('MANNSCHAFT_ADRESSE')." : "; ?></label>
 			</td>
 			<td>
 			<textarea class="inputbox" name="adresse" id="adresse" cols="40" rows="2" style="width:100%"><?php echo $row->adresse; ?></textarea>
 			</td>
 		</tr>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="lokal"><?php echo JText::_( 'MANNSCHAFT_TERMINE' )." : "; ?></label>
+			<td class="key" nowrap="nowrap"><label for="lokal"><?php echo JText::_('MANNSCHAFT_TERMINE')." : "; ?></label>
 			</td>
 			<td>
 			<textarea class="inputbox" name="termine" id="termine" cols="40" rows="2" style="width:100%"><?php echo $row->termine; ?></textarea>
-			<br><?php  echo JText::_( 'CLM_TERMINE' ) ; ?>
+			<br><?php  echo JText::_('CLM_TERMINE') ; ?>
 			</td>
 		</tr>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="lokal"><?php echo JText::_( 'MANNSCHAFT_HOMEPAGE' )." : "; ?></label>
+			<td class="key" nowrap="nowrap"><label for="lokal"><?php echo JText::_('MANNSCHAFT_HOMEPAGE')." : "; ?></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="homepage" id="homepage"  size="50" value="<?php echo $row->homepage; ?>" />
@@ -396,11 +395,15 @@ public static function mannschaft( &$row,$lists, $option )
 
  <div class="width-50 fltrt">
   <fieldset class="adminform">
-   <legend><?php echo JText::_( 'REMARKS' ); ?></legend>
-	<?php if (is_null($row->bemerkungen)) $row->bemerkungen = ''; ?>
-	<?php if (is_null($row->bem_int)) $row->bem_int = ''; ?>
+   <legend><?php echo JText::_('REMARKS'); ?></legend>
+	<?php if (is_null($row->bemerkungen)) {
+	    $row->bemerkungen = '';
+	} ?>
+	<?php if (is_null($row->bem_int)) {
+	    $row->bem_int = '';
+	} ?>
 	<table class="adminlist">
-	<legend><?php echo JText::_( 'REMARKS_PUBLIC' ); ?></legend>
+	<legend><?php echo JText::_('REMARKS_PUBLIC'); ?></legend>
 	<br>
 	<tr>
 	<td width="100%" valign="top">
@@ -410,7 +413,7 @@ public static function mannschaft( &$row,$lists, $option )
 	</table>
 
 	<table class="adminlist">
-	<tr><legend><?php echo JText::_( 'REMARKS_INTERNAL' ); ?></legend>
+	<tr><legend><?php echo JText::_('REMARKS_INTERNAL'); ?></legend>
 	<br>
 	<td width="100%" valign="top">
 	<textarea class="inputbox" name="bem_int" id="bem_int" cols="40" rows="5" style="width:90%"><?php echo $row->bem_int;?></textarea>
@@ -426,12 +429,12 @@ public static function mannschaft( &$row,$lists, $option )
 		<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
 		<input type="hidden" name="rankingpos" value="<?php echo $row->rankingpos; ?>" />
 		<input type="hidden" name="pre_man" value="<?php echo $row->man_nr; ?>" />
-<!---		<input type="hidden" name="cid" value="<?php //echo $row->cid; ?>" />
-		<input type="hidden" name="client_id" value="<?php //echo $row->cid; ?>" />
+<!---		<input type="hidden" name="cid" value="<?php //echo $row->cid;?>" />
+		<input type="hidden" name="client_id" value="<?php //echo $row->cid;?>" />
 --->		<input type="hidden" name="liste" value="<?php echo $row->liste; ?>" />
 		<input type="hidden" name="task" value="" />
-		<?php echo JHtml::_( 'form.token' ); ?>
+		<?php echo JHtml::_('form.token'); ?>
 		</form>
 		<?php
-	}
+    }
 }

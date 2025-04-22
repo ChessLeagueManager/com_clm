@@ -1,31 +1,29 @@
-<?php 
+<?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
 
-defined('_JEXEC') or die; 
+defined('_JEXEC') or die;
 
 $mainframe	= JFactory::getApplication();
 
-	//$token = JRequest::getVar('token');
-	$token 	= clm_core::$load->request_string('token', '');
-	$db	= JFactory::getDBO();
-	$db->setQuery('SELECT id FROM #__users WHERE block = 0 AND activation = '.$db->Quote($token));
+//$token = JRequest::getVar('token');
+$token 	= clm_core::$load->request_string('token', '');
+$db	= JFactory::getDBO();
+$db->setQuery('SELECT id FROM #__users WHERE block = 0 AND activation = '.$db->Quote($token));
 
-	// Verify the token
-	if (!($id = $db->loadResult()))
-	{
-		$this->setError(JText::_('INVALID_TOKEN'));
-		echo JText::_('RESET_PASSWORD_LINK');
-	}
-else {
-	// Push the token and user id into the session
-	$mainframe->setUserState($this->_namespace.'token',	$token);
-	$mainframe->setUserState($this->_namespace.'id',	$id);
-?>
+// Verify the token
+if (!($id = $db->loadResult())) {
+    $this->setError(JText::_('INVALID_TOKEN'));
+    echo JText::_('RESET_PASSWORD_LINK');
+} else {
+    // Push the token and user id into the session
+    $mainframe->setUserState($this->_namespace.'token', $token);
+    $mainframe->setUserState($this->_namespace.'id', $id);
+    ?>
 
 
 
@@ -61,6 +59,6 @@ else {
 <p><?php echo JText::_('RESET_PASSWORD_ADVICE1').JText::_('RESET_PASSWORD_ADVICE2'); ?></p>
 
 	<button type="submit" class="validate"><?php echo JText::_('RESET_PASSWORD_SUBMIT'); ?></button>
-	<?php echo JHTML::_( 'form.token' ); ?>
+	<?php echo JHTML::_('form.token'); ?>
 </form>
 <?php } ?>

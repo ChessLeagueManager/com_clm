@@ -4,44 +4,44 @@
 <?php
 defined('_JEXEC') or die('Restricted access');
 
-	$config			= JComponentHelper::getParams( 'com_clm' );
-	
-    ?>
+$config			= JComponentHelper::getParams('com_clm');
+
+?>
     
     <table class="noshow">
       <tr>
         <td width="50%" valign="top">
 	    <fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_GENEREL' ); ?></legend>
+			<legend><?php echo JText::_('CONFIG_GENEREL'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                        	<?php echo $this->params->render( 'params', 'template_generell'); ?>
+                        	<?php echo $this->params->render('params', 'template_generell'); ?>
 						</td>
       				</tr>
 				</tbody>
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_TEMP_BACKGROUND' ); ?></legend>
+			<legend><?php echo JText::_('CONFIG_TEMP_BACKGROUND'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                        	<?php echo $this->params->render( 'params', 'template_background'); ?>
+                        	<?php echo $this->params->render('params', 'template_background'); ?>
        	 				</td>
       				</tr>
 				</tbody>
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_TEMP_UPDOWN' ); ?></legend>
+			<legend><?php echo JText::_('CONFIG_TEMP_UPDOWN'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                        	<?php echo $this->params->render( 'params', 'template_aufab'); ?>
+                        	<?php echo $this->params->render('params', 'template_aufab'); ?>
        	 				</td>
       				</tr>
 				</tbody>
@@ -52,49 +52,49 @@ defined('_JEXEC') or die('Restricted access');
 
       <td width="50%" valign="top">
 	<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_TEMP_TEXT' ); ?></legend>
+			<legend><?php echo JText::_('CONFIG_TEMP_TEXT'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                        	<?php echo $this->params->render( 'params', 'template_text'); ?>
+                        	<?php echo $this->params->render('params', 'template_text'); ?>
        	 				</td>
       				</tr>
 				</tbody>
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_TEMP_MSCH' ); ?></legend>
-            <?php echo JText::_( 'CONFIG_TEMP_MSCH_HINT' ); ?><br />
+			<legend><?php echo JText::_('CONFIG_TEMP_MSCH'); ?></legend>
+            <?php echo JText::_('CONFIG_TEMP_MSCH_HINT'); ?><br />
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                        	<?php echo $this->params->render( 'params', 'template_mannschaften'); ?>
+                        	<?php echo $this->params->render('params', 'template_mannschaften'); ?>
        	 				</td>
       				</tr>
 				</tbody>
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_TEMP_WRONG' ); ?></legend>
+			<legend><?php echo JText::_('CONFIG_TEMP_WRONG'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                        	<?php echo $this->params->render( 'params', 'template_wrong'); ?>
+                        	<?php echo $this->params->render('params', 'template_wrong'); ?>
        	 				</td>
       				</tr>
 				</tbody>
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'Color Picker' ); ?></legend>
+			<legend><?php echo JText::_('Color Picker'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                        <?php echo JText::_( 'CONFIG_TEMP_PICKER' ); ?><br />
+                        <?php echo JText::_('CONFIG_TEMP_PICKER'); ?><br />
 <input type="text" id="bau" onclick="startColorPicker(this)" onkeyup="maskedHex(this)">
 
 <input type="text" id="baubau" onclick="startColorPicker(this)" ></td>

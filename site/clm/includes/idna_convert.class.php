@@ -47,13 +47,13 @@
  *
  * @author  Matthias Sommerfeld <mso@phlylabs.de>
  * @copyright 2004-2014 phlyLabs Berlin, http://phlylabs.de
- * @version 0.9.0 2014-12-12    
- * @version 0.9.0a 2020-04-17 
+ * @version 0.9.0 2014-12-12
+ * @version 0.9.0a 2020-04-17
  * @version 0.9.0b 2023-11-12 !!!!!!!!!!!!
  */
-class idna_convert extends stdClass {
-
-//    private $version = '0.9.0a';	// due to php 7.4: 4 statements changed with {} replaced by []
+class idna_convert extends stdClass
+{
+    //    private $version = '0.9.0a';	// due to php 7.4: 4 statements changed with {} replaced by []
     private $version = '0.9.0b';	// due to php 8.2: extends stdClass
     protected $sub_version = 'main';
 
@@ -206,7 +206,7 @@ class idna_convert extends stdClass {
                 $this->_error('Only simple domain name parts can be handled in strict mode');
                 return false;
             }
-            list ($email_pref, $input) = explode('@', $input, 2);
+            list($email_pref, $input) = explode('@', $input, 2);
             $arr = explode('.', $input);
             foreach ($arr as $k => $v) {
                 if (preg_match('!^' . preg_quote($this->_punycode_prefix, '!') . '!', $v)) {
@@ -271,7 +271,8 @@ class idna_convert extends stdClass {
             case 'utf8':        return $return; // break;
             case 'ucs4_string': return $this->_ucs4_to_ucs4_string($this->_utf8_to_ucs4($return));  // break;
             case 'ucs4_array':  return $this->_utf8_to_ucs4($return); // break;
-            default:            $this->_error('Unsupported output format'); return false;
+            default:            $this->_error('Unsupported output format');
+                return false;
         }
     }
 
@@ -291,6 +292,7 @@ class idna_convert extends stdClass {
                 break;
             case 'ucs4_string':
                 $decoded = $this->_ucs4_string_to_ucs4($decoded);
+                // no break
             case 'ucs4_array':
                 break;
             default:
@@ -315,7 +317,8 @@ class idna_convert extends stdClass {
                 case 0xFF61:
                     $decoded[$k] = 0x2E;
                     // Right, no break here, the above are converted to dots anyway
-                // Stumbling across an anchoring character
+                    // Stumbling across an anchoring character
+                    // no break
                 case 0x2E:
                 case 0x2F:
                 case 0x3A:
@@ -998,7 +1001,7 @@ class idna_convert extends stdClass {
                 $out_len++;
                 $output[$out_len] = 0;
             }
-            $output[$out_len] += ord($input[$i]) << (8 * (3 - ($i % 4) ) );	// due to php 7.4  old: $output[$out_len] += ord($input{$i}) << (8 * (3 - ($i % 4) ) );
+            $output[$out_len] += ord($input[$i]) << (8 * (3 - ($i % 4)));	// due to php 7.4  old: $output[$out_len] += ord($input{$i}) << (8 * (3 - ($i % 4) ) );
         }
         return $output;
     }
@@ -1015,7 +1018,7 @@ class idna_convert extends stdClass {
         if (self::$_mb_string_overload) {
             return mb_strlen($string, '8bit');
         }
-        return strlen((binary) $string);
+        return strlen((string) $string);
     }
 
     /**

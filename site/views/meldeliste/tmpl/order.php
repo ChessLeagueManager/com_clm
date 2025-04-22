@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -20,8 +20,8 @@ $mainframe	= JFactory::getApplication();
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 // Variablen holen
-$sid 		= clm_core::$load->request_int('saison','1');
-$lid 		= clm_core::$load->request_int('lid','1');
+$sid 		= clm_core::$load->request_int('saison', '1');
+$lid 		= clm_core::$load->request_int('lid', '1');
 $zps 		= clm_core::$load->request_string('zps');
 $man 		= clm_core::$load->request_int('man');
 $stamm 		= clm_core::$load->request_int('stamm');
@@ -32,71 +32,75 @@ $check		= clm_core::$load->request_array_string('check');
 $man_name 	= clm_core::$load->request_string('man_name');
 $liga_lokal	= clm_core::$load->request_string('lokal');
 $liga_mf 	= clm_core::$load->request_string('mf');
-	//CLM parameter auslesen
-	$config = clm_core::$db->config();
-	$countryversion = $config->countryversion;
- 
+//CLM parameter auslesen
+$config = clm_core::$db->config();
+$countryversion = $config->countryversion;
+
 $cid_sql = array();
-foreach($cid as $cid_a) {
-        $cid_sql[] = '\''.$cid_a.'\'';
-    }
-$cids = implode(',',$cid_sql);
+foreach ($cid as $cid_a) {
+    $cid_sql[] = '\''.$cid_a.'\'';
+}
+$cids = implode(',', $cid_sql);
 
 // Login Status prüfen
 // Prüfen ob Datensatz schon vorhanden ist
-	$db			= JFactory::getDBO();
-	$query	= "SELECT id, liste "
-		." FROM #__clm_mannschaften "
-		." WHERE sid = $sid AND zps = '".$zps."' "
-		." AND liga = $lid AND man_nr = $man AND published = 1 "
-		;
-	$db->setQuery( $query );
-	$test=$db->loadObjectList();
+$db			= JFactory::getDBO();
+$query	= "SELECT id, liste "
+    ." FROM #__clm_mannschaften "
+    ." WHERE sid = $sid AND zps = '".$zps."' "
+    ." AND liga = $lid AND man_nr = $man AND published = 1 "
+;
+$db->setQuery($query);
+$test = $db->loadObjectList();
 
 if ($test[0]->id < 1) {
-	$link = "index.php?option=com_clm&view=info";
-	$msg = JText::_( 'CLUB_LIST_TEAM_DISABLED' );
-	$mainframe->redirect( $link, $msg );
- 			}
+    $link = "index.php?option=com_clm&view=info";
+    $msg = JText::_('CLUB_LIST_TEAM_DISABLED');
+    $mainframe->redirect($link, $msg);
+}
 
 $abgabe		= $this->abgabe;
-	$today = date("Y-m-d"); 
-	//Liga-Parameter aufbereiten
-	$paramsStringArray = explode("\n", $abgabe[0]->params);
-	$abgabe[0]->params = array();
-	foreach ($paramsStringArray as $value) {
-		$ipos = strpos ($value, '=');
-		if ($ipos !==false) {
-			$key = substr($value,0,$ipos);
-			if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
-			if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
-			$abgabe[0]->params[$key] = substr($value,$ipos+1);
-			}
-	}	
-	if (!isset($abgabe[0]->params['deadline_roster']))  {   //Standardbelegung
-		$abgabe[0]->params['deadline_roster'] = '1970-01-01'; }
-
-if ($abgabe[0]->liste > 0 AND ($abgabe[0]->params['deadline_roster'] == '0000-00-00' OR $abgabe[0]->params['deadline_roster'] == '1970-01-01')) {
-	$msg = JText::_( 'CLUB_LIST_ALREADY_EXIST' ).'XX';
-	$link = "index.php?option=com_clm&view=info";
-	$mainframe->redirect( $link, $msg );
+$today = date("Y-m-d");
+//Liga-Parameter aufbereiten
+$paramsStringArray = explode("\n", $abgabe[0]->params);
+$abgabe[0]->params = array();
+foreach ($paramsStringArray as $value) {
+    $ipos = strpos($value, '=');
+    if ($ipos !== false) {
+        $key = substr($value, 0, $ipos);
+        if (substr($key, 0, 2) == "\'") {
+            $key = substr($key, 2, strlen($key) - 4);
+        }
+        if (substr($key, 0, 1) == "'") {
+            $key = substr($key, 1, strlen($key) - 2);
+        }
+        $abgabe[0]->params[$key] = substr($value, $ipos + 1);
+    }
 }
-if ($abgabe[0]->liste > 0 AND $abgabe[0]->params['deadline_roster'] < $today) {
-	$msg = JText::_( 'CLUB_LIST_TOO_LATE' );
-	$link = "index.php?option=com_clm&view=info";
-	$mainframe->redirect( $link, $msg );
- 			}
+if (!isset($abgabe[0]->params['deadline_roster'])) {   //Standardbelegung
+    $abgabe[0]->params['deadline_roster'] = '1970-01-01';
+}
+
+if ($abgabe[0]->liste > 0 and ($abgabe[0]->params['deadline_roster'] == '0000-00-00' or $abgabe[0]->params['deadline_roster'] == '1970-01-01')) {
+    $msg = JText::_('CLUB_LIST_ALREADY_EXIST').'XX';
+    $link = "index.php?option=com_clm&view=info";
+    $mainframe->redirect($link, $msg);
+}
+if ($abgabe[0]->liste > 0 and $abgabe[0]->params['deadline_roster'] < $today) {
+    $msg = JText::_('CLUB_LIST_TOO_LATE');
+    $link = "index.php?option=com_clm&view=info";
+    $mainframe->redirect($link, $msg);
+}
 
 // Koordinaten holen
 $addressHandler = new AddressHandler();
 $lokal_coord = $addressHandler->convertAddress($liga_lokal);
-if(is_null($lokal_coord) or $lokal_coord==-1){
-	$geo_query = " , lokal_coord = null";
-	$lokal_coord = null;
-	if($config->googlemaps)//Only output a message if geo service is enabled
-	{
-		$mainframe->enqueueMessage( JText::_( 'CLUB_LIST_GEO_WARNING_ORDER' ), 'warning' );
-	}
+if (is_null($lokal_coord) or $lokal_coord == -1) {
+    $geo_query = " , lokal_coord = null";
+    $lokal_coord = null;
+    if ($config->googlemaps) {//Only output a message if geo service is enabled
+        $mainframe->enqueueMessage(JText::_('CLUB_LIST_GEO_WARNING_ORDER'), 'warning');
+    }
 }
 
 // NICHT vorhanden //
@@ -105,17 +109,24 @@ if(is_null($lokal_coord) or $lokal_coord==-1){
 $liga 		= $this->liga;
 $mllist		= $this->mllist;
 $spieler		= $this->spieler;
-$mflist[]		= JHTML::_('select.option',  '0', JText::_( 'TEAM_SELECT_LEADER' ), 'mf', 'mfname' );
-$mflist			= array_merge( $mflist, $mllist );
-$lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox" size="1"', 'mf', 'mfname', $liga_mf );
+$mflist[]		= JHTML::_('select.option', '0', JText::_('TEAM_SELECT_LEADER'), 'mf', 'mfname');
+$mflist			= array_merge($mflist, $mllist);
+$lists['mf']	= JHTML::_('select.genericlist', $mflist, 'mf', 'class="inputbox" size="1"', 'mf', 'mfname', $liga_mf);
 
-	// Textparameter setzen
-	if ($abgabe[0]->liste > 0) $erstmeldung = 0;	// Erstmeldung nein
-	else $erstmeldung = 1;  						// Erstmeldung ja
-	if ($abgabe[0]->params['deadline_roster'] < $today) { $korr_moeglich = 0; 	// Korrektur möglich im FE nein
-														$deadline_roster = ''; }
-	else { $korr_moeglich = 1; 			// Korrektur möglich im FE ja
-		$deadline_roster = JHTML::_('date', $abgabe[0]->params['deadline_roster'], JText::_('DATE_FORMAT_CLM_F')); }
+// Textparameter setzen
+if ($abgabe[0]->liste > 0) {
+    $erstmeldung = 0;
+}	// Erstmeldung nein
+else {
+    $erstmeldung = 1;
+}  						// Erstmeldung ja
+if ($abgabe[0]->params['deadline_roster'] < $today) {
+    $korr_moeglich = 0; 	// Korrektur möglich im FE nein
+    $deadline_roster = '';
+} else {
+    $korr_moeglich = 1; 			// Korrektur möglich im FE ja
+    $deadline_roster = JHTML::_('date', $abgabe[0]->params['deadline_roster'], JText::_('DATE_FORMAT_CLM_F'));
+}
 
 ?>
 <div >
@@ -134,12 +145,12 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
 <li><?php echo JText::_('CLUB_LIST_HINT_S3') ?></li>
 <li><?php echo JText::_('CLUB_LIST_HINT_S4') ?></li>
 </ol>
-<?php //echo JText::_('CLUB_LIST_PLANNED') ?>
+<?php //echo JText::_('CLUB_LIST_PLANNED')?>
 </div>
-<?php 
+<?php
 
 ?>
-<?php $sort= CLMModelMeldeliste::Sortierung ($cids); ?>
+<?php $sort = CLMModelMeldeliste::Sortierung($cids); ?>
 <br>
 <script type="text/javascript"><!--
         function Tausch ( idA, idB )
@@ -271,7 +282,7 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
 		<th class="anfang"><?php echo JText::_('CLUB_LIST_NAME') ?></th>
 		<th class="anfang" width="8%"><?php echo JText::_('CLUB_LIST_ATTR') ?></th>
 		<th class="anfang" width="8%"><?php echo JText::_('CLUB_LIST_DWZ') ?></th>
-		<?php if ($countryversion =="de") { ?>
+		<?php if ($countryversion == "de") { ?>
 			<th class="anfang" width="35%"><?php echo JText::_('CLUBS_LIST_NAME') ?></th>
 			<th class="anfang" width="8%"><?php echo JText::_('CLUB_LIST_MGL') ?></th>
 		<?php } else { ?>
@@ -282,65 +293,76 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
 	</tr>
 
 <?php $i = 0;
-	foreach($cid as $cid){ 
-	if ($i< ($stamm+$ersatz)) {
-	?>
+foreach ($cid as $cid) {
+    if ($i < ($stamm + $ersatz)) {
+        ?>
 	<tr>
-		<td><?php echo $i+1; ?></td>
-		<td><span id="name<?php echo $i+1; ?>"><?php if (!isset($check[$sort[$i]->id]) OR $check[$sort[$i]->id] != '1') echo $sort[$i]->name;
-														else echo '<del>'.$sort[$i]->name.'</del>'; ?></span>
-			<input type="hidden" name="hidden_name<?php echo $i+1; ?>" id="hidden_name<?php echo $i+1; ?>" value="<?php echo $sort[$i]->name; ?>" />
-			<input type="hidden" name="hidden_gesperrt<?php echo $i+1; ?>" id="hidden_gesperrt<?php echo $i+1; ?>" value="<?php echo $sort[$i]->gesperrt; ?>" />
-			<input type="hidden" name="hidden_check<?php echo $i+1; ?>" id="hidden_check<?php echo $i+1; ?>" value="<?php echo $check[$sort[$i]->id];; ?>" />
-			<input type="hidden" name="hidden_zps<?php echo $i+1; ?>" id="hidden_zps<?php echo $i+1; ?>" value="<?php echo $sort[$i]->zps; ?>" /></td>
-		<td id="attr<?php echo $i+1; ?>" name="attr<?php echo $i+1; ?>"><?php echo $attr[$sort[$i]->id]; ?>
-			<input type="hidden" name="hidden_attr<?php echo $i+1; ?>" id="hidden_attr<?php echo $i+1; ?>" value="<?php echo $attr[$sort[$i]->id];; ?>" /></td>
-		<td id="dwz<?php echo $i+1; ?>" id="dwz<?php echo $i+1; ?>"><?php echo $sort[$i]->dwz; ?>
-			<input type="hidden" name="hidden_dwz<?php echo $i+1; ?>" id="hidden_dwz<?php echo $i+1; ?>" value="<?php echo $sort[$i]->dwz;; ?>" />
-			<input type="hidden" name="hidden_dwz_I0<?php echo $i+1; ?>" id="hidden_dwz_I0<?php echo $i+1; ?>" value="<?php echo $sort[$i]->dwz_I0;; ?>" /></td>
-		<td id="zpsname<?php echo $i+1; ?>"><?php echo $sort[$i]->Vereinname; ?></td>
-		<?php if ($countryversion =="de") { ?>
-		  <td id="mglnr<?php echo $i+1; ?>"><?php echo $sort[$i]->Mgl_Nr; ?>
-			<input type="hidden" name="hidden_mglnr<?php echo $i+1; ?>" id="hidden_mglnr<?php echo $i+1; ?>" value="<?php echo $sort[$i]->Mgl_Nr; ?>" />
-			<input type="hidden" name="PKZ<?php echo $i+1; ?>" id="PKZ<?php echo $i+1; ?>" value="<?php echo $sort[$i]->PKZ; ?>" />
-			<input type="hidden" name="hidden_PKZ<?php echo $i+1; ?>" id="hidden_PKZ<?php echo $i+1; ?>" value="<?php echo $sort[$i]->PKZ; ?>" />
+		<td><?php echo $i + 1; ?></td>
+		<td><span id="name<?php echo $i + 1; ?>"><?php if (!isset($check[$sort[$i]->id]) or $check[$sort[$i]->id] != '1') {
+		    echo $sort[$i]->name;
+		} else {
+		    echo '<del>'.$sort[$i]->name.'</del>';
+		} ?></span>
+			<input type="hidden" name="hidden_name<?php echo $i + 1; ?>" id="hidden_name<?php echo $i + 1; ?>" value="<?php echo $sort[$i]->name; ?>" />
+			<input type="hidden" name="hidden_gesperrt<?php echo $i + 1; ?>" id="hidden_gesperrt<?php echo $i + 1; ?>" value="<?php echo $sort[$i]->gesperrt; ?>" />
+			<input type="hidden" name="hidden_check<?php echo $i + 1; ?>" id="hidden_check<?php echo $i + 1; ?>" value="<?php echo $check[$sort[$i]->id];
+        ; ?>" />
+			<input type="hidden" name="hidden_zps<?php echo $i + 1; ?>" id="hidden_zps<?php echo $i + 1; ?>" value="<?php echo $sort[$i]->zps; ?>" /></td>
+		<td id="attr<?php echo $i + 1; ?>" name="attr<?php echo $i + 1; ?>"><?php echo $attr[$sort[$i]->id]; ?>
+			<input type="hidden" name="hidden_attr<?php echo $i + 1; ?>" id="hidden_attr<?php echo $i + 1; ?>" value="<?php echo $attr[$sort[$i]->id];
+        ; ?>" /></td>
+		<td id="dwz<?php echo $i + 1; ?>" id="dwz<?php echo $i + 1; ?>"><?php echo $sort[$i]->dwz; ?>
+			<input type="hidden" name="hidden_dwz<?php echo $i + 1; ?>" id="hidden_dwz<?php echo $i + 1; ?>" value="<?php echo $sort[$i]->dwz;
+        ; ?>" />
+			<input type="hidden" name="hidden_dwz_I0<?php echo $i + 1; ?>" id="hidden_dwz_I0<?php echo $i + 1; ?>" value="<?php echo $sort[$i]->dwz_I0;
+        ; ?>" /></td>
+		<td id="zpsname<?php echo $i + 1; ?>"><?php echo $sort[$i]->Vereinname; ?></td>
+		<?php if ($countryversion == "de") { ?>
+		  <td id="mglnr<?php echo $i + 1; ?>"><?php echo $sort[$i]->Mgl_Nr; ?>
+			<input type="hidden" name="hidden_mglnr<?php echo $i + 1; ?>" id="hidden_mglnr<?php echo $i + 1; ?>" value="<?php echo $sort[$i]->Mgl_Nr; ?>" />
+			<input type="hidden" name="PKZ<?php echo $i + 1; ?>" id="PKZ<?php echo $i + 1; ?>" value="<?php echo $sort[$i]->PKZ; ?>" />
+			<input type="hidden" name="hidden_PKZ<?php echo $i + 1; ?>" id="hidden_PKZ<?php echo $i + 1; ?>" value="<?php echo $sort[$i]->PKZ; ?>" />
 			</td>
 		<?php } else { ?>
-		  <td id="PKZ<?php echo $i+1; ?>"><?php echo $sort[$i]->PKZ; ?>
-			<input type="hidden" name="hidden_PKZ<?php echo $i+1; ?>" id="hidden_PKZ<?php echo $i+1; ?>" value="<?php echo $sort[$i]->PKZ; ?>" /></td>
-			<input type="hidden" name="mglnr<?php echo $i+1; ?>" id="mglnr<?php echo $i+1; ?>" value="<?php echo $sort[$i]->Mgl_Nr; ?>" />
-			<input type="hidden" name="hidden_mglnr<?php echo $i+1; ?>" id="hidden_mglnr<?php echo $i+1; ?>" value="<?php echo $sort[$i]->Mgl_Nr; ?>" />
+		  <td id="PKZ<?php echo $i + 1; ?>"><?php echo $sort[$i]->PKZ; ?>
+			<input type="hidden" name="hidden_PKZ<?php echo $i + 1; ?>" id="hidden_PKZ<?php echo $i + 1; ?>" value="<?php echo $sort[$i]->PKZ; ?>" /></td>
+			<input type="hidden" name="mglnr<?php echo $i + 1; ?>" id="mglnr<?php echo $i + 1; ?>" value="<?php echo $sort[$i]->Mgl_Nr; ?>" />
+			<input type="hidden" name="hidden_mglnr<?php echo $i + 1; ?>" id="hidden_mglnr<?php echo $i + 1; ?>" value="<?php echo $sort[$i]->Mgl_Nr; ?>" />
 			</td>
 		<?php } ?>
 		<td>&nbsp;
 		<?php if ($i == 0) { ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php } else { ?>
-		<a href="javascript:NachOben(<?php echo $i+1; ?>);" id="hoch<?php echo $i+1; ?>"><img  src="components/com_clm/images/uparrow.png" alt="NachOben" /></a>
+		<a href="javascript:NachOben(<?php echo $i + 1; ?>);" id="hoch<?php echo $i + 1; ?>"><img  src="components/com_clm/images/uparrow.png" alt="NachOben" /></a>
 		<?php } ?>&nbsp;&nbsp;
-		<?php if ($i == ($stamm+$ersatz-1)) echo "   "; else { ?>
-		<a href="javascript:NachUnten(<?php echo $i+1; ?>);" id="runter<?php echo $i+1; ?>"><img  src="components/com_clm/images/downarrow.png" alt="NachUnten" /></a>
+		<?php if ($i == ($stamm + $ersatz - 1)) {
+		    echo "   ";
+		} else { ?>
+		<a href="javascript:NachUnten(<?php echo $i + 1; ?>);" id="runter<?php echo $i + 1; ?>"><img  src="components/com_clm/images/downarrow.png" alt="NachUnten" /></a>
 		<?php } ?></td>
 	</tr>
-	<?php $i++;}} ?> 
+	<?php $i++;
+    }
+} ?> 
 </table>
 <table class="adminlist" cellpadding="0" cellspacing="0">
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="mf"><?php echo JText::_( 'TEAM_LEADER' )." : "; ?></label>
+			<td class="key" nowrap="nowrap"><label for="mf"><?php echo JText::_('TEAM_LEADER')." : "; ?></label>
 			</td>
 			<td>
 			<?php echo $lists['mf']; ?>
 			</td>
 			<td>
-			<?php  echo JText::_( 'TEAM_LEADER_COMMENT' ) ; ?>
+			<?php  echo JText::_('TEAM_LEADER_COMMENT') ; ?>
 			</td>
 		</tr>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="lokal"><?php echo JText::_( 'TEAM_LOCATION' )." : "; ?></label>
+			<td class="key" nowrap="nowrap"><label for="lokal"><?php echo JText::_('TEAM_LOCATION')." : "; ?></label>
 			</td>
 			<td>
 			<textarea class="inputbox" name="lokal" id="lokal" cols="40" rows="3" style="width:90%"><?php echo $liga_lokal; ?></textarea>
 			</td>
 			<td>
-			<?php  echo JText::_( 'CLM_KOMMA' )."<br>".JText::_( 'CLM_ADDRESS1' ); ?>
+			<?php  echo JText::_('CLM_KOMMA')."<br>".JText::_('CLM_ADDRESS1'); ?>
 			</td>
 		</tr>
 		</table>
@@ -354,7 +376,7 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
 		<input type="hidden" name="ersatz" value="<?php echo $ersatz; ?>" />
 		<input type="hidden" name="man_name" value="<?php echo $man_name; ?>" />
 		<input type="hidden" name="task" value="" />
-	<?php echo JHTML::_( 'form.token' ); ?>
+	<?php echo JHTML::_('form.token'); ?>
 </form>
 </center>
 <br>

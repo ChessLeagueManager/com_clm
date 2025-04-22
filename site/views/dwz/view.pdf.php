@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
@@ -9,24 +10,23 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-jimport( 'joomla.application.component.view');
+jimport('joomla.application.component.view');
 
 class CLMViewDWZ extends JViewLegacy
 {
-	function display($tpl = 'pdf')
-	{
-		$model	  = $this->getModel();
-  		$liga     = $model->getCLMLiga();
-		$this->liga = $liga;
+    public function display($tpl = 'pdf')
+    {
+        $model	  = $this->getModel();
+        $liga     = $model->getCLMLiga();
+        $this->liga = $liga;
 
-		$model	= $this->getModel();
-		$zps	= $model->getCLMzps();
-		$this->zps = $zps;
+        $model	= $this->getModel();
+        $zps	= $model->getCLMzps();
+        $this->zps = $zps;
 
-		$document =JFactory::getDocument();
-		$document->setMimeEncoding('application/pdf');
+        $document = JFactory::getDocument();
+        $document->setMimeEncoding('application/pdf');
 
-		parent::display($tpl);
-	}	
+        parent::display($tpl);
+    }
 }
-?>

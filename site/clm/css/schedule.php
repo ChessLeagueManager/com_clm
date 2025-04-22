@@ -1,38 +1,38 @@
 <?php
 defined('clm') or die('Restricted access');
-	// Konfigurationsparameter auslesen
-	$config				= clm_core::$db->config();
-	$template			= $config->template;
-	$clm_lesehilfe		= $config->lesehilfe;
-	$clm_zeile1			= "#".$config->zeile1;
-	$clm_zeile2			= "#".$config->zeile2;
-	$clm_re_col			= "#".$config->re_col;
-	$clm_tableth		= "#".$config->tableth;
-	$clm_subth			= "#".$config->subth;
-	$clm_tableth_s1		= "#".$config->tableth_s1;
-	$clm_tableth_s2		= "#".$config->tableth_s2;
-	$clm_cellin_top			= $config->cellin_top;
-	$clm_cellin_left			= $config->cellin_left;
-	$clm_cellin_right			= $config->cellin_right;
-	$clm_cellin_bottom			= $config->cellin_bottom;
-	$clm_border			= $config->border_length." ".$config->border_style." #".$config->border_color;
-	$clm_wrong1 		= "#".$config->wrong1;
-	$clm_wrong2			= $config->wrong2_length." ".$config->wrong2_style." #".$config->wrong2_color;
-	$clm_rang_auf		= "#".$config->rang_auf;
-	$clm_rang_auf_evtl	= "#".$config->rang_auf_evtl;
-	$clm_rang_ab		= "#".$config->rang_ab;
-	$clm_rang_ab_evtl	= "#".$config->rang_ab_evtl;
-	$clm_msch_nr		= $config->msch_nr;
-	$clm_msch_dwz		= $config->msch_dwz;
-	$clm_msch_rnd		= $config->msch_rnd;
-	$clm_msch_punkte	= $config->msch_punkte;
-	$clm_msch_spiele	= $config->msch_spiele;
-	$clm_msch_prozent	= $config->msch_prozent;
-	$fe_pgn_show		= $config->fe_pgn_show;
+// Konfigurationsparameter auslesen
+$config				= clm_core::$db->config();
+$template			= $config->template;
+$clm_lesehilfe		= $config->lesehilfe;
+$clm_zeile1			= "#".$config->zeile1;
+$clm_zeile2			= "#".$config->zeile2;
+$clm_re_col			= "#".$config->re_col;
+$clm_tableth		= "#".$config->tableth;
+$clm_subth			= "#".$config->subth;
+$clm_tableth_s1		= "#".$config->tableth_s1;
+$clm_tableth_s2		= "#".$config->tableth_s2;
+$clm_cellin_top			= $config->cellin_top;
+$clm_cellin_left			= $config->cellin_left;
+$clm_cellin_right			= $config->cellin_right;
+$clm_cellin_bottom			= $config->cellin_bottom;
+$clm_border			= $config->border_length." ".$config->border_style." #".$config->border_color;
+$clm_wrong1 		= "#".$config->wrong1;
+$clm_wrong2			= $config->wrong2_length." ".$config->wrong2_style." #".$config->wrong2_color;
+$clm_rang_auf		= "#".$config->rang_auf;
+$clm_rang_auf_evtl	= "#".$config->rang_auf_evtl;
+$clm_rang_ab		= "#".$config->rang_ab;
+$clm_rang_ab_evtl	= "#".$config->rang_ab_evtl;
+$clm_msch_nr		= $config->msch_nr;
+$clm_msch_dwz		= $config->msch_dwz;
+$clm_msch_rnd		= $config->msch_rnd;
+$clm_msch_punkte	= $config->msch_punkte;
+$clm_msch_spiele	= $config->msch_spiele;
+$clm_msch_prozent	= $config->msch_prozent;
+$fe_pgn_show		= $config->fe_pgn_show;
 
-	if ($template) {
-//clm_core::$cms->addStyleSheet(clm_core::$url."css/schedule.css");
-?>
+if ($template) {
+    //clm_core::$cms->addStyleSheet(clm_core::$url."css/schedule.css");
+    ?>
 <style type="text/css">
 
 #clm .clm .clmbox { width:100%; margin: 10px 0 0 0; border: 1px solid #CCC; float: none !important; padding: 5px 0; background-color: #F5F5F5; color: #666666 !important;}

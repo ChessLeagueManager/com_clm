@@ -1,71 +1,73 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
-function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hname, $gname, $hmf, $gmf, $comment, $icomment, $ko, $sender, $liga, $gemeldet, $out, $recipient) {
-	$lang = clm_core::$lang->liga_mail_body;
-	$dateNow = clm_core::$load->date_to_string($dateNow,true);
-	if ($dateGame != - 1) {
-		$dateGame = clm_core::$load->date_to_string($dateGame,false);
-	} else {
-		$dateGame = " ";
-	}
-	// Details aus $out
-	$sid 	= $out["paar"][0]->sid;
-	$lid	= $out["paar"][0]->lid;
-	$rnd	= $out["paar"][0]->runde;
-	$dg		= $out["paar"][0]->dg; 
-	$rang = $out["liga"][0]->rang;
-	if ($rang === '0') {
-		$rmnr = "melde_nr";
-	} else {
-		$rmnr = "rang_nr";
-	}
-	if (isset($out["hmf"][0])) {
-		$hmf_name	= $out["hmf"][0]->name;
-		$hmf_email	= $out["hmf"][0]->email;
-	} else {
-		$hmf_name	= "";
-		$hmf_email	= "";
-	}
-	if (isset($out["gmf"][0])) {
-		$gmf_name	= $out["gmf"][0]->name;
-		$gmf_email	= $out["gmf"][0]->email;
-	} else {
-		$gmf_name	= "";
-		$gmf_email	= "";
-	}
-	if (isset($out["sl"][0])) {
-		$sl_name	= $out["sl"][0]->name;
-		$sl_email	= $out["sl"][0]->email;
-	} else {
-		$sl_name	= "";
-		$sl_email	= "";
-	}
+function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hname, $gname, $hmf, $gmf, $comment, $icomment, $ko, $sender, $liga, $gemeldet, $out, $recipient)
+{
+    $lang = clm_core::$lang->liga_mail_body;
+    $dateNow = clm_core::$load->date_to_string($dateNow, true);
+    if ($dateGame != - 1) {
+        $dateGame = clm_core::$load->date_to_string($dateGame, false);
+    } else {
+        $dateGame = " ";
+    }
+    // Details aus $out
+    $sid 	= $out["paar"][0]->sid;
+    $lid	= $out["paar"][0]->lid;
+    $rnd	= $out["paar"][0]->runde;
+    $dg		= $out["paar"][0]->dg;
+    $rang = $out["liga"][0]->rang;
+    if ($rang === '0') {
+        $rmnr = "melde_nr";
+    } else {
+        $rmnr = "rang_nr";
+    }
+    if (isset($out["hmf"][0])) {
+        $hmf_name	= $out["hmf"][0]->name;
+        $hmf_email	= $out["hmf"][0]->email;
+    } else {
+        $hmf_name	= "";
+        $hmf_email	= "";
+    }
+    if (isset($out["gmf"][0])) {
+        $gmf_name	= $out["gmf"][0]->name;
+        $gmf_email	= $out["gmf"][0]->email;
+    } else {
+        $gmf_name	= "";
+        $gmf_email	= "";
+    }
+    if (isset($out["sl"][0])) {
+        $sl_name	= $out["sl"][0]->name;
+        $sl_email	= $out["sl"][0]->email;
+    } else {
+        $sl_name	= "";
+        $sl_email	= "";
+    }
 
-	// Konfigurationsparameter auslesen
-	$config = clm_core::$db->config();
-	$fromname = $config->email_fromname;
-	
-	// Pfad der Application bestimmen für Links
-	$pfad = (empty($_SERVER['HTTPS'])) ? 'http' : 'https';
+    // Konfigurationsparameter auslesen
+    $config = clm_core::$db->config();
+    $fromname = $config->email_fromname;
+
+    // Pfad der Application bestimmen für Links
+    $pfad = (empty($_SERVER['HTTPS'])) ? 'http' : 'https';
     $pfad .= '://'.$_SERVER['HTTP_HOST'];
 
-	// Pfad der Application bestimmen für Links
-	$url = strpos($_SERVER['PHP_SELF'], "administrator");
-	if (!$url) {
-		$url = strpos($_SERVER['PHP_SELF'], "components");
-		if (!$url) {
-			$url = - 1;
-		}
-	}
-	$pfad = ((empty($_SERVER['HTTPS'])) ? 'http://' : 'https://') . $_SERVER['HTTP_HOST'] . substr($_SERVER['PHP_SELF'], 0, $url - 1);
+    // Pfad der Application bestimmen für Links
+    $url = strpos($_SERVER['PHP_SELF'], "administrator");
+    if (!$url) {
+        $url = strpos($_SERVER['PHP_SELF'], "components");
+        if (!$url) {
+            $url = - 1;
+        }
+    }
+    $pfad = ((empty($_SERVER['HTTPS'])) ? 'http://' : 'https://') . $_SERVER['HTTP_HOST'] . substr($_SERVER['PHP_SELF'], 0, $url - 1);
 
-// Mailbody HTML Header
-	$body_html_header = '
+    // Mailbody HTML Header
+    $body_html_header = '
 			<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 			<html>
 			<head>
@@ -73,11 +75,11 @@ function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hn
 			<title>Online Spielbericht</title>
 			</head>
 			<body>';
-	$body_html_footer = '
+    $body_html_footer = '
 			</body>
-			</html>';	
-// Mailbody HTML Spielbericht
-	$body_html =	'
+			</html>';
+    // Mailbody HTML Spielbericht
+    $body_html =	'
 		<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px;">
 		<tr>
 			<td bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;" colspan="6"><div align="center" style="font-size: 12px;"><strong>'.$lang->raw("report").' ' .$dateNow. '</strong></div></td>
@@ -146,10 +148,10 @@ function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hn
 			<td width="215" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.$lang->raw("player").'</strong> '.$lang->raw("guest").'</div></td>
 		</tr>
 	';
-	for ($i=0; $i<count($player); $i++) {
-  	  $body_html .=   '
+    for ($i = 0; $i < count($player); $i++) {
+        $body_html .=   '
 		<tr>
-			<td width="50" style="border-bottom: solid 1px #999999;"><div align="center"><strong>'.($i+1).'</strong></div></td>
+			<td width="50" style="border-bottom: solid 1px #999999;"><div align="center"><strong>'.($i + 1).'</strong></div></td>
 			<td width="75" style="border-bottom: solid 1px #999999;"><div align="center">' .$player[$i][0]. '&nbsp;</div></td>
 			<td width="60" style="border-bottom: solid 1px #999999;"><div align="center">' .$player[$i][1]. '&nbsp;</div></td>
 			<td width="210" style="border-bottom: solid 1px #999999;"><div align="center">' .$player[$i][2]. '&nbsp;</div></td>
@@ -159,8 +161,8 @@ function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hn
 			<td width="215" style="border-bottom: solid 1px #999999;"><div align="center">' .$player[$i][6]. '&nbsp;</div></td>
 		</tr>
 	  ';
-	}
-	$body_html .= 	  '
+    }
+    $body_html .= 	  '
 		<tr>
 			<td width="50"><div align="center"></div></td>
 			<td width="75"><div align="center"></div></td>
@@ -178,42 +180,43 @@ function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hn
 			<td>&nbsp;</td>
 		</tr>
 	';
-	if ($comment != "") { 
-		$comment = preg_replace('/\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s/','<br>',$comment);
+    if ($comment != "") {
+        $comment = preg_replace('/\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s/', '<br>', $comment);
 
-//		$comment = ereg_replace('
-//','<br>',$comment);
+        //		$comment = ereg_replace('
+        //','<br>',$comment);
 
-      $body_html .= 	'
+        $body_html .= 	'
 		<tr>
 			<td width="80" valign="top"><strong>'.$lang->raw("comment").'</strong></td>
 			<td  width="420" nowrap="nowrap" valign="top" size="1">
-				<textarea cols="30" rows="2" style="width:90%">'.str_replace('&','&amp;',$comment).'</textarea>
+				<textarea cols="30" rows="2" style="width:90%">'.str_replace('&', '&amp;', $comment).'</textarea>
 			</td>
   		</tr>
 	  ';
-/*      $body_html .= 	'
-		<tr>
-			<td width="80" valign="top"><strong>'.$lang->raw("comment").'</strong></td>
-			<td  width="420" nowrap="nowrap" valign="top" size="1">
-				<textarea cols="30" rows="2" style="width:90%">'.clm_core::$load->utf8decode($comment).'</textarea>
-			</td>
-  		</tr>
-	  ';
-*/	}
-	if ($icomment != "") { 
-		$icomment = preg_replace('/\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s/','<br>',$icomment);
+        /*      $body_html .= 	'
+                <tr>
+                    <td width="80" valign="top"><strong>'.$lang->raw("comment").'</strong></td>
+                    <td  width="420" nowrap="nowrap" valign="top" size="1">
+                        <textarea cols="30" rows="2" style="width:90%">'.clm_core::$load->utf8decode($comment).'</textarea>
+                    </td>
+                </tr>
+              ';
+        */
+    }
+    if ($icomment != "") {
+        $icomment = preg_replace('/\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s\s/', '<br>', $icomment);
 
-      $body_html .= 	'
+        $body_html .= 	'
 		<tr>
 			<td width="80" valign="top"><strong>'.$lang->raw("icomment").'</strong></td>
 			<td  width="420" nowrap="nowrap" valign="top" size="1">
-				<textarea cols="30" rows="2" style="width:90%">'.str_replace('&','&amp;',$icomment).'</textarea>
+				<textarea cols="30" rows="2" style="width:90%">'.str_replace('&', '&amp;', $icomment).'</textarea>
 			</td>
   		</tr>
 	  ';
-	}
-	$body_html .= 	  '
+    }
+    $body_html .= 	  '
 		<tr>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
@@ -225,41 +228,50 @@ function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hn
 	
 		</table>
 	';
-	
-	$body_html_sp = "XXX";
-	// Mail Admin
-	if ($recipient == 'Admin') {
-		// Text Admin
-		$body_html_sp= '<br>'
-			.$lang->raw('RESULT_ADMIN_COPY1')
-			.'<br>'.$lang->raw('RESULT_ADMIN_COPY2')." ".$hname." - ".$gname
-			.'<br>'.$lang->raw('RESULT_ADMIN_COPY3_1')." ".$fromname;
-		if ($gemeldet) $body_html_sp .= $lang->raw('RESULT_ADMIN_COPY3_2A'); 
-		else $body_html_sp .= $lang->raw('RESULT_ADMIN_COPY3_2');
-		$body_html_sp .= '<br>'.'<br>';
-		$body_name1 = "";
-	}
-	// Text Staffelleiter
-	if ($recipient == 'SL') {
-		$body_html_sp = '<br>'
-			.$lang->raw('RESULT_SL_COPY1')
-			.'<br>'.$lang->raw('RESULT_ADMIN_COPY2')." ".$hname." - ".$gname
-			.'<br>'.$lang->raw('RESULT_ADMIN_COPY3_1')." ".$fromname;
-		if ($gemeldet) $body_html_sp .= $lang->raw('RESULT_ADMIN_COPY3_2A'); 
-		else $body_html_sp .= $lang->raw('RESULT_ADMIN_COPY3_2');
-		$body_html_sp .= '<br>'.'<br>';
-		$body_name1 = "";
-	}
-	// Mailbody HTML ML
-	if ($recipient == 'Home' OR $recipient == 'Guest') {
-		$body_html_sp = '
+
+    $body_html_sp = "XXX";
+    // Mail Admin
+    if ($recipient == 'Admin') {
+        // Text Admin
+        $body_html_sp = '<br>'
+            .$lang->raw('RESULT_ADMIN_COPY1')
+            .'<br>'.$lang->raw('RESULT_ADMIN_COPY2')." ".$hname." - ".$gname
+            .'<br>'.$lang->raw('RESULT_ADMIN_COPY3_1')." ".$fromname;
+        if ($gemeldet) {
+            $body_html_sp .= $lang->raw('RESULT_ADMIN_COPY3_2A');
+        } else {
+            $body_html_sp .= $lang->raw('RESULT_ADMIN_COPY3_2');
+        }
+        $body_html_sp .= '<br>'.'<br>';
+        $body_name1 = "";
+    }
+    // Text Staffelleiter
+    if ($recipient == 'SL') {
+        $body_html_sp = '<br>'
+            .$lang->raw('RESULT_SL_COPY1')
+            .'<br>'.$lang->raw('RESULT_ADMIN_COPY2')." ".$hname." - ".$gname
+            .'<br>'.$lang->raw('RESULT_ADMIN_COPY3_1')." ".$fromname;
+        if ($gemeldet) {
+            $body_html_sp .= $lang->raw('RESULT_ADMIN_COPY3_2A');
+        } else {
+            $body_html_sp .= $lang->raw('RESULT_ADMIN_COPY3_2');
+        }
+        $body_html_sp .= '<br>'.'<br>';
+        $body_name1 = "";
+    }
+    // Mailbody HTML ML
+    if ($recipient == 'Home' or $recipient == 'Guest') {
+        $body_html_sp = '
 			<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px;">
 			  <tr>
 				<td>'.$lang->raw('RESULT_DATA_BODY1')." ".$hname." - ".$gname
-					.$lang->raw('RESULT_DATA_BODY2_1')." ".$fromname;
-		if ($gemeldet) $body_html_sp .= $lang->raw('RESULT_DATA_BODY2_2A'); 
-		else $body_html_sp .= $lang->raw('RESULT_DATA_BODY2_2');
-		$body_html_sp .= $lang->raw('RESULT_DATA_BODY2B').' <a href="'.$pfad.'/index.php?option=com_clm&view=runde&saison='.$sid.'&liga='.$lid.'&runde='.$rnd.'&dg='.$dg.'">'.$lang->raw('RESULT_DATA_BODY2B').'</a>
+                    .$lang->raw('RESULT_DATA_BODY2_1')." ".$fromname;
+        if ($gemeldet) {
+            $body_html_sp .= $lang->raw('RESULT_DATA_BODY2_2A');
+        } else {
+            $body_html_sp .= $lang->raw('RESULT_DATA_BODY2_2');
+        }
+        $body_html_sp .= $lang->raw('RESULT_DATA_BODY2B').' <a href="'.$pfad.'/index.php?option=com_clm&view=runde&saison='.$sid.'&liga='.$lid.'&runde='.$rnd.'&dg='.$dg.'">'.$lang->raw('RESULT_DATA_BODY2B').'</a>
 				</td>
 			  </tr><tr>
 				<td><a href="mailto:'.$sl_email.'">'.$lang->raw('RESULT_DATA_BODY3').'</a></td>
@@ -270,12 +282,12 @@ function clm_view_liga_mail_body_html($player, $result, $dateNow, $dateGame, $hn
 			  </tr>
 			</table>
 			';
-		if ($recipient == 'Home')
-			$body_name1 = $lang->raw('RESULT_NAME').$hmf_name.",";
-		else
-			$body_name1 = $lang->raw('RESULT_NAME').$gmf_name.",";
-	}
-	$body = $body_html_header.$body_name1.$body_html_sp.$body_html.$body_html_footer;
-	echo $body;
+        if ($recipient == 'Home') {
+            $body_name1 = $lang->raw('RESULT_NAME').$hmf_name.",";
+        } else {
+            $body_name1 = $lang->raw('RESULT_NAME').$gmf_name.",";
+        }
+    }
+    $body = $body_html_header.$body_name1.$body_html_sp.$body_html.$body_html_footer;
+    echo $body;
 }
-?>

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -33,45 +34,45 @@ jimport('joomla.application.component.view');
  */
 class CLMViewReset extends JViewLegacy
 {
-	/**
-	 * Registry namespace prefix
-	 *
-	 * @var	string
-	 */
-	var $_namespace	= 'com_user.reset.';
+    /**
+     * Registry namespace prefix
+     *
+     * @var	string
+     */
+    public $_namespace	= 'com_user.reset.';
 
-	/**
-	 * Display function
-	 *
-	 * @since 1.5
-	 */
-	function display($tpl = null)
-	{
-		jimport('joomla.html.html');
+    /**
+     * Display function
+     *
+     * @since 1.5
+     */
+    public function display($tpl = null)
+    {
+        jimport('joomla.html.html');
 
-		$mainframe	= JFactory::getApplication();
+        $mainframe	= JFactory::getApplication();
 
-		// Load the form validation behavior
-//		JHTML::_('behavior.formvalidation');
+        // Load the form validation behavior
+        //		JHTML::_('behavior.formvalidation');
 
-		// Add the tooltip behavior
-//		JHtml::_('behavior.tooltip');
-		require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'tooltip.php');
+        // Add the tooltip behavior
+        //		JHtml::_('behavior.tooltip');
+        require_once(JPATH_COMPONENT . DS . 'includes' . DS . 'tooltip.php');
 
-		// Get the layout
-		$layout	= $this->getLayout();
+        // Get the layout
+        $layout	= $this->getLayout();
 
-/**		if ($layout == 'complete')
-		{
-			$id		= $mainframe->getUserState($this->_namespace.'id');
-			$token	= $mainframe->getUserState($this->_namespace.'token');
+        /**		if ($layout == 'complete')
+                {
+                    $id		= $mainframe->getUserState($this->_namespace.'id');
+                    $token	= $mainframe->getUserState($this->_namespace.'token');
 
-			if (is_null($id) || is_null($token))
-			{
-				$mainframe->redirect('index.php?option=com_clm&view=reset');
-			}
-		}
-**/
-		parent::display($tpl);
-	}
+                    if (is_null($id) || is_null($token))
+                    {
+                        $mainframe->redirect('index.php?option=com_clm&view=reset');
+                    }
+                }
+        **/
+        parent::display($tpl);
+    }
 }

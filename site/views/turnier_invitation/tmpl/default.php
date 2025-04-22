@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -21,25 +22,24 @@ echo "<div id='clm'><div id='turnier_invitation'>";
 
 // componentheading vorbereiten
 $heading = $this->turnier->name;
-	
-echo "<div id='ti_text'>";
-	
-// Turnier unveröffentlicht?
-if ( $this->turnier->published == 0) { 
-	echo CLMContent::componentheading($heading);
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
 
-// Turnier
+echo "<div id='ti_text'>";
+
+// Turnier unveröffentlicht?
+if ($this->turnier->published == 0) {
+    echo CLMContent::componentheading($heading);
+    echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
+
+    // Turnier
 } else {
-	echo CLMContent::componentheading($heading);
-	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo $this->turnier->invitationText;
+    echo CLMContent::componentheading($heading);
+    require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
+    echo $this->turnier->invitationText;
 
 }
-	
+
 echo "</div>";
-	
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); 
+
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php');
 
 echo '</div></div>';
-?>

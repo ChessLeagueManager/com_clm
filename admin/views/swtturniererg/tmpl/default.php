@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -10,17 +10,25 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
-$rfirst	= clm_core::$load->request_int( 'rfirst',1);
-if (is_null($this->runden)) $rcount = 0;
-else $rcount = count($this->runden);
+$rfirst	= clm_core::$load->request_int('rfirst', 1);
+if (is_null($this->runden)) {
+    $rcount = 0;
+} else {
+    $rcount = count($this->runden);
+}
 $_GET['rcount'] = $rcount;
 $rlast = $rcount;
 $_GET['rfirst'] = $rfirst;
 $pcount = clm_core::$load->request_int('pcount');
-if ($pcount < 50) $rrange = 5;
-elseif ($pcount < 100) $rrange = 3;
-elseif ($pcount < 150) $rrange = 2;
-else $rrange = 1;
+if ($pcount < 50) {
+    $rrange = 5;
+} elseif ($pcount < 100) {
+    $rrange = 3;
+} elseif ($pcount < 150) {
+    $rrange = 2;
+} else {
+    $rrange = 1;
+}
 $_GET['rrange'] = $rrange;
 ?>
 <script language="javascript" type="text/javascript">
@@ -29,17 +37,17 @@ function showRounds(){
 	var runde = document.adminForm.runden_filter.value;
 	
 	if(runde == 0) {
-	<?php 
-		foreach($this->runden as $rnd => $runde) {
-			echo "document.getElementById('fieldset_runde".$rnd."').style.display = 'block'; \n";
-		}
-	?>
+	<?php
+        foreach ($this->runden as $rnd => $runde) {
+            echo "document.getElementById('fieldset_runde".$rnd."').style.display = 'block'; \n";
+        }
+?>
 	} else {
-	<?php 
-		foreach($this->runden as $rnd => $runde) {
-			echo "document.getElementById('fieldset_runde".$rnd."').style.display = 'none'; \n";
-		}	
-	?>
+	<?php
+    foreach ($this->runden as $rnd => $runde) {
+        echo "document.getElementById('fieldset_runde".$rnd."').style.display = 'none'; \n";
+    }
+?>
 	document.getElementById('fieldset_runde'+runde).style.display = 'block';
 	}
 }
@@ -63,20 +71,25 @@ function showRounds(){
 
 //if (isset($this->runden) AND count($this->runden) > 0) {
 //if (isset($rcount) AND $rcount > 0) {
-foreach($this->runden as $rnd => $runde) {
-	if ($runde->nr < $rfirst) continue;
-	if ($runde->nr > ($rfirst + $rrange - 1)) { $rlast = ($runde->nr - 1); break;}
-	echo "
+foreach ($this->runden as $rnd => $runde) {
+    if ($runde->nr < $rfirst) {
+        continue;
+    }
+    if ($runde->nr > ($rfirst + $rrange - 1)) {
+        $rlast = ($runde->nr - 1);
+        break;
+    }
+    echo "
 	<fieldset class='adminform' id='fieldset_runde".$rnd."' style='display:block;'>
 	<legend>".JText::_('ROUND')." ".$runde->runde.", ".JText::_('DG')." ".$runde->dg." (".$runde->name.")</legend>
 		<table width='100%' class='admintable'> 
 			<tr>";
 
-	//
-	// Rundendetails
-	//
-	
-	echo"
+    //
+    // Rundendetails
+    //
+
+    echo"
 				<td width='50%' style='vertical-align: top;'>
 					<fieldset class='adminform'>
 						<legend>".JText::_('JDETAILS')."</legend>
@@ -86,7 +99,7 @@ foreach($this->runden as $rnd => $runde) {
 						<table class='admintable'>
 							<tr>
 								<td class='key' width='20%' nowrap='nowrap'>
-									<label for='name'>".JText::_( 'ROUND_NAME' ).":</label>
+									<label for='name'>".JText::_('ROUND_NAME').":</label>
 								</td>
 								<td>
 									<input class='inputbox' type='text' name='name[".$rnd."]' id='name[".$rnd."]' size='50' maxlength='60' value='".$runde->name."' />
@@ -95,86 +108,86 @@ foreach($this->runden as $rnd => $runde) {
 
 							<tr>
 								<td width='100' class='key'>
-									<label for='datum'>".JText::_( 'JDATE' ).":</label>
+									<label for='datum'>".JText::_('JDATE').":</label>
 								</td>
 								<td>
-									".JHtml::_('calendar', $runde->datum, 'datum['.$rnd.']', 'datum['.$rnd.']', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'32',  'maxlength'=>'19'))."
+									".JHtml::_('calendar', $runde->datum, 'datum['.$rnd.']', 'datum['.$rnd.']', '%Y-%m-%d', array('class' => 'text_area', 'size' => '32',  'maxlength' => '19'))."
 								</td>
 							</tr>
 
 							<tr>
 								<td class='key' nowrap='nowrap'>
-									<label for='startzeit'>".JText::_( 'RUNDE_STARTTIME' ).":</label>
+									<label for='startzeit'>".JText::_('RUNDE_STARTTIME').":</label>
 								</td>
 								<td>
-									<input class='inputbox' type='time' name='startzeit[".$rnd."]' id='startzeit[".$rnd."]' value='".substr($runde->startzeit,0,5)."'  />
+									<input class='inputbox' type='time' name='startzeit[".$rnd."]' id='startzeit[".$rnd."]' value='".substr($runde->startzeit, 0, 5)."'  />
 								</td>
 							</tr>
 
 							<tr>
 								<td class='key' nowrap='nowrap'>
-									<label for='published'>".JText::_( 'CLM_PUBLISHED' ).":</label>
+									<label for='published'>".JText::_('CLM_PUBLISHED').":</label>
 								</td>
 								<td><fieldset class='radio'>
-									".CLMForm::radioPublished ('published['.$rnd.']', $runde->published)."
+									".CLMForm::radioPublished('published['.$rnd.']', $runde->published)."
 								</fieldset></td>
 							</tr>
 							
 							<tr>
 								<td class='key' nowrap='nowrap'>
-									<label for='verein'>".JText::_( 'ENTRY_ENABLED' )."</label>
+									<label for='verein'>".JText::_('ENTRY_ENABLED')."</label>
 								</td>
 								<td><fieldset class='radio'>
-									".JHtml::_('select.booleanlist',  'abgeschlossen['.$rnd.']', "class='inputbox'", $runde->abgeschlossen )."
+									".JHtml::_('select.booleanlist', 'abgeschlossen['.$rnd.']', "class='inputbox'", $runde->abgeschlossen)."
 								</fieldset></td>
 							</tr>
 
 							<tr>
 								<td class='key' nowrap='nowrap'>
-									<label for='mf'>".JText::_('TOURNAMENT_DIRECTOR').' '.JText::_( 'APPROVAL' ).":</label>
+									<label for='mf'>".JText::_('TOURNAMENT_DIRECTOR').' '.JText::_('APPROVAL').":</label>
 								</td>
 								<td><fieldset class='radio'>
-									".JHtml::_('select.booleanlist',  'tl_ok['.$rnd.']', "class='inputbox'", $runde->tl_ok )."
+									".JHtml::_('select.booleanlist', 'tl_ok['.$rnd.']', "class='inputbox'", $runde->tl_ok)."
 								</fieldset></td>
 							</tr>
 						</table>
 					</fieldset>";
 
-	//
-	// Bemerkungen
-	//
-	
-	echo"
+    //
+    // Bemerkungen
+    //
+
+    echo"
 					<fieldset class='adminform'>
-						<legend>".JText::_( 'REMARKS' )."</legend>
+						<legend>".JText::_('REMARKS')."</legend>
 						
 						<table class='admintable'>
 							<tr>
 								<td width='20%' class='key' nowrap='nowrap'>
-									<label for='mf'>".JText::_( 'REMARKS_PUBLIC' ).":</label>
+									<label for='mf'>".JText::_('REMARKS_PUBLIC').":</label>
 								</td>
 								<td valign='top'>
-									<textarea class='inputbox' name='bemerkungen[".$rnd."]' id='bemerkungen[".$rnd."]' cols='40' rows='5' style='width:90%'>".str_replace('&','&amp;',$runde->bemerkungen)."</textarea>
+									<textarea class='inputbox' name='bemerkungen[".$rnd."]' id='bemerkungen[".$rnd."]' cols='40' rows='5' style='width:90%'>".str_replace('&', '&amp;', $runde->bemerkungen)."</textarea>
 								</td>
 							</tr>
 							
 							<tr>
 								<td width='20%' class='key' nowrap='nowrap'>
-									<label for='mf'>".JText::_( 'REMARKS_INTERNAL' ).":</label>
+									<label for='mf'>".JText::_('REMARKS_INTERNAL').":</label>
 								</td>
 								<td valign='top'>
-									<textarea class='inputbox' name='bem_int[".$rnd."]' id='bem_int[".$rnd."]' cols='40' rows='5' style='width:90%'>".str_replace('&','&amp;',$runde->bem_int)."</textarea>
+									<textarea class='inputbox' name='bem_int[".$rnd."]' id='bem_int[".$rnd."]' cols='40' rows='5' style='width:90%'>".str_replace('&', '&amp;', $runde->bem_int)."</textarea>
 								</td>
 							</tr>
 						</table>							
 					</fieldset>
 				</td>";
 
-	//
-	// Paarungsdaten
-	//
-	
-	echo"
+    //
+    // Paarungsdaten
+    //
+
+    echo"
 				<td width='50%' style='vertical-align: top;'>
 					<fieldset class='adminform'>
 						<legend>".JText::_('PAIRINGS')."</legend>
@@ -195,24 +208,28 @@ foreach($this->runden as $rnd => $runde) {
 								</tfoot>
 								<tbody>";
 
-								$k = 0;
-								if (!isset($this->matches)) $max_rnd = 0;
-								elseif (is_null($this->matches)) $max_rnd = 0;
-								else $max_rnd = max(array_keys($this->matches));
-								if ($max_rnd >= $rnd) {
-								  foreach($this->matches[$rnd] as $brett => $match) {
-									echo "<tr class='row".$k."'>";
-										echo "<td align='center'>".$brett."<input type='hidden' name='brett[".$rnd."][".$brett."]' 	value='".$match->brett."' /></td>";
-										echo "<td>".JHtml::_('select.genericlist', $this->teilnehmer_options, 'spieler['.$rnd.']['.$brett.']', 'class="inputbox" autocomplete="off"', 'value', 'text', $match->spieler, false)."</td>";
-										echo "<td>".JHtml::_('select.genericlist', $this->teilnehmer_options, 'gegner['.$rnd.']['.$brett.']', 'class="inputbox" autocomplete="off"', 'value', 'text', $match->gegner, false)."</td>";
-										echo "<td>".JHtml::_('select.genericlist', $this->ergebnis_options, 'ergebnisWhite['.$rnd.']['.$brett.']', 'class="inputbox" autocomplete="off"', 'value', 'text', $match->ergebnisWhite, false)."
+    $k = 0;
+    if (!isset($this->matches)) {
+        $max_rnd = 0;
+    } elseif (is_null($this->matches)) {
+        $max_rnd = 0;
+    } else {
+        $max_rnd = max(array_keys($this->matches));
+    }
+    if ($max_rnd >= $rnd) {
+        foreach ($this->matches[$rnd] as $brett => $match) {
+            echo "<tr class='row".$k."'>";
+            echo "<td align='center'>".$brett."<input type='hidden' name='brett[".$rnd."][".$brett."]' 	value='".$match->brett."' /></td>";
+            echo "<td>".JHtml::_('select.genericlist', $this->teilnehmer_options, 'spieler['.$rnd.']['.$brett.']', 'class="inputbox" autocomplete="off"', 'value', 'text', $match->spieler, false)."</td>";
+            echo "<td>".JHtml::_('select.genericlist', $this->teilnehmer_options, 'gegner['.$rnd.']['.$brett.']', 'class="inputbox" autocomplete="off"', 'value', 'text', $match->gegner, false)."</td>";
+            echo "<td>".JHtml::_('select.genericlist', $this->ergebnis_options, 'ergebnisWhite['.$rnd.']['.$brett.']', 'class="inputbox" autocomplete="off"', 'value', 'text', $match->ergebnisWhite, false)."
 												<input type='hidden' name='ergebnisBlack[".$rnd."][".$brett."]' 	value='".$match->ergebnisBlack."' /></td>";
-									echo "</tr>";
-								    $k = 1 - $k;
-								  }
-								}
-	
-	echo"
+            echo "</tr>";
+            $k = 1 - $k;
+        }
+    }
+
+    echo"
 									</tbody>
 								</table>
 							</div> 
@@ -221,10 +238,10 @@ foreach($this->runden as $rnd => $runde) {
 				</tr>
 			</table>
 		</fieldset>";
-	
-	}
+
+}
 //	} else echo "<br>Es liegen keine Ergebnisse vor!";
-	?>
+?>
 	
 
 	<!---script>
@@ -251,5 +268,5 @@ foreach($this->runden as $rnd => $runde) {
 	<input type="hidden" name="view" value="swtturniererg" />
 	<input type="hidden" name="controller" value="swtturniererg" />
 	<input type="hidden" name="task" value="" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo JHtml::_('form.token'); ?>
 </form>

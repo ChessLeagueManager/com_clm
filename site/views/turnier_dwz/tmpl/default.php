@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -11,13 +11,13 @@
 */
 defined('_JEXEC') or die('Restricted access');
 //JHtml::_('behavior.tooltip', '.CLMTooltip');
-require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
+require_once(JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 // Konfigurationsparameter auslesen
-$itemid 		= clm_core::$load->request_int( 'Itemid' );
+$itemid 		= clm_core::$load->request_int('Itemid');
 $config			= clm_core::$db->config();
 $fixth_ttln		= $config->fixth_ttln;
 
@@ -28,63 +28,63 @@ echo "<div id='clm'><div id='turnier_teilnehmer'>";
 $heading =  $this->turnier->name.": ".JText::_('TOURNAMENT_DWZ');
 
 $params = new clm_class_params($this->turnier->params);
-$inofDWZ = $params->get("inofDWZ","0");
-$dwz_date = $params->get("dwz_date","1970-01-01");
+$inofDWZ = $params->get("inofDWZ", "0");
+$dwz_date = $params->get("dwz_date", "1970-01-01");
 
 $archive_check = clm_core::$api->db_check_season_user($this->turnier->sid);
 if (!$archive_check) {
-	echo CLMContent::componentheading($heading);
-	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('NO_ACCESS')."<br/>".JText::_('NOT_REGISTERED'));
-} elseif ( $this->turnier->published == 0) { 
-	echo CLMContent::componentheading($heading);
-	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
+    echo CLMContent::componentheading($heading);
+    require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
+    echo CLMContent::clmWarning(JText::_('NO_ACCESS')."<br/>".JText::_('NOT_REGISTERED'));
+} elseif ($this->turnier->published == 0) {
+    echo CLMContent::componentheading($heading);
+    require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
+    echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
 
 } elseif (count($this->players) == 0) {
     echo CLMContent::componentheading($heading);
-	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOPLAYERSREGISTERED'));
+    require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
+    echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOPLAYERSREGISTERED'));
 
 } elseif ($inofDWZ == 0) {
-   echo CLMContent::componentheading($heading);
-	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_DWZ_NO'));
-	
+    echo CLMContent::componentheading($heading);
+    require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
+    echo CLMContent::clmWarning(JText::_('TOURNAMENT_DWZ_NO'));
+
 } else {
 
-// PDF-Link
-echo CLMContent::createPDFLink('turnier_dwz', JText::_('TOURNAMENT_DWZ'), array('turnier' => $this->turnier->id, 'layout' => 'dwz'));
+    // PDF-Link
+    echo CLMContent::createPDFLink('turnier_dwz', JText::_('TOURNAMENT_DWZ'), array('turnier' => $this->turnier->id, 'layout' => 'dwz'));
     echo CLMContent::componentheading($heading);
-	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	$turParams = new JRegistry();
-	$turParams->loadString($this->turnier->params);
+    require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
+    $turParams = new JRegistry();
+    $turParams->loadString($this->turnier->params);
 
-	?>
+    ?>
 
-	<table cellpadding="0" cellspacing="0" id="turnier_teilnehmer" <?php if ($fixth_ttln =="1") { ?>class="tableWithFloatingHeader"<?php } ?>>
+	<table cellpadding="0" cellspacing="0" id="turnier_teilnehmer" <?php if ($fixth_ttln == "1") { ?>class="tableWithFloatingHeader"<?php } ?>>
 
 	<tr>
 		
 		<th class="tt_col_1"><?php echo JText::_('TOURNAMENT_NUMBERABB'); ?></th>
 		
 		<?php
-		if ($turParams->get('displayPlayerTitle', 1) == 1) {
-		?>
+        if ($turParams->get('displayPlayerTitle', 1) == 1) {
+            ?>
 			<th class="tt_col_2"><?php echo JText::_('TOURNAMENT_TITLE'); ?></th>
 		<?php
-		}
-		?>
+        }
+    ?>
 		
 		<th class="tt_col_3"><?php echo JText::_('TOURNAMENT_PLAYERNAME'); ?></th>
 		
 		<?php
-		if ($turParams->get('displayPlayerClub', 1) == 2) {
-		?>
+    if ($turParams->get('displayPlayerClub', 1) == 2) {
+        ?>
 			<th class="tt_col_4"><?php echo JText::_('TOURNAMENT_CLUB'); ?></th>
 		<?php
-		}
-		?>		
+    }
+    ?>		
 		
 		<th class="tt_col_7"><?php echo JText::_('TOURNAMENT_RATING'); ?></th>
 		<th class="tt_col_7"><?php echo JText::_('DWZ_W'); ?></th>
@@ -102,100 +102,103 @@ echo CLMContent::createPDFLink('turnier_dwz', JText::_('TOURNAMENT_DWZ'), array(
 	
 	<?php
 
-	$p=0;
+    $p = 0;
 
-	foreach ($this->players as $key => $value) {
+    foreach ($this->players as $key => $value) {
 
-		$p++; // rowCount
+        $p++; // rowCount
 
-		// Farbe anpassen
+        // Farbe anpassen
 
-		if ($p%2 != 0) { 
+        if ($p % 2 != 0) {
 
-			$zeilenr = "zeile1"; 
+            $zeilenr = "zeile1";
 
-		} else { 
+        } else {
 
-			$zeilenr = "zeile2"; 
+            $zeilenr = "zeile2";
 
-		}
+        }
 
-		?>
+        ?>
 
 		<tr class="<?php echo $zeilenr; ?>">
 			
 			<td class="tt_col_1"><?php echo $value->snr; ?></td>
 			
 			<?php
-				
-			// Title
-			if ($turParams->get('displayPlayerTitle', 1) == 1) {
-				echo '<td class="tt_col_2">'.$value->titel.'</td>';
-			}
-				
-			$link = new CLMcLink();
-			$link->view = 'turnier_player';
-			$link->more = array('turnier' => $this->turnier->id, 'snr' => $value->snr, 'Itemid' => $itemid );
-			$link->makeURL();
-			
-			// Name
-			echo '<td class="tt_col_3">'.$link->makeLink($value->name). '</td>';
-			
-			// Club
-			if ($turParams->get('displayPlayerClub', 1) == 2) {
-				if ($this->tourn_linkclub == 1) {
-					$link = new CLMcLink();
-					$link->view = 'verein';
-					$link->more = array('saison' => $value->sid, 'zps' => $value->zps, 'Itemid' => $itemid );
-					$link->makeURL();
-					echo '<td class="tt_col_4">'.$link->makeLink($value->verein).'</td>';
-				} else {
-					echo '<td class="tt_col_4">'.$value->verein.'</td>';
-				}
-			}
-			
-			// start_dwz
-			echo '<td class="tt_col_7">'.CLMText::formatRating($value->start_dwz).'</td>';
-			echo '<td class="tt_col_7">'.$value->Punkte.'</td>';
-			echo '<td class="tt_col_7">'.CLMText::formatRating($value->We).'</td>';
-			echo '<td class="tt_col_7">'.CLMText::formatRating($value->EFaktor).'</td>';
-			echo '<td class="tt_col_7">'.CLMText::formatRating($value->Leistung).'</td>';
-			echo '<td class="tt_col_7">'.CLMText::formatRating($value->Niveau).'</td>';
-			echo '<td class="tt_col_7">';
-			$Pkt = explode (".", $value->Punkte);
-			if ($Pkt[1] != "0") {
-				if ($Pkt[0] != "0") { 
-					echo $Pkt[0].'&frac12;  /  '.$value->Partien.'</td>';
-				} else { 
-					echo '&frac12;  /  '.$value->Partien.'</td>';
-				}
-			} else { 
-				echo $Pkt[0].'  /  '.$value->Partien.'</td>';
-			} 
-  			//echo '<td class="tt_col_7">'.CLMText::formatRating($value->Partien).'</td>';
-			echo '<td class="tt_col_7">'.CLMText::formatRating($value->DWZ).'</td>';
-			if ($value->DWZ == 0 OR $value->start_dwz == 0) echo '<td class="tt_col_7">'.CLMText::formatRating(0).'</td>';
-			else echo '<td class="tt_col_7">'.($value->DWZ - $value->start_dwz).'</td>';
-			
-			
-			?>
+
+            // Title
+            if ($turParams->get('displayPlayerTitle', 1) == 1) {
+                echo '<td class="tt_col_2">'.$value->titel.'</td>';
+            }
+
+        $link = new CLMcLink();
+        $link->view = 'turnier_player';
+        $link->more = array('turnier' => $this->turnier->id, 'snr' => $value->snr, 'Itemid' => $itemid );
+        $link->makeURL();
+
+        // Name
+        echo '<td class="tt_col_3">'.$link->makeLink($value->name). '</td>';
+
+        // Club
+        if ($turParams->get('displayPlayerClub', 1) == 2) {
+            if ($this->tourn_linkclub == 1) {
+                $link = new CLMcLink();
+                $link->view = 'verein';
+                $link->more = array('saison' => $value->sid, 'zps' => $value->zps, 'Itemid' => $itemid );
+                $link->makeURL();
+                echo '<td class="tt_col_4">'.$link->makeLink($value->verein).'</td>';
+            } else {
+                echo '<td class="tt_col_4">'.$value->verein.'</td>';
+            }
+        }
+
+        // start_dwz
+        echo '<td class="tt_col_7">'.CLMText::formatRating($value->start_dwz).'</td>';
+        echo '<td class="tt_col_7">'.$value->Punkte.'</td>';
+        echo '<td class="tt_col_7">'.CLMText::formatRating($value->We).'</td>';
+        echo '<td class="tt_col_7">'.CLMText::formatRating($value->EFaktor).'</td>';
+        echo '<td class="tt_col_7">'.CLMText::formatRating($value->Leistung).'</td>';
+        echo '<td class="tt_col_7">'.CLMText::formatRating($value->Niveau).'</td>';
+        echo '<td class="tt_col_7">';
+        $Pkt = explode(".", $value->Punkte);
+        if ($Pkt[1] != "0") {
+            if ($Pkt[0] != "0") {
+                echo $Pkt[0].'&frac12;  /  '.$value->Partien.'</td>';
+            } else {
+                echo '&frac12;  /  '.$value->Partien.'</td>';
+            }
+        } else {
+            echo $Pkt[0].'  /  '.$value->Partien.'</td>';
+        }
+        //echo '<td class="tt_col_7">'.CLMText::formatRating($value->Partien).'</td>';
+        echo '<td class="tt_col_7">'.CLMText::formatRating($value->DWZ).'</td>';
+        if ($value->DWZ == 0 or $value->start_dwz == 0) {
+            echo '<td class="tt_col_7">'.CLMText::formatRating(0).'</td>';
+        } else {
+            echo '<td class="tt_col_7">'.($value->DWZ - $value->start_dwz).'</td>';
+        }
+
+
+        ?>
 		
 		</tr>
 
 		<?php
-	}
+    }
 
-	echo '</table>';
+    echo '</table>';
 
-	if($dwz_date == "0000-00-00" OR $dwz_date == "1970-01-01") { 
-		echo '<div class="hint">'.JText::_('TOURNAMENT_DWZ_DATE_NO').'</div><br/>';
-	} else {
-		echo '<div class="hint">'.JText::_('TOURNAMENT_DWZ_DATE').clm_core::$load->date_to_string($dwz_date,false,false).'.</div><br/>';
-	}
+    if ($dwz_date == "0000-00-00" or $dwz_date == "1970-01-01") {
+        echo '<div class="hint">'.JText::_('TOURNAMENT_DWZ_DATE_NO').'</div><br/>';
+    } else {
+        echo '<div class="hint">'.JText::_('TOURNAMENT_DWZ_DATE').clm_core::$load->date_to_string($dwz_date, false, false).'.</div><br/>';
+    }
 }
 
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); 
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php');
 echo '</div></div>';
 
- 
+
 ?>

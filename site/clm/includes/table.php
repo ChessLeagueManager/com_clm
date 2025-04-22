@@ -1,4 +1,5 @@
 <?php
+
 defined('clm') or die('Restricted access');
 // **** Tabellen und ihre unique Spalten definieren **** //
 // unique Feld, Typ des Feldes, AUTO_INCREMENT
@@ -13,4 +14,3 @@ $table["dwz_vereine"] = array("ZPS", "s",false);
 $table["dwz_verbaende"] = array("Verband", "s",false);
 $table["mannschaften"] = array("id", "i",true);
 $table["logging"] = array("id", "i",true);
-?>

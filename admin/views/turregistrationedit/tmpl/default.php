@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleague.de
@@ -11,8 +11,8 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-		$turParams = new clm_class_params($this->turnier->params);
-		$param_typeaccount = $turParams->get('typeAccount', 0);
+$turParams = new clm_class_params($this->turnier->params);
+$param_typeaccount = $turParams->get('typeAccount', 0);
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -21,8 +21,8 @@ defined('_JEXEC') or die('Restricted access');
 	
 	<div class="col width-50">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'PLAYER_DATA' ); ?></legend>
-<?php //echo "<br>registrationid:".$this->param['registrationid']; ?>
+		<legend><?php echo JText::_('PLAYER_DATA'); ?></legend>
+<?php //echo "<br>registrationid:".$this->param['registrationid'];?>
 		<table class="admintable">
 			<tr>
 				<td class="key" nowrap="nowrap">* <?php echo JText::_('PLAYER_NAME'); ?> (<?php echo JText::_('LASTNAME_FIRSTNAME'); ?>):</td>
@@ -52,15 +52,27 @@ defined('_JEXEC') or die('Restricted access');
 			<?php } ?>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('RATING'); ?>:</td>
-				<td><input class="inputbox" type="text" name="dwz" id="dwz" size="4" maxlength="4" value="<?php if ($this->registration->dwz != 0) echo $this->registration->dwz; else echo ""; ?>" /></td>
+				<td><input class="inputbox" type="text" name="dwz" id="dwz" size="4" maxlength="4" value="<?php if ($this->registration->dwz != 0) {
+				    echo $this->registration->dwz;
+				} else {
+				    echo "";
+				} ?>" /></td>
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('RATING_INDEX'); ?>:</td>
-				<td><input class="inputbox" type="text" name="dwz_I0" id="dwz_I0" size="4" maxlength="4" value="<?php if ($this->registration->dwz_I0 != 0) echo $this->registration->dwz_I0; else echo ""; ?>" /></td>
+				<td><input class="inputbox" type="text" name="dwz_I0" id="dwz_I0" size="4" maxlength="4" value="<?php if ($this->registration->dwz_I0 != 0) {
+				    echo $this->registration->dwz_I0;
+				} else {
+				    echo "";
+				} ?>" /></td>
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('FIDE_ELO'); ?>:</td>
-				<td><input class="inputbox" type="text" name="elo" id="elo" size="4" maxlength="4" value="<?php if ($this->registration->elo != 0) echo $this->registration->elo; else echo ""; ?>" /></td>
+				<td><input class="inputbox" type="text" name="elo" id="elo" size="4" maxlength="4" value="<?php if ($this->registration->elo != 0) {
+				    echo $this->registration->elo;
+				} else {
+				    echo "";
+				} ?>" /></td>
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_TITLE'); ?>:</td>
@@ -70,21 +82,25 @@ defined('_JEXEC') or die('Restricted access');
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_SEX'); ?>:</td>
 				<td class="paramlist_value">
 					<?php
-					$options = array();
-					$options[''] = '';
-					$options['M'] = JText::_('OPTION_SEX_M');
-					$options['W'] = JText::_('OPTION_SEX_W');
-					$optionlist = array();
-					foreach ($options as $key => $val) {
-						$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
-					}
-					echo JHtml::_('select.genericlist', $optionlist, 'geschlecht', 'class="inputbox"', 'id', 'name', $this->registration->geschlecht);
-					?>
+                    $options = array();
+$options[''] = '';
+$options['M'] = JText::_('OPTION_SEX_M');
+$options['W'] = JText::_('OPTION_SEX_W');
+$optionlist = array();
+foreach ($options as $key => $val) {
+    $optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name');
+}
+echo JHtml::_('select.genericlist', $optionlist, 'geschlecht', 'class="inputbox"', 'id', 'name', $this->registration->geschlecht);
+?>
 				</td>
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_FIDE_ID'); ?>:</td>
-				<td><input class="inputbox" type="text" name="FIDEid" id="FIDEid" size="8" maxlength="8" value="<?php if ($this->registration->FIDEid != 0) echo $this->registration->FIDEid; else echo ""; ?>" /></td>
+				<td><input class="inputbox" type="text" name="FIDEid" id="FIDEid" size="8" maxlength="8" value="<?php if ($this->registration->FIDEid != 0) {
+				    echo $this->registration->FIDEid;
+				} else {
+				    echo "";
+				} ?>" /></td>
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_FIDE_CCO'); ?>:</td>
@@ -92,7 +108,11 @@ defined('_JEXEC') or die('Restricted access');
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_MGLNR'); ?>:</td>
-				<td><input class="inputbox" type="text" name="mgl_nr" id="mgl_nr" size="5" maxlength="5" value="<?php if ($this->registration->mgl_nr != 0) echo $this->registration->mgl_nr; else echo ""; ?>" /></td>
+				<td><input class="inputbox" type="text" name="mgl_nr" id="mgl_nr" size="5" maxlength="5" value="<?php if ($this->registration->mgl_nr != 0) {
+				    echo $this->registration->mgl_nr;
+				} else {
+				    echo "";
+				} ?>" /></td>
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_PKZ'); ?>:</td>
@@ -100,12 +120,16 @@ defined('_JEXEC') or die('Restricted access');
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_ZPS'); ?>:</td>
-				<td><input class="inputbox" type="text" name="zps" id="zps" size="5" maxlength="5" value="<?php if ($this->registration->zps != '0') echo $this->registration->zps; else echo ""; ?>" /></td>
+				<td><input class="inputbox" type="text" name="zps" id="zps" size="5" maxlength="5" value="<?php if ($this->registration->zps != '0') {
+				    echo $this->registration->zps;
+				} else {
+				    echo "";
+				} ?>" /></td>
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_COMMENT'); ?>:</td>
 				<td width="100%" valign="top">
-					<textarea class="inputbox" name="bem_int" id="bem_int" cols="40" rows="4" style="width:90%"><?php echo str_replace('&','&amp;',$this->registration->comment);?></textarea>
+					<textarea class="inputbox" name="bem_int" id="bem_int" cols="40" rows="4" style="width:90%"><?php echo str_replace('&', '&amp;', $this->registration->comment);?></textarea>
 				</td>
 			</tr>
 		</table>
@@ -123,6 +147,6 @@ defined('_JEXEC') or die('Restricted access');
 	<input type="hidden" name="snrmax" value="<?php echo $this->snrmax; ?>" />
 	<input type="hidden" name="controller" value="turregistrationedit" />
 	<input type="hidden" name="task" value="" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo JHtml::_('form.token'); ?>
 
 </form>

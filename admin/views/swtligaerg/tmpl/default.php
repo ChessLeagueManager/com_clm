@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -23,7 +23,7 @@ $mturnier = clm_core::$load->request_int('mturnier', 0);
 $ungerade = clm_core::$load->request_int('ungerade', 0);
 $noOrgReference = clm_core::$load->request_string('noOrgReference', '0');
 $noBoardResults = clm_core::$load->request_string('noBoardResults', '0');
-$dwz_handling   = clm_core::$load->request_string( 'dwz_handling', '0');
+$dwz_handling   = clm_core::$load->request_string('dwz_handling', '0');
 
 ?>
 
@@ -46,43 +46,60 @@ $dwz_handling   = clm_core::$load->request_string( 'dwz_handling', '0');
 <form action="index.php" method="post" name="adminForm" id="adminForm">
     <div class="col width-50">
     	<?php $sw_prelims = false;
-    		for ($p = 1; $p <= $this->anz_paarungen; $p++) { 
-				if (!isset($this->swt_data[$p])) break;
-				if (($this->swt_data[$p]['gast_mannschaft'] != "spielfrei") AND (isset($this->swt_data[$p]['hemsum'])) AND ($this->swt_data[$p]['hemsum'] != $this->swt_data[$p]['hmmsum']))  $sw_prelims = true;
-				if (($this->swt_data[$p]['heim_mannschaft'] != "spielfrei") AND (isset($this->swt_data[$p]['gemsum'])) AND ($this->swt_data[$p]['gemsum'] != $this->swt_data[$p]['gmmsum']))  $sw_prelims = true;
-    		}	
-			if 	($sw_prelims) {   ?>
+for ($p = 1; $p <= $this->anz_paarungen; $p++) {
+    if (!isset($this->swt_data[$p])) {
+        break;
+    }
+    if (($this->swt_data[$p]['gast_mannschaft'] != "spielfrei") and (isset($this->swt_data[$p]['hemsum'])) and ($this->swt_data[$p]['hemsum'] != $this->swt_data[$p]['hmmsum'])) {
+        $sw_prelims = true;
+    }
+    if (($this->swt_data[$p]['heim_mannschaft'] != "spielfrei") and (isset($this->swt_data[$p]['gemsum'])) and ($this->swt_data[$p]['gemsum'] != $this->swt_data[$p]['gmmsum'])) {
+        $sw_prelims = true;
+    }
+}
+if ($sw_prelims) {   ?>
 				<fieldset class="adminform">
-				    <legend><?php echo $this->swt_db_data['liga_name'] . ' ' . JText::_( 'SWT_LEAGUE_DG' ) . ' ' . ($dgang+1) . ' ' . JText::_( 'SWT_LEAGUE_ROUND' ) . ' ' . ($runde+1) . ', ' . JText::_( 'SWT_LEAGUE_PRELIMS' ) ; ?></legend>
+				    <legend><?php echo $this->swt_db_data['liga_name'] . ' ' . JText::_('SWT_LEAGUE_DG') . ' ' . ($dgang + 1) . ' ' . JText::_('SWT_LEAGUE_ROUND') . ' ' . ($runde + 1) . ', ' . JText::_('SWT_LEAGUE_PRELIMS') ; ?></legend>
 				    <table  class="adminlist">
-						<?php for ($p = 1; $p <= $this->anz_paarungen; $p++) { if (!isset($this->swt_data[$p])) break; ?>
-							<?php if ($this->swt_data[$p]['hemsum'] != $this->swt_data[$p]['hmmsum'])  { ?>
+						<?php for ($p = 1; $p <= $this->anz_paarungen; $p++) {
+						    if (!isset($this->swt_data[$p])) {
+						        break;
+						    } ?>
+							<?php if ($this->swt_data[$p]['hemsum'] != $this->swt_data[$p]['hmmsum']) { ?>
 							<tr>
 								<th widhth="90%" nowrap="nowrap">
-			    			<label><?php echo JText::_( 'SWT_LEAGUE_PAIRING' ).' '.$p.' '.$this->swt_data[$p]['heim_mannschaft'].': '.JText::_( 'SWT_LEAGUE_PRELIM01' ).'('.$this->swt_data[$p]['hmmsum'].') '.JText::_( 'SWT_LEAGUE_PRELIM02' ); ?></label>
+			    			<label><?php echo JText::_('SWT_LEAGUE_PAIRING').' '.$p.' '.$this->swt_data[$p]['heim_mannschaft'].': '.JText::_('SWT_LEAGUE_PRELIM01').'('.$this->swt_data[$p]['hmmsum'].') '.JText::_('SWT_LEAGUE_PRELIM02'); ?></label>
 								</th>
 							</tr>	
 							<?php } ?>
-							<?php if ($this->swt_data[$p]['gemsum'] != $this->swt_data[$p]['gmmsum'])  { if (!isset($this->swt_data[$p])) break; ?>
+							<?php if ($this->swt_data[$p]['gemsum'] != $this->swt_data[$p]['gmmsum']) {
+							    if (!isset($this->swt_data[$p])) {
+							        break;
+							    } ?>
 							<tr>
 								<th widhth="90%" nowrap="nowrap">
-				    			<label><?php echo JText::_( 'SWT_LEAGUE_PAIRING' ).' '.$p.' '.$this->swt_data[$p]['gast_mannschaft'].':'.JText::_( 'SWT_LEAGUE_PRELIM01' ).'('.$this->swt_data[$p]['gmmsum'].') '.JText::_( 'SWT_LEAGUE_PRELIM02' ); ?></label>
+				    			<label><?php echo JText::_('SWT_LEAGUE_PAIRING').' '.$p.' '.$this->swt_data[$p]['gast_mannschaft'].':'.JText::_('SWT_LEAGUE_PRELIM01').'('.$this->swt_data[$p]['gmmsum'].') '.JText::_('SWT_LEAGUE_PRELIM02'); ?></label>
 								</th>
 							</tr>	
 							<?php } ?>
 						<?php } ?>
 				    </table>
 				</fieldset>
-			<?php }	
-    		for ($p = 1; $p <= $this->anz_paarungen; $p++) { if (!isset($this->swt_data[$p])) break;
-    			?>
+			<?php }
+for ($p = 1; $p <= $this->anz_paarungen; $p++) {
+    if (!isset($this->swt_data[$p])) {
+        break;
+    }
+    ?>
 				<fieldset class="adminform">
-				    <legend <?php if ($noBoardResults == '1') { echo 'style="font-size:120%;"'; } ?>><?php echo $this->swt_db_data['liga_name'] . ' ' . JText::_( 'SWT_LEAGUE_DG' ) . ' ' . ($dgang+1) . ' ' . JText::_( 'SWT_LEAGUE_ROUND' ) . ' ' . ($runde+1) . ', ' . JText::_( 'SWT_LEAGUE_PAIRING' ) . ' ' . $p; ?></legend>
+				    <legend <?php if ($noBoardResults == '1') {
+				        echo 'style="font-size:120%;"';
+				    } ?>><?php echo $this->swt_db_data['liga_name'] . ' ' . JText::_('SWT_LEAGUE_DG') . ' ' . ($dgang + 1) . ' ' . JText::_('SWT_LEAGUE_ROUND') . ' ' . ($runde + 1) . ', ' . JText::_('SWT_LEAGUE_PAIRING') . ' ' . $p; ?></legend>
 				    <table  class="adminlist">
 					  <?php if ($noBoardResults == '0') { ?>  
 				    	<tr>
 				    		<th width="10%" nowrap="nowrap">
-				    			<label><?php echo JText::_( 'SWT_LEAGUE_BOARD' ); ?></label>
+				    			<label><?php echo JText::_('SWT_LEAGUE_BOARD'); ?></label>
 				    		</th>
 				    		<th nowrap="nowrap">
 				    			<label><?php echo $this->swt_data[$p]['heim_mannschaft']; ?></label>
@@ -91,10 +108,10 @@ $dwz_handling   = clm_core::$load->request_string( 'dwz_handling', '0');
 				    			<label><?php echo $this->swt_data[$p]['gast_mannschaft']; ?></label>
 				    		</th>
 				    		<th nowrap="nowrap">
-				    			<label><?php echo JText::_( 'SWT_LEAGUE_RESULT' ); ?></label>
+				    			<label><?php echo JText::_('SWT_LEAGUE_RESULT'); ?></label>
 				    		</th>
 				    		<th nowrap="nowrap">
-				    			<label><?php echo JText::_( 'SWT_LEAGUE_RESULT_KORR' ); ?></label>
+				    			<label><?php echo JText::_('SWT_LEAGUE_RESULT_KORR'); ?></label>
 				    		</th>
 				   		</tr>
 						<?php echo $this->tables['auswahl'][$p]; ?>
@@ -114,14 +131,14 @@ $dwz_handling   = clm_core::$load->request_string( 'dwz_handling', '0');
 				    </table>
 				</fieldset>
 				<?php
-			}
-		?>
+}
+?>
     </div>
     <!-- ggf. hier noch irgendwas anzeigen (z.B. Bemerkungen, interne Bemerkungen, ...) -->
     
     <!--<div class="col width-50">
         <fieldset class="adminform">
-            <legend><?php echo JText::_( 'SWT_LEAGUE_PLAYERS_2' ); ?></legend>
+            <legend><?php echo JText::_('SWT_LEAGUE_PLAYERS_2'); ?></legend>
             <table class="adminlist">
                 <?php echo $this->tables['ersatzspieler']; ?>
             </table>
@@ -147,6 +164,6 @@ $dwz_handling   = clm_core::$load->request_string( 'dwz_handling', '0');
 	<input type="hidden" name="ungerade" value="<?php echo $ungerade; ?>" />
 	<input type="hidden" name="dwz_handling" value="<?php echo $dwz_handling; ?>" />
     <?php echo $this->hidden['farbe']; ?>
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo JHtml::_('form.token'); ?>
 
 </form>

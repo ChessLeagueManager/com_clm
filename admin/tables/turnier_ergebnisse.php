@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
@@ -12,45 +12,45 @@
 */
 
 // no direct access
-defined( '_JEXEC' ) or die( 'Restricted access' );
+defined('_JEXEC') or die('Restricted access');
 
 class TableCLMTurnier_Ergebnisse extends JTable
 {
+    public $id				= null;
+    public $sid				= null;
+    public $turnier		= '';
+    public $runde			= '';
+    public $paar			= '';
+    public $brett			= '';
+    public $dg				= '';
+    public $tln_nr			= '';
+    public $heim			= '';
+    public $spieler		= '';
+    public $gegner			= '';
+    public $ergebnis		= '';
+    public $tiebrS		= 0;
+    public $tiebrG		= 0;
+    public $kampflos		= '';
+    public $gemeldet		= 0;
+    public $pgn			= '';
+    public $ordering		= null;
 
-	var $id				= null;
-	var $sid				= null;
-	var $turnier		= '';
-	var $runde			= '';
-	var $paar			= '';
-	var $brett			= '';
-	var $dg				= '';
-	var $tln_nr			= '';
-	var $heim			= '';
-	var $spieler		= '';
-	var $gegner			= '';
-	var $ergebnis		= '';
-	var $tiebrS		= 0;
-	var $tiebrG		= 0;
-	var $kampflos		= '';
-	var $gemeldet		= 0;
-	var $pgn			= '';
-	var $ordering		= null;
+    public function __construct(&$_db)
+    {
+        parent::__construct('#__clm_turniere_rnd_spl', 'id', $_db);
+    }
 
-	function __construct( &$_db ) {
-		parent::__construct( '#__clm_turniere_rnd_spl', 'id', $_db );
-	}
+    /**
+     * Overloaded check function
+     *
+     * @access public
+     * @return boolean
+     * @see JTable::check
+     * @since 1.5
+     */
+    public function check()
+    {
 
-	/**
-	 * Overloaded check function
-	 *
-	 * @access public
-	 * @return boolean
-	 * @see JTable::check
-	 * @since 1.5
-	 */
-	function check()
-	{
-
-		return true;
-	}
+        return true;
+    }
 }
