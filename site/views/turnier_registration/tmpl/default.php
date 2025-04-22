@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -18,69 +18,69 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 echo "<div id='clm'><div id='turnier_info'>";
 
 // Konfigurationsparameter auslesen - get configuration parameter
-$itemid 		= clm_core::$load->request_int( 'Itemid' );
+$itemid 		= clm_core::$load->request_int('Itemid');
 $today = date("Y-m-d");
 
 // componentheading vorbereiten - prepare componentheading
 $heading = $this->turnier->name;
 
 // Turnier unveröffentlicht? - Tournament unpublished?
-if ( $this->turnier->published == 0) {
-	echo CLMContent::componentheading($heading);
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
+if ($this->turnier->published == 0) {
+    echo CLMContent::componentheading($heading);
+    echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
 
-// Turnier Registration nicht gesetzt oder abgelaufen - Tournament registration not chosen or expired
-} elseif (!isset($this->turnier->dateRegistration) OR $this->turnier->dateRegistration < $today)  { // Online Anmeldung vorgesehen? - Omline registration provided?
-	echo CLMContent::componentheading($heading);
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NO_ONLINE_REG'));
+    // Turnier Registration nicht gesetzt oder abgelaufen - Tournament registration not chosen or expired
+} elseif (!isset($this->turnier->dateRegistration) or $this->turnier->dateRegistration < $today) { // Online Anmeldung vorgesehen? - Omline registration provided?
+    echo CLMContent::componentheading($heading);
+    echo CLMContent::clmWarning(JText::_('TOURNAMENT_NO_ONLINE_REG'));
 
-// Turnier - Tournament
+    // Turnier - Tournament
 } else {
-	echo CLMContent::componentheading($heading);
-	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	
-	?>
+    echo CLMContent::componentheading($heading);
+    require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
+
+    ?>
 	
 	<br />
 	
 	<?php
 
-	// Online Anmeldung - Online Registration
-	
-		// Konfigurationsparameter auslesen - get configuration parameter
-		$config = clm_core::$db->config();
-		$privacy_notice = $config->privacy_notice;
+    // Online Anmeldung - Online Registration
 
-		$turParams = new clm_class_params($this->turnier->params);
-		$typeRegistration = $turParams->get('typeRegistration', 0);
-		$typeAccount 	= $turParams->get('typeAccount', 0);
-		$optionEloAnalysis = $turParams->get('optionEloAnalysis', 0);
-		$reg_name 		= clm_core::$load->request_string('reg_name','');		
-		$reg_vorname 	= clm_core::$load->request_string('reg_vorname','');		
-		$reg_jahr 		= clm_core::$load->request_string('reg_jahr','');		
-		$reg_geschlecht	= clm_core::$load->request_string('reg_geschlecht','');		
-		$reg_club 		= clm_core::$load->request_string('reg_club','');		
-		$reg_mail 		= clm_core::$load->request_string('reg_mail','');		
-		$reg_tel_no 	= clm_core::$load->request_string('reg_tel_no','');		
-		$reg_account 	= clm_core::$load->request_string('reg_account','');		
-		$reg_zps 		= clm_core::$load->request_string('reg_zps','');		
-		$reg_mgl_nr 		= clm_core::$load->request_string('reg_mgl_nr','');		
-		$reg_dwz 		= clm_core::$load->request_string('reg_dwz','');		
-		$reg_elo 		= clm_core::$load->request_string('reg_elo','');		
-		$reg_FIDEid 		= clm_core::$load->request_string('reg_FIDEid','');		
-		$reg_comment 	= clm_core::$load->request_string('reg_comment','');		
-		$reg_dsgvo 	= clm_core::$load->request_string('reg_dsgvo',0);		
+        // Konfigurationsparameter auslesen - get configuration parameter
+        $config = clm_core::$db->config();
+    $privacy_notice = $config->privacy_notice;
 
-		if ($typeRegistration < 5) { 
-			$headline = JText::_('REGISTRATION_ONLINE');
-			$layout = 'sent';
-			$button = JText::_('CLUB_DATA_SEND_BUTTON');
-		} else {
-			$headline = JText::_('REGISTRATION_ONLINE_5');
-			$layout = 'selection';
-			$button = 'Weiter';
-		}
-		?>
+    $turParams = new clm_class_params($this->turnier->params);
+    $typeRegistration = $turParams->get('typeRegistration', 0);
+    $typeAccount 	= $turParams->get('typeAccount', 0);
+    $optionEloAnalysis = $turParams->get('optionEloAnalysis', 0);
+    $reg_name 		= clm_core::$load->request_string('reg_name', '');
+    $reg_vorname 	= clm_core::$load->request_string('reg_vorname', '');
+    $reg_jahr 		= clm_core::$load->request_string('reg_jahr', '');
+    $reg_geschlecht	= clm_core::$load->request_string('reg_geschlecht', '');
+    $reg_club 		= clm_core::$load->request_string('reg_club', '');
+    $reg_mail 		= clm_core::$load->request_string('reg_mail', '');
+    $reg_tel_no 	= clm_core::$load->request_string('reg_tel_no', '');
+    $reg_account 	= clm_core::$load->request_string('reg_account', '');
+    $reg_zps 		= clm_core::$load->request_string('reg_zps', '');
+    $reg_mgl_nr 		= clm_core::$load->request_string('reg_mgl_nr', '');
+    $reg_dwz 		= clm_core::$load->request_string('reg_dwz', '');
+    $reg_elo 		= clm_core::$load->request_string('reg_elo', '');
+    $reg_FIDEid 		= clm_core::$load->request_string('reg_FIDEid', '');
+    $reg_comment 	= clm_core::$load->request_string('reg_comment', '');
+    $reg_dsgvo 	= clm_core::$load->request_string('reg_dsgvo', 0);
+
+    if ($typeRegistration < 5) {
+        $headline = JText::_('REGISTRATION_ONLINE');
+        $layout = 'sent';
+        $button = JText::_('CLUB_DATA_SEND_BUTTON');
+    } else {
+        $headline = JText::_('REGISTRATION_ONLINE_5');
+        $layout = 'selection';
+        $button = 'Weiter';
+    }
+    ?>
 	  <br>
 	<script language="javascript" type="text/javascript">
 
@@ -88,9 +88,9 @@ if ( $this->turnier->published == 0) {
 			var form = document.adminForm;
 			// do field validation
 			if (form.name99.value == "") {
-				alert( "<?php echo JText::_( 'REGISTRATION_PLAYER_INPUT', true ); ?>" );
+				alert( "<?php echo JText::_('REGISTRATION_PLAYER_INPUT', true); ?>" );
 			} else if (form.club.value == "") {
-				alert( "<?php echo JText::_( 'REGISTRATION_CLUB_INPUT', true ); ?>" );
+				alert( "<?php echo JText::_('REGISTRATION_CLUB_INPUT', true); ?>" );
 			} else {
 				Joomla.submitform( pressbutton );
 			}
@@ -140,8 +140,8 @@ if ( $this->turnier->published == 0) {
 			<input class="inputbox" type="text" name="reg_tel_no" id="reg_tel_no" size="30" maxlength="30" value="<?php echo $reg_tel_no; ?>" />
 			</td>
 		</tr>
-	<?php if ($typeAccount > 0) { 
-	?>
+	<?php if ($typeAccount > 0) {
+	    ?>
 		<tr>
 			<td align="left" width="100" title="<?php echo JText::_('REGISTRATION_ACCOUNT_HINT'); ?>"><?php echo JText::_('REGISTRATION_ACCOUNT_'.$typeAccount); ?>(*):</td>
 			<td colspan="3">
@@ -149,8 +149,8 @@ if ( $this->turnier->published == 0) {
 			</td>
 		</tr>
 	<?php } ?>
-	<?php if ($typeRegistration < 5) { 
-	?>
+	<?php if ($typeRegistration < 5) {
+	    ?>
 		<tr>
 			<td align="left" width="100"><?php echo JText::_('REGISTRATION_CLUB'); ?>(*):</td>
 			<td colspan="3">
@@ -191,16 +191,16 @@ if ( $this->turnier->published == 0) {
 			<td align="left" width="100"><?php echo JText::_('REGISTRATION_SEX'); ?>:</td>
 			<td class="paramlist_value" colspan="3">
 					<?php
-					$options = array();
-					$options[''] = '';
-					$options['M'] = JText::_('REGISTRATION_SEX_M');
-					$options['W'] = JText::_('REGISTRATION_SEX_W');
-					$optionlist = array();
-					foreach ($options as $key => $val) {
-						$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
-					}
-					echo JHtml::_('select.genericlist', $optionlist, 'reg_geschlecht', 'class="inputbox"', 'id', 'name', $reg_geschlecht);
-					?>
+	                    $options = array();
+	    $options[''] = '';
+	    $options['M'] = JText::_('REGISTRATION_SEX_M');
+	    $options['W'] = JText::_('REGISTRATION_SEX_W');
+	    $optionlist = array();
+	    foreach ($options as $key => $val) {
+	        $optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name');
+	    }
+	    echo JHtml::_('select.genericlist', $optionlist, 'reg_geschlecht', 'class="inputbox"', 'id', 'name', $reg_geschlecht);
+	    ?>
 				</td>
 		</tr>
 		<tr>
@@ -210,10 +210,10 @@ if ( $this->turnier->published == 0) {
 			</td>
 		</tr>
 	<?php } else {
-		  } 
-		// Formular-Ausgabe abschließen und Captcha einbinden - Finish formular output and implement captcha
-		$result = clm_core::$load->session_variables('o'); 
-		?>
+	}
+    // Formular-Ausgabe abschließen und Captcha einbinden - Finish formular output and implement captcha
+    $result = clm_core::$load->session_variables('o');
+    ?>
 		<?php if ($privacy_notice != '') { ?>
 		  <tr>
 			<th style="align: center;" class="anfang">&nbsp;&nbsp;&nbsp;<input type="checkbox" id="reg_dsgvo" name="reg_dsgvo" value="1">
@@ -250,14 +250,14 @@ if ( $this->turnier->published == 0) {
 		<input type="hidden" name="optionEloAnalysis" value="<?php echo $optionEloAnalysis; ?>" />
 		<input type="hidden" name="privacy_notice" value="<?php echo $privacy_notice; ?>" />
 		<input type="hidden" name="task" value="" />
-		<?php echo JHTML::_( 'form.token' ); ?>
+		<?php echo JHTML::_('form.token'); ?>
 		
 	  </form>
 				
 <?php	}
 
 
-	
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); 
+
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php');
 echo '</div></div>';
 ?>

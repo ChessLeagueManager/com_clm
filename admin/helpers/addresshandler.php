@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -15,7 +16,7 @@ class AddressHandler
 
     /**
      * AddressHandler constructor.
-     * 
+     *
      * Initializes the AddressHandler object.
      */
     public function __construct()
@@ -65,7 +66,8 @@ class AddressHandler
      * @param string|null $coord_text The text containing the coordinates.
      * @return array An array containing the latitude and longitude extracted from the text.
      */
-    private function extractCoordinatesFromText($coord_text){
+    private function extractCoordinatesFromText($coord_text)
+    {
         if (!is_null($coord_text)) {
             preg_match('/POINT\(([-\d\.]+) ([-\d\.]+)\)/', $coord_text, $matches);
             if ($matches) {
@@ -91,18 +93,17 @@ class AddressHandler
     public function convertAddress($address)
     {
         // First check if user enabled address conversion
-        if(!$this->geo_enabled){
+        if (!$this->geo_enabled) {
             return -1; // Map Services (external) not enabled
         }
 
         // Lookup based on activated service
         $coordinates = $this->getCoordinates($address);
 
-        if(is_null($coordinates)){
-            return NULL;
-        }
-        else{
-            // Return as Text 
+        if (is_null($coordinates)) {
+            return null;
+        } else {
+            // Return as Text
             $point = "POINT($coordinates[0] $coordinates[1])";
 
             return $point;
@@ -181,51 +182,48 @@ class AddressHandler
 
         //Check if the response is empty
         if (empty($resp_json) || $resp_json == "[]") {
-            return NULL;
-        }
-        else
-        {
+            return null;
+        } else {
             //Search for the PLZ (Postleitzahl) in the response
             //There were some occurences by CLM user, where the highest response of OSM was in a different city (other PLZ)
             preg_match('/\b\d{5}\b/', $address, $matches);
             if (!empty($matches)) {
                 $postal_code = $matches[0];
-            
+
                 $places = json_decode($resp_json, true);
-            
+
                 // Track place with highest importance
                 $highestImportancePlace = null;
-                $maxImportance = -1; // OSM returns only values between 0 and 1 
-            
+                $maxImportance = -1; // OSM returns only values between 0 and 1
+
                 // Loop through the response and check if the PLZ exists in the display_name
                 foreach ($places as &$place) {
                     if (strpos($place['display_name'], $postal_code) !== false) {
                         $place['importance'] += 0.5; // Arbitrary value to increase importance of the place
                     }
-            
+
                     // Track highest importance place
                     if ($place['importance'] > $maxImportance) {
                         $maxImportance = $place['importance'];
                         $highestImportancePlace = $place;
                     }
                 }
-                        
-            }
-            else {
+
+            } else {
                 $resp = json_decode($resp_json, true);
                 //take first response which has the highest importance
                 $highestImportancePlace = $resp[0];
             }
 
             if (is_null($highestImportancePlace)) {
-                return NULL;
+                return null;
             } elseif (isset($highestImportancePlace['lat']) && isset($highestImportancePlace['lon'])) {
                 return array($highestImportancePlace['lat'], $highestImportancePlace['lon']);
             } else {
-                return NULL;
+                return null;
             }
         }
-}
+    }
 
     /**
      * Retrieves the coordinates (latitude and longitude) of a given address using the Google Geocoding API.
@@ -245,7 +243,7 @@ class AddressHandler
         if ($resp['status'] == 'OK' && isset($resp['results'][0]['geometry']['location']['lat']) && isset($resp['results'][0]['geometry']['location']['lng'])) {
             return array($resp['results'][0]['geometry']['location']['lat'], $resp['results'][0]['geometry']['location']['lng']);
         } else {
-            return NULL;
+            return null;
         }
     }
 
@@ -258,7 +256,7 @@ class AddressHandler
      */
     public function updateClubCoordinates($coord, $rowId)
     {
-        $club=1;
+        $club = 1;
         $this->updateCoordinates($coord, $rowId, $club);
     }
 
@@ -271,7 +269,7 @@ class AddressHandler
      */
     public function updateTeamCoordinates($coord, $rowId)
     {
-        $club=0;
+        $club = 0;
         $this->updateCoordinates($coord, $rowId, $club);
     }
 
@@ -287,28 +285,24 @@ class AddressHandler
     {
         $db 	= JFactory::getDBO();
 
-        if($club==1){
+        if ($club == 1) {
             $table = '#__clm_vereine';
-        }
-        else
-        {
+        } else {
             $table = '#__clm_mannschaften';
         }
-        if(is_null($coord) or $coord==-1){
+        if (is_null($coord) or $coord == -1) {
             $query = "UPDATE $table "
             . " SET lokal_coord = NULL"
             . " WHERE id = $rowId";
             clm_core::$db->query($query);
-        }
-        else{
+        } else {
             //Store in db
             $query = "UPDATE $table"
                 . " SET lokal_coord = '$coord'"
                 . " WHERE id = $rowId";
             clm_core::$db->query($query);
-        }  
+        }
     }
 
 
 }
-?>

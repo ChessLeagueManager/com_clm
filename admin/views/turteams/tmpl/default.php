@@ -1,14 +1,14 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
 defined('_JEXEC') or die('Restricted access');
 
-	$turParams = new clm_class_params($this->turnier->params);
-	$param_typeaccount = $turParams->get('typeAccount', 0);
+$turParams = new clm_class_params($this->turnier->params);
+$param_typeaccount = $turParams->get('typeAccount', 0);
 
 ?>
 
@@ -18,21 +18,21 @@ defined('_JEXEC') or die('Restricted access');
 	
 	<div class="col width-50">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'EDIT_TEAMS' ); ?></legend>
+		<legend><?php echo JText::_('EDIT_TEAMS'); ?></legend>
 
 		<table class="admintable">
 		<tr>
 			<th width="10">
-				<?php echo JText::_( 'TEAM_NR' ); ?>
+				<?php echo JText::_('TEAM_NR'); ?>
 			</th>
 			<th width="250">
-				<?php echo JText::_( 'TEAM' ); ?>
+				<?php echo JText::_('TEAM'); ?>
 			</th>
 		</tr>
-			<?php 
-		    $i = 0;
-			foreach ($this->teams as $team) { 
-			  $i++; ?>
+			<?php
+            $i = 0;
+foreach ($this->teams as $team) {
+    $i++; ?>
 			  <tr>
 			    <td>
 				  <input type="text" name="tln_nr<?php echo $i; ?>" id="tln_nr<?php echo $i; ?>" value="<?php echo $team->tln_nr;  ?>" size="1" maxlength="4" style="width:100%;">
@@ -40,8 +40,8 @@ defined('_JEXEC') or die('Restricted access');
 				  <input type="text" name="name<?php echo $i; ?>" id="name<?php echo $i; ?>" value="<?php echo $team->name;  ?>" size="50" maxlength="100" style="width:100%;">
 				</td>
 			  </tr>
-			<?php } 
-			for ($ii=($i+1); $ii<($i+6); $ii++ ) { ?>
+			<?php }
+for ($ii = ($i + 1); $ii < ($i + 6); $ii++) { ?>
 			  <tr>
 			    <td>
 				  <input type="text" name="tln_nr<?php echo $ii; ?>" id="tln_nr<?php echo $ii; ?>" value="<?php echo '';  ?>" size="1" maxlength="4" style="width:100%;">
@@ -68,6 +68,6 @@ defined('_JEXEC') or die('Restricted access');
 	<input type="hidden" name="controller" value="turteams" />
 	<input type="hidden" name="boxchecked" value="0" />
 	<input type="hidden" name="task" value="" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo JHtml::_('form.token'); ?>
 
 </form>

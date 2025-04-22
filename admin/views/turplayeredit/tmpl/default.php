@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -11,11 +11,11 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-		$turParams = new clm_class_params($this->turnier->params);
-		$param_typeaccount = $turParams->get('typeAccount', 0);
-		$param_teamranking = $turParams->get('teamranking', 0);
-		$param_import_source = $turParams->get('import_source', 0);
-		$param_eloanalysis = $turParams->get('optionEloAnalysis', 0);
+$turParams = new clm_class_params($this->turnier->params);
+$param_typeaccount = $turParams->get('typeAccount', 0);
+$param_teamranking = $turParams->get('teamranking', 0);
+$param_import_source = $turParams->get('import_source', 0);
+$param_eloanalysis = $turParams->get('optionEloAnalysis', 0);
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -37,7 +37,7 @@ defined('_JEXEC') or die('Restricted access');
 	<div class="col width-50">
 		<fieldset class="adminform">
 		<br>
-		<legend><?php echo JText::_( 'PLAYER_DATA' ); ?></legend>
+		<legend><?php echo JText::_('PLAYER_DATA'); ?></legend>
 
 		<table class="admintable">
 			<tr>
@@ -54,32 +54,40 @@ defined('_JEXEC') or die('Restricted access');
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_ZPS'); ?>:</td>
-				<td><input class="inputbox" type="text" name="zps" id="zps" size="5" maxlength="5" value="<?php if ($this->player->zps != '0') echo $this->player->zps; else echo ""; ?>" /></td>
+				<td><input class="inputbox" type="text" name="zps" id="zps" size="5" maxlength="5" value="<?php if ($this->player->zps != '0') {
+				    echo $this->player->zps;
+				} else {
+				    echo "";
+				} ?>" /></td>
 		
 	   
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_MGLNR'); ?>:</td>
-				<td><input class="inputbox" type="text" name="mgl_nr" id="mgl_nr" size="4" maxlength="4" value="<?php if ($this->player->mgl_nr != 0) echo $this->player->mgl_nr; else echo ""; ?>" /></td>
+				<td><input class="inputbox" type="text" name="mgl_nr" id="mgl_nr" size="4" maxlength="4" value="<?php if ($this->player->mgl_nr != 0) {
+				    echo $this->player->mgl_nr;
+				} else {
+				    echo "";
+				} ?>" /></td>
 			</tr>
-			<?php if ($param_teamranking > 0 ) { ?>
+			<?php if ($param_teamranking > 0) { ?>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('TEAM'); ?>:</td>
 				<td class="paramlist_value">
 					<?php
-					$options = array();
-					$options[0] = JText::_('KEIN TEAM');
-					foreach ($this->teams as $team) {
-						$options[$team->tln_nr] = $team->name;
-					}
-					$optionlist = array();
-					foreach ($options as $key => $val) {
-						$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
-					}
-					echo JHtml::_('select.genericlist', $optionlist, 'mtln_nr', 'class="inputbox"', 'id', 'name', $this->player->mtln_nr);
-					?>
+                    $options = array();
+			    $options[0] = JText::_('KEIN TEAM');
+			    foreach ($this->teams as $team) {
+			        $options[$team->tln_nr] = $team->name;
+			    }
+			    $optionlist = array();
+			    foreach ($options as $key => $val) {
+			        $optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name');
+			    }
+			    echo JHtml::_('select.genericlist', $optionlist, 'mtln_nr', 'class="inputbox"', 'id', 'name', $this->player->mtln_nr);
+			    ?>
 				</td>
 			</tr>
 			<?php } ?>
-			<?php if ($param_import_source != '' AND $param_import_source != 0) { ?>
+			<?php if ($param_import_source != '' and $param_import_source != 0) { ?>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('DECODE_NICKNAME'); ?> (<?php echo $param_import_source; ?>):</td>
 				<td><input class="inputbox" type="text" name="oname" id="oname" size="20" maxlength="60" value="<?php echo $this->player->oname; ?>" /></td>
@@ -115,16 +123,16 @@ defined('_JEXEC') or die('Restricted access');
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_SEX'); ?>:</td>
 				<td class="paramlist_value">
 					<?php
-					$options = array();
-					$options[''] = '';
-					$options['M'] = JText::_('OPTION_SEX_M');
-					$options['W'] = JText::_('OPTION_SEX_W');
-					$optionlist = array();
-					foreach ($options as $key => $val) {
-						$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
-					}
-					echo JHtml::_('select.genericlist', $optionlist, 'geschlecht', 'class="inputbox"', 'id', 'name', $this->player->geschlecht);
-					?>
+			    $options = array();
+$options[''] = '';
+$options['M'] = JText::_('OPTION_SEX_M');
+$options['W'] = JText::_('OPTION_SEX_W');
+$optionlist = array();
+foreach ($options as $key => $val) {
+    $optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name');
+}
+echo JHtml::_('select.genericlist', $optionlist, 'geschlecht', 'class="inputbox"', 'id', 'name', $this->player->geschlecht);
+?>
 				</td>
 			</tr>
 			<tr>
@@ -158,13 +166,13 @@ defined('_JEXEC') or die('Restricted access');
 	<div class="col width-50">
 		<fieldset class="adminform">
 		<br>
-		<legend><?php echo JText::_( 'RESULT' ); ?></legend>
+		<legend><?php echo JText::_('RESULT'); ?></legend>
 
 		<table class="admintable">
 			
 			<?php
-			if ($this->turnier->typ != 3) { // nicht KO-System
-			?>
+            if ($this->turnier->typ != 3) { // nicht KO-System
+                ?>
 			
 				</tr>
 					<td class="key" nowrap="nowrap"><?php echo JText::_('POINTS'); ?>:</td>
@@ -172,40 +180,40 @@ defined('_JEXEC') or die('Restricted access');
 				</tr>
 				
 				<?php
-				$fwFieldNames = array(1 => 'sum_bhlz', 'sum_busum', 'sum_sobe', 'sum_wins');
-				// Feinwertungen durchgehen
-				for ($f=1; $f<=3; $f++) {
-					$fieldName = 'tiebr'.$f;
-					if ($this->turnier->$fieldName != 0) {
-						$sumFieldname = 'sumTiebr'.$f;
-						?>
+                    $fwFieldNames = array(1 => 'sum_bhlz', 'sum_busum', 'sum_sobe', 'sum_wins');
+                // Feinwertungen durchgehen
+                for ($f = 1; $f <= 3; $f++) {
+                    $fieldName = 'tiebr'.$f;
+                    if ($this->turnier->$fieldName != 0) {
+                        $sumFieldname = 'sumTiebr'.$f;
+                        ?>
 							</tr>
 								<td class="key" nowrap="nowrap"><?php echo JText::_('TIEBR_'.$this->turnier->$fieldName); ?>:</td>
 								<td><input class="inputbox" type="text" name="<?php echo $sumFieldname ?>" id="<?php echo $sumFieldname ?>" size="4" maxlength="8" value="<?php echo $this->player->$sumFieldname; ?>" /></td>
 							</tr>
 						<?php
-					}
-				}
-				?>
+                    }
+                }
+                ?>
 				
 			
 			
 			<?php
-			} else { // nur KO-System
-			?>
+            } else { // nur KO-System
+                ?>
 				</tr>
 					<td class="key" nowrap="nowrap"><?php echo JText::_('TOURNAMENT_KOSTATUS'); ?>:</td>
 					<td>
-						<?php 
-							$kostatuslist[]	= JHtml::_('select.option',  '0', JText::_('TOURNAMENT_KOSTATUS_0'), 'id', 'name' );
-							$kostatuslist[]	= JHtml::_('select.option',  '1', JText::_('TOURNAMENT_KOSTATUS_1'), 'id', 'name' );
-							echo JHtml::_('select.genericlist', $kostatuslist, 'koStatus', 'class="inputbox" size="1"', 'id', 'name', $this->player->koStatus );
-						?>
+						<?php
+                                $kostatuslist[]	= JHtml::_('select.option', '0', JText::_('TOURNAMENT_KOSTATUS_0'), 'id', 'name');
+                $kostatuslist[]	= JHtml::_('select.option', '1', JText::_('TOURNAMENT_KOSTATUS_1'), 'id', 'name');
+                echo JHtml::_('select.genericlist', $kostatuslist, 'koStatus', 'class="inputbox" size="1"', 'id', 'name', $this->player->koStatus);
+                ?>
 					</td>
 				</tr>
 			<?php
-			}
-			?>
+            }
+?>
 		
 		</table>
 		
@@ -221,6 +229,6 @@ defined('_JEXEC') or die('Restricted access');
 	<input type="hidden" name="turnierid" value="<?php echo $this->player->turnier; ?>" />
 	<input type="hidden" name="controller" value="turplayeredit" />
 	<input type="hidden" name="task" value="" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo JHtml::_('form.token'); ?>
 
 </form>

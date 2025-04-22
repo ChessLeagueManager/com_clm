@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -11,14 +11,14 @@
 */
 defined('_JEXEC') or die('Restricted access');
 //JHtml::_('behavior.tooltip', '.CLMTooltip');
-require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
+require_once(JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 
 // Konfigurationsparameter auslesen
-$itemid 		= clm_core::$load->request_int( 'Itemid' );
+$itemid 		= clm_core::$load->request_int('Itemid');
 $config			= clm_core::$db->config();
 $fixth_ttln		= $config->fixth_ttln;
 
@@ -30,184 +30,184 @@ $heading =  $this->turnier->name.": ".JText::_('TOURNAMENT_PARTICIPANTLIST');
 
 $archive_check = clm_core::$api->db_check_season_user($this->turnier->sid);
 if (!$archive_check) {
-	echo CLMContent::componentheading($heading);
-	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('NO_ACCESS')."<br/>".JText::_('NOT_REGISTERED'));
-} elseif ( $this->turnier->published == 0) { 
     echo CLMContent::componentheading($heading);
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
+    require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
+    echo CLMContent::clmWarning(JText::_('NO_ACCESS')."<br/>".JText::_('NOT_REGISTERED'));
+} elseif ($this->turnier->published == 0) {
+    echo CLMContent::componentheading($heading);
+    echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
 
 } elseif (count($this->players) == 0) {
     echo CLMContent::componentheading($heading);
-	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOPLAYERSREGISTERED'));
+    require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
+    echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOPLAYERSREGISTERED'));
 
-	
+
 } else {
 
-// PDF-Link
-echo CLMContent::createPDFLink('turnier_teilnehmer', JText::_('TOURNAMENT_PARTICIPANTLIST'), array('turnier' => $this->turnier->id, 'layout' => 'teilnehmer'));
+    // PDF-Link
+    echo CLMContent::createPDFLink('turnier_teilnehmer', JText::_('TOURNAMENT_PARTICIPANTLIST'), array('turnier' => $this->turnier->id, 'layout' => 'teilnehmer'));
     echo CLMContent::componentheading($heading);
-	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	$turParams = new clm_class_params($this->turnier->params);
+    require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
+    $turParams = new clm_class_params($this->turnier->params);
 
-	?>
+    ?>
 
-	<table cellpadding="0" cellspacing="0" id="turnier_teilnehmer" <?php if ($fixth_ttln =="1") { ?>class="tableWithFloatingHeader"<?php } ?>>
+	<table cellpadding="0" cellspacing="0" id="turnier_teilnehmer" <?php if ($fixth_ttln == "1") { ?>class="tableWithFloatingHeader"<?php } ?>>
 
 	<tr>
 		
 		<th class="tt_col_1"><?php echo JText::_('TOURNAMENT_NUMBERABB'); ?></th>
 		
 		<?php
-		if ($turParams->get('displayPlayerTitle', 1) == 1) {
-		?>
+        if ($turParams->get('displayPlayerTitle', 1) == 1) {
+            ?>
 			<th class="tt_col_2"><?php echo JText::_('TOURNAMENT_TITLE'); ?></th>
 		<?php
-		}
-		?>
+        }
+    ?>
 		
 		<th class="tt_col_3"><?php echo JText::_('TOURNAMENT_PLAYERNAME'); ?></th>
 		
 		<?php
-		if ($turParams->get('displayPlayerClub', 1) == 1) {
-		?>
+    if ($turParams->get('displayPlayerClub', 1) == 1) {
+        ?>
 			<th class="tt_col_4"><?php echo JText::_('TOURNAMENT_CLUB'); ?></th>
 		<?php
-		}
-		?>
+    }
+    ?>
 		
 		<?php
-		if ($turParams->get('displayPlayerFederation', 0) == 1) {
-		?>
+    if ($turParams->get('displayPlayerFederation', 0) == 1) {
+        ?>
 			<th class="tt_col_5"><?php echo JText::_('TOURNAMENT_FEDERATION'); ?></th>
 		<?php
-		}
-		?>
+    }
+    ?>
 		
 		
 		<th class="tt_col_6"><?php echo JText::_('TOURNAMENT_TWZ'); ?></th>
 	
 		<?php
-		if ($turParams->get('displayPlayerRating', 0) == 1) {
-		?>
+    if ($turParams->get('displayPlayerRating', 0) == 1) {
+        ?>
 			<th class="tt_col_7"><?php echo JText::_('TOURNAMENT_RATING'); ?></th>
 		<?php
-		}
-		?>
+    }
+    ?>
 	
 		<?php
-		if ($turParams->get('displayPlayerElo', 0) == 1) {
-		?>
+    if ($turParams->get('displayPlayerElo', 0) == 1) {
+        ?>
 			<th class="tt_col_8"><?php echo JText::_('TOURNAMENT_ELO'); ?></th>
 		<?php
-		}
-		?>
+    }
+    ?>
 	
 		<?php
-		if ($this->s_gruppen == 1) {
-		?>
+    if ($this->s_gruppen == 1) {
+        ?>
 			<th class="tt_col_4"><?php echo JText::_('TOURNAMENT_GRUPPEN'); ?></th>
 		<?php
-		}
-		?>
+    }
+    ?>
 	
 	
 	</tr>
 	
 	<?php
 
-	$p=0;
+    $p = 0;
 
-	foreach ($this->players as $key => $value) {
+    foreach ($this->players as $key => $value) {
 
-		$p++; // rowCount
+        $p++; // rowCount
 
-		// Farbe anpassen
+        // Farbe anpassen
 
-		if ($p%2 != 0) { 
+        if ($p % 2 != 0) {
 
-			$zeilenr = "zeile1"; 
+            $zeilenr = "zeile1";
 
-		} else { 
+        } else {
 
-			$zeilenr = "zeile2"; 
+            $zeilenr = "zeile2";
 
-		}
+        }
 
-		?>
+        ?>
 
 		<tr class="<?php echo $zeilenr; ?>">
 			
 			<td class="tt_col_1"><?php echo $value->snr; ?></td>
 			
 			<?php
-				
-			// Title
-			if ($turParams->get('displayPlayerTitle', 1) == 1) {
-				echo '<td class="tt_col_2">'.$value->titel.'</td>';
-			}
-				
-			$link = new CLMcLink();
-			$link->view = 'turnier_player';
-			$link->more = array('turnier' => $this->turnier->id, 'snr' => $value->snr, 'Itemid' => $itemid );
-			$link->makeURL();
-			
-			// Name
-			echo '<td class="tt_col_3">'.$link->makeLink($value->name). '</td>';
-			
-			// Club
-			if ($turParams->get('displayPlayerClub', 1) == 1) {
-				if ($this->tourn_linkclub == 1) {
-					$link = new CLMcLink();
-					$link->view = 'verein';
-					$link->more = array('saison' => $value->sid, 'zps' => $value->zps, 'Itemid' => $itemid );
-					$link->makeURL();
-					echo '<td class="tt_col_4">'.$link->makeLink($value->verein).'</td>';
-				} else {
-					echo '<td class="tt_col_4">'.$value->verein.'</td>';
-				}
-			}
-			
-			// Federation
-			if ($turParams->get('displayPlayerFederation', 0) == 1) {
-				echo '<td class="tt_col_5">'.$value->FIDEcco.'</td>';
-			}
-			
-			// TWZ
-			echo '<td class="tt_col_6">'.CLMText::formatRating($value->twz).'</td>';
-			
-			// start_dwz
-			if ($turParams->get('displayPlayerRating', 0) == 1) {
-				echo '<td class="tt_col_7">';
-					echo CLMText::formatRating($value->start_dwz);
-				echo '</td>';
-			}
-			
-			// FIDEelo
-			if ($turParams->get('displayPlayerElo', 0) == 1) {
-				echo '<td class="tt_col_8">';
-					echo CLMText::formatRating($value->FIDEelo);
-				echo '</td>';
-			}
-			
-			// Gruppen
-			if ($this->s_gruppen == 1) {
-				echo '<td class="tt_col_3">'.$value->gruppen.'</td>';
-			}
-			?>
+
+            // Title
+            if ($turParams->get('displayPlayerTitle', 1) == 1) {
+                echo '<td class="tt_col_2">'.$value->titel.'</td>';
+            }
+
+        $link = new CLMcLink();
+        $link->view = 'turnier_player';
+        $link->more = array('turnier' => $this->turnier->id, 'snr' => $value->snr, 'Itemid' => $itemid );
+        $link->makeURL();
+
+        // Name
+        echo '<td class="tt_col_3">'.$link->makeLink($value->name). '</td>';
+
+        // Club
+        if ($turParams->get('displayPlayerClub', 1) == 1) {
+            if ($this->tourn_linkclub == 1) {
+                $link = new CLMcLink();
+                $link->view = 'verein';
+                $link->more = array('saison' => $value->sid, 'zps' => $value->zps, 'Itemid' => $itemid );
+                $link->makeURL();
+                echo '<td class="tt_col_4">'.$link->makeLink($value->verein).'</td>';
+            } else {
+                echo '<td class="tt_col_4">'.$value->verein.'</td>';
+            }
+        }
+
+        // Federation
+        if ($turParams->get('displayPlayerFederation', 0) == 1) {
+            echo '<td class="tt_col_5">'.$value->FIDEcco.'</td>';
+        }
+
+        // TWZ
+        echo '<td class="tt_col_6">'.CLMText::formatRating($value->twz).'</td>';
+
+        // start_dwz
+        if ($turParams->get('displayPlayerRating', 0) == 1) {
+            echo '<td class="tt_col_7">';
+            echo CLMText::formatRating($value->start_dwz);
+            echo '</td>';
+        }
+
+        // FIDEelo
+        if ($turParams->get('displayPlayerElo', 0) == 1) {
+            echo '<td class="tt_col_8">';
+            echo CLMText::formatRating($value->FIDEelo);
+            echo '</td>';
+        }
+
+        // Gruppen
+        if ($this->s_gruppen == 1) {
+            echo '<td class="tt_col_3">'.$value->gruppen.'</td>';
+        }
+        ?>
 		
 		</tr>
 
 		<?php
-	}
+    }
 
-	echo '</table>';
+    echo '</table>';
 
 }
 
-require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); 
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php');
 echo '</div></div>';
 
- 
+
 ?>

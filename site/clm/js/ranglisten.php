@@ -1,6 +1,7 @@
 <?php
+
 /*
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2020 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -15,4 +16,3 @@ clm_core::$cms->addScriptDeclaration('var clm_ranglisten_gruppe = "'.html_entity
 clm_core::$cms->addScriptDeclaration('var clm_ranglisten_check = "'.html_entity_decode($lang->team_check).'";');
 clm_core::$cms->addScriptDeclaration('var clm_ranglisten_usepkz = 1 ;');
 clm_core::$cms->addScript(clm_core::$url."js/ranglisten.js");
-?>

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -10,67 +11,69 @@
  * @email webmaster@sbbl.org
 */
 // no direct access
-defined( '_JEXEC' ) or die( 'Restricted access' );
+defined('_JEXEC') or die('Restricted access');
 
 class TableCLMCategories extends JTable
 {
-	var $id				= 0;
-	var $parentid		= 0;
-	var $name		= '';
-	var $sid		= 0;
-	var $dateStart = '1970-01-01';
-	var $dateEnd   = '1970-01-01';
-	var $tl			= 0;
-	var $bezirk		= '';
-	var $bezirkTur = '1';
-	var $vereinZPS = '';
-	var $published		= 0;
-	var $started		= 0;
-	var $finished		= 0;
-	// var $invitationText = ''; // soll nicht aus catform heraus gelöscht werden...
-	var $bemerkungen	= '';
-	var $bem_int		= '';
-	var $checked_out	= null;
-	var $checked_out_time	= null;
-	var $ordering		= 0;
-	var $params 		= '';
+    public $id				= 0;
+    public $parentid		= 0;
+    public $name		= '';
+    public $sid		= 0;
+    public $dateStart = '1970-01-01';
+    public $dateEnd   = '1970-01-01';
+    public $tl			= 0;
+    public $bezirk		= '';
+    public $bezirkTur = '1';
+    public $vereinZPS = '';
+    public $published		= 0;
+    public $started		= 0;
+    public $finished		= 0;
+    // var $invitationText = ''; // soll nicht aus catform heraus gelöscht werden...
+    public $bemerkungen	= '';
+    public $bem_int		= '';
+    public $checked_out	= null;
+    public $checked_out_time	= null;
+    public $ordering		= 0;
+    public $params 		= '';
 
-	function __construct( &$_db ) {
-		parent::__construct( '#__clm_categories', 'id', $_db );
-	}
+    public function __construct(&$_db)
+    {
+        parent::__construct('#__clm_categories', 'id', $_db);
+    }
 
-	/**
-	 * Overloaded check function
-	 *
-	 * @access public
-	 * @return boolean
-	 * @see JTable::check
-	 * @since 1.5
-	 */
-	function checkData() {
+    /**
+     * Overloaded check function
+     *
+     * @access public
+     * @return boolean
+     * @see JTable::check
+     * @since 1.5
+     */
+    public function checkData()
+    {
 
-		// aktuelle Daten laden
-		// $category = new CLMCategory($this->id, TRUE);
+        // aktuelle Daten laden
+        // $category = new CLMCategory($this->id, TRUE);
 
-		if (trim($this->name) == '') { // Name vorhanden
-			$this->setError( CLMText::errorText('NAME', 'MISSING') );
-			return false;
-		
-		/*
-		} elseif ($this->sid <= 0) { // SaisonID > 0
-			$this->setError( CLMText::errorText('SEASON', 'IMPOSSIBLE') );
-			return false;
-		
-		} elseif ($this->tl <= 0) {
-			$this->setError( CLMText::errorText('TOURNAMENT_DIRECTOR', 'MISSING') );
-			return false;
-		*/
-		
-		}
+        if (trim($this->name) == '') { // Name vorhanden
+            $this->setError(CLMText::errorText('NAME', 'MISSING'));
+            return false;
 
-		return true;
-	
-	}
+            /*
+            } elseif ($this->sid <= 0) { // SaisonID > 0
+                $this->setError( CLMText::errorText('SEASON', 'IMPOSSIBLE') );
+                return false;
+
+            } elseif ($this->tl <= 0) {
+                $this->setError( CLMText::errorText('TOURNAMENT_DIRECTOR', 'MISSING') );
+                return false;
+            */
+
+        }
+
+        return true;
+
+    }
 
 
 }

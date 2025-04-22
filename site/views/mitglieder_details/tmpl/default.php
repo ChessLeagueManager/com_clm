@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -16,7 +16,7 @@ defined('_JEXEC') or die('Restricted access');
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 // Variablen holen
-$sid 		= clm_core::$load->request_int( 'saison', '1' ); 
+$sid 		= clm_core::$load->request_int('saison', '1');
 $zps 		= clm_core::$load->request_string('zps');
 $mgl		= clm_core::$load->request_int('mglnr');
 
@@ -25,36 +25,36 @@ $clmuser 	= $this->clmuser;
 $spieler	= $this->spieler;
 $verein		= $this->verein;
 
-$user		=JFactory::getUser();
+$user		= JFactory::getUser();
 
 $mainframe = JFactory::getApplication();
 $link = 'index.php';
-	
+
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 // Konfigurationsparameter auslesen
 $config = clm_core::$db->config();
 
 if (!$user->get('id')) {
-	$msg = JText::_( 'CLUB_LIST_LOGIN' );
-	$mainframe->redirect( $link, $msg );
- 			}
+    $msg = JText::_('CLUB_LIST_LOGIN');
+    $mainframe->redirect($link, $msg);
+}
 if ($clmuser[0]->published < 1) {
-	$msg = JText::_( 'CLUB_LIST_ACCOUNT' );
-	$mainframe->redirect( $link, $msg );
-				}
+    $msg = JText::_('CLUB_LIST_ACCOUNT');
+    $mainframe->redirect($link, $msg);
+}
 if ($clmuser[0]->zps <> $zps) {
-	$msg = JText::_( 'CLUB_LIST_FALSE' );
-	$mainframe->redirect( $link, $msg );
-				}
+    $msg = JText::_('CLUB_LIST_FALSE');
+    $mainframe->redirect($link, $msg);
+}
 
-if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps){
+if ($user->get('id') > 0 and  $clmuser[0]->published > 0 and $clmuser[0]->zps == $zps) {
 
-?>
+    ?>
 <div >
 <div id="mitglieder">
 
-	<?php if (!$mgl ) { ?>
+	<?php if (!$mgl) { ?>
     <div class="componentheading"><?php echo JText::_('Spieler nachmelden') ?> ::: <?php echo $verein[0]->name; ?></div>
     <?php } else { ?>
     <div class="componentheading"><?php echo JText::_('Spieler bearbeiten') ?> ::: <?php echo $spieler[0]->Spielername .', '. $verein[0]->name; ?></div>
@@ -92,8 +92,8 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
             <td>Geschlecht</td>
             <td>       
                     <select size="1" name="geschlecht" id="geschlecht">
-                    <option value="M" <?php if ($spieler[0]->Geschlecht =="M"){ ?> selected="selected"<?php } ?>><?php echo JText::_( 'M' ); ?></option> 
-                    <option value="W" <?php if ($spieler[0]->Geschlecht =="W"){ ?> selected="selected"<?php } ?>><?php echo JText::_( 'W' ); ?></option> 
+                    <option value="M" <?php if ($spieler[0]->Geschlecht == "M") { ?> selected="selected"<?php } ?>><?php echo JText::_('M'); ?></option> 
+                    <option value="W" <?php if ($spieler[0]->Geschlecht == "W") { ?> selected="selected"<?php } ?>><?php echo JText::_('W'); ?></option> 
                     </select>
             </td>
         </tr>
@@ -105,7 +105,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
     
 	<input type="submit" value=" <?php echo JText::_('SUBMIT') ?> ">
 	<?php  // Prüfen ob neuer Spieler
-    if (!$mgl) { ?>
+        if (!$mgl) { ?>
         <input type="hidden" name="new" value="1" />
     <?php } ?>
 	<input type="hidden" name="layout" value="sent" />
@@ -114,7 +114,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 	<input type="hidden" name="saison" value="<?php echo $sid; ?>" />
 	<input type="hidden" name="zps" value="<?php echo $zps; ?>" />
     <input type="hidden" name="task" value="" />
-    <?php echo JHTML::_( 'form.token' ); ?>
+    <?php echo JHTML::_('form.token'); ?>
     </form>
 <br>
 <?php } ?>

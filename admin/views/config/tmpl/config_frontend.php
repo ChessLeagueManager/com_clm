@@ -1,68 +1,68 @@
 <?php
 defined('_JEXEC') or die('Restricted access');
 
-	$config			= JComponentHelper::getParams( 'com_clm' );
-	
-    ?>
+$config			= JComponentHelper::getParams('com_clm');
+
+?>
     
     <table class="noshow">
       <tr>
         <td width="50%" valign="top">
 	    <fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_CLUB' ); ?></legend>
+			<legend><?php echo JText::_('CONFIG_FRONTEND_CLUB'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                        	<?php echo $this->params->render( 'params', 'fe_vereine'); ?>
+                        	<?php echo $this->params->render('params', 'fe_vereine'); ?>
 						</td>
       				</tr>
 				</tbody>
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_TEAMS' ); ?></legend>
+			<legend><?php echo JText::_('CONFIG_FRONTEND_TEAMS'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                        	<?php echo $this->params->render( 'params', 'fe_msch'); ?>
+                        	<?php echo $this->params->render('params', 'fe_msch'); ?>
 						</td>
       				</tr>
 				</tbody>
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_CLUBS' ); ?></legend>
+			<legend><?php echo JText::_('CONFIG_FRONTEND_CLUBS'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                        	<?php echo $this->params->render( 'params', 'fe_vereinsliste'); ?>
+                        	<?php echo $this->params->render('params', 'fe_vereinsliste'); ?>
 						</td>
       				</tr>
 				</tbody>
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_ROUNDS' ); ?></legend>
+			<legend><?php echo JText::_('CONFIG_FRONTEND_ROUNDS'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                        	<?php echo $this->params->render( 'params', 'fe_runde'); ?>
+                        	<?php echo $this->params->render('params', 'fe_runde'); ?>
 						</td>
       				</tr>
 				</tbody>
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_MELDUNG' ); ?></legend>
+			<legend><?php echo JText::_('CONFIG_FRONTEND_MELDUNG'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                        	<?php echo $this->params->render( 'params', 'fe_meldelisten'); ?>
+                        	<?php echo $this->params->render('params', 'fe_meldelisten'); ?>
 						</td>
       				</tr>
 				</tbody>
@@ -73,60 +73,60 @@ defined('_JEXEC') or die('Restricted access');
 
       <td width="50%" valign="top">
 	<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_SUBMENU' ); ?></legend>
+			<legend><?php echo JText::_('CONFIG_FRONTEND_SUBMENU'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                        	<?php echo $this->params->render( 'params', 'fe_submenu'); ?>
+                        	<?php echo $this->params->render('params', 'fe_submenu'); ?>
 						</td>
       				</tr>
 				</tbody>
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_FIXHEADER' ); ?></legend>
+			<legend><?php echo JText::_('CONFIG_FRONTEND_FIXHEADER'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                        	<?php echo $this->params->render( 'params', 'fe_fixheader'); ?>
+                        	<?php echo $this->params->render('params', 'fe_fixheader'); ?>
 						</td>
       				</tr>
 				</tbody>
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_DISPLAY' ); ?></legend>
+			<legend><?php echo JText::_('CONFIG_FRONTEND_DISPLAY'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                        	<?php echo $this->params->render( 'params', 'fe_display'); ?>
+                        	<?php echo $this->params->render('params', 'fe_display'); ?>
 						</td>
       				</tr>
 				</tbody>
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_MAPS' ); ?></legend>
+			<legend><?php echo JText::_('CONFIG_FRONTEND_MAPS'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                       	<?php echo $this->params->render( 'params', 'googlemaps'); ?> <a href="https://console.cloud.google.com/projectcreate" target="_blank"><?php echo JText::_( 'CONFIG_FRONTEND_MAPS_GETKEY' ); ?></a>
+                       	<?php echo $this->params->render('params', 'googlemaps'); ?> <a href="https://console.cloud.google.com/projectcreate" target="_blank"><?php echo JText::_('CONFIG_FRONTEND_MAPS_GETKEY'); ?></a>
                         </td>
       				</tr>
 				</tbody>
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_CHARTS' ); ?></legend>
+			<legend><?php echo JText::_('CONFIG_FRONTEND_CHARTS'); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                       	<?php echo $this->params->render( 'params', 'charts'); ?>
+                       	<?php echo $this->params->render('params', 'charts'); ?>
                         </td>
       				</tr>
 				</tbody>

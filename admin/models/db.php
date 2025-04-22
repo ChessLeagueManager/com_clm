@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
@@ -11,10 +12,10 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-class CLMModeldb extends JModelLegacy {
-	function __construct(){
-		parent::__construct();
-	}
+class CLMModeldb extends JModelLegacy
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
 }
-
-?>

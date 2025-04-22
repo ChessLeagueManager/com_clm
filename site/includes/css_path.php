@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -8,51 +8,51 @@
 // Pfade zum Style Sheet und Stylesheet laden !
 // Es gab ein paar Probleme mit dem Joomla Dateiseperator die diese Massnahme noetig machen
 
-	// Falls nicht bereits aktiv.
-	require_once (JPATH_SITE . DIRECTORY_SEPARATOR . "components" . DIRECTORY_SEPARATOR . "com_clm" . DIRECTORY_SEPARATOR . "clm" . DIRECTORY_SEPARATOR . "index.php");
+// Falls nicht bereits aktiv.
+require_once(JPATH_SITE . DIRECTORY_SEPARATOR . "components" . DIRECTORY_SEPARATOR . "com_clm" . DIRECTORY_SEPARATOR . "clm" . DIRECTORY_SEPARATOR . "index.php");
 
-	// Konfigurationsparameter auslesen
-	$config				= clm_core::$db->config();
-	$template			= $config->template;
-	$clm_lesehilfe		= $config->lesehilfe;
-	$clm_zeile1			= "#".$config->zeile1;
-	$clm_zeile2			= "#".$config->zeile2;
-	$clm_re_col			= "#".$config->re_col;
-	$clm_tableth		= "#".$config->tableth;
-	$clm_subth			= "#".$config->subth;
-	$clm_tableth_s1		= "#".$config->tableth_s1;
-	$clm_tableth_s2		= "#".$config->tableth_s2;
-	$clm_cellin_top			= $config->cellin_top;
-	$clm_cellin_left			= $config->cellin_left;
-	$clm_cellin_right			= $config->cellin_right;
-	$clm_cellin_bottom			= $config->cellin_bottom;
-	$clm_border			= $config->border_length." ".$config->border_style." #".$config->border_color;
-	$clm_wrong1 		= "#".$config->wrong1;
-	$clm_wrong2			= $config->wrong2_length." ".$config->wrong2_style." #".$config->wrong2_color;
-	$clm_rang_auf		= "#".$config->rang_auf;
-	$clm_rang_auf_evtl	= "#".$config->rang_auf_evtl;
-	$clm_rang_ab		= "#".$config->rang_ab;
-	$clm_rang_ab_evtl	= "#".$config->rang_ab_evtl;
-	$clm_msch_nr		= $config->msch_nr;
-	$clm_msch_dwz		= $config->msch_dwz;
-	$clm_msch_rnd		= $config->msch_rnd;
-	$clm_msch_punkte	= $config->msch_punkte;
-	$clm_msch_spiele	= $config->msch_spiele;
-	$clm_msch_prozent	= $config->msch_prozent;
-	$fe_pgn_show		= $config->fe_pgn_show;
+// Konfigurationsparameter auslesen
+$config				= clm_core::$db->config();
+$template			= $config->template;
+$clm_lesehilfe		= $config->lesehilfe;
+$clm_zeile1			= "#".$config->zeile1;
+$clm_zeile2			= "#".$config->zeile2;
+$clm_re_col			= "#".$config->re_col;
+$clm_tableth		= "#".$config->tableth;
+$clm_subth			= "#".$config->subth;
+$clm_tableth_s1		= "#".$config->tableth_s1;
+$clm_tableth_s2		= "#".$config->tableth_s2;
+$clm_cellin_top			= $config->cellin_top;
+$clm_cellin_left			= $config->cellin_left;
+$clm_cellin_right			= $config->cellin_right;
+$clm_cellin_bottom			= $config->cellin_bottom;
+$clm_border			= $config->border_length." ".$config->border_style." #".$config->border_color;
+$clm_wrong1 		= "#".$config->wrong1;
+$clm_wrong2			= $config->wrong2_length." ".$config->wrong2_style." #".$config->wrong2_color;
+$clm_rang_auf		= "#".$config->rang_auf;
+$clm_rang_auf_evtl	= "#".$config->rang_auf_evtl;
+$clm_rang_ab		= "#".$config->rang_ab;
+$clm_rang_ab_evtl	= "#".$config->rang_ab_evtl;
+$clm_msch_nr		= $config->msch_nr;
+$clm_msch_dwz		= $config->msch_dwz;
+$clm_msch_rnd		= $config->msch_rnd;
+$clm_msch_punkte	= $config->msch_punkte;
+$clm_msch_spiele	= $config->msch_spiele;
+$clm_msch_prozent	= $config->msch_prozent;
+$fe_pgn_show		= $config->fe_pgn_show;
 
 
-	if ($template) {
+if ($template) {
 
-	$document = JFactory::getDocument();
-	if ($config->div == 1) {
-		$document->addStyleSheet('components/com_clm/includes/clm_content.css', 'text/css');
-?>
+    $document = JFactory::getDocument();
+    if ($config->div == 1) {
+        $document->addStyleSheet('components/com_clm/includes/clm_content.css', 'text/css');
+        ?>
 <style type="text/css">
 
 #clm .clm .pgn a, #clm .clm  a.pgn { color:<?php echo $fe_pgn_show; ?> !important; }
 
-<?php if ($clm_lesehilfe =="1") { ?>#clm .clm tr.zeile1:hover td, #clm .clm tr.zeile2:hover td, #clm .clm tr.zeile1_auf:hover td, #clm .clm tr.zeile2_auf:hover td {background-color: #FFFFBB !important;}  /*-- Lesehilfe --*/
+<?php if ($clm_lesehilfe == "1") { ?>#clm .clm tr.zeile1:hover td, #clm .clm tr.zeile2:hover td, #clm .clm tr.zeile1_auf:hover td, #clm .clm tr.zeile2_auf:hover td {background-color: #FFFFBB !important;}  /*-- Lesehilfe --*/
 <?php } ?>
 
 #clm .clm table th, #clm .clm table td { padding-left: <?php echo $clm_cellin_left; ?>; padding-top: <?php echo $clm_cellin_top; ?>; padding-right: <?php echo $clm_cellin_right; ?>; padding-bottom: <?php echo $clm_cellin_bottom; ?>; border: <?php echo $clm_border; ?>; }
@@ -91,15 +91,15 @@
 
 </style>
 <?php
-	} else {
-		$document->addStyleSheet('components/com_clm/includes/clm_content_0.css', 'text/css');
+    } else {
+        $document->addStyleSheet('components/com_clm/includes/clm_content_0.css', 'text/css');
 
-?>
+        ?>
 <style type="text/css">
 
 .clm .pgn a, .clm  a.pgn { color:<?php echo $fe_pgn_show; ?> !important; }
 
-<?php if ($clm_lesehilfe =="1") { ?>.clm tr.zeile1:hover td, .clm tr.zeile2:hover td, .clm tr.zeile1_auf:hover td, .clm tr.zeile2_auf:hover td {background-color: #FFFFBB !important;}  /*-- Lesehilfe --*/
+<?php if ($clm_lesehilfe == "1") { ?>.clm tr.zeile1:hover td, .clm tr.zeile2:hover td, .clm tr.zeile1_auf:hover td, .clm tr.zeile2_auf:hover td {background-color: #FFFFBB !important;}  /*-- Lesehilfe --*/
 <?php } ?>
 
 .clm table th, .clm table td { padding-left: <?php echo $clm_cellin_left; ?>; padding-top: <?php echo $clm_cellin_top; ?>; padding-right: <?php echo $clm_cellin_right; ?>; padding-bottom: <?php echo $clm_cellin_bottom; ?>; border: <?php echo $clm_border; ?>; }

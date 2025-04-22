@@ -1,4 +1,5 @@
 <?php
+
 defined('clm') or die('Restricted access');
 
 $lang = clm_core::$lang->dewis_import;
@@ -17,4 +18,3 @@ clm_core::$cms->addScriptDeclaration('var clm_dewis_import_finished = "'.$lang->
 clm_core::$cms->addScriptDeclaration('var clm_dewis_import_finishedClub = "'.$lang->finishedClub.'";');
 clm_core::$cms->addScriptDeclaration('var clm_dewis_import_updateClub = "'.$lang->updateClub.'";');
 clm_core::$cms->addScript(clm_core::$url."js/dewis_import.js");
-?>

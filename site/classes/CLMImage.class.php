@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -15,20 +16,19 @@
 * CLMImage
 * Klassenbibliothek für bild-bezogene Funktionalitäten
 */
-class CLMImage {
+class CLMImage
+{
+    /**
+    * imageURL()
+    * Stellt die URL eines Frontend-Images zusammen
+    */
+    public static function imageURL($image)
+    {
 
-	
-	/**
-	* imageURL()
-	* Stellt die URL eines Frontend-Images zusammen
-	*/
-	public static function imageURL($image) {
-	
-		$string = JUri::root().'components/com_clm/images/'.$image;
-		
-		return $string;
-	
-	}
-	
+        $string = JUri::root().'components/com_clm/images/'.$image;
+
+        return $string;
+
+    }
+
 }
-?>

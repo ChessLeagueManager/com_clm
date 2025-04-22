@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -54,14 +54,14 @@ $pgnInput = $turParams->get('pgnInput', 1);
 	<div class="width-60 fltlft">
 	<fieldset class="adminform">
 		<legend>
-			<?php 
-			echo JText::_('ROUND')." ".$this->round->nr." (".$this->round->name.")";
-			// wenn mehr als ein Durchgang, auch Nummer des Durchgangs angeben
-			if ($this->turnier->dg > 1) {
-				echo ", ".JText::_('STAGE')." ".$this->matches[0]->dg;
-				// leider wurde dg früher nicht in Runde-Table gespeichert - daher aus einem der Matches extrahiert
-			}
-			?>
+			<?php
+            echo JText::_('ROUND')." ".$this->round->nr." (".$this->round->name.")";
+// wenn mehr als ein Durchgang, auch Nummer des Durchgangs angeben
+if ($this->turnier->dg > 1) {
+    echo ", ".JText::_('STAGE')." ".$this->matches[0]->dg;
+    // leider wurde dg früher nicht in Runde-Table gespeichert - daher aus einem der Matches extrahiert
+}
+?>
 		</legend>
 
 		<table class="adminlist">
@@ -72,92 +72,95 @@ $pgnInput = $turParams->get('pgnInput', 1);
 				<th nowrap="nowrap"><?php echo JText::_('BLACK') ?></th>
 				<th nowrap="nowrap"><?php echo JText::_('RESULT') ?></th>
 				<?php
-				if ($this->turnier->typ == 3 or $this->turnier->typ == 5) { // KO?
-					echo '<th nowrap="nowrap">'.JText::_('DECISION_MATCHES').'</th>';
-					$pgnColspan = 4;
-				} else {
-					$pgnColspan = 3;
-				}
-				if ($pgnInput == 1) {
-					echo '<th nowrap="nowrap" align="center">'.JText::_('PGN').'</th>';
-				}
-				?>
+    if ($this->turnier->typ == 3 or $this->turnier->typ == 5) { // KO?
+        echo '<th nowrap="nowrap">'.JText::_('DECISION_MATCHES').'</th>';
+        $pgnColspan = 4;
+    } else {
+        $pgnColspan = 3;
+    }
+if ($pgnInput == 1) {
+    echo '<th nowrap="nowrap" align="center">'.JText::_('PGN').'</th>';
+}
+?>
 			</tr>
 
-			<?php 	
-				// alle Matches durchgehen
-				foreach ($this->matches as $key => $value) {
-					// Zeilen färben
-					if ($this->turnier->typ != 3 and $this->turnier->typ != 5) { // nicht KO?
-						// abwechselnd einfärben
-						if ($key%2 == 0) { // gerade
-							$color = '#FFFACD';
-						} else {
-							$color = '#D3D3D3';
-						}
-					} else {
-						// pärchenweise einfärben
-						$temp = $key+1;
-						if ($temp%2 != 0) $temp++; // auf geraden Grundwert bringen
-						$temp = $temp/2;
-						if ($temp%2 == 0) { // gerade
-							$color = '#FFFACD';
-						} else {
-							$color = '#D3D3D3';
-						}
-					}
-					?>
+			<?php
+// alle Matches durchgehen
+foreach ($this->matches as $key => $value) {
+    // Zeilen färben
+    if ($this->turnier->typ != 3 and $this->turnier->typ != 5) { // nicht KO?
+        // abwechselnd einfärben
+        if ($key % 2 == 0) { // gerade
+            $color = '#FFFACD';
+        } else {
+            $color = '#D3D3D3';
+        }
+    } else {
+        // pärchenweise einfärben
+        $temp = $key + 1;
+        if ($temp % 2 != 0) {
+            $temp++;
+        } // auf geraden Grundwert bringen
+        $temp = $temp / 2;
+        if ($temp % 2 == 0) { // gerade
+            $color = '#FFFACD';
+        } else {
+            $color = '#D3D3D3';
+        }
+    }
+    ?>
 					
 					<!-- Datenzeile -->
 					<tr>
 						<td align="center" nowrap="nowrap" style="background-color:<?php echo $color; ?>;">
-							<?php echo ($key+1); ?>
+							<?php echo($key + 1); ?>
 						</td>
 						<td nowrap="nowrap" style="background-color:<?php echo $color; ?>;">
 							<?php
-								echo CLMForm::selectMatchPlayer('w['.$value->id.']', $value->spieler, $this->players);
-							?>
-						</td>
-				
-						<td nowrap="nowrap" style="background-color:<?php echo $color; ?>;">
-							<?php
-								echo CLMForm::selectMatchPlayer('b['.$value->id.']', $value->gegner, $this->players);
-							?>
+                echo CLMForm::selectMatchPlayer('w['.$value->id.']', $value->spieler, $this->players);
+    ?>
 						</td>
 				
 						<td nowrap="nowrap" style="background-color:<?php echo $color; ?>;">
 							<?php
-								echo CLMForm::selectMatchResult('res['.$value->id.']', $value->ergebnis);
-							?>
+        echo CLMForm::selectMatchPlayer('b['.$value->id.']', $value->gegner, $this->players);
+    ?>
+						</td>
+				
+						<td nowrap="nowrap" style="background-color:<?php echo $color; ?>;">
+							<?php
+        echo CLMForm::selectMatchResult('res['.$value->id.']', $value->ergebnis);
+    ?>
 						</td>
 				
 						<?php
-						if ($this->turnier->typ == 3 or $this->turnier->typ == 5) { // KO?
-							echo '<td align="center" nowrap="nowrap" style="background-color:'.$color.';">';
-								echo '<input class="inputbox" type="text" name="tiebrS['.$value->id.']" id="tiebrS'.$value->id.'" size="3" maxlength="3" value="'.$value->tiebrS.'" />&nbsp;:&nbsp;';
-								echo '<input class="inputbox" type="text" name="tiebrG['.$value->id.']" id="tiebrG'.$value->id.'" size="3" maxlength="3" value="'.$value->tiebrG.'" />';
-							echo '</td>';
-						}
-						if ($pgnInput == 1) {
-						?>
+                        if ($this->turnier->typ == 3 or $this->turnier->typ == 5) { // KO?
+                            echo '<td align="center" nowrap="nowrap" style="background-color:'.$color.';">';
+                            echo '<input class="inputbox" type="text" name="tiebrS['.$value->id.']" id="tiebrS'.$value->id.'" size="3" maxlength="3" value="'.$value->tiebrS.'" />&nbsp;:&nbsp;';
+                            echo '<input class="inputbox" type="text" name="tiebrG['.$value->id.']" id="tiebrG'.$value->id.'" size="3" maxlength="3" value="'.$value->tiebrG.'" />';
+                            echo '</td>';
+                        }
+    if ($pgnInput == 1) {
+        ?>
 							<td nowrap="nowrap" style="background-color:<?php echo $color; ?>;" align="center">
 								<span id="pgnSwitch<?php echo $value->id; ?>">
 								<?php
-									if (is_null($value->pgn)) 
-										echo '<a href="#" onclick="openPgnRow('.$value->id.')">0</a>';
-									else
-										echo '<a href="#" onclick="openPgnRow('.$value->id.')">'.strlen($value->pgn).'</a>';
-								?>
+                    if (is_null($value->pgn)) {
+                        echo '<a href="#" onclick="openPgnRow('.$value->id.')">0</a>';
+                    } else {
+                        echo '<a href="#" onclick="openPgnRow('.$value->id.')">'.strlen($value->pgn).'</a>';
+                    }
+        ?>
 								</span>
 							</td>
 						<?php
-						}
-						?>
+    }
+    ?>
 					</tr>
 					
 					<?php
-					if ($pgnInput == 1) {
-					?>
+                    if ($pgnInput == 1) {
+                        ?>
 
 						<!-- pgnzeile -->
 						<tr>
@@ -179,12 +182,12 @@ $pgnInput = $turParams->get('pgnInput', 1);
 						</tr>
 					
 					<?php
-					}
-					?>
+                    }
+    ?>
 					
-			<?php 
-				} 
-			?> 
+			<?php
+}
+?> 
 		
 		</table>
 	</fieldset>
@@ -192,58 +195,70 @@ $pgnInput = $turParams->get('pgnInput', 1);
 
 	<div class="width-40 fltrt">
 	<fieldset class="adminform">
-		<legend><?php echo JText::_( 'JDETAILS' ); ?></legend>
+		<legend><?php echo JText::_('JDETAILS'); ?></legend>
 
 		<table class="admintable">
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'ENTERED_BY' ); ?></label>
+			<label for="name"><?php echo JText::_('ENTERED_BY'); ?></label>
 			</td>
 			<td>
-			<?php if (!$this->round->gemeldet) { echo "---"; }
-				else { echo $this->round->gname; } ?>
+			<?php if (!$this->round->gemeldet) {
+			    echo "---";
+			} else {
+			    echo $this->round->gname;
+			} ?>
 			</td>
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'DATE_AT' ); ?>:</label>
+			<label for="name"><?php echo JText::_('DATE_AT'); ?>:</label>
 			</td>
 			<td>
-			<?php if ($this->round->zeit != "0000-00-00 00:00:00" AND $this->round->zeit != "1970-01-01 00:00:00") {echo JHtml::_('date',  $this->round->zeit, JText::_('DATE_FORMAT_LC2'));} 
-			else { echo "---"; } ?>
+			<?php if ($this->round->zeit != "0000-00-00 00:00:00" and $this->round->zeit != "1970-01-01 00:00:00") {
+			    echo JHtml::_('date', $this->round->zeit, JText::_('DATE_FORMAT_LC2'));
+			} else {
+			    echo "---";
+			} ?>
 
 			</td>
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'EDITED_BY' ); ?></label>
+			<label for="name"><?php echo JText::_('EDITED_BY'); ?></label>
 			</td>
 			<td>
-			<?php if (!$this->round->editor) { echo "---"; }
-				else { echo $this->round->ename; }?>
+			<?php if (!$this->round->editor) {
+			    echo "---";
+			} else {
+			    echo $this->round->ename;
+			}?>
 			</td>
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'DATE_AT' ); ?>:</label>
+			<label for="name"><?php echo JText::_('DATE_AT'); ?>:</label>
 			</td>
 			<td>
-			<?php if ($this->round->edit_zeit != "0000-00-00 00:00:00" AND $this->round->edit_zeit != "1970-01-01 00:00:00") {echo JHtml::_('date',  $this->round->edit_zeit, JText::_('DATE_FORMAT_LC2'));} 
-			else { echo "---"; } ?>
+			<?php if ($this->round->edit_zeit != "0000-00-00 00:00:00" and $this->round->edit_zeit != "1970-01-01 00:00:00") {
+			    echo JHtml::_('date', $this->round->edit_zeit, JText::_('DATE_FORMAT_LC2'));
+			} else {
+			    echo "---";
+			} ?>
 			</td>
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-				<label for="name"><?php echo JText::_( 'APPROVAL' ); ?>:</label>
+				<label for="name"><?php echo JText::_('APPROVAL'); ?>:</label>
 			</td>
 			<td>
-				<?php 
-					if ($this->round->tl_ok == 1) {
-						echo JText::_('JYES');
-					} else {
-						echo JText::_('JNO');
-					}
-				?>
+				<?php
+                    if ($this->round->tl_ok == 1) {
+                        echo JText::_('JYES');
+                    } else {
+                        echo JText::_('JNO');
+                    }
+?>
 			</td>
 		</tr>
 
@@ -260,6 +275,6 @@ $pgnInput = $turParams->get('pgnInput', 1);
 	<input type="hidden" name="boxchecked" value="0" />
 	<input type="hidden" name="turnierid" value="<?php echo $this->param['turnierid']; ?>" />
 	<input type="hidden" name="roundid" value="<?php echo $this->param['roundid']; ?>" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo JHtml::_('form.token'); ?>
 
 </form>

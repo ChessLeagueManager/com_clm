@@ -1,4 +1,5 @@
 <?php
+
 defined('clm') or die('Restricted access');
 $lang = clm_core::$lang->table;
 clm_core::$cms->addScriptDeclaration('var clm_table_url = "'.clm_core::$url.clm_core::$load->gen_url().'";');
@@ -33,4 +34,3 @@ clm_core::$cms->addScriptDeclaration('var clm_table_pageLength = '.$config->tabl
 clm_core::$load->load_js("jquery");
 clm_core::$cms->addScript(clm_core::$url."js/DataTables.js");
 clm_core::$cms->addScript(clm_core::$url."js/table.js");
-?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -8,7 +8,7 @@
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
- 
+
 */
 defined('_JEXEC') or die('Restricted access');
 
@@ -81,9 +81,9 @@ function showTournaments(){
 		<tr>
 			<td width="80%" style="vertical-align: top;">
 				<fieldset class="adminform"> 
-					<legend><?php echo JText::_( 'JDETAILS' ); ?></legend> 
+					<legend><?php echo JText::_('JDETAILS'); ?></legend> 
 					<table class="admintable">
-						<?php if(!$this->isNew): ?>
+						<?php if (!$this->isNew): ?>
 						<tr> 
 							<td width="150" align="right" class="key"> 
 								<label for="id">ID</label> 
@@ -95,7 +95,7 @@ function showTournaments(){
 						<?php endif; ?>
 						<tr> 
 							<td width="150" align="right" class="key"> 
-								<label for="name"><?php echo JText::_( 'SPECIALRANKING_NAME' ); ?></label> 
+								<label for="name"><?php echo JText::_('SPECIALRANKING_NAME'); ?></label> 
 							</td> 
 							<td> 
 								<input class="inputbox" type="text" name="name" 
@@ -104,18 +104,18 @@ function showTournaments(){
 							</td> 
 						</tr> 
 						<tr> 
-							<td width="150" align="right" class="key" title="<?php echo JText::_( 'SPECIALRANKING_SHORTNAME_HINT' ); ?>"> 
-								<label for="shortname"><?php echo JText::_( 'SPECIALRANKING_SHORTNAME' ); ?></label> 
+							<td width="150" align="right" class="key" title="<?php echo JText::_('SPECIALRANKING_SHORTNAME_HINT'); ?>"> 
+								<label for="shortname"><?php echo JText::_('SPECIALRANKING_SHORTNAME'); ?></label> 
 							</td> 
 							<td> 
 								<input class="inputbox" type="text" name="shortname" 
 								id="shortname" size="10" maxlength="10" 
-								value="<?php echo $this->sonderrangliste->shortname;?>" title="<?php echo JText::_( 'SPECIALRANKING_SHORTNAME_HINT' ); ?>" /> 
+								value="<?php echo $this->sonderrangliste->shortname;?>" title="<?php echo JText::_('SPECIALRANKING_SHORTNAME_HINT'); ?>" /> 
 							</td> 
 						</tr> 
 						<tr> 
 							<td align="right" class="key"> 
-								<label for="saison"><?php echo JText::_( 'SPECIALRANKING_SAISON' ); ?></label> 
+								<label for="saison"><?php echo JText::_('SPECIALRANKING_SAISON'); ?></label> 
 							</td> 
 							<td> 
 								<?php  echo $this->lists['saison'];?> 
@@ -123,7 +123,7 @@ function showTournaments(){
 						</tr>
 						<tr> 
 							<td align="right" class="key"> 
-								<label for="turnier"><?php echo JText::_( 'SPECIALRANKING_TOURNAMENT' ); ?></label> 
+								<label for="turnier"><?php echo JText::_('SPECIALRANKING_TOURNAMENT'); ?></label> 
 							</td> 
 							<td> 
 								<?php  echo $this->lists['turnier'];?> 
@@ -131,7 +131,7 @@ function showTournaments(){
 						</tr>
 						<tr> 
 							<td align="right" class="key"> 
-								<label for="published"><?php echo JText::_( 'JPUBLISHED' ); ?></label> 
+								<label for="published"><?php echo JText::_('JPUBLISHED'); ?></label> 
 							</td> 
 							<td><fieldset class="radio"> 
 								<?php  echo $this->lists['published'];?> 
@@ -139,7 +139,7 @@ function showTournaments(){
 						</tr>
 						<!--<tr> 
 							<td width="100" align="right" class="key"> 
-								<label for="description"><?php //echo JText::_( 'DESCRIPTION' ); ?></label> 
+								<label for="description"><?php //echo JText::_( 'DESCRIPTION' );?></label> 
 							</td> 
 							<td> 
 								<textarea class="inputbox" type="text" name="description" 
@@ -148,7 +148,7 @@ function showTournaments(){
 						</tr>-->
 						<tr> 
 							<td align="right" class="key"> 
-								<label for="ordering"><?php echo JText::_( 'JFIELD_ORDERING_LABEL' ); ?></label> 
+								<label for="ordering"><?php echo JText::_('JFIELD_ORDERING_LABEL'); ?></label> 
 							</td> 
 							<td> 
 								<?php  echo $this->lists['ordering'];?> 
@@ -158,11 +158,11 @@ function showTournaments(){
 				</fieldset>
 				<br>
 				<fieldset class="adminform">
-					<legend><?php echo JText::_( 'SPECIALRANKING_RATING_FILTER_OPTIONS' ); ?></legend>
+					<legend><?php echo JText::_('SPECIALRANKING_RATING_FILTER_OPTIONS'); ?></legend>
 					<table class="admintable">
 						<tr>
 							<td width="150" align="right" class="key"> 
-								<label for="use_rating_filter"><?php echo JText::_( 'SPECIALRANKING_OPTION_USE_RATING_FILTER' ); ?></label> 
+								<label for="use_rating_filter"><?php echo JText::_('SPECIALRANKING_OPTION_USE_RATING_FILTER'); ?></label> 
 							</td> 
 							<td><fieldset class="radio"> 
 								<?php  echo $this->lists['use_rating_filter'];?> 
@@ -170,7 +170,7 @@ function showTournaments(){
 						</tr>
 						<tr>
 							<td align="right" class="key"> 
-								<label for="rating_type"><?php echo JText::_( 'SPECIALRANKING_OPTION_RATING_TYPE' ); ?></label> 
+								<label for="rating_type"><?php echo JText::_('SPECIALRANKING_OPTION_RATING_TYPE'); ?></label> 
 							</td> 
 							<td> 
 								<?php  echo $this->lists['rating_type'];?> 
@@ -178,7 +178,7 @@ function showTournaments(){
 						</tr>
 						<tr> 
 							<td align="right" class="key"> 
-								<label for="rating_higher_than"><?php echo JText::_( 'SPECIALRANKING_OPTION_RATING_HIGHER_THAN' ); ?></label> 
+								<label for="rating_higher_than"><?php echo JText::_('SPECIALRANKING_OPTION_RATING_HIGHER_THAN'); ?></label> 
 							</td> 
 							<td> 
 								<input class="inputbox" type="text" name="rating_higher_than" 
@@ -188,7 +188,7 @@ function showTournaments(){
 						</tr>
 						<tr> 
 							<td align="right" class="key"> 
-								<label for="rating_lower_than"><?php echo JText::_( 'SPECIALRANKING_OPTION_RATING_LOWER_THAN' ); ?></label> 
+								<label for="rating_lower_than"><?php echo JText::_('SPECIALRANKING_OPTION_RATING_LOWER_THAN'); ?></label> 
 							</td> 
 							<td> 
 								<input class="inputbox" type="text" name="rating_lower_than" 
@@ -200,11 +200,11 @@ function showTournaments(){
 				</fieldset>
 				<br>
 				<fieldset class="adminform">
-					<legend><?php echo JText::_( 'SPECIALRANKING_BIRTHYEAR_FILTER_OPTIONS' ); ?></legend>
+					<legend><?php echo JText::_('SPECIALRANKING_BIRTHYEAR_FILTER_OPTIONS'); ?></legend>
 					<table class="admintable">
 						<tr>
 							<td width="150" align="right" class="key"> 
-								<label for="use_birtYear_filter"><?php echo JText::_( 'SPECIALRANKING_OPTION_USE_BIRTHYEAR_FILTER' ); ?></label> 
+								<label for="use_birtYear_filter"><?php echo JText::_('SPECIALRANKING_OPTION_USE_BIRTHYEAR_FILTER'); ?></label> 
 							</td> 
 							<td><fieldset class="radio"> 
 								<?php  echo $this->lists['use_birthYear_filter'];?> 
@@ -212,7 +212,7 @@ function showTournaments(){
 						</tr>
 						<tr> 
 							<td align="right" class="key"> 
-								<label for="birthYear_younger_than"><?php echo JText::_( 'SPECIALRANKING_OPTION_BIRTHYEAR_YOUNGER_THAN' ); ?></label> 
+								<label for="birthYear_younger_than"><?php echo JText::_('SPECIALRANKING_OPTION_BIRTHYEAR_YOUNGER_THAN'); ?></label> 
 							</td> 
 							<td> 
 								<input class="inputbox" type="text" name="birthYear_younger_than" 
@@ -222,7 +222,7 @@ function showTournaments(){
 						</tr>
 						<tr> 
 							<td align="right" class="key"> 
-								<label for="birthYear_older_than"><?php echo JText::_( 'SPECIALRANKING_OPTION_BIRTHYEAR_OLDER_THAN' ); ?></label> 
+								<label for="birthYear_older_than"><?php echo JText::_('SPECIALRANKING_OPTION_BIRTHYEAR_OLDER_THAN'); ?></label> 
 							</td> 
 							<td> 
 								<input class="inputbox" type="text" name="birthYear_older_than" 
@@ -234,11 +234,11 @@ function showTournaments(){
 				</fieldset>
 				<br>
 				<fieldset class="adminform">
-					<legend><?php echo JText::_( 'SPECIALRANKING_SEX_FILTER_OPTIONS' ); ?></legend>
+					<legend><?php echo JText::_('SPECIALRANKING_SEX_FILTER_OPTIONS'); ?></legend>
 					<table class="admintable">
 						<tr>
 							<td width="150" align="right" class="key"> 
-								<label for="use_rating_filter"><?php echo JText::_( 'SPECIALRANKING_OPTION_USE_SEX_FILTER' ); ?></label> 
+								<label for="use_rating_filter"><?php echo JText::_('SPECIALRANKING_OPTION_USE_SEX_FILTER'); ?></label> 
 							</td> 
 							<td><fieldset class="radio"> 
 								<?php  echo $this->lists['use_sex_filter'];?> 
@@ -246,7 +246,7 @@ function showTournaments(){
 						</tr>
 						<tr>
 							<td align="right" class="key"> 
-								<label for="rating_type"><?php echo JText::_( 'SPECIALRANKING_OPTION_SEX' ); ?></label> 
+								<label for="rating_type"><?php echo JText::_('SPECIALRANKING_OPTION_SEX'); ?></label> 
 							</td> 
 							<td> 
 								<?php  echo $this->lists['sex'];?> 
@@ -256,11 +256,11 @@ function showTournaments(){
 				</fieldset>
 				<br>
 				<fieldset class="adminform">
-					<legend><?php echo JText::_( 'SPECIALRANKING_SEX_YEAR_FILTER_OPTIONS' ); ?></legend>
+					<legend><?php echo JText::_('SPECIALRANKING_SEX_YEAR_FILTER_OPTIONS'); ?></legend>
 					<table class="admintable">
 						<tr>
 							<td width="150" align="right" class="key"> 
-								<label for="use_sex_year_filter"><?php echo JText::_( 'SPECIALRANKING_OPTION_USE_SEX_YEAR_FILTER' ); ?></label> 
+								<label for="use_sex_year_filter"><?php echo JText::_('SPECIALRANKING_OPTION_USE_SEX_YEAR_FILTER'); ?></label> 
 							</td> 
 							<td><fieldset class="radio"> 
 								<?php  echo $this->lists['use_sex_year_filter'];?> 
@@ -268,7 +268,7 @@ function showTournaments(){
 						</tr>
 						<tr> 
 							<td align="right" class="key"> 
-								<label for="maleYear_younger_than"><?php echo JText::_( 'SPECIALRANKING_OPTION_MALEYEAR_YOUNGER_THAN' ); ?></label> 
+								<label for="maleYear_younger_than"><?php echo JText::_('SPECIALRANKING_OPTION_MALEYEAR_YOUNGER_THAN'); ?></label> 
 							</td> 
 							<td> 
 								<input class="inputbox" type="text" name="maleYear_younger_than" 
@@ -278,7 +278,7 @@ function showTournaments(){
 						</tr>
 						<tr> 
 							<td align="right" class="key"> 
-								<label for="maleYear_older_than"><?php echo JText::_( 'SPECIALRANKING_OPTION_MALEYEAR_OLDER_THAN' ); ?></label> 
+								<label for="maleYear_older_than"><?php echo JText::_('SPECIALRANKING_OPTION_MALEYEAR_OLDER_THAN'); ?></label> 
 							</td> 
 							<td> 
 								<input class="inputbox" type="text" name="maleYear_older_than" 
@@ -288,7 +288,7 @@ function showTournaments(){
 						</tr>  						
 						<tr> 
 							<td align="right" class="key"> 
-								<label for="femaleYear_younger_than"><?php echo JText::_( 'SPECIALRANKING_OPTION_FEMALEYEAR_YOUNGER_THAN' ); ?></label> 
+								<label for="femaleYear_younger_than"><?php echo JText::_('SPECIALRANKING_OPTION_FEMALEYEAR_YOUNGER_THAN'); ?></label> 
 							</td> 
 							<td> 
 								<input class="inputbox" type="text" name="femaleYear_younger_than" 
@@ -298,7 +298,7 @@ function showTournaments(){
 						</tr>
 						<tr> 
 							<td align="right" class="key"> 
-								<label for="femaleYear_older_than"><?php echo JText::_( 'SPECIALRANKING_OPTION_FEMALEYEAR_OLDER_THAN' ); ?></label> 
+								<label for="femaleYear_older_than"><?php echo JText::_('SPECIALRANKING_OPTION_FEMALEYEAR_OLDER_THAN'); ?></label> 
 							</td> 
 							<td> 
 								<input class="inputbox" type="text" name="femaleYear_older_than" 
@@ -310,11 +310,11 @@ function showTournaments(){
 				</fieldset>
 				<br>
 				<fieldset class="adminform">
-					<legend><?php echo JText::_( 'SPECIALRANKING_ZPS_FILTER_OPTIONS' ); ?></legend>
+					<legend><?php echo JText::_('SPECIALRANKING_ZPS_FILTER_OPTIONS'); ?></legend>
 					<table class="admintable">
 						<tr>
 							<td width="150" align="right" class="key"> 
-								<label for="use_zps_filter"><?php echo JText::_( 'SPECIALRANKING_OPTION_USE_ZPS_FILTER' ); ?></label> 
+								<label for="use_zps_filter"><?php echo JText::_('SPECIALRANKING_OPTION_USE_ZPS_FILTER'); ?></label> 
 							</td> 
 							<td><fieldset class="radio"> 
 								<?php  echo $this->lists['use_zps_filter'];?> 
@@ -322,7 +322,7 @@ function showTournaments(){
 						</tr>
 						<tr> 
 							<td align="right" class="key"> 
-								<label for="zps_higher_than"><?php echo JText::_( 'SPECIALRANKING_OPTION_ZPS_HIGHER_THAN' ); ?></label> 
+								<label for="zps_higher_than"><?php echo JText::_('SPECIALRANKING_OPTION_ZPS_HIGHER_THAN'); ?></label> 
 							</td> 
 							<td> 
 								<input class="inputbox" type="text" name="zps_higher_than" 
@@ -332,7 +332,7 @@ function showTournaments(){
 						</tr>
 						<tr> 
 							<td align="right" class="key"> 
-								<label for="zps_lower_than"><?php echo JText::_( 'SPECIALRANKING_OPTION_ZPS_LOWER_THAN' ); ?></label> 
+								<label for="zps_lower_than"><?php echo JText::_('SPECIALRANKING_OPTION_ZPS_LOWER_THAN'); ?></label> 
 							</td> 
 							<td> 
 								<input class="inputbox" type="text" name="zps_lower_than" 
@@ -354,7 +354,7 @@ function showTournaments(){
 	<input type="hidden" name="id" value="<?php echo $this->sonderrangliste->id; ?>" />
 	<input type="hidden" name="controller" value="sonderranglistenform" />
 	<input type="hidden" name="task" value="" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo JHtml::_('form.token'); ?>
 
 </form>
 <script language="javascript" type="text/javascript"><!-- 

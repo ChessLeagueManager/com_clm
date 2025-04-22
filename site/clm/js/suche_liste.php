@@ -1,6 +1,7 @@
 <?php
+
 /*
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2020 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -19,4 +20,3 @@ clm_core::$cms->addScript(clm_core::$url."includes/jquery-3.7.1.min.js");
 clm_core::$cms->addScript(clm_core::$url."js/select2.min.js");
 clm_core::$load->load_css("suche_liste");
 clm_core::$cms->addScript(clm_core::$url."js/suche_liste.js");
-?>

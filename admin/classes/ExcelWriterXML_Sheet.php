@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File contains the class files for ExcelWriterXML_Sheet
  * @package ExcelWriterXML
@@ -39,135 +40,138 @@
  * @uses ExcelWriterXML_Style::numberFormatDatetime()
  * @uses ExcelWriterXML_Style::numberFormatTime()
  */
-class ExcelWriterXML_Sheet {
-	// Private Variables
-	private $id;
-	private $cells = array();
-	private $colWidth = array();
-	private $rowHeight = array();
-	private $URLs = array();
-	private $mergeCells = array();
-	private $comments = array();
-	public  $formatErrors = array();
-	private $displayRightToLeft = false;
-	/////////////////////
-	
-	// Public Variables
-	/////////////////////
-	
-	// Constructor
-	/**
+class ExcelWriterXML_Sheet
+{
+    // Private Variables
+    private $id;
+    private $cells = array();
+    private $colWidth = array();
+    private $rowHeight = array();
+    private $URLs = array();
+    private $mergeCells = array();
+    private $comments = array();
+    public $formatErrors = array();
+    private $displayRightToLeft = false;
+    /////////////////////
+
+    // Public Variables
+    /////////////////////
+
+    // Constructor
+    /**
      * Constructor for a new Sheet
      * @param string $id The name of the sheet to be referenced within the
      * spreadsheet
      */
-	function ExcelWriterXML_Sheet($id){
-		$this->id = $id;
-	}
-	
-	/**
-	 * Function to get the named value of the Sheet
-	 * @return string Name of the Sheet
-	 */
-	function getID(){
-		return $this->id;
-	}
-	
-	/**
-	 * Adds a format error.  When the document is generated if there are any
-	 * errors they will be listed on a seperate sheet.
-@param string $function The name of the function that was called
-	 * @param string $message Details of the error
-	 */
-	public function addError($function, $message){
-		$tmp = array(
-			'sheet'		=> $this->id,
-			'function'	=> $function,
-			'message'	=> $message,
-		);
-		$this->formatErrors[] = $tmp;
-	}
-	
-	/**
-	 * Returns any errors found in the sheet
-	 * @return mixed Array of errors if they exist, otherwise false
-	 */
-	public function getErrors(){
-		return($this->formatErrors);
-	}
+    public function ExcelWriterXML_Sheet($id)
+    {
+        $this->id = $id;
+    }
 
-	/**
+    /**
+     * Function to get the named value of the Sheet
+     * @return string Name of the Sheet
+     */
+    public function getID()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Adds a format error.  When the document is generated if there are any
+     * errors they will be listed on a seperate sheet.
+@param string $function The name of the function that was called
+     * @param string $message Details of the error
+     */
+    public function addError($function, $message)
+    {
+        $tmp = array(
+            'sheet'		=> $this->id,
+            'function'	=> $function,
+            'message'	=> $message,
+        );
+        $this->formatErrors[] = $tmp;
+    }
+
+    /**
+     * Returns any errors found in the sheet
+     * @return mixed Array of errors if they exist, otherwise false
+     */
+    public function getErrors()
+    {
+        return($this->formatErrors);
+    }
+
+    /**
      * Converts a MySQL type datetime field to a value that can be used within
      * Excel.
      * If the passed value is not valid then the passed string is sent back.
      * @param string $datetime Value must in in the format "yyyy-mm-dd hh:ii:ss"
      * @return string Value in the Excel format "yyyy-mm-ddThh:ii:ss.000"
      */
-	public function convertMysqlDatetime($datetime){
-		$datetime = trim($datetime);
-		$pattern = "/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}/";
-		if (preg_match($pattern, $datetime, $matches)) {
-			$datetime = $matches[0];
-			list($date,$time) = explode(' ',$datetime);
-			return($date.'T'.$time.'.000');
-		}
-		else{
-			return($datetime);
-		}
-	}
-	
-	/**
+    public function convertMysqlDatetime($datetime)
+    {
+        $datetime = trim($datetime);
+        $pattern = "/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}/";
+        if (preg_match($pattern, $datetime, $matches)) {
+            $datetime = $matches[0];
+            list($date, $time) = explode(' ', $datetime);
+            return($date.'T'.$time.'.000');
+        } else {
+            return($datetime);
+        }
+    }
+
+    /**
      * Converts a MySQL type date field to a value that can be used within Excel
      * If the passed value is not valid then the passed string is sent back.
      * @param string $datetime Value must in in the format "yyyy-mm-dd hh:ii:ss"
      * or "yyyy-mm-dd"
      * @return string Value in the Excel format "yyyy-mm-ddT00:00:00.000"
      */
-	public function convertMysqlDate($datetime){
-		$datetime = trim($datetime);
-		$pattern1 = "/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}/";
-		$pattern2 = "/[0-9]{4}-[0-9]{2}-[0-9]{2}/";
-		if (preg_match($pattern1, $datetime, $matches)) {
-			$datetime = $matches[0];
-			list($date,$time) = explode(' ',$datetime);
-			return($date.'T'.$time.'.000');
-		}
-		else if (preg_match($pattern2, $datetime, $matches)) {
-			$date = $matches[0];
-			return($date.'T00:00:00.000');
-		}
-		else{
-			return($datetime);
-		}
-	}
-	
-	/**
+    public function convertMysqlDate($datetime)
+    {
+        $datetime = trim($datetime);
+        $pattern1 = "/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}/";
+        $pattern2 = "/[0-9]{4}-[0-9]{2}-[0-9]{2}/";
+        if (preg_match($pattern1, $datetime, $matches)) {
+            $datetime = $matches[0];
+            list($date, $time) = explode(' ', $datetime);
+            return($date.'T'.$time.'.000');
+        } elseif (preg_match($pattern2, $datetime, $matches)) {
+            $date = $matches[0];
+            return($date.'T00:00:00.000');
+        } else {
+            return($datetime);
+        }
+    }
+
+    /**
      * Converts a MySQL type time field to a value that can be used within Excel
      * If the passed value is not valid then the passed string is sent back.
      * @param string $datetime Value must in in the format "yyyy-mm-dd hh:ii:ss"
      * or "hh:ii:ss"
      * @return string Value in the Excel format "1899-12-31Thh:ii:ss.000"
      */
-	public function convertMysqlTime($datetime){
-		$datetime = trim($datetime);
-		$pattern1 = "/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}/";
-		$pattern2 = "/[0-9]{2}:[0-9]{2}:[0-9]{2}/";
-		if (preg_match($pattern1, $datetime, $matches)) {
-			$datetime = $matches[0];
-			list($date,$time) = explode(' ',$datetime);
-			return($date.'T'.$time.'.000');
-		}
-		else if (preg_match($pattern2, $datetime, $matches)) {
-			$time = $matches[0];
-			return('1899-12-31T'.$time.'.000');
-		}
-		else{
-			return($datetime);
-		}
-	}
-	
+    public function convertMysqlTime($datetime)
+    {
+        $datetime = trim($datetime);
+        $pattern1 = "/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}/";
+        $pattern2 = "/[0-9]{2}:[0-9]{2}:[0-9]{2}/";
+        if (preg_match($pattern1, $datetime, $matches)) {
+            $datetime = $matches[0];
+            list($date, $time) = explode(' ', $datetime);
+            return($date.'T'.$time.'.000');
+        } elseif (preg_match($pattern2, $datetime, $matches)) {
+            $time = $matches[0];
+            return('1899-12-31T'.$time.'.000');
+        } else {
+            return($datetime);
+        }
+    }
 
-	/**
+
+    /**
      * Writes a formula to a cell
      * From MS
      * Specifies the formula stored in this cell. All formulas are persisted in
@@ -184,18 +188,19 @@ class ExcelWriterXML_Sheet {
      * @param mixed $style Named style, or style reference to be applied to the
      * cell
      */
-	public function writeFormula($dataType,$row,$column,$data,$style = null){
-		if ($dataType != 'String'
-			&& $dataType != 'Number'
-			&& $dataType != 'DateTime'){
-			$this->addError(__FUNCTION__,'('.$row.','.$column.') DataType for formula was not valid "'.$dataType.'"');
-			$halign = 'Automatic';
-		}
+    public function writeFormula($dataType, $row, $column, $data, $style = null)
+    {
+        if ($dataType != 'String'
+            && $dataType != 'Number'
+            && $dataType != 'DateTime') {
+            $this->addError(__FUNCTION__, '('.$row.','.$column.') DataType for formula was not valid "'.$dataType.'"');
+            $halign = 'Automatic';
+        }
 
-		$this->writeData('String',$row,$column,'',$style,$data);
-	}
+        $this->writeData('String', $row, $column, '', $style, $data);
+    }
 
-	/**
+    /**
      * Writes a string to a cell
      * @see writeData()
      * @param integer $row Row, based upon a "1" based array
@@ -204,11 +209,12 @@ class ExcelWriterXML_Sheet {
      * @param mixed $style Named style, or style reference to be applied to the
      * cell
      */
-	public function writeString($row,$column,$data,$style = null){
-		$this->writeData('String',$row,$column,$data,$style);
-	}
-	
-	/**
+    public function writeString($row, $column, $data, $style = null)
+    {
+        $this->writeData('String', $row, $column, $data, $style);
+    }
+
+    /**
      * Writes a number to a cell.
      * If the data is not numeric then the function will write the data as a
      * string.
@@ -219,17 +225,17 @@ class ExcelWriterXML_Sheet {
      * @param mixed $style Named style, or style reference to be applied to the
      * cell
      */
-	public function writeNumber($row,$column,$data,$style = null){
-		if (!is_numeric($data)){
-			$this->writeData('String',$row,$column,$data,$style);
-			$this->addError(__FUNCTION__,'('.$row.','.$column.') Tried to write non-numeric data to type Number "'.$data.'"');
-		}
-		else{
-			$this->writeData('Number',$row,$column,$data,$style);
-		}
-	}
-	
-	/**
+    public function writeNumber($row, $column, $data, $style = null)
+    {
+        if (!is_numeric($data)) {
+            $this->writeData('String', $row, $column, $data, $style);
+            $this->addError(__FUNCTION__, '('.$row.','.$column.') Tried to write non-numeric data to type Number "'.$data.'"');
+        } else {
+            $this->writeData('Number', $row, $column, $data, $style);
+        }
+    }
+
+    /**
      * Writes a Date/Time to a cell.
      * If data is not valid the function will write the passed value as a
      * string.
@@ -241,131 +247,154 @@ class ExcelWriterXML_Sheet {
      * @param mixed $style Named style, or style reference to be applied to the
      * cell
      */
-	public function writeDateTime($row,$column,$data,$style = null){
-		$pattern = "/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.000/";
-		if (preg_match($pattern, $data, $matches)) {
-			$data = $matches[0];
-			$this->writeData('DateTime',$row,$column,$data,$style);
-		}
-		else{
-			$this->writeData('String',$row,$column,$data,$style);
-			$this->addError(__FUNCTION__,'('.$row.','.$column.') Tried to write invalid datetime data to type DateTime "'.$data.'"');
-		}
-	}
-	private function writeData($type,$row,$column,$data,$style = null,$formula = null){
-		if ($style != null){
-			if (gettype($style) == 'object'){
-				if (get_class($style) == 'ExcelWriterXML_Style'){
-					$styleID = $style->getID();
-				}
-				else{
-					$this->addError(__FUNCTION__,'('.$row.','.$column.') StyleID supplied was an object, but not a style object "'.get_class($style).'"');
-					$styleID = null;
-				}
-			}
-			else{
-				$styleID = $style;
-			}
-		}
-		else{
-			$styleID = null;
-		}
-		
-		$cell = array(
-			'type'		=> $type,
-			'style'		=> $styleID,
-			'data'		=> $data,
-			'formula'	=> $formula,
-		);
-		$this->cells[$row][$column] = $cell;
-	}
-	
-	/**
-	 * Displays the sheet in Right to Left format
-	 */
-	public function displayRightToLeft(){
-		$this->displayRightToLeft = true;
-	}
+    public function writeDateTime($row, $column, $data, $style = null)
+    {
+        $pattern = "/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.000/";
+        if (preg_match($pattern, $data, $matches)) {
+            $data = $matches[0];
+            $this->writeData('DateTime', $row, $column, $data, $style);
+        } else {
+            $this->writeData('String', $row, $column, $data, $style);
+            $this->addError(__FUNCTION__, '('.$row.','.$column.') Tried to write invalid datetime data to type DateTime "'.$data.'"');
+        }
+    }
+    private function writeData($type, $row, $column, $data, $style = null, $formula = null)
+    {
+        if ($style != null) {
+            if (gettype($style) == 'object') {
+                if (get_class($style) == 'ExcelWriterXML_Style') {
+                    $styleID = $style->getID();
+                } else {
+                    $this->addError(__FUNCTION__, '('.$row.','.$column.') StyleID supplied was an object, but not a style object "'.get_class($style).'"');
+                    $styleID = null;
+                }
+            } else {
+                $styleID = $style;
+            }
+        } else {
+            $styleID = null;
+        }
 
-	/**
+        $cell = array(
+            'type'		=> $type,
+            'style'		=> $styleID,
+            'data'		=> $data,
+            'formula'	=> $formula,
+        );
+        $this->cells[$row][$column] = $cell;
+    }
+
+    /**
+     * Displays the sheet in Right to Left format
+     */
+    public function displayRightToLeft()
+    {
+        $this->displayRightToLeft = true;
+    }
+
+    /**
      * Called by the ExcelWriterXML class to get the XML data for this object
      * @return string Contains only the XML data for the sheet
      */
-	public function getSheetXML(){
-		ksort($this->cells);
-		
-		$displayRightToLeft = ($this->displayRightToLeft) ? 'ss:RightToLeft="1"' : '';
-		
-		$xml = '<Worksheet ss:Name="'.$this->id.'" '.$displayRightToLeft.'>'."\r";
-		$xml .= '	<Table>'."\r";
-		foreach($this->colWidth as $colIndex => $colWidth){
-			  $xml .= '		<Column ss:Index="'.$colIndex.'" ss:AutoFitWidth="0" ss:Width="'.$colWidth.'"/>'."\r";
-		}
-		foreach($this->cells as $row => $rowData){
-			ksort($rowData);
-			if (isset($this->rowHeight[$row])){
-				$rowHeight = 'ss:AutoFitHeight="0" ss:Height="'.$this->rowHeight[$row].'"';
-			}
-			else{$rowHeight = '';}
-			$xml .= '		<Row ss:Index="'.$row.'" '.$rowHeight.' >'."\r";
-			foreach($rowData as $column => $cell){
-				if (!empty($cell['formula'])) $formula = 'ss:Formula="'.$cell['formula'].'"';
-				else $formula = '';
-				if (!empty($cell['style'])) $style = 'ss:StyleID="'.$cell['style'].'"';
-				else $style = '';
-				if (empty($this->URLs[$row][$column])) $URL = '';
-				else $URL = 'ss:HRef="'.htmlspecialchars($this->URLs[$row][$column]).'"';
-				if (empty($this->mergeCells[$row][$column])) $mergeCell = '';
-				else $mergeCell = 'ss:MergeAcross="'.$this->mergeCells[$row][$column]['width'].'" ss:MergeDown="'.$this->mergeCells[$row][$column]['height'].'"';
-				if (empty($this->comments[$row][$column])) $comment = '';
-				else{
-					$comment = '					<Comment ss:Author="'.$this->comments[$row][$column]['author'].'">'."\r";
-					$comment .= '					<ss:Data xmlns="http://www.w3.org/TR/REC-html40">'."\r";
-					$comment .= '					<B><Font html:Face="Tahoma" x:CharSet="1" html:Size="8" html:Color="#000000">'.htmlspecialchars($this->comments[$row][$column]['author']).':</Font></B>'."\r";
-					$comment .= '					<Font html:Face="Tahoma" x:CharSet="1" html:Size="8" html:Color="#000000">'.htmlspecialchars($this->comments[$row][$column]['comment']).'</Font>'."\r";
-					$comment .= '					</ss:Data>'."\r";
-					$comment .= '					</Comment>'."\r";
-				}
-				$type = $cell['type'];
-				$data = $cell['data'];
-				$data = htmlspecialchars($data);
-				$data = str_replace("\r\n",'&#10;',$data);
-				$data = str_replace("\n",'&#10;',$data);
-				
-				$xml .= '			<Cell '.$style.' ss:Index="'.$column.'" '.$URL.' '.$mergeCell.' '.$formula.'>'."\r";
-				$xml .= '				<Data ss:Type="'.$type.'">';
-				$xml .= $data;
-				$xml .= '</Data>'."\r";
-				$xml .= str_replace('&amp;#10;','&#10;',$comment);
-				$xml .= '			</Cell>'."\r";
-			}
-			$xml .= '		</Row>'."\r";
-		}
-		$xml .= '	</Table>'."\r";
-		$xml .= '</Worksheet>'."\r";
-		return($xml);
-	}
+    public function getSheetXML()
+    {
+        ksort($this->cells);
 
-	/**
+        $displayRightToLeft = ($this->displayRightToLeft) ? 'ss:RightToLeft="1"' : '';
+
+        $xml = '<Worksheet ss:Name="'.$this->id.'" '.$displayRightToLeft.'>'."\r";
+        $xml .= '	<Table>'."\r";
+        foreach ($this->colWidth as $colIndex => $colWidth) {
+            $xml .= '		<Column ss:Index="'.$colIndex.'" ss:AutoFitWidth="0" ss:Width="'.$colWidth.'"/>'."\r";
+        }
+        foreach ($this->cells as $row => $rowData) {
+            ksort($rowData);
+            if (isset($this->rowHeight[$row])) {
+                $rowHeight = 'ss:AutoFitHeight="0" ss:Height="'.$this->rowHeight[$row].'"';
+            } else {
+                $rowHeight = '';
+            }
+            $xml .= '		<Row ss:Index="'.$row.'" '.$rowHeight.' >'."\r";
+            foreach ($rowData as $column => $cell) {
+                if (!empty($cell['formula'])) {
+                    $formula = 'ss:Formula="'.$cell['formula'].'"';
+                } else {
+                    $formula = '';
+                }
+                if (!empty($cell['style'])) {
+                    $style = 'ss:StyleID="'.$cell['style'].'"';
+                } else {
+                    $style = '';
+                }
+                if (empty($this->URLs[$row][$column])) {
+                    $URL = '';
+                } else {
+                    $URL = 'ss:HRef="'.htmlspecialchars($this->URLs[$row][$column]).'"';
+                }
+                if (empty($this->mergeCells[$row][$column])) {
+                    $mergeCell = '';
+                } else {
+                    $mergeCell = 'ss:MergeAcross="'.$this->mergeCells[$row][$column]['width'].'" ss:MergeDown="'.$this->mergeCells[$row][$column]['height'].'"';
+                }
+                if (empty($this->comments[$row][$column])) {
+                    $comment = '';
+                } else {
+                    $comment = '					<Comment ss:Author="'.$this->comments[$row][$column]['author'].'">'."\r";
+                    $comment .= '					<ss:Data xmlns="http://www.w3.org/TR/REC-html40">'."\r";
+                    $comment .= '					<B><Font html:Face="Tahoma" x:CharSet="1" html:Size="8" html:Color="#000000">'.htmlspecialchars($this->comments[$row][$column]['author']).':</Font></B>'."\r";
+                    $comment .= '					<Font html:Face="Tahoma" x:CharSet="1" html:Size="8" html:Color="#000000">'.htmlspecialchars($this->comments[$row][$column]['comment']).'</Font>'."\r";
+                    $comment .= '					</ss:Data>'."\r";
+                    $comment .= '					</Comment>'."\r";
+                }
+                $type = $cell['type'];
+                $data = $cell['data'];
+                $data = htmlspecialchars($data);
+                $data = str_replace("\r\n", '&#10;', $data);
+                $data = str_replace("\n", '&#10;', $data);
+
+                $xml .= '			<Cell '.$style.' ss:Index="'.$column.'" '.$URL.' '.$mergeCell.' '.$formula.'>'."\r";
+                $xml .= '				<Data ss:Type="'.$type.'">';
+                $xml .= $data;
+                $xml .= '</Data>'."\r";
+                $xml .= str_replace('&amp;#10;', '&#10;', $comment);
+                $xml .= '			</Cell>'."\r";
+            }
+            $xml .= '		</Row>'."\r";
+        }
+        $xml .= '	</Table>'."\r";
+        $xml .= '</Worksheet>'."\r";
+        return($xml);
+    }
+
+    /**
      * Alias for function columnWidth()
      */
-	function cellWidth( $row, $col,$width = 48){$this->columnWidth($col,$width);}
+    public function cellWidth($row, $col, $width = 48)
+    {
+        $this->columnWidth($col, $width);
+    }
 
-	/**
+    /**
      * Sets the width of a cell.
      * Sets  the width of the column that the cell resides in.
      * Cell width of zero effectively hides the column
      * @param integer $col Column, based upon a "1" based array
      * @param mixed $width Width of the cell/column, default is 48
      */
-	function columnWidth( $col,$width = 48){$this->colWidth[$col] = $width;}
+    public function columnWidth($col, $width = 48)
+    {
+        $this->colWidth[$col] = $width;
+    }
 
-	/**
+    /**
      * Alias for function rowHeight()
      */
-	function cellHeight( $row, $col,$height = 12.5){$this->rowHeight($row,$height);}
+    public function cellHeight($row, $col, $height = 12.5)
+    {
+        $this->rowHeight($row, $height);
+    }
 
-	/**
+    /**
      * Sets the height of a cell.
      * Sets  the height of the column that the cell resides in.
      * Cell height of zero effectively hides the row
@@ -373,17 +402,23 @@ class ExcelWriterXML_Sheet {
      * @param integer $col Column, based upon a "1" based array
      * @param mixed $height Height of the cell/column, default is 12.5
      */
-	function rowHeight( $row,$height = 12.5){$this->rowHeight[$row] = $height;}
+    public function rowHeight($row, $height = 12.5)
+    {
+        $this->rowHeight[$row] = $height;
+    }
 
-	/**
+    /**
      * Makes the target cell a link to a URL
      * @param integer $row Row, based upon a "1" based array
      * @param integer $col Column, based upon a "1" based array
      * @param string $URL The URL that the link should point to
      */
-	function addURL( $row, $col,$URL){$this->URLs[$row][$col] = $URL;}
-	
-	/**
+    public function addURL($row, $col, $URL)
+    {
+        $this->URLs[$row][$col] = $URL;
+    }
+
+    /**
      * Merges 2 or more cells.
      * The function acts like a bounding box, with the row and column defining
      * the upper left corner, and the width and height extending the box.
@@ -393,24 +428,25 @@ class ExcelWriterXML_Sheet {
      * @param integer $width Number of cells to the right to merge with
      * @param integer $height Number of cells down to merge with
      */
-	function cellMerge($row,$col, $width = 0, $height = 0){
-		if ($width < 0 || $height < 0){
-			$this->addError(__FUNCTION__,'('.$row.','.$col.') Tried to merge cells with width/height < 0 "(w='.$width.',h='.$height.')"');
-			return;
-		}
-		
-		$this->mergeCells[$row][$col] = array(
-			'width'		=> $width,
-			'height'	=> $height,
-		);
-		/* I don't think this code is necessary
-		if (!isset($cells[$row][$col])){
-			$this->writeString($row,$col,'');
-		}
-		*/
-	}
-	
-	/**
+    public function cellMerge($row, $col, $width = 0, $height = 0)
+    {
+        if ($width < 0 || $height < 0) {
+            $this->addError(__FUNCTION__, '('.$row.','.$col.') Tried to merge cells with width/height < 0 "(w='.$width.',h='.$height.')"');
+            return;
+        }
+
+        $this->mergeCells[$row][$col] = array(
+            'width'		=> $width,
+            'height'	=> $height,
+        );
+        /* I don't think this code is necessary
+        if (!isset($cells[$row][$col])){
+            $this->writeString($row,$col,'');
+        }
+        */
+    }
+
+    /**
      * Adds a comment to a cell
      * @param integer $row Row, based upon a "1" based array
      * @param integer $col Column, based upon a "1" based array
@@ -418,14 +454,15 @@ class ExcelWriterXML_Sheet {
      * @param string $author The comment will show a bold header displaying the
      * author
      */
-	function addComment( $row, $col,$comment,$author = 'SYSTEM'){
-		$this->comments[$row][$col] = array(
-			'comment'	=> $comment,
-			'author'	=> $author,
-		);
-	}
-	
-	/**
+    public function addComment($row, $col, $comment, $author = 'SYSTEM')
+    {
+        $this->comments[$row][$col] = array(
+            'comment'	=> $comment,
+            'author'	=> $author,
+        );
+    }
+
+    /**
      * Outputs a MYSQL table or list of tables to an Excel doc
      * @param string $host MySQL host to connect to
      * @param string $username Username to connect with
@@ -433,17 +470,27 @@ class ExcelWriterXML_Sheet {
      * @param string $db Database to use
      * @param mixed $table If string, out specific table.  If array, each table will have it's own sheet
      */
-	public function mysqlQueryToTable($host,$username,$password,$query){
-		EWXcheckDriverDB('mysql');
-		if (empty($host))		$this->addError('Database','HOSTNAME is empty');
-		if (empty($username))	$this->addError('Database','USERNAME is empty');
-		if (count($this->formatErrors) > 0){return false;}
-		
-		$link = mysql_connect($host,$username,$password);
-		if (!$link) $this->addError('Database','UNABLE to connect to '.$host.'('.mysql_error().')');
-		if (count($this->formatErrors) > 0){return false;}
-		
-		EWXmysqlGenerateByQuery($this,$link,$query);
-	}
+    public function mysqlQueryToTable($host, $username, $password, $query)
+    {
+        EWXcheckDriverDB('mysql');
+        if (empty($host)) {
+            $this->addError('Database', 'HOSTNAME is empty');
+        }
+        if (empty($username)) {
+            $this->addError('Database', 'USERNAME is empty');
+        }
+        if (count($this->formatErrors) > 0) {
+            return false;
+        }
+
+        $link = mysql_connect($host,$username,$password);
+        if (!$link) {
+            $this->addError('Database','UNABLE to connect to '.$host.'('.mysql_error().')');
+        }
+        if (count($this->formatErrors) > 0) {
+            return false;
+        }
+
+        EWXmysqlGenerateByQuery($this,$link,$query);
+    }
 }
-?>

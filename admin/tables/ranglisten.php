@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -10,52 +11,52 @@
  * @email webmaster@sbbl.org
 */
 // no direct access
-defined( '_JEXEC' ) or die( 'Restricted access' );
+defined('_JEXEC') or die('Restricted access');
 
 class TableCLMRanglisten extends JTable
 {
+    public $id			= 0;
+    public $gid		= 0;
+    public $sid		= 0;
+    public $zps		= '';
+    public $sg_zps		= '';
+    public $rang		= 0;
+    public $published		= 0;
+    public $bemerkungen	= '';
+    public $bem_int		= '';
+    public $checked_out	= null;
+    public $checked_out_time	= null;
+    public $ordering		= 0;
 
-	var $id			= 0;
-	var $gid		= 0;
-	var $sid		= 0;
-	var $zps		= '';
-	var $sg_zps		= '';
-	var $rang		= 0;
-	var $published		= 0;
-	var $bemerkungen	= '';
-	var $bem_int		= '';
-	var $checked_out	= null;
-	var $checked_out_time	= null;
-	var $ordering		= 0;
+    public function __construct(&$_db)
+    {
+        parent::__construct('#__clm_rangliste_id', 'id', $_db);
+    }
 
-	function __construct( &$_db ) {
-		parent::__construct( '#__clm_rangliste_id', 'id', $_db );
-	}
-
-	/**
-	 * Overloaded check function
-	 *
-	 * @access public
-	 * @return boolean
-	 * @see JTable::check
-	 * @since 1.5
-	 */
-	function check()
-	{
-		// check for valid client name
-	/*	if (trim($this->Gruppe == '')) {
-			$this->setError(JText::_( 'BNR_CLIENT_NAME' ));
-			return false;
-		}
+    /**
+     * Overloaded check function
+     *
+     * @access public
+     * @return boolean
+     * @see JTable::check
+     * @since 1.5
+     */
+    public function check()
+    {
+        // check for valid client name
+        /*	if (trim($this->Gruppe == '')) {
+                $this->setError(JText::_( 'BNR_CLIENT_NAME' ));
+                return false;
+            }
 */
-		// check for valid client contact
-/**		if (trim($this->sid == '')) {
-			$this->setError(JText::_( 'Saison muss angegeben werden !' ));
-			return false;
-		}
+        // check for valid client contact
+        /**		if (trim($this->sid == '')) {
+                    $this->setError(JText::_( 'Saison muss angegeben werden !' ));
+                    return false;
+                }
 
-**/		
+        **/
 
-		return true;
-	}
+        return true;
+    }
 }

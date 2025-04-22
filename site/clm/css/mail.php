@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @ CLM Component
  * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
@@ -7,4 +8,3 @@
 */
 defined('clm') or die('Restricted access');
 clm_core::$cms->addStyleSheet(clm_core::$url."css/mail.css");
-?>

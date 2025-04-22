@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -13,43 +14,44 @@
 /**
  * erstellt einen Link innerhalb des Administrationsbereichs
 */
-	
-class AdminLink extends stdClass {
 
-	function __construct($option = 'com_clm') {
+class AdminLink extends stdClass
+{
+    public function __construct($option = 'com_clm')
+    {
 
-		// INIT
-		$this->option 			= $option;
-		
-		$this->view 			= NULL; // Name des Views
-		
-		$this->more 			= array(); // weitere Parameter als assoziatives Array
-		
-		$this->url 				= 'index.php?option='.$this->option;
+        // INIT
+        $this->option 			= $option;
 
-	}
+        $this->view 			= null; // Name des Views
+
+        $this->more 			= array(); // weitere Parameter als assoziatives Array
+
+        $this->url 				= 'index.php?option='.$this->option;
+
+    }
 
 
-	/**
-	 * URL zusammensetzen
-	 */
-	function makeURL() {
+    /**
+     * URL zusammensetzen
+     */
+    public function makeURL()
+    {
 
-		if ($this->view) {
-			$this->url .= '&view='.$this->view;
-		}
+        if ($this->view) {
+            $this->url .= '&view='.$this->view;
+        }
 
-		if (count($this->more) > 0) {
-			foreach ($this->more as $key => $value) {
-				$this->url .= "&".$key."=".$value;
-			}
-		}
+        if (count($this->more) > 0) {
+            foreach ($this->more as $key => $value) {
+                $this->url .= "&".$key."=".$value;
+            }
+        }
 
-		// Achtung: eine Verwendung von JRoute ist nicht nötig,
-		// da eine SEO-Optimierung im backend überflüssig scheint
+        // Achtung: eine Verwendung von JRoute ist nicht nötig,
+        // da eine SEO-Optimierung im backend überflüssig scheint
 
-	}
+    }
 
 
 }
-?>

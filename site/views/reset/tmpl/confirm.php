@@ -22,5 +22,5 @@
 	</table>
 
 	<button type="submit" class="validate"><?php echo JText::_('Absenden'); ?></button>
-	<?php echo JHTML::_( 'form.token' ); ?>
+	<?php echo JHTML::_('form.token'); ?>
 </form>

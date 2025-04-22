@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -11,14 +11,14 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-	$turParams = new clm_class_params($this->turnier->params);
-	$param_typeaccount = $turParams->get('typeAccount', 0);
-	$mail_bcc = ''; 
-	foreach ($this->players as $player) {
-		if (clm_core::$load->is_email($player->email)) {
-			$mail_bcc .= $player->email.';'; 
-		}
-	} 
+$turParams = new clm_class_params($this->turnier->params);
+$param_typeaccount = $turParams->get('typeAccount', 0);
+$mail_bcc = '';
+foreach ($this->players as $player) {
+    if (clm_core::$load->is_email($player->email)) {
+        $mail_bcc .= $player->email.';';
+    }
+}
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -27,7 +27,7 @@ defined('_JEXEC') or die('Restricted access');
 	
 	<div class="col width-50">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'MAIL_DATA' ); ?></legend>
+		<legend><?php echo JText::_('MAIL_DATA'); ?></legend>
 
 		<table class="admintable">
 			<tr>
@@ -66,6 +66,6 @@ defined('_JEXEC') or die('Restricted access');
 	<input type="hidden" name="controller" value="turplayersmail" />
 	<input type="hidden" name="boxchecked" value="0" />
 	<input type="hidden" name="task" value="" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo JHtml::_('form.token'); ?>
 
 </form>

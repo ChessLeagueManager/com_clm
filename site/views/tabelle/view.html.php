@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2020 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -10,29 +11,28 @@
  * @email webmaster@sbbl.org
 */
 
-jimport( 'joomla.application.component.view');
+jimport('joomla.application.component.view');
 
 class CLMViewTabelle extends JViewLegacy
 {
-	function display($tpl = null)
-	{
-		$model	  = $this->getModel();
-  		$liga     = $model->getCLMLiga();
-		$this->liga = $liga;
+    public function display($tpl = null)
+    {
+        $model	  = $this->getModel();
+        $liga     = $model->getCLMLiga();
+        $this->liga = $liga;
 
-		$model	  = $this->getModel();
-  		$spielfrei     = $model->getCLMSpielfrei();
-		$this->spielfrei = $spielfrei;
+        $model	  = $this->getModel();
+        $spielfrei     = $model->getCLMSpielfrei();
+        $this->spielfrei = $spielfrei;
 
-		$model	  = $this->getModel();
-  		$punkte     = $model->getCLMPunkte();
-		$this->punkte = $punkte;
+        $model	  = $this->getModel();
+        $punkte     = $model->getCLMPunkte();
+        $this->punkte = $punkte;
 
-/*		$model	  = $this->getModel();
-		$dwzschnitt     = $model->getCLMDWZSchnitt();
-		$this->dwzschnitt = $dwzschnitt;
-*/
-		parent::display($tpl);
-	}	
+        /*		$model	  = $this->getModel();
+                $dwzschnitt     = $model->getCLMDWZSchnitt();
+                $this->dwzschnitt = $dwzschnitt;
+        */
+        parent::display($tpl);
+    }
 }
-?>

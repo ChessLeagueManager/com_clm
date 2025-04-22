@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Helper functions for building a DataTables server-side processing SQL query
  *
@@ -20,290 +21,291 @@
 * Zweiter Filter für Spalten über Auswahlboxen
 */
 
-abstract class clm_class_DataTables {
-	/**
-	 * Create the data output array for the DataTables rows
-	 *
-	 *  @param  array $columns Column information array
-	 *  @param  array $data    Data from the SQL get
-	 *  @return array          Formatted data in a row based format
-	 */
-	static function data_output ( $columns, $data )
-	{
-		$out = array();
+abstract class clm_class_DataTables
+{
+    /**
+     * Create the data output array for the DataTables rows
+     *
+     *  @param  array $columns Column information array
+     *  @param  array $data    Data from the SQL get
+     *  @return array          Formatted data in a row based format
+     */
+    public static function data_output($columns, $data)
+    {
+        $out = array();
 
-		for ( $i=0, $ien=count($data) ; $i<$ien ; $i++ ) {
-			$row = array();
+        for ($i = 0, $ien = count($data) ; $i < $ien ; $i++) {
+            $row = array();
 
-			for ( $j=0, $jen=count($columns) ; $j<$jen ; $j++ ) {
-				$column = $columns[$j];
+            for ($j = 0, $jen = count($columns) ; $j < $jen ; $j++) {
+                $column = $columns[$j];
 
-				// Is there a formatter?
-				if ( isset( $column['formatter'] ) ) {
-					$row[ $column['dt'] ] = $column['formatter']( $data[$i][ $column['db'] ], $data[$i] );
-				}
-				else {
-					$row[ $column['dt'] ] = $data[$i][ $columns[$j]['db'] ];
-				}
-			}
+                // Is there a formatter?
+                if (isset($column['formatter'])) {
+                    $row[ $column['dt'] ] = $column['formatter']($data[$i][ $column['db'] ], $data[$i]);
+                } else {
+                    $row[ $column['dt'] ] = $data[$i][ $columns[$j]['db'] ];
+                }
+            }
 
-			$out[] = $row;
-		}
+            $out[] = $row;
+        }
 
-		return $out;
-	}
-
-
-	/**
-	 * Paging
-	 *
-	 * Construct the LIMIT clause for server-side processing SQL query
-	 *
-	 *  @param  array $request Data sent to server by DataTables
-	 *  @param  array $columns Column information array
-	 *  @return string SQL limit clause
-	 */
-	static function limit ( $request, $columns )
-	{
-		$limit = '';
-
-		if ( isset($request['start']) && $request['length'] != -1 ) {
-			$limit = "LIMIT ".intval($request['start']).", ".intval($request['length']);
-		}
-
-		return $limit;
-	}
+        return $out;
+    }
 
 
-	/**
-	 * Ordering
-	 *
-	 * Construct the ORDER BY clause for server-side processing SQL query
-	 *
-	 *  @param  array $request Data sent to server by DataTables
-	 *  @param  array $columns Column information array
-	 *  @return string SQL order by clause
-	 */
-	static function order ( $request, $columns )
-	{
-		$order = '';
+    /**
+     * Paging
+     *
+     * Construct the LIMIT clause for server-side processing SQL query
+     *
+     *  @param  array $request Data sent to server by DataTables
+     *  @param  array $columns Column information array
+     *  @return string SQL limit clause
+     */
+    public static function limit($request, $columns)
+    {
+        $limit = '';
 
-		if ( isset($request['order']) && count($request['order']) ) {
-			$orderBy = array();
-			$dtColumns = self::pluck( $columns, 'dt' );
+        if (isset($request['start']) && $request['length'] != -1) {
+            $limit = "LIMIT ".intval($request['start']).", ".intval($request['length']);
+        }
 
-			for ( $i=0, $ien=count($request['order']) ; $i<$ien ; $i++ ) {
-				// Convert the column index into the column data property
-				$columnIdx = intval($request['order'][$i]['column']);
-				$requestColumn = $request['columns'][$columnIdx];
-
-				$columnIdx = array_search( $requestColumn['data'], $dtColumns );
-				$column = $columns[ $columnIdx ];
-
-				if ( $requestColumn['orderable'] == 'true' ) {
-					$dir = $request['order'][$i]['dir'] === 'asc' ?
-						'ASC' :
-						'DESC';
-
-					$orderBy[] = '`'.$column['db'].'` '.$dir;
-				}
-			}
-
-			$order = 'ORDER BY '.implode(', ', $orderBy);
-		}
-
-		return $order;
-	}
+        return $limit;
+    }
 
 
-	/**
-	 * Searching / Filtering
-	 *
-	 * Construct the WHERE clause for server-side processing SQL query.
-	 *
-	 * NOTE this does not match the built-in DataTables filtering which does it
-	 * word by word on any field. It's possible to do here performance on large
-	 * databases would be very poor
-	 *
-	 *  @param  array $db Database connection
-	 *  @param  array $request Data sent to server by DataTables
-	 *  @param  array $columns Column information array
-	 *  @return string SQL where clause
-	 */
-	static function filter ( $db, $request, $columns)
-	{
-		$globalSearch = array();
-		$columnSearch = array();
-		$dtColumns = self::pluck( $columns, 'dt' );
+    /**
+     * Ordering
+     *
+     * Construct the ORDER BY clause for server-side processing SQL query
+     *
+     *  @param  array $request Data sent to server by DataTables
+     *  @param  array $columns Column information array
+     *  @return string SQL order by clause
+     */
+    public static function order($request, $columns)
+    {
+        $order = '';
 
-		if ( isset($request['search']) && $request['search']['value'] != '' ) {
-			$str = $request['search']['value'];
+        if (isset($request['order']) && count($request['order'])) {
+            $orderBy = array();
+            $dtColumns = self::pluck($columns, 'dt');
 
-			for ( $i=0, $ien=count($request['columns']) ; $i<$ien ; $i++ ) {
-				$requestColumn = $request['columns'][$i];
-				$columnIdx = array_search( $requestColumn['data'], $dtColumns );
-				$column = $columns[ $columnIdx ];
+            for ($i = 0, $ien = count($request['order']) ; $i < $ien ; $i++) {
+                // Convert the column index into the column data property
+                $columnIdx = intval($request['order'][$i]['column']);
+                $requestColumn = $request['columns'][$columnIdx];
 
-				if ( $requestColumn['searchable'] == 'true' ) {
-					$globalSearch[] = "`".$column['db']."` LIKE ".self::makeSafe($db,"s",$str,true);
-				}
-			}
-		}
+                $columnIdx = array_search($requestColumn['data'], $dtColumns);
+                $column = $columns[ $columnIdx ];
 
-		// Individual column filtering
-		for ( $i=0, $ien=count($request['columns']) ; $i<$ien ; $i++ ) {
-			$requestColumn = $request['columns'][$i];
-			$columnIdx = array_search( $requestColumn['data'], $dtColumns );
-			$column = $columns[ $columnIdx ];
+                if ($requestColumn['orderable'] == 'true') {
+                    $dir = $request['order'][$i]['dir'] === 'asc' ?
+                        'ASC' :
+                        'DESC';
 
-			$str = $requestColumn['search']['value'];
+                    $orderBy[] = '`'.$column['db'].'` '.$dir;
+                }
+            }
 
-			if ( $requestColumn['searchable'] == 'true' &&
-			 $str != '' ) {
-				$columnSearch[] = "`".$column['db']."` LIKE ".self::makeSafe($db,"s",$str,true);
-			}
-		}
+            $order = 'ORDER BY '.implode(', ', $orderBy);
+        }
 
-		// Combine the filters into a single string
-		$where = '';
+        return $order;
+    }
 
-		if ( count( $globalSearch ) ) {
-			$where = '('.implode(' OR ', $globalSearch).')';
-		}
 
-		if ( count( $columnSearch ) ) {
-			$where = $where === '' ?
-				implode(' AND ', $columnSearch) :
-				$where .' AND '. implode(' AND ', $columnSearch);
-		}
+    /**
+     * Searching / Filtering
+     *
+     * Construct the WHERE clause for server-side processing SQL query.
+     *
+     * NOTE this does not match the built-in DataTables filtering which does it
+     * word by word on any field. It's possible to do here performance on large
+     * databases would be very poor
+     *
+     *  @param  array $db Database connection
+     *  @param  array $request Data sent to server by DataTables
+     *  @param  array $columns Column information array
+     *  @return string SQL where clause
+     */
+    public static function filter($db, $request, $columns)
+    {
+        $globalSearch = array();
+        $columnSearch = array();
+        $dtColumns = self::pluck($columns, 'dt');
 
-		if ( $where !== '' ) {
-			$where = 'WHERE '.$where;
-		}
-		return $where;
-	}
+        if (isset($request['search']) && $request['search']['value'] != '') {
+            $str = $request['search']['value'];
 
-	/**
-	 * Perform the SQL queries needed for an server-side processing requested,
-	 * utilising the helper functions of this class, limit(), order() and
-	 * filter() among others. The returned array is ready to be encoded as JSON
-	 * in response to an SSP request, or can be modified if needed before
-	 * sending back to the client.
-	 *
-	 *  @param  array $request Data sent to server by DataTables
-	 *  @param  string $table SQL table to query
-	 *  @param  string $primaryKey Primary key of the table
-	 *  @param  array $columns Column information array
-	 *  @param  array $allowed Allow Column search (but not display)
-	 *  @param  mysqli $db Database connection
-	 *  @return array          Server-side processing response array
-	 */
-	static function simple ( $request, $table, $primaryKey, $columns, $allowed, $db )
-	{
-		// Build the SQL query string from the request
-		$limit = self::limit( $request, $columns );
-		$order = self::order( $request, $columns );
-		$where = self::filter( $db,$request, $columns);
-		$customWhere = self::customFilter($db,$request, $allowed);
-		if($where=='' && $customWhere!='') {
-			$where = " WHERE".$customWhere;
-		} else if ($customWhere!='') {
-			$where = $where." AND".$customWhere;
-		}
+            for ($i = 0, $ien = count($request['columns']) ; $i < $ien ; $i++) {
+                $requestColumn = $request['columns'][$i];
+                $columnIdx = array_search($requestColumn['data'], $dtColumns);
+                $column = $columns[ $columnIdx ];
 
-		// Main query to actually get the data
-		$data =  $db->loadAssocList(
-			"SELECT SQL_CALC_FOUND_ROWS `".implode("`, `", self::pluck($columns, 'db'))."`
+                if ($requestColumn['searchable'] == 'true') {
+                    $globalSearch[] = "`".$column['db']."` LIKE ".self::makeSafe($db, "s", $str, true);
+                }
+            }
+        }
+
+        // Individual column filtering
+        for ($i = 0, $ien = count($request['columns']) ; $i < $ien ; $i++) {
+            $requestColumn = $request['columns'][$i];
+            $columnIdx = array_search($requestColumn['data'], $dtColumns);
+            $column = $columns[ $columnIdx ];
+
+            $str = $requestColumn['search']['value'];
+
+            if ($requestColumn['searchable'] == 'true' &&
+             $str != '') {
+                $columnSearch[] = "`".$column['db']."` LIKE ".self::makeSafe($db, "s", $str, true);
+            }
+        }
+
+        // Combine the filters into a single string
+        $where = '';
+
+        if (count($globalSearch)) {
+            $where = '('.implode(' OR ', $globalSearch).')';
+        }
+
+        if (count($columnSearch)) {
+            $where = $where === '' ?
+                implode(' AND ', $columnSearch) :
+                $where .' AND '. implode(' AND ', $columnSearch);
+        }
+
+        if ($where !== '') {
+            $where = 'WHERE '.$where;
+        }
+        return $where;
+    }
+
+    /**
+     * Perform the SQL queries needed for an server-side processing requested,
+     * utilising the helper functions of this class, limit(), order() and
+     * filter() among others. The returned array is ready to be encoded as JSON
+     * in response to an SSP request, or can be modified if needed before
+     * sending back to the client.
+     *
+     *  @param  array $request Data sent to server by DataTables
+     *  @param  string $table SQL table to query
+     *  @param  string $primaryKey Primary key of the table
+     *  @param  array $columns Column information array
+     *  @param  array $allowed Allow Column search (but not display)
+     *  @param  mysqli $db Database connection
+     *  @return array          Server-side processing response array
+     */
+    public static function simple($request, $table, $primaryKey, $columns, $allowed, $db)
+    {
+        // Build the SQL query string from the request
+        $limit = self::limit($request, $columns);
+        $order = self::order($request, $columns);
+        $where = self::filter($db, $request, $columns);
+        $customWhere = self::customFilter($db, $request, $allowed);
+        if ($where == '' && $customWhere != '') {
+            $where = " WHERE".$customWhere;
+        } elseif ($customWhere != '') {
+            $where = $where." AND".$customWhere;
+        }
+
+        // Main query to actually get the data
+        $data =  $db->loadAssocList(
+            "SELECT SQL_CALC_FOUND_ROWS `".implode("`, `", self::pluck($columns, 'db'))."`
 			 FROM `$table`
 			 $where
 			 $order
 			 $limit"
-		);
+        );
 
 
-		// Data set length after filtering
-		$recordsFiltered = $db->loadAssocList(
-			"SELECT FOUND_ROWS()"
-		);
-		$recordsFiltered = $recordsFiltered[0][0];
+        // Data set length after filtering
+        $recordsFiltered = $db->loadAssocList(
+            "SELECT FOUND_ROWS()"
+        );
+        $recordsFiltered = $recordsFiltered[0][0];
 
 
-		// Total data set length
-		$recordsTotal = $db->loadAssocList(
-			"SELECT COUNT(`{$primaryKey}`)
+        // Total data set length
+        $recordsTotal = $db->loadAssocList(
+            "SELECT COUNT(`{$primaryKey}`)
 			 FROM   `$table`"
-		);
-		$recordsTotal = $recordsTotal[0][0];
+        );
+        $recordsTotal = $recordsTotal[0][0];
 
-		/*
-		 * Output
-		 */
-		return array(
-			"draw"            => intval( $request['draw'] ),
-			"recordsTotal"    => intval( $recordsTotal ),
-			"recordsFiltered" => intval( $recordsFiltered ),
-			"data"            => self::data_output( $columns, $data )
-		);
-	}
-	/**
-	 * Filter for $allowed columns
-	 */
-	static function customFilter($db,$request, $allowed) {
-		$where='';
-		if(!isset($request["names"]) || !isset($request["values"])) {
-			return $where;		
-		}
-		for ($i=0;$i<count($request["names"]);$i++) {
-			if(isset($request["values"][$i]) && isset($allowed[$request["names"][$i]]) && $request["values"][$i]!="") {
-				if($where!="") {
-					$where .= " AND";
-				}
-				$out = explode(":",$request["names"][$i]);
-				for($p=0;$p<count($out);$p++) {
-					if($p>0) {
-						$where .= " OR";
-					} else {
-						$where .= " (";
-					}
-					$where .= "`".$out[$p]."` = ".self::makeSafe($db,$allowed[$request["names"][$i]],$request["values"][$i]);
-				}
-				if(count($out)>0) {
-					$where .= " )";
-				}
-			} else {
-				continue;
-			}
-		}
-		return $where;
-	}
-	/**
-	 * SQL Prevention
-	 */
-	static function makeSafe($db,$type,$value,$like=false) {
-		if($type == "i") {
-			return intval($value);
-		} else {
-			return "'".($like ? "%" : "").$db->escape($value).($like ? "%" : "")."'";
-		}
-	}
+        /*
+         * Output
+         */
+        return array(
+            "draw"            => intval($request['draw']),
+            "recordsTotal"    => intval($recordsTotal),
+            "recordsFiltered" => intval($recordsFiltered),
+            "data"            => self::data_output($columns, $data)
+        );
+    }
+    /**
+     * Filter for $allowed columns
+     */
+    public static function customFilter($db, $request, $allowed)
+    {
+        $where = '';
+        if (!isset($request["names"]) || !isset($request["values"])) {
+            return $where;
+        }
+        for ($i = 0;$i < count($request["names"]);$i++) {
+            if (isset($request["values"][$i]) && isset($allowed[$request["names"][$i]]) && $request["values"][$i] != "") {
+                if ($where != "") {
+                    $where .= " AND";
+                }
+                $out = explode(":", $request["names"][$i]);
+                for ($p = 0;$p < count($out);$p++) {
+                    if ($p > 0) {
+                        $where .= " OR";
+                    } else {
+                        $where .= " (";
+                    }
+                    $where .= "`".$out[$p]."` = ".self::makeSafe($db, $allowed[$request["names"][$i]], $request["values"][$i]);
+                }
+                if (count($out) > 0) {
+                    $where .= " )";
+                }
+            } else {
+                continue;
+            }
+        }
+        return $where;
+    }
+    /**
+     * SQL Prevention
+     */
+    public static function makeSafe($db, $type, $value, $like = false)
+    {
+        if ($type == "i") {
+            return intval($value);
+        } else {
+            return "'".($like ? "%" : "").$db->escape($value).($like ? "%" : "")."'";
+        }
+    }
 
-	/**
-	 * Pull a particular property from each assoc. array in a numeric array, 
-	 * returning and array of the property values from each item.
-	 *
-	 *  @param  array  $a    Array to get data from
-	 *  @param  string $prop Property to read
-	 *  @return array        Array of property values
-	 */
-	static function pluck ( $a, $prop )
-	{
-		$out = array();
+    /**
+     * Pull a particular property from each assoc. array in a numeric array,
+     * returning and array of the property values from each item.
+     *
+     *  @param  array  $a    Array to get data from
+     *  @param  string $prop Property to read
+     *  @return array        Array of property values
+     */
+    public static function pluck($a, $prop)
+    {
+        $out = array();
 
-		for ( $i=0, $len=count($a) ; $i<$len ; $i++ ) {
-			$out[] = $a[$i][$prop];
-		}
+        for ($i = 0, $len = count($a) ; $i < $len ; $i++) {
+            $out[] = $a[$i][$prop];
+        }
 
-		return $out;
-	}
+        return $out;
+    }
 }
-?>

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -9,36 +10,35 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-jimport( 'joomla.application.component.view');
+jimport('joomla.application.component.view');
 
-class CLMViewTurnier_DWZ extends JViewLegacy {
-	
-	function display($tpl = null) {
-		
-		$config = clm_core::$db->config();
-		
-		$model		= $this->getModel();
-		
-		$document = JFactory::getDocument();
-		
-//		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
-		clm_core::$cms->addScript(clm_core::$url."includes/jquery-3.7.1.min.js");
-		$document->addScript(JURI::base().'components/com_clm/javascript/updateTableHeaders.js');
-		
-		// Title in Browser
-		$headTitle = CLMText::composeHeadTitle( array( $model->turnier->name, JText::_('TOURNAMENT_DWZ') ) );
-		$document->setTitle( $headTitle );
-		
-		$this->turnier = $model->turnier;
+class CLMViewTurnier_DWZ extends JViewLegacy
+{
+    public function display($tpl = null)
+    {
 
-		$out = $config->tourn_linkclub;
-		$this->tourn_linkclub = $out;
-		$this->players = $model->players;
-		
-		parent::display($tpl);
-	
-	}
-	
+        $config = clm_core::$db->config();
+
+        $model		= $this->getModel();
+
+        $document = JFactory::getDocument();
+
+        //		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
+        clm_core::$cms->addScript(clm_core::$url."includes/jquery-3.7.1.min.js");
+        $document->addScript(JURI::base().'components/com_clm/javascript/updateTableHeaders.js');
+
+        // Title in Browser
+        $headTitle = CLMText::composeHeadTitle(array( $model->turnier->name, JText::_('TOURNAMENT_DWZ') ));
+        $document->setTitle($headTitle);
+
+        $this->turnier = $model->turnier;
+
+        $out = $config->tourn_linkclub;
+        $this->tourn_linkclub = $out;
+        $this->players = $model->players;
+
+        parent::display($tpl);
+
+    }
+
 }
-
-?>

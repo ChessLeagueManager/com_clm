@@ -1,4 +1,5 @@
 <?php
+
 defined('clm') or die('Restricted access');
 // **** Datenbank Verbindung **** //
 //
@@ -9,4 +10,3 @@ defined('clm') or die('Restricted access');
 // $database = clm_class_cms::joomla_config($joomla_path);
 
 $database = clm_class_cms::joomla_config();
-?>

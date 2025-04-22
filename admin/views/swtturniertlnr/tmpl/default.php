@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -10,7 +10,7 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
-$pfirst	= clm_core::$load->request_int( 'pfirst',1);
+$pfirst	= clm_core::$load->request_int('pfirst', 1);
 $pcount = count($this->teilnehmer);
 $_GET['pcount'] = $pcount;
 $plast = $pcount;
@@ -21,11 +21,11 @@ $_GET['prange'] = $prange;
 /*
 $params = clm_core::$load->request_string('params');
 if(isset($params['useAsTWZ'])) {
-	$useAsTWZ = $params['useAsTWZ'];
+    $useAsTWZ = $params['useAsTWZ'];
 } else {
-	$useAsTWZ = 0;
+    $useAsTWZ = 0;
 }
-*/  
+*/
 $useAsTWZ = clm_core::$load->request_string('useAsTWZ', '0');
 ?>
 
@@ -70,37 +70,44 @@ $useAsTWZ = clm_core::$load->request_string('useAsTWZ', '0');
 			<tfoot>
 				<tr>
 					<td colspan="10">
-						<?php //echo $this->pagination->getListFooter(); ?>
+						<?php //echo $this->pagination->getListFooter();?>
 					</td>
 				</tr>
 			</tfoot>
 			<tbody>
-				<?php 
-					
-					$k = 0;
-					foreach($this->teilnehmer as $i => $spieler) {
-						if ($spieler->name == 'spielfrei') continue;
-						if ($i < $pfirst) continue;
-						if ($i > ($pfirst + $prange - 1)) { $plast = ($i - 1); break;}
-						echo "<tr class='row".$k."'>";
-							echo "<td align='center'>".$i."<input type='hidden' name='snr[".$i."]' 	value='".$i."' /></td>";
-							echo "<td align='center'><input class='inputbox' type='text' name='title[".$i."]' id='title".$i."' size='3' maxlength='3' value='".$spieler->title."' /></td>";
-							echo "<td><input class='inputbox' type='text' name='name[".$i."]' id='name' size='40' maxlength='60' value='".htmlspecialchars($spieler->name, ENT_QUOTES)."' /></td>";
-							echo "<td>".JHtml::_('select.genericlist', $this->geschlechter, 'geschlecht['.$i.']', 'class="inputbox" autocomplete="off"', 'value', 'text', $spieler->geschlecht, false)."</td>";
-							echo "<td>".CLMForm::selectVereinZPS('zps['.$i.']',$spieler->zps);
-                          				echo "<input type='hidden' name='tlnrStatus[".$i."]' value='".$spieler->tlnrStatus."' /><input type='hidden' name='zps_z[".$i."]' value='".$spieler->zps."' />"."</td>";
-							echo "<td align='center'><input class='inputbox' type='text' name='mgl_nr[".$i."]' id='mgl_nr".$i."' size='4' maxlength='4' value='".$spieler->mgl_nr."' /></td>";
-							echo "<td><input class='inputbox' type='text' name='verein[".$i."]' id='verein".$i."' size='40' maxlength='60' value='".htmlspecialchars($spieler->verein, ENT_QUOTES)."' /></td>";
-							echo "<td align='center'><input class='inputbox' type='text' name='start_dwz[".$i."]' id='start_dwz".$i."' size='4' maxlength='4' value='".$spieler->start_dwz."' /></td>";
-							echo "<td align='center'><input class='inputbox' type='text' name='FIDEelo[".$i."]' id='FIDEelo".$i."' size='4' maxlength='4' value='".$spieler->FIDEelo."' /><input type='hidden' name='twz[".$i."]' id='twz'  value='".$spieler->twz."' /></td>";
-							echo "<td align='center'><input class='inputbox' type='text' name='birthYear[".$i."]' id='birthYear".$i."' size='4' maxlength='4' value='".$spieler->birthYear."' /></td>";
-							echo "<input type='hidden' name='FIDEcco[".$i."]' id='FIDEcco".$i."' value='".$spieler->FIDEcco."' />";
-							echo "<input type='hidden' name='FIDEid[".$i."]' id='FIDEid".$i."' value='".$spieler->FIDEid."' />";
-							echo "<input type='hidden' name='s_punkte[".$i."]' id='s_punkte".$i."' value='".$spieler->s_punkte."' />";
-						echo "</tr>";
-					$k = 1 - $k;
-					}
-				?>
+				<?php
+
+                    $k = 0;
+foreach ($this->teilnehmer as $i => $spieler) {
+    if ($spieler->name == 'spielfrei') {
+        continue;
+    }
+    if ($i < $pfirst) {
+        continue;
+    }
+    if ($i > ($pfirst + $prange - 1)) {
+        $plast = ($i - 1);
+        break;
+    }
+    echo "<tr class='row".$k."'>";
+    echo "<td align='center'>".$i."<input type='hidden' name='snr[".$i."]' 	value='".$i."' /></td>";
+    echo "<td align='center'><input class='inputbox' type='text' name='title[".$i."]' id='title".$i."' size='3' maxlength='3' value='".$spieler->title."' /></td>";
+    echo "<td><input class='inputbox' type='text' name='name[".$i."]' id='name' size='40' maxlength='60' value='".htmlspecialchars($spieler->name, ENT_QUOTES)."' /></td>";
+    echo "<td>".JHtml::_('select.genericlist', $this->geschlechter, 'geschlecht['.$i.']', 'class="inputbox" autocomplete="off"', 'value', 'text', $spieler->geschlecht, false)."</td>";
+    echo "<td>".CLMForm::selectVereinZPS('zps['.$i.']', $spieler->zps);
+    echo "<input type='hidden' name='tlnrStatus[".$i."]' value='".$spieler->tlnrStatus."' /><input type='hidden' name='zps_z[".$i."]' value='".$spieler->zps."' />"."</td>";
+    echo "<td align='center'><input class='inputbox' type='text' name='mgl_nr[".$i."]' id='mgl_nr".$i."' size='4' maxlength='4' value='".$spieler->mgl_nr."' /></td>";
+    echo "<td><input class='inputbox' type='text' name='verein[".$i."]' id='verein".$i."' size='40' maxlength='60' value='".htmlspecialchars($spieler->verein, ENT_QUOTES)."' /></td>";
+    echo "<td align='center'><input class='inputbox' type='text' name='start_dwz[".$i."]' id='start_dwz".$i."' size='4' maxlength='4' value='".$spieler->start_dwz."' /></td>";
+    echo "<td align='center'><input class='inputbox' type='text' name='FIDEelo[".$i."]' id='FIDEelo".$i."' size='4' maxlength='4' value='".$spieler->FIDEelo."' /><input type='hidden' name='twz[".$i."]' id='twz'  value='".$spieler->twz."' /></td>";
+    echo "<td align='center'><input class='inputbox' type='text' name='birthYear[".$i."]' id='birthYear".$i."' size='4' maxlength='4' value='".$spieler->birthYear."' /></td>";
+    echo "<input type='hidden' name='FIDEcco[".$i."]' id='FIDEcco".$i."' value='".$spieler->FIDEcco."' />";
+    echo "<input type='hidden' name='FIDEid[".$i."]' id='FIDEid".$i."' value='".$spieler->FIDEid."' />";
+    echo "<input type='hidden' name='s_punkte[".$i."]' id='s_punkte".$i."' value='".$spieler->s_punkte."' />";
+    echo "</tr>";
+    $k = 1 - $k;
+}
+?>
 			</tbody>
 		</table>
 	</div> 
@@ -125,5 +132,5 @@ $useAsTWZ = clm_core::$load->request_string('useAsTWZ', '0');
 	<input type="hidden" name="view" value="swtturniertlnr" />
 	<input type="hidden" name="controller" value="swtturniertlnr" />
 	<input type="hidden" name="task" value="" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo JHtml::_('form.token'); ?>
 </form>

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -20,26 +21,27 @@
 // Beim Umzug der entsprechenden Views sollten die Abhängigkeiten zu dieser Klasse aufgelöst werden.
 //
 */
-	
-class CLMLog extends stdClass {
 
-	function __construct() {
+class CLMLog extends stdClass
+{
+    public function __construct()
+    {
 
-		// aktion
-		$this->aktion 			= NULL; // wird von außen befüllt
-		$this->nr_aktion 		= 0; // wird von außen befüllt 
-		// parameters
-		$this->params 			= array();  // wird von außen befüllt mit key=>value-Paaren
-	
-	}
+        // aktion
+        $this->aktion 			= null; // wird von außen befüllt
+        $this->nr_aktion 		= 0; // wird von außen befüllt
+        // parameters
+        $this->params 			= array();  // wird von außen befüllt mit key=>value-Paaren
 
-	/**
-	 * log schreiben
-	 */
-	function write() {
-		clm_core::addDeprecated($this->aktion, json_encode($this->params));
-	}
+    }
+
+    /**
+     * log schreiben
+     */
+    public function write()
+    {
+        clm_core::addDeprecated($this->aktion, json_encode($this->params));
+    }
 
 
 }
-?>

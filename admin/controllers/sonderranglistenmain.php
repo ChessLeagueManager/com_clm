@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -11,126 +12,139 @@
 */
 
 // no direct access
-defined( '_JEXEC' ) or die( 'Restricted access' );
+defined('_JEXEC') or die('Restricted access');
 
-class CLMControllerSonderranglistenMain extends JControllerLegacy {
+class CLMControllerSonderranglistenMain extends JControllerLegacy
+{
+    public function __construct()
+    {
+        parent::__construct();
 
-	function __construct() {
-		parent::__construct();		
+        $this->app	= JFactory::getApplication();
+    }
 
-		$this->app	= JFactory::getApplication();
-	}
-	
-	function display($cachable = false, $urlparams = array()) { 
-		$_REQUEST['view'] = 'sonderranglistenmain';
-		parent::display(); 
-	} 
-	
-	function add() { 
-		$_REQUEST['hidemainmenu'] = 1;
-		$adminLink = new AdminLink();
-		$adminLink->view = "sonderranglistenform";
-		$adminLink->makeURL();		
-		$this->app->redirect( $adminLink->url );
-	}
-	
-	function edit() { 
-		$cids = clm_core::$load->request_array_int('cid'); 
-		$adminLink = new AdminLink();
-		$adminLink->view = "sonderranglistenform";
-		$adminLink->more = array('id' => $cids[0]);
-		$adminLink->makeURL();		
-		$this->app->redirect( $adminLink->url );
-	}
-	
-	function save() { 
-		$model = $this->getModel('sonderranglistenform'); 
-		if ($model->store()) { 
-			$msg = 'Speichern war erfolgreich'; 
-		} else { 
-			$msg = 'Fehler beim Speichern'; 
-		} 
-		$this->app->enqueueMessage( $msg );
-		$this->app->redirect('index.php?option=com_clm&view=sonderranglistenmain'); 
-	} 
-	
-	function remove() { 
-		$model = $this->getModel('sonderranglistenform'); 
-		if($model->delete()) { 
-			$msg = 'Löschen war erfolgreich'; 
-		} else { 
-			$msg = 'Fehler beim Löschen'; 
-		} 
-		$this->app->enqueueMessage( $msg );
-		$this->app->redirect('index.php?option=com_clm&view=sonderranglistenmain'); 
-	}
+    public function display($cachable = false, $urlparams = array())
+    {
+        $_REQUEST['view'] = 'sonderranglistenmain';
+        parent::display();
+    }
 
-	function publish() {
-		$model = $this->getModel('sonderranglistenform');
-		if($model->publish()) {
-			$msg = 'Freigeben war erfolgreich';
-		} else {
-			$msg = 'Fehler beim freigeben';
-		}
-		$this->app->enqueueMessage( $msg );
-		$this->app->redirect('index.php?option=com_clm&view=sonderranglistenmain'); 
-		
-	}
-	
-	function unpublish() {
-		$model = $this->getModel('sonderranglistenform');
-		if($model->unpublish()) {
-			$msg = 'Sperren war erfolgreich';
-		} else {
-			$msg = 'Fehler beim sperren';
-		}
-		$this->app->enqueueMessage( $msg );
-		$this->app->redirect('index.php?option=com_clm&view=sonderranglistenmain'); 
-		
-	}
-	
-	function saveOrder() {
-		$model = $this->getModel('sonderranglistenform');
-		if($model->saveOrder()) {
-			$msg = 'Reihenfolge wurde erfolgreich gespeichert';
-		} else {
-			$msg = 'Fehler beim speichern der Reihenfolge';
-		}
-		$this->app->enqueueMessage( $msg );
-		$this->app->redirect('index.php?option=com_clm&view=sonderranglistenmain'); 
-	}
-	
-	function orderUp() {
-		$model = $this->getModel('sonderranglistenform');
-		if($model->orderUp()) {
-			$msg = 'Reihenfolge wurde erfolgreich gespeichert';
-		} else {
-			$msg = 'Fehler beim speichern der Reihenfolge';
-		}
-		$this->app->enqueueMessage( $msg );
-		$this->app->redirect('index.php?option=com_clm&view=sonderranglistenmain'); 
-	}
-	
-	function orderDown() {
-		$model = $this->getModel('sonderranglistenform');
-		if($model->orderDown()) {
-			$msg = 'Reihenfolge wurde erfolgreich gespeichert';
-		} else {
-			$msg = 'Fehler beim speichern der Reihenfolge';
-		}
-		$this->app->enqueueMessage( $msg );
-		$this->app->redirect('index.php?option=com_clm&view=sonderranglistenmain'); 
-	}
-		
-	function cancel() { 
-		$msg = 'Aktion abgebrochen'; 
-		$this->app->enqueueMessage( $msg );
-		$this->app->redirect('index.php?option=com_clm&view=sonderranglistenmain'); 
-	} 
-	
-	function copy_set() { 
-		$_REQUEST['hidemainmenu'] = 1; 
-		$this->app->redirect('index.php?option=com_clm&view=sonderranglistencopy'); 
-	}
+    public function add()
+    {
+        $_REQUEST['hidemainmenu'] = 1;
+        $adminLink = new AdminLink();
+        $adminLink->view = "sonderranglistenform";
+        $adminLink->makeURL();
+        $this->app->redirect($adminLink->url);
+    }
 
-} 
+    public function edit()
+    {
+        $cids = clm_core::$load->request_array_int('cid');
+        $adminLink = new AdminLink();
+        $adminLink->view = "sonderranglistenform";
+        $adminLink->more = array('id' => $cids[0]);
+        $adminLink->makeURL();
+        $this->app->redirect($adminLink->url);
+    }
+
+    public function save()
+    {
+        $model = $this->getModel('sonderranglistenform');
+        if ($model->store()) {
+            $msg = 'Speichern war erfolgreich';
+        } else {
+            $msg = 'Fehler beim Speichern';
+        }
+        $this->app->enqueueMessage($msg);
+        $this->app->redirect('index.php?option=com_clm&view=sonderranglistenmain');
+    }
+
+    public function remove()
+    {
+        $model = $this->getModel('sonderranglistenform');
+        if ($model->delete()) {
+            $msg = 'Löschen war erfolgreich';
+        } else {
+            $msg = 'Fehler beim Löschen';
+        }
+        $this->app->enqueueMessage($msg);
+        $this->app->redirect('index.php?option=com_clm&view=sonderranglistenmain');
+    }
+
+    public function publish()
+    {
+        $model = $this->getModel('sonderranglistenform');
+        if ($model->publish()) {
+            $msg = 'Freigeben war erfolgreich';
+        } else {
+            $msg = 'Fehler beim freigeben';
+        }
+        $this->app->enqueueMessage($msg);
+        $this->app->redirect('index.php?option=com_clm&view=sonderranglistenmain');
+
+    }
+
+    public function unpublish()
+    {
+        $model = $this->getModel('sonderranglistenform');
+        if ($model->unpublish()) {
+            $msg = 'Sperren war erfolgreich';
+        } else {
+            $msg = 'Fehler beim sperren';
+        }
+        $this->app->enqueueMessage($msg);
+        $this->app->redirect('index.php?option=com_clm&view=sonderranglistenmain');
+
+    }
+
+    public function saveOrder()
+    {
+        $model = $this->getModel('sonderranglistenform');
+        if ($model->saveOrder()) {
+            $msg = 'Reihenfolge wurde erfolgreich gespeichert';
+        } else {
+            $msg = 'Fehler beim speichern der Reihenfolge';
+        }
+        $this->app->enqueueMessage($msg);
+        $this->app->redirect('index.php?option=com_clm&view=sonderranglistenmain');
+    }
+
+    public function orderUp()
+    {
+        $model = $this->getModel('sonderranglistenform');
+        if ($model->orderUp()) {
+            $msg = 'Reihenfolge wurde erfolgreich gespeichert';
+        } else {
+            $msg = 'Fehler beim speichern der Reihenfolge';
+        }
+        $this->app->enqueueMessage($msg);
+        $this->app->redirect('index.php?option=com_clm&view=sonderranglistenmain');
+    }
+
+    public function orderDown()
+    {
+        $model = $this->getModel('sonderranglistenform');
+        if ($model->orderDown()) {
+            $msg = 'Reihenfolge wurde erfolgreich gespeichert';
+        } else {
+            $msg = 'Fehler beim speichern der Reihenfolge';
+        }
+        $this->app->enqueueMessage($msg);
+        $this->app->redirect('index.php?option=com_clm&view=sonderranglistenmain');
+    }
+
+    public function cancel()
+    {
+        $msg = 'Aktion abgebrochen';
+        $this->app->enqueueMessage($msg);
+        $this->app->redirect('index.php?option=com_clm&view=sonderranglistenmain');
+    }
+
+    public function copy_set()
+    {
+        $_REQUEST['hidemainmenu'] = 1;
+        $this->app->redirect('index.php?option=com_clm&view=sonderranglistencopy');
+    }
+
+}

@@ -1,6 +1,7 @@
 <?php
+
 /*
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2024 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -16,4 +17,3 @@ clm_core::$cms->addScriptDeclaration('var clm_gruppen_alter_grenze = "'.html_ent
 clm_core::$cms->addScriptDeclaration('var clm_gruppen_alter = "'.html_entity_decode($lang->alter_not_numeric).'";');
 clm_core::$cms->addScriptDeclaration('var clm_gruppen_sid = "'.html_entity_decode($lang->sid_auswaehlen).'";');
 clm_core::$cms->addScript(clm_core::$url."js/gruppen.js");
-?>

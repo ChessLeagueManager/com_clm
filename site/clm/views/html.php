@@ -1,12 +1,13 @@
 <?php
-function clm_view_html($title,$head,$body) { 
-$config = clm_core::$db->config();
-if($config->favicon!="") {
-	$favicon = $config->favicon;
-} else {
-	$favicon = clm_core::$load->gen_image_url("html/favicon","ico");
-}
-?>
+function clm_view_html($title, $head, $body)
+{
+    $config = clm_core::$db->config();
+    if ($config->favicon != "") {
+        $favicon = $config->favicon;
+    } else {
+        $favicon = clm_core::$load->gen_image_url("html/favicon", "ico");
+    }
+    ?>
 <!DOCTYPE html>
 <html>
 <head>

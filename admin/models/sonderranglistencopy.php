@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2017 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -11,16 +12,19 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-class CLMModelSonderranglistenCopy extends JModelLegacy {
-	var $_turniere;
- 
-	function __construct() { 
-		parent::__construct(); 
-	} 
-		
-	function getTurniere() {
-		if (empty( $this->_turniere )) { 
-			$query = ' 	SELECT
+class CLMModelSonderranglistenCopy extends JModelLegacy
+{
+    public $_turniere;
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    public function getTurniere()
+    {
+        if (empty($this->_turniere)) {
+            $query = ' 	SELECT
 							t.id as id,
 							t.name as name,
 							s.id as sid,
@@ -31,11 +35,10 @@ class CLMModelSonderranglistenCopy extends JModelLegacy {
 							s.id = t.sid
 						ORDER BY
 							sname DESC, t.ordering ASC';
-			$this->_turniere = $this->_getList( $query );	
-		}
-		return $this->_turniere;
-	}
-	
-	
-} 
-?>
+            $this->_turniere = $this->_getList($query);
+        }
+        return $this->_turniere;
+    }
+
+
+}

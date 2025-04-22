@@ -1,6 +1,6 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Component 
+ * @ Chess League Manager (CLM) Component
  * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
@@ -53,6 +53,6 @@ Der Import kann nun abgeschlossen werden.
     <input type="hidden" name="runde" value="<?php echo $runde; ?>" />
 	<input type="hidden" name="mturnier" value="<?php echo $mturnier; ?>" />
 	<input type="hidden" name="ungerade" value="<?php echo $ungerade; ?>" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo JHtml::_('form.token'); ?>
 	
 </form>
