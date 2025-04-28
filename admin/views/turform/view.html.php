@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -14,6 +14,7 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 class CLMViewTurForm extends JViewLegacy {
 
 	function display($tpl = null) {
+		$lang = clm_core::$lang->arbiter;
 		$task = clm_core::$load->request_string('task');
 		$id = clm_core::$load->request_int('id');
 		
@@ -33,6 +34,7 @@ class CLMViewTurForm extends JViewLegacy {
 		if (($row->tl == $clmAccess->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR ($clmAccess->access('BE_tournament_edit_detail') === true) OR ($clmAccess->access('BE_tournament_create') === true)) {
 			JToolBarHelper::save( 'save' );
 			JToolBarHelper::apply( 'apply' );
+			JToolBarHelper::custom('arbiter','edit.png','edit_f2.png',$lang->arbiter_assign,false);
 		}
 		JToolBarHelper::spacer();
 		JToolBarHelper::cancel('cancel');

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -341,4 +341,47 @@ function saveIt($apply=false)
 	$mainframe->enqueueMessage($msg);
 	$mainframe->redirect( 'index.php?option='.$option.'&view=view_tournament_group&liga=1' );
 	}
+	
+public static function arbiter()
+	{
+	defined('clm') or die('Restricted access');
+	$mainframe	= JFactory::getApplication();
+
+	$db 		=JFactory::getDBO();
+	$user 		=JFactory::getUser();
+	$lid 		= clm_core::$load->request_int('lid');
+	$tid 		= clm_core::$load->request_int('tid');
+
+	$option 	= clm_core::$load->request_string('option');
+	$section 	= clm_core::$load->request_string('section');
+
+	// Ligadaten und Paarungsdaten holen
+	$query	= "SELECT a.id as lid, a.sid, a.sl, a.liga_mt "
+		." FROM #__clm_liga as a"
+		." WHERE a.id = ".$lid
+		;
+	$db->setQuery($query);
+	$liga=$db->loadObjectList();
+
+	$clmAccess = clm_core::$access;      
+
+	// Prüfen ob User Berechtigung hat
+	if ( $liga[0]->liga_mt == 0 ) {
+		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
+			$msg = JText::_( 'LIGEN_NO_FIXTURE');
+			$mainframe->enqueueMessage($msg, 'warning');
+			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$tid);
+		}
+	} else {
+		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
+			$msg = JText::_( 'LIGEN_NO_FIXTURE');
+			$mainframe->enqueueMessage($msg, 'warning');
+			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$tid);
+		}
+	}	
+
+	// Link MUSS hardcodiert sein !!!
+	$mainframe->redirect( 'index.php?option='.$option.'&view=arbiterassign&task=edit&returnview=ligen&lid='.$lid.'&tid='.$tid);
+	}
+	
 }

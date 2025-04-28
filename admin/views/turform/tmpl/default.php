@@ -767,6 +767,9 @@ else $field_search = "inputbox";
 	<input type="hidden" name="option" value="com_clm" />
 	<input type="hidden" name="view" value="turform" />
 	<input type="hidden" name="id" value="<?php echo $this->turnier->id; ?>" />
+	<input type="hidden" name="tid" value="<?php echo $this->turnier->id; ?>" />
+	<input type="hidden" name="lid" value="0" />
+	<input type="hidden" name="returnview" value="turform" />
 	<input type="hidden" name="controller" value="turform" />
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="rnd" value="<?php echo $this->turnier->rnd; ?>" />

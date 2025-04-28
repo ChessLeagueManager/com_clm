@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -183,6 +183,41 @@ class CLMControllerTurForm extends JControllerLegacy {
 		$app =JFactory::getApplication();
 		$app->redirect( $adminLink->url );
 		
+	}
+
+
+	function arbiter()
+	{
+	defined('clm') or die('Restricted access');
+	$app	= JFactory::getApplication();
+
+	$db 		=JFactory::getDBO();
+	$user 		=JFactory::getUser();
+	$lid 		= clm_core::$load->request_int('lid');
+	$tid 		= clm_core::$load->request_int('id');
+	$returnview	= clm_core::$load->request_string('returnview');
+
+	$option = clm_core::$load->request_string('option');
+
+	// Turnierdaten und Paarungsdaten holen
+	$query	= "SELECT a.id as lid, a.sid, a.tl  "
+		." FROM #__clm_turniere as a"
+		." WHERE a.id = ".$tid
+		;
+	$db->setQuery($query);
+	$turnier=$db->loadObjectList();
+	$clmAccess = clm_core::$access;      
+
+	// Prüfen ob User Berechtigung hat
+	if (( $turnier[0]->tl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
+		$msg = JText::_( 'LIGEN_NO_FIXTURE');
+		$app->enqueueMessage($msg, 'warning');
+		$app->redirect( 'index.php?option='. $option.'&view=turform&task=edit&id='.$tid);
+	}
+
+
+	// Link MUSS hardcodiert sein !!!
+	$app->redirect( 'index.php?option='.$option.'&view=arbiterassign&task=edit&returnview=turform&lid='.$lid.'&tid='.$tid);
 	}
 
 }

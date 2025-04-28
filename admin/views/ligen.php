@@ -13,6 +13,8 @@ class CLMViewLigen
 {
 	public static function setLigaToolbar($new, $sid)
 	{
+		$lang = clm_core::$lang->arbiter;
+
 		if (!$new) { $text = JText::_( 'Edit' );}
 		else { $text = JText::_( 'New' );}
 		clm_core::$load->load_css("icons_images");
@@ -20,6 +22,7 @@ class CLMViewLigen
 		if ($new OR (clm_core::$db->saison->get($sid)->published == 1 AND clm_core::$db->saison->get($sid)->archiv == 0)) {
 			JToolBarHelper::save( 'save' );
 			JToolBarHelper::apply( 'apply' );
+			JToolBarHelper::custom('arbiter','edit.png','edit_f2.png',$lang->arbiter_assign,false);
 		}
 		JToolBarHelper::cancel();
 	}
@@ -36,6 +39,7 @@ class CLMViewLigen
 	$countryversion= $config->countryversion;
 	$import_pgn = $config->import_pgn;
 	$fe_sl_ergebnisse = $config->fe_sl_ergebnisse;
+	$fe_ar_ergebnisse = $config->fe_ar_ergebnisse;
 	?>
 	<?php 
 	//Liga-Parameter aufbereiten
@@ -108,6 +112,8 @@ class CLMViewLigen
 		$row->params['import_date'] = '1970-01-01'; }
 	if (!isset($row->params['fe_sl_ergebnisse']))  {   //Standardbelegung
 		$row->params['fe_sl_ergebnisse'] = '0'; }
+	if (!isset($row->params['fe_ar_ergebnisse']))  {   //Standardbelegung
+		$row->params['fe_ar_ergebnisse'] = '0'; }
 
 	// Auswahlfelder durchsuchbar machen
 	clm_core::$load->load_js("suche_liste");
@@ -747,16 +753,28 @@ class CLMViewLigen
 		</fieldset></td>
 	</tr>
 	<?php } ?>
-	<?php if ($fe_sl_ergebnisse == 1) { ?>
-	<tr>
-		<td nowrap="nowrap" colspan="2">
-			<label for="fe_sl_ergebnisse">
-				<span class="editlinktip hasTip" title="<?php echo JText::_( 'OPTION_FE_SL_ERGEBNISSE_HINT' );?>">
-				<?php echo JText::_( 'OPTION_FE_SL_ERGEBNISSE' )." : "; ?></span></label>
-		</td><td class="paramlist_value"><fieldset class="radio">
-			<?php echo JHtml::_('select.booleanlist', 'params[fe_sl_ergebnisse]', 'class="inputbox"', $row->params['fe_sl_ergebnisse']); ?>
+	<?php if ($fe_sl_ergebnisse == 1 OR $fe_ar_ergebnisse == 1) { ?>
+	  <tr>
+		<?php if ($fe_sl_ergebnisse == 1 ) { ?>
+			<td nowrap="nowrap" colspan="2">
+				<label for="fe_sl_ergebnisse">
+					<span class="editlinktip hasTip" title="<?php echo JText::_( 'OPTION_FE_SL_ERGEBNISSE_HINT' );?>">
+					<?php echo JText::_( 'OPTION_FE_SL_ERGEBNISSE' )." : "; ?></span></label>
+			</td><td colspan="1"><fieldset class="radio">
+				<?php echo JHtml::_('select.booleanlist', 'params[fe_sl_ergebnisse]', 'class="inputbox"', $row->params['fe_sl_ergebnisse']); ?>
 		</fieldset></td>
-	</tr>
+		<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+		<?php } ?>
+		<?php if ($fe_ar_ergebnisse == 1 ) { ?>
+			<td nowrap="nowrap" colspan="2">
+				<label for="fe_ar_ergebnisse">
+					<span class="editlinktip hasTip" title="<?php echo JText::_( 'OPTION_FE_AR_ERGEBNISSE_HINT' );?>">
+					<?php echo JText::_( 'OPTION_FE_AR_ERGEBNISSE' )." : "; ?></span></label>
+			</td><td colspan="1"><fieldset class="radio">
+				<?php echo JHtml::_('select.booleanlist', 'params[fe_ar_ergebnisse]', 'class="inputbox"', $row->params['fe_ar_ergebnisse']); ?>
+		</fieldset></td>
+		<?php } ?>
+	  </tr>
 	<?php } ?>
     <tr>	
 	<td nowrap="nowrap" colspan="2">
@@ -874,6 +892,7 @@ class CLMViewLigen
 	<input type="hidden" name="section" value="ligen" />
 	<input type="hidden" name="option" value="com_clm" />
 	<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
+	<input type="hidden" name="lid" value="<?php echo $row->id; ?>" />
 	<input type="hidden" name="sid_alt" value="<?php echo $row->sid; ?>" />
 <!---	<input type="hidden" name="cid" value="<?php //echo $row->cid; ?>" />
 	<input type="hidden" name="client_id" value="<?php //echo $row->cid; ?>" />
