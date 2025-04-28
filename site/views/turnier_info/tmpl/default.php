@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -13,10 +13,9 @@
 defined('_JEXEC') or die('Restricted access');
 
 // Stylesheet laden
-
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
-
+$arbiter	= $this->arbiter;
 echo "<div id='clm'><div id='turnier_info'>";
 
 // Konfigurationsparameter auslesen
@@ -36,6 +35,38 @@ if ( $this->turnier->published == 0) {
 	echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
 	
+	// Schiedsrichter aufbereiten
+	if (is_null($arbiter) OR count($arbiter) < 1) {
+		$s_arbiter = false;
+	} else {
+		$s_arbiter = true;
+		$lang1 = clm_core::$lang->arbiter;
+		$aca = ''; $adca = ''; $apo = '';
+		$asa = ''; $aasa = ''; $aaca = '';
+		foreach ($arbiter as $arb1) {
+			if ($arb1->role == 'CA') $aca = $arb1->fname;
+			elseif ($arb1->role == 'DCA') {
+				if ($adca != '') $adca .= ', ';
+				$adca .= $arb1->fname;
+			}
+			elseif ($arb1->role == 'PO') {
+				if ($apo != '') $apo .= ', ';
+				$apo .= $arb1->fname;
+			}
+			elseif ($arb1->role == 'SA') {
+				if ($asa != '') $apo .= ', ';
+				$asa .= $arb1->fname;
+			}
+			elseif ($arb1->role == 'ASA') {
+				if ($apo != '') $aasa .= ', ';
+				$aasa .= $arb1->fname;
+			}
+			elseif ($arb1->role == 'ACA') {
+				if ($apo != '') $aaca .= ', ';
+				$aaca .= $arb1->fname;
+			}
+		}
+	}	
 	?>
 
 	<table>
@@ -45,7 +76,7 @@ if ( $this->turnier->published == 0) {
 	</tr>
 	
 	<tr>
-		<td align="left" width="100"><?php echo JText::_('SEASON') ?>:</td>
+		<td align="left" width="16%"><?php echo JText::_('SEASON') ?>:</td>
 		<td><?php echo $this->turnier->saisonname ?></td>
 	</tr>
 
@@ -231,6 +262,38 @@ if ( $this->turnier->published == 0) {
 	<?php
 	}
 	?>
+	<?php if ($s_arbiter) { ?>
+		<?php if ($aca != '') { ?>
+			<tr>
+				<td align="left" width="100"><?php echo $lang1->roleACA ?>:</td>
+				<td><?php echo $aca; ?></td>
+			</tr>
+		<?php  } if ($adca != '') { ?>
+			<tr>
+				<td align="left" width="100"><?php echo $lang1->roleADCA ?>:</td>
+				<td><?php echo $adca; ?></td>
+			</tr>
+		<?php  } if ($apo != '') { ?>
+			<tr>
+				<td align="left" width="100"><?php echo $lang1->roleAPO ?>:</td>
+				<td><?php echo $apo; ?></td>
+			</tr>
+		<?php  } if ($asa != '') { ?>
+			<tr>
+				<td align="left" width="100"><?php echo $lang1->roleASA ?>:</td>
+				<td><?php echo $asa; ?></td>
+			</tr>
+		<?php  } if ($aasa != '') { ?>
+			<tr>
+				<td align="left" width="100"><?php echo $lang1->roleAASA ?>:</td>
+				<td><?php echo $aasa; ?></td>
+			</tr>
+		<?php  } if ($aaca != '') { ?>
+			<tr>
+				<td align="left" width="100"><?php echo $lang1->roleAACA ?>:</td>
+				<td><?php echo $aaca; ?></td>
+			</tr>
+	<?php  } } ?>
 	
 	</table>
 
@@ -246,7 +309,7 @@ if ( $this->turnier->published == 0) {
 		</tr>
 	
 		<tr>
-			<td align="left" width="100"><?php echo JText::_('TOURNAMENT_MATCHES'); ?>:</td>
+			<td align="left" width="16%"><?php echo JText::_('TOURNAMENT_MATCHES'); ?>:</td>
 			<td>
 				<?php 
 				echo $this->matchStats['count']; 

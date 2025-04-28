@@ -1,12 +1,11 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip');
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
  
 $lid		= clm_core::$load->request_int('liga',1); 
@@ -33,8 +32,7 @@ $liga		= $this->liga;
 
 $punkte		= $this->punkte;
 $spielfrei	= $this->spielfrei;
-//$dwzschnitt	= $this->dwzschnitt;
-
+$arbiter	= $this->arbiter;
 $lang = clm_core::$lang->liga_info;
 
 if ($sid == 0) {
@@ -83,18 +81,38 @@ elseif (!$liga OR $liga[0]->published == 0) {
 
 } else {
 
-	// Array für DWZ Schnitt setzen
-/*	$dwz = array();
-	for ($y=1; $y< ($liga[0]->teil)+1; $y++) {
-		if ($params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
-			if(isset($dwzschnitt[($y-1)]->dwz)) {
-			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->dwz; }
-		} else {
-			if(isset($dwzschnitt[($y-1)]->start_dwz)) {
-			$dwz[$dwzschnitt[($y-1)]->tlnr] = $dwzschnitt[($y-1)]->start_dwz; }
+	// Schiedsrichter aufbereiten
+	if (is_null($arbiter) OR count($arbiter) < 1) {
+		$s_arbiter = false;
+	} else {
+		$s_arbiter = true;
+		$lang1 = clm_core::$lang->arbiter;
+		$aca = ''; $adca = ''; $apo = '';
+		$asa = ''; $aasa = ''; $aaca = '';
+		foreach ($arbiter as $arb1) {
+			if ($arb1->role == 'CA') $aca = $arb1->fname;
+			elseif ($arb1->role == 'DCA') {
+				if ($adca != '') $adca .= ', ';
+				$adca .= $arb1->fname;
+			}
+			elseif ($arb1->role == 'PO') {
+				if ($apo != '') $apo .= ', ';
+				$apo .= $arb1->fname;
+			}
+			elseif ($arb1->role == 'SA') {
+				if ($asa != '') $apo .= ', ';
+				$asa .= $arb1->fname;
+			}
+			elseif ($arb1->role == 'ASA') {
+				if ($apo != '') $aasa .= ', ';
+				$aasa .= $arb1->fname;
+			}
+			elseif ($arb1->role == 'ACA') {
+				if ($apo != '') $aaca .= ', ';
+				$aaca .= $arb1->fname;
+			}
 		}
-	}
-*/
+	}	
 	// Spielfreie Teilnehmer finden //
 	$diff = $spielfrei[0]->count;
 	?>
@@ -113,7 +131,7 @@ elseif (!$liga OR $liga[0]->published == 0) {
 	</tr>
 	
 	<tr>
-		<td align="left" width="25%"><?php echo $lang->season ?>:</td>
+		<td align="left" width="28%"><?php echo $lang->season ?>:</td>
 		<td><?php echo $liga[0]->sname ?></td>
 	</tr>
 	<tr>
@@ -183,6 +201,38 @@ elseif (!$liga OR $liga[0]->published == 0) {
 										   else echo $lang->tournament_manager; ?>:</td>
 		<td><?php echo $liga[0]->sl; ?></td>
 	</tr>
+	<?php if ($s_arbiter) { ?>
+		<?php if ($aca != '') { ?>
+			<tr>
+				<td align="left" width="100"><?php echo $lang1->roleACA ?>:</td>
+				<td><?php echo $aca; ?></td>
+			</tr>
+		<?php  } if ($adca != '') { ?>
+			<tr>
+				<td align="left" width="100"><?php echo $lang1->roleADCA ?>:</td>
+				<td><?php echo $adca; ?></td>
+			</tr>
+		<?php  } if ($apo != '') { ?>
+			<tr>
+				<td align="left" width="100"><?php echo $lang1->roleAPO ?>:</td>
+				<td><?php echo $apo; ?></td>
+			</tr>
+		<?php  } if ($asa != '') { ?>
+			<tr>
+				<td align="left" width="100"><?php echo $lang1->roleASA ?>:</td>
+				<td><?php echo $asa; ?></td>
+			</tr>
+		<?php  } if ($aasa != '') { ?>
+			<tr>
+				<td align="left" width="100"><?php echo $lang1->roleAASA ?>:</td>
+				<td><?php echo $aasa; ?></td>
+			</tr>
+		<?php  } if ($aaca != '') { ?>
+			<tr>
+				<td align="left" width="100"><?php echo $lang1->roleAACA ?>:</td>
+				<td><?php echo $aaca; ?></td>
+			</tr>
+	<?php  } } ?>
 	</table>
 
 	<br>

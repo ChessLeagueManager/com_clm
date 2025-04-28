@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -520,5 +520,26 @@ class CLMModelLiga_Info extends JModelLegacy
 		return @$result;
 	}
 		
+	function _getCLMArbiter( $options )
+	{
+	$tid	= 0;
+	$lid	= clm_core::$load->request_int('liga',0);
+	
+		$db			= JFactory::getDBO();
+		// alle Schiedsrichter im Turnier
+		$query = "SELECT at.*, CONCAT(a.name,',',a.vorname,'(',a.fideid,')') as fname FROM #__clm_arbiter_turnier as at "
+				." LEFT JOIN #__clm_arbiter as a ON a.fideid = at.fideid "
+				." WHERE at.liga = $lid AND at.turnier = $tid "
+				." AND at.trole = 'A' AND at.role <> 'A00' "
+				." ORDER BY at.role, at.id ";
+		return $query;
+	}
+	function getCLMArbiter( $options=array() )
+	{
+		$query	= $this->_getCLMArbiter( $options );
+		$result = $this->_getList( $query );
+		return $result;
+	}
+	
 }
 ?>

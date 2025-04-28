@@ -23,6 +23,7 @@ $ -> Language fix or change
 ^ Datenbank: Anpassung der Schiedsrichtertabellen
 + Schiedsrichter: Anlegen und Datenpflege für Schiedsrichter möglich
 + Schiedsrichter: Zuordnung von Schiedsrichtern zu Team- und Einzelwettbewerben 
++ Schiedsrichter: Anzeigen der Schiedsrichter im Frontend
 
 - - - - - 4.2.3 - [18-02-2025] - - - - - - - - - - - - - - - - - - - -
 # Rundenbericht: In Rangliste punkt- und wertungsgleich -> gleiche Platzierung (Nachbesserung)
