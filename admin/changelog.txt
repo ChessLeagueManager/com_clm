@@ -24,6 +24,7 @@ $ -> Language fix or change
 + Schiedsrichter: Anlegen und Datenpflege für Schiedsrichter möglich
 + Schiedsrichter: Zuordnung von Schiedsrichtern zu Team- und Einzelwettbewerben 
 + Schiedsrichter: Anzeigen der Schiedsrichter im Frontend
++ Ergebniseingabe durch SR im Frontend freischaltbar
 
 - - - - - 4.2.3 - [18-02-2025] - - - - - - - - - - - - - - - - - - - -
 # Rundenbericht: In Rangliste punkt- und wertungsgleich -> gleiche Platzierung (Nachbesserung)
