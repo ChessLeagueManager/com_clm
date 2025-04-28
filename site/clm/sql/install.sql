@@ -1456,10 +1456,13 @@ CREATE TABLE IF NOT EXISTS `#__clm_arbiter` (
   `geloescht` timestamp NULL DEFAULT NULL,
   `nurlokal` varchar(1) DEFAULT 'Y',
   `source` varchar(64) DEFAULT NULL,
+  `title` varchar(3) DEFAULT NULL,
   `name` varchar(32) DEFAULT NULL,
   `vorname` varchar(32) DEFAULT NULL,
   `fideid` int(11) DEFAULT 0,
-  `endoflicense` date DEFAULT NULL,
+  `fidefed` char(3) DEFAULT 'GER',
+  `published` mediumint(11) UNSIGNED DEFAULT NULL,
+  `ordering` int(11) DEFAULT 0,
   `pkz` int(11) DEFAULT 0,
   `strasse` varchar(64) DEFAULT NULL,
   `ort` varchar(64) DEFAULT NULL,
@@ -1467,8 +1470,10 @@ CREATE TABLE IF NOT EXISTS `#__clm_arbiter` (
   `email` varchar(128) DEFAULT NULL,
   `telefon` varchar(128) DEFAULT NULL,
   `mobil` varchar(128) DEFAULT NULL,
+  `bemerkungen` text DEFAULT NULL,
+  `bem_int` text DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `arb_uuid` (`uuid`)
+  UNIQUE KEY `fideid` (`fideid`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `#__clm_arbiterlicense` (
@@ -1486,9 +1491,14 @@ CREATE TABLE IF NOT EXISTS `#__clm_arbiter_arbiterlicense` (
 
 CREATE TABLE IF NOT EXISTS `#__clm_arbiter_turnier` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `r_arbiter` int(11) NOT NULL,
-  `r_turnier` int(11) NOT NULL,
-  `funktion` varchar(32) NOT NULL,
+  `fideid` int(11) UNSIGNED NOT NULL,
+  `turnier` int(11) DEFAULT NULL,
+  `liga` int(11) DEFAULT NULL,
+  `dg` tinyint(3) UNSIGNED NOT NULL,
+  `runde` tinyint(3) UNSIGNED NOT NULL,
+  `paar` tinyint(3) UNSIGNED NOT NULL,
+  `trole` char(3) DEFAULT NULL,
+  `role` char(3) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
