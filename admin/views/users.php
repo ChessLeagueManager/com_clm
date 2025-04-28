@@ -32,7 +32,8 @@ public static function setUsersToolbar()
 		JToolBarHelper::deleteList();
 		JToolBarHelper::editList();
 		JToolBarHelper::addNew();
-		JToolBarHelper::custom( 'email', 'mail.png', 'mail_f2.png', JText::_('USER_MAIL') ); 
+		JToolBarHelper::custom( 'email', 'mail.png', 'mail_f2.png', JText::_('USER_MAIL_FORMLESS') ); 
+		JToolBarHelper::custom( 'email_confirm', 'mail.png', 'mail_f2.png', JText::_('USER_MAIL_CONFIRM') ); 
 	}
 	JToolBarHelper::help( 'screen.clm.user' );
 	}

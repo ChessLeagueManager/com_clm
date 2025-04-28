@@ -21,4 +21,5 @@ $bindings["view_paarungsliste_xls"]=array("liga");
 $bindings["view_paarungsliste_ics"]=array("liga");
 $bindings["view_terminliste_xls"]=array("cid");
 $bindings["view_mail"]=array("return_section","return_view","cids");
+$bindings["view_mail_confirm"]=array("return_section","return_view","cids");
 ?>

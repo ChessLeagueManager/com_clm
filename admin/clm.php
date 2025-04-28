@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -567,6 +567,19 @@ if($view == "view_config") {
 	return;
 } else if($view == "view_mail") {
 	$fix = clm_core::$api->callStandalone("view_mail");
+	clm_core::$load->load_css("icons_images");
+	JToolBarHelper::title(JText::_('TITLE_INFO'));
+	echo '<div id="clm">';
+	if($fix[0]) {
+		echo $fix[2]; // array dereferencing fix php 5.3
+	} else {
+		$fix = clm_core::$load->load_view("notification",array($fix[1]));
+		echo "<div class='clm'>".$fix[1]."</div>";
+	}
+	echo "</div>";
+	return;
+} else if($view == "view_mail_confirm") {
+	$fix = clm_core::$api->callStandalone("view_mail_confirm");
 	clm_core::$load->load_css("icons_images");
 	JToolBarHelper::title(JText::_('TITLE_INFO'));
 	echo '<div id="clm">';
