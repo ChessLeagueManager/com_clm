@@ -29,6 +29,7 @@ $ -> Language fix or change
 # SWT-Import: Anpassung wegen sql_mode=strict_trans_tables 
 ^ Einzelturnier: Löschen Teilnehmer vor Turnierstart
 # Einzelturnier: Abspeichern FIDE-Id bei Teilnehmer
+# View Spieler: in Aufstellung von 2 Teams eines Vereins in einer Liga
 
 - - - - - 4.2.3 - [18-02-2025] - - - - - - - - - - - - - - - - - - - -
 # Rundenbericht: In Rangliste punkt- und wertungsgleich -> gleiche Platzierung (Nachbesserung)
