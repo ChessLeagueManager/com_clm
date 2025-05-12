@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -48,6 +48,7 @@ class CLMViewTurPlayers extends JViewLegacy {
 			// noch keine Ergebnisse eingetragen
 			if (!$model->turnier->started) { 
 				if ($model->turnier->typ == 1) { // nur bei CH-System
+					JToolBarHelper::custom('del_player', 'cancel.png', 'copy_f2.png', JText::_('DEL_PLAYER'),false);
 					JToolBarHelper::custom( 'plusTln', 'upload.png', 'upload_f2.png', JText::_('PARTICIPANT_PLUS'), false);
 					JToolBarHelper::spacer();
 				}
@@ -114,7 +115,6 @@ class CLMViewTurPlayers extends JViewLegacy {
 		clm_core::$load->load_js("suche_liste");
 
 		// zusätzliche Funktionalitäten
-//		JHtml::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 
 

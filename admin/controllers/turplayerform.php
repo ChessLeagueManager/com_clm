@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -117,6 +117,7 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 			// $dwz = clm_core::$load->request_int('dwz');
 			$natrating = clm_core::$load->request_int('natrating');
 			$fideelo = clm_core::$load->request_int('fideelo');
+			$FIDEid = clm_core::$load->request_int('FIDEid');
 			$titel = clm_core::$load->request_string('titel');
 			$geschlecht = clm_core::$load->request_string('geschlecht', 'NULL');
 			$birthYear = clm_core::$load->request_string('birthYear', '0000');
@@ -126,6 +127,7 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 			if (is_null($twz) OR $twz == '') $twz = 0;						
 			if (is_null($natrating) OR $natrating == '') $natrating = 0;						
 			if (is_null($fideelo) OR $fideelo == '') $fideelo = 0;
+			if (is_null($FIDEid) OR $FIDEid == '') $FIDEid = 0;
 			if (is_null($birthYear) OR !is_numeric($birthYear)) $birthYear = '0000';
 
 			$mgl_nr = clm_core::$load->request_int('mgl_nr');
@@ -136,13 +138,10 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 			}
 
 			$query = " INSERT INTO #__clm_turniere_tlnr"
-				." (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `titel`, `mgl_nr` ,`zps`)"
+				." (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `FIDEid`, `titel`, `mgl_nr` ,`zps`)"
 				." VALUES"
-//				." ('".$tournament->data->sid."', '".$turnierid."', '".$maxSnr++."', '$name', '$birthYear', '$geschlecht', '$verein', '$twz', '$natrating', '$fideelo', '$titel', '".$maxFzps."', '99999')";
-				." ('".$tournament->data->sid."', '".$turnierid."', '".$maxSnr++."', '$name', '$birthYear', '$geschlecht', '$verein', '$twz', '$natrating', '$fideelo', '$titel', '$mgl_nr', '".$zps."')";
-//		$this->_db->setQuery($query);
-//		if ($this->_db->query()) {
-		if (clm_core::$db->query($query)) { 
+				." ('".$tournament->data->sid."', '".$turnierid."', '".$maxSnr++."', '$name', '$birthYear', '$geschlecht', '$verein', '$twz', '$natrating', '$fideelo', '$FIDEid', '$titel', '$mgl_nr', '".$zps."')";
+			if (clm_core::$db->query($query)) { 
 				$this->app->enqueueMessage(JText::_('PLAYER')." ".$name." ".JText::_('ADDED'));
 				$playersIn++; // den angemeldeten Spielern zufügen
 				return true;

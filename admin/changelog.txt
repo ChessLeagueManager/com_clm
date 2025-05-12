@@ -27,6 +27,8 @@ $ -> Language fix or change
 + Ergebniseingabe durch SR im Frontend freischaltbar
 + Benutzer: vorgefertigte Bestätigungsmail
 # SWT-Import: Anpassung wegen sql_mode=strict_trans_tables 
+^ Einzelturnier: Löschen Teilnehmer vor Turnierstart
+# Einzelturnier: Abspeichern FIDE-Id bei Teilnehmer
 
 - - - - - 4.2.3 - [18-02-2025] - - - - - - - - - - - - - - - - - - - -
 # Rundenbericht: In Rangliste punkt- und wertungsgleich -> gleiche Platzierung (Nachbesserung)
