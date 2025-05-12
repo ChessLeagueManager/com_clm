@@ -331,7 +331,10 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 		$values = '';
 		foreach ($spalten as $spalte) {
 			$fields .= "`".$spalte."`,";
-			$values .= " '".clm_escape(clm_core::$load->request_string($spalte,''))."',";
+			if ($spalte == 'started' OR $spalte == 'finished' OR $spalte == 'ordering') 
+				$values .= " '".clm_escape(clm_core::$load->request_string($spalte,'0'))."',";
+			else
+				$values .= " '".clm_escape(clm_core::$load->request_string($spalte,''))."',";
 		}
 		
 		// Parameter

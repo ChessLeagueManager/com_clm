@@ -26,6 +26,7 @@ $ -> Language fix or change
 + Schiedsrichter: Anzeigen der Schiedsrichter im Frontend
 + Ergebniseingabe durch SR im Frontend freischaltbar
 + Benutzer: vorgefertigte Bestätigungsmail
+# SWT-Import: Anpassung wegen sql_mode=strict_trans_tables 
 
 - - - - - 4.2.3 - [18-02-2025] - - - - - - - - - - - - - - - - - - - -
 # Rundenbericht: In Rangliste punkt- und wertungsgleich -> gleiche Platzierung (Nachbesserung)
