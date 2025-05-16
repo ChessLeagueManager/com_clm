@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5.0" method="upgrade">
 	<name>CLM</name>
-	<creationDate>18.02.2025</creationDate>
+	<creationDate>16.05.2025</creationDate>
 	<author>CLM Team</author>
 	<copyright>(C) Copyright 2008-2025 by CLM Project</copyright>
 	<license>GNU/GPL</license>
 	<authorEmail>fishpoke@fishpoke.de</authorEmail>
 	<authorUrl>www.chessleaguemanager.de</authorUrl>
-	<version>4.2.3</version>
+	<version>4.2.4</version>
  	<scriptfile>installer.php</scriptfile>
 	<description>
 		<![CDATA[
@@ -16,10 +16,13 @@
 		 <p>Die CLM Komponente ist eine Verwaltung für Schachligen und Schachturniere.</p>
 		 <a href="https://www.chessleaguemanager.de" target="blank">CLM Projekt Homepage</a>  |  <a href="https://www.chessleaguemanager.de/index.php?option=com_kunena" target="blank">Support Forum</a>
 		 <br><br>
-		 <u>Das Wichtigste zur neuen Beta 4.2.3 :</u>
+		 <u>Das Wichtigste zur neuen Beta 4.2.4 :</u>
 		 <ul type="square">
-		 <li><font color="red">Entkopplung von Joomla- und CLM-Mail-Adressen der Benutzer</font></li>
-		 <li>Details zur Entkopplung siehe <a href="https://www.chessleaguemanager.de/der-administrationsbereich/item/195-email-adressen-in-joomla-und-clm" target="blank">CLM Wiki</a></li> 
+		 <li><font color="red">Ergebniseingabe durch Staffelleiter im Frontend freischaltbar, siehe <a href="https://www.chessleaguemanager.de/das-frontend/item/196-ergebnismeldung-durch-staffelleiter-im-frontend" target="blank">CLM Wiki</a></font></li>
+		 <li><font color="red">Ergebniseingabe durch Schiedsrichter im Frontend freischaltbar, siehe <a href="https://www.chessleaguemanager.de/das-frontend/item/197-ergebnismeldung-durch-schiedsrichter-im-frontend" target="blank">CLM Wiki</a></font></li>
+		 <li>Diese Funktion setzt die Version 4.2.5 des CLM-Login-Moduls voraus</li> 
+		 <li></li>
+		 </li><li><font color="red">Die Vereinheitlichung der Mailausgaben wird mit der Umstellung der Ergebniseingabe abgeschlossen, siehe <a href="https://www.chessleaguemanager.de/der-administrationsbereich/item/192-vereinheitlichung-der-email-ausgaben" target="blank">CLM Wiki</a></font></li>
 		 </ul></br>
 		 <p>Weitere Ergänzungen und Korrekturen siehe changelog auf der Projektseite</p>
 		 <p>Hinweise, Fehlermeldungen, Wünsche bitte über unser Forum</p>

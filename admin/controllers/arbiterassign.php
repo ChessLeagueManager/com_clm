@@ -91,8 +91,8 @@ class CLMControllerArbiterAssign extends JControllerLegacy {
 		clm_core::$db->query($query);	
 		if ($aca > 0) {
 			$query = " INSERT INTO #__clm_arbiter_turnier "
-				." (fideid, liga, turnier, trole, role ) "
-				." VALUES ($aca, $lid, $tid, 'A', 'CA')"
+				." (fideid, liga, turnier, trole, role, dg, runde, paar ) "
+				." VALUES ($aca, $lid, $tid, 'A', 'CA', 0, 0, 0)"
 			;
 			clm_core::$db->query($query);	
 		}
@@ -101,23 +101,12 @@ class CLMControllerArbiterAssign extends JControllerLegacy {
 		$query = " DELETE FROM #__clm_arbiter_turnier "
 			." WHERE liga = $lid AND turnier = $tid AND trole = 'A' AND role = 'DCA' "; 
 		clm_core::$db->query($query);	
-		if ($adca > 0) {
-			$query = " INSERT INTO #__clm_arbiter_turnier "
-				." (fideid, liga, turnier, trole, role ) "
-				." VALUES ($adca, $lid, $tid, 'A', 'DCA')"
-			;
-			clm_core::$db->query($query);	
-		}
-		
-		$query = " DELETE FROM #__clm_arbiter_turnier "
-			." WHERE liga = $lid AND turnier = $tid AND trole = 'A' AND role = 'DCA' "; 
-		clm_core::$db->query($query);	
 		for ($i = 0; $i <= 10; $i++) {
 			$adca = clm_core::$load->request_int('adca'.$i);
 			if ($adca < 1) continue;
 			$query = " INSERT INTO #__clm_arbiter_turnier "
-				." (fideid, liga, turnier, trole, role ) "
-				." VALUES ($adca, $lid, $tid, 'A', 'DCA')"
+				." (fideid, liga, turnier, trole, role, dg, runde, paar ) "
+				." VALUES ($adca, $lid, $tid, 'A', 'DCA', 0, 0, 0)"
 			;
 			clm_core::$db->query($query);	
 		}
@@ -129,8 +118,8 @@ class CLMControllerArbiterAssign extends JControllerLegacy {
 			$apo = clm_core::$load->request_int('apo'.$i);
 			if ($apo < 1) continue;
 			$query = " INSERT INTO #__clm_arbiter_turnier "
-				." (fideid, liga, turnier, trole, role ) "
-				." VALUES ($apo, $lid, $tid, 'A', 'PO')"
+				." (fideid, liga, turnier, trole, role, dg, runde, paar ) "
+				." VALUES ($apo, $lid, $tid, 'A', 'PO', 0, 0, 0)"
 			;
 			clm_core::$db->query($query);	
 		}
@@ -142,8 +131,8 @@ class CLMControllerArbiterAssign extends JControllerLegacy {
 			$asa = clm_core::$load->request_int('asa'.$i);
 			if ($asa < 1) continue;
 			$query = " INSERT INTO #__clm_arbiter_turnier "
-				." (fideid, liga, turnier, trole, role ) "
-				." VALUES ($asa, $lid, $tid, 'A', 'SA')"
+				." (fideid, liga, turnier, trole, role, dg, runde, paar ) "
+				." VALUES ($asa, $lid, $tid, 'A', 'SA', 0, 0, 0)"
 			;
 			clm_core::$db->query($query);	
 		}
@@ -155,8 +144,8 @@ class CLMControllerArbiterAssign extends JControllerLegacy {
 			$aasa = clm_core::$load->request_int('aasa'.$i);
 			if ($aasa < 1) continue;
 			$query = " INSERT INTO #__clm_arbiter_turnier "
-				." (fideid, liga, turnier, trole, role ) "
-				." VALUES ($aasa, $lid, $tid, 'A', 'ASA')"
+				." (fideid, liga, turnier, trole, role, dg, runde, paar ) "
+				." VALUES ($aasa, $lid, $tid, 'A', 'ASA', 0, 0, 0)"
 			;
 			clm_core::$db->query($query);	
 		}
@@ -168,8 +157,8 @@ class CLMControllerArbiterAssign extends JControllerLegacy {
 			$aaca = clm_core::$load->request_int('aaca'.$i);
 			if ($aaca < 1) continue;
 			$query = " INSERT INTO #__clm_arbiter_turnier "
-				." (fideid, liga, turnier, trole, role ) "
-				." VALUES ($aaca, $lid, $tid, 'A', 'ACA')"
+				." (fideid, liga, turnier, trole, role, dg, runde, paar ) "
+				." VALUES ($aaca, $lid, $tid, 'A', 'ACA', 0, 0, 0)"
 			;
 			clm_core::$db->query($query);	
 		}

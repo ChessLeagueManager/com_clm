@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 4.2.4 - [xx-xx-2025] - - - - - - - - - - - - - - - - - - - -
+- - - - - 4.2.4 - [16-05-2025] - - - - - - - - - - - - - - - - - - - -
 + Ergebniseingabe durch SL im Frontend freischaltbar
 ^ Datenbank: formale Umstellung der DB-Engine auf InnoDB
 ^ Vereinheitlichung der Mailausgaben mit Möglichkeit der Unterdrückung (Ergebnismeldung)
