@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -28,14 +28,10 @@ class CLMViewRunde extends JViewLegacy
   		$paar     = $model->getCLMPaar();
 		$this->paar = $paar;
 
-/*		$model	  = $this->getModel();
-  		$dwzschnitt     = $model->getCLMDWZSchnitt();
-		$this->dwzschnitt = $dwzschnitt;
-*/
-/*		$model	  = $this->getModel();
-		$dwzgespielt     = $model->getCLMDWZgespielt();
-		$this->dwzgespielt  = $dwzgespielt;
-*/
+		$model	  = $this->getModel();
+		$offen     = $model->getCLMOffen();
+		$this->offen = $offen;
+
 		$model	= $this->getModel();
   		$einzel	= $model->getCLMEinzel();
 		$this->einzel = $einzel;

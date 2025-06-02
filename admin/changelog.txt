@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 4.2.5 - [xx-xx-2025] - - - - - - - - - - - - - - - - - - - -
++ Views Rangliste, Tabelle, Rundenbericht: Reset nach Zeitintervall
+
 - - - - - 4.2.4 - [16-05-2025] - - - - - - - - - - - - - - - - - - - -
 + Ergebniseingabe durch SL im Frontend freischaltbar
 ^ Datenbank: formale Umstellung der DB-Engine auf InnoDB

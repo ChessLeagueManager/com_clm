@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -22,6 +22,18 @@ $liga		= $this->liga;
 $option 	= clm_core::$load->request_string( 'option' );
 if ($option == '') $option = 'com_clm';
 $mainframe	= JFactory::getApplication();
+
+$offen		= $this->offen;
+$anz_offen	= count($offen);
+if ($anz_offen > 0) {
+	clm_core::$load->load_js("view_reset");
+}
+$a_offen = array();
+foreach ($offen as $value) {
+	if (!isset($a_offen[$value->tln_nr][$value->dg][$value->runde])) {
+		$a_offen[$value->tln_nr][$value->dg][$value->runde] = new stdclass();
+	}
+}
 
 // Userkennung holen
 $user	=JFactory::getUser();
@@ -327,16 +339,14 @@ elseif ($liga[0]->runden_modus == "4" OR $liga[0]->runden_modus == "5") {
 							echo '<td class="trenner" '.$estyle.'>X</td>';
 						} else { 
 							// veränderte CSS für weitere Durchgänge ermöglichen
-							if ($dg%2 != 0) { 
-								echo '<td class="'.$zeilenr.'" '.$estyle.'>';
-							} else {
-								echo '<td class="'.$zeilenr_dg2.'" '.$estyle.'>';
-							}
-							
-							// nur erster Durchgang
-							// TODO: muß man das wirklich unterscheiden?
-						//	if ($dg == 1) {
 								if ($punkte[$y]->tln_nr > $runden[0]->tln_nr) {
+									if (isset($a_offen[$punkte[$x]->tln_nr][$dg][$runden[($punkte[$y]->tln_nr)-2]->runde])) {
+										echo '<td class="rang_auf_evtl" '.$estyle.'>';
+									} elseif ($dg%2 != 0) { 
+										echo '<td class="'.$zeilenr.'" '.$estyle.'>';
+									} else {
+										echo '<td class="'.$zeilenr_dg2.'" '.$estyle.'>';
+									}
 									if (isset($runden[($punkte[$y]->tln_nr)-2]) AND $runde != "" AND $runden[($punkte[$y]->tln_nr)-2]->runde <= $runde) {
 										$link = new CLMcLink();
 										$link->view = 'runde';
@@ -355,6 +365,13 @@ elseif ($liga[0]->runden_modus == "4" OR $liga[0]->runden_modus == "5") {
 									}
 								}
 								if ($punkte[$y]->tln_nr < $runden[0]->tln_nr) {
+									if (isset($a_offen[$punkte[$x]->tln_nr][$dg][$runden[($punkte[$y]->tln_nr)-1]->runde])) {
+										echo '<td class="rang_auf_evtl" '.$estyle.'>';
+									} elseif ($dg%2 != 0) { 
+										echo '<td class="'.$zeilenr.'" '.$estyle.'>';
+									} else {
+										echo '<td class="'.$zeilenr_dg2.'" '.$estyle.'>';
+									}
 									if (isset($runden[($punkte[$y]->tln_nr)-1]) AND $runde != "" AND $runden[($punkte[$y]->tln_nr)-1]->runde <= $runde) {
 										$link = new CLMcLink();
 										$link->view = 'runde';

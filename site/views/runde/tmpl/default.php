@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -83,6 +83,11 @@ if(isset($liga[0])){
 	$detail		= clm_core::$load->request_int('detail',0);
 	if ($detail == 0) $detailp = '1'; else $detailp = '0';
 
+	$offen		= $this->offen;
+	$anz_offen	= count($offen);
+	if ($anz_offen > 0) {
+		clm_core::$load->load_js("view_reset");
+	}
 	// Userkennung holen
 	$user	=JFactory::getUser();
 	$jid	= $user->get('id');

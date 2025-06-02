@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -457,6 +457,29 @@ class CLMModelRangliste extends JModelLegacy
 		$query	= $this->_getCLMEinzel( $options );
 		$result = $this->_getList( $query );
 		return @$result;
+	}
+
+	// offene Partien (Ergebnis --- 7)	
+	function _getCLMOffen ( &$options )
+	{
+		$liga	= clm_core::$load->request_int('liga',0);
+	
+		$db		= JFactory::getDBO();
+		$query = " SELECT a.tln_nr,a.dg,a.runde,a.paar,a.ergebnis "
+				." FROM #__clm_rnd_spl as a "
+				." WHERE a.lid = ".$liga
+				." AND a.ergebnis = 7 "
+				." ORDER BY a.tln_nr,a.dg ASC,a.runde ASC,a.paar "
+			;
+
+		return $query;
+	}
+
+	function getCLMOffen ( $options=array() )
+	{
+		$query	= $this->_getCLMOffen( $options );
+		$result = $this->_getList( $query );
+		return $result;
 	}
 		
 }

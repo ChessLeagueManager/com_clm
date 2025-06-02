@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -19,6 +19,11 @@ $runde		= clm_core::$load->request_int('runde');
 $item		= clm_core::$load->request_int('Itemid',1);
 $liga		= $this->liga;
 
+$offen		= $this->offen;
+$anz_offen	= count($offen);
+if ($anz_offen > 0) {
+	clm_core::$load->load_js("view_reset");
+}
 //Liga-Parameter aufbereiten
 if(isset($liga[0])){
 	$paramsStringArray = explode("\n", $liga[0]->params);
