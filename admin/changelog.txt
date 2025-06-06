@@ -14,6 +14,7 @@ $ -> Language fix or change
 
 - - - - - 4.2.5 - [xx-xx-2025] - - - - - - - - - - - - - - - - - - - -
 + Views Rangliste, Tabelle, Rundenbericht: Reset nach Zeitintervall
+# Teamwettbewerbe: Berliner Wertung bei kampflos 
 
 - - - - - 4.2.4 - [16-05-2025] - - - - - - - - - - - - - - - - - - - -
 + Ergebniseingabe durch SL im Frontend freischaltbar

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -2541,17 +2541,20 @@ function kampflos($gast)
 	$meldung	= $user->get('id');
 	if ($gast=="heim" OR $gast=="home") { $comment = JText::_( 'ERGEBNISSE_COMMENT_HOME_KL' ); }
 	else { $comment = JText::_( 'ERGEBNISSE_COMMENT_GUEST_KL' ); }
-
+	$icomment = '';
 	$brett_punkte	= $bretter * ($sieg + $antritt);
 	$man_punkte	= $man_sieg + $man_antritt;
+	$wert_punkte	= (($bretter * ($bretter + 1)) / 2);
 
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET brettpunkte = '".$brett_punkte."'"
 		." , manpunkte = '".$man_punkte."'"
+		." , wertpunkte = '".$wert_punkte."'"
 		." , ergebnis = 5 "
 		." , kampflos = 1 "
 		." , zeit = '$now'"
 		." , gemeldet = '$meldung'"
+		." , dwz_editor = '$meldung'"
 		." , comment = '$comment'"
 		." , icomment = '$icomment'"
 		." WHERE sid = ".$sid
@@ -2568,10 +2571,12 @@ function kampflos($gast)
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET brettpunkte = '0'"
 		." , manpunkte = '0'"
+		." , wertpunkte = '0'"
 		." , ergebnis = 4 "
 		." , kampflos = 1 "
 		." , zeit = '$now'"
 		." , gemeldet = '$meldung'"
+		." , dwz_editor = '$meldung'"
 		." , comment = '$comment'"
 		." , icomment = '$icomment'"
 		." WHERE sid = ".$sid
