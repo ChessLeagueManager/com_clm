@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.fishpoke.de
  * @author Thomas Schwietert
@@ -13,6 +13,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 	//BE-Parameter aufbereiten
+	$this->accessgroup->params = str_replace('BE_elobase_general', 'BE_dewis_general', $this->accessgroup->params);
 	$paramsStringArray = explode("\n", $this->accessgroup->params);
 	$this->accessgroup->params = array();
 	foreach ($paramsStringArray as $value) {
@@ -119,7 +120,8 @@ defined('_JEXEC') or die('Restricted access');
 				<fieldset class="adminform"> 
 					<legend><?php echo JText::_( 'ACCESSGROUP_BE_DETAILS' ); ?></legend> 
 					<table class="admintable">
-						<?php  foreach (clm_core::$access->getAccesspoints() as $pname => $value) { 
+						<?php  foreach (clm_core::$access->getAccesspoints() as $pname => $value) {
+									if ($pname == 'BE_elobase_general') $pname = 'BE_dewis_general'; 
 									$tname = 'TAP_'.$pname;
 									if (!isset($this->accessgroup->params[$pname])) { $this->accessgroup->params[$pname] = 0; }
 						?> 

@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 defined('clm') or die('Restricted access');
 // Alle Zugriffspunkte
 //        0 / 1 / 2
@@ -45,7 +51,7 @@ $accesspoints["BE_user_copy"]=0;
 $accesspoints["BE_accessgroup_general"]=0;
 $accesspoints["BE_swt_general"]=0;
 $accesspoints["BE_pgn_general"]=0;
-$accesspoints["BE_elobase_general"]=0;
+$accesspoints["BE_dewis_general"]=0;
 $accesspoints["BE_database_general"]=0;
 $accesspoints["BE_logfile_general"]=0;
 $accesspoints["BE_logfile_delete"]=0;
