@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -28,6 +28,7 @@ public static function setRundenToolbar($sid, $params_round_date)
 		JToolBarHelper::custom('check','preview.png','upload_f2.png','RUNDE_CHECK',false);
 		// Nur CLM-Admin hat Zugriff auf Toolbar
 	  if($clmAccess->access('BE_league_edit_round') !== false) {
+		JToolBarHelper::custom( 'termine_copy', 'copy.png', 'copy_f2.png', 'Termine kopieren',false ); 
 		JToolBarHelper::publishList();
 		JToolBarHelper::unpublishList();
 		JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', 'Copy' );
@@ -100,7 +101,8 @@ public static function runden( $rows, $lists, $pageNav, $option )
 				<?php
 		// eigenes Dropdown Menue
 		if ($val ==0 OR ( $val ==1 AND $dropdown == 1)) {
-			echo "&nbsp;&nbsp;&nbsp;".$lists['sid'];
+			echo $lists['qlid'];
+			echo "&nbsp;&nbsp;&nbsp;"."&nbsp;&nbsp;&nbsp;"."&nbsp;&nbsp;&nbsp;"."&nbsp;&nbsp;&nbsp;"."&nbsp;&nbsp;&nbsp;"."&nbsp;&nbsp;&nbsp;".$lists['sid'];
 			echo "&nbsp;&nbsp;&nbsp;".$lists['lid'];
 					}
 			echo "&nbsp;&nbsp;&nbsp;".$lists['state'];

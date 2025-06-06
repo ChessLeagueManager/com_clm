@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -157,6 +157,9 @@ function display($cachable = false, $urlparams = array())
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
 //	$lists['lid']	= JHtml::_('select.genericlist', $ligalist, 'filter_lid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
 	$lists['lid']	= JHtml::_('select.genericlist', $ligalist, 'filter_lid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
+	$ligalistq[]	= JHtml::_('select.option',  '0', JText::_( 'Termine von Liga, nur nötig für Termine kopieren' ), 'cid', 'name' );
+	$ligalistq	= array_merge( $ligalistq, $db->loadObjectList() );
+	$lists['qlid']	= JHtml::_('select.genericlist', $ligalistq, 'filter_qlid', 'class="'.$field_search.'" size="1" ','cid', 'name', 0 );
 	// Ordering
 	$lists['order_Dir']	= $filter_order_Dir;
 	$lists['order']		= $filter_order;
@@ -997,6 +1000,83 @@ function check()
 		$clmLog->write();
 		
 		return array(true,$round->liga);
+	}
+
+function termine_copy()
+	{
+	$mainframe	= JFactory::getApplication();
+	// Check for request forgeries
+	defined('clm') or die('Restricted access');
+	$option 	= clm_core::$load->request_string('option');
+	$section 	= clm_core::$load->request_string('section');
+	$lid 	= clm_core::$load->request_int('liga');
+	$qlid 	= clm_core::$load->request_int('filter_qlid');
+	if ($qlid == 0) {
+		$mainframe->enqueueMessage(JText::_( 'keine Quelle-Liga ausgewählt', true ), 'warning');
+		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$lid );
+	}
+	$db	=JFactory::getDBO();
+	$user	= JFactory::getUser();
+
+	$liga =JTable::getInstance( 'ligen', 'TableCLM' );
+	$liga->load($lid);
+	if ($liga->liga_mt == 0) {
+		$mppoint = 'league';
+	} else {
+		$mppoint = 'teamtournament';
+	}
+
+	$clmAccess = clm_core::$access;      
+
+	// Prüfen ob User Berechtigung hat
+	if (( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
+		$mainframe->enqueueMessage(JText::_( 'RUNDE_ST_KOPIE' ), 'warning');
+		$link = 'index.php?option='.$option.'&section='.$section.'&liga='.$lid;
+		$mainframe->redirect( $link);
+	}
+	
+	$query = "SELECT * FROM  #__clm_runden_termine "
+		." WHERE liga = ".$qlid
+		;
+	$t_source = clm_core::$db->loadObjectList($query);	
+	$at_source = array();
+	foreach ($t_source as $t_s) {
+		$at_source[$t_s->nr] = $t_s;
+	}
+	
+	$query = "SELECT * FROM  #__clm_runden_termine "
+		." WHERE liga = ".$lid
+		." AND datum = '1970-01-01' AND startzeit = '00:00:00' "  
+		." AND deadlineday = '1970-01-01' AND deadlinetime = '00:00:00' "  
+		;
+	$t_target = clm_core::$db->loadObjectList($query);
+	$n = 0;
+	foreach ($t_target as $t_t) {
+		if (isset($at_source[$t_t->nr])) {
+			$query = " UPDATE #__clm_runden_termine "
+				." SET datum = '".$at_source[$t_t->nr]->datum."' "
+				." , startzeit = '".$at_source[$t_t->nr]->startzeit."' "
+				." , deadlineday = '".$at_source[$t_t->nr]->deadlineday."' "
+				." , deadlinetime = '".$at_source[$t_t->nr]->deadlinetime."' "
+				." WHERE liga = ".$lid
+				." AND nr = ".$at_source[$t_t->nr]->nr
+			;
+			$db->setQuery($query);
+			clm_core::$db->query($query);
+			$n++;
+		}
+	}
+
+	$msg=JText::_( 'Rundentermine kopiert');
+	
+	// Log schreiben
+	$clmLog = new CLMLog();
+	$clmLog->aktion = JText::_( 'Rundentermine kopiert');
+	$clmLog->params = array('lid' => $lid, 'qlid' => $qlid, 'anz' => $n );
+	$clmLog->write();
+	
+	$mainframe->enqueueMessage(JText::_( $n.' '.$msg ), 'message');
+	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$lid);
 	}
 
 }
