@@ -1009,7 +1009,8 @@ function termine_copy()
 	defined('clm') or die('Restricted access');
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');
-	$lid 	= clm_core::$load->request_int('liga');
+//	$lid 	= clm_core::$load->request_int('liga');
+	$lid 	= clm_core::$load->request_int('filter_lid');
 	$qlid 	= clm_core::$load->request_int('filter_qlid');
 	if ($qlid == 0) {
 		$mainframe->enqueueMessage(JText::_( 'keine Quelle-Liga ausgewählt', true ), 'warning');
