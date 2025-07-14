@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -33,7 +33,8 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 		$rtermine = clm_core::$db->loadObjectList($query);	
 		$a_rtermine = array();
 		foreach ($rtermine as $rt1) {
-			$a_rtermine[$rt1->dg][$rt1->nr] = $rt1;
+//			$a_rtermine[$rt1->dg][$rt1->nr] = $rt1;
+			$a_rtermine[$rt1->nr] = $rt1;
 		}
 
 		// Runden (Termine) anlegen
@@ -126,6 +127,7 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 							. " ,'1970-01-01 00:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00',NULL,NULL,'','','1970-01-01')";
 						clm_core::$db->query($query);
 					}
+					$rnd_cnt = 1;
 					// Ende Runde 1
 					for ($p = 2;$p < $n;$p++) {
 						// Modus festlegen 1 = Normal; 2 = zentrale Enderunde
@@ -689,6 +691,6 @@ function clm_api_db_tournament_genRounds($id, $group = true) {
 			}
 		}
 	}
-	return array(true, "");
+	return array(true, "m_genRounds");
 }
 ?>

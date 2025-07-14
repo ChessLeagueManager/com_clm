@@ -17,6 +17,7 @@ $ -> Language fix or change
 # Teamwettbewerbe: Berliner Wertung bei kampflos 
 + Teamwettbewerbe: Termine kopieren
 # Admin-View DeWIS: Zugriffsberechtigung korrigiert
+# Teamwettbewerbe: Runden anlegen für Wettbewerbe mit 1 Runde z.B. Relegation
 
 - - - - - 4.2.4 - [16-05-2025] - - - - - - - - - - - - - - - - - - - -
 + Ergebniseingabe durch SL im Frontend freischaltbar
