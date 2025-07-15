@@ -2544,7 +2544,7 @@ function kampflos($gast)
 	$icomment = '';
 	$brett_punkte	= $bretter * ($sieg + $antritt);
 	$man_punkte	= $man_sieg + $man_antritt;
-	$wert_punkte	= (($bretter * ($bretter + 1)) / 2);
+	$wert_punkte	= (($bretter * ($bretter + 1)) / 2) * ($sieg + $antritt);
 
 	$query	= "UPDATE #__clm_rnd_man"
 		." SET brettpunkte = '".$brett_punkte."'"
