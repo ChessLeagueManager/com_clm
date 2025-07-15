@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -29,15 +29,19 @@ class CLMViewRunde extends JViewLegacy
 		$this->paar = $paar;
 
 		$model	  = $this->getModel();
-  		$einzel     = $model->getCLMEinzel();
+		$offen     = $model->getCLMOffen();
+		$this->offen = $offen;
+
+		$model	= $this->getModel();
+  		$einzel	= $model->getCLMEinzel();
 		$this->einzel = $einzel;
 
-		$model	  = $this->getModel();
-  		$summe     = $model->getCLMSumme();
+		$model	= $this->getModel();
+  		$summe	= $model->getCLMSumme();
 		$this->summe = $summe;
 
-		$model	  = $this->getModel();
-  		$ok       = $model->getCLMOK();
+		$model	= $this->getModel();
+  		$ok	= $model->getCLMOK();
 		$this->ok = $ok;
 
 		$model	= $this->getModel();
