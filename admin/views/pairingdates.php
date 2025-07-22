@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -19,7 +19,6 @@ public static function setPairingDatesToolbar($row)
 
 	if (clm_core::$load->request_string('task') == 'edit') { $text = JText::_( 'Edit' );}
 		else { $text = JText::_( 'New' );}
-	$verein 	= clm_core::$load->request_string('verein');
 	JToolBarHelper::title(  JText::_( 'TITLE_PAARUNG').' '.$row->name.': [ '. $text.' ]' ,'clm_settings_2');
 	JToolBarHelper::custom( 'save', 'save.png', 'save_f2.png', JText::_( 'SAVE'),false );
 	JToolBarHelper::custom( 'apply', 'apply.png', 'apply_f2.png', JText::_( 'APPLY'),false );
@@ -36,7 +35,7 @@ public static function pairingdates( &$row, $paarung, $man, $count_man, $option,
 <!--- <br> --->
 
 	<form action="index.php" method="post" name="adminForm" id="adminForm">
-	<div class="width-60 fltlft">
+	<div class="width-70 fltlft">
 
 	<fieldset class="adminform">
 <!---	<legend><?php echo JText::_( 'PAARUNG_AKTUELL' ); ?></legend> --->

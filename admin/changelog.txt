@@ -20,6 +20,7 @@ $ -> Language fix or change
 # Teamwettbewerbe: Runden anlegen für Wettbewerbe mit 1 Runde z.B. Relegation
 # Vereinliste: im Ausnahmefall fehlt Zwischenzeile für Schachbezirk
 # Einzelturniere: Feinwertungen bei spielfrei während des Turniers, Buchholzsumme bei kampflos
+^ Anpassung php 8.2 (DateTime::createFromFormat)
 
 - - - - - 4.2.4 - [16-05-2025] - - - - - - - - - - - - - - - - - - - -
 + Ergebniseingabe durch SL im Frontend freischaltbar

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -170,7 +170,8 @@ function save()
 	for ($y = 0; $y < $pairings; $y++ ) {
 		$ndate	= clm_core::$load->request_string( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Date');
 		if (!clm_core::$load->is_date($ndate,'Y-m-d')) { $ndate = '1970-01-01'; }
-		$ntime	= clm_core::$load->request_string( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Time');
+//		$ntime	= clm_core::$load->request_string( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Time');
+		$ntime	= clm_core::$load->request_string( 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Time').':00';
 		if ($ntime != '00:00:00' AND $n1time == '00:00:00') $n1time = $ntime;
 		if (!clm_core::$load->is_date($ndate." " . $ntime, "Y-m-d H:i:s")) { $ntime = '00:00:00'; }
 		
