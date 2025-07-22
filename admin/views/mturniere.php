@@ -215,7 +215,7 @@ class CLMViewMTurniere
 	<td width="20%" nowrap="nowrap">
 	<label for="name"><?php echo JText::_( 'MTURN_NAME' ); ?></label>
 	</td><td colspan="2">
-	<input class="inputbox" type="text" name="name" id="name" size="30" maxlength="30" value="<?php echo $row->name; ?>" />
+	<input class="inputbox" type="text" name="name" id="name" size="30" maxlength="100" value="<?php echo $row->name; ?>" />
 	</td>
 	<td nowrap="nowrap">
 	<label for="sl"><?php echo JText::_( 'MTURN_CHIEF' ); ?></label>
