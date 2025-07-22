@@ -289,14 +289,14 @@ function edit()
 	$lists['saison']= JHTML::_('select.genericlist',   $season_list, 'sid', 'class="'.$field_search.'" size="1" style="width:300px"','sid', 'name', $row->sid );
 	$sql = " SELECT u.* FROM #__users as u "
 		." LEFT JOIN #__clm_user as a ON u.id = a.jid AND a.sid IN ('".$sid."')"
-		." WHERE a.name IS NULL";
+		." WHERE a.name IS NULL AND u.block = 0";
 	} else { 
 	$season_list[]	= JHTML::_('select.option',  clm_core::$access->getSeason(), clm_core::$db->saison->get(clm_core::$access->getSeason())->name, 'sid', 'name' );
 //	$lists['saison']= JHTML::_('select.genericlist',  $season_list, 'sid', 'class="js-example-basic-single" size="1" style="width:300px"','sid', 'name', clm_core::$access->getSeason() );
 	$lists['saison']= JHTML::_('select.genericlist',  $season_list, 'sid', 'class="'.$field_search.'" size="1" style="width:300px"','sid', 'name', clm_core::$access->getSeason() );
 	$sql = " SELECT u.* FROM #__users as u "
 		." LEFT JOIN #__clm_user as a ON u.id = a.jid AND a.sid IN ('".clm_core::$access->getSeason()."')"
-		." WHERE a.name IS NULL";
+		." WHERE a.name IS NULL AND u.block = 0";
 	}
 	$db->setQuery($sql);
 	if (!$db->execute()){
@@ -538,7 +538,6 @@ function save() {
 		return;
 	}
 
-	
 
 	switch ($task) {
 		// 6 = Manager ; 7 = Admin; 8 = Superadmin ; 2= registered
