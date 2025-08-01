@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -65,6 +65,7 @@ class clm_class_log {
 		$lang = clm_core::$lang->logging_error;
 		if (clm_core::$db->config ()->log_error) {
 			echo $lang->error1 . "<br/>" . $lang->error2 . "<br/>" . $lang->error3 . "<br/>" . $lang->error4 . " " . $this->callid;
+			echo '<br/>Siehe auch <a href="https://www.chessleaguemanager.de/faq/item/178-meldung-interner-fehler" target="blank">CLM Wiki</a>';
 		} else {
 			echo $lang->error1 . "<br/>" . $lang->error2 . "<br/>" . $lang->error_problem;
 		}
@@ -133,6 +134,9 @@ class clm_class_log {
 			case 4 :
 				if($lang->exist($name)) {
 					$name = '<p title="'.$name.'" >'.$lang->$name . "</p>";
+				}
+				if (strlen($content) > 200) {
+					$content = self::hideError($content,$lang->messagelog);
 				}
 			break;
 			case 5 :
