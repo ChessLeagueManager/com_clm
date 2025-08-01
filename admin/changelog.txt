@@ -24,6 +24,7 @@ $ -> Language fix or change
 # Teamwettbewerbe: Anzeigelänge Liganame bis 100 Zeichen
 # Benutzer: geblockte Jommla-User ausschliessen
 # TRF-Import: Bereitstellung Rundenanzahl  
+# SWT-Import Einzelturniere: Behandlung Rundentermine
 
 - - - - - 4.2.4 - [16-05-2025] - - - - - - - - - - - - - - - - - - - -
 + Ergebniseingabe durch SL im Frontend freischaltbar

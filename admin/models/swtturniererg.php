@@ -516,6 +516,8 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			foreach($this->_runden as $rnd => $runde) {
 			  $i = $runde->nr;	  
 			  if ($i >= $rfirst AND $i <= $rlast) {
+				$hdatum = CLMSWT::getFormValue('datum','1970-01-01','string',$rnd);
+				if ($hdatum == '0000-00-00' OR $hdatum == '') $hdatum = '1970-01-01';
 				$insert_query .= 	" ( 
 										".CLMSWT::getFormValue('sid',null,'int').", 
 										'".CLMSWT::getFormValue('name','','string',$rnd)."', 										
@@ -523,7 +525,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 										".CLMSWT::getFormValue('swt_tid',null,'int').", 
 										".CLMSWT::getFormValue('dg',null,'int',$rnd).", 
 										".CLMSWT::getFormValue('runde',null,'int',$rnd).",
-										'".CLMSWT::getFormValue('datum','1970-01-01','string',$rnd)."', 
+										'".$hdatum."', 
 										'".CLMSWT::getFormValue('startzeit','00:00:00','string',$rnd)."', 
 										".CLMSWT::getFormValue('abgeschlossen',0,'int',$rnd).", 
 										".CLMSWT::getFormValue('tl_ok',0,'int',$rnd).", 
