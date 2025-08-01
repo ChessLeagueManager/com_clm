@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -539,6 +539,7 @@ function save()
 			$mainframe->enqueueMessage(JTEXT::_('WARNING_ADDRESS_LOOKUP'), 'warning');
 		}
 	}
+
 	// Wenn Meldelistenmodus dann bei Änderung der Mannschaftsnummer Meldeliste updaten
 	if ($liga_dat->rang == 0 AND $pre_man != $row->man_nr) {
 		$query = " UPDATE #__clm_meldeliste_spieler "
@@ -1045,6 +1046,78 @@ public static function meldeliste()
 	$row->checkout( $user->get('id') );
 	// Link MUSS hardcodiert sein !!!
 	$mainframe->redirect( 'index.php?option='.$option.'&section=meldelisten&task=edit&id='.$cid[0]);
+	}
+
+public static function copy_meldeliste()
+	{
+	defined('clm') or die( 'Invalid Token' );
+	$mainframe	= JFactory::getApplication();
+
+	$db 		=JFactory::getDBO();
+	$user 		=JFactory::getUser();
+	$cid 		= clm_core::$load->request_array_int( 'cid');
+	if (is_null($cid)) 
+		$cid[0] = clm_core::$load->request_int('id');
+	$option 	= clm_core::$load->request_string('option');
+	$section 	= clm_core::$load->request_string('section');
+										 
+	// keine Meldeliste gewählt
+	if ($cid[0] < 1) {
+		$msg = JText::_( 'MANNSCHAFTEN_MELDELISTE');
+		$mainframe->enqueueMessage( $msg );
+		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+	}
+	// load the row from the db table
+	$row =JTable::getInstance( 'mannschaften', 'TableCLM' );
+		$row->load( $cid[0] );
+
+	// Konfigurationsparameter auslesen 
+	$config = clm_core::$db->config();
+	$rang	= $config->rangliste;
+
+	// load the row from the db table
+	$rowliga	= JTable::getInstance( 'ligen', 'TableCLM' );
+	$liga		= $row->liga;
+		$rowliga->load( $liga );
+
+	$link = 'index.php?option='.$option.'&section='.$section;
+
+	// Prüfen ob User Berechtigung  hat
+	$clmAccess = clm_core::$access;      
+	if ($clmAccess->access('BE_team_registration_list') === false) {
+		$section = 'info';
+		$mainframe->enqueueMessage( JText::_( 'TEAM_NO_ACCESS' ), 'warning' );
+		$link = 'index.php?option='.$option.'&section='.$section;
+		$mainframe->redirect( $link);
+	}
+
+	if ( $rang == 0 AND $rowliga->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_registration_list') !== true) {
+		$mainframe->enqueueMessage( JText::_( 'MANNSCHAFTEN_MELDELISTE_BEARBEITEN' ), 'warning' );
+		$mainframe->redirect( $link);
+	}
+
+	if ( $rowliga->rang > 0) {
+		$mainframe->enqueueMessage( JText::_('MANNSCHAFTEN_NO_MELDELISTE' ), 'warning' );
+		$mainframe->enqueueMessage( JText::_('MANNSCHAFTEN_MANNSCHAFT_RANG' ), 'notice' );
+		$msg = JText::_( 'MANNSCHAFTEN_RANG_VEREIN' );
+		$mainframe->enqueueMessage( $msg, 'message' );
+		$mainframe->redirect( $link );
+		}
+
+	// Prüfen ob Verein bereits zugeordnet ist
+	if (is_null($row->zps) OR $row->zps < '2') {
+		$mainframe->enqueueMessage( JText::_( 'Es ist noch kein Verein zugeordnet' ), 'warning' );
+		$link = 'index.php?option='.$option.'&section='.$section;
+		$mainframe->redirect( $link);
+	}
+	// Prüfen ob bereits eine Meldeliste angelegt ist
+	if (!is_null($row->liste) AND $row->liste > 0) {
+		$mainframe->enqueueMessage( JText::_( 'Meldeliste ist bereits angelegt' ), 'warning' );
+		$link = 'index.php?option='.$option.'&section='.$section;
+		$mainframe->redirect( $link);
+	}
+	// Link MUSS hardcodiert sein !!!
+	$mainframe->redirect( 'index.php?option='.$option.'&view=copymeldeliste&id='.$cid[0]);
 	}
 
 public static function delete_meldeliste()
