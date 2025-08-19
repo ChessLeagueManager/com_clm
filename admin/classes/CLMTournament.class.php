@@ -608,7 +608,7 @@ class CLMTournament extends stdClass {
 		if ((in_array(2, $arrayFW)) OR (in_array(12, $arrayFW))) { // Buchholz-Summe als TieBreaker gewünscht?
 			// erneut alle Matches durchgehen -> Spieler erhalten Buchholzsummen
 			foreach ($matchData as $key => $value) {
-				if ($value->gegner >= 1) {
+				if ($value->gegner >= 1 AND $value->ergebnis < 3) {
 					$array_PlayerBuSum[$value->tln_nr] += $array_PlayerBuch[$value->gegner];
 					if ($array_PlayerBuSumMin[$value->tln_nr] > $array_PlayerBuch[$value->gegner]) 
 							$array_PlayerBuSumMin[$value->tln_nr] = $array_PlayerBuch[$value->gegner];
