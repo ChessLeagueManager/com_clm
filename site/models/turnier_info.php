@@ -143,7 +143,8 @@ class CLMModelTurnier_Info extends JModelLegacy {
 	
 		$db			= JFactory::getDBO();
 		// alle Schiedsrichter im Turnier
-		$query = "SELECT at.*, CONCAT(a.name,',',a.vorname,'(',a.fideid,')') as fname FROM #__clm_arbiter_turnier as at "
+//		$query = "SELECT at.*, CONCAT(a.name,',',a.vorname,'(',a.fideid,')') as fname FROM #__clm_arbiter_turnier as at "
+		$query = "SELECT at.*, CONCAT(a.vorname,' ',a.name) as fname FROM #__clm_arbiter_turnier as at "
 				." LEFT JOIN #__clm_arbiter as a ON a.fideid = at.fideid "
 				." WHERE at.liga = $lid AND at.turnier = $tid "
 				." AND at.trole = 'A' AND at.role <> 'A00' "

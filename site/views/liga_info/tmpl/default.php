@@ -100,15 +100,15 @@ elseif (!$liga OR $liga[0]->published == 0) {
 				$apo .= $arb1->fname;
 			}
 			elseif ($arb1->role == 'SA') {
-				if ($asa != '') $apo .= ', ';
+				if ($asa != '') $asa .= ', ';
 				$asa .= $arb1->fname;
 			}
 			elseif ($arb1->role == 'ASA') {
-				if ($apo != '') $aasa .= ', ';
+				if ($aasa != '') $aasa .= ', ';
 				$aasa .= $arb1->fname;
 			}
 			elseif ($arb1->role == 'ACA') {
-				if ($apo != '') $aaca .= ', ';
+				if ($aaca != '') $aaca .= ', ';
 				$aaca .= $arb1->fname;
 			}
 		}
@@ -177,9 +177,9 @@ elseif (!$liga OR $liga[0]->published == 0) {
 					if ($liga[0]->tiebr1 > 0)  
 						echo clm_core::$load->key_to_name('tiebreak',intval($liga[0]->tiebr1),true); 
 					if ($liga[0]->tiebr2 > 0)  
-						echo ';'.clm_core::$load->key_to_name('tiebreak',intval($liga[0]->tiebr2),true); 
+						echo ', '.clm_core::$load->key_to_name('tiebreak',intval($liga[0]->tiebr2),true); 
 					if ($liga[0]->tiebr3 > 0)  
-						echo ';'.clm_core::$load->key_to_name('tiebreak',intval($liga[0]->tiebr3),true); 
+						echo ', '.clm_core::$load->key_to_name('tiebreak',intval($liga[0]->tiebr3),true); 
 				  }
 			?>
 		</td>

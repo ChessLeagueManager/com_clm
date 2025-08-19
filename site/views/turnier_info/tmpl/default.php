@@ -54,15 +54,15 @@ if ( $this->turnier->published == 0) {
 				$apo .= $arb1->fname;
 			}
 			elseif ($arb1->role == 'SA') {
-				if ($asa != '') $apo .= ', ';
+				if ($asa != '') $asa .= ', ';
 				$asa .= $arb1->fname;
 			}
 			elseif ($arb1->role == 'ASA') {
-				if ($apo != '') $aasa .= ', ';
+				if ($aasa != '') $aasa .= ', ';
 				$aasa .= $arb1->fname;
 			}
 			elseif ($arb1->role == 'ACA') {
-				if ($apo != '') $aaca .= ', ';
+				if ($aaca != '') $aaca .= ', ';
 				$aaca .= $arb1->fname;
 			}
 		}
