@@ -43,7 +43,7 @@ class CLMControllerCopyMeldeliste extends JControllerLegacy {
 		// Id's der Quell-Meldeliste ermitteln
 		$query = "SELECT ml.id FROM `#__clm_meldeliste_spieler` as ml"
 				." WHERE ml.lid = '".$source->liga."' AND ml.mnr = ".$source->man_nr
-				." AND ml.zps = '".$source->zps."'"
+//				." AND ml.zps = '".$source->zps."'"
 				;
 		$sourcelist = clm_core::$db->loadObjectList($query);	
 
