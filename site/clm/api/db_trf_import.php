@@ -10,6 +10,7 @@
  * Ergänzungen zum Standard: XX? von JaVaFo, XC? von CLM
 */
 function clm_api_db_trf_import($file,$season,$turnier,$group=false,$update=false,$test=false) {
+	set_time_limit(180);
 	$group = false;
 //echo "<br>file:"; var_dump($file); //die('ende-controller');	
     $lang = clm_core::$lang->imports;
@@ -167,7 +168,7 @@ if ($debug > 0) { echo "<br>xxs_pab: $xxs_pab   erg: $erg_pab "; }
 		foreach ($a_spielerdaten as $line) {
 			$i = 0;
 			while ((strlen($line) > (98+($i*10))) AND (substr($line,(98+($i*10)),1)) > ' ') {  // result gesetzt
-				echo "<br>$i ".substr($line,(98+($i*10)),1);
+//				echo "<br>$i ".substr($line,(98+($i*10)),1);
 				$rundenzahl = $i+1;
 				$i++;
 			}	
