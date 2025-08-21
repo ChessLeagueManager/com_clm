@@ -89,7 +89,6 @@ $rights["view_mail_confirm"]=array(0,"BE_user_general",true);
 $rights["db_player_check"]=array(); // Prüfung, ob spieler im Spielbetrieb verankert
 $rights["mail_send"]=array(); // Mailversand
 $rights["db_syn_player_block"]=array(); // Synchronisation Sperrkennzeichen
-
 $rights["test_print"]=array();
 //************************
 // Turniere
@@ -101,6 +100,8 @@ $rights["db_tournament_group"]=array(4, array("BE_league_general" => true, "BE_t
 
 $rights["db_tournament_genDWZ"]=array(1,"BE_tournament_edit_round","BE_league_edit_round","BE_teamtournament_edit_round",1,0); // inoff. DWZ generieren
 $rights["db_tournament_delDWZ"]=array(1,"BE_tournament_edit_round","BE_league_edit_round","BE_teamtournament_edit_round",1,0); // inoff. DWZ löschen
+$rights["db_tournament_genFIDERating"]=array(1,"BE_tournament_edit_round","BE_league_edit_round","BE_teamtournament_edit_round",1,0); // inoff. DWZ generieren
+$rights["db_tournament_delFIDERating"]=array(1,"BE_tournament_edit_round","BE_league_edit_round","BE_teamtournament_edit_round",1,0); // inoff. DWZ löschen
 $rights["db_tournament_updateDWZ"]=array(1,"BE_tournament_edit_detail","BE_league_edit_detail","BE_teamtournament_edit_detail",1,0); // DWZ des Turniers aktualisieren
 $rights["db_tournament_copy"]=array(5,"BE_tournament_create","BE_league_create","BE_teamtournament_create",1,0); // Kopieren
 $rights["db_tournament_genRounds"]=array(1,"BE_tournament_edit_round","BE_league_edit_round","BE_teamtournament_edit_round",1,0); // Runden generieren

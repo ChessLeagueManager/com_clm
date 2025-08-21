@@ -30,7 +30,7 @@ $countryversion = $config->countryversion;
 
 	if ($row->rang > 0) {
 		$query = "SELECT  l.rang, l.name as lname, m.tln_nr, m.name, d.Spielername,d.DWZ as dsbDWZ,d.DWZ_Index, a.*, l.anzeige_ma"
-			.",r.man_nr as rmnr, r.Rang as rrang, l.params "
+			.",r.man_nr as rmnr, r.Rang as rrang, l.params, d.FIDE_Elo as dsbElo "
 			." FROM #__clm_meldeliste_spieler as a "
 //			." LEFT JOIN #__clm_rangliste_spieler as r on r.Gruppe = $row->rang AND r.ZPS = a.zps AND r.Mgl_Nr = a.mgl_nr AND r.sid = a.sid "
 			." LEFT JOIN #__clm_rangliste_spieler as r on r.Gruppe = $row->rang AND r.ZPSmgl = a.zps AND r.Mgl_Nr = a.mgl_nr AND r.sid = a.sid "
@@ -47,19 +47,8 @@ $countryversion = $config->countryversion;
 			." ORDER BY m.tln_nr ASC , rmnr ASC, rrang ASC "
 			;
 	} else {
-		//der bisherige Ansatz versagt bei Spielgemeinschaften
-		$query = "SELECT l.rang, l.name as lname, m.tln_nr, m.name, d.Spielername,d.DWZ as dsbDWZ,d.DWZ_Index, a.* "
-			." FROM #__clm_meldeliste_spieler as a "
-			." LEFT JOIN #__clm_dwz_spieler as d on d.zps = a.zps AND d.mgl_nr = a.mgl_nr AND d.sid = a.sid"
-			." LEFT JOIN #__clm_mannschaften as m on m.zps = a.zps AND m.man_nr = a.mnr AND m.sid = a.sid AND m.liga = a.lid"
-			." LEFT JOIN #__clm_liga AS l ON l.id = m.liga  AND l.sid = m.sid "
-			." WHERE a.sid = ".$sid
-			." AND a.lid = ".$lid
-			." AND a.status = ".$row->rang
-			." AND a.Partien > 0 "
-			." ORDER BY m.tln_nr ASC, a.mnr ASC, a.snr ASC ";
 		//ein neuer Versuch auch für Spielgemeinschaften
-		$query = "SELECT l.rang, l.name as lname, m.tln_nr, m.name, d.Spielername,d.DWZ as dsbDWZ,d.DWZ_Index, a.*, l.anzeige_ma, l.params"
+		$query = "SELECT l.rang, l.name as lname, m.tln_nr, m.name, d.Spielername,d.DWZ as dsbDWZ,d.DWZ_Index, a.*, l.anzeige_ma, l.params, d.FIDE_Elo as dsbElo"
 			." FROM #__clm_mannschaften as m "
 			." LEFT JOIN #__clm_liga AS l ON l.id = m.liga  AND l.sid = m.sid "
 			." LEFT JOIN #__clm_meldeliste_spieler as a on (a.zps = m.zps OR FIND_IN_SET(a.zps,m.sg_zps) != 0) AND a.mnr = m.man_nr AND a.sid = m.sid AND a.lid = m.liga";

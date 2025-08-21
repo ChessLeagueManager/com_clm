@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -30,6 +30,8 @@ $liga		= $this->liga;
 	if (!isset($params['dwz_date']) OR $params['dwz_date'] == '0000-00-00') { $params['dwz_date'] = '1970-01-01'; }
 	if ($params['dwz_date'] == '1970-01-01') { $old=true; } // dwz aus dwz_spieler
 	else { $old=false; } // dwz aus Meldeliste
+	if (!isset($params['optionEloAnalysis'])) $optionEloAnalysis = '0';
+	else $optionEloAnalysis = $params['optionEloAnalysis'];
 $dwz		= $this->dwz;
 $spieler	= $this->spieler;
 $sid		= clm_core::$load->request_int( 'saison',0);
@@ -111,6 +113,21 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 	<td><?php echo $team_punkte." / ".$team_partien; ?></td>
 	<td><?php if ($team_dwz_partien > 0) echo round($team_dwz_gneu / $team_dwz_partien); ?></td>
 	<td><?php if ($team_diff > 0) echo "+"; echo $team_diff; ?></td>
+	<?php if ($optionEloAnalysis == '1') { ?>	
+	  <td><?php if ($team_elo_anzahl_alt > 0) {
+	    $team_elo_alt = intval(0.5 + $team_elo_summe_alt/$team_elo_anzahl_alt);
+	    echo $team_elo_alt;
+		}?></td>
+	  <td><?php if ($team_elo_anzahl_neu > 0) {
+	    $team_elo_neu = intval(0.5 + $team_elo_summe_neu/$team_elo_anzahl_neu);
+	    echo $team_elo_neu;
+		}?></td>
+	  <td><?php if ($team_elo_alt && $team_elo_neu) {
+	    $elodifferenz = $team_elo_neu - $team_elo_alt;
+	    if ($elodifferenz > 0) echo '+';
+	    echo $elodifferenz;
+		} ?></td>
+	<?php } ?>	
 </tr>
 <?php }} ?>
 </table>
@@ -119,7 +136,11 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 <table cellpadding="0" cellspacing="0" class="dwz_liga">
 <tr>
 <th><?php echo $liga->tln_nr;?></th>
-<th colspan="11"><a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $sid; ?>&amp;liga=<?php echo $lid; ?>&amp;tlnr=<?php echo $liga->tln_nr; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $liga->name;?></a></th>
+<?php if ($optionEloAnalysis = '1') { ?>	
+	<th colspan="14"><a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $sid; ?>&amp;liga=<?php echo $lid; ?>&amp;tlnr=<?php echo $liga->tln_nr; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $liga->name;?></a></th>
+<?php } else { ?>	
+	<th colspan="11"><a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $sid; ?>&amp;liga=<?php echo $lid; ?>&amp;tlnr=<?php echo $liga->tln_nr; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $liga->name;?></a></th>
+<?php } ?>	
 </tr>
 <tr>
 	<td><?php echo JText::_('DWZ_NR') ?></td>
@@ -136,6 +157,10 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 	<td><?php echo JText::_('DWZ_LEVEL') ?></td>
 	<td><?php echo JText::_('DWZ_POINTS') ?></td>
 	<td colspan="2"><?php echo JText::_('DWZ_NEW'); //klkl ?></td>
+	<?php if ($optionEloAnalysis == '1') { ?>	
+	  <td><?php echo JText::_('ELO') ?></td>
+	  <td colspan="2"><?php echo JText::_('ELO_NEW'); ?></td>
+	<?php } ?>	
 </tr>
 
 <?php 
@@ -147,6 +172,12 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 	$team_niveau = 0;
 	$team_dwz_gneu = 0;
 	$team_diff = 0;
+	$team_elo_alt = 0;
+	$team_elo_neu = 0;
+	$team_elo_anzahl_alt = 0;
+	$team_elo_anzahl_neu = 0;
+	$team_elo_summe_alt = 0;
+	$team_elo_summe_neu = 0;
 } ?>
 <tr class="<?php echo $zeilenr; ?>">
     <td><?php if($liga->rang =="1") { echo $liga->mnr.'-';} echo $liga->snr;?></td>
@@ -216,7 +247,23 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
     if ( $dwzdifferenz > 0 ) { echo "+" . $dwzdifferenz; } 
 	elseif ( $dwzdifferenz < 0 ) { echo $dwzdifferenz; }
 	else { echo ''; }?></td>
-</tr>
+	<?php if ($optionEloAnalysis == '1') { ?>	
+	  <?php if ($old) { ?>
+		<td><?php echo CLMText::formatRating($liga->dsbElo); ?></td>
+	  <?php } else { ?>
+		<td><?php echo CLMText::formatRating($liga->FIDEelo); ?></td>
+	  <?php } ?>
+	  <td><?php echo CLMText::formatRating($liga->inofFIDEelo); ?></td>
+	  <?php $elodifferenz = NULL;
+		if ($old && $liga->dsbElo && $liga->inofFIDEelo) {
+		  $elodifferenz = $liga->inofFIDEelo - $liga->dsbElo; }
+		if (!$old && $liga->FIDEelo && $liga->inofFIDEelo) {
+		  $elodifferenz = $liga->inofFIDEelo - $liga->FIDEelo; } ?>
+	  <td><?php  if ($elodifferenz > 0) echo '+';
+	    echo $elodifferenz; ?>
+	  </td>
+	<?php } ?>
+ </tr>
 
 <?php
 $count= $liga->tln_nr;
@@ -229,6 +276,16 @@ $count= $liga->tln_nr;
 	$team_niveau += ($liga->Niveau * $liga->Partien);
 	if ($dwz_alt > 0) $team_dwz_gneu += ($liga->DWZ * $liga->Partien);
 	if ($dwz_alt > 0) $team_diff += $dwzdifferenz;
+	if ($old) 
+	  $team_elo_summe_alt += $liga->dsbElo;
+	else
+	  $team_elo_summe_alt += $liga->FIDEelo;
+	$team_elo_summe_neu += $liga->inofFIDEelo;
+	if ($old)
+	  $team_elo_anzahl_alt += $liga->dsbElo > 0 ? 1 : 0;
+	else
+	  $team_elo_anzahl_alt += $liga->FIDEelo > 0 ? 1 : 0;
+	$team_elo_anzahl_neu += $liga->inofFIDEelo > 0 ? 1 : 0;
  }
 if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 ?>
@@ -243,7 +300,19 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 	<td><?php echo $team_punkte." / ".$team_partien; ?></td>
 	<td><?php if ($team_dwz_partien > 0) echo round($team_dwz_gneu / $team_dwz_partien); ?></td>
 	<td><?php if ($team_diff > 0) echo "+"; echo $team_diff; ?></td>
-</tr>
+	<td><?php if ($team_elo_anzahl_alt > 0) {
+	    $team_elo_alt = intval(0.5 + $team_elo_summe_alt/$team_elo_anzahl_alt);
+	    echo $team_elo_alt;
+		}?></td>
+	<td><?php if ($team_elo_anzahl_neu > 0) {
+	    $team_elo_neu = intval(0.5 + $team_elo_summe_neu/$team_elo_anzahl_neu);
+	    echo $team_elo_neu;
+		}?></td>
+	<td><?php if ($team_elo_alt && $team_elo_neu) {
+	    $elodifferenz = $team_elo_neu - $team_elo_neu;
+	    if ($elodifferenz > 0) echo '+';
+	    echo $elodifferenz;
+		} ?></td></tr>
 <?php } ?>
 </table>
 <?php } ?>

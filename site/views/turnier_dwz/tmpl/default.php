@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -29,6 +29,7 @@ $heading =  $this->turnier->name.": ".JText::_('TOURNAMENT_DWZ');
 
 $params = new clm_class_params($this->turnier->params);
 $inofDWZ = $params->get("inofDWZ","0");
+$optionEloAnalysis = $params->get("optionEloAnalysis","0");
 $dwz_date = $params->get("dwz_date","1970-01-01");
 
 $archive_check = clm_core::$api->db_check_season_user($this->turnier->sid);
@@ -95,9 +96,12 @@ echo CLMContent::createPDFLink('turnier_dwz', JText::_('TOURNAMENT_DWZ'), array(
 		<th class="tt_col_7"><?php echo JText::_('DWZ_POINTS'); ?></th>
 		<th class="tt_col_7"><?php echo JText::_('DWZ_NEW'); ?></th>
 		<th class="tt_col_7"><?php echo JText::_('DWZ_DIFF'); ?></th>
-	
-	
-	
+		<?php if ($optionEloAnalysis == '1') { ?>
+			<th class="tt_col_7"><?php echo JText::_('ELO'); ?></th>
+			<th class="tt_col_7"><?php echo JText::_('ELO_NEW'); ?></th>
+			<th class="tt_col_7"><?php echo JText::_('ELO_K'); ?></th>
+			<th class="tt_col_7"><?php echo JText::_('ELO_DIFF'); ?></th>	
+		<?php } ?>
 	</tr>
 	
 	<?php
@@ -177,7 +181,15 @@ echo CLMContent::createPDFLink('turnier_dwz', JText::_('TOURNAMENT_DWZ'), array(
 			if ($value->DWZ == 0 OR $value->start_dwz == 0) echo '<td class="tt_col_7">'.CLMText::formatRating(0).'</td>';
 			else echo '<td class="tt_col_7">'.($value->DWZ - $value->start_dwz).'</td>';
 			
-			
+			if ($optionEloAnalysis == '1') { 
+				echo '<td class="tt_col_7">'.CLMText::formatRating($value->FIDEelo).'</td>';
+				echo '<td class="tt_col_7">'.CLMText::formatRating($value->inofFIDEelo).'</td>';
+				echo '<td class="tt_col_7">'.$value->Fide_Kf.'</td>';
+				if ($value->FIDEelo == 0 OR $value->inofFIDEelo == 0)
+					echo '<td class="tt_col_7">'.CLMText::formatRating(0).'</td>';
+				else
+					echo '<td class="tt_col_7">'.($value->inofFIDEelo - $value->FIDEelo).'</td>';			
+			}
 			?>
 		
 		</tr>

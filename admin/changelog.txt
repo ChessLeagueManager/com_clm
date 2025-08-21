@@ -28,6 +28,7 @@ $ -> Language fix or change
 ^ Logging: Darstellung umfangreicher Einträge über Popup
 + Teamwettbewerbe: Kopieren von Meldelisten
 # Ligakarte/Turnierinfo: kleine Designkorrektur
++ Inoffizielle Elo-Auswertung pro Wettbewerb aktivierbar
 
 - - - - - 4.2.4 - [16-05-2025] - - - - - - - - - - - - - - - - - - - -
 + Ergebniseingabe durch SL im Frontend freischaltbar

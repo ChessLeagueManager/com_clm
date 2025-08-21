@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_dwz_spieler` (
   `synflag` tinyint(1) NOT NULL DEFAULT 0,
   `gesperrt` tinyint(1) UNSIGNED DEFAULT NULL,
   `inofFIDEelo` smallint(4) UNSIGNED DEFAULT NULL,
-  `K` smallint(4) UNSIGNED DEFAULT NULL,
+  `Fide_Kf` smallint(4) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sid_zps_mglnr` (`sid`,`ZPS`,`Mgl_Nr`),
   KEY `sid` (`sid`),
@@ -323,7 +323,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_meldeliste_spieler` (
   `gesperrt` tinyint(1) UNSIGNED DEFAULT NULL,
   `attr` varchar(4) DEFAULT NULL,
   `inofFIDEelo` smallint(4) UNSIGNED DEFAULT NULL,
-  `K` smallint(4) UNSIGNED DEFAULT NULL,
+  `Fide_Kf` smallint(4) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `lid_zps_mglnr` (`lid`,`zps`,`mgl_nr`),
   KEY `lid` (`lid`)
@@ -1337,7 +1337,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere_tlnr` (
   `checked_out_time` datetime DEFAULT NULL,
   `ordering` int(11) NOT NULL DEFAULT 0,
   `inofFIDEelo` smallint(4) UNSIGNED DEFAULT NULL,
-  `K` smallint(4) UNSIGNED DEFAULT NULL,
+  `Fide_Kf` smallint(4) UNSIGNED DEFAULT NULL,
+  `perm_board` smallint(4) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`,`zps`,`mgl_nr`,`status`),
   KEY `turnier_snr` (`turnier`,`snr`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -1362,6 +1363,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_user` (
   `zps` varchar(5) DEFAULT NULL,
   `mglnr` varchar(5) DEFAULT NULL,
   `PKZ` varchar(9) DEFAULT NULL,
+  `fideid` int(11) UNSIGNED DEFAULT NULL,
   `org_exc` enum('0','1') NOT NULL DEFAULT '0',
   `mannschaft` smallint(3) UNSIGNED DEFAULT NULL,
   `published` smallint(3) UNSIGNED DEFAULT NULL,

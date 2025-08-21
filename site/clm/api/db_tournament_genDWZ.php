@@ -1,7 +1,7 @@
 <?php 
 /**
- * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @ Chess League Manager (CLM) Component
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -19,9 +19,9 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
 		$table_list_id = "lid";
 		$table_round = "#__clm_rnd_spl";
 		$table_round_id = "lid";
-		if ($countryversion == "de") 
+		if ($countryversion == "de")
 			$playerId = "zps=? AND mgl_nr=? AND lid=?";
-		else 
+		else
 			$playerId = "zps=? AND PKZ=? AND lid=?";
 		$birthAndID = "";
 	} else {
@@ -44,21 +44,22 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
 			.' WHERE id='.$id;
 	$liga = clm_core::$db->loadObjectList($query);
 	if(count($liga)==0) {
-			return array(true, "e_calculateDWZNoLiga"); 	
+			return array(true, "e_calculateDWZNoLiga");
 	}
 	$liga = $liga[0];
-	// DWZ-Handling ermitteln 
+	// DWZ-Handling ermitteln
 	$tparams = new clm_class_params($liga->params);
 	$param_dwz_date = $tparams->get('dwz_date', '1970-01-01');
 	if ($param_dwz_date == '0000-00-00' OR $param_dwz_date == '1970-01-01') $old = true; // DWZ aus dwz_spieler
 	else $old = false;				// DWZ aus Meldeliste
+	$optionEloAnalysis = $tparams->get('optionEloAnalysis', '0');
 	// Vermeintliches Ende bestimmen
 	$query='SELECT MAX(datum) as date'
 			.' FROM '.$table_dates
 			.' WHERE '.$table_dates_id.'='.$id;
 	$datum = clm_core::$db->loadObjectList($query);
 	if(count($datum)==0) {
-			return array(true, "e_calculateDWZNoRound"); 	
+			return array(true, "e_calculateDWZNoRound");
 	}
 	$year = substr($datum[0]->date,0,4);
 	if($year=="0000") {
@@ -74,7 +75,7 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
 	$dwz = new clm_class_dwz_rechner();
 
 	if(count($spieler)==0) {
-			return array(false, "e_DWZnoPlayer"); 
+			return array(false, "e_DWZnoPlayer");
 	}
 
 	// Spieler zur DWZ Auswertung hinzufügen
@@ -94,7 +95,7 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
  		 	else
 				$query .= ' AND PKZ="'. clm_core::$db->escape($spieler[$i]->PKZ) .'"';
  			$birth = clm_core::$db->loadObjectList($query);
- 
+
 			if ($old) { 	// keine DWZ-Angaben in Meldeliste, Berechnung auf Basis dwz_spieler
 				$spieler[$i]->start_dwz = $birth[0]->dsbDWZ;
 				$spieler[$i]->start_I0  = $birth[0]->dsbDWZ_Index;
@@ -144,7 +145,6 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
 	$someMatch=false;
 	for ($i=0;$i < count($partien);$i++)
  	{
-		
 		list ($punkte, $gpunkte) = clm_core::$load->gen_result($partien[$i]->ergebnis,0);
 		if($punkte==-1) {	// due to php 7.4  old: if($punkte[0]==-1) {
 			continue;		
@@ -160,7 +160,7 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
  	$result = $dwz->getAllPlayerObject();
 
 	if(!$someMatch) {
-			return array(false, "e_DWZnoMatch"); 
+			return array(false, "e_DWZnoMatch");
 	}
 
 
@@ -205,7 +205,21 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
 		$params = new clm_class_params($table->params);
 		$params->set("inofDWZ","1");
 		$table->params = $params->params();
+		$params = $params->params();
+		$stmt = clm_core::$db->prepare("UPDATE $table_main SET params = ? WHERE id = ?");
+		$stmt->bind_param("si", $params, $id);
+		$stmt->execute();
 	}
-	return array(true, "m_calculateDWZSuccess"); 
+
+    if ($optionEloAnalysis == '0')
+		return array(true, "m_calculateDWZSuccess");
+
+	$elo_result = clm_core::$api->db_tournament_genFIDERating($id,$group);
+
+    if ($elo_result[0]) {
+        return array(true, "m_calculateDWZSuccess");
+    } else {
+        return $elo_result;
+    }
 }
 ?>
