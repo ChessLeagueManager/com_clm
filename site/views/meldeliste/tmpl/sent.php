@@ -163,12 +163,12 @@ else
 	}
 	//Sperrkennzeichen synchronisieren
 	for ($y=1; $y< (1+$stamm+$ersatz) ; $y++){ 
-		$mgl		= clm_core::$load->request_int('hidden_mglnr'.$y);
-		$zps		= clm_core::$load->request_string('hidden_zps'.$y);
+		$mgl01		= clm_core::$load->request_int('hidden_mglnr'.$y);
+		$zps01		= clm_core::$load->request_string('hidden_zps'.$y);
 		$check		= clm_core::$load->request_int('hidden_check'.$y);
 		$gesperrt	= clm_core::$load->request_int('hidden_gesperrt'.$y);
 		if ($check != $gesperrt) {
-			$rc = clm_core::$api->db_syn_player_block($sid,$zps,$mgl,$check);
+			$rc = clm_core::$api->db_syn_player_block($sid,$zps01,$mgl01,$check);
 			if ($rc[0] === false) {
 				$msg = "m_updateError".$rc[1];
 				$mainframe->enqueueMessage( $msg, 'error' );

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -77,7 +77,8 @@ if (!isset($row[0]->name)) { ?>
 <div id="desc"><?php echo JText::_('CLUB_DATA_NOTE') ?></div>
 <br>
 <center>
-<form action="index.php?option=com_clm&amp;view=verein&amp;layout=sent" method="post" name="adminForm" id="adminForm">
+<!-- <form action="index.php?option=com_clm&amp;view=verein&amp;layout=sent" method="post" name="adminForm" id="adminForm"> -->
+<form>
 		<div class="col width-95">
 
 		<table class="admintable">
