@@ -42,6 +42,14 @@ function clm_api_mail_send($mail_to, $mail_subj, $mail_body, $htmlMail=0, $mail_
 			return array(false, "e_mailSSendErrorNoMailsName");
 	}
 
+	// Behandlung der subject-line
+	// Wandle den Text in Quoted-Printable um
+    $quoted_printable = quoted_printable_encode($mail_subj);
+    // Entferne Zeilenumbrüche, falls vorhanden
+    $quoted_printable = str_replace("=\r\n", "", $quoted_printable);
+    // Erstelle das kodierte Subject im MIME-Header-Format
+    $mail_subj = '=?UTF-8?Q?' . $quoted_printable . '?=';
+
 	// Zusammenstellung des Headers
 	if ($htmlMail == 0) {
 		$headers[] = 'MIME-Version: 1.0';
