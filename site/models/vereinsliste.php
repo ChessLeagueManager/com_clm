@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -59,6 +59,8 @@ class CLMModelVereinsliste extends JModelLegacy
 		
 	if(!empty($filter_order) && !empty($filter_order_Dir) ){
 		$query .= ' ORDER BY c.Verband ASC, '.$filter_order.' '.$filter_order_Dir;
+	} else {
+        $query .= ' ORDER BY c.Verband ASC, a.zps ASC';
 	}
 		
 	//$cnt_qry = count ($query);
