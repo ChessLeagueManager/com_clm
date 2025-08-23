@@ -89,6 +89,7 @@ $rights["view_mail_confirm"]=array(0,"BE_user_general",true);
 $rights["db_player_check"]=array(); // Prüfung, ob spieler im Spielbetrieb verankert
 $rights["mail_send"]=array(); // Mailversand
 $rights["db_syn_player_block"]=array(); // Synchronisation Sperrkennzeichen
+$rights["db_checkin"]=array(); // Checkin auf NULL-Werte
 $rights["test_print"]=array();
 //************************
 // Turniere

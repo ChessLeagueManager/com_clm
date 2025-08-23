@@ -31,6 +31,7 @@ $ -> Language fix or change
 + Inoffizielle Elo-Auswertung pro Wettbewerb aktivierbar
 # Anpassungen J 5.3 / php 8.3
 ^ Mail-Ausgabe: Aufbereitung der subject-Zeile 
+# Teamwettbewerbe: Einbau Checkin nach Update bei Liga-, Benutzer- und Mannschaftsdaten
 
 - - - - - 4.2.4 - [16-05-2025] - - - - - - - - - - - - - - - - - - - -
 + Ergebniseingabe durch SL im Frontend freischaltbar

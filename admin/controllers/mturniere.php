@@ -236,6 +236,9 @@ function saveIt($apply=false)
 		$mainframe->enqueueMessage($row->getError(), 'error');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
+
+	$rc = clm_core::$api->db_checkin('liga',$row->id);
+
 	$liga_man	= $row->id;
 	$liga_rnd	= $row->runden;
 	$liga_dg	= $row->durchgang;

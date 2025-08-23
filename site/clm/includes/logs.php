@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -40,5 +40,6 @@ $logs[]="db_swm_import";
 $logs[]="db_swt_to_clm";
 $logs[]="db_term_import";
 $logs[]="db_mail_save";
-$logs[]="db_syn_player_block"; // Synchronisation Sperrkennzeichen
+$logs[]="db_syn_player_block"; 	// Synchronisation Sperrkennzeichen
+$logs[]="db_checkin"; 			// Checkin auf NULL-Wert
 ?>

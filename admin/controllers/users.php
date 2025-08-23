@@ -538,6 +538,8 @@ function save() {
 		return;
 	}
 
+	$rc = clm_core::$api->db_checkin('user',$row->id);
+	
 
 	switch ($task) {
 		// 6 = Manager ; 7 = Admin; 8 = Superadmin ; 2= registered
