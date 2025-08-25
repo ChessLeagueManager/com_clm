@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -39,7 +39,7 @@ function clm_api_db_mail_save($return_section, $return_view, $cids, $mail_to, $m
 
 	if ($rc[0] === false) {
 //		echo "<br>MailError ".$rc[1]; die();
-		return array(false, "m_mailSendError".$rc[1]);
+		return array(false, "m_mailSendError: ".$rc[1]);
 	}
 	return array(true, "m_mailSendSuccess");
 }

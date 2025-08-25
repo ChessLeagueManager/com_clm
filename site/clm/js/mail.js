@@ -1,6 +1,6 @@
 /*
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -82,41 +82,41 @@ function clm_mail_save(box) {
 	    } else { // code for IE6, IE5
 	        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	    }
-	    xmlhttp.onreadystatechange = function() {
-	        if (xmlhttp.readyState == 4) {
-	            if (xmlhttp.status == 200) {
-	                try {
- 	                    var out = JSON.parse(xmlhttp.responseText);
-	                } catch (e) {
-//							clm_mail_message(box,clm_mail_result_error1,"error");
-							clm_mail_message(box,e,"error");
-	                    return;
-	                }
-	                if (out.length != 1 || out[0].length != 2 || out[0][0] != true) {
-	                	if(out.length == 1 && out[0].length == 2 && out[0][0] == false && out[0][1] == "e_mailLogin") {
-	                		clm_mail_message(box,clm_mail_result_login,"error");
-	                	} else {
-	                		clm_mail_message(box,clm_mail_result_error2,"error");
-	                	}
-	                  return;
-	                }
-	                clm_mail_message(box,clm_mail_result_success,"success");
-	            } else {
-	                clm_mail_message(box,clm_mail_result_error0,"error");
-	            }
-	        }
-	    }
-	    xmlhttp.open("POST", clm_mail_url, true);
-	    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    var command = new Array(2);
 	    command[1] = new Array(2);
 	    command[1][1] = new Array(2);
 	    command[0] = 0;
 	    command[1][0] = "db_mail_save";
 	    command[1][1] = clm_mail_genData(box);
+	    xmlhttp.onreadystatechange = function() {
+	        if (xmlhttp.readyState == 4) {
+	            if (xmlhttp.status == 200) {
+	                try {
+ 	                    var out = JSON.parse(xmlhttp.responseText);
+	                } catch (e) {
+//							clm_mail_message(box,clm_mail_result_error1,"error",xmlhttp);
+							clm_mail_message(box,e,"error",xmlhttp);
+	                    return;
+	                }
+	                if (out.length != 1 || out[0].length != 2 || out[0][0] != true) {
+	                	if(out.length == 1 && out[0].length == 2 && out[0][0] == false && out[0][1] == "e_mailLogin") {
+	                		clm_mail_message(box,clm_mail_result_login,"error",xmlhttp);
+	                	} else {
+	                		clm_mail_message(box,clm_mail_result_error2 + " <br/>JSON:<br/><pre>" + JSON.stringify(command) + "</pre><br/>","error",xmlhttp);
+	                	}
+	                  return;
+	                }
+	                clm_mail_message(box,clm_mail_result_success,"success","");
+	            } else {
+	                clm_mail_message(box,clm_mail_result_error0,"error",xmlhttp);
+	            }
+	        }
+	    }
+	    xmlhttp.open("POST", clm_mail_url, true);
+	    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    xmlhttp.send('command=' + JSON.stringify(command));
 }
-function clm_mail_message(box,msg,stats) {
+function clm_mail_message(box,msg,stats,request) {
 	do {
 		childs = box.getElementsByClassName("outer_mail_subj");
 		box.removeChild(childs[0]);
@@ -129,6 +129,11 @@ function clm_mail_message(box,msg,stats) {
 	box.getElementsByClassName("button_back")[0].disabled=false;
 	element = box.getElementsByClassName("clm_view_notification")[0];
 	element.innerHTML = "<div class='"+stats+"'>"+msg+"</div>";
+	if (exists(request.responseText)) {
+		element.innerHTML = "<div class='"+stats+"'>(clm_mail)<br/>"+msg+"<br/>responseText:<br/><pre>"+request.responseText+"</pre></div>";
+	} else {
+		element.innerHTML = "<div class='"+stats+"'>(clm_mail)<br/>"+msg+"<br />no responseText.</div>";
+	}
 	element.className="clm_view_notification";
 }
 clm_mail_addLoadEvent(clm_mail_change_global);

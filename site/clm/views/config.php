@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
 function clm_view_config($elements,$base=false) {
 clm_core::$load->load_css("config");
 clm_core::$load->load_css("buttons");
@@ -15,6 +21,9 @@ if($base)
 	{
 		if($i==0 && !$base) {
 			$i=2;
+		}
+		if (!isset($elements[$i])) {
+			throw new Exception("element $i von Gruppe " . $elements[0] . " unbekannt");
 		}
 		if(count($elements[$i])==1)
 		{
