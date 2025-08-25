@@ -70,7 +70,7 @@ class CLMViewLigen
 	if (!isset($row->params['pgnlname']))  {   //Standardbelegung
 		$row->params['pgnlname'] = ''; }
 	if (!isset($row->params['anz_sgp']))  {   //Standardbelegung
-		$row->params['anz_sgp'] = 1; }
+		$row->params['anz_sgp'] = 0; }
 	if (!isset($row->params['deadline_roster']))  {   //Standardbelegung
 		$row->params['deadline_roster'] = '1970-01-01'; }
 	if (!isset($row->params['color_order']))  {   //Standardbelegung

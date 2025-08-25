@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -504,7 +504,7 @@ if ($ausgeloste_runden == 0) {
 			}
 		}
 		if (isset($lid_params['anz_sgp'])) $swt_db_data['anz_sgp'] = $lid_params['anz_sgp'];   //anz_sg Parameterübernahme
-		else $swt_db_data['anz_sgp'] = 1;
+		else $swt_db_data['anz_sgp'] = 0;
 
 		$this->_swt_db_data = $swt_db_data;
 		return $swt_db_data;

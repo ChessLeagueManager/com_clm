@@ -34,6 +34,7 @@ $ -> Language fix or change
 # Teamwettbewerbe: Einbau Checkin nach Update bei Liga-, Benutzer- und Mannschaftsdaten
 # Vereinsliste: Nachbesserung Sortierung
 + Mail-Ausgabe: auch auf UNIX-Systemen ohne sendmail
+^ Spielgemeinschaften: Anzahl Partnervereine ohne Trägerverein: neuer Standard 0 (keine Spielgemeinschaft)   
 
 - - - - - 4.2.4 - [16-05-2025] - - - - - - - - - - - - - - - - - - - -
 + Ergebniseingabe durch SL im Frontend freischaltbar
