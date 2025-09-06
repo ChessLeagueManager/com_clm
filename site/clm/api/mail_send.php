@@ -126,24 +126,38 @@ function clm_api_mail_send($mail_to, $mail_subj, $mail_body, $htmlMail=0, $mail_
 					list($name, $address) = explode("<", $mailone);
 					$name = trim($name);
 					$address = trim(str_replace(">", "", $address));
-					$mailer->addAddress($address, $name);
+					if (isset($address) && ($address != "")) {
+						$mailer->addAddress($address, $name);
+					} else {
+						$mailer->addAddress($mailone);
+					}
 				}
 				if ($mail_cc != null) {
 					$mail_tolist = explode(",", $mail_cc);
 					foreach ($mail_tolist as $mailone) {
 						list($name, $address) = explode("<", $mailone);
 						$name = trim($name);
-						$address = trim(str_replace(">", "", $address));						$mailer->addCc($address, $name);
+						$address = trim(str_replace(">", "", $address));
+						if (isset($address) && ($address != "")) {
+							$mailer->addCc($address, $name);
+						} else {
+							$mailer->addCc($mailone);
+						}
 					}
 				} else {
 					$mail_cc = "null";
 				}
 				if ($mail_bcc != null) {
-					$mail_tolist = explode(",", $mail_bcc);					foreach ($mail_tolist as $mailone) {
+					$mail_tolist = explode(",", $mail_bcc);	
+					foreach ($mail_tolist as $mailone) {
 						list($name, $address) = explode("<", $mailone);
 						$name = trim($name);
 						$address = trim(str_replace(">", "", $address));
-						$mailer->addBcc($address, $name);
+						if (isset($address) && ($address != "")) {
+							$mailer->addBcc($address, $name);
+						} else {
+							$mailer->addBcc($mailone);
+						}
 					}
 				} else {
 					$mail_bcc = "null";
@@ -155,8 +169,8 @@ function clm_api_mail_send($mail_to, $mail_subj, $mail_body, $htmlMail=0, $mail_
 		}
 	}
 
-	catch (Exception $e) {
-		return array(false, "Exception gefangen.<br/>" . htmlspecialchars($e));
+	catch (\Throwable $e) {
+		return array(false, "<p>Exception gefangen. (to: " . htmlspecialchars($mail_to) . ") (cc: " . htmlspecialchars($mail_cc) . ") (bcc: " . htmlspecialchars($mail_bcc) . ")</p><p>" . htmlspecialchars($e) . "</p>");
 	}
 
 //	if ($rc === false) return array(false, "e_mailSendError".":".error_get_last()['message']);
