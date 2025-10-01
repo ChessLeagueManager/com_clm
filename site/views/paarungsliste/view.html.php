@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -28,14 +28,6 @@ class CLMViewPaarungsliste extends JViewLegacy
 		$paar     = $model->getCLMPaar();
 		$this->paar = $paar;
 
-/*		$model	  = $this->getModel();
-		$dwzschnitt     = $model->getCLMDWZSchnitt();
-		$this->dwzschnitt = $dwzschnitt;
-*/
-/*		$model	  = $this->getModel();
-		$dwzgespielt     = $model->getCLMDWZgespielt();
-		$this->dwzgespielt = $dwzgespielt;
-*/
 		$model	  = $this->getModel();
 		$summe     = $model->getCLMSumme();
 		$this->summe = $summe;
@@ -43,6 +35,10 @@ class CLMViewPaarungsliste extends JViewLegacy
 		$model	  = $this->getModel();
 		$rundensumme     = $model->getCLMRundensumme();
 		$this->rundensumme = $rundensumme;
+
+		$model	  = $this->getModel();
+		$arbiter     = $model->getCLMArbiter();
+		$this->arbiter = $arbiter;
 
 		parent::display($tpl);
 	}	

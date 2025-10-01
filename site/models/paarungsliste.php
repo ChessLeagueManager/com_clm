@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -167,6 +167,31 @@ class CLMModelPaarungsliste extends JModelLegacy
 		$query	= $this->_getCLMRundensumme( $options );
 		$result = $this->_getList( $query );
 		return @$result;
+	}
+
+	function _getCLMArbiter ( &$options )
+	{
+	$liga	= clm_core::$load->request_int('liga',0);
+	$db	= JFactory::getDBO();
+
+	$query = " SELECT ta.*, a.name as aname, a.vorname as avorname FROM #__clm_arbiter_turnier as ta " 
+			." LEFT JOIN #__clm_arbiter as a ON ta.fideid = a.fideid "
+			." WHERE ta.liga = ".$liga
+			." AND ta.trole = 'A' AND ta.role = 'A00' "
+			;
+		return $query;
+	}
+	function getCLMArbiter ( $options=array() )
+	{
+		$query	= $this->_getCLMArbiter( $options );
+		$result = $this->_getList( $query );
+		$arbiter = array();
+		if (!is_null($result)) {
+			foreach ($result as $arb) {
+				$arbiter[$arb->dg][$arb->runde][$arb->paar] = $arb->avorname.' '.$arb->aname;
+			}
+		}
+		return $arbiter;
 	}
 
 }

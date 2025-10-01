@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -40,6 +40,7 @@ $termin		= $this->termin;
 $paar		= $this->paar;
 $summe		= $this->summe;
 $rundensumme= $this->rundensumme;
+$arbiter 	= $this->arbiter;
 
 if(isset($liga[0])){
 	$runden_modus = $liga[0]->runden_modus;
@@ -213,6 +214,16 @@ if ($termin[$term]->published =="1") { ?>
 		<div class="left"><b><?php if ($termin[$x]->datum > 0) echo $termin[$x]->datum; ?></b></div>
 		<div style="text-align: right; padding: 0 10px 0 0;"><b><?php echo $termin[$x]->name; ?></b></div>
 	<?php } ?>
+	<?php if (count($arbiter) > 0) { ?>
+		<td class="heim">
+		<?php 
+			if (isset($arbiter[$paar[$z]->dg][$paar[$z]->runde][0])) {
+				echo $arbiter[$paar[$z]->dg][$paar[$z]->runde][0]; 
+			} else { echo ' '; }
+		?>
+		</td>
+	<?php } ?>
+
 </div>
 </td></tr>
 <tr>
@@ -230,6 +241,9 @@ if ($termin[$term]->published =="1") { ?>
 	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
 	<?php if ($params['round_date'] == '1') { ?>
 	<th class="heim"><?php echo JText::_('FIXTURE_DATE') ?></th>
+	<?php } ?>
+	<?php if (count($arbiter) > 0) { ?>
+	<th class="heim"><?php echo JText::_('ARBITER') ?></th>
 	<?php } ?>
 </tr>
 <?php
@@ -294,12 +308,21 @@ else { echo $paar[$z]->gname; } ?>
 			} ?>
 	</td>
 	<?php if ($params['round_date'] == '1') { ?>
-	<td class="heim">
-	<?php 
+		<td class="heim">
+		<?php 
 			if (isset($paar[$z]->pdate) AND $paar[$z]->pdate > '1970-01-01') {
 			echo JHTML::_('date',  $paar[$z]->pdate, JText::_('DATE_FORMAT_CLM_Y2')); 
 			if($paar[$z]->ptime > '00:00:00') { echo '  '.substr($paar[$z]->ptime,0,5); } }
-	?>
+		?>
+	</td>
+	<?php } ?>
+	<?php if (count($arbiter) > 0) { ?>
+		<td class="heim">
+		<?php 
+			if (isset($arbiter[$paar[$z]->dg][$paar[$z]->runde][$paar[$z]->paar])) {
+				echo $arbiter[$paar[$z]->dg][$paar[$z]->runde][$paar[$z]->paar]; 
+			} else { echo ' '; }
+		?>
 	</td>
 	<?php } ?>
 </tr>

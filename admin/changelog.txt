@@ -16,6 +16,7 @@ $ -> Language fix or change
 ^ Umstellung der Links von chessleaguemanager.de auf chessleaguemanager.org
 + Einzelturniere: Feinwertung niedrige eigene TWZ
 + Teamwettbewerbe: freie Mail an alle MF einer Staffel
++ Anzeige Schiedsrichter in Paarungsliste
 
 - - - - - 4.3.0 - [05-09-2025] - - - - - - - - - - - - - - - - - - - -
 + Views Rangliste, Tabelle, Rundenbericht: Reset nach Zeitintervall
