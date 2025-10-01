@@ -18,6 +18,7 @@ $ -> Language fix or change
 + Teamwettbewerbe: freie Mail an alle MF einer Staffel
 + Anzeige Schiedsrichter in Paarungsliste
 # Teamwettbewerbe: Anzeige Inoffizielle Elo-Auswertung
+# Benutzer-Mail-Adressen mit Umlaut nun möglich 
 
 - - - - - 4.3.0 - [05-09-2025] - - - - - - - - - - - - - - - - - - - -
 + Views Rangliste, Tabelle, Rundenbericht: Reset nach Zeitintervall

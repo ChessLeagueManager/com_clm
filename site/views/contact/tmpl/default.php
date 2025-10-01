@@ -25,8 +25,8 @@ if (isset($clmuser[0])) {
 <form>
 <script language="javascript" type="text/javascript">
 function emailsyntax(element) {
-	let regex = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+\\\.([!#-'*+/-9=?A-Z^-~-]+)|\[[\t -Z^-~]*])");
-
+//	let regex = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+\\\.([!#-'*+/-9=?A-Z^-~-]+)|\[[\t -Z^-~]*])");
+	let regex = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-ZäöüßÄÖÜ^-~-]+\\\.([!#-'*+/-9=?A-ZäöüßÄÖÜ^-~-]+)|\[[\t -Z^-~]*])");
 	address = element.value;
 	if (regex.test(address)) {
 		return 0;

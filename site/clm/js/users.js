@@ -1,11 +1,12 @@
 /*
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
 function emailsyntax(element) {
-	let regex = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+\\\.([!#-'*+/-9=?A-Z^-~-]+)|\[[\t -Z^-~]*])");
+//	let regex = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+\\\.([!#-'*+/-9=?A-Z^-~-]+)|\[[\t -Z^-~]*])");
+	let regex = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-ZäöüßÄÖÜ^-~-]+\\\.([!#-'*+/-9=?A-ZäöüßÄÖÜ^-~-]+)|\[[\t -Z^-~]*])");
 	address = element.value;
 	if (regex.test(address)) {
 		return true;
