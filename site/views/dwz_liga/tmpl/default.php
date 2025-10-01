@@ -136,7 +136,7 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 <table cellpadding="0" cellspacing="0" class="dwz_liga">
 <tr>
 <th><?php echo $liga->tln_nr;?></th>
-<?php if ($optionEloAnalysis = '1') { ?>	
+<?php if ($optionEloAnalysis == '1') { ?>	
 	<th colspan="14"><a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $sid; ?>&amp;liga=<?php echo $lid; ?>&amp;tlnr=<?php echo $liga->tln_nr; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $liga->name;?></a></th>
 <?php } else { ?>	
 	<th colspan="11"><a href="index.php?option=com_clm&amp;view=mannschaft&amp;saison=<?php echo $sid; ?>&amp;liga=<?php echo $lid; ?>&amp;tlnr=<?php echo $liga->tln_nr; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $liga->name;?></a></th>
