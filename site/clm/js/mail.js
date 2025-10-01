@@ -125,6 +125,12 @@ function clm_mail_message(box,msg,stats,request) {
 		childs = box.getElementsByClassName("outer_mail_body");
 		box.removeChild(childs[0]);
 	} while (childs.length>0);
+	do {
+		childs = box.getElementsByClassName("outer_mail_to");
+		box.removeChild(childs[0]);
+	} while (childs.length>0);
+//	const to_clipboard = document.getElementById("to_clipboard");
+//	to_clipboard.remove();
 	box.getElementsByClassName("button_save")[0].style.display="none";
 	box.getElementsByClassName("button_back")[0].disabled=false;
 	element = box.getElementsByClassName("clm_view_notification")[0];

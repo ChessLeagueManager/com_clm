@@ -23,6 +23,7 @@ class CLMViewLigen
 			JToolBarHelper::save( 'save' );
 			JToolBarHelper::apply( 'apply' );
 			JToolBarHelper::custom('arbiter','edit.png','edit_f2.png',$lang->arbiter_assign,false);
+			JToolBarHelper::custom( 'email', 'mail.png', 'mail_f2.png', JText::_('LEAGUE_MAIL_TO_ML'),false); 
 		}
 		JToolBarHelper::cancel();
 	}

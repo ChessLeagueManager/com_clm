@@ -23,6 +23,7 @@ class CLMViewMTurniere
 			JToolBarHelper::save( 'save' );
 			JToolBarHelper::apply( 'apply' );
 			JToolBarHelper::custom('arbiter','edit.png','edit_f2.png',$lang->arbiter_assign,false);
+			JToolBarHelper::custom( 'email', 'mail.png', 'mail_f2.png', JText::_('LEAGUE_MAIL_TO_ML'),false); 
 		}
 		JToolBarHelper::cancel();
 	}
@@ -922,7 +923,7 @@ class CLMViewMTurniere
    <legend><?php echo JText::_( 'REMARKS' ); ?></legend>
 	<table class="adminlist">
 	<?php if ($new) { ?>
-		<tr><font color=red><b>Hinweis:</b></font> Manchmal ist es sinnvoll bzw. nötig, eine Punktspielliga als Mannschaftsturnier anzulegen. Siehe auch<b><a href="https://chessleaguemanager.de/faq/item/190-punktspielligen-als-liga-oder-als-mannschaftsturnier"><?php echo JText::_(' hier'); ?></a></b></tr>
+		<tr><font color=red><b>Hinweis:</b></font> Manchmal ist es sinnvoll bzw. nötig, eine Punktspielliga als Mannschaftsturnier anzulegen. Siehe auch<b><a href="https://chessleaguemanager.org/faq/item/190-punktspielligen-als-liga-oder-als-mannschaftsturnier"><?php echo JText::_(' hier'); ?></a></b></tr>
 		<p>&nbsp;&nbsp;</p>
 	<?php } ?>
 	<legend><?php echo JText::_( 'REMARKS_PUBLIC' ); ?></legend>

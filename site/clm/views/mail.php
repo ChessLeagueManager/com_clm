@@ -1,7 +1,7 @@
 <?php
 /**
  * @ CLM Component
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -15,17 +15,29 @@ function clm_view_mail($out) {
 	clm_core::$load->load_js("mail");
 	$jid = clm_core::$access->getJid();
 
-	$users = $out["users"];
 	$auser = $out["auser"];
-
 	$str_mail_cc = $auser[0]->name." <".$auser[0]->email.">"; 
 
 	$str_mail_to = '';
-	for ($x=0; $x < (count($users)); $x++) {
-		if ($x > 0) $str_mail_to .= ', ';
-		$str_mail_to .= $users[$x]->name." <".$users[$x]->email.">"."\r\n"; 
+	// freie Mail an Benutzer
+	if ($out["input"]["return_section"] == 'users') {
+		$users = $out["users"];
+		for ($x=0; $x < (count($users)); $x++) {
+			if ($x > 0) $str_mail_to .= ', ';
+			$str_mail_to .= $users[$x]->name." <".$users[$x]->email.">"."\r\n"; 
+		}
 	}
-
+	
+	// freie Mail an Mannschaftsleiter
+	if ($out["input"]["return_section"] == 'mturniere' OR $out["input"]["return_section"] == 'ligen') {
+		$teams = $out["teams"];
+		for ($x=0; $x < (count($teams)); $x++) {
+			if ($x > 0) $str_mail_to .= ', ';
+			$str_mail_to .= $teams[$x]->mfname." <".$teams[$x]->mfmail.">";
+			if (($x > 0) AND ($x % 2 == 1)) $str_mail_to .= "\r\n"; 
+		}
+	}
+	
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
@@ -39,6 +51,23 @@ function clm_view_mail($out) {
 	echo "</h4>";
 ?>
 
+<script>
+function copytoClipboard(e) {
+  // Get the text field
+  var copyText = document.getElementById(e);
+
+  // Select the text field
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); // For mobile devices
+
+  // Copy the text inside the text field
+  navigator.clipboard.writeText(copyText.value);
+  
+  // Alert the copied text
+  alert("Copied the text: " + copyText.value);
+}
+</script>
+    
 	<div class="outer_mail_subj">
 			<div class="info">
 				<?php echo $lang->mail_from; ?>
@@ -47,14 +76,26 @@ function clm_view_mail($out) {
 				<?php echo $str_mail_from; ?>
 			</div>
 	</div>
-	<div class="outer_mail_subj">
+	<?php if ($out["input"]["return_section"] == 'users') { ?>
+		<div class="outer_mail_to">
 			<div class="info">
 				<?php echo $lang->mail_to; ?>
 			</div>
 			<div class="info_text">
 				<?php echo $str_mail_to; ?>
 			</div>
-	</div>
+		</div>
+	<?php } else { ?>
+		<div class="outer_mail_to">
+			<div class="info">
+				<?php echo $lang->mail_to; ?>
+			</div>
+			<div class="text">
+				<textarea class="mail_to" id="mail_to" oninput="clm_mail_fill_fields(this,false);"><?php echo $str_mail_to; ?></textarea>		
+			</div>
+			<button type="button" id="to_clipboard" onclick="copytoClipboard('mail_to')">Kopieren in Zwischenablage</button>
+		</div>
+	<?php } ?>
 	<div class="outer_mail_subj">
 			<div class="info">
 				<?php echo $lang->mail_cc; ?>

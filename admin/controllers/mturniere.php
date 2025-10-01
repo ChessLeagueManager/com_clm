@@ -417,4 +417,67 @@ public static function arbiter()
 	$mainframe->redirect( 'index.php?option='.$option.'&view=arbiterassign&task=edit&returnview=mturniere&lid='.$lid.'&tid='.$tid);
 	}
 
+// freie Mail an alle Mannschaftsleiter
+function email()
+	{
+	$mainframe = JFactory::getApplication();
+	// Check for request forgeries
+	defined('_JEXEC') or die( 'Invalid Token' );
+	$db		= JFactory::getDBO();
+	$lid 		= clm_core::$load->request_int('lid');
+	$option		= clm_core::$load->request_string('option', '');
+	$section	= clm_core::$load->request_string('section', '');
+	$user	= JFactory::getUser();
+
+	// Daten der Liga holen
+	$query	= "SELECT a.id as lid, a.sid, a.sl, a.liga_mt "
+		." FROM #__clm_liga as a"
+		." WHERE a.id = ".$lid
+		;
+	$db->setQuery($query);
+	$liga=$db->loadObjectList();
+
+	// Prüfen ob User Berechtigung hat
+	$clmAccess = clm_core::$access;
+	if ( $liga[0]->liga_mt == 0 ) {
+		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
+			$msg = JText::_( 'LIGEN_NO_FIXTURE');
+			$mainframe->enqueueMessage($msg, 'warning');
+			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$tid);
+		}
+	} else {
+		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
+			$msg = JText::_( 'LIGEN_NO_FIXTURE');
+			$mainframe->enqueueMessage($msg, 'warning');
+			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$tid);
+		}
+	}	
+	// Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$from = $config->email_from;
+	$fromname = $config->email_fromname;
+	if ( $from == '' ) {
+		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
+		$this->setMessage(JText::_( 'USER_ERGEBNISDIENST_KEINE_ADRESSE'),'warning');
+		return;
+	}
+	if ( $fromname == '' ) {
+		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
+		$this->setMessage(JText::_( 'USER_ERGEBNISDIENST_KEIN_NAME'),'warning');
+		return;
+	}
+
+	// Log schreiben
+	$clmLog = new CLMLog();
+	$clmLog->aktion = "Mail versandt";
+	$clmLog->params = array('cids' => $lid);
+	$clmLog->write();
+
+	$adminLink = new AdminLink();
+	$adminLink->more = array('return_section' => 'mturniere', 'return_view' => 'xxx', 'cids' => $lid );
+	$adminLink->view = "view_mail";
+	$adminLink->makeURL();
+	$mainframe->redirect( $adminLink->url );
+	}
+
 }

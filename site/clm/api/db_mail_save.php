@@ -15,26 +15,30 @@ function clm_api_db_mail_save($return_section, $return_view, $cids, $mail_to, $m
 	$out = $out[2];
 	
 	/* Start: Übernahme der Detaildaten */
-	$users = $out["users"];
 	$auser = $out["auser"];
-
 	$mail_cc = clm_core::$load->sub_umlaute($auser[0]->name)." <".$auser[0]->email.">"; 
 
 	$mail_to = '';
-	for ($x=0; $x < (count($users)); $x++) {
-		if ($x > 0) $mail_to .= ', ';
-		$mail_to .= clm_core::$load->sub_umlaute($users[$x]->name)." <".$users[$x]->email.">"; 
+	// freie Mail an Benutzer
+	if ($out["input"]["return_section"] == 'users') {
+		$users = $out["users"];
+		for ($x=0; $x < (count($users)); $x++) {
+			if ($x > 0) $mail_to .= ', ';
+			$mail_to .= clm_core::$load->sub_umlaute($users[$x]->name)." <".$users[$x]->email.">"; 
+		}
 	}
-
+	// freie Mail an Mannschaftsleiter
+	if ($out["input"]["return_section"] == 'mturniere' OR $out["input"]["return_section"] == 'ligen') {
+		$teams = $out["teams"];
+		for ($x=0; $x < (count($teams)); $x++) {
+			if ($x > 0) $mail_to .= ', ';
+			$mail_to .= clm_core::$load->sub_umlaute($teams[$x]->mfname)." <".$teams[$x]->mfmail.">"; 
+		}
+	}
+		
 	// Datum und Uhrzeit für Meldung
 	$now = clm_core::$cms->getNowDate();
 	
-	// Konfigurationsparameter auslesen
-/*	$config = clm_core::$db->config();
-	$from = $config->email_from;
-	$fromname = $config->email_fromname;
-	$htmlMail = $config->email_type;
-*/
 	$rc = clm_core::$api->mail_send($mail_to, $mail_subj, $mail_body, 0, $mail_cc);
 
 	if ($rc[0] === false) {

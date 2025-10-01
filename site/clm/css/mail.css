@@ -1,6 +1,6 @@
 /*
  * @ CLM Component
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -9,14 +9,14 @@
 /********************/
 
 
-#clm .clm .clm_view_mail .outer_mail_subj .info, #clm .clm .clm_view_mail .outer_mail_body .info  {
+#clm .clm .clm_view_mail .outer_mail_subj .info, #clm .clm .clm_view_mail .outer_mail_body .info, #clm .clm .clm_view_mail .outer_mail_to .info  {
 	font-size: 110%;
 	font-weight:bold;
 	text-align:left;
 	padding:5px;
 	word-wrap: break-word;
 }
-#clm .clm .clm_view_mail .outer_mail_subj .info_text  {
+#clm .clm .clm_view_mail .outer_mail_subj .info_text, #clm .clm .clm_view_mail .outer_mail_to .info_text  {
 	font-size: 140%;
 /*	font-weight:bold; */
 	text-align:left;
@@ -24,7 +24,7 @@
 	word-wrap: break-word;
 }
 
-#clm .clm .clm_view_mail .outer_mail_subj .text, #clm .clm .clm_view_mail .outer_mail_body .text  {
+#clm .clm .clm_view_mail .outer_mail_subj .text, #clm .clm .clm_view_mail .outer_mail_body .text, #clm .clm .clm_view_mail .outer_mail_to .text  {
 	border: 1px solid #cccccc;
 }
 
@@ -37,7 +37,7 @@
 	resize:vertical;
 }
 
-#clm .clm .clm_view_mail .outer_mail_body .text textarea  {
+#clm .clm .clm_view_mail .outer_mail_body .text textarea, #clm .clm .clm_view_mail .outer_mail_to .text textarea  {
 	width:100%;
 	height:120px;
 	font-size: 140%;
