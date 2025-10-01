@@ -817,6 +817,9 @@ class CLMTournament extends stdClass {
 					case 51: // ordering
 						$sumTiebr[$tb] = 1000 - $player[$s-1]->ordering;
 						break;
+					case 52: // eigene TWZ
+						$sumTiebr[$tb] = $player[$s-1]->twz;
+						break;
 					default:
 						$sumTiebr[$tb] = 0;
 				}
@@ -910,12 +913,14 @@ class CLMTournament extends stdClass {
 	function setRankingPositions() {
 	
 		if($this->turnierid==""){ return; }
+		if ($this->data->tiebr1 == 52) $sort1 = 'ASC'; else $sort1 = 'DESC';
+		if ($this->data->tiebr2 == 52) $sort2 = 'ASC'; else $sort2 = 'DESC';
+		if ($this->data->tiebr3 == 52) $sort3 = 'ASC'; else $sort3 = 'DESC';
 		$query = "SELECT * "
 			." FROM `#__clm_turniere_tlnr`"
 			." WHERE turnier = ".$this->turnierid
-			." ORDER BY sum_punkte DESC, sumTiebr1 DESC, sumTiebr2 DESC, sumTiebr3 DESC, snr ASC"
+			." ORDER BY sum_punkte DESC, sumTiebr1 ".$sort1.", sumTiebr2 ".$sort2.", sumTiebr3 ".$sort3.", snr ASC"
 			;
-		
 		$this->_db->setQuery( $query );
 		$players = $this->_db->loadObjectList();
 	

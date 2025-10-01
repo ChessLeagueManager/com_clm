@@ -196,6 +196,9 @@ class CLMText {
 			case 30: // Turnierleistung
 				$format = "%01.0f";
 				break;
+			case 52: // niedrigere TWZ
+				$format = "%01.0f";
+				break;
 		
 		}
 		

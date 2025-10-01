@@ -207,7 +207,7 @@ if (!$archive_check) {
 					for ($f=1; $f<=3; $f++) {
 						$fwFieldName = 'tiebr'.$f;
 						$plTiebrField = 'sumTiebr'.$f;
-						if ($this->turnier->$fwFieldName > 0) {
+						if ($this->turnier->$fwFieldName > 0 AND $this->turnier->$fwFieldName < 50) {
 							echo '<td class="fw_col"><div>'.CLMtext::tiebrFormat($this->turnier->$fwFieldName, $this->players[$p]->$plTiebrField).'</div></td>';
 						}
 					}
