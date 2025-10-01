@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5.0" method="upgrade">
 	<name>CLM</name>
-	<creationDate>05.09.2025</creationDate>
+	<creationDate>14.09.2025</creationDate>
 	<author>CLM Team</author>
 	<copyright>(C) Copyright 2008-2025 by CLM Project</copyright>
 	<license>GNU/GPL</license>
 	<authorEmail>fishpoke@fishpoke.de</authorEmail>
-	<authorUrl>www.chessleaguemanager.de</authorUrl>
-	<version>4.3.0</version>
+	<authorUrl>chessleaguemanager.org</authorUrl>
+	<version>4.3.0a</version>
  	<scriptfile>installer.php</scriptfile>
 	<description>
 		<![CDATA[
 	 	<img src="components/com_clm/images/clm_logo.png" alt="" align="left" />
 		 <h3>CLM - Chess League Manager :</h3>
 		 <p>Die CLM Komponente ist eine Verwaltung für Schachligen und Schachturniere.</p>
-		 <a href="https://www.chessleaguemanager.de" target="blank">CLM Projekt Homepage</a>  |  <a href="https://www.chessleaguemanager.de/index.php?option=com_kunena" target="blank">Support Forum</a>
+		 <a href="https://chessleaguemanager.org" target="blank">CLM Projekt Homepage</a>  |  <a href="https://chessleaguemanager.org/index.php?option=com_kunena" target="blank">Support Forum</a>
 		 <br><br>
-		 <u>Das Wichtigste zur neuen Beta 4.3.0 :</u>
+		 <u>Das Wichtigste zur neuen Beta 4.3.1 (Testpaket 4.3.0a):</u>
 		 <ul type="square">
-		 <li><font color="red">Kopieren von Meldelisten jetzt möglich, siehe Admin-View Mannschaften</font></li>
-		 <li><font color="red">inoffizielle Elo-Auswertung aktivierbar über Schalter in den Liga- bzw. Turnierdetails</font></li>
-		 <li><font color="red">Mailausgabe mit Codierung der Betreff-Zeile</font></li>
+		 <li><font color="red">Umstellung der Links von chessleaguemanager.de auf chessleaguemanager.org</font></li>
+		 <li><font color="red">neu: freie Mail an alle MF einer Staffel möglich</font></li>
 		 </ul></br>
 		 <p>Weitere Ergänzungen und Korrekturen siehe changelog auf der Projektseite</p>
 		 <p>Hinweise, Fehlermeldungen, Wünsche bitte über unser Forum</p>

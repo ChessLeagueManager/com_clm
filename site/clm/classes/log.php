@@ -65,7 +65,7 @@ class clm_class_log {
 		$lang = clm_core::$lang->logging_error;
 		if (clm_core::$db->config ()->log_error) {
 			echo $lang->error1 . "<br/>" . $lang->error2 . "<br/>" . $lang->error3 . "<br/>" . $lang->error4 . " " . $this->callid;
-			echo '<br/>Siehe auch <a href="https://www.chessleaguemanager.de/faq/item/178-meldung-interner-fehler" target="blank">CLM Wiki</a>';
+			echo '<br/>Siehe auch <a href="https://chessleaguemanager.org/faq/item/178-meldung-interner-fehler" target="blank">CLM Wiki</a>';
 		} else {
 			echo $lang->error1 . "<br/>" . $lang->error2 . "<br/>" . $lang->error_problem;
 		}

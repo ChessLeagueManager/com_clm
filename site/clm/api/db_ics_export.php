@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -38,7 +38,7 @@ function clm_api_db_ics_export($file_name,$itermine) {
 	$begin[1] = 'VERSION:2.0';
 	$begin[2] = 'CALSCALE:GREGORIAN';
 	$begin[3] = 'METHOD:PUBLISH';
-	$begin[4] = 'PRODID:-//chessleaguemanager.de//DE';
+	$begin[4] = 'PRODID:-//chessleaguemanager.örg//DE';
 	$begin[5] = 'BEGIN:VTIMEZONE';
 	$begin[6] = 'TZID:Europe/Berlin';
 	$begin[7] = 'BEGIN:STANDARD';
