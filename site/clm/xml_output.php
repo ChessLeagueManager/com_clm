@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -33,9 +33,16 @@ require ("index.php");
 		$a_paar 			= $out[2]["paar"];
 		if ($view == 0) { 
 			$mannschaft		= $out[2]["mannschaft"];
+			$mz_nr = array();
+			$inr = 0;
+			foreach ($mannschaft as $m) {
+				$inr++;
+				$mz_nr[$m->tln_nr] = $inr;
+			}
 			$results = array();
 			foreach ($a_paar as $paar0) {
-				$results[$paar0->dg][$paar0->hrank][$paar0->grank] = $paar0->brettpunkte;
+//				$results[$paar0->dg][$paar0->hrank][$paar0->grank] = $paar0->brettpunkte;
+				$results[$paar0->dg][$paar0->htln][$mz_nr[$paar0->gtln]] = $paar0->brettpunkte;
 			}
 			if ($liga[0]->runden_modus != 1 AND $liga[0]->runden_modus != 2) {
 				$error_text = "PLG_CLM_SHOW_ERR_MODUS_V0";
@@ -109,13 +116,13 @@ if ($view == 0 or $view == 1) {		// Rangliste (Kreuztabelle/Tabelle)
  
 	$root->appendChild($kreuzHeaderNode = $dom->createElement("kreuzHeader"));
 	  for ($d = 1; $d <= $liga[0]->durchgang; $d++) { 
-		for ($r = 1; $r <= $liga[0]->teil; $r++) { 
+		for ($r = 1; $r <= (count($mannschaft)); $r++) { 
 			$kreuzHeaderNode->appendChild($dom->createElement("eH", $r));
 		}
 	  }
 	$root->appendChild($ranglisteNode = $dom->createElement("rangliste"));
 //	for ($m = 0; $m <= $liga[0]->runden; $m++) { 
-	for ($m = 0; $m <= $liga[0]->teil; $m++) {
+	for ($m = 0; $m <= (count($mannschaft)); $m++) {
 		if (!isset($mannschaft[$m])) continue;
 		if (is_null($mannschaft[$m])) continue;
 		$ranglisteNode->appendChild($teamsNode = $dom->createElement("teams"));
@@ -127,21 +134,31 @@ if ($view == 0 or $view == 1) {		// Rangliste (Kreuztabelle/Tabelle)
 		$unentschieden = 0;
 		$verlust = 0;
 		for ($d = 1; $d <= $liga[0]->durchgang; $d++) { 
-		  for ($r = 1; $r <= ($liga[0]->runden + 1); $r++) { 
+		  for ($r = 1; $r <= (count($mannschaft)); $r++) { 
 			if ($mannschaft[$m]->published == 0) continue;
 		
-			if ($mannschaft[$m]->rankingpos == $r ) 
+//			if ($mannschaft[$m]->rankingpos == $r ) 
+			if (($m + 1) == $r ) 
 				$kreuzBodyNode->appendChild($dom->createElement("e", "**"));
 			else {
-				if (!isset($results[$d][$mannschaft[$m]->rankingpos][$r])) {
+//				if (!isset($results[$d][$mannschaft[$m]->rankingpos][$r])) {
+				if (!isset($results[$d][$mannschaft[$m]->tln_nr][$r])) {
 					$kreuzBodyNode->appendChild($dom->createElement("e", ' '));			
 				} else {
-					$kreuzBodyNode->appendChild($dom->createElement("e", $results[$d][$mannschaft[$m]->rankingpos][$r]));			
-					if (is_numeric($results[$d][$mannschaft[$m]->rankingpos][$r])) {
+//					$kreuzBodyNode->appendChild($dom->createElement("e", $results[$d][$mannschaft[$m]->rankingpos][$r]));			
+					$kreuzBodyNode->appendChild($dom->createElement("e", $results[$d][$mannschaft[$m]->tln_nr][$r]));			
+/*					if (is_numeric($results[$d][$mannschaft[$m]->rankingpos][$r])) {
 						$spiele++;
 						if ($results[$d][$mannschaft[$m]->rankingpos][$r] > $liga[0]->stamm/2) $siege++;
 						if ($results[$d][$mannschaft[$m]->rankingpos][$r] == $liga[0]->stamm/2) $unentschieden++;
 						if ($results[$d][$mannschaft[$m]->rankingpos][$r] < $liga[0]->stamm/2) $verlust++;
+					}
+*/
+					if (is_numeric($results[$d][$mannschaft[$m]->tln_nr][$r])) {
+						$spiele++;
+						if ($results[$d][$mannschaft[$m]->tln_nr][$r] > $liga[0]->stamm/2) $siege++;
+						if ($results[$d][$mannschaft[$m]->tln_nr][$r] == $liga[0]->stamm/2) $unentschieden++;
+						if ($results[$d][$mannschaft[$m]->tln_nr][$r] < $liga[0]->stamm/2) $verlust++;
 					}
 				}
 			}
