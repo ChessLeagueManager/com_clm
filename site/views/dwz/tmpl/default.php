@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -173,7 +173,7 @@ echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
    <?php } elseif ($countryversion == "en" AND $rating_type == 1) { ?>
     <td class="dwz_6"><a href="https://www.ecfrating.org.uk/v2/new/player.php?ECF_code=<?php echo $zps->PKZ; ?>" target="_blank"><?php echo $zps->DWZ; ?></td>
    <?php } ?>
-    <td class="dwz_7"><?php if ( $zps->FIDE_Elo == 0 ) { echo "-"; } else { echo '<a href="http://ratings.fide.com/card.phtml?event=' . $zps->FIDE_ID . '" target="_blank">' . $zps->FIDE_Elo .'</a>'; } ?></td>
+    <td class="dwz_7"><?php if ( $zps->FIDE_Elo == 0 ) { echo "-"; } else { echo '<a href="https://ratings.fide.com/profile/' . $zps->FIDE_ID . '" target="_blank">' . $zps->FIDE_Elo .'</a>'; } ?></td>
     </tr>
     
 <?php $x++; }} ?>

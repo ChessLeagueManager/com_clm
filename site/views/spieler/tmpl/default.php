@@ -159,7 +159,7 @@ else {  ?>
             </tr>
             <tr>
             <td class="det_col1"><?php if ($spieler[0]->FIDE_ELO > 0) { ?><?php echo JText::_('PLAYER_ELO') ?><?php } ?></td>
-            <td class="det_col2"><a href="http://ratings.fide.com/card.phtml?event=<?php echo $spieler[0]->FIDE_ID;?>" target="_blank"><?php if ($spieler[0]->FIDE_ELO > 0) { ?><?php echo $spieler[0]->FIDE_ELO; ?><?php } ?></a></td>
+			<td class="det_col2"><a href="https://ratings.fide.com/profile/<?php echo $spieler[0]->FIDE_ID;?>" target="_blank"><?php if ($spieler[0]->FIDE_ELO > 0) { ?><?php echo $spieler[0]->FIDE_ELO; ?><?php } ?></a></td>
         	</tr>
         </table>
     </td>

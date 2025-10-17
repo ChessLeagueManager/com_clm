@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -97,7 +97,7 @@ if ($this->playerPhoto != '') { ?>
 				<td align="left" class="tp_col_1"><?php echo JText::_('TOURNAMENT_ELO') ?>:</td>
 				<?php // FIDE Link
 					if ($turParams->get('displayPlayerFideLink', 0) == 1) { ?>
-						<td class="tp_col_data"><a href="http://ratings.fide.com/card.phtml?event=<?php echo $this->player->FIDEid;?>" target="_blank"><?php echo CLMText::formatRating($this->player->FIDEelo) ?></td>
+						<td class="tp_col_data"><a href="https://ratings.fide.com/profile/<?php echo $this->player->FIDEid;?>" target="_blank"><?php echo CLMText::formatRating($this->player->FIDEelo) ?></td>
 					<?php } else { ?>
 						<td class="tp_col_data"><?php echo CLMText::formatRating($this->player->FIDEelo) ?></td>
 					<?php } ?>
