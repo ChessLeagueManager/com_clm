@@ -310,7 +310,7 @@ if ($debug > 0) { echo "<br>snr: $snr  geschlecht: $geschlecht  titel: $titel  n
 			if (is_numeric($twz)) $twz = (integer) $twz; else $twz = 0;
 		} else {
 			$start_dwz = 0;
-			$FIDEelo   = 0;
+//			$FIDEelo   = 0;  // es wird dann FIDEelo aus Spielerkarte 001 genommen
 			$twz = 0;
 		}
 

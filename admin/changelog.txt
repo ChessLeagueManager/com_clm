@@ -20,6 +20,7 @@ $ -> Language fix or change
 # Teamwettbewerbe: Anzeige Inoffizielle Elo-Auswertung
 # Benutzer-Mail-Adressen mit Umlaut nun möglich 
 # SWM-Import: Umschlüsselung von Feinwertungen
+# TRF-Import: Elo-Zahl aus Spielerkarte
 
 - - - - - 4.3.0 - [05-09-2025] - - - - - - - - - - - - - - - - - - - -
 + Views Rangliste, Tabelle, Rundenbericht: Reset nach Zeitintervall
