@@ -318,11 +318,11 @@
 .righttable0, .righttable_ch0 { float:right; width: 35px; }
 .righttable1, .righttable_ch1 { float:right; width: 70px; }
 .righttable2, .righttable_ch2 { float:right; width: 142px; } /* 115 */
-.righttable3, .righttable_ch3 { float:right; width: 175px; } /* 150 */
+.righttable3, .righttable_ch3 { float:right; width: 188px; } /* 150 175 */
 #righttabletable0, #righttabletable_ch0 { width: 35px; border-left:1px solid #DDD; }
 #righttabletable1, #righttabletable_ch1 { width: 70px; border-left:1px solid #DDD; }
 #righttabletable2, #righttabletable_ch2 { width: 142px; border-left:1px solid #DDD; } 
-#righttabletable3, #righttabletable_ch3 { width: 175px; border-left:1px solid #DDD; }
+#righttabletable3, #righttabletable_ch3 { width: 188px; border-left:1px solid #DDD; }
 
 /** Definition Zellen **/
 #turnier_rangliste .rang, #turnier_rangliste .rang_auf, #turnier_rangliste .rang_auf_evtl, #turnier_rangliste .rang_ab, #turnier_rangliste .rang_ab_evtl {width: 20px; text-align: right !important;} 
