@@ -1134,10 +1134,13 @@ function transcode_tiebr($group,$tournament,$line_nr,$debug) {
 		61 ->  1    1 Arranz-Sytem
 		68 ->  2    4 Anzahl Siege variabel
 		70 ->  6    2 Summe Buchholz variabel
+		80 ->  6    0 Buchholz
+		81 -> 25    0 Direktvergleich
+		84 ->  1    0 Buchholz
 	*/
 if ($debug > 1) { echo "<br>group:"; var_dump($group); } 		
-	$clm_array = array (0 => 0, 1 => 0, 5 => 51, 8 => 1, 9 => 1, 11 => 25, 19 => 13, 23 => 16, 36 => 16,
-		37 => 1, 42 => 0, 43 => 0, 44 => 0, 52 => 13, 54 => 0, 55 => 0, 59 => 0, 60 => 0, 61 => 0, 68 => 4, 70 => 2);
+//	$clm_array = array (0 => 0, 1 => 0, 5 => 51, 8 => 1, 9 => 1, 11 => 25, 19 => 13, 23 => 16, 36 => 16,
+//		37 => 1, 42 => 0, 43 => 0, 44 => 0, 52 => 13, 54 => 0, 55 => 0, 59 => 0, 60 => 0, 61 => 0, 68 => 4, 70 => 2);
 if ($debug > 1) { echo "<br>1tiebr linenr:"; var_dump($line_nr); } 		
 if ($debug > 1) { echo "<br>1tiebr line:"; var_dump($tournament["out"][$line_nr]); }		
 if ($debug > 1) { echo "<br>1tiebr line+4:"; var_dump($tournament["out"][$line_nr+4]); } 		
@@ -1202,6 +1205,15 @@ if ($debug > 1) { echo "<br>streich_schwach: $streich_schwach   streich_stark: $
 		elseif ($line[0] == 70) {		// Buchholz Summe
 			if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 2; }
 			elseif ($streich_stark == 0 AND $streich_schwach == 1) { $line[0] = 12; } // mit 1 Streichwert
+			else { $line[0] = 0; } }
+		elseif ($line[0] == 80) {		// Elo-Schnitt
+			if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 6; }
+			elseif ($streich_stark == 0 AND $streich_schwach == 1) { $line[0] = 16; } // mit 1 Streichwert
+			else { $line[0] = 0; } }
+		elseif ($line[0] == 84) {		// Buchholz
+			if ($streich_stark == 0 AND $streich_schwach == 0) { $line[0] = 1; }
+			elseif ($streich_stark == 0 AND $streich_schwach == 1) { $line[0] = 11; } // mit 1 Streichwert
+			elseif ($streich_stark == 1 AND $streich_schwach == 1) { $line[0] = 5; }	// mittlere Buchholz
 			else { $line[0] = 0; } }
 		else { $line[0] = 0; } 
 	}
