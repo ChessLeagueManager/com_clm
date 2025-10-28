@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -54,7 +54,7 @@ class CLMModelTurRoundForm extends JModelLegacy {
 
 	function _getTurnierData() {
 	
-		$query = 'SELECT name'
+		$query = 'SELECT *'
 			. ' FROM #__clm_turniere'
 			. ' WHERE id = '.$this->param['turnierid']
 			;

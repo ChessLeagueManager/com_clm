@@ -1,6 +1,6 @@
 /*
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -19,6 +19,10 @@
 			alert( jtext['number_nr'] );
 		} else if (form.datum.value == "") {
 			alert( jtext['enter_date'] );
+		} else if (form.datum.value > dateEnd ) {
+			alert( 'Rundendatum größer als Enddatum des Turniers' );
+		} else if (form.datum.value < dateStart ) {
+			alert( 'Rundendatum kleiner als Startdatum des Turniers' );
 		} else {
 			Joomla.submitform( pressbutton );
 		}

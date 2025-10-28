@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -51,6 +51,9 @@ class CLMViewTurRoundForm extends JViewLegacy {
 		$this->user = $model->user;
 		
 		$this->roundData = $model->roundData;
+		$this->turnierData = $model->turnierData;
+		$document->addScriptDeclaration("dateStart = '".$this->turnierData->dateStart."';");
+		$document->addScriptDeclaration("dateEnd = '".$this->turnierData->dateEnd."';");
 
 		$this->param = $model->param;
 
