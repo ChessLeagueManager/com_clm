@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 function clm_api_db_mail_save($return_section, $return_view, $cids, $mail_to, $mail_subj, $mail_body) {
 
@@ -33,6 +33,10 @@ function clm_api_db_mail_save($return_section, $return_view, $cids, $mail_to, $m
 		for ($x=0; $x < (count($teams)); $x++) {
 			if ($x > 0) $mail_to .= ', ';
 			$mail_to .= clm_core::$load->sub_umlaute($teams[$x]->mfname)." <".$teams[$x]->mfmail.">"; 
+		}
+		$liga = $out["liga"];
+		if (($liga[0]->sl > 0) AND ($liga[0]->slmail != $auser[0]->email)) {
+			$mail_to .= ', '.clm_core::$load->sub_umlaute($liga[0]->slname)." <".$liga[0]->slmail.">"; 				
 		}
 	}
 		

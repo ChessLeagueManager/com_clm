@@ -3,7 +3,7 @@
  * @ CLM Component
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 function clm_view_mail($out) {
 	clm_core::$load->load_css("mail");
@@ -35,6 +35,10 @@ function clm_view_mail($out) {
 			if ($x > 0) $str_mail_to .= ', ';
 			$str_mail_to .= $teams[$x]->mfname." <".$teams[$x]->mfmail.">";
 			if (($x > 0) AND ($x % 2 == 1)) $str_mail_to .= "\r\n"; 
+		}
+		$liga = $out["liga"];
+		if (($liga[0]->sl > 0) AND ($liga[0]->slmail != $auser[0]->email)) {
+			$str_mail_to .= ', '.$liga[0]->slname." <".$liga[0]->slmail.">"; 				
 		}
 	}
 	

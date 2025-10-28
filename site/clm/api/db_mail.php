@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 function clm_api_db_mail($return_section,$return_view,$cids) {
 
@@ -51,7 +51,7 @@ function clm_api_db_mail($return_section,$return_view,$cids) {
 	if ($return_section == 'mturniere' OR $return_section == 'ligen') {
 		$lid = $out["input"]["cids"];
 		$out["input"]["lid"]=$cids;
-		// Daten der Liga einschl. MF holen
+		// Daten der Liga einschl. SL holen
 		$ligaModel	= "SELECT l.*, u.name as slname, u.email as slmail FROM #__clm_liga as l"
 			." LEFT JOIN #__clm_user as u ON u.jid = l.sl AND u.sid = l.sid"
 			." WHERE l.id = ".$lid

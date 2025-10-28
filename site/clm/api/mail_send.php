@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 /* Input-Parameter
  * $mail_to		Mailempfänger (string)
@@ -52,6 +52,13 @@ function clm_api_mail_send($mail_to, $mail_subj, $mail_body, $htmlMail=0, $mail_
     $quoted_printable = str_replace("=\r\n", "", $quoted_printable);
     // Erstelle das kodierte Subject im MIME-Header-Format
     $mail_subj = '=?UTF-8?Q?' . $quoted_printable . '?=';
+	// Behandlung der fromname
+	// Wandle den Text in Quoted-Printable um
+    $quoted_printable = quoted_printable_encode($fromname);
+    // Entferne Zeilenumbrüche, falls vorhanden
+    $quoted_printable = str_replace("=\r\n", "", $quoted_printable);
+    // Erstelle das kodierte Subject im MIME-Header-Format
+    $fromname = '=?UTF-8?Q?' . $quoted_printable . '?=';
 
 	// Zusammenstellung des Headers
 	if ($htmlMail == 0) {
@@ -63,33 +70,47 @@ function clm_api_mail_send($mail_to, $mail_subj, $mail_body, $htmlMail=0, $mail_
 		$headers[] = 'Content-type: text/html; charset=utf-8';
 	}
 
-	$headers[] = "From: ".$fromname." <".$from.">";
-	
-	if ($suppress == 0) {
-		$mail_body2 = "";
+	if (!class_exists('idna_convert')) {
+		$path = clm_core::$path . DS . "includes" . DS . "idna_convert.class" . '.php';
+		require_once ($path);
+	}
+
+	$nl = PHP_EOL;
+	if ($htmlMail == 1) $nl = '<br>';
+	$mail_body2 = $nl;
+
+	$IDN = new idna_convert();
+	$from = $IDN->encode($from);
+	$mail_to = $IDN->encode($mail_to);
+
+	$mail_debug = 0;
+	$umleitung = "";
+
+	if ($suppress == 3) {
+		$umleitung .= $nl."-------------------------------------";
+		$umleitung .= $nl."Orig.Empfänger: ".$mail_to;
+		$mail_to = $IDN->encode($replace);
 		if (!is_null($mail_cc) AND $mail_cc > ' ') {
-			$headers[] = "Cc: ".$mail_cc;
-		}
-		if (!is_null($mail_bcc) AND $mail_bcc > ' ') {
-			$headers[] = "Bcc: ".$mail_bcc;
-		}
-	} 
-	if ($suppress == 2) {
-		if ($htmlMail == 0) $nl = PHP_EOL;
-		if ($htmlMail == 1) $nl = '<br>';
-		$mail_body2 = $nl;
-		$mail_body2 .= $nl."-------------------------------------";
-		$mail_body2 .= $nl."Orig.Empfänger: ".$mail_to;
-		$mail_to	= $replace;
-		if (!is_null($mail_cc) AND $mail_cc > ' ') {
-			if ($htmlMail == 0) $mail_body2 .= $nl;
-			$mail_body2 .= $nl."Orig.CC-Empfänger: ".$mail_cc;
-		}
-		if (!is_null($mail_bcc) AND $mail_bcc > ' ') {
-			if ($htmlMail == 0) $mail_body2 .= $nl;
-			$mail_body2 .= $nl."Orig.BCC-Empfänger: ".$mail_bcc;
+			$umleitung .= $nl."Orig.CC-Empfänger: ".$mail_cc;
+			if ($htmlMail == 0) $umleitung .= $nl;
 		}
 	}
+
+	$headers[] = "From: ".$fromname." <".$from.">";
+	$mail_body2 = $nl."-------------------------------------";
+	$mail_body2 .= $nl."From: ".$fromname." (".$from.")";
+	
+	if (!is_null($mail_cc) AND $mail_cc > ' ') {
+		$mail_cc = $IDN->encode($mail_cc);
+		$headers[] = "Cc: ".$mail_cc;
+		$mail_body2 .= $nl."Cc: ".$mail_cc;
+	}
+	if (!is_null($mail_bcc) AND $mail_bcc > ' ') {
+		$mail_bcc = $IDN->encode($mail_bcc);
+		$headers[] = "Bcc: ".$mail_bcc;
+		$mail_body2 .= $nl."Bcc: ".$mail_bcc;
+	} 
+	if ($htmlMail == 0) $mail_body2 .= $nl;
 
 //	$rc = mail($mail_to,$mail_subj,$mail_body.$mail_body2,implode("\r\n", $headers));
 
@@ -100,6 +121,12 @@ function clm_api_mail_send($mail_to, $mail_subj, $mail_body, $htmlMail=0, $mail_
 	# $mailer->setBcc($mail_bcc);
 	# $mailer->setBody($mail_body.$mail_body2);
 	# $rc = $mailer->Send();
+
+	if ($mail_debug == 0) {
+		$mail_body2 = $umleitung;
+	} else {
+		$mail_body2 = $umleitung . $mail_body2;
+	}
 
 	$tried = "";
 	try {
