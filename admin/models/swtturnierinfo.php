@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -99,8 +99,10 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 			} else { 
 				$this->_turnier->set('name'			, $filename);
 			}
+			$this->_turnier->set('FIDEcco'		, CLMSWT::readName($swt,1160,3));
+			$this->_turnier->set('city'			, CLMSWT::readName($swt,831,40));
 			
-			//Mit Daten aus Datenbank �berschreiben, falls ein Turnier geupdated wird
+			//Mit Daten aus Datenbank überschreiben, falls ein Turnier geupdated wird
 			if(clm_core::$load->request_int('update') == 1) {
 				$turnierFromDatabase = $this->_getTurnierFromDatabase();
 			}
@@ -324,7 +326,7 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 						   "typ", "tiebr1", "tiebr2", "tiebr3",
 		                   "rnd", "teil", "runden", "dg", "tl", "bezirk", "bezirkTur", "vereinZPS", 
 						   "published", "started", "finished", "invitationText", "bemerkungen", "bem_int",
-						   "ordering", "sieg", "siegs", "remis", "remiss", "nieder", "niederk" );
+						   "ordering", "sieg", "siegs", "remis", "remiss", "nieder", "niederk", "FIDEcco", "city" );
 		
 		//Strings für Felder und Werte erstellen
 		$fields = '';
@@ -380,7 +382,7 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 			
 			$turnierFromDatabase = $db->loadObject();
 			
-			//Stadartwerte werden �berschrieben
+			//Stadartwerte werden überschrieben
 			$this->_turnier->set('name'				, $turnierFromDatabase->name);
 			$this->_turnier->set('sid'				, $turnierFromDatabase->sid);
 			$this->_turnier->set('dateStart'		, $turnierFromDatabase->dateStart);
@@ -405,6 +407,8 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 			$this->_turnier->set('remiss'			, $turnierFromDatabase->remiss);
 			$this->_turnier->set('nieder'			, $turnierFromDatabase->nieder);
 			$this->_turnier->set('niederk'			, $turnierFromDatabase->niederk);
+			$this->_turnier->set('FIDEcco'			, $turnierFromDatabase->FIDEcco);
+			$this->_turnier->set('city'				, $turnierFromDatabase->city);
 		}
 	}
 	

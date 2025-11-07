@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleagueamanager.de
+ * @link https://chessleagueamanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -299,7 +299,7 @@ $turParams = new clm_class_params($this->turnier->params);
 		  <table class="paramlist admintable">
 
 		<tr>
-			<td width="40%" class="paramlist_key">
+			<td width="30%" class="paramlist_key">
 				<label for="tl">
 					<?php echo JText::_( 'TOURNAMENT_DIRECTOR' ); ?>:
 				</label>
@@ -311,7 +311,7 @@ $turParams = new clm_class_params($this->turnier->params);
 
 
 		<tr>
-			<td width="40%" class="paramlist_key">
+			<td width="30%" class="paramlist_key">
 				<label for="bezirkVer">
 					<?php echo JText::_( 'DISTRICT_EVENT' ); ?>:
 				</label>
@@ -323,7 +323,7 @@ $turParams = new clm_class_params($this->turnier->params);
 
 
 		<tr>
-			<td width="40%" class="paramlist_key">
+			<td width="30%" class="paramlist_key">
 				<label for="vereinZPS">
 					<?php echo JText::_( 'ORGANIZER' ); ?>/<?php echo JText::_( 'HOSTER' ); ?>:
 				</label>
@@ -332,6 +332,26 @@ $turParams = new clm_class_params($this->turnier->params);
 				<?php echo $this->lists['vereinZPS']; ?>
 			</td>
 		</tr>
+	<tr>
+		<td width="30%" class="paramlist_key">
+			<label for="city" title="<?php echo JText::_( 'TOURNAMENT_CITY_HINT' ); ?>">
+				<?php echo JText::_( 'TOURNAMENT_CITY' ); ?>:
+			</label>
+		</td>
+		<td class="paramlist_value" title="<?php echo JText::_( 'TOURNAMENT_CITY_HINT' ); ?>">
+			<input class="inputbox" type="text" name="city" id="city" size="31" maxlength="60" value="<?php echo $this->turnier->city; ?>" />
+		</td>
+		<td width="3%"class="paramlist_value">
+		</td>
+		<td width="20%" class="paramlist_key">
+			<label for="FIDEcco">
+				<?php echo JText::_( 'TOURNAMENT_FIDECCO' ); ?>:
+			</label>
+		</td>
+		<td class="paramlist_value">
+			<input class="inputbox" type="text" name="FIDEcco" id="FIDEcco" size="3" maxlength="3" value="<?php echo $this->turnier->FIDEcco; ?>" />
+		</td>
+	</tr>
 
 				</table>
 			</fieldset>

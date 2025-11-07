@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
  * @author Thomas Schwietert
@@ -96,6 +96,7 @@ $useAsTWZ = clm_core::$load->request_string('useAsTWZ', '0');
 							echo "<td align='center'><input class='inputbox' type='text' name='birthYear[".$i."]' id='birthYear".$i."' size='4' maxlength='4' value='".$spieler->birthYear."' /></td>";
 							echo "<input type='hidden' name='FIDEcco[".$i."]' id='FIDEcco".$i."' value='".$spieler->FIDEcco."' />";
 							echo "<input type='hidden' name='FIDEid[".$i."]' id='FIDEid".$i."' value='".$spieler->FIDEid."' />";
+							echo "<input type='hidden' name='PKZ[".$i."]' id='PKZ".$i."' value='".$spieler->PKZ."' />";
 							echo "<input type='hidden' name='s_punkte[".$i."]' id='s_punkte".$i."' value='".$spieler->s_punkte."' />";
 						echo "</tr>";
 					$k = 1 - $k;

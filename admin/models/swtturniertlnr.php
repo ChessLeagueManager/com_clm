@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -88,11 +88,13 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 				if ($teilnehmer->geschlecht == 'm') $teilnehmer->set('geschlecht'	, 'M');
 				$teilnehmer->set('tlnrStatus'	, (CLMSWT::readName($swt,$offset+184	,1)=="*" ? "0" : "1"));
 				if ($modus == 3 OR $modus == 5) $teilnehmer->set('tlnrStatus'	, 1);
-				if ($file_version == 724)
+				if ($file_version == 724) {
 					$teilnehmer->set('FIDEid'   	, 0);
-				else
+					$teilnehmer->set('PKZ'   	, 0);
+				} else {
 					$teilnehmer->set('FIDEid'   	, CLMSWT::readName($swt,$offset+324	,12));
-
+					$teilnehmer->set('PKZ'   	, CLMSWT::readName($swt,$offset+337	,12));
+				}
 				$s_points = CLMSWT::readInt($swt,$offset+273,1);
 				$s_sign = CLMSWT::readInt($swt,$offset+274,1);
 				if ($s_sign == 255) $s_points = ($s_points - 256);
@@ -147,7 +149,7 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 		if($anz_teilnehmer > 0){
 			$insert_query = "INSERT IGNORE INTO 
 									#__clm_swt_turniere_tlnr" . " 
-									( `sid`, `turnier`, `swt_tid`, `snr`, `name`, `birthYear`, `geschlecht`, `tlnrStatus`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `titel`, `FIDEcco`, `FIDEid`, `mgl_nr`, `zps`, `status`, `s_punkte`) "
+									( `sid`, `turnier`, `swt_tid`, `snr`, `name`, `birthYear`, `geschlecht`, `tlnrStatus`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `titel`, `FIDEcco`, `FIDEid`, `PKZ`, `mgl_nr`, `zps`, `status`, `s_punkte`) "
 						  . " 	VALUES";
 			
 			print clm_core::$load->request_string('snr[1]');
@@ -178,6 +180,7 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 										'".CLMSWT::getFormValue('title','','string',$i)."', 
 										'".CLMSWT::getFormValue('FIDEcco','','string',$i)."',
 										".CLMSWT::getFormValue('FIDEid',0,'int',$i).", 
+										".CLMSWT::getFormValue('PKZ',0,'int',$i).", 
 										".CLMSWT::getFormValue('mgl_nr',0,'int',$i).", 
 										'".$zpscode."', 
 										"."0".", 
