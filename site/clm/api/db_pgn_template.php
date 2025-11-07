@@ -3,16 +3,17 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  *
  * erstellt pgn-Template einer Runde eines Mannschafts- oder Einzelturniers
 */
-function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true) {
+function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true,$paar=0) {
  	$lang = clm_core::$lang->pgn;
 	$id = clm_core::$load->make_valid($id, 0, -1);
 	$dg = clm_core::$load->make_valid($dg, 0, -1);
 	$round = clm_core::$load->make_valid($round, 0, -1);
 	$type = clm_core::$load->make_valid($type, 0, -1);
+	$paar = clm_core::$load->make_valid($paar, 0, -1);
 	// CLM-Parameter auslesen	
 	$config		= clm_core::$db->config();
 	$name_subuml	= $config->fe_runde_subuml;
@@ -123,14 +124,16 @@ function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true) {
 	$nl = "\n";
 	$file_name = clm_core::$load->utf8decode($turnier->name).'_'.clm_core::$load->utf8decode($runde->name);
 	if ($type == 1) $file_name .= '_'.clm_core::$load->utf8decode($user_zps);
-//	$file_name = strtr($file_name,' ./','___');
+	if ($type == 3) $file_name .= '_'.$paar;
 	$file_name 	= clm_core::$load->file_name($file_name);
 	$file_name .= '.pgn'; 
 	if (!file_exists('components'.DS.'com_clm'.DS.'pgn'.DS)) mkdir('components'.DS.'com_clm'.DS.'pgn'.DS);
 	$pdatei = fopen('components'.DS.'com_clm'.DS.'pgn'.DS.$file_name,"wt");
 	if($group) {
 	 foreach ($matches as $einz) {
-	  if (($einz->zps == $user_zps) OR ($einz->gzps == $user_zps) OR ($type == 2)) {
+	  if ( (($type == 1) AND ($einz->zps == $user_zps) OR ($einz->gzps == $user_zps)) 
+		  OR (($type == 2)) 
+		  OR (($type == 3) AND ($einz->paar == $paar)) ) {
 		  $gtmarker = "*";
 		  $resulthint = "";
 		if ($name_subuml == 1) {

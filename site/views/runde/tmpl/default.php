@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link https://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -46,13 +46,14 @@ $liga		= $this->liga;
 $option 	= 'com_clm';
 $mainframe	= JFactory::getApplication();
 $pgn		= clm_core::$load->request_int('pgn',0); 
+$paar		= clm_core::$load->request_int('paar',0); 
 
 $config		= clm_core::$db->config();
 
 if(isset($liga[0])){
 
-	if (($pgn == 1) OR ($pgn == 2)) { 
-		$result = clm_core::$api->db_pgn_template($lid,$dg,$runde,$pgn,true);
+	if (($pgn == 1) OR ($pgn == 2) OR ($pgn == 3)) { 
+		$result = clm_core::$api->db_pgn_template($lid,$dg,$runde,$pgn,true,$paar);
 		if (!$result[1]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
 		$link = 'index.php?option='.$option.'&view=runde&saison='.$sid.'&liga='.$lid.'&dg='.$dg.'&runde='.$runde.'&pgn=0';
 		if ($item != 0) $link .= '&Itemid='.$item;
@@ -212,7 +213,7 @@ if(isset($liga[0])){
 				echo CLMContent::createPGNLink('runde', JText::_('ROUND_PGN_CLUB'), array('saison' => $liga[0]->sid, 'liga' => $liga[0]->id, 'runde' => $runde_orig, 'dg' => $dg) );
 			} 	
 			// PGN gesamte Runde
-			if (($params['pgntype'] > 0) AND ($jid != 0)) {
+			if ($params['pgntype'] > 0) {
 				echo CLMContent::createPGNLink('runde', JText::_('ROUND_PGN_ALL'), array('saison' => $liga[0]->sid, 'liga' => $liga[0]->id, 'runde' => $runde_orig, 'dg' => $dg), 2 );
 			}  
 			// PDF
@@ -326,17 +327,27 @@ if (isset($paar[$y]->htln)) {  // Leere Begegnungen ausblenden
         <?php
         $edit=0;
         $medit=0;
-		?> <div class=paarung> <?php	if ($paar[$y]->hname != 'spielfrei' AND $paar[$y]->gname != 'spielfrei' AND $params['ReportForm'] != '0') {   // $jid != 0 AND 
+		?> <div class="paarung"> <?php	
+		if ($paar[$y]->hname != 'spielfrei' AND $paar[$y]->gname != 'spielfrei' AND $params['ReportForm'] != '0') {   // $jid != 0 AND 
 		?>
             <div class="run_admit"><a href="index.php?option=com_clm&view=runde&saison=<?php echo $liga[0]->sid; ?>&liga=<?php echo $liga[0]->id; ?>&amp;layout=paarung&amp;runde=<?php echo $runde_orig; ?>&amp;dg=<?php echo $dg; ?>&amp;paarung=<?php echo ($y + 1); ?>&amp;format=pdf"><label for="name" class="hasTip"><img  src="<?php echo CLMImage::imageURL('pdf_button.png'); ?>"  class="CLMTooltip" title="<?php echo JText::_('PAIRING_PDF'); ?>" /></label></a>
-			<?php } ?>
-		</div> <?php
+			</div> 
+			<?php }
         // Meldenden einfügen wenn Runde eingegeben wurde
         if (isset($einzel[$w]->paar) AND $einzel[$w]->paar == ($y+1)) { ?>
             <div class="run_admit"><label for="name" class="hasTip"><img  src="<?php echo CLMImage::imageURL('edit_f2.png'); ?>"  class="CLMTooltip" title="<?php echo JText::_('REPORTED_BY').' '.$summe[$z2]->name; ?>" /></label>
             </div>
-        <?php }
-        if (isset($paar[$y]->hpublished) AND $paar[$y]->hpublished == 1 AND $params['noBoardResults'] == '0') { ?>
+			<?php 
+			if (isset($paar[$y]->hpublished) AND $paar[$y]->hpublished == 1 AND $params['noBoardResults'] == '0') { 
+				// PGN für diese Paarung
+				if (($params['pgntype'] > 0)) { ?> 
+					<div class="run_admit"><a href="index.php?option=com_clm&view=runde&saison=<?php echo $liga[0]->sid; ?>&liga=<?php echo $liga[0]->id; ?>&amp;runde=<?php echo $runde_orig; ?>&amp;dg=<?php echo $dg; ?>&amp;paar=<?php echo ($y + 1); ?>&amp;pgn=3"><label for="name" class="hasTip"><img  src="<?php echo CLMImage::imageURL('pgn.gif'); ?>" width="16" height="19" class="CLMTooltip" title="<?php echo JText::_('ROUND_PGN_PAAR'); ?>" /></label></a>
+					</div> 
+				<?php }  	        
+		}}
+ 		echo "</div>"; 
+    
+		if (isset($paar[$y]->hpublished) AND $paar[$y]->hpublished == 1 AND $params['noBoardResults'] == '0') { ?>
         <a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $liga[0]->sid; ?>&liga=<?php echo $liga[0]->id; ?>&tlnr=<?php echo $paar[$y]->htln; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $paar[$y]->hname; ?></a>
         <?php } else {
         if (isset($paar[$y]->hname)){

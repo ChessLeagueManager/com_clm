@@ -26,6 +26,7 @@ $ -> Language fix or change
 # Anzeige: pdf-Darstellung großer Kreuztabellen nachgebessert
 # Rangliste im Rundenbericht: störende Warnung bei Sonderfall entfernt
 + Einzelturnier: Prüfung Rundentermin muss im Turnierzeitraum sein
+^ Teamwettbewerbe: Download pgn-Vorlagedatei ohne Benutzeranmeldung
 
 - - - - - 4.3.0 - [05-09-2025] - - - - - - - - - - - - - - - - - - - -
 + Views Rangliste, Tabelle, Rundenbericht: Reset nach Zeitintervall
