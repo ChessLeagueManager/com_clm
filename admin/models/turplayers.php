@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -112,12 +112,15 @@ class CLMModelTurPlayers extends JModelLegacy {
 			$mainframe = JFactory::getApplication();
 			$mainframe->enqueueMessage( JText::_('PLEASE_CORRECT_SNR'), 'warning' );
 		}
-		
+
+		// sum of entry fee paid
+		$query = 'SELECT SUM(a.amount_paid) as sum_fee FROM #__clm_turniere_tlnr as a'
+				. ' WHERE  a.turnier = '.$this->param['id'];
+		$this->_db->setQuery($query);
+		$ltlnr=$this->_db->loadObjectList();
+		$this->sum_fee=$ltlnr[0]->sum_fee;
 		
 	}
-	
-	
-	
 	function _sqlWhere() {
 	
 		// init

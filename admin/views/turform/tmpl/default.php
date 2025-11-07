@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -19,6 +19,8 @@ if (is_null($this->turnier->bem_int)) $this->turnier->bem_int = '';
 $clm_config = clm_core::$db->config();
 if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
 else $field_search = "inputbox";
+$turnier_entry_fee = $clm_config->turnier_entry_fee;
+
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -377,6 +379,18 @@ else $field_search = "inputbox";
 		<td class="paramlist_value">
 			<?php echo $this->form['tl']; ?>
 		</td>
+	  <?php if ($turnier_entry_fee == 1) { ?>
+		<td width="6%"class="paramlist_value">
+		</td>
+		<td width="17%" class="paramlist_key" title="<?php echo JText::_( 'TOURNAMENT_ENTRY_FEE_HINT' );?>">
+			<label for="entry_fee">
+				<?php echo JText::_( 'TOURNAMENT_ENTRY_FEE' ); ?>:
+			</label>
+		</td>
+		<td class="paramlist_value" title="<?php echo JText::_( 'TOURNAMENT_ENTRY_FEE_HINT' );?>">
+			<input class="inputbox" type="text" name="entry_fee" id="entry_fee" size="5" maxlength="6" value="<?php echo $this->turnier->entry_fee; ?>" />
+		</td>
+	  <?php } ?>
 	</tr>
 	<tr>
 	<td width="40%" class="paramlist_key">
@@ -413,6 +427,36 @@ else $field_search = "inputbox";
 		</td>
 	</tr>
 	
+	<tr>
+		<td width="40%" class="paramlist_key">
+			<label for="city" title="<?php echo JText::_( 'TOURNAMENT_CITY_HINT' ); ?>">
+				<?php echo JText::_( 'TOURNAMENT_CITY' ); ?>:
+			</label>
+		</td>
+		<td class="paramlist_value" title="<?php echo JText::_( 'TOURNAMENT_CITY_HINT' ); ?>">
+			<input class="inputbox" type="text" name="city" id="city" size="31" maxlength="60" value="<?php echo $this->turnier->city; ?>" />
+		</td>
+		<td width="3%"class="paramlist_value">
+		</td>
+		<td width="20%" class="paramlist_key">
+			<label for="FIDEcco">
+				<?php echo JText::_( 'TOURNAMENT_FIDECCO' ); ?>:
+			</label>
+		</td>
+		<td class="paramlist_value">
+			<input class="inputbox" type="text" name="FIDEcco" id="FIDEcco" size="3" maxlength="3" value="<?php echo $this->turnier->FIDEcco; ?>" />
+		</td>
+	</tr>
+	<tr>
+		<td width="40%" class="paramlist_key" title="<?php echo JText::_( 'TOURNAMENT_LOKAL_HINT' ); ?>">
+			<label for="lokal">
+				<?php echo JText::_( 'TOURNAMENT_LOKAL' ); ?>:
+			</label>
+		</td>
+		<td colspan="4" class="paramlist_value" title="<?php echo JText::_( 'TOURNAMENT_LOKAL_HINT' ); ?>">
+			<input class="inputbox" type="text" name="lokal" id="lokal" size="80" maxlength="200" value="<?php echo $this->turnier->lokal; ?>" />
+		</td>
+	</tr>
 	<tr>
 		<td width="30%" class="paramlist_key">
 			<label for="dateRegistration">

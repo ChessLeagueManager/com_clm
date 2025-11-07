@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -14,6 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 $clmAccess = clm_core::$access;
 $turParams = new clm_class_params($this->turnier->params);
 
+		$dview = clm_core::$load->request_string('dview','std');
 ?>
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 
@@ -25,6 +26,11 @@ $turParams = new clm_class_params($this->turnier->params);
 		<button onclick="this.form.submit();"><?php echo JText::_( 'GO' ); ?></button>
 		<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_vid').value='0';this.form.submit();"><?php echo JText::_( 'RESET' ); ?></button>
 			</td>
+		<?php if ($dview == 'entry_fee') { ?>	
+			<td nowrap="nowrap" align="center" width="100%">
+				<?php echo 'Standard-Startgeld:'.$this->turnier->entry_fee.' / aktuell eingezahlt:'.$this->sum_fee ?>
+			</td>
+		<?php } ?>	
 			<td nowrap="nowrap">
 				<?php
 					echo "&nbsp;&nbsp;&nbsp;".CLMForm::selectVereinTournament('filter_vid', $this->param['vid'], $this->turnier->id, TRUE);
@@ -70,6 +76,7 @@ $turParams = new clm_class_params($this->turnier->params);
 					<th width="20%">
 						<?php echo JHtml::_('grid.sort', JText::_('CLUB'), 'verein', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
+				<?php if ($dview == 'std') { ?>	
 					<th width="5%">
 						<?php echo JHtml::_('grid.sort', JText::_('PLAYER_ZPS'), 'twz', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
@@ -129,6 +136,17 @@ $turParams = new clm_class_params($this->turnier->params);
 							}
 						}
 					?>
+				<?php } if ($dview == 'entry_fee') { ?>	
+					<th width="20%">
+						<?php echo JHtml::_('grid.sort', JText::_('PLAYER_DATE_PAID'), 'date_paid', $this->param['order_Dir'], $this->param['order'] ); ?>
+					</th>
+					<th width="5%">
+						<?php echo JHtml::_('grid.sort', JText::_('PLAYER_AMOUNT_PAID'), 'amount_paid', $this->param['order_Dir'], $this->param['order'] ); ?>
+					</th>
+					<th width="20%">
+						<?php echo JHtml::_('grid.sort', JText::_('PLAYER_REASON'), 'reason', $this->param['order_Dir'], $this->param['order'] ); ?>
+					</th>
+				<?php } ?>	
 					
 					<th width="10%" nowrap="nowrap">
 						<?php echo JHtml::_('grid.sort', JText::_('JGRID_HEADING_ORDERING'), 'ordering', $this->param['order_Dir'], $this->param['order'] ); ?>
@@ -212,7 +230,7 @@ $turParams = new clm_class_params($this->turnier->params);
 						if (($this->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
 							$adminLink = new AdminLink();
 							$adminLink->view = "turplayeredit";
-							$adminLink->more = array('playerid' => $row->id);
+							$adminLink->more = array('playerid' => $row->id, 'dview' => $dview);
 							$adminLink->makeURL();
 							?>
 							<span class="editlinktip hasTip" title="<?php echo JText::_( 'PLAYER_EDIT' );?>">
@@ -229,6 +247,7 @@ $turParams = new clm_class_params($this->turnier->params);
 					<td align="left">
 						<?php echo $row->verein; ?>
 					</td>
+				<?php if ($dview == 'std') { ?>	
 					<td align="center">
 						<?php 
 						if ($row->zps > '') {
@@ -330,6 +349,17 @@ $turParams = new clm_class_params($this->turnier->params);
 						}
 						
 					?>
+				<?php } if ($dview == 'entry_fee') { ?>	
+					<td align="center">
+						<?php echo $row->date_paid; ?>
+					</td>
+					<td align="center">
+						<?php echo $row->amount_paid; ?>
+					</td>
+					<td align="center">
+						<?php echo $row->reason; ?>
+					</td>
+				<?php } ?>	
 					
 					<td class="order" width="10%">
 						<span><?php echo $this->pagination->orderUpIcon($i, true, 'orderup', 'Move Up', $this->param['order'] ); ?></span>
@@ -358,6 +388,7 @@ $turParams = new clm_class_params($this->turnier->params);
 		<input type="hidden" name="filter_order" value="<?php echo $this->param['order']; ?>" />
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $this->param['order_Dir']; ?>" />
 		<input type="hidden" name="id" value="<?php echo $this->param['id']; ?>" />
+		<input type="hidden" name="dview" value="<?php echo $dview; ?>" />
 		<?php echo JHtml::_( 'form.token' ); ?>
 
 </form>

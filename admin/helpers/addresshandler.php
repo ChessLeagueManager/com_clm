@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Florian Huber
  * @email huberflorian2@googlemail.com
 */
@@ -250,6 +250,19 @@ class AddressHandler
     }
 
     /**
+     * Updates the single tournament coordinates.
+     *
+     * @param string $coord The coordinates to update.
+     * @param int $rowId The row ID of the team.
+     * @return void
+     */
+    public function updateTournamentCoordinates($coord, $rowId)
+    {
+        $club=2;
+        $this->updateCoordinates($coord, $rowId, $club);
+    }
+
+    /**
      * Updates the coordinates of a club.
      *
      * @param string $coord The new coordinates of the club.
@@ -280,7 +293,10 @@ class AddressHandler
      *
      * @param string|null $coord The coordinates to update. If null or -1, the coordinates will be set to NULL.
      * @param int $rowId The ID of the row to update.
-     * @param int $club The club identifier. If 1, the table will be set to '#__clm_vereine', otherwise it will be set to '#__clm_mannschaften'.
+     * @param int $club The table identifier. 
+	 *   If 1, the table will be set to '#__clm_vereine', table of clubs
+     *   If 2, the table will be set to '#__clm_turnieree', table of single tournaments
+	 *   otherwise it will be set to '#__clm_mannschaften', table of teams
      * @return void
      */
     private function updateCoordinates($coord, $rowId, $club)
@@ -290,8 +306,10 @@ class AddressHandler
         if($club==1){
             $table = '#__clm_vereine';
         }
-        else
-        {
+        elseif ($club==2){
+            $table = '#__clm_turniere';
+        }
+        else {
             $table = '#__clm_mannschaften';
         }
         if(is_null($coord) or $coord==-1){

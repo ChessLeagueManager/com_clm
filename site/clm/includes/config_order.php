@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 defined('clm') or die('Restricted access');
 
@@ -19,7 +19,7 @@ $config_order = array(
 				array("club_list", 0, "fe_vereinsliste_vs","fe_vereinsliste_hpage","fe_vereinsliste_dwz","fe_vereinsliste_elo")),
 			array("tournaments", 0, "tourn_linkclub", "tourn_showtlok"),
 
-			array("singletournaments", 0, "tourn_ch_system",
+			array("singletournaments", 0, "turnier_entry_fee","tourn_ch_system",
 				array("singletournaments_credentials", 0, "tourn_ch_server","tourn_ch_url","tourn_ch_key","tourn_ch_ip","tourn_ch_mail")),
 			array("rounds", 0, "fe_runde_rang", "fe_runde_aktuell", "fe_runde_tln", "fe_runde_subuml"),
 			array("teams", 0, "man_manleader", "man_mail", "man_tel", "man_mobil", "man_spiellokal", "man_spielplan", "man_showdwz"),

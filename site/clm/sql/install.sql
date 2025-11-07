@@ -1,8 +1,8 @@
 --
 -- @ Chess League Manager (CLM) Component 
--- @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+-- @Copyright (C) 2008-2025 CLM Team.  All rights reserved
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
--- @link http://www.chessleaguemanager.de
+-- @link https://chessleaguemanager.org
 --
 -- phpMyAdmin SQL Dump
 -- version 4.1.12
@@ -936,6 +936,12 @@ CREATE TABLE IF NOT EXISTS `#__clm_swt_turniere` (
   `remiss` decimal(2,1) UNSIGNED DEFAULT 0.5,
   `nieder` decimal(2,1) UNSIGNED DEFAULT 0.0,
   `niederk` decimal(2,1) UNSIGNED DEFAULT 0.0,
+  `dateRegistration` date NOT NULL DEFAULT '1970-01-01' COMMENT 'Datum der Registrierung',
+  `entry_fee` decimal(6,2) DEFAULT NULL COMMENT 'Standard-Startgeld',
+  `FIDEcco` char(3) DEFAULT 'GER' COMMENT 'Föderation des Veranstalters',
+  `city` varchar(100) DEFAULT NULL COMMENT 'Ort des Turniers',
+  `lokal` varchar(200) NOT NULL DEFAULT '' COMMENT 'Spiellokal einschl. Anschrift',
+  `lokal_coord` text DEFAULT NULL COMMENT 'Geokoordinaten des Spiellokals',  
   PRIMARY KEY (`swt_tid`),
   KEY `published` (`published`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -1161,6 +1167,11 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere` (
   `nieder` decimal(2,1) UNSIGNED DEFAULT 0.0,
   `niederk` decimal(2,1) UNSIGNED DEFAULT 0.0,
   `dateRegistration` date NOT NULL DEFAULT '1970-01-01',
+  `entry_fee` decimal(6,2) DEFAULT NULL COMMENT 'Standard-Startgeld',
+  `FIDEcco` char(3) DEFAULT 'GER' COMMENT 'Föderation des Veranstalters',
+  `city` varchar(100) DEFAULT NULL COMMENT 'Ort des Turniers',
+  `lokal` varchar(200) NOT NULL DEFAULT '' COMMENT 'Spiellokal einschl. Anschrift',
+  `lokal_coord` text DEFAULT NULL COMMENT 'Geokoordinaten des Spiellokals',  
   PRIMARY KEY (`id`),
   KEY `published` (`published`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -1339,6 +1350,10 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere_tlnr` (
   `inofFIDEelo` smallint(4) UNSIGNED DEFAULT NULL,
   `Fide_Kf` smallint(4) UNSIGNED DEFAULT NULL,
   `perm_board` smallint(4) UNSIGNED DEFAULT NULL,
+  `waiting_list_nr` smallint(4) UNSIGNED DEFAULT NULL COMMENT 'Position auf der Warteliste',  
+  `date_paid` date DEFAULT NULL COMMENT 'Datum der Einzahlung',
+  `amount_paid` decimal(6,2) DEFAULT NULL COMMENT 'eingezahlter Betrag',
+  `reason` varchar(100) DEFAULT NULL COMMENT 'Grund der Differenz',
   PRIMARY KEY (`id`,`zps`,`mgl_nr`,`status`),
   KEY `turnier_snr` (`turnier`,`snr`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

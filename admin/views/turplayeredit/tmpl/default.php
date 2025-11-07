@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -16,7 +16,33 @@ defined('_JEXEC') or die('Restricted access');
 		$param_teamranking = $turParams->get('teamranking', 0);
 		$param_import_source = $turParams->get('import_source', 0);
 		$param_eloanalysis = $turParams->get('optionEloAnalysis', 0);
+		
+		$dview = clm_core::$load->request_string('dview','std');
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		$turnier_entry_fee = $clm_config->turnier_entry_fee;
+		if ($turnier_entry_fee == 1 AND $this->turnier->entry_fee > 0) $sfee = 1; else $sfee = 0;
 ?>
+
+	<script language="javascript" type="text/javascript">
+
+		 Joomla.submitbutton = function (pressbutton) { 		
+			var form = document.adminForm;
+			if (pressbutton == 'cancel') {
+				Joomla.submitform( pressbutton );
+				return;
+			}
+			// do field validation
+			if ((<?php echo $sfee; ?> == 1 ) && (form.amount_paid.value > 0) 
+				&& (form.date_paid.value <= "1970-01-01") ) {
+				alert( "Betrag ohne Bezahldatum ist nicht zulässig" );
+			} else if ((<?php echo $sfee; ?> == 1 ) && (<?php echo $this->turnier->entry_fee; ?> != form.amount_paid.value) 
+				&& (form.reason.value == "") ) {
+				alert( "Betrag weicht ab - Grund fehlt" );
+			} else {	Joomla.submitform( pressbutton ); }
+		}
+
+		</script>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 
@@ -98,6 +124,8 @@ defined('_JEXEC') or die('Restricted access');
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('FIDE_ELO'); ?>:</td>
 				<td><input class="inputbox" type="text" name="FIDEelo" id="FIDEelo" size="4" maxlength="4" value="<?php echo $this->player->FIDEelo; ?>" /></td>
+				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_TITLE'); ?>:</td>
+				<td><input class="inputbox" type="text" name="titel" id="titel" size="3" maxlength="3" value="<?php echo $this->player->titel; ?>" /></td>
 			</tr>
 			<?php if ($param_eloanalysis == 1) { ?>
 				<tr>
@@ -107,10 +135,6 @@ defined('_JEXEC') or die('Restricted access');
 					<td><input class="inputbox" type="text" name="FIDEcco" id="FIDEcco" size="3" maxlength="3" value="<?php echo $this->player->FIDEcco; ?>" /></td>
 				</tr>
 			<?php } ?>
-			<tr>
-				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_TITLE'); ?>:</td>
-				<td><input class="inputbox" type="text" name="titel" id="titel" size="3" maxlength="3" value="<?php echo $this->player->titel; ?>" /></td>
-			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_SEX'); ?>:</td>
 				<td class="paramlist_value">
@@ -126,8 +150,6 @@ defined('_JEXEC') or die('Restricted access');
 					echo JHtml::_('select.genericlist', $optionlist, 'geschlecht', 'class="inputbox"', 'id', 'name', $this->player->geschlecht);
 					?>
 				</td>
-			</tr>
-			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_BIRTH_YEAR'); ?>:</td>
 				<td><input class="inputbox" type="text" name="birthYear" id="birthYear" size="4" maxlength="4" value="<?php echo $this->player->birthYear; ?>"/></td>
 			</tr>
@@ -137,9 +159,7 @@ defined('_JEXEC') or die('Restricted access');
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_EMAIL'); ?>:</td>
-				<td><input class="inputbox" type="text" name="email" id="email" size="50" maxlength="60" value="<?php echo $this->player->email; ?>" /></td>
-			</tr>
-			<tr>
+				<td><input class="inputbox" type="text" name="email" id="email" size="40" maxlength="60" value="<?php echo $this->player->email; ?>" /></td>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_TEL_NO'); ?>:</td>
 				<td><input class="inputbox" type="text" name="tel_no" id="tel_no" size="30" maxlength="30" value="<?php echo $this->player->tel_no; ?>" /></td>
 			</tr>
@@ -154,7 +174,34 @@ defined('_JEXEC') or die('Restricted access');
 		</fieldset>
 	</div>
 
+  <?php // Detail-View wechseln, nur wenn Startgeldverwaltung aktiv ist
+   if (($turnier_entry_fee == 1) AND !is_null($this->turnier->entry_fee) AND ($this->turnier->entry_fee > 0)) { ?>
 
+	<div class="col width-50">
+		<fieldset class="adminform">
+		<br>
+		<legend><?php echo JText::_( 'PLAYER_ENTRY_FEE'); ?><span style="font-size:80%"> (Standard hier: <?php echo $this->turnier->entry_fee; ?>)</span></legend>
+		
+		<table class="admintable">
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_DATE_PAID'); ?>:</td>
+				<td><?php echo CLMForm::calendar($this->player->date_paid, "date_paid", "date_paid", '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?></td>
+			</tr>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_AMOUNT_PAID'); ?>:</td>
+				<td><input class="inputbox" type="text" name="amount_paid" id="amount_paid" size="10" maxlength="10" value="<?php echo $this->player->amount_paid; ?>" /></td>
+			</tr>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_REASON'); ?>:</td>
+				<td><input class="inputbox" type="text" name="reason" id="reason" size="40" maxlength="40" value="<?php echo $this->player->tel_no; ?>" /></td>
+			</tr>
+		
+		</table>
+		
+		</fieldset>
+	</div>
+  <?php } ?>
+  
 	<div class="col width-50">
 		<fieldset class="adminform">
 		<br>
@@ -221,6 +268,7 @@ defined('_JEXEC') or die('Restricted access');
 	<input type="hidden" name="turnierid" value="<?php echo $this->player->turnier; ?>" />
 	<input type="hidden" name="controller" value="turplayeredit" />
 	<input type="hidden" name="task" value="" />
+	<input type="hidden" name="dview" value="<?php echo $dview; ?>" />
 	<?php echo JHtml::_( 'form.token' ); ?>
 
 </form>

@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 defined('clm') or die('Restricted access');
 // aus clm_function_make_valid entnommen
@@ -171,4 +171,5 @@ $config["mail_smtp_host"]=array(150,7,"localhost",null);
 $config["mail_smtp_port"]=array(151,0,25,null);
 $config["mail_smtp_helo"]=array(152,7,"localhost",null);
 $config["mail_smtp_autotls"]=array(153,9,0,array(0,1));
+$config["turnier_entry_fee"]=array(153,9,0,array(0,1));
 ?>

@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -15,6 +15,10 @@ class CLMViewTurPlayers extends JViewLegacy {
 
 	function display($tpl = NULL) {
 
+		$dview = clm_core::$load->request_string('dview','std');
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		$turnier_entry_fee = $clm_config->turnier_entry_fee;
 		
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
 		$model =   $this->getModel();
@@ -90,6 +94,14 @@ class CLMViewTurPlayers extends JViewLegacy {
 				JToolBarHelper::custom( 'player_decode', 'copy.png', 'copy_f2.png', JText::_('DECODE_PLAYERS'), false);
 				JToolBarHelper::custom( 'player_decode_copy', 'copy.png', 'copy_f2.png', JText::_('DECODE_SEASON'), false);
 			}
+			// Detail-View wechseln, nur wenn Startgeldverwaltung aktiv ist
+			if (($turnier_entry_fee == 1) AND !is_null($model->turnier->entry_fee) AND ($model->turnier->entry_fee > 0)) {
+				if ($dview == 'std') {
+					JToolBarHelper::custom( 'view_entry_fee', 'forward.png', 'forward_f2.png', JText::_('VIEW_ENTRY_FEE'), false);
+				} else {
+					JToolBarHelper::custom( 'view_std', 'forward.png', 'forward_f2.png', JText::_('VIEW_STD'), false);
+				}
+			}
 		}
 		
 		JToolBarHelper::cancel();
@@ -106,6 +118,7 @@ class CLMViewTurPlayers extends JViewLegacy {
 		$this->turnier = $model->turnier;
 		
 		$this->turplayers = $model->turPlayers;
+		$this->sum_fee = $model->sum_fee;
 
 		$this->param = $model->param;
 

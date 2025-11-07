@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -38,15 +38,16 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		$turnierid = clm_core::$load->request_int('turnierid');
 		// Task
 		$task = clm_core::$load->request_string('task');
+		$dview = clm_core::$load->request_string('dview','std');
 
 		$adminLink = new AdminLink();
 		if ($task == 'apply') {
 			// Weiterleitung bleibt im Formular
-			$adminLink->more = array('playerid' => $playerid);
+			$adminLink->more = array('playerid' => $playerid, 'dview' => $dview);
 			$adminLink->view = "turplayeredit";
 		} else {
 			// Weiterleitung in Liste
-			$adminLink->more = array('id' => $turnierid);
+			$adminLink->more = array('id' => $turnierid, 'dview' => $dview);
 			$adminLink->view = "turplayers"; // WL in Liste
 		}
 		$adminLink->makeURL();
@@ -106,6 +107,9 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		if (is_null($row->FIDEid) OR !is_numeric($row->FIDEid)) $row->FIDEid = 0;
 		if (is_null($row->birthYear) OR !is_numeric($row->birthYear)) $row->birthYear = '0000';
 		if (is_null($row->s_punkte) OR !is_numeric($row->s_punkte)) $row->s_punkte = 0.0;
+		if (($row->date_paid == '') OR ($row->date_paid == '1910-01-01')) $row->date_paid = NULL;
+		if ($row->amount_paid == '') $row->amount_paid = NULL;
+		
 		if (!$row->check($post)) {
 			$this->app->enqueueMessage($row->getError(),'error');
 			return false;
@@ -139,7 +143,7 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 
 		$adminLink = new AdminLink();
 		$adminLink->view = "turplayers";
-		$adminLink->more = array('id' => $turnierid);
+		$adminLink->more = array('id' => $turnierid, 'dview' => $dview);
 		$adminLink->makeURL();
 		$this->app->redirect( $adminLink->url );
 		

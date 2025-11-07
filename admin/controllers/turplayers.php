@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -51,6 +51,35 @@ class CLMControllerTurPlayers extends JControllerLegacy {
 		$adminLink = new AdminLink();
 		$adminLink->view = "turplayerform";
 		$adminLink->more = array('id' => $id);
+		$adminLink->makeURL();
+		
+		$this->app->redirect( $adminLink->url );
+	
+	}
+
+	// Weiterleitung -> Standard-View
+	function view_std() {
+		
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+		
+		$adminLink = new AdminLink();
+		$adminLink->view = "turplayers";
+		$adminLink->more = array('id' => $id, 'dview' => 'std');
+		$adminLink->makeURL();
+		
+		$this->app->redirect( $adminLink->url );
+	
+	}
+	// Weiterleitung -> Startgeld-View
+	function view_entry_fee() {
+		
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+		
+		$adminLink = new AdminLink();
+		$adminLink->view = "turplayers";
+		$adminLink->more = array('id' => $id, 'dview' => 'entry_fee');
 		$adminLink->makeURL();
 		
 		$this->app->redirect( $adminLink->url );

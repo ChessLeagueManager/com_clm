@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -13,6 +13,7 @@ defined('_JEXEC') or die();
 
 jimport('joomla.application.component.model');
 jimport( 'joomla.html.parameter' );
+require_once JPATH_COMPONENT_ADMINISTRATOR. '/helpers/addresshandler.php';
 
 class CLMModelTurnier_Info extends JModelLegacy {
 	
@@ -45,7 +46,14 @@ class CLMModelTurnier_Info extends JModelLegacy {
 			;
 		$this->_db->setQuery( $query );
 		$this->turnier = $this->_db->loadObject();
-
+		
+		$result = array();
+		$result[0] = $this->turnier;
+		//Adress Handling
+		$addressHandler = new AddressHandler();
+		$addressHandler->queryLocation($result,1);
+		$this->turnier = $result[0];
+	
 		// Ausrichter
 		$this->turnier->organame = clm_core::$load->zps_to_district($this->turnier->vereinZPS);
 

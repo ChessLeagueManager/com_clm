@@ -27,6 +27,8 @@ $ -> Language fix or change
 # Rangliste im Rundenbericht: störende Warnung bei Sonderfall entfernt
 + Einzelturnier: Prüfung Rundentermin muss im Turnierzeitraum sein
 ^ Teamwettbewerbe: Download pgn-Vorlagedatei ohne Benutzeranmeldung
++ Einzelturniere: Startgeldverwaltung möglich
++ Einzelturniere: Kartenanzeige Spiellokal
 
 - - - - - 4.3.0 - [05-09-2025] - - - - - - - - - - - - - - - - - - - -
 + Views Rangliste, Tabelle, Rundenbericht: Reset nach Zeitintervall

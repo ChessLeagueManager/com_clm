@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,11 +12,20 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+$arbiter	= $this->arbiter;
+// Konfigurationsparameter auslesen
+$config 			= clm_core::$db->config();
+$googlemaps   	= $config->googlemaps;
+$googlemaps_ver   	= $config->googlemaps_ver;
+$maps_zoom			= $config->maps_zoom;
+
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
-$arbiter	= $this->arbiter;
-echo "<div id='clm'><div id='turnier_info'>";
+// Load functions for map
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'geo_functions.php');
+
+echo '<div="clm"><div id="turnier_info">';
 
 // Konfigurationsparameter auslesen
 $itemid 		= clm_core::$load->request_int( 'Itemid' );
@@ -294,7 +303,54 @@ if ( $this->turnier->published == 0) {
 				<td><?php echo $aaca; ?></td>
 			</tr>
 	<?php  } } ?>
-	
+	<?php
+	if ($this->turnier->lokal > '' ) {
+		$lat = $this->turnier->lokal_coord_lat;
+		$lon = $this->turnier->lokal_coord_long;
+		if ($this->turnier->lokal_coord == '' OR ($lat == 0 AND $lon == 0)) {
+		?>
+			<tr>
+				<td align="left" width="100"><?php echo JText::_('CLUB_LOCATION'); ?>:</td>
+				<td><?php echo $this->turnier->lokal; ?></td>
+			</tr>
+		<?php } else { ?>
+			<tr>
+				<td align="left" width="100"><?php echo JText::_('CLUB_LOCATION'); ?>:</td>
+				<td>
+		<?php	$spiellokal = explode(",", $this->turnier->lokal); 
+			if ($spiellokal[0] ==! false ) $loc_text = $spiellokal[0]; else $loc_text = '';
+			if (isset($spiellokal[1])) $loc_text .= '<br>'.$spiellokal[1]; 
+			if (isset($spiellokal[2])) $loc_text .= '<br>'.$spiellokal[2]; 
+			if (isset($spiellokal[3])) $loc_text .= '<br>'.$spiellokal[3]; 
+			$img_marker = clm_core::$load->gen_image_url("table/marker-icon");
+		?>
+	<div style="position:relative;">
+		<div id="mapdiv1" class="map" style="position:absolute;top:0;right:0;float:right;width:100%;height:300px;text-align:center;"></div>
+		<?php if (($lat != 0 || $lon != 0) && $googlemaps_ver == 3) { ?>
+			<div id="madinfo" style="position:absolute;top:0;right:0;float:right;z-index:1000;width:80%;height:200px;text-align:center;"><span style="font-weight: bold; background-color: #FFF"><?php echo $loc_text; ?></span></div>
+		<?php } ?>
+	</div>
+ 
+	<script language="JavaScript">
+		var Lat=<?php printf( '%0.7f', $lat ); ?>;
+		var Lon=<?php printf( '%0.7f', $lon ); ?>;
+		if (Lat == 0 && Lon == 0) {
+		} else {
+			<?php if ($googlemaps_ver == 1) {?>
+				var popupText = `<?php printf($loc_text); ?>`;
+				createLeafletMap(Lat, Lon, popupText, <?php echo $maps_zoom; ?>);
+			<?php } ?>
+			<?php if ($googlemaps_ver == 3) {?>
+				createOSMap(Lat, Lon, `<?php echo $img_marker; ?>`, <?php echo $maps_zoom; ?>);
+			<?php } ?>
+		}
+	</script>
+		<div id="mapdiv0" class="map" style="width:100%;height:300px;"></div>																	   
+		</td></tr>
+		<?php } ?>		
+			
+		<?php } ?>		
+
 	</table>
 
 	<?php
