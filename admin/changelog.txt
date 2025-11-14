@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 4.3.1 - [xx-xx-2025] - - - - - - - - - - - - - - - - - - - -
+- - - - - 4.3.1 - [14-11-2025] - - - - - - - - - - - - - - - - - - - -
 ^ Umstellung der Links von chessleaguemanager.de auf chessleaguemanager.org
 + Einzelturniere: Feinwertung niedrige eigene TWZ
 + Teamwettbewerbe: freie Mail an alle MF einer Staffel

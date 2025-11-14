@@ -140,6 +140,7 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		
 		// turnierid
 		$turnierid = clm_core::$load->request_int('turnierid');
+		$dview = clm_core::$load->request_string('dview','std');
 
 		$adminLink = new AdminLink();
 		$adminLink->view = "turplayers";
