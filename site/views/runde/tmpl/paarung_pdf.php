@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -215,6 +215,7 @@ $pdf->SetFont('Times','B',$date_font+4);
 			$pdf->Cell($breite0,$zelle+1,'','LTB',0);
 //			$pdf->Cell($breite1,$zelle+1,clm_core::$load->utf8decode($paar[$y]->hname),'TB',0,'L'); 
 			$pdf->Cell($breite1,$zelle+1,clm_core::$load->utf8decode($paar[$y]->hname),'TB',0,'R'); 
+			$hlokal = $paar[$y]->hlokal;
 	} else $pdf->Cell($breite1+7,$zelle+1,'',0,0);
 
 	$pdf->Cell(16,$zelle+1,' - ','TB',0,'C');
@@ -291,10 +292,14 @@ $pdf->SetFont('Times','',$date_font);
 // Kommentar zur Paarung
 	$pdf->SetX($xxm-5);
 	$pdf->Cell($breite,2,'',0,1,'C');
+	if (isset($hlokal)) {
+		if (is_null($hlokal)) $hlokal = '';
+		$pdf->SetX($xxm-5);
+		$pdf->Cell($breite+5,6,clm_core::$load->utf8decode('Spiellokal: '.$hlokal),0,1,'L');
+	}
 	$pdf->SetX($xxm-5);
 	$pdf->Cell($breite+5,6,clm_core::$load->utf8decode(JText::_('PAIRING_COMMENT')),0,1,'L');
 	$pdf->SetX($xxm-5);
-	$pdf->Ln();	
 	$pdf->Ln();	
 	
 // Unterschrift	
