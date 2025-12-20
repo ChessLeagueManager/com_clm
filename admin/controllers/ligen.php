@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,8 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+// Include the AddressHandler class
+require_once JPATH_COMPONENT_ADMINISTRATOR. '/helpers/addresshandler.php';
 
 class CLMControllerLigen extends JControllerLegacy
 {
@@ -217,10 +219,24 @@ function saveIt($apply=false)
 	}
 	}
 	$row->liga_mt	= 0; //mtmt 0 = liga  1 = mannschaftsturnier
+	if ($row->dateStart < '1970-01-01') $row->dateStart = '1970-01-01';
+	if ($row->dateEnd < '1970-01-01') $row->dateEnd = '1970-01-01';
 	// save the changes
 	if (!$row->store()) {
 		$mainframe->enqueueMessage($row->getError(), 'error');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
+	}
+	else {
+		if ($row->lokal > '') {
+			//Geometry points need to be safed manually		
+			$addressHandler = new AddressHandler();
+			$lokal_coord = $addressHandler->convertAddress($row->lokal);
+			$addressHandler->updateMTournamentCoordinates($lokal_coord, $row->id);
+	
+			if(is_null($lokal_coord)){
+				$mainframe->enqueueMessage(JTEXT::_('WARNING_ADDRESS_LOOKUP'), 'warning');
+			}
+		}
 	}
 
 	$rc = clm_core::$api->db_checkin('liga',$row->id);

@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -100,7 +100,9 @@ class CLMViewMTurniere
 	if (!isset($row->params['firstView']))  {   //Standardbelegung
 		$row->params['firstView'] = '0'; }
 	if (!isset($row->params['time_control']))  {   //Standardbelegung
-		$row->params['time_control'] = ''; }
+		$row->params['time_control'] = '0'; }
+	if ($row->params['time_control'] <= ' ')  {   //falls leer
+		$row->params['time_control'] = '0'; }
 	if (!isset($row->params['waiting_period']))  {   //Standardbelegung
 		$row->params['waiting_period'] = ''; }
 	if (!isset($row->params['pseudo_dwz']))  {   //Standardbelegung
@@ -301,7 +303,25 @@ class CLMViewMTurniere
 	</tr>
 	<input type="hidden" name="rang" value="0" />
 	<?php } ?>
-
+	
+	<tr>
+        <td width="40" class="key">
+           	<label for="dateStart">
+               	<?php echo JText::_( 'LEAGUE_STARTDATE' ); ?> 
+           	</label>
+        </td>
+        <td colspan="2">
+			<?php echo CLMForm::calendar($row->dateStart, "dateStart", "dateStart", '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
+        </td>
+        <td width="40" class="key" title="<?php echo JText::_( 'LEAGUE_ENDDATE_HINT' ); ?>">
+           	<label for="dateEnd">
+               	<?php echo JText::_( 'LEAGUE_ENDDATE' ); ?> 
+           	</label>
+        </td>
+        <td>
+			<?php echo CLMForm::calendar($row->dateEnd, "dateEnd", "dateEnd", '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
+        </td>
+	</tr>
 	<tr>
 	<td nowrap="nowrap">
 	<label for="teil"><?php echo JText::_( 'LEAGUE_TEAMS' ); ?></label>
@@ -549,13 +569,6 @@ class CLMViewMTurniere
 				<?php echo JHtml::_('select.booleanlist', 'params[optionEloAnalysis]', 'class="inputbox"', $row->params['optionEloAnalysis']); ?>
 			</fieldset>
 		</td>
-	</tr>
-	<tr>
-		<td nowrap="nowrap">
-		<label for="params[pseudo_dwz]"><?php echo JText::_( 'LEAGUE_PSEUDO_DWZ' ); ?></label>
-		</td><td colspan="2">
-		<input class="inputbox" type="text" name="params[pseudo_dwz]" id="params-pseudo_dwz" size="4" maxlength="4" value="<?php echo $row->params['pseudo_dwz']; ?>" />
-		</td>
 		<td class="paramlist_key">
 			<?php echo JText::_('ANNUL_PROC'); ?>:
 		</td>
@@ -574,15 +587,58 @@ class CLMViewMTurniere
 		</td>
 	</tr>
 	<tr>
-		<td width="20%" nowrap="nowrap">
-			<label for="params[time_control]"><?php echo JText::_( 'LEAGUE_TIME_CONTROL' ); ?></label>
+		<td nowrap="nowrap">
+		<label for="params[pseudo_dwz]"><?php echo JText::_( 'LEAGUE_PSEUDO_DWZ' ); ?></label>
 		</td><td colspan="2">
-		<input class="inputbox" type="text" name="params[time_control]" id="params-time_control" size="36" maxlength="120" value="<?php echo $row->params['time_control']; ?>" />
+		<input class="inputbox" type="text" name="params[pseudo_dwz]" id="params-pseudo_dwz" size="4" maxlength="4" value="<?php echo $row->params['pseudo_dwz']; ?>" />
 		</td>
 		<td nowrap="nowrap">
 			<label for="params[waiting_period]"><?php echo JText::_( 'LEAGUE_WAITING_PERIOD' ); ?></label>
-		</td><td colspan="2">
-		<input class="inputbox" type="text" name="params[waiting_period]" id="params-waiting_period" size="15" maxlength="50" value="<?php echo $row->params['waiting_period']; ?>" />
+		</td>
+		<td colspan="2">
+			<input class="inputbox" type="text" name="params[waiting_period]" id="params-waiting_period" size="15" maxlength="50" value="<?php echo $row->params['waiting_period']; ?>" />
+		</td>
+	</tr>
+	<tr>
+		<td width="20%" nowrap="nowrap">
+			<label for="params[time_control]"><?php echo JText::_( 'LEAGUE_TIME_CONTROL' ); ?></label>
+		</td>
+		<td colspan="4">
+			<?php if (is_numeric($row->params['time_control'])) {
+					echo CLMForm::selectTimeControl('params[time_control]', $row->params['time_control']);
+				  } else { ?>
+					<input class="inputbox" type="text" name="params[time_control]" id="params-time_control" size="36" maxlength="120" value="<?php echo $row->params['time_control']; ?>" />
+				  <?php } ?>		  
+		</td>
+	</tr>
+	<tr>
+		<td width="40%" class="paramlist_key">
+			<label for="city" title="<?php echo JText::_( 'TOURNAMENT_CITY_HINT' ); ?>">
+				<?php echo JText::_( 'TOURNAMENT_CITY' ); ?>:
+			</label>
+		</td>
+		<td class="paramlist_value" title="<?php echo JText::_( 'TOURNAMENT_CITY_HINT' ); ?>">
+			<input class="inputbox" type="text" name="city" id="city" size="31" maxlength="60" value="<?php echo $row->city; ?>" />
+		</td>
+		<td width="3%"class="paramlist_value">
+		</td>
+		<td width="20%" class="paramlist_key">
+			<label for="FIDEcco">
+				<?php echo JText::_( 'TOURNAMENT_FIDECCO' ); ?>:
+			</label>
+		</td>
+		<td class="paramlist_value">
+			<input class="inputbox" type="text" name="FIDEcco" id="FIDEcco" size="3" maxlength="3" value="<?php echo $row->FIDEcco; ?>" />
+		</td>
+	</tr>
+	<tr>
+		<td width="40%" class="paramlist_key" title="<?php echo JText::_( 'TOURNAMENT_LOKAL_HINT' ); ?>">
+			<label for="lokal">
+				<?php echo JText::_( 'TOURNAMENT_LOKAL' ); ?>:
+			</label>
+		</td>
+		<td colspan="4" class="paramlist_value" title="<?php echo JText::_( 'TOURNAMENT_LOKAL_HINT' ); ?>">
+			<input class="inputbox" type="text" name="lokal" id="lokal" size="80" maxlength="200" value="<?php echo $row->lokal; ?>" />
 		</td>
 	</tr>
 		</table>

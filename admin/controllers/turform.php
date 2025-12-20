@@ -112,7 +112,7 @@ class CLMControllerTurForm extends JControllerLegacy {
 		// Parameter
 		$paramsStringArray = array();
 		foreach ($row->params as $key => $value) {
-			if ($key == 'import_source') {
+			if (($key == 'import_source') OR ($key == 'time_control') OR ($key == 'waiting_period')) {
 				$paramsStringArray[] = $key.'='.$value;
 			} else {
 				$paramsStringArray[] = $key.'='.intval($value);

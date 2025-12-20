@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -57,6 +57,30 @@ class CLMForm {
 		
 //		return JHTML::_('select.genericlist', $saisonlist, $name, 'class="js-example-basic-single" style="width:350px" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
 		return JHTML::_('select.genericlist', $saisonlist, $name, 'class="'.$field_search.'" style="width:350px" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+	
+	}
+	
+	public static function selectTimeControl ($name, $value = 0, $filter = FALSE, $only = true) {
+	
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
+
+		$_db				= JFactory::getDBO();
+		
+		$timecontrollist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_TIMECONTROL' )), 'id', 'name' );
+		if ($only === true) 
+			$query = 'SELECT id, name FROM #__clm_zeitmodus WHERE published = 1 ORDER BY ordering';
+		elseif ($only > 0 AND $only < 1000)
+			$query = 'SELECT id, name FROM #__clm_zeitmodus WHERE id = '.$only;
+		else 
+			$query = 'SELECT id, name FROM #__clm_zeitmodus';
+		$_db->setQuery($query);
+		$timecontrollist		= array_merge( $timecontrollist, $_db->loadObjectList() );
+		
+		return JHTML::_('select.genericlist', $timecontrollist, $name, 'class="js-example-basic-single" style="width:550px" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+//		return JHTML::_('select.genericlist', $timecontrollist, $name, 'class="'.$field_search.'" style="width:550px" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
 	
 	}
 	

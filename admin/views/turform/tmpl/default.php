@@ -310,7 +310,7 @@ $turnier_entry_fee = $clm_config->turnier_entry_fee;
 		<td width="30%" class="paramlist_key">
 			<?php echo JText::_('OPTION_AUTODWZ'); ?>:
 		</td>
-		<td class="paramlist_value">
+		<td width="20%" class="paramlist_value">
 			<?php 
 			$options = array();
 			$options[0] = JText::_('OPTION_AUTODWZ_0');
@@ -321,8 +321,27 @@ $turnier_entry_fee = $clm_config->turnier_entry_fee;
 				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
 			}
 //			echo JHtml::_('select.genericlist', $optionlist, 'params[autoDWZ]', 'class="js-example-basic-single" size="1" style="width:350px"', 'id', 'name', $turParams->get('autoDWZ', 0));
-			echo JHtml::_('select.genericlist', $optionlist, 'params[autoDWZ]', 'class="'.$field_search.'" size="1" style="width:350px"', 'id', 'name', $turParams->get('autoDWZ', 0));
+			echo JHtml::_('select.genericlist', $optionlist, 'params[autoDWZ]', 'class="'.$field_search.'" size="1" style="width:300px"', 'id', 'name', $turParams->get('autoDWZ', 0));
 			?>
+		</td>
+		<td nowrap="nowrap">
+			<label for="params[waiting_period]"><?php echo JText::_( 'LEAGUE_WAITING_PERIOD' ); ?></label>
+<!--		</td><td colspan="1"> -->
+		<input class="inputbox" type="text" name="params[waiting_period]" id="params[waiting_period]" size="7" maxlength="9" value="<?php echo $turParams->get('waiting_period',''); ?>" />
+		</td>
+	</tr>
+	<tr>
+		<td width="30%" class="paramlist_key">
+			<label for="params[time_control]">
+				<?php echo JText::_( 'LEAGUE_TIME_CONTROL' ); ?>:
+			</label>
+	</td>
+		<td colspan="3" class="paramlist_value">
+			<?php if (is_numeric($turParams->get('time_control','0'))) {
+					echo $this->form['timecontrol']; 
+					} else { ?>
+					<input class="inputbox" type="text" name="params[time_control]" id="params[time_control]" size="7" maxlength="9" value="<?php echo $turParams->get('time_cobtrol',''); ?>" />
+				  <?php } ?>		  
 		</td>
 	</tr>
 

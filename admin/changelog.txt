@@ -12,6 +12,10 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 4.3.2 - [xx-xx-2025] - - - - - - - - - - - - - - - - - - - -
++ Bedenkzeit: neue Tabelle und Einbau bei Einzel- und Teamwettbewerben
++ Teamwettbewerbe: neue Felder für Turnierstart und -ende sowie Ort
+
 - - - - - 4.3.1 - [14-11-2025] - - - - - - - - - - - - - - - - - - - -
 ^ Umstellung der Links von chessleaguemanager.de auf chessleaguemanager.org
 + Einzelturniere: Feinwertung niedrige eigene TWZ

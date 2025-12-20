@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -46,6 +46,10 @@ class CLMModelTurForm extends JModelLegacy {
 		
 		// Saison
 		$this->form['sid']	= CLMForm::selectSeason('sid', $this->turnier->sid);
+	
+		// Bedenkzeit
+		$turParams = new clm_class_params($this->turnier->params);
+		$this->form['timecontrol']	= CLMForm::selectTimeControl('params[time_control]', $turParams->get('time_control', 0));
 	
 		// Modus
 		$this->form['modus']	= CLMForm::selectModus('typ', $this->turnier->typ, false, ' onChange="showFormRoundscount()"');

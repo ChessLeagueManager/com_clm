@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 defined('clm') or die('Restricted access');
 // API mit Rechten versehen
@@ -90,6 +90,9 @@ $rights["db_player_check"]=array(); // Prüfung, ob spieler im Spielbetrieb vera
 $rights["mail_send"]=array(); // Mailversand
 $rights["db_syn_player_block"]=array(); // Synchronisation Sperrkennzeichen
 $rights["db_checkin"]=array(); // Checkin auf NULL-Werte
+$rights["db_time_control"]=array(); // Aufbereitung Bedenkzeit
+$rights["db_turplayersliste"]=array();
+$rights["db_time_controlliste"]=array();
 $rights["test_print"]=array();
 //************************
 // Turniere

@@ -173,6 +173,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_liga` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL DEFAULT '',
   `sid` mediumint(3) UNSIGNED DEFAULT NULL,
+  `dateStart` date NOT NULL DEFAULT '1970-01-01' COMMENT 'Startdatum',
+  `dateEnd` date NOT NULL DEFAULT '1970-01-01' COMMENT 'Endedatum',
   `catidAlltime` smallint(6) UNSIGNED NOT NULL DEFAULT 0,
   `catidEdition` smallint(6) UNSIGNED NOT NULL DEFAULT 0,
   `teil` mediumint(5) UNSIGNED DEFAULT NULL,
@@ -215,6 +217,10 @@ CREATE TABLE IF NOT EXISTS `#__clm_liga` (
   `ersatz_regel` tinyint(1) UNSIGNED DEFAULT 0,
   `anzeige_ma` tinyint(1) UNSIGNED DEFAULT 0,
   `params` text NOT NULL,
+  `FIDEcco` char(3) DEFAULT 'GER' COMMENT 'Föderation des Veranstalters',
+  `city` varchar(100) DEFAULT NULL COMMENT 'Ort des Turniers',
+  `lokal` varchar(200) NOT NULL DEFAULT '' COMMENT 'Spiellokal einschl. Anschrift',
+  `lokal_coord` text DEFAULT NULL COMMENT 'Geokoordinaten des Spiellokal', 
   PRIMARY KEY (`id`),
   KEY `published` (`published`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -657,6 +663,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_swt_liga` (
   `lid` int(11) DEFAULT NULL,
   `name` varchar(100) NOT NULL DEFAULT '',
   `sid` mediumint(3) UNSIGNED DEFAULT NULL,
+  `dateStart` date NOT NULL DEFAULT '1970-01-01' COMMENT 'Startdatum',
+  `dateEnd` date NOT NULL DEFAULT '1970-01-01' COMMENT 'Endedatum',
   `catidAlltime` smallint(6) UNSIGNED NOT NULL DEFAULT 0,
   `catidEdition` smallint(6) UNSIGNED NOT NULL DEFAULT 0,
   `teil` mediumint(5) UNSIGNED DEFAULT NULL,
@@ -699,6 +707,10 @@ CREATE TABLE IF NOT EXISTS `#__clm_swt_liga` (
   `ersatz_regel` tinyint(1) UNSIGNED DEFAULT 0,
   `anzeige_ma` tinyint(1) UNSIGNED DEFAULT 0,
   `params` text NOT NULL,
+  `FIDEcco` char(3) DEFAULT 'GER' COMMENT 'Föderation des Veranstalters',
+  `city` varchar(100) DEFAULT NULL COMMENT 'Ort des Turniers',
+  `lokal` varchar(200) NOT NULL DEFAULT '' COMMENT 'Spiellokal einschl. Anschrift',
+  `lokal_coord` text DEFAULT NULL COMMENT 'Geokoordinaten des Spiellokal', 
   PRIMARY KEY (`id`),
   KEY `published` (`published`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -1518,4 +1530,31 @@ CREATE TABLE IF NOT EXISTS `#__clm_arbiter_turnier` (
   `role` char(3) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+--
+-- 4.3.2 Tabelle Zeitmodus
+--
+
+CREATE TABLE IF NOT EXISTS `#__clm_zeitmodus` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `typ` varchar(20) NOT NULL DEFAULT '' COMMENT 'Zeittyp',
+  `ordering` smallint(4) UNSIGNED DEFAULT '0' COMMENT 'Anzeige-Reihenfolge',
+  `trf` varchar(30) NOT NULL DEFAULT '' COMMENT 'Code für TRF-Ausgabe',
+  `pgn` varchar(30) NOT NULL DEFAULT '' COMMENT 'Code für PGN-Ausgabe',
+  `time60` smallint(6) UNSIGNED DEFAULT '0' COMMENT 'max. Zeit für 60 Züge',
+  `name` varchar(100) NOT NULL DEFAULT '' COMMENT 'Text für Anzeige in FE und BE',
+  `zuege_phase_1` smallint(4) UNSIGNED DEFAULT '0' COMMENT 'Züge 1.Periode',
+  `sekunden_phase_1` smallint(6) UNSIGNED DEFAULT '0' COMMENT 'Zeit 1.Periode',
+  `increment_phase_1` smallint(4) UNSIGNED DEFAULT '0' COMMENT 'Inkrement 1.Periode',
+  `zuege_phase_2` smallint(4) UNSIGNED DEFAULT '0' COMMENT 'Züge 2.Periode',
+  `sekunden_phase_2` smallint(6) UNSIGNED DEFAULT '0' COMMENT 'Zeit 2.Periode',
+  `increment_phase_2` smallint(4) UNSIGNED DEFAULT '0' COMMENT 'Inkrement 2.Periode',
+  `zuege_phase_3` smallint(4) UNSIGNED DEFAULT '0' COMMENT 'Züge 3.Periode',
+  `sekunden_phase_3` smallint(6) UNSIGNED DEFAULT '0' COMMENT 'Zeit 3.Periode',
+  `increment_phase_3` smallint(4) UNSIGNED DEFAULT '0' COMMENT 'Inkrement 3.Periode',
+  `published` tinyint(1) UNSIGNED DEFAULT '0' COMMENT 'veröffentlicht',
+  PRIMARY KEY (`id`),
+  KEY `published` (`published`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -575,7 +575,8 @@ if ($pdf_orientation == 'P' AND $pdf->GetY() < 228) {
 	$pdf->Cell($leer,$zelle,' ',0,0,'L');
 	$pdf->Cell(40,$zelle,$lang->time_control,1,0,'L',$fc);
 	if (!isset($params['time_control'])) $params['time_control'] = '';
-	$pdf->Cell(140,$zelle,clm_core::$load->utf8decode($params['time_control']),1,1,'L',$fc);
+	$time_control = clm_core::$api->db_time_control($params['time_control']);
+	$pdf->Cell(140,$zelle,clm_core::$load->utf8decode($time_control),1,1,'L',$fc);
 }
 
 // --------------------------------------------------------------

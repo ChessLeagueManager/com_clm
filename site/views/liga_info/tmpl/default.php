@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 defined('_JEXEC') or die('Restricted access');
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
@@ -24,7 +24,8 @@ $liga		= $this->liga;
 	}	
 	if (!isset($params['dwz_date'])) $params['dwz_date'] = '1970-01-01';
 	if (!isset($params['color_order'])) $params['coloer_order'] = '';
-	if (!isset($params['time_control'])) $params['time_control'] = ''; 
+	if (!isset($params['time_control'])) $params['time_control'] = '0';
+	$time_control = clm_core::$api->db_time_control($params['time_control']);	
 	if (!isset($params['waiting_period'])) $params['waiting_period'] = ''; 
  	$paramsc = new clm_class_params($liga[0]->params);
 	$params['pseudo_dwz'] = $paramsc->get('pseudo_dwz',0);
@@ -61,6 +62,12 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 	$config = clm_core::$db->config();
 	$pdf_melde = $config->pdf_meldelisten;
 	$man_showdwz = $config->man_showdwz;
+	$googlemaps   	= $config->googlemaps;
+	$googlemaps_ver   	= $config->googlemaps_ver;
+	$maps_zoom			= $config->maps_zoom;
+
+// Load functions for map
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'geo_functions.php');
 
 		// Userkennung holen
 	$user	=JFactory::getUser();
@@ -190,7 +197,7 @@ elseif (!$liga OR $liga[0]->published == 0) {
 	</tr>
 	<tr>
 		<td align="left" width="100"><?php echo $lang->time_control ?>:</td>
-		<td><?php echo $params['time_control']; ?></td>
+		<td><?php echo $time_control; ?></td>
 	</tr>
 	<tr>
 		<td align="left" width="100"><?php echo $lang->waiting_period ?>:</td>
@@ -233,6 +240,55 @@ elseif (!$liga OR $liga[0]->published == 0) {
 				<td><?php echo $aaca; ?></td>
 			</tr>
 	<?php  } } ?>
+	<?php
+	if ($liga[0]->lokal > '' ) {
+		$lat = $liga[0]->lokal_coord_lat;
+		$lon = $liga[0]->lokal_coord_long;
+//		if ($liga[0]->lokal_coord <= '' OR ($lat == 0 AND $lon == 0)) {
+		if (($lat == 0 AND $lon == 0)) {
+		?>
+			<tr>
+				<td align="left" width="100"><?php echo JText::_('CLUB_LOCATION'); ?>:</td>
+				<td><?php echo $liga[0]->lokal; ?></td>
+			</tr>
+		<?php } else { ?>
+			<tr>
+				<td align="left" width="100"><?php echo JText::_('CLUB_LOCATION'); ?>:</td>
+				<td>
+		<?php	$spiellokal = explode(",", $liga[0]->lokal); 
+			if ($spiellokal[0] ==! false ) $loc_text = $spiellokal[0]; else $loc_text = '';
+			if (isset($spiellokal[1])) $loc_text .= '<br>'.$spiellokal[1]; 
+			if (isset($spiellokal[2])) $loc_text .= '<br>'.$spiellokal[2]; 
+			if (isset($spiellokal[3])) $loc_text .= '<br>'.$spiellokal[3]; 
+			$img_marker = clm_core::$load->gen_image_url("table/marker-icon");
+		?>
+	<div style="position:relative;">
+		<div id="mapdiv1" class="map" style="position:absolute;top:0;right:0;float:right;width:100%;height:300px;text-align:center;"></div>
+		<?php if (($lat != 0 || $lon != 0) && $googlemaps_ver == 3) { ?>
+			<div id="madinfo" style="position:absolute;top:0;right:0;float:right;z-index:1000;width:80%;height:200px;text-align:center;"><span style="font-weight: bold; background-color: #FFF"><?php echo $loc_text; ?></span></div>
+		<?php } ?>
+	</div>
+ 
+	<script language="JavaScript">
+		var Lat=<?php printf( '%0.7f', $lat ); ?>;
+		var Lon=<?php printf( '%0.7f', $lon ); ?>;
+		if (Lat == 0 && Lon == 0) {
+		} else {
+			<?php if ($googlemaps_ver == 1) {?>
+				var popupText = `<?php printf($loc_text); ?>`;
+				createLeafletMap(Lat, Lon, popupText, <?php echo $maps_zoom; ?>);
+			<?php } ?>
+			<?php if ($googlemaps_ver == 3) {?>
+				createOSMap(Lat, Lon, `<?php echo $img_marker; ?>`, <?php echo $maps_zoom; ?>);
+			<?php } ?>
+		}
+	</script>
+		<div id="mapdiv0" class="map" style="width:100%;height:300px;"></div>																	   
+		</td></tr>
+		<?php } ?>		
+			
+		<?php } ?>		
+
 	</table>
 
 	<br>

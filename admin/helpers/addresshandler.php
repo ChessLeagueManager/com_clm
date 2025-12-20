@@ -250,6 +250,19 @@ class AddressHandler
     }
 
     /**
+     * Updates the team tournament coordinates.
+     *
+     * @param string $coord The coordinates to update.
+     * @param int $rowId The row ID of the team.
+     * @return void
+     */
+   public function updateMTournamentCoordinates($coord, $rowId)
+    {
+        $club=3;
+        $this->updateCoordinates($coord, $rowId, $club);
+    }
+
+    /**
      * Updates the single tournament coordinates.
      *
      * @param string $coord The coordinates to update.
@@ -308,6 +321,9 @@ class AddressHandler
         }
         elseif ($club==2){
             $table = '#__clm_turniere';
+        }
+        elseif ($club==3){
+            $table = '#__clm_liga';
         }
         else {
             $table = '#__clm_mannschaften';
