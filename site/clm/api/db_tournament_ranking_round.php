@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 	/**
 	* errechnet/aktualisiert Rangliste/Punktesummen eines Mannschaftsturnier
@@ -777,7 +777,7 @@
 						if ($liga_mt == 0) {
 							if ( $value->summanpunkte == $value0->summanpunkte AND $value->sumbrettpunkte == $value0->sumbrettpunkte AND $value->sumtiebr1 == $value0->sumtiebr1 )  
 								if ($order == 0) $s_rankingPos = 0;
-								else if ( $value->order == $value0->order) $s_rankingPos = 0;
+								else if ( $value->ordering == $value0->ordering) $s_rankingPos = 0;
 						} else {
 							if ( $value->summanpunkte == $value0->summanpunkte AND $value->sumtiebr1 == $value0->sumtiebr1 AND $value->sumtiebr2 == $value0->sumtiebr2 AND $value->sumtiebr3 == $value0->sumtiebr3 )   
 								$s_rankingPos = 0;
@@ -786,7 +786,7 @@
 						if ($liga_mt == 0) {
 							if ( $value->summanpunkte == $value0->summanpunkte AND $value->sumbrettpunkte == $value0->sumbrettpunkte AND $value->sumtiebr1 == $value0->sumtiebr1 )  
 								if ($order == 0) $s_rankingPos = 0;
-								else if ( $value->order == $value0->order) $s_rankingPos = 0;
+								else if ( $value->ordering == $value0->ordering) $s_rankingPos = 0;
 						} else {
 							if ( $value->z_summanpunkte == $value0->z_summanpunkte AND $value->sumtiebr1 == $value0->sumtiebr1 AND $value->sumtiebr2 == $value0->sumtiebr2 AND $value->sumtiebr3 == $value0->sumtiebr3 )   
 								$s_rankingPos = 0;
