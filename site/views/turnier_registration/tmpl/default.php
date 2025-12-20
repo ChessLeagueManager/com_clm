@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -181,7 +181,7 @@ if ( $this->turnier->published == 0) {
 		</tr>
 		<?php if ($optionEloAnalysis == 1) { ?>
 		<tr>
-			<td align="left" width="100"><?php echo JText::_('REGISTRATION_FIDEID'); ?>:</td>
+			<td align="left" width="100"><?php echo JText::_('REGISTRATION_FIDEID'); ?><?php if ($optionEloAnalysis == 1) echo '(*)'; ?>:</td>
 			<td colspan="3">
 			<input class="inputbox" type="text" name="reg_FIDEid" id="reg_FIDEid" size="8" maxlength="8" value="<?php echo $reg_FIDEid; ?>" />
 			</td>

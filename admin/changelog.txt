@@ -15,6 +15,7 @@ $ -> Language fix or change
 - - - - - 4.3.2 - [xx-xx-2025] - - - - - - - - - - - - - - - - - - - -
 + Bedenkzeit: neue Tabelle und Einbau bei Einzel- und Teamwettbewerben
 + Teamwettbewerbe: neue Felder für Turnierstart und -ende sowie Ort
+^ Online-Anmeldung: FIDE-ID wird Pflichtfeld, wenn Eloauswertung geplant ist
 
 - - - - - 4.3.1 - [14-11-2025] - - - - - - - - - - - - - - - - - - - -
 ^ Umstellung der Links von chessleaguemanager.de auf chessleaguemanager.org

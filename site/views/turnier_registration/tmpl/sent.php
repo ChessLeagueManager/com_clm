@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -100,7 +100,9 @@ if ($reg_dwz != '' AND (!is_numeric($reg_dwz) OR $reg_dwz < 0 OR $reg_dwz > 3000
 if ($reg_elo != '' AND (!is_numeric($reg_elo) OR $reg_elo < 0 OR $reg_elo > 3000))
 	$msg .= '<br>'.JText::_('REGISTRATION_E_ELO');
 if ($optionEloAnalysis == 1) {
-	if ($reg_FIDEid != '' AND (!is_numeric($reg_FIDEid) OR $reg_FIDEid < 10000))
+	if ($reg_FIDEid == '' )
+		$msg .= '<br>'.'Das Turnier wird ELO-ausgewertet. Bitte tragen Sie Ihre FIDE-ID ein'.'<br>'.'Haben Sie noch keine ID, tragen Sie bitte 0 ein und kontaktieren Sie den Turnierleiter, z.B. über das Info-Feld dieses Formulars';
+	if ($reg_FIDEid != '' AND (!is_numeric($reg_FIDEid) OR ($reg_FIDEid != 0 AND $reg_FIDEid < 10000)))
 		$msg .= '<br>'.JText::_('REGISTRATION_E_FIDEID');
 }
 if ($reg_check01 == '') 
