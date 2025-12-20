@@ -19,6 +19,7 @@ $ -> Language fix or change
 ^ Spielbericht: Formular um Spiellokal ergänzt
 + pdf-Ausgaben: neue Funktion BreakCell in class fpdf
 + Bereitstellung von Startgeldlisten als pdf-Ausgaben sowie als csv-Datei
++ Einzelturniere: neues Teilnehmer-Feld Geburtstag für Vereinslose 
 
 - - - - - 4.3.1 - [14-11-2025] - - - - - - - - - - - - - - - - - - - -
 ^ Umstellung der Links von chessleaguemanager.de auf chessleaguemanager.org

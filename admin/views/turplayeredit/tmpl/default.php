@@ -36,7 +36,8 @@ defined('_JEXEC') or die('Restricted access');
 			if ((<?php echo $sfee; ?> == 1 ) && (form.amount_paid.value > 0) 
 				&& (form.date_paid.value <= "1970-01-01") ) {
 				alert( "Betrag ohne Bezahldatum ist nicht zulässig" );
-			} else if ((<?php echo $sfee; ?> == 1 ) && (<?php echo $this->turnier->entry_fee; ?> != form.amount_paid.value) 
+			} else if ((<?php echo $sfee; ?> == 1 ) 
+				&& (<?php echo $this->turnier->entry_fee; ?> != form.amount_paid.value) && (form.amount_paid.value > 0)
 				&& (form.reason.value == "") ) {
 				alert( "Betrag weicht ab - Grund fehlt" );
 			} else {	Joomla.submitform( pressbutton ); }
@@ -156,6 +157,8 @@ defined('_JEXEC') or die('Restricted access');
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('TOURNAMENT_SPECIAL_POINTS'); ?>:</td>
 				<td><input class="inputbox" type="text" name="s_punkte" id="s_punkte" size="4" maxlength="4" value="<?php echo $this->player->s_punkte; ?>"/></td>
+				<td class="key" nowrap="nowrap" title="<?php echo JText::_( 'PLAYER_BIRTH_DAY_HINT' );?>"><?php echo JText::_('PLAYER_BIRTH_DAY'); ?>:</td>
+				<td title="<?php echo JText::_( 'PLAYER_BIRTH_DAY_HINT' );?>"><?php echo CLMForm::calendar($this->player->birthDay, "birthDay", "birthDay", '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?></td>
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_EMAIL'); ?>:</td>
@@ -193,7 +196,7 @@ defined('_JEXEC') or die('Restricted access');
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo JText::_('PLAYER_REASON'); ?>:</td>
-				<td><input class="inputbox" type="text" name="reason" id="reason" size="40" maxlength="40" value="<?php echo $this->player->tel_no; ?>" /></td>
+				<td><input class="inputbox" type="text" name="reason" id="reason" size="40" maxlength="40" value="<?php echo $this->player->reason; ?>" /></td>
 			</tr>
 		
 		</table>

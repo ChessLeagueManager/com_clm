@@ -106,8 +106,9 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		if ($row->sumTiebr3 == '') $row->sumTiebr3 = 0;
 		if (is_null($row->FIDEid) OR !is_numeric($row->FIDEid)) $row->FIDEid = 0;
 		if (is_null($row->birthYear) OR !is_numeric($row->birthYear)) $row->birthYear = '0000';
+		if ($row->birthDay == '') $row->birthDay = NULL;
 		if (is_null($row->s_punkte) OR !is_numeric($row->s_punkte)) $row->s_punkte = 0.0;
-		if (($row->date_paid == '') OR ($row->date_paid == '1910-01-01')) $row->date_paid = NULL;
+		if (($row->date_paid == '') OR ($row->date_paid <= '1970-01-01')) $row->date_paid = NULL;
 		if ($row->amount_paid == '') $row->amount_paid = NULL;
 		
 		if (!$row->check($post)) {
