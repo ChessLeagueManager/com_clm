@@ -8,6 +8,11 @@
 *******************************************************************************/
 /* Mini-Anpassung php 8.1 line 1212                                           */
 /* Mini-Anpassung php 8.2 utf8_encode                                         */
+/* new with CLM 4.3.2 (12/2025)
+*  function BreakCell according to								      
+*   https://stackoverflow.com/questions/48945844/is-it-possible-to-cut-text-on-cell-in-in-fpdf-library 
+*   by adding parameter ln
+*/
 define('FPDF_VERSION','1.82');
 
 class FPDF
@@ -767,6 +772,108 @@ function MultiCell($w, $h, $txt, $border=0, $align='J', $fill=false)
 		$b .= 'B';
 	$this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
 	$this->x = $this->lMargin;
+}
+
+function BreakCell($w, $h, $txt, $border=0, $ln=0, $align='J', $fill=false)
+{
+	// Output text with automatic or explicit line breaks
+    if(!isset($this->CurrentFont))
+        $this->Error('No font has been set');
+    $cw = &$this->CurrentFont['cw'];
+    if($w==0)
+        $w = $this->w-$this->rMargin-$this->x;
+    $wmax = ($w-2*$this->cMargin)*1000/$this->FontSize;
+    $s = str_replace("\r",'',$txt);
+    $nb = strlen($s);
+    if($nb>0 && $s[$nb-1]=="\n")
+        $nb--;
+
+//*** Since we only create one Cell, there is no need to remove bottom border 
+//*** code removed
+    $b = 0;
+    if($border)$b=$border;
+
+    $sep = -1;
+    $i = 0;
+    $j = 0;
+    $l = 0;
+    $ns = 0;
+    $nl = 1;
+// *** stop as one cell is set
+// *** prevents last line if there allready is a cell
+    $stop=false;
+    while($i<$nb && $stop===false)
+    {
+        // Get next character
+        $c = $s[$i];
+        if($c=="\n")
+        {
+            // Explicit line break
+            if($this->ws>0)
+            {
+                $this->ws = 0;
+                $this->_out('0 Tw');
+            }
+//            $this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
+            $this->Cell($w,$h,substr($s,$j,$i-$j),$b,0,$align,$fill);		// CLM 4.3.2 (12/2025)
+// *** cell is set, so we stop
+// *** rest of code removed 
+            $stop=true;
+            break;
+        }
+// *** do not auto-break after space
+// *** code removed
+
+        $l += $cw[$c];
+        if($l>$wmax)
+        {
+// *** sep always is -1 if there is no "\n"
+// *** if/else removed
+            // Automatic line break
+            if($sep==-1)
+            {
+                if($i==$j)
+                    $i++;
+                if($this->ws>0)
+                {
+                    $this->ws = 0;
+                    $this->_out('0 Tw');
+                }
+//*** changed lenght $i-$j in $i-$j-3 to make space for 3 dots
+//*** added 3 dots
+//            $this->Cell($w,$h,substr($s,$j,$i-$j-3).'...',$b,2,$align,$fill);
+            $this->Cell($w,$h,substr($s,$j,$i-$j-3).'...',$b,0,$align,$fill);		// CLM 4.3.2 (12/2025)
+// *** cell is set, so we stop
+// *** rest of code removed 
+            $stop=true;
+            break;
+// *** cell is set, so we stop
+            }
+        }
+        else
+            $i++;
+    }
+    // Last chunk
+// *** only if no cell is set
+    if($stop===false){
+        if($this->ws>0)
+        {
+            $this->ws = 0;
+            $this->_out('0 Tw');
+        }
+//*** bottom border allready set
+//*** code removed
+//        $this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
+        $this->Cell($w,$h,substr($s,$j,$i-$j),$b,0,$align,$fill);		// CLM 4.3.2 (12/2025)
+    }
+//  $this->x = $this->lMargin;
+	if($ln>0)					// CLM 4.3.2 (12/2025)
+	{
+		// Go to next line
+		$this->y += $h;
+		if($ln==1)
+			$this->x = $this->lMargin;
+	}
 }
 
 function Write($h, $txt, $link='')
