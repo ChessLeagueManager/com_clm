@@ -19,7 +19,8 @@ class CLMViewTurPlayers extends JViewLegacy {
 		//CLM parameter auslesen
 		$clm_config = clm_core::$db->config();
 		$turnier_entry_fee = $clm_config->turnier_entry_fee;
-		
+		$testbutton = $clm_config->test_button;
+
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
 		$model =   $this->getModel();
 		
@@ -100,10 +101,13 @@ class CLMViewTurPlayers extends JViewLegacy {
 					JToolBarHelper::custom( 'view_entry_fee', 'forward.png', 'forward_f2.png', JText::_('VIEW_ENTRY_FEE'), false);
 				} else {
 					JToolBarHelper::custom( 'view_std', 'forward.png', 'forward_f2.png', JText::_('VIEW_STD'), false);
+					JToolBarHelper::custom( 'export_pdf', 'copy.png', 'copy_f2.png', 'pdf-Startgeldexport', false);
+					JToolBarHelper::custom( 'export_csv', 'copy.png', 'copy_f2.png', 'csv-Startgeldexport', false);
+					if ($testbutton == 1) JToolBarHelper::custom( 'export_tc', 'copy.png', 'copy_f2.png', 'Zeitmodi-Liste', false);
 				}
 			}
 		}
-		
+
 		JToolBarHelper::cancel();
 		if (($model->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
 			JToolBarHelper::divider();

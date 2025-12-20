@@ -758,4 +758,78 @@ class CLMControllerTurPlayers extends JControllerLegacy {
 		$this->app->redirect( $adminLink->url );
 	}
 
+	function export_csv() {
+
+		// Check for request forgeries
+		defined('_JEXEC') or die('Restricted access');
+			
+		$lid = clm_core::$load->request_int('id');
+		$result = clm_core::$api->db_turplayersliste($lid,'csv');
+
+		$file_name = $result[2];
+		// Log schreiben
+		$clmLog = new CLMLog();
+		$clmLog->aktion = "Teilnehmer.csv"." ".JText::_('CLM_EXPORT');
+		$clmLog->params = array('file_name' => $file_name, 'id' => $lid,'format' => 'csv'); 
+		$clmLog->write();
+
+		$app =JFactory::getApplication();
+		$app->enqueueMessage( 'Teilnehmerliste als csv exportiert','message' );					
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turplayers";
+		$adminLink->more = array('file_name' => $file_name, 'lid' => $lid);
+		$adminLink->makeURL();
+		$app->redirect( $adminLink->url );
+
+	}
+
+	function export_pdf() {
+
+		// Check for request forgeries
+		defined('_JEXEC') or die('Restricted access');
+			
+		$lid = clm_core::$load->request_int('id');
+		$result = clm_core::$api->db_turplayersliste($lid,'pdf');
+
+		$file_name = $result[2];
+		// Log schreiben
+		$clmLog = new CLMLog();
+		$clmLog->aktion = "Teilnehmer.pdf"." ".JText::_('CLM_EXPORT');
+		$clmLog->params = array('file_name' => $file_name, 'id' => $lid,'format' => 'csv'); 
+		$clmLog->write();
+
+		$app =JFactory::getApplication();
+		$app->enqueueMessage( 'Teilnehmerliste als pdf exportiert','message' );					
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turplayers";
+		$adminLink->more = array('file_name' => $file_name, 'lid' => $lid);
+		$adminLink->makeURL();
+		$app->redirect( $adminLink->url );
+
+	}
+
+	function export_tc() {
+
+		// Check for request forgeries
+		defined('_JEXEC') or die('Restricted access');
+
+		$lid = clm_core::$load->request_int('id');
+		$result = clm_core::$api->db_time_controlliste();
+
+		$file_name = $result[2];
+		$app =JFactory::getApplication();
+
+		$app->enqueueMessage( 'Zeitmodiliste erstellt','message' );					
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turplayers";
+		$adminLink->more = array('file_name' => $file_name, 'lid' => $lid);
+		$adminLink->makeURL();
+		$app->redirect( $adminLink->url );
+
+	}
+
+
 }
