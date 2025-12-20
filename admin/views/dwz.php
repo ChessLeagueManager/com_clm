@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -211,6 +211,7 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 	<legend><?php echo JText::_( 'MEMBER_TABLE_9' ); ?></legend>
 	<?php if ($filter_vid !="0") { ?>
 	<table class="admintable">
+		<?php if (!isset($spieler[0]->Spielername)) $filter_mgl = 0; ?>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
 			<label for="name"><?php echo JText::_( 'MEMBER_TABLE_10' ); ?></label>
