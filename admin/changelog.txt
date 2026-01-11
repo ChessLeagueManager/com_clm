@@ -12,16 +12,17 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 4.3.2 - [xx-xx-2025] - - - - - - - - - - - - - - - - - - - -
+- - - - - 4.3.2 - [xx-xx-2026] - - - - - - - - - - - - - - - - - - - -
 + Bedenkzeit: neue Tabelle und Einbau bei Einzel- und Teamwettbewerben
 + Teamwettbewerbe: neue Felder für Turnierstart und -ende sowie Ort
 ^ Online-Anmeldung: FIDE-ID wird Pflichtfeld, wenn Eloauswertung geplant ist
 ^ Spielbericht: Formular um Spiellokal ergänzt
 + pdf-Ausgaben: neue Funktion BreakCell in class fpdf
 + Bereitstellung von Startgeldlisten als pdf-Ausgaben sowie als csv-Datei
-+ Einzelturniere: neues Teilnehmer-Feld Geburtstag für Vereinslose 
-# Mitgliederverwaltung: Anzeige Spieler bei Auswahl eines anderen Vereins 
++ Einzelturniere: neues Teilnehmer-Feld Geburtstag für Vereinslose
+# Mitgliederverwaltung: Anzeige Spieler bei Auswahl eines anderen Vereins
 # Rangliste im Rundenbericht: Warnung bei aktivierten Ordering verhindern 
++ Mitgliederverwaltung: pdf-Mitgliederliste
 
 - - - - - 4.3.1 - [14-11-2025] - - - - - - - - - - - - - - - - - - - -
 ^ Umstellung der Links von chessleaguemanager.de auf chessleaguemanager.org

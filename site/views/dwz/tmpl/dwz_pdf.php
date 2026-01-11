@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -143,8 +143,8 @@ $pdf->SetFont('Times','',$font);
 		$pdf->Cell(18,$zelle,$zps->PKZ,1,0,'C');
 	}
 	if (is_null($zps->FIDE_Titel)) $zps->FIDE_Titel = '';
-	$pdf->Cell(8,$zelle,clm_core::$load->utf8decode($zps->FIDE_Titel),'BT',0,'L');
-	$pdf->Cell(72,$zelle,clm_core::$load->utf8decode($zps->Spielername),'BT',0,'L');
+	$pdf->Cell(12,$zelle,clm_core::$load->utf8decode($zps->FIDE_Titel),'BT',0,'L');
+	$pdf->Cell(68,$zelle,clm_core::$load->utf8decode($zps->Spielername),'BT',0,'L');
 	$pdf->Cell(16,$zelle,$zps->DWZ,1,0,'C');
 	if ($countryversion =="de") {
 		$pdf->Cell(16,$zelle,$zps->DWZ_Index,1,0,'C');

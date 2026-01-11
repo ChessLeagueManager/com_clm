@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -832,4 +832,37 @@ static function player_move_from()
 	$link = 'index.php?option='.$option.'&section='.$section;
 	$mainframe->redirect( $link );
 	}
+	
+	function export_pdf() {
+
+		// Check for request forgeries
+		defined('_JEXEC') or die('Restricted access');
+
+		$sid = clm_core::$load->request_int('sid');
+		$zps = clm_core::$load->request_string('zps');
+
+		$mainframe	= JFactory::getApplication();
+		$option 	= clm_core::$load->request_string('option');
+		$filter_sort		= $mainframe->getUserStateFromRequest( "$option.filter_sort",'filter_sort',0,'string' );
+		$result = clm_core::$api->db_clubmemberliste($sid,$zps,'pdf',$filter_sort);
+
+		$file_name = $result[2];
+		// Log schreiben
+		$clmLog = new CLMLog();
+		$clmLog->aktion = "Vereinsmitglieder.pdf"." ".JText::_('CLM_EXPORT');
+		$clmLog->params = array('zps' => $zps, 'sid' => $sid,'format' => 'pdf'); 
+		$clmLog->write();
+
+		$app =JFactory::getApplication();
+		$app->enqueueMessage( 'Teilnehmerliste als pdf exportiert','message' );					
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "dwz";
+		$adminLink->more = array('zps' => $zps, 'sid' => $sid);
+		$adminLink->makeURL();
+		$app->redirect( $adminLink->url );
+
+	}
+	
+	
 }

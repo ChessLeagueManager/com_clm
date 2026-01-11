@@ -93,6 +93,7 @@ $rights["db_checkin"]=array(); // Checkin auf NULL-Werte
 $rights["db_time_control"]=array(); // Aufbereitung Bedenkzeit
 $rights["db_turplayersliste"]=array();
 $rights["db_time_controlliste"]=array();
+$rights["db_clubmemberliste"]=array();
 $rights["test_print"]=array();
 //************************
 // Turniere

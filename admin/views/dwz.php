@@ -25,6 +25,7 @@ static function setDWZToolbar($countryversion)
 		JToolBarHelper::custom( 'nachmeldung_delete', 'trash.png', 'trash_f2.png', JText::_( 'MEMBER_BUTTON_DEL_NACH'),false );
 		JToolBarHelper::custom( 'nachmeldung', 'apply.png', 'apply_f2.png', JText::_( 'MEMBER_BUTTON_NACH'),false );
 		JToolBarHelper::custom( 'daten_edit', 'apply.png', 'apply_f2.png', JText::_( 'MEMBER_BUTTON_EDIT'),false );
+		JToolBarHelper::custom( 'export_pdf', 'copy.png', 'copy_f2.png', 'pdf-Mitgliederliste', false);
 	if ($clmAccess->access('BE_database_general') === true AND $countryversion == 'en') { 
 		JToolBarHelper::custom( 'player_move_to', 'apply.png', 'apply_f2.png', JText::_( 'MEMBER_BUTTON_MOVE_TO'),false );
 		JToolBarHelper::custom( 'player_move_from', 'apply.png', 'apply_f2.png', JText::_( 'MEMBER_BUTTON_MOVE_FROM'),false );
