@@ -24,6 +24,7 @@ $ -> Language fix or change
 # Rangliste im Rundenbericht: Warnung bei aktivierten Ordering verhindern 
 + Mitgliederverwaltung: pdf-Mitgliederliste
 + SWM-Import: Ergänzung um Turnierort und Föderation
+^ Copyright 2008-2026
 
 - - - - - 4.3.1 - [14-11-2025] - - - - - - - - - - - - - - - - - - - -
 ^ Umstellung der Links von chessleaguemanager.de auf chessleaguemanager.org
