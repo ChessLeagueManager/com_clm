@@ -3,7 +3,7 @@
  * @ Chess League Manager (CLM) Component 
  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  *
  * Import einer Turnierdatei vom Swiss-Manager 
  * bisher nur TUNx = Einzelturnier im CH-Modus und TURx = Einzelturnier als Vollturnier
@@ -133,6 +133,7 @@ if ($debug > 1) { echo "<br>pour: ";	var_dump($tour); }
 				$valueS .= ",'".clm_core::$db->escape($tour[0])."'";
 			}
 		}
+		$params->set("time_control",$tournament["out"][106][0]);
 		$params->set("playerViewDisplaySex",'0');	
 		$params->set("playerViewDisplayBirthYear",'0');	
 		if ($update) {
@@ -829,13 +830,13 @@ function zzparse_structure_s($part) {
 					array('vch',69,'bemerkungen'),
 					array('vch',102,0),		// Turnierdirektor
 					array('vch',101,0),		// Veranstalter
-					array('vch',66,0),		// Ort/Land
+					array('vch',66,'city'),		// Ort/Land
 					array('vch',67,0),		// Schiedsrichter
 					//array('ign',2,0),
 					array('vch',103,0),		// Name der pgn-Datei
 					array('vch',110,0),		// Name der Video-Datei
 					array('vch',65,0),		// Turniername				
-					array('vch',66,0),		// Ort/Land
+					array('vch',669,0),		// Ort/Land
 					array('vch',104,0),		// Name der Turnierdatei						
 					array('vch',301,0),		// unklar301 ??
 					array('vch',105,0),		// Altersgruppen
@@ -843,7 +844,7 @@ function zzparse_structure_s($part) {
 					array('ign',2,0),		
 					array('vch',111,0),		// Vorlage
 					array('ign',6,0),		
-					array('vch',112,0),		// Förderation						
+					array('vch',112,'FIDEcco'),		// Förderation						
 					array('vch',68,0),		// Hauptschiedsrichter				
 					array('vch',113,0),		// Föderations-Repräsendant
 					array('vch',107,0),		// email-Adresse
@@ -944,13 +945,13 @@ function zzparse_structure_t($part) {
 					array('vch',69,'bemerkungen'),
 					array('vch',102,0),		// Turnierdirektor
 					array('vch',101,0),		// Veranstalter
-					array('vch',66,0),		// Ort/Land
+					array('vch',66,'city'),		// Ort/Land
 					array('vch',67,0),		// Schiedsrichter
 					//array('ign',2,0),
 					array('vch',103,0),		// Name der pgn-Datei
 					array('vch',110,0),		// Name der Video-Datei
 					array('vch',65,0),		// Turniername				
-					array('vch',66,0),		// Ort/Land
+					array('vch',669,0),		// Ort/Land
 					array('vch',104,0),		// Name der Turnierdatei						
 					array('vch',301,0),		// unklar301 ??
 					array('vch',105,0),		// Altersgruppen
@@ -958,7 +959,7 @@ function zzparse_structure_t($part) {
 					array('ign',2,0),		
 					array('vch',111,0),		// Vorlage
 					array('ign',6,0),		
-					array('vch',112,0),		// Förderation						
+					array('vch',112,'FIDEcco'),		// Förderation						
 					array('vch',68,0),		// Hauptschiedsrichter				
 					array('vch',113,0),		// Föderations-Repräsendant
 					array('vch',107,0),		// email-Adresse
