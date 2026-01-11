@@ -338,9 +338,10 @@ $turnier_entry_fee = $clm_config->turnier_entry_fee;
 	</td>
 		<td colspan="3" class="paramlist_value">
 			<?php if (is_numeric($turParams->get('time_control','0'))) {
-					echo $this->form['timecontrol']; 
+					echo CLMForm::selectTimeControl('params[time_control]', $turParams->get('time_control','0'));
+//					echo $this->form['timecontrol']; 
 					} else { ?>
-					<input class="inputbox" type="text" name="params[time_control]" id="params[time_control]" size="7" maxlength="9" value="<?php echo $turParams->get('time_cobtrol',''); ?>" />
+					<input class="inputbox" type="text" name="params[time_control]" id="params[time_control]" size="36" maxlength="120" value="<?php echo $turParams->get('time_control',''); ?>" />
 				  <?php } ?>		  
 		</td>
 	</tr>
