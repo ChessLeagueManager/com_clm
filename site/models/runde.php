@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -507,7 +507,7 @@ class CLMModelRunde extends JModelLegacy
 	$man	=$db->loadObjectList();
 	$rang	=$man[0]->rang;
 	if ($rang == 0)
-	$query = " SELECT a.tln_nr, a.man_nr, m.snr, m.mgl_nr, m.zps, d.Spielername, IF(m.start_dwz IS NULL, d.DWZ, m.start_dwz) as dwz, m.gesperrt "
+	$query = " SELECT a.tln_nr, a.man_nr, m.snr, m.mgl_nr, m.zps, d.Spielername, IF(m.start_dwz IS NULL, d.DWZ, m.start_dwz) as dwz, m.gesperrt, m.gesperrtm "
 		." FROM #__clm_mannschaften as a "
 		." LEFT JOIN #__clm_meldeliste_spieler AS m ON m.lid = a.liga AND m.mnr = a.man_nr "
 				." AND ( m.zps = a.zps OR FIND_IN_SET(m.zps, a.sg_zps))	"	
@@ -517,7 +517,7 @@ class CLMModelRunde extends JModelLegacy
 		." ORDER BY m.snr "
 		;
 	else
-	$query = " SELECT a.tln_nr, a.man_nr, m.snr, m.mgl_nr, m.zps, d.Spielername, IF(m.start_dwz IS NULL, d.DWZ, m.start_dwz) as dwz, t.Rang as trang, t.man_nr as tman_nr, m.gesperrt "
+	$query = " SELECT a.tln_nr, a.man_nr, m.snr, m.mgl_nr, m.zps, d.Spielername, IF(m.start_dwz IS NULL, d.DWZ, m.start_dwz) as dwz, t.Rang as trang, t.man_nr as tman_nr, m.gesperrt, m.gesperrtm "
 		." FROM #__clm_mannschaften as a "
 		." LEFT JOIN #__clm_meldeliste_spieler AS m ON m.lid = a.liga AND m.mnr = a.man_nr "
 				." AND ( m.zps = a.zps OR FIND_IN_SET(m.zps, a.sg_zps))	"	

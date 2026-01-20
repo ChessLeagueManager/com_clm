@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -352,7 +352,7 @@ $pdf->SetFont('Times','',$date_font);
 			}
 			$strikeout_x = $pdf->GetX();
 			$pdf->Cell(32,$zelle/2,clm_core::$load->utf8decode($team[$i]->Spielername),0,0,'L');	
-			if ($team[$i]->gesperrt == 1) {
+			if ($team[$i]->gesperrt == 1 OR $team[$i]->gesperrtm == 1) {
 				$pdf->SetX($strikeout_x);
 				$pdf->Cell(32,$zelle/2,'------------------------',0,0,'L');
 			}
@@ -360,7 +360,7 @@ $pdf->SetFont('Times','',$date_font);
 			$pdf->Cell(5,$zelle/2,$team[$i]->mgl_nr,0,0,'C');
 			$strikeout_x = $pdf->GetX();
 			$pdf->Cell(30,$zelle/2,clm_core::$load->utf8decode($team[$i]->Spielername),0,0,'L');	
-			if ($team[$i]->gesperrt == 1) {
+			if ($team[$i]->gesperrt == 1 OR $team[$i]->gesperrtm == 1) {
 				$pdf->SetX($strikeout_x);
 				$pdf->Cell(30,$zelle/2,'------------------------',0,0,'L');
 			}
@@ -384,7 +384,7 @@ $pdf->SetFont('Times','',$date_font);
 			}
 			$strikeout_x = $pdf->GetX();
 			$pdf->Cell(32,$zelle/2,clm_core::$load->utf8decode($team[$i]->Spielername),0,0,'L');
-			if ($team[$i]->gesperrt == 1) {
+			if ($team[$i]->gesperrt == 1 OR $team[$i]->gesperrtm == 1) {
 				$pdf->SetX($strikeout_x);
 				$pdf->Cell(32,$zelle/2,'------------------------',0,0,'L');
 			}
@@ -392,7 +392,7 @@ $pdf->SetFont('Times','',$date_font);
 			$pdf->Cell(5,$zelle/2,$team[$i]->mgl_nr,0,0,'C');
 			$strikeout_x = $pdf->GetX();
 			$pdf->Cell(30,$zelle/2,clm_core::$load->utf8decode($team[$i]->Spielername),0,0,'L');	
-			if ($team[$i]->gesperrt == 1) {
+			if ($team[$i]->gesperrt == 1 OR $team[$i]->gesperrtm == 1) {
 				$pdf->SetX($strikeout_x);
 				$pdf->Cell(30,$zelle/2,'------------------------',0,0,'L');
 			}

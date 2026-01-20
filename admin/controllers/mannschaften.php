@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -1304,6 +1304,7 @@ public static function save_meldeliste()
 	for ($y=1; $y< 1+($stamm+$ersatz); $y++){
 		$spl	= clm_core::$load->request_string( 'spieler'.$y);
 		$block	= clm_core::$load->request_int( 'check'.$y);
+		$blockm	= clm_core::$load->request_int( 'checkm'.$y);
 		$attr	= clm_core::$load->request_string( 'attr'.$y);
 		if ($attr == '') $attr = NULL;
 		$teil	= explode("-", $spl);
@@ -1322,13 +1323,12 @@ public static function save_meldeliste()
 
 		if ($spl >0) {
 			$query	= "REPLACE INTO #__clm_meldeliste_spieler"
-				." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `PKZ`, `zps`, `ordering`, `gesperrt`, `start_dwz`, `start_I0`, `attr`) "
-				. " VALUES ('$sid','$liga','$mnr','$y','$mgl_nr','$PKZ','$tzps', 0, '$block','$dwz','$dwz_I0'";
+				." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `PKZ`, `zps`, `ordering`, `gesperrt`, `gesperrtm`, `start_dwz`, `start_I0`, `attr`) "
+				. " VALUES ('$sid','$liga','$mnr','$y','$mgl_nr','$PKZ','$tzps', 0, '$block', '$blockm','$dwz','$dwz_I0'";
 			if (!is_null($attr))
 				$query	.= ",'$attr') ";
 			else
 				$query	.= ", NULL) ";
-			//$db->setQuery($query);
 			clm_core::$db->query($query);	
 		}
 	}
@@ -1461,6 +1461,7 @@ public static function apply_meldeliste()
 	for ($y=1; $y< 1+($stamm+$ersatz); $y++){
 		$spl	= clm_core::$load->request_string( 'spieler'.$y);
 		$block	= clm_core::$load->request_int( 'check'.$y);
+		$blockm	= clm_core::$load->request_int( 'checkm'.$y);
 		$attr	= clm_core::$load->request_string( 'attr'.$y);
 		if ($attr == '') $attr = NULL;
 		$teil	= explode("-", $spl);
@@ -1479,8 +1480,8 @@ public static function apply_meldeliste()
 
 		if($spl >0){
 			$query	= "REPLACE INTO #__clm_meldeliste_spieler"
-				." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `PKZ`, `zps`, `ordering`, `gesperrt`, `start_dwz`, `start_I0`, `attr`) "
-				. " VALUES ('$sid','$liga','$mnr','$y','$mgl_nr','$PKZ','$tzps', 0,'$block','$dwz','$dwz_I0'";
+				." ( `sid`, `lid`, `mnr`, `snr`, `mgl_nr`, `PKZ`, `zps`, `ordering`, `gesperrt`, `gesperrtm`, `start_dwz`, `start_I0`, `attr`) "
+				. " VALUES ('$sid','$liga','$mnr','$y','$mgl_nr','$PKZ','$tzps', 0,'$block','$blockm','$dwz','$dwz_I0'";
 			if (!is_null($attr))
 				$query	.= ",'$attr') ";
 			else

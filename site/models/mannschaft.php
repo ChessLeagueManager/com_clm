@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -109,7 +109,7 @@ class CLMModelMannschaft extends JModelLegacy
 		$rang	=$man[0]->rang;
 		$ersatz_regel	=$man[0]->ersatz_regel;
 	if ($rang > 0) {
-		$query = " SELECT a.start_dwz, m.tln_nr as tln_nr,a.snr,a.dwz,a.mgl_nr,a.zps, '' as PKZ, d.Spielername as name,d.DWZ as dwz,d.FIDE_Titel,d.Status,d.gesperrt "
+		$query = " SELECT a.start_dwz, m.tln_nr as tln_nr,a.snr,a.dwz,a.mgl_nr,a.zps, '' as PKZ, d.Spielername as name,d.DWZ as dwz,d.FIDE_Titel,d.Status,d.gesperrt,a.gesperrtm "
 			.",r.man_nr as rmnr, r.Rang as rrang "
 			." FROM #__clm_meldeliste_spieler as a "
 //			." LEFT JOIN #__clm_rangliste_spieler as r on r.ZPS = a.zps AND r.Mgl_Nr = a.mgl_nr AND r.sid = a.sid "
@@ -130,7 +130,7 @@ class CLMModelMannschaft extends JModelLegacy
 		$query .= " ORDER BY rmnr ASC, rrang ASC ";
 	} else {
 	  if ($zps != "0") { //normal
-		$query = " SELECT a.start_dwz,a.mgl_nr,a.zps,a.PKZ,a.attr, d.Spielername as name,d.DWZ as dwz,d.FIDE_Titel,d.Status,d.gesperrt "
+		$query = " SELECT a.start_dwz,a.mgl_nr,a.zps,a.PKZ,a.attr, d.Spielername as name,d.DWZ as dwz,d.FIDE_Titel,d.Status,d.gesperrt,a.gesperrtm "
 			." FROM #__clm_meldeliste_spieler as a ";
 		if ($countryversion == "de") {
 			$query .= " LEFT JOIN #__clm_dwz_spieler as d on d.zps = a.zps AND d.mgl_nr = a.mgl_nr AND d.sid = a.sid";

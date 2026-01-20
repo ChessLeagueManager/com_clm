@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -234,7 +234,7 @@ function edit()
 	$abgabe=$db->loadObjectList();
 
 	//Stammspieler
-	$selsql = "SELECT mgl_nr,snr,zps,PKZ, gesperrt, attr FROM #__clm_meldeliste_spieler"
+	$selsql = "SELECT mgl_nr,snr,zps,PKZ, gesperrt, gesperrtm, attr FROM #__clm_meldeliste_spieler"
 		//." WHERE ( zps = '".$row->zps."' OR zps='".$row->sg_zps."')"
 		." WHERE ( ZPS ='".$row->zps."' OR FIND_IN_SET(ZPS,'".$row->sg_zps."') != 0 )"
 		." AND mnr = ".$row->man_nr

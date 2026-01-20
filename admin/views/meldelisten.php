@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -234,8 +234,11 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 			<th width="50">
 				<?php echo JText::_( 'MELDELISTE_ATTRIBUT' ); ?>
 			</th>
-			<th width="10">
+			<th width="10" title="<?php echo JText::_( 'MELDELISTE_BLOCK_HINT' );?>">
 				<?php echo JText::_( 'MELDELISTE_BLOCK' ); ?>
+			</th>
+			<th width="10" title="<?php echo JText::_( 'MELDELISTE_BLOCKM_HINT' );?>">
+				<?php echo JText::_( 'MELDELISTE_BLOCKM' ); ?>
 			</th>
 		</tr>
 <?php //Sammeln der Daten für insertPosition()
@@ -282,6 +285,9 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		</td>
 		<td align="center">
 		  <input type="checkbox" name="check<?php echo $i+1; ?>" id="check<?php echo $i+1; ?>" value="1" <?php if(isset($row_sel[$i]) AND $row_sel[$i]->gesperrt =="1") { echo 'checked="checked"'; }?>>
+		</td>
+		<td align="center">
+		  <input type="checkbox" name="checkm<?php echo $i+1; ?>" id="checkm<?php echo $i+1; ?>" value="1" <?php if(isset($row_sel[$i]) AND $row_sel[$i]->gesperrtm =="1") { echo 'checked="checked"'; }?>>
 		</td>
 	</tr>
 <?php }} ?> 
@@ -342,8 +348,11 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 			<th width="50">
 				<?php echo JText::_( 'MELDELISTE_ATTRIBUT' ); ?>
 			</th>
-			<th width="10">
+			<th width="10" title="<?php echo JText::_( 'MELDELISTE_BLOCK_HINT' );?>">
 				<?php echo JText::_( 'MELDELISTE_BLOCK' ); ?>
+			</th>
+			<th width="10" title="<?php echo JText::_( 'MELDELISTE_BLOCKM_HINT' );?>">
+				<?php echo JText::_( 'MELDELISTE_BLOCKM' ); ?>
 			</th>
 		</tr>
 <?php //Sammeln der Daten für insertPosition()
@@ -389,6 +398,9 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		</td>
 		<td align="center">
 		  <input type="checkbox" name="check<?php echo $i+1; ?>" id="check<?php echo $i+1; ?>" value="1" <?php if(isset($row_sel[$i]) AND $row_sel[$i]->gesperrt =="1") { echo 'checked="checked"'; }?>>
+		</td>
+		<td align="center">
+		  <input type="checkbox" name="checkm<?php echo $i+1; ?>" id="checkm<?php echo $i+1; ?>" value="1" <?php if(isset($row_sel[$i]) AND $row_sel[$i]->gesperrtm =="1") { echo 'checked="checked"'; }?>>
 		</td>
 
 	</tr>

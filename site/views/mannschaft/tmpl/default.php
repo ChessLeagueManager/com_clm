@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link https://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -202,8 +202,8 @@ elseif ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) { ?>
     
     <?php if ($lparams['noOrgReference'] == '0') { ?>
     <div class="teamdetails">
-        <div id="leftalign">
-    <?php if ($man_manleader =="1") { ?>
+    <div id="leftalign">
+   <?php if ($man_manleader =="1") { ?>
         <b><?php echo JText::_('TEAM_LEADER') ?></b><br>
         <?php if ( $mannschaft[0]->mf_name <> '' ) {
         echo $mannschaft[0]->mf_name; ?><br>
@@ -223,7 +223,7 @@ elseif ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) { ?>
         else { echo JText::_('TEAM_NO_MOBILE') ; }
                                 }
         else { ?><?php echo JText::_('TEAM_NOT_SET') ?><?php }} ?>
-        </div>
+	</div>
         <div id="rightalign">
     <?php if ($man_spiellokal =="1") { ?>
         <b><?php echo JText::_('TEAM_LOCATION'); ?></b>
@@ -368,9 +368,9 @@ for ($x=0; $x< 400; $x++){
 		<td class="dwz"><?php echo $count[$x]->FIDE_Titel; ?></td>
 	<?php if($count[$x]->zps != "-2") { ?>
 		<td class="name"><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $count[$x]->zps; ?>&mglnr=<?php echo $count[$x]->mgl_nr; ?>&PKZ=<?php echo $count[$x]->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>">
-		<?php if ($count[$x]->gesperrt == 1) echo "<del>"; 
+		<?php if ($count[$x]->gesperrt == 1 OR $count[$x]->gesperrtm == 1) echo "<del>"; 
 			  echo $count[$x]->name; if ($count[$x]->Status != 'A') echo " (".$count[$x]->Status.")"; 
-			  if ($count[$x]->gesperrt == 1) echo "</del>"; ?></a></td>
+			  if ($count[$x]->gesperrt == 1 OR $count[$x]->gesperrtm == 1) echo "</del>"; ?></a></td>
 	<?php } else { ?>
 		<td class="name"><?php echo $count[$x]->name; ?></td>
 	<?php } ?>
