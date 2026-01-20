@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  *
@@ -122,8 +122,8 @@ function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true,$paar=0) {
 	}
  	
 	$nl = "\n";
-	$file_name = clm_core::$load->utf8decode($turnier->name).'_'.clm_core::$load->utf8decode($runde->name);
-	if ($type == 1) $file_name .= '_'.clm_core::$load->utf8decode($user_zps);
+	$file_name = $turnier->name.'_'.$runde->name;
+	if ($type == 1) $file_name .= '_'.$user_zps;
 	if ($type == 3) $file_name .= '_'.$paar;
 	$file_name 	= clm_core::$load->file_name($file_name);
 	$file_name .= '.pgn'; 

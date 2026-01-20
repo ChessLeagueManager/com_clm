@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 function clm_view_schedule_xls($out) {
 	$lang = clm_core::$lang->schedule;
@@ -49,27 +49,19 @@ function clm_view_schedule_xls($out) {
 		$schedule[] = $event;
     } 
 
-//echo "<br><br>schedule:"; var_dump($schedule); 
-//echo "<br><br>count:"; var_dump(count($schedule)); 
-
 // Ausgabe
 	if(count($schedule)==0) {
 		return array(false, "e_ScheduleNoDataError");
 	}
 		
 	$nl = "\n";
-	$file_name = 'Schedule'.'_'.clm_core::$load->utf8decode($club[0]->name."_".$club[0]->season_name);   
+	$file_name = 'Schedule'.'_'.$club[0]->name."_".$club[0]->season_name;   
 	$file_name .= '.csv'; 
-//	$file_name = strtr($file_name,' ','_');
-//	$file_name = strtr($file_name,"/","_");
-	$file_name = clm_core::$load->make_valid($file_name, 20, 'outputfile');
+	$file_name = clm_core::$load->file_name($file_name);
 	if (!file_exists('components'.DS.'com_clm'.DS.'pgn'.DS)) mkdir('components'.DS.'com_clm'.DS.'pgn'.DS);
 	$pdatei = fopen('components'.DS.'com_clm'.DS.'pgn'.DS.$file_name,"wt");
 	foreach($schedule as $schedule1) {
-//echo "<br><br>schedule1:"; var_dump($schedule1); //die();
 		$return = fputcsv($pdatei, $schedule1);
-//echo "<br><br>return:"; var_dump($return); //die();
-		//break;
 	}
 	fclose($pdatei);
     if (file_exists('components'.DS.'com_clm'.DS.'pgn'.DS.$file_name)) {

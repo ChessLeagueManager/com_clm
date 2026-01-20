@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 function clm_view_paarungsliste_ics($out) {
 
@@ -52,7 +52,8 @@ function clm_view_paarungsliste_ics($out) {
     } 
 	if (isset($event['DSTART'])) $termine[] = $event;
 
-	$filename = 'Liga'.'_'.clm_core::$load->utf8decode($liga[0]->name."_".$liga[0]->sname);   
+//	$filename = 'Liga'.'_'.clm_core::$load->utf8decode($liga[0]->name."_".$liga[0]->sname);   
+	$filename = 'Liga'.'_'.$liga[0]->name."_".$liga[0]->sname;   
 	$filename = clm_core::$load->file_name($filename);
 	
 	$result = clm_core::$api->db_ics_export($filename,$termine);

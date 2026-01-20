@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -1096,7 +1096,7 @@ $xml = $xmla->writeData();
 
 	// Slashes und Spaces aus Namen filtern und Namen mit Pfad zusammensetzen
 	$dat_name 	= clm_core::$load->file_name($liga_name[0]->name);
-	$file		= clm_core::$load->utf8decode($dat_name).'__'.$datum;
+	$file		= $dat_name.'__'.$datum;
 	$path		= JPath::clean(JPATH_ADMINISTRATOR.DS.'components'.DS.$option.DS.'dewis');
 	if($format =="1"){ $datei_endung = "txt";}
 	if($format =="2"){ $datei_endung = "xml";}

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -25,9 +25,9 @@ $jid	= $user->get('id');
 
   if ($pgn == 1) { 
 	$nl = "\n";
-	$file_name = clm_core::$load->utf8decode($this->turnier->name);
-	$file_name = strtr($file_name,' ./','___');
+	$file_name = $this->turnier->name;
 	$file_name .= '.pgn'; 
+	$file_name = clm_core::$load->file_name($file_name);
 	$pdatei = fopen($file_name,"wt");
 	// alle Runden durchgehen - go through all rounds
 	foreach ($this->rounds as $value) {

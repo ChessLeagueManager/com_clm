@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 function clm_view_schedule_ics($out) {
 	$lang = clm_core::$lang->schedule;
@@ -48,7 +48,8 @@ function clm_view_schedule_ics($out) {
 //		break;
     } 
 
-	$filename = 'Schedule'.'_'.clm_core::$load->utf8decode($club[0]->name."_".$club[0]->season_name);   
+//	$filename = 'Schedule'.'_'.clm_core::$load->utf8decode($club[0]->name."_".$club[0]->season_name);   
+	$filename = 'Schedule'.'_'.$club[0]->name."_".$club[0]->season_name;   
 	$filename = clm_core::$load->file_name($filename);
 	
 	$result = clm_core::$api->db_ics_export($filename,$termine);

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 // Eingang: ausgewälte ID's oder nichts 
 function clm_api_db_terminliste($cid = array()) {
@@ -88,10 +88,9 @@ function clm_api_db_terminliste($cid = array()) {
 	}
 		
 	$nl = "\n";
-	$file_name = clm_core::$load->utf8decode($lang->title);   
+	$file_name = $lang->title;   
 	$file_name .= '.csv'; 
-	$file_name = strtr($file_name,' ','_');
-	$file_name = strtr($file_name,"/","_");
+	$file_name = clm_core::$load->file_name($file_name);
 	if (!file_exists('components'.DS.'com_clm'.DS.'pgn'.DS)) mkdir('components'.DS.'com_clm'.DS.'pgn'.DS);
 	$pdatei = fopen('components'.DS.'com_clm'.DS.'pgn'.DS.$file_name,"wt");
 	foreach($output as $line1) {
