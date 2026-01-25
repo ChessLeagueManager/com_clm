@@ -164,6 +164,25 @@ $pdf->SetFont('Times','B',$head_font);
 		$ztext .= " )";
 		$pdf->Cell(20,10,$ztext,0,1,'L');
 	}	
+
+// Source - https://stackoverflow.com/a
+// Posted by Xavier Ruiz
+// Retrieved 2026-01-22, License - CC BY-SA 3.0
+
+function getImage($dataURI){
+  $img = explode(',',$dataURI,2);
+  $pic = 'data://text/plain;base64,'.$img[1];
+  $type = explode("/", explode(':', substr($dataURI, 0, strpos($dataURI, ';')))[1])[1]; // get the image type
+  if ($type=="png") return array($pic, $type);
+  return false;
+}
+
+$image64 = clm_core::$load->show_club_logo($mannschaft[0]->zps,30,'pdf');
+
+if ($image64 == '') $pic = false;
+else $pic = getImage($image64[0]);
+if ($pic!==false) $pdf->Image($pic[0], 160,30,$image64[1],$image64[2], $pic[1]);
+
 $pdf->SetFont('Times','B',$head_font-2);
 	$pdf->Cell(10,10,' ',0,0);
 	$pdf->Cell(100,10,clm_core::$load->utf8decode(JText::_('LEAGUE')).' : '.clm_core::$load->utf8decode($mannschaft[0]->liga_name)." ".$saison[0]->name,0,1,'L');

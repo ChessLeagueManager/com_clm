@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -79,7 +79,7 @@ if (!isset($row[0]->name)) { ?>
 <center>
 <!-- <form action="index.php?option=com_clm&amp;view=verein&amp;layout=sent" method="post" name="adminForm" id="adminForm"> -->
 <form>
-		<div class="col width-95">
+	<div class="col width-95">
 
 		<table class="admintable">
 
@@ -114,6 +114,10 @@ if (!isset($row[0]->name)) { ?>
 		</tr>
 
 <tr><td colspan="2"><hr></td></tr>
+	</table>
+	<table>
+	<tr><td>
+		<table class="admintable">
 
 		<tr>
 			<td class="key" nowrap="nowrap"><label for="vs"><?php echo JText::_( 'CLUB_DATA_CHIEF' ); ?></label>
@@ -180,7 +184,9 @@ if (!isset($row[0]->name)) { ?>
 			<input class="inputbox" type="text" name="jw_tel" id="jw_tel" size="70" maxlength="100" value="<?php echo $row[0]->jw_tel; ?>" />
 			</td>
 		</tr>
-<tr><td colspan="2"><hr></td></tr>
+		</table>
+	</td><td>
+		<table class="admintable">
 		<tr>
 			<td class="key" nowrap="nowrap"><label for="pw"><?php echo JText::_( 'CLUB_DATA_PRESS' ); ?></label>
 			</td>
@@ -248,6 +254,7 @@ if (!isset($row[0]->name)) { ?>
 		</tr>
 		</table>
 </div>
+	</td></tr></table>
 
 <br>
 <input type="submit" value=" <?php echo JText::_('CLUB_DATA_SEND_BUTTON') ?> ">
@@ -268,6 +275,40 @@ $name = $this->name;
 		<input type="hidden" name="task" value="" />
 		<?php echo JHTML::_( 'form.token' ); ?>
 		</form>
+<br><br><hr><br>		
+
+	<form method="post" name="adminForm" id="adminForm" enctype="multipart/form-data" >
+	<div class="col width-95">
+  <fieldset class="adminform">
+	<table class="adminlist">
+		<tr>
+			<td width="30%"><?php echo JText::_( 'Vereinslogo: Bereitstellen/Ändern' ); ?></td>
+			<td width="70%"><input type="file" name="logo_file" /></td>
+		</tr>
+		<tr>
+			<td width="30%"><?php echo JText::_( 'Aktuelles Logo:' ); ?></td>
+		</tr>
+		<tr>
+			<td width="50%">
+				<?php echo clm_core::$load->show_club_logo($zps,200); ?>
+			</td>
+		</tr>
+	</table>
+  </fieldset>
+  </div>
+	<input type="submit" value=" <?php echo JText::_('Logo hochladen') ?> ">
+	<input type="button" value=" <?php echo JText::_('CLUB_DATA_BACK_BUTTON') ?> " onClick="history.back()">
+<br> <br>
+		<input type="hidden" name="layout" value="upload_logo" />
+		<input type="hidden" name="view" value="verein" />
+		<input type="hidden" name="option" value="com_clm" />
+		<input type="hidden" name="saison" value="<?php echo $sid; ?>" />
+		<input type="hidden" name="zps" value="<?php echo $zps; ?>" />
+		<input type="hidden" name="task" value="" />
+		<?php echo JHTML::_( 'form.token' ); ?>
+		</form>
+		
+		
 </center>
 <?php } ?>
 

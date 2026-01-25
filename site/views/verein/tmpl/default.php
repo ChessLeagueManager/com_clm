@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -131,7 +131,10 @@ if (!$archive_check) {
             <div class="column">
             <?php if (isset($vereinstats[0])) { ?>
                 <table class="vereinstats">
-                <tr>
+				<tr><td align="center" colspan="2">
+					<?php echo clm_core::$load->show_club_logo($zps,150); ?>
+                </td></tr>
+				<tr>
                     <td><?php echo JText::_('CLUBS_LIST_MEMBER') ?>:</td>
                     <td><?php echo $vereinstats[0]->Mgl; ?> (<?php echo $vereinstats[0]->Mgl_m; ?> <?php echo JText::_('CLUBS_LIST_MEMBERM') ?> | <?php echo $vereinstats[0]->Mgl_w; ?> <?php echo JText::_('CLUBS_LIST_MEMBERW') ?>)</td>
                 </tr>

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -224,6 +224,7 @@ public static function setVereinToolbar()
 		if($clmAccess->access('BE_club_edit_member') === true) {
 			JToolBarHelper::custom('dwz','list.png','list_f2.png','VEREIN_BUTTON_MEMBER_EDIT',false);
 		}
+		JToolBarHelper::custom( 'upload_logo', 'upload.png', 'upload_f2.png', JText::_('Vereinslogo laden'), false);
 		JToolBarHelper::cancel();
 		JToolBarHelper::help( 'screen.clm.edit' );
 	}
@@ -246,7 +247,7 @@ public static function verein( &$row, $lists, $option )
 		clm_core::$load->load_js("suche_liste");
 		?>
 
-		<form action="index.php" method="post" name="adminForm" id="adminForm">
+		<form action="index.php" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data" >
 
 		<div class="width-50 fltlft">
 		<fieldset class="adminform">
@@ -479,7 +480,26 @@ public static function verein( &$row, $lists, $option )
 	</tr>
 	</table>
   </fieldset>
+  <br><br>
+  <fieldset class="adminform">
+   <legend><?php echo JText::_( 'Vereinslogo' ); ?></legend>
+	<table class="adminlist">
+		<tr>
+			<td width="30%"><?php echo JText::_( 'Bereitstellen/Ändern' ); ?></td>
+			<td width="70%"><input type="file" name="logo_file" /></td>
+		</tr>
+		<tr>
+			<td width="30%"><?php echo JText::_( 'Aktuelles Logo:' ); ?></td>
+		</tr>
+		<tr>
+			<td width="50%">
+				<?php echo clm_core::$load->show_club_logo($row->zps,300); ?>
+			</td>
+		</tr>
+	</table>
+  </fieldset>
   </div>
+  
 		<div class="clr"></div>
 
 		<input type="hidden" name="section" value="vereine" />

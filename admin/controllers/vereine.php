@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -818,4 +818,89 @@ function copy_saison()
 	$mainframe->enqueueMessage( $msg ,'message' );
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
+	
+function upload_logo() {
+	jimport( 'joomla.filesystem.file' );
+
+	$zps 	= clm_core::$load->request_string('zps');
+	$sid	= clm_core::$load->request_string('sid');
+	$id 	= clm_core::$load->request_string('id');
+
+	$msg = '';
+	if ($msg == '') {
+		//Datei wird hochgeladen
+		$file = clm_core::$load->request_file('logo_file', null);
+		//Dateiname wird bereinigt
+		$filename = JFile::makeSafe($file['name']);
+		$_POST['filename'] = $filename;
+		//Temporärer Name und Ziel werden festgesetzt
+		$src = $file['tmp_name'];
+		$dest = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR . $filename;
+		//Datei wird auf dem Server gespeichert (Abfrage auf .png Endung)
+		$ext = strtolower(JFile::getExt($filename));
+		if ( $ext != 'png') {
+			$msg = JText::_( 'Falscher Dateityp - ist nicht .png' );
+		}
+	}
+	if ($msg == '') {
+		// eigentliches Hochgeladen
+		if ( !JFile::upload($src, $dest) ) {
+			$msg = JText::_( 'Upload-Fehler' );
+		}
+	} 
+	
+	if ($msg == '') {
+		// eigentliches Hochgeladen
+		$size = getimagesize( $dest);
+		if ( $size[0] > 256 ) {
+			$msg = JText::_( 'Logo ist zu breit, max. 256 x 256 px' );
+		} elseif ( $size[1] > 256 ) {
+			$msg = JText::_( 'Logo ist zu hoch, max. 256 x 256 px' );
+		}
+	} 
+
+	if ($msg == '') {
+		// Get the image and convert into string
+		$img = file_get_contents($dest);
+
+		// Encode the image string data into base64
+		$ndata = base64_encode($img);
+		$ndata = "data:image/".$ext.";base64,".$ndata;
+		if ( strlen($ndata) > 65535 ) { // max. Länge für ein DB-Feld vom Typ TEXT
+			$msg = JText::_( 'Bilddatei zu groß (base46-Code > 65535 Byte)' );
+		}
+	}
+	
+	// nach encode kann Datei gelöscht werden
+	unlink($dest);
+	
+	if ($msg == '') {
+		// Save the image to the database
+		$query = " INSERT INTO #__clm_images "
+			." (typ, key1, key2, image, width, height ) "
+			." VALUES ('club', '".$zps."', '".$sid."', '".$ndata."',$size[0], $size[1])"
+			." ON DUPLICATE KEY UPDATE image = '".$ndata."', width = $size[0], height = $size[1]";
+		if (!clm_core::$db->query($query)) $msg = 'Speichern in die DB nicht möglich';
+		$anz = clm_core::$db->affected_rows();
+	}
+	
+	if ($msg == '') {
+		$msg = 'Logo wurde hochgeladen';
+		$mtype = 'message';
+		// Log schreiben
+		$clmLog = new CLMLog();
+		$clmLog->aktion = 'Logo hochgeladen';
+		$clmLog->params = array('sid' => $sid, 'zps' => $zps);
+		$clmLog->write();
+	} else {
+		$mtype = 'warning';
+	}
+	$adminLink = new AdminLink();
+	$adminLink->more = array('section' => 'vereine', 'task' => 'edit', 'id' => $id);
+	$adminLink->makeURL();
+			
+	$this->app->enqueueMessage( $msg, $mtype );
+	$this->app->redirect($adminLink->url); 		
+}
+
 }

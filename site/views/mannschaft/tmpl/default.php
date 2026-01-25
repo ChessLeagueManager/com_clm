@@ -203,6 +203,9 @@ elseif ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) { ?>
     <?php if ($lparams['noOrgReference'] == '0') { ?>
     <div class="teamdetails">
     <div id="leftalign">
+	<table style="border-style: hidden;" ><tr><td>
+			<?php echo clm_core::$load->show_club_logo($mannschaft[0]->zps,150); ?>
+			</td><td style="border-style: hidden;" >	
    <?php if ($man_manleader =="1") { ?>
         <b><?php echo JText::_('TEAM_LEADER') ?></b><br>
         <?php if ( $mannschaft[0]->mf_name <> '' ) {
@@ -223,6 +226,7 @@ elseif ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) { ?>
         else { echo JText::_('TEAM_NO_MOBILE') ; }
                                 }
         else { ?><?php echo JText::_('TEAM_NOT_SET') ?><?php }} ?>
+	</td></tr></table>
 	</div>
         <div id="rightalign">
     <?php if ($man_spiellokal =="1") { ?>

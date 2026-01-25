@@ -178,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_images` (
   `width` smallint(4) UNSIGNED NOT NULL COMMENT 'Breite in px',
   `height` smallint(4) UNSIGNED NOT NULL COMMENT 'Höhe in px',
   PRIMARY KEY (`id`),
-  KEY `typ_key1_key2` (`typ`,`key1`,`key2`)
+  UNIQUE KEY `typ_key1_key2` (`typ`,`key1`,`key2`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 ----------------------------------------------------------
