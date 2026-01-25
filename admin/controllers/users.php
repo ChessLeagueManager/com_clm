@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -664,12 +664,20 @@ function remove() {
 	$user_edit = new JUser($id);
 	$gid= $user_edit->get('gid');
 
+	$result = clm_core::$api->db_user_check($sid,$row->id);
+	if (!$result[0]) {
+		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
+		$this->setMessage(JText::_( 'Löschen von '.$row->name.'('.$row->username.') nicht möglich,<br>'.$result[1]), 'warning');
+		return;
+	}
+
 	// Joomla Account auf unpublish
 	if ($gid == 23) {
 		$query	= "UPDATE #__users SET block = 1 WHERE id = " . $id ;
 		$db->setQuery($query);
 		$db->execute();
 	}
+
 	// CLM User löschen
 	$query = ' DELETE FROM #__clm_user WHERE jid = ' . $id . ' AND sid = ' .$row->sid;
 	$db->setQuery( $query );
@@ -679,7 +687,7 @@ function remove() {
 	
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = "User gelöscht";
+	$clmLog->aktion = "CLM User gelöscht";
 	$clmLog->params = array('sid' => $row->sid, 'jid' => $row->jid, 'cids' => $cids);
 	$clmLog->write();
 	

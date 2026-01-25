@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
 */
@@ -87,6 +87,7 @@ $rights["db_mail_save"]=array();
 $rights["view_mail"]=array();
 $rights["view_mail_confirm"]=array(0,"BE_user_general",true);
 $rights["db_player_check"]=array(); // Prüfung, ob spieler im Spielbetrieb verankert
+$rights["db_user_check"]=array(); // Prüfung, ob Benutzer im Spielbetrieb verankert, z.B. Mannschaftsleiter, Schiedsrichter, usw.
 $rights["mail_send"]=array(); // Mailversand
 $rights["db_syn_player_block"]=array(); // Synchronisation Sperrkennzeichen
 $rights["db_checkin"]=array(); // Checkin auf NULL-Werte
