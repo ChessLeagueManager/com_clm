@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5.0" method="upgrade">
 	<name>CLM</name>
-	<creationDate>14.11.2025</creationDate>
+	<creationDate>30.01.2026</creationDate>
 	<author>CLM Team</author>
-	<copyright>(C) Copyright 2008-2025 by CLM Project</copyright>
+	<copyright>(C) Copyright 2008-2026 by CLM Project</copyright>
 	<license>GNU/GPL</license>
 	<authorEmail>fishpoke@fishpoke.de</authorEmail>
 	<authorUrl>chessleaguemanager.org</authorUrl>
-	<version>4.3.1</version>
+	<version>4.3.2</version>
  	<scriptfile>installer.php</scriptfile>
 	<description>
 		<![CDATA[
@@ -16,11 +16,11 @@
 		 <p>Die CLM Komponente ist eine Verwaltung für Schachligen und Schachturniere.</p>
 		 <a href="https://chessleaguemanager.org" target="blank">CLM Projekt Homepage</a>  |  <a href="https://chessleaguemanager.org/index.php?option=com_kunena" target="blank">Support Forum</a>
 		 <br><br>
-		 <u>Das Wichtigste zur neuen Beta 4.3.1 :</u>
+		 <u>Das Wichtigste zur neuen Beta 4.3.2 :</u>
 		 <ul type="square">
-		 <li><font color="red">Umstellung der Links von chessleaguemanager.de auf chessleaguemanager.org</font></li>
-		 <li><font color="red">neu: freie Mail an alle MF einer Staffel möglich</font></li>
-		 <li><font color="red">neu: Startgeldverwaltung für Einzelturniere möglich</font></li>
+		 <li><font color="red">Ligadetails um Start- und Endedatum sowie Spielort ergänzt </font></li>
+		 <li><font color="red">neue Tabelle der Zeitmodi</font></li>
+		 <li><font color="red">Vereinslogos - Hochladen und Anzeige</font></li>
 		 </ul></br>
 		 <p>Weitere Ergänzungen und Korrekturen siehe changelog auf der Projektseite</p>
 		 <p>Hinweise, Fehlermeldungen, Wünsche bitte über unser Forum</p>

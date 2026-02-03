@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 4.3.2 - [xx-xx-2026] - - - - - - - - - - - - - - - - - - - -
+- - - - - 4.3.2 - [30-01-2026] - - - - - - - - - - - - - - - - - - - -
 + Bedenkzeit: neue Tabelle und Einbau bei Einzel- und Teamwettbewerben
 + Teamwettbewerbe: neue Felder für Turnierstart und -ende sowie Ort
 ^ Online-Anmeldung: FIDE-ID wird Pflichtfeld, wenn Eloauswertung geplant ist
