@@ -163,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_ergebnis` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
---------------------------------------------------------
+-- -----------------------------------------------------
 
 --
 -- 4.3.2 Tabellestruktur Images (Logos)
@@ -181,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_images` (
   UNIQUE KEY `typ_key1_key2` (`typ`,`key1`,`key2`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-----------------------------------------------------------
+-- -------------------------------------------------------
 
 --
 -- Tabellenstruktur für Tabelle `#__clm_liga`
