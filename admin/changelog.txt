@@ -12,6 +12,10 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 5.0.0 - [xx-xx-2026] - - - - - - - - - - - - - - - - - - - -
+^ Anpassung Joomla 6
++ Teamwettbewerbe: Feinwertung Sonneborn-Berger mit Streichergebnis
+
 - - - - - 4.3.2 - [30-01-2026] - - - - - - - - - - - - - - - - - - - -
 + Bedenkzeit: neue Tabelle und Einbau bei Einzel- und Teamwettbewerben
 + Teamwettbewerbe: neue Felder für Turnierstart und -ende sowie Ort

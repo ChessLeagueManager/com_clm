@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -9,28 +9,32 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 class CLMViewMTurniere
 {
 	public static function setMTurnierToolbar($new, $sid)
 	{
 		$lang = clm_core::$lang->arbiter;
 		
-		if (!$new) { $text = JText::_( 'Edit' );}
-		else { $text = JText::_( 'New' );}
+		if (!$new) { $text = Text::_( 'Edit' );}
+		else { $text = Text::_( 'New' );}
 		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title( JText::_( 'MTURN_BUTTON_7' ).': [ '. $text.' ]', 'clm_headmenu_mturnier.png' );
+		ToolBarHelper::title( Text::_( 'MTURN_BUTTON_7' ).': [ '. $text.' ]', 'clm_headmenu_mturnier.png' );
 		if ($new OR (clm_core::$db->saison->get($sid)->published == 1 AND clm_core::$db->saison->get($sid)->archiv == 0)) {
-			JToolBarHelper::save( 'save' );
-			JToolBarHelper::apply( 'apply' );
-			JToolBarHelper::custom('arbiter','edit.png','edit_f2.png',$lang->arbiter_assign,false);
-			JToolBarHelper::custom( 'email', 'mail.png', 'mail_f2.png', JText::_('LEAGUE_MAIL_TO_ML'),false); 
+			ToolBarHelper::save( 'save' );
+			ToolBarHelper::apply( 'apply' );
+			ToolBarHelper::custom('arbiter','edit.png','edit_f2.png',$lang->arbiter_assign,false);
+			ToolBarHelper::custom( 'email', 'mail.png', 'mail_f2.png', Text::_('LEAGUE_MAIL_TO_ML'),false); 
 		}
-		JToolBarHelper::cancel();
+		ToolBarHelper::cancel();
 	}
 
 	public static function mturnier(&$row, $lists, $option, $new)
 	{
-	JFactory::getApplication()->input->set('hidemainmenu', true);
+	Factory::getApplication()->input->set('hidemainmenu', true);
 	CLMViewMTurniere::setMTurnierToolbar($new, $row->sid);
 
 	// Konfigurationsparameter auslesen
@@ -172,35 +176,35 @@ class CLMViewMTurniere
 			}
 			
 			if (form.name.value == "") {
-				alert( "<?php echo JText::_( 'MTURN_HINT_1', true ); ?>" );
+				alert( "<?php echo Text::_( 'MTURN_HINT_1', true ); ?>" );
 			} else if ( vals == 0 ) { 	//display text box checking season
-				alert( "<?php echo JText::_( 'LEAGUE_HINT_2', true ); ?>" );
+				alert( "<?php echo Text::_( 'LEAGUE_HINT_2', true ); ?>" );
 			} else if (form.stamm.value == "") {
-				alert( "<?php echo JText::_( 'LEAGUE_HINT_3', true ); ?>" );
+				alert( "<?php echo Text::_( 'LEAGUE_HINT_3', true ); ?>" );
 			} else if (form.ersatz.value == "") {
-				alert( "<?php echo JText::_( 'LEAGUE_HINT_4', true ); ?>" );
+				alert( "<?php echo Text::_( 'LEAGUE_HINT_4', true ); ?>" );
 			} else if (form.teil.value == "") {
-				alert( "<?php echo JText::_( 'LEAGUE_HINT_5', true ); ?>" );
+				alert( "<?php echo Text::_( 'LEAGUE_HINT_5', true ); ?>" );
 			} else if (form.runden.value == "") {
-				alert( "<?php echo JText::_( 'LEAGUE_HINT_6', true ); ?>" );
+				alert( "<?php echo Text::_( 'LEAGUE_HINT_6', true ); ?>" );
 			} else if ( vald == 0 ) {  //display text box checking lap
-				alert( "<?php echo JText::_( 'LEAGUE_HINT_7', true ); ?>" );
+				alert( "<?php echo Text::_( 'LEAGUE_HINT_7', true ); ?>" );
 			} else if ( form.runden_modus.value == 4 && form.teil.value > potenzg ) {
-				alert( "<?php echo JText::_( 'MTURN_HINT_8', true ); ?>" ); 
+				alert( "<?php echo Text::_( 'MTURN_HINT_8', true ); ?>" ); 
 			} else if ( form.runden_modus.value == 4 && form.teil.value < potenzk ) {
-				alert( "<?php echo JText::_( 'MTURN_HINT_9', true ); ?>" ); 
+				alert( "<?php echo Text::_( 'MTURN_HINT_9', true ); ?>" ); 
 			} else if ( form.runden_modus.value == 5 && form.teil.value > potenzg5 ) {
-				alert( "<?php echo JText::_( 'MTURN_HINT_8', true ).'\n'.JText::_( 'MTURN_HINT_15', true ); ?>" ); 
+				alert( "<?php echo Text::_( 'MTURN_HINT_8', true ).'\n'.Text::_( 'MTURN_HINT_15', true ); ?>" ); 
 			} else if ( form.runden_modus.value == 5 && form.teil.value < potenzk5 ) {
-				alert( "<?php echo JText::_( 'MTURN_HINT_9', true ).'\n'.JText::_( 'MTURN_HINT_15', true ); ?>" ); 
+				alert( "<?php echo Text::_( 'MTURN_HINT_9', true ).'\n'.Text::_( 'MTURN_HINT_15', true ); ?>" ); 
 			} else if ( form.runden_modus.value == 3 && form.durchgang.value > 1 ) {
-				alert( "<?php echo JText::_( 'MTURN_HINT_10', true ); ?>" ); 
+				alert( "<?php echo Text::_( 'MTURN_HINT_10', true ); ?>" ); 
 			} else if (form.anz_sgp.value < 0 ) {
-				alert( "<?php echo JText::_( 'LEAGUE_HINT_8', true ); ?>" );
+				alert( "<?php echo Text::_( 'LEAGUE_HINT_8', true ); ?>" );
 			} else if (form.anz_sgp.value > 20 ) {
-				alert( "<?php echo JText::_( 'LEAGUE_HINT_8', true ); ?>" );
+				alert( "<?php echo Text::_( 'LEAGUE_HINT_8', true ); ?>" );
 			} else if ( form.runden_modus.value < 3 && form.runden.value <  (rteil - 1)) {
-				alert( "<?php echo JText::_( 'LEAGUE_HINT_9', true ); ?>" );
+				alert( "<?php echo Text::_( 'LEAGUE_HINT_9', true ); ?>" );
 			} else {
 				Joomla.submitform( pressbutton );
 			}
@@ -211,17 +215,17 @@ class CLMViewMTurniere
  <form action="index.php" method="post" name="adminForm" id="adminForm">
   <div class="width-60 fltlft">
   <fieldset class="adminform">
-   <legend><?php echo JText::_( 'MTURN_DATA' ); ?></legend>
+   <legend><?php echo Text::_( 'MTURN_DATA' ); ?></legend>
       <table class="paramlist admintable">
 
 	<tr>
 	<td width="20%" nowrap="nowrap">
-	<label for="name"><?php echo JText::_( 'MTURN_NAME' ); ?></label>
+	<label for="name"><?php echo Text::_( 'MTURN_NAME' ); ?></label>
 	</td><td colspan="2">
 	<input class="inputbox" type="text" name="name" id="name" size="30" maxlength="100" value="<?php echo $row->name; ?>" />
 	</td>
 	<td nowrap="nowrap">
-	<label for="sl"><?php echo JText::_( 'MTURN_CHIEF' ); ?></label>
+	<label for="sl"><?php echo Text::_( 'MTURN_CHIEF' ); ?></label>
 	</td><td colspan="2">
 	<?php echo $lists['sl']; ?>
 	</td>
@@ -230,19 +234,19 @@ class CLMViewMTurniere
 	// Kategorien
 	list($parentArray, $parentKeys) = CLMCategoryTree::getTree();
 	if (count($parentArray) > 0)  { // nur, wenn Kategorien existieren
-		$parentlist[]	= JHtml::_('select.option',  '0', CLMText::selectOpener(JText::_( 'NO_PARENT' )), 'id', 'name' );
+		$parentlist[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'NO_PARENT' )), 'id', 'name' );
 		foreach ($parentArray as $key => $value) {
-			$parentlist[]	= JHtml::_('select.option',  $key, $value, 'id', 'name' );
+			$parentlist[]	= HTMLHelper::_('select.option',  $key, $value, 'id', 'name' );
 		}
-		$catidAlltime = JHtml::_('select.genericlist', $parentlist, 'catidAlltime', 'class="'.$field_search.'" size="1" style="max-width: 250px;"', 'id', 'name', intval($row->catidAlltime));
-		$catidEdition = JHtml::_('select.genericlist', $parentlist, 'catidEdition', 'class="'.$field_search.'" size="1" style="max-width: 250px;"', 'id', 'name', intval($row->catidEdition));
+		$catidAlltime = HTMLHelper::_('select.genericlist', $parentlist, 'catidAlltime', 'class="'.$field_search.'" size="1" style="max-width: 250px;"', 'id', 'name', intval($row->catidAlltime));
+		$catidEdition = HTMLHelper::_('select.genericlist', $parentlist, 'catidEdition', 'class="'.$field_search.'" size="1" style="max-width: 250px;"', 'id', 'name', intval($row->catidEdition));
 	}
 	if (isset($catidAlltime)) { 
 	?>
 		<tr>
 			<td colspan="1" class="paramlist_key">
 				<label for="category">
-					<?php echo JText::_( 'CATEGORY_ALLTIME' ); ?>:
+					<?php echo Text::_( 'CATEGORY_ALLTIME' ); ?>:
 				</label>
 			</td>
 			<td colspan="2" class="paramlist_value">
@@ -250,7 +254,7 @@ class CLMViewMTurniere
 			</td>
 			<td colspan="1" class="paramlist_key">
 				<label for="category">
-					<?php echo JText::_( 'CATEGORY_EDITION' ); ?>:
+					<?php echo Text::_( 'CATEGORY_EDITION' ); ?>:
 				</label>
 			</td>
 			<td colspan="2" class="paramlist_value">
@@ -259,20 +263,20 @@ class CLMViewMTurniere
 		</tr>
 		<tr>
 			<td colspan="1" class="paramlist_key">
-							<?php echo JText::_('OPTION_ADDCATTONAME'); ?>:
+							<?php echo Text::_('OPTION_ADDCATTONAME'); ?>:
 			</td>
 			<td colspan="5" class="paramlist_value">
 				<?php
 				$options = array();
-				$options[0] = JText::_('OPTION_ADDCATTONAME_0');
-				$options[1] = JText::_('OPTION_ADDCATTONAME_1');
-				$options[2] = JText::_('OPTION_ADDCATTONAME_2');
+				$options[0] = Text::_('OPTION_ADDCATTONAME_0');
+				$options[1] = Text::_('OPTION_ADDCATTONAME_1');
+				$options[2] = Text::_('OPTION_ADDCATTONAME_2');
 				$optionlist = array();
 				foreach ($options as $key => $val) {
-					$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
+					$optionlist[]	= HTMLHelper::_('select.option', $key, $val, 'id', 'name' );
 				}
-//				echo JHtml::_('select.genericlist', $optionlist, 'params[addCatToName]', 'class="js-example-basic-single"', 'id', 'name', (isset($row->params['addCatToName']) ? $row->params['addCatToName'] : "0"));
-				echo JHtml::_('select.genericlist', $optionlist, 'params[addCatToName]', 'class="'.$field_search.'"', 'id', 'name', (isset($row->params['addCatToName']) ? $row->params['addCatToName'] : "0"));
+//				echo HTMLHelper::_('select.genericlist', $optionlist, 'params[addCatToName]', 'class="js-example-basic-single"', 'id', 'name', (isset($row->params['addCatToName']) ? $row->params['addCatToName'] : "0"));
+				echo HTMLHelper::_('select.genericlist', $optionlist, 'params[addCatToName]', 'class="'.$field_search.'"', 'id', 'name', (isset($row->params['addCatToName']) ? $row->params['addCatToName'] : "0"));
 				?>
 			</td>
 		</tr>
@@ -281,24 +285,24 @@ class CLMViewMTurniere
 	?>
 	<tr>
 	<td nowrap="nowrap">
-	<label for="saison"><?php echo JText::_( 'LEAGUE_SEASON' ); ?></label>
+	<label for="saison"><?php echo Text::_( 'LEAGUE_SEASON' ); ?></label>
 	</td><td colspan="2">
 	<?php echo $lists['saison']; ?>
 	</td>
 
 	<td nowrap="nowrap">
-	<label for="rang"><?php echo JText::_( 'LEAGUE_LIST_TYPE' ); ?></label>
+	<label for="rang"><?php echo Text::_( 'LEAGUE_LIST_TYPE' ); ?></label>
 	</td><td colspan="2">
 	<?php if ($rang == 0) { ?>
 	<?php echo $lists['gruppe']; ?>
 	</td>
 	</tr>
-	<?php } if ($rang == 1) { echo JText::_( 'LEAGUE_LIST_TYPE_DEFAULT_RANK' ); ?>
+	<?php } if ($rang == 1) { echo Text::_( 'LEAGUE_LIST_TYPE_DEFAULT_RANK' ); ?>
 	</td>
 	</tr>
 	<input type="hidden" name="rang" value="1" />
 	<?php }
-	if ($rang == 2) { echo JText::_( 'LEAGUE_LIST_TYPE_DEFAULT_LIST' ); ?>
+	if ($rang == 2) { echo Text::_( 'LEAGUE_LIST_TYPE_DEFAULT_LIST' ); ?>
 	</td>
 	</tr>
 	<input type="hidden" name="rang" value="0" />
@@ -307,15 +311,15 @@ class CLMViewMTurniere
 	<tr>
         <td width="40" class="key">
            	<label for="dateStart">
-               	<?php echo JText::_( 'LEAGUE_STARTDATE' ); ?> 
+               	<?php echo Text::_( 'LEAGUE_STARTDATE' ); ?> 
            	</label>
         </td>
         <td colspan="2">
 			<?php echo CLMForm::calendar($row->dateStart, "dateStart", "dateStart", '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
         </td>
-        <td width="40" class="key" title="<?php echo JText::_( 'LEAGUE_ENDDATE_HINT' ); ?>">
+        <td width="40" class="key" title="<?php echo Text::_( 'LEAGUE_ENDDATE_HINT' ); ?>">
            	<label for="dateEnd">
-               	<?php echo JText::_( 'LEAGUE_ENDDATE' ); ?> 
+               	<?php echo Text::_( 'LEAGUE_ENDDATE' ); ?> 
            	</label>
         </td>
         <td>
@@ -324,13 +328,13 @@ class CLMViewMTurniere
 	</tr>
 	<tr>
 	<td nowrap="nowrap">
-	<label for="teil"><?php echo JText::_( 'LEAGUE_TEAMS' ); ?></label>
+	<label for="teil"><?php echo Text::_( 'LEAGUE_TEAMS' ); ?></label>
 	</td><td colspan="2">
 	<input class="inputbox" type="text" name="teil" id="teil" size="4" maxlength="4" value="<?php echo $row->teil; ?>" />
 	</td>
-        <td width="20" class="key" title="<?php echo JText::_( 'LEAGUE_DEADLINE_ROSTER_HINT' ); ?>">
+        <td width="20" class="key" title="<?php echo Text::_( 'LEAGUE_DEADLINE_ROSTER_HINT' ); ?>">
            	<label for="params[deadline_roster]">
-               	<?php echo JText::_( 'LEAGUE_DEADLINE_ROSTER' ); ?> 
+               	<?php echo Text::_( 'LEAGUE_DEADLINE_ROSTER' ); ?> 
            	</label>
         </td>
         <td>
@@ -340,12 +344,12 @@ class CLMViewMTurniere
 	
 	<tr>
 	<td nowrap="nowrap">
-	<label for="stammspieler"><?php echo JText::_( 'LEAGUE_PLAYERS_1' ); ?></label>
+	<label for="stammspieler"><?php echo Text::_( 'LEAGUE_PLAYERS_1' ); ?></label>
 	</td><td colspan="2">
 	<input class="inputbox" type="text" name="stamm" id="stamm" size="4" maxlength="4" value="<?php echo $row->stamm; ?>" />
 	</td>
 	<td nowrap="nowrap">
-	<label for="erstatzspieler"><?php echo JText::_( 'LEAGUE_PLAYERS_2' ); ?></label>
+	<label for="erstatzspieler"><?php echo Text::_( 'LEAGUE_PLAYERS_2' ); ?></label>
 	</td><td colspan="2">
 	<input class="inputbox" type="text" name="ersatz" id="ersatz" size="4" maxlength="4" value="<?php echo $row->ersatz; ?>" />
 	</td>
@@ -353,12 +357,12 @@ class CLMViewMTurniere
 
 	<tr>
 	<td nowrap="nowrap">
-	<label for="runden"><?php echo JText::_( 'LEAGUE_ROUNDS' ); ?></label>
+	<label for="runden"><?php echo Text::_( 'LEAGUE_ROUNDS' ); ?></label>
 	</td><td colspan="2">
 	<input class="inputbox" type="text" name="runden" id="runden" size="4" maxlength="4" value="<?php echo $row->runden; ?>" />
 	</td>
 	<td nowrap="nowrap">
-	<label for="durchgang"><?php echo JText::_( 'LEAGUE_DG' ); ?></label>
+	<label for="durchgang"><?php echo Text::_( 'LEAGUE_DG' ); ?></label>
 	</td><td colspan="2">
 <!--		<select name="durchgang" id="durchgang" class="js-example-basic-single" value="<?php echo $row->durchgang; ?>" size="1"> -->
 		<select name="durchgang" id="durchgang" class="<?php echo $field_search; ?>" value="<?php echo $row->durchgang; ?>" size="1">
@@ -372,46 +376,46 @@ class CLMViewMTurniere
 
 	<tr>
 	<td nowrap="nowrap">
-<label for="params[color_order]"><?php echo JText::_( 'LEAGUE_COLOR_ORDER' ); ?></label>
+<label for="params[color_order]"><?php echo Text::_( 'LEAGUE_COLOR_ORDER' ); ?></label>
 	</td><td colspan="2">
 <!--		<select name="params[color_order]" id="params-color_order" class="js-example-basic-single" value="<?php echo $row->params['color_order']; ?>" size="1"> -->
 		<select name="params[color_order]" id="params-color_order" class="<?php echo $field_search; ?>" value="<?php echo $row->params['color_order']; ?>" size="1">
 		<!--<option>- wählen -</option>-->
-		<option value="1" <?php if ($row->params['color_order'] == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_COLOR_ORDER_1' );?></option>
-		<option value="2" <?php if ($row->params['color_order'] == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_COLOR_ORDER_2' );?></option>
-		<option value="3" <?php if ($row->params['color_order'] == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_COLOR_ORDER_3' );?></option>
-		<option value="4" <?php if ($row->params['color_order'] == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_COLOR_ORDER_4' );?></option>
-		<option value="5" <?php if ($row->params['color_order'] == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_COLOR_ORDER_5' );?></option>
-		<option value="6" <?php if ($row->params['color_order'] == 6) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_COLOR_ORDER_6' );?></option>
+		<option value="1" <?php if ($row->params['color_order'] == 1) {echo 'selected="selected"';} ?>><?php echo Text::_( 'LEAGUE_COLOR_ORDER_1' );?></option>
+		<option value="2" <?php if ($row->params['color_order'] == 2) {echo 'selected="selected"';} ?>><?php echo Text::_( 'LEAGUE_COLOR_ORDER_2' );?></option>
+		<option value="3" <?php if ($row->params['color_order'] == 3) {echo 'selected="selected"';} ?>><?php echo Text::_( 'LEAGUE_COLOR_ORDER_3' );?></option>
+		<option value="4" <?php if ($row->params['color_order'] == 4) {echo 'selected="selected"';} ?>><?php echo Text::_( 'LEAGUE_COLOR_ORDER_4' );?></option>
+		<option value="5" <?php if ($row->params['color_order'] == 5) {echo 'selected="selected"';} ?>><?php echo Text::_( 'LEAGUE_COLOR_ORDER_5' );?></option>
+		<option value="6" <?php if ($row->params['color_order'] == 6) {echo 'selected="selected"';} ?>><?php echo Text::_( 'LEAGUE_COLOR_ORDER_6' );?></option>
 		</select>
 	</td>
 	<td nowrap="nowrap">
-	<label for="params[round_date]"><?php echo JText::_( 'LEAGUE_ROUND_DATE' ); ?></label>
+	<label for="params[round_date]"><?php echo Text::_( 'LEAGUE_ROUND_DATE' ); ?></label>
 	</td><td colspan="2">
 <!--		<select name="params[round_date]" id="params-round_date" class="js-example-basic-single" value="<?php echo $row->params['round_date']; ?>" size="1"> -->
 		<select name="params[round_date]" id="params-round_date" class="<?php echo $field_search; ?>" value="<?php echo $row->params['round_date']; ?>" size="1">
-		<option value="0" <?php if ($row->params['round_date'] == 0) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_ROUND_DATE_0' );?></option>
-		<option value="1" <?php if ($row->params['round_date'] == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_ROUND_DATE_1' );?></option>
+		<option value="0" <?php if ($row->params['round_date'] == 0) {echo 'selected="selected"';} ?>><?php echo Text::_( 'LEAGUE_ROUND_DATE_0' );?></option>
+		<option value="1" <?php if ($row->params['round_date'] == 1) {echo 'selected="selected"';} ?>><?php echo Text::_( 'LEAGUE_ROUND_DATE_1' );?></option>
 		</select>
 	</td>
 	</tr>
 
 	<tr>
 	<td nowrap="nowrap">
-	<label for="runden_modus"><?php echo JText::_( 'MTURN_PAIRING_MODE' ); ?></label>
+	<label for="runden_modus"><?php echo Text::_( 'MTURN_PAIRING_MODE' ); ?></label>
 	</td><td colspan="2">
 <!--		<select name="runden_modus" id="runden_modus" class="js-example-basic-single" value="<?php echo $row->runden_modus; ?>" size="1"> -->
 		<select name="runden_modus" id="runden_modus" class="<?php echo $field_search; ?>" value="<?php echo $row->runden_modus; ?>" size="1">
 		<!--<option>- wählen -</option>-->
-		<option value="1" <?php if ($row->runden_modus == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_PAIRING_MODE_2' );?></option>
-		<option value="2" <?php if ($row->runden_modus == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_PAIRING_MODE_3' );?></option>
-		<option value="3" <?php if ($row->runden_modus == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_PAIRING_MODE_4' );?></option>
-		<option value="4" <?php if ($row->runden_modus == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_PAIRING_MODE_5' );?></option>
-		<option value="5" <?php if ($row->runden_modus == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_PAIRING_MODE_6' );?></option>
+		<option value="1" <?php if ($row->runden_modus == 1) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_PAIRING_MODE_2' );?></option>
+		<option value="2" <?php if ($row->runden_modus == 2) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_PAIRING_MODE_3' );?></option>
+		<option value="3" <?php if ($row->runden_modus == 3) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_PAIRING_MODE_4' );?></option>
+		<option value="4" <?php if ($row->runden_modus == 4) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_PAIRING_MODE_5' );?></option>
+		<option value="5" <?php if ($row->runden_modus == 5) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_PAIRING_MODE_6' );?></option>
 		</select>
 	</td>
 	<td nowrap="nowrap">
-	<label for="heim"><?php echo JText::_( 'LEAGUE_HOME' ); ?></label>
+	<label for="heim"><?php echo Text::_( 'LEAGUE_HOME' ); ?></label>
 	</td><td colspan="2"><fieldset class="radio">
 		<?php echo $lists['heim']; ?>
 	</fieldset></td>
@@ -419,106 +423,109 @@ class CLMViewMTurniere
 	
     <tr>
 	<td nowrap="nowrap">
-	<label for="tiebr1"><?php echo '1.'.JText::_( 'MTURN_TIEBREAKER' ); ?></label>
+	<label for="tiebr1"><?php echo '1.'.Text::_( 'MTURN_TIEBREAKER' ); ?></label>
 	</td><td colspan="2">
 <!--		<select name="tiebr1" id="tiebr1" class="js-example-basic-single" value="<?php echo $row->tiebr1; ?>" size="1"> -->
 		<select name="tiebr1" id="tiebr1" class="<?php echo $field_search; ?>" value="<?php echo $row->tiebr1; ?>" size="1">
 		<!--<option>- wählen -</option>-->
-		<option value="0" <?php if ($row->tiebr1 == 0) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_SELECT_TIEBR_0' );?></option>
-		<option value="1" <?php if ($row->tiebr1 == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_1' );?></option>
-		<option value="11" <?php if ($row->tiebr1 == 11) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_11' );?></option>
-		<option value="2" <?php if ($row->tiebr1 == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_2' );?></option>
-		<option value="12" <?php if ($row->tiebr1 == 12) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_12' );?></option>
-		<option value="7" <?php if ($row->tiebr1 == 7) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_7' );?></option>
-		<option value="17" <?php if ($row->tiebr1 == 17) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_17' );?></option>
-		<option value="8" <?php if ($row->tiebr1 == 8) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_8' );?></option>
-		<option value="18" <?php if ($row->tiebr1 == 18) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_18' );?></option>
-		<option value="23" <?php if ($row->tiebr1 == 23) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_23' );?></option>
-		<option value="4" <?php if ($row->tiebr1 == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_4' );?></option>
-		<option value="5" <?php if ($row->tiebr1 == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_5' );?></option>
-		<option value="9" <?php if ($row->tiebr1 == 9) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_9' );?></option>
-		<option value="10" <?php if ($row->tiebr1 == 10) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_10' );?></option>
-		<option value="3" <?php if ($row->tiebr1 == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_3' );?></option>
-		<option value="25" <?php if ($row->tiebr1 == 25) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_25' );?></option>
-		<option value="51" <?php if ($row->tiebr1 == 51) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_51' );?></option>
+		<option value="0" <?php if ($row->tiebr1 == 0) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_SELECT_TIEBR_0' );?></option>
+		<option value="1" <?php if ($row->tiebr1 == 1) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_1' );?></option>
+		<option value="11" <?php if ($row->tiebr1 == 11) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_11' );?></option>
+		<option value="2" <?php if ($row->tiebr1 == 2) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_2' );?></option>
+		<option value="12" <?php if ($row->tiebr1 == 12) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_12' );?></option>
+		<option value="7" <?php if ($row->tiebr1 == 7) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_7' );?></option>
+		<option value="17" <?php if ($row->tiebr1 == 17) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_17' );?></option>
+		<option value="8" <?php if ($row->tiebr1 == 8) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_8' );?></option>
+		<option value="18" <?php if ($row->tiebr1 == 18) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_18' );?></option>
+		<option value="23" <?php if ($row->tiebr1 == 23) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_23' );?></option>
+		<option value="4" <?php if ($row->tiebr1 == 4) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_4' );?></option>
+		<option value="5" <?php if ($row->tiebr1 == 5) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_5' );?></option>
+		<option value="9" <?php if ($row->tiebr1 == 9) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_9' );?></option>
+		<option value="10" <?php if ($row->tiebr1 == 10) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_10' );?></option>
+		<option value="3" <?php if ($row->tiebr1 == 3) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_3' );?></option>
+		<option value="33" <?php if ($row->tiebr1 == 33) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_33' );?></option>
+		<option value="25" <?php if ($row->tiebr1 == 25) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_25' );?></option>
+		<option value="51" <?php if ($row->tiebr1 == 51) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_51' );?></option>
 		</select>
 	</td>
 	<td nowrap="nowrap">
-	<label for="tiebr2"><?php echo '2.'.JText::_( 'MTURN_TIEBREAKER' ); ?></label>
+	<label for="tiebr2"><?php echo '2.'.Text::_( 'MTURN_TIEBREAKER' ); ?></label>
 	</td>
 	<td colspan="2">
 <!--		<select name="tiebr2" id="tiebr2" class="js-example-basic-single" value="<?php echo $row->tiebr2; ?>" size="1"> -->
 		<select name="tiebr2" id="tiebr2" class="<?php echo $field_search; ?>" value="<?php echo $row->tiebr2; ?>" size="1">
 		<!--<option>- wählen -</option>-->
-		<option value="0" <?php if ($row->tiebr2 == 0) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_SELECT_TIEBR_0' );?></option>
-		<option value="1" <?php if ($row->tiebr2 == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_1' );?></option>
-		<option value="11" <?php if ($row->tiebr2 == 11) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_11' );?></option>
-		<option value="2" <?php if ($row->tiebr2 == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_2' );?></option>
-		<option value="12" <?php if ($row->tiebr2 == 12) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_12' );?></option>
-		<option value="7" <?php if ($row->tiebr2 == 7) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_7' );?></option>
-		<option value="17" <?php if ($row->tiebr2 == 17) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_17' );?></option>
-		<option value="8" <?php if ($row->tiebr2 == 8) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_8' );?></option>
-		<option value="18" <?php if ($row->tiebr2 == 18) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_18' );?></option>
-		<option value="23" <?php if ($row->tiebr2 == 23) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_23' );?></option>
-		<option value="4" <?php if ($row->tiebr2 == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_4' );?></option>
-		<option value="5" <?php if ($row->tiebr2 == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_5' );?></option>
-		<option value="9" <?php if ($row->tiebr2 == 9) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_9' );?></option>
-		<option value="10" <?php if ($row->tiebr2 == 10) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_10' );?></option>
-		<option value="3" <?php if ($row->tiebr2 == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_3' );?></option>
-		<option value="25" <?php if ($row->tiebr2 == 25) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_25' );?></option>
-		<option value="51" <?php if ($row->tiebr2 == 51) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_51' );?></option>
+		<option value="0" <?php if ($row->tiebr2 == 0) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_SELECT_TIEBR_0' );?></option>
+		<option value="1" <?php if ($row->tiebr2 == 1) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_1' );?></option>
+		<option value="11" <?php if ($row->tiebr2 == 11) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_11' );?></option>
+		<option value="2" <?php if ($row->tiebr2 == 2) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_2' );?></option>
+		<option value="12" <?php if ($row->tiebr2 == 12) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_12' );?></option>
+		<option value="7" <?php if ($row->tiebr2 == 7) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_7' );?></option>
+		<option value="17" <?php if ($row->tiebr2 == 17) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_17' );?></option>
+		<option value="8" <?php if ($row->tiebr2 == 8) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_8' );?></option>
+		<option value="18" <?php if ($row->tiebr2 == 18) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_18' );?></option>
+		<option value="23" <?php if ($row->tiebr2 == 23) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_23' );?></option>
+		<option value="4" <?php if ($row->tiebr2 == 4) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_4' );?></option>
+		<option value="5" <?php if ($row->tiebr2 == 5) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_5' );?></option>
+		<option value="9" <?php if ($row->tiebr2 == 9) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_9' );?></option>
+		<option value="10" <?php if ($row->tiebr2 == 10) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_10' );?></option>
+		<option value="3" <?php if ($row->tiebr2 == 3) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_3' );?></option>
+		<option value="33" <?php if ($row->tiebr2 == 33) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_33' );?></option>
+		<option value="25" <?php if ($row->tiebr2 == 25) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_25' );?></option>
+		<option value="51" <?php if ($row->tiebr2 == 51) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_51' );?></option>
 		</select>
 	</td>
 	</tr>
 	<tr>
 	<td nowrap="nowrap">
-	<label for="tiebr3"><?php echo '3.'.JText::_( 'MTURN_TIEBREAKER' ); ?></label>
+	<label for="tiebr3"><?php echo '3.'.Text::_( 'MTURN_TIEBREAKER' ); ?></label>
 	</td><td colspan="2">
 <!--		<select name="tiebr3" id="tiebr3" class="js-example-basic-single" value="<?php echo $row->tiebr3; ?>" size="1"> -->
 		<select name="tiebr3" id="tiebr3" class="<?php echo $field_search; ?>" value="<?php echo $row->tiebr3; ?>" size="1">
 		<!--<option>- wählen -</option>-->
-		<option value="0" <?php if ($row->tiebr3 == 0) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_SELECT_TIEBR_0' );?></option>
-		<option value="1" <?php if ($row->tiebr3 == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_1' );?></option>
-		<option value="11" <?php if ($row->tiebr3 == 11) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_11' );?></option>
-		<option value="2" <?php if ($row->tiebr3 == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_2' );?></option>
-		<option value="12" <?php if ($row->tiebr3 == 12) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_12' );?></option>
-		<option value="7" <?php if ($row->tiebr3 == 7) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_7' );?></option>
-		<option value="17" <?php if ($row->tiebr3 == 17) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_17' );?></option>
-		<option value="8" <?php if ($row->tiebr3 == 8) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_8' );?></option>
-		<option value="18" <?php if ($row->tiebr3 == 18) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_18' );?></option>
-		<option value="23" <?php if ($row->tiebr3 == 23) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_23' );?></option>
-		<option value="4" <?php if ($row->tiebr3 == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_4' );?></option>
-		<option value="5" <?php if ($row->tiebr3 == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_5' );?></option>
-		<option value="9" <?php if ($row->tiebr3 == 9) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_9' );?></option>
-		<option value="10" <?php if ($row->tiebr3 == 10) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_10' );?></option>
-		<option value="3" <?php if ($row->tiebr3 == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_3' );?></option>
-		<option value="25" <?php if ($row->tiebr3 == 25) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_25' );?></option>
-		<option value="51" <?php if ($row->tiebr3 == 51) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_51' );?></option>
+		<option value="0" <?php if ($row->tiebr3 == 0) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_SELECT_TIEBR_0' );?></option>
+		<option value="1" <?php if ($row->tiebr3 == 1) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_1' );?></option>
+		<option value="11" <?php if ($row->tiebr3 == 11) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_11' );?></option>
+		<option value="2" <?php if ($row->tiebr3 == 2) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_2' );?></option>
+		<option value="12" <?php if ($row->tiebr3 == 12) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_12' );?></option>
+		<option value="7" <?php if ($row->tiebr3 == 7) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_7' );?></option>
+		<option value="17" <?php if ($row->tiebr3 == 17) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_17' );?></option>
+		<option value="8" <?php if ($row->tiebr3 == 8) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_8' );?></option>
+		<option value="18" <?php if ($row->tiebr3 == 18) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_18' );?></option>
+		<option value="23" <?php if ($row->tiebr3 == 23) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_23' );?></option>
+		<option value="4" <?php if ($row->tiebr3 == 4) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_4' );?></option>
+		<option value="5" <?php if ($row->tiebr3 == 5) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_5' );?></option>
+		<option value="9" <?php if ($row->tiebr3 == 9) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_9' );?></option>
+		<option value="10" <?php if ($row->tiebr3 == 10) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_10' );?></option>
+		<option value="3" <?php if ($row->tiebr3 == 3) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_3' );?></option>
+		<option value="33" <?php if ($row->tiebr3 == 33) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_33' );?></option>
+		<option value="25" <?php if ($row->tiebr3 == 25) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_25' );?></option>
+		<option value="51" <?php if ($row->tiebr3 == 51) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_51' );?></option>
 		</select>
 	</td>
 					<td class="paramlist_key">
-						<?php echo JText::_('MTURN_TIEBREAKERSFIDECORRECT'); ?>:
+						<?php echo Text::_('MTURN_TIEBREAKERSFIDECORRECT'); ?>:
 					</td>
 					<td class="paramlist_value"><fieldset class="radio">
-						<?php //echo JHtml::_('select.booleanlist', 'params[optionTiebreakersFideCorrect]', 'class="js-example-basic-single"', $row->params['optionTiebreakersFideCorrect']); ?>
-						<?php echo JHtml::_('select.booleanlist', 'params[optionTiebreakersFideCorrect]', 'class="'.$field_search.'"', $row->params['optionTiebreakersFideCorrect']); ?>
+						<?php //echo HTMLHelper::_('select.booleanlist', 'params[optionTiebreakersFideCorrect]', 'class="js-example-basic-single"', $row->params['optionTiebreakersFideCorrect']); ?>
+						<?php echo HTMLHelper::_('select.booleanlist', 'params[optionTiebreakersFideCorrect]', 'class="'.$field_search.'"', $row->params['optionTiebreakersFideCorrect']); ?>
 					</fieldset></td>
 	</tr>
 	
 	<tr>
 	<td nowrap="nowrap">
-	<label for="ersatz_regel"><?php echo JText::_( 'LEAGUE_ERSATZ_REGEL' ); ?></label>
+	<label for="ersatz_regel"><?php echo Text::_( 'LEAGUE_ERSATZ_REGEL' ); ?></label>
 	</td>
 	<td colspan="2">
 <!--		<select name="ersatz_regel" id="ersatz_regel" class="js-example-basic-single" value="<?php echo $row->ersatz_regel; ?>" size="1"> -->
 		<select name="ersatz_regel" id="ersatz_regel" class="<?php echo $field_search; ?>" value="<?php echo $row->ersatz_regel; ?>" size="1">
 		<!--<option>- wählen -</option>-->
-		<option value="0" <?php if ($row->ersatz_regel == 0) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_ERSATZ_REGEL_0' );?></option>
-		<option value="1" <?php if ($row->ersatz_regel == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'LEAGUE_ERSATZ_REGEL_1' );?></option>
+		<option value="0" <?php if ($row->ersatz_regel == 0) {echo 'selected="selected"';} ?>><?php echo Text::_( 'LEAGUE_ERSATZ_REGEL_0' );?></option>
+		<option value="1" <?php if ($row->ersatz_regel == 1) {echo 'selected="selected"';} ?>><?php echo Text::_( 'LEAGUE_ERSATZ_REGEL_1' );?></option>
 		</select>
 	</td>
 	<td nowrap="nowrap">
-	<label for="anz_sgp"><?php echo JText::_( 'LEAGUE_ANZ_SGP' ); ?></label>
+	<label for="anz_sgp"><?php echo Text::_( 'LEAGUE_ANZ_SGP' ); ?></label>
 	</td><td colspan="2">
 	<input class="inputbox" type="text" name="anz_sgp" id="anz_sgp" size="4" maxlength="4" value="<?php echo $row->params['anz_sgp'] ?>" />
 	</td>
@@ -526,74 +533,74 @@ class CLMViewMTurniere
 	
 		<tr>
 		<td class="paramlist_key">
-			<?php echo JText::_('OPTION_AUTODWZ'); ?>:
+			<?php echo Text::_('OPTION_AUTODWZ'); ?>:
 		</td>
 		<td colspan="2" class="paramlist_value">
 			<?php 
 			$options = array();
-			$options[0] = JText::_('OPTION_AUTODWZ_0');
-			$options[1] = JText::_('OPTION_AUTODWZ_1');
-			$options[2] = JText::_('OPTION_AUTODWZ_2');
-			$options[3] = JText::_('OPTION_AUTODWZ_3');
+			$options[0] = Text::_('OPTION_AUTODWZ_0');
+			$options[1] = Text::_('OPTION_AUTODWZ_1');
+			$options[2] = Text::_('OPTION_AUTODWZ_2');
+			$options[3] = Text::_('OPTION_AUTODWZ_3');
 			$optionlist = array();
 			foreach ($options as $key => $val) {
-				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
+				$optionlist[]	= HTMLHelper::_('select.option', $key, $val, 'id', 'name' );
 			}
-//			echo JHtml::_('select.genericlist', $optionlist, 'params[autoDWZ]', 'class="js-example-basic-single"', 'id', 'name', (isset($row->params['autoDWZ']) ? $row->params['autoDWZ'] : "0")); 
-			echo JHtml::_('select.genericlist', $optionlist, 'params[autoDWZ]', 'class="'.$field_search.'"', 'id', 'name', (isset($row->params['autoDWZ']) ? $row->params['autoDWZ'] : "0")); 
+//			echo HTMLHelper::_('select.genericlist', $optionlist, 'params[autoDWZ]', 'class="js-example-basic-single"', 'id', 'name', (isset($row->params['autoDWZ']) ? $row->params['autoDWZ'] : "0")); 
+			echo HTMLHelper::_('select.genericlist', $optionlist, 'params[autoDWZ]', 'class="'.$field_search.'"', 'id', 'name', (isset($row->params['autoDWZ']) ? $row->params['autoDWZ'] : "0")); 
 			?>
 		</td>
 		<td class="paramlist_key">
-			<?php echo JText::_('OPTION_AUTORANKING'); ?>:
+			<?php echo Text::_('OPTION_AUTORANKING'); ?>:
 		</td>
 		<td colspan="2" class="paramlist_value">
 			<?php 
 			$options = array();
-			$options[0] = JText::_('OPTION_AUTORANKING_0');
-			$options[1] = JText::_('OPTION_AUTORANKING_1');
+			$options[0] = Text::_('OPTION_AUTORANKING_0');
+			$options[1] = Text::_('OPTION_AUTORANKING_1');
 			$optionlist = array();
 			foreach ($options as $key => $val) {
-				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
+				$optionlist[]	= HTMLHelper::_('select.option', $key, $val, 'id', 'name' );
 			}
-//			echo JHtml::_('select.genericlist', $optionlist, 'params[autoRANKING]', 'class="js-example-basic-single"', 'id', 'name', (isset($row->params['autoRANKING']) ? $row->params['autoRANKING'] : "0")); 
-			echo JHtml::_('select.genericlist', $optionlist, 'params[autoRANKING]', 'class="'.$field_search.'"', 'id', 'name', (isset($row->params['autoRANKING']) ? $row->params['autoRANKING'] : "0")); 
+//			echo HTMLHelper::_('select.genericlist', $optionlist, 'params[autoRANKING]', 'class="js-example-basic-single"', 'id', 'name', (isset($row->params['autoRANKING']) ? $row->params['autoRANKING'] : "0")); 
+			echo HTMLHelper::_('select.genericlist', $optionlist, 'params[autoRANKING]', 'class="'.$field_search.'"', 'id', 'name', (isset($row->params['autoRANKING']) ? $row->params['autoRANKING'] : "0")); 
 			?>
 		</td>
 	</tr>
 	<tr>
-		<td nowrap="nowrap" colspan="2" title="<?php echo JText::_( 'OPTION_ELO_ANALYSIS_HINT' );?>">
-			<label for="params[optionEloAnalysis]"><?php echo JText::_( 'OPTION_ELO_ANALYSIS' ); ?></label>
+		<td nowrap="nowrap" colspan="2" title="<?php echo Text::_( 'OPTION_ELO_ANALYSIS_HINT' );?>">
+			<label for="params[optionEloAnalysis]"><?php echo Text::_( 'OPTION_ELO_ANALYSIS' ); ?></label>
 		</td>
 		<td colspan="1">
 			<fieldset class="radio">
-				<?php echo JHtml::_('select.booleanlist', 'params[optionEloAnalysis]', 'class="inputbox"', $row->params['optionEloAnalysis']); ?>
+				<?php echo HTMLHelper::_('select.booleanlist', 'params[optionEloAnalysis]', 'class="inputbox"', $row->params['optionEloAnalysis']); ?>
 			</fieldset>
 		</td>
 		<td class="paramlist_key">
-			<?php echo JText::_('ANNUL_PROC'); ?>:
+			<?php echo Text::_('ANNUL_PROC'); ?>:
 		</td>
 		<td colspan="2" class="paramlist_value">
 			<?php 
 			$options = array();
-			$options[0] = JText::_('ANNUL_PROC_0');
-			$options[1] = JText::_('ANNUL_PROC_1');
+			$options[0] = Text::_('ANNUL_PROC_0');
+			$options[1] = Text::_('ANNUL_PROC_1');
 			$optionlist = array();
 			foreach ($options as $key => $val) {
-				$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
+				$optionlist[]	= HTMLHelper::_('select.option', $key, $val, 'id', 'name' );
 			}
-//			echo JHtml::_('select.genericlist', $optionlist, 'params[annul_proc]', 'class="js-example-basic-single"', 'id', 'name', (isset($row->params['annul_proc']) ? $row->params['annul_proc'] : "0")); 
-			echo JHtml::_('select.genericlist', $optionlist, 'params[annul_proc]', 'class="'.$field_search.'"', 'id', 'name', (isset($row->params['annul_proc']) ? $row->params['annul_proc'] : "0")); 
+//			echo HTMLHelper::_('select.genericlist', $optionlist, 'params[annul_proc]', 'class="js-example-basic-single"', 'id', 'name', (isset($row->params['annul_proc']) ? $row->params['annul_proc'] : "0")); 
+			echo HTMLHelper::_('select.genericlist', $optionlist, 'params[annul_proc]', 'class="'.$field_search.'"', 'id', 'name', (isset($row->params['annul_proc']) ? $row->params['annul_proc'] : "0")); 
 			?>
 		</td>
 	</tr>
 	<tr>
 		<td nowrap="nowrap">
-		<label for="params[pseudo_dwz]"><?php echo JText::_( 'LEAGUE_PSEUDO_DWZ' ); ?></label>
+		<label for="params[pseudo_dwz]"><?php echo Text::_( 'LEAGUE_PSEUDO_DWZ' ); ?></label>
 		</td><td colspan="2">
 		<input class="inputbox" type="text" name="params[pseudo_dwz]" id="params-pseudo_dwz" size="4" maxlength="4" value="<?php echo $row->params['pseudo_dwz']; ?>" />
 		</td>
 		<td nowrap="nowrap">
-			<label for="params[waiting_period]"><?php echo JText::_( 'LEAGUE_WAITING_PERIOD' ); ?></label>
+			<label for="params[waiting_period]"><?php echo Text::_( 'LEAGUE_WAITING_PERIOD' ); ?></label>
 		</td>
 		<td colspan="2">
 			<input class="inputbox" type="text" name="params[waiting_period]" id="params-waiting_period" size="15" maxlength="50" value="<?php echo $row->params['waiting_period']; ?>" />
@@ -601,7 +608,7 @@ class CLMViewMTurniere
 	</tr>
 	<tr>
 		<td width="20%" nowrap="nowrap">
-			<label for="params[time_control]"><?php echo JText::_( 'LEAGUE_TIME_CONTROL' ); ?></label>
+			<label for="params[time_control]"><?php echo Text::_( 'LEAGUE_TIME_CONTROL' ); ?></label>
 		</td>
 		<td colspan="4">
 			<?php if (is_numeric($row->params['time_control'])) {
@@ -613,18 +620,18 @@ class CLMViewMTurniere
 	</tr>
 	<tr>
 		<td width="40%" class="paramlist_key">
-			<label for="city" title="<?php echo JText::_( 'TOURNAMENT_CITY_HINT' ); ?>">
-				<?php echo JText::_( 'TOURNAMENT_CITY' ); ?>:
+			<label for="city" title="<?php echo Text::_( 'TOURNAMENT_CITY_HINT' ); ?>">
+				<?php echo Text::_( 'TOURNAMENT_CITY' ); ?>:
 			</label>
 		</td>
-		<td class="paramlist_value" title="<?php echo JText::_( 'TOURNAMENT_CITY_HINT' ); ?>">
+		<td class="paramlist_value" title="<?php echo Text::_( 'TOURNAMENT_CITY_HINT' ); ?>">
 			<input class="inputbox" type="text" name="city" id="city" size="31" maxlength="60" value="<?php echo $row->city; ?>" />
 		</td>
 		<td width="3%"class="paramlist_value">
 		</td>
 		<td width="20%" class="paramlist_key">
 			<label for="FIDEcco">
-				<?php echo JText::_( 'TOURNAMENT_FIDECCO' ); ?>:
+				<?php echo Text::_( 'TOURNAMENT_FIDECCO' ); ?>:
 			</label>
 		</td>
 		<td class="paramlist_value">
@@ -632,12 +639,12 @@ class CLMViewMTurniere
 		</td>
 	</tr>
 	<tr>
-		<td width="40%" class="paramlist_key" title="<?php echo JText::_( 'TOURNAMENT_LOKAL_HINT' ); ?>">
+		<td width="40%" class="paramlist_key" title="<?php echo Text::_( 'TOURNAMENT_LOKAL_HINT' ); ?>">
 			<label for="lokal">
-				<?php echo JText::_( 'TOURNAMENT_LOKAL' ); ?>:
+				<?php echo Text::_( 'TOURNAMENT_LOKAL' ); ?>:
 			</label>
 		</td>
-		<td colspan="4" class="paramlist_value" title="<?php echo JText::_( 'TOURNAMENT_LOKAL_HINT' ); ?>">
+		<td colspan="4" class="paramlist_value" title="<?php echo Text::_( 'TOURNAMENT_LOKAL_HINT' ); ?>">
 			<input class="inputbox" type="text" name="lokal" id="lokal" size="80" maxlength="200" value="<?php echo $row->lokal; ?>" />
 		</td>
 	</tr>
@@ -645,20 +652,20 @@ class CLMViewMTurniere
   </fieldset>
   
   <fieldset class="adminform">
-   <legend><?php echo JText::_( 'LEAGUE_VALUATION' ); ?></legend>
+   <legend><?php echo Text::_( 'LEAGUE_VALUATION' ); ?></legend>
       <table class="paramlist admintable">
 
 	<tr>
 	<td nowrap="nowrap">&nbsp;</td>
-	<td><?php echo JText::_( 'LEAGUE_VALUATION_1' );?></td>
-	<td><?php echo JText::_( 'LEAGUE_VALUATION_2' );?></td>
-	<td><?php echo JText::_( 'LEAGUE_VALUATION_3' );?></td>
-	<td><?php echo JText::_( 'LEAGUE_VALUATION_4' );?></td>
+	<td><?php echo Text::_( 'LEAGUE_VALUATION_1' );?></td>
+	<td><?php echo Text::_( 'LEAGUE_VALUATION_2' );?></td>
+	<td><?php echo Text::_( 'LEAGUE_VALUATION_3' );?></td>
+	<td><?php echo Text::_( 'LEAGUE_VALUATION_4' );?></td>
 	</tr>
 	
 	<tr>
 	<td nowrap="nowrap">
-	<label for="punkte_modus"><?php echo JText::_( 'LEAGUE_MATCH_VALUATION' ); ?></label>
+	<label for="punkte_modus"><?php echo Text::_( 'LEAGUE_MATCH_VALUATION' ); ?></label>
 	</td>
 	<td>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="sieg" id="sieg" size="4" maxlength="4" value="<?php if($row->sieg !=""){ echo $row->sieg;} else { echo "1";}; ?>" /></td>
 	<td>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="remis" id="remis" size="4" maxlength="4" value="<?php if($row->remis !=""){ echo $row->remis;} else { echo "0.5";}; ?>" /></td>
@@ -668,7 +675,7 @@ class CLMViewMTurniere
 
 	<tr>
 	<td nowrap="nowrap">
-	<label for="man_punkte"><?php echo JText::_( 'LEAGUE_TEAM_POINTS' ); ?></label>
+	<label for="man_punkte"><?php echo Text::_( 'LEAGUE_TEAM_POINTS' ); ?></label>
 	</td>
 	<td>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="man_sieg" id="man_sieg" size="4" maxlength="4" value="<?php if($row->man_sieg !=""){ echo $row->man_sieg;} else { echo "2";}; ?>" /></td>
 	<td>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="man_remis" id="man_remis" size="4" maxlength="4" value="<?php if($row->man_remis !=""){ echo $row->man_remis;} else { echo "1";}; ?>" /></td>
@@ -678,35 +685,35 @@ class CLMViewMTurniere
 
 	<tr>
 	<td nowrap="nowrap">
-	<label for="sieg_bed"><?php echo JText::_( 'LEAGUE_WINNING_CONDITIONS' ); ?></label>
+	<label for="sieg_bed"><?php echo Text::_( 'LEAGUE_WINNING_CONDITIONS' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
 <!--		<select name="sieg_bed" id="sieg_bed" class="js-example-basic-single" value="<?php echo $row->sieg_bed;  ?>" size="1"> -->
 		<select name="sieg_bed" id="sieg_bed" class="<?php echo $field_search; ?>" value="<?php echo $row->sieg_bed;  ?>" size="1">
-		<option value="1" <?php if ($row->sieg_bed == 1) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_WINNING_CONDITIONS_1' );?></option>
-		<option value="2" <?php if ($row->sieg_bed == 2) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_WINNING_CONDITIONS_2' );?></option>
+		<option value="1" <?php if ($row->sieg_bed == 1) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_WINNING_CONDITIONS_1' );?></option>
+		<option value="2" <?php if ($row->sieg_bed == 2) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_WINNING_CONDITIONS_2' );?></option>
 		</select>
 	</td>
 	<td nowrap="nowrap">
-	<label for="b_wertung"><?php echo JText::_( 'LEAGUE_SCORE_CONDITIONS' ); //klkl?></label>
+	<label for="b_wertung"><?php echo Text::_( 'LEAGUE_SCORE_CONDITIONS' ); //klkl?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
 <!--		<select name="b_wertung" id="b_wertung" class="js-example-basic-single" value="<?php echo $row->b_wertung; ?>" size="1"> -->
 		<select name="b_wertung" id="b_wertung" class="<?php echo $field_search; ?>" value="<?php echo $row->b_wertung; ?>" size="1">
-		<option value="0" <?php if ($row->b_wertung == 0) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_SCORE_CONDITIONS_0' );?></option>
-		<option value="3" <?php if ($row->b_wertung == 3) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_SCORE_CONDITIONS_3' );?></option>
-		<option value="4" <?php if ($row->b_wertung == 4) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_SCORE_CONDITIONS_4' );?></option>
+		<option value="0" <?php if ($row->b_wertung == 0) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_SCORE_CONDITIONS_0' );?></option>
+		<option value="3" <?php if ($row->b_wertung == 3) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_SCORE_CONDITIONS_3' );?></option>
+		<option value="4" <?php if ($row->b_wertung == 4) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_SCORE_CONDITIONS_4' );?></option>
 		</select>
 	</td>
 	</tr>
 
 	<tr>
 	<td nowrap="nowrap">
-	<label for="auf"><?php echo JText::_( 'LEAGUE_UP' ); ?></label>
+	<label for="auf"><?php echo Text::_( 'LEAGUE_UP' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
 	<input class="inputbox" type="text" name="auf" id="auf" size="10" maxlength="10" value="<?php echo $row->auf; ?>" />
 	</td>
 
 	<td nowrap="nowrap">
-	<label for="color_auf"><?php echo JText::_( 'LEAGUE_UP_POSSIBLE' ); ?></label>
+	<label for="color_auf"><?php echo Text::_( 'LEAGUE_UP_POSSIBLE' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
 	<input class="inputbox" type="text" name="auf_evtl" id="auf_evtl" size="10" maxlength="10" value="<?php echo $row->auf_evtl; ?>" />
 	</td>
@@ -714,13 +721,13 @@ class CLMViewMTurniere
 
 	<tr>
 	<td nowrap="nowrap">
-	<label for="ab"><?php echo JText::_( 'LEAGUE_DOWN' ); ?></label>
+	<label for="ab"><?php echo Text::_( 'LEAGUE_DOWN' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
 	<input class="inputbox" type="text" name="ab" id="ab" size="10" maxlength="10" value="<?php echo $row->ab; ?>" />
 	</td>
 
 	<td nowrap="nowrap">
-	<label for="color_ab"><?php echo JText::_( 'LEAGUE_DOWN_POSSIBILE' ); ?></label>
+	<label for="color_ab"><?php echo Text::_( 'LEAGUE_DOWN_POSSIBILE' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
 	<input class="inputbox" type="text" name="ab_evtl" id="ab_evtl" size="10" maxlength="10" value="<?php echo $row->ab_evtl; ?>" />
 	</td>
@@ -729,70 +736,70 @@ class CLMViewMTurniere
   </fieldset>
   
   <fieldset class="adminform">
-   <legend><?php echo JText::_( 'LEAGUE_BOARD_VALUATION' ); ?></legend>
+   <legend><?php echo Text::_( 'LEAGUE_BOARD_VALUATION' ); ?></legend>
       <table class="paramlist admintable">
 	<tr>
 	<td nowrap="nowrap">
-	<label for="params[btiebr1]"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION1' ); ?></label>
+	<label for="params[btiebr1]"><?php echo Text::_( 'LEAGUE_BOARD_VALUATION1' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
 <!--		<select name="params[btiebr1]" id="params-btiebr1" class="js-example-basic-single" value="<?php echo $row->params['btiebr1']; ?>" size="1"> -->
 		<select name="params[btiebr1]" id="params-btiebr1" class="<?php echo $field_search; ?>" value="<?php echo $row->params['btiebr1']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
-		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr1'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
+		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr1'] == $x) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
 		</select>
 	</td>	
 	<td nowrap="nowrap">
-	<label for="params[btiebr2]"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION2' ); ?></label>
+	<label for="params[btiebr2]"><?php echo Text::_( 'LEAGUE_BOARD_VALUATION2' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
 <!--		<select name="params[btiebr2]" id="params-btiebr2" class="js-example-basic-single" value="<?php echo $row->params['btiebr2']; ?>" size="1"> -->
 		<select name="params[btiebr2]" id="params-btiebr2" class="<?php echo $field_search; ?>" value="<?php echo $row->params['btiebr2']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
-		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr2'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
+		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr2'] == $x) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
 		</select>
 	</td>
 	</tr>
 	<tr>
 	<td nowrap="nowrap">
-	<label for="params[btiebr3]"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION3' ); ?></label>
+	<label for="params[btiebr3]"><?php echo Text::_( 'LEAGUE_BOARD_VALUATION3' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
 <!--		<select name="params[btiebr3]" id="params-btiebr3" class="js-example-basic-single" value="<?php echo $row->params['btiebr3']; ?>" size="1"> -->
 		<select name="params[btiebr3]" id="params-btiebr3" class="<?php echo $field_search; ?>" value="<?php echo $row->params['btiebr3']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
-		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr3'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
+		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr3'] == $x) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
 		</select>
 	</td>	
 	<td nowrap="nowrap">
-	<label for="params[btiebr4]"><?php echo JText::_( 'LEAGUE_BOARD_VALUATION4' ); ?></label>
+	<label for="params[btiebr4]"><?php echo Text::_( 'LEAGUE_BOARD_VALUATION4' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
 <!--		<select name="params[btiebr4]" id="params-btiebr4" class="js-example-basic-single" value="<?php echo $row->params['btiebr4']; ?>" size="1"> -->
 		<select name="params[btiebr4]" id="params-btiebr4" class="<?php echo $field_search; ?>" value="<?php echo $row->params['btiebr4']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
-		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr4'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
+		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr4'] == $x) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
 		</select>
 	</td>	
 	</tr>
 	<tr>
 	<td nowrap="nowrap">
-	<label for="params[btiebr5]"><?php echo JText::_( 'LEAGUE_BOARD_COLUMN5' ); ?></label>
+	<label for="params[btiebr5]"><?php echo Text::_( 'LEAGUE_BOARD_COLUMN5' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
 <!--		<select name="params[5]" id="params-btiebr5" class="js-example-basic-single" value="<?php echo $row->params['btiebr5']; ?>" size="1"> -->
 		<select name="params[btiebr5]" id="params-btiebr5" class="<?php echo $field_search; ?>" value="<?php echo $row->params['btiebr5']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
-		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr5'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
+		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr5'] == $x) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
 		</select>
 	</td>	
 	<td nowrap="nowrap">
-	<label for="params[btiebr6]"><?php echo JText::_( 'LEAGUE_BOARD_COLUMN6' ); ?></label>
+	<label for="params[btiebr6]"><?php echo Text::_( 'LEAGUE_BOARD_COLUMN6' ); ?></label>
 	</td><td colspan="2">&nbsp;&nbsp;
 <!--		<select name="params[btiebr6]" id="params-btiebr6" class="js-example-basic-single" value="<?php echo $row->params['btiebr6']; ?>" size="1"> -->
 		<select name="params[btiebr6]" id="params-btiebr6" class="<?php echo $field_search; ?>" value="<?php echo $row->params['btiebr6']; ?>" size="1">
 		<?php for ($x=0; $x<10; $x++) { ?> 
-		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr6'] == $x) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
+		<option value="<?php echo $x; ?>" <?php if ($row->params['btiebr6'] == $x) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_BOARD_VALUATION_'.$x );?></option>
 		<?php } ?>
 		</select>
 	</td>	
@@ -800,12 +807,12 @@ class CLMViewMTurniere
 	
 	<tr>
 	<td nowrap="nowrap">
-	<label for="params[bnhtml]"><?php echo JText::_( 'LEAGUE_BOARD_POSITIONS_LIST' ); ?></label>
+	<label for="params[bnhtml]"><?php echo Text::_( 'LEAGUE_BOARD_POSITIONS_LIST' ); ?></label>
 	</td><td colspan="2">
 	<input class="inputbox" type="text" name="params[bnhtml]" id="params[bnhtml]" size="2" maxlength="2" value="<?php echo $row->params['bnhtml']; ?>" />
 	</td>
 	<td nowrap="nowrap">
-	<label for="params[bnpdf]"><?php echo JText::_( 'LEAGUE_BOARD_POSITIONS_PDF' ); ?></label>
+	<label for="params[bnpdf]"><?php echo Text::_( 'LEAGUE_BOARD_POSITIONS_PDF' ); ?></label>
 	</td><td colspan="2">
 	<input class="inputbox" type="text" name="params[bnpdf]" id="params-bnpdf" size="2" maxlength="2" value="<?php echo $row->params['bnpdf']; ?>" />
 	</td>
@@ -815,18 +822,18 @@ class CLMViewMTurniere
   </fieldset>
   
   <fieldset class="adminform">
-   <legend><?php echo JText::_( 'LEAGUE_PREFERENCES' ); ?></legend>
+   <legend><?php echo Text::_( 'LEAGUE_PREFERENCES' ); ?></legend>
       <table class="paramlist admintable">
 
       <tr>
 	<td nowrap="nowrap">
-	<label for="params[incl_to_season]"><?php echo JText::_( 'OPTION_INCL_TO_SEASON' ); ?></label>
+	<label for="params[incl_to_season]"><?php echo Text::_( 'OPTION_INCL_TO_SEASON' ); ?></label>
 	</td><td colspan="1"><fieldset class="radio">
-		<?php echo JHtml::_('select.booleanlist', 'params[incl_to_season]', 'class="inputbox"', $row->params['incl_to_season']); ?>
+		<?php echo HTMLHelper::_('select.booleanlist', 'params[incl_to_season]', 'class="inputbox"', $row->params['incl_to_season']); ?>
 	</fieldset></td>
 	<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 	<td nowrap="nowrap">
-	<label for="anzeige_ma"><?php echo JText::_( 'LEAGUE_SHOW_PLAYERLIST' ); ?></label>
+	<label for="anzeige_ma"><?php echo Text::_( 'LEAGUE_SHOW_PLAYERLIST' ); ?></label>
 	</td><td colspan="1"><fieldset class="radio">
 	<?php echo $lists['anzeige_ma']; ?>
 	</fieldset></td>
@@ -834,49 +841,49 @@ class CLMViewMTurniere
 
     <tr>
 	<td nowrap="nowrap">
-	<label for="params[ReportForm]"><?php echo JText::_( 'LEAGUE_REPORT_FORM' ); ?></label>
+	<label for="params[ReportForm]"><?php echo Text::_( 'LEAGUE_REPORT_FORM' ); ?></label>
 	</td><td colspan="5">
 <!--		<select name="params[ReportForm]" id="params-ReportForm" class="js-example-basic-single" value="<?php echo $row->params['ReportForm']; ?>" size="1"> -->
 		<select name="params[ReportForm]" id="params-ReportForm" class="<?php echo $field_search; ?>" value="<?php echo $row->params['ReportForm']; ?>" size="1">
-		<option value="0" <?php if ($row->params['ReportForm'] == 0) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FORM_NO' );?></option>
-		<option value="1" <?php if ($row->params['ReportForm'] == 1) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FORM_LINEUP_NO' );?></option>
-		<option value="2" <?php if ($row->params['ReportForm'] == 2) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FORM_MEMBER_NO' );?></option>
+		<option value="0" <?php if ($row->params['ReportForm'] == 0) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_FORM_NO' );?></option>
+		<option value="1" <?php if ($row->params['ReportForm'] == 1) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_FORM_LINEUP_NO' );?></option>
+		<option value="2" <?php if ($row->params['ReportForm'] == 2) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_FORM_MEMBER_NO' );?></option>
 		</select>
 	</td>
 	</tr>
  
     <tr>
 	<td nowrap="nowrap">
-	<label for="params[firstView]"><?php echo JText::_( 'LEAGUE_FIRST_VIEW' ); ?></label>
+	<label for="params[firstView]"><?php echo Text::_( 'LEAGUE_FIRST_VIEW' ); ?></label>
 	</td><td colspan="5">
 <!--		<select name="params[firstView]" id="params-firstView" class="js-example-basic-single" value="<?php echo $row->params['firstView']; ?>" size="1"> -->
 		<select name="params[firstView]" id="params-firstView" class="<?php echo $field_search; ?>" value="<?php echo $row->params['firstView']; ?>" size="1">
-		<option value="0" <?php if ($row->params['firstView'] == 0) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FV_RANGLISTE' );?></option>
-		<option value="1" <?php if ($row->params['firstView'] == 1) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FV_TABELLE' );?></option>
-		<option value="2" <?php if ($row->params['firstView'] == 2) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FV_PAARUNGSLISTE' );?></option>
-		<option value="3" <?php if ($row->params['firstView'] == 3) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_FV_TEILNEHMER' );?></option>
+		<option value="0" <?php if ($row->params['firstView'] == 0) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_FV_RANGLISTE' );?></option>
+		<option value="1" <?php if ($row->params['firstView'] == 1) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_FV_TABELLE' );?></option>
+		<option value="2" <?php if ($row->params['firstView'] == 2) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_FV_PAARUNGSLISTE' );?></option>
+		<option value="3" <?php if ($row->params['firstView'] == 3) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_FV_TEILNEHMER' );?></option>
 		</select>
 	</td>
 	</tr>
 
     <tr>
 	<td nowrap="nowrap">
-	<label for="params[pgntype]"><?php echo JText::_( 'LEAGUE_PGN_TYPE' ); ?></label>
+	<label for="params[pgntype]"><?php echo Text::_( 'LEAGUE_PGN_TYPE' ); ?></label>
 	</td><td colspan="5">
 <!--		<select name="params[pgntype]" id="params-pgntype" class="js-example-basic-single" value="<?php echo $row->params['pgntype']; ?>" size="1"> -->
 		<select name="params[pgntype]" id="params-pgntype" class="<?php echo $field_search; ?>" value="<?php echo $row->params['pgntype']; ?>" size="1">
-		<option value="0" <?php if ($row->params['pgntype'] == 0) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_PGN_NO' );?></option>
-		<option value="1" <?php if ($row->params['pgntype'] == 1) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_PGN_LEAGUE_NAME' );?></option>
-		<option value="2" <?php if ($row->params['pgntype'] == 2) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_PGN_SHORT_LEAGUE_NAME' );?></option>
-		<option value="3" <?php if ($row->params['pgntype'] == 3) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_PGN_TEAM_NAMES' );?></option>
-		<option value="4" <?php if ($row->params['pgntype'] == 4) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_PGN_SHORT_TEAM_NAMES' );?></option>
-		<option value="5" <?php if ($row->params['pgntype'] == 5) {echo 'selected="selected"';}  ?>><?php echo JText::_( 'LEAGUE_PGN_ALL_SHORT_NAMES' );?></option>
+		<option value="0" <?php if ($row->params['pgntype'] == 0) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_PGN_NO' );?></option>
+		<option value="1" <?php if ($row->params['pgntype'] == 1) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_PGN_LEAGUE_NAME' );?></option>
+		<option value="2" <?php if ($row->params['pgntype'] == 2) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_PGN_SHORT_LEAGUE_NAME' );?></option>
+		<option value="3" <?php if ($row->params['pgntype'] == 3) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_PGN_TEAM_NAMES' );?></option>
+		<option value="4" <?php if ($row->params['pgntype'] == 4) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_PGN_SHORT_TEAM_NAMES' );?></option>
+		<option value="5" <?php if ($row->params['pgntype'] == 5) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_PGN_ALL_SHORT_NAMES' );?></option>
 		</select>
 	</td>
 	</tr>
 	<tr>
 	<td nowrap="nowrap">
-	<label for="params[pgnlname]"><?php echo JText::_( 'LEAGUE_SHORT_NAME' ); ?></label>
+	<label for="params[pgnlname]"><?php echo Text::_( 'LEAGUE_SHORT_NAME' ); ?></label>
 	</td><td colspan="5">
 	<input class="inputbox" type="text" name="params[pgnlname]" id="params-pgnlname" size="30" maxlength="30" value="<?php echo $row->params['pgnlname']; ?>" />
 	</td>
@@ -885,31 +892,31 @@ class CLMViewMTurniere
 	<?php if ($import_pgn == 1) { ?>
 	<tr>
 		<td nowrap="nowrap">
-<!--			<label for="pgninput"><?php echo JText::_( 'OPTION_PGNINPUT' ); ?></label> -->
+<!--			<label for="pgninput"><?php echo Text::_( 'OPTION_PGNINPUT' ); ?></label> -->
 			<label for="pgninput">
-				<span class="editlinktip hasTip" title="<?php echo JText::_( 'OPTION_PGNINPUT_HINT' );?>">
-				<?php echo JText::_( 'OPTION_PGNINPUT' )." : "; ?></span></label>
+				<span class="editlinktip hasTip" title="<?php echo Text::_( 'OPTION_PGNINPUT_HINT' );?>">
+				<?php echo Text::_( 'OPTION_PGNINPUT' )." : "; ?></span></label>
 		</td><td colspan="1"><fieldset class="radio">
-			<?php echo JHtml::_('select.booleanlist', 'params[pgnInput]', 'class="inputbox"', $row->params['pgnInput']); ?>
+			<?php echo HTMLHelper::_('select.booleanlist', 'params[pgnInput]', 'class="inputbox"', $row->params['pgnInput']); ?>
 		</fieldset></td>
 		<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td nowrap="nowrap">
-<!--			<label for="pgnpublic"><?php echo JText::_( 'OPTION_PGNPUBLIC' ); ?></label> -->
+<!--			<label for="pgnpublic"><?php echo Text::_( 'OPTION_PGNPUBLIC' ); ?></label> -->
 			<label for="pgnpublic">
-				<span class="editlinktip hasTip" title="<?php echo JText::_( 'OPTION_PGNPUBLIC_HINT' );?>">
-				<?php echo JText::_( 'OPTION_PGNPUBLIC' )." : "; ?></span></label>
+				<span class="editlinktip hasTip" title="<?php echo Text::_( 'OPTION_PGNPUBLIC_HINT' );?>">
+				<?php echo Text::_( 'OPTION_PGNPUBLIC' )." : "; ?></span></label>
 		</td><td colspan="1"><fieldset class="radio">
-			<?php echo JHtml::_('select.booleanlist', 'params[pgnPublic]', 'class="inputbox"', $row->params['pgnPublic']); ?>
+			<?php echo HTMLHelper::_('select.booleanlist', 'params[pgnPublic]', 'class="inputbox"', $row->params['pgnPublic']); ?>
 		</fieldset></td>
 	</tr>
 	<tr>
 		<td nowrap="nowrap">
-<!--			<label for="pgndownload"><?php echo JText::_( 'OPTION_PGNDOWNLOAD' ); ?></label> -->
+<!--			<label for="pgndownload"><?php echo Text::_( 'OPTION_PGNDOWNLOAD' ); ?></label> -->
 			<label for="pgndownload">
-				<span class="editlinktip hasTip" title="<?php echo JText::_( 'OPTION_PGNDOWNLOAD_HINT' );?>">
-				<?php echo JText::_( 'OPTION_PGNDOWNLOAD' )." : "; ?></span></label>
+				<span class="editlinktip hasTip" title="<?php echo Text::_( 'OPTION_PGNDOWNLOAD_HINT' );?>">
+				<?php echo Text::_( 'OPTION_PGNDOWNLOAD' )." : "; ?></span></label>
 		</td><td colspan="1"><fieldset class="radio">
-			<?php echo JHtml::_('select.booleanlist', 'params[pgnDownload]', 'class="inputbox"', $row->params['pgnDownload']); ?>
+			<?php echo HTMLHelper::_('select.booleanlist', 'params[pgnDownload]', 'class="inputbox"', $row->params['pgnDownload']); ?>
 		</fieldset></td>
 	</tr>
 	<?php } ?>
@@ -918,34 +925,34 @@ class CLMViewMTurniere
 		<?php if ($fe_sl_ergebnisse == 1 ) { ?>
 			<td nowrap="nowrap">
 				<label for="fe_sl_ergebnisse">
-					<span class="editlinktip hasTip" title="<?php echo JText::_( 'OPTION_FE_SL_ERGEBNISSE_HINT' );?>">
-					<?php echo JText::_( 'OPTION_FE_SL_ERGEBNISSE' )." : "; ?></span></label>
+					<span class="editlinktip hasTip" title="<?php echo Text::_( 'OPTION_FE_SL_ERGEBNISSE_HINT' );?>">
+					<?php echo Text::_( 'OPTION_FE_SL_ERGEBNISSE' )." : "; ?></span></label>
 			</td><td colspan="1"><fieldset class="radio">
-				<?php echo JHtml::_('select.booleanlist', 'params[fe_sl_ergebnisse]', 'class="inputbox"', $row->params['fe_sl_ergebnisse']); ?>
+				<?php echo HTMLHelper::_('select.booleanlist', 'params[fe_sl_ergebnisse]', 'class="inputbox"', $row->params['fe_sl_ergebnisse']); ?>
 		</fieldset></td>
 		<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<?php } ?>
 		<?php if ($fe_ar_ergebnisse == 1 ) { ?>
 			<td nowrap="nowrap">
 				<label for="fe_ar_ergebnisse">
-					<span class="editlinktip hasTip" title="<?php echo JText::_( 'OPTION_FE_AR_ERGEBNISSE_HINT' );?>">
-					<?php echo JText::_( 'OPTION_FE_AR_ERGEBNISSE' )." : "; ?></span></label>
+					<span class="editlinktip hasTip" title="<?php echo Text::_( 'OPTION_FE_AR_ERGEBNISSE_HINT' );?>">
+					<?php echo Text::_( 'OPTION_FE_AR_ERGEBNISSE' )." : "; ?></span></label>
 			</td><td colspan="1"><fieldset class="radio">
-				<?php echo JHtml::_('select.booleanlist', 'params[fe_ar_ergebnisse]', 'class="inputbox"', $row->params['fe_ar_ergebnisse']); ?>
+				<?php echo HTMLHelper::_('select.booleanlist', 'params[fe_ar_ergebnisse]', 'class="inputbox"', $row->params['fe_ar_ergebnisse']); ?>
 		</fieldset></td>
 		<?php } ?>
 	  </tr>
 	<?php } ?>
     <tr>
 	<td nowrap="nowrap">
-	<label for="mail"><?php echo JText::_( 'LEAGUE_MAIL' ); ?></label>
+	<label for="mail"><?php echo Text::_( 'LEAGUE_MAIL' ); ?></label>
 	</td><td colspan="1"><fieldset class="radio">
 	<?php echo $lists['mail']; ?>
 	</fieldset></td>
 	<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <?php if ($sl_mail == "1") { ?>
 	<td nowrap="nowrap">
-	<label for="sl_mail"><?php echo JText::_( 'LEAGUE_MAIL_CHIEF' ); ?></label>
+	<label for="sl_mail"><?php echo Text::_( 'LEAGUE_MAIL_CHIEF' ); ?></label>
 	</td><td colspan="1"><fieldset class="radio">
 	<?php echo $lists['sl_mail']; ?>
 	</fieldset></td>
@@ -957,13 +964,13 @@ class CLMViewMTurniere
 	</tr>
 	<tr>
 	<td nowrap="nowrap">
-	<label for="order"><?php echo JText::_( 'LEAGUE_ORDERING' ); ?></label>
+	<label for="order"><?php echo Text::_( 'LEAGUE_ORDERING' ); ?></label>
 	</td><td colspan="1"><fieldset class="radio">
 	<?php echo $lists['order']; ?>
 	</fieldset></td>
 	<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 	<td nowrap="nowrap">
-	<label for="published"><?php echo JText::_( 'LEAGUE_PUBLISHED' ); ?></label>
+	<label for="published"><?php echo Text::_( 'LEAGUE_PUBLISHED' ); ?></label>
 	</td><td colspan="1"><fieldset class="radio">
 	<?php echo $lists['published']; ?>
 	</fieldset></td>
@@ -976,13 +983,13 @@ class CLMViewMTurniere
 
   <div class="width-30 fltrt">
   <fieldset class="adminform">
-   <legend><?php echo JText::_( 'REMARKS' ); ?></legend>
+   <legend><?php echo Text::_( 'REMARKS' ); ?></legend>
 	<table class="adminlist">
 	<?php if ($new) { ?>
-		<tr><font color=red><b>Hinweis:</b></font> Manchmal ist es sinnvoll bzw. nötig, eine Punktspielliga als Mannschaftsturnier anzulegen. Siehe auch<b><a href="https://chessleaguemanager.org/faq/item/190-punktspielligen-als-liga-oder-als-mannschaftsturnier"><?php echo JText::_(' hier'); ?></a></b></tr>
+		<tr><font color=red><b>Hinweis:</b></font> Manchmal ist es sinnvoll bzw. nötig, eine Punktspielliga als Mannschaftsturnier anzulegen. Siehe auch<b><a href="https://chessleaguemanager.org/faq/item/190-punktspielligen-als-liga-oder-als-mannschaftsturnier"><?php echo Text::_(' hier'); ?></a></b></tr>
 		<p>&nbsp;&nbsp;</p>
 	<?php } ?>
-	<legend><?php echo JText::_( 'REMARKS_PUBLIC' ); ?></legend>
+	<legend><?php echo Text::_( 'REMARKS_PUBLIC' ); ?></legend>
 	<tr>
 	<td width="100%" valign="top">
 	<?php if (is_null($row->bemerkungen)) $row->bemerkungen = ''; ?>
@@ -992,7 +999,7 @@ class CLMViewMTurniere
 	</table>
 
 	<table class="adminlist">
-	<legend><?php echo JText::_( 'REMARKS_INTERNAL' ); ?></legend>
+	<legend><?php echo Text::_( 'REMARKS_INTERNAL' ); ?></legend>
 	<tr>
 	<td width="100%" valign="top">
 	<?php if (is_null($row->bem_int)) $row->bem_int = ''; ?>
@@ -1004,52 +1011,52 @@ class CLMViewMTurniere
   </fieldset>
   
     <fieldset>
-  	<legend><?php echo JText::_( 'LEAGUE_HINTS' ); ?></legend>
- 	<b><?php echo JText::_( 'MTURN_HINTS_FINE_RANKINGS' ); ?></b>
-	<?php echo JText::_( 'MTURN_HINTS_01' ); ?>
- 	<?php echo JText::_( 'MTURN_HINTS_02' ); ?>
- 	<?php echo JText::_( 'MTURN_HINTS_03' ); ?>
- 	<?php echo JText::_( 'MTURN_HINTS_04' ); ?>
- 	<?php echo JText::_( 'MTURN_HINTS_05' ); ?>
- 	<?php echo JText::_( 'MTURN_HINTS_06' ); ?>
- 	<?php echo JText::_( 'MTURN_HINTS_07' ); ?>
+  	<legend><?php echo Text::_( 'LEAGUE_HINTS' ); ?></legend>
+ 	<b><?php echo Text::_( 'MTURN_HINTS_FINE_RANKINGS' ); ?></b>
+	<?php echo Text::_( 'MTURN_HINTS_01' ); ?>
+ 	<?php echo Text::_( 'MTURN_HINTS_02' ); ?>
+ 	<?php echo Text::_( 'MTURN_HINTS_03' ); ?>
+ 	<?php echo Text::_( 'MTURN_HINTS_04' ); ?>
+ 	<?php echo Text::_( 'MTURN_HINTS_05' ); ?>
+ 	<?php echo Text::_( 'MTURN_HINTS_06' ); ?>
+ 	<?php echo Text::_( 'MTURN_HINTS_07' ); ?>
 	<br><br><br>
-  	<b><?php echo JText::_( 'MTURN_HINTS_PAIRING_MODE' ); ?></b>
-  	<?php echo JText::_( 'LEAGUE_HINTS_1' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_2' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_3' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_4' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_5' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_6' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_7' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_8' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_9' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_10' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_11' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_12' ); ?>
-	<?php echo JText::_( 'LEAGUE_HINTS_13' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_14' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_15' ); ?>
-	<?php echo JText::_( 'LEAGUE_HINTS_16' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_17' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_18' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_19' ); ?>
-	<?php echo JText::_( 'LEAGUE_HINTS_20' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_21' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_22' ); ?>
-	<?php echo JText::_( 'LEAGUE_HINTS_23' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_24' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_25' ); ?>
-	<?php echo JText::_( 'LEAGUE_HINTS_26' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_27' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_28' ); ?>
-	<?php echo JText::_( 'LEAGUE_HINTS_30' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_31' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_32' ); ?>
-	<?php echo JText::_( 'LEAGUE_HINTS_33' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_34' ); ?>
-  	<?php echo JText::_( 'LEAGUE_HINTS_35' ); ?>
-	<?php echo JText::_( 'LEAGUE_HINTS_36' ); ?>
+  	<b><?php echo Text::_( 'MTURN_HINTS_PAIRING_MODE' ); ?></b>
+  	<?php echo Text::_( 'LEAGUE_HINTS_1' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_2' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_3' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_4' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_5' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_6' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_7' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_8' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_9' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_10' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_11' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_12' ); ?>
+	<?php echo Text::_( 'LEAGUE_HINTS_13' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_14' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_15' ); ?>
+	<?php echo Text::_( 'LEAGUE_HINTS_16' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_17' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_18' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_19' ); ?>
+	<?php echo Text::_( 'LEAGUE_HINTS_20' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_21' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_22' ); ?>
+	<?php echo Text::_( 'LEAGUE_HINTS_23' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_24' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_25' ); ?>
+	<?php echo Text::_( 'LEAGUE_HINTS_26' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_27' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_28' ); ?>
+	<?php echo Text::_( 'LEAGUE_HINTS_30' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_31' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_32' ); ?>
+	<?php echo Text::_( 'LEAGUE_HINTS_33' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_34' ); ?>
+  	<?php echo Text::_( 'LEAGUE_HINTS_35' ); ?>
+	<?php echo Text::_( 'LEAGUE_HINTS_36' ); ?>
   	</fieldset>
 
   </div>
@@ -1072,7 +1079,7 @@ class CLMViewMTurniere
 	<input type="hidden" name="params[import_date]" value="<?php echo $row->params['import_date']; ?>" />
 	<input type="hidden" name="ordering" value="<?php echo $row->ordering; ?>" />
 	<?php $row->liga_mt = 1; //mtmt ?>
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
 	</form>
 	<?php }}
 ?>

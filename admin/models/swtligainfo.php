@@ -1,15 +1,19 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Table\Table;
+use Joomla\Filesystem\File;
 
 class CLMModelSWTLigainfo extends JModelLegacy {
 
@@ -62,7 +66,7 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		//Mit Daten aus Datenbank überschreiben, falls ein Liga geupdated wird
 		if(clm_core::$load->request_int('update') == 1) {
 			if ($lid = clm_core::$load->request_int('lid')) {
-				$db		=JFactory::getDBO ();
+				$db		=Factory::getDBO ();
 				$select_query = '  SELECT * FROM #__clm_liga '
 								.' WHERE id = '.$lid.'; ';
 				$db->setQuery ($select_query);
@@ -114,7 +118,23 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 	function getDataSWT () {
 		
 		jimport( 'joomla.filesystem.file' );
-		
+
+		function check_date($date,$format,$sep) {
+    
+			$pos1    = strpos($format, 'd');  		// 0
+			$pos2    = strpos($format, 'm');		// 1
+			$pos3    = strpos($format, 'Y'); 		// 2
+    
+			$check    = explode($sep,$date);
+			if (count($check) != 3) return false;
+			if (!is_numeric($check[0]) OR !is_numeric($check[1]) OR !is_numeric($check[2])) return false; 
+			$check[$pos1] = str_pad($check[$pos1],2,"0",STR_PAD_LEFT);
+			$check[$pos2] = str_pad($check[$pos2],2,"0",STR_PAD_LEFT);
+			$check[$pos3] = str_pad($check[$pos3],4,"20",STR_PAD_LEFT);
+   
+			if (!checkdate($check[$pos2],$check[$pos1],$check[$pos3])) return false;
+			return $check[$pos3]."-".$check[$pos2]."-".$check[$pos1];
+		}
 		$mturnier = clm_core::$load->request_int('mturnier', 0);
 		
 		// Namen und Verzeichnis der SWT-Datei auslesen
@@ -135,15 +155,20 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		$swt_data['anz_durchgaenge']		= $this->_SWTReadInt ($swt, 599);
 		$swt_data['heimrecht_vertauscht']	= $this->_SWTReadBool ($swt, 1329);
 
-		//echo '<br>liganame: '.$swt_data['liga_name'];
-		//echo '<br>amannschaften: '.$swt_data['anz_mannschaften'];
-		//echo '<br>abretter: '.$swt_data['anz_bretter'];
-		//echo '<br>aspieler: '.$swt_data['anz_spieler'];
-		//echo '<br>aersatz: '.$swt_data['anz_ersatz'];
-		//echo '<br>arunden: '.$swt_data['anz_runden'];
-		//echo '<br>durchgang: '.$swt_data['durchgang'];
-		//echo '<br>adurchg: '.$swt_data['anz_durchgaenge'];
-		//echo '<br>hrvtauscht: '.$swt_data['heimrecht_vertauscht'].'<br>';
+			//Turnierdatum
+			if(($tdatum = $this->_SWTReadName($swt,1055,20)) != '') {
+				if (check_date($tdatum,"dmY",".") != false)
+					$swt_data['dateStart'] = check_date($tdatum,"dmY",".");
+				else $swt_data['dateStart'] =  "";		
+			}	
+			if(($tdatum = $this->_SWTReadName($swt,1076,20)) != '') {
+				if (check_date($tdatum,"dmY",".") != false)
+					$swt_data['dateEnd'] = check_date($tdatum,"dmY",".");
+				else $swt_data['dateEnd'] =  "";		
+			}	
+
+		$swt_data['city'] =  $this->_SWTReadName($swt,831,40);
+		$swt_data['FIDEcco'] =  $this->_SWTReadName($swt,1160,3);
 
 		if ($mturnier == 1) {
 			//echo "mturnier<br/>";
@@ -262,11 +287,16 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		if ($swt_data['runden_modus'] == 3) { // Schweizer System
 			$man_zweit = $this->_SWTReadInt ($swt, 613);
 			$man_dritt = $this->_SWTReadInt ($swt, 615);
+			$man_viert = $this->_SWTReadInt ($swt, 169);
+			$man_fuenf = $this->_SWTReadInt ($swt, 151);
 		}
 		else {
 			$man_zweit = $this->_SWTReadInt ($swt, 614);
 			$man_dritt = $this->_SWTReadInt ($swt, 616);
+			$man_viert = 0;
+			$man_fuenf = 0;
 		}
+
 		/* SWT -> CLM	(Beschreibung)
 			 1 ->  9	 Brettpunkte
 			 2 ->  5	 Brettpunkte
@@ -278,18 +308,23 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 			14 ->  4	 Anzahl der Siege
 			15 -> 25     Direkter Vergleich
 			16 -> 10	 Berliner Wertung    (alt 6)
-			18 -> 10	 Berliner Wertung (dir. Vergleich)   (alt 6) */
-		$clm_fein = array (0 => 0, 1 => 9, 2 => 5, 3 => 1, 4 => 2, 5 => 23, 14 => 4, 15 => 25, 16 => 10, 18 => 10);
+			18 -> 10	 Berliner Wertung (dir. Vergleich)   (alt 6) 
+			22 -> 23     Sonneborn-Berger (erweitert -> ggf. mit Streichwertung) */
+		$clm_fein = array (0 => 0, 1 => 9, 2 => 5, 3 => 1, 4 => 2, 5 => 23, 14 => 4, 15 => 25, 16 => 10, 18 => 10, 22 => 23);
 		
 		$swt_data['tiebr1'] = $clm_fein[$man_zweit];
 		$swt_data['tiebr2'] = $clm_fein[$man_dritt];
-		$swt_data['tiebr3'] = 0;
+		$swt_data['tiebr3'] = $clm_fein[$man_viert];
+//echo "<br>".$swt_data['tiebr1']."/".$swt_data['tiebr2']."/".$swt_data['tiebr3'];
 		
 		// Streichwertung bei Buchholz
 		$anzStreichwertungen = $this->_SWTReadInt ($swt, 9);
 		if ($swt_data['tiebr1'] == 1 AND $anzStreichwertungen == 1) $swt_data['tiebr1'] = 11;
 		if ($swt_data['tiebr2'] == 1 AND $anzStreichwertungen == 1) $swt_data['tiebr2'] = 11;
-
+		if ($swt_data['tiebr3'] == 1 AND $anzStreichwertungen == 1) $swt_data['tiebr3'] = 11;
+		if ($swt_data['tiebr1'] == 23 AND $anzStreichwertungen == 1) $swt_data['tiebr1'] = 33;
+		if ($swt_data['tiebr2'] == 23 AND $anzStreichwertungen == 1) $swt_data['tiebr2'] = 33;
+		if ($swt_data['tiebr3'] == 23 AND $anzStreichwertungen == 1) $swt_data['tiebr3'] = 33;
 		//Pseudo-DWZ
 		$swt_data['pseudo_dwz'] = $this->_SWTReadInt($swt,626,2);
 
@@ -316,8 +351,8 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 	
 	// Listen aus der DB auslesen (SL, Saison, Ranglisten)
 	function dbQuery () {
-		$db			=JFactory::getDBO ();
-		$user		=JFactory::getUser ();
+		$db			=Factory::getDBO ();
+		$user		=Factory::getUser ();
 		$option 	= clm_core::$load->request_string( 'option' );
 		$section 	= clm_core::$load->request_string( 'section' );
 		$mturnier 	= clm_core::$load->request_int('mturnier', 0);
@@ -370,11 +405,11 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 	function store () {
 	
 		// DB-Zugriff
-		$db		=JFactory::getDBO ();
+		$db		=Factory::getDBO ();
 		
 		// load the row from the db table
 		$lid = clm_core::$load->request_string('lid');
-		$row 		=JTable::getInstance( 'ligen', 'TableCLM' );	
+		$row 		=Table::getInstance( 'ligen', 'TableCLM' );	
 		$row->load( $lid );
 
 		//Liga-Parameter aufbereiten
@@ -429,6 +464,7 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 		$spalten = array ( 'lid', 'name', 'catidEdition', 'catidAlltime', 'sl', 'sid', 'rang', 'teil', 'stamm', 'ersatz', 'runden', 'durchgang', 'runden_modus', 'heim',
 		                   'sieg', 'remis', 'nieder', 'antritt', 'man_sieg', 'man_remis', 'man_nieder', 'man_antritt', 'sieg_bed',
 						   'b_wertung', 'auf', 'auf_evtl', 'ab', 'ab_evtl', 'mail', 'sl_mail', 'order', 
+						   'dateStart', 'dateEnd', 'city', 'FIDEcco', 
 						   'published', 'ordering', 'bem_int', 'liga_mt', 'tiebr1', 'tiebr2', 'tiebr3', 'ersatz_regel', 'anzeige_ma', 'params' );
 
 		
@@ -460,7 +496,7 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 	function _SWTReadName($file, $offset, $length){
 		$i = 0;
 		$name = '';
-		//while(ord ($chr = JFile::read($file, false, 1, 8192, $offset+$i)) != 0 && $i < $length){
+		//while(ord ($chr = File::read($file, false, 1, 8192, $offset+$i)) != 0 && $i < $length){
 		while(ord ($chr = file_get_contents ($file, false, null, $offset+$i, 1)) != 0 AND $i < $length){
 			$name .= $chr;
 			$i++;
@@ -471,7 +507,7 @@ class CLMModelSWTLigainfo extends JModelLegacy {
 	function _SWTReadInt ($file, $offset, $length = 1) {
 		$value = 0;
 		for ($i = 0; $i < $length; $i++) {
-			//$cur = ord (JFile::read ($file, false, 1, 8192, $offset+$i));
+			//$cur = ord (File::read ($file, false, 1, 8192, $offset+$i));
 			$cur = ord(file_get_contents ($file, false, null, $offset+$i, 1));
 			$value += $cur * pow (256, $i);
 		}

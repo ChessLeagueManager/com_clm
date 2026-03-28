@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 	/**
 	* errechnet/aktualisiert Rangliste/Punktesummen eines Mannschaftsturnier
@@ -272,6 +272,9 @@
 		$array_PlayerBuchOppBP = array();
 		$array_PlayeraSoBe = array();
 		$array_PlayerSoBe = array();
+		$array_PlayerSoBeErw = array();
+		$array_PlayerSoBe1St = array();
+		$array_PlayerSoBeMin = array();
 		$array_PlayerBuSum = array();
 		$array_PlayerBuSum1St = array();
 		$array_PlayerBuSumMin = array();
@@ -292,6 +295,9 @@
 			$array_PlayerBuch1StBP[$s] = 0;
 			$array_PlayeraSoBe[$s] = 0;
 			$array_PlayerSoBe[$s] = 0;
+			$array_PlayerSoBeErw[$s] = 0;
+			$array_PlayerSoBe1St[$s] = 0;
+			$array_PlayerSoBeMin[$s] = 9999;
 			$array_PlayerBuSum[$s] = 0;
 			$array_PlayerBuSum1St[$s] = 0;
 			$array_PlayerBuSumMin[$s] = 9999;
@@ -346,7 +352,6 @@
 		  }
 		}
 		
-
 		// Punkte/Siege
 		// alle Matches durchgehen -> Spieler erhalten Punkte und Wins
 		foreach ($matchData as $key => $value) {
@@ -387,7 +392,10 @@
 			// Buchholz auf Basis Mannschaftspunkte
 			if (in_array(1, $arrayFW) OR in_array(2, $arrayFW) OR in_array(11, $arrayFW)) { // beliebige Buchholz als TieBreaker gewünscht?
 				if ($value->ergebnis < 3 OR $params['optionTiebreakersFideCorrect'] == 0) {
-					$array_PlayerBuchOpp[$value->tln_nr][] = $array_PlayerMPunkteTB[$value->gegner]; // Array mit Gegnerwerten - für Streichresultat
+					if ($value->gegner >= 1)
+						$array_PlayerBuchOpp[$value->tln_nr][] = $array_PlayerMPunkteTB[$value->gegner]; // Array mit Gegnerwerten - für Streichresultat
+					else
+						$array_PlayerBuchOpp[$value->tln_nr][] = 0; // Array mit Gegnerwerten - für Streichresultat
 				} else { //Ranglistenkorrektur nach FIDE (Teil 2) nur für CH-Turniere
 					$query = "SELECT tln_nr, gegner, dg, runde, ergebnis FROM `#__clm_rnd_man`"
 					. " WHERE lid = ".$id
@@ -411,6 +419,7 @@
 					$array_PlayerBuchOpp[$value->tln_nr][] = $PlayerPunkteKOR; // Array mit Gegnerwerten - für Streichresultat
 				}
 			}
+
 			// Buchholz auf Basis Brettpunkte 
 			if (in_array(7, $arrayFW) OR in_array(8, $arrayFW) OR in_array(17, $arrayFW) OR in_array(18, $arrayFW)) { // beliebige Buchholz als TieBreaker gewünscht?
 				if ($value->ergebnis < 3 OR $params['optionTiebreakersFideCorrect'] == 0) {
@@ -438,8 +447,7 @@
 					$array_PlayerBuchOppBP[$value->tln_nr][] = $PlayerPunkteKOR; // Array mit Gegnerwerten - für Streichresultat
 				}
 			}
-			
-			
+
 			// Sonneborn-Berger alt
 			if (in_array(3, $arrayFW)) { // SoBe(alt) als ein TieBreaker gewünscht?
 				if ($value->manpunkte == $man_remis) { // remis
@@ -455,8 +463,19 @@
 					$array_PlayerSoBe[$value->tln_nr] += $value->brettpunkte * $array_PlayerMPunkte[$value->gegner];
 				}
 			}
+			
+			// Sonneborn-Berger neu mit Streichwertung
+			if (in_array(33, $arrayFW)) { // SoBe(neu) als ein TieBreaker gewünscht?
+				if ($array_PlayerMPunkte[$value->gegner] < $array_PlayerSoBeMin[$value->tln_nr]) {
+					$array_PlayerSoBeMin[$value->tln_nr] = $array_PlayerMPunkte[$value->gegner];
+					$array_PlayerSoBe1St[$value->tln_nr] = $value->brettpunkte * $array_PlayerMPunkte[$value->gegner];
+				}
+				if ($value->brettpunkte > 0) { 
+					$array_PlayerSoBeErw[$value->tln_nr] += $value->brettpunkte * $array_PlayerMPunkte[$value->gegner];
+				}
+			}
 		}
-	
+
 		// Buchholz auf Basis Mannschaftspunkte
 		if ((in_array(1, $arrayFW)) OR (in_array(2, $arrayFW)) OR (in_array(12, $arrayFW))) { // normale Buchholz als TieBreaker gewünscht?
 			for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
@@ -503,6 +522,7 @@
 				else $array_PlayerBuch1StBP[$s] = array_sum($array_PlayerBuchOppBP[$s]);
 			}
 		}
+
 		// BuchholzSumme auf Basis Mannschaftspunkte
 		if ((in_array(2, $arrayFW)) OR (in_array(12, $arrayFW))) { // Buchholz-Summe als TieBreaker gewünscht?
 			// erneut alle Matches durchgehen -> Spieler erhalten Buchholzsummen
@@ -541,10 +561,11 @@
 				$array_PlayerBuSum1StBP[$s] = $array_PlayerBuSumBP[$s] - $array_PlayerBuSumMinBP[$s];
 			}
 		}
+
 		// alle Spieler durchgehen und updaten (kein vorheriges Löschen notwendig)
 		for ($s=1; $s<= $team[0]->teil; $s++) { // alle Startnummern durchgehen
 			// Korrektur Mannschaftspunkte
-			$query = "SELECT liga, tln_nr, abzug, bpabzug FROM `#__clm_mannschaften`"
+			$query = "SELECT liga, tln_nr, name, abzug, bpabzug FROM `#__clm_mannschaften`"
 				. " WHERE liga = ".$id
 				. " AND tln_nr = ".$s;
 			$abzug = clm_core::$db->loadObjectList($query);
@@ -601,6 +622,9 @@
 					case 23: // sobe 
 						$sumTiebr[$tb] = $array_PlayerSoBe[$s];
 						break;
+					case 33: // sobe erweitert
+						$sumTiebr[$tb] = $array_PlayerSoBeErw[$s] - $array_PlayerSoBe1St[$s];
+						break;
 					case 51: // ordering
 						$sumTiebr[$tb] = 1000 - $team[$s-1]->ordering;
 						break;
@@ -610,7 +634,7 @@
 			}
 			$query = "UPDATE #__clm_mannschaften"
 					. " SET summanpunkte = ".$array_PlayerMPunkte[$s].", sumbrettpunkte = ".$array_PlayerBPunkte[$s].", sumwins = ".$array_PlayerWins[$s].", "
-					. " sumTiebr1 = ".$sumTiebr[1].", sumTiebr2 = ".$sumTiebr[2].", sumTiebr3 = ".$sumTiebr[3]
+					. " sumtiebr1 = ".$sumTiebr[1].", sumtiebr2 = ".$sumTiebr[2].", sumtiebr3 = ".$sumTiebr[3]
 					. " WHERE liga = ".$id
 					. " AND tln_nr = ".$s
 					;
@@ -675,8 +699,7 @@
 			}
 		}
 	
-		$query = "SELECT id, name, tln_nr"
-			." , summanpunkte, sumbrettpunkte, sumtiebr1, sumtiebr2, sumtiebr3, ordering "   
+		$query = "SELECT * "
 			." FROM `#__clm_mannschaften`"
 			." WHERE liga = ".$id;
 		if ($liga_mt == 0) {
@@ -685,6 +708,7 @@
 			if ($b_wertung == 3 AND $order == 1) $query .= ", sumtiebr1 DESC, ordering ASC";
 			if ($b_wertung == 3 AND $order == 0) $query .= ", sumtiebr1 DESC";
 			if ($b_wertung == 4 AND $order == 1) $query .= ", ordering ASC, sumtiebr1 DESC";
+			if ($b_wertung == 4 AND $order == 0) $query .= ", sumtiebr1 DESC";
 			if ($b_wertung == 4 AND $order == 0) $query .= ", sumtiebr1 DESC";
 			$query .= ", tln_nr ASC";
 		} else {
@@ -704,7 +728,7 @@
 					if ($liga_mt == 0) {
 						if ( $value->summanpunkte == $value0->summanpunkte AND $value->sumbrettpunkte == $value0->sumbrettpunkte AND $value->sumtiebr1 == $value0->sumtiebr1 )  
 							if ($order == 0) $s_rankingPos = 0;
-							else if ( $value->order == $value0->order) $s_rankingPos = 0;
+							else if ( $value->ordering == $value0->ordering) $s_rankingPos = 0;
 					} else {
 						if ( $value->summanpunkte == $value0->summanpunkte AND $value->sumtiebr1 == $value0->sumtiebr1 AND $value->sumtiebr2 == $value0->sumtiebr2 AND $value->sumtiebr3 == $value0->sumtiebr3 )   
 							$s_rankingPos = 0;

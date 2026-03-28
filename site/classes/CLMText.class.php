@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -13,6 +13,10 @@
 * CLMText
 * Klassenbibliothek für text-bezogene Funktionalitäten
 */
+JLoader::registerAlias('JFilterOutput', '\\Joomla\\CMS\\Filter\\OutputFilter', '6.0');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 class CLMText {
 	
 	/**
@@ -27,7 +31,7 @@ class CLMText {
 		
 		// Seitennamen anzeigen
 		if ($showSitename) {
-			$mf = JFactory::getApplication();
+			$mf = Factory::getApplication();
 			$string .= $mf->getCfg('sitename').' - ';
 		}
 		
@@ -112,7 +116,7 @@ class CLMText {
 					$string .= '.';
 					break;
 				case 2:
-					$string .= '.&nbsp;'.JText::_('TOURNAMENT_POSITION');
+					$string .= '.&nbsp;'.Text::_('TOURNAMENT_POSITION');
 					break;
 				
 			}
@@ -195,6 +199,9 @@ class CLMText {
 				break;
 			case 30: // Turnierleistung
 				$format = "%01.0f";
+				break;
+			case 33: // sonneborn-berger erweitert
+				$format = "%01.1f";
 				break;
 			case 52: // niedrigere TWZ
 				$format = "%01.0f";
