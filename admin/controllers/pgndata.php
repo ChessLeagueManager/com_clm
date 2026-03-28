@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,6 +12,9 @@
 
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 class CLMControllerPGNdata extends JControllerLegacy
 {
@@ -25,7 +28,7 @@ class CLMControllerPGNdata extends JControllerLegacy
 	} 
 	
 	function next() {
-		$app =JFactory::getApplication();	
+		$app =Factory::getApplication();	
 		$model = $this->getModel('pgndata');
 		$liga = clm_core::$load->request_string('liga', '');
 		$pgn_file = clm_core::$load->request_string('pgn_file', '');
@@ -34,7 +37,7 @@ class CLMControllerPGNdata extends JControllerLegacy
 			$adminLink->view = 'pgnimport';
 			$adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
 			$adminLink->makeURL ();
-			$app->enqueueMessage( JText::_( 'PGN_STORE_SUCCESS' ),'message' );
+			$app->enqueueMessage( Text::_( 'PGN_STORE_SUCCESS' ),'message' );
 			$app->redirect($adminLink->url);
 		}
 		else
@@ -43,14 +46,14 @@ class CLMControllerPGNdata extends JControllerLegacy
 			$adminLink->view = 'swt';
 			$adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
 			$adminLink->makeURL ();
-			$app->enqueueMessage( JText::_( 'PGN_STORE_ERROR' ),'message' );
+			$app->enqueueMessage( Text::_( 'PGN_STORE_ERROR' ),'message' );
 			$app->redirect($adminLink->url);
 		}
 	
 	}
 	
 	function cancel() {		
-		$app =JFactory::getApplication();	
+		$app =Factory::getApplication();	
 		$liga = clm_core::$load->request_string('liga', '');
 		$pgn_file = clm_core::$load->request_string('pgn_file', '');
 		$adminLink = new AdminLink ();
@@ -58,7 +61,7 @@ class CLMControllerPGNdata extends JControllerLegacy
 		$adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
 		$adminLink->makeURL ();
 		
-		$msg = JText::_( 'SWT_CANCEL_MSG' );
+		$msg = Text::_( 'SWT_CANCEL_MSG' );
 		$app->enqueueMessage( $msg );
 		$app->redirect($adminLink->url);
 	

@@ -1,11 +1,14 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 	$lid = clm_core::$load->request_int('lid');
 	$tid = clm_core::$load->request_int('tid');
@@ -42,7 +45,7 @@ defined('_JEXEC') or die('Restricted access');
 
 	<div class="width-50 fltlft">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'JDETAILS' ); ?></legend>
+		<legend><?php echo Text::_( 'JDETAILS' ); ?></legend>
 			<table class="paramlist admintable">
 	
 			<tr>
@@ -100,7 +103,7 @@ defined('_JEXEC') or die('Restricted access');
 				<tr>
 					<td width="40%" class="paramlist_key">
 						<label for="published">
-							<?php echo JText::_( 'JPUBLISHED' ); ?>:
+							<?php echo Text::_( 'JPUBLISHED' ); ?>:
 						</label>
 					</td>
 					<td class="paramlist_value"><fieldset class="radio">
@@ -116,10 +119,10 @@ defined('_JEXEC') or die('Restricted access');
 	<div class="width-50 fltrt">
 		<fieldset class="adminform">
 			
-			<legend><?php echo JText::_( 'REMARKS' ); ?></legend>
+			<legend><?php echo Text::_( 'REMARKS' ); ?></legend>
 		
 			<table class="paramlist admintable">
-				<legend><?php echo JText::_( 'REMARKS_PUBLIC' ); ?></legend>
+				<legend><?php echo Text::_( 'REMARKS_PUBLIC' ); ?></legend>
 				<br>
 				<tr>
 					<td width="100%" valign="top">
@@ -129,7 +132,7 @@ defined('_JEXEC') or die('Restricted access');
 			</table>
 		
 			<table class="adminlist">
-				<legend><?php echo JText::_( 'REMARKS_INTERNAL' ); ?></legend>
+				<legend><?php echo Text::_( 'REMARKS_INTERNAL' ); ?></legend>
 				<br>
 				<tr>
 					<td width="100%" valign="top">
@@ -155,6 +158,6 @@ defined('_JEXEC') or die('Restricted access');
 	<input type="hidden" name="returnview" value="<?php echo $returnview; ?>" />
 	<input type="hidden" name="controller" value="arbiterform" />
 	<input type="hidden" name="task" value="" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
 
 </form>

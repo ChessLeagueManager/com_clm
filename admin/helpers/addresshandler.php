@@ -1,12 +1,14 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Florian Huber
  * @email huberflorian2@googlemail.com
 */
+
+use Joomla\CMS\Factory;
 
 class AddressHandler
 {
@@ -314,7 +316,7 @@ class AddressHandler
      */
     private function updateCoordinates($coord, $rowId, $club)
     {
-        $db 	= JFactory::getDBO();
+        $db 	= Factory::getDBO();
 
         if($club==1){
             $table = '#__clm_vereine';

@@ -2,9 +2,9 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -14,7 +14,10 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-class TableCLMAccessgroupsForm extends JTable
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+
+class TableCLMAccessgroupsForm extends Table
 {
 	var $id			= null;
 	var $name		= '';
@@ -33,19 +36,19 @@ class TableCLMAccessgroupsForm extends JTable
 	 *
 	 * @access public
 	 * @return boolean
-	 * @see JTable::check
+	 * @see Table::check
 	 * @since 1.5
 	 */
 	function checkData() {
 
 		// check for valid name
 		if(trim($this->name) == '') {
-			$this->setError(JText::_( 'Name angeben !' ));
+			$this->setError(Text::_( 'Name angeben !' ));
 			return false;
 		}
 
 		if(empty($this->usertype)) {
-			$this->setError(JText::_( 'Type angeben' ));
+			$this->setError(Text::_( 'Type angeben' ));
 			return false;
 		}
 		return true;

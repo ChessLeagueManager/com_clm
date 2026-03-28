@@ -9,26 +9,32 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Router\Route;
+
 class CLMViewMeldelisten
 {
 public static function setMeldelistenToolbar()
 	{
-		JToolBarHelper::title( JText::_( 'TITLE_MELDELISTE' ), 'generic.png' );
-		JToolBarHelper::editList();
-		JToolBarHelper::help( 'screen.clm.meldeliste' );
+		ToolBarHelper::title( Text::_( 'TITLE_MELDELISTE' ), 'generic.png' );
+		ToolBarHelper::editList();
+		ToolBarHelper::help( 'screen.clm.meldeliste' );
 	}
 
 public static function meldelisten ( &$rows, &$lists, &$pageNav, $option )
 	{
-		$mainframe	= JFactory::getApplication();
+		$mainframe	= Factory::getApplication();
 		CLMViewMeldelisten::setMeldelistenToolbar();
-		$user =JFactory::getUser();
+		$user =Factory::getUser();
 		//Ordering allowed ?
 		$ordering = ($lists['order'] == 'a.ordering');
 
 		// Auswahlfelder durchsuchbar machen
 		clm_core::$load->load_js("suche_liste");
-//		JHtml::_('behavior.tooltip');
+//		HTMLHelper::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 		?>
 		<form action="index.php?option=com_clm&section=meldelisten" method="post" name="adminForm" id="adminForm">
@@ -36,10 +42,10 @@ public static function meldelisten ( &$rows, &$lists, &$pageNav, $option )
 		<table>
 		<tr>
 			<td align="left" width="100%">
-				<?php echo JText::_( 'Filter' ); ?>:
+				<?php echo Text::_( 'Filter' ); ?>:
 		<input type="text" name="search" id="search" value="<?php echo $lists['search'];?>" class="text_area" onchange="document.adminForm.submit();" />
-		<button onclick="this.form.submit();"><?php echo JText::_( 'Go' ); ?></button>
-		<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo JText::_( 'Reset' ); ?></button>
+		<button onclick="this.form.submit();"><?php echo Text::_( 'Go' ); ?></button>
+		<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo Text::_( 'Reset' ); ?></button>
 			</td>
 			<td nowrap="nowrap">
 				<?php
@@ -63,29 +69,29 @@ public static function meldelisten ( &$rows, &$lists, &$pageNav, $option )
 						<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 					</th>
 					<th class="title">
-						<?php echo JHtml::_('grid.sort',   'MELDELISTE_MANNSCHAFT', 'a.name', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'MELDELISTE_MANNSCHAFT', 'a.name', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="3%">
-						<?php echo JHtml::_('grid.sort',   'MELDELISTE_NR', 'a.mnr', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'MELDELISTE_NR', 'a.mnr', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="15%">
-						<?php echo JHtml::_('grid.sort',   'MELDELISTE_LIGA', 'd.name', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'MELDELISTE_LIGA', 'd.name', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="22%">
-						<?php echo JHtml::_('grid.sort',   'MELDELISTE_VEREIN', 'b.Vereinname', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'MELDELISTE_VEREIN', 'b.Vereinname', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="11%">
-						<?php echo JHtml::_('grid.sort',   'MELDELISTE_SAISON', 'c.name', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'MELDELISTE_SAISON', 'c.name', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="6%">
-						<?php echo JHtml::_('grid.sort',   'JPUBLISHED', 'a.published', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'JPUBLISHED', 'a.published', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="8%" nowrap="nowrap">
-						<?php echo JHtml::_('grid.sort',   'JGRID_HEADING_ORDERING', 'a.ordering', @$lists['order_Dir'], @$lists['order'] ); ?>
-						<?php echo JHtml::_('grid.order',  $rows ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'JGRID_HEADING_ORDERING', 'a.ordering', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.order',  $rows ); ?>
 					</th>
 					<th width="1%" nowrap="nowrap">
-						<?php echo JHtml::_('grid.sort',   'JGRID_HEADING_ID', 'a.id', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'JGRID_HEADING_ID', 'a.id', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 				</tr>
 			</thead>
@@ -101,10 +107,10 @@ public static function meldelisten ( &$rows, &$lists, &$pageNav, $option )
 			$k = 0;
 			for ($i=0, $n=count( $rows ); $i < $n; $i++) {
 				$row = &$rows[$i];
-				$link 		= JRoute::_( 'index.php?option=com_clm&section=meldelisten&task=edit&cid[]='. $row->id );
-				$checked 	= JHtml::_('grid.checkedout',   $row, $i );
-//				$published 	= JHtml::_('grid.published', $row, $i );
-				$published 	= JHtml::_('jgrid.published', $row->published, $i );
+				$link 		= Route::_( 'index.php?option=com_clm&section=meldelisten&task=edit&cid[]='. $row->id );
+				$checked 	= HTMLHelper::_('grid.checkedout',   $row, $i );
+//				$published 	= HTMLHelper::_('grid.published', $row, $i );
+				$published 	= HTMLHelper::_('jgrid.published', $row->published, $i );
 
 				?>
 				<tr class="<?php echo 'row'. $k; ?>">
@@ -120,7 +126,7 @@ public static function meldelisten ( &$rows, &$lists, &$pageNav, $option )
 
 					<td>
 	
-								<span class="editlinktip hasTip" title="<?php echo JText::_( 'MELDELISTE_EDIT' );?>::<?php echo $row->name.$row->man_nr; ?>">
+								<span class="editlinktip hasTip" title="<?php echo Text::_( 'MELDELISTE_EDIT' );?>::<?php echo $row->name.$row->man_nr; ?>">
 							<a href="<?php echo $link; ?>">
 								<?php echo $row->name; ?></a></span>
 	
@@ -169,7 +175,7 @@ public static function meldelisten ( &$rows, &$lists, &$pageNav, $option )
 		<input type="hidden" name="filter_order" value="<?php echo $lists['order']; ?>" />
 		<input type="hidden" name="verein" value="<?php echo $row->verein; ?>" />
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $lists['order_Dir']; ?>" />
-		<?php echo JHtml::_( 'form.token' ); ?>
+		<?php echo HTMLHelper::_( 'form.token' ); ?>
 		</form>
 		<?php
 	}
@@ -181,20 +187,20 @@ public static function setMeldelisteToolbar($row)
 
 		$cid = clm_core::$load->request_array_int('cid');
 										  
-		if (clm_core::$load->request_string( 'task') == 'edit') { $text = JText::_( 'Edit' );}
-			else { $text = JText::_( 'New' );}
+		if (clm_core::$load->request_string( 'task') == 'edit') { $text = Text::_( 'Edit' );}
+			else { $text = Text::_( 'New' );}
 		$verein 	= clm_core::$load->request_string( 'verein' );
-		JToolBarHelper::title(  JText::_( 'MELDELISTE')." ".$row->name .': [ '. $text.' ]', 'clm_headmenu_mannschaften.png');
-		JToolBarHelper::custom( 'save_meldeliste', 'save.png', 'save_f2.png', JText::_('SAVE'), false );
-		JToolBarHelper::custom( 'apply_meldeliste', 'apply.png', 'apply_f2.png', JText::_('APPLY'), false );
-		JToolBarHelper::cancel();
-		JToolBarHelper::help( 'screen.clm.edit' );
+		ToolBarHelper::title(  Text::_( 'MELDELISTE')." ".$row->name .': [ '. $text.' ]', 'clm_headmenu_mannschaften.png');
+		ToolBarHelper::custom( 'save_meldeliste', 'save.png', 'save_f2.png', Text::_('SAVE'), false );
+		ToolBarHelper::custom( 'apply_meldeliste', 'apply.png', 'apply_f2.png', Text::_('APPLY'), false );
+		ToolBarHelper::cancel();
+		ToolBarHelper::help( 'screen.clm.edit' );
 	}
 		
 public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abgabe, $option)
 	{
 //		$_REQUEST['hidemainmenu'] = 1;
-		JFactory::getApplication()->input->set('hidemainmenu', true);
+		Factory::getApplication()->input->set('hidemainmenu', true);
 		CLMViewMeldelisten::setMeldelisteToolbar($row);
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 		$number = $liga[0]->stamm + $liga[0]->ersatz;
@@ -221,24 +227,24 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		<div class="width-50 fltlft">
 <div>
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'MELDELISTE_STAMMSPIELER' ); ?></legend>
+		<legend><?php echo Text::_( 'MELDELISTE_STAMMSPIELER' ); ?></legend>
 		<table class="admintable">
 
 		<tr>
 			<th width="10">
-				<?php echo JText::_( 'MELDELISTE_BRETT' ); ?>
+				<?php echo Text::_( 'MELDELISTE_BRETT' ); ?>
 			</th>
 			<th width="25">
-				<?php echo JText::_( 'MELDELISTE_SPIELERNAME' ); ?>
+				<?php echo Text::_( 'MELDELISTE_SPIELERNAME' ); ?>
 			</th>
 			<th width="50">
-				<?php echo JText::_( 'MELDELISTE_ATTRIBUT' ); ?>
+				<?php echo Text::_( 'MELDELISTE_ATTRIBUT' ); ?>
 			</th>
-			<th width="10" title="<?php echo JText::_( 'MELDELISTE_BLOCK_HINT' );?>">
-				<?php echo JText::_( 'MELDELISTE_BLOCK' ); ?>
+			<th width="10" title="<?php echo Text::_( 'MELDELISTE_BLOCK_HINT' );?>">
+				<?php echo Text::_( 'MELDELISTE_BLOCK' ); ?>
 			</th>
-			<th width="10" title="<?php echo JText::_( 'MELDELISTE_BLOCKM_HINT' );?>">
-				<?php echo JText::_( 'MELDELISTE_BLOCKM' ); ?>
+			<th width="10" title="<?php echo Text::_( 'MELDELISTE_BLOCKM_HINT' );?>">
+				<?php echo Text::_( 'MELDELISTE_BLOCKM' ); ?>
 			</th>
 		</tr>
 <?php //Sammeln der Daten für insertPosition()
@@ -261,13 +267,13 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 	<tr>
 		<td class="key" nowrap="nowrap">
 		  <label for="sid">
-			<?php echo JText::_( 'MELDELISTE_BRETT_NR').' '.($i+1).' : '; ?>
+			<?php echo Text::_( 'MELDELISTE_BRETT_NR').' '.($i+1).' : '; ?>
 		  </label>
 		</td>
 		<td>
 <!--		  <select size="1" class="js-example-basic-single" style="width:300px;" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo 'spieler'.($i+1); ?>" onChange="insertPosition(this,'<?php echo $insert_key[$i]; ?>') "> -->
 		  <select size="1" class="<?php echo $field_search; ?>" style="width:300px;" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo 'spieler'.($i+1); ?>" onChange="insertPosition(this,'<?php echo $insert_key[$i]; ?>') ">
-			<option value="0"><?php echo JText::_( 'MELDELISTE_SPIELER_AUSWAEHLEN'); ?></option>
+			<option value="0"><?php echo Text::_( 'MELDELISTE_SPIELER_AUSWAEHLEN'); ?></option>
 			<?php for ($x=0; $x < $max[0]->max; $x++) { ?>
 			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps.'-'.$row_spl[$x]->dwz.'-'.$row_spl[$x]->dwz_I0; ?>" <?php
 			  if ($countryversion == "de") {
@@ -277,7 +283,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 			  } ?>><?php
 				echo $row_spl[$x]->name.'&nbsp;-&nbsp;&nbsp;'.$row_spl[$x]->id; ?></option> 
 			<?php }	?>
-			<option value="9999"><?php echo JText::_( 'MELDELISTE_POSITION_EINFUEGEN'); ?></option>
+			<option value="9999"><?php echo Text::_( 'MELDELISTE_POSITION_EINFUEGEN'); ?></option>
 		  </select>
 		</td>
 		<td align="center">
@@ -297,30 +303,30 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 <br>
 <div>
  <fieldset class="adminform">
-   <legend><?php echo JText::_( 'MELDELISTE_DETAILS' ); ?></legend>
+   <legend><?php echo Text::_( 'MELDELISTE_DETAILS' ); ?></legend>
 	<table class="admintable">
 	<tr>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'MELDELISTE_MELDER' ).' : '; ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'MELDELISTE_MELDER' ).' : '; ?></td>
 		<td class="key" nowrap="nowrap"><?php if (!isset($abgabe[0]->name)) {echo "---";} 
 			else { echo $abgabe[0]->name; } ?>
 		</td>
 	</tr>
 	<tr>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'JDATE' ).' : '; ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'JDATE' ).' : '; ?></td>
 		<td class="key" nowrap="nowrap"><?php if (!isset($abgabe[0]->datum) OR $abgabe[0]->datum=="0000-00-00 00:00:00" OR $abgabe[0]->datum=="1970-01-01 00:00:00") {echo  "---";} 
-			else { echo JHtml::_('date',  $abgabe[0]->datum, JText::_('DATE_FORMAT_LC2')); } ?>
+			else { echo HTMLHelper::_('date',  $abgabe[0]->datum, Text::_('DATE_FORMAT_LC2')); } ?>
 		</td>
 	</tr>
 	<tr>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'MELDELISTE_LAST_UPDATE' ).' : '; ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'MELDELISTE_LAST_UPDATE' ).' : '; ?></td>
 		<td class="key" nowrap="nowrap"><?php if (!isset($abgabe[0]->editor )) {echo "---";} 
 			else { echo $abgabe[0]->editor; } ?>
 		</td>
 	</tr>
 	<tr>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'JDATE' ).' : '; ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'JDATE' ).' : '; ?></td>
 		<td class="key" nowrap="nowrap"><?php if (!isset($abgabe[0]->edit_datum) OR $abgabe[0]->edit_datum =="0000-00-00 00:00:00" OR $abgabe[0]->edit_datum =="1970-01-01 00:00:00") {echo  "---";} 
-			else { echo JHtml::_('date',  $abgabe[0]->edit_datum, JText::_('DATE_FORMAT_LC2')); } ?>
+			else { echo HTMLHelper::_('date',  $abgabe[0]->edit_datum, Text::_('DATE_FORMAT_LC2')); } ?>
 		</td>
 	</tr>
 
@@ -335,24 +341,24 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 
 		<div class="width-50 fltrt">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'MELDELISTE_ERSATZSPIELER' ); ?></legend>
+		<legend><?php echo Text::_( 'MELDELISTE_ERSATZSPIELER' ); ?></legend>
 
 		<table class="admintable">
 		<tr>
 			<th width="10">
-				<?php echo JText::_( 'MELDELISTE_BRETT' ); ?>
+				<?php echo Text::_( 'MELDELISTE_BRETT' ); ?>
 			</th>
 			<th width="25">
-				<?php echo JText::_( 'MELDELISTE_SPIELERNAME' ); ?>
+				<?php echo Text::_( 'MELDELISTE_SPIELERNAME' ); ?>
 			</th>
 			<th width="50">
-				<?php echo JText::_( 'MELDELISTE_ATTRIBUT' ); ?>
+				<?php echo Text::_( 'MELDELISTE_ATTRIBUT' ); ?>
 			</th>
-			<th width="10" title="<?php echo JText::_( 'MELDELISTE_BLOCK_HINT' );?>">
-				<?php echo JText::_( 'MELDELISTE_BLOCK' ); ?>
+			<th width="10" title="<?php echo Text::_( 'MELDELISTE_BLOCK_HINT' );?>">
+				<?php echo Text::_( 'MELDELISTE_BLOCK' ); ?>
 			</th>
-			<th width="10" title="<?php echo JText::_( 'MELDELISTE_BLOCKM_HINT' );?>">
-				<?php echo JText::_( 'MELDELISTE_BLOCKM' ); ?>
+			<th width="10" title="<?php echo Text::_( 'MELDELISTE_BLOCKM_HINT' );?>">
+				<?php echo Text::_( 'MELDELISTE_BLOCKM' ); ?>
 			</th>
 		</tr>
 <?php //Sammeln der Daten für insertPosition()
@@ -375,12 +381,12 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
  if(isset($liga[0])){	for ($i=$liga[0]->stamm; $i< ($liga[0]->stamm + $liga[0]->ersatz); $i++){
 ?>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="sid"><?php echo JText::_( 'MELDELISTE_BRETT_NR' ).' '.($i+1).' : '; ?></label>
+			<td class="key" nowrap="nowrap"><label for="sid"><?php echo Text::_( 'MELDELISTE_BRETT_NR' ).' '.($i+1).' : '; ?></label>
 			</td>
 		<td>
 <!--		  <select size="1" class="js-example-basic-single" style="width:300px;" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo 'spieler'.($i+1); ?>" onChange="insertPosition(this,'<?php echo $insert_key[$i]; ?>') "> -->
 		  <select size="1" class="<?php echo $field_search; ?>" style="width:300px;" name="<?php echo 'spieler'.($i+1); ?>" id="<?php echo 'spieler'.($i+1); ?>" onChange="insertPosition(this,'<?php echo $insert_key[$i]; ?>') ">
-			<option value="0"><?php echo JText::_( 'MELDELISTE_SPIELER_AUSWAEHLEN'); ?></option>
+			<option value="0"><?php echo Text::_( 'MELDELISTE_SPIELER_AUSWAEHLEN'); ?></option>
 			<?php for ($x=0; $x < $max[0]->max; $x++) { ?>
 			 <option value="<?php echo $row_spl[$x]->id.'-'.$row_spl[$x]->zps.'-'.$row_spl[$x]->dwz.'-'.$row_spl[$x]->dwz_I0;; ?>" <?php 
 			  if ($countryversion == "de") {
@@ -390,7 +396,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 			  } ?>><?php
 				echo $row_spl[$x]->name.'&nbsp;-&nbsp;&nbsp;'.$row_spl[$x]->id; ?></option> 
 			<?php }	?>
-			<option value="9999"><?php echo JText::_( 'MELDELISTE_POSITION_EINFUEGEN'); ?></option>
+			<option value="9999"><?php echo Text::_( 'MELDELISTE_POSITION_EINFUEGEN'); ?></option>
 		  </select>
 		</td>
 		<td align="center">
@@ -422,7 +428,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		<input type="hidden" name="editor" value="<?php if (isset($abgabe[0]->name)) echo $abgabe[0]->name; ?>" />
 
 		<input type="hidden" name="task" value="" />
-		<?php echo JHtml::_( 'form.token' ); ?>
+		<?php echo HTMLHelper::_( 'form.token' ); ?>
 		</form>
 		<?php
 	}

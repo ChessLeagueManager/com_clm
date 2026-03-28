@@ -1,31 +1,34 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class CLMViewCopyMeldeliste extends JViewLegacy {
 
 	function display($tpl = NULL) {
 
 		$text = 'Meldeliste kopieren von';
-		JToolBarHelper::title( $text );
+		ToolBarHelper::title( $text );
 		
 		if (clm_core::$access->getType() == 'admin' OR clm_core::$access->getType() == 'tl') {
-			JToolBarHelper::save( 'save' );
-//			JToolBarHelper::apply( 'apply' );
+			ToolBarHelper::save( 'save' );
+//			ToolBarHelper::apply( 'apply' );
 		}
-		JToolBarHelper::spacer();
-		JToolBarHelper::cancel('cancel');
+		ToolBarHelper::spacer();
+		ToolBarHelper::cancel('cancel');
 
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
 		$model =   $this->getModel();
 
 		// Document/Seite
-		$document =JFactory::getDocument();
+		$document =Factory::getDocument();
 
 		// Daten an Template übergeben
 		$this->user = $model->user;

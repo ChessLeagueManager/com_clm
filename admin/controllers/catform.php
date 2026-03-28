@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,10 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
 
 class CLMControllerCatForm extends JControllerLegacy {
 	
@@ -20,7 +24,7 @@ class CLMControllerCatForm extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->app =JFactory::getApplication();
+		$this->app =Factory::getApplication();
 					
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -35,9 +39,9 @@ class CLMControllerCatForm extends JControllerLegacy {
 		if ($result[0]) { // erfolgreich?
 			
 			if ($result[1]) { // neue Kategorie?
-				$this->app->enqueueMessage( JText::_('CATEGORY_CREATED') );
+				$this->app->enqueueMessage( Text::_('CATEGORY_CREATED') );
 			} else {
-				$this->app->enqueueMessage( JText::_('CATEGORY_EDITED') );
+				$this->app->enqueueMessage( Text::_('CATEGORY_EDITED') );
 			}		
 		}
 		// sonst Fehlermeldung schon geschrieben
@@ -66,7 +70,7 @@ class CLMControllerCatForm extends JControllerLegacy {
 		defined('_JEXEC') or die( 'Invalid Token' );
 	
 		if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
-			$this->app->enqueueMessage( JText::_('SECTION_NO_ACCESS'),'warning' );
+			$this->app->enqueueMessage( Text::_('SECTION_NO_ACCESS'),'warning' );
 			return array(false);
 		}
 	
@@ -74,7 +78,7 @@ class CLMControllerCatForm extends JControllerLegacy {
 		$task = clm_core::$load->request_string('task');
 		
 		// Instanz der Tabelle
-		$row = JTable::getInstance( 'categories', 'TableCLM' );
+		$row = Table::getInstance( 'categories', 'TableCLM' );
 		
 		$post = $_POST; 
 		if (!$row->bind($post)) {
@@ -103,12 +107,12 @@ class CLMControllerCatForm extends JControllerLegacy {
 		// if new item, order last in appropriate group
 		if (!$row->id) {
 			$neu = true; // Flag für neue Kategorie
-			$stringAktion = JText::_('CATEGORY_CREATED');
+			$stringAktion = Text::_('CATEGORY_CREATED');
 			// $where = "sid = " . (int) $row->sid; warum nur in Saison?
 			$row->ordering = $row->getNextOrder(); // ( $where );
 		} else {
 			$neu = false;
-			$stringAktion = JText::_('CATEGORY_EDITED');
+			$stringAktion = Text::_('CATEGORY_EDITED');
 		}
 		
 		// save the changes

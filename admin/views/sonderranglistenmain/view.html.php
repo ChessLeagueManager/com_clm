@@ -1,21 +1,25 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
 class CLMViewSonderranglistenMain extends JViewLegacy {
 	function display($tpl = null) { 
 		
-		$mainframe	= JFactory::getApplication();
+		$mainframe	= Factory::getApplication();
 		$option 	= clm_core::$load->request_string('option');
 		
 		//Daten vom Model
@@ -37,18 +41,18 @@ class CLMViewSonderranglistenMain extends JViewLegacy {
 		
 		//Toolbar
 		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title( JText::_('TITLE_SPECIALRANKINGS') ,'clm_headmenu_sonderranglisten.png' );
+		ToolBarHelper::title( Text::_('TITLE_SPECIALRANKINGS') ,'clm_headmenu_sonderranglisten.png' );
 		
 		if($turnierExists) {
-			JToolBarHelper::publishList('publish');
-			JToolBarHelper::unpublishList();
-			JToolBarHelper::deleteList();
-			JToolBarHelper::editList(); 
-			JToolBarHelper::addNew(); 
-			JToolBarHelper::custom( 'copy_set', 'copy.png', 'copy_f2.png', JText::_( 'SP_RANKING_COPY' ), false );
+			ToolBarHelper::publishList('publish');
+			ToolBarHelper::unpublishList();
+			ToolBarHelper::deleteList();
+			ToolBarHelper::editList(); 
+			ToolBarHelper::addNew(); 
+			ToolBarHelper::custom( 'copy_set', 'copy.png', 'copy_f2.png', Text::_( 'SP_RANKING_COPY' ), false );
 		}
 		
-//		JHtml::_('behavior.tooltip');
+//		HTMLHelper::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 
 		// Auswahlfelder durchsuchbar machen
@@ -71,19 +75,19 @@ class CLMViewSonderranglistenMain extends JViewLegacy {
 		
 		
 		//Filter 
-		$options_filter_tur[]		= JHtml::_('select.option', '', JText::_( 'SPECIALRANKINGS_TOURNAMENTS' ));
+		$options_filter_tur[]		= HTMLHelper::_('select.option', '', Text::_( 'SPECIALRANKINGS_TOURNAMENTS' ));
 		foreach($filter_turniere as $tur)	{
-			$options_filter_tur[]		= JHtml::_('select.option', $tur->id, $tur->name);
+			$options_filter_tur[]		= HTMLHelper::_('select.option', $tur->id, $tur->name);
 		}
-//		$lists['filter_turnier']	= JHtml::_('select.genericlist', $options_filter_tur, 'filter_turnier', 'class="js-example-basic-single" onchange="this.form.submit();"', 'value', 'text', $filter_turnier );
-		$lists['filter_turnier']	= JHtml::_('select.genericlist', $options_filter_tur, 'filter_turnier', 'class="'.$field_search.'" onchange="this.form.submit();"', 'value', 'text', $filter_turnier );
+//		$lists['filter_turnier']	= HTMLHelper::_('select.genericlist', $options_filter_tur, 'filter_turnier', 'class="js-example-basic-single" onchange="this.form.submit();"', 'value', 'text', $filter_turnier );
+		$lists['filter_turnier']	= HTMLHelper::_('select.genericlist', $options_filter_tur, 'filter_turnier', 'class="'.$field_search.'" onchange="this.form.submit();"', 'value', 'text', $filter_turnier );
 		
-		$options_filter_sai[]		= JHtml::_('select.option', '', JText::_( 'SPECIALRANKINGS_SEASONS' ));
+		$options_filter_sai[]		= HTMLHelper::_('select.option', '', Text::_( 'SPECIALRANKINGS_SEASONS' ));
 		foreach($filter_saisons as $sai)	{
-			$options_filter_sai[]		= JHtml::_('select.option', $sai->id, $sai->name);
+			$options_filter_sai[]		= HTMLHelper::_('select.option', $sai->id, $sai->name);
 		}
-//		$lists['filter_saison']	= JHtml::_('select.genericlist', $options_filter_sai, 'filter_saison', 'class="js-example-basic-single" onchange="this.form.submit();"', 'value', 'text', $filter_saison );
-		$lists['filter_saison']	= JHtml::_('select.genericlist', $options_filter_sai, 'filter_saison', 'class="'.$field_search.'" onchange="this.form.submit();"', 'value', 'text', $filter_saison );
+//		$lists['filter_saison']	= HTMLHelper::_('select.genericlist', $options_filter_sai, 'filter_saison', 'class="js-example-basic-single" onchange="this.form.submit();"', 'value', 'text', $filter_saison );
+		$lists['filter_saison']	= HTMLHelper::_('select.genericlist', $options_filter_sai, 'filter_saison', 'class="'.$field_search.'" onchange="this.form.submit();"', 'value', 'text', $filter_saison );
 		
 		
 		//Reihenfolge

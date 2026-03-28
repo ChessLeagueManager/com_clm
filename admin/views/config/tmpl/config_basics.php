@@ -1,5 +1,13 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link https://chessleaguemanager.org
+*/
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
 
 	$config			= JComponentHelper::getParams( 'com_clm' );
 	
@@ -9,7 +17,7 @@ defined('_JEXEC') or die('Restricted access');
       <tr>
         <td width="50%" valign="top">
 	    <fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_GENEREL' ); ?></legend>
+			<legend><?php echo Text::_( 'CONFIG_GENEREL' ); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
@@ -25,7 +33,7 @@ defined('_JEXEC') or die('Restricted access');
 
       <td width="50%" valign="top">
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_EMAIL' ); ?></legend>
+			<legend><?php echo Text::_( 'CONFIG_EMAIL' ); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
@@ -38,7 +46,7 @@ defined('_JEXEC') or die('Restricted access');
 			</fieldset>
         
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_DATABASE' ); ?></legend>
+			<legend><?php echo Text::_( 'CONFIG_DATABASE' ); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>

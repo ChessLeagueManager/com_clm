@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -10,6 +10,10 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Pagination\Pagination;
 
 class CLMModelTurPlayers extends JModelLegacy {
 
@@ -24,7 +28,7 @@ class CLMModelTurPlayers extends JModelLegacy {
 
 
 		// user
-		$this->user =JFactory::getUser();
+		$this->user =Factory::getUser();
 		
 		// get parameters
 		$this->_getParameters();
@@ -44,7 +48,7 @@ class CLMModelTurPlayers extends JModelLegacy {
 		global $mainframe, $option;
 		//Joomla 1.6 compatibility
 		if (empty($mainframe)) {
-			$mainframe = JFactory::getApplication();
+			$mainframe = Factory::getApplication();
 			$option = $mainframe->scope;
 		}
 	
@@ -109,8 +113,8 @@ class CLMModelTurPlayers extends JModelLegacy {
 		
 		// wenn nicht gestartet, check, ob Startnummern okay
 		if (!$tournament->started AND !$tournament->checkCorrectSnr()) {
-			$mainframe = JFactory::getApplication();
-			$mainframe->enqueueMessage( JText::_('PLEASE_CORRECT_SNR'), 'warning' );
+			$mainframe = Factory::getApplication();
+			$mainframe->enqueueMessage( Text::_('PLEASE_CORRECT_SNR'), 'warning' );
 		}
 
 		// sum of entry fee paid
@@ -175,7 +179,7 @@ class CLMModelTurPlayers extends JModelLegacy {
 		// Load the content if it doesn't already exist
 		if (empty($this->pagination)) {
 			jimport('joomla.html.pagination');
-			$this->pagination = new JPagination($this->playersTotal, $this->limitstart, $this->limit );
+			$this->pagination = new Pagination($this->playersTotal, $this->limitstart, $this->limit );
 		}
 	}
 

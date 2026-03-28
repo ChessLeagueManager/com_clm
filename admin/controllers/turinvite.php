@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,10 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
 
 class CLMControllerTurInvite extends JControllerLegacy {
 	
@@ -20,7 +24,7 @@ class CLMControllerTurInvite extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->app 	= JFactory::getApplication();
+		$this->app 	= Factory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -28,13 +32,13 @@ class CLMControllerTurInvite extends JControllerLegacy {
 		// turnierid
 		$id = clm_core::$load->request_int('id');
 		$clmAccess = clm_core::$access;      
-		$row = JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = Table::getInstance( 'turniere', 'TableCLM' );
 		$row->load($id);
 		//$tournament = new CLMTournament($this->id, true);
 		//die('    tinvite');
 		//if (!$tournament->checkAccess(0,0,$row->tl)) {
 		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) AND ($clmAccess->access('BE_tournament_edit_detail') !== true)) {
-			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'), 'warning' );
+			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'), 'warning' );
 			$adminLink = new AdminLink();
 			$adminLink->view = "turmain";
 			$adminLink->makeURL();
@@ -77,16 +81,16 @@ class CLMControllerTurInvite extends JControllerLegacy {
 		// turnierid
 		$id = clm_core::$load->request_int('id');
 		// Instanz der Tabelle
-		$row = JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = Table::getInstance( 'turniere', 'TableCLM' );
 		$row->load( $id ); // Daten zu dieser ID laden
 
 		$clmAccess = clm_core::$access;      
 		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {																						   
-			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'), 'warning' );
+			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'), 'warning' );
 			return false;
 		}
 
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 	
 //		$invitationText = clm_core::$load->request_string('invitationText');	
 		$invitationText = $_POST["invitationText"];	
@@ -97,14 +101,14 @@ class CLMControllerTurInvite extends JControllerLegacy {
 								 
 								
 		if (!clm_core::$db->query($query)) { 
-			$this->app->enqueueMessage( JText::_('DB_ERROR'), 'warning' );
+			$this->app->enqueueMessage( Text::_('DB_ERROR'), 'warning' );
 			return false;
 		}
-		$this->app->enqueueMessage( JText::_('INVITATION_EDITED'), 'message' );
+		$this->app->enqueueMessage( Text::_('INVITATION_EDITED'), 'message' );
 
 		// Log schreiben
 		$clmLog = new CLMLog();
-		$clmLog->aktion = JText::_('INVITATION_EDITED');
+		$clmLog->aktion = Text::_('INVITATION_EDITED');
 		$clmLog->params = array('tid' => $id); // TurnierID wird als LigaID gespeichert
 		$clmLog->write();
 	

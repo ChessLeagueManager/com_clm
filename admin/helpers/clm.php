@@ -6,9 +6,12 @@
 	 * @return	JObject
 	 *
 	 */
+	 
+use Joomla\CMS\Factory;
+
 	public static function getActions($categoryId = 0)
 	{
-		$user	= JFactory::getUser();
+		$user	= Factory::getUser();
 		$result	= new JObject;
 
 		if (empty($categoryId)) {

@@ -1,11 +1,14 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Pagination\Pagination;
 
 class CLMModelArbiterMain extends JModelLegacy {
 
@@ -21,7 +24,7 @@ class CLMModelArbiterMain extends JModelLegacy {
 		global $mainframe, $option;
 		//Joomla 1.6 compatibility
 		if (empty($mainframe)) {
-			$mainframe = JFactory::getApplication();
+			$mainframe = Factory::getApplication();
 			$option = $mainframe->scope;
 		}
 
@@ -32,7 +35,7 @@ class CLMModelArbiterMain extends JModelLegacy {
 		$this->setState('limitstart', $this->limitstart);
 
 		// user
-		$this->user =JFactory::getUser();
+		$this->user =Factory::getUser();
 		
 		// get parameters
 		$this->_getParameters();
@@ -53,7 +56,7 @@ class CLMModelArbiterMain extends JModelLegacy {
 		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
 		else $field_search = "inputbox";
 	
-		$mainframe =JFactory::getApplication();
+		$mainframe =Factory::getApplication();
 		global $option;
 	
 		if (!isset($this->param) OR is_null($this->param)) $this->param = array();	// seit J 4.2 nötig um notice zu vermeiden
@@ -132,7 +135,7 @@ class CLMModelArbiterMain extends JModelLegacy {
 		// Load the content if it doesn't already exist
 		if (empty($this->pagination)) {
 			jimport('joomla.html.pagination');
-			$this->pagination = new JPagination($this->arbiterTotal, $this->limitstart, $this->limit );
+			$this->pagination = new Pagination($this->arbiterTotal, $this->limitstart, $this->limit );
 		}
 	}
 

@@ -1,16 +1,20 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class CLMViewTurRegistrationEdit extends JViewLegacy {
 
@@ -22,22 +26,22 @@ class CLMViewTurRegistrationEdit extends JViewLegacy {
 		
 		// Die Toolbar erstellen, die über der Seite angezeigt wird
 		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title( $model->turnierData->name.", ".JText::_('REGISTRATION').": ".$model->registrationData->name, 'clm_turnier.png'  );
+		ToolBarHelper::title( $model->turnierData->name.", ".Text::_('REGISTRATION').": ".$model->registrationData->name, 'clm_turnier.png'  );
 	
 		// Instanz der Tabelle
-		$row = JTable::getInstance( 'registrations', 'TableCLM' );
+		$row = Table::getInstance( 'registrations', 'TableCLM' );
 		$row->load( $model->registrationData->id ); // Daten zu dieser Registration-ID laden
-		$rowt = JTable::getInstance( 'turniere', 'TableCLM' );
+		$rowt = Table::getInstance( 'turniere', 'TableCLM' );
 		$rowt->load( $model->registrationData->tid ); // Daten zu dieser Turnier-ID laden
 
 		$clmAccess = clm_core::$access;
 		if (($rowt->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') == 2) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
-			JToolBarHelper::save( 'save' );
-			JToolBarHelper::apply( 'apply' );
-			JToolBarHelper::custom('copy_to', 'copy.png', 'copy_f2.png', JText::_('REGISTRATION_COPY_TO'),false);
+			ToolBarHelper::save( 'save' );
+			ToolBarHelper::apply( 'apply' );
+			ToolBarHelper::custom('copy_to', 'copy.png', 'copy_f2.png', Text::_('REGISTRATION_COPY_TO'),false);
 		}
-		JToolBarHelper::spacer();
-		JToolBarHelper::cancel();
+		ToolBarHelper::spacer();
+		ToolBarHelper::cancel();
 
 		// das MainMenu abschalten
 		$_GET['hidemainmenu'] = 1;
@@ -47,20 +51,20 @@ class CLMViewTurRegistrationEdit extends JViewLegacy {
 		$model =   $this->getModel();
 
 		// Document/Seite
-		$document =JFactory::getDocument();
+		$document =Factory::getDocument();
 
 		// JS-Array jtext -> Fehlertexte
 		$document->addScriptDeclaration("var jtext = new Array();");
-		$document->addScriptDeclaration("jtext['enter_name'] = '".JText::_('PLEASE_ENTER')." ".JText::_('PLAYER_NAME')."';");
-		$document->addScriptDeclaration("jtext['enter_birthyear'] = '".JText::_('PLEASE_ENTER')." ".JText::_('PLAYER_BIRTH_YEAR')."';");
-		$document->addScriptDeclaration("jtext['number_birthyear'] = '".JText::_('PLEASE_NUMBER')." ".JText::_('PLAYER_BIRTH_YEAR')."';");
-		$document->addScriptDeclaration("jtext['enter_club'] = '".JText::_('PLEASE_ENTER')." ".JText::_('PLAYER_NAME')."';");
-		$document->addScriptDeclaration("jtext['enter_email'] = '".JText::_('PLEASE_ENTER')." ".JText::_('CLUB')."';");
-		$document->addScriptDeclaration("jtext['number_dwz'] = '".JText::_('PLEASE_NUMBER')." ".JText::_('RATING')."';");
-		$document->addScriptDeclaration("jtext['number_dwzindex'] = '".JText::_('PLEASE_NUMBER')." ".JText::_('RATING_INDEX')."';");
-		$document->addScriptDeclaration("jtext['number_elo'] = '".JText::_('PLEASE_NUMBER')." ".JText::_('FIDE_ELO')."';");
-		$document->addScriptDeclaration("jtext['number_fideid'] = '".JText::_('PLEASE_NUMBER')." ".JText::_('PLAYER_FIDE_ID')."';");
-		$document->addScriptDeclaration("jtext['number_mglnr'] = '".JText::_('PLEASE_NUMBER')." ".JText::_('PLAYER_MGLNR')."';");
+		$document->addScriptDeclaration("jtext['enter_name'] = '".Text::_('PLEASE_ENTER')." ".Text::_('PLAYER_NAME')."';");
+		$document->addScriptDeclaration("jtext['enter_birthyear'] = '".Text::_('PLEASE_ENTER')." ".Text::_('PLAYER_BIRTH_YEAR')."';");
+		$document->addScriptDeclaration("jtext['number_birthyear'] = '".Text::_('PLEASE_NUMBER')." ".Text::_('PLAYER_BIRTH_YEAR')."';");
+		$document->addScriptDeclaration("jtext['enter_club'] = '".Text::_('PLEASE_ENTER')." ".Text::_('PLAYER_NAME')."';");
+		$document->addScriptDeclaration("jtext['enter_email'] = '".Text::_('PLEASE_ENTER')." ".Text::_('CLUB')."';");
+		$document->addScriptDeclaration("jtext['number_dwz'] = '".Text::_('PLEASE_NUMBER')." ".Text::_('RATING')."';");
+		$document->addScriptDeclaration("jtext['number_dwzindex'] = '".Text::_('PLEASE_NUMBER')." ".Text::_('RATING_INDEX')."';");
+		$document->addScriptDeclaration("jtext['number_elo'] = '".Text::_('PLEASE_NUMBER')." ".Text::_('FIDE_ELO')."';");
+		$document->addScriptDeclaration("jtext['number_fideid'] = '".Text::_('PLEASE_NUMBER')." ".Text::_('PLAYER_FIDE_ID')."';");
+		$document->addScriptDeclaration("jtext['number_mglnr'] = '".Text::_('PLEASE_NUMBER')." ".Text::_('PLAYER_MGLNR')."';");
 
 		// Script
 		$document->addScript(CLM_PATH_JAVASCRIPT.'turregistrationedit.js');

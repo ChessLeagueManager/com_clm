@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,10 +12,13 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 class CLMControllerPGNImport extends JControllerLegacy
 {
 	function __construct() {		
-		$this->app =JFactory::getApplication();
+		$this->app =Factory::getApplication();
 		parent::__construct();		
 	}
 	
@@ -32,7 +35,7 @@ class CLMControllerPGNImport extends JControllerLegacy
 		$adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
 		$adminLink->makeURL ();		
 		if ($liga == '') {	
-			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
+			$msg = Text::_( 'PGN_CHOOSE_LEAGUE_MSG' );
 			$this->app->enqueueMessage( $msg );
 			$this->app->redirect($adminLink->url);
 		} else { 
@@ -62,7 +65,7 @@ if ($test_button > 0) {
 		echo "<br><br>Start pgn-Import <br>Dateiname: $filename";  
 }
 		if ($filename == '') {
-			$msg = JText::_( 'PGN_FILE_NO' );
+			$msg = Text::_( 'PGN_FILE_NO' );
 			return $msg;
 		}
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . 'swt' . DIRECTORY_SEPARATOR;
@@ -74,7 +77,7 @@ if ($test_button > 0) {
 		$ii = 0; $jj = 0; $ij = 0; $ib = 0; 
 		$pgn_data = file_get_contents($pgn);
 		if ($pgn_data === false) { 
-			$msg = JText::_( 'PGN_FILE_ERROR' );
+			$msg = Text::_( 'PGN_FILE_ERROR' );
 			return $msg;
 		}
 		if (mb_detect_encoding($pgn_data, 'UTF-8', true) === false) {
@@ -111,12 +114,12 @@ if ($test_button > 0) {
 					if ($return_arr['error'] != '') $pgn_error++;
 		}
 
-		$msg = $total.' '.JText::_( 'PGN_IMPORT_TOTAL' ).'<br>'
-			.($total - $pgn_error).' '.JText::_( 'PGN_IMPORT_ALLOCATED' ).'<br>';
+		$msg = $total.' '.Text::_( 'PGN_IMPORT_TOTAL' ).'<br>'
+			.($total - $pgn_error).' '.Text::_( 'PGN_IMPORT_ALLOCATED' ).'<br>';
 		if ($pgn_error == 0) 
-			$msg .= JText::_( 'PGN_IMPORT_CLOSE' ).'<br>'; 
+			$msg .= Text::_( 'PGN_IMPORT_CLOSE' ).'<br>'; 
 		else
-			$msg .= $pgn_error.' '.JText::_( 'PGN_IMPORT_OPEN' );
+			$msg .= $pgn_error.' '.Text::_( 'PGN_IMPORT_OPEN' );
 if ($test_button > 0) {		
 		echo "<br><br>Ende pgn-Import <br><br><br>"; 
 }
@@ -149,10 +152,10 @@ if ($test_button > 0) {
 }
 		//Field Check
 		if (!isset($game['White'])) {  
-				$error_text = JText::_( 'PGN_E_NAME_WHITE' ); 
+				$error_text = Text::_( 'PGN_E_NAME_WHITE' ); 
 				$game['White'] = ''; }
 		if (!isset($game['Black'])) { 
-				$error_text = JText::_( 'PGN_E_NAME_BLACK' );
+				$error_text = Text::_( 'PGN_E_NAME_BLACK' );
 				$game['Black'] = ''; }
 
 		// Aufbereitung der Namen
@@ -226,7 +229,7 @@ if ($test_button > 0) {
 			if ($brett > 0) $query .= ' AND a.brett = '.$brett;
 			$gameslist	= clm_core::$db->loadObjectList($query);
 			if (count($gameslist) < 2) { 
-				$error_text = JText::_( 'PGN_E_NO_ROUND' );
+				$error_text = Text::_( 'PGN_E_NO_ROUND' );
 			}
 		} else { $gameslist = array(); }
 if ($test_button > 0) {		
@@ -270,10 +273,10 @@ if ($test_button > 0) {
 				}
 			}
 			if (count($gameslist_name) < 2) { 
-				$error_text = JText::_( 'PGN_E_NO_NAME' );
+				$error_text = Text::_( 'PGN_E_NO_NAME' );
 			}
 			if (count($gameslist_name) > 2) { 
-				$error_text = JText::_( 'PGN_E_MANY_NAMES' );
+				$error_text = Text::_( 'PGN_E_MANY_NAMES' );
 			}
 		} else {
 			$gameslist_name	= $gameslist;
@@ -383,7 +386,7 @@ if ($test_button > 0) {
 	}
 	
 	function using_ntable() {		
-		$app =JFactory::getApplication();
+		$app =Factory::getApplication();
 		$liga = clm_core::$load->request_string('liga', '');
 		$pgn_file = clm_core::$load->request_string('pgn_file', '');
 		$adminLink = new AdminLink ();
@@ -391,7 +394,7 @@ if ($test_button > 0) {
 		$adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
 		$adminLink->makeURL ();		
 		if ($liga == '') {	
-			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
+			$msg = Text::_( 'PGN_CHOOSE_LEAGUE_MSG' );
 			$app->enqueueMessage( $msg );
 			$app->redirect($adminLink->url);
 		} else { 
@@ -475,12 +478,12 @@ if ($test_button > 0) {
 }
 				$ij = $ii + $jj;
 			} 
-		$msg = $total.' '.JText::_( 'PGN_IMPORT_TOTAL' ).'<br>'
-			.($total - $pgn_error).' '.JText::_( 'PGN_IMPORT_ALLOCATED' ).'<br>';
+		$msg = $total.' '.Text::_( 'PGN_IMPORT_TOTAL' ).'<br>'
+			.($total - $pgn_error).' '.Text::_( 'PGN_IMPORT_ALLOCATED' ).'<br>';
 		if ($pgn_error == 0) 
-			$msg .= JText::_( 'PGN_IMPORT_CLOSE' ).'<br>'; 
+			$msg .= Text::_( 'PGN_IMPORT_CLOSE' ).'<br>'; 
 		else
-			$msg .= $pgn_error.' '.JText::_( 'PGN_IMPORT_OPEN' );
+			$msg .= $pgn_error.' '.Text::_( 'PGN_IMPORT_OPEN' );
 if ($test_button > 0) {		
 		echo "<br><br>Ende Update gegen Tabelle <br> $msg"; 
 		die(); 
@@ -498,7 +501,7 @@ if ($test_button > 0) {
 		$adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
 		$adminLink->makeURL ();		
 		if ($liga == '') {	
-			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
+			$msg = Text::_( 'PGN_CHOOSE_LEAGUE_MSG' );
 			$this->app->enqueueMessage( $msg );
 			$this->app->redirect($adminLink->url);
 		} else { 
@@ -518,12 +521,12 @@ if ($test_button > 0) {
 		$adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
 		$adminLink->makeURL ();		
 		if ($liga == '') {	
-			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
+			$msg = Text::_( 'PGN_CHOOSE_LEAGUE_MSG' );
 			$this->app->enqueueMessage( $msg );
 			$this->app->redirect($adminLink->url);
 		} else { 
 			$pgn_del = $this->getDelPGN(true);
-			$msg = $pgn_del.' '.JText::_( 'PGN_DELETE_TOTAL' );
+			$msg = $pgn_del.' '.Text::_( 'PGN_DELETE_TOTAL' );
 			$this->app->enqueueMessage( $msg );
 			$this->app->redirect($adminLink->url);
 		}
@@ -537,12 +540,12 @@ if ($test_button > 0) {
 		$adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
 		$adminLink->makeURL ();		
 		if ($liga == '') {	
-			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
+			$msg = Text::_( 'PGN_CHOOSE_LEAGUE_MSG' );
 			$this->app->enqueueMessage( $msg );
 			$this->app->redirect($adminLink->url);
 		} else {
 			$pgn_del = $this->getDelPGN(false);
-			$msg = $pgn_del.' '.JText::_( 'PGN_DELETE_TOTAL' );
+			$msg = $pgn_del.' '.Text::_( 'PGN_DELETE_TOTAL' );
 			$this->app->enqueueMessage( $msg );
 			$this->app->redirect($adminLink->url);
 		}
@@ -587,7 +590,7 @@ if ($test_button > 0) {
 		$adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
 		$adminLink->makeURL ();		
 		if ($liga == '') {	
-			$msg = JText::_( 'PGN_CHOOSE_LEAGUE_MSG' );
+			$msg = Text::_( 'PGN_CHOOSE_LEAGUE_MSG' );
 			$this->app->enqueueMessage( $msg );
 			$this->app->redirect($adminLink->url);
 		} else { 
@@ -607,7 +610,7 @@ if ($test_button > 0) {
 		$adminLink->view = 'swt';
 		$adminLink->more = array('liga' => $liga, 'pgn_file' => $pgn_file);
 		$adminLink->makeURL ();		
-		$msg = JText::_( 'SWT_CANCEL_MSG' );
+		$msg = Text::_( 'SWT_CANCEL_MSG' );
 		$this->app->enqueueMessage( $msg );
 		$this->app->redirect($adminLink->url);
 	}

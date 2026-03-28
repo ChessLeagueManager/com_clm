@@ -1,11 +1,13 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\HTML\HTMLHelper;
 
 	require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 	$lang = clm_core::$lang->arbiter;
@@ -161,7 +163,7 @@ wurde bereits ein solches angelegt.
 		<legend><?php echo $lang->timetable; ?></legend>
 			<table class="paramlist admintable">
 			<?php $vdg = 0; $vrunde = 0; $i = 0; $ha00 = 0; //$sf = array();
-				$harbiterlist[]	= JHTML::_('select.option',  '0', $lang->select_arbiter , 'fideid', 'fname' );
+				$harbiterlist[]	= HTMLHelper::_('select.option',  '0', $lang->select_arbiter , 'fideid', 'fname' );
 				$harbiterlist	= array_merge( $harbiterlist, $All );
 				for ($p = 0; $p < count($paarung); $p++) {
 					If ($vdg != $paarung[$p]->dg OR $vrunde != $paarung[$p]->runde) {
@@ -174,7 +176,7 @@ wurde bereits ein solches angelegt.
 						echo '<input type="hidden" name="paar['.$i.']" id="paar['.$i.']" value="0" />';
 						echo "</td>";
 						if (isset($array_A00[$paarung[$p]->dg][$paarung[$p]->runde][0])) $ha00 = $array_A00[$paarung[$p]->dg][$paarung[$p]->runde][0]; else $ha00 = 0;
-						$hlist = JHTML::_('select.genericlist',   $harbiterlist, 'sf['.$i.']', 'class="'.$field_search.'" style="width:300px" size="1"',
+						$hlist = HTMLHelper::_('select.genericlist',   $harbiterlist, 'sf['.$i.']', 'class="'.$field_search.'" style="width:300px" size="1"',
 							'fideid', 'fname', $ha00);
 						echo "<td>".$hlist;
 						if ($ha00 > 0 AND isset($array_A00U[$paarung[$p]->dg][$paarung[$p]->runde][0]) 
@@ -189,7 +191,7 @@ wurde bereits ein solches angelegt.
 					echo "</td>";
 
 					if (isset($array_A00[$paarung[$p]->dg][$paarung[$p]->runde][$paarung[$p]->paar])) $ha00 = $array_A00[$paarung[$p]->dg][$paarung[$p]->runde][$paarung[$p]->paar]; else $ha00 = 0;
-					$hlist = JHTML::_('select.genericlist',   $harbiterlist, 'sf['.$i.']', 'class="'.$field_search.'" style="width:300px" size="1"',
+					$hlist = HTMLHelper::_('select.genericlist',   $harbiterlist, 'sf['.$i.']', 'class="'.$field_search.'" style="width:300px" size="1"',
 						'fideid', 'fname', $ha00);
 					echo "<td>".$hlist;
 					if ($ha00 > 0 AND isset($array_A00U[$paarung[$p]->dg][$paarung[$p]->runde][$paarung[$p]->paar]) 
@@ -215,6 +217,6 @@ wurde bereits ein solches angelegt.
 	<input type="hidden" name="returnview" value="<?php echo $returnview; ?>" />
 	<input type="hidden" name="controller" value="arbiterassign" />
 	<input type="hidden" name="task" value="apply" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
 
 </form>

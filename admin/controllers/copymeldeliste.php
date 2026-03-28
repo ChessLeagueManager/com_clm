@@ -1,12 +1,15 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Table\Table;
 
 class CLMControllerCopyMeldeliste extends JControllerLegacy {
 	
@@ -16,7 +19,7 @@ class CLMControllerCopyMeldeliste extends JControllerLegacy {
 
 		parent::__construct( $config );
 		
-		$this->app =JFactory::getApplication();
+		$this->app =Factory::getApplication();
 					
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -27,17 +30,17 @@ class CLMControllerCopyMeldeliste extends JControllerLegacy {
 	function save() {
 	
 		$id = clm_core::$load->request_int('id');
-		$target	= JTable::getInstance('mannschaften', 'TableCLM');
+		$target	= Table::getInstance('mannschaften', 'TableCLM');
 		$target->load( (int)$id );
 
 		$teamid = clm_core::$load->request_int('teamid');
 		if ($teamid == 0) {
-			$app	= JFactory::getApplication();
+			$app	= Factory::getApplication();
 			$msg = 'Es wurde keine Meldeliste ausgewählt!';
 			$app->enqueueMessage( $msg, 'warning' );
 			$app->redirect( 'index.php?option=com_clm&view=copymeldeliste&id='.$id );
 		}
-		$source	= JTable::getInstance('mannschaften', 'TableCLM');
+		$source	= Table::getInstance('mannschaften', 'TableCLM');
 		$source->load( (int)$teamid );
 
 		// Id's der Quell-Meldeliste ermitteln
@@ -48,7 +51,7 @@ class CLMControllerCopyMeldeliste extends JControllerLegacy {
 		$sourcelist = clm_core::$db->loadObjectList($query);	
 
 		// neue Meldelisteneinträge schreiben
-		$spieler	= JTable::getInstance( 'meldelisten', 'TableCLM' );
+		$spieler	= Table::getInstance( 'meldelisten', 'TableCLM' );
 		$i = 0;
 		foreach ($sourcelist as $s01) {
 			$i++;
@@ -64,10 +67,10 @@ class CLMControllerCopyMeldeliste extends JControllerLegacy {
 		}
 		
 		// Datum und Uhrzeit für Meldung
-		$date =JFactory::getDate();
+		$date =Factory::getDate();
 		$now = $date->toSQL();
 		// Benutzer auslesen
-		$user		= JFactory::getUser();
+		$user		= Factory::getUser();
 		$melder	= $user->get('id');
 		// Eintrag der Mannschaft ergänzen durch Melder und Zeitpunkt
 		$target->liste = $melder;

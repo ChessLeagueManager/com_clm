@@ -1,15 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Pagination\Pagination;
 
 class CLMModelAccessgroupsMain extends JModelLegacy {
 
@@ -22,7 +25,7 @@ class CLMModelAccessgroupsMain extends JModelLegacy {
 
 	function __construct(){
 		parent::__construct();
-		$mainframe 	= JFactory::getApplication();
+		$mainframe 	= Factory::getApplication();
 		$option 	= clm_core::$load->request_string('option', '');
 
 		//Pagination Variabeln
@@ -46,7 +49,7 @@ class CLMModelAccessgroupsMain extends JModelLegacy {
 		$this->setState( 'filter_order_Dir' , $filter_order_Dir );
  
 		// User
-		$this->user =JFactory::getUser();
+		$this->user =Factory::getUser();
 	}
 	
 	function getAccessgroups() { 
@@ -69,7 +72,7 @@ class CLMModelAccessgroupsMain extends JModelLegacy {
 		{
 		if (empty($this->_pagination)) {
 			jimport('joomla.html.pagination');
-			$this->_pagination = new JPagination( $this->getTotal(), $this->getState('limitstart'), $this->getState('limit') );
+			$this->_pagination = new Pagination( $this->getTotal(), $this->getState('limitstart'), $this->getState('limit') );
 		}
 		return $this->_pagination;
 	}
@@ -77,7 +80,7 @@ class CLMModelAccessgroupsMain extends JModelLegacy {
 	function getUser()
 		{
 		if (empty($this->_user)) {
-			$this->_user =JFactory::getUser();;
+			$this->_user =Factory::getUser();;
 		}
 		return $this->_user;
 	}
@@ -92,7 +95,7 @@ class CLMModelAccessgroupsMain extends JModelLegacy {
 	}
 	
 	function _buildContentWhere() {
-		$mainframe	= JFactory::getApplication();
+		$mainframe	= Factory::getApplication();
 		$option 	= clm_core::$load->request_string('option', '');
 
 		$search 		= clm_core::$load->request_string('search' , '');
@@ -110,7 +113,7 @@ class CLMModelAccessgroupsMain extends JModelLegacy {
 	
 	
 	function _buildContentOrderBy()	{
-		$mainframe	= JFactory::getApplication();
+		$mainframe	= Factory::getApplication();
 		$option 	= clm_core::$load->request_string('option', '');
  
 		$orderby = '';

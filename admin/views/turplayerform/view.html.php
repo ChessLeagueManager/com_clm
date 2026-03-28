@@ -1,15 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class CLMViewTurPlayerForm extends JViewLegacy {
 
@@ -26,12 +29,12 @@ class CLMViewTurPlayerForm extends JViewLegacy {
 		$adminLink->makeURL();
 		
 		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title( '<a href="'.$adminLink->url.'">'.$model->turnier->name."</a>: ".JText::_('PLAYERS_ADD'), 'clm_turnier.png'  );
+		ToolBarHelper::title( '<a href="'.$adminLink->url.'">'.$model->turnier->name."</a>: ".Text::_('PLAYERS_ADD'), 'clm_turnier.png'  );
 	
-		JToolBarHelper::save();
-		JToolBarHelper::apply();
-		JToolBarHelper::spacer();
-		JToolBarHelper::cancel();
+		ToolBarHelper::save();
+		ToolBarHelper::apply();
+		ToolBarHelper::spacer();
+		ToolBarHelper::cancel();
 
 		// das MainMenu abschalten
 		$_GET['hidemainmenu'] = 1;

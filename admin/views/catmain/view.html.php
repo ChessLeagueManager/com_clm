@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,30 +11,33 @@
 */
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
 class CLMViewCatMain extends JViewLegacy {
 
 	function display($tpl = NULL)
 	{
 
 		// Die Toolbar erstellen, die über der Seite angezeigt wird
-		JToolBarHelper::title( JText::_( 'JCATEGORIES' ) );
+		ToolBarHelper::title( Text::_( 'JCATEGORIES' ) );
 
 		// nur, wenn Admin
 		if (clm_core::$access->getType() == 'admin' OR clm_core::$access->getType() == 'tl') {
-			JToolBarHelper::custom('add','new.png','new_f2.png', JText::_('ADD'), false);
-			JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', JText::_('JTOOLBAR_DUPLICATE'));
+			ToolBarHelper::custom('add','new.png','new_f2.png', Text::_('ADD'), false);
+			ToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', Text::_('JTOOLBAR_DUPLICATE'));
 		}
-		JToolBarHelper::editList();
+		ToolBarHelper::editList();
 		// nur, wenn Admin
 		if (clm_core::$access->getType() == 'admin' OR clm_core::$access->getType() == 'tl') {
-			JToolBarHelper::spacer();
-			JToolBarHelper::publishList();
-			JToolBarHelper::unpublishList();
+			ToolBarHelper::spacer();
+			ToolBarHelper::publishList();
+			ToolBarHelper::unpublishList();
 		}
 		
 		if (clm_core::$access->getType() === 'admin') {
-			JToolBarHelper::spacer();
-			JToolBarHelper::custom('delete','delete.png','delete_f2.png', JText::_('DELETE'),true);
+			ToolBarHelper::spacer();
+			ToolBarHelper::custom('delete','delete.png','delete_f2.png', Text::_('DELETE'),true);
 		}
 
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
@@ -54,7 +57,7 @@ class CLMViewCatMain extends JViewLegacy {
 		$this->pagination = $model->pagination;
 
 		// zusätzliche Funktionalitäten
-//		JHtml::_('behavior.tooltip');
+//		HTMLHelper::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 
 		// Auswahlfelder durchsuchbar machen

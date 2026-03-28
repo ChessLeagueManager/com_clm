@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleagueamanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,10 @@
 */
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class CLMViewSWTTurnierTlnr extends JViewLegacy {
 	function display($tpl = null) { 
@@ -21,16 +25,16 @@ class CLMViewSWTTurnierTlnr extends JViewLegacy {
 		
 		//Toolbar
 		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title( JText::_('TITLE_SWT_TOURNAMENT_TLNR') ,'clm_headmenu_manager.png' );
+		ToolBarHelper::title( Text::_('TITLE_SWT_TOURNAMENT_TLNR') ,'clm_headmenu_manager.png' );
 		
-		//JToolBarHelper::custom('next','next.png','next_f2.png', JText::_('SWT_TOURNAMENT_NEXT'), false);
-		JToolBarHelper::custom('next','forward.png','forward_f2.png', JText::_('SWT_TOURNAMENT_NEXT'), false);
-		JToolBarHelper::custom('cancel','cancel.png','cancel_f2.png', JText::_('SWT_TOURNAMENT_CANCEL'), false);	
+		//ToolBarHelper::custom('next','next.png','next_f2.png', Text::_('SWT_TOURNAMENT_NEXT'), false);
+		ToolBarHelper::custom('next','forward.png','forward_f2.png', Text::_('SWT_TOURNAMENT_NEXT'), false);
+		ToolBarHelper::custom('cancel','cancel.png','cancel_f2.png', Text::_('SWT_TOURNAMENT_CANCEL'), false);	
 		
 		//Listen
-		$geschlechter[] = JHtml::_('select.option','',JText::_(''));
-		$geschlechter[] = JHtml::_('select.option','M',JText::_('OPTION_SEX_M'));
-		$geschlechter[] = JHtml::_('select.option','W',JText::_('OPTION_SEX_W'));
+		$geschlechter[] = HTMLHelper::_('select.option','',Text::_(''));
+		$geschlechter[] = HTMLHelper::_('select.option','M',Text::_('OPTION_SEX_M'));
+		$geschlechter[] = HTMLHelper::_('select.option','W',Text::_('OPTION_SEX_W'));
 		
 		//Daten ans Template
 		$this->teilnehmer = $teilnehmer;

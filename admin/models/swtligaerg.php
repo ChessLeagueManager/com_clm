@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team. All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -13,6 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
 
+use Joomla\CMS\Factory;
 
 class CLMModelSWTLigaerg extends JModelLegacy {
 
@@ -179,8 +180,8 @@ class CLMModelSWTLigaerg extends JModelLegacy {
 	function store () {
 		
 		// DB-Zugriff
-		$db		= JFactory::getDBO ();
-		//$row	=& JTable::getInstance ('ligenSWT', 'TableCLM');
+		$db		= Factory::getDBO ();
+		//$row	=& Table::getInstance ('ligenSWT', 'TableCLM');
 		
 		$swt_id	= clm_core::$load->request_int('swt_id', 0);
 		$sid	= clm_core::$load->request_int('sid', 0);

@@ -11,6 +11,13 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Path;
+
 class CLMModelAuswertung extends JModelLegacy {
 
 	var $_swtFiles;
@@ -24,8 +31,8 @@ function datei() {
 
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
-	$db	= JFactory::getDBO();
-	$app	= JFactory::getApplication();
+	$db	= Factory::getDBO();
+	$app	= Factory::getApplication();
 	$option	= clm_core::$load->request_string('option');
 	// Link zum redirect generieren
 	$adminLink = new AdminLink();
@@ -51,14 +58,14 @@ function datei() {
 	if ($vround != "") {
 		$around = explode(".",$vround);
 		if (is_null($around) OR count($around) != 2 OR !is_numeric($around[0]) OR !is_numeric($around[1])) {
-			$app->enqueueMessage(JText::_( 'DEWIS_ERROR_SELPARAMETER1' ).$vround, 'warning');
+			$app->enqueueMessage(Text::_( 'DEWIS_ERROR_SELPARAMETER1' ).$vround, 'warning');
 			$app->redirect( $adminLink->url);
 		}
 	}
 	if ($vpairing != "") {
 		$apairing = explode(",",$vpairing);
 		if (is_null($apairing) OR count($apairing) < 1 OR count($apairing) > 10) {
-			$app->enqueueMessage(JText::_( 'DEWIS_ERROR_SELPARAMETER2' ).$vpairing, 'warning');
+			$app->enqueueMessage(Text::_( 'DEWIS_ERROR_SELPARAMETER2' ).$vpairing, 'warning');
 			$app->redirect( $adminLink->url);
 		}
 		$aapairing = array();
@@ -66,7 +73,7 @@ function datei() {
 			$aapairingx = explode(".",$apairing1);
 			if (is_null($aapairingx) OR count($aapairingx) < 1 OR !is_numeric($aapairingx[0]) OR !is_numeric($aapairingx[1]) 
 				OR !is_numeric($aapairingx[2])) {
-				$app->enqueueMessage(JText::_( 'DEWIS_ERROR_SELPARAMETER2' ).$vpairing, 'warning');
+				$app->enqueueMessage(Text::_( 'DEWIS_ERROR_SELPARAMETER2' ).$vpairing, 'warning');
 				$app->redirect( $adminLink->url);
 			}
 			$aapairing[] = $aapairingx;
@@ -79,9 +86,9 @@ function datei() {
 	$countryversion = $config->countryversion;
 
 	// Dateinamen zusammensetzen
-	$date	=JFactory::getDate();
+	$date	=Factory::getDate();
 	$now	= $date->toSQL();
-	$datum	= JHTML::_('date',  $now, JText::_('d-m-Y__H-i-s'));
+	$datum	= HTMLHelper::_('date',  $now, Text::_('d-m-Y__H-i-s'));
 
 	// Grunddaten für Ligen und Mannschaftsturniere laden
 	if(!is_null($liga) OR !is_null($mt)){
@@ -105,7 +112,7 @@ function datei() {
 			;
 		$db->setQuery($sql);
 		$liga_date	= $db->loadObjectList();
-		$end_date	= JHTML::_('date',  $liga_date[0]->datum, JText::_('Y-m-d'));
+		$end_date	= HTMLHelper::_('date',  $liga_date[0]->datum, Text::_('Y-m-d'));
 		
 		// Vollständigkeit prüfen für Ligen und Mannschaftsturniere
 		// 1.	Erwartete Anzahl von Einzelergebnissen auf Basis Anzahl spielfreie Mannschaften
@@ -163,16 +170,16 @@ function datei() {
 			
 			$fehler	= 0;
 			if($rnd_count < ($counter - $count_kampflos) AND $rnd_count == 0){
-				$app->enqueueMessage(JText::_( 'DB_WTEXT0' ).JText::_( 'DB_ROUND' ).$rnd.JText::_( 'DB_DG' ).$dg, 'warning');
+				$app->enqueueMessage(Text::_( 'DB_WTEXT0' ).Text::_( 'DB_ROUND' ).$rnd.Text::_( 'DB_DG' ).$dg, 'warning');
 				$fehler = 1;
 			} elseif($rnd_count < ($counter - $count_kampflos)){
-				$app->enqueueMessage(JText::_( 'DB_WTEXT1' ).JText::_( 'DB_ROUND' ).$rnd.JText::_( 'DB_DG' ).$dg, 'warning');
+				$app->enqueueMessage(Text::_( 'DB_WTEXT1' ).Text::_( 'DB_ROUND' ).$rnd.Text::_( 'DB_DG' ).$dg, 'warning');
 				$fehler = 1;
 			}
 		  }
 		}
 		if ($all_count == 0) {
-			$app->enqueueMessage(JText::_( 'Es liegen noch keine Ergebnisse vor' ).$vround, 'warning');
+			$app->enqueueMessage(Text::_( 'Es liegen noch keine Ergebnisse vor' ).$vround, 'warning');
 			$app->redirect( $adminLink->url);
 		}
 
@@ -189,7 +196,7 @@ function datei() {
 		$db->setQuery($sql);
 		$liga_name = $db->loadObjectList();
 
-		$end_date	= JHTML::_('date',  $liga_name[0]->dateEnd, JText::_('Y-m-d'));
+		$end_date	= HTMLHelper::_('date',  $liga_name[0]->dateEnd, Text::_('Y-m-d'));
 		$anzahl_runden	= ($liga_name[0]->runden)*($liga_name[0]->dg);
 	}
 	
@@ -285,8 +292,8 @@ function datei() {
 	$db->setQuery($sql);
 	$spieler=$db->loadObjectList();
 	if (count($spieler) == 0) { 
-		$app->enqueueMessage(JText::_( 'DB_NO_PLAYER' ), 'warning');
-		$app->enqueueMessage(JText::_( 'DB_FILE_NOSUCCESS' ), 'warning');
+		$app->enqueueMessage(Text::_( 'DB_NO_PLAYER' ), 'warning');
+		$app->enqueueMessage(Text::_( 'DB_FILE_NOSUCCESS' ), 'warning');
 		$app->redirect( $adminLink->url);
 	}
 
@@ -448,8 +455,8 @@ function datei() {
 	// Probedaten
 		$ort		= clm_core::$load->utf8decode("Name Ort");
 		$fide_land	= "GER";
-		$datum_s	= JHTML::_('date',  $liga_start[0]->datum, JText::_('d.m.Y'));
-		$datum_e	= JHTML::_('date',  $liga_date[0]->datum, JText::_('d.m.Y'));
+		$datum_s	= HTMLHelper::_('date',  $liga_start[0]->datum, Text::_('d.m.Y'));
+		$datum_e	= HTMLHelper::_('date',  $liga_date[0]->datum, Text::_('d.m.Y'));
 		$zuege_1	= clm_core::$load->utf8decode("90 Min 40 Züge");
 		$zuege_2	= clm_core::$load->utf8decode("60 Min 20 Züge");
 		$zuege_3	= clm_core::$load->utf8decode("30 Min Rest");
@@ -1097,7 +1104,7 @@ $xml = $xmla->writeData();
 	// Slashes und Spaces aus Namen filtern und Namen mit Pfad zusammensetzen
 	$dat_name 	= clm_core::$load->file_name($liga_name[0]->name);
 	$file		= $dat_name.'__'.$datum;
-	$path		= JPath::clean(JPATH_ADMINISTRATOR.DS.'components'.DS.$option.DS.'dewis');
+	$path		= Path::clean(JPATH_ADMINISTRATOR.DS.'components'.DS.$option.DS.'dewis');
 	if($format =="1"){ $datei_endung = "txt";}
 	if($format =="2"){ $datei_endung = "xml";}
 	if($format =="3"){ $datei_endung = "xml";}
@@ -1106,12 +1113,12 @@ $xml = $xmla->writeData();
 
 	// Datei schreiben ggf. Fehlermeldung absetzen
 	jimport('joomla.filesystem.file');
-	if (!JFile::write( $write, $xml )) { 
-		$app->enqueueMessage(JText::_( 'DB_FEHLER_SCHREIB' ), 'warning');
+	if (!File::write( $write, $xml )) { 
+		$app->enqueueMessage(Text::_( 'DB_FEHLER_SCHREIB' ), 'warning');
 		$app->redirect( $adminLink->url);
 	}
   
-	$app->enqueueMessage(JText::_( 'DB_FILE_SUCCESS' ).clm_core::$load->utf8encode($file), 'message');
+	$app->enqueueMessage(Text::_( 'DB_FILE_SUCCESS' ).clm_core::$load->utf8encode($file), 'message');
 	$app->redirect( $adminLink->url);
 	}
 
@@ -1121,9 +1128,9 @@ function xml_dateien()
 	jimport( 'joomla.filesystem.folder' );
 	$option		= clm_core::$load->request_string('option');
 	$filesDir 	= 'components'.DS.$option.DS.'dewis';
-	$ex_dbf		= JFolder::files( $filesDir, 'dbf$',true, false);
+	$ex_dbf		= Folder::files( $filesDir, 'dbf$',true, false);
 	$ex_dbf[]	= 'index.html';
-	$files		= JFolder::files( $filesDir, '',true, false, $ex_dbf );
+	$files		= Folder::files( $filesDir, '',true, false, $ex_dbf );
 	$count		= count($files);
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
@@ -1137,10 +1144,10 @@ function xml_dateien()
 				.'" target="_blank">'.clm_core::$load->utf8encode($files[$x]).'</a></td>'
 				.'<td width="10%">&nbsp;&nbsp;</td>'
 				.'<td width="15%"><a href="index.php?option=com_clm&view=auswertung&task=delete&datei='.$files[$x].'" '
-				.'>'.JText::_( 'DELETE').'</a></td>';
+				.'>'.Text::_( 'DELETE').'</a></td>';
 			if ($countryversion =="en-out") {  //download funktioniert so nicht, deshalb deaktiviert für 3.2.4
 				$dateien .= '<td width="15%"><a href="index.php?option=com_clm&view=auswertung&task=download&datei='.$files[$x].'" '
-							.'>'.JText::_( 'DB_DOWNLOAD').'</a></td>';
+							.'>'.Text::_( 'DB_DOWNLOAD').'</a></td>';
 			} else { 
 				$dateien .= '<td width="15%">  </td>';
 			}
@@ -1156,7 +1163,7 @@ function download()
 	{
 	$option		= clm_core::$load->request_string('option');
 	$datei		= clm_core::$load->request_string('datei');
-	$app		= JFactory::getApplication();
+	$app		= Factory::getApplication();
 	
 	if($datei){
 		$file 	= JPATH_ADMINISTRATOR.DS.'components'.DS.$option.DS.'dewis'.DS.$datei;	
@@ -1171,8 +1178,8 @@ function download()
 		flush();
 		readfile ( $file );
 
-		$msg =JText::_( 'DB_DWL_SUCCESS');
-	}else{	$msg =JText::_( 'Keine Datei gefunden !');}
+		$msg =Text::_( 'DB_DWL_SUCCESS');
+	}else{	$msg =Text::_( 'Keine Datei gefunden !');}
 
 	$app->enqueueMessage( $msg, 'warning');	
 
@@ -1185,16 +1192,16 @@ function delete()
 	{
 	$option		= clm_core::$load->request_string('option');
 	$datei		= clm_core::$load->request_string('datei');
-	$app		= JFactory::getApplication();
+	$app		= Factory::getApplication();
 	
 	if($datei){
 		$filesDir 	= 'components'.DS.$option.DS.'dewis';
 		jimport('joomla.filesystem.file');
-		$rc = JFile::delete( $filesDir.DS.str_replace("%2B","+",$datei ));
-		if ($rc) $msg =JText::_( 'DB_DEL_SUCCESS');
-		else $msg = JText::_( 'Fehler beim Löschen!');
+		$rc = File::delete( $filesDir.DS.str_replace("%2B","+",$datei ));
+		if ($rc) $msg =Text::_( 'DB_DEL_SUCCESS');
+		else $msg = Text::_( 'Fehler beim Löschen!');
 	} else {
-		$msg =JText::_( 'Keine Datei gefunden!');}
+		$msg =Text::_( 'Keine Datei gefunden!');}
 
 	$app->enqueueMessage( $msg, 'warning');	
 
@@ -1205,7 +1212,7 @@ function delete()
 	}	
 
 function liga_filter() {
-	$db =JFactory::getDBO();	
+	$db =Factory::getDBO();	
 	// Ligafilter
 	$sql = 'SELECT d.id AS cid, d.name FROM #__clm_liga as d'
 		." LEFT JOIN #__clm_saison as s ON s.id = d.sid"
@@ -1213,30 +1220,30 @@ function liga_filter() {
 		." AND d.published = 1 "
 		." ORDER BY d.ordering ";
 	$db->setQuery($sql);
-	$ligalist[]	= JHTML::_('select.option',  '0', JText::_( 'MANNSCHAFTEN_LIGA' ), 'cid', 'name' );
+	$ligalist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'MANNSCHAFTEN_LIGA' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
-	$lists['lid']	= JHTML::_('select.genericlist', $ligalist, 'filter_lid', 'class="inputbox" size="1" onchange=""','cid', 'name', '' );
+	$lists['lid']	= HTMLHelper::_('select.genericlist', $ligalist, 'filter_lid', 'class="inputbox" size="1" onchange=""','cid', 'name', '' );
 	
 	return $lists['lid'];
 	}
 	
 function turnier_filter() {
-	$db =JFactory::getDBO();	
+	$db =Factory::getDBO();	
 	// Ligafilter
 	$sql = 'SELECT d.id AS cid, d.name FROM #__clm_turniere as d'
 		." LEFT JOIN #__clm_saison as s ON s.id = d.sid"
 		." WHERE s.archiv = 0 "
 		." ORDER BY d.ordering ";
 	$db->setQuery($sql);
-	$ligalist[]	= JHTML::_('select.option',  '0', JText::_( 'DB_FILE_TOURNAMENT_0' ), 'cid', 'name' );
+	$ligalist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'DB_FILE_TOURNAMENT_0' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
-	$lists['lid']	= JHTML::_('select.genericlist', $ligalist, 'filter_et', 'class="inputbox" size="1" onchange=""','cid', 'name', '' );
+	$lists['lid']	= HTMLHelper::_('select.genericlist', $ligalist, 'filter_et', 'class="inputbox" size="1" onchange=""','cid', 'name', '' );
 	
 	return $lists['lid'];
 	}
 
 function mannschaftsturnier_filter() {
-	$db =JFactory::getDBO();	
+	$db =Factory::getDBO();	
 	// Ligafilter
 	$sql = 'SELECT d.id AS cid, d.name FROM #__clm_liga as d'
 		." LEFT JOIN #__clm_saison as s ON s.id = d.sid"
@@ -1244,9 +1251,9 @@ function mannschaftsturnier_filter() {
 		." AND d.published = 1 "
 		." ORDER BY d.ordering ";
 	$db->setQuery($sql);
-	$ligalist[]	= JHTML::_('select.option',  '0', JText::_( 'DB_FILE_TEAMTOURNAMENT_0' ), 'cid', 'name' );
+	$ligalist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'DB_FILE_TEAMTOURNAMENT_0' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
-	$lists['lid']	= JHTML::_('select.genericlist', $ligalist, 'filter_mt', 'class="inputbox" size="1" onchange=""','cid', 'name', '' );
+	$lists['lid']	= HTMLHelper::_('select.genericlist', $ligalist, 'filter_mt', 'class="inputbox" size="1" onchange=""','cid', 'name', '' );
 	
 	return $lists['lid'];
 	}

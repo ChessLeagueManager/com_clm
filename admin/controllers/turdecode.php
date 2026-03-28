@@ -1,12 +1,15 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 class CLMControllerTurDecode extends JControllerLegacy 
 {
@@ -15,7 +18,7 @@ class CLMControllerTurDecode extends JControllerLegacy
 		
 		parent::__construct( $config );
 		
-		$this->app 	= JFactory::getApplication();
+		$this->app 	= Factory::getApplication();
 			
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -26,10 +29,10 @@ class CLMControllerTurDecode extends JControllerLegacy
 	function save() {
 	
 		$result = $this->_saveDo();   
-		$app =JFactory::getApplication();
+		$app =Factory::getApplication();
 		
 		if ($result[0]) { // erfolgreich?		
-			$app->enqueueMessage( JText::_('DECODE_TABLE_UPDATE') );
+			$app->enqueueMessage( Text::_('DECODE_TABLE_UPDATE') );
 		} else {
 			$app->enqueueMessage( $result[2],$result[1] );					
 		}
@@ -144,7 +147,7 @@ class CLMControllerTurDecode extends JControllerLegacy
 		}
 		// Log schreiben
 		$clmLog = new CLMLog();
-		$clmLog->aktion = JText::_('DECODE_TABLE_UPDATED_LOG');
+		$clmLog->aktion = Text::_('DECODE_TABLE_UPDATED_LOG');
 		$clmLog->params = array('sid' => $sid, 'tid' => $tid); 
 		$clmLog->write();
 		

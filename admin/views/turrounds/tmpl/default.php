@@ -1,15 +1,19 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Table\Table;
 
 $clmAccess = clm_core::$access;
  
@@ -27,44 +31,44 @@ $clmAccess = clm_core::$access;
 					<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 				</th>
 				<th width="3%">
-					<?php echo JHtml::_('grid.sort',   JText::_('ROUND_DG'), 'dg', $this->param['order_Dir'], $this->param['order'] ); ?>
+					<?php echo HTMLHelper::_('grid.sort',   Text::_('ROUND_DG'), 'dg', $this->param['order_Dir'], $this->param['order'] ); ?>
 				</th>
 				<th width="3%">
-					<?php echo JHtml::_('grid.sort',   JText::_('ROUND_NR'), 'nr', $this->param['order_Dir'], $this->param['order'] ); ?>
+					<?php echo HTMLHelper::_('grid.sort',   Text::_('ROUND_NR'), 'nr', $this->param['order_Dir'], $this->param['order'] ); ?>
 				</th>
 				<th class="title">
-					<?php echo JText::_('ROUND'); ?>
+					<?php echo Text::_('ROUND'); ?>
 				</th>
 				
 				<th width="9%">
-					<?php echo JText::_('JDATE'); ?>
+					<?php echo Text::_('JDATE'); ?>
 				</th>
 				
 				<th width="5%">
-					<?php echo JText::_('RUNDE_STARTTIME'); ?>
+					<?php echo Text::_('RUNDE_STARTTIME'); ?>
 				</th>
 
 				<th width="10%">
-					<?php echo JText::_('MATCH_COUNT'); ?>
+					<?php echo Text::_('MATCH_COUNT'); ?>
 				</th>
 				<th width="10%">
-					<?php echo JText::_('MATCHES'); ?>
+					<?php echo Text::_('MATCHES'); ?>
 				</th>
 				
 				<th width="8%">
-					<?php echo JHtml::_('grid.sort',   JText::_('CLM_PUBLISHED'), 'published', $this->param['order_Dir'], $this->param['order'] ); ?>
+					<?php echo HTMLHelper::_('grid.sort',   Text::_('CLM_PUBLISHED'), 'published', $this->param['order_Dir'], $this->param['order'] ); ?>
 				</th>
 				
 				<th width="8%">
-					<?php echo JText::_('ENTRY_ENABLED'); ?>
+					<?php echo Text::_('ENTRY_ENABLED'); ?>
 				</th>
 				
 				<th width="8%">
-					<?php echo JHtml::_('grid.sort',   JText::_('TOURNAMENT_DIRECTOR')."<br />".JText::_('APPROVAL'), 'tl_ok', $this->param['order_Dir'], $this->param['order'] ); ?>
+					<?php echo HTMLHelper::_('grid.sort',   Text::_('TOURNAMENT_DIRECTOR')."<br />".Text::_('APPROVAL'), 'tl_ok', $this->param['order_Dir'], $this->param['order'] ); ?>
 				</th>
 				
 				<th width="1%" nowrap="nowrap">
-					<?php echo JHtml::_('grid.sort',   'JGRID_HEADING_ID', 'a.id', $this->param['order_Dir'], $this->param['order'] ); ?>
+					<?php echo HTMLHelper::_('grid.sort',   'JGRID_HEADING_ID', 'a.id', $this->param['order_Dir'], $this->param['order'] ); ?>
 				</th>
 			</tr>
 		</thead>
@@ -74,14 +78,14 @@ $clmAccess = clm_core::$access;
 		$k = 0;
 		
 		$n=count( $this->turrounds );
-		$row =JTable::getInstance( 'turnier_runden', 'TableCLM' );
+		$row =Table::getInstance( 'turnier_runden', 'TableCLM' );
 		foreach ($this->turrounds as $i => $value) {
 			//$row = &$value;
 			// load the row from the db table 
 			$row->load( $value->id );
-			$checked 	= JHtml::_('grid.checkedout',   $row, ($i) ); //-1
-//			$published 	= JHtml::_('grid.published', $row, ($i) );  //-1
-			$published 	= JHtml::_('jgrid.published', $row->published, $i );
+			$checked 	= HTMLHelper::_('grid.checkedout',   $row, ($i) ); //-1
+//			$published 	= HTMLHelper::_('grid.published', $row, ($i) );  //-1
+			$published 	= HTMLHelper::_('jgrid.published', $row->published, $i );
 			?>
 			
 			<tr class="<?php echo 'row'. $k; ?>">
@@ -112,7 +116,7 @@ $clmAccess = clm_core::$access;
 						$adminLink->view = "turroundform";
 						$adminLink->more = array('task' => 'edit', 'turnierid' => $this->param['id'], 'roundid' => $row->id);
 						$adminLink->makeURL();
-						echo '<span class="editlinktip hasTip" title="'.JText::_( 'JACTION_EDIT' ).'">';
+						echo '<span class="editlinktip hasTip" title="'.Text::_( 'JACTION_EDIT' ).'">';
 						echo '<a href="'.$adminLink->url.'">'.$row->name.'</a>';
 						echo '</span>';
 					}
@@ -120,7 +124,7 @@ $clmAccess = clm_core::$access;
 				</td>
 				
 				<td align="center">
-					<?php if ($row->datum != '0000-00-00' AND $row->datum != '1970-01-01') echo JHtml::_( 'date', $row->datum, JText::_('DATE_FORMAT_CLM'));?>
+					<?php if ($row->datum != '0000-00-00' AND $row->datum != '1970-01-01') echo HTMLHelper::_( 'date', $row->datum, Text::_('DATE_FORMAT_CLM'));?>
 				</td>
 				<td align="center">
 					<?php if ($row->startzeit != 0) echo substr($row->startzeit,0,5);?>
@@ -129,20 +133,20 @@ $clmAccess = clm_core::$access;
 				<td align="center">
 					<?php 
 					if (($this->turnier->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_result') !== true ) OR ($clmAccess->access('BE_tournament_edit_result') === false)) {
-						echo CLMText::sgpl($value->countMatches, JText::_('MATCH'), JText::_('MATCHES'));
+						echo CLMText::sgpl($value->countMatches, Text::_('MATCH'), Text::_('MATCHES'));
 					} else {	
 						$adminLink = new AdminLink();
 						$adminLink->view = "turroundmatches";
 						$adminLink->more = array('turnierid' =>  $this->param['id'], 'roundid' => $row->id);
 						$adminLink->makeURL();
-						echo '<a href="'.$adminLink->url.'">'.CLMText::sgpl($value->countMatches, JText::_('MATCH'), JText::_('MATCHES')).'</a>';
+						echo '<a href="'.$adminLink->url.'">'.CLMText::sgpl($value->countMatches, Text::_('MATCH'), Text::_('MATCHES')).'</a>';
 					} ?>
 				</td>
 				
 				<td align="center">
 					<?php 
-						echo $value->countAssigned."&nbsp;".JText::_('MATCHES_ASSIGNED');
-						echo '<br />'.$value->countResults."&nbsp;".JText::_('MATCHES_PLAYED');
+						echo $value->countAssigned."&nbsp;".Text::_('MATCHES_ASSIGNED');
+						echo '<br />'.$value->countResults."&nbsp;".Text::_('MATCHES_PLAYED');
 					?>
 				</td>
 				
@@ -154,9 +158,9 @@ $clmAccess = clm_core::$access;
 					<?php 
 						// meldung nicht erlaubt
 						if ($value->abgeschlossen == '1') { 
-							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'disbale\')" title="'.JText::_('DISABLE_ENTRY').'"><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /></a>';
+							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'disbale\')" title="'.Text::_('DISABLE_ENTRY').'"><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /></a>';
 						} else {
-							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'enable\')" title="'.JText::_('ENABLE_ENTRY').'"><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /></a>';
+							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'enable\')" title="'.Text::_('ENABLE_ENTRY').'"><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /></a>';
 						}
 					?>
 				</td>
@@ -165,9 +169,9 @@ $clmAccess = clm_core::$access;
 					<?php 
 						// tl_ok/director approval
 						if ($row->tl_ok == '1') { 
-							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'unapprove\')" title="'.JText::_('REMOVE_APPROVAL').'"><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /></a>';
+							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'unapprove\')" title="'.Text::_('REMOVE_APPROVAL').'"><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /></a>';
 						} else {
-							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'approve\')" title="'.JText::_('SET_APPROVAL').'"><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /></a>';
+							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'approve\')" title="'.Text::_('SET_APPROVAL').'"><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /></a>';
 						}
 					?>
 				</td>
@@ -202,6 +206,6 @@ $clmAccess = clm_core::$access;
 	<input type="hidden" name="filter_order" value="<?php echo $this->param['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->param['order_Dir']; ?>" />
 	<input type="hidden" name="id" value="<?php echo $this->param['id']; ?>" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
 
 </form>

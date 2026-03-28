@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,10 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
 
 class CLMControllerTermineForm extends JControllerLegacy {
 	
@@ -32,15 +36,15 @@ class CLMControllerTermineForm extends JControllerLegacy {
 		$task = clm_core::$load->request_string('task', '');
 
 		$result = $this->_saveDo();
-		$app =JFactory::getApplication();
+		$app =Factory::getApplication();
 		
 		if ($result[0]) { // erfolgreich?
 			
 			
 			if ($result[1]) { // neues termine?
-				$app->enqueueMessage( JText::_('TERMINE_TASK_CREATED') );
+				$app->enqueueMessage( Text::_('TERMINE_TASK_CREATED') );
 			} else {
-				$app->enqueueMessage( JText::_('TERMINE_TASK_EDITED') );
+				$app->enqueueMessage( Text::_('TERMINE_TASK_EDITED') );
 			}
 		
 		} else {
@@ -71,7 +75,7 @@ class CLMControllerTermineForm extends JControllerLegacy {
 		// Task
 		$task = clm_core::$load->request_string('task', '');
 		// Instanz der Tabelle
-		$row = JTable::getInstance( 'termine', 'TableCLM' );
+		$row = Table::getInstance( 'termine', 'TableCLM' );
 		
 	
 		$post = $_POST; 
@@ -89,11 +93,11 @@ class CLMControllerTermineForm extends JControllerLegacy {
 		// if new item, order last in appropriate group
 		if (!$row->id) {
 			$neu = true; // Flag für neues termine
-			$stringAktion = JText::_('TERMINE_TASK_CREATED');
+			$stringAktion = Text::_('TERMINE_TASK_CREATED');
 			$row->ordering = $row->getNextOrder(); // ( $where );
 		} else {
 			$neu = false;
-			$stringAktion = JText::_('TERMINE_TASK_EDITED');
+			$stringAktion = Text::_('TERMINE_TASK_EDITED');
 		}
 		
 		// handling checkboxes
@@ -120,7 +124,7 @@ class CLMControllerTermineForm extends JControllerLegacy {
 		$adminLink = new AdminLink();
 		$adminLink->view = "terminemain";
 		$adminLink->makeURL();
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$app->redirect( $adminLink->url );
 		
 	}

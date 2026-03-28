@@ -1,15 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 //echo "<br><br>v-pgn_arr:"; var_dump($this->pgn_arr);
 $pgn_data = $this->pgn_arr;
@@ -50,21 +53,21 @@ $pgn_file = clm_core::$load->request_string('pgn_file', '');
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 	<div class="width-100 fltlft">
 		<fieldset class="adminform">
-			<legend><?php echo $total.' '.JText::_( 'PGN_MAINTAIN_TOTAL' ); ?><br>
-				<?php if ($total == 0) echo JText::_( 'PGN_MAINTAIN_CLOSE' ); 
-					else echo JText::_( 'PGN_MAINTAIN_OPEN' ); ?></legend>
+			<legend><?php echo $total.' '.Text::_( 'PGN_MAINTAIN_TOTAL' ); ?><br>
+				<?php if ($total == 0) echo Text::_( 'PGN_MAINTAIN_CLOSE' ); 
+					else echo Text::_( 'PGN_MAINTAIN_OPEN' ); ?></legend>
 			<table class="paramlist admintable">
 			<?php if ($pgn_error > 0) {  ?>
 			<tr>
-					<th style="text-align:left" ><div><?php echo JText::_('PGN_LEAGUE_ERROR') ?></div></th>
-					<th style="text-align:left" ><div><?php echo JText::_('PGN_LEAGUE_TOURNAMENT') ?></div></th>
-					<th style="text-align:left" ><div><?php echo JText::_('PGN_LEAGUE_DG') ?></div></th>
-					<th style="text-align:left" ><div><?php echo JText::_('PGN_LEAGUE_ROUND') ?></div></th>
+					<th style="text-align:left" ><div><?php echo Text::_('PGN_LEAGUE_ERROR') ?></div></th>
+					<th style="text-align:left" ><div><?php echo Text::_('PGN_LEAGUE_TOURNAMENT') ?></div></th>
+					<th style="text-align:left" ><div><?php echo Text::_('PGN_LEAGUE_DG') ?></div></th>
+					<th style="text-align:left" ><div><?php echo Text::_('PGN_LEAGUE_ROUND') ?></div></th>
 					<?php if ($tkz == 't') {  ?>
-					<th style="text-align:left" ><div><?php echo JText::_('PGN_LEAGUE_PAIR') ?></div></th>
+					<th style="text-align:left" ><div><?php echo Text::_('PGN_LEAGUE_PAIR') ?></div></th>
 					<?php }  ?>
-					<th style="text-align:left" ><div><?php echo JText::_('PGN_LEAGUE_BOARD') ?></div></th>
-					<th style="text-align:left" ><div><?php echo JText::_('PGN_LEAGUE_PGNTEXT') ?></div></th>
+					<th style="text-align:left" ><div><?php echo Text::_('PGN_LEAGUE_BOARD') ?></div></th>
+					<th style="text-align:left" ><div><?php echo Text::_('PGN_LEAGUE_PGNTEXT') ?></div></th>
 				</tr>
  			<?php for ($p = 0; $p < count($pgn_data); $p++) {  
 				if ($pgn_data[$p]['error'] == '') continue;
@@ -133,5 +136,5 @@ $pgn_file = clm_core::$load->request_string('pgn_file', '');
 	<input type="hidden" name="liga" value="<?php echo $liga; ?>" />
 	<input type="hidden" name="pgn_file" value="<?php echo $pgn_file; ?>" />
 	<input type="hidden" name="pgn_count" value="<?php echo count($pgn_data); ?>" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
 </form>

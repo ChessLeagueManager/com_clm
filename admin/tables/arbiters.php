@@ -1,14 +1,17 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
+
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-class TableCLMArbiters extends JTable
+use Joomla\CMS\Table\Table;
+
+class TableCLMArbiters extends Table
 {
 	var $id			= 0;
 	var $fideid		= 0;
@@ -30,7 +33,7 @@ class TableCLMArbiters extends JTable
 	 *
 	 * @access public
 	 * @return boolean
-	 * @see JTable::check
+	 * @see Table::check
 	 * @since 1.5
 	 */
 	function checkData() {

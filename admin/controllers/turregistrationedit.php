@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,10 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
 
 class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 	
@@ -20,7 +24,7 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->app 	= JFactory::getApplication();
+		$this->app 	= Factory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -67,12 +71,12 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		$snrmax = clm_core::$load->request_int('snrmax');
 
 		// Instanz der Tabelle
-		$rowt = JTable::getInstance( 'turniere', 'TableCLM' );
+		$rowt = Table::getInstance( 'turniere', 'TableCLM' );
 		$rowt->load( $turnierid ); // Daten zu dieser Turnier-ID laden
 
 		$clmAccess = clm_core::$access;      
 		if (($rowt->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
-			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'), 'warning' );
+			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'), 'warning' );
 			return false;
 		}
 	
@@ -80,7 +84,7 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		$task = clm_core::$load->request_string('task');
 		
 		// Instanz der Tabelle
-		$row = JTable::getInstance( 'registrations', 'TableCLM' );
+		$row = Table::getInstance( 'registrations', 'TableCLM' );
 		$row->load( $registrationid ); // Daten zu dieser ID laden
 
 		if ($task == 'copy_to') {
@@ -92,7 +96,7 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 				$text = CLMText::errorText('PLAYERLIST', 'FULL');
 			}
 			if ($row->status == 2) {
-				$text = JText::_('REGISTRATION_ALREADY_MOVED');
+				$text = Text::_('REGISTRATION_ALREADY_MOVED');
 			}
 			if ($text != '') {
 				$this->app->enqueueMessage( $text );
@@ -137,7 +141,7 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 			$param_useastwz = $turParams->get('useAsTWZ', 0);
 
 			// Teilnehmerdaten holen
-			$tlnr = JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
+			$tlnr = Table::getInstance( 'turnier_teilnehmer', 'TableCLM' );
 			$tlnr->sid		= $rowt->sid;
 			$tlnr->turnier	= $row->tid;
 			$tlnr->snr		= $snrmax + 1;  // 0
@@ -173,7 +177,7 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 			$tlnr->zps		= $row->zps;
 			if (strlen($tlnr->zps) != 5 OR $tlnr->mgl_nr < 1) {
 				// weiteren Daten aus TlnTabelle
-				$db		= JFactory::getDBO();
+				$db		= Factory::getDBO();
 				$query = "SELECT MAX(mgl_nr), MAX(snr) FROM `#__clm_turniere_tlnr`"
 					." WHERE turnier = ".$tlnr->turnier
 					." AND zps = 99999 "
@@ -199,11 +203,11 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 				return false;
 			}
 			if ($tlnr->zps == '99999') 
-				$text = JText::_('REGISTRATION_MOVED9');
+				$text = Text::_('REGISTRATION_MOVED9');
 			else 
-				$text = JText::_('REGISTRATION_MOVED');
+				$text = Text::_('REGISTRATION_MOVED');
 		} else {
-			$text = JText::_('REGISTRATION_EDITED');
+			$text = Text::_('REGISTRATION_EDITED');
 		}
 		
 		// Log schreiben

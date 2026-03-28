@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,10 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
 
 class CLMControllerPaarung extends JControllerLegacy
 {
@@ -27,16 +31,16 @@ function __construct( $config = array() )
 
 function display($cachable = false, $urlparams = array())
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
-	$db 		=JFactory::getDBO();
-	$user 		=JFactory::getUser();
+	$db 		=Factory::getDBO();
+	$user 		=Factory::getUser();
 	$task 		= clm_core::$load->request_string('task');
 	$cid 		= clm_core::$load->request_int('id');
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');
 
-	$row =JTable::getInstance( 'ligen', 'TableCLM' );
+	$row =Table::getInstance( 'ligen', 'TableCLM' );
 	// load the row from the db table
 	$row->load( $cid );
 
@@ -51,13 +55,13 @@ function display($cachable = false, $urlparams = array())
 	$clmAccess = clm_core::$access;      
 	// Prüfen ob User Berechtigung hat
 	if (( $row->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_fixture') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_fixture') === false)) {
-		$mainframe->enqueueMessage( JText::_( 'PAARUNG_LIGEN' ), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'PAARUNG_LIGEN' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$csection;
 		$mainframe->redirect( $link);
 					}
 	// Prüfen ob Runden erstellt sind
 	if ( $row->rnd < 1) {
-		$mainframe->enqueueMessage( JText::_( 'PAARUNG_RUND' ), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'PAARUNG_RUND' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$csection;
 		$mainframe->redirect( $link);
 		}
@@ -112,34 +116,34 @@ function display($cachable = false, $urlparams = array())
 
 function cancel()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 	
 	$option		= clm_core::$load->request_string('option');
-	$row 		= JTable::getInstance( 'ligen', 'TableCLM' );
+	$row 		= Table::getInstance( 'ligen', 'TableCLM' );
 	$id		= clm_core::$load->request_int('id');	
 	// load the row from the db table
 	$row->load( $id );  //mtmt
-	$msg = JText::_( 'PAARUNG_AENDERN');
+	$msg = Text::_( 'PAARUNG_AENDERN');
 	$mainframe->enqueueMessage( $msg, 'message' );
 	$mainframe->redirect( 'index.php?option='. $option.'&section=runden&liga='.$row->id );
 	}
 
 function save()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 
 	$option		= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
 
-	$db 		=JFactory::getDBO();
+	$db 		=Factory::getDBO();
 	$task 		= clm_core::$load->request_string('task');
-	$user 		=JFactory::getUser();
+	$user 		=Factory::getUser();
 	$meldung 	= $user->get('id');
-	$row 		=JTable::getInstance( 'ligen', 'TableCLM' );
+	$row 		=Table::getInstance( 'ligen', 'TableCLM' );
 	$cid		=clm_core::$load->request_int('id');
 	$row->load( $cid);
 	//Liga-Parameter aufbereiten
@@ -239,13 +243,13 @@ function save()
 	switch ($task)
 	{
 		case 'apply':
-		$msg = JText::_( 'PAARUNG_AENDERN_IST' );
+		$msg = Text::_( 'PAARUNG_AENDERN_IST' );
 		$link = 'index.php?option='.$option.'&section='.$section.'&id='.$cid;
 			break;
 		case 'save':
 		default:
 		
-		$msg = JText::_( 'PAARUNG_AENDERN_IST' );
+		$msg = Text::_( 'PAARUNG_AENDERN_IST' );
 		if ($row->liga_mt == 1) //mtmt
 			$link = 'index.php?option='.$option.'&view=view_tournament_group&liga=0';
 		else
@@ -255,7 +259,7 @@ function save()
 
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'PAARUNG_LOG');
+	$clmLog->aktion = Text::_( 'PAARUNG_LOG');
 	$clmLog->params = array('sid' => $sid, 'lid' => $lid, 'cids' => $cid);
 	$clmLog->write();
 

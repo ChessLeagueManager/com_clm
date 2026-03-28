@@ -1,15 +1,20 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Pagination\Pagination;
 
 class CLMModelCatMain extends JModelLegacy {
 
@@ -25,7 +30,7 @@ class CLMModelCatMain extends JModelLegacy {
 		global $mainframe, $option;
 		//Joomla 1.6 compatibility
 		if (empty($mainframe)) {
-			$mainframe = JFactory::getApplication();
+			$mainframe = Factory::getApplication();
 			$option = $mainframe->scope;
 		}
 
@@ -36,7 +41,7 @@ class CLMModelCatMain extends JModelLegacy {
 		$this->setState('limitstart', $this->limitstart);
 
 		// user
-		$this->user =JFactory::getUser();
+		$this->user =Factory::getUser();
 		
 		// get parameters
 		$this->_getParameters();
@@ -57,7 +62,7 @@ class CLMModelCatMain extends JModelLegacy {
 		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
 		else $field_search = "inputbox";
 	
-		$mainframe =JFactory::getApplication();
+		$mainframe =Factory::getApplication();
 		global $option;
 	
 		if (!isset($this->param) OR is_null($this->param)) $this->param = array();	// seit J 4.2 nötig um notice zu vermeiden
@@ -70,12 +75,12 @@ class CLMModelCatMain extends JModelLegacy {
 		$this->param['parentid'] = $mainframe->getUserStateFromRequest( "$option.filter_parentid", 'filter_parentid', 0, 'int' );
 		// get Tree
 		list($this->parentArray, $this->parentKeys, $this->parentChilds) = CLMCategoryTree::getTree();
-		$parentlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'NO_PARENT' )), 'id', 'name' );
+		$parentlist[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'NO_PARENT' )), 'id', 'name' );
 		foreach ($this->parentArray as $key => $value) {
-			$parentlist[]	= JHTML::_('select.option',  $key, $value, 'id', 'name' );
+			$parentlist[]	= HTMLHelper::_('select.option',  $key, $value, 'id', 'name' );
 		}
-//		$this->form['parent'] = JHTML::_('select.genericlist', $parentlist, 'filter_parentid', 'class="js-example-basic-single" size="1" style="max-width: 250px;"'.CLMText::stringOnchange(true), 'id', 'name', $this->param['parentid']);
-		$this->form['parent'] = JHTML::_('select.genericlist', $parentlist, 'filter_parentid', 'class="'.$field_search.'" size="1" style="max-width: 250px;"'.CLMText::stringOnchange(true), 'id', 'name', $this->param['parentid']);
+//		$this->form['parent'] = HTMLHelper::_('select.genericlist', $parentlist, 'filter_parentid', 'class="js-example-basic-single" size="1" style="max-width: 250px;"'.CLMText::stringOnchange(true), 'id', 'name', $this->param['parentid']);
+		$this->form['parent'] = HTMLHelper::_('select.genericlist', $parentlist, 'filter_parentid', 'class="'.$field_search.'" size="1" style="max-width: 250px;"'.CLMText::stringOnchange(true), 'id', 'name', $this->param['parentid']);
 	
 	
 		// Statusfilter
@@ -194,7 +199,7 @@ class CLMModelCatMain extends JModelLegacy {
 		// Load the content if it doesn't already exist
 		if (empty($this->pagination)) {
 			jimport('joomla.html.pagination');
-			$this->pagination = new JPagination($this->catTotal, $this->limitstart, $this->limit );
+			$this->pagination = new Pagination($this->catTotal, $this->limitstart, $this->limit );
 		}
 	}
 

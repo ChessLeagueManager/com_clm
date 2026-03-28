@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -12,6 +12,10 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+
 class CLMControllerTurPlayerEdit extends JControllerLegacy {
 	
 
@@ -20,7 +24,7 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->app =JFactory::getApplication();
+		$this->app =Factory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -65,12 +69,12 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		$turnierid = clm_core::$load->request_int('turnierid');
 
 		// Instanz der Tabelle
-		$row = JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = Table::getInstance( 'turniere', 'TableCLM' );
 		$row->load( $turnierid ); // Daten zu dieser ID laden
 
 		$clmAccess = clm_core::$access;      
 		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
-			$this->app->enqueueMessage(JText::_('TOURNAMENT_NO_ACCESS'),'warning');
+			$this->app->enqueueMessage(Text::_('TOURNAMENT_NO_ACCESS'),'warning');
 			return false;
 		}
 	
@@ -78,7 +82,7 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		$task = clm_core::$load->request_string('task');
 		
 		// Instanz der Tabelle
-		$row = JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
+		$row = Table::getInstance( 'turnier_teilnehmer', 'TableCLM' );
 		$row->load( $playerid ); // Daten zu dieser ID laden
 
 		// Spieler existent?
@@ -123,7 +127,7 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		
 	 	clm_core::$api->direct("db_tournament_delDWZ",array($turnierid,false));
 
-		$text = JText::_('PARTICIPANT_EDITED').": ".$row->name;
+		$text = Text::_('PARTICIPANT_EDITED').": ".$row->name;
 
 		// Log schreiben
 		$clmLog = new CLMLog();

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,12 +12,14 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+use Joomla\CMS\Factory;
+
 class CLMControllerAccessgroupsMain extends JControllerLegacy {
 
 	function __construct() {
 		parent::__construct();		
 
-		$this->app	= JFactory::getApplication();
+		$this->app	= Factory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply','save' );

@@ -1,12 +1,16 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleagueamanager.de
+ * @link https://chessleaguemanager.org
 */
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class CLMViewArenaTurnier extends JViewLegacy {
 	function display($tpl = null) { 
@@ -20,28 +24,28 @@ class CLMViewArenaTurnier extends JViewLegacy {
 		
 		//Toolbar
 		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title( JText::_('TITLE_SWT_TOURNAMENT') ,'clm_headmenu_manager.png' );
+		ToolBarHelper::title( Text::_('TITLE_SWT_TOURNAMENT') ,'clm_headmenu_manager.png' );
 		
-		JToolBarHelper::custom('update','refresh.png','refresh_f2.png', JText::_('SWT_TOURNAMENT_UPDATE'), false);
+		ToolBarHelper::custom('update','refresh.png','refresh_f2.png', Text::_('SWT_TOURNAMENT_UPDATE'), false);
 		$clmAccess = clm_core::$access;
 		if ($clmAccess->access('BE_tournament_create') === true) {
-			JToolBarHelper::custom('add','new.png','new_f2.png', JText::_('SWT_TOURNAMENT_NEW'), false);
+			ToolBarHelper::custom('add','new.png','new_f2.png', Text::_('SWT_TOURNAMENT_NEW'), false);
 		}
 		//CLM parameter auslesen
 		$config = clm_core::$db->config();
 		$test_button = $config->test_button;
 		if ($test_button) {
-			JToolBarHelper::custom('test','delete.png','delete_f2.png', JText::_('SWT_TOURNAMENT_TEST'), false);
+			ToolBarHelper::custom('test','delete.png','delete_f2.png', Text::_('SWT_TOURNAMENT_TEST'), false);
 		}
-		JToolBarHelper::cancel();
+		ToolBarHelper::cancel();
 		
 		//Saison- und Turnier-Auswahl erstellen
-		$options_saisons[]		= JHtml::_('select.option', '', JText::_( 'SWT_SAISONS' ));
+		$options_saisons[]		= HTMLHelper::_('select.option', '', Text::_( 'SWT_SAISONS' ));
 		foreach($saisons as $saison)	{
-			$options_saisons[]		= JHtml::_('select.option', $saison->id, $saison->name);
+			$options_saisons[]		= HTMLHelper::_('select.option', $saison->id, $saison->name);
 		}
 		
-		$options_turniere[]		= JHtml::_('select.option', '', JText::_( 'SWT_TOURNAMENTS' ));
+		$options_turniere[]		= HTMLHelper::_('select.option', '', Text::_( 'SWT_TOURNAMENTS' ));
 		$arena_code	= clm_core::$load->request_string('arena_code', '');
 		$current_turnier	= clm_core::$load->request_string('tid', '');
 		$turnier_codes = array();
@@ -54,12 +58,12 @@ class CLMViewArenaTurnier extends JViewLegacy {
 			$current_turnier = 0;
 
 			$turnier_codes[$turnier->id] = $tur_code;
-			$options_turniere[]		= JHtml::_('select.option', $turnier->id, $turnier->name);
+			$options_turniere[]		= HTMLHelper::_('select.option', $turnier->id, $turnier->name);
 		}
 		
-		$lists['saisons']	= JHtml::_('select.genericlist', $options_saisons, 'filter_saison', 'class="inputbox" onchange="this.form.submit();"', 'value', 'text', $state->get('filter_saison') );
+		$lists['saisons']	= HTMLHelper::_('select.genericlist', $options_saisons, 'filter_saison', 'class="inputbox" onchange="this.form.submit();"', 'value', 'text', $state->get('filter_saison') );
 
-		$lists['turniere']	= JHtml::_('select.genericlist', $options_turniere, 'tid', 'class="inputbox" onChange="insertCode()"', 'value', 'text', 0 );
+		$lists['turniere']	= HTMLHelper::_('select.genericlist', $options_turniere, 'tid', 'class="inputbox" onChange="insertCode()"', 'value', 'text', 0 );
 
 		//Daten an Template
 		$this->lists = $lists;

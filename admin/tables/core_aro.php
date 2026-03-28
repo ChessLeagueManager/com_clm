@@ -1,10 +1,9 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -14,7 +13,10 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-class TableCLMcore_aro extends JTable
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Language\Text;
+
+class TableCLMcore_aro extends Table
 {
 
 	var $group_id		= '';
@@ -29,7 +31,7 @@ class TableCLMcore_aro extends JTable
 	 *
 	 * @access public
 	 * @return boolean
-	 * @see JTable::check
+	 * @see Table::check
 	 * @since 1.5
 	 */
 	function check()
@@ -37,12 +39,12 @@ class TableCLMcore_aro extends JTable
 
 		// check for valid name
 		if(trim($this->name) == '') {
-			$this->setError(JText::_( 'Name angeben !' ));
+			$this->setError(Text::_( 'Name angeben !' ));
 			return false;
 		}
 
 		if(empty($this->email)) {
-			$this->setError(JText::_( 'Email angeben' ));
+			$this->setError(Text::_( 'Email angeben' ));
 			return false;
 		}
 		return true;

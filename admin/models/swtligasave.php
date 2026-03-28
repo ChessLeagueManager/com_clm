@@ -1,15 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Table\Table;
 
 class CLMModelSWTLigasave extends JModelLegacy {
 
@@ -23,10 +26,10 @@ class CLMModelSWTLigasave extends JModelLegacy {
 
 		//echo "in finalCopy ()<br/>";
 		set_time_limit(60);
-		$db		=JFactory::getDBO ();
-		$conf =JFactory::getConfig();   
+		$db		=Factory::getDBO ();
+		$conf =Factory::getConfig();   
 		
-		$date =JFactory::getDate ();
+		$date =Factory::getDate ();
 		$zeit = $date->toSQL ();
 		
 		$swt_id	= clm_core::$load->request_int('swt_id', 0);
@@ -309,7 +312,7 @@ class CLMModelSWTLigasave extends JModelLegacy {
 	
 	function userAnlegen () {
 	
-		$db		=JFactory::getDBO ();
+		$db		=Factory::getDBO ();
 		$sid	= clm_core::$load->request_int('sid', 0);
 		
 		$sql = ' SELECT `id`, `jid` FROM #__clm_user '
@@ -319,7 +322,7 @@ class CLMModelSWTLigasave extends JModelLegacy {
 		
 		if (count ($objs) < 1) {
 		
-			$row =JTable::getInstance ('users', 'TableCLM');
+			$row =Table::getInstance ('users', 'TableCLM');
 			$row->sid			= $sid;
 			$row->jid			= '9997';
 			$row->name			= 'SWT-Import';
@@ -346,9 +349,9 @@ class CLMModelSWTLigasave extends JModelLegacy {
 	
 	function rundenTermine () {
 		
-		$db		=JFactory::getDBO ();
+		$db		=Factory::getDBO ();
 		
-		$date =JFactory::getDate ();
+		$date =Factory::getDate ();
 		$zeit = $date->toSQL ();
 		
 		$swt_id	= clm_core::$load->request_int('swt_id', 0);
@@ -372,7 +375,7 @@ class CLMModelSWTLigasave extends JModelLegacy {
 		$termineFromDatabase = array();
 		if ($update == 1 AND $liga_id > 0) {
 			
-			$db		=JFactory::getDBO ();
+			$db		=Factory::getDBO ();
 			$select_query = ' SELECT * FROM #__clm_runden_termine '
 							.' WHERE liga = '.$liga_id;
 			$db->setQuery ($select_query);
@@ -532,7 +535,7 @@ class CLMModelSWTLigasave extends JModelLegacy {
 	function _SWTReadInt ($file, $offset, $length = 1) {
 		$value = 0;
 		for ($i = 0; $i < $length; $i++) {
-			//$cur = ord (JFile::read ($file, false, 1, 8192, $offset+$i));
+			//$cur = ord (File::read ($file, false, 1, 8192, $offset+$i));
 			$cur = ord(file_get_contents ($file, false, null, $offset+$i, 1));
 			$value += $cur * pow (256, $i);
 		}

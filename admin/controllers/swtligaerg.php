@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,10 +12,13 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 class CLMControllerSWTLigaerg extends JControllerLegacy
 {
 	function __construct() {
-		$this->app =JFactory::getApplication();
+		$this->app =Factory::getApplication();
 		parent::__construct();
 	}
 	
@@ -32,7 +35,7 @@ class CLMControllerSWTLigaerg extends JControllerLegacy
 			$runde = clm_core::$load->request_int('runde', 0);
 			$dgang = clm_core::$load->request_int('dgang', 0);
 		// schon gespeicherte SWT-Daten aus der DB holen
-			$db		=JFactory::getDBO ();
+			$db		=Factory::getDBO ();
 			$swt_id = clm_core::$load->request_int( 'swt_id', 0);
 				//echo "swt_id: $swt_id"; //DBG
 			$sql = ' SELECT id, teil as anz_mannschaften, stamm as anz_bretter, ersatz as anz_ersatzspieler, durchgang as anz_durchgaenge, runden as anz_runden, sieg, remis, nieder, antritt, man_sieg, man_remis, man_nieder, man_antritt, sieg_bed'
@@ -50,12 +53,12 @@ class CLMControllerSWTLigaerg extends JControllerLegacy
 				$_GET['runde'] = 0;
 				$_GET['dgang'] = $dgang + 1; }
 			else $_GET['runde'] = $runde + 1;
-//			$this->_message = JText::_( 'SWT_STORE_SUCCESS' );
+//			$this->_message = Text::_( 'SWT_STORE_SUCCESS' );
 			parent::display ();
 		}
 		else {
 			$_REQUEST['view'] = 'swtligaerg';
-			$this->_message = JText::_( 'SWT_STORE_ERROR' );
+			$this->_message = Text::_( 'SWT_STORE_ERROR' );
 			parent::display ();
 		}
 	}
@@ -65,8 +68,8 @@ class CLMControllerSWTLigaerg extends JControllerLegacy
 		$model = $this->getModel('swtligaerg');
 		if ($model->store ()) {
 //			$_REQUEST['view'] = 'swtligasave';
-//			$this->_message = JText::_( 'SWT_STORE_SUCCESS' );
-			//$app->enqueueMessage( JText::_('SWT_STORE_SUCCESS') );
+//			$this->_message = Text::_( 'SWT_STORE_SUCCESS' );
+			//$app->enqueueMessage( Text::_('SWT_STORE_SUCCESS') );
 			$swt_file = clm_core::$load->request_string('swt_file', '');
 			$sid = clm_core::$load->request_int('sid', 0);
 			$lid = clm_core::$load->request_int('lid', 0);
@@ -88,7 +91,7 @@ class CLMControllerSWTLigaerg extends JControllerLegacy
 		}
 		else {
 			$_REQUEST['view'] = 'swtligaerg';
-			$this->_message = JText::_( 'SWT_STORE_ERROR' );
+			$this->_message = Text::_( 'SWT_STORE_ERROR' );
 			parent::display ();
 		}
 	}
@@ -99,7 +102,7 @@ class CLMControllerSWTLigaerg extends JControllerLegacy
 		$adminLink->view = 'swt';
 		$adminLink->makeURL ();
 		
-		$msg = JText::_( 'SWT_CANCEL_MSG' );
+		$msg = Text::_( 'SWT_CANCEL_MSG' );
 //		$this->setRedirect($adminLink->url, $msg);
 		$this->app->enqueueMessage( $msg );
 		$this->app->redirect($adminLink->url); 		

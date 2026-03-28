@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -11,6 +11,10 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 class CLMControllerDWZ extends JControllerLegacy
 {
@@ -24,10 +28,10 @@ function __construct( $config = array() )
 
 function display($cachable = false, $urlparams = array())
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
-	$db		=JFactory::getDBO();
+	$db		=Factory::getDBO();
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
@@ -110,11 +114,11 @@ function display($cachable = false, $urlparams = array())
 
 	// Vereinefilter laden
 	$vlist = CLMFilterVerein::vereine_filter(0);
-//	$lists['vid']	= JHTML::_('select.genericlist', $vlist, 'filter_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
-//	$lists['vid']	= JHTML::_('select.genericlist', $vlist, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="change_vid();"','zps', 'name', $filter_vid );
-	$lists['vid']	= JHTML::_('select.genericlist', $vlist, 'filter_vid', 'class="'.$field_search.'" size="1" onchange="change_vid();"','zps', 'name', $filter_vid );
-	$lists['vid_to']	= JHTML::_('select.genericlist', $vlist, 'filter_vid_to', 'class="inputbox" size="1" ','zps', 'name', $filter_vid_to );
-	$lists['vid_from']	= JHTML::_('select.genericlist', $vlist, 'filter_vid_from', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid_from );
+//	$lists['vid']	= HTMLHelper::_('select.genericlist', $vlist, 'filter_vid', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
+//	$lists['vid']	= HTMLHelper::_('select.genericlist', $vlist, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="change_vid();"','zps', 'name', $filter_vid );
+	$lists['vid']	= HTMLHelper::_('select.genericlist', $vlist, 'filter_vid', 'class="'.$field_search.'" size="1" onchange="change_vid();"','zps', 'name', $filter_vid );
+	$lists['vid_to']	= HTMLHelper::_('select.genericlist', $vlist, 'filter_vid_to', 'class="inputbox" size="1" ','zps', 'name', $filter_vid_to );
+	$lists['vid_from']	= HTMLHelper::_('select.genericlist', $vlist, 'filter_vid_from', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid_from );
 	
 
 	// Spielerfilter
@@ -128,10 +132,10 @@ function display($cachable = false, $urlparams = array())
 			." ORDER BY Spielername ASC"
 			;
 		$db->setQuery($sql);
-		$mlist[]	= JHTML::_('select.option',  '0', JText::_( 'DWZ_SPIELER' ), 'Mgl_Nr', 'Spielername' );
+		$mlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'DWZ_SPIELER' ), 'Mgl_Nr', 'Spielername' );
 		$mlist		= array_merge( $mlist, $db->loadObjectList() );
-//		$lists['mgl']	= JHTML::_('select.genericlist', $mlist, 'filter_mgl', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','Mgl_Nr', 'Spielername', $filter_mgl );
-		$lists['mgl']	= JHTML::_('select.genericlist', $mlist, 'filter_mgl', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','Mgl_Nr', 'Spielername', $filter_mgl );
+//		$lists['mgl']	= HTMLHelper::_('select.genericlist', $mlist, 'filter_mgl', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','Mgl_Nr', 'Spielername', $filter_mgl );
+		$lists['mgl']	= HTMLHelper::_('select.genericlist', $mlist, 'filter_mgl', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','Mgl_Nr', 'Spielername', $filter_mgl );
 	  } else {
 		$sql = 'SELECT PKZ, Spielername FROM #__clm_dwz_spieler as a'
 			.' LEFT JOIN #__clm_saison AS s ON s.id = a.sid'
@@ -140,10 +144,10 @@ function display($cachable = false, $urlparams = array())
 			." ORDER BY Spielername ASC"
 			;
 		$db->setQuery($sql);
-		$mlist[]	= JHTML::_('select.option',  '0', JText::_( 'DWZ_SPIELER' ), 'PKZ', 'Spielername' );
+		$mlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'DWZ_SPIELER' ), 'PKZ', 'Spielername' );
 		$mlist		= array_merge( $mlist, $db->loadObjectList() );
-//		$lists['PKZ']	= JHTML::_('select.genericlist', $mlist, 'filter_PKZ', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','PKZ', 'Spielername', $filter_PKZ );
-		$lists['PKZ']	= JHTML::_('select.genericlist', $mlist, 'filter_PKZ', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','PKZ', 'Spielername', $filter_PKZ );
+//		$lists['PKZ']	= HTMLHelper::_('select.genericlist', $mlist, 'filter_PKZ', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','PKZ', 'Spielername', $filter_PKZ );
+		$lists['PKZ']	= HTMLHelper::_('select.genericlist', $mlist, 'filter_PKZ', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','PKZ', 'Spielername', $filter_PKZ );
 	  }	
 	}
 
@@ -156,7 +160,7 @@ function display($cachable = false, $urlparams = array())
 
 static function cancel()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 	
@@ -168,20 +172,20 @@ static function cancel()
 		. ' WHERE checked_out = '.clm_core::$access->getJid();
 	$rc = clm_core::$db->query($query);	
 
-	$msg = JText::_( 'DWZ_AKTION');
+	$msg = Text::_( 'DWZ_AKTION');
 	$mainframe->enqueueMessage( $msg, 'message' );
 	$mainframe->redirect( 'index.php?option='. $option.'&section=vereine' );
 	}
 
 static function spieler($zps)
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 	
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
-	$db 		= JFactory::getDBO();
+	$db 		= Factory::getDBO();
 
 	$query	= "SELECT a.Spielername, a.Mgl_Nr, a.ZPS, a.PKZ FROM #__clm_dwz_spieler as a "
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
@@ -197,11 +201,11 @@ static function spieler($zps)
 
 static function nachmeldung_delete()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 
-	$db 		= JFactory::getDBO();
+	$db 		= Factory::getDBO();
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
 	$spieler	= clm_core::$load->request_string('spieler');
@@ -211,7 +215,7 @@ static function nachmeldung_delete()
 	$countryversion = $config->countryversion;
 
 	if ( $spieler == 0 OR $spieler == '') {
-		$mainframe->enqueueMessage( JText::_( 'DWZ_SPIELER_LOESCH' ), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'DWZ_SPIELER_LOESCH' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link );
 	}
@@ -250,7 +254,7 @@ static function nachmeldung_delete()
 	$clmLog->params = array('sid' => $sid, 'zps' => $zps, 'mgl_nr' => $spieler, 'cids' => $cid);
 	$clmLog->write();
 	
-	$msg = JText::_( 'DWZ_SPIELER_MITGLIED').' '.$spieler.' '.JText::_('DWZ_LOESCH' );
+	$msg = Text::_( 'DWZ_SPIELER_MITGLIED').' '.$spieler.' '.Text::_('DWZ_LOESCH' );
 	$mainframe->enqueueMessage( $msg, 'message' );
 	$link = 'index.php?option='.$option.'&section='.$section;
 	$mainframe->redirect( $link);
@@ -258,17 +262,17 @@ static function nachmeldung_delete()
 
 static function nachmeldung()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 
-	$db 		= JFactory::getDBO();
+	$db 		= Factory::getDBO();
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
 	$sid		= clm_core::$load->request_int('sid');
 
 	if ( $sid == 0 ) {
-		$mainframe->enqueueMessage( JText::_( 'DWZ_VEREIN' ), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'DWZ_VEREIN' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
@@ -297,12 +301,12 @@ static function nachmeldung()
 	if (!isset($status) OR $status == "") $status = "N";
 	// Prüfen ob Name und Mitgliedsnummer/PKZ angegeben wurden
 	if ( $countryversion == "de" AND ($name == "" OR $mglnr =="" OR $mglnr=="0") ) {
-		$mainframe->enqueueMessage( JText::_( 'DWZ_NAME_NR' ), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'DWZ_NAME_NR' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link );
 	}
 	if ( $countryversion == "en" AND ($name == "" OR $PKZ =="" OR $PKZ=="0") ) {
-		$mainframe->enqueueMessage( JText::_( 'DWZ_NAME_PKZ' ), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'DWZ_NAME_PKZ' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link );
 	}
@@ -318,14 +322,14 @@ static function nachmeldung()
 		$db->setQuery($query);
 		$mgl_exist = $db->loadObjectList();
 		if ($filter_mgl == $mglnr) {
-			$mainframe->enqueueMessage( JText::_( 'DWZ_SPIELER_AUSWAHL' ), 'warning' );
-			$mainframe->enqueueMessage( JText::_( 'DWZ_DATEN_AENDERN' ), 'notice' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_SPIELER_AUSWAHL' ), 'warning' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_DATEN_AENDERN' ), 'notice' );
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link );
 		}
 		if(isset($mgl_exist[0]) AND $mgl_exist[0]->Mgl_Nr !="") {
-			$mainframe->enqueueMessage( JText::_( 'DWZ_EXISTIERT' ), 'warning' );
-			$mainframe->enqueueMessage( JText::_( 'DWZ_DATEN_AENDERN' ), 'notice' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_EXISTIERT' ), 'warning' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_DATEN_AENDERN' ), 'notice' );
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link );
 		}
@@ -339,14 +343,14 @@ static function nachmeldung()
 		$db->setQuery($query);
 		$PKZ_exist = $db->loadObjectList();
 		if ($filter_PKZ == $PKZ) {
-			$mainframe->enqueueMessage( JText::_( 'DWZ_SPIELER_AUSWAHL' ), 'warning' );
-			$mainframe->enqueueMessage( JText::_( 'DWZ_DATEN_AENDERN' ), 'notice' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_SPIELER_AUSWAHL' ), 'warning' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_DATEN_AENDERN' ), 'notice' );
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link );
 		}
 		if($PKZ_exist[0]->PKZ !="") {
-			$mainframe->enqueueMessage( JText::_( 'DWZ_EXISTIERT_PKZ' ), 'warning' );
-			$mainframe->enqueueMessage( JText::_( 'DWZ_DATEN_AENDERN' ), 'notice' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_EXISTIERT_PKZ' ), 'warning' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_DATEN_AENDERN' ), 'notice' );
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link );
 		}
@@ -391,7 +395,7 @@ static function nachmeldung()
 	$clmLog->params = array('sid' => $sid, 'zps' => $zps, 'mgl_nr' => $mglnr);
 	$clmLog->write();
 	
-	$msg = JText::_( 'DWZ_SPIELER_SPEICHERN' );
+	$msg = Text::_( 'DWZ_SPIELER_SPEICHERN' );
 	$mainframe->enqueueMessage( $msg, 'message' );
 	$link = 'index.php?option='.$option.'&section='.$section;
 	$mainframe->redirect( $link );
@@ -399,14 +403,14 @@ static function nachmeldung()
 
 static function daten_edit()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
 
-	$db 		= JFactory::getDBO();
+	$db 		= Factory::getDBO();
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
 
@@ -432,12 +436,12 @@ static function daten_edit()
 
 	// Prüfen ob Name und Mitgliedsnummer/PKZ angegeben wurden
 	if ( $countryversion == "de" AND ($name == "" OR $mglnr =="" OR $mglnr=="0") ) {
-		$mainframe->enqueueMessage( JText::_( 'DWZ_NAME_NR' ), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'DWZ_NAME_NR' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link );
 	}
 	if ( $countryversion == "en" AND ($name == "" OR $PKZ =="" OR $PKZ=="0") ) {
-		$mainframe->enqueueMessage( JText::_( 'DWZ_NAME_PKZ' ), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'DWZ_NAME_PKZ' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link );
 	}
@@ -453,8 +457,8 @@ static function daten_edit()
 		$db->setQuery($query);
 		$mgl_exist = $db->loadObjectList();
 		if (!$mgl_exist) {
-			$mainframe->enqueueMessage( JText::_( 'DWZ_SPIELER_NO' ), 'warning' );
-			$mainframe->enqueueMessage( JText::_( 'DWZ_NACHM' ), 'notice' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_SPIELER_NO' ), 'warning' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_NACHM' ), 'notice' );
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link );
 		}
@@ -468,8 +472,8 @@ static function daten_edit()
 		$db->setQuery($query);
 		$PKZ_exist = $db->loadObjectList();
 		if (!$PKZ_exist) {
-			$mainframe->enqueueMessage( JText::_( 'DWZ_SPIELER_NO' ), 'warning' );
-			$mainframe->enqueueMessage( JText::_( 'DWZ_NACHM' ), 'notice' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_SPIELER_NO' ), 'warning' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_NACHM' ), 'notice' );
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link );
 		}
@@ -536,7 +540,7 @@ static function daten_edit()
 	$clmLog->params = array('sid' => $sid, 'zps' => $zps, 'mgl_nr' => $mglnr, 'PKZ' => $PKZ);
 	$clmLog->write();
 	
-	$msg = JText::_( 'DWZ_SPIELER_AENDERN' );
+	$msg = Text::_( 'DWZ_SPIELER_AENDERN' );
 	$mainframe->enqueueMessage( $msg, 'message' );
 	$link = 'index.php?option='.$option.'&section='.$section;
 	$mainframe->redirect( $link );
@@ -544,11 +548,11 @@ static function daten_edit()
 
 static function spieler_delete()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 
-	$db 		= JFactory::getDBO();
+	$db 		= Factory::getDBO();
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
 	$spieler	= clm_core::$load->request_string('del_spieler');
@@ -560,14 +564,14 @@ static function spieler_delete()
 	// SL nicht zulassen !
 	$clmAccess = clm_core::$access;
 	if($clmAccess->access('BE_database_general') === false) {
-		$mainframe->enqueueMessage( JText::_( 'DWZ_REFERENT').clm_core::$access->getType(), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'DWZ_REFERENT').clm_core::$access->getType(), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link );
 	}
 
 	// Spieler muß ausgewählt sein
 	if ( $spieler == 0 OR $spieler == '') {
-		$mainframe->enqueueMessage( JText::_( 'DWZ_SPIELER_LOESCH' ), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'DWZ_SPIELER_LOESCH' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link );
 	}
@@ -605,7 +609,7 @@ static function spieler_delete()
 	$clmLog->params = array('sid' => $sid, 'zps' => $zps, 'mgl_nr' => $spieler);
 	$clmLog->write();
 	
-	$msg = JText::_( 'DWZ_SPIELER_MITGLIED').' '.$spieler.' '.JText::_('DWZ_LOESCH' );
+	$msg = Text::_( 'DWZ_SPIELER_MITGLIED').' '.$spieler.' '.Text::_('DWZ_LOESCH' );
 	$mainframe->enqueueMessage( $msg, 'message' );
 	$link = 'index.php?option='.$option.'&section='.$section;
 	$mainframe->redirect( $link );
@@ -613,11 +617,11 @@ static function spieler_delete()
 
 static function player_move_to()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 
-	$db 		= JFactory::getDBO();
+	$db 		= Factory::getDBO();
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
 	$spieler	= clm_core::$load->request_string('spieler_to');
@@ -630,20 +634,20 @@ static function player_move_to()
 	// SL nicht zulassen !
 	$clmAccess = clm_core::$access;
 	if($clmAccess->access('BE_database_general') === false) {
-		$mainframe->enqueueMessage( JText::_( 'DWZ_REFERENT' ).clm_core::$access->getType(), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'DWZ_REFERENT' ).clm_core::$access->getType(), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link );
 	}
 
 	// Spieler muß ausgewählt sein
 	if ( $spieler == 0 OR $spieler == '') {
-		$mainframe->enqueueMessage( JText::_( 'DWZ_PLAYER_MISSING' ), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'DWZ_PLAYER_MISSING' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link );
 	}
 	// neuer Verein muß ausgewählt sein
 	if ( $newclub == 0 OR $newclub == '') {
-		$mainframe->enqueueMessage( JText::_( 'DWZ_NEWCLUB_MISSING' ), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'DWZ_NEWCLUB_MISSING' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link );
 	}
@@ -658,7 +662,7 @@ static function player_move_to()
 	$db->setQuery($query);
 	$pl_data = $db->loadObjectList();
 	if (!$pl_data) {
-			$mainframe->enqueueMessage( JText::_( 'DWZ_PLAYER_CLUB' ), 'warning' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_PLAYER_CLUB' ), 'warning' );
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link );
 	}
@@ -671,7 +675,7 @@ static function player_move_to()
 	$db->setQuery($query);
 	$pl_check = $db->loadObjectList();
 	if ($pl_check) {
-			$mainframe->enqueueMessage( JText::_( 'DWZ_PLAYER_CLUB_TO' ), 'warning' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_PLAYER_CLUB_TO' ), 'warning' );
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link );
 	}
@@ -684,7 +688,7 @@ static function player_move_to()
 	$db->setQuery($query);
 	$pl_check = $db->loadObjectList();
 	if ($pl_check) {
-			$mainframe->enqueueMessage( JText::_( 'DWZ_PLAYER_CLUB_PLAIED' ), 'warning' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_PLAYER_CLUB_PLAIED' ), 'warning' );
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link );
 	}
@@ -712,11 +716,11 @@ static function player_move_to()
 
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'DWZ_PLAYER_MOVE_OUT');
+	$clmLog->aktion = Text::_( 'DWZ_PLAYER_MOVE_OUT');
 	$clmLog->params = array('sid' => $sid, 'zps' => $zps, 'mgl_nr' => $spieler, 'to' => $newclub);
 	$clmLog->write();
 	
-	$msg = JText::_( 'DWZ_PLAYER_MOVE_OUT').' '.$spieler;
+	$msg = Text::_( 'DWZ_PLAYER_MOVE_OUT').' '.$spieler;
 	$mainframe->enqueueMessage( $msg, 'message' );
 	$link = 'index.php?option='.$option.'&section='.$section;
 	$mainframe->redirect( $link );
@@ -724,11 +728,11 @@ static function player_move_to()
 
 static function player_move_from()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 
-	$db 		= JFactory::getDBO();
+	$db 		= Factory::getDBO();
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
 	$spieler	= clm_core::$load->request_string('spieler_from');
@@ -741,20 +745,20 @@ static function player_move_from()
 	// SL nicht zulassen !
 	$clmAccess = clm_core::$access;
 	if($clmAccess->access('BE_database_general') === false) {
-		$mainframe->enqueueMessage( JText::_( 'DWZ_REFERENT' ).clm_core::$access->getType(), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'DWZ_REFERENT' ).clm_core::$access->getType(), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link );
 	}
 
 	// Spieler muß ausgewählt sein
 	if ( $spieler == 0 OR $spieler == '') {
-		$mainframe->enqueueMessage( JText::_( 'DWZ_PLAYER_MISSING' ), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'DWZ_PLAYER_MISSING' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link );
 	}
 	// alter Verein muß ausgewählt sein
 	if ( $oldclub == 0 OR $oldclub == '') {
-		$mainframe->enqueueMessage( JText::_( 'DWZ_OLDCLUB_MISSING' ), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'DWZ_OLDCLUB_MISSING' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link );
 	}
@@ -769,7 +773,7 @@ static function player_move_from()
 	$db->setQuery($query);
 	$pl_data = $db->loadObjectList();
 	if (!$pl_data) {
-			$mainframe->enqueueMessage( JText::_( 'DWZ_PLAYER_CLUB_FROM' ), 'warning' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_PLAYER_CLUB_FROM' ), 'warning' );
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link );
 	}
@@ -782,7 +786,7 @@ static function player_move_from()
 	$db->setQuery($query);
 	$pl_check = $db->loadObjectList();
 	if ($pl_check) {
-			$mainframe->enqueueMessage( JText::_( 'DWZ_PLAYER_CLUB_ALREADY' ), 'warning' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_PLAYER_CLUB_ALREADY' ), 'warning' );
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link );
 	}
@@ -795,7 +799,7 @@ static function player_move_from()
 	$db->setQuery($query);
 	$pl_check = $db->loadObjectList();
 	if ($pl_check) {
-			$mainframe->enqueueMessage( JText::_( 'DWZ_PLAYER_CLUB_PLAIED' ), 'warning' );
+			$mainframe->enqueueMessage( Text::_( 'DWZ_PLAYER_CLUB_PLAIED' ), 'warning' );
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link );
 	}
@@ -823,11 +827,11 @@ static function player_move_from()
 
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'DWZ_PLAYER_MOVE_IN');
+	$clmLog->aktion = Text::_( 'DWZ_PLAYER_MOVE_IN');
 	$clmLog->params = array('sid' => $sid, 'zps' => $zps, 'mgl_nr' => $spieler, 'from' => $oldclub);
 	$clmLog->write();
 	
-	$msg = JText::_( 'DWZ_PLAYER_MOVE_IN').' '.$spieler;
+	$msg = Text::_( 'DWZ_PLAYER_MOVE_IN').' '.$spieler;
 	$mainframe->enqueueMessage( $msg, 'message' );
 	$link = 'index.php?option='.$option.'&section='.$section;
 	$mainframe->redirect( $link );
@@ -841,7 +845,7 @@ static function player_move_from()
 		$sid = clm_core::$load->request_int('sid');
 		$zps = clm_core::$load->request_string('zps');
 
-		$mainframe	= JFactory::getApplication();
+		$mainframe	= Factory::getApplication();
 		$option 	= clm_core::$load->request_string('option');
 		$filter_sort		= $mainframe->getUserStateFromRequest( "$option.filter_sort",'filter_sort',0,'string' );
 		$result = clm_core::$api->db_clubmemberliste($sid,$zps,'pdf',$filter_sort);
@@ -849,11 +853,11 @@ static function player_move_from()
 		$file_name = $result[2];
 		// Log schreiben
 		$clmLog = new CLMLog();
-		$clmLog->aktion = "Vereinsmitglieder.pdf"." ".JText::_('CLM_EXPORT');
+		$clmLog->aktion = "Vereinsmitglieder.pdf"." ".Text::_('CLM_EXPORT');
 		$clmLog->params = array('zps' => $zps, 'sid' => $sid,'format' => 'pdf'); 
 		$clmLog->write();
 
-		$app =JFactory::getApplication();
+		$app =Factory::getApplication();
 		$app->enqueueMessage( 'Teilnehmerliste als pdf exportiert','message' );					
 
 		$adminLink = new AdminLink();

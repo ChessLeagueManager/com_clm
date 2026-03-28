@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -16,6 +16,10 @@
  * optional als zweiter Parameter der voreingestellte Wert ($value)
  * Verwendung: CLMForm::methodenname('name', 'wert');
 */
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+
 class CLMForm {
 
 	// Formularelement hidden
@@ -43,9 +47,9 @@ class CLMForm {
 		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
 		else $field_search = "inputbox";
 
-		$_db				= JFactory::getDBO();
+		$_db				= Factory::getDBO();
 		
-		$saisonlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_SEASON' )), 'id', 'name' );
+		$saisonlist[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'SELECT_SEASON' )), 'id', 'name' );
 		if ($only === true) 
 			$query = 'SELECT id, name FROM #__clm_saison WHERE archiv = 0';
 		elseif ($only > 0 AND $only < 1000)
@@ -55,8 +59,8 @@ class CLMForm {
 		$_db->setQuery($query);
 		$saisonlist		= array_merge( $saisonlist, $_db->loadObjectList() );
 		
-//		return JHTML::_('select.genericlist', $saisonlist, $name, 'class="js-example-basic-single" style="width:350px" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
-		return JHTML::_('select.genericlist', $saisonlist, $name, 'class="'.$field_search.'" style="width:350px" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+//		return HTMLHelper::_('select.genericlist', $saisonlist, $name, 'class="js-example-basic-single" style="width:350px" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+		return HTMLHelper::_('select.genericlist', $saisonlist, $name, 'class="'.$field_search.'" style="width:350px" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
 	
 	}
 	
@@ -67,9 +71,9 @@ class CLMForm {
 		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
 		else $field_search = "inputbox";
 
-		$_db				= JFactory::getDBO();
+		$_db				= Factory::getDBO();
 		
-		$timecontrollist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_TIMECONTROL' )), 'id', 'name' );
+		$timecontrollist[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'SELECT_TIMECONTROL' )), 'id', 'name' );
 		if ($only === true) 
 			$query = 'SELECT id, name FROM #__clm_zeitmodus WHERE published = 1 ORDER BY ordering';
 		elseif ($only > 0 AND $only < 1000)
@@ -79,8 +83,8 @@ class CLMForm {
 		$_db->setQuery($query);
 		$timecontrollist		= array_merge( $timecontrollist, $_db->loadObjectList() );
 		
-		return JHTML::_('select.genericlist', $timecontrollist, $name, 'class="js-example-basic-single" style="width:550px" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
-//		return JHTML::_('select.genericlist', $timecontrollist, $name, 'class="'.$field_search.'" style="width:550px" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+		return HTMLHelper::_('select.genericlist', $timecontrollist, $name, 'class="js-example-basic-single" style="width:550px" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+//		return HTMLHelper::_('select.genericlist', $timecontrollist, $name, 'class="'.$field_search.'" style="width:550px" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
 	
 	}
 	
@@ -93,18 +97,18 @@ class CLMForm {
 		else $field_search = "inputbox";
 	
 		$modi = array();
-		$modi[0] = CLMText::selectOpener(JText::_('SELECT_MODUS'));
-		$modi[1] = JText::_('MODUS_TYP_1');
-		$modi[2] = JText::_('MODUS_TYP_2');
-		$modi[3] = JText::_('MODUS_TYP_3');
-		$modi[5] = JText::_('MODUS_TYP_5');
-		$modi[6] = JText::_('MODUS_TYP_6');
+		$modi[0] = CLMText::selectOpener(Text::_('SELECT_MODUS'));
+		$modi[1] = Text::_('MODUS_TYP_1');
+		$modi[2] = Text::_('MODUS_TYP_2');
+		$modi[3] = Text::_('MODUS_TYP_3');
+		$modi[5] = Text::_('MODUS_TYP_5');
+		$modi[6] = Text::_('MODUS_TYP_6');
 		foreach ($modi as $key => $val) {
-			$modilist[]	= JHTML::_('select.option', $key, $val, 'id', 'name' );
+			$modilist[]	= HTMLHelper::_('select.option', $key, $val, 'id', 'name' );
 		}
 	
-//		return JHTML::_('select.genericlist', $modilist, $name, 'class="js-example-basic-single" style="width:350px" size="1"'.CLMText::stringOnchange($filter).$more,'id', 'name', intval($value) );
-		return JHTML::_('select.genericlist', $modilist, $name, 'class="'.$field_search.'" style="width:350px" size="1"'.CLMText::stringOnchange($filter).$more,'id', 'name', intval($value) );
+//		return HTMLHelper::_('select.genericlist', $modilist, $name, 'class="js-example-basic-single" style="width:350px" size="1"'.CLMText::stringOnchange($filter).$more,'id', 'name', intval($value) );
+		return HTMLHelper::_('select.genericlist', $modilist, $name, 'class="'.$field_search.'" style="width:350px" size="1"'.CLMText::stringOnchange($filter).$more,'id', 'name', intval($value) );
 		
 	}
 
@@ -117,34 +121,34 @@ class CLMForm {
 		else $field_search = "inputbox";
 	
 		$tiebr = array();
-		$tiebr[0] = CLMText::selectOpener(JText::_('SELECT_TIEBREAKER'));
-		$tiebr[1] = JText::_('TIEBR_1');
-		$tiebr[11] = JText::_('TIEBR_11');
-		$tiebr[2] = JText::_('TIEBR_2');
-		$tiebr[12] = JText::_('TIEBR_12');
-		$tiebr[3] = JText::_('TIEBR_3');
-		$tiebr[13] = JText::_('TIEBR_13');
-		$tiebr[4] = JText::_('TIEBR_4');
-		$tiebr[5] = JText::_('TIEBR_5');
-		//$tiebr[15] = JText::_('TIEBR_15');
-		$tiebr[6] = JText::_('TIEBR_6');
-		$tiebr[16] = JText::_('TIEBR_16');
-		$tiebr[7] = JText::_('TIEBR_7');
-		$tiebr[8] = JText::_('TIEBR_8');
-		$tiebr[18] = JText::_('TIEBR_18');
-		$tiebr[9] = JText::_('TIEBR_9');
-		$tiebr[19] = JText::_('TIEBR_19');
-		$tiebr[25] = JText::_('TIEBR_25');
-		$tiebr[29] = JText::_('TIEBR_29');
-		$tiebr[30] = JText::_('TIEBR_30');
-		$tiebr[51] = JText::_('TIEBR_51');
-		$tiebr[52] = JText::_('TIEBR_52');
+		$tiebr[0] = CLMText::selectOpener(Text::_('SELECT_TIEBREAKER'));
+		$tiebr[1] = Text::_('TIEBR_1');
+		$tiebr[11] = Text::_('TIEBR_11');
+		$tiebr[2] = Text::_('TIEBR_2');
+		$tiebr[12] = Text::_('TIEBR_12');
+		$tiebr[3] = Text::_('TIEBR_3');
+		$tiebr[13] = Text::_('TIEBR_13');
+		$tiebr[4] = Text::_('TIEBR_4');
+		$tiebr[5] = Text::_('TIEBR_5');
+		//$tiebr[15] = Text::_('TIEBR_15');
+		$tiebr[6] = Text::_('TIEBR_6');
+		$tiebr[16] = Text::_('TIEBR_16');
+		$tiebr[7] = Text::_('TIEBR_7');
+		$tiebr[8] = Text::_('TIEBR_8');
+		$tiebr[18] = Text::_('TIEBR_18');
+		$tiebr[9] = Text::_('TIEBR_9');
+		$tiebr[19] = Text::_('TIEBR_19');
+		$tiebr[25] = Text::_('TIEBR_25');
+		$tiebr[29] = Text::_('TIEBR_29');
+		$tiebr[30] = Text::_('TIEBR_30');
+		$tiebr[51] = Text::_('TIEBR_51');
+		$tiebr[52] = Text::_('TIEBR_52');
 		foreach ($tiebr as $key => $val) {
-			$tiebrlist[]	= JHTML::_('select.option', $key, $val, 'id', 'name' );
+			$tiebrlist[]	= HTMLHelper::_('select.option', $key, $val, 'id', 'name' );
 		}
 	
-//		return JHTML::_('select.genericlist', $tiebrlist, $name, 'class="js-example-basic-single" size="1" style="width:350px;"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
-		return JHTML::_('select.genericlist', $tiebrlist, $name, 'class="'.$field_search.'" size="1" style="width:350px;"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+//		return HTMLHelper::_('select.genericlist', $tiebrlist, $name, 'class="js-example-basic-single" size="1" style="width:350px;"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+		return HTMLHelper::_('select.genericlist', $tiebrlist, $name, 'class="'.$field_search.'" size="1" style="width:350px;"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
 		
 	}
 	
@@ -156,14 +160,14 @@ class CLMForm {
 		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
 		else $field_search = "inputbox";
 	
-		// $stagelist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_STAGES' )), 'id', 'name' );
-		$stagelist[]	= JHTML::_('select.option',  '1', '1', 'id', 'name' );
-		$stagelist[]	= JHTML::_('select.option',  '2', '2', 'id', 'name' );
-		$stagelist[]	= JHTML::_('select.option',  '3', '3', 'id', 'name' );
-		$stagelist[]	= JHTML::_('select.option',  '4', '4', 'id', 'name' );
+		// $stagelist[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'SELECT_STAGES' )), 'id', 'name' );
+		$stagelist[]	= HTMLHelper::_('select.option',  '1', '1', 'id', 'name' );
+		$stagelist[]	= HTMLHelper::_('select.option',  '2', '2', 'id', 'name' );
+		$stagelist[]	= HTMLHelper::_('select.option',  '3', '3', 'id', 'name' );
+		$stagelist[]	= HTMLHelper::_('select.option',  '4', '4', 'id', 'name' );
 	
-//		return JHTML::_('select.genericlist', $stagelist, $name, 'class="js-example-basic-single" size="1" style="width:50px"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
-		return JHTML::_('select.genericlist', $stagelist, $name, 'class="'.$field_search.'" size="1" style="width:50px"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+//		return HTMLHelper::_('select.genericlist', $stagelist, $name, 'class="js-example-basic-single" size="1" style="width:50px"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+		return HTMLHelper::_('select.genericlist', $stagelist, $name, 'class="'.$field_search.'" size="1" style="width:50px"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
 	
 	}
 
@@ -182,30 +186,30 @@ class CLMForm {
 		if($userlist === false) {
 			echo "<br>cl: "; var_dump($userlist); die('clcl'); }
 		
-		if ($name == 'torg') $tllist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_ORGANIZER' )), 'jid', 'name' );
-		else $tllist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_DIRECTOR' )), 'jid', 'name' );
+		if ($name == 'torg') $tllist[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'SELECT_ORGANIZER' )), 'jid', 'name' );
+		else $tllist[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'SELECT_DIRECTOR' )), 'jid', 'name' );
 		$tllist		= array_merge( $tllist, $userlist);
 		
-//		return JHTML::_('select.genericlist', $tllist, $name, 'class="js-example-basic-single" style="width:300px" size="1"'.CLMText::stringOnchange($filter), 'jid', 'name', $value );
-		return JHTML::_('select.genericlist', $tllist, $name, 'class="'.$field_search.'" style="width:300px" size="1"'.CLMText::stringOnchange($filter), 'jid', 'name', $value );
+//		return HTMLHelper::_('select.genericlist', $tllist, $name, 'class="js-example-basic-single" style="width:300px" size="1"'.CLMText::stringOnchange($filter), 'jid', 'name', $value );
+		return HTMLHelper::_('select.genericlist', $tllist, $name, 'class="'.$field_search.'" style="width:300px" size="1"'.CLMText::stringOnchange($filter), 'jid', 'name', $value );
 	
 	}
 
 
 	public static function selectDistrict ($name, $value = '0', $filter = FALSE) {
 
-		$_db				= JFactory::getDBO();
+		$_db				= Factory::getDBO();
 		
 		// Bezirksveranstaltung
 		$query = "SELECT ZPS, Vereinname FROM #__clm_dwz_vereine";
 		$_db->setQuery($query);
-		$veranstalter[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_ORGANIZER' )), 'ZPS', 'Vereinname' );
-		$veranstalter[]	= JHTML::_('select.option',  '-1', JText::_( ' ---------------------------- ' ), 'ZPS', 'Vereinname' );
-		$veranstalter[]	= JHTML::_('select.option',  '1', JText::_( 'DISTRICT_EVENT' ), 'ZPS', 'Vereinname' );
-		$veranstalter[]	= JHTML::_('select.option',  '-1', JText::_( ' ---------------------------- ' ), 'ZPS', 'Vereinname' );
+		$veranstalter[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'SELECT_ORGANIZER' )), 'ZPS', 'Vereinname' );
+		$veranstalter[]	= HTMLHelper::_('select.option',  '-1', Text::_( ' ---------------------------- ' ), 'ZPS', 'Vereinname' );
+		$veranstalter[]	= HTMLHelper::_('select.option',  '1', Text::_( 'DISTRICT_EVENT' ), 'ZPS', 'Vereinname' );
+		$veranstalter[]	= HTMLHelper::_('select.option',  '-1', Text::_( ' ---------------------------- ' ), 'ZPS', 'Vereinname' );
 		$veranstalter	= array_merge( $veranstalter, $_db->loadObjectList() );
 		
-		return JHTML::_('select.genericlist', $veranstalter, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
+		return HTMLHelper::_('select.genericlist', $veranstalter, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
 
 	}
 
@@ -217,44 +221,52 @@ class CLMForm {
 		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
 		else $field_search = "inputbox";
 	
-		$_db				= JFactory::getDBO();
+		$_db				= Factory::getDBO();
 		
 		// Verbandfilter
 		$query = 'SELECT Verband, Verbandname FROM #__clm_dwz_verbaende';
 		$_db->setQuery($query);
-		$verbandlist[] = JHTML::_('select.option',  '0', JText::_( 'SELECT_ASSOCIATION' ), 'Verband', 'Verbandname' );
+		$verbandlist[] = HTMLHelper::_('select.option',  '0', Text::_( 'SELECT_ASSOCIATION' ), 'Verband', 'Verbandname' );
 		$verbandlist = array_merge( $verbandlist, $_db->loadObjectList() );
 		
-//		return JHTML::_('select.genericlist', $verbandlist, $name, 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','Verband', 'Verbandname', $value );
-		return JHTML::_('select.genericlist', $verbandlist, $name, 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','Verband', 'Verbandname', $value );
+//		return HTMLHelper::_('select.genericlist', $verbandlist, $name, 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','Verband', 'Verbandname', $value );
+		return HTMLHelper::_('select.genericlist', $verbandlist, $name, 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','Verband', 'Verbandname', $value );
 
 	}
 
 
 	public static function selectVereinZPS ($name, $value = NULL, $filter = FALSE) {
 	
-		$_db				= JFactory::getDBO();
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+		else $field_search = "inputbox";
+
+		// Auswahlfelder durchsuchbar machen
+		clm_core::$load->load_js("suche_liste");
+
+		$_db				= Factory::getDBO();
 		
 		$query = "SELECT ZPS, Vereinname FROM #__clm_dwz_vereine GROUP BY ZPS";
 		$_db->setQuery($query);
-		$veranstalter[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_CLUB' )), 'ZPS', 'Vereinname' );
+		$veranstalter[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'SELECT_CLUB' )), 'ZPS', 'Vereinname' );
 		$veranstalter	= array_merge( $veranstalter, $_db->loadObjectList() );
 		
-		return JHTML::_('select.genericlist', $veranstalter, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
-	
+//		return HTMLHelper::_('select.genericlist', $veranstalter, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
+		return HTMLHelper::_('select.genericlist', $veranstalter, $name, 'class="'.$field_search.'" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
 	}
 
 	public static function selectVerband ($name, $value = NULL, $filter = FALSE) {
 	
-		$_db				= JFactory::getDBO();
+		$_db				= Factory::getDBO();
 		
 		$query = " (SELECT v2.Verband AS ZPS, v2.Verbandname AS Vereinname FROM #__clm_dwz_verbaende AS v2 GROUP BY ZPS) "
 				;
 		$_db->setQuery($query);
-		$veranstalter[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_VERBAND' )), 'ZPS', 'Vereinname' );
+		$veranstalter[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'SELECT_VERBAND' )), 'ZPS', 'Vereinname' );
 		$veranstalter	= array_merge( $veranstalter, $_db->loadObjectList() );
 		
-		return JHTML::_('select.genericlist', $veranstalter, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
+		return HTMLHelper::_('select.genericlist', $veranstalter, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
 	
 	}
 
@@ -265,7 +277,7 @@ class CLMForm {
 		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
 		else $field_search = "inputbox";
 	
-		$_db				= JFactory::getDBO();
+		$_db				= Factory::getDBO();
 		
 		$query = " (SELECT v2.Verband AS ZPS, v2.Verbandname AS Vereinname FROM #__clm_dwz_verbaende AS v2 GROUP BY ZPS) "
 
@@ -275,11 +287,11 @@ class CLMForm {
  
 				;
 		$_db->setQuery($query);
-		$veranstalter[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_HOST' )), 'ZPS', 'Vereinname' );
+		$veranstalter[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'SELECT_HOST' )), 'ZPS', 'Vereinname' );
 		$veranstalter	= array_merge( $veranstalter, $_db->loadObjectList() );
 		
-//		return JHTML::_('select.genericlist', $veranstalter, $name, 'class="js-example-basic-single" style="width:300px" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
-		return JHTML::_('select.genericlist', $veranstalter, $name, 'class="'.$field_search.'" style="width:300px" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
+//		return HTMLHelper::_('select.genericlist', $veranstalter, $name, 'class="js-example-basic-single" style="width:300px" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
+		return HTMLHelper::_('select.genericlist', $veranstalter, $name, 'class="'.$field_search.'" style="width:300px" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
 	
 	}
 
@@ -290,7 +302,7 @@ class CLMForm {
 		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
 		else $field_search = "inputbox";
 	
-		$_db				= JFactory::getDBO();
+		$_db				= Factory::getDBO();
 		
 		if ($verband != '000') {
 			$temp = $verband;
@@ -302,18 +314,18 @@ class CLMForm {
 			$query = "SELECT ZPS, Vereinname FROM #__clm_dwz_vereine WHERE sid = ".clm_core::$access->getSeason();
 		}
 		$_db->setQuery($query);
-		$veranstalter[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_CLUB' )), 'ZPS', 'Vereinname' );
+		$veranstalter[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'SELECT_CLUB' )), 'ZPS', 'Vereinname' );
 		$veranstalter	= array_merge( $veranstalter, $_db->loadObjectList() );
 		
-//		return JHTML::_('select.genericlist', $veranstalter, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
-		return JHTML::_('select.genericlist', $veranstalter, $name, 'class="'.$field_search.'" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
+//		return HTMLHelper::_('select.genericlist', $veranstalter, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
+		return HTMLHelper::_('select.genericlist', $veranstalter, $name, 'class="'.$field_search.'" size="1"'.CLMText::stringOnchange($filter),'ZPS', 'Vereinname', $value );
 	
 	}
 
 
 	public static function radioPublished ($name, $value = 0) {
 	
-		return JHTML::_('select.booleanlist', $name, 'class="inputbox"', $value);
+		return HTMLHelper::_('select.booleanlist', $name, 'class="inputbox"', $value);
 	
 	}
 
@@ -325,7 +337,7 @@ class CLMForm {
 		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
 		else $field_search = "inputbox";
 	
-		$_db				= JFactory::getDBO();
+		$_db				= Factory::getDBO();
 	
 		$config = clm_core::$db->config();
 		$lv	= $config->lv;
@@ -351,11 +363,11 @@ class CLMForm {
 		$_db->setQuery($sql);
 		$vereine = $_db->loadObjectList();
 	
-		$vlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_CLUB' )), 'zps', 'name' );
+		$vlist[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'SELECT_CLUB' )), 'zps', 'name' );
 		$vlist		= array_merge( $vlist, $vereine);
 	
-//		return JHTML::_('select.genericlist', $vlist, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
-		return JHTML::_('select.genericlist', $vlist, $name, 'class="'.$field_search.'" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
+//		return HTMLHelper::_('select.genericlist', $vlist, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
+		return HTMLHelper::_('select.genericlist', $vlist, $name, 'class="'.$field_search.'" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
 	
 	}
 
@@ -378,11 +390,11 @@ class CLMForm {
 			if (is_null($verein->name)) $verein->name = "";
 		}
 
-		$vlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_CLUB' )), 'zps', 'name' );
+		$vlist[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'SELECT_CLUB' )), 'zps', 'name' );
 		$vlist		= array_merge( $vlist, $vereine);
 	
-//		return JHTML::_('select.genericlist', $vlist, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
-		return JHTML::_('select.genericlist', $vlist, $name, 'class="'.$field_search.'" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
+//		return HTMLHelper::_('select.genericlist', $vlist, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
+		return HTMLHelper::_('select.genericlist', $vlist, $name, 'class="'.$field_search.'" size="1"'.CLMText::stringOnchange($filter), 'zps', 'name', $value );
 	
 	}
 
@@ -393,15 +405,15 @@ class CLMForm {
 		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
 		else $field_search = "inputbox";
 	
-		$pllist[] = JHTML::_('select.option', '0', CLMText::selectOpener(JText::_( 'SELECT_PLAYER_'.strtoupper(substr($name, 0, 1)) ) ), 'snr', 'name' );
-		$pllist[] = JHTML::_('select.option', '-1', JText::_( ' ---------------------------- ' ), 'snr', 'name');
+		$pllist[] = HTMLHelper::_('select.option', '0', CLMText::selectOpener(Text::_( 'SELECT_PLAYER_'.strtoupper(substr($name, 0, 1)) ) ), 'snr', 'name' );
+		$pllist[] = HTMLHelper::_('select.option', '-1', Text::_( ' ---------------------------- ' ), 'snr', 'name');
 	
 		foreach ($players as $key => $value) {
-			$pllist[]	= JHTML::_('select.option', $value['snr'], $value['snr']." - ".$value['name'], 'snr', 'name');
+			$pllist[]	= HTMLHelper::_('select.option', $value['snr'], $value['snr']." - ".$value['name'], 'snr', 'name');
 		}
 	
-//		return JHTML::_('select.genericlist', $pllist, $name, 'class="js-example-basic-single" size="1" style="width:250px"', 'snr', 'name', $selected );
-		return JHTML::_('select.genericlist', $pllist, $name, 'class="'.$field_search.'" size="1" style="width:250px"', 'snr', 'name', $selected );
+//		return HTMLHelper::_('select.genericlist', $pllist, $name, 'class="js-example-basic-single" size="1" style="width:250px"', 'snr', 'name', $selected );
+		return HTMLHelper::_('select.genericlist', $pllist, $name, 'class="'.$field_search.'" size="1" style="width:250px"', 'snr', 'name', $selected );
 	
 	}
 
@@ -413,15 +425,15 @@ class CLMForm {
 		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
 		else $field_search = "inputbox";
 	
-		$resultlist[] = JHTML::_('select.option', '-1', CLMText::selectOpener(JText::_( 'SELECT_RESULT' ) ), 'eid', 'ergebnis' );
-		$resultlist[] = JHTML::_('select.option', '-2', JText::_( ' ---------------- ' ), 'eid', 'ergebnis');
+		$resultlist[] = HTMLHelper::_('select.option', '-1', CLMText::selectOpener(Text::_( 'SELECT_RESULT' ) ), 'eid', 'ergebnis' );
+		$resultlist[] = HTMLHelper::_('select.option', '-2', Text::_( ' ---------------- ' ), 'eid', 'ergebnis');
 		
 		for ($r=0; $r<=13; $r++) {
-			$resultlist[] = JHTML::_('select.option', $r, JText::_( 'RESULT_EID_'.$r ), 'eid', 'ergebnis' );
+			$resultlist[] = HTMLHelper::_('select.option', $r, Text::_( 'RESULT_EID_'.$r ), 'eid', 'ergebnis' );
 		}
 	
-//		return JHTML::_('select.genericlist', $resultlist, $name, 'class="js-example-basic-single" size="1" style="width:170px"', 'eid', 'ergebnis', $value );
-		return JHTML::_('select.genericlist', $resultlist, $name, 'class="'.$field_search.'" size="1" style="width:170px"', 'eid', 'ergebnis', $value );
+//		return HTMLHelper::_('select.genericlist', $resultlist, $name, 'class="js-example-basic-single" size="1" style="width:170px"', 'eid', 'ergebnis', $value );
+		return HTMLHelper::_('select.genericlist', $resultlist, $name, 'class="'.$field_search.'" size="1" style="width:170px"', 'eid', 'ergebnis', $value );
 	
 	}
 
@@ -434,34 +446,34 @@ class CLMForm {
 
 		$countryversion = $clm_config->countryversion;
 		if ($countryversion =="de") {
-			$dwzlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_RATING' )), 'id', 'name' );
-			$dwzlist[]	= JHTML::_('select.option',  '56', 'DWZ >= 2600', 'id', 'name' );
+			$dwzlist[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'SELECT_RATING' )), 'id', 'name' );
+			$dwzlist[]	= HTMLHelper::_('select.option',  '56', 'DWZ >= 2600', 'id', 'name' );
 			for ($r=52; $r>=20; $r-=4) {
-				$dwzlist[]	= JHTML::_('select.option',  $r, 'DWZ < '.($r*50), 'id', 'name' );
+				$dwzlist[]	= HTMLHelper::_('select.option',  $r, 'DWZ < '.($r*50), 'id', 'name' );
 			}
 		} else {	// engl.Anwendung
-			$dwzlist[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_RATING_GRADE' )), 'id', 'name' );
-			//$dwzlist[]	= JHTML::_('select.option',  '6', 'grade >= 250', 'id', 'name' );
+			$dwzlist[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'SELECT_RATING_GRADE' )), 'id', 'name' );
+			//$dwzlist[]	= HTMLHelper::_('select.option',  '6', 'grade >= 250', 'id', 'name' );
 			for ($r=5; $r>=1; $r-=1) {
-				$dwzlist[]	= JHTML::_('select.option',  $r, 'grade < '.($r*50), 'id', 'name' );
+				$dwzlist[]	= HTMLHelper::_('select.option',  $r, 'grade < '.($r*50), 'id', 'name' );
 			}
 		}
 	
-//		return JHTML::_('select.genericlist', $dwzlist, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
-		return JHTML::_('select.genericlist', $dwzlist, $name, 'class="'.$field_search.'" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+//		return HTMLHelper::_('select.genericlist', $dwzlist, $name, 'class="js-example-basic-single" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+		return HTMLHelper::_('select.genericlist', $dwzlist, $name, 'class="'.$field_search.'" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
 	
 	}
 
 
 	public static function selectPriority ($name, $value = 0, $filter = FALSE) {
 	
-		$list[]	= JHTML::_('select.option',  '0', CLMText::selectOpener(JText::_( 'SELECT_PRIORITY' )), 'id', 'name' );
+		$list[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'SELECT_PRIORITY' )), 'id', 'name' );
 		
 		for ($p=35; $p>=5; $p-=5) {
-			$list[]	= JHTML::_('select.option',  $p, JText::_('TODO_PRIO_'.$p), 'id', 'name' );
+			$list[]	= HTMLHelper::_('select.option',  $p, Text::_('TODO_PRIO_'.$p), 'id', 'name' );
 		}
 	
-		return JHTML::_('select.genericlist', $list, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
+		return HTMLHelper::_('select.genericlist', $list, $name, 'class="inputbox" size="1"'.CLMText::stringOnchange($filter),'id', 'name', intval($value) );
 	
 	}
 
@@ -469,7 +481,7 @@ class CLMForm {
 	public static function calendar($value, $name, $id, $format = '%Y-%m-%d', $attribs = null) {
 		if ($value == '0000-00-00' OR $value == '1970-01-01') $value = '';
 	
-		return JHTML::_('calendar', $value, $name, $id, $format, $attribs);
+		return HTMLHelper::_('calendar', $value, $name, $id, $format, $attribs);
 	}	
 
 
@@ -496,19 +508,19 @@ class CLMForm {
 		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
 		else $field_search = "inputbox";
 
-		$state = array('' => '- ' . JText::_('JLIB_HTML_SELECT_STATE') . ' -', 'P' => JText::_($published), 'U' => JText::_($unpublished));
+		$state = array('' => '- ' . Text::_('JLIB_HTML_SELECT_STATE') . ' -', 'P' => Text::_($published), 'U' => Text::_($unpublished));
 
 		if ($archived)
 		{
-			$state['A'] = JText::_($archived);
+			$state['A'] = Text::_($archived);
 		}
 
 		if ($trashed)
 		{
-			$state['T'] = JText::_($trashed);
+			$state['T'] = Text::_($trashed);
 		}
 
-		return JHtml::_(
+		return HTMLHelper::_(
 			'select.genericlist',
 			$state,
 			'filter_state',

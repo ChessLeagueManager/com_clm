@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,11 +11,14 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+
 ?>
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 
 <?php
-//$editor =JFactory::getEditor();
+//$editor =Factory::getEditor();
 //echo $editor->display('invitationText', $this->turnier->invitationText, '800', '600', '60', '20', false);
 
 use Joomla\CMS\Editor\Editor;
@@ -46,6 +49,6 @@ The parameters of the display method are:
 		<input type="hidden" name="task" value="" />
 		<input type="hidden" name="controller" value="turinvite" />
 		<input type="hidden" name="id" value="<?php echo $this->param['id']; ?>" />
-		<?php echo JHtml::_( 'form.token' ); ?>
+		<?php echo HTMLHelper::_( 'form.token' ); ?>
 
 </form>

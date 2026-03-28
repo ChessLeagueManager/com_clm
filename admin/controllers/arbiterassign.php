@@ -1,12 +1,15 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 class CLMControllerArbiterAssign extends JControllerLegacy {
 	
@@ -16,7 +19,7 @@ class CLMControllerArbiterAssign extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->app =JFactory::getApplication();
+		$this->app =Factory::getApplication();
 					
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -75,7 +78,7 @@ class CLMControllerArbiterAssign extends JControllerLegacy {
 		$lang = clm_core::$lang->arbiter;
 	
 		if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
-			$this->app->enqueueMessage( JText::_('SECTION_NO_ACCESS'),'warning' );
+			$this->app->enqueueMessage( Text::_('SECTION_NO_ACCESS'),'warning' );
 			return array(false);
 		}
 	

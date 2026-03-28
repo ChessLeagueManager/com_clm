@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -11,6 +11,11 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Table\Table;
+
 class CLMModelTurForm extends JModelLegacy {
 
 	// benötigt für Pagination
@@ -19,7 +24,7 @@ class CLMModelTurForm extends JModelLegacy {
 		parent::__construct();
 
 		// user
-		$this->user =JFactory::getUser();
+		$this->user =Factory::getUser();
 		
 		$this->_getData();
 
@@ -36,12 +41,12 @@ class CLMModelTurForm extends JModelLegacy {
 		// category
 		list($this->parentArray, $this->parentKeys) = CLMCategoryTree::getTree();
 		if (count($this->parentArray) > 0)  { // nur, wenn Kategorien existieren
-			$parentlist[]	= JHtml::_('select.option',  '0', CLMText::selectOpener(JText::_( 'NO_PARENT' )), 'id', 'name' );
+			$parentlist[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'NO_PARENT' )), 'id', 'name' );
 			foreach ($this->parentArray as $key => $value) {
-				$parentlist[]	= JHtml::_('select.option',  $key, $value, 'id', 'name' );
+				$parentlist[]	= HTMLHelper::_('select.option',  $key, $value, 'id', 'name' );
 			}
-			$this->form['catidAlltime'] = JHtml::_('select.genericlist', $parentlist, 'catidAlltime', 'class="inputbox" size="1" style="max-width: 250px;"', 'id', 'name', intval($this->turnier->catidAlltime));
-			$this->form['catidEdition'] = JHtml::_('select.genericlist', $parentlist, 'catidEdition', 'class="inputbox" size="1" style="max-width: 250px;"', 'id', 'name', intval($this->turnier->catidEdition));
+			$this->form['catidAlltime'] = HTMLHelper::_('select.genericlist', $parentlist, 'catidAlltime', 'class="inputbox" size="1" style="max-width: 250px;"', 'id', 'name', intval($this->turnier->catidAlltime));
+			$this->form['catidEdition'] = HTMLHelper::_('select.genericlist', $parentlist, 'catidEdition', 'class="inputbox" size="1" style="max-width: 250px;"', 'id', 'name', intval($this->turnier->catidEdition));
 		}
 		
 		// Saison
@@ -68,7 +73,7 @@ class CLMModelTurForm extends JModelLegacy {
 		$this->form['torg']	= CLMForm::selectDirector('torg', $this->turnier->torg);
 		
 		// bezirksveranstaltung?
-		$this->form['bezirkTur']= JHtml::_('select.booleanlist', 'bezirkTur', 'class="inputbox"', $this->turnier->bezirkTur);
+		$this->form['bezirkTur']= HTMLHelper::_('select.booleanlist', 'bezirkTur', 'class="inputbox"', $this->turnier->bezirkTur);
 		
 		// vereinZPS
 //		if (strlen($this->turnier->vereinZPS) < 2) $this->turnier->vereinZPS = null;
@@ -90,7 +95,7 @@ class CLMModelTurForm extends JModelLegacy {
 	function _getData() {
 		
 		// Instanz der Tabelle
-		$this->turnier = JTable::getInstance( 'turniere', 'TableCLM');
+		$this->turnier = Table::getInstance( 'turniere', 'TableCLM');
 		if ($id = clm_core::$load->request_int('id')) {
 			$this->turnier->load($id);
 		}

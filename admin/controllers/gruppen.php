@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,12 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Pagination\Pagination;
 
 class CLMControllerGruppen extends JControllerLegacy
 {
@@ -28,10 +34,10 @@ function __construct( $config = array() )
 
 function display($cachable = false, $urlparams = array())
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');
-	$db=JFactory::getDBO();
+	$db=Factory::getDBO();
 
 	$filter_order		= $mainframe->getUserStateFromRequest( "$option.filter_order",'filter_order','a.id',	'cmd' );
 	$filter_order_Dir	= $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",'filter_order_Dir','','word' );
@@ -82,7 +88,7 @@ function display($cachable = false, $urlparams = array())
 	$total = $db->loadResult();
 
 	jimport('joomla.html.pagination');
-	$pageNav = new JPagination( $total, $limitstart, $limit );
+	$pageNav = new Pagination( $total, $limitstart, $limit );
 
 	// get the subset (based on limits) of required records
 	$query = 'SELECT a.*, c.name AS saison, u.name as uname '
@@ -102,16 +108,16 @@ function display($cachable = false, $urlparams = array())
 	}
 	
 	// state filter
-	//$lists['state']	= JHTML::_('grid.state',  $filter_state );
+	//$lists['state']	= HTMLHelper::_('grid.state',  $filter_state );
 	$lists['state'] = CLMForm::selectState( $filter_state );
 
 	// state sid         nach Saison sortieren
 	$sql = 'SELECT id, name FROM #__clm_saison WHERE archiv =0';
 	$db->setQuery($sql);
-	$saisonlist[]	= JHTML::_('select.option',  '0', JText::_( 'GRUPPEN_SAISON' ), 'id', 'name' );
+	$saisonlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'GRUPPEN_SAISON' ), 'id', 'name' );
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
-//	$lists['sid']      = JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
-	$lists['sid']      = JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+//	$lists['sid']      = HTMLHelper::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']      = HTMLHelper::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 
 	// table ordering
 	$lists['order_Dir']	= $filter_order_Dir;
@@ -126,10 +132,10 @@ function display($cachable = false, $urlparams = array())
 
 function edit()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
-	$db 		=JFactory::getDBO();
-	$user 		=JFactory::getUser();
+	$db 		=Factory::getDBO();
+	$user 		=Factory::getUser();
 	$task 		= clm_core::$load->request_string( 'task');
 	$cid 		= clm_core::$load->request_array_int('cid');
 	if (is_null($cid)) {
@@ -144,7 +150,7 @@ function edit()
 	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
 	else $field_search = "inputbox";
 	
-	$row =JTable::getInstance( 'gruppen', 'TableCLM' );
+	$row =Table::getInstance( 'gruppen', 'TableCLM' );
 	// load the row from the db table
 	$row->load( $cid[0] );
 
@@ -158,7 +164,7 @@ function edit()
 	} else { $lid = 0; };
 	$clmAccess = clm_core::$access;      
 	if ($clmAccess->access('BE_club_edit_ranking') === false AND $task == 'edit') {
-		$mainframe->enqueueMessage( JText::_( 'GRUPPEN_STAFFFEL' ), 'warning' );		
+		$mainframe->enqueueMessage( Text::_( 'GRUPPEN_STAFFFEL' ), 'warning' );		
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 					}
@@ -166,14 +172,14 @@ function edit()
 	if ($task == 'edit') {
 	// illegaler Einbruchversuch über URL !
 	// evtl. mitschneiden !?!
-	$saison		=JTable::getInstance( 'saisons', 'TableCLM' );
+	$saison		=Table::getInstance( 'saisons', 'TableCLM' );
 	$saison->load( $row->sid );
 	if ($saison->archiv == "1" ) {   //AND clm_core::$access->getType() !== 'admin') {
-		$mainframe->enqueueMessage( JText::_( 'GRUPPEN_RANG' ), 'warning' );		
+		$mainframe->enqueueMessage( Text::_( 'GRUPPEN_RANG' ), 'warning' );		
 		$mainframe->redirect( 'index.php?option='. $option.'&section=vereine', $msg );
 				}
 	if ($cid[0]== "" AND $task =='edit') {
-		$mainframe->enqueueMessage( JText::_( 'GRUPPEN_FALSCH' ), 'warning' );		
+		$mainframe->enqueueMessage( Text::_( 'GRUPPEN_FALSCH' ), 'warning' );		
 		$mainframe->redirect( 'index.php?option='. $option.'&section=vereine' );
 				}
 	// do stuff for existing records
@@ -183,8 +189,8 @@ function edit()
 		$row->published 	= 0;
 	}
 
-//	$lists['published']	= JHTML::_('select.booleanlist',  'published', 'class="js-example-basic-single"', $row->published );
-	$lists['published']	= JHTML::_('select.booleanlist',  'published', 'class="'.$field_search.'"', $row->published );
+//	$lists['published']	= HTMLHelper::_('select.booleanlist',  'published', 'class="js-example-basic-single"', $row->published );
+	$lists['published']	= HTMLHelper::_('select.booleanlist',  'published', 'class="'.$field_search.'"', $row->published );
 
 	// Saisonlist //
 	$sql = 'SELECT id as sid, name FROM #__clm_saison WHERE archiv =0';
@@ -193,10 +199,10 @@ function edit()
 		$mainframe->enqueueMessage( $db->getErrorMsg(), 'warning' );		
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
-	$saisonlist[]	= JHTML::_('select.option',  '0', JText::_( 'GRUPPEN_SAISON' ), 'sid', 'name' );
+	$saisonlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'GRUPPEN_SAISON' ), 'sid', 'name' );
 	$saisonlist	= array_merge( $saisonlist, $db->loadObjectList() );
-//	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1"','sid', 'name', $row->sid );
-	$lists['saison']= JHTML::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1"','sid', 'name', $row->sid );
+//	$lists['saison']= HTMLHelper::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1"','sid', 'name', $row->sid );
+	$lists['saison']= HTMLHelper::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1"','sid', 'name', $row->sid );
 
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'gruppen.php');
 	$jid = 0; $user_group = 0;
@@ -206,7 +212,7 @@ function edit()
 
 function save()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
@@ -214,9 +220,9 @@ function save()
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');
 
-	$db 		= JFactory::getDBO();
+	$db 		= Factory::getDBO();
 	$task 		= clm_core::$load->request_string( 'task');
-	$row 		= JTable::getInstance( 'gruppen', 'TableCLM' );
+	$row 		= Table::getInstance( 'gruppen', 'TableCLM' );
 	$msg		= clm_core::$load->request_int( 'id');
 	$delete		= clm_core::$load->request_string( 'delete');
 	$create		= clm_core::$load->request_string( 'create');
@@ -246,21 +252,21 @@ function save()
 	
 
 	if ($delete == 1) {
-		$mainframe->enqueueMessage( JText::_( 'GRUPPEN_RL_LOESCH' ), 'warning' );		
+		$mainframe->enqueueMessage( Text::_( 'GRUPPEN_RL_LOESCH' ), 'warning' );		
 			}
 	if ($create == 1) {
-		$mainframe->enqueueMessage( JText::_( 'GRUPPEN_RL_NEU' ), 'notice' );		
+		$mainframe->enqueueMessage( Text::_( 'GRUPPEN_RL_NEU' ), 'notice' );		
 			}
 
 	switch ($task)
 	{
 		case 'apply':
-			$msg = JText::_( 'GRUPPEN_AENDERN' );
+			$msg = Text::_( 'GRUPPEN_AENDERN' );
 			$link = 'index.php?option='.$option.'&section='.$section.'&task=edit&id='. $row->id ;
 			break;
 		case 'save':
 		default:
-			$msg = JText::_( 'GRUPPEN_SPEICHERT');
+			$msg = Text::_( 'GRUPPEN_SPEICHERT');
 			$link = 'index.php?option='.$option.'&section='.$section;
 			break;
 	}
@@ -278,7 +284,7 @@ function save()
 
 function cancel()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 	
@@ -286,26 +292,26 @@ function cancel()
 	$section 	= clm_core::$load->request_string('section');
 	$id		= clm_core::$load->request_int('id');	
 
-	$msg = JText::_( 'GRUPPEN_AKTION').' '.$id;
+	$msg = Text::_( 'GRUPPEN_AKTION').' '.$id;
 	$mainframe->enqueueMessage( $msg, 'message' );		
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
 function remove()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 
-	$db 		=JFactory::getDBO();
+	$db 		=Factory::getDBO();
 	$cid 		= clm_core::$load->request_array_int('cid');
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');
 							   
 
 	if (count($cid) < 1) {
-		$mainframe->enqueueMessage( JText::_( 'GRUPPEN_SELECT', true ), 'warning' );		
+		$mainframe->enqueueMessage( Text::_( 'GRUPPEN_SELECT', true ), 'warning' );		
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
@@ -320,7 +326,7 @@ function remove()
 	// Wenn User nicht Admin oder DWZ prüfen ob SL der Staffel
 	$clmAccess = clm_core::$access;      
 	if ($clmAccess->access('BE_club_edit_ranking') === false) {
-			$mainframe->enqueueMessage( JText::_( 'GRUPPEN_RL_STAFFEL' ), 'warning' );		
+			$mainframe->enqueueMessage( Text::_( 'GRUPPEN_RL_STAFFEL' ), 'warning' );		
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link);
 					}
@@ -336,14 +342,14 @@ function remove()
 
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'GRUPPEN_MSG_AKTION' );
+	$clmLog->aktion = Text::_( 'GRUPPEN_MSG_AKTION' );
 	$clmLog->params = array('cids' => $cids, 'zps' => $row->zps);
 	$clmLog->write();
 	
 	if (count($cid) == 1) { 
-		$msg = JText::_( 'GRUPPEN_MSG_DEL_ENTRY' ); 
+		$msg = Text::_( 'GRUPPEN_MSG_DEL_ENTRY' ); 
 	} else { 
-		$msg = count($cid).' '.JText::_( 'GRUPPEN_MSG_DEL_ENTRYS' ); 
+		$msg = count($cid).' '.Text::_( 'GRUPPEN_MSG_DEL_ENTRYS' ); 
 	}
 
 	$mainframe->enqueueMessage( $msg, 'message' );		
@@ -352,13 +358,13 @@ function remove()
 
 function publish()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 
-	$db 		=JFactory::getDBO();
-	$user 		=JFactory::getUser();
+	$db 		=Factory::getDBO();
+	$user 		=Factory::getUser();
 	$cid		= clm_core::$load->request_array_int('cid');
 	$task		= clm_core::$load->request_string( 'task' );
 	$publish	= ($task == 'publish');
@@ -372,7 +378,7 @@ function publish()
 	//// Wenn User nicht Admin kein Zugang
 	$clmAccess = clm_core::$access;      
 	if ($clmAccess->access('BE_club_edit_ranking') !== true) {
-		$mainframe->enqueueMessage( JText::_( 'GRUPPEN_STAFF' ), 'warning' );		
+		$mainframe->enqueueMessage( Text::_( 'GRUPPEN_STAFF' ), 'warning' );		
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 					}
@@ -389,13 +395,13 @@ function publish()
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 	if (count( $cid ) == 1) {
-		$row =JTable::getInstance( 'mannschaften', 'TableCLM' );
+		$row =Table::getInstance( 'mannschaften', 'TableCLM' );
 	}
 	
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'GRUPPEN_MSG_GROUP' );
-	$table	=JTable::getInstance( 'mannschaften', 'TableCLM');
+	$clmLog->aktion = Text::_( 'GRUPPEN_MSG_GROUP' );
+	$table	=Table::getInstance( 'mannschaften', 'TableCLM');
 	$table->load($cid[0]);
 	$clmLog->params = array('sid' => $table->sid, 'lid' => $table->liga, 'zps' => $table->zps, 'cids' => $cids);
 	$clmLog->write();
@@ -422,12 +428,12 @@ function orderup(  ) {
 */
 function order( $inc )
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 
-	$db		=JFactory::getDBO();
+	$db		=Factory::getDBO();
 	$cid		= clm_core::$load->request_array_int('cid');
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');
@@ -435,7 +441,7 @@ function order( $inc )
 	$limit 		= clm_core::$load->request_int( 'limit' );
 	$limitstart 	= clm_core::$load->request_int( 'limitstart' );
 
-	$row =JTable::getInstance( 'gruppen', 'TableCLM' );
+	$row =Table::getInstance( 'gruppen', 'TableCLM' );
 	$row->load( $cid[0]);
 	$row->move( $inc, 'liga = '.(int) $row->liga.' AND published != 0' );
 
@@ -449,12 +455,12 @@ function order( $inc )
 */
 function saveOrder(  )
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 
-	$db			=JFactory::getDBO();
+	$db			=Factory::getDBO();
 	$cid		= clm_core::$load->request_array_int('cid');
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');
@@ -463,7 +469,7 @@ function saveOrder(  )
 	$total		= count( $cid );
 	$order		= clm_core::$load->request_array_int('order');
 
-	$row =JTable::getInstance( 'gruppen', 'TableCLM' );
+	$row =Table::getInstance( 'gruppen', 'TableCLM' );
 	$groupings = array();
 
 	// update ordering values
@@ -492,15 +498,15 @@ function saveOrder(  )
 
 function copy()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');
 	$cid	= clm_core::$load->request_array_int('cid');
-	$db	=JFactory::getDBO();
-	$table	=JTable::getInstance('gruppen', 'TableCLM');
-	$user	= JFactory::getUser();
+	$db	=Factory::getDBO();
+	$table	=Table::getInstance('gruppen', 'TableCLM');
+	$user	= Factory::getUser();
 	$n		= count( $cid );
 
 	// Prüfen ob User Berechtigung zum kopieren hat
@@ -514,7 +520,7 @@ function copy()
 	// Wenn User nicht Admin oder DWZ prüfen ob SL der Staffel
 	$clmAccess = clm_core::$access;      
 	if ($clmAccess->access('BE_club_edit_ranking') === false) {
-		$mainframe->enqueueMessage( JText::_( 'GRUPPEN_KOPIE' ), 'warning' );		
+		$mainframe->enqueueMessage( Text::_( 'GRUPPEN_KOPIE' ), 'warning' );		
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
@@ -537,7 +543,7 @@ function copy()
 			}
 		}
 	} else {	
-		$mainframe->enqueueMessage( JText::_( 'GRUPPEN_NO_SELECT' ), 'warning' );		
+		$mainframe->enqueueMessage( Text::_( 'GRUPPEN_NO_SELECT' ), 'warning' );		
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
@@ -548,7 +554,7 @@ function copy()
 	// Log schreiben
 	$clmLog = new CLMLog();
 	$clmLog->aktion = "Gruppe(n) kopiert";
-	$table	=JTable::getInstance( 'gruppen', 'TableCLM');
+	$table	=Table::getInstance( 'gruppen', 'TableCLM');
 	$table->load($cid[0]);
 	$clmLog->params = array('sid' => $table->sid, 'lid' => $table->liga, 'zps' => $table->zps, 'cids' => implode( ',', $cid ));
 	$clmLog->write();

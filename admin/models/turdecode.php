@@ -1,11 +1,16 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Pagination\Pagination;
 
 class CLMModelTurDecode extends JModelLegacy {
 
@@ -19,7 +24,7 @@ class CLMModelTurDecode extends JModelLegacy {
 
 
 		// user
-		$this->user =JFactory::getUser();
+		$this->user =Factory::getUser();
 		
 		// get parameters
 		$this->_getParameters();
@@ -40,9 +45,9 @@ class CLMModelTurDecode extends JModelLegacy {
 	// alle vorhandenen Parameter auslesen
 	function _getParameters() {
 	
-		$mainframe =JFactory::getApplication();
+		$mainframe =Factory::getApplication();
 		global $option;
-		$db=JFactory::getDBO();
+		$db=Factory::getDBO();
 
 		if (!isset($this->param) OR is_null($this->param)) $this->param = array();	// seit J 4.2 nötig um notice zu vermeiden
 		if (!isset($this->lists) OR is_null($this->lists)) $this->lists = array();	// seit J 4.2 nötig um notice zu vermeiden
@@ -71,9 +76,9 @@ class CLMModelTurDecode extends JModelLegacy {
 		$sql = 'SELECT Verband, Verbandname FROM #__clm_dwz_verbaende ';
 		$sql .= " WHERE SUBSTR(Verband,2,2) = '00' AND Verband <> '000' ";
 		$db->setQuery($sql);
-		$verbandlist[]	= JHTML::_('select.option',  '', JText::_( 'DECODE_VERBAND_WAEHLEN' ), 'Verband', 'Verbandname' );
+		$verbandlist[]	= HTMLHelper::_('select.option',  '', Text::_( 'DECODE_VERBAND_WAEHLEN' ), 'Verband', 'Verbandname' );
 		$verbandlist	= array_merge( $verbandlist, $db->loadObjectList() );
-		$this->lists['verband']	= JHTML::_('select.genericlist', $verbandlist, 'filter_verband', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','Verband', 'Verbandname', $filter_verband );
+		$this->lists['verband']	= HTMLHelper::_('select.genericlist', $verbandlist, 'filter_verband', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','Verband', 'Verbandname', $filter_verband );
 		if ($countryversion =="de") 
 			$this->param['verband'] = $filter_verband;
 		else
@@ -86,9 +91,9 @@ class CLMModelTurDecode extends JModelLegacy {
 			$sql .= " AND SUBSTR(ZPS,1,1) = '".substr($filter_verband,0,1)."'";
 		$sql .= " ORDER BY Vereinname ";
 		$db->setQuery($sql);
-		$vereinlist[]	= JHTML::_('select.option',  '', JText::_( 'DECODE_VEREIN_WAEHLEN' ), 'ZPS', 'Vereinname' );
+		$vereinlist[]	= HTMLHelper::_('select.option',  '', Text::_( 'DECODE_VEREIN_WAEHLEN' ), 'ZPS', 'Vereinname' );
 		$vereinlist	= array_merge( $vereinlist, $db->loadObjectList() );
-		$this->lists['verein']	= JHTML::_('select.genericlist', $vereinlist, 'filter_verein', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','ZPS', 'Vereinname', $filter_verein );
+		$this->lists['verein']	= HTMLHelper::_('select.genericlist', $vereinlist, 'filter_verein', 'class="inputbox" size="1" onchange="document.adminForm.submit();"','ZPS', 'Vereinname', $filter_verein );
 //		if ($countryversion =="de") 
 			$this->param['verein'] = $filter_verein;
 //		else
@@ -204,7 +209,7 @@ class CLMModelTurDecode extends JModelLegacy {
 		// Load the content if it doesn't already exist
 		if (empty($this->pagination)) {
 			jimport('joomla.html.pagination');
-			$this->pagination = new JPagination($this->playersTotal, $this->limitstart, $this->limit );
+			$this->pagination = new Pagination($this->playersTotal, $this->limitstart, $this->limit );
 		}
 	}
 

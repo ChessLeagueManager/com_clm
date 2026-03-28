@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM-Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,10 @@
 */
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class CLMViewAccessgroupsForm extends JViewLegacy {
 
@@ -28,29 +32,29 @@ class CLMViewAccessgroupsForm extends JViewLegacy {
 		}
 		// Die Toolbar erstellen, die über der Seite angezeigt wird
 		if (!$isNew) { 
-			$text = JText::_( 'ACCESSGROUP_EDIT' );
+			$text = Text::_( 'ACCESSGROUP_EDIT' );
 		} else { 
-			$text = JText::_( 'ACCESSGROUP_CREATE' );
+			$text = Text::_( 'ACCESSGROUP_CREATE' );
 		}
 		
 		$clmAccess = clm_core::$access;
 		
 		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title( $text, 'clm_headmenu_sonderranglisten.png' );
+		ToolBarHelper::title( $text, 'clm_headmenu_sonderranglisten.png' );
 		
 		if ( $accessgroup->kind !== 'CLM' AND $clmAccess->access('BE_accessgroup_general') ) {
-			JToolBarHelper::save( 'save' );
-			JToolBarHelper::apply( 'apply' );
+			ToolBarHelper::save( 'save' );
+			ToolBarHelper::apply( 'apply' );
 		}
-		JToolBarHelper::spacer();
-		JToolBarHelper::cancel();
+		ToolBarHelper::spacer();
+		ToolBarHelper::cancel();
 		
 		$config = clm_core::$db->config();
 		
 		//Listen
-		$lists['published']			= JHtml::_('select.booleanlist', 'published', 'class="inputbox"', $accessgroup->published );
+		$lists['published']			= HTMLHelper::_('select.booleanlist', 'published', 'class="inputbox"', $accessgroup->published );
 
-		$lists['ordering']	= JText::_('ACCESSGROUP_ORDERING_NEW'); // Neue Sonderranglisten werden standardmäßig an den Anfang gesetzt. Die Sortierung kann nach dem Speichern dieser Sonderrangliste geändert werden. 
+		$lists['ordering']	= Text::_('ACCESSGROUP_ORDERING_NEW'); // Neue Sonderranglisten werden standardmäßig an den Anfang gesetzt. Die Sortierung kann nach dem Speichern dieser Sonderrangliste geändert werden. 
 	
 					
 		// Daten an Template übergeben

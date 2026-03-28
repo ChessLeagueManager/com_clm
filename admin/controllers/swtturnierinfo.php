@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,10 +11,13 @@
 */
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 class CLMControllerSWTTurnierInfo extends JControllerLegacy
 {
 	function __construct() {		
-		$this->app = JFactory::getApplication();
+		$this->app = Factory::getApplication();
 		parent::__construct();		
 	}
 	
@@ -38,15 +41,15 @@ class CLMControllerSWTTurnierInfo extends JControllerLegacy
 			$adminLink->more = array('swt_file' => $swt_file, 'tid' => $tid, 'swt_tid' => $swt_tid, 'sid' => $sid, 'update' => $update, 'useAsTWZ' => $useAsTWZ);
 			$adminLink->view = "swtturniertlnr";
 			$adminLink->makeURL();
-//			$this->_message = JText::_( 'SWT_STORE_SUCCESS' );
+//			$this->_message = Text::_( 'SWT_STORE_SUCCESS' );
 			$this->app->redirect($adminLink->url); 				
 //			parent::display ();
 		}
 		else {
 			$_REQUEST['view'] = 'swtturnierinfo';
-			$msg = JText::_( 'SWT_STORE_ERROR' );
+			$msg = Text::_( 'SWT_STORE_ERROR' );
 			$this->app->enqueueMessage( $msg );
-//			$this->_message = JText::_( 'SWT_STORE_ERROR' );
+//			$this->_message = Text::_( 'SWT_STORE_ERROR' );
 			parent::display ();
 		}
 	
@@ -57,7 +60,7 @@ class CLMControllerSWTTurnierInfo extends JControllerLegacy
 		$adminLink->view = 'swt';
 		$adminLink->makeURL ();
 		
-		$msg = JText::_( 'SWT_CANCEL_MSG' );
+		$msg = Text::_( 'SWT_CANCEL_MSG' );
 		$this->app->enqueueMessage( $msg );
 		$this->app->redirect($adminLink->url); 		
 	

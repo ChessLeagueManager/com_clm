@@ -1,15 +1,17 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Table\Table;
 
 class CLMModelSonderranglistenForm extends JModelLegacy {
 	var $_sonderrangliste;
@@ -159,7 +161,7 @@ class CLMModelSonderranglistenForm extends JModelLegacy {
 	
 	function delete() { 
 		$cids = clm_core::$load->request_array_int('cid'); 
-		$row = JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
+		$row = Table::getInstance( 'sonderranglistenform', 'TableCLM' );
 		if (count( $cids )) { 
 			foreach($cids as $cid) { 
 				if (!$row->delete( $cid )) { 
@@ -177,7 +179,7 @@ class CLMModelSonderranglistenForm extends JModelLegacy {
 	
 	function publish() {
 		$cids = clm_core::$load->request_array_int('cid');
-		$row = JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
+		$row = Table::getInstance( 'sonderranglistenform', 'TableCLM' );
 		if (!$row->publish( $cids )) { 
 			$this->setError( $row->_db->getErrorMsg() ); 
 			return false; 
@@ -187,7 +189,7 @@ class CLMModelSonderranglistenForm extends JModelLegacy {
 	
 	function unpublish() {
 		$cids = clm_core::$load->request_array_int('cid');
-		$row = JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
+		$row = Table::getInstance( 'sonderranglistenform', 'TableCLM' );
 
 		if (!$row->publish($cids,0)) { 
 			$this->setError( $row->_db->getErrorMsg() ); 
@@ -199,7 +201,7 @@ class CLMModelSonderranglistenForm extends JModelLegacy {
 	function saveOrder() {
 		$cids = clm_core::$load->request_array_int('cid');
 		$order = clm_core::$load->request_array_int('order');
-		$row = JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
+		$row = Table::getInstance( 'sonderranglistenform', 'TableCLM' );
 		//var_dump(	$cids);
 		
 		for($i = 0; $i < count($cids); $i ++) {
@@ -222,7 +224,7 @@ class CLMModelSonderranglistenForm extends JModelLegacy {
 	function orderUp() {
 		$cids = clm_core::$load->request_array_int('cid');
 		if(isset($cids[0])) {
-		$row = JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
+		$row = Table::getInstance( 'sonderranglistenform', 'TableCLM' );
 			$row->load((int)$cids[0]);
 			$row->move(-1, 'turnier = '.$row->turnier);
 			$row->reorder('turnier = '.$row->turnier);
@@ -234,7 +236,7 @@ class CLMModelSonderranglistenForm extends JModelLegacy {
 		$cids = clm_core::$load->request_array_int('cid');
 				
 		if(isset($cids[0])) {
-		$row = JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
+		$row = Table::getInstance( 'sonderranglistenform', 'TableCLM' );
 			$row->load((int)$cids[0]);
 			$row->move(1, 'turnier = '.$row->turnier);
 			$row->reorder('turnier = '.$row->turnier);

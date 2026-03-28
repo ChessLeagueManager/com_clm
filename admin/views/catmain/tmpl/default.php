@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,21 +11,24 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+
 ?>
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 
 	<table>
 		<tr>
 			<td align="left" width="100%">
-				<?php echo JText::_( 'FILTER' ); ?>:
+				<?php echo Text::_( 'FILTER' ); ?>:
 				<input type="text" name="search" id="search" value="<?php echo $this->param['search'];?>" class="text_area" onchange="document.adminForm.submit();" />
-				<button onclick="this.form.submit();"><?php echo JText::_( 'Go' ); ?></button>
-				<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_sid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo JText::_( 'RESET' ); ?></button>
+				<button onclick="this.form.submit();"><?php echo Text::_( 'Go' ); ?></button>
+				<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_sid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo Text::_( 'RESET' ); ?></button>
 			</td>
 			<td nowrap="nowrap">
 				<?php
 					echo $this->form['parent'];
-//					echo "&nbsp;&nbsp;&nbsp;".JHtml::_('grid.state',  $this->param['state'] );
+//					echo "&nbsp;&nbsp;&nbsp;".HTMLHelper::_('grid.state',  $this->param['state'] );
 					echo "&nbsp;&nbsp;&nbsp;".CLMForm::selectState( $this->param['state'] );
 				?>
 			</td>
@@ -42,26 +45,26 @@ defined('_JEXEC') or die('Restricted access');
 			<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 		</th>
 		<th width="18%" class="title">
-			<?php echo JHtml::_('grid.sort',   JText::_('CATEGORY_NAME'), 'name', $this->param['order_Dir'], $this->param['order'] ); ?>
+			<?php echo HTMLHelper::_('grid.sort',   Text::_('CATEGORY_NAME'), 'name', $this->param['order_Dir'], $this->param['order'] ); ?>
 		</th>
 
 		<th width="6%" class="title">
-			<?php echo JText::_('JDATE'); ?>
+			<?php echo Text::_('JDATE'); ?>
 		</th>
 
 		<th width="10%">
-			<?php echo JText::_('TOURNAMENTS'); ?>
+			<?php echo Text::_('TOURNAMENTS'); ?>
 		</th>
 
 		<th width="5%">
-		<?php echo JHtml::_('grid.sort',   JText::_('CLM_PUBLISHED'), 'published', $this->param['order_Dir'], $this->param['order'] ); ?>
+		<?php echo HTMLHelper::_('grid.sort',   Text::_('CLM_PUBLISHED'), 'published', $this->param['order_Dir'], $this->param['order'] ); ?>
 		</th>
 		<th width="8%" nowrap="nowrap">
-			<?php echo JHtml::_('grid.sort',   JText::_('JGRID_HEADING_ORDERING'), 'ordering', $this->param['order_Dir'], $this->param['order'] ); ?>
-			<?php echo JHtml::_('grid.order',  $this->categories ); ?>
+			<?php echo HTMLHelper::_('grid.sort',   Text::_('JGRID_HEADING_ORDERING'), 'ordering', $this->param['order_Dir'], $this->param['order'] ); ?>
+			<?php echo HTMLHelper::_('grid.order',  $this->categories ); ?>
 		</th>
 		<th width="1%" nowrap="nowrap">
-			<?php echo JHtml::_('grid.sort',   'JGRID_HEADING_ID', 'id', $this->param['order_Dir'], $this->param['order'] ); ?>
+			<?php echo HTMLHelper::_('grid.sort',   'JGRID_HEADING_ID', 'id', $this->param['order_Dir'], $this->param['order'] ); ?>
 		</th>
 		</tr>
 		</thead>
@@ -83,9 +86,9 @@ defined('_JEXEC') or die('Restricted access');
 			$row = &$value;
 
 
-			$checked 	= JHtml::_('grid.checkedout',   $row, $i );
-//			$published 	= JHtml::_('grid.published', $row, $i );
-			$published 	= JHtml::_('jgrid.published', $row->published, $i );
+			$checked 	= HTMLHelper::_('grid.checkedout',   $row, $i );
+//			$published 	= HTMLHelper::_('grid.published', $row, $i );
+			$published 	= HTMLHelper::_('jgrid.published', $row->published, $i );
 			?>
 			<tr class="<?php echo 'row'. $k; ?>">
 			<td align="center">
@@ -106,7 +109,7 @@ defined('_JEXEC') or die('Restricted access');
 					$adminLink->makeURL();
 				
 					?>
-					<span class="editlinktip hasTip" title="<?php echo JText::_( 'CATEGORY_EDIT' );?>::<?php echo $row->name; ?>">
+					<span class="editlinktip hasTip" title="<?php echo Text::_( 'CATEGORY_EDIT' );?>::<?php echo $row->name; ?>">
 						<a href="<?php echo $adminLink->url; ?>">
 							<?php echo $row->name; ?>
 						</a>
@@ -121,10 +124,10 @@ defined('_JEXEC') or die('Restricted access');
 			<td align="center">
 				<?php 
 				if ($row->dateStart != '0000-00-00' AND $row->dateStart != '1970-01-01') {
-					echo JHtml::_( 'date', $row->dateStart, JText::_('DATE_FORMAT_CLM')) ;
+					echo HTMLHelper::_( 'date', $row->dateStart, Text::_('DATE_FORMAT_CLM')) ;
 				}
 				if ($row->dateEnd != '0000-00-00' AND $row->dateEnd != '1970-01-01') {
-					echo '<br />'.JHtml::_( 'date', $row->dateEnd, JText::_('DATE_FORMAT_CLM'));
+					echo '<br />'.HTMLHelper::_( 'date', $row->dateEnd, Text::_('DATE_FORMAT_CLM'));
 				}
 				
 				?>
@@ -181,6 +184,6 @@ defined('_JEXEC') or die('Restricted access');
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->param['order_Dir']; ?>" />
 	<input type="hidden" name="controller" value="catmain" />
 	<input type="hidden" name="task" value="" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
 
 </form>

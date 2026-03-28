@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,10 +11,14 @@
 */
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
 class CLMViewAccessgroupsMain extends JViewLegacy {
 	function display($tpl = null) { 
 		
-		$mainframe	= JFactory::getApplication();
+		$mainframe	= Factory::getApplication();
 		$option 	= clm_core::$load->request_string('option', '');
 		
 		//Daten vom Model
@@ -33,18 +37,18 @@ class CLMViewAccessgroupsMain extends JViewLegacy {
 		
 		//Toolbar
 		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title( JText::_('TITLE_ACCESSGROUPS') ,'clm_headmenu_sonderranglisten.png' );
+		ToolBarHelper::title( Text::_('TITLE_ACCESSGROUPS') ,'clm_headmenu_sonderranglisten.png' );
 		
 		if($accessgroupExists) {
-			JToolBarHelper::publishList('publish');
-			JToolBarHelper::unpublishList();
-			JToolBarHelper::deleteList();
-			JToolBarHelper::editList(); 
-			JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', JText::_( 'LEAGUE_BUTTON_4' ) );
-			JToolBarHelper::addNew(); 
+			ToolBarHelper::publishList('publish');
+			ToolBarHelper::unpublishList();
+			ToolBarHelper::deleteList();
+			ToolBarHelper::editList(); 
+			ToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', Text::_( 'LEAGUE_BUTTON_4' ) );
+			ToolBarHelper::addNew(); 
 		}
 		
-//		JHtml::_('behavior.tooltip');
+//		HTMLHelper::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 		
 		//Suche 

@@ -1,15 +1,19 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Pagination\Pagination;
 
 class CLMModelTurRounds extends JModelLegacy {
 
@@ -22,8 +26,8 @@ class CLMModelTurRounds extends JModelLegacy {
 		parent::__construct();
 
 		// user
-		$this->user = JFactory::getUser();
-		$this->app	= JFactory::getApplication();
+		$this->user = Factory::getUser();
+		$this->app	= Factory::getApplication();
 		
 		// get parameters
 		$this->_getParameters();
@@ -50,7 +54,7 @@ class CLMModelTurRounds extends JModelLegacy {
 		global $mainframe, $option;
 		//Joomla 1.6 compatibility
 		if (empty($mainframe)) {
-			$mainframe = JFactory::getApplication();
+			$mainframe = Factory::getApplication();
 			$option = $mainframe->scope;
 		}
 	
@@ -185,9 +189,9 @@ class CLMModelTurRounds extends JModelLegacy {
 				$this->turnier->roundToDraw = $temp;
 				// Notice absetzen
 				if (isset($this->turRounds[$temp])) 
-					$this->app->enqueueMessage( JText::_('NOTICE_NEXTROUNDTODRAW').": ".$this->turRounds[$temp]->name, 'notice' );
+					$this->app->enqueueMessage( Text::_('NOTICE_NEXTROUNDTODRAW').": ".$this->turRounds[$temp]->name, 'notice' );
 				else 
-					$this->app->enqueueMessage( JText::_('NOTICE_NEXTROUNDTODRAW'), 'notice' );
+					$this->app->enqueueMessage( Text::_('NOTICE_NEXTROUNDTODRAW'), 'notice' );
 			}
 			
 		}
@@ -197,7 +201,7 @@ class CLMModelTurRounds extends JModelLegacy {
 		// Load the content if it doesn't already exist
 		if (empty($this->pagination)) {
 			jimport('joomla.html.pagination');
-			$this->pagination = new JPagination($this->roundsTotal, $this->getState('limitstart'), $this->getState('limit') );
+			$this->pagination = new Pagination($this->roundsTotal, $this->getState('limitstart'), $this->getState('limit') );
 		}
 	}
 

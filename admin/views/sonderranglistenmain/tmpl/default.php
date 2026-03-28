@@ -1,25 +1,29 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+
 ?>
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 	<table>
 	<tbody>
 		<tr>
 			<td width="100%">
-				<?php echo JText::_( 'FILTER' ); ?>:
+				<?php echo Text::_( 'FILTER' ); ?>:
 				<input type="text" name="search" id="search" value="<?php echo $this->lists['search'];?>" class="text_area" onchange="document.adminForm.submit();" />
-				<button onclick="this.form.submit();"><?php echo JText::_( 'Go' ); ?></button>
-				<button onclick="document.getElementById('search').value='';this.form.submit();"><?php echo JText::_( 'RESET' ); ?></button>
+				<button onclick="this.form.submit();"><?php echo Text::_( 'Go' ); ?></button>
+				<button onclick="document.getElementById('search').value='';this.form.submit();"><?php echo Text::_( 'RESET' ); ?></button>
 			</td>
 			<td><?php echo ($this->lists['filter_saison']); ?>
 			</td>
@@ -29,7 +33,7 @@ defined('_JEXEC') or die('Restricted access');
 	</tbody>
 </table>
 <?php if( !$this->turnierExists ) {
-	//::raiseWarning( 500, $row->name.": ".JText::_( 'SPECIALRANKINGS_WARNING_NO_TOURNAMENT' ) );
+	//::raiseWarning( 500, $row->name.": ".Text::_( 'SPECIALRANKINGS_WARNING_NO_TOURNAMENT' ) );
 } ?>
 <div id="editcell"> 
 	<table class="adminlist">
@@ -39,14 +43,14 @@ defined('_JEXEC') or die('Restricted access');
 				<th width="20">
 					<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 				</th>
-				<th width="" class="title"><?php echo JHtml::_('grid.sort',   JText::_('SPECIALRANKINGS_NAME'), 'name', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
-				<th width="" class="title"><?php echo JHtml::_('grid.sort',   JText::_('SPECIALRANKINGS_TOURNAMENT_NAME'), 'turnier', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
-				<th width="20"><?php echo JHtml::_('grid.sort',   JText::_('CLM_PUBLISHED'), 'a.published', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
+				<th width="" class="title"><?php echo HTMLHelper::_('grid.sort',   Text::_('SPECIALRANKINGS_NAME'), 'name', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
+				<th width="" class="title"><?php echo HTMLHelper::_('grid.sort',   Text::_('SPECIALRANKINGS_TOURNAMENT_NAME'), 'turnier', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
+				<th width="20"><?php echo HTMLHelper::_('grid.sort',   Text::_('CLM_PUBLISHED'), 'a.published', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
 				<th width="100" nowrap="nowrap">
-					<?php echo JHtml::_('grid.sort',   JText::_('JGRID_HEADING_ORDERING'), 'ordering', $this->lists['order_Dir'], $this->lists['order'] ); ?>
-					<?php echo JHtml::_('grid.order',  $this->sonderranglisten ); ?>
+					<?php echo HTMLHelper::_('grid.sort',   Text::_('JGRID_HEADING_ORDERING'), 'ordering', $this->lists['order_Dir'], $this->lists['order'] ); ?>
+					<?php echo HTMLHelper::_('grid.order',  $this->sonderranglisten ); ?>
 				</th>
-				<th width="10" nowrap="nowrap"><?php echo JHtml::_('grid.sort',   'JGRID_HEADING_ID', 'a.id', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
+				<th width="10" nowrap="nowrap"><?php echo HTMLHelper::_('grid.sort',   'JGRID_HEADING_ID', 'a.id', $this->lists['order_Dir'], $this->lists['order'] ); ?></th>
 			</tr>
 		</thead>
 		<tfoot>
@@ -63,9 +67,9 @@ defined('_JEXEC') or die('Restricted access');
 		$disabled = $this->ordering ?  '' : 'disabled="disabled"';
 		foreach ($this->sonderranglisten as $i => $value) {
 			$row = &$value;
-			$checked 	= JHtml::_('grid.checkedout',   $row, $i );
-//			$published 	= JHtml::_('grid.published', $row, $i );
-			$published 	= JHtml::_('jgrid.published', $row->published, $i );
+			$checked 	= HTMLHelper::_('grid.checkedout',   $row, $i );
+//			$published 	= HTMLHelper::_('grid.published', $row, $i );
+			$published 	= HTMLHelper::_('jgrid.published', $row->published, $i );
 			?>
 			<tr class="<?php echo 'row'. $k; ?>">
 				<td align="center"><?php echo $this->pagination->getRowOffset( $i ); ?></td>
@@ -82,7 +86,7 @@ defined('_JEXEC') or die('Restricted access');
 						$adminLink->makeURL();
 					
 						?>
-						<span class="editlinktip hasTip" title="<?php echo JText::_( 'SPECIALRANKINGS_EDIT' );?>::<?php echo $row->name; ?>">
+						<span class="editlinktip hasTip" title="<?php echo Text::_( 'SPECIALRANKINGS_EDIT' );?>::<?php echo $row->name; ?>">
 							<a href="<?php echo $adminLink->url; ?>">
 								<?php echo $row->name; ?>
 							</a>
@@ -101,7 +105,7 @@ defined('_JEXEC') or die('Restricted access');
 						$adminLink->makeURL();
 					
 						?>
-						<span class="editlinktip hasTip" title="<?php echo JText::_( 'SPECIALRANKINGS_TOURNAMENT_EDIT' );?>::<?php echo $row->turniername; ?>">
+						<span class="editlinktip hasTip" title="<?php echo Text::_( 'SPECIALRANKINGS_TOURNAMENT_EDIT' );?>::<?php echo $row->turniername; ?>">
 							<a href="<?php echo $adminLink->url; ?>">
 								<?php echo $row->turniername; ?>
 							</a>
@@ -133,6 +137,6 @@ defined('_JEXEC') or die('Restricted access');
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir'] ; ?>" />
 	<input type="hidden" name="controller" value="sonderranglistenmain" />
 	<input type="hidden" name="task" value="" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
 
 </form>

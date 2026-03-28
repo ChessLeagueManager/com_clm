@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,10 +12,13 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 class CLMControllerTRFTurnier extends JControllerLegacy
 {
 	function __construct() {		
-		$this->app = JFactory::getApplication();
+		$this->app = Factory::getApplication();
 		parent::__construct();		
 	}
 	
@@ -33,7 +36,7 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 			$adminLink = new AdminLink();
 			$adminLink->view = "trfturnier";
 			$adminLink->makeURL();			
-			$msg = JText::_( 'TRF_FILE_ERROR' ); 			
+			$msg = Text::_( 'TRF_FILE_ERROR' ); 			
 			$this->app->enqueueMessage( $msg );
 			$this->app->redirect($adminLink->url); 		
 		}
@@ -42,7 +45,7 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 			$adminLink = new AdminLink();
 			$adminLink->view = "trfturnier";
 			$adminLink->makeURL();			
-			$msg = JText::_( 'SWT_TOURNAMENT_ERROR' ); 			
+			$msg = Text::_( 'SWT_TOURNAMENT_ERROR' ); 			
 			$this->app->enqueueMessage( $msg );
 			$this->app->redirect($adminLink->url); 		
 		}
@@ -62,12 +65,12 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 			clm_core::$api->direct("db_tournament_genDWZ",array($new_ID,false));
 		}
 		
-		$language = JFactory::getLanguage();
+		$language = Factory::getLanguage();
 		$language->load('com_clm');
 		$language->load('com_clm.swtimport');	
 
 		// Log schreiben
-		$msg = JText::_( 'SWT_STORE_SUCCESS' );
+		$msg = Text::_( 'SWT_STORE_SUCCESS' );
 		$clmLog = new CLMLog();
 		$clmLog->aktion = 'TRF-Import - '.$msg;
 		$clmLog->params = array('sid' => $sid, 'tid' => $tid, 'trf_file' => $trf_file);
@@ -75,7 +78,7 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 
 		$_REQUEST['view'] = 'trfturnier';
 		if (isset($result[2]) AND $result[2] > 0) { $htext = " (ID = ".$new_ID.")"; } else $htext = ""; 
-		$this->app->enqueueMessage( JText::_( 'SWT_STORE_SUCCESS' ).$htext,'message' );
+		$this->app->enqueueMessage( Text::_( 'SWT_STORE_SUCCESS' ).$htext,'message' );
 		$_REQUEST['trf_file'] = $trf_file;
 		
 		parent::display();
@@ -89,7 +92,7 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 			$adminLink = new AdminLink();
 			$adminLink->view = "trfturnier";
 			$adminLink->makeURL();			
-			$msg = JText::_( 'TRF_FILE_ERROR' ); 			
+			$msg = Text::_( 'TRF_FILE_ERROR' ); 			
 			$this->app->enqueueMessage( $msg );
 			$this->app->redirect($adminLink->url); 		
 		}
@@ -109,12 +112,12 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 			clm_core::$api->direct("db_tournament_genDWZ",array($new_ID,false));
 		}
 		
-		$language = JFactory::getLanguage();
+		$language = Factory::getLanguage();
 		$language->load('com_clm');
 		$language->load('com_clm.swtimport');	
 
 		// Log schreiben
-		$msg = JText::_( 'SWT_STORE_SUCCESS' );
+		$msg = Text::_( 'SWT_STORE_SUCCESS' );
 		$clmLog = new CLMLog();
 		$clmLog->aktion = 'TRF-Import - '.$msg;
 		$clmLog->params = array('sid' => $sid, 'tid' => $new_ID, 'trf_file' => $trf_file);
@@ -122,7 +125,7 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 
 		$_REQUEST['view'] = 'trfturnier';
 		if (isset($result[2]) AND $result[2] > 0) { $htext = " (ID = ".$new_ID.")"; } else $htext = ""; 
-		JFactory::getApplication()->enqueueMessage( JText::_( 'SWT_STORE_SUCCESS' ).$htext,'message' );
+		Factory::getApplication()->enqueueMessage( Text::_( 'SWT_STORE_SUCCESS' ).$htext,'message' );
 		$_REQUEST['trf_file'] = $trf_file;
 
 		parent::display();
@@ -135,7 +138,7 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		$result = clm_core::$api->db_trf_import($path.$trf_file,$sid,0,false,false,true);
 		
-		$language = JFactory::getLanguage();
+		$language = Factory::getLanguage();
 		$language->load('com_clm');
 		$language->load('com_clm.swtimport');	
 
@@ -151,7 +154,7 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 		$trf_file = clm_core::$load->request_string('trf_file', '');
 		$sid = clm_core::$load->request_int('filter_saison', 0);
 		
-		$language = JFactory::getLanguage();
+		$language = Factory::getLanguage();
 		$language->load('com_clm');
 		$language->load('com_clm.swtimport');	
 
@@ -159,7 +162,7 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 		$adminLink->view = "swt";
 		$adminLink->more = array('swm_file' => $swm_file );
 		$adminLink->makeURL();
-		$this->app->enqueueMessage( JText::_( 'TRF_ACTION_CANCEL' ),'message' );
+		$this->app->enqueueMessage( Text::_( 'TRF_ACTION_CANCEL' ),'message' );
 		$this->app->redirect($adminLink->url); 		
 	
 	}

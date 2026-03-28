@@ -1,14 +1,21 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Router\Route;
+
 class CLMViewErgebnisse
 {
 static function setErgebnisseToolbar($val, $rows, $f_lid, $f_runde, $f_dg)
@@ -18,27 +25,27 @@ static function setErgebnisseToolbar($val, $rows, $f_lid, $f_runde, $f_dg)
 
 	if ($val == 1) {
 		if ($f_lid >0) { $msg = $rows[0]->liga ;
-			if ($f_runde >0) { $msg = $msg.', '.JText::_( 'TITLE_RESULTS_4').$rows[0]->runde; }
-			if ($rows[0]->durchgang > 1 AND $f_dg >0) { $msg = $msg.', '.JText::_( 'TITLE_RESULTS_5').$rows[0]->dg;}
+			if ($f_runde >0) { $msg = $msg.', '.Text::_( 'TITLE_RESULTS_4').$rows[0]->runde; }
+			if ($rows[0]->durchgang > 1 AND $f_dg >0) { $msg = $msg.', '.Text::_( 'TITLE_RESULTS_5').$rows[0]->dg;}
 				}
 		else {
-			if ($f_runde >0) { $msg = JText::_( 'TITLE_RESULTS_6').$rows[0]->runde; }
-			else { $msg = JText::_( 'TITLE_RESULTS_7');}
+			if ($f_runde >0) { $msg = Text::_( 'TITLE_RESULTS_6').$rows[0]->runde; }
+			else { $msg = Text::_( 'TITLE_RESULTS_7');}
 			}
-	JToolBarHelper::title( JText::_( 'TITLE_RESULTS_2').$msg.JText::_('TITLE_RESULTS_3'), 'clm_settings.png' ); }
-	else {	JToolBarHelper::title( JText::_( 'TITLE_RESULTS_1' ), 'generic.png' ); }
-		JToolBarHelper::custom('heim_kampflos','send.png','send_f2.png',JText::_('RESULTS_HEIM_KL'),false);
-		JToolBarHelper::custom('gast_kampflos','send.png','send_f2.png',JText::_('RESULTS_GAST_KL'),false);
-		JToolBarHelper::custom('wertung','send.png','send_f2.png',JText::_('RESULTS_CHANGE_VALUATION'),false);
-		JToolBarHelper::editList();
-		JToolBarHelper::deleteList('','remove','Ergebnis löschen');
-	if ($val == 1) { JToolBarHelper::custom('back','cancel.png','download_f2.png',JText::_('MEMBER_BUTTON_BACK'),false); }
-		JToolBarHelper::help( 'screen.clm.ergebnisse' );
+	ToolBarHelper::title( Text::_( 'TITLE_RESULTS_2').$msg.Text::_('TITLE_RESULTS_3'), 'clm_settings.png' ); }
+	else {	ToolBarHelper::title( Text::_( 'TITLE_RESULTS_1' ), 'generic.png' ); }
+		ToolBarHelper::custom('heim_kampflos','send.png','send_f2.png',Text::_('RESULTS_HEIM_KL'),false);
+		ToolBarHelper::custom('gast_kampflos','send.png','send_f2.png',Text::_('RESULTS_GAST_KL'),false);
+		ToolBarHelper::custom('wertung','send.png','send_f2.png',Text::_('RESULTS_CHANGE_VALUATION'),false);
+		ToolBarHelper::editList();
+		ToolBarHelper::deleteList('','remove','Ergebnis löschen');
+	if ($val == 1) { ToolBarHelper::custom('back','cancel.png','download_f2.png',Text::_('MEMBER_BUTTON_BACK'),false); }
+		ToolBarHelper::help( 'screen.clm.ergebnisse' );
 	}
 
 static function ergebnisse ( $rows, $lists, $pageNav, $option )
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	$f_lid		= $mainframe->getUserStateFromRequest( "$option.filter_lid",'filter_lid',0,'int' );
 	$f_runde	= $mainframe->getUserStateFromRequest( "$option.filter_runde",'filter_runde',0,'int' );
 	$f_dg		= $mainframe->getUserStateFromRequest( "$option.filter_dg",'filter_dg',0,'int' );
@@ -48,14 +55,14 @@ static function ergebnisse ( $rows, $lists, $pageNav, $option )
 	$dropdown	= $config->dropdown;
 
 	CLMViewErgebnisse::setErgebnisseToolbar($val, $rows, $f_lid, $f_runde, $f_dg);
-	$user =JFactory::getUser();
+	$user =Factory::getUser();
 	//Ordering allowed ?
 	$ordering = ($lists['order'] == 'a.ordering');
 
 	// Auswahlfelder durchsuchbar machen
 	clm_core::$load->load_js("suche_liste");
 
-//	JHtml::_('behavior.tooltip');
+//	HTMLHelper::_('behavior.tooltip');
 	require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 	?>
 	<form action="index.php?option=com_clm&section=ergebnisse" method="post" name="adminForm" id="adminForm">
@@ -63,10 +70,10 @@ static function ergebnisse ( $rows, $lists, $pageNav, $option )
 	<table>
 	<tr>
 		<td align="left" width="100%">
-			<?php echo JText::_( 'Filter' ); ?>:
+			<?php echo Text::_( 'Filter' ); ?>:
 	<input type="text" name="search" id="search" value="<?php echo $lists['search'];?>" class="text_area" onchange="document.adminForm.submit();" />
-	<button onclick="this.form.submit();"><?php echo JText::_( 'Go' ); ?></button>
-	<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo JText::_( 'Reset' ); ?></button>
+	<button onclick="this.form.submit();"><?php echo Text::_( 'Go' ); ?></button>
+	<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo Text::_( 'Reset' ); ?></button>
 		</td>
 		<td nowrap="nowrap">
 			<?php
@@ -78,13 +85,13 @@ static function ergebnisse ( $rows, $lists, $pageNav, $option )
 				}
 			if ($rows[0]->durchgang >1) { ?>
 			<select name="filter_dg" id="filter_dg" class="inputbox" size="1" onchange="document.adminForm.submit();">
-			<option value="- DG -" <?php if ( $f_dg == 0) { ?> selected="selected" <?php } ?>><?php echo JText::_( 'RESULTS_FILTER_DG' );?></option>
-			<option value="1"  <?php if ( $f_dg == 1) { ?> selected="selected" <?php } ?>><?php echo JText::_( 'RESULTS_FILTER_DG1' );?></option>
-			<option value="2" <?php if ( $f_dg == 2) { ?> selected="selected" <?php } ?>><?php echo JText::_( 'RESULTS_FILTER_DG2' );?></option>
+			<option value="- DG -" <?php if ( $f_dg == 0) { ?> selected="selected" <?php } ?>><?php echo Text::_( 'RESULTS_FILTER_DG' );?></option>
+			<option value="1"  <?php if ( $f_dg == 1) { ?> selected="selected" <?php } ?>><?php echo Text::_( 'RESULTS_FILTER_DG1' );?></option>
+			<option value="2" <?php if ( $f_dg == 2) { ?> selected="selected" <?php } ?>><?php echo Text::_( 'RESULTS_FILTER_DG2' );?></option>
 			<?php if ($rows[0]->durchgang >2) { ?>
-				<option value="3" <?php if ( $f_dg == 3) { ?> selected="selected" <?php } ?>><?php echo JText::_( 'RESULTS_FILTER_DG3' );?></option>
+				<option value="3" <?php if ( $f_dg == 3) { ?> selected="selected" <?php } ?>><?php echo Text::_( 'RESULTS_FILTER_DG3' );?></option>
 			<?php } if ($rows[0]->durchgang >3) { ?>
-				<option value="4" <?php if ( $f_dg == 4) { ?> selected="selected" <?php } ?>><?php echo JText::_( 'RESULTS_FILTER_DG4' );?></option>
+				<option value="4" <?php if ( $f_dg == 4) { ?> selected="selected" <?php } ?>><?php echo Text::_( 'RESULTS_FILTER_DG4' );?></option>
 			<?php } ?>
 			</select>
 		<?php } ?>
@@ -102,34 +109,34 @@ static function ergebnisse ( $rows, $lists, $pageNav, $option )
 					<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 				</th>
 				<th class="title">
-					<?php echo JHtml::_('grid.sort', JText::_( 'RESULTS_OVERVIEW_HOME' ), 'hname', @$lists['order_Dir'], @$lists['order'] ); ?>
+					<?php echo HTMLHelper::_('grid.sort', Text::_( 'RESULTS_OVERVIEW_HOME' ), 'hname', @$lists['order_Dir'], @$lists['order'] ); ?>
 				</th>
 				<th class="title">
-					<?php echo JHtml::_('grid.sort', JText::_( 'RESULTS_OVERVIEW_GUEST' ), 'gname', @$lists['order_Dir'], @$lists['order'] ); ?>
+					<?php echo HTMLHelper::_('grid.sort', Text::_( 'RESULTS_OVERVIEW_GUEST' ), 'gname', @$lists['order_Dir'], @$lists['order'] ); ?>
 				</th>
 				<th width="15%">
-					<?php echo JHtml::_('grid.sort', JText::_( 'RESULTS_OVERVIEW_LEAGUE' ), 'a.lid', @$lists['order_Dir'], @$lists['order'] ); ?>
+					<?php echo HTMLHelper::_('grid.sort', Text::_( 'RESULTS_OVERVIEW_LEAGUE' ), 'a.lid', @$lists['order_Dir'], @$lists['order'] ); ?>
 				</th>
 				<th width="3%">
-					<?php echo JHtml::_('grid.sort', JText::_( 'RESULTS_OVERVIEW_ROUND' ), 'a.runde', @$lists['order_Dir'], @$lists['order'] ); ?>
+					<?php echo HTMLHelper::_('grid.sort', Text::_( 'RESULTS_OVERVIEW_ROUND' ), 'a.runde', @$lists['order_Dir'], @$lists['order'] ); ?>
 				</th>
 				<th width="3%">
-					<?php echo JHtml::_('grid.sort', JText::_( 'RESULTS_OVERVIEW_PAIRING' ), 'a.paar', @$lists['order_Dir'], @$lists['order'] ); ?>
+					<?php echo HTMLHelper::_('grid.sort', Text::_( 'RESULTS_OVERVIEW_PAIRING' ), 'a.paar', @$lists['order_Dir'], @$lists['order'] ); ?>
 				</th>
 				<th width="3%">
-					<?php echo JHtml::_('grid.sort', JText::_( 'RESULTS_OVERVIEW_DG' ), 'a.dg', @$lists['order_Dir'], @$lists['order'] ); ?>
+					<?php echo HTMLHelper::_('grid.sort', Text::_( 'RESULTS_OVERVIEW_DG' ), 'a.dg', @$lists['order_Dir'], @$lists['order'] ); ?>
 				</th>
 				<th width="10%">
-					<?php echo JHtml::_('grid.sort', JText::_( 'RESULTS_OVERVIEW_SEASON' ), 's.name', @$lists['order_Dir'], @$lists['order'] ); ?>
+					<?php echo HTMLHelper::_('grid.sort', Text::_( 'RESULTS_OVERVIEW_SEASON' ), 's.name', @$lists['order_Dir'], @$lists['order'] ); ?>
 				</th>
 				<th width="5%">
-					<?php echo JHtml::_('grid.sort', JText::_( 'RESULTS_OVERVIEW_COMMIT' ), 'a.gemeldet', @$lists['order_Dir'], @$lists['order'] ); ?>
+					<?php echo HTMLHelper::_('grid.sort', Text::_( 'RESULTS_OVERVIEW_COMMIT' ), 'a.gemeldet', @$lists['order_Dir'], @$lists['order'] ); ?>
 				</th>
 				<th width="12%">
-					<?php echo JHtml::_('grid.sort', JText::_( 'RESULTS_OVERVIEW_BY' ), 'u.name', @$lists['order_Dir'], @$lists['order'] ); ?>
+					<?php echo HTMLHelper::_('grid.sort', Text::_( 'RESULTS_OVERVIEW_BY' ), 'u.name', @$lists['order_Dir'], @$lists['order'] ); ?>
 				</th>
 				<th width="2%">
-					<?php echo JHtml::_('grid.sort', JText::_( 'RESULTS_OVERVIEW_ID' ), 'a.id', @$lists['order_Dir'], @$lists['order'] ); ?>
+					<?php echo HTMLHelper::_('grid.sort', Text::_( 'RESULTS_OVERVIEW_ID' ), 'a.id', @$lists['order_Dir'], @$lists['order'] ); ?>
 				</th>
 
 			</tr>
@@ -144,16 +151,15 @@ static function ergebnisse ( $rows, $lists, $pageNav, $option )
 		<tbody>
 		<?php
 		$k = 0;
-		$row = JTable::getInstance( 'ergebnisse', 'TableCLM' );
+		$row = Table::getInstance( 'ergebnisse', 'TableCLM' );
 		for ($i=0, $n=count( $rows ); $i < $n; $i++) {
 			//$row = &$rows[$i];
 			// load the row from the db table
 			$row->load( $rows[$i]->id );
-//		$link 		= JRoute::_( 'index.php?option=com_clm&section=ergebnisse&task=edit&cid[]='. $row->id );
-			$link 		= JRoute::_( 'index.php?option=com_clm&section=ergebnisse&task=edit&id='. $row->id );
-			$checked 	= JHtml::_('grid.checkedout',   $row, $i );
-//			$published 	= JHtml::_('grid.published', $row, $i );
-			$published 	= JHtml::_('jgrid.published', $row->published, $i );
+			$link 		= Route::_( 'index.php?option=com_clm&section=ergebnisse&task=edit&id='. $row->id );
+			$checked 	= HTMLHelper::_('grid.checkedout',   $row, $i );
+//			$published 	= HTMLHelper::_('grid.published', $row, $i );
+			$published 	= HTMLHelper::_('jgrid.published', $row->published, $i );
 			?>
 			<tr class="<?php echo 'row'. $k; ?>">
 				<td align="center">
@@ -163,7 +169,7 @@ static function ergebnisse ( $rows, $lists, $pageNav, $option )
 					<?php echo $checked; ?>
 				</td>
 				<td>
-					<span class="editlinktip hasTip" title="<?php echo JText::_( 'RESULTS_OVERVIEW_EDIT_TIP' );?>::<?php echo $rows[$i]->hname.' - '.$rows[$i]->gname." ".JText::_( 'RESULTS_OVERVIEW_EDIT_TIP_2' ).$row->runde.JText::_( 'RESULTS_OVERVIEW_EDIT_TIP_3' ).$row->paar; ?>">
+					<span class="editlinktip hasTip" title="<?php echo Text::_( 'RESULTS_OVERVIEW_EDIT_TIP' );?>::<?php echo $rows[$i]->hname.' - '.$rows[$i]->gname." ".Text::_( 'RESULTS_OVERVIEW_EDIT_TIP_2' ).$row->runde.Text::_( 'RESULTS_OVERVIEW_EDIT_TIP_3' ).$row->paar; ?>">
 						<a href="<?php echo $link; ?>">
 							<?php echo $rows[$i]->hname; ?></a></span>	
 				</td>
@@ -194,7 +200,7 @@ static function ergebnisse ( $rows, $lists, $pageNav, $option )
 					?>
 				</td>
 				<td align="center">
-					<?php if ($row->gemeldet ==1) { echo JText::_( 'RESULTS_OVERVIEW_FREE' ); }
+					<?php if ($row->gemeldet ==1) { echo Text::_( 'RESULTS_OVERVIEW_FREE' ); }
 						else { echo $rows[$i]->uname; } ?>
 				</td>
 				<td align="center">
@@ -212,27 +218,27 @@ static function ergebnisse ( $rows, $lists, $pageNav, $option )
 	<input type="hidden" name="boxchecked" value="0" />
 	<input type="hidden" name="filter_order" value="<?php echo $lists['order']; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $lists['order_Dir']; ?>" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
 	</form>
 	<?php
 	}
 
 static function setErgebnisToolbar($runde)
 	{
-		if (clm_core::$load->request_string( 'task') == 'edit') { $text = JText::_( 'Edit' );}
-			else { $text = JText::_( 'New' );}
-		JToolBarHelper::title(  JText::_( 'TITLE_RESULTS_8').' '.$runde[0]->hname.' - '.$runde[0]->gname .': [ '. $text.' ]' );
-		JToolBarHelper::save();
-		JToolBarHelper::apply();
-		JToolBarHelper::custom('update_remarks','save.png','save_f2.png',JText::_('BUTTON_UPDATE_REMARKS'),false);
-		JToolBarHelper::cancel();
-		JToolBarHelper::help( 'screen.clm.edit' );
+		if (clm_core::$load->request_string( 'task') == 'edit') { $text = Text::_( 'Edit' );}
+			else { $text = Text::_( 'New' );}
+		ToolBarHelper::title(  Text::_( 'TITLE_RESULTS_8').' '.$runde[0]->hname.' - '.$runde[0]->gname .': [ '. $text.' ]' );
+		ToolBarHelper::save();
+		ToolBarHelper::apply();
+		ToolBarHelper::custom('update_remarks','save.png','save_f2.png',Text::_('BUTTON_UPDATE_REMARKS'),false);
+		ToolBarHelper::cancel();
+		ToolBarHelper::help( 'screen.clm.edit' );
 	}
 		
 static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter, $ergebnis, $option, $hvoraufstellung, $gvoraufstellung)
 	{
 		CLMViewErgebnisse::setErgebnisToolbar($runde);
-		JFactory::getApplication()->input->set('hidemainmenu', true);
+		Factory::getApplication()->input->set('hidemainmenu', true);
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
@@ -253,32 +259,32 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 	<fieldset class="adminform">
 	<legend><?php 
 	if ($runde[0]->dg == 1) {
-	echo $runde[0]->lname.' '.JText::_('TITLE_RESULTS_6').' '.$runde[0]->runde.', '.JText::_('TITLE_RESULTS_9').' '.$runde[0]->paar;
+	echo $runde[0]->lname.' '.Text::_('TITLE_RESULTS_6').' '.$runde[0]->runde.', '.Text::_('TITLE_RESULTS_9').' '.$runde[0]->paar;
 				}
 	else {
-	echo $runde[0]->lname.' '.JText::_('TITLE_RESULTS_4').' '.$runde[0]->runde.', '.JText::_('TITLE_RESULTS_9').' '.$runde[0]->paar.', '.JText::_('TITLE_RESULTS_10').$runde[0]->dg ;
+	echo $runde[0]->lname.' '.Text::_('TITLE_RESULTS_4').' '.$runde[0]->runde.', '.Text::_('TITLE_RESULTS_9').' '.$runde[0]->paar.', '.Text::_('TITLE_RESULTS_10').$runde[0]->dg ;
 	} ?>
 	</legend>
 	<table class="admintable">
 
 	<tr>
-		<th class="key" nowrap="nowrap"><?php echo JText::_( 'RESULTS_DETAILS_BOARD' ); ?></th>
+		<th class="key" nowrap="nowrap"><?php echo Text::_( 'RESULTS_DETAILS_BOARD' ); ?></th>
 		<th class="key" nowrap="nowrap" style="width: 250px"><?php echo $runde[0]->hname; ?></th>
 		<th class="key" nowrap="nowrap" style="width: 250px"><?php echo $runde[0]->gname; ?></th>
-		<th class="key" nowrap="nowrap"><?php echo JText::_( 'RESULTS_DETAILS_RESULT' ); ?></th>
+		<th class="key" nowrap="nowrap"><?php echo Text::_( 'RESULTS_DETAILS_RESULT' ); ?></th>
 	<tr>
 <?php 	for ($i=0; $i<$runde[0]->stamm; $i++) { ?>
 	
 	<tr>
 		<td class="key" nowrap="nowrap">
 		  <label for="sid">
-			<?php echo JText::_('RESULTS_DETAILS_NO').'&nbsp;&nbsp;'.($i+1).'&nbsp;&nbsp;'; ?>
+			<?php echo Text::_('RESULTS_DETAILS_NO').'&nbsp;&nbsp;'.($i+1).'&nbsp;&nbsp;'; ?>
 		  </label>
 		</td>
 		<td class="key" nowrap="nowrap" style="width: 250px">
 <!--	  <select size="1" name="<?php echo 'heim'.($i+1); ?>" id="<?php echo 'heim'.($i+1); ?>" class="js-example-basic-single" style="width: 250px"> -->
 		  <select size="1" name="<?php echo 'heim'.($i+1); ?>" id="<?php echo 'heim'.($i+1); ?>" class="<?php echo $field_search; ?>" style="width: 250px">
- 		<option value="0"><?php echo JText::_('RESULTS_DETAILS_DD_1');?></option>
+ 		<option value="0"><?php echo Text::_('RESULTS_DETAILS_DD_1');?></option>
 
 			<?php for ($x=0; $x < $hcount; $x++){
 			if ($runde[0]->rang !="0") {
@@ -320,14 +326,14 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 			 	  echo $heim[$x]->name; ?>
 				</option> 			  
 			<?php }}} ?>
-		 <option value="99999-ZZZZZ"<?php if (!isset($bretter[$i]) OR $bretter[$i]->zps =="ZZZZZ"){ ?> selected="selected"<?php } ?>>&nbsp;&nbsp;&nbsp;---&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo JText::_('RESULTS_DETAILS_NOT_NOMINATED'); ?></option>
+		 <option value="99999-ZZZZZ"<?php if (!isset($bretter[$i]) OR $bretter[$i]->zps =="ZZZZZ"){ ?> selected="selected"<?php } ?>>&nbsp;&nbsp;&nbsp;---&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo Text::_('RESULTS_DETAILS_NOT_NOMINATED'); ?></option>
 		  </select>
 		</td>
 
 		<td class="key" nowrap="nowrap" style="width: 250px">
 <!--	  <select size="1" name="<?php echo 'gast'.($i+1); ?>" id="<?php echo 'gast'.($i+1); ?>" class="js-example-basic-single" style="width: 250px"> -->
 		  <select size="1" name="<?php echo 'gast'.($i+1); ?>" id="<?php echo 'gast'.($i+1); ?>" class="<?php echo $field_search; ?>" style="width: 250px">
- 		<option value="0"><?php echo JText::_('RESULTS_DETAILS_DD_2');?></option>
+ 		<option value="0"><?php echo Text::_('RESULTS_DETAILS_DD_2');?></option>
 			<?php for ($x=0; $x < $gcount; $x++) {
 			if ($runde[0]->rang !="0") {
 				//if (($gast[$x]->mnr >= $runde[0]->gmnr AND $gast[$x]->Rang < 1000 ) OR ($gast[$x]->mnr == $runde[0]->gmnr)){ 
@@ -368,14 +374,14 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 						echo $gast[$x]->name; ?>
 				</option> 			  
 			<?php }}} ?>
-			 <option value="99999-ZZZZZ"<?php if (!isset($bretter[$i]) OR $bretter[$i]->gzps =="ZZZZZ"){ ?> selected="selected"<?php } ?>>&nbsp;&nbsp;&nbsp;---&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo JText::_('RESULTS_DETAILS_NOT_NOMINATED'); ?></option>
+			 <option value="99999-ZZZZZ"<?php if (!isset($bretter[$i]) OR $bretter[$i]->gzps =="ZZZZZ"){ ?> selected="selected"<?php } ?>>&nbsp;&nbsp;&nbsp;---&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo Text::_('RESULTS_DETAILS_NOT_NOMINATED'); ?></option>
 		  </select>
 		</td>
 
 		<td class="key" nowrap="nowrap">
 <!--	  <select size="1" name="<?php echo 'ergebnis'.($i+1); ?>" id="<?php echo 'ergebnis'.($i+1); ?>" class="js-example-basic-single"> -->
 		  <select size="1" name="<?php echo 'ergebnis'.($i+1); ?>" id="<?php echo 'ergebnis'.($i+1); ?>" class="<?php echo $field_search; ?>">
-			<option value="8"><?php echo JText::_('RESULTS_DETAILS_DD_3');?></option>
+			<option value="8"><?php echo Text::_('RESULTS_DETAILS_DD_3');?></option>
 			<?php for ($x=0; $x < 11; $x++) { ?>
 			 <option value="<?php echo ($ergebnis[$x]->id); ?>" 
 			 <?php if ($runde[0]->gemeldet > 0 AND isset($bretter[$i]->ergebnis) AND (((int)$ergebnis[$x]->id)-1) == ((int)$bretter[$i]->ergebnis)) { ?> selected="selected" <?php } ?>>
@@ -395,23 +401,23 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 	<div class="width-40 fltrt">
 	<fieldset class="adminform">
 	<legend><?php 
-		echo JText::_( 'RESULTS_MT_KO_LEGEND' ); //" KO-System: Feinwertung ";
+		echo Text::_( 'RESULTS_MT_KO_LEGEND' ); //" KO-System: Feinwertung ";
 	 ?>
 	</legend>
 	<table class="admintable">
 		<tr>
 			<td class="key" nowrap="nowrap">
-			<label for="ko_decision"><?php echo JText::_( 'RESULTS_MT_KO_DECISION' ); ?></label>
+			<label for="ko_decision"><?php echo Text::_( 'RESULTS_MT_KO_DECISION' ); ?></label>
 			</td>
 			<td class="key" nowrap="nowrap">
 <!--			<select name="ko_decision" id="ko_decision" value="<?php echo $runde[0]->ko_decision; ?>" class="js-example-basic-single" size="1"> -->
 			<select name="ko_decision" id="ko_decision" value="<?php echo $runde[0]->ko_decision; ?>" class="<?php echo $field_search; ?>" size="1">
 			<!--<option>- wählen -</option>-->
-			<option value="1" <?php if ($runde[0]->ko_decision == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_BW' );?></option>
-			<option value="2" <?php if ($runde[0]->ko_decision == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_BLITZ' ).$runde[0]->hname;?></option>
-			<option value="3" <?php if ($runde[0]->ko_decision == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_BLITZ' ).$runde[0]->gname;?></option>
-			<option value="4" <?php if ($runde[0]->ko_decision == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_LOS' ).$runde[0]->hname;?></option>
-			<option value="5" <?php if ($runde[0]->ko_decision == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_LOS' ).$runde[0]->gname;?></option>
+			<option value="1" <?php if ($runde[0]->ko_decision == 1) {echo 'selected="selected"';} ?>><?php echo Text::_( 'RESULTS_MT_KO_DECISION_BW' );?></option>
+			<option value="2" <?php if ($runde[0]->ko_decision == 2) {echo 'selected="selected"';} ?>><?php echo Text::_( 'RESULTS_MT_KO_DECISION_BLITZ' ).$runde[0]->hname;?></option>
+			<option value="3" <?php if ($runde[0]->ko_decision == 3) {echo 'selected="selected"';} ?>><?php echo Text::_( 'RESULTS_MT_KO_DECISION_BLITZ' ).$runde[0]->gname;?></option>
+			<option value="4" <?php if ($runde[0]->ko_decision == 4) {echo 'selected="selected"';} ?>><?php echo Text::_( 'RESULTS_MT_KO_DECISION_LOS' ).$runde[0]->hname;?></option>
+			<option value="5" <?php if ($runde[0]->ko_decision == 5) {echo 'selected="selected"';} ?>><?php echo Text::_( 'RESULTS_MT_KO_DECISION_LOS' ).$runde[0]->gname;?></option>
 			</select>
 			</td>
 		</tr>
@@ -426,11 +432,11 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 //	if (($pcomment == 1) OR ($pcomment == 2 AND ($runde[0]->runden_modus == 4 OR $runde[0]->runden_modus == 5))) {    // Kommentarfeld ?>			
 	<div class="width-40 fltrt">
 	  <fieldset class="adminform">
-		<legend><?php echo JText::_( 'RESULTS_COMMENT_LEGEND' ); ?></legend>
+		<legend><?php echo Text::_( 'RESULTS_COMMENT_LEGEND' ); ?></legend>
 		<table class="admintable">
 		<tr>
 			<td class="key" nowrap="nowrap">
-			<label for="comment"><?php echo JText::_( 'RESULTS_COMMENT' ); ?></label>
+			<label for="comment"><?php echo Text::_( 'RESULTS_COMMENT' ); ?></label>
 			</td>
 			<td class="inputbox" nowrap="nowrap" width="100%" valign="top">
 <!--			<textarea name="comment" id="comment" cols="40" rows="3" style="width:90%"><?php echo str_replace('&','&amp;',$runde[0]->comment);?></textarea> -->
@@ -445,11 +451,11 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 //	if (($picomment == 1) OR ($picomment == 2 AND ($runde[0]->runden_modus == 4 OR $runde[0]->runden_modus == 5))) {    // int. Kommentarfeld ?>			
 	<div class="width-40 fltrt">
 	  <fieldset class="adminform">
-		<legend><?php echo JText::_( 'RESULTS_ICOMMENT_LEGEND' ); ?></legend>
+		<legend><?php echo Text::_( 'RESULTS_ICOMMENT_LEGEND' ); ?></legend>
 		<table class="admintable">
 		<tr>
 			<td class="key" nowrap="nowrap">
-			<label for="icomment"><?php echo JText::_( 'RESULTS_COMMENT' ); ?></label>
+			<label for="icomment"><?php echo Text::_( 'RESULTS_COMMENT' ); ?></label>
 			</td>
 			<td class="inputbox" nowrap="nowrap" width="100%" valign="top">
 <!--			<textarea name="icomment" id="icomment" cols="40" rows="3" style="width:90%"><?php echo str_replace('&','&amp;',$runde[0]->icomment);?></textarea> -->
@@ -462,33 +468,33 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 <?php // } ?>	
 		<div class="width-40 fltrt">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'RESULTS_DETAILS_DETAILS' ); ?></legend>
+		<legend><?php echo Text::_( 'RESULTS_DETAILS_DETAILS' ); ?></legend>
 
 		<table class="admintable">
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'RESULTS_DETAILS_BY' ); ?></label>
+			<label for="name"><?php echo Text::_( 'RESULTS_DETAILS_BY' ); ?></label>
 			</td>
 			<td>
-			<?php if (!$runde[0]->melder) { echo JText::_('RESULTS_DETAILS_NOTHING'); }
+			<?php if (!$runde[0]->melder) { echo Text::_('RESULTS_DETAILS_NOTHING'); }
 				else { echo $runde[0]->melder; } ?>
 			</td>
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'RESULTS_DETAILS_DATE' ); ?></label>
+			<label for="name"><?php echo Text::_( 'RESULTS_DETAILS_DATE' ); ?></label>
 			</td>
 			<td>
 			<?php if ($runde[0]->zeit != "0000-00-00 00:00:00" AND $runde[0]->zeit != "1970-01-01 00:00:00") {
-				//echo JHtml::_('date',  $runde[0]->zeit, JText::_('DATE_FORMAT_LC2'));} 
+				//echo HTMLHelper::_('date',  $runde[0]->zeit, Text::_('DATE_FORMAT_LC2'));} 
 				echo clm_core::$cms->showDate($runde[0]->zeit);} 
-			else { echo JText::_('RESULTS_DETAILS_NOTHING'); } ?>
+			else { echo Text::_('RESULTS_DETAILS_NOTHING'); } ?>
 
 			</td>
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'RESULTS_DETAILS_LAST_EDIT_BY' ); ?></label>
+			<label for="name"><?php echo Text::_( 'RESULTS_DETAILS_LAST_EDIT_BY' ); ?></label>
 			</td>
 			<td>
 			<?php if (!$runde[0]->editor) { echo "---"; }
@@ -497,31 +503,31 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'RESULTS_DETAILS_DATE' ); ?></label>
+			<label for="name"><?php echo Text::_( 'RESULTS_DETAILS_DATE' ); ?></label>
 			</td>
 			<td>
 			<?php if ($runde[0]->edit_zeit != "0000-00-00 00:00:00" AND $runde[0]->edit_zeit != "1970-01-01 00:00:00") {
-				//echo JHtml::_('date',  $runde[0]->edit_zeit, JText::_('DATE_FORMAT_LC2'));} 
+				//echo HTMLHelper::_('date',  $runde[0]->edit_zeit, Text::_('DATE_FORMAT_LC2'));} 
 				echo clm_core::$cms->showDate($runde[0]->edit_zeit);} 
 			else { echo "---"; } ?>
 			</td>
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'RESULTS_DETAILS_EVALUATION_EDITED_BY' ); ?></label>
+			<label for="name"><?php echo Text::_( 'RESULTS_DETAILS_EVALUATION_EDITED_BY' ); ?></label>
 			</td>
 			<td>
-			<?php if (!$runde[0]->dwz_editor) { echo JText::_('RESULTS_DETAILS_NOTHING'); }
+			<?php if (!$runde[0]->dwz_editor) { echo Text::_('RESULTS_DETAILS_NOTHING'); }
 				else { echo $runde[0]->dwz_editor; }?>
 			</td>
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'RESULTS_DETAILS_DATE' ); ?></label>
+			<label for="name"><?php echo Text::_( 'RESULTS_DETAILS_DATE' ); ?></label>
 			</td>
 			<td>
-			<?php if ($runde[0]->dwz_zeit != "0000-00-00 00:00:00" AND $runde[0]->dwz_zeit != "1970-01-01 00:00:00") {echo JHtml::_('date',  $runde[0]->dwz_zeit, JText::_('DATE_FORMAT_LC2'));} 
-			else { echo JText::_('RESULTS_DETAILS_NOTHING'); } ?>
+			<?php if ($runde[0]->dwz_zeit != "0000-00-00 00:00:00" AND $runde[0]->dwz_zeit != "1970-01-01 00:00:00") {echo HTMLHelper::_('date',  $runde[0]->dwz_zeit, Text::_('DATE_FORMAT_LC2'));} 
+			else { echo Text::_('RESULTS_DETAILS_NOTHING'); } ?>
 			</td>
 		</tr>
 
@@ -544,33 +550,33 @@ static function Ergebnis( $row, $runde, $heim, $hcount, $gast, $gcount, $bretter
 		<input type="hidden" name="hzps" value="<?php echo $runde[0]->hzps; ?>" />
 		<input type="hidden" name="gzps" value="<?php echo $runde[0]->gzps; ?>" />
 		<input type="hidden" name="id" value="<?php echo $runde[0]->id; ?>" />
-		<?php echo JHtml::_( 'form.token' ); ?>
+		<?php echo HTMLHelper::_( 'form.token' ); ?>
 		</form>
 		<?php
 	}
 
 public static function setWertungToolbar($row)
 	{
-		JToolBarHelper::title(  JText::_( 'TITLE_EDIT_EVALUATION' ));
-		JToolBarHelper::custom('save_wertung','save.png','save_f2.png',JText::_( 'EVALUATION_CHANGE'),false);
-		JToolBarHelper::custom('delete_wertung','delete.png','delete_f2.png',JText::_( 'EVALUATION_DELETE'),false);
-		JToolBarHelper::cancel();
-		JToolBarHelper::help( 'screen.clm.edit' );
+		ToolBarHelper::title(  Text::_( 'TITLE_EDIT_EVALUATION' ));
+		ToolBarHelper::custom('save_wertung','save.png','save_f2.png',Text::_( 'EVALUATION_CHANGE'),false);
+		ToolBarHelper::custom('delete_wertung','delete.png','delete_f2.png',Text::_( 'EVALUATION_DELETE'),false);
+		ToolBarHelper::cancel();
+		ToolBarHelper::help( 'screen.clm.edit' );
 	}
 		
 public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $lists)
 	{
 		CLMViewErgebnisse::setWertungToolbar($row);
-		JFactory::getApplication()->input->set('hidemainmenu', true);
+		Factory::getApplication()->input->set('hidemainmenu', true);
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 	?>
 
 	<div class="width-100">
 	<fieldset class="adminform">
-	<legend><?php echo JText::_( 'EVALUATION_HINT_1'); ?></legend>
-	<?php echo JText::_( 'EVALUATION_HINT_2'); ?>
+	<legend><?php echo Text::_( 'EVALUATION_HINT_1'); ?></legend>
+	<?php echo Text::_( 'EVALUATION_HINT_2'); ?>
 	<br>
-	<?php echo JText::_( 'EVALUATION_HINT_3'); ?>
+	<?php echo Text::_( 'EVALUATION_HINT_3'); ?>
 	</fieldset>
 	</div>
 
@@ -581,25 +587,25 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 	<fieldset class="adminform">
 	<legend><?php 
 	if ($runde[0]->dg == 1) {
-		echo $runde[0]->lname.' : '.JText::_('EVALUATION_ROUND').' '.$runde[0]->runde.', '.JText::_('EVALUATION_PAIRING').' '.$runde[0]->paar;
+		echo $runde[0]->lname.' : '.Text::_('EVALUATION_ROUND').' '.$runde[0]->runde.', '.Text::_('EVALUATION_PAIRING').' '.$runde[0]->paar;
 				}
 	else { 
-		echo $runde[0]->lname.' : '.JText::_('EVALUATION_ROUND').' '.$runde[0]->runde.', '.JText::_('EVALUATION_PAIRING').' '.$runde[0]->paar.', '.JText::_('EVALUATION_DG').' '.$runde[0]->dg ;
+		echo $runde[0]->lname.' : '.Text::_('EVALUATION_ROUND').' '.$runde[0]->runde.', '.Text::_('EVALUATION_PAIRING').' '.$runde[0]->paar.', '.Text::_('EVALUATION_DG').' '.$runde[0]->dg ;
 	} ?>
 	</legend>
 	<table class="admintable">
 	<tr>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'RESULTS_DETAILS_BOARD' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'RESULTS_DETAILS_BOARD' ); ?></td>
 		<td class="key" nowrap="nowrap"><?php echo $runde[0]->hname; ?></td>
 		<td class="key" nowrap="nowrap"><?php echo $runde[0]->gname; ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'EVALUATION_RESULT'); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'EVALUATION_RESULT_TO'); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'EVALUATION_RESULT'); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'EVALUATION_RESULT_TO'); ?></td>
 	<tr>
 <?php 	for ($i=0; $i<$runde[0]->stamm; $i++) { ?>
 	<tr>
 		<td class="key" nowrap="nowrap">
 		  <label for="sid">
-			<?php echo JText::_( 'RESULTS_DETAILS_NO').'&nbsp;&nbsp;'.($i+1).'&nbsp;&nbsp;'; ?>
+			<?php echo Text::_( 'RESULTS_DETAILS_NO').'&nbsp;&nbsp;'.($i+1).'&nbsp;&nbsp;'; ?>
 		  </label>
 		</td>
 		<td class="key" nowrap="nowrap">
@@ -617,7 +623,7 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 
 		<td class="key" nowrap="nowrap">
 		  <select size="1" name="<?php echo 'ergebnis'.($i+1); ?>" id="<?php echo 'ergebnis'.($i+1); ?>">
-			<option value="-1" selected="selected"><?php echo JText::_( 'RESULTS_DETAILS_DD_3'); ?></option>
+			<option value="-1" selected="selected"><?php echo Text::_( 'RESULTS_DETAILS_DD_3'); ?></option>
 			<?php for ($x=0; $x < 11; $x++) { ?>
 			 <option value="<?php echo ($ergebnis[$x]->eid); ?>" <?php if ($runde[0]->dwz_edit > 0 AND isset($bretter[$i]->dwz_edit) AND (($ergebnis[$x]->id)-1) == ((int)$bretter[$i]->dwz_edit)) { ?> selected="selected" <?php } ?>><?php echo $ergebnis[$x]->erg_text; ?></option>
 			<?php } ?>
@@ -627,11 +633,11 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 	</tr>
 <?php } ?> 
 	<tr>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'EVALUATION_RESULT_MANUALLY'); ?>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'EVALUATION_RESULT_MANUALLY'); ?>
 		</td>
 		<td class="key" nowrap="nowrap">
 		</td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'EVALUATION_BRETTPUNKTE_MANUALLY'); //klkl ?>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'EVALUATION_BRETTPUNKTE_MANUALLY'); //klkl ?>
 		</td>
 		<td class="key" nowrap="nowrap">
 		<?php //echo $lists['weiss'].' - '.$lists['schwarz']; ?>
@@ -649,7 +655,7 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 		</td>
 		<td class="key" nowrap="nowrap">
 		</td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'EVALUATION_WERTPUNKTE_MANUALLY'); //klkl ?>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'EVALUATION_WERTPUNKTE_MANUALLY'); //klkl ?>
 		</td>
 		<td class="key" nowrap="nowrap">
 		<?php echo $lists['weiss_w']; ?>
@@ -668,22 +674,22 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 	<div class="width-40 fltrt">
 	<fieldset class="adminform">
 	<legend><?php 
-		echo JText::_( 'RESULTS_MT_KO_LEGEND' ); //" KO-System: Feinwertung ";
+		echo Text::_( 'RESULTS_MT_KO_LEGEND' ); //" KO-System: Feinwertung ";
 	 ?>
 	</legend>
 	<table class="admintable">
 		<tr>
 			<td class="key" nowrap="nowrap">
-			<label for="ko_decision"><?php echo JText::_( 'RESULTS_MT_KO_DECISION' ); ?></label>
+			<label for="ko_decision"><?php echo Text::_( 'RESULTS_MT_KO_DECISION' ); ?></label>
 			</td>
 			<td class="key" nowrap="nowrap">
 			<select name="ko_decision" id="ko_decision" value="<?php echo $runde[0]->ko_decision; ?>" size="1">
 			<!--<option>- wählen -</option>-->
-			<option value="1" <?php if ($runde[0]->ko_decision == 1) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_BW' );?></option>
-			<option value="2" <?php if ($runde[0]->ko_decision == 2) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_BLITZ' ).$runde[0]->hname;?></option>
-			<option value="3" <?php if ($runde[0]->ko_decision == 3) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_BLITZ' ).$runde[0]->gname;?></option>
-			<option value="4" <?php if ($runde[0]->ko_decision == 4) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_LOS' ).$runde[0]->hname;?></option>
-			<option value="5" <?php if ($runde[0]->ko_decision == 5) {echo 'selected="selected"';} ?>><?php echo JText::_( 'RESULTS_MT_KO_DECISION_LOS' ).$runde[0]->gname;?></option>
+			<option value="1" <?php if ($runde[0]->ko_decision == 1) {echo 'selected="selected"';} ?>><?php echo Text::_( 'RESULTS_MT_KO_DECISION_BW' );?></option>
+			<option value="2" <?php if ($runde[0]->ko_decision == 2) {echo 'selected="selected"';} ?>><?php echo Text::_( 'RESULTS_MT_KO_DECISION_BLITZ' ).$runde[0]->hname;?></option>
+			<option value="3" <?php if ($runde[0]->ko_decision == 3) {echo 'selected="selected"';} ?>><?php echo Text::_( 'RESULTS_MT_KO_DECISION_BLITZ' ).$runde[0]->gname;?></option>
+			<option value="4" <?php if ($runde[0]->ko_decision == 4) {echo 'selected="selected"';} ?>><?php echo Text::_( 'RESULTS_MT_KO_DECISION_LOS' ).$runde[0]->hname;?></option>
+			<option value="5" <?php if ($runde[0]->ko_decision == 5) {echo 'selected="selected"';} ?>><?php echo Text::_( 'RESULTS_MT_KO_DECISION_LOS' ).$runde[0]->gname;?></option>
 			</select>
 			</td>
 		</tr>
@@ -698,11 +704,11 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 	if (($pcomment == 1) OR ($pcomment == 2 AND ($runde[0]->runden_modus == 4 OR $runde[0]->runden_modus == 5))) {    // Kommentarfeld ?>			
 	<div class="width-40 fltrt">
 	  <fieldset class="adminform">
-		<legend><?php echo JText::_( 'RESULTS_COMMENT_LEGEND' ); ?></legend>
+		<legend><?php echo Text::_( 'RESULTS_COMMENT_LEGEND' ); ?></legend>
 		<table class="admintable">
 		<tr>
 			<td class="key" nowrap="nowrap">
-			<label for="comment"><?php echo JText::_( 'RESULTS_COMMENT' ); ?></label>
+			<label for="comment"><?php echo Text::_( 'RESULTS_COMMENT' ); ?></label>
 			</td>
 			<td class="inputbox" nowrap="nowrap" width="100%" valign="top">
 			<textarea name="comment" id="comment" cols="40" rows="3" style="width:90%"><?php echo str_replace('&','&amp;',$runde[0]->comment);?></textarea>
@@ -717,11 +723,11 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 	<div class="width-40 fltrt">
 	  <fieldset class="adminform">
 		<br>
-		<legend><?php echo JText::_( 'RESULTS_ICOMMENT_LEGEND' ); ?></legend>
+		<legend><?php echo Text::_( 'RESULTS_ICOMMENT_LEGEND' ); ?></legend>
 		<table class="admintable">
 		<tr>
 			<td class="key" nowrap="nowrap">
-			<label for="icomment"><?php echo JText::_( 'RESULTS_COMMENT' ); ?></label>
+			<label for="icomment"><?php echo Text::_( 'RESULTS_COMMENT' ); ?></label>
 			</td>
 			<td class="inputbox" nowrap="nowrap" width="100%" valign="top">
 			<textarea name="icomment" id="icomment" cols="40" rows="3" style="width:90%"><?php echo str_replace('&','&amp;',$runde[0]->icomment);?></textarea>
@@ -734,62 +740,62 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 
 		<div class="width-40 fltrt">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'RESULTS_DETAILS_DETAILS' ); ?></legend>
+		<legend><?php echo Text::_( 'RESULTS_DETAILS_DETAILS' ); ?></legend>
 
 		<table class="admintable">
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'RESULTS_DETAILS_BY' ); ?></label>
+			<label for="name"><?php echo Text::_( 'RESULTS_DETAILS_BY' ); ?></label>
 			</td>
 			<td>
-			<?php if (!$runde[0]->melder) { echo JText::_( 'RESULTS_DETAILS_NOTHING'); }
+			<?php if (!$runde[0]->melder) { echo Text::_( 'RESULTS_DETAILS_NOTHING'); }
 				else { echo $runde[0]->melder; } ?>
 			</td>
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'RESULTS_DETAILS_DATE' ); ?></label>
+			<label for="name"><?php echo Text::_( 'RESULTS_DETAILS_DATE' ); ?></label>
 			</td>
 			<td>
-			<?php if ($runde[0]->zeit != "0000-00-00 00:00:00" AND $runde[0]->zeit != "1970-01-01 00:00:00") {echo JHtml::_('date',  $runde[0]->zeit, JText::_('DATE_FORMAT_LC2'));} 
-			else {  echo JText::_( 'RESULTS_DETAILS_NOTHING'); } ?>
+			<?php if ($runde[0]->zeit != "0000-00-00 00:00:00" AND $runde[0]->zeit != "1970-01-01 00:00:00") {echo HTMLHelper::_('date',  $runde[0]->zeit, Text::_('DATE_FORMAT_LC2'));} 
+			else {  echo Text::_( 'RESULTS_DETAILS_NOTHING'); } ?>
 
 			</td>
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'RESULTS_DETAILS_LAST_EDIT_BY' ); ?></label>
+			<label for="name"><?php echo Text::_( 'RESULTS_DETAILS_LAST_EDIT_BY' ); ?></label>
 			</td>
 			<td>
-			<?php if (!$runde[0]->editor) {  echo JText::_( 'RESULTS_DETAILS_NOTHING'); }
+			<?php if (!$runde[0]->editor) {  echo Text::_( 'RESULTS_DETAILS_NOTHING'); }
 				else { echo $runde[0]->name_editor; }?>
 			</td>
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'am : ' ); ?></label>
+			<label for="name"><?php echo Text::_( 'am : ' ); ?></label>
 			</td>
 			<td>
-			<?php if ($runde[0]->edit_zeit != "0000-00-00 00:00:00" AND $runde[0]->edit_zeit != "1970-01-01 00:00:00") {echo JHtml::_('date',  $runde[0]->edit_zeit, JText::_('DATE_FORMAT_LC2'));} 
+			<?php if ($runde[0]->edit_zeit != "0000-00-00 00:00:00" AND $runde[0]->edit_zeit != "1970-01-01 00:00:00") {echo HTMLHelper::_('date',  $runde[0]->edit_zeit, Text::_('DATE_FORMAT_LC2'));} 
 			else { echo "---"; } ?>
 			</td>
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'EVALUATION_RESULT_EDITED_BY' ); ?></label>
+			<label for="name"><?php echo Text::_( 'EVALUATION_RESULT_EDITED_BY' ); ?></label>
 			</td>
 			<td>
-			<?php if (!$runde[0]->dwz_editor) { echo JText::_( 'RESULTS_DETAILS_NOTHING'); }
+			<?php if (!$runde[0]->dwz_editor) { echo Text::_( 'RESULTS_DETAILS_NOTHING'); }
 				else { echo $runde[0]->dwz_editor; }?>
 			</td>
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'RESULTS_DETAILS_DATE' ); ?></label>
+			<label for="name"><?php echo Text::_( 'RESULTS_DETAILS_DATE' ); ?></label>
 			</td>
 			<td>
-			<?php if ($runde[0]->dwz_zeit != "0000-00-00 00:00:00" AND $runde[0]->dwz_zeit != "1970-01-01 00:00:00") {echo JHtml::_('date',  $runde[0]->dwz_zeit, JText::_('DATE_FORMAT_LC2'));} 
-			else { echo JText::_( 'RESULTS_DETAILS_NOTHING'); } ?>
+			<?php if ($runde[0]->dwz_zeit != "0000-00-00 00:00:00" AND $runde[0]->dwz_zeit != "1970-01-01 00:00:00") {echo HTMLHelper::_('date',  $runde[0]->dwz_zeit, Text::_('DATE_FORMAT_LC2'));} 
+			else { echo Text::_( 'RESULTS_DETAILS_NOTHING'); } ?>
 			</td>
 		</tr>
 
@@ -812,7 +818,7 @@ public static function Wertung( &$row, $runde, $bretter, $ergebnis, $option, $li
 		<input type="hidden" name="gzps" value="<?php echo $runde[0]->gzps; ?>" />
 		<input type="hidden" name="id" value="<?php echo $runde[0]->id; ?>" />
 		<input type="hidden" name="cid" value="<?php echo $runde[0]->id; ?>" />
-		<?php echo JHtml::_( 'form.token' ); ?>
+		<?php echo HTMLHelper::_( 'form.token' ); ?>
 		</form>
 		<?php
 	}

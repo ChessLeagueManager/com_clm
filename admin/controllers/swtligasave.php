@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,9 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 class CLMControllerSWTLigasave extends JControllerLegacy
 {
@@ -29,16 +32,16 @@ class CLMControllerSWTLigasave extends JControllerLegacy
 	
 	function save () {
 		
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$model = $this->getModel('swtligasave');
 		if ($model->finalCopy () && $model->rundenTermine () && $model->userAnlegen ()) {
 //			$_REQUEST['view'] = 'swt';
-			$msg = JText::_( 'SWT_STORE_SUCCESS' );
+			$msg = Text::_( 'SWT_STORE_SUCCESS' );
 //			$htext = " (ID = ".$lid.")";
 		}
 		else {
 			$_REQUEST['view'] = 'swtligaerg';
-			$msg = JText::_( 'SWT_STORE_ERROR' );			
+			$msg = Text::_( 'SWT_STORE_ERROR' );			
 		}
 		$sid = clm_core::$load->request_int('sid');
 		$lid = clm_core::$load->request_int('lid');

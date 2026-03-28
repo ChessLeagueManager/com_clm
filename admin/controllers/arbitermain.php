@@ -1,22 +1,25 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+
 class CLMControllerArbiterMain extends JControllerLegacy {
 	
-
 	// Konstruktor
 	function __construct( $config = array() ) {
 		
 		parent::__construct( $config );
 		
-		$this->app	= JFactory::getApplication();
+		$this->app	= Factory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply','save' );
@@ -67,7 +70,7 @@ class CLMControllerArbiterMain extends JControllerLegacy {
 		$lang = clm_core::$lang->arbiter;
 
 		// TODO? evtl global inconstruct anlegen
-		$user 		=JFactory::getUser();
+		$user 		=Factory::getUser();
 		
 		$cid		= clm_core::$load->request_array_int('cid');
 		$lid = clm_core::$load->request_int('lid');
@@ -79,7 +82,7 @@ class CLMControllerArbiterMain extends JControllerLegacy {
 		
 		// Inhalte übergeben?
 		if (empty( $cid )) { 
-			$this->app->enqueueMessage( JText::_( 'NO_ITEM_SELECTED' ),'warning' );
+			$this->app->enqueueMessage( Text::_( 'NO_ITEM_SELECTED' ),'warning' );
 		
 		} else { // ja, Inhalte vorhanden
 			
@@ -87,7 +90,7 @@ class CLMControllerArbiterMain extends JControllerLegacy {
 			foreach ($cid as $key => $value) {
 		
 				// load the row from the db table
-				$row =JTable::getInstance( 'arbiters', 'TableCLM' );
+				$row =Table::getInstance( 'arbiters', 'TableCLM' );
 				$row->load( $value ); // Daten zu dieser ID laden
 		
 					// Berechtigung vorhanden
@@ -110,19 +113,19 @@ class CLMControllerArbiterMain extends JControllerLegacy {
 			// immer noch Einträge vorhanden?
 			if ( !empty($cid) ) { 
 		
-				$row =JTable::getInstance( 'arbiters', 'TableCLM' );
+				$row =Table::getInstance( 'arbiters', 'TableCLM' );
 				$row->publish( $cid, $publish );
 			
 				// Meldung erstellen
 				if ($publish) {
-					$this->app->enqueueMessage( CLMText::sgpl(count($cid), $lang->arbiter, $lang->arbiter)." ".JText::_('CLM_PUBLISHED') );
+					$this->app->enqueueMessage( CLMText::sgpl(count($cid), $lang->arbiter, $lang->arbiter)." ".Text::_('CLM_PUBLISHED') );
 				} else {
-					$this->app->enqueueMessage( CLMText::sgpl(count($cid), $lang->arbiter, $lang->arbiter)." ".JText::_('CLM_UNPUBLISHED') );
+					$this->app->enqueueMessage( CLMText::sgpl(count($cid), $lang->arbiter, $lang->arbiter)." ".Text::_('CLM_UNPUBLISHED') );
 				}
 			
 			} else {
 			
-				$this->app->enqueueMessage(JText::_('NO_CHANGES'));
+				$this->app->enqueueMessage(Text::_('NO_CHANGES'));
 			
 			}
 	
@@ -176,7 +179,7 @@ class CLMControllerArbiterMain extends JControllerLegacy {
 		
 		
 		// Daten laden
-		$row =JTable::getInstance( 'arbiters', 'TableCLM' );
+		$row =Table::getInstance( 'arbiters', 'TableCLM' );
 		$row->load( $arbiterid );
 		
 		// falls Cat existent?
@@ -255,7 +258,7 @@ class CLMControllerArbiterMain extends JControllerLegacy {
 		$cid = clm_core::$load->request_array_int('cid');
 		$arbiterid = $cid[0];
 	
-		$row =JTable::getInstance( 'arbiters', 'TableCLM' );
+		$row =Table::getInstance( 'arbiters', 'TableCLM' );
 		if ( !$row->load( (int)$arbiterid ) ) {
 			$this->app->enqueueMessage( CLMText::errorText('ARBITER', 'NOTEXISTING'),'warning' );
 			return false;
@@ -264,7 +267,7 @@ class CLMControllerArbiterMain extends JControllerLegacy {
 		$row->move($inc, '');
 		$row->reorder();
 	
-		$this->app->enqueueMessage( $row->name.": ".JText::_('ORDERING_CHANGED') );
+		$this->app->enqueueMessage( $row->name.": ".Text::_('ORDERING_CHANGED') );
 		
 		return true;
 		
@@ -282,7 +285,7 @@ class CLMControllerArbiterMain extends JControllerLegacy {
 		$total		= count( $cid );
 		$order		= clm_core::$load->request_array_int('order');
 	
-		$row =JTable::getInstance( 'arbiteres', 'TableCLM' );
+		$row =Table::getInstance( 'arbiteres', 'TableCLM' );
 		$groupings = array();
 	
 		// update ordering values
@@ -304,7 +307,7 @@ class CLMControllerArbiterMain extends JControllerLegacy {
 			$row->reorder('sid = '.(int) $group);
 		}
 		
-		$this->app->enqueueMessage( JText::_('NEW_ORDERING_SAVED') );
+		$this->app->enqueueMessage( Text::_('NEW_ORDERING_SAVED') );
 	
 		$adminLink = new AdminLink();
 		$adminLink->view = "arbitermain";

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,10 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
 
 class CLMControllerTurPlayerForm extends JControllerLegacy {
 	
@@ -20,7 +24,7 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->app = JFactory::getApplication();
+		$this->app = Factory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -72,15 +76,15 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 		// turnierid
 		$turnierid = clm_core::$load->request_int('id');
 
-		$db		= JFactory::getDBO();
+		$db		= Factory::getDBO();
 
 		// Instanz der Tabelle
-		$row = JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = Table::getInstance( 'turniere', 'TableCLM' );
 		$row->load( $turnierid ); // Daten zu dieser ID laden
 
 		$clmAccess = clm_core::$access;      
 		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
-			$this->app->enqueueMessage(JText::_('TOURNAMENT_NO_ACCESS'),'warning');
+			$this->app->enqueueMessage(Text::_('TOURNAMENT_NO_ACCESS'),'warning');
 			return false;
 		}
 	
@@ -142,11 +146,11 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 				." VALUES"
 				." ('".$tournament->data->sid."', '".$turnierid."', '".$maxSnr++."', '$name', '$birthYear', '$geschlecht', '$verein', '$twz', '$natrating', '$fideelo', '$FIDEid', '$titel', '$mgl_nr', '".$zps."')";
 			if (clm_core::$db->query($query)) { 
-				$this->app->enqueueMessage(JText::_('PLAYER')." ".$name." ".JText::_('ADDED'));
+				$this->app->enqueueMessage(Text::_('PLAYER')." ".$name." ".Text::_('ADDED'));
 				$playersIn++; // den angemeldeten Spielern zufügen
 				return true;
 			} else {
-				$this->app->enqueueMessage(JText::_('DB_ERROR'));
+				$this->app->enqueueMessage(Text::_('DB_ERROR'));
 				return false;
 			}
 			
@@ -200,7 +204,7 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 					}
 					$db->setQuery($query);
 					if ($db->loadResult() > 0) {
-						$this->app->enqueueMessage(JText::_('PLAYER')." ".$data->Spielername." ".JText::_('ALREADYIN'), 'warning');
+						$this->app->enqueueMessage(Text::_('PLAYER')." ".$data->Spielername." ".Text::_('ALREADYIN'), 'warning');
 					} else {
 					
 						$twz = clm_core::$load->gen_twz($param_useastwz, $data->DWZ, $data->FIDE_Elo);
@@ -217,9 +221,9 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 //						if ($this->_db->query()) { 
 						if (clm_core::$db->query($query)) { 
 							$playersIn++;
-							$this->app->enqueueMessage(JText::_('PLAYER')." ".$data->Spielername." ".JText::_('ADDED'));
+							$this->app->enqueueMessage(Text::_('PLAYER')." ".$data->Spielername." ".Text::_('ADDED'));
 						} else {
-							$this->app->enqueueMessage(JText::_('DB_ERROR'), 'warning');
+							$this->app->enqueueMessage(Text::_('DB_ERROR'), 'warning');
 						}
 					}
 				
@@ -235,18 +239,18 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 		// je nach Task: Message und Weiterleitung
 		switch ($task) {
 			case 'apply':
-				$stringAktion = JText::_('PLAYERS_ADDED');
+				$stringAktion = Text::_('PLAYERS_ADDED');
 				break;
 			case 'save':
 			default:
-				$stringAktion = JText::_('PLAYERS_SAVED');
+				$stringAktion = Text::_('PLAYERS_SAVED');
 				break;
 		}
 	
 		// Plätze frei?
 		$openSpots = ($tournament->data->teil-$playersIn);
 		if ($openSpots > 0) {
-			$this->app->enqueueMessage(JText::_('PARTICIPANTS_WANTED').": ".$openSpots, 'notice' );
+			$this->app->enqueueMessage(Text::_('PARTICIPANTS_WANTED').": ".$openSpots, 'notice' );
 		} else {
 			$this->app->enqueueMessage(CLMText::errorText('PARTICIPANTLIST', 'FULL'), 'notice' );
 			$_POST['task'] = 'save';

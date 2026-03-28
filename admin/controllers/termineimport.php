@@ -1,17 +1,20 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+use Joomla\CMS\Factory;
+use Joomla\Filesystem\File;
+
 class CLMControllertermineimport extends JControllerLegacy
 {
 	function __construct() {		
-		$this->app = JFactory::getApplication();
+		$this->app = Factory::getApplication();
 		parent::__construct();		
 	}
 	
@@ -53,7 +56,8 @@ class CLMControllertermineimport extends JControllerLegacy
 		$filename = clm_core::$load->request_string('termine_file', '');
 		//pgn-Verzeichnis
 		$path = JPATH_COMPONENT . DS . "pgn" . DS;
-		if ( strtolower(JFile::getExt($filename) ) == 'ics') {
+//		if ( strtolower(File::getExt($filename) ) == 'ics') {
+		if ( strtolower(substr(strrchr(basename($filename), '.'),1) ) == 'ics' ) {
 			$result = clm_core::$api->db_term_import_ics($path.$filename,false);		
 		} else {
 			$result = clm_core::$api->db_term_import($path.$filename,false);		

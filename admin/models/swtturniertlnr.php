@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -10,6 +10,8 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
 
 class CLMModelSWTTurnierTlnr extends JModelLegacy {
 
@@ -136,7 +138,7 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 	}
 	
 	function store() {
-		$db		=JFactory::getDBO ();
+		$db		=Factory::getDBO ();
 		
 		//Name und Verzeichnis der SWT-Datei
 		$filename 	= clm_core::$load->request_string('swt_file', '');

@@ -1,15 +1,16 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 
+use Joomla\CMS\Language\Text;
 
 // Klassenbibliothek CLMText für verschiedene textbezogene Funktionalitäten
 class CLMText {
@@ -118,7 +119,7 @@ class CLMText {
 	
 	public static function selectEntity($entity) {
 	
-		return JText::_('SELECT').' '.$entity;
+		return Text::_('SELECT').' '.$entity;
 	
 	}
 	
@@ -146,7 +147,7 @@ class CLMText {
 	*/
 	public static function errorText ($subject, $error) {
 	
-		return JText::_($subject).": ".JText::_('ERROR_'.$error);
+		return Text::_($subject).": ".Text::_('ERROR_'.$error);
 	
 	}
 	

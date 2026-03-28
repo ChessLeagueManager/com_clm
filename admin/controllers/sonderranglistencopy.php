@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,9 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 class CLMControllerSonderranglistenCopy extends JControllerLegacy {
 	
@@ -29,8 +32,8 @@ class CLMControllerSonderranglistenCopy extends JControllerLegacy {
 	
 		if ($this->_saveDo()) { // erfolgreich?
 			
-			$app =JFactory::getApplication();			
-			$app->enqueueMessage( JText::_('SP_RANKING_COPIED') );
+			$app =Factory::getApplication();			
+			$app->enqueueMessage( Text::_('SP_RANKING_COPIED') );
 		
 		}
 		// sonst Fehlermeldung schon geschrieben
@@ -50,7 +53,7 @@ class CLMControllerSonderranglistenCopy extends JControllerLegacy {
 	
 		$clmAccess = clm_core::$access;      
 		if ($clmAccess->access('BE_tournament_edit_detail') === false) {
-			$this->setMessage( JText::_( 'TOURNAMENT_NO_ACCESS' ), 'warning' );
+			$this->setMessage( Text::_( 'TOURNAMENT_NO_ACCESS' ), 'warning' );
 			return false;
 		}
 		$turnier_source = clm_core::$load->request_string('turnier_source');
@@ -79,7 +82,7 @@ class CLMControllerSonderranglistenCopy extends JControllerLegacy {
 		}
 		// Log schreiben
 		$clmLog = new CLMLog();
-		$clmLog->aktion = JText::_( 'SPECIALRANKING_COPY' );
+		$clmLog->aktion = Text::_( 'SPECIALRANKING_COPY' );
 		$clmLog->params = array('tid_from' => $turnier_source, 'tid_to' => $turnier_target); // TurnierID wird als LigaID gespeichert
 		$clmLog->write();
 			

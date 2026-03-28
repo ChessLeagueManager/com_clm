@@ -1,15 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 $turParams = new clm_class_params($this->turnier->params);
 $pgnInput = $turParams->get('pgnInput', 1);
@@ -55,10 +58,10 @@ $pgnInput = $turParams->get('pgnInput', 1);
 	<fieldset class="adminform">
 		<legend>
 			<?php 
-			echo JText::_('ROUND')." ".$this->round->nr." (".$this->round->name.")";
+			echo Text::_('ROUND')." ".$this->round->nr." (".$this->round->name.")";
 			// wenn mehr als ein Durchgang, auch Nummer des Durchgangs angeben
 			if ($this->turnier->dg > 1) {
-				echo ", ".JText::_('STAGE')." ".$this->matches[0]->dg;
+				echo ", ".Text::_('STAGE')." ".$this->matches[0]->dg;
 				// leider wurde dg früher nicht in Runde-Table gespeichert - daher aus einem der Matches extrahiert
 			}
 			?>
@@ -67,19 +70,19 @@ $pgnInput = $turParams->get('pgnInput', 1);
 		<table class="adminlist">
 	
 			<tr>
-				<th nowrap="nowrap"><?php echo JText::_('MATCH') ?></th>
-				<th nowrap="nowrap"><?php echo JText::_('WHITE') ?></th>
-				<th nowrap="nowrap"><?php echo JText::_('BLACK') ?></th>
-				<th nowrap="nowrap"><?php echo JText::_('RESULT') ?></th>
+				<th nowrap="nowrap"><?php echo Text::_('MATCH') ?></th>
+				<th nowrap="nowrap"><?php echo Text::_('WHITE') ?></th>
+				<th nowrap="nowrap"><?php echo Text::_('BLACK') ?></th>
+				<th nowrap="nowrap"><?php echo Text::_('RESULT') ?></th>
 				<?php
 				if ($this->turnier->typ == 3 or $this->turnier->typ == 5) { // KO?
-					echo '<th nowrap="nowrap">'.JText::_('DECISION_MATCHES').'</th>';
+					echo '<th nowrap="nowrap">'.Text::_('DECISION_MATCHES').'</th>';
 					$pgnColspan = 4;
 				} else {
 					$pgnColspan = 3;
 				}
 				if ($pgnInput == 1) {
-					echo '<th nowrap="nowrap" align="center">'.JText::_('PGN').'</th>';
+					echo '<th nowrap="nowrap" align="center">'.Text::_('PGN').'</th>';
 				}
 				?>
 			</tr>
@@ -192,12 +195,12 @@ $pgnInput = $turParams->get('pgnInput', 1);
 
 	<div class="width-40 fltrt">
 	<fieldset class="adminform">
-		<legend><?php echo JText::_( 'JDETAILS' ); ?></legend>
+		<legend><?php echo Text::_( 'JDETAILS' ); ?></legend>
 
 		<table class="admintable">
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'ENTERED_BY' ); ?></label>
+			<label for="name"><?php echo Text::_( 'ENTERED_BY' ); ?></label>
 			</td>
 			<td>
 			<?php if (!$this->round->gemeldet) { echo "---"; }
@@ -206,17 +209,17 @@ $pgnInput = $turParams->get('pgnInput', 1);
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'DATE_AT' ); ?>:</label>
+			<label for="name"><?php echo Text::_( 'DATE_AT' ); ?>:</label>
 			</td>
 			<td>
-			<?php if ($this->round->zeit != "0000-00-00 00:00:00" AND $this->round->zeit != "1970-01-01 00:00:00") {echo JHtml::_('date',  $this->round->zeit, JText::_('DATE_FORMAT_LC2'));} 
+			<?php if ($this->round->zeit != "0000-00-00 00:00:00" AND $this->round->zeit != "1970-01-01 00:00:00") {echo HTMLHelper::_('date',  $this->round->zeit, Text::_('DATE_FORMAT_LC2'));} 
 			else { echo "---"; } ?>
 
 			</td>
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'EDITED_BY' ); ?></label>
+			<label for="name"><?php echo Text::_( 'EDITED_BY' ); ?></label>
 			</td>
 			<td>
 			<?php if (!$this->round->editor) { echo "---"; }
@@ -225,23 +228,23 @@ $pgnInput = $turParams->get('pgnInput', 1);
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'DATE_AT' ); ?>:</label>
+			<label for="name"><?php echo Text::_( 'DATE_AT' ); ?>:</label>
 			</td>
 			<td>
-			<?php if ($this->round->edit_zeit != "0000-00-00 00:00:00" AND $this->round->edit_zeit != "1970-01-01 00:00:00") {echo JHtml::_('date',  $this->round->edit_zeit, JText::_('DATE_FORMAT_LC2'));} 
+			<?php if ($this->round->edit_zeit != "0000-00-00 00:00:00" AND $this->round->edit_zeit != "1970-01-01 00:00:00") {echo HTMLHelper::_('date',  $this->round->edit_zeit, Text::_('DATE_FORMAT_LC2'));} 
 			else { echo "---"; } ?>
 			</td>
 		</tr>
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-				<label for="name"><?php echo JText::_( 'APPROVAL' ); ?>:</label>
+				<label for="name"><?php echo Text::_( 'APPROVAL' ); ?>:</label>
 			</td>
 			<td>
 				<?php 
 					if ($this->round->tl_ok == 1) {
-						echo JText::_('JYES');
+						echo Text::_('JYES');
 					} else {
-						echo JText::_('JNO');
+						echo Text::_('JNO');
 					}
 				?>
 			</td>
@@ -260,6 +263,6 @@ $pgnInput = $turParams->get('pgnInput', 1);
 	<input type="hidden" name="boxchecked" value="0" />
 	<input type="hidden" name="turnierid" value="<?php echo $this->param['turnierid']; ?>" />
 	<input type="hidden" name="roundid" value="<?php echo $this->param['roundid']; ?>" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
 
 </form>

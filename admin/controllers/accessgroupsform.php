@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,10 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
 
 class CLMControllerAccessgroupsForm extends JControllerLegacy {
 	
@@ -20,7 +24,7 @@ class CLMControllerAccessgroupsForm extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->app = JFactory::getApplication();
+		$this->app = Factory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -41,9 +45,9 @@ class CLMControllerAccessgroupsForm extends JControllerLegacy {
 		if ($result[0]) { // erfolgreich?
 						
 			if ($result[3]) { // new access group?
-				$this->app->enqueueMessage( JText::_('ACCESSGROUP_CREATED') );
+				$this->app->enqueueMessage( Text::_('ACCESSGROUP_CREATED') );
 			} else {
-				$this->app->enqueueMessage( JText::_('ACCESSGROUP_EDITED') );
+				$this->app->enqueueMessage( Text::_('ACCESSGROUP_EDITED') );
 			}
 		
 		} else {
@@ -74,13 +78,13 @@ class CLMControllerAccessgroupsForm extends JControllerLegacy {
 		$clmAccess = clm_core::$access;      
 
 		if($clmAccess->access('BE_accessgroup_general') === false) {
-			return array(false,'warning',JText::_('SECTION_NO_ACCESS'));
+			return array(false,'warning',Text::_('SECTION_NO_ACCESS'));
 		}
 	
 		// Task
 		$task = clm_core::$load->request_string('task');
 		// Instanz der Tabelle
-		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
+		$row = Table::getInstance( 'accessgroupsform', 'TableCLM' );
 		
 		$post = $_POST; 
 		if (!$row->bind($post)) {
@@ -105,12 +109,12 @@ class CLMControllerAccessgroupsForm extends JControllerLegacy {
 		// if new item, order last in appropriate group
 		if (!$row->id) {
 			$neu = true; // Flag für neue accessgruppe
-			$stringAktion = JText::_('ACCESSGROUP_CREATED');
+			$stringAktion = Text::_('ACCESSGROUP_CREATED');
 			// $where = "sid = " . (int) $row->sid; warum nur in Saison?
 			$row->ordering = $row->getNextOrder(); // ( $where );
 		} else {
 			$neu = false;
-			$stringAktion = JText::_('ACCESSGROUP_EDITED');
+			$stringAktion = Text::_('ACCESSGROUP_EDITED');
 		}
 		
 		// save the changes

@@ -1,14 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
 class CLMViewPaarung
 {
 
@@ -17,14 +21,14 @@ public static function setPaarungToolbar($row)
 	// Menubilder laden
 		clm_core::$load->load_css("icons_images");
 
-	if (clm_core::$load->request_string('task') == 'edit') { $text = JText::_( 'Edit' );}
-		else { $text = JText::_( 'New' );}
+	if (clm_core::$load->request_string('task') == 'edit') { $text = Text::_( 'Edit' );}
+		else { $text = Text::_( 'New' );}
 	$verein 	= clm_core::$load->request_string('verein');
-	JToolBarHelper::title(  JText::_( 'TITLE_PAARUNG').' '.$row->name.': [ '. $text.' ]' ,'clm_settings_2');
-	JToolBarHelper::custom( 'save', 'save.png', 'save_f2.png', JText::_( 'SAVE'),false );
-	JToolBarHelper::custom( 'apply', 'apply.png', 'apply_f2.png', JText::_( 'APPLY'),false );
-	JToolBarHelper::cancel();
-	JToolBarHelper::help( 'screen.clm.edit' );
+	ToolBarHelper::title(  Text::_( 'TITLE_PAARUNG').' '.$row->name.': [ '. $text.' ]' ,'clm_settings_2');
+	ToolBarHelper::custom( 'save', 'save.png', 'save_f2.png', Text::_( 'SAVE'),false );
+	ToolBarHelper::custom( 'apply', 'apply.png', 'apply_f2.png', Text::_( 'APPLY'),false );
+	ToolBarHelper::cancel();
+	ToolBarHelper::help( 'screen.clm.edit' );
 	}
 		
 public static function paarung( &$row, $paarung, $man, $count_man, $option, $cid, &$lists)
@@ -47,25 +51,25 @@ public static function paarung( &$row, $paarung, $man, $count_man, $option, $cid
 	if (!isset($lparams['round_date']))  {   //Standardbelegung
 		$lparams['round_date'] = '0'; }
 		?>
-	<h1><?php echo JText::_( 'PAARUNG_WARNING_LINE1' ); ?></h1>
-	<h1><?php echo JText::_( 'PAARUNG_WARNING_LINE2' ); ?></h1>
+	<h1><?php echo Text::_( 'PAARUNG_WARNING_LINE1' ); ?></h1>
+	<h1><?php echo Text::_( 'PAARUNG_WARNING_LINE2' ); ?></h1>
 	<br>
-	<h3><?php echo JText::_( 'PAARUNG_WARNING_LINE3' ); ?></h3>
-	<h3><?php echo JText::_( 'PAARUNG_WARNING_LINE4' ); ?></h3>
-	<h3><?php echo JText::_( 'PAARUNG_WARNING_LINE5' ); ?></h3>
-	<h3><?php echo JText::_( 'PAARUNG_WARNING_LINE6' ); ?></h3>
-	<h3><?php echo JText::_( 'PAARUNG_WARNING_LINE7' ); ?></h3>
-	<h3><?php echo JText::_( 'PAARUNG_WARNING_LINE8' ); ?></h3>
-	<h3><?php echo JText::_( 'PAARUNG_WARNING_LINE9' ); ?></h3>
-	<h3><?php echo JText::_( 'PAARUNG_WARNING_LINE10' ); ?></h3>
-	<h3><?php echo JText::_( 'PAARUNG_WARNING_LINE11' ); ?></h3>
+	<h3><?php echo Text::_( 'PAARUNG_WARNING_LINE3' ); ?></h3>
+	<h3><?php echo Text::_( 'PAARUNG_WARNING_LINE4' ); ?></h3>
+	<h3><?php echo Text::_( 'PAARUNG_WARNING_LINE5' ); ?></h3>
+	<h3><?php echo Text::_( 'PAARUNG_WARNING_LINE6' ); ?></h3>
+	<h3><?php echo Text::_( 'PAARUNG_WARNING_LINE7' ); ?></h3>
+	<h3><?php echo Text::_( 'PAARUNG_WARNING_LINE8' ); ?></h3>
+	<h3><?php echo Text::_( 'PAARUNG_WARNING_LINE9' ); ?></h3>
+	<h3><?php echo Text::_( 'PAARUNG_WARNING_LINE10' ); ?></h3>
+	<h3><?php echo Text::_( 'PAARUNG_WARNING_LINE11' ); ?></h3>
 	<br>
 
 	<form action="index.php" method="post" name="adminForm" id="adminForm">
 	<div class="width-45 fltlft">
 
 	<fieldset class="adminform">
-	<legend><?php echo JText::_( 'PAARUNG_AKTUELL' ); ?></legend>
+	<legend><?php echo Text::_( 'PAARUNG_AKTUELL' ); ?></legend>
 
 	<table class="paramlist admintable">
 
@@ -83,16 +87,16 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 		<td class="key" nowrap="nowrap" colspan="7" height="24"><b><br><?php echo $paarung[$count]->rname; ?></b></td>
 	</tr>
 	<tr>
-		<td class="key" nowrap="nowrap" height="24"><?php echo JText::_( 'PAARUNG_DG' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_RUNDE' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_PAAR' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_HEIM' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_GAST' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_HEIM' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_GAST' ); ?></td>
+		<td class="key" nowrap="nowrap" height="24"><?php echo Text::_( 'PAARUNG_DG' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'PAARUNG_RUNDE' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'PAARUNG_PAAR' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'PAARUNG_HEIM' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'PAARUNG_GAST' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'PAARUNG_HEIM' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'PAARUNG_GAST' ); ?></td>
 		<?php if ($lparams['round_date'] == '1') { ?>
-			<td class="key" nowrap="nowrap">&nbsp;&nbsp;<?php echo JText::_( 'PAARUNG_DATE' ); ?></td>
-			<td class="key" nowrap="nowrap">&nbsp;&nbsp;<?php echo JText::_( 'PAARUNG_TIME' ); ?></td>
+			<td class="key" nowrap="nowrap">&nbsp;&nbsp;<?php echo Text::_( 'PAARUNG_DATE' ); ?></td>
+			<td class="key" nowrap="nowrap">&nbsp;&nbsp;<?php echo Text::_( 'PAARUNG_TIME' ); ?></td>
 		<?php } ?>
 	</tr>
 
@@ -119,7 +123,7 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 	<div class="width-55 fltrt">
 
 	<fieldset class="adminform">
-	<legend><?php echo JText::_( 'PAARUNG_CHANGED' ); ?></legend>
+	<legend><?php echo Text::_( 'PAARUNG_CHANGED' ); ?></legend>
 
 	<table class="paramlist admintable">
 
@@ -151,11 +155,11 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 		<td class="key" nowrap="nowrap" colspan="7" height="24"><b><br><?php echo $paarung[$count]->rname; ?></b></td>
 	</tr>
 	<tr>
-		<td class="key" nowrap="nowrap" height="24"><?php echo JText::_( 'PAARUNG_HEIM' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_GAST' ); ?></td>
+		<td class="key" nowrap="nowrap" height="24"><?php echo Text::_( 'PAARUNG_HEIM' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'PAARUNG_GAST' ); ?></td>
 		<?php if ($lparams['round_date'] == '1') { ?>
-			<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_DATE' ); ?></td>
-			<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_TIME' ); ?></td>
+			<td class="key" nowrap="nowrap"><?php echo Text::_( 'PAARUNG_DATE' ); ?></td>
+			<td class="key" nowrap="nowrap"><?php echo Text::_( 'PAARUNG_TIME' ); ?></td>
 		<?php } ?>
 	</tr>
 
@@ -164,7 +168,7 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 		<td class="key" nowrap="nowrap" height="24">
 		  <select size="1" name="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Heim'; ?>" id="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Heim'; ?>" style="line-height: 1.7 !important; margin-bottom: 0;"> -->
 <!--		  <select size="1" name="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Heim'; ?>" id="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Heim'; ?>"> -->
-			<option value="0"><?php echo JText::_( 'PAARUNG_HEIM_WAEHLEN' ); ?></option>
+			<option value="0"><?php echo Text::_( 'PAARUNG_HEIM_WAEHLEN' ); ?></option>
 			<?php for ($z=0; $z < $count_man[0]->tln_nr; $z++){ 
 				if (($row->runden_modus != 4 AND $row->runden_modus != 5) OR 
 				    ($row->runden_modus == 4 AND ($man[$z]->rankingpos >= ($paarung[$count]->runde - 1))) OR
@@ -178,7 +182,7 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 		<td class="key" nowrap="nowrap">
 		  <select size="1" name="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Gast'; ?>" id="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Gast'; ?>" style="line-height: 1.7 !important; margin-bottom: 0;">
 <!--		  <select size="1" name="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Gast'; ?>" id="<?php echo 'D'.$dg.'R'.($cnt+1).'P'.($y+1).'Gast'; ?>"> -->
-			<option value="0"><?php echo JText::_( 'PAARUNG_GAST_WAEHLEN' ); ?></option>
+			<option value="0"><?php echo Text::_( 'PAARUNG_GAST_WAEHLEN' ); ?></option>
 			<?php for ($z=0; $z < $count_man[0]->tln_nr; $z++){ 
 				if (($row->runden_modus != 4 AND $row->runden_modus != 5) OR 
 				    ($row->runden_modus == 4 AND ($man[$z]->rankingpos >= ($paarung[$count]->runde - 1))) OR
@@ -196,7 +200,7 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 				$paarung[$count]->ptime = $paarung[$count]->startzeit;
 			} ?>
 			<td>
-				<?php echo JHtml::_('calendar', $paarung[$count]->pdate, $ndate, $ndate, '%Y-%m-%d', array('class'=>'text_area', 'size'=>'8',  'maxlength'=>'12')); ?>
+				<?php echo HTMLHelper::_('calendar', $paarung[$count]->pdate, $ndate, $ndate, '%Y-%m-%d', array('class'=>'text_area', 'size'=>'8',  'maxlength'=>'12')); ?>
 			</td>
 			<td>
 				<input class="inputbox" type="time" name="<?php echo $ntime; ?>" id="<?php echo $ntime; ?>" size="3" maxlength="5" value="<?php echo substr($paarung[$count]->ptime,0,5); ?>"  />
@@ -216,7 +220,7 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 	<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
 	<input type="hidden" name="task" value="" />
 
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
 	</form>
 	<?php
 	}

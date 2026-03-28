@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -13,6 +13,9 @@
 /**
  * Turnier
 */
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
 	
 class CLMTournament extends stdClass {
 
@@ -21,7 +24,7 @@ class CLMTournament extends stdClass {
 		// $getData, ob die Turneirdaten aus clm_turniere sofort ausgelesen werden sollen
 
 		// DB
-		$this->_db				= JFactory::getDBO();
+		$this->_db				= Factory::getDBO();
 		
 		// turnierid
 		$this->turnierid = $turnierid;	
@@ -36,7 +39,7 @@ class CLMTournament extends stdClass {
 
 	function _getData() {
 	
-		$this->data = JTable::getInstance( 'turniere', 'TableCLM' );
+		$this->data = Table::getInstance( 'turniere', 'TableCLM' );
 		$this->data->load($this->turnierid);
 	
 	}
@@ -924,7 +927,7 @@ class CLMTournament extends stdClass {
 		$this->_db->setQuery( $query );
 		$players = $this->_db->loadObjectList();
 	
-		$table	= JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
+		$table	= Table::getInstance( 'turnier_teilnehmer', 'TableCLM' );
 		// rankingPos umsortieren
 		$rankingPos = 0; $rankingPosZ = 0;
 		$sum_punkte = 0; $sumTiebr1 = 0; $sumTiebr2 = 0; $sumTiebr3 = 0;
@@ -964,12 +967,12 @@ class CLMTournament extends stdClass {
 //		$this->_db->setQuery($query);
 //		if (!$this->_db->query()) { 
 		if (!clm_core::$db->query($query)) { 
-			JError::raiseNotice(500, JText::_('DB_ERROR') );
+			JError::raiseNotice(500, Text::_('DB_ERROR') );
 			return FALSE;
 		}
 		
-		$app = JFactory::getApplication();
-		$app->enqueueMessage( JText::_('PARTICIPANT_COUNT_RAISED_TO').": ".($this->data->teil+1) );
+		$app = Factory::getApplication();
+		$app->enqueueMessage( Text::_('PARTICIPANT_COUNT_RAISED_TO').": ".($this->data->teil+1) );
 		
 		return TRUE;
 	
@@ -993,12 +996,12 @@ class CLMTournament extends stdClass {
 //		$this->_db->setQuery($query);
 //		if (!$this->_db->query()) { 
 		if (!clm_core::$db->query($query)) { 
-			JError::raiseNotice(500, JText::_('DB_ERROR') );
+			JError::raiseNotice(500, Text::_('DB_ERROR') );
 			return FALSE;
 		}
 		
-		$app = JFactory::getApplication();
-		$app->enqueueMessage( JText::_('PARTICIPANT_COUNT_LESSENED_TO').": ".($this->data->teil-1) );
+		$app = Factory::getApplication();
+		$app->enqueueMessage( Text::_('PARTICIPANT_COUNT_LESSENED_TO').": ".($this->data->teil-1) );
 		
 		return TRUE;
 	

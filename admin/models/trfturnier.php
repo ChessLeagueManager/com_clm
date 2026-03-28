@@ -1,15 +1,19 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanaager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\Filesystem\Folder;
+use Joomla\CMS\Language\Text;
+use Joomla\Filesystem\File;
 
 class CLMModelTRFTurnier extends JModelLegacy {
 
@@ -67,7 +71,7 @@ class CLMModelTRFTurnier extends JModelLegacy {
 		jimport( 'joomla.filesystem.folder' );
 		
 		$filesDir = 'components'.DS."com_clm".DS.'swt';
-		$this->trfFiles = JFolder::files( $filesDir, '.TRF$|.trf$|.TRFX$|.trfx$', false, true );
+		$this->trfFiles = Folder::files( $filesDir, '.TRF$|.trf$|.TRFX$|.trfx$', false, true );
 		
 		return $this->trfFiles;
 	}
@@ -79,7 +83,7 @@ class CLMModelTRFTurnier extends JModelLegacy {
 		$file = clm_core::$load->request_file('trf_datei', null);
 
 		//Dateiname wird bereinigt
-		$trf_file = JFile::makeSafe($file['name']);
+		$trf_file = File::makeSafe($file['name']);
 		$_POST['trf_file'] = $trf_file;
 
 		//Temporärer Name und Ziel werden festgesetzt
@@ -87,14 +91,15 @@ class CLMModelTRFTurnier extends JModelLegacy {
 		$dest = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR . $trf_file;
 
 		//Datei wird auf dem Server gespeichert (abfrage auf .tunx oder turx Endung)
-		if ( strtolower(JFile::getExt($trf_file) ) == 'trf' OR strtolower(JFile::getExt($trf_file) ) == 'trfx' ) {
-			if ( JFile::upload($src, $dest) ) {
-				$msg = JText::_( 'SWT_UPLOAD_SUCCESS' ); 
+//		if ( strtolower(File::getExt($trf_file) ) == 'trf' OR strtolower(File::getExt($trf_file) ) == 'trfx' ) {
+		if (strtolower(substr(strrchr(basename($trf_file), '.'),1) ) == 'trf' OR strtolower(substr(strrchr(basename($trf_file), '.'),1) ) == 'trfx') {
+			if ( File::upload($src, $dest) ) {
+				$msg = Text::_( 'SWT_UPLOAD_SUCCESS' ); 
 			} else {
-				$msg = JText::_( 'SWT_UPLOAD_ERROR' );
+				$msg = Text::_( 'SWT_UPLOAD_ERROR' );
 			}
 		} else {
-			$msg = JText::_( 'SWT_UPLOAD_ERROR_WRONG_EXT' ).'*'.$trf_file.'*';
+			$msg = Text::_( 'SWT_UPLOAD_ERROR_WRONG_EXT' ).'*'.$trf_file.'*';
 		}
 
 		return $msg;
@@ -106,17 +111,17 @@ class CLMModelTRFTurnier extends JModelLegacy {
 		//Name der zu löschenden Datei wird geladen
 		$trf_file = clm_core::$load->request_string('trf_file', '');
 		if ($trf_file == '') {
-			$msg = JText::_( 'SWT_FILE_ERROR' ); 
+			$msg = Text::_( 'SWT_FILE_ERROR' ); 
 			return $msg;
 		}		
 		//SWT-Verzeichnis
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		
 		//Datei löschen
-		if ( JFile::delete($path.$trf_file) ) {
-			$msg = JText::_( 'SWT_DELETE_SUCCESS' ); 
+		if ( File::delete($path.$trf_file) ) {
+			$msg = Text::_( 'SWT_DELETE_SUCCESS' ); 
 		} else {
-			$msg = JText::_( 'SWT_DELETE_ERROR' ); 
+			$msg = Text::_( 'SWT_DELETE_ERROR' ); 
 		}
 		return $msg;
 	}

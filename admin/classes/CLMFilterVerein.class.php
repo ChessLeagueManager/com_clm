@@ -2,9 +2,9 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -24,14 +24,16 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 // swt ******
 // turnier_teilnehmer
 
-
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 class CLMFilterVerein
 {
 
 public static function vereine_filter($override)
 	{
-	$db =JFactory::getDBO();
+	$db =Factory::getDBO();
 
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
@@ -126,15 +128,15 @@ public static function vereine_filter($override)
 
 	// Hinweis setzen wenn Filter leer !
 	if (count($vereine) == 0 AND $vl == 1) {
-//		JError::raiseWarning( 500,  JText::_( 'FILTER_VLISTE'));
-//		JError::raiseNotice( 6000,  JText::_( 'FILTER_KEIN_VEREIN'));
+//		JError::raiseWarning( 500,  Text::_( 'FILTER_VLISTE'));
+//		JError::raiseNotice( 6000,  Text::_( 'FILTER_KEIN_VEREIN'));
 	}
 	if (count($vereine) == 0 AND $vl == 0) {
-//		JError::raiseWarning( 500,  JText::_( 'FILTER_VLISTE'));
-//		JError::raiseNotice( 6000,  JText::_( 'FILTER_URSACHE'));
+//		JError::raiseWarning( 500,  Text::_( 'FILTER_VLISTE'));
+//		JError::raiseNotice( 6000,  Text::_( 'FILTER_URSACHE'));
 	}
 
-	$vlist[]	= JHtml::_('select.option',  '0', JText::_( 'FILTER_VEREIN' ), 'zps', 'name' );
+	$vlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'FILTER_VEREIN' ), 'zps', 'name' );
 	$vlist		= array_merge( $vlist, $vereine);
 	return $vlist;
 	}

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,10 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
 
 class CLMControllerCheck extends JControllerLegacy
 {
@@ -26,7 +30,7 @@ function __construct( $config = array() )
 
 function display($cachable = false, $urlparams = array())
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');
 	$mainframe->redirect( 'index.php?option='. $option.'&section=info' );
@@ -34,10 +38,10 @@ function display($cachable = false, $urlparams = array())
 
 function edit()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
-	$db 		=JFactory::getDBO();
-	$user 		=JFactory::getUser();
+	$db 		=Factory::getDBO();
+	$user 		=Factory::getUser();
 	$task 		= clm_core::$load->request_string('task');
 	$cid = clm_core::$load->request_array_int('cid');
 	$id  = clm_core::$load->request_int('id',0);
@@ -62,10 +66,10 @@ function edit()
 
 	// illegaler Einbruchversuch über URL !
 	// evtl. mitschneiden !?!
-	$saison		=JTable::getInstance( 'saisons', 'TableCLM' );
+	$saison		=Table::getInstance( 'saisons', 'TableCLM' );
 	$saison->load( $rnd[0]->sid );
 	if ($saison->archiv == "1") { 
-		$app->enqueueMessage( JText::_( 'CHECK_RUNDEN' ), 'warning' );
+		$app->enqueueMessage( Text::_( 'CHECK_RUNDEN' ), 'warning' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section=info' );
 	}
 
@@ -115,7 +119,7 @@ public static function check_d_spl($zps,$spieler,$PKZ,$runde,$dg,$rnd)
 	$sid = $rnd[0]->sid;
 	$rt_date = $rnd[0]->datum;
 	
-	$db 	=JFactory::getDBO();
+	$db 	=Factory::getDBO();
 	$query = " SELECT COUNT(*) as count "
 		." FROM #__clm_rnd_spl as a "
 		." LEFT JOIN #__clm_liga as l ON a.lid = l.id "
@@ -140,7 +144,7 @@ public static function show_d_spl($zps,$spieler,$PKZ,$runde,$dg,$rnd)
 	$sid = $rnd[0]->sid;
 	$rt_date = $rnd[0]->datum;
 	
-	$db 	=JFactory::getDBO();
+	$db 	=Factory::getDBO();
 	$query = " SELECT l.name, a.lid, a.paar, a.brett, rt.datum"
 		." FROM #__clm_rnd_spl as a "
 		." LEFT JOIN #__clm_liga as l ON a.lid = l.id "
@@ -164,7 +168,7 @@ public static function check_r_spl($zps,$spieler,$PKZ,$runde,$dg,$rnd)
 	{
 	$sid = $rnd[0]->sid;
 	
-	$db 	=JFactory::getDBO();
+	$db 	=Factory::getDBO();
 	$query = " SELECT COUNT(*) as count "
 		." FROM #__clm_rnd_spl as a "
 		." WHERE a.zps = '$zps'"
@@ -186,7 +190,7 @@ public static function show_r_spl($zps,$spieler,$PKZ,$runde,$dg,$rnd)
 	{
 	$sid = $rnd[0]->sid;
 	
-	$db 	=JFactory::getDBO();
+	$db 	=Factory::getDBO();
 	$query = " SELECT l.name, a.lid, a.paar, a.brett, rt.datum"
 		." FROM #__clm_rnd_spl as a "
 		." LEFT JOIN #__clm_liga as l ON a.lid = l.id "

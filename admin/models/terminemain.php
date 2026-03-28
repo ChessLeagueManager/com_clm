@@ -1,15 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Pagination\Pagination;
 
 class CLMModelTermineMain extends JModelLegacy {
 
@@ -25,7 +28,7 @@ class CLMModelTermineMain extends JModelLegacy {
 		global $mainframe, $option;
 		//Joomla 1.6 compatibility
 		if (empty($mainframe)) {
-			$mainframe = JFactory::getApplication();
+			$mainframe = Factory::getApplication();
 			$option = $mainframe->scope;
 		}
 
@@ -36,7 +39,7 @@ class CLMModelTermineMain extends JModelLegacy {
 		$this->setState('limitstart', $this->limitstart);
 
 		// user
-		$this->user =JFactory::getUser();
+		$this->user =Factory::getUser();
 		
 		// get parameters
 		$this->_getParameters();
@@ -52,7 +55,7 @@ class CLMModelTermineMain extends JModelLegacy {
 	// alle vorhandenen Parameter auslesen
 	function _getParameters() {
 	
-		$mainframe =JFactory::getApplication();
+		$mainframe =Factory::getApplication();
 		global $option;
 	
 		if (!isset($this->param) OR is_null($this->param)) $this->param = array();	// seit J 4.2 nötig um notice zu vermeiden
@@ -134,7 +137,7 @@ class CLMModelTermineMain extends JModelLegacy {
 		// Load the content if it doesn't already exist
 		if (empty($this->pagination)) {
 			jimport('joomla.html.pagination');
-			$this->pagination = new JPagination($this->termineTotal, $this->limitstart, $this->limit );
+			$this->pagination = new Pagination($this->termineTotal, $this->limitstart, $this->limit );
 		}
 	}
 

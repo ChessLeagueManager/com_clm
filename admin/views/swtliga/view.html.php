@@ -1,15 +1,19 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class CLMViewSWTliga extends JViewLegacy {
 
@@ -24,24 +28,24 @@ class CLMViewSWTliga extends JViewLegacy {
 			
 		//Toolbar
 		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title( JText::_('TITLE_SWT_LEAGUE')." - ".$swt_file ,'clm_headmenu_manager.png' );
+		ToolBarHelper::title( Text::_('TITLE_SWT_LEAGUE')." - ".$swt_file ,'clm_headmenu_manager.png' );
 		
-		JToolBarHelper::custom('update','refresh.png','refresh_f2.png', JText::_('SWT_LEAGUE_UPDATE'), false);
-		JToolBarHelper::custom('add','new.png','new_f2.png', JText::_('SWT_TOURNAMENT_NEW'), false);
+		ToolBarHelper::custom('update','refresh.png','refresh_f2.png', Text::_('SWT_LEAGUE_UPDATE'), false);
+		ToolBarHelper::custom('add','new.png','new_f2.png', Text::_('SWT_TOURNAMENT_NEW'), false);
 		
 		//Saison- und Ligen-Auswahl erstellen
-		$options_saisons[] = JHtml::_('select.option', '', JText::_( 'SWT_SAISONS' ));
+		$options_saisons[] = HTMLHelper::_('select.option', '', Text::_( 'SWT_SAISONS' ));
 		foreach($saisons as $saison) {
-			$options_saisons[] = JHtml::_('select.option', $saison->id, $saison->name);
+			$options_saisons[] = HTMLHelper::_('select.option', $saison->id, $saison->name);
 		}
 		
-		$options_ligen[] = JHtml::_('select.option', '', JText::_( 'SWT_LEAGUES' ));
+		$options_ligen[] = HTMLHelper::_('select.option', '', Text::_( 'SWT_LEAGUES' ));
 		foreach($ligen as $liga) {
-			$options_ligen[] = JHtml::_('select.option', $liga->id, $liga->name);
+			$options_ligen[] = HTMLHelper::_('select.option', $liga->id, $liga->name);
 		}
 		
-		$lists['saisons']	= JHtml::_('select.genericlist', $options_saisons, 'filter_saison', 'class="inputbox" onchange="this.form.submit();"', 'value', 'text', $state->get('filter_saison') );
-		$lists['ligen']	= JHtml::_('select.genericlist', $options_ligen, 'liga', 'class="inputbox"', 'value', 'text', 0 );
+		$lists['saisons']	= HTMLHelper::_('select.genericlist', $options_saisons, 'filter_saison', 'class="inputbox" onchange="this.form.submit();"', 'value', 'text', $state->get('filter_saison') );
+		$lists['ligen']	= HTMLHelper::_('select.genericlist', $options_ligen, 'liga', 'class="inputbox"', 'value', 'text', 0 );
 		
 		//Daten an Template
 		$this->lists = $lists;

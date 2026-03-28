@@ -1,15 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class CLMViewTurRounds extends JViewLegacy {
 
@@ -21,22 +24,22 @@ class CLMViewTurRounds extends JViewLegacy {
 		
 		// Die Toolbar erstellen, die über der Seite angezeigt wird
 		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title( $model->turnier->name.": ".JText::_('ROUNDS'), 'clm_turnier.png'  );
+		ToolBarHelper::title( $model->turnier->name.": ".Text::_('ROUNDS'), 'clm_turnier.png'  );
 	
-		JToolBarHelper::spacer();
+		ToolBarHelper::spacer();
 		$clmAccess = clm_core::$access;
 		if (($model->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== false) OR $clmAccess->access('BE_tournament_edit_round') === true) {
-			JToolBarHelper::spacer();
-			JToolBarHelper::publishList();
-			JToolBarHelper::unpublishList();
+			ToolBarHelper::spacer();
+			ToolBarHelper::publishList();
+			ToolBarHelper::unpublishList();
 		}
-		JToolBarHelper::spacer();
-		JToolBarHelper::cancel();
+		ToolBarHelper::spacer();
+		ToolBarHelper::cancel();
 
 		if (($model->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== false) OR $clmAccess->access('BE_tournament_edit_round') === true) {
-			JToolBarHelper::divider();
-			JToolBarHelper::spacer();
-			JToolBarHelper::custom( 'turform', 'config.png', 'config_f2.png', JText::_('TOURNAMENT'), false);
+			ToolBarHelper::divider();
+			ToolBarHelper::spacer();
+			ToolBarHelper::custom( 'turform', 'config.png', 'config_f2.png', Text::_('TOURNAMENT'), false);
 		}
 
 		// Daten an Template übergeben
@@ -50,7 +53,7 @@ class CLMViewTurRounds extends JViewLegacy {
 		$this->pagination = $model->pagination;
 		
 		// zusätzliche Funktionalitäten
-//		JHtml::_('behavior.tooltip');
+//		HTMLHelper::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 
 		parent::display();

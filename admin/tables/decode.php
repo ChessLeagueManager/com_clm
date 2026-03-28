@@ -1,16 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
+
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-class TableCLMDecode extends JTable
-{
+use Joomla\CMS\Table\Table;
 
+class TableCLMDecode extends Table
+{
 	var $id			= 0;
 	var $sid		= 0;
 	var $source		= '';

@@ -1,5 +1,13 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link https://chessleaguemanager.org
+*/
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
 
 	$config			= JComponentHelper::getParams( 'com_clm' );
 	
@@ -9,7 +17,7 @@ defined('_JEXEC') or die('Restricted access');
       <tr>
         <td width="50%" valign="top">
 	    <fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_CLUB' ); ?></legend>
+			<legend><?php echo Text::_( 'CONFIG_FRONTEND_CLUB' ); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
@@ -21,7 +29,7 @@ defined('_JEXEC') or die('Restricted access');
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_TEAMS' ); ?></legend>
+			<legend><?php echo Text::_( 'CONFIG_FRONTEND_TEAMS' ); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
@@ -33,7 +41,7 @@ defined('_JEXEC') or die('Restricted access');
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_CLUBS' ); ?></legend>
+			<legend><?php echo Text::_( 'CONFIG_FRONTEND_CLUBS' ); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
@@ -45,7 +53,7 @@ defined('_JEXEC') or die('Restricted access');
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_ROUNDS' ); ?></legend>
+			<legend><?php echo Text::_( 'CONFIG_FRONTEND_ROUNDS' ); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
@@ -57,7 +65,7 @@ defined('_JEXEC') or die('Restricted access');
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_MELDUNG' ); ?></legend>
+			<legend><?php echo Text::_( 'CONFIG_FRONTEND_MELDUNG' ); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
@@ -73,7 +81,7 @@ defined('_JEXEC') or die('Restricted access');
 
       <td width="50%" valign="top">
 	<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_SUBMENU' ); ?></legend>
+			<legend><?php echo Text::_( 'CONFIG_FRONTEND_SUBMENU' ); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
@@ -85,7 +93,7 @@ defined('_JEXEC') or die('Restricted access');
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_FIXHEADER' ); ?></legend>
+			<legend><?php echo Text::_( 'CONFIG_FRONTEND_FIXHEADER' ); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
@@ -97,7 +105,7 @@ defined('_JEXEC') or die('Restricted access');
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_DISPLAY' ); ?></legend>
+			<legend><?php echo Text::_( 'CONFIG_FRONTEND_DISPLAY' ); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
@@ -109,19 +117,19 @@ defined('_JEXEC') or die('Restricted access');
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_MAPS' ); ?></legend>
+			<legend><?php echo Text::_( 'CONFIG_FRONTEND_MAPS' ); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>
        					<td valign="top">
-                       	<?php echo $this->params->render( 'params', 'googlemaps'); ?> <a href="https://console.cloud.google.com/projectcreate" target="_blank"><?php echo JText::_( 'CONFIG_FRONTEND_MAPS_GETKEY' ); ?></a>
+                       	<?php echo $this->params->render( 'params', 'googlemaps'); ?> <a href="https://console.cloud.google.com/projectcreate" target="_blank"><?php echo Text::_( 'CONFIG_FRONTEND_MAPS_GETKEY' ); ?></a>
                         </td>
       				</tr>
 				</tbody>
 				</table>
 			</fieldset>
 			<fieldset class="adminform">
-			<legend><?php echo JText::_( 'CONFIG_FRONTEND_CHARTS' ); ?></legend>
+			<legend><?php echo Text::_( 'CONFIG_FRONTEND_CHARTS' ); ?></legend>
 				<table class="admintable" cellspacing="1">
 				<tbody>
 					<tr>

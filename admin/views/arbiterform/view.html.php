@@ -1,11 +1,15 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class CLMViewArbiterForm extends JViewLegacy {
 
@@ -20,14 +24,14 @@ class CLMViewArbiterForm extends JViewLegacy {
 			$text = $lang->arbiter_create;
 		}
 		
-		JToolBarHelper::title( $text );
+		ToolBarHelper::title( $text );
 		
 		if (clm_core::$access->getType() == 'admin' OR clm_core::$access->getType() == 'tl') {
-			JToolBarHelper::save( 'save' );
-			JToolBarHelper::apply( 'apply' );
+			ToolBarHelper::save( 'save' );
+			ToolBarHelper::apply( 'apply' );
 		}
-		JToolBarHelper::spacer();
-		JToolBarHelper::cancel('cancel');
+		ToolBarHelper::spacer();
+		ToolBarHelper::cancel('cancel');
 
 		// das MainMenu abschalten
 		$_GET['hidemainmenu'] = 1;
@@ -37,12 +41,12 @@ class CLMViewArbiterForm extends JViewLegacy {
 		$model =   $this->getModel();
 
 		// Document/Seite
-		$document =JFactory::getDocument();
+		$document =Factory::getDocument();
 
 		// JS-Array jtext -> Fehlertexte
 		$document->addScriptDeclaration("var jserror = new Array();");
-		$document->addScriptDeclaration("jserror['enter_fide'] = '".JText::_('PLEASE_ENTER')." ".JText::_('FIDE_ID')."';");
-		$document->addScriptDeclaration("jserror['enter_name'] = '".JText::_('PLEASE_ENTER')." ".JText::_('ARBITER_NAME')."';");
+		$document->addScriptDeclaration("jserror['enter_fide'] = '".Text::_('PLEASE_ENTER')." ".Text::_('FIDE_ID')."';");
+		$document->addScriptDeclaration("jserror['enter_name'] = '".Text::_('PLEASE_ENTER')." ".Text::_('ARBITER_NAME')."';");
 
 		// Daten an Template übergeben
 		$this->user = $model->user;

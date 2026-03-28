@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,12 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Pagination\Pagination;
 
 class CLMControllerErgebnisse extends JControllerLegacy
 {
@@ -28,10 +34,10 @@ function __construct( $config = array() )
 
 function display($cachable = false, $urlparams = array())
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
-	$db		= JFactory::getDBO();
+	$db		= Factory::getDBO();
 
 	// für kaskadierende Menüführung
 	// Parameter auslesen
@@ -129,7 +135,7 @@ function display($cachable = false, $urlparams = array())
 	$total = $db->loadResult();
 
 	jimport('joomla.html.pagination');
-	$pageNav = new JPagination( $total, $limitstart, $limit );
+	$pageNav = new Pagination( $total, $limitstart, $limit );
 
 	// get the subset (based on limits) of required records
 	$query = "SELECT a.*,l.name as liga,l.teil,l.durchgang,l.sl,l.liga_mt, "
@@ -153,15 +159,15 @@ function display($cachable = false, $urlparams = array())
 	}
 	// Filter
 	// Statusfilter
-	//$lists['state']	= JHTML::_('grid.state',  $filter_state );
+	//$lists['state']	= HTMLHelper::_('grid.state',  $filter_state );
 	$lists['state'] = CLMForm::selectState( $filter_state );
 	// Saisonfilter
 	$sql = 'SELECT id, name FROM #__clm_saison WHERE archiv =0';
 	$db->setQuery($sql);
-	$saisonlist[]	= JHTML::_('select.option',  '0', JText::_( 'ERGEBNISSE_SAISON_SELECT' ), 'id', 'name' );
+	$saisonlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'ERGEBNISSE_SAISON_SELECT' ), 'id', 'name' );
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
-//	$lists['sid']      = JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
-	$lists['sid']      = JHTML::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+//	$lists['sid']      = HTMLHelper::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']      = HTMLHelper::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 	// Nur ausführen wenn Saison published = 1 !!
 	if ( isset($rows[0]->liga) AND is_string($rows[0]->liga) ) {
 	
@@ -176,14 +182,14 @@ function display($cachable = false, $urlparams = array())
 	}
 	//echo "<br>erg: "; var_dump($rows);  die('  section');
 	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
-		$mainframe->enqueueMessage( JText::_('LIGEN_STAFFEL_TOTAL'),'warning' );
+		$mainframe->enqueueMessage( Text::_('LIGEN_STAFFEL_TOTAL'),'warning' );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	} elseif ($clmAccess->access('BE_'.$mppoint.'_edit_result') === true) $where_sl = '';
 	else $where_sl = ' AND a.sl = '.clm_core::$access->getJid();
 	
 	if($rows[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
-		$mainframe->enqueueMessage( JText::_('LIGEN_STAFFEL'),'warning' );
+		$mainframe->enqueueMessage( Text::_('LIGEN_STAFFEL'),'warning' );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
@@ -193,28 +199,28 @@ function display($cachable = false, $urlparams = array())
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
 		." WHERE a.rnd = 1 AND a.published = 1 AND s.archiv = 0 AND s.published = 1 ".$where_sl;
 	$db->setQuery($sql);
-	$ligalist[]	= JHTML::_('select.option',  '0', JText::_( 'ERGEBNISSE_LIGA' ), 'cid', 'name' );
+	$ligalist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'ERGEBNISSE_LIGA' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
-//	$lists['lid']	= JHTML::_('select.genericlist', $ligalist, 'filter_lid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
-	$lists['lid']	= JHTML::_('select.genericlist', $ligalist, 'filter_lid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
+//	$lists['lid']	= HTMLHelper::_('select.genericlist', $ligalist, 'filter_lid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
+	$lists['lid']	= HTMLHelper::_('select.genericlist', $ligalist, 'filter_lid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
 	// Rundenfilter
 	$sql = 'SELECT id, runde as name FROM #__clm_rnd_man '
 		." WHERE lid =".($rows[0]->lid)." AND paar =1 AND heim = 1 AND dg = 1"
 		." ORDER BY runde ASC ";
 	$db->setQuery($sql);
-	$rlist[]	= JHTML::_('select.option',  '0', JText::_( 'ERGEBNISSE_RUNDE' ), 'name', 'name' );
+	$rlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'ERGEBNISSE_RUNDE' ), 'name', 'name' );
 	$rlist		= array_merge( $rlist, $db->loadObjectList() );
-//	$lists['runde']	= JHTML::_('select.genericlist', $rlist, 'filter_runde', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','name', 'name', intval( $filter_runde ) );
-	$lists['runde']	= JHTML::_('select.genericlist', $rlist, 'filter_runde', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','name', 'name', intval( $filter_runde ) );
+//	$lists['runde']	= HTMLHelper::_('select.genericlist', $rlist, 'filter_runde', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','name', 'name', intval( $filter_runde ) );
+	$lists['runde']	= HTMLHelper::_('select.genericlist', $rlist, 'filter_runde', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','name', 'name', intval( $filter_runde ) );
 	// Durchgangsfilter
 	$dg_menu = array();
-	$dg_menu[]	= JHTML::_('select.option',  '0', JText::_( 'ERGEBNISSE_DURCHGANG' ), 'name', 'name' );
-	$dg_menu[]	= JHTML::_('select.option',  '1', JText::_( 'ERGEBNISSE_DGA' ), 'name', 'name' );
-	$dg_menu[]	= JHTML::_('select.option',  '2', JText::_( 'ERGEBNISSE_DGB' ), 'name', 'name' );
-	$dg_menu[]	= JHTML::_('select.option',  '3', JText::_( 'ERGEBNISSE_DGC' ), 'name', 'name' );
-	$dg_menu[]	= JHTML::_('select.option',  '4', JText::_( 'ERGEBNISSE_DGD' ), 'name', 'name' );
-//	$lists['dg_menu']	= JHTML::_('select.genericlist', $dg_menu, 'filter_dg', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','name', 'name', intval( $filter_dg ) );
-	$lists['dg_menu']	= JHTML::_('select.genericlist', $dg_menu, 'filter_dg', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','name', 'name', intval( $filter_dg ) );
+	$dg_menu[]	= HTMLHelper::_('select.option',  '0', Text::_( 'ERGEBNISSE_DURCHGANG' ), 'name', 'name' );
+	$dg_menu[]	= HTMLHelper::_('select.option',  '1', Text::_( 'ERGEBNISSE_DGA' ), 'name', 'name' );
+	$dg_menu[]	= HTMLHelper::_('select.option',  '2', Text::_( 'ERGEBNISSE_DGB' ), 'name', 'name' );
+	$dg_menu[]	= HTMLHelper::_('select.option',  '3', Text::_( 'ERGEBNISSE_DGC' ), 'name', 'name' );
+	$dg_menu[]	= HTMLHelper::_('select.option',  '4', Text::_( 'ERGEBNISSE_DGD' ), 'name', 'name' );
+//	$lists['dg_menu']	= HTMLHelper::_('select.genericlist', $dg_menu, 'filter_dg', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','name', 'name', intval( $filter_dg ) );
+	$lists['dg_menu']	= HTMLHelper::_('select.genericlist', $dg_menu, 'filter_dg', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','name', 'name', intval( $filter_dg ) );
 	}
 	// Ordering
 	$lists['order_Dir']	= $filter_order_Dir;
@@ -229,10 +235,10 @@ function display($cachable = false, $urlparams = array())
 
 function edit()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
-	$db 		=JFactory::getDBO();
-	$user 		=JFactory::getUser();
+	$db 		=Factory::getDBO();
+	$user 		=Factory::getUser();
 	$task 		= clm_core::$load->request_string( 'task');
 	$option 	= clm_core::$load->request_string( 'option' );
 	$section 	= clm_core::$load->request_string( 'section' );
@@ -241,35 +247,35 @@ function edit()
 	if (is_null($cid)) {
 		$cid[0] = $id; }
 	// load the row from the db table
-	$row =JTable::getInstance( 'ergebnisse', 'TableCLM' );
+	$row =Table::getInstance( 'ergebnisse', 'TableCLM' );
 	$row->load( $cid[0] );
 
-	$sid =JTable::getInstance( 'saisons', 'TableCLM' );
+	$sid =Table::getInstance( 'saisons', 'TableCLM' );
 	$sid->load($row->sid);
 
 	// Ergebnisse einer unveröffentlichten Saison nicht bearbeiten
 	if ($sid->published =="0") {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SAISON'),'warning' );
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SAISON_WARTEN'),'notice' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_SAISON'),'warning' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_SAISON_WARTEN'),'notice' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 	// spielfreie Runde  kann nicht gemeldet / bearbeitet werden
 	if ($row->gemeldet == "1") {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SPIELFREIE'),'notice' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_SPIELFREIE'),'notice' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 	// Runde durch SWT-Import auf spielfrei gesetzt -> kann nicht gemeldet / bearbeitet werden
 	if ($row->gemeldet == "9997" AND is_null($row->ergebnis)) {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SPIELFREI_DURCH_SWT'),'warnung' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_SPIELFREI_DURCH_SWT'),'warnung' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
 	// illegaler Einbruchversuch über URL !
 	// evtl. mitschneiden !?!
-	$saison		=JTable::getInstance( 'saisons', 'TableCLM' );
+	$saison		=Table::getInstance( 'saisons', 'TableCLM' );
 	$saison->load( $row->sid );
 	if ($saison->archiv == "1") { //  AND clm_core::$access->getType() !== 'admin') {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_ARCHIV'),'warning' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_ARCHIV'),'warning' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 	//CLM parameter auslesen
@@ -304,20 +310,20 @@ function edit()
 		$csection = 'mturniere';
 	}
 	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
-		$mainframe->enqueueMessage( JText::_('LIGEN_STAFFEL_TOTAL'),'warning' );
+		$mainframe->enqueueMessage( Text::_('LIGEN_STAFFEL_TOTAL'),'warning' );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	} 
 	if ($runde[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_IHRER'),'warning' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_IHRER'),'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 					}
 	$row->checkout( clm_core::$access->getJid() );
 
 	if ( $runde[0]->hmnr > ($runde[0]->lid)*10 OR $runde[0]->gmnr > ($runde[0]->lid)*10) {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_MANNSCHAFTNUMMER'),'notice' );
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_MN_HEIM').' '.$runde[0]->hmnr.JText::_('ERGEBNISSE_MN_GAST').' '.$runde[0]->gmnr.' !','notice' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_MANNSCHAFTNUMMER'),'notice' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_MN_HEIM').' '.$runde[0]->hmnr.Text::_('ERGEBNISSE_MN_GAST').' '.$runde[0]->gmnr.' !','notice' );
 	}
 	
 	// Spieler Heim
@@ -388,7 +394,7 @@ function edit()
 	$sql = "SELECT a.id, a.erg_text "
 		." FROM #__clm_ergebnis as a "
 		;
-	$db 		=JFactory::getDBO();
+	$db 		=Factory::getDBO();
 	$db->setQuery( $sql );
 	$ergebnis	= $db->loadObjectList();
 
@@ -502,19 +508,19 @@ function edit()
 
 function remove()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 
-	$db 		=JFactory::getDBO();
+	$db 		=Factory::getDBO();
 	$cid 		= clm_core::$load->request_array_int('cid');
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
-	$user 		=JFactory::getUser();
+	$user 		=Factory::getUser();
 
 	if (count($cid) < 1) {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SELECT'),'warning' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_SELECT'),'warning' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 	
@@ -538,12 +544,12 @@ function remove()
 			$csection = 'mturniere';
 		}
 		if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
-			$mainframe->enqueueMessage( JText::_('LIGEN_STAFFEL_TOTAL'),'warning' );
+			$mainframe->enqueueMessage( Text::_('LIGEN_STAFFEL_TOTAL'),'warning' );
 			$section = 'runden';
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 		} 
 		if ($data[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
-			$mainframe->enqueueMessage( JText::_('ERGEBNISSE_LOESCH'),'warning' );
+			$mainframe->enqueueMessage( Text::_('ERGEBNISSE_LOESCH'),'warning' );
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link);
 		}
@@ -628,7 +634,7 @@ function remove()
 	$clmLog->params = array('cid' => $cid, 'sid' => $data[0]->sid, 'lid' => $data[0]->lid, 'rnd' => $data[0]->runde, 'paar' => $data[0]->paar, 'dg' => $data[0]->dg);
 	$clmLog->write();
 
-	$msg = JText::_( 'ERGEBNISSE_GELOESCHT');
+	$msg = Text::_( 'ERGEBNISSE_GELOESCHT');
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
@@ -636,18 +642,18 @@ function remove()
 
 function save()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 
 	$option		= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
-	$db 		=JFactory::getDBO();
+	$db 		=Factory::getDBO();
 	$task		= clm_core::$load->request_string( 'task');
-	$user 		=JFactory::getUser();
+	$user 		=Factory::getUser();
 	$id_id 		= clm_core::$load->request_string( 'id');
-	$date		=JFactory::getDate();
+	$date		=Factory::getDate();
 
 	$meldung 	= $user->get('id');
 	$sid		= clm_core::$load->request_int( 'sid');
@@ -1241,7 +1247,7 @@ function save()
 	}
 	// Nachricht absetzen als Hinweis das Ergebnis nicht geändert wurde
 	else {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_ME_WERTUNG'),'notice' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_ME_WERTUNG'),'notice' );
 	}
 
 	// Teilnehmer ID bestimmen 
@@ -1381,7 +1387,7 @@ function save()
 				elseif ($hwpunkte > $gwpunkte) $ko_par = 2;		// Sieger Heim nach Wertpunkte
 				elseif ($hwpunkte < $gwpunkte) $ko_par = 3;		// Sieger Gast nach Wertpunkte
 				else { $ko_par = 3;								// Sieger Gast nach Computer --> Nacharbeit durch TL
-				     $comment = JText::_('ERGEBNISSE_KO_COMMENT').$comment; }
+				     $comment = Text::_('ERGEBNISSE_KO_COMMENT').$comment; }
 			}
 			elseif ($ko_decision == 2) $ko_par = 2;				// Sieger Heim nach Blitz-Entscheid
 			elseif ($ko_decision == 4) $ko_par = 2;				// Sieger Heim nach Los-Entscheid
@@ -1443,14 +1449,14 @@ function save()
 	switch ($task)
 	{
 		case 'apply':
-		$msg = JText::_( 'ERGEBNISSE_AENDERUNG' );
+		$msg = Text::_( 'ERGEBNISSE_AENDERUNG' );
 //		$link = 'index.php?option='.$option.'&section='.$section.'&task=edit&cid[]='.$id_id;
 		$link = 'index.php?option='.$option.'&section='.$section.'&task=edit&id='.$id_id;
 			break;
 		case 'save':
 		default:
-		$row =JTable::getInstance( 'ergebnisse', 'TableCLM' );
-		$msg = JText::_( 'ERGEBNISSE_GESPEICHERT' );
+		$row =Table::getInstance( 'ergebnisse', 'TableCLM' );
+		$msg = Text::_( 'ERGEBNISSE_GESPEICHERT' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 			break;
 	}
@@ -1458,9 +1464,9 @@ function save()
 	// Log schreiben
 	$clmLog = new CLMLog();
 	if (!$id[0]->gemeldet) {
-		$clmLog->aktion = JText::_( 'ERGEBNISSE_AKTION_GEMELDET' );
+		$clmLog->aktion = Text::_( 'ERGEBNISSE_AKTION_GEMELDET' );
 	} else { 
-		$clmLog->aktion = JText::_( 'ERGEBNISSE_AKTION_EDIT' );
+		$clmLog->aktion = Text::_( 'ERGEBNISSE_AKTION_EDIT' );
 	}
 	$clmLog->params = array('sid' => $sid, 'lid' => $lid, 'rnd' => $rnd, 'paar' => $paarung, 'dg' => $dg);
 	$clmLog->write();
@@ -1476,55 +1482,55 @@ function save()
 
 function cancel()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 	
 	$option		= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
 	$id		= clm_core::$load->request_string('id');	
-	$row 		=JTable::getInstance( 'ergebnisse', 'TableCLM' );
+	$row 		=Table::getInstance( 'ergebnisse', 'TableCLM' );
 
-	$msg = JText::_( 'ERGEBNISSE_AKTION');
+	$msg = Text::_( 'ERGEBNISSE_AKTION');
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
 function wertung()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 
-	$db 		=JFactory::getDBO();
-	$user 		=JFactory::getUser();
+	$db 		=Factory::getDBO();
+	$user 		=Factory::getUser();
 	$task 		= clm_core::$load->request_string( 'task');
 	$option 	= clm_core::$load->request_string( 'option' );
 	$section 	= clm_core::$load->request_string( 'section' );
 	$cid 		= clm_core::$load->request_array_int('cid');
 
 	if (count($cid) < 1) {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SELECT'),'warning' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_SELECT'),'warning' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
 	// load the row from the db table
-	$row =JTable::getInstance( 'ergebnisse', 'TableCLM' );
+	$row =Table::getInstance( 'ergebnisse', 'TableCLM' );
 	$row->load( $cid[0] );
 
-	$sid =JTable::getInstance( 'saisons', 'TableCLM' );
+	$sid =Table::getInstance( 'saisons', 'TableCLM' );
 	$sid->load($row->sid);
 
 	// Ergebnisse einer unveröffentlichten Saison nicht bearbeiten
 	if ($sid->published =="0") {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SAISON_NO'),'warning' );
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SAISON_WARTEN'),'notice' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_SAISON_NO'),'warning' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_SAISON_WARTEN'),'notice' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
 	// spielfreie Runde  kann nicht gemeldet / bearbeitet werden
 	if ($row->gemeldet == "1") {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_TW_RUNDEN'),'notice' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_TW_RUNDEN'),'notice' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
@@ -1547,7 +1553,7 @@ function wertung()
 	$runde		= $db->loadObjectList();
 	// Prüfen ob Ergebnis bereits gemeldet wurde
 	if ($runde[0]->gemeldet < 1) {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_DWZ'),'warning' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_DWZ'),'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
@@ -1563,12 +1569,12 @@ function wertung()
 	}
 
 	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
-		$mainframe->enqueueMessage( JText::_('LIGEN_STAFFEL_TOTAL'),'warning' );
+		$mainframe->enqueueMessage( Text::_('LIGEN_STAFFEL_TOTAL'),'warning' );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	} 
 	if ($runde[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_DWZ_BEARBEIT'),'warning' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_DWZ_BEARBEIT'),'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 					}
@@ -1661,65 +1667,65 @@ function wertung()
 	$list_gast	= clm_core::$db->loadObjectList($sql);
 
 	// Werteliste für Brettpunkte
-	$wlist[]	= JHTML::_('select.option',  '-1', JText::_( 'ERGEBNISSE_SUMME' ), 'jid', 'name' );
-	$wlist[]	= JHTML::_('select.option',  floatval(0), JText::_( '0' ), 'jid', 'name' );
+	$wlist[]	= HTMLHelper::_('select.option',  '-1', Text::_( 'ERGEBNISSE_SUMME' ), 'jid', 'name' );
+	$wlist[]	= HTMLHelper::_('select.option',  floatval(0), Text::_( '0' ), 'jid', 'name' );
 	$until = 1+(($sieg+$antritt)*$runde[0]->stamm);
 	if ($countryversion =="en" AND ($runde[0]->runden_modus == 4 OR $runde[0]->runden_modus == 5)) {
 		$until = 1+(($sieg+$antritt)*$runde[0]->stamm*2);
 	}
 	for($x=1; $x< $until; $x++) {
-		$wlist[]	= JHTML::_('select.option',  floatval($x-(0.5)), floatval($x-(0.5)), 'jid', 'name' );
-		$wlist[]	= JHTML::_('select.option',  floatval($x), floatval($x), 'jid', 'name' );
+		$wlist[]	= HTMLHelper::_('select.option',  floatval($x-(0.5)), floatval($x-(0.5)), 'jid', 'name' );
+		$wlist[]	= HTMLHelper::_('select.option',  floatval($x), floatval($x), 'jid', 'name' );
 	}
 	// Werteliste für Wertpunkte (Berliner Wertung)
 	for($x=1; $x<= $runde[0]->stamm; $x++) {
 		if ($x == 1) $bw_max = 0;
 		$bw_max += $x;
 	}
-	$bwlist[]	= JHTML::_('select.option',  '-1', JText::_( 'ERGEBNISSE_SUMME' ), 'jid', 'name' );
-	$bwlist[]	= JHTML::_('select.option',  floatval(0), JText::_( '0' ), 'jid', 'name' );
+	$bwlist[]	= HTMLHelper::_('select.option',  '-1', Text::_( 'ERGEBNISSE_SUMME' ), 'jid', 'name' );
+	$bwlist[]	= HTMLHelper::_('select.option',  floatval(0), Text::_( '0' ), 'jid', 'name' );
 	for($x=1; $x<= $bw_max; $x++) {
-		$bwlist[]	= JHTML::_('select.option',  floatval($x-(0.5)), floatval($x-(0.5)), 'jid', 'name' );
-		$bwlist[]	= JHTML::_('select.option',  floatval($x), floatval($x), 'jid', 'name' );
+		$bwlist[]	= HTMLHelper::_('select.option',  floatval($x-(0.5)), floatval($x-(0.5)), 'jid', 'name' );
+		$bwlist[]	= HTMLHelper::_('select.option',  floatval($x), floatval($x), 'jid', 'name' );
 	}
 	
 	// Aufbereitung Eingabefelder für Brett- und Wertpunkte
 	if (isset($list_heim[0]) AND $list_heim[0]->bp != $hpsum) 
-		$lists['weiss']		= JHTML::_('select.genericlist',   $wlist, 'w_erg', 'class="inputbox" size="1"', 'jid', 'name', floatval($list_heim[0]->bp ));
+		$lists['weiss']		= HTMLHelper::_('select.genericlist',   $wlist, 'w_erg', 'class="inputbox" size="1"', 'jid', 'name', floatval($list_heim[0]->bp ));
 	else
-		$lists['weiss']		= JHTML::_('select.genericlist',   $wlist, 'w_erg', 'class="inputbox" size="1"', 'jid', 'name', '-1');
+		$lists['weiss']		= HTMLHelper::_('select.genericlist',   $wlist, 'w_erg', 'class="inputbox" size="1"', 'jid', 'name', '-1');
 	
 	if (isset($list_heim[0]) AND $list_heim[0]->wp != $hwsum) 
-		$lists['weiss_w']		= JHTML::_('select.genericlist',   $bwlist, 'ww_erg', 'class="inputbox" size="1"', 'jid', 'name', floatval($list_heim[0]->wp ));
+		$lists['weiss_w']		= HTMLHelper::_('select.genericlist',   $bwlist, 'ww_erg', 'class="inputbox" size="1"', 'jid', 'name', floatval($list_heim[0]->wp ));
 	else
-		$lists['weiss_w']		= JHTML::_('select.genericlist',   $bwlist, 'ww_erg', 'class="inputbox" size="1"', 'jid', 'name', '-1' );
+		$lists['weiss_w']		= HTMLHelper::_('select.genericlist',   $bwlist, 'ww_erg', 'class="inputbox" size="1"', 'jid', 'name', '-1' );
 	
 	if (isset($list_gast[0]) AND $list_gast[0]->bp != $gpsum) 
-		$lists['schwarz']		= JHTML::_('select.genericlist',   $wlist, 's_erg', 'class="inputbox" size="1"', 'jid', 'name', floatval($list_gast[0]->bp ));
+		$lists['schwarz']		= HTMLHelper::_('select.genericlist',   $wlist, 's_erg', 'class="inputbox" size="1"', 'jid', 'name', floatval($list_gast[0]->bp ));
 	else
-		$lists['schwarz']		= JHTML::_('select.genericlist',   $wlist, 's_erg', 'class="inputbox" size="1"', 'jid', 'name', '-1');
+		$lists['schwarz']		= HTMLHelper::_('select.genericlist',   $wlist, 's_erg', 'class="inputbox" size="1"', 'jid', 'name', '-1');
 	
 	if (isset($list_gast[0]) AND $list_gast[0]->wp != $gwsum) 
-		$lists['schwarz_w']		= JHTML::_('select.genericlist',   $bwlist, 'sw_erg', 'class="inputbox" size="1"', 'jid', 'name', floatval($list_gast[0]->wp ));
+		$lists['schwarz_w']		= HTMLHelper::_('select.genericlist',   $bwlist, 'sw_erg', 'class="inputbox" size="1"', 'jid', 'name', floatval($list_gast[0]->wp ));
 	else
-		$lists['schwarz_w']		= JHTML::_('select.genericlist',   $bwlist, 'sw_erg', 'class="inputbox" size="1"', 'jid', 'name', '-1' );
+		$lists['schwarz_w']		= HTMLHelper::_('select.genericlist',   $bwlist, 'sw_erg', 'class="inputbox" size="1"', 'jid', 'name', '-1' );
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'ergebnisse.php');
 	CLMViewErgebnisse::wertung( $row, $runde,$bretter,$ergebnis, $option, $lists);
 	}
 
 function save_wertung()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 
 	$option		= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
-	$db 		= JFactory::getDBO();
+	$db 		= Factory::getDBO();
 	$task 		= clm_core::$load->request_string('task');
-	$user 		= JFactory::getUser();
+	$user 		= Factory::getUser();
 	$id_id 		= clm_core::$load->request_string('id');
-	$date 		= JFactory::getDate();
+	$date 		= Factory::getDate();
 
 	$meldung 	= $user->get('id');
 	$sid		= clm_core::$load->request_int('sid');
@@ -1912,17 +1918,17 @@ function save_wertung()
 	else $limit = $stamm * ($sieg+$antritt);
 	$err = 0;
 	if($w_erg + $s_erg > $limit ) {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_ME_HOCH'),'warning' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_ME_HOCH'),'warning' );
 		$err=1;
 	}
 	if($w_erg =="-1" AND $s_erg !="-1" ) {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_GEAENDERT_HM'),'warning' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_GEAENDERT_HM'),'warning' );
 	}
 	if($w_erg !="-1" AND $s_erg =="-1" ) {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_GEAENDERT_GM'),'warning' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_GEAENDERT_GM'),'warning' );
 	}
 	if($count_einzel > 0) {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_EE'),'notice' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_EE'),'notice' );
 	}
 	// Brettpunkte Heim summieren
 	$query	= "SELECT SUM(punkte) as punkte "
@@ -2022,7 +2028,7 @@ function save_wertung()
 	$query	= "UPDATE #__clm_rnd_man";
 		// Wenn nichts geändert wurde (keine Einzelergebnis, keine Mannschaftswertung)
 		if($w_erg =="-1" AND $s_erg =="-1" AND $ww_erg =="-1" AND $sw_erg =="-1" AND $count_einzel =="0") {
-			$mainframe->enqueueMessage( JText::_('ERGEBNISSE_TW_GELOESCHT'),'notice' );
+			$mainframe->enqueueMessage( Text::_('ERGEBNISSE_TW_GELOESCHT'),'notice' );
 			$query = $query
 			." SET dwz_editor = NULL"
 			." , dwz_zeit = '1970-01-01 00:00:00'";
@@ -2080,7 +2086,7 @@ function save_wertung()
 				elseif ($hwpunkte > $gwpunkte) $ko_par = 2;		// Sieger Heim nach Wertpunkte
 				elseif ($hwpunkte < $gwpunkte) $ko_par = 3;		// Sieger Gast nach Wertpunkte
 				else { $ko_par = 3;								// Sieger Gast nach Computer --> Nacharbeit durch TL
-				     if ($comment == '') $comment = JText::_('ERGEBNISSE_KO_COMMENT').$comment; }
+				     if ($comment == '') $comment = Text::_('ERGEBNISSE_KO_COMMENT').$comment; }
 			}
 			elseif ($ko_decision == 2) $ko_par = 2;				// Sieger Heim nach Blitz-Entscheid
 			elseif ($ko_decision == 4) $ko_par = 2;				// Sieger Heim nach Los-Entscheid
@@ -2149,27 +2155,27 @@ function save_wertung()
 	// errechnet/aktulisiert Rangliste/Punktesummen
 	clm_core::$api->db_tournament_ranking($lid,true); 
 
-	$msg = JText::_( 'ERGEBNISSE_AW' );
+	$msg = Text::_( 'ERGEBNISSE_AW' );
 	$link = 'index.php?option='.$option.'&section='.$section;
 
 	switch ($task)
 	{
 		case 'apply_wertung':
-		$msg = JText::_( 'ERGEBNISSE_TW_ANGEWENDET' );
+		$msg = Text::_( 'ERGEBNISSE_TW_ANGEWENDET' );
 //		$link = 'index.php?option='.$option.'&section='.$section.'&task=wertung&cid[]='.$id_id;
 		$link = 'index.php?option='.$option.'&section='.$section.'&task=wertung&id='.$id_id;
 			break;
 		case 'save_wertung':
 		default:
-		$row =JTable::getInstance( 'ergebnisse', 'TableCLM' );
-		$msg = JText::_( 'ERGEBNISSE_TW_GESPEICHERT' );
+		$row =Table::getInstance( 'ergebnisse', 'TableCLM' );
+		$msg = Text::_( 'ERGEBNISSE_TW_GESPEICHERT' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 			break;
 	}
 
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'ERGEBNISSE_AKTION_VALUATION' );
+	$clmLog->aktion = Text::_( 'ERGEBNISSE_AKTION_VALUATION' );
 	$clmLog->params = array('sid' => $sid, 'lid' => $lid, 'rnd' => $rnd, 'paar' => $paarung, 'dg' => $dg);
 	$clmLog->write();
 	
@@ -2179,18 +2185,18 @@ function save_wertung()
 
 function delete_wertung()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 
 	$option		= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
-	$db 		=JFactory::getDBO();
+	$db 		=Factory::getDBO();
 	$task 		= clm_core::$load->request_string( 'task');
-	$user 		=JFactory::getUser();
+	$user 		=Factory::getUser();
 	$id_id 		= clm_core::$load->request_string( 'id');
-	$date 		=JFactory::getDate();
+	$date 		=Factory::getDate();
 
 	$meldung 	= $user->get('id');
 	$sid		= clm_core::$load->request_int( 'sid');
@@ -2201,7 +2207,7 @@ function delete_wertung()
 	$hzps		= clm_core::$load->request_string( 'hzps');
 	$gzps		= clm_core::$load->request_string( 'gzps');
 
-	$liga_sl	=JTable::getInstance( 'ligen', 'TableCLM' );
+	$liga_sl	=Table::getInstance( 'ligen', 'TableCLM' );
 	$liga_sl->load( $lid );
 
 	// Prüfen ob User Berechtigung zum löschen hat
@@ -2214,12 +2220,12 @@ function delete_wertung()
 		$csection = 'mturniere';
 	}
 	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
-		$mainframe->enqueueMessage( JText::_('LIGEN_STAFFEL_TOTAL'),'warning' );
+		$mainframe->enqueueMessage( Text::_('LIGEN_STAFFEL_TOTAL'),'warning' );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	} 
 	if ($liga_sl->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_DWZ_LOESCHEN'),'warning' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_DWZ_LOESCHEN'),'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
@@ -2390,12 +2396,12 @@ function delete_wertung()
 	// errechnet/aktulisiert Rangliste/Punktesummen
 	clm_core::$api->db_tournament_ranking($lid,true); 
 
-	$msg = JText::_( 'ERGEBNISSE_AW_GELOESCHT' );
+	$msg = Text::_( 'ERGEBNISSE_AW_GELOESCHT' );
 	$link = 'index.php?option='.$option.'&section='.$section;
 
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'ERGEBNISSE_AKTION_VALUATION_DEL' );
+	$clmLog->aktion = Text::_( 'ERGEBNISSE_AKTION_VALUATION_DEL' );
 	$clmLog->params = array('sid' => $sid, 'lid' => $lid, 'rnd' => $rnd, 'paar' => $paarung, 'dg' => $dg);
 	$clmLog->write();
 	
@@ -2405,7 +2411,7 @@ function delete_wertung()
 
 function back()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 
@@ -2417,7 +2423,7 @@ function back()
 
 function gast_kampflos()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
@@ -2426,17 +2432,17 @@ function gast_kampflos()
 	$section	= clm_core::$load->request_string('section');
 	$link		= 'index.php?option='.$option.'&section='.$section;
 
-	$gast =JText::_( 'ERGEBNISSE_MSG_GUEST' );
+	$gast =Text::_( 'ERGEBNISSE_MSG_GUEST' );
 	CLMControllerErgebnisse::kampflos($gast);
 
-	$msg	= JText::_( 'ERGEBNISSE_MSG_GUEST_KL' );
+	$msg	= Text::_( 'ERGEBNISSE_MSG_GUEST_KL' );
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
 	}
 
 function heim_kampflos()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
@@ -2445,34 +2451,34 @@ function heim_kampflos()
 	$section	= clm_core::$load->request_string('section');
 	$link		= 'index.php?option='.$option.'&section='.$section;
 
-	$gast = JText::_( 'ERGEBNISSE_MSG_HOME' );
+	$gast = Text::_( 'ERGEBNISSE_MSG_HOME' );
 	CLMControllerErgebnisse::kampflos($gast);
 
-	$msg	= JText::_( 'ERGEBNISSE_MSG_HOME_KL' );
+	$msg	= Text::_( 'ERGEBNISSE_MSG_HOME_KL' );
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
 	}
 
 function kampflos($gast)
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 
 	$option		= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
-	$db 		= JFactory::getDBO();
+	$db 		= Factory::getDBO();
 	$link		= 'index.php?option='.$option.'&section='.$section;
 	$cid 		= clm_core::$load->request_array_int('cid');
  
  if (count($cid) < 1) {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SELECT'), 'warning' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_SELECT'), 'warning' );
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
 	// load the row from the db table
-	$row =JTable::getInstance( 'ergebnisse', 'TableCLM' );
+	$row =Table::getInstance( 'ergebnisse', 'TableCLM' );
 	$row->load( $cid[0] );
 		$sid	= $row->sid;
 		$lid 	= $row->lid;
@@ -2480,7 +2486,7 @@ function kampflos($gast)
 		$paar	= $row->paar;
 		$dg	= $row->dg;
 
-	$liga_sl	=JTable::getInstance( 'ligen', 'TableCLM' );
+	$liga_sl	=Table::getInstance( 'ligen', 'TableCLM' );
 	$liga_sl->load( $row->lid );
 		$bretter	= $liga_sl->stamm;
 		$sieg		= $liga_sl->sieg;
@@ -2510,12 +2516,12 @@ function kampflos($gast)
 		$csection = 'mturniere';
 	}
 	if($clmAccess->access('BE_'.$mppoint.'_edit_result') === false) {
-		$mainframe->enqueueMessage( JText::_('LIGEN_STAFFEL_TOTAL'), 'warning' );
+		$mainframe->enqueueMessage( Text::_('LIGEN_STAFFEL_TOTAL'), 'warning' );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	} 
 	if ($liga_sl->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_LIGEN_ARBEIT'),'warning' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_LIGEN_ARBEIT'),'warning' );
 		$mainframe->redirect( $link);
 					}
 
@@ -2531,16 +2537,16 @@ function kampflos($gast)
 
 	// Wenn "Spielfrei" kampflos gesetzt wurde
 	if ((($data[0]->hzps =="0" AND ($gast == "heim" OR $gast=="home")) OR ( $data[0]->gzps =="0" AND ($gast == "gast" OR $gast=="away"))) AND $params['noOrgReference'] == '0') {
-		$mainframe->enqueueMessage( JText::_('ERGEBNISSE_SPIELFREI'),'warning' );
+		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_SPIELFREI'),'warning' );
 		$mainframe->redirect( $link);
 					}
 	// Datum und Uhrzeit für Meldezeitpunkt
-	$date		=JFactory::getDate();
+	$date		=Factory::getDate();
 	$now		= $date->toSQL();
-	$user		=JFactory::getUser();
+	$user		=Factory::getUser();
 	$meldung	= $user->get('id');
-	if ($gast=="heim" OR $gast=="home") { $comment = JText::_( 'ERGEBNISSE_COMMENT_HOME_KL' ); }
-	else { $comment = JText::_( 'ERGEBNISSE_COMMENT_GUEST_KL' ); }
+	if ($gast=="heim" OR $gast=="home") { $comment = Text::_( 'ERGEBNISSE_COMMENT_HOME_KL' ); }
+	else { $comment = Text::_( 'ERGEBNISSE_COMMENT_GUEST_KL' ); }
 	$icomment = '';
 	$brett_punkte	= $bretter * ($sieg + $antritt);
 	$man_punkte	= $man_sieg + $man_antritt;
@@ -2617,7 +2623,7 @@ function kampflos($gast)
 
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'ERGEBNISSE_AKTION_KL' );
+	$clmLog->aktion = Text::_( 'ERGEBNISSE_AKTION_KL' );
 	$clmLog->params = array('sid' => $sid, 'lid' => $lid, 'rnd' => $rnd, 'paar' => $paar, 'dg' => $dg);
 	$clmLog->write();
 	
@@ -2634,18 +2640,18 @@ function kampflos($gast)
 
 function update_remarks()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 
 	$option		= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
-	$db 		=JFactory::getDBO();
+	$db 		=Factory::getDBO();
 	$task		= clm_core::$load->request_string( 'task');
-	$user 		=JFactory::getUser();
+	$user 		=Factory::getUser();
 	$id_id 		= clm_core::$load->request_string( 'id');
-	$date		=JFactory::getDate();
+	$date		=Factory::getDate();
 
 	$meldung 	= $user->get('id');
 	$sid		= clm_core::$load->request_int( 'sid');
@@ -2684,11 +2690,11 @@ function update_remarks()
 
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'ERGEBNISSE_UPDATE_REMARKS' );
+	$clmLog->aktion = Text::_( 'ERGEBNISSE_UPDATE_REMARKS' );
 	$clmLog->params = array('sid' => $sid, 'lid' => $lid, 'rnd' => $rnd, 'paar' => $paarung, 'dg' => $dg);
 	$clmLog->write();
 
-	$msg = JText::_( 'ERGEBNISSE_UPDATE_REMARKS' );
+	$msg = Text::_( 'ERGEBNISSE_UPDATE_REMARKS' );
 	$link = 'index.php?option='.$option.'&section='.$section;
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );

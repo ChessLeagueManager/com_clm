@@ -1,15 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 $swt_file    = clm_core::$load->request_string('swt_file', '');
 $update = clm_core::$load->request_int('update', 0);
@@ -53,6 +56,6 @@ Der Import kann nun abgeschlossen werden.
     <input type="hidden" name="runde" value="<?php echo $runde; ?>" />
 	<input type="hidden" name="mturnier" value="<?php echo $mturnier; ?>" />
 	<input type="hidden" name="ungerade" value="<?php echo $ungerade; ?>" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
 	
 </form>

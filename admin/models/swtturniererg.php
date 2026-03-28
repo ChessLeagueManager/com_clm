@@ -1,15 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 class CLMModelSWTTurnierErg extends JModelLegacy {
 
@@ -85,10 +88,10 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 				$runde->dg = $this->_calculateDurchgang($rnd);
 				$runde->runde = $this->_calculateRunde($rnd);
 				$runde->nr = $rnd;
-				$runde->name = JText::_('ROUND')." ".$runde->runde;
-				if ($anz_durchgaenge == 2 AND $runde->dg == 1) $runde->name .= " (".JText::_('TOURNAMENT_STAGE_1').")";
-				elseif ($anz_durchgaenge == 2 AND $runde->dg == 2) $runde->name .= " (".JText::_('TOURNAMENT_STAGE_2').")";
-				elseif ($anz_durchgaenge > 2) $runde->name .= " (".JText::_('DG')." ".$runde->dg.")";
+				$runde->name = Text::_('ROUND')." ".$runde->runde;
+				if ($anz_durchgaenge == 2 AND $runde->dg == 1) $runde->name .= " (".Text::_('TOURNAMENT_STAGE_1').")";
+				elseif ($anz_durchgaenge == 2 AND $runde->dg == 2) $runde->name .= " (".Text::_('TOURNAMENT_STAGE_2').")";
+				elseif ($anz_durchgaenge > 2) $runde->name .= " (".Text::_('DG')." ".$runde->dg.")";
 				$runde->published = 1;
 			
 				$runde->abgeschlossen 	= 0;
@@ -137,7 +140,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	
 	function getTeilnehmerNamen(){
 		if(empty($this->_teilnehmerNamen)) {
-			$db		=JFactory::getDBO ();
+			$db		=Factory::getDBO ();
 			
 			//Turnier-ID auslesen
 			$swt_tid = clm_escape(clm_core::$load->request_string('swt_tid'));
@@ -157,7 +160,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	}
 	
 	function getErgebnisTexte() {
-		$db		=JFactory::getDBO ();
+		$db		=Factory::getDBO ();
 		
 		$select_query = " 	SELECT 
 								`eid`,`erg_text`
@@ -423,7 +426,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	}
 	
 	function _setRundenDetailsByDatabase($tid, $runde) {
-		$db		=JFactory::getDBO ();
+		$db		=Factory::getDBO ();
 		
 		$select_query = " 	SELECT 
 								*
@@ -503,7 +506,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	
 	
 	function _storeRundenInfos() {
-		$db		=JFactory::getDBO ();
+		$db		=Factory::getDBO ();
 		$this->getRunden();
 		$rfirst = clm_core::$load->request_int('rfirst', 0);
 		$rlast  = clm_core::$load->request_int('rlast', 0);
@@ -546,11 +549,11 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			} else {
 				if($db->getErrorNum() == 1062){
 					//Seite wurde aktualisiert (F5) und Daten stehen schon in der Datenbank
-					JFactory::getApplication()->enqueueMessage( JText::_('SWT_STORE_WARNING_ROUNDS_ALLREADY_EXISTS'),'notice' );
+					Factory::getApplication()->enqueueMessage( Text::_('SWT_STORE_WARNING_ROUNDS_ALLREADY_EXISTS'),'notice' );
 					return true;
 				} else {
 					//Ein Fehler ist aufgetreten
-					JFactory::getApplication()->enqueueMessage(  JText::_('SWT_STORE_ERROR_ROUNDS'),'error' );
+					Factory::getApplication()->enqueueMessage(  Text::_('SWT_STORE_ERROR_ROUNDS'),'error' );
 					return false;
 				}
 			}
@@ -561,7 +564,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	}
 	
 	function _storePaarungen() {
-		$db		=JFactory::getDBO ();
+		$db		=Factory::getDBO ();
 		$this->getRunden();
 		$rfirst = clm_core::$load->request_int('rfirst', 0);
 		$rlast  = clm_core::$load->request_int('rlast', 0);
@@ -674,11 +677,11 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			} else {
 				if($db->getErrorNum() == 1062){
 					//Seite wurde aktualisiert (F5) und Daten stehen schon in der Datenbank
-					JFactory::getApplication()->enqueueMessage( JText::_('SWT_STORE_WARNING_MATCHES_ALLREADY_EXISTS'),'notice' );
+					Factory::getApplication()->enqueueMessage( Text::_('SWT_STORE_WARNING_MATCHES_ALLREADY_EXISTS'),'notice' );
 					return true;
 				} else {
 					//Ein Fehler ist aufgetreten
-					JFactory::getApplication()->enqueueMessage(  JText::_('SWT_STORE_ERROR_MATCHES'),'error' );
+					Factory::getApplication()->enqueueMessage(  Text::_('SWT_STORE_ERROR_MATCHES'),'error' );
 					return false;
 				}
 			}
@@ -690,7 +693,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	
 	function _deleteSpielfreiDummys() {
 		$swt_tid	= clm_escape(clm_core::$load->request_string('swt_tid'));
-		$db		=JFactory::getDBO ();
+		$db		=Factory::getDBO ();
 		
 		//Anzahl der Spielfrei-Dummys feststellen
 		
@@ -737,7 +740,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 			return true;
 		} else {		
 			//Ein Fehler ist aufgetreten
-			JFactory::getApplication()->enqueueMessage(  JText::_('SWT_STORE_ERROR_COULD_NOT_DELETE_DUMMYS'),'error' );
+			Factory::getApplication()->enqueueMessage(  Text::_('SWT_STORE_ERROR_COULD_NOT_DELETE_DUMMYS'),'error' );
 			return false;
 		}
 	}
@@ -752,7 +755,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 		// Nur kopieren, wenn das Turnier noch nicht kopiert wurde (d.h. die tid in der #__swt_turniere noch nicht geupdated wurde bzw. == 0 ist)
 //		if($this->_getTid($swt_tid) == 0) {
 			if(!$this->_copyTurnier($swt_tid, $update, $tid)){
-				JFactory::getApplication()->enqueueMessage( JText::_('SWT_STORE_ERROR_COPY_TOURNAMENT'),'error' );
+				Factory::getApplication()->enqueueMessage( Text::_('SWT_STORE_ERROR_COPY_TOURNAMENT'),'error' );
 				return false;
 			}
 //		}	
@@ -763,26 +766,26 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 		$_POST["tid"] = $tid;
 		// Teilnehmer kopieren
 		if(!$this->_copyTeilnehmer($swt_tid, $update, $tid)){
-			JFactory::getApplication()->enqueueMessage( JText::_('SWT_STORE_ERROR_COPY_PLAYERS'),'error' );
+			Factory::getApplication()->enqueueMessage( Text::_('SWT_STORE_ERROR_COPY_PLAYERS'),'error' );
 			return false;
 		}
 		
 		// RundenInfos kopieren
 		if(!$this->_copyRundenInfos($swt_tid, $update, $tid)){
-			JFactory::getApplication()->enqueueMessage( JText::_('SWT_STORE_ERROR_COPY_ROUNDS'),'error' );
+			Factory::getApplication()->enqueueMessage( Text::_('SWT_STORE_ERROR_COPY_ROUNDS'),'error' );
 			return false;
 		}
 		
 		// Paarungen kopieren
 		if(!$this->_copyPaarungen($swt_tid, $update, $tid)){
-			JFactory::getApplication()->enqueueMessage( JText::_('SWT_STORE_ERROR_COPY_MATCHES'),'error' );
+			Factory::getApplication()->enqueueMessage( Text::_('SWT_STORE_ERROR_COPY_MATCHES'),'error' );
 			return false;
 		}
 		return true;
 	}
 	
 	function _copyTurnier($swt_tid, $update, $tid) {
-		$db		=JFactory::getDBO ();
+		$db		=Factory::getDBO ();
 	
 		$select_query = "	SELECT *
 							FROM #__clm_swt_turniere
@@ -841,7 +844,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	}
 	
 	function _copyTeilnehmer($swt_tid, $update, $tid) {
-		$db		=JFactory::getDBO ();
+		$db		=Factory::getDBO ();
 	
 		$delete_query = "	DELETE FROM
 								#__clm_turniere_tlnr
@@ -875,7 +878,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	}
 	
 	function _copyRundenInfos($swt_tid, $update, $tid) {
-		$db		=JFactory::getDBO ();
+		$db		=Factory::getDBO ();
 	
 		$delete_query = "	DELETE FROM
 								#__clm_turniere_rnd_termine
@@ -910,7 +913,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	}
 	
 	function _copyPaarungen($swt_tid, $update, $tid) {
-		$db		=JFactory::getDBO ();
+		$db		=Factory::getDBO ();
 	
 		$select_query = " SELECT * FROM #__clm_turniere_rnd_spl "
 						." WHERE turnier = ".$tid
@@ -968,7 +971,7 @@ class CLMModelSWTTurnierErg extends JModelLegacy {
 	}
 	
 	function _getTid($swt_tid) {
-		$db		=JFactory::getDBO ();
+		$db		=Factory::getDBO ();
 		
 		$select_query = "	SELECT 
 								tid

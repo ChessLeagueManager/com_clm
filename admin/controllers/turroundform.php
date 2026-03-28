@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,10 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
 
 class CLMControllerTurRoundForm extends JControllerLegacy {
 	
@@ -20,7 +24,7 @@ class CLMControllerTurRoundForm extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->app	= JFactory::getApplication();
+		$this->app	= Factory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -64,12 +68,12 @@ class CLMControllerTurRoundForm extends JControllerLegacy {
 		$roundid = clm_core::$load->request_int('roundid');
 
 		// Instanz der Tabelle
-		$row = JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = Table::getInstance( 'turniere', 'TableCLM' );
 		$row->load($turnierid);
 
 		$clmAccess = clm_core::$access;      
 		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {																						   
-			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'),'warning' );
+			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return array(false);
 		}
 	
@@ -77,7 +81,7 @@ class CLMControllerTurRoundForm extends JControllerLegacy {
 		$task = clm_core::$load->request_string('task');
 		
 		// Instanz der Tabelle
-		$row = JTable::getInstance( 'turnier_runden', 'TableCLM' );
+		$row = Table::getInstance( 'turnier_runden', 'TableCLM' );
 		$row->load($roundid);
 	
 		// bind
@@ -108,7 +112,7 @@ class CLMControllerTurRoundForm extends JControllerLegacy {
 			;
 			clm_core::$db->query($query);
 		}
-		$stringAktion = JText::_('ROUND_EDITED');
+		$stringAktion = Text::_('ROUND_EDITED');
 		
 		$this->app->enqueueMessage($stringAktion);
 	

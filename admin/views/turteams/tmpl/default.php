@@ -1,11 +1,14 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 	$turParams = new clm_class_params($this->turnier->params);
 	$param_typeaccount = $turParams->get('typeAccount', 0);
@@ -18,15 +21,15 @@ defined('_JEXEC') or die('Restricted access');
 	
 	<div class="col width-50">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'EDIT_TEAMS' ); ?></legend>
+		<legend><?php echo Text::_( 'EDIT_TEAMS' ); ?></legend>
 
 		<table class="admintable">
 		<tr>
 			<th width="10">
-				<?php echo JText::_( 'TEAM_NR' ); ?>
+				<?php echo Text::_( 'TEAM_NR' ); ?>
 			</th>
 			<th width="250">
-				<?php echo JText::_( 'TEAM' ); ?>
+				<?php echo Text::_( 'TEAM' ); ?>
 			</th>
 		</tr>
 			<?php 
@@ -68,6 +71,6 @@ defined('_JEXEC') or die('Restricted access');
 	<input type="hidden" name="controller" value="turteams" />
 	<input type="hidden" name="boxchecked" value="0" />
 	<input type="hidden" name="task" value="" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
 
 </form>

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,10 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
 
 class CLMControllerCatMain extends JControllerLegacy {
 	
@@ -20,7 +24,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->app	= JFactory::getApplication();
+		$this->app	= Factory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply','save' );
@@ -78,7 +82,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		}
 		
 		// Daten holen
-		$row =JTable::getInstance( 'categories', 'TableCLM' );
+		$row =Table::getInstance( 'categories', 'TableCLM' );
 
 		if ( !$row->load($catid) ) {
 			$this->app->enqueueMessage( CLMText::errorText('JCATEGORY', 'NOTEXISTING'),'warning' );
@@ -90,7 +94,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		
 		// Daten für Kopie anpassen
 		$row->id				= 0; // neue id wird von DB vergeben
-		$row->name			= JText::_('COPY_OF').' '.$row->name;
+		$row->name			= Text::_('COPY_OF').' '.$row->name;
 		$row->published	= 0;
 
 
@@ -102,12 +106,12 @@ class CLMControllerCatMain extends JControllerLegacy {
 	
 		// Log schreiben
 		$clmLog = new CLMLog();
-		$clmLog->aktion = JText::_('CATEGORY_COPIED').": ".$nameOld;
+		$clmLog->aktion = Text::_('CATEGORY_COPIED').": ".$nameOld;
 		$clmLog->params = array('catid' => $catid);
 		$clmLog->write();
 		
 		// Message
-		$this->app->enqueueMessage( $nameOld.": ".JText::_('CATEGORY_COPIED') );
+		$this->app->enqueueMessage( $nameOld.": ".Text::_('CATEGORY_COPIED') );
 
 		// Ende Runden erstellt
 		return true;
@@ -136,7 +140,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		defined('_JEXEC') or die( 'Invalid Token' );
 	
 		// TODO? evtl global inconstruct anlegen
-		$user 		=JFactory::getUser();
+		$user 		=Factory::getUser();
 		
 		$cid		= clm_core::$load->request_array_int('cid');
 		
@@ -145,7 +149,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		
 		// Inhalte übergeben?
 		if (empty( $cid )) { 
-			$this->app->enqueueMessage( JText::_( 'NO_ITEM_SELECTED' ),'warning' );
+			$this->app->enqueueMessage( Text::_( 'NO_ITEM_SELECTED' ),'warning' );
 		
 		} else { // ja, Inhalte vorhanden
 			
@@ -153,12 +157,12 @@ class CLMControllerCatMain extends JControllerLegacy {
 			foreach ($cid as $key => $value) {
 		
 				// load the row from the db table
-				$row =JTable::getInstance( 'categories', 'TableCLM' );
+				$row =Table::getInstance( 'categories', 'TableCLM' );
 				$row->load( $value ); // Daten zu dieser ID laden
 		
 				// Prüfen ob User Berechtigung für diese category hat
 				if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
-					$this->app->enqueueMessage( $row->name.": ".JText::_( 'CATEGORY_NO_ACCESS' ),'warning' );
+					$this->app->enqueueMessage( $row->name.": ".Text::_( 'CATEGORY_NO_ACCESS' ),'warning' );
 					
 					// daher diesen Eintrag aus dem cid-Array löschen
 					unset($cid[$key]);
@@ -170,7 +174,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 					if ($row->published != $publish) {
 						// Log
 						$clmLog = new CLMLog();
-						$clmLog->aktion = JText::_('JCATEGORY')." ".$row->name.": ".$task;
+						$clmLog->aktion = Text::_('JCATEGORY')." ".$row->name.": ".$task;
 						$clmLog->params = array('catid' => $value);
 						$clmLog->write();
 						// Log geschrieben - Änderungen später
@@ -187,19 +191,19 @@ class CLMControllerCatMain extends JControllerLegacy {
 			// immer noch Einträge vorhanden?
 			if ( !empty($cid) ) { 
 		
-				$row =JTable::getInstance( 'categories', 'TableCLM' );
+				$row =Table::getInstance( 'categories', 'TableCLM' );
 				$row->publish( $cid, $publish );
 			
 				// Meldung erstellen
 				if ($publish) {
-					$this->app->enqueueMessage( CLMText::sgpl(count($cid), JText::_('JCATEGORY'), JText::_('JCATEGORIES'))." ".JText::_('CLM_PUBLISHED') );
+					$this->app->enqueueMessage( CLMText::sgpl(count($cid), Text::_('JCATEGORY'), Text::_('JCATEGORIES'))." ".Text::_('CLM_PUBLISHED') );
 				} else {
-					$this->app->enqueueMessage( CLMText::sgpl(count($cid), JText::_('JCATEGORY'), JText::_('JCATEGORIES'))." ".JText::_('CLM_UNPUBLISHED') );
+					$this->app->enqueueMessage( CLMText::sgpl(count($cid), Text::_('JCATEGORY'), Text::_('JCATEGORIES'))." ".Text::_('CLM_UNPUBLISHED') );
 				}
 			
 			} else {
 			
-				$this->app->enqueueMessage(JText::_('NO_CHANGES'));
+				$this->app->enqueueMessage(Text::_('NO_CHANGES'));
 			
 			}
 	
@@ -247,17 +251,17 @@ class CLMControllerCatMain extends JControllerLegacy {
 		// access?
 		$category = new CLMCategory($catid, TRUE);
 		if (!$category->checkAccess(true, false, false)) {
-			$this->app->enqueueMessage( JText::_('CATEGORY_NO_ACCESS'),'warning' );
+			$this->app->enqueueMessage( Text::_('CATEGORY_NO_ACCESS'),'warning' );
 			return false;
 		}
 		
 		if (!$category->checkDelete()) {
-			$this->app->enqueueMessage( JText::_('CATEGORY_NO_DELETE'),'warning' );
+			$this->app->enqueueMessage( Text::_('CATEGORY_NO_DELETE'),'warning' );
 			return false;
 		}
 		
 		// Daten laden
-		$row =JTable::getInstance( 'categories', 'TableCLM' );
+		$row =Table::getInstance( 'categories', 'TableCLM' );
 		$row->load( $catid );
 		
 		// falls Cat existent?
@@ -281,13 +285,13 @@ class CLMControllerCatMain extends JControllerLegacy {
 		
 		// Log schreiben
 		$clmLog = new CLMLog();
-		$clmLog->aktion = JText::_('CATEGORY_DELETED');
+		$clmLog->aktion = Text::_('CATEGORY_DELETED');
 		$clmLog->params = array('catid' => $catid);
 		$clmLog->write();
 		
 		
 		// Message
-		$this->app->enqueueMessage( $row->name.": ".JText::_('CATEGORY_DELETED') );
+		$this->app->enqueueMessage( $row->name.": ".Text::_('CATEGORY_DELETED') );
 		
 		return true;
 		
@@ -331,11 +335,11 @@ class CLMControllerCatMain extends JControllerLegacy {
 		// access?
 		$category = new CLMCategory($catid, true);
 		if (!$category->checkAccess()) {
-			$this->app->enqueueMessage( JText::_('CATEGORY_NO_ACCESS'),'warning' );
+			$this->app->enqueueMessage( Text::_('CATEGORY_NO_ACCESS'),'warning' );
 			return false;
 		}
 	
-		$row =JTable::getInstance( 'categories', 'TableCLM' );
+		$row =Table::getInstance( 'categories', 'TableCLM' );
 		if ( !$row->load( (int)$catid ) ) {
 			$this->app->enqueueMessage( CLMText::errorText('CATEGORY', 'NOTEXISTING'),'warning' );
 			return false;
@@ -344,7 +348,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		$row->move($inc, 'sid = '.$row->sid);
 		$row->reorder('sid = '.$row->sid);
 	
-		$this->app->enqueueMessage( $row->name.": ".JText::_('ORDERING_CHANGED') );
+		$this->app->enqueueMessage( $row->name.": ".Text::_('ORDERING_CHANGED') );
 		
 		return true;
 		
@@ -357,7 +361,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		defined('_JEXEC') or die( 'Invalid Token' );
 	
 		if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
-			$this->app->enqueueMessage( JText::_('SECTION_NO_ACCESS'),'warning' );
+			$this->app->enqueueMessage( Text::_('SECTION_NO_ACCESS'),'warning' );
 			return false;
 		}
 	
@@ -367,7 +371,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 		$total		= count( $cid );
 		$order		= clm_core::$load->request_array_int('order');
 	
-		$row =JTable::getInstance( 'categories', 'TableCLM' );
+		$row =Table::getInstance( 'categories', 'TableCLM' );
 		$groupings = array();
 	
 		// update ordering values
@@ -389,7 +393,7 @@ class CLMControllerCatMain extends JControllerLegacy {
 			$row->reorder('sid = '.(int) $group);
 		}
 		
-		$this->app->enqueueMessage( JText::_('NEW_ORDERING_SAVED') );
+		$this->app->enqueueMessage( Text::_('NEW_ORDERING_SAVED') );
 	
 		$adminLink = new AdminLink();
 		$adminLink->view = "catmain";

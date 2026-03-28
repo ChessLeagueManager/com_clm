@@ -1,15 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Pagination\Pagination;
 
 class CLMModelSonderranglistenMain extends JModelLegacy {
 
@@ -25,7 +28,7 @@ class CLMModelSonderranglistenMain extends JModelLegacy {
 	function __construct(){
 		parent::__construct();
 		
-		$mainframe 	= JFactory::getApplication();
+		$mainframe 	= Factory::getApplication();
 		$option 	= clm_core::$load->request_string('option');
 
 		//Pagination Variabeln
@@ -54,7 +57,7 @@ class CLMModelSonderranglistenMain extends JModelLegacy {
 		$this->setState( 'filter_order_Dir' , $filter_order_Dir );
 		
 		// User
-		$this->user =JFactory::getUser();
+		$this->user =Factory::getUser();
 	}
 	
 	function getSonderranglisten() { 
@@ -77,7 +80,7 @@ class CLMModelSonderranglistenMain extends JModelLegacy {
 		{
 		if (empty($this->_pagination)) {
 			jimport('joomla.html.pagination');
-			$this->_pagination = new JPagination( $this->getTotal(), $this->getState('limitstart'), $this->getState('limit') );
+			$this->_pagination = new Pagination( $this->getTotal(), $this->getState('limitstart'), $this->getState('limit') );
 		}
 		return $this->_pagination;
 	}
@@ -85,7 +88,7 @@ class CLMModelSonderranglistenMain extends JModelLegacy {
 	function getUser()
 		{
 		if (empty($this->_user)) {
-			$this->_user =JFactory::getUser();;
+			$this->_user =Factory::getUser();;
 		}
 		return $this->_user;
 	}
@@ -122,7 +125,7 @@ class CLMModelSonderranglistenMain extends JModelLegacy {
 	}
 	
 	function _buildContentWhere() {
-		$mainframe	= JFactory::getApplication();
+		$mainframe	= Factory::getApplication();
 		$option 	= clm_core::$load->request_string('option');
 																					
 		$filter_saison	= $mainframe->getUserStateFromRequest( "$option.filter_saison",'filter_saison','','int' );
@@ -148,7 +151,7 @@ class CLMModelSonderranglistenMain extends JModelLegacy {
 	
 	
 	function _buildContentOrderBy()	{
-		$mainframe	= JFactory::getApplication();
+		$mainframe	= Factory::getApplication();
 		$option 	= clm_core::$load->request_string('option');
  
 		$orderby = '';

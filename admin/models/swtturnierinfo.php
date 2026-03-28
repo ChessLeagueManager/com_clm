@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -10,6 +10,8 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
 
 class CLMModelSWTTurnierInfo extends JModelLegacy {
 
@@ -319,7 +321,7 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 	}
 	
 	function store(){
-		$db		=JFactory::getDBO ();
+		$db		=Factory::getDBO ();
 	
 		//Namen aller Formularfelder als Array
 		$spalten = array ( "tid", "name", "sid", "dateStart", "dateEnd", "catidAlltime", "catidEdition",
@@ -370,7 +372,7 @@ class CLMModelSWTTurnierInfo extends JModelLegacy {
 	function _getTurnierFromDatabase(){
 		if ($id = clm_core::$load->request_int('turnier')) {
 			
-			$db		=JFactory::getDBO ();
+			$db		=Factory::getDBO ();
 			$select_query = ' 	SELECT 
 							* 
 						FROM 

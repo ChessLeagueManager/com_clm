@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,10 @@
  */
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class CLMViewSWTLigaman extends JViewLegacy {
 
@@ -39,19 +43,19 @@ class CLMViewSWTLigaman extends JViewLegacy {
 
 		// Toolbar
 		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title( JText::_('TITLE_SWT_LEAGUE_MAN') ,'clm_headmenu_manager.png' );
+		ToolBarHelper::title( Text::_('TITLE_SWT_LEAGUE_MAN') ,'clm_headmenu_manager.png' );
 		
 		//echo "man: [$man]";
 		//echo "anz_mannschaften: [$anz_mannschaften]";
 		if ($man + 1 < $anz_mannschaften) {
-			//JToolBarHelper::custom('nextTeam','next.png','next_f2.png', JText::_('SWT_LEAGUE_NEXT_TEAM'), false);
-			JToolBarHelper::custom('nextTeam','forward.png','forward_f2.png', JText::_('SWT_LEAGUE_NEXT_TEAM'), false);
+			//ToolBarHelper::custom('nextTeam','next.png','next_f2.png', Text::_('SWT_LEAGUE_NEXT_TEAM'), false);
+			ToolBarHelper::custom('nextTeam','forward.png','forward_f2.png', Text::_('SWT_LEAGUE_NEXT_TEAM'), false);
 		}
 		else {
-			//JToolBarHelper::custom('next','next.png','next_f2.png', JText::_('SWT_LEAGUE_NEXT_STEP'), false);
-			JToolBarHelper::custom('next','forward.png','forward_f2.png', JText::_('SWT_LEAGUE_NEXT_STEP'), false);
+			//ToolBarHelper::custom('next','next.png','next_f2.png', Text::_('SWT_LEAGUE_NEXT_STEP'), false);
+			ToolBarHelper::custom('next','forward.png','forward_f2.png', Text::_('SWT_LEAGUE_NEXT_STEP'), false);
 		}
-		JToolBarHelper::custom('cancel','cancel.png','cancel_f2.png', JText::_('SWT_LEAGUE_CANCEL'), false);
+		ToolBarHelper::custom('cancel','cancel.png','cancel_f2.png', Text::_('SWT_LEAGUE_CANCEL'), false);
 
 
 		// Listen
@@ -62,27 +66,27 @@ class CLMViewSWTLigaman extends JViewLegacy {
 		//echo "filter_zps: $filter_zps"; //DBG
 		//echo "GET: "; print_r ($_GET); //DBG
 		// Vereinsliste
-		$vlist[] = JHtml::_('select.option', '0', JText::_( 'SWT_LEAGUE_CLUB_SELECT' ), 'zps', 'name');
+		$vlist[] = HTMLHelper::_('select.option', '0', Text::_( 'SWT_LEAGUE_CLUB_SELECT' ), 'zps', 'name');
 		$vlist = array_merge( $vlist, $db_vlist );
-		//$lists['vereine'] = JHtml::_('select.genericlist', $vlist, 'filter_zps', 'class="inputbox" size="1" onchange="document.adminForm.submit()"', 'zps', 'name', $filter_zps);
-		$lists['vereine'] = JHtml::_('select.genericlist', $vlist, 'filter_zps', 'class="inputbox" size="1"', 'zps', 'name', $filter_zps);
+		//$lists['vereine'] = HTMLHelper::_('select.genericlist', $vlist, 'filter_zps', 'class="inputbox" size="1" onchange="document.adminForm.submit()"', 'zps', 'name', $filter_zps);
+		$lists['vereine'] = HTMLHelper::_('select.genericlist', $vlist, 'filter_zps', 'class="inputbox" size="1"', 'zps', 'name', $filter_zps);
 		// Partnervereine für Spielgemeinschaft
-		$sg_vlist[] = JHtml::_('select.option', '0', JText::_( 'SWT_LEAGUE_CLUB_SELECT' ), 'zps', 'name');
+		$sg_vlist[] = HTMLHelper::_('select.option', '0', Text::_( 'SWT_LEAGUE_CLUB_SELECT' ), 'zps', 'name');
 		$sg_vlist = array_merge( $vlist, $db_vlist );
-		//$lists['sg_vereine'] = JHtml::_('select.genericlist', $vlist, 'filter_sg_zps', 'class="inputbox" size="1" onchange="document.adminForm.submit()"', 'zps', 'name', $filter_sg_zps);
+		//$lists['sg_vereine'] = HTMLHelper::_('select.genericlist', $vlist, 'filter_sg_zps', 'class="inputbox" size="1" onchange="document.adminForm.submit()"', 'zps', 'name', $filter_sg_zps);
 		$sg_string = $filter_sg_zps;
 		$afilter_sg_zps = array();
 		$afilter_sg_zps = explode(',',$sg_string);
 		for ($i = 0; $i < $swt_db_data['anz_sgp']; $i++) { 
 			if (!isset($afilter_sg_zps[$i]) OR $afilter_sg_zps[$i] === 0 OR $afilter_sg_zps[$i] == '') $afilter_sg_zps[$i] = '0';
-			$lists['sg'.$i]= JHtml::_('select.genericlist',   $vlist, 'sg_zps'.$i , 'class="inputbox" size="1" ','zps', 'name', $afilter_sg_zps[$i] );
+			$lists['sg'.$i]= HTMLHelper::_('select.genericlist',   $vlist, 'sg_zps'.$i , 'class="inputbox" size="1" ','zps', 'name', $afilter_sg_zps[$i] );
 		}
 		// Liste der Teilnehmer-Nummern
 		$tlist = array ();
 		for ($i = 1; $i <= $swt_db_data['anz_mannschaften']; $i++) {
-			$tlist[] = JHtml::_('select.option', $i, $i, 'value', 'text');
+			$tlist[] = HTMLHelper::_('select.option', $i, $i, 'value', 'text');
 		}
-		$lists['tln_nr'] = JHtml::_('select.genericlist', $tlist, 'tln_nr', 'class="inputbox" size="1"', 'value', 'text', $man + 1);
+		$lists['tln_nr'] = HTMLHelper::_('select.genericlist', $tlist, 'tln_nr', 'class="inputbox" size="1"', 'value', 'text', $man + 1);
 
 		// Tabellen
 		// Stammspieler-Auswahl
@@ -96,15 +100,15 @@ class CLMViewSWTLigaman extends JViewLegacy {
 				$swt_spieler = '';
 			}
 			$splist		= array ();
-			$splist[]	= JHtml::_('select.option', '0', JText::_( 'SWT_LEAGUE_PLAYER_SELECT' ), 'id', 'name');
+			$splist[]	= HTMLHelper::_('select.option', '0', Text::_( 'SWT_LEAGUE_PLAYER_SELECT' ), 'id', 'name');
 			$splist		= array_merge( $splist, $db_splist );
 			if ($noOrgReference == '0')
-//				$splist[]	= JHtml::_('select.option', '-1', $swt_data['spieler_'.$i]['name'] . " " . JText::_( 'SWT_LEAGUE_NEW' ), 'id', 'name');
-				$splist[]	= JHtml::_('select.option', '-1', $swt_spieler . " " . JText::_( 'SWT_LEAGUE_NEW' ), 'id', 'name');
+//				$splist[]	= HTMLHelper::_('select.option', '-1', $swt_data['spieler_'.$i]['name'] . " " . Text::_( 'SWT_LEAGUE_NEW' ), 'id', 'name');
+				$splist[]	= HTMLHelper::_('select.option', '-1', $swt_spieler . " " . Text::_( 'SWT_LEAGUE_NEW' ), 'id', 'name');
 			else
-//				$splist[]	= JHtml::_('select.option', '-1', $swt_data['spieler_'.$i]['name'], 'id', 'name');
-				$splist[]	= JHtml::_('select.option', '-1', $swt_spieler, 'id', 'name');
-			$blist		= JHtml::_('select.genericlist', $splist, 'dwzid_'.$i, 'class="inputbox" size="1"', 'id', 'name', $dwzid);
+//				$splist[]	= HTMLHelper::_('select.option', '-1', $swt_data['spieler_'.$i]['name'], 'id', 'name');
+				$splist[]	= HTMLHelper::_('select.option', '-1', $swt_spieler, 'id', 'name');
+			$blist		= HTMLHelper::_('select.genericlist', $splist, 'dwzid_'.$i, 'class="inputbox" size="1"', 'id', 'name', $dwzid);
 			
 //			$swt_spieler = $swt_data['spieler_'.$i]['name'];
 			if ($dwzid == -1) {
@@ -114,7 +118,7 @@ class CLMViewSWTLigaman extends JViewLegacy {
 			if ($noOrgReference == '0')
 			$tablerow = '<tr>'
 					  . '<td nowrap="nowrap">'
-					  . '<label for="dwzid_'.$i.'">' . JText::_( 'SWT_LEAGUE_PLAYER_NR' ).' '.$i.'</label>'
+					  . '<label for="dwzid_'.$i.'">' . Text::_( 'SWT_LEAGUE_PLAYER_NR' ).' '.$i.'</label>'
 					  . '</td>'
 					  . '<td>' . $blist . '</td>'
 					  . '<td>' . $swt_spieler . '</td>'
@@ -122,7 +126,7 @@ class CLMViewSWTLigaman extends JViewLegacy {
 			elseif ($noBoardResults == '0')
 				$tablerow = '<tr>'
 					  . '<td nowrap="nowrap">'
-					  . '<label for="dwzid_'.$i.'">' . JText::_( 'SWT_LEAGUE_PLAYER_NR' ).' '.$i.'</label>'
+					  . '<label for="dwzid_'.$i.'">' . Text::_( 'SWT_LEAGUE_PLAYER_NR' ).' '.$i.'</label>'
 					  . '</td>'
 					  . '<td>' . $blist . '</td>'
 					  . '</tr>';
@@ -143,13 +147,13 @@ class CLMViewSWTLigaman extends JViewLegacy {
 			if (!isset($swt_data['spieler_'.$i])) continue;
 			$dwzid		= $swt_data['spieler_'.$i]['dwzid'];
 			$splist		= array ();
-			$splist[]	= JHtml::_('select.option', '0', JText::_( 'SWT_LEAGUE_PLAYER_SELECT' ), 'id', 'name');
+			$splist[]	= HTMLHelper::_('select.option', '0', Text::_( 'SWT_LEAGUE_PLAYER_SELECT' ), 'id', 'name');
 			$splist		= array_merge( $splist, $db_splist );
 			if ($noOrgReference == '0')
-				$splist[]	= JHtml::_('select.option', '-1', $swt_data['spieler_'.$i]['name'] . " " . JText::_( 'SWT_LEAGUE_NEW' ), 'id', 'name');
+				$splist[]	= HTMLHelper::_('select.option', '-1', $swt_data['spieler_'.$i]['name'] . " " . Text::_( 'SWT_LEAGUE_NEW' ), 'id', 'name');
 			else
-				$splist[]	= JHtml::_('select.option', '-1', $swt_data['spieler_'.$i]['name'], 'id', 'name');
-			$blist		= JHtml::_('select.genericlist', $splist, 'dwzid_'.$i, 'class="inputbox" size="1"', 'id', 'name', $dwzid);
+				$splist[]	= HTMLHelper::_('select.option', '-1', $swt_data['spieler_'.$i]['name'], 'id', 'name');
+			$blist		= HTMLHelper::_('select.genericlist', $splist, 'dwzid_'.$i, 'class="inputbox" size="1"', 'id', 'name', $dwzid);
 
 			$swt_spieler = $swt_data['spieler_'.$i]['name'];
 			if ($dwzid == -1) {
@@ -159,7 +163,7 @@ class CLMViewSWTLigaman extends JViewLegacy {
 			if ($noOrgReference == '0')
 			$tablerow = '<tr>'
 					  . '<td nowrap="nowrap">'
-					  . '<label for="dwzid_'.$i.'">' . JText::_( 'SWT_LEAGUE_PLAYER_NR' ).' '.$i.'</label>'
+					  . '<label for="dwzid_'.$i.'">' . Text::_( 'SWT_LEAGUE_PLAYER_NR' ).' '.$i.'</label>'
 					  . '</td>'
 					  . '<td>' . $blist . '</td>'
 					  . '<td>' . $swt_spieler . '</td>'
@@ -167,7 +171,7 @@ class CLMViewSWTLigaman extends JViewLegacy {
 			elseif ($noBoardResults == '0')
 				$tablerow = '<tr>'
 					  . '<td nowrap="nowrap">'
-					  . '<label for="dwzid_'.$i.'">' . JText::_( 'SWT_LEAGUE_PLAYER_NR' ).' '.$i.'</label>'
+					  . '<label for="dwzid_'.$i.'">' . Text::_( 'SWT_LEAGUE_PLAYER_NR' ).' '.$i.'</label>'
 					  . '</td>'
 					  . '<td>' . $blist . '</td>'
 					  . '</tr>';

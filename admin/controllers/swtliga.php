@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,10 +12,13 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 class CLMControllerSWTLiga extends JControllerLegacy
 {
 	function __construct() {		
-		$this->app =JFactory::getApplication();
+		$this->app =Factory::getApplication();
 		parent::__construct();		
 	}
 	
@@ -36,13 +39,13 @@ class CLMControllerSWTLiga extends JControllerLegacy
 			$adminLink->view = 'swt';
 			$adminLink->more = array('swt_file' => $swt_file, 'sid' => $sid);
 			$adminLink->makeURL ();
-			$msg = JText::_( 'SWT_LEAGUE_OVERWRITE_NOT_GIVEN' );
+			$msg = Text::_( 'SWT_LEAGUE_OVERWRITE_NOT_GIVEN' );
 			$this->setRedirect($adminLink->url, $msg);
 			$this->app->redirect($adminLink->url); 		
 		} else {
 //			$_REQUEST['view'] = 'swtligainfo';
 //			$_POST['update'] = '1';
-			$db		=JFactory::getDBO ();
+			$db		=Factory::getDBO ();
 			$select_query = '  SELECT * FROM #__clm_liga '
 							.' WHERE id = '.$lid.'; ';
 			$db->setQuery ($select_query);

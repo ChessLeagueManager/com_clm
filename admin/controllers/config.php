@@ -1,18 +1,21 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Version;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
 
 class CLMControllerConfig extends JControllerLegacy {
 	
@@ -22,7 +25,7 @@ class CLMControllerConfig extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->_db		= JFactory::getDBO();
+		$this->_db		= Factory::getDBO();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
@@ -37,8 +40,8 @@ class CLMControllerConfig extends JControllerLegacy {
 	
 		if ($this->_saveDo()) { // erfolgreich?
 			
-			$app =JFactory::getApplication();
-			$app->enqueueMessage( JText::_('CONFIG_SAVED') );
+			$app =Factory::getApplication();
+			$app->enqueueMessage( Text::_('CONFIG_SAVED') );
 		
 		}
 		// sonst Fehlermeldung schon geschrieben
@@ -56,7 +59,7 @@ class CLMControllerConfig extends JControllerLegacy {
 	
 	        $clmAccess = clm_core::$access;
 		if($clmAccess->access('BE_config_general') === false) {
-			JError::raiseWarning(500, JText::_('SECTION_NO_ACCESS') );
+			JError::raiseWarning(500, Text::_('SECTION_NO_ACCESS') );
 			return false;
 		}
 	
@@ -65,16 +68,16 @@ class CLMControllerConfig extends JControllerLegacy {
 		
 		
 		// Joomla-Version ermitteln
-		$version = new JVersion();
+		$version = new Version();
 		$joomlaVersion = $version->getShortVersion();
 		if (substr_count($joomlaVersion, '1.5')) {
-			$table = JTable::getInstance('component');
+			$table = Table::getInstance('component');
 			if (!$table->loadByOption('com_clm')) {
 				JError::raiseWarning(500, 'Not a valid component');
 				return false;
 			}
 		} else { // in 1.6 ist loadByOption abgeschafft!
-			$table = JTable::getInstance('Asset');
+			$table = Table::getInstance('Asset');
 			if (!$table->loadByName('com_clm')) {
 				JError::raiseWarning(500, 'Not a valid component');
 				return false;

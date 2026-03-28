@@ -1,15 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
 
 class CLMModelAccessgroupsForm extends JModelLegacy {
 	var $_accessgroup;
@@ -86,7 +89,7 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 	}
 	
 	function store() { 
-		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
+		$row = Table::getInstance( 'accessgroupsform', 'TableCLM' );
 		$accessgroup = $_POST; 
 		if (!$row->bind($accessgroup)) { 
 			$this->setError($this->_db->getErrorMsg()); 
@@ -105,7 +108,7 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 	
 	function delete() { 
 		$cids = clm_core::$load->request_array_int('cid'); 
-		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
+		$row = Table::getInstance( 'accessgroupsform', 'TableCLM' );
 		if (count( $cids )) { 
 			foreach($cids as $cid) { 
 				if (!$row->delete( $cid )) { 
@@ -119,7 +122,7 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 	
 	function publish() {
 		$cids = clm_core::$load->request_array_int('cid');
-		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
+		$row = Table::getInstance( 'accessgroupsform', 'TableCLM' );
 		if (!$row->publish( $cids )) { 
 			$this->setError( 'Fehler beim Freigeben' ); 
 			return false; 
@@ -129,7 +132,7 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 	
 	function unpublish() {
 		$cids = clm_core::$load->request_array_int('cid');
-		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
+		$row = Table::getInstance( 'accessgroupsform', 'TableCLM' );
 		if (!$row->publish($cids,0)) { 
 			$this->setError( 'Fehler beim Sperren' ); 
 			return false; 
@@ -140,7 +143,7 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 	function saveOrder() {
 		$cids = clm_core::$load->request_array_int('cid');
 		$order = clm_core::$load->request_array_int('order');
-		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );		
+		$row = Table::getInstance( 'accessgroupsform', 'TableCLM' );		
 		for($i = 0; $i < count($cids); $i ++) {
 			$row->load((int)$cids[$i]);
 			if($row->ordering != $order[$i]) {
@@ -161,7 +164,7 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 	function orderUp() {
 		$cids = clm_core::$load->request_array_int('cid');
 		if(isset($cids[0])) {
-			$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
+			$row = Table::getInstance( 'accessgroupsform', 'TableCLM' );
 			$row->load((int)$cids[0]);
 			$row->move(-1, 'name = '.$row->name);
 			$row->reorder('name = '.$row->name);
@@ -172,7 +175,7 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 	function orderDown() {
 		$cids = clm_core::$load->request_array_int('cid');					
 		if(isset($cids[0])) {
-			$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
+			$row = Table::getInstance( 'accessgroupsform', 'TableCLM' );
 			$row->load((int)$cids[0]);
 			$row->move(1, 'name = '.$row->name);
 			$row->reorder('name = '.$row->name);
@@ -184,13 +187,13 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 		$cids = clm_core::$load->request_array_int('cid');
 		$n		= count( $cids );
 
-		$row = JTable::getInstance( 'accessgroupsform', 'TableCLM' );
+		$row = Table::getInstance( 'accessgroupsform', 'TableCLM' );
 		$rn = 0;
 		if ($n > 0) {
 			foreach ($cids as $id) {
 				if ($row->load( (int)$id )) {
 					$row->id			= 0;
-					$row->name			= JText::_( 'COPY_OF' ).' '.$row->name;
+					$row->name			= Text::_( 'COPY_OF' ).' '.$row->name;
 					$row->usertype			= 'c_'.$row->usertype;
 					$row->published		= 0;
 					$row->kind			= 'USER';
@@ -202,12 +205,12 @@ class CLMModelAccessgroupsForm extends JModelLegacy {
 			}
 		}
 
-	if ($n >1) { $msg=JText::_( 'LIGEN_AKTION_ENTRYS' );}
-		else {$msg=JText::_( 'LIGEN_AKTION_ENTRY' );}
+	if ($n >1) { $msg=Text::_( 'LIGEN_AKTION_ENTRYS' );}
+		else {$msg=Text::_( 'LIGEN_AKTION_ENTRY' );}
 	
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'ACCESSGROUP_COPIED_LOG' );
+	$clmLog->aktion = Text::_( 'ACCESSGROUP_COPIED_LOG' );
 	$clmLog->params = array('sid' => clm_core::$access->getSeason(), 'cids' => $row->usertype);
 	$clmLog->write();
 	return true;

@@ -1,11 +1,15 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
 
 class CLMModeltermineimport extends JModelLegacy {
 
@@ -20,7 +24,7 @@ class CLMModeltermineimport extends JModelLegacy {
 		
 		$filesDir = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "pgn" . DIRECTORY_SEPARATOR;
 		if (!file_exists($filesDir)) mkdir($filesDir);
-		$this->TermineFiles = JFolder::files( $filesDir, '.CSV$|.csv$|.ics$', false, true );
+		$this->TermineFiles = Folder::files( $filesDir, '.CSV$|.csv$|.ics$', false, true );
 		
 		return $this->TermineFiles;
 	}
@@ -32,20 +36,21 @@ class CLMModeltermineimport extends JModelLegacy {
 		$file = clm_core::$load->request_file('termine_datei', null);
 		
 		//Dateiname wird bereinigt
-		$filename = JFile::makeSafe($file['name']);
+		$filename = File::makeSafe($file['name']);
 		$_POST['filename'] = $filename;
 		//Temporärer Name und Ziel werden festgesetzt
 		$src = $file['tmp_name'];
 		$dest = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "pgn" . DIRECTORY_SEPARATOR . $filename;
 		//Datei wird auf dem Server gespeichert (abfrage auf .csv Endung)
-		if ( strtolower(JFile::getExt($filename) ) == 'csv' OR strtolower(JFile::getExt($filename) ) == 'ics') {
-			if ( JFile::upload($src, $dest) ) {
-				$msg = JText::_( 'SWT_UPLOAD_SUCCESS' ); 
+//		if ( strtolower(File::getExt($filename) ) == 'csv' OR strtolower(File::getExt($filename) ) == 'ics') {
+		if (strtolower(substr(strrchr(basename($filename), '.'),1) ) == 'csv' OR strtolower(substr(strrchr(basename($filename), '.'),1) ) == 'isc') {
+			if ( File::upload($src, $dest) ) {
+				$msg = Text::_( 'SWT_UPLOAD_SUCCESS' ); 
 			} else {
-				$msg = JText::_( 'SWT_UPLOAD_ERROR' );
+				$msg = Text::_( 'SWT_UPLOAD_ERROR' );
 			}
 		} else {
-			$msg = JText::_( 'SWT_UPLOAD_ERROR_WRONG_EXT' );
+			$msg = Text::_( 'SWT_UPLOAD_ERROR_WRONG_EXT' );
 		}
 		return $msg;
 	}
@@ -60,10 +65,10 @@ class CLMModeltermineimport extends JModelLegacy {
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "pgn" . DIRECTORY_SEPARATOR;
 		
 		//Datei löschen
-		if ( JFile::delete($path.$filename) ) {
-			$msg = JText::_( 'SWT_DELETE_SUCCESS' ); 
+		if ( File::delete($path.$filename) ) {
+			$msg = Text::_( 'SWT_DELETE_SUCCESS' ); 
 		} else {
-			$msg = JText::_( 'SWT_DELETE_ERROR' ); 
+			$msg = Text::_( 'SWT_DELETE_ERROR' ); 
 		}
 		return $msg;
 	}

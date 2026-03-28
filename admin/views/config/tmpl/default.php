@@ -12,23 +12,23 @@ defined('_JEXEC') or die('Restricted access');
 /*	$pane =& JPane::getInstance('tabs'); 
 	echo $pane->startPane( 'pane' );
 		
-		echo $pane->startPanel( JText::_('CONFIG_BASICS'), 'panel_basics' );
+		echo $pane->startPanel( Text::_('CONFIG_BASICS'), 'panel_basics' );
 			require_once('config_basics.php'); 
 		echo $pane->endPanel();
 		
-		echo $pane->startPanel( JText::_('CONFIG_FRONTEND'), 'panel_frontend' );
+		echo $pane->startPanel( Text::_('CONFIG_FRONTEND'), 'panel_frontend' );
 			require_once('config_frontend.php'); 
 		echo $pane->endPanel();
 		
-		echo $pane->startPanel( JText::_('CONFIG_TOURN'), 'panel_turnier' );
+		echo $pane->startPanel( Text::_('CONFIG_TOURN'), 'panel_turnier' );
 			require_once('config_turnier.php'); 
 		echo $pane->endPanel();
 		
-		echo $pane->startPanel( JText::_('CONFIG_TEMPLATE'), 'panel_template' );
+		echo $pane->startPanel( Text::_('CONFIG_TEMPLATE'), 'panel_template' );
 			require_once('config_template.php'); 
 		echo $pane->endPanel();
 		
-		echo $pane->startPanel( JText::_('CONFIG_UPGRADE'), 'panel_upgrade' );
+		echo $pane->startPanel( Text::_('CONFIG_UPGRADE'), 'panel_upgrade' );
 			require_once('config_upgrade.php'); 
 		echo $pane->endPanel();
 	
@@ -40,7 +40,7 @@ defined('_JEXEC') or die('Restricted access');
 	<input type="hidden" name="view" value="config" />
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="controller" value="config" />
-	<?php //echo JHtml::_( 'form.token' ); ?>
+	<?php //echo HTMLHelper::_( 'form.token' ); ?>
 </form>
 -->
 </div>

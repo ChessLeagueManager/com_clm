@@ -1,11 +1,14 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Table\Table;
 
 class CLMModelArbiterForm extends JModelLegacy {
 
@@ -15,7 +18,7 @@ class CLMModelArbiterForm extends JModelLegacy {
 		parent::__construct();
 
 		// user
-		$this->user =JFactory::getUser();
+		$this->user =Factory::getUser();
 		
 		$this->_getData();
 
@@ -27,7 +30,7 @@ class CLMModelArbiterForm extends JModelLegacy {
 	function _getData() {
 		
 		// Instanz der Tabelle
-		$this->arbiter = JTable::getInstance( 'arbiters', 'TableCLM');
+		$this->arbiter = Table::getInstance( 'arbiters', 'TableCLM');
 		if ($id = clm_core::$load->request_int('id')) {
 			$this->arbiter->load($id);
 		}

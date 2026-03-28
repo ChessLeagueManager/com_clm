@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -10,6 +10,10 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Router\Route;
 
 $clmAccess = clm_core::$access;
 $turParams = new clm_class_params($this->turnier->params);
@@ -21,10 +25,10 @@ $turParams = new clm_class_params($this->turnier->params);
 		<table>
 		<tr>
 			<td align="left" width="100%">
-				<?php echo JText::_( 'FILTER' ); ?>:
+				<?php echo Text::_( 'FILTER' ); ?>:
 		<input type="text" name="search" id="search" value="<?php echo $this->param['search'];?>" class="text_area" onchange="document.adminForm.submit();" />
-		<button onclick="this.form.submit();"><?php echo JText::_( 'GO' ); ?></button>
-		<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_vid').value='0';this.form.submit();"><?php echo JText::_( 'RESET' ); ?></button>
+		<button onclick="this.form.submit();"><?php echo Text::_( 'GO' ); ?></button>
+		<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_vid').value='0';this.form.submit();"><?php echo Text::_( 'RESET' ); ?></button>
 			</td>
 		<?php if ($dview == 'entry_fee') { ?>	
 			<td nowrap="nowrap" align="center" width="100%">
@@ -50,62 +54,62 @@ $turParams = new clm_class_params($this->turnier->params);
 					</th>
 					<?php if ($this->turnier->typ != 3) { ?>
 						<th width="3%">
-							<?php echo JHtml::_('grid.sort', JText::_('RANKING_POS_ABB'), 'rankingPos', $this->param['order_Dir'], $this->param['order'] ); ?>
+							<?php echo HTMLHelper::_('grid.sort', Text::_('RANKING_POS_ABB'), 'rankingPos', $this->param['order_Dir'], $this->param['order'] ); ?>
 						</th>
 					<?php } ?>
 					<th width="3%">
-						<?php echo JHtml::_('grid.sort', JText::_('CLM_NUMBER_ABB'), 'snr', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort', Text::_('CLM_NUMBER_ABB'), 'snr', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<?php if ($this->turnier->typ == 1) { ?>
 					<th width="3%">
-						<?php echo JHtml::_('grid.sort', JText::_('CLM_ACTIVE'), 'tlnrStatus', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort', Text::_('CLM_ACTIVE'), 'tlnrStatus', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<?php } ?>
 					<?php 
 					if ($turParams->get('displayPlayerTitle', 1) == 1) {
 					?>
 					<th width="3%">
-						<?php echo JHtml::_('grid.sort', JText::_('PLAYER_TITLE'), 'titel', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort', Text::_('PLAYER_TITLE'), 'titel', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<?php 
 					} 
 					?>
 					<th width="20%" class="title">
-						<?php echo JHtml::_('grid.sort', JText::_('PLAYER_NAME'), 'name', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort', Text::_('PLAYER_NAME'), 'name', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<th width="20%">
-						<?php echo JHtml::_('grid.sort', JText::_('CLUB'), 'verein', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort', Text::_('CLUB'), 'verein', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 				<?php if ($dview == 'std') { ?>	
 					<th width="5%">
-						<?php echo JHtml::_('grid.sort', JText::_('PLAYER_ZPS'), 'twz', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort', Text::_('PLAYER_ZPS'), 'twz', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<th width="5%">
-						<?php echo JHtml::_('grid.sort', JText::_('PLAYER_MGLNR'), 'start_dwz', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort', Text::_('PLAYER_MGLNR'), 'start_dwz', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<?php
 					if ($turParams->get('displayPlayerFederation', 0) == 1) {
 					?>
 					<th width="5%">
-						<?php echo JHtml::_('grid.sort', JText::_('FEDERATION'), 'FIDEcco', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort', Text::_('FEDERATION'), 'FIDEcco', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<?php
 					}
 					?>
 					<th width="5%">
-						<?php echo JHtml::_('grid.sort', JText::_('TWZ'), 'twz', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort', Text::_('TWZ'), 'twz', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<th width="5%">
-						<?php echo JHtml::_('grid.sort', JText::_('RATING'), 'start_dwz', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort', Text::_('RATING'), 'start_dwz', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<th width="5%">
-						<?php echo JHtml::_('grid.sort', JText::_('FIDE_ELO'), 'FIDEelo', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort', Text::_('FIDE_ELO'), 'FIDEelo', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<?php 
 					if ($turParams->get('optionEloAnalysis', 0) == 1) {
 					?>
 					<th width="3%">
-						<?php echo JHtml::_('grid.sort', JText::_('FIDE_ID'), 'FIDEid', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort', Text::_('FIDE_ID'), 'FIDEid', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<?php 
 					} 
@@ -114,9 +118,9 @@ $turParams = new clm_class_params($this->turnier->params);
 					<th width="5%">
 						<?php 
 						if ($this->turnier->typ != 3) { // Punkte
-							echo JHtml::_('grid.sort', JText::_('POINTS'), 'sum_punkte', $this->param['order_Dir'], $this->param['order'] ); 
+							echo HTMLHelper::_('grid.sort', Text::_('POINTS'), 'sum_punkte', $this->param['order_Dir'], $this->param['order'] ); 
 						} else {
-							echo JHtml::_('grid.sort', JText::_('TOURNAMENT_SUCCESS'), 'koRound', $this->param['order_Dir'], $this->param['order'] ); 
+							echo HTMLHelper::_('grid.sort', Text::_('TOURNAMENT_SUCCESS'), 'koRound', $this->param['order_Dir'], $this->param['order'] ); 
 						}
 						?>
 					</th>
@@ -130,7 +134,7 @@ $turParams = new clm_class_params($this->turnier->params);
 								$fieldName = 'tiebr'.$f;
 								if ($this->turnier->$fieldName != 0 AND $this->turnier->$fieldName < 50) {
 									echo '<th width="5%">';
-									echo JText::_('TIEBR_'.$this->turnier->$fieldName);
+									echo Text::_('TIEBR_'.$this->turnier->$fieldName);
 									echo '</th>';
 								}
 							}
@@ -138,22 +142,22 @@ $turParams = new clm_class_params($this->turnier->params);
 					?>
 				<?php } if ($dview == 'entry_fee') { ?>	
 					<th width="20%">
-						<?php echo JHtml::_('grid.sort', JText::_('PLAYER_DATE_PAID'), 'date_paid', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort', Text::_('PLAYER_DATE_PAID'), 'date_paid', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<th width="5%">
-						<?php echo JHtml::_('grid.sort', JText::_('PLAYER_AMOUNT_PAID'), 'amount_paid', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort', Text::_('PLAYER_AMOUNT_PAID'), 'amount_paid', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 					<th width="20%">
-						<?php echo JHtml::_('grid.sort', JText::_('PLAYER_REASON'), 'reason', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort', Text::_('PLAYER_REASON'), 'reason', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 				<?php } ?>	
 					
 					<th width="10%" nowrap="nowrap">
-						<?php echo JHtml::_('grid.sort', JText::_('JGRID_HEADING_ORDERING'), 'ordering', $this->param['order_Dir'], $this->param['order'] ); ?>
-						<?php echo JHtml::_('grid.order', $this->turplayers ); ?>
+						<?php echo HTMLHelper::_('grid.sort', Text::_('JGRID_HEADING_ORDERING'), 'ordering', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.order', $this->turplayers ); ?>
 					</th>
 					<th width="1%" nowrap="nowrap">
-						<?php echo JHtml::_('grid.sort',   'ID', 'a.id', $this->param['order_Dir'], $this->param['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'ID', 'a.id', $this->param['order_Dir'], $this->param['order'] ); ?>
 					</th>
 
 				</tr>
@@ -174,10 +178,10 @@ $turParams = new clm_class_params($this->turnier->params);
 				$row = &$value;
 			// for ($i=0, $n=count( $rows ); $i < $n; $i++) {
 				// $row = &$rows[$i];			
-				//$link 		= JRoute::_( 'index.php?option=com_clm&section=t&task=edit&cid[]='. $row->id );
-				$checked 	= JHtml::_('grid.checkedout',   $row, $i );
-//				$published 	= JHtml::_('grid.published', $row, $i );
-				$published 	= JHtml::_('jgrid.published', $row->published, $i );
+				//$link 		= Route::_( 'index.php?option=com_clm&section=t&task=edit&cid[]='. $row->id );
+				$checked 	= HTMLHelper::_('grid.checkedout',   $row, $i );
+//				$published 	= HTMLHelper::_('grid.published', $row, $i );
+				$published 	= HTMLHelper::_('jgrid.published', $row->published, $i );
 				?>
 				<tr class="<?php echo 'row'. $k; ?>">
 					<td align="center">
@@ -207,9 +211,9 @@ $turParams = new clm_class_params($this->turnier->params);
 					<?php 
 						// Teilnehmer aktiv
 						if ($row->tlnrStatus == 1) { 
-							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'unactive\')" title="'.JText::_('SET_DEACTIVE').'"><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /></a>';
+							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'unactive\')" title="'.Text::_('SET_DEACTIVE').'"><img width="16" height="16" src="components/com_clm/images/apply_f2.png" /></a>';
 						} else {
-							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'active\')" title="'.JText::_('SET_ACTIVE').'"><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /></a>';
+							echo '<a href="javascript:void(0);" onclick="Joomla.listItemTask(\'cb'.($i).'\', \'active\')" title="'.Text::_('SET_ACTIVE').'"><img width="16" height="16" src="components/com_clm/images/cancel_f2.png" /></a>';
 						}
 					?>
 					</td>
@@ -233,7 +237,7 @@ $turParams = new clm_class_params($this->turnier->params);
 							$adminLink->more = array('playerid' => $row->id, 'dview' => $dview);
 							$adminLink->makeURL();
 							?>
-							<span class="editlinktip hasTip" title="<?php echo JText::_( 'PLAYER_EDIT' );?>">
+							<span class="editlinktip hasTip" title="<?php echo Text::_( 'PLAYER_EDIT' );?>">
 								<a href="<?php echo $adminLink->url; ?>">
 									<?php echo $row->name; ?>
 								</a>
@@ -323,10 +327,10 @@ $turParams = new clm_class_params($this->turnier->params);
 							echo $row->sum_punkte; 
 						} else {
 							echo '<td align="center"><b>';
-							echo JText::_('TOURNAMENT_KOSTATUS_'.$row->koStatus);
+							echo Text::_('TOURNAMENT_KOSTATUS_'.$row->koStatus);
 							echo '<br />';
 							if ($row->koRound != 0) {
-								//echo JText::_('ROUND_KO_'.$row->koRound);
+								//echo Text::_('ROUND_KO_'.$row->koRound);
 								echo $row->koRoundName;
 							}
 						}	
@@ -389,6 +393,6 @@ $turParams = new clm_class_params($this->turnier->params);
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $this->param['order_Dir']; ?>" />
 		<input type="hidden" name="id" value="<?php echo $this->param['id']; ?>" />
 		<input type="hidden" name="dview" value="<?php echo $dview; ?>" />
-		<?php echo JHtml::_( 'form.token' ); ?>
+		<?php echo HTMLHelper::_( 'form.token' ); ?>
 
 </form>

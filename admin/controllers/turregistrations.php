@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team. All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,6 +12,10 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+
 class CLMControllerTurRegistrations extends JControllerLegacy {	
 
 	// Konstruktor
@@ -19,7 +23,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->app 	= JFactory::getApplication();
+		$this->app 	= Factory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'unactive','active' );
@@ -74,7 +78,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 
 		$adminLink = new AdminLink();
 		if ($count < 1) {
-			$this->app->enqueueMessage( JText::_('NO_ITEM_SELECTED'), 'warning' );
+			$this->app->enqueueMessage( Text::_('NO_ITEM_SELECTED'), 'warning' );
 			$adminLink->view = "turregistrations";
 			$adminLink->more = array('id' => $id);
 		} else {
@@ -112,7 +116,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		// turnierid
 		$id = clm_core::$load->request_int('id');
 		// Turnierdaten holen
-		$turnier =JTable::getInstance( 'turniere', 'TableCLM' );
+		$turnier =Table::getInstance( 'turniere', 'TableCLM' );
 		$turnier->load( $id ); // Daten zu dieser ID laden
 
 		// Turnier existent?
@@ -123,7 +127,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 	
 		$clmAccess = clm_core::$access;      
 		if (($turnier->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
-			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'), 'warning' );
+			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'), 'warning' );
 			return false;
 		}
 	
@@ -131,7 +135,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		$tournament = new CLMTournament($id);
 		$tournament->checkTournamentStarted();
 		if ($tournament->started) {
-			$this->app->enqueueMessage( JText::_( 'DELETION_NOT_POSSIBLE' ).": ".JText::_('RESULTS_ENTERED'), 'warning' );
+			$this->app->enqueueMessage( Text::_( 'DELETION_NOT_POSSIBLE' ).": ".Text::_('RESULTS_ENTERED'), 'warning' );
 			return false;
 		}
 	
@@ -140,7 +144,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		if (is_null($cid)) $cid = array();
 	
 		if (count($cid) < 1) {
-			$this->app->enqueueMessage( JText::_('NO_ITEM_SELECTED'), 'warning' );
+			$this->app->enqueueMessage( Text::_('NO_ITEM_SELECTED'), 'warning' );
 			return false;
 		}
 		// alle Checks erledigt
@@ -153,11 +157,11 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 //		$this->_db->setQuery($query);
 //		if (!$this->_db->query()) { 
 		if (!clm_core::$db->query($query)) { 
-			$this->app->enqueueMessage( JText::_('DB_ERROR'), 'warning' );
+			$this->app->enqueueMessage( Text::_('DB_ERROR'), 'warning' );
 			return false;
 		}
 	
-		$text = CLMText::sgpl(count($cid), JText::_('PLAYER'), JText::_('PLAYERS'))." ".JText::_('DELETED');
+		$text = CLMText::sgpl(count($cid), Text::_('PLAYER'), Text::_('PLAYERS'))." ".Text::_('DELETED');
 	
 		// Log schreiben
 		$clmLog = new CLMLog();
@@ -216,21 +220,21 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 	
 		$clmAccess = clm_core::$access;      
 		if ($clmAccess->access('BE_tournament_edit_detail') === false) {
-			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'), 'warning' );
+			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'), 'warning' );
 			return false;
 		}
 	
 		$cid = clm_core::$load->request_array_int('cid');
 		$tlnid = $cid[0];
 	
-		$row =JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
+		$row =Table::getInstance( 'turnier_teilnehmer', 'TableCLM' );
 		if ( !$row->load($tlnid) ) {
 			$this->app->enqueueMessage( CLMText::errorText('PLAYER', 'NOTEXISTING'), 'warning' );
 			return false;
 		}
 		$row->move($inc, '');
 									   
-		$this->app->enqueueMessage( JText::_('ORDERING_CHANGED') );
+		$this->app->enqueueMessage( Text::_('ORDERING_CHANGED') );
 		
 		return true;
 		
@@ -245,7 +249,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 	
 		$clmAccess = clm_core::$access;      
 		if ($clmAccess->access('BE_tournament_edit_detail') === false) {
-			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'), 'warning' );
+			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'), 'warning' );
 			return false;
 		}
 	
@@ -256,7 +260,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		// alle Order-Einträge
 		$order		= clm_core::$load->request_array_int('order');
 	
-		$row =JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
+		$row =Table::getInstance( 'turnier_teilnehmer', 'TableCLM' );
 		
 		$groupings = array();
 	
@@ -279,7 +283,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 			$row->reorder('turnier = '.(int) $group);
 		}
 										   
-		$this->app->enqueueMessage( JText::_('NEW_ORDERING_SAVED') );
+		$this->app->enqueueMessage( Text::_('NEW_ORDERING_SAVED') );
 	
 		// turnierid
 		$id = clm_core::$load->request_int('id');
@@ -343,19 +347,19 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 	
 		$clmAccess = clm_core::$access;      
 		if ($clmAccess->access('BE_tournament_edit_detail') === false) {
-			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'), 'warning' );
+			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'), 'warning' );
 			return false;
 		}
 	
 		$tournament = new CLMTournament($this->id);
 		$tournament->checkTournamentStarted();
 		if ($tournament->started) {
-			$this->app->enqueueMessage( JText::_( 'SORTING_NOT_POSSIBLE' ).": ".JText::_('RESULTS_ENTERED'), 'warning' );
+			$this->app->enqueueMessage( Text::_( 'SORTING_NOT_POSSIBLE' ).": ".Text::_('RESULTS_ENTERED'), 'warning' );
 			return false;
 		}
 	
 		// Anzahl gemeldeter Spiele -> maximale Snr
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$query = "SELECT COUNT(id) FROM `#__clm_turniere_tlnr`"
 			." WHERE turnier =".$id
 			;
@@ -368,24 +372,24 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 								.' WHERE turnier = '.$id
 								.' ORDER BY ordering ASC'
 								;
-			$stringMessage = JText::_('ORDERED_BY_ORDERING');
+			$stringMessage = Text::_('ORDERED_BY_ORDERING');
 		} elseif ($by == 'twz') {
 			$queryOrderBy = 'SELECT id FROM `#__clm_turniere_tlnr`'
 								.' WHERE turnier = '.$id
 								.' ORDER BY twz DESC'
 								;
-			$stringMessage = JText::_('ORDERED_BY_TWZ');
+			$stringMessage = Text::_('ORDERED_BY_TWZ');
 		} elseif ($by == 'random') {
 			$queryOrderBy = 'SELECT id FROM `#__clm_turniere_tlnr`'
 								.' WHERE turnier = '.$id
 								.' ORDER BY RAND()'
 								;
-			$stringMessage = JText::_('ORDERED_BY_RANDOM');
+			$stringMessage = Text::_('ORDERED_BY_RANDOM');
 		}
 		$db->setQuery($queryOrderBy);
 		$players = $db->loadObjectList();
 	
-		$table	=JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
+		$table	=Table::getInstance( 'turnier_teilnehmer', 'TableCLM' );
 		// Snr umsortieren
 		$snr = 0;
 		// alle Spieler durchgehen
@@ -428,7 +432,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 	
 		$clmAccess = clm_core::$access;      
 		if ($clmAccess->access('BE_tournament_edit_detail') === false) {
-			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'), 'warning' );
+			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'), 'warning' );
 			return false;
 		}
 	
@@ -438,17 +442,17 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		$tournament = new CLMTournament($id, true);
 		$tournament->checkTournamentStarted();
 		if (!$tournament->started) {
-			$this->app->enqueueMessage( JText::_( 'RANKING_NOT_POSSIBLE' ).": ".JText::_('NO_RESULTS_ENTERED'), 'warning' );
+			$this->app->enqueueMessage( Text::_( 'RANKING_NOT_POSSIBLE' ).": ".Text::_('NO_RESULTS_ENTERED'), 'warning' );
 			return false;
 		} elseif ($tournament->data->typ == 3) {
-			$this->app->enqueueMessage( JText::_( 'RANKING_NOT_POSSIBLE' ).": ".JText::_('MODUS_TYP_3'), 'warning' );
+			$this->app->enqueueMessage( Text::_( 'RANKING_NOT_POSSIBLE' ).": ".Text::_('MODUS_TYP_3'), 'warning' );
 			return false;
 		}
 	
 		$tournament->calculateRanking();
 		$tournament->setRankingPositions();
 	
-		$stringMessage = JText::_('SET_RANKING_DONE');
+		$stringMessage = Text::_('SET_RANKING_DONE');
 	
 		// Log schreiben
 		$clmLog = new CLMLog();
@@ -504,7 +508,7 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		$tlnrID = $cid[0];
 	
 		// Teilnehmerdaten holen
-		$tlnr =JTable::getInstance( 'turnier_teilnehmer', 'TableCLM' );
+		$tlnr =Table::getInstance( 'turnier_teilnehmer', 'TableCLM' );
 		$tlnr->load( $tlnrID ); // Daten zu dieser ID laden
 		// Teilnehmer existent?
 		if (!$tlnr->id) {
@@ -527,14 +531,14 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		}
 									   
 		if ($active) {
-			$this->app->enqueueMessage( $tlnr->name.": "." ".JText::_('PLAYER_ACTIVE') );
+			$this->app->enqueueMessage( $tlnr->name.": "." ".Text::_('PLAYER_ACTIVE') );
 		} else {
-			$this->app->enqueueMessage( $tlnr->name.": "." ".JText::_('PLAYER_DEACTIVE') );
+			$this->app->enqueueMessage( $tlnr->name.": "." ".Text::_('PLAYER_DEACTIVE') );
 		}
 	
 		// Log
 		$clmLog = new CLMLog();
-		$clmLog->aktion = JText::_('PLAYER')." ".$tlnr->name." (ID: ".$tlnrID."): ".$task;
+		$clmLog->aktion = Text::_('PLAYER')." ".$tlnr->name." (ID: ".$tlnrID."): ".$task;
 		$clmLog->params = array('tid' => $id); // TurnierID wird als LigaID gespeichert
 		$clmLog->write();
 	

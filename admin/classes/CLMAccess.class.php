@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -13,6 +13,7 @@
 /**
  * access check on backend within clm component
 */
+use Joomla\CMS\Factory;
 	
 class CLMAccess {
 
@@ -22,7 +23,7 @@ class CLMAccess {
 
 	function __construct() {
 	  // DB
-		$this->_db				= JFactory::getDBO();
+		$this->_db				= Factory::getDBO();
 	  // season
 		$query = ' SELECT id FROM #__clm_saison
 					WHERE published = 1 AND archiv = 0

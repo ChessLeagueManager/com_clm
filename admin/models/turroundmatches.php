@@ -1,15 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 class CLMModelTurRoundMatches extends JModelLegacy {
 
@@ -20,7 +23,7 @@ class CLMModelTurRoundMatches extends JModelLegacy {
 
 
 		// user
-		$this->user =JFactory::getUser();
+		$this->user =Factory::getUser();
 		
 		// get parameters
 		$this->_getParameters();
@@ -105,7 +108,7 @@ class CLMModelTurRoundMatches extends JModelLegacy {
 			." FROM `#__clm_turniere_tlnr` " 
 			." WHERE turnier = ".$this->param['turnierid']
 			."   AND tlnrStatus = 1 ";
-		if ($this->turnier->rname != JText::_('ROUND_KO_1') AND ($this->turnier->typ == '3' or $this->turnier->typ == '5')) {
+		if ($this->turnier->rname != Text::_('ROUND_KO_1') AND ($this->turnier->typ == '3' or $this->turnier->typ == '5')) {
 			if (($this->turnier->typ == '3' AND $this->round->nr < $this->turnier->runden) OR ($this->turnier->typ == '5' AND $this->round->nr < $this->turnier->runden-1)) {
 				$query .= " AND ( koStatus = '1' OR  koRound >= ".$this->round->nr.")"; }
 			if ($this->turnier->typ == '3' AND $this->round->nr == $this->turnier->runden) { // KO-Modus Finale

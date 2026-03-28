@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,12 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Pagination\Pagination;
 
 class CLMControllerRunden extends JControllerLegacy
 {
@@ -20,7 +26,7 @@ class CLMControllerRunden extends JControllerLegacy
 function __construct( $config = array() )
 	{
 		parent::__construct( $config );
-		$this->app = JFactory::getApplication();
+		$this->app = Factory::getApplication();
 
 		// Register Extra tasks
 		$this->registerTask( 'add','edit' );
@@ -32,10 +38,10 @@ function __construct( $config = array() )
 
 function display($cachable = false, $urlparams = array())
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');
-	$db=JFactory::getDBO();
+	$db=Factory::getDBO();
 	$liga	= clm_core::$load->request_int('liga');
  
 	// Parameter auslesen
@@ -99,7 +105,7 @@ function display($cachable = false, $urlparams = array())
 	$total = $db->loadResult();
 
 	jimport('joomla.html.pagination');
-	$pageNav = new JPagination( $total, $limitstart, $limit );
+	$pageNav = new Pagination( $total, $limitstart, $limit );
 
 	// get the subset (based on limits) of required records
 	$query = "SELECT a.*, c.name AS saison, c.published as sid_pub, u.name AS editor, d.name AS liga_name, "
@@ -118,15 +124,15 @@ function display($cachable = false, $urlparams = array())
 	}
 	// Filter
 	// Statusfilter
-	//$lists['state']	= JHTML::_('grid.state',  $filter_state );
+	//$lists['state']	= HTMLHelper::_('grid.state',  $filter_state );
 	$lists['state'] = CLMForm::selectState( $filter_state );
 	// nach Saison sortieren
 	$sql = 'SELECT id, name FROM #__clm_saison WHERE archiv =0';
 	$db->setQuery($sql);
-	$saisonlist[]	= JHtml::_('select.option',  '0', JText::_( 'RUNDE_SAISON_WAE' ), 'id', 'name' );
+	$saisonlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'RUNDE_SAISON_WAE' ), 'id', 'name' );
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
-//	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
-	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+//	$lists['sid']      = HTMLHelper::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']      = HTMLHelper::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 	// Nur ausführen wenn Saison published = 1 !!
 
 	//Zugangscheck
@@ -142,7 +148,7 @@ function display($cachable = false, $urlparams = array())
 	}
 
 	if($clmAccess->access('BE_'.$mppoint.'_edit_round') === false) {
-		$mainframe->enqueueMessage(JText::_( 'LIGEN_STAFFEL_TOTAL' ), 'warning');
+		$mainframe->enqueueMessage(Text::_( 'LIGEN_STAFFEL_TOTAL' ), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&view=view_tournament_group&liga='.$liga_type);
 	} elseif ($clmAccess->access('BE_'.$mppoint.'_edit_round') === true) $where_sl = '';
 	else $where_sl = ' AND a.sl = '.clm_core::$access->getJid();
@@ -153,24 +159,24 @@ function display($cachable = false, $urlparams = array())
 		." WHERE s.archiv = 0 ".$where_sl;
 	$db->setQuery($sql);
 
-	$ligalist[]	= JHtml::_('select.option',  '0', JText::_( 'RUNDE_LIGA_WAE' ), 'cid', 'name' );
+	$ligalist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'RUNDE_LIGA_WAE' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
-//	$lists['lid']	= JHtml::_('select.genericlist', $ligalist, 'filter_lid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
-	$lists['lid']	= JHtml::_('select.genericlist', $ligalist, 'filter_lid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
-	$ligalistq[]	= JHtml::_('select.option',  '0', JText::_( 'Termine von Liga, nur nötig für Termine kopieren' ), 'cid', 'name' );
+//	$lists['lid']	= HTMLHelper::_('select.genericlist', $ligalist, 'filter_lid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
+	$lists['lid']	= HTMLHelper::_('select.genericlist', $ligalist, 'filter_lid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
+	$ligalistq[]	= HTMLHelper::_('select.option',  '0', Text::_( 'Termine von Liga, nur nötig für Termine kopieren' ), 'cid', 'name' );
 	$ligalistq	= array_merge( $ligalistq, $db->loadObjectList() );
-	$lists['qlid']	= JHtml::_('select.genericlist', $ligalistq, 'filter_qlid', 'class="'.$field_search.'" size="1" ','cid', 'name', 0 );
+	$lists['qlid']	= HTMLHelper::_('select.genericlist', $ligalistq, 'filter_qlid', 'class="'.$field_search.'" size="1" ','cid', 'name', 0 );
 	// Ordering
 	$lists['order_Dir']	= $filter_order_Dir;
 	$lists['order']		= $filter_order;
 	// Suchefilter
 	$lists['search']= $search;
 	if(isset($rows[0]) && $rows[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) {
-		$mainframe->enqueueMessage(JText::_( 'LIGEN_STAFFEL' ), 'warning');
+		$mainframe->enqueueMessage(Text::_( 'LIGEN_STAFFEL' ), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&view=view_tournament_group&liga='.$liga_type);
 	}
 	if(!isset($rows[0])) {
-		$mainframe->enqueueMessage(JText::_( 'LIGEN_NOT_POSSIBLE' ), 'warning');
+		$mainframe->enqueueMessage(Text::_( 'LIGEN_NOT_POSSIBLE' ), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&view=view_tournament_group&liga='.$liga_type);
 	}
  
@@ -180,10 +186,10 @@ function display($cachable = false, $urlparams = array())
 
 function edit()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
-	$db 		=JFactory::getDBO();
-	$user 		=JFactory::getUser();
+	$db 		=Factory::getDBO();
+	$user 		=Factory::getUser();
 	$task 		= clm_core::$load->request_string('task');
 	$id 		= clm_core::$load->request_int('id',0);
 	$cid = clm_core::$load->request_array_int('cid');
@@ -197,11 +203,11 @@ function edit()
 	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
 	else $field_search = "inputbox";
 	
-	$row 		=JTable::getInstance( 'runden', 'TableCLM' );
+	$row 		=Table::getInstance( 'runden', 'TableCLM' );
 	// load the row from the db table
 	$row->load( $cid[0] );
 
-	$liga =JTable::getInstance( 'ligen', 'TableCLM' );
+	$liga =Table::getInstance( 'ligen', 'TableCLM' );
 	$liga->load($row->liga);
 	if ($liga->liga_mt == "0") {
 		$mppoint = 'league';
@@ -215,7 +221,7 @@ function edit()
 
 	if($clmAccess->access('BE_'.$mppoint.'_edit_round') === false) {
 		$section = $csection;
-		$msg = JText::_( 'Kein Zugriff: ').JText::_( 'RUNDE_STAFFEL_TOTAL1' );    
+		$msg = Text::_( 'Kein Zugriff: ').Text::_( 'RUNDE_STAFFEL_TOTAL1' );    
 		$mainframe->enqueueMessage($msg, 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 		}
@@ -223,15 +229,15 @@ function edit()
 	if ($task == 'edit') {
 	// illegaler Einbruchversuch über URL !
 	// evtl. mitschneiden !?!
-	$saison		=JTable::getInstance( 'saisons', 'TableCLM' );
+	$saison		=Table::getInstance( 'saisons', 'TableCLM' );
 	$saison->load( $row->sid );
 		if ($saison->archiv == "1" AND $clmAccess->access('BE_'.$mppoint.'_create') !== true) {
-			$mainframe->enqueueMessage(JText::_( 'RUNDE_ARCHIV' ), 'warning');
+			$mainframe->enqueueMessage(Text::_( 'RUNDE_ARCHIV' ), 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 			}
 		// Prüfen ob User Berechtigung zum editieren hat
 		if ( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) {
-			$mainframe->enqueueMessage(JText::_( 'RUNDE_STAFFEL' ), 'warning');
+			$mainframe->enqueueMessage(Text::_( 'RUNDE_STAFFEL' ), 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 		}
 	// do stuff for existing records
@@ -240,7 +246,7 @@ function edit()
 	// do stuff for new records
 		// Prüfen ob User Berechtigung zum Bearbeiten hat
 		if ( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) {
-			$mainframe->enqueueMessage(JText::_( 'RUNDE_STAFFEL' ), 'warning');
+			$mainframe->enqueueMessage(Text::_( 'RUNDE_STAFFEL' ), 'warning');
 			$section = $csection;
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link );
@@ -264,12 +270,12 @@ function edit()
 		$mainframe->enqueueMessage($row->getErrorMsg(), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
-	$ligalist[]	= JHtml::_('select.option',  '0', JText::_( 'RUNDE_LIGA_WAE') , 'liga', 'name' );
+	$ligalist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'RUNDE_LIGA_WAE') , 'liga', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
-//	$lists['liga']	= JHtml::_('select.genericlist',   $ligalist, 'liga', 'class="js-example-basic-single" size="1"','liga', 'name', $row->liga );
-	$lists['liga']	= JHtml::_('select.genericlist',   $ligalist, 'liga', 'class="'.$field_search.'" size="1"','liga', 'name', $row->liga );
-//	$lists['published']	= JHtml::_('select.booleanlist',  'published', 'class="js-example-basic-single"', $row->published );
-	$lists['published']	= JHtml::_('select.booleanlist',  'published', 'class="'.$field_search.'"', $row->published );
+//	$lists['liga']	= HTMLHelper::_('select.genericlist',   $ligalist, 'liga', 'class="js-example-basic-single" size="1"','liga', 'name', $row->liga );
+	$lists['liga']	= HTMLHelper::_('select.genericlist',   $ligalist, 'liga', 'class="'.$field_search.'" size="1"','liga', 'name', $row->liga );
+//	$lists['published']	= HTMLHelper::_('select.booleanlist',  'published', 'class="js-example-basic-single"', $row->published );
+	$lists['published']	= HTMLHelper::_('select.booleanlist',  'published', 'class="'.$field_search.'"', $row->published );
 	// Saisonliste
 	$sql = 'SELECT id as sid, name FROM #__clm_saison WHERE archiv = 0';
 	$db->setQuery($sql);
@@ -277,14 +283,14 @@ function edit()
 		$mainframe->enqueueMessage($row->getErrorMsg(), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
-	$saisonlist[]	= JHtml::_('select.option',  '0', JText::_( 'RUNDE_SAISON_WAE' ), 'sid', 'name' );
+	$saisonlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'RUNDE_SAISON_WAE' ), 'sid', 'name' );
 	$saisonlist	= array_merge( $saisonlist, $db->loadObjectList() );
-//	$lists['saison']= JHtml::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1"','sid', 'name', $row->sid );
-	$lists['saison']= JHtml::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1"','sid', 'name', $row->sid );
+//	$lists['saison']= HTMLHelper::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1"','sid', 'name', $row->sid );
+	$lists['saison']= HTMLHelper::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1"','sid', 'name', $row->sid );
 	// Liste Meldung
-	$lists['complete']= JHtml::_('select.booleanlist',  'meldung', 'class="inputbox"', $row->meldung );
+	$lists['complete']= HTMLHelper::_('select.booleanlist',  'meldung', 'class="inputbox"', $row->meldung );
 	// Liste SL OK
-	$lists['slok']= JHtml::_('select.booleanlist',  'sl_ok', 'class="inputbox"', $row->sl_ok );
+	$lists['slok']= HTMLHelper::_('select.booleanlist',  'sl_ok', 'class="inputbox"', $row->sl_ok );
 
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'runden.php');
 	CLMViewRunden::runde( $row, $lists, $option );
@@ -293,7 +299,7 @@ function edit()
 
 function save()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
@@ -304,9 +310,9 @@ function save()
 	$section 	= clm_core::$load->request_string('section');
 	$slok_old	= clm_core::$load->request_string('slok_old');
 	
-	$db 		=JFactory::getDBO();
+	$db 		=Factory::getDBO();
 	$task 		= clm_core::$load->request_string('task');
-	$row 		=JTable::getInstance( 'runden', 'TableCLM' );
+	$row 		=Table::getInstance( 'runden', 'TableCLM' );
 	$msg = clm_core::$load->request_string('id');
 
 	$post = $_POST; 
@@ -322,9 +328,9 @@ function save()
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 	// if new item, order last in appropriate group
-	$aktion = JText::_( 'RUNDE_LOG_EDIT');
+	$aktion = Text::_( 'RUNDE_LOG_EDIT');
 	if (!$row->id) {
-	$aktion = JText::_( 'RUNDE_LOG_ADDED');
+	$aktion = Text::_( 'RUNDE_LOG_ADDED');
 		$where = "sid = " . (int) $row->sid;
 		$row->ordering = $row->getNextOrder( $where );
 	}
@@ -377,12 +383,12 @@ function save()
 	switch ($task)
 	{
 		case 'apply':
-			$msg = JText::_( 'RUNDE_AENDERUNG').$row->nr.JText::_( 'RUNDE_GESPEICHERT' );
+			$msg = Text::_( 'RUNDE_AENDERUNG').$row->nr.Text::_( 'RUNDE_GESPEICHERT' );
 			$link = 'index.php?option='.$option.'&section='.$section.'&task=edit&id='.$row->id.'&liga='.$cliga;
 			break;
 		case 'save':
 		default:
-			$msg = JText::_( 'RUNDE ').$row->nr.JText::_( 'RUNDE_GESPEICHERT' );
+			$msg = Text::_( 'RUNDE ').$row->nr.Text::_( 'RUNDE_GESPEICHERT' );
 			$link = 'index.php?option='.$option.'&section='.$section.'&liga='.$cliga;
 			break;
 	}
@@ -395,14 +401,14 @@ function save()
 	// Log schreiben bei Freigabe
 	if (($row->sl_ok == 1)&&($slok_old != 1)) {
 		$clmLog = new CLMLog();
-		$clmLog->aktion = JText::_( 'RUNDE_LOG_FREIGABE');
+		$clmLog->aktion = Text::_( 'RUNDE_LOG_FREIGABE');
 		$clmLog->nr_aktion = 201;							//klkl
 		$clmLog->params = array('sid' => $row->sid, 'lid' => $row->liga, 'rnd' => $row->nr);
 		$clmLog->write();
 	}
 	if (($row->sl_ok != 1)&&($slok_old == 1)) {
 		$clmLog = new CLMLog();
-		$clmLog->aktion = JText::_( 'RUNDE_LOG_FREIGABE_DEL');
+		$clmLog->aktion = Text::_( 'RUNDE_LOG_FREIGABE_DEL');
 		$clmLog->nr_aktion = 202;							//klkl
 		$clmLog->params = array('sid' => $row->sid, 'lid' => $row->liga, 'rnd' => $row->nr);
 		$clmLog->write();
@@ -415,7 +421,7 @@ function save()
 
 function cancel()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 	$cliga 		= clm_core::$load->request_int('liga');
@@ -423,9 +429,9 @@ function cancel()
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');
 	$id		= clm_core::$load->request_string('id');	
-	$row 		=JTable::getInstance( 'runden', 'TableCLM' );
+	$row 		=Table::getInstance( 'runden', 'TableCLM' );
 
-	$msg = JText::_( 'RUNDE_AKTION');
+	$msg = Text::_( 'RUNDE_AKTION');
 	$mainframe->enqueueMessage($msg , "message");
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cliga);
 	}
@@ -433,24 +439,24 @@ function cancel()
 
 function remove()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 
-	$db 		=JFactory::getDBO();
+	$db 		=Factory::getDBO();
 	$cid = clm_core::$load->request_array_int('cid');
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');
 
 	if (count($cid) < 1) {
-		$mainframe->enqueueMessage(JText::_( 'RUNDE_SELECT', true ) , "warning");
+		$mainframe->enqueueMessage(Text::_( 'RUNDE_SELECT', true ) , "warning");
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
-	$row =JTable::getInstance( 'runden', 'TableCLM' );
+	$row =Table::getInstance( 'runden', 'TableCLM' );
 	$row->load( $cid[0] );
-	$liga =JTable::getInstance( 'ligen', 'TableCLM' );
+	$liga =Table::getInstance( 'ligen', 'TableCLM' );
 	$liga->load($row->liga);
 
 	if ($liga->liga_mt == 0) {
@@ -466,7 +472,7 @@ function remove()
 	// Prüfen ob User Berechtigung zum löschen hat
 	//if ( $liga->sl !== clm_core::$access->getJid() AND clm_core::$access->getType() !== 'admin') {
 	if (( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
-		$mainframe->enqueueMessage(JText::_( 'RUNDE_ST_LOESCHEN' ), 'warning');
+		$mainframe->enqueueMessage(Text::_( 'RUNDE_ST_LOESCHEN' ), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 		$cids = implode( ',', $cid );
@@ -479,8 +485,8 @@ function remove()
 
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'RUNDE_LOG_DELETED');
-	$table	=JTable::getInstance( 'runden', 'TableCLM');
+	$clmLog->aktion = Text::_( 'RUNDE_LOG_DELETED');
+	$table	=Table::getInstance( 'runden', 'TableCLM');
 	$table->load($cid[0]);
 	$clmLog->params = array('sid' => $table->sid, 'lid' => $table->liga, 'rnd' => $table->nr, 'cids' => $cids);
 	$clmLog->write();
@@ -491,13 +497,13 @@ function remove()
 
 function publish()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 
-	$db 		=JFactory::getDBO();
-	$user 		=JFactory::getUser();
+	$db 		=Factory::getDBO();
+	$user 		=Factory::getUser();
 	$cid = clm_core::$load->request_array_int('cid');
 	$task		= clm_core::$load->request_string('task');
 	$publish	= ($task == 'publish');
@@ -508,9 +514,9 @@ function publish()
 		$mainframe->enqueueMessage('No items selected', 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
-	$row =JTable::getInstance( 'runden', 'TableCLM' );
+	$row =Table::getInstance( 'runden', 'TableCLM' );
 	$row->load( $cid[0] );
-	$liga =JTable::getInstance( 'ligen', 'TableCLM' );
+	$liga =Table::getInstance( 'ligen', 'TableCLM' );
 	$liga->load($row->liga);
 	if ($liga->liga_mt == 0) {
 		$mppoint = 'league';
@@ -522,7 +528,7 @@ function publish()
 
 	// Prüfen ob User Berechtigung hat
 	if (( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
-		$mainframe->enqueueMessage(JText::_( 'RUNDE_ST_PUBLIZIEREN' ), 'warning');
+		$mainframe->enqueueMessage(Text::_( 'RUNDE_ST_PUBLIZIEREN' ), 'warning');
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 					}
@@ -538,13 +544,13 @@ function publish()
 	}
 
 	if (count( $cid ) == 1) {
-		$row =JTable::getInstance( 'runden', 'TableCLM' );
+		$row =Table::getInstance( 'runden', 'TableCLM' );
 	}
 
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'RUNDE_LOG')." ".$task;
-	$table	=JTable::getInstance( 'runden', 'TableCLM');
+	$clmLog->aktion = Text::_( 'RUNDE_LOG')." ".$task;
+	$table	=Table::getInstance( 'runden', 'TableCLM');
 	$table->load($cid[0]);
 	$clmLog->params = array('sid' => $table->sid, 'lid' => $table->liga, 'rnd' => $table->nr, 'cids' => $cids);
 	$clmLog->write();
@@ -571,12 +577,12 @@ function orderup(  ) {
 */
 function order( $inc )
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 
-	$db		=JFactory::getDBO();
+	$db		=Factory::getDBO();
 	$cid = clm_core::$load->request_array_int('cid');
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');										 
@@ -584,7 +590,7 @@ function order( $inc )
 	$limit 		= clm_core::$load->request_int('limit',0);
 	$limitstart 	= clm_core::$load->request_int('limitstart',0);
 
-	$row =JTable::getInstance( 'runden', 'TableCLM' );
+	$row =Table::getInstance( 'runden', 'TableCLM' );
 	$row->load( $cid[0] );
 //	$row->move( $inc, 'liga = '.(int) $row->liga.' AND published != 0' );
 	$row->move( $inc, 'liga = '.(int) $row->liga );
@@ -598,12 +604,12 @@ function order( $inc )
 */
 function saveOrder(  )
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 
-	$db			=JFactory::getDBO();
+	$db			=Factory::getDBO();
 	$cid = clm_core::$load->request_array_int('cid');
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');							   
@@ -612,7 +618,7 @@ function saveOrder(  )
 	$order = clm_core::$load->request_array_int('order');
 										   
 
-	$row =JTable::getInstance( 'runden', 'TableCLM' );
+	$row =Table::getInstance( 'runden', 'TableCLM' );
 	$groupings = array();
 
 	// update ordering values
@@ -642,10 +648,10 @@ function saveOrder(  )
 public static function paarung()
 	{
 	defined('clm') or die('Restricted access');
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
-	$db 		=JFactory::getDBO();
-	$user 		=JFactory::getUser();
+	$db 		=Factory::getDBO();
+	$user 		=Factory::getUser();
 	$cid 		= clm_core::$load->request_int('liga');
 	$filter_lid 		= clm_core::$load->request_int('filter_lid' );
 	if ($filter_lid > 0 AND !is_null($filter_lid)) $cid = $filter_lid;     
@@ -655,7 +661,7 @@ public static function paarung()
 
 	// keine Liga gewählt
 	if ($cid < 1) {
-		$msg = JText::_( 'LIGEN_PA_AENDERN');
+		$msg = Text::_( 'LIGEN_PA_AENDERN');
 		$mainframe->enqueueMessage($msg, 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section);
 	}
@@ -672,13 +678,13 @@ public static function paarung()
 	// Prüfen ob User Berechtigung hat
 	if ( $liga[0]->liga_mt == 0 ) {
 		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
-			$msg = JText::_( 'LIGEN_NO_FIXTURE');
+			$msg = Text::_( 'LIGEN_NO_FIXTURE');
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid);
 		}
 	} else {
 		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
-			$msg = JText::_( 'LIGEN_NO_FIXTURE');
+			$msg = Text::_( 'LIGEN_NO_FIXTURE');
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid);
 		}
@@ -691,10 +697,10 @@ public static function paarung()
 public static function pairingdates()
 	{
 	defined('clm') or die('Restricted access');
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
-	$db 		=JFactory::getDBO();
-	$user 		=JFactory::getUser();
+	$db 		=Factory::getDBO();
+	$user 		=Factory::getUser();
 	$cid 		= clm_core::$load->request_int('liga');
 
 	$option 	= clm_core::$load->request_string('option');
@@ -702,7 +708,7 @@ public static function pairingdates()
 
 	// keine Liga gewählt
 	if ($cid < 1) {
-		$msg = JText::_( 'LIGEN_PA_AENDERN');
+		$msg = Text::_( 'LIGEN_PA_AENDERN');
 		$mainframe->enqueueMessage($msg, 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid);
 	}
@@ -719,13 +725,13 @@ public static function pairingdates()
 	// Prüfen ob User Berechtigung hat
 	if ( $liga[0]->liga_mt == 0 ) {
 		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
-			$msg = JText::_( 'LIGEN_NO_FIXTURE');
+			$msg = Text::_( 'LIGEN_NO_FIXTURE');
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid);
 		}
 	} else {
 		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
-			$msg = JText::_( 'LIGEN_NO_FIXTURE');
+			$msg = Text::_( 'LIGEN_NO_FIXTURE');
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid);
 		}
@@ -737,7 +743,7 @@ public static function pairingdates()
 
 function copy()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 	$option 	= clm_core::$load->request_string('option');
@@ -746,14 +752,14 @@ function copy()
 	$cid = clm_core::$load->request_array_int('cid');
 	if (is_null($cid)) {
 		$cid[0] = $id; }
-	$db	=JFactory::getDBO();
-	$table	=JTable::getInstance( 'runden', 'TableCLM');
-	$user	= JFactory::getUser();
+	$db	=Factory::getDBO();
+	$table	=Table::getInstance( 'runden', 'TableCLM');
+	$user	= Factory::getUser();
 	$n		= count( $cid );
 
-	$row =JTable::getInstance( 'runden', 'TableCLM' );
+	$row =Table::getInstance( 'runden', 'TableCLM' );
 	$row->load( $cid[0] );
-	$liga =JTable::getInstance( 'ligen', 'TableCLM' );
+	$liga =Table::getInstance( 'ligen', 'TableCLM' );
 	$liga->load($row->liga);
 	if ($liga->liga_mt == 0) {
 		$mppoint = 'league';
@@ -765,7 +771,7 @@ function copy()
 
 	// Prüfen ob User Berechtigung hat
 	if (( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
-		$mainframe->enqueueMessage(JText::_( 'RUNDE_ST_KOPIE' ), 'warning');
+		$mainframe->enqueueMessage(Text::_( 'RUNDE_ST_KOPIE' ), 'warning');
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
@@ -792,32 +798,32 @@ function copy()
 			}
 		}
 	} else {	
-		$mainframe->enqueueMessage(JText::_( 'RUNDE_NO_SELCET' ), 'warning');
+		$mainframe->enqueueMessage(Text::_( 'RUNDE_NO_SELCET' ), 'warning');
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
 
-	if ($n >1) { $msg=JText::_( 'RUNDE_MSG_COPY_ENTRYS');}
-		else {$msg=JText::_( 'RUNDE_MSG_COPY_ENTRY');}
+	if ($n >1) { $msg=Text::_( 'RUNDE_MSG_COPY_ENTRYS');}
+		else {$msg=Text::_( 'RUNDE_MSG_COPY_ENTRY');}
 	
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'RUNDE_LOG_COPIED');
-	$table	=JTable::getInstance( 'runden', 'TableCLM');
+	$clmLog->aktion = Text::_( 'RUNDE_LOG_COPIED');
+	$table	=Table::getInstance( 'runden', 'TableCLM');
 	$table->load($cid[0]);
 	$clmLog->params = array('sid' => $table->sid, 'lid' => $table->liga, 'rnd' => $table->nr, 'cids' => implode( ',', $cid ));
 	$clmLog->write();
 	
-	$mainframe->enqueueMessage(JText::_( $n.$msg ), 'message');
+	$mainframe->enqueueMessage(Text::_( $n.$msg ), 'message');
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section);
 	}
 
 function check()
 	{
 	defined('clm') or die('Restricted access');
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
-	$db	=JFactory::getDBO();
+	$db	=Factory::getDBO();
 	$cid = clm_core::$load->request_array_int('cid');
 	$id  = clm_core::$load->request_int('id',0);
 	if (is_null($cid)) {
@@ -827,14 +833,14 @@ function check()
 
 	// keine Runde gewählt
 	if ($cid[0] < 1) {
-		$msg = JText::_( 'RUNDE_RUNDE_PRUE');
+		$msg = Text::_( 'RUNDE_RUNDE_PRUE');
 		$mainframe->enqueueMessage($msg , 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section);
 	}
 
-	$row =JTable::getInstance( 'runden', 'TableCLM' );
+	$row =Table::getInstance( 'runden', 'TableCLM' );
 	$row->load( $cid[0] );
-	$liga =JTable::getInstance( 'ligen', 'TableCLM' );
+	$liga =Table::getInstance( 'ligen', 'TableCLM' );
 	$liga->load($row->liga);
 	if ($liga->liga_mt == "0") {
 		$mppoint = 'league';
@@ -849,16 +855,16 @@ function check()
 	// Prüfen ob User Berechtigung hat
 	//if ( $liga->sl !== clm_core::$access->getJid() AND clm_core::$access->getType() !== 'admin') {
 	if (( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
-		$mainframe->enqueueMessage(JText::_( 'RUNDE_ST_PRUEFEN' ) , 'warning');
+		$mainframe->enqueueMessage(Text::_( 'RUNDE_ST_PRUEFEN' ) , 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section);
 				}
-	$table	=JTable::getInstance( 'runden', 'TableCLM');
+	$table	=Table::getInstance( 'runden', 'TableCLM');
 	$table->load($cid[0]);
 
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'RUNDE_LOG_VERIFIED');
-	$table	=JTable::getInstance( 'runden', 'TableCLM');
+	$clmLog->aktion = Text::_( 'RUNDE_LOG_VERIFIED');
+	$table	=Table::getInstance( 'runden', 'TableCLM');
 	$table->load($cid[0]);
 	$clmLog->params = array('sid' => $table->sid, 'lid' => $table->liga, 'rnd' => $table->nr);
 	$clmLog->write();
@@ -875,7 +881,7 @@ function check()
 		$this->adminLink = new AdminLink();
 		$this->adminLink->more = array('section' => 'runden', 'liga' => $rc[1], 'clm_backend' => 1, 'session_language' => 'de-DE');
 		$this->adminLink->makeURL();
-		$mainframe	= JFactory::getApplication();
+		$mainframe	= Factory::getApplication();
 		$mainframe->redirect( $this->adminLink->url );
 	
 	}
@@ -890,7 +896,7 @@ function check()
 		$roundID = $cid[0];
 
 		// Rundendaten holen
-		$round =JTable::getInstance( 'runden', 'TableCLM' );
+		$round =Table::getInstance( 'runden', 'TableCLM' );
 		$round->load( $roundID ); // Daten zu dieser ID laden
 
 		// Runde existent?
@@ -899,12 +905,12 @@ function check()
 			return array(false,0);
 		}
 		// Liga/MTurnier holen
-		$row = JTable::getInstance( 'ligen', 'TableCLM' );
+		$row = Table::getInstance( 'ligen', 'TableCLM' );
 		$row->load( $round->liga ); // Daten zu dieser ID laden
 
 	    $clmAccess = clm_core::$access;      
 		if (($row->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
-			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'),'warning' );
+			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'),'warning' );
 		return array(false,$round->liga);
 		}
 			
@@ -919,11 +925,11 @@ function check()
 		}
 									   
 		if ($approve) {
-			$log_ext = $round->name." ".JText::_('RUNDE_APPROVED');
-			$this->app->enqueueMessage( $round->name." ".JText::_('RUNDE_APPROVED') );
+			$log_ext = $round->name." ".Text::_('RUNDE_APPROVED');
+			$this->app->enqueueMessage( $round->name." ".Text::_('RUNDE_APPROVED') );
 		} else {
-			$log_text = $round->name." ".JText::_('RUNDE_UNAPPROVED');
-			$this->app->enqueueMessage( $round->name." ".JText::_('RUNDE_UNAPPROVED') );
+			$log_text = $round->name." ".Text::_('RUNDE_UNAPPROVED');
+			$this->app->enqueueMessage( $round->name." ".Text::_('RUNDE_UNAPPROVED') );
 		}
 
 		// Log
@@ -942,7 +948,7 @@ function check()
 		$this->adminLink = new AdminLink();
 		$this->adminLink->more = array('section' => 'runden', 'liga' => $rc[1], 'clm_backend' => 1, 'session_language' => 'de-DE');
 		$this->adminLink->makeURL();
-		$mainframe	= JFactory::getApplication();
+		$mainframe	= Factory::getApplication();
 		$mainframe->redirect( $this->adminLink->url );
 	
 	}
@@ -957,7 +963,7 @@ function check()
 		$roundID = $cid[0];
 
 		// Rundendaten holen
-		$round =JTable::getInstance( 'runden', 'TableCLM' );
+		$round =Table::getInstance( 'runden', 'TableCLM' );
 		$round->load( $roundID ); // Daten zu dieser ID laden
 
 		// Runde existent?
@@ -966,12 +972,12 @@ function check()
 			return array(false,0);
 		}
 		// Liga/MTurnier holen
-		$row = JTable::getInstance( 'ligen', 'TableCLM' );
+		$row = Table::getInstance( 'ligen', 'TableCLM' );
 		$row->load( $round->liga ); // Daten zu dieser ID laden
 
 	    $clmAccess = clm_core::$access;      
 		if (($row->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
-			$this->app->enqueueMessage( JText::_('TOURNAMENT_NO_ACCESS'),'warning' );
+			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return array(false,$round->liga);
 		}
 			
@@ -986,11 +992,11 @@ function check()
 		}
 									   
 		if ($possible) {
-			$log_ext = $round->name." ".JText::_('RUNDE_INPUT_RELEASED');
-			$this->app->enqueueMessage( $round->name." ".JText::_('RUNDE_INPUT_RELEASED') );
+			$log_ext = $round->name." ".Text::_('RUNDE_INPUT_RELEASED');
+			$this->app->enqueueMessage( $round->name." ".Text::_('RUNDE_INPUT_RELEASED') );
 		} else {
-			$log_text = $round->name." ".JText::_('RUNDE_INPUT_BLOCKED');
-			$this->app->enqueueMessage( $round->name." ".JText::_('RUNDE_INPUT_BLOCKED') );
+			$log_text = $round->name." ".Text::_('RUNDE_INPUT_BLOCKED');
+			$this->app->enqueueMessage( $round->name." ".Text::_('RUNDE_INPUT_BLOCKED') );
 		}
 
 		// Log
@@ -1004,7 +1010,7 @@ function check()
 
 function termine_copy()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 	$option 	= clm_core::$load->request_string('option');
@@ -1013,13 +1019,13 @@ function termine_copy()
 	$lid 	= clm_core::$load->request_int('filter_lid');
 	$qlid 	= clm_core::$load->request_int('filter_qlid');
 	if ($qlid == 0) {
-		$mainframe->enqueueMessage(JText::_( 'keine Quelle-Liga ausgewählt', true ), 'warning');
+		$mainframe->enqueueMessage(Text::_( 'keine Quelle-Liga ausgewählt', true ), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$lid );
 	}
-	$db	=JFactory::getDBO();
-	$user	= JFactory::getUser();
+	$db	=Factory::getDBO();
+	$user	= Factory::getUser();
 
-	$liga =JTable::getInstance( 'ligen', 'TableCLM' );
+	$liga =Table::getInstance( 'ligen', 'TableCLM' );
 	$liga->load($lid);
 	if ($liga->liga_mt == 0) {
 		$mppoint = 'league';
@@ -1031,7 +1037,7 @@ function termine_copy()
 
 	// Prüfen ob User Berechtigung hat
 	if (( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
-		$mainframe->enqueueMessage(JText::_( 'RUNDE_ST_KOPIE' ), 'warning');
+		$mainframe->enqueueMessage(Text::_( 'RUNDE_ST_KOPIE' ), 'warning');
 		$link = 'index.php?option='.$option.'&section='.$section.'&liga='.$lid;
 		$mainframe->redirect( $link);
 	}
@@ -1068,15 +1074,15 @@ function termine_copy()
 		}
 	}
 
-	$msg=JText::_( 'Rundentermine kopiert');
+	$msg=Text::_( 'Rundentermine kopiert');
 	
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'Rundentermine kopiert');
+	$clmLog->aktion = Text::_( 'Rundentermine kopiert');
 	$clmLog->params = array('lid' => $lid, 'qlid' => $qlid, 'anz' => $n );
 	$clmLog->write();
 	
-	$mainframe->enqueueMessage(JText::_( $n.' '.$msg ), 'message');
+	$mainframe->enqueueMessage(Text::_( $n.' '.$msg ), 'message');
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$lid);
 	}
 

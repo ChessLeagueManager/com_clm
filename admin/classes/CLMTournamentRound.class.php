@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -13,6 +13,8 @@
 /**
  * Turnier
 */
+use Joomla\CMS\Factory;
+use Joomla\CMS\Table\Table;
 	
 class CLMTournamentRound extends stdClass{
 
@@ -21,7 +23,7 @@ class CLMTournamentRound extends stdClass{
 		// $roundid übergibt id des Runde (nicht RundenNr!)
 
 		// DB
-		$this->_db				= JFactory::getDBO();
+		$this->_db				= Factory::getDBO();
 		
 		// turnierid
 		$this->turnierid = $turnierid;	
@@ -35,7 +37,7 @@ class CLMTournamentRound extends stdClass{
 
 	function _getRoundData() {
 	
-		$this->round = JTable::getInstance( 'turnier_runden', 'TableCLM' );
+		$this->round = Table::getInstance( 'turnier_runden', 'TableCLM' );
 		$this->round->load($this->roundid);
 	
 	}

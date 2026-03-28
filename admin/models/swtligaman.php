@@ -1,15 +1,17 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
 
 class CLMModelSWTLigaman extends JModelLegacy {
 
@@ -131,7 +133,7 @@ class CLMModelSWTLigaman extends JModelLegacy {
     function store () {
 	
 		// DB-Zugriff
-		$db =JFactory::getDBO ();
+		$db =Factory::getDBO ();
 
 		// allgemeine Formulardaten sammeln
 		//if ($sg_zps == 0) $sg_zps = '';
@@ -162,7 +164,7 @@ class CLMModelSWTLigaman extends JModelLegacy {
 		$_POST['man_nr'] = $man_nr;
 		//Mit Daten aus DB-Tab clm_mannschaften überschreiben, falls eine Liga geupdated wird
 		if (clm_core::$load->request_int('update') == 1 AND  clm_core::$load->request_int('lid') > 0) {
-			$db		=JFactory::getDBO ();
+			$db		=Factory::getDBO ();
 			$select_query = '  SELECT * FROM #__clm_mannschaften '
 							.' WHERE liga = '.$lid.' AND tln_nr = '.$tln_nr;
 			$db->setQuery ($select_query);
@@ -174,7 +176,7 @@ class CLMModelSWTLigaman extends JModelLegacy {
 		}
 		//Mit Daten aus DB-Tab clm_dwz_vereine überschreiben, falls eine Liga angelegt wird
 		if (clm_core::$load->request_int('update') == 0 AND  clm_core::$load->request_int('lid') == 0) {
-			$db		=JFactory::getDBO ();
+			$db		=Factory::getDBO ();
 			$select_query = '  SELECT * FROM #__clm_vereine '
 							." WHERE sid = ".$sid." AND zps = '".$zps."'";
 			$db->setQuery ($select_query);
@@ -313,7 +315,7 @@ class CLMModelSWTLigaman extends JModelLegacy {
 	function fixSpielerID () { // für Spieler, die während des Imports entfernt wurden, Datensatz mit "alter" Spielerid kopieren
 		
 		// DB-Zugriff
-		$db =JFactory::getDBO ();
+		$db =Factory::getDBO ();
 		
 		$sid		= clm_core::$load->request_int('sid');
 		$swt_id		= clm_core::$load->request_int('swt_id');

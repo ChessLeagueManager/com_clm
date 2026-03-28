@@ -1,11 +1,15 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class CLMViewTurDecode extends JViewLegacy {
 
@@ -17,19 +21,19 @@ class CLMViewTurDecode extends JViewLegacy {
 		
 		// Die Toolbar erstellen, die über der Seite angezeigt wird
 		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title( $model->turnier->name.": ".JText::_('DECODE_PLAYERS'), 'clm_turnier.png'  );
+		ToolBarHelper::title( $model->turnier->name.": ".Text::_('DECODE_PLAYERS'), 'clm_turnier.png'  );
 	
 		// Instanz der Tabelle
-		$row = JTable::getInstance( 'turniere', 'TableCLM' );
+		$row = Table::getInstance( 'turniere', 'TableCLM' );
 		$row->load( $model->turnier->id ); // Daten zu dieser ID laden
 
 		$clmAccess = clm_core::$access;
 		if (($row->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') == 2) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
-			JToolBarHelper::save( 'save' );
-			JToolBarHelper::apply( 'apply' );
+			ToolBarHelper::save( 'save' );
+			ToolBarHelper::apply( 'apply' );
 		}
-		JToolBarHelper::spacer();
-		JToolBarHelper::cancel();
+		ToolBarHelper::spacer();
+		ToolBarHelper::cancel();
 
 		// das MainMenu abschalten
 		$_REQUEST['hidemainmenu'] = 1;
@@ -39,7 +43,7 @@ class CLMViewTurDecode extends JViewLegacy {
 		$model =   $this->getModel();
 
 		// Document/Seite
-		$document =JFactory::getDocument();
+		$document =Factory::getDocument();
 
 
 		// Daten an Template übergeben

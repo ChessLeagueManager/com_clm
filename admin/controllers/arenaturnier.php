@@ -1,17 +1,20 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 class CLMControllerArenaTurnier extends JControllerLegacy
 {
 	function __construct() {		
-		$this->app = JFactory::getApplication();
+		$this->app = Factory::getApplication();
 		parent::__construct();		
 	}
 	
@@ -27,7 +30,7 @@ class CLMControllerArenaTurnier extends JControllerLegacy
 		$sid = clm_core::$load->request_int('filter_saison', 0);
 		$tid = clm_core::$load->request_int('tid', 0);
 		if ($tid == 0) {
-			$msg = JText::_( 'ARENA_UPDATE_MISSING' );
+			$msg = Text::_( 'ARENA_UPDATE_MISSING' );
 			$result[0] = false;
 		} else {
 			$result = clm_core::$api->db_arena_import($arena_code,$sid,$tid,$group,true,false);
@@ -51,7 +54,7 @@ class CLMControllerArenaTurnier extends JControllerLegacy
 		}
 		// Log schreiben
 		if ($result[0] AND isset($result[2]) AND $result[2] > 0) {
-			$msg = JText::_( 'SWT_STORE_SUCCESS' );
+			$msg = Text::_( 'SWT_STORE_SUCCESS' );
 			$clmLog = new CLMLog();
 			$clmLog->aktion = 'lichess-Import - '.$msg;
 			$clmLog->params = array('sid' => $sid, 'tid' => $tid, 'arena_code' => $arena_code);
@@ -59,8 +62,8 @@ class CLMControllerArenaTurnier extends JControllerLegacy
 			$msg .= " (ID = ".$tid.")"; 
 		} else {
 			if (isset($result[2]) AND $result[0] !== true AND $result[1] == 'e_ArenaCodeNoValid') {
-				$msg = JText::_( 'ARENA_CODE_NOVALID' ).' <b>'.$result[2].'</b>'; 
-			} elseif ($msg == '')  $msg = JText::_( 'SWT_STORE_ERROR' );
+				$msg = Text::_( 'ARENA_CODE_NOVALID' ).' <b>'.$result[2].'</b>'; 
+			} elseif ($msg == '')  $msg = Text::_( 'SWT_STORE_ERROR' );
 		}
 		
 		$adminLink = new AdminLink();
@@ -100,7 +103,7 @@ class CLMControllerArenaTurnier extends JControllerLegacy
 		
 		// Log schreiben
 		if ($result[0] AND isset($result[2]) AND $result[2] > 0) {
-			$msg = JText::_( 'SWT_STORE_SUCCESS' );
+			$msg = Text::_( 'SWT_STORE_SUCCESS' );
 			$clmLog = new CLMLog();
 			$clmLog->aktion = 'Arena-Import - '.$msg;
 			$clmLog->params = array('sid' => $sid, 'tid' => $new_ID, 'arena_code' => $arena_code);
@@ -108,8 +111,8 @@ class CLMControllerArenaTurnier extends JControllerLegacy
 			$msg .= " (ID = ".$new_ID.")"; 
 		} else {
 			if ($result[0] !== true AND $result[1] == 'e_ArenaCodeNoValid') {
-				$msg = JText::_( 'ARENA_CODE_NOVALID' ).' <b>'.$result[2].'</b>'; }
-			else $msg = JText::_( 'SWT_STORE_ERROR' );
+				$msg = Text::_( 'ARENA_CODE_NOVALID' ).' <b>'.$result[2].'</b>'; }
+			else $msg = Text::_( 'SWT_STORE_ERROR' );
 		}
 
 		$adminLink = new AdminLink();
@@ -130,8 +133,8 @@ class CLMControllerArenaTurnier extends JControllerLegacy
 		
 		if ($result[0] !== true) {
 			if (isset($result[1]) AND $result[1] == 'e_ArenaCodeNoValid') {
-				$msg = JText::_( 'ARENA_CODE_NOVALID' ).' <b>'.$result[2].'</b>'; }
-			else $msg = JText::_( 'SWT_STORE_ERROR' );
+				$msg = Text::_( 'ARENA_CODE_NOVALID' ).' <b>'.$result[2].'</b>'; }
+			else $msg = Text::_( 'SWT_STORE_ERROR' );
 			echo "<br><br>".$msg."<br><br>";
 		}
 		$_REQUEST['view'] = 'arenaturnier';
@@ -150,7 +153,7 @@ class CLMControllerArenaTurnier extends JControllerLegacy
 		$adminLink->view = "swt";
 		$adminLink->more = array('sid' => $sid, 'tid' => $tid, 'arena_code' => $arena_code);
 		$adminLink->makeURL();
-		$this->app->enqueueMessage( JText::_( 'ARENA_ACTION_CANCEL' ) );
+		$this->app->enqueueMessage( Text::_( 'ARENA_ACTION_CANCEL' ) );
 		$this->app->redirect($adminLink->url); 		
 	
 	}

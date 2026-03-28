@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -13,15 +13,17 @@
 /**
  * Category
 */
+use Joomla\CMS\Factory;
 	
 class CLMCategory extends stdClass{
+use Joomla\CMS\Table\Table;
 
 	function __construct($catid, $getData = FALSE) {
 		// $catid übergibt id der category
 		// $getData, ob die Turneirdaten aus clm_categories sofort ausgelesen werden sollen
 
 		// DB
-		$this->_db				= JFactory::getDBO();
+		$this->_db				= Factory::getDBO();
 		
 		// catid
 		$this->catid = $catid;	
@@ -36,7 +38,7 @@ class CLMCategory extends stdClass{
 
 	function _getData() {
 	
-		$this->data = JTable::getInstance( 'categories', 'TableCLM' );
+		$this->data = Table::getInstance( 'categories', 'TableCLM' );
 		$this->data->load($this->catid);
 	
 	}

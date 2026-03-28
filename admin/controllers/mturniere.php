@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -13,6 +13,11 @@
 defined( '_JEXEC' ) or die( 'Restricted access' );
 // Include the AddressHandler class
 require_once JPATH_COMPONENT_ADMINISTRATOR. '/helpers/addresshandler.php';
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Table\Table;
 
 class CLMControllerMTurniere extends JControllerLegacy
 {
@@ -26,16 +31,16 @@ class CLMControllerMTurniere extends JControllerLegacy
 
 	function display($cachable = false, $urlparams = array())
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
-	$db 		=JFactory::getDBO();
-	$user 		=JFactory::getUser();
+	$db 		=Factory::getDBO();
+	$user 		=Factory::getUser();
 	$cid 		= clm_core::$load->request_array_int('cid');
 	if (is_null($cid)) 
 		$cid[0] = clm_core::$load->request_int('id');
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');
-	$row 		=JTable::getInstance( 'ligen', 'TableCLM' );
+	$row 		=Table::getInstance( 'ligen', 'TableCLM' );
 	
 	// load the row from the db table
 	$row->load( $cid[0] );
@@ -43,13 +48,13 @@ class CLMControllerMTurniere extends JControllerLegacy
 	$clmAccess = clm_core::$access;
 
 	if($clmAccess->access('BE_teamtournament_edit_detail') === false) {
-		$msg = JText::_( 'Kein Zugriff: ').JText::_( 'MTURN_STAFFEL_TOTAL' ) ;    
+		$msg = Text::_( 'Kein Zugriff: ').Text::_( 'MTURN_STAFFEL_TOTAL' ) ;    
 		$mainframe->enqueueMessage($msg, 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 	if ($cid[0]==0) {
 		if($clmAccess->access('BE_teamtournament_create') === false) {
-			$msg = JText::_( 'LIGEN_ADMIN' );
+			$msg = Text::_( 'LIGEN_ADMIN' );
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 		}
@@ -57,23 +62,23 @@ class CLMControllerMTurniere extends JControllerLegacy
 		$row->published	= 0;
 	} else { 
 	// Prüfen ob User Berechtigung zum editieren hat
-	$saison		=JTable::getInstance( 'saisons', 'TableCLM' );
+	$saison		=Table::getInstance( 'saisons', 'TableCLM' );
 	$saison->load( $row->sid );
 	// illegaler Einbruchversuch über URL !
 	// evtl. mitschneiden !?!
 		if ($saison->archiv == "1" AND $clmAccess->access('BE_teamtournament_edit_detail') === false) {
-			$msg = JText::_( 'MTURN_ARCHIV' );
+			$msg = Text::_( 'MTURN_ARCHIV' );
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 		}
 		// Keine SL oder Admin
 		if($clmAccess->access('BE_teamtournament_edit_detail') === false) {
-			$msg = JText::_( 'MTURN_STAFFEL_TOTAL' );
+			$msg = Text::_( 'MTURN_STAFFEL_TOTAL' );
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 		}
 		if($row->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_teamtournament_edit_detail') !== true) {
-			$msg = JText::_( 'MTURN_STAFFEL' );
+			$msg = Text::_( 'MTURN_STAFFEL' );
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 		}
@@ -88,26 +93,26 @@ class CLMControllerMTurniere extends JControllerLegacy
 	
 	// Listen
 	// Heimrecht vertauscht
-	$lists['heim']	= JHtml::_('select.booleanlist',  'heim', 'class="inputbox"', $row->heim );
+	$lists['heim']	= HTMLHelper::_('select.booleanlist',  'heim', 'class="inputbox"', $row->heim );
 	// Published
-	$lists['published']	= JHtml::_('select.booleanlist',  'published', 'class="inputbox"', $row->published );
+	$lists['published']	= HTMLHelper::_('select.booleanlist',  'published', 'class="inputbox"', $row->published );
 	// Anzeige Mannschaftsaufstellung
-	$lists['anzeige_ma']	= JHTML::_('select.booleanlist',  'anzeige_ma', 'class="inputbox"', $row->anzeige_ma );
+	$lists['anzeige_ma']	= HTMLHelper::_('select.booleanlist',  'anzeige_ma', 'class="inputbox"', $row->anzeige_ma );
 	// automat. Mail
-	$lists['mail']	= JHtml::_('select.booleanlist',  'mail', 'class="inputbox"', $row->mail );
+	$lists['mail']	= HTMLHelper::_('select.booleanlist',  'mail', 'class="inputbox"', $row->mail );
 	// Staffelleitermail als BCC
-	$lists['sl_mail']	= JHtml::_('select.booleanlist',  'sl_mail', 'class="inputbox"', $row->sl_mail );
+	$lists['sl_mail']	= HTMLHelper::_('select.booleanlist',  'sl_mail', 'class="inputbox"', $row->sl_mail );
 	// Ordering für Rangliste
-	$lists['order']	= JHtml::_('select.booleanlist',  'order', 'class="inputbox"', $row->order );
+	$lists['order']	= HTMLHelper::_('select.booleanlist',  'order', 'class="inputbox"', $row->order );
 
 	//für alle ligen oder nur ausgewählte
 	$userlist = $clmAccess->userlist('BE_teamtournament_edit_result','>0');	
 	if($userlist === false) {
 		echo "<br>cl: "; var_dump($userlist); die('clcl'); }
-	$sllist[]	= JHtml::_('select.option',  '0', JText::_( 'MTURN_TL' ), 'jid', 'name' );
+	$sllist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'MTURN_TL' ), 'jid', 'name' );
 	$sllist		= array_merge( $sllist, $userlist );
-//	$lists['sl']	= JHtml::_('select.genericlist',   $sllist, 'sl', 'class="js-example-basic-single" size="1"', 'jid', 'name', $row->sl );
-	$lists['sl']	= JHtml::_('select.genericlist',   $sllist, 'sl', 'class="'.$field_search.'" size="1"', 'jid', 'name', $row->sl );
+//	$lists['sl']	= HTMLHelper::_('select.genericlist',   $sllist, 'sl', 'class="js-example-basic-single" size="1"', 'jid', 'name', $row->sl );
+	$lists['sl']	= HTMLHelper::_('select.genericlist',   $sllist, 'sl', 'class="'.$field_search.'" size="1"', 'jid', 'name', $row->sl );
 	// Saisonliste
 	$sql = "SELECT id as sid, name FROM #__clm_saison WHERE archiv = 0";
 	$db->setQuery($sql);
@@ -115,10 +120,10 @@ class CLMControllerMTurniere extends JControllerLegacy
 		$mainframe->enqueueMessage($row->getErrorMsg(), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
-	$saisonlist[]	= JHtml::_('select.option',  '0', JText::_( 'LIGEN_SAISON' ), 'sid', 'name' );
+	$saisonlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'LIGEN_SAISON' ), 'sid', 'name' );
 	$saisonlist	= array_merge( $saisonlist, $db->loadObjectList() );
-//	$lists['saison']= JHtml::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1"','sid', 'name', $row->sid );
-	$lists['saison']= JHtml::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1"','sid', 'name', $row->sid );
+//	$lists['saison']= HTMLHelper::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1"','sid', 'name', $row->sid );
+	$lists['saison']= HTMLHelper::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1"','sid', 'name', $row->sid );
 	// Rangliste
 	$query = " SELECT id, Gruppe FROM #__clm_rangliste_name ";
 	if ($row->sid > 0)
@@ -130,10 +135,10 @@ class CLMControllerMTurniere extends JControllerLegacy
 		$mainframe->enqueueMessage($row->getErrorMsg(), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
-	$glist[]	= JHtml::_('select.option',  '0', JText::_( 'LIGEN_ML' ), 'id', 'Gruppe' );
+	$glist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'LIGEN_ML' ), 'id', 'Gruppe' );
 	$glist		= array_merge( $glist, $db->loadObjectList() );
-//	$lists['gruppe']= JHtml::_('select.genericlist',   $glist, 'rang', 'class="js-example-basic-single" size="1"', 'id', 'Gruppe', $row->rang );
-	$lists['gruppe']= JHtml::_('select.genericlist',   $glist, 'rang', 'class="'.$field_search.'" size="1"', 'id', 'Gruppe', $row->rang );
+//	$lists['gruppe']= HTMLHelper::_('select.genericlist',   $glist, 'rang', 'class="js-example-basic-single" size="1"', 'id', 'Gruppe', $row->rang );
+	$lists['gruppe']= HTMLHelper::_('select.genericlist',   $glist, 'rang', 'class="'.$field_search.'" size="1"', 'id', 'Gruppe', $row->rang );
 
 	// ggf. Info, wenn Stichtag der Aufstellung nicht mit Meldeschluss der Rangliste übereinstimmt.
 	if($row->rang > 0){
@@ -143,7 +148,7 @@ class CLMControllerMTurniere extends JControllerLegacy
 		$params = new clm_class_params($row->params);
 		$deadline_roster = $params->get("deadline_roster",'1970-01-01');
 		if ($deadline_roster != $gruppe[0]->Meldeschluss) {
-			$mainframe->enqueueMessage( JText::_( 'LEAGUE_RANG_MELDESCHLUSS').' ('.$gruppe[0]->Meldeschluss.') ' );
+			$mainframe->enqueueMessage( Text::_( 'LEAGUE_RANG_MELDESCHLUSS').' ('.$gruppe[0]->Meldeschluss.') ' );
 		}
 	} 
 
@@ -161,15 +166,15 @@ function save() {
 
 function saveIt($apply=false)
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die('Restricted access'); 
 
 	$option		= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
-	$db 		= JFactory::getDBO();
-	$row 		= JTable::getInstance( 'ligen', 'TableCLM' );
+	$db 		= Factory::getDBO();
+	$row 		= Table::getInstance( 'ligen', 'TableCLM' );
 	$msg		= clm_core::$load->request_string('id');
 	$sid_alt	= clm_core::$load->request_string('sid_alt');
 	$sid		= clm_core::$load->request_string('sid');
@@ -201,13 +206,13 @@ function saveIt($apply=false)
 	$teil	= $row->teil;
 
 	// if new item, order last in appropriate group
-	$aktion = JText::_( 'LIGEN_AKTION_LEAGUE_EDIT' );
+	$aktion = Text::_( 'LIGEN_AKTION_LEAGUE_EDIT' );
 	$neu_id = 0;
 	$ungerade_id = 0;
 	$ko_id = 0;
 	if (!$row->id) {
 	$neu_id = 1;
-	$aktion = JText::_( 'LIGEN_AKTION_NEW_LEAGUE' );
+	$aktion = Text::_( 'LIGEN_AKTION_NEW_LEAGUE' );
 		$where = "sid = " . (int) $row->sid;
 		$row->ordering = $row->getNextOrder( $where );
 	
@@ -217,19 +222,19 @@ function saveIt($apply=false)
 		$ungerade_id	= 1;
 		$row->teil	= $row->teil+1;
 		$tln		= $row->teil;
-		$mainframe->enqueueMessage(JText::_( 'LIGEN_MANNSCH', true ), 'notice');
+		$mainframe->enqueueMessage(Text::_( 'LIGEN_MANNSCH', true ), 'notice');
 	}	}	
 	if ($row->runden_modus == 4) {
 		$ko_id = 0;
 		$tln_ko	= $row->teil;
 		while ($row->teil < pow(2,$row->runden)) { $ko_id++; $row->teil = $row->teil+1;}
-		if ($ko_id > 0)  $mainframe->enqueueMessage(JText::_( 'MTURN_MANNSCH_KO' ), 'notice');
+		if ($ko_id > 0)  $mainframe->enqueueMessage(Text::_( 'MTURN_MANNSCH_KO' ), 'notice');
 			}	
 	if ($row->runden_modus == 5) {
 		$ko_id = 0;
 		$tln_ko	= $row->teil;
 		while ($row->teil < pow(2,$row->runden-1)) { $ko_id++; $row->teil = $row->teil+1;}
-		if ($ko_id > 0)  $mainframe->enqueueMessage(JText::_( 'MTURN_MANNSCH_KO' ), 'notice');
+		if ($ko_id > 0)  $mainframe->enqueueMessage(Text::_( 'MTURN_MANNSCH_KO' ), 'notice');
 		}
 	}
 	$row->liga_mt	= 1; //mtmt 0 = liga  1 = mannschaftsturnier
@@ -248,7 +253,7 @@ function saveIt($apply=false)
 			$addressHandler->updateMTournamentCoordinates($lokal_coord, $row->id);
 	
 			if(is_null($lokal_coord)){
-				$mainframe->enqueueMessage(JTEXT::_('WARNING_ADDRESS_LOOKUP'), 'warning');
+				$mainframe->enqueueMessage(Text::_('WARNING_ADDRESS_LOOKUP'), 'warning');
 			}
 		}
 	}
@@ -263,7 +268,7 @@ function saveIt($apply=false)
 	// Wenn sid gewechselt wurde, alle Daten in neue Saison verschieben
 //	if ($sid_alt != $sid AND $sid_alt != "") {
 	if ($sid_alt != $sid AND $sid_alt != "0") {
-		$mainframe->enqueueMessage(JText::_( 'LIGEN_SAISON_AEND' ), 'notice');
+		$mainframe->enqueueMessage(Text::_( 'LIGEN_SAISON_AEND' ), 'notice');
 	$query = " UPDATE #__clm_mannschaften "
 		." SET sid = ".$sid
 		." WHERE liga = ".$liga_man
@@ -315,7 +320,7 @@ function saveIt($apply=false)
 		;
 	$db->setQuery($query);
 	clm_core::$db->query($query);
-		$mainframe->enqueueMessage(JText::_( 'LIGEN_MANNSCH_1' ), 'notice');
+		$mainframe->enqueueMessage(Text::_( 'LIGEN_MANNSCH_1' ), 'notice');
 	}	}
 	// Bei KO-System  x Mannschaften "spielfrei" hinzufügen, wenn nötig
 	if (($row->runden_modus == 4) OR ($row->runden_modus == 5)) { // KO System
@@ -329,7 +334,7 @@ function saveIt($apply=false)
 	clm_core::$db->query($query);
 		}
 	if ($ko_id > 0) 
-		$mainframe->enqueueMessage($ko_id.JText::_( 'MTURN_MANNSCH_KO_1' ), 'notice');
+		$mainframe->enqueueMessage($ko_id.Text::_( 'MTURN_MANNSCH_KO_1' ), 'notice');
 	}
 	
 	// Mannschaftsrunden anlegen
@@ -337,7 +342,7 @@ function saveIt($apply=false)
 		clm_core::$api->db_tournament_genRounds($liga_man,true); 
 		// Mannschaften anlegen
 		for($x=1; $x< 1+$teil; $x++) {
-			$man_name = JText::_( 'LIGEN_STD_TEAM' )." ".$x;
+			$man_name = Text::_( 'LIGEN_STD_TEAM' )." ".$x;
 			if ($x < 10) $man_nr = $liga_man.'0'.$x; else $man_nr = $liga_man.$x;
 			$query = " INSERT INTO #__clm_mannschaften "
 				." (`sid`,`name`,`liga`,`zps`,`liste`,`edit_liste`,`man_nr`,`tln_nr`,`mf` "
@@ -356,10 +361,10 @@ function saveIt($apply=false)
 	//CLMControllerErgebnisse::calculateRanking($sid,$liga_man);
 	
 	if($apply) {
-			$msg = JText::_( 'LIGEN_AENDERN' );
+			$msg = Text::_( 'LIGEN_AENDERN' );
 			$link = 'index.php?option='.$option.'&section='.$section.'&id='. $row->id ;
 	} else {
-			$msg = JText::_( 'LIGEN_LIGA' );
+			$msg = Text::_( 'LIGEN_LIGA' );
 			$link = 'index.php?option='.$option.'&view=view_tournament_group&liga=0';
 	}
 	
@@ -377,16 +382,16 @@ function saveIt($apply=false)
 
 	function cancel()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die('Restricted access');
 	
 	$option		= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
 	$id			= clm_core::$load->request_string('id');	
-	$row 		= JTable::getInstance( 'ligen', 'TableCLM' );
+	$row 		= Table::getInstance( 'ligen', 'TableCLM' );
 
-	$msg = JText::_( 'LIGEN_AKTION');
+	$msg = Text::_( 'LIGEN_AKTION');
 	$mainframe->enqueueMessage($msg);
 	$mainframe->redirect( 'index.php?option='.$option.'&view=view_tournament_group&liga=0' );
 	}
@@ -394,10 +399,10 @@ function saveIt($apply=false)
 public static function arbiter()
 	{
 	defined('clm') or die('Restricted access');
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
-	$db 		=JFactory::getDBO();
-	$user 		=JFactory::getUser();
+	$db 		=Factory::getDBO();
+	$user 		=Factory::getUser();
 	$lid 		= clm_core::$load->request_int('lid');
 	$tid 		= clm_core::$load->request_int('tid');
 
@@ -417,13 +422,13 @@ public static function arbiter()
 	// Prüfen ob User Berechtigung hat
 	if ( $liga[0]->liga_mt == 0 ) {
 		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
-			$msg = JText::_( 'LIGEN_NO_FIXTURE');
+			$msg = Text::_( 'LIGEN_NO_FIXTURE');
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$tid);
 		}
 	} else {
 		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
-			$msg = JText::_( 'LIGEN_NO_FIXTURE');
+			$msg = Text::_( 'LIGEN_NO_FIXTURE');
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$tid);
 		}
@@ -436,14 +441,14 @@ public static function arbiter()
 // freie Mail an alle Mannschaftsleiter
 function email()
 	{
-	$mainframe = JFactory::getApplication();
+	$mainframe = Factory::getApplication();
 	// Check for request forgeries
 	defined('_JEXEC') or die( 'Invalid Token' );
-	$db		= JFactory::getDBO();
+	$db		= Factory::getDBO();
 	$lid 		= clm_core::$load->request_int('lid');
 	$option		= clm_core::$load->request_string('option', '');
 	$section	= clm_core::$load->request_string('section', '');
-	$user	= JFactory::getUser();
+	$user	= Factory::getUser();
 
 	// Daten der Liga holen
 	$query	= "SELECT a.id as lid, a.sid, a.sl, a.liga_mt "
@@ -457,13 +462,13 @@ function email()
 	$clmAccess = clm_core::$access;
 	if ( $liga[0]->liga_mt == 0 ) {
 		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
-			$msg = JText::_( 'LIGEN_NO_FIXTURE');
+			$msg = Text::_( 'LIGEN_NO_FIXTURE');
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$tid);
 		}
 	} else {
 		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
-			$msg = JText::_( 'LIGEN_NO_FIXTURE');
+			$msg = Text::_( 'LIGEN_NO_FIXTURE');
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$tid);
 		}
@@ -474,12 +479,12 @@ function email()
 	$fromname = $config->email_fromname;
 	if ( $from == '' ) {
 		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
-		$this->setMessage(JText::_( 'USER_ERGEBNISDIENST_KEINE_ADRESSE'),'warning');
+		$this->setMessage(Text::_( 'USER_ERGEBNISDIENST_KEINE_ADRESSE'),'warning');
 		return;
 	}
 	if ( $fromname == '' ) {
 		$this->setRedirect('index.php?option=' . $option . '&section=' . $section);
-		$this->setMessage(JText::_( 'USER_ERGEBNISDIENST_KEIN_NAME'),'warning');
+		$this->setMessage(Text::_( 'USER_ERGEBNISDIENST_KEIN_NAME'),'warning');
 		return;
 	}
 

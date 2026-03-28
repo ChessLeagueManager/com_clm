@@ -1,15 +1,19 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\File;
 
 class CLMModelPGNImport extends JModelLegacy {
 
@@ -70,7 +74,7 @@ class CLMModelPGNImport extends JModelLegacy {
 		jimport( 'joomla.filesystem.folder' );
 		
 		$filesDir = 'components'.DS."com_clm".DS.'swt';
-		$this->pgnFiles = JFolder::files( $filesDir, '.PGN$|.pgn$', false, true );
+		$this->pgnFiles = Folder::files( $filesDir, '.PGN$|.pgn$', false, true );
 		
 		return $this->pgnFiles;
 	}
@@ -82,7 +86,7 @@ class CLMModelPGNImport extends JModelLegacy {
 		$file = clm_core::$load->request_file('pgn_datei', null);
 		
 		//Dateiname wird bereinigt
-		$pgn_file = JFile::makeSafe($file['name']);
+		$pgn_file = File::makeSafe($file['name']);
 		$_POST['pgn_file'] = $pgn_file;
 
 		//Temporärer Name und Ziel werden festgesetzt
@@ -90,14 +94,15 @@ class CLMModelPGNImport extends JModelLegacy {
 		$dest = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR . $pgn_file;
 		
 		//Datei wird auf dem Server gespeichert (abfrage auf .pgn Endung)
-		if ( strtolower(JFile::getExt($pgn_file) ) == 'pgn') {
-			if ( JFile::upload($src, $dest) ) {
-				$msg = JText::_( 'SWT_UPLOAD_SUCCESS' ); 
+//		if ( strtolower(File::getExt($pgn_file) ) == 'pgn') {
+		if ( strtolower(substr(strrchr(basename($pgn_file), '.'),1) ) == 'pgn') {
+			if ( File::upload($src, $dest) ) {
+				$msg = Text::_( 'SWT_UPLOAD_SUCCESS' ); 
 			} else {
-				$msg = JText::_( 'SWT_UPLOAD_ERROR' );
+				$msg = Text::_( 'SWT_UPLOAD_ERROR' );
 			}
 		} else {
-			$msg = JText::_( 'SWT_UPLOAD_ERROR_WRONG_EXT' );
+			$msg = Text::_( 'SWT_UPLOAD_ERROR_WRONG_EXT' );
 		}
 		return $msg;
 	}
@@ -108,17 +113,17 @@ class CLMModelPGNImport extends JModelLegacy {
 		//Name der zu löschenden Datei wird geladen
 		$pgn_file = clm_core::$load->request_string('pgn_file', '');
 		if ($pgn_file == '') {
-			$msg = JText::_( 'SWT_FILE_ERROR' ); 
+			$msg = Text::_( 'SWT_FILE_ERROR' ); 
 			return $msg;
 		}		
 		//SWT-Verzeichnis
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		
 		//Datei löschen
-		if ( JFile::delete($path.$pgn_file) ) {
-			$msg = JText::_( 'SWT_DELETE_SUCCESS' ); 
+		if ( File::delete($path.$pgn_file) ) {
+			$msg = Text::_( 'SWT_DELETE_SUCCESS' ); 
 		} else {
-			$msg = JText::_( 'SWT_DELETE_ERROR' ); 
+			$msg = Text::_( 'SWT_DELETE_ERROR' ); 
 		}
 		return $msg;
 	}

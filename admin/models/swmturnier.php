@@ -1,15 +1,19 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanaager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\File;
 
 class CLMModelSWMTurnier extends JModelLegacy {
 
@@ -37,7 +41,8 @@ class CLMModelSWMTurnier extends JModelLegacy {
 	
 	function getTurniere() {
 		$swm_file	= clm_core::$load->request_string( 'swm_file' );
-		if (strtolower(JFile::getExt($swm_file) ) == 'tumx' OR strtolower(JFile::getExt($swm_file) ) == 'tutx') {
+//		if (strtolower(File::getExt($swm_file) ) == 'tumx' OR strtolower(File::getExt($swm_file) ) == 'tutx') {
+		if (strtolower(substr(strrchr(basename($swm_file), '.'),1) ) == 'tumx' OR strtolower(substr(strrchr(basename($swm_file), '.'),1) ) == 'tutx') {
 			$group = true; 
 		} else { $group = false; }
 		if (empty( $this->_turniere )) { 
@@ -73,7 +78,7 @@ class CLMModelSWMTurnier extends JModelLegacy {
 		jimport( 'joomla.filesystem.folder' );
 		
 		$filesDir = 'components'.DS."com_clm".DS.'swt';
-		$this->swmFiles = JFolder::files( $filesDir, '.TUNx$|.tunx$|.TUNX$|.TURx$|.turx$|.TURX$|.TUMx$|.tumx$|.TUMX$|.TUTx$|.tutx$|.TUTX$', false, true );
+		$this->swmFiles = Folder::files( $filesDir, '.TUNx$|.tunx$|.TUNX$|.TURx$|.turx$|.TURX$|.TUMx$|.tumx$|.TUMX$|.TUTx$|.tutx$|.TUTX$', false, true );
 		
 		return $this->swmFiles;
 	}
@@ -85,7 +90,7 @@ class CLMModelSWMTurnier extends JModelLegacy {
 		$file = clm_core::$load->request_file('swm_datei', null);
 
 		//Dateiname wird bereinigt
-		$swm_file = JFile::makeSafe($file['name']);
+		$swm_file = File::makeSafe($file['name']);
 		$_POST['swm_file'] = $swm_file;
 
 		//Temporärer Name und Ziel werden festgesetzt
@@ -93,15 +98,17 @@ class CLMModelSWMTurnier extends JModelLegacy {
 		$dest = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR . $swm_file;
 
 		//Datei wird auf dem Server gespeichert (abfrage auf .tunx oder turx Endung)
-		if ( strtolower(JFile::getExt($swm_file) ) == 'tunx' OR strtolower(JFile::getExt($swm_file) ) == 'turx' OR
-			 strtolower(JFile::getExt($swm_file) ) == 'tumx' OR strtolower(JFile::getExt($swm_file) ) == 'tutx') {
-			if ( JFile::upload($src, $dest) ) {
-				$msg = JText::_( 'SWT_UPLOAD_SUCCESS' ); 
+//		if ( strtolower(File::getExt($swm_file) ) == 'tunx' OR strtolower(File::getExt($swm_file) ) == 'turx' OR
+//			 strtolower(File::getExt($swm_file) ) == 'tumx' OR strtolower(File::getExt($swm_file) ) == 'tutx') {
+		if (strtolower(substr(strrchr(basename($swm_file), '.'),1) ) == 'tunx' OR strtolower(substr(strrchr(basename($swm_file), '.'),1) ) == 'turx' OR
+			 strtolower(substr(strrchr(basename($swm_file), '.'),1) ) == 'tumx' OR strtolower(substr(strrchr(basename($swm_file), '.'),1) ) == 'tutx') {
+			if ( File::upload($src, $dest) ) {
+				$msg = Text::_( 'SWT_UPLOAD_SUCCESS' ); 
 			} else {
-				$msg = JText::_( 'SWT_UPLOAD_ERROR' );
+				$msg = Text::_( 'SWT_UPLOAD_ERROR' );
 			}
 		} else {
-			$msg = JText::_( 'SWT_UPLOAD_ERROR_WRONG_EXT' ).'*'.$swm_file.'*';
+			$msg = Text::_( 'SWT_UPLOAD_ERROR_WRONG_EXT' ).'*'.$swm_file.'*';
 		}
 
 		return $msg;
@@ -113,17 +120,17 @@ class CLMModelSWMTurnier extends JModelLegacy {
 		//Name der zu löschenden Datei wird geladen
 		$swm_file = clm_core::$load->request_string('swm', '');
 		if ($swm_file == '') {
-			$msg = JText::_( 'SWT_FILE_ERROR' ); 
+			$msg = Text::_( 'SWT_FILE_ERROR' ); 
 			return $msg;
 		}		
 		//SWT-Verzeichnis
 		$path = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR;
 		
 		//Datei löschen
-		if ( JFile::delete($path.$swm_file) ) {
-			$msg = JText::_( 'SWT_DELETE_SUCCESS' ); 
+		if ( File::delete($path.$swm_file) ) {
+			$msg = Text::_( 'SWT_DELETE_SUCCESS' ); 
 		} else {
-			$msg = JText::_( 'SWT_DELETE_ERROR' ); 
+			$msg = Text::_( 'SWT_DELETE_ERROR' ); 
 		}
 		return $msg;
 	}

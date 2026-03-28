@@ -2,9 +2,9 @@
 
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -14,7 +14,9 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-class TableCLMAccessPoints extends JTable
+use Joomla\CMS\Table\Table;
+
+class TableCLMAccessPoints extends Table
 {
 	var $id			= null;
 	var $area		= '';
@@ -34,7 +36,7 @@ class TableCLMAccessPoints extends JTable
 	 *
 	 * @access public
 	 * @return boolean
-	 * @see JTable::check
+	 * @see Table::check
 	 * @since 1.5
 	 */
 	 // wegen Abwärtskompatibilität kein Überschreiben und Verwenden von check()

@@ -1,15 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 ?>
 <script language="javascript" type="text/javascript">
@@ -31,11 +34,11 @@ defined('_JEXEC') or die('Restricted access');
 		<tr>
 			<td width="50%" style="vertical-align: top;">
 				<fieldset class="adminform"> 
-					<legend><?php echo JText::_( 'SPECIALRANKING_COPY' ); ?></legend> 
+					<legend><?php echo Text::_( 'SPECIALRANKING_COPY' ); ?></legend> 
 					<table class="admintable">
 						<tr> 
 							<td width="100" align="right" class="key"> 
-								<label for="turnier"><?php echo JText::_( 'SPECIALRANKING_TOURNAMENT_SOURCE' ).'&nbsp'; ?></label> 
+								<label for="turnier"><?php echo Text::_( 'SPECIALRANKING_TOURNAMENT_SOURCE' ).'&nbsp'; ?></label> 
 							</td> 
 							<td> 
 								<?php  echo $this->lists['turnier_source'];?> 
@@ -43,7 +46,7 @@ defined('_JEXEC') or die('Restricted access');
 						</tr>
 						<tr> 
 							<td width="100" align="right" class="key"> 
-								<label for="turnier"><?php echo JText::_( 'SPECIALRANKING_TOURNAMENT_TARGET' ).'&nbsp&nbsp'; ?></label> 
+								<label for="turnier"><?php echo Text::_( 'SPECIALRANKING_TOURNAMENT_TARGET' ).'&nbsp&nbsp'; ?></label> 
 							</td> 
 							<td> 
 								<?php  echo $this->lists['turnier_target'];?> 
@@ -57,14 +60,14 @@ defined('_JEXEC') or die('Restricted access');
 			</td>
 		</tr>
     </table> 
-	<br><?php echo JText::_( 'SPECIALRANKING_COPY_COMMENT1' ); ?>
-	<br><?php echo JText::_( 'SPECIALRANKING_COPY_COMMENT2' ); ?>
+	<br><?php echo Text::_( 'SPECIALRANKING_COPY_COMMENT1' ); ?>
+	<br><?php echo Text::_( 'SPECIALRANKING_COPY_COMMENT2' ); ?>
 	<div class="clr"></div> 
 	<input type="hidden" name="option" value="com_clm" />
 	<input type="hidden" name="view" value="sonderranglistencopy" />
 <!--	<input type="hidden" name="id" value="<?php echo $this->sonderrangliste->id; ?>" />  -->
 	<input type="hidden" name="controller" value="sonderranglistencopy" />
 	<input type="hidden" name="task" value="" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
 
 </form>

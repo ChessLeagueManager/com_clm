@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,10 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
 
 class CLMControllerTermineMain extends JControllerLegacy {
 	
@@ -45,7 +49,7 @@ class CLMControllerTermineMain extends JControllerLegacy {
 	function copy() {
 
 		$result = $this->_copyDo();
-		$app =JFactory::getApplication();
+		$app =Factory::getApplication();
 
 		if ($result[0]) { // erfolgreich?			
 			// ja, keine Meldung
@@ -76,7 +80,7 @@ class CLMControllerTermineMain extends JControllerLegacy {
 		
 		
 		// Daten holen
-		$row =JTable::getInstance( 'termine', 'TableCLM' );
+		$row =Table::getInstance( 'termine', 'TableCLM' );
 
 		if ( !$row->load($termineid) ) {
 			return array(false,'warning',CLMText::errorText('TERMINE_TASK', 'NOTEXISTING'));
@@ -87,7 +91,7 @@ class CLMControllerTermineMain extends JControllerLegacy {
 		
 		// Daten für Kopie anpassen
 		$row->id				= 0; // neue id wird von DB vergeben
-		$row->name			= JText::_('COPY_OF').' '.$row->name;
+		$row->name			= Text::_('COPY_OF').' '.$row->name;
 		$row->published	= 0;
 
 		if (!$row->store()) {	
@@ -121,7 +125,7 @@ class CLMControllerTermineMain extends JControllerLegacy {
 		defined('_JEXEC') or die('Restricted access');
 	
 		// termine? evtl global inconstruct anlegen
-		$user 		=JFactory::getUser();
+		$user 		=Factory::getUser();
 		
 		$cid = clm_core::$load->request_array_int('cid');	
 		
@@ -131,8 +135,8 @@ class CLMControllerTermineMain extends JControllerLegacy {
 		// Inhalte übergeben?
 		if (empty( $cid )) { 
 			
-			$app =JFactory::getApplication();
-			$app->enqueueMessage( JText::_('NO_ITEM_SELECTED'), 'marning' );
+			$app =Factory::getApplication();
+			$app->enqueueMessage( Text::_('NO_ITEM_SELECTED'), 'marning' );
 		
 		} else { // ja, Inhalte vorhanden
 			
@@ -140,14 +144,14 @@ class CLMControllerTermineMain extends JControllerLegacy {
 			foreach ($cid as $key => $value) {
 		
 				// load the row from the db table
-				$row =JTable::getInstance( 'termine', 'TableCLM' );
+				$row =Table::getInstance( 'termine', 'TableCLM' );
 				$row->load( $value ); // Daten zu dieser ID laden
 		
 				// Änderung nötig?
 				if ($row->published != $publish) {
 					// Log
 					$clmLog = new CLMLog();
-					$clmLog->aktion = JText::_('TERMINE')." ".$row->name.": ".$task;
+					$clmLog->aktion = Text::_('TERMINE')." ".$row->name.": ".$task;
 					$clmLog->params = array(); 
 					$clmLog->write();
 					// Log geschrieben - Änderungen später
@@ -161,21 +165,21 @@ class CLMControllerTermineMain extends JControllerLegacy {
 			// immer noch Einträge vorhanden?
 			if ( !empty($cid) ) { 
 		
-				$row =JTable::getInstance( 'termine', 'TableCLM' );
+				$row =Table::getInstance( 'termine', 'TableCLM' );
 				$row->publish( $cid, $publish );
 			
 				// Meldung erstellen
-				$app =JFactory::getApplication();
+				$app =Factory::getApplication();
 				if ($publish) {
-					$app->enqueueMessage( CLMText::sgpl(count($cid), JText::_('TERMINE_TASK'), JText::_('TERMINE_TASKS'))." ".JText::_('CLM_PUBLISHED') );
+					$app->enqueueMessage( CLMText::sgpl(count($cid), Text::_('TERMINE_TASK'), Text::_('TERMINE_TASKS'))." ".Text::_('CLM_PUBLISHED') );
 				} else {
-					$app->enqueueMessage( CLMText::sgpl(count($cid), JText::_('TERMINE_TASK'), JText::_('TERMINE_TASKS'))." ".JText::_('CLM_UNPUBLISHED') );
+					$app->enqueueMessage( CLMText::sgpl(count($cid), Text::_('TERMINE_TASK'), Text::_('TERMINE_TASKS'))." ".Text::_('CLM_UNPUBLISHED') );
 				}
 			
 			} else {
 			
-				$app =JFactory::getApplication();
-				$app->enqueueMessage(JText::_('NO_CHANGES'));
+				$app =Factory::getApplication();
+				$app->enqueueMessage(Text::_('NO_CHANGES'));
 			
 			}
 	
@@ -197,7 +201,7 @@ class CLMControllerTermineMain extends JControllerLegacy {
 	function delete() {
 
 		$result = $this->_deleteDo();
-		$app =JFactory::getApplication();
+		$app =Factory::getApplication();
 
 		$app->enqueueMessage( $result[2],$result[1] );					
 
@@ -221,7 +225,7 @@ class CLMControllerTermineMain extends JControllerLegacy {
 		// access? nur admin darf löschen
 		$clmAccess = clm_core::$access;
 		if ($clmAccess->access('BE_event_delete') === false) {
-			return array(false,'warning',JText::_('NO_ACCESS'));
+			return array(false,'warning',Text::_('NO_ACCESS'));
 		}
 		
 		$cid = clm_core::$load->request_array_int('cid');
@@ -234,7 +238,7 @@ class CLMControllerTermineMain extends JControllerLegacy {
 			$termineid = $cid1;
 				
 			// termindaten laden
-			$row =JTable::getInstance( 'termine', 'TableCLM' );
+			$row =Table::getInstance( 'termine', 'TableCLM' );
 			$row->load( $termineid );
 		
 			// ob Termin existent?
@@ -250,12 +254,12 @@ class CLMControllerTermineMain extends JControllerLegacy {
 		}
 		// Log schreiben
 		$clmLog = new CLMLog();
-		$clmLog->aktion = JText::_('TERMINE_TASK')." ".JText::_('CLM_DELETED');
+		$clmLog->aktion = Text::_('TERMINE_TASK')." ".Text::_('CLM_DELETED');
 		$clmLog->params = array( 'count' => $count); 
 		$clmLog->write();
 		if ($count > 1) $htext = $count.' x ';
 		else $htext = $row->name;
-		return array(true,'message',$htext.": ".JText::_('TERMINE_TASK')." ".JText::_('CLM_DELETED'));
+		return array(true,'message',$htext.": ".Text::_('TERMINE_TASK')." ".Text::_('CLM_DELETED'));
 		
 	}
 	
@@ -295,16 +299,16 @@ class CLMControllerTermineMain extends JControllerLegacy {
 		$termineid = $cid[0];
 	
 	
-		$row =JTable::getInstance( 'termine', 'TableCLM' );
+		$row =Table::getInstance( 'termine', 'TableCLM' );
 		if ( !$row->load( $termineid ) ) {
-			$app =JFactory::getApplication();
+			$app =Factory::getApplication();
 			$app->enqueueMessage( CLMText::errorText('TERMINE_TASK', 'NOTEXISTING'), 'warning' );
 			return false;
 		}
 		$row->move( $inc, '' );
 	
-		$app =JFactory::getApplication();
-		$app->enqueueMessage( $row->name.": ".JText::_('ORDERING_CHANGED') );
+		$app =Factory::getApplication();
+		$app->enqueueMessage( $row->name.": ".Text::_('ORDERING_CHANGED') );
 		
 		return true;
 		
@@ -317,8 +321,8 @@ class CLMControllerTermineMain extends JControllerLegacy {
 		defined('_JEXEC') or die('Restricted access');	
 		
 		if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
-			$app =JFactory::getApplication();
-			$app->enqueueMessage( JText::_('SECTION_NO_ACCESS'), 'warning' );
+			$app =Factory::getApplication();
+			$app->enqueueMessage( Text::_('SECTION_NO_ACCESS'), 'warning' );
 			return false;
 		}
 		
@@ -327,7 +331,7 @@ class CLMControllerTermineMain extends JControllerLegacy {
 		$total		= count( $cid );
 		$cid = clm_core::$load->request_array_int('order');
 	
-		$row =JTable::getInstance( 'termine', 'TableCLM' );
+		$row =Table::getInstance( 'termine', 'TableCLM' );
 		$groupings = array();
 	
 		// update ordering values
@@ -339,7 +343,7 @@ class CLMControllerTermineMain extends JControllerLegacy {
 			if ($row->ordering != $order[$i]) {
 				$row->ordering = $order[$i];
 				if (!$row->store()) {
-					$app =JFactory::getApplication();
+					$app =Factory::getApplication();
 					$app->enqueueMessage( $db->getErrorMsg(), 'error' );
 					return false;
 				}
@@ -351,8 +355,8 @@ class CLMControllerTermineMain extends JControllerLegacy {
 			$row->reorder('sid = '.(int) $group);
 		}
 		
-		$app =JFactory::getApplication();
-		$app->enqueueMessage( JText::_('NEW_ORDERING_SAVED') );
+		$app =Factory::getApplication();
+		$app->enqueueMessage( Text::_('NEW_ORDERING_SAVED') );
 	
 		$adminLink = new AdminLink();
 		$adminLink->view = "terminemain";
@@ -390,13 +394,13 @@ class CLMControllerTermineMain extends JControllerLegacy {
 		$file_name = $result[2];
 		// Log schreiben
 		$clmLog = new CLMLog();
-		$clmLog->aktion = JText::_('TERMINE_TASK')." ".JText::_('CLM_EXPORT');
+		$clmLog->aktion = Text::_('TERMINE_TASK')." ".Text::_('CLM_EXPORT');
 		$clmLog->params = array('file_name' => $file_name); 
 		$clmLog->write();
 
-		$app =JFactory::getApplication();
+		$app =Factory::getApplication();
 
-		$app->enqueueMessage( JText::_('TERMINE_TASK_EXPORTED'),'message' );					
+		$app->enqueueMessage( Text::_('TERMINE_TASK_EXPORTED'),'message' );					
 
 		$adminLink = new AdminLink();
 		$adminLink->view = "terminemain";
@@ -411,7 +415,7 @@ class CLMControllerTermineMain extends JControllerLegacy {
 
 	function download() {
 		
-		$app =JFactory::getApplication();
+		$app =Factory::getApplication();
 		$file_name = clm_core::$load->request_array_int('file_name');
 
 		if ($file_name == '') $file_name = 'Terminliste.csv';
@@ -431,7 +435,7 @@ class CLMControllerTermineMain extends JControllerLegacy {
 			flush();
 			exit;
 		} else {
-			$app->enqueueMessage( JText::_('TERMINE_TASK')." ".JText::_('CLM_KEINE'),'warning' );					
+			$app->enqueueMessage( Text::_('TERMINE_TASK')." ".Text::_('CLM_KEINE'),'warning' );					
 		}
 		
 		$adminLink = new AdminLink();

@@ -1,15 +1,20 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleagueamanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\Filesystem\File;
 
 class CLMViewSWMTurnier extends JViewLegacy {
 	function display($tpl = null) { 
@@ -24,34 +29,35 @@ class CLMViewSWMTurnier extends JViewLegacy {
 		//Toolbar
 		clm_core::$load->load_css("icons_images");
 		if ($swm_file == '')
-			JToolBarHelper::title( JText::_('TITLE_SWM_FILE_IMPORT') ,'clm_headmenu_manager.png' );
-		elseif (strtolower(JFile::getExt($swm_file) ) == 'tumx' OR strtolower(JFile::getExt($swm_file) ) == 'tutx') 
-			JToolBarHelper::title( JText::_('TITLE_SWT_LEAGUE')." - ".$swm_file ,'clm_headmenu_manager.png' );
+			ToolBarHelper::title( Text::_('TITLE_SWM_FILE_IMPORT') ,'clm_headmenu_manager.png' );
+//		elseif (strtolower(File::getExt($swm_file) ) == 'tumx' OR strtolower(File::getExt($swm_file) ) == 'tutx') 
+		elseif (strtolower(substr(strrchr(basename($swm_file), '.'),1) ) == 'tumx' OR strtolower(substr(strrchr(basename($swm_file), '.'),1) ) == 'tutx') 
+			ToolBarHelper::title( Text::_('TITLE_SWT_LEAGUE')." - ".$swm_file ,'clm_headmenu_manager.png' );
 		else
-			JToolBarHelper::title( JText::_('TITLE_SWT_TOURNAMENT')." - ".$swm_file ,'clm_headmenu_manager.png' );
+			ToolBarHelper::title( Text::_('TITLE_SWT_TOURNAMENT')." - ".$swm_file ,'clm_headmenu_manager.png' );
 		
-		JToolBarHelper::custom('update','refresh.png','refresh_f2.png', JText::_('SWT_TOURNAMENT_UPDATE'), false);
+		ToolBarHelper::custom('update','refresh.png','refresh_f2.png', Text::_('SWT_TOURNAMENT_UPDATE'), false);
 		$clmAccess = clm_core::$access;
 		if ($clmAccess->access('BE_tournament_create') === true) {
-			JToolBarHelper::custom('add','new.png','new_f2.png', JText::_('SWT_TOURNAMENT_NEW'), false);
+			ToolBarHelper::custom('add','new.png','new_f2.png', Text::_('SWT_TOURNAMENT_NEW'), false);
 		}
 		//CLM parameter auslesen
 		$config = clm_core::$db->config();
 		$test_button = $config->test_button;
 		if ($test_button) {
-			JToolBarHelper::custom('test','delete.png','delete_f2.png', JText::_('SWT_TOURNAMENT_TEST'), false);
+			ToolBarHelper::custom('test','delete.png','delete_f2.png', Text::_('SWT_TOURNAMENT_TEST'), false);
 		}
-		JToolBarHelper::custom('swm_delete','delete.png','delete_f2.png', JText::_('SWM_DELETE'), false);
-		JToolBarHelper::custom( 'swm_upload', 'upload.png', 'upload_f2.png', JText::_('SWM_UPLOAD'), false);
-		JToolBarHelper::cancel();
+		ToolBarHelper::custom('swm_delete','delete.png','delete_f2.png', Text::_('SWM_DELETE'), false);
+		ToolBarHelper::custom( 'swm_upload', 'upload.png', 'upload_f2.png', Text::_('SWM_UPLOAD'), false);
+		ToolBarHelper::cancel();
 		
 		//Saison- und Turnier-Auswahl erstellen
-		$options_saisons[]		= JHtml::_('select.option', '', JText::_( 'SWT_SAISONS' ));
+		$options_saisons[]		= HTMLHelper::_('select.option', '', Text::_( 'SWT_SAISONS' ));
 		foreach($saisons as $saison)	{
-			$options_saisons[]		= JHtml::_('select.option', $saison->id, $saison->name);
+			$options_saisons[]		= HTMLHelper::_('select.option', $saison->id, $saison->name);
 		}
 		
-		$options_turniere[]		= JHtml::_('select.option', '', JText::_( 'SWT_TOURNAMENTS' ));
+		$options_turniere[]		= HTMLHelper::_('select.option', '', Text::_( 'SWT_TOURNAMENTS' ));
 		$current_turnier	= clm_core::$load->request_string('turnier', '');
 		
 		foreach($turniere as $turnier)	{
@@ -64,19 +70,19 @@ class CLMViewSWMTurnier extends JViewLegacy {
 			else $filename = '';
 			if ($filename == $swm_file)	$current_turnier = $turnier->id;
 
-			$options_turniere[]		= JHtml::_('select.option', $turnier->id, $turnier->name);
+			$options_turniere[]		= HTMLHelper::_('select.option', $turnier->id, $turnier->name);
 		}
 		
-		$lists['saisons']	= JHtml::_('select.genericlist', $options_saisons, 'filter_saison', 'class="inputbox" onchange="this.form.submit();"', 'value', 'text', $state->get('filter_saison') );
-		$lists['turniere']	= JHtml::_('select.genericlist', $options_turniere, 'turnier', 'class="inputbox"', 'value', 'text', $current_turnier );
+		$lists['saisons']	= HTMLHelper::_('select.genericlist', $options_saisons, 'filter_saison', 'class="inputbox" onchange="this.form.submit();"', 'value', 'text', $state->get('filter_saison') );
+		$lists['turniere']	= HTMLHelper::_('select.genericlist', $options_turniere, 'turnier', 'class="inputbox"', 'value', 'text', $current_turnier );
 		
 		//SWM-File-Auswahl erstellen
-		$options_swm_files[]		= JHtml::_('select.option', '', JText::_( 'SWM_FILES' ));
+		$options_swm_files[]		= HTMLHelper::_('select.option', '', Text::_( 'SWM_FILES' ));
 		if (isset($swmFiles)) {
 		foreach($swmFiles as $i => $file)	{
-			$options_swm_files[]		= JHtml::_('select.option', basename($file), basename($file));
+			$options_swm_files[]		= HTMLHelper::_('select.option', basename($file), basename($file));
 		} 	}
-		$lists['swm_files']	= JHtml::_('select.genericlist', $options_swm_files, 'swm_file', 'class="inputbox" onchange="document.adminForm.submit();"', 'value', 'text', $swm_file );
+		$lists['swm_files']	= HTMLHelper::_('select.genericlist', $options_swm_files, 'swm_file', 'class="inputbox" onchange="document.adminForm.submit();"', 'value', 'text', $swm_file );
 
 		//Daten an Template
 		$this->lists = $lists;

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,10 +12,13 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 class CLMControllerSWT extends JControllerLegacy
 {
 	function __construct() {		
-		$this->app = JFactory::getApplication();
+		$this->app = Factory::getApplication();
 		parent::__construct();		
 	}
 	
@@ -76,7 +79,7 @@ class CLMControllerSWT extends JControllerLegacy
 			$adminLink->view = "swt";
 			$adminLink->makeURL();
 			
-			$msg = JText::_( 'SWT_FILE_ERROR' ); 
+			$msg = Text::_( 'SWT_FILE_ERROR' ); 
 			
 			$this->app->enqueueMessage( $msg );
 			$this->app->redirect($adminLink->url); 		

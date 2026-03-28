@@ -1,15 +1,19 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+
 $today = date("Y-m-d");
 
 ?>
@@ -17,12 +21,12 @@ $today = date("Y-m-d");
 <form action="index.php" method="post" name="adminForm" id="adminForm">
   <div class="width-60 fltlft">
 	<fieldset class="adminform">
-		<legend><?php echo JText::_( 'JDETAILS' ); ?></legend>
+		<legend><?php echo Text::_( 'JDETAILS' ); ?></legend>
 
 		<table class="paramlist admintable">
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'TERMINE_TASK' ); ?>:</label>
+			<label for="name"><?php echo Text::_( 'TERMINE_TASK' ); ?>:</label>
 			</td>
 			<td colspan="2" >
 			<input class="inputbox" type="text" name="name" id="name" size="50" maxlength="100" value="<?php echo $this->termine->name; ?>" />
@@ -31,7 +35,7 @@ $today = date("Y-m-d");
 
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'TERMINE_HOST' ); ?>:</label>
+			<label for="name"><?php echo Text::_( 'TERMINE_HOST' ); ?>:</label>
 			</td>
 			<td colspan="2" >
 			<?php echo $this->form['vereinZPS']; ?>
@@ -41,7 +45,7 @@ $today = date("Y-m-d");
 		<tr>
 			<td width="100" align="right" class="key">
 			<label for="adresse">
-			<?php echo JText::_( 'TERMINE_ADRESS' ); ?>:
+			<?php echo Text::_( 'TERMINE_ADRESS' ); ?>:
 			</label>
 			</td>
 			<td colspan="2" >
@@ -52,7 +56,7 @@ $today = date("Y-m-d");
 		<tr>
 			<td width="100" align="right" class="key">
 			<label for="event_link">
-			<?php echo JText::_( 'TERMINE_EVENT_LINK' ); ?>:
+			<?php echo Text::_( 'TERMINE_EVENT_LINK' ); ?>:
 			</label>
 			</td>
 			<td colspan="2" >
@@ -64,18 +68,18 @@ $today = date("Y-m-d");
 	// Kategorien
 	list($parentArray, $parentKeys) = CLMCategoryTree::getTree();
 	if (count($parentArray) > 0)  { // nur, wenn Kategorien existieren
-		$parentlist[]	= JHtml::_('select.option',  '0', CLMText::selectOpener(JText::_( 'NO_PARENT' )), 'id', 'name' );
+		$parentlist[]	= HTMLHelper::_('select.option',  '0', CLMText::selectOpener(Text::_( 'NO_PARENT' )), 'id', 'name' );
 		foreach ($parentArray as $key => $value) {
-			$parentlist[]	= JHtml::_('select.option',  $key, $value, 'id', 'name' );
+			$parentlist[]	= HTMLHelper::_('select.option',  $key, $value, 'id', 'name' );
 		}
-		$catidAlltime = JHtml::_('select.genericlist', $parentlist, 'catidAlltime', 'class="inputbox" size="1" style="max-width: 250px;"', 'id', 'name', intval($this->termine->catidAlltime));
-		$catidEdition = JHtml::_('select.genericlist', $parentlist, 'catidEdition', 'class="inputbox" size="1" style="max-width: 250px;"', 'id', 'name', intval($this->termine->catidEdition));
+		$catidAlltime = HTMLHelper::_('select.genericlist', $parentlist, 'catidAlltime', 'class="inputbox" size="1" style="max-width: 250px;"', 'id', 'name', intval($this->termine->catidAlltime));
+		$catidEdition = HTMLHelper::_('select.genericlist', $parentlist, 'catidEdition', 'class="inputbox" size="1" style="max-width: 250px;"', 'id', 'name', intval($this->termine->catidEdition));
 	}
 	if (isset($catidAlltime)) { ?>
 		<tr>
 			<td colspan="1" class="paramlist_key">
 				<label for="category">
-					<?php echo JText::_( 'CATEGORY_ALLTIME' ); ?>:
+					<?php echo Text::_( 'CATEGORY_ALLTIME' ); ?>:
 				</label>
 			</td>
 			<td colspan="2" class="paramlist_value">
@@ -83,7 +87,7 @@ $today = date("Y-m-d");
 			</td>
 			<td colspan="1" class="paramlist_key">
 				<label for="category">
-					<?php echo JText::_( 'CATEGORY_EDITION' ); ?>:
+					<?php echo Text::_( 'CATEGORY_EDITION' ); ?>:
 				</label>
 			</td>
 			<td colspan="2" class="paramlist_value">
@@ -96,8 +100,8 @@ $today = date("Y-m-d");
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
 				<label for="name">
-				<span class="editlinktip hasTip" title="<?php echo JText::_( 'TERMINE_KATEGORIE_HINT' );?>">
-				<?php echo JText::_( 'TERMINE_KATEGORIE' ); ?></span></label>
+				<span class="editlinktip hasTip" title="<?php echo Text::_( 'TERMINE_KATEGORIE_HINT' );?>">
+				<?php echo Text::_( 'TERMINE_KATEGORIE' ); ?></span></label>
 			</td>
 			<td colspan="2" >
 			<input class="inputbox" type="text" name="category" id="category" size="32" maxlength="60" value="<?php echo $this->termine->category; ?>" />
@@ -108,7 +112,7 @@ $today = date("Y-m-d");
 		<tr>
 			<td width="100" align="right" class="key">
 			<label for="startdate">
-				<?php echo JText::_( 'TERMINE_STARTDATE' ); ?>:
+				<?php echo Text::_( 'TERMINE_STARTDATE' ); ?>:
 			</label>
 			</td>
 			<td>
@@ -117,17 +121,17 @@ $today = date("Y-m-d");
 				<span >  </span>
 			</td><td>
 				<input class="inputbox" type="time" name="starttime" id="starttime" size="6" maxlength="6" value="<?php echo substr($this->termine->starttime,0,5); ?>"  />
-				<span > <?php echo JText::_( 'TERMINE_UHR' ); ?> </span>
+				<span > <?php echo Text::_( 'TERMINE_UHR' ); ?> </span>
 			</td><td>
 				<span><input type="checkbox" id='allday' name='allday' <?php if ($this->termine->allday == 1) echo " checked='checked' "; ?> value="<?php echo $this->termine->allday; ?>" /></span>
-				<span ><?php echo JText::_( 'TERMINE_ALLDAY' ); ?></span>
+				<span ><?php echo Text::_( 'TERMINE_ALLDAY' ); ?></span>
 			</td>
 		</tr>
         
 		<tr>
 			<td width="100" align="right" class="key">
 			<label for="enddate">
-			<?php echo JText::_( 'TERMINE_ENDDATE' ); ?>:
+			<?php echo Text::_( 'TERMINE_ENDDATE' ); ?>:
 			</label>
 			</td>
 			<td>
@@ -137,15 +141,15 @@ $today = date("Y-m-d");
 				<span >  </span>
 			</td><td>
 				<input class="inputbox" type="time" name="endtime" id="endtime" size="6" maxlength="6" value="<?php echo substr($this->termine->endtime,0,5); ?>"  />
-				<span > <?php echo JText::_( 'TERMINE_UHR' ); ?> </span>
+				<span > <?php echo Text::_( 'TERMINE_UHR' ); ?> </span>
 			</td><td>
 				<span><input type="checkbox" id='noendtime' name='noendtime' <?php if ($this->termine->noendtime == 1) echo " checked='checked' "; ?> value="<?php echo $this->termine->noendtime; ?>" /></span>
-				<span ><?php echo JText::_( 'TERMINE_NOENDTIME' ); ?></span>
+				<span ><?php echo Text::_( 'TERMINE_NOENDTIME' ); ?></span>
 			</td>
 		</tr>
 
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="published"><?php echo JText::_( 'JPUBLISHED' ); ?></label>
+			<td class="key" nowrap="nowrap"><label for="published"><?php echo Text::_( 'JPUBLISHED' ); ?></label>
 			</td>
 			<td><fieldset class="radio">
 			<?php echo $this->form['published']; ?>
@@ -155,7 +159,7 @@ $today = date("Y-m-d");
 	</fieldset>
 	
     <fieldset class="adminform">
-		<legend><?php echo JText::_( 'TERMINE_DESCRIPTION' ); ?></legend>
+		<legend><?php echo Text::_( 'TERMINE_DESCRIPTION' ); ?></legend>
 		<textarea class="inputbox" name="beschreibung" id="beschreibung" cols="50" rows="10" style="width:99%"><?php echo str_replace('&','&amp;',$this->termine->beschreibung);?></textarea>
 	</fieldset>
 	</div>
@@ -167,6 +171,6 @@ $today = date("Y-m-d");
 	<input type="hidden" name="id" value="<?php echo $this->termine->id; ?>" />
 	<input type="hidden" name="controller" value="termineform" />
 	<input type="hidden" name="task" value="" />
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
 
 </form>

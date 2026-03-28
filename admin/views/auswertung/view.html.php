@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,17 +12,21 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
 class CLMViewAuswertung extends JViewLegacy {
 	function display($tpl = null) {
 		
-		$app	= JFactory::getApplication();
+		$app	= Factory::getApplication();
 		$jinput = $app->input;
 		$task 	= $jinput->get('task', null, null);
  		$model	= $this->getModel('auswertung');
 
 		//Toolbar
 		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title( JText::_('DB_RATING_TITLE') ,'clm_headmenu_manager.png' );
+		ToolBarHelper::title( Text::_('DB_RATING_TITLE') ,'clm_headmenu_manager.png' );
 		$tpl = null;
 		
 		if($task =='datei'){
@@ -31,10 +35,10 @@ class CLMViewAuswertung extends JViewLegacy {
 			$et	= $jinput->get('filter_et', null, null);
 			$mt	= $jinput->get('filter_mt', null, null);
 			if(!$liga AND !$et AND !$mt){
-				$app->enqueueMessage( JText::_('DB_RATING_SELECT'), 'warning');
+				$app->enqueueMessage( Text::_('DB_RATING_SELECT'), 'warning');
 			}
 			if(!$format AND $liga){
-				$app->enqueueMessage( JText::_('DB_RATING_FORMAT'), 'warning');
+				$app->enqueueMessage( Text::_('DB_RATING_FORMAT'), 'warning');
 			} 
 			if(($liga !="0" AND $format !="0") OR ($et OR $mt) ){
 

@@ -12,6 +12,12 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Pagination\Pagination;
+
 class CLMControllerMeldelisten extends JControllerLegacy
 {
 	/**
@@ -28,10 +34,10 @@ function __construct( $config = array() )
 
 function display($cachable = false, $urlparams = array())
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');
-	$db=JFactory::getDBO();
+	$db=Factory::getDBO();
 
 	$filter_order		= $mainframe->getUserStateFromRequest( "$option.filter_order",'filter_order','a.id',	'cmd' );
 	$filter_order_Dir	= $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",'filter_order_Dir','','word' );
@@ -41,7 +47,8 @@ function display($cachable = false, $urlparams = array())
 	$filter_vid		= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'int' );
 	$filter_catid		= $mainframe->getUserStateFromRequest( "$option.filter_catid",'filter_catid',0,'int' );
 	$search			= $mainframe->getUserStateFromRequest( "$option.search",'search','','string' );
-	$search			= JString::strtolower( $search );
+//	$search			= JString::strtolower( $search );
+	$search			= strtolower( $search );
 	$limit			= $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
 	$limitstart		= $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
 
@@ -83,7 +90,7 @@ function display($cachable = false, $urlparams = array())
 	$total = $db->loadResult();
 
 	jimport('joomla.html.pagination');
-	$pageNav = new JPagination( $total, $limitstart, $limit );
+	$pageNav = new Pagination( $total, $limitstart, $limit );
 
 	// get the subset (based on limits) of required records
 	$query = 'SELECT a.*, c.name AS saison, b.Vereinname as verein, u.name AS editor, d.name AS liga_name'
@@ -105,36 +112,36 @@ function display($cachable = false, $urlparams = array())
 	}
 
 	// state filter
-	//$lists['state']	= JHTML::_('grid.state',  $filter_state );
+	//$lists['state']	= HTMLHelper::_('grid.state',  $filter_state );
 	$lists['state'] = CLMForm::selectState( $filter_state );
 
 	// Saisonfilter
 	$sql = 'SELECT id, name FROM #__clm_saison WHERE archiv =0';
 	$db->setQuery($sql);
-	$saisonlist[]	= JHtml::_('select.option',  '0', JText::_( 'MELDELISTEN_SAISON' ), 'id', 'name' );
+	$saisonlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'MELDELISTEN_SAISON' ), 'id', 'name' );
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
-//	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
-	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+//	$lists['sid']      = HTMLHelper::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']      = HTMLHelper::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 	// Ligafilter
 	$sql = 'SELECT id AS cid, name FROM #__clm_liga'
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
 		." WHERE s.archiv = 0 ";
 	$db->setQuery($sql);
 
-	$ligalist[]	= JHtml::_('select.option',  '0', JText::_( 'MELDELISTEN_LIGA' ), 'cid', 'name' );
+	$ligalist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'MELDELISTEN_LIGA' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
-//	$lists['lid']	= JHtml::_('select.genericlist', $ligalist, 'filter_lid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
-	$lists['lid']	= JHtml::_('select.genericlist', $ligalist, 'filter_lid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
+//	$lists['lid']	= HTMLHelper::_('select.genericlist', $ligalist, 'filter_lid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
+	$lists['lid']	= HTMLHelper::_('select.genericlist', $ligalist, 'filter_lid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
 	// Vereinefilter
 	$sql = 'SELECT id, name FROM #__clm_vereine'
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
 		." WHERE s.archiv = 0 ";
 	$db->setQuery($sql);
 
-	$vlist[]	= JHtml::_('select.option',  '0', JText::_( 'MELDELISTEN_VEREIN' ), 'id', 'name' );
+	$vlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'MELDELISTEN_VEREIN' ), 'id', 'name' );
 	$vlist		= array_merge( $vlist, $db->loadObjectList() );
-//	$lists['vid']	= JHtml::_('select.genericlist', $vlist, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_vid );
-	$lists['vid']	= JHtml::_('select.genericlist', $vlist, 'filter_vid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_vid );
+//	$lists['vid']	= HTMLHelper::_('select.genericlist', $vlist, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_vid );
+	$lists['vid']	= HTMLHelper::_('select.genericlist', $vlist, 'filter_vid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', $filter_vid );
 
 	// Ordering
 	$lists['order_Dir']	= $filter_order_Dir;
@@ -149,10 +156,10 @@ function display($cachable = false, $urlparams = array())
 
 function edit()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
-	$db 		=JFactory::getDBO();
-	$user 		=JFactory::getUser();
+	$db 		=Factory::getDBO();
+	$user 		=Factory::getUser();
 	$task 		= clm_core::$load->request_string( 'task');
 	$cid 		= clm_core::$load->request_array_int( 'cid');
 	if (is_null($cid)) 
@@ -161,7 +168,7 @@ function edit()
 	$section 	= clm_core::$load->request_string('section');
 	$liga 		= clm_core::$load->request_string( 'liga');
 										 
-	$row =JTable::getInstance( 'mannschaften', 'TableCLM' );
+	$row =Table::getInstance( 'mannschaften', 'TableCLM' );
 	// load the row from the db table
 	$row->load( $cid[0] );
 
@@ -174,12 +181,12 @@ function edit()
 	$clmAccess = clm_core::$access;
 	if ($clmAccess->access('BE_team_registration_list') === false) {
 		$section = 'info';
-		$mainframe->enqueueMessage( JText::_( 'TEAM_NO_ACCESS' ), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'TEAM_NO_ACCESS' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
 	if ( isset($lid[0]) && $lid[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_team_registration_list') !== true AND $task == 'edit') {
-		$mainframe->enqueueMessage( JText::_( 'MELDELISTEN_STAFFEL' ), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'MELDELISTEN_STAFFEL' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section=mannschaften';
 		$mainframe->redirect( $link);
 					}
@@ -242,7 +249,7 @@ function edit()
 		." AND sid = ".$row->sid
 		." ORDER BY snr ASC"
 		;
-	$db 		=JFactory::getDBO();
+	$db 		=Factory::getDBO();
 	$db->setQuery( $selsql );
 	$row_sel=$db->loadObjectList();
 
@@ -256,16 +263,16 @@ function edit()
 
 function cancel()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 	
 	$option 	= clm_core::$load->request_string('option');
 	$section 	= clm_core::$load->request_string('section');
 	$id		= clm_core::$load->request_int('id');	
-	$row 		=JTable::getInstance( 'meldelisten', 'TableCLM' );
+	$row 		=Table::getInstance( 'meldelisten', 'TableCLM' );
 
-	$msg = JText::_( 'MELDELISTEN_ML_ABGE').$id;
+	$msg = Text::_( 'MELDELISTEN_ML_ABGE').$id;
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}

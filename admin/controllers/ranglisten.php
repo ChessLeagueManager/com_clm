@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,12 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Pagination\Pagination;
 
 class CLMControllerRanglisten extends JControllerLegacy
 {
@@ -29,10 +35,10 @@ function __construct( $config = array() )
 
 function display($cachable = false, $urlparams = array())
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
-	$db		= JFactory::getDBO();
+	$db		= Factory::getDBO();
 
 	$filter_gid		= $mainframe->getUserStateFromRequest( "$option.filter_gid",'filter_gid',0,'int' );
 	$filter_order		= $mainframe->getUserStateFromRequest( "$option.filter_order",'filter_order','a.id',	'cmd' );
@@ -102,7 +108,7 @@ function display($cachable = false, $urlparams = array())
 	
 
 	jimport('joomla.html.pagination');
-	$pageNav = new JPagination($total, $limitstart, $limit );
+	$pageNav = new Pagination($total, $limitstart, $limit );
 
 	// get the subset (based on limits) of required records
 	$query = 'SELECT a.*, c.name AS saison, v.Vereinname as vname, n.Gruppe as gname '
@@ -127,33 +133,33 @@ function display($cachable = false, $urlparams = array())
 	// Saisonfilter
 	$sql = 'SELECT id, name FROM #__clm_saison WHERE archiv =0';
 	$db->setQuery($sql);
-	$saisonlist[]	= JHtml::_('select.option',  '0', JText::_( 'RANGLISTE_SAISON_WAE' ), 'id', 'name' );
+	$saisonlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'RANGLISTE_SAISON_WAE' ), 'id', 'name' );
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
-//	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
-	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+//	$lists['sid']      = HTMLHelper::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']      = HTMLHelper::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'name', intval( $filter_sid ) );
 
 	// Gruppenfilter
 	$sql = 'SELECT id, Gruppe FROM #__clm_rangliste_name WHERE published =1'.' AND sid = '.$filter_sid;
 	$db->setQuery($sql);
-	$gruppenlist[]	= JHtml::_('select.option',  '0', JText::_( 'RANGLISTE_GRUPPE_AUS' ), 'id', 'Gruppe' );
+	$gruppenlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'RANGLISTE_GRUPPE_AUS' ), 'id', 'Gruppe' );
 	$gruppenlist         = array_merge( $gruppenlist, $db->loadObjectList() );
-//	$lists['gid']      = JHtml::_('select.genericlist', $gruppenlist, 'filter_gid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'Gruppe', intval( $filter_gid ) );
-	$lists['gid']      = JHtml::_('select.genericlist', $gruppenlist, 'filter_gid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'Gruppe', intval( $filter_gid ) );
+//	$lists['gid']      = HTMLHelper::_('select.genericlist', $gruppenlist, 'filter_gid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','id', 'Gruppe', intval( $filter_gid ) );
+	$lists['gid']      = HTMLHelper::_('select.genericlist', $gruppenlist, 'filter_gid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','id', 'Gruppe', intval( $filter_gid ) );
 
 	$db->setQuery($sql);
-	$gruppenlistt[]	= JHtml::_('select.option',  '0', JText::_( 'neue Rangfolgegruppe auswählen \n nur nötig beim Kopieren' ), 'id', 'Gruppe' );
+	$gruppenlistt[]	= HTMLHelper::_('select.option',  '0', Text::_( 'neue Rangfolgegruppe auswählen \n nur nötig beim Kopieren' ), 'id', 'Gruppe' );
 	$gruppenlistt         = array_merge( $gruppenlistt, $db->loadObjectList() );
-	$lists['tgid']      = JHtml::_('select.genericlist', $gruppenlistt, 'filter_tgid', 'class="'.$field_search.'" size="1" ','id', 'Gruppe', 0 );
+	$lists['tgid']      = HTMLHelper::_('select.genericlist', $gruppenlistt, 'filter_tgid', 'class="'.$field_search.'" size="1" ','id', 'Gruppe', 0 );
 
 	// Vereinefilter laden
 	$vereinefilter = CLMFilterVerein::vereine_filter(0);
-//	$lists['vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
-	$lists['vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_vid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
-//	$lists['sg_vid']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_sg_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid );
-	$lists['sg_vid1']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_sg_vid1', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid1 );
-	$lists['sg_vid2']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_sg_vid2', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid2 );
-	$lists['sg_vid3']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_sg_vid3', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid3 );
-	$lists['sg_vid4']	= JHtml::_('select.genericlist', $vereinefilter, 'filter_sg_vid4', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid4 );
+//	$lists['vid']	= HTMLHelper::_('select.genericlist', $vereinefilter, 'filter_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
+	$lists['vid']	= HTMLHelper::_('select.genericlist', $vereinefilter, 'filter_vid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_vid );
+//	$lists['sg_vid']	= HTMLHelper::_('select.genericlist', $vereinefilter, 'filter_sg_vid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid );
+	$lists['sg_vid1']	= HTMLHelper::_('select.genericlist', $vereinefilter, 'filter_sg_vid1', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid1 );
+	$lists['sg_vid2']	= HTMLHelper::_('select.genericlist', $vereinefilter, 'filter_sg_vid2', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid2 );
+	$lists['sg_vid3']	= HTMLHelper::_('select.genericlist', $vereinefilter, 'filter_sg_vid3', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid3 );
+	$lists['sg_vid4']	= HTMLHelper::_('select.genericlist', $vereinefilter, 'filter_sg_vid4', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','zps', 'name', $filter_sg_vid4 );
 
 	// Suchefilter
 	$lists['search']= $search;
@@ -167,7 +173,7 @@ function display($cachable = false, $urlparams = array())
 
 function edit()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
 
@@ -184,13 +190,13 @@ function edit()
 	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
 	else $field_search = "inputbox";
 	
-	$db 		=JFactory::getDBO();
-	$user 		=JFactory::getUser();
+	$db 		=Factory::getDBO();
+	$user 		=Factory::getUser();
 	$task 		= clm_core::$load->request_string( 'task');
 	$cid 		= clm_core::$load->request_array_int('cid');
 	if (is_null($cid)) $cid[0] = clm_core::$load->request_int('id');
 										 
-	$row =JTable::getInstance( 'ranglisten', 'TableCLM' );
+	$row =Table::getInstance( 'ranglisten', 'TableCLM' );
 	$vname="";
 	$sg_vname= array();
 	$gname="";
@@ -199,14 +205,14 @@ function edit()
 	if ($task == 'edit') {
 		// illegaler Einbruchversuch über URL !
 		// evtl. mitschneiden !?!
-		$saison		=JTable::getInstance( 'saisons', 'TableCLM' );
+		$saison		=Table::getInstance( 'saisons', 'TableCLM' );
 		$saison->load( $row->sid );
 		if ($saison->archiv == "1") {  // AND clm_core::$access->getType() !== 'admin') {
-			$mainframe->enqueueMessage( JText::_( 'RANGLISTE_ARCHIV' ), 'warning' );		
+			$mainframe->enqueueMessage( Text::_( 'RANGLISTE_ARCHIV' ), 'warning' );		
 			$mainframe->redirect( 'index.php?option='. $option.'&section=vereine' );
 		}
 		if ($cid[0]== "" AND $task =='edit') {
-			$mainframe->enqueueMessage( JText::_( 'RANGLISTE_FALSCH' ), 'warning' );		
+			$mainframe->enqueueMessage( Text::_( 'RANGLISTE_FALSCH' ), 'warning' );		
 			$mainframe->redirect( 'index.php?option='. $option.'&section=vereine' );
 		}
 		// load the row from the db table
@@ -415,7 +421,7 @@ function edit()
 	} else { $lid = 0; }
 	$clmAccess = clm_core::$access;
 	if ($clmAccess->access('BE_club_edit_ranking') === false AND $task == 'edit') {
-		$mainframe->enqueueMessage( JText::_( 'RANGLISTE_STAFFEL' ), 'warning' );		
+		$mainframe->enqueueMessage( Text::_( 'RANGLISTE_STAFFEL' ), 'warning' );		
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
@@ -427,15 +433,15 @@ function edit()
 		$row->published 	= 0;
 	}
 
-	$lists['published']	= JHtml::_('select.booleanlist',  'published', 'class="inputbox"', $row->published );
+	$lists['published']	= HTMLHelper::_('select.booleanlist',  'published', 'class="inputbox"', $row->published );
 
 	// Saisonliste //
 	$sql = "SELECT id, name FROM #__clm_saison WHERE archiv =0";
 	$db->setQuery($sql);
-	$saisonlist[]	= JHtml::_('select.option',  '0', JText::_( 'RANGLISTE_SAISON_WAE' ), 'id', 'name' );
+	$saisonlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'RANGLISTE_SAISON_WAE' ), 'id', 'name' );
 	$saisonlist         = array_merge( $saisonlist, $db->loadObjectList() );
-//	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" style="width:300px" onchange="javascript:edit();"','id', 'name', intval( $filter_sid ) );
-	$lists['sid']      = JHtml::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','id', 'name', intval( $filter_sid ) );
+//	$lists['sid']      = HTMLHelper::_('select.genericlist', $saisonlist, 'filter_sid', 'class="js-example-basic-single" size="1" style="width:300px" onchange="javascript:edit();"','id', 'name', intval( $filter_sid ) );
+	$lists['sid']      = HTMLHelper::_('select.genericlist', $saisonlist, 'filter_sid', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','id', 'name', intval( $filter_sid ) );
 
 	if ($filter_sid == 0) $filter_sid = clm_core::$access->getSeason();
 	// Gruppenliste //
@@ -448,21 +454,21 @@ function edit()
 		$mainframe->enqueueMessage( $db->getErrorMsg(), 'warning' );		
 		$mainframe->redirect( 'index.php?option='.$option.'&section='.$section );
 	}
-	$gruppenlist[]	= JHtml::_('select.option',  '0', JText::_( 'RANGLISTE_GRUPPE_AUS' ), 'gid', 'Gruppe' );
+	$gruppenlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'RANGLISTE_GRUPPE_AUS' ), 'gid', 'Gruppe' );
 	$gruppenlist	= array_merge( $gruppenlist, $db->loadObjectList() );
-//	$lists['gruppe']= JHtml::_('select.genericlist',   $gruppenlist, 'filter_gid', 'class="js-example-basic-single" size="1" style="width:300px" onchange="javascript:edit();"','gid', 'Gruppe', intval( $filter_gid ) );
-	$lists['gruppe']= JHtml::_('select.genericlist',   $gruppenlist, 'filter_gid', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','gid', 'Gruppe', intval( $filter_gid ) );
+//	$lists['gruppe']= HTMLHelper::_('select.genericlist',   $gruppenlist, 'filter_gid', 'class="js-example-basic-single" size="1" style="width:300px" onchange="javascript:edit();"','gid', 'Gruppe', intval( $filter_gid ) );
+	$lists['gruppe']= HTMLHelper::_('select.genericlist',   $gruppenlist, 'filter_gid', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','gid', 'Gruppe', intval( $filter_gid ) );
 
 	// Vereinliste
 	// Vereinefilter laden
 	$vereinlist	= CLMFilterVerein::vereine_filter(0);
-//	$lists['vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_vid', 'class="js-example-basic-single" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_vid );
-	$lists['vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_vid', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_vid );
-//	$lists['sg_vid']	= JHtml::_('select.genericlist', $vereinlist, 'filter_sg_vid', 'class="js-example-basic-single" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid );
-	$lists['sg_vid1']	= JHtml::_('select.genericlist', $vereinlist, 'filter_sg_vid1', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid1 );
-	$lists['sg_vid2']	= JHtml::_('select.genericlist', $vereinlist, 'filter_sg_vid2', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid2 );
-	$lists['sg_vid3']	= JHtml::_('select.genericlist', $vereinlist, 'filter_sg_vid3', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid3 );
-	$lists['sg_vid4']	= JHtml::_('select.genericlist', $vereinlist, 'filter_sg_vid4', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid4 );
+//	$lists['vid']	= HTMLHelper::_('select.genericlist', $vereinlist, 'filter_vid', 'class="js-example-basic-single" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_vid );
+	$lists['vid']	= HTMLHelper::_('select.genericlist', $vereinlist, 'filter_vid', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_vid );
+//	$lists['sg_vid']	= HTMLHelper::_('select.genericlist', $vereinlist, 'filter_sg_vid', 'class="js-example-basic-single" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid );
+	$lists['sg_vid1']	= HTMLHelper::_('select.genericlist', $vereinlist, 'filter_sg_vid1', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid1 );
+	$lists['sg_vid2']	= HTMLHelper::_('select.genericlist', $vereinlist, 'filter_sg_vid2', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid2 );
+	$lists['sg_vid3']	= HTMLHelper::_('select.genericlist', $vereinlist, 'filter_sg_vid3', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid3 );
+	$lists['sg_vid4']	= HTMLHelper::_('select.genericlist', $vereinlist, 'filter_sg_vid4', 'class="'.$field_search.'" size="1" style="width:300px" onchange="javascript:edit();"','zps', 'name', $filter_sg_vid4 );
 	$lists['anz_sgp']	= $anz_sgp;
 
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'ranglisten.php');
@@ -472,7 +478,7 @@ function edit()
 
 function save()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
@@ -480,17 +486,17 @@ function save()
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
 
-	$db		= JFactory::getDBO();
+	$db		= Factory::getDBO();
 	$task		= clm_core::$load->request_string( 'task');
 	$pre_task	= clm_core::$load->request_string( 'pre_task');
 	$msg		= clm_core::$load->request_int( 'id');
 	$exist		= clm_core::$load->request_string( 'exist');
-	$row		= JTable::getInstance( 'ranglisten', 'TableCLM' );
+	$row		= Table::getInstance( 'ranglisten', 'TableCLM' );
 	if ($pre_task == 'edit' and is_numeric($msg)) 
 		$row->load( $msg );
 	if ( $exist != "0" AND $pre_task !="edit") {
-		$mainframe->enqueueMessage( JText::_( 'RANGLISTE_LISTE_IST' ), 'warning' );		
-		$mainframe->enqueueMessage( JText::_( 'RANGLISTE_AENDERN' ), 'notice' );		
+		$mainframe->enqueueMessage( Text::_( 'RANGLISTE_LISTE_IST' ), 'warning' );		
+		$mainframe->enqueueMessage( Text::_( 'RANGLISTE_AENDERN' ), 'notice' );		
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
@@ -529,7 +535,7 @@ function save()
 		$row->sid = $sid;
 		$row->gid = $gid;
 
-		$aktion = JText::_( 'RANGLISTE_LOG_ADDED');
+		$aktion = Text::_( 'RANGLISTE_LOG_ADDED');
 	}
 	else {
 		
@@ -538,7 +544,7 @@ function save()
 		$sid = $row->sid;
 		$gid = $row->gid;
 
-		$aktion = JText::_( 'RANGLISTE_LOG_EDIT');
+		$aktion = Text::_( 'RANGLISTE_LOG_EDIT');
 	}
 
 	if (!$row->id) {
@@ -697,9 +703,9 @@ function save()
 	}
 
 	if($sn_cnt =="1") {
-		$mainframe->enqueueMessage(JText::_( 'RANGLISTE_MN_RANG' ), 'notice');
-		$mainframe->enqueueMessage(JText::_( 'RANGLISTE_ERGEBNIS' ), 'notice');
-		$mainframe->enqueueMessage(JText::_( 'RANGLISTE_MN_MANAGER' ), 'notice');
+		$mainframe->enqueueMessage(Text::_( 'RANGLISTE_MN_RANG' ), 'notice');
+		$mainframe->enqueueMessage(Text::_( 'RANGLISTE_ERGEBNIS' ), 'notice');
+		$mainframe->enqueueMessage(Text::_( 'RANGLISTE_MN_MANAGER' ), 'notice');
 	}
 
 	//Sperrkennzeichen sybchronisieren
@@ -720,12 +726,12 @@ function save()
 	switch ($task)
 	{
 		case 'apply':
-			$msg = JText::_( 'RANGLISTE_MSG_CHANGES_SAVED');
+			$msg = Text::_( 'RANGLISTE_MSG_CHANGES_SAVED');
 			$link = 'index.php?option='.$option.'&section='.$section.'&task=edit&id='. $row->id ;
 			break;
 		case 'save':
 		default:
-			$msg = JText::_( 'RANGLISTE_MSG_SAVED');
+			$msg = Text::_( 'RANGLISTE_MSG_SAVED');
 			$link = 'index.php?option='.$option.'&section='.$section;
 			break;
 	}
@@ -742,34 +748,34 @@ function save()
 
 function cancel()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 	
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
 	$id		= clm_core::$load->request_int('id');	
-	$row 		=JTable::getInstance( 'ranglisten', 'TableCLM' );
+	$row 		=Table::getInstance( 'ranglisten', 'TableCLM' );
 	$filter_vid	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
-	$msg = JText::_( 'RANGLISTE_AKTION'); //$filter_vid;
+	$msg = Text::_( 'RANGLISTE_AKTION'); //$filter_vid;
 	$mainframe->enqueueMessage($msg, 'message');
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
 function remove()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 
-	$db 		=JFactory::getDBO();
+	$db 		=Factory::getDBO();
 	$cid 		= clm_core::$load->request_array_int('cid');
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
 
 	if (count($cid) < 1) {
-		$mainframe->enqueueMessage(JText::_( 'RANGLISTE_SELECT', true ), 'warning');
+		$mainframe->enqueueMessage(Text::_( 'RANGLISTE_SELECT', true ), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
@@ -784,12 +790,12 @@ function remove()
 	// Wenn User nicht Admin oder DWZ prüfen ob SL der Staffel //
 	$clmAccess = clm_core::$access;
 	if ($clmAccess->access('BE_club_edit_ranking') === false) {
-			$mainframe->enqueueMessage(JText::_( 'RANGLISTE_RL_STAFFEL', true ), 'warning');
+			$mainframe->enqueueMessage(Text::_( 'RANGLISTE_RL_STAFFEL', true ), 'warning');
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link);
 					}
 	else {
-		$row	= JTable::getInstance( 'ranglisten', 'TableCLM' );
+		$row	= Table::getInstance( 'ranglisten', 'TableCLM' );
 		$row->load( $cid[0] );
 
 		$query	=" DELETE FROM #__clm_rangliste_spieler "
@@ -830,9 +836,9 @@ function remove()
 	$clmLog->write();
 	
 	if (count($cid) == 1) { 
-		$msg = JText::_( 'RANGLISTE_MSG_DEL_ENTRY'); 
+		$msg = Text::_( 'RANGLISTE_MSG_DEL_ENTRY'); 
 	} else { 
-		$msg = count($cid)." ".JText::_( 'RANGLISTE_MSG_DEL_ENTRYS'); 
+		$msg = count($cid)." ".Text::_( 'RANGLISTE_MSG_DEL_ENTRYS'); 
 	}
 
 	$mainframe->enqueueMessage($msg, 'message');
@@ -841,13 +847,13 @@ function remove()
 
 function publish()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 
-	$db 		= JFactory::getDBO();
-	$user 		= JFactory::getUser();
+	$db 		= Factory::getDBO();
+	$user 		= Factory::getUser();
 	$cid		= clm_core::$load->request_array_int('cid');
 	$task		= clm_core::$load->request_string( 'task' );
 	$publish	= ($task == 'publish');
@@ -869,7 +875,7 @@ function publish()
 	// Wenn User nicht Admin oder DWZ prüfen ob SL der Staffel
 	$clmAccess = clm_core::$access;
 	if ($clmAccess->access('BE_club_edit_ranking') === false) {
-		$mainframe->enqueueMessage(JText::_( 'RANGLISTE_STAL_RANG' ), 'warning');
+		$mainframe->enqueueMessage(Text::_( 'RANGLISTE_STAL_RANG' ), 'warning');
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
@@ -887,13 +893,13 @@ function publish()
 		$mainframe->redirect( $link);
 	}
 	if (count( $cid ) == 1) {
-		$row =JTable::getInstance( 'ranglisten', 'TableCLM' );
+		$row =Table::getInstance( 'ranglisten', 'TableCLM' );
 		}
 	
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'RANGLISTE_LOG')." ".$task;
-	$table		= &JTable::getInstance( 'ranglisten', 'TableCLM');
+	$clmLog->aktion = Text::_( 'RANGLISTE_LOG')." ".$task;
+	$table		= &Table::getInstance( 'ranglisten', 'TableCLM');
 	$table->load($cid[0]);
 	$clmLog->params = array('sid' => $table->sid, 'lid' => $lid, 'zps' => $table->zps, 'cids' => $cids);
 	$clmLog->write();
@@ -921,12 +927,12 @@ function orderup(  ) {
 */
 function order( $inc )
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 
-	$db		=JFactory::getDBO();
+	$db		=Factory::getDBO();
 	$cid		= clm_core::$load->request_array_int('cid');
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
@@ -934,11 +940,11 @@ function order( $inc )
 	$limit 		= clm_core::$load->request_int( 'limit', 0, '', 'int' );
 	$limitstart 	= clm_core::$load->request_int( 'limitstart', 0, '', 'int' );
 
-	$row =JTable::getInstance( 'mannschaften', 'TableCLM' );
+	$row =Table::getInstance( 'mannschaften', 'TableCLM' );
 	$row->load( $cid[0]);
 	$row->move( $inc, 'liga = '.(int) $row->liga.' AND published != 0' );
 
-	$msg 	= JText::_( 'RANGLISTE_MSG_SORT');
+	$msg 	= Text::_( 'RANGLISTE_MSG_SORT');
 	$mainframe->enqueueMessage($msg, 'message');
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
@@ -948,12 +954,12 @@ function order( $inc )
 */
 function saveOrder(  )
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 
-	$db			=JFactory::getDBO();
+	$db			=Factory::getDBO();
 	$cid		= clm_core::$load->request_array_int('cid');
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
@@ -961,7 +967,7 @@ function saveOrder(  )
 	$total		= count( $cid );
 	$order		= clm_core::$load->request_array_int('order');
 
-	$row =JTable::getInstance( 'mannschaften', 'TableCLM' );
+	$row =Table::getInstance( 'mannschaften', 'TableCLM' );
 	$groupings = array();
 
 	// update ordering values
@@ -973,7 +979,7 @@ function saveOrder(  )
 		if ($row->ordering != $order[$i]) {
 			$row->ordering = $order[$i];
 			if (!$row->store()) {
-				$mainframe->enqueueMessage(JText::_( 'RANGLISTE_SELECT', true ), 'warning');
+				$mainframe->enqueueMessage(Text::_( 'RANGLISTE_SELECT', true ), 'warning');
 				$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 			}
 		}
@@ -990,15 +996,15 @@ function saveOrder(  )
 
 function copy()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Check for request forgeries
 	defined('clm') or die( 'Invalid Token' );
 	$option 	= clm_core::$load->request_string('option');
 	$section	= clm_core::$load->request_string('section');
 	$cid		= clm_core::$load->request_array_int('cid');
-	$db		= JFactory::getDBO();
-	$table		= JTable::getInstance('ranglisten', 'TableCLM');
-	$user		= JFactory::getUser();
+	$db		= Factory::getDBO();
+	$table		= Table::getInstance('ranglisten', 'TableCLM');
+	$user		= Factory::getUser();
 	$n		= count( $cid );
 	$this->setRedirect( 'index.php?option='.$option.'&section='.$section );
 	$tgid	= clm_core::$load->request_int('filter_tgid',0);
@@ -1006,11 +1012,11 @@ function copy()
 	// Prüfen ob User Berechtigung zum kopieren hat
 	$clmAccess = clm_core::$access;
 	if ($clmAccess->access('BE_club_edit_ranking') === false) {
-		$mainframe->enqueueMessage(JText::_( 'RANGLISTE_ADMIN', true ), 'warning');
+		$mainframe->enqueueMessage(Text::_( 'RANGLISTE_ADMIN', true ), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 	if ($tgid == 0) {
-		$mainframe->enqueueMessage(JText::_( 'keine Zielrangfolgegruppe ausgewählt', true ), 'warning');
+		$mainframe->enqueueMessage(Text::_( 'keine Zielrangfolgegruppe ausgewählt', true ), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 	$table->load( (int)$cid[0] );
@@ -1028,7 +1034,7 @@ echo "<br>table  sid ".$table->sid." gid ".$table->gid; //die();
 
 	if ($rg_source[0]->geschlecht != $rg_target[0]->geschlecht OR $rg_source[0]->alter_grenze != $rg_target[0]->alter_grenze OR 
 			$rg_source[0]->alter != $rg_target[0]->alter OR $rg_source[0]->status != $rg_target[0]->status OR $rg_source[0]->anz_sgp != $rg_target[0]->anz_sgp ) {
-		$mainframe->enqueueMessage(JText::_( 'Eigenschaften der Zielranggruppe weichen ab', true ), 'warning');
+		$mainframe->enqueueMessage(Text::_( 'Eigenschaften der Zielranggruppe weichen ab', true ), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
@@ -1046,7 +1052,7 @@ echo "<br>table  sid ".$table->sid." gid ".$table->gid; //die();
 					;
 				$rangfolge = clm_core::$db->loadObjectList($query);	
 				if (is_null($rangfolge) OR count($rangfolge) > 0) {
-					$mainframe->enqueueMessage(JText::_( 'Zielrangfolge existiert bereits', true ), 'warning');
+					$mainframe->enqueueMessage(Text::_( 'Zielrangfolge existiert bereits', true ), 'warning');
 					continue;
 				}
 				$table->id			= 0;
@@ -1082,18 +1088,18 @@ echo "<br>table  sid ".$table->sid." gid ".$table->gid; //die();
 		}
 	}
 	else {	
-		$mainframe->enqueueMessage(JText::_( 'RANGLISTE_NO_SELECT', true ), 'warning');
+		$mainframe->enqueueMessage(Text::_( 'RANGLISTE_NO_SELECT', true ), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
 
-	if ($nn == 0) { $msg=JText::_( 'Rangfolge nicht kopiert');}
-	elseif ($nn > 1) { $msg=JText::_( 'RANGLISTE_MSG_COPY_ENTRYS');}
-		else {$msg=JText::_( 'RANGLISTE_MSG_COPY_ENTRY');}
+	if ($nn == 0) { $msg=Text::_( 'Rangfolge nicht kopiert');}
+	elseif ($nn > 1) { $msg=Text::_( 'RANGLISTE_MSG_COPY_ENTRYS');}
+		else {$msg=Text::_( 'RANGLISTE_MSG_COPY_ENTRY');}
 	
 	// Log schreiben
 	$clmLog = new CLMLog();
-	$clmLog->aktion = JText::_( 'RANGLISTE_LOG_COPIED');
-	$table		= JTable::getInstance( 'ranglisten', 'TableCLM');
+	$clmLog->aktion = Text::_( 'RANGLISTE_LOG_COPIED');
+	$table		= Table::getInstance( 'ranglisten', 'TableCLM');
 	$table->load($cid[0]);
 	$clmLog->params = array('sid' => $table->sid, 'lid' => $lid, 'zps' => $table->zps, 'cids' => implode( ',', $cid ));
 	$clmLog->write();

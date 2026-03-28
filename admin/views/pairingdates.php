@@ -1,14 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
 class CLMViewPairingDates
 {
 
@@ -17,13 +21,13 @@ public static function setPairingDatesToolbar($row)
 	// Menubilder laden
 		clm_core::$load->load_css("icons_images");
 
-	if (clm_core::$load->request_string('task') == 'edit') { $text = JText::_( 'Edit' );}
-		else { $text = JText::_( 'New' );}
-	JToolBarHelper::title(  JText::_( 'TITLE_PAARUNG').' '.$row->name.': [ '. $text.' ]' ,'clm_settings_2');
-	JToolBarHelper::custom( 'save', 'save.png', 'save_f2.png', JText::_( 'SAVE'),false );
-	JToolBarHelper::custom( 'apply', 'apply.png', 'apply_f2.png', JText::_( 'APPLY'),false );
-	JToolBarHelper::cancel();
-	JToolBarHelper::help( 'screen.clm.edit' );
+	if (clm_core::$load->request_string('task') == 'edit') { $text = Text::_( 'Edit' );}
+		else { $text = Text::_( 'New' );}
+	ToolBarHelper::title(  Text::_( 'TITLE_PAARUNG').' '.$row->name.': [ '. $text.' ]' ,'clm_settings_2');
+	ToolBarHelper::custom( 'save', 'save.png', 'save_f2.png', Text::_( 'SAVE'),false );
+	ToolBarHelper::custom( 'apply', 'apply.png', 'apply_f2.png', Text::_( 'APPLY'),false );
+	ToolBarHelper::cancel();
+	ToolBarHelper::help( 'screen.clm.edit' );
 	}
 		
 public static function pairingdates( &$row, $paarung, $man, $count_man, $option, $cid, &$lists)
@@ -38,7 +42,7 @@ public static function pairingdates( &$row, $paarung, $man, $count_man, $option,
 	<div class="width-70 fltlft">
 
 	<fieldset class="adminform">
-<!---	<legend><?php echo JText::_( 'PAARUNG_AKTUELL' ); ?></legend> --->
+<!---	<legend><?php echo Text::_( 'PAARUNG_AKTUELL' ); ?></legend> --->
 
 	<table class="admintable">
 
@@ -55,21 +59,21 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 	<tr>
 	<td class="key" nowrap="nowrap" colspan="7" height="24"><h3><?php echo $paarung[$count]->rname;
 		if (isset($paarung[$count]->datum) AND $paarung[$count]->datum > '1970-01-01') {
-			echo '  '.JText::_('ON_DAY').' '.JHTML::_('date',  $paarung[$count]->datum, JText::_('DATE_FORMAT_CLM_F')); 
+			echo '  '.Text::_('ON_DAY').' '.HTMLHelper::_('date',  $paarung[$count]->datum, Text::_('DATE_FORMAT_CLM_F')); 
 			if(isset($paarung[$count]->enddatum) and $paarung[$count]->enddatum > '1970-01-01' and $paarung[$count]->enddatum != $paarung[$count]->datum) { 
-			echo ' - '.JHTML::_('date',  $paarung[$count]->enddatum, JText::_('DATE_FORMAT_CLM_F')); } }?>
+			echo ' - '.HTMLHelper::_('date',  $paarung[$count]->enddatum, Text::_('DATE_FORMAT_CLM_F')); } }?>
 	</h3></td>
 	</tr>
 	<tr>
-		<td class="key" nowrap="nowrap" height="24"><?php echo JText::_( 'PAARUNG_DG' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_RUNDE' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_PAAR' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_HEIM' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_GAST' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_HEIM' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_GAST' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_DATE' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'PAARUNG_TIME' ); ?></td>
+		<td class="key" nowrap="nowrap" height="24"><?php echo Text::_( 'PAARUNG_DG' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'PAARUNG_RUNDE' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'PAARUNG_PAAR' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'PAARUNG_HEIM' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'PAARUNG_GAST' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'PAARUNG_HEIM' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'PAARUNG_GAST' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'PAARUNG_DATE' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'PAARUNG_TIME' ); ?></td>
 	</tr>
 
 	<?php for ($y = 0; $y < $pairings; $y++ ) { ?>
@@ -111,7 +115,7 @@ if ($row->durchgang > 1) { $runden_counter = $row->durchgang * $row->runden; }
 	<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
 	<input type="hidden" name="task" value="" />
 
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
 	</form>
 	<?php
 	}

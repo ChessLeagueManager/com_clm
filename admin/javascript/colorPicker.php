@@ -1,3 +1,6 @@
+<?php
+use Joomla\CMS\Uri\Uri;
+?>
 <script language="javascript" type="text/javascript">
 <!--
 
@@ -25,11 +28,11 @@
 
 
 // A few configuration settings
-var CROSSHAIRS_LOCATION = '<?php echo JURI::base()."components/com_clm/images/colorpicker/crosshairs.png" ;?>';
-var HUE_SLIDER_LOCATION = '<?php echo JURI::base()."components/com_clm/images/colorpicker/h.png" ;?>';
-var HUE_SLIDER_ARROWS_LOCATION = '<?php echo JURI::base()."components/com_clm/images/colorpicker/position.png" ;?>';
-var SAT_VAL_SQUARE_LOCATION = '<?php echo JURI::base()."components/com_clm/images/colorpicker/sv.png" ;?>';
-var BUTON_CLOSE_LOCATION='<?php echo JURI::base()."components/com_clm/images/colorpicker/close.jpg" ;?>';
+var CROSSHAIRS_LOCATION = '<?php echo URI::base()."components/com_clm/images/colorpicker/crosshairs.png" ;?>';
+var HUE_SLIDER_LOCATION = '<?php echo URI::base()."components/com_clm/images/colorpicker/h.png" ;?>';
+var HUE_SLIDER_ARROWS_LOCATION = '<?php echo URI::base()."components/com_clm/images/colorpicker/position.png" ;?>';
+var SAT_VAL_SQUARE_LOCATION = '<?php echo URI::base()."components/com_clm/images/colorpicker/sv.png" ;?>';
+var BUTON_CLOSE_LOCATION='<?php echo URI::base()."components/com_clm/images/colorpicker/close.jpg" ;?>';
 var HEIGHT_OF_OBJ=25;//manualy move the the color picker top or botom
 var WIDTH_OF_OBJ=150; //manualy move the color picker left or right
 

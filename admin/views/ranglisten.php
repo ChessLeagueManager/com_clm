@@ -1,35 +1,41 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Router\Route;
+
 class CLMViewRanglisten
 {
 public static function setRanglistenToolbar($check)
 	{
-	JToolBarHelper::title(   JText::_( 'TITLE_RANGLISTE' ), 'generic.png' );	
-	JToolBarHelper::publishList();
-	JToolBarHelper::unpublishList();
+	ToolBarHelper::title(   Text::_( 'TITLE_RANGLISTE' ), 'generic.png' );	
+	ToolBarHelper::publishList();
+	ToolBarHelper::unpublishList();
 	$clmAccess = clm_core::$access;
 	if ($clmAccess->access('BE_club_edit_ranking') === true) {
-		JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', JText::_('COPY') ); 
+		ToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', Text::_('COPY') ); 
 	}
-	JToolBarHelper::deleteList();
-	JToolBarHelper::editList();
-	JToolBarHelper::addNew();
-	JToolBarHelper::help( 'screen.clm.info' );
+	ToolBarHelper::deleteList();
+	ToolBarHelper::editList();
+	ToolBarHelper::addNew();
+	ToolBarHelper::help( 'screen.clm.info' );
 	}
 
 public static function Ranglisten ( &$rows, &$lists, &$pageNav, $option )
 	{
-	$db		= JFactory::getDBO();
-	$user 		= JFactory::getUser();
+	$db		= Factory::getDBO();
+	$user 		= Factory::getUser();
 	$jid 		= $user->get('id');
 	$sql = " SELECT usertype FROM #__clm_user "
 		." WHERE jid =".$jid
@@ -51,10 +57,10 @@ public static function Ranglisten ( &$rows, &$lists, &$pageNav, $option )
 		<table>
 		<tr>
 			<td align="left" width="100%">
-				<?php echo JText::_( 'Filter' ); ?>:
+				<?php echo Text::_( 'Filter' ); ?>:
 		<input type="text" name="search" id="search" value="<?php echo $lists['search'];?>" class="text_area" onchange="document.adminForm.submit();" />
-		<button onclick="this.form.submit();"><?php echo JText::_( 'GO' ); ?></button>
-		<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo JText::_( 'RESET' ); ?></button>
+		<button onclick="this.form.submit();"><?php echo Text::_( 'GO' ); ?></button>
+		<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo Text::_( 'RESET' ); ?></button>
 			</td>
 			<td nowrap="nowrap">
 				<?php
@@ -78,27 +84,27 @@ public static function Ranglisten ( &$rows, &$lists, &$pageNav, $option )
 						<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 					</th>
 					<th class="title">
-						<?php echo JHtml::_('grid.sort',   'RANGLISTE_VEREIN', 'c.vname', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'RANGLISTE_VEREIN', 'c.vname', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="15%">
-						<?php echo JHtml::_('grid.sort',   'RANGLISTE_GRUPPE', 'a.Meldelschluss', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'RANGLISTE_GRUPPE', 'a.Meldelschluss', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="10%">
-						<?php echo JHtml::_('grid.sort',   'RANGLISTE_AUTOR', 'a.rang', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'RANGLISTE_AUTOR', 'a.rang', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="11%">
-						<?php echo JHtml::_('grid.sort',   'RANGLISTE_SAISON', 'c.name', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'RANGLISTE_SAISON', 'c.name', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="6%">
-						<?php echo JHtml::_('grid.sort',   'JPUBLISHED', 'a.published', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'JPUBLISHED', 'a.published', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="8%" nowrap="nowrap">
-						<?php echo JHtml::_('grid.sort',   'JGRID_HEADING_ORDERING', 'a.ordering', @$lists['order_Dir'], @$lists['order'] ); ?>
-						<?php echo JHtml::_('grid.order',  $rows ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'JGRID_HEADING_ORDERING', 'a.ordering', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.order',  $rows ); ?>
 					</th>
 
 					<th width="1%" nowrap="nowrap">
-						<?php echo JHtml::_('grid.sort',   'JGRID_HEADING_ID', 'a.id', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'JGRID_HEADING_ID', 'a.id', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 				</tr>
 			</thead>
@@ -115,11 +121,11 @@ public static function Ranglisten ( &$rows, &$lists, &$pageNav, $option )
 			for ($i=0, $n=count( $rows ); $i < $n; $i++) {
 				$row = &$rows[$i];
 
-				$link 		= JRoute::_( 'index.php?option=com_clm&section=ranglisten&task=edit&id='. $row->id );
+				$link 		= Route::_( 'index.php?option=com_clm&section=ranglisten&task=edit&id='. $row->id );
 
-				$checked 	= JHtml::_('grid.checkedout',   $row, $i );
-//				$published 	= JHtml::_('grid.published', $row, $i );
-				$published 	= JHtml::_('jgrid.published', $row->published, $i );
+				$checked 	= HTMLHelper::_('grid.checkedout',   $row, $i );
+//				$published 	= HTMLHelper::_('grid.published', $row, $i );
+				$published 	= HTMLHelper::_('jgrid.published', $row->published, $i );
 
 				?>
 				<tr class="<?php echo 'row'. $k; ?>">
@@ -134,7 +140,7 @@ public static function Ranglisten ( &$rows, &$lists, &$pageNav, $option )
 
 					<td>
 
-								<span class="editlinktip hasTip" title="<?php echo JText::_( 'RANGLISTE_EDIT' ).' ';?>: <?php echo $row->vname; ?>">
+								<span class="editlinktip hasTip" title="<?php echo Text::_( 'RANGLISTE_EDIT' ).' ';?>: <?php echo $row->vname; ?>">
 							<a href="<?php echo $link; ?>">
 								<?php echo $row->vname; ?></a></span>
 
@@ -176,7 +182,7 @@ public static function Ranglisten ( &$rows, &$lists, &$pageNav, $option )
 		<input type="hidden" name="boxchecked" value="0" />
 		<input type="hidden" name="filter_order" value="<?php echo $lists['order']; ?>" />
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $lists['order_Dir']; ?>" />
-		<?php echo JHtml::_( 'form.token' ); ?>
+		<?php echo HTMLHelper::_( 'form.token' ); ?>
 		</form>
 		<?php
 	}
@@ -185,21 +191,21 @@ public static function setRanglisteToolbar($vname)
 	{
 
 		$cid = clm_core::$load->request_array_int('cid');
-		if (clm_core::$load->request_string( 'task') == 'edit') { $text = JText::_( 'Edit' );}
-			else { $text = JText::_( 'New' );}
-		JToolBarHelper::title(  JText::_( 'RANGLISTE' )." $vname : [ ". $text.' ]' );
-		JToolBarHelper::custom('sortieren','back.png','edit_f2.png','REORDER',false);
-		JToolBarHelper::custom('pruefen','back.png','edit_f2.png','RANGLISTE_CHECK',false);	
-		JToolBarHelper::custom('neu_laden','back.png','edit_f2.png','RANGLISTE_LOAD',false);
-		JToolBarHelper::save();
-		JToolBarHelper::apply();
-		JToolBarHelper::cancel();
-		JToolBarHelper::help( 'screen.clm.edit' );
+		if (clm_core::$load->request_string( 'task') == 'edit') { $text = Text::_( 'Edit' );}
+			else { $text = Text::_( 'New' );}
+		ToolBarHelper::title(  Text::_( 'RANGLISTE' )." $vname : [ ". $text.' ]' );
+		ToolBarHelper::custom('sortieren','back.png','edit_f2.png','REORDER',false);
+		ToolBarHelper::custom('pruefen','back.png','edit_f2.png','RANGLISTE_CHECK',false);	
+		ToolBarHelper::custom('neu_laden','back.png','edit_f2.png','RANGLISTE_LOAD',false);
+		ToolBarHelper::save();
+		ToolBarHelper::apply();
+		ToolBarHelper::cancel();
+		ToolBarHelper::help( 'screen.clm.edit' );
 	}
 
 public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$sg_vname,$gname,$sname,$cid,$exist,$sg_exist,$pa_exist,$count,$gid_exist)
 	{
-	JFactory::getApplication()->input->set('hidemainmenu', true);
+	Factory::getApplication()->input->set('hidemainmenu', true);
 	CLMViewRanglisten::setRanglisteToolbar($vname);
 
 	JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
@@ -214,10 +220,10 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 
 	<div class="col width-100">
 	<fieldset class="adminform">
-	<legend><?php echo JText::_( 'RANGLISTE_TIP' ); ?></legend>
+	<legend><?php echo Text::_( 'RANGLISTE_TIP' ); ?></legend>
 
-	<h1><?php echo JText::_( 'RANGLISTE_TIP_LINE1' ); ?></h1>
-	<h2><?php echo JText::_( 'RANGLISTE_TIP_LINE2' ); ?></h2>
+	<h1><?php echo Text::_( 'RANGLISTE_TIP_LINE1' ); ?></h1>
+	<h2><?php echo Text::_( 'RANGLISTE_TIP_LINE2' ); ?></h2>
 	<br>
 
 	</fieldset>
@@ -228,10 +234,10 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 
 	<div class="col width-100">
 	<fieldset class="adminform">
-	<legend><?php echo JText::_( 'RANGLISTE_TIP' ); ?></legend>
+	<legend><?php echo Text::_( 'RANGLISTE_TIP' ); ?></legend>
 
-	<h1><?php echo JText::_( 'RANGLISTE_TIP_PA_LINE1' ); ?></h1>
-	<h2><?php echo JText::_( 'RANGLISTE_TIP_PA_LINE2' ); ?></h2>
+	<h1><?php echo Text::_( 'RANGLISTE_TIP_PA_LINE1' ); ?></h1>
+	<h2><?php echo Text::_( 'RANGLISTE_TIP_PA_LINE2' ); ?></h2>
 	<br>
 
 	</fieldset>
@@ -242,10 +248,10 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 
 	<div class="col width-100">
 	<fieldset class="adminform">
-	<legend><?php echo JText::_( 'RANGLISTE_TIP' ); ?></legend>
+	<legend><?php echo Text::_( 'RANGLISTE_TIP' ); ?></legend>
 
-	<h1><?php echo JText::_( 'RANGLISTE_TIP_SG_LINE1' ); ?></h1>
-	<h2><?php echo JText::_( 'RANGLISTE_TIP_SG_LINE2' ); ?></h2>
+	<h1><?php echo Text::_( 'RANGLISTE_TIP_SG_LINE1' ); ?></h1>
+	<h2><?php echo Text::_( 'RANGLISTE_TIP_SG_LINE2' ); ?></h2>
 	<br>
 
 	</fieldset>
@@ -258,11 +264,11 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 <div>
 		<div class="width-50 fltlft">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'RANGLISTE_DETAILS' ); ?></legend>
+		<legend><?php echo Text::_( 'RANGLISTE_DETAILS' ); ?></legend>
 
 		<table class="admintable">
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="filter_vid"><?php echo JText::_( 'RANGLISTE_VEREIN' ).' : '; ?></label>
+			<td class="key" nowrap="nowrap"><label for="filter_vid"><?php echo Text::_( 'RANGLISTE_VEREIN' ).' : '; ?></label>
 			</td>
 			<td>
 			<?php if (clm_core::$load->request_string( 'task') == 'edit' ) { echo $vname; }
@@ -272,7 +278,7 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 
 		<?php if ($anz_sgp > 0) { ?>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="sg_vid"><?php echo JText::_( 'RANGLISTE_VEREIN2' ).' : '; ?></label>
+			<td class="key" nowrap="nowrap"><label for="sg_vid"><?php echo Text::_( 'RANGLISTE_VEREIN2' ).' : '; ?></label>
 			</td>
 			<td>
 			<?php if (clm_core::$load->request_string( 'task') == 'edit' ) { if (isset($sg_vname[1])) echo $sg_vname[1]; else echo ''; }
@@ -282,7 +288,7 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 		<?php } ?>
 		<?php if ($anz_sgp > 1) { ?>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="sg_vid"><?php echo JText::_( 'RANGLISTE_VEREIN2' ).' : '; ?></label>
+			<td class="key" nowrap="nowrap"><label for="sg_vid"><?php echo Text::_( 'RANGLISTE_VEREIN2' ).' : '; ?></label>
 			</td>
 			<td>
 			<?php if (clm_core::$load->request_string( 'task') == 'edit' ) { if (isset($sg_vname[2])) echo $sg_vname[2]; else echo ''; }
@@ -292,7 +298,7 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 		<?php } ?>
 		<?php if ($anz_sgp > 2) { ?>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="sg_vid"><?php echo JText::_( 'RANGLISTE_VEREIN2' ).' : '; ?></label>
+			<td class="key" nowrap="nowrap"><label for="sg_vid"><?php echo Text::_( 'RANGLISTE_VEREIN2' ).' : '; ?></label>
 			</td>
 			<td>
 			<?php if (clm_core::$load->request_string( 'task') == 'edit' ) { if (isset($sg_vname[3])) echo $sg_vname[3]; else echo ''; }
@@ -302,7 +308,7 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 		<?php } ?>
 		<?php if ($anz_sgp > 3) { ?>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="sg_vid"><?php echo JText::_( 'RANGLISTE_VEREIN2' ).' : '; ?></label>
+			<td class="key" nowrap="nowrap"><label for="sg_vid"><?php echo Text::_( 'RANGLISTE_VEREIN2' ).' : '; ?></label>
 			</td>
 			<td>
 			<?php if (clm_core::$load->request_string( 'task') == 'edit' ) { if (isset($sg_vname[4])) echo $sg_vname[4]; else echo ''; }
@@ -312,7 +318,7 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 		<?php } ?>
 
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="filter_sid"><?php echo JText::_( 'RANGLISTE_SAISON' ).' : '; ?></label>
+			<td class="key" nowrap="nowrap"><label for="filter_sid"><?php echo Text::_( 'RANGLISTE_SAISON' ).' : '; ?></label>
 			</td>
 			<td>
 			<?php if (clm_core::$load->request_string( 'task') == 'edit' ) { echo $sname; }
@@ -321,7 +327,7 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 		</tr>
 
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="filter_gid"><?php echo JText::_( 'RANGLISTE_GRUPPE' ).' : '; ?></label>
+			<td class="key" nowrap="nowrap"><label for="filter_gid"><?php echo Text::_( 'RANGLISTE_GRUPPE' ).' : '; ?></label>
 			</td>
 			<td>
 			<?php	if (clm_core::$load->request_string( 'task') == 'edit' ) { echo $gname;}
@@ -330,7 +336,7 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 		</tr>
 
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="published"><?php echo JText::_( 'JPUBLISHED' ).' : '; ?></label>
+			<td class="key" nowrap="nowrap"><label for="published"><?php echo Text::_( 'JPUBLISHED' ).' : '; ?></label>
 			</td>
 			<td><fieldset class="radio">
 			<?php echo $lists['published']; ?>
@@ -343,9 +349,9 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 
  <div class="width-50 fltrt">
   <fieldset class="adminform">
-   <legend><?php echo JText::_( 'REMARKS' ); ?></legend>
+   <legend><?php echo Text::_( 'REMARKS' ); ?></legend>
 	<table class="adminlist">
-	<legend><?php echo JText::_( 'REMARKS_PUBLIC' ); ?></legend>
+	<legend><?php echo Text::_( 'REMARKS_PUBLIC' ); ?></legend>
 	<tr>
 	<td width="100%" valign="top">
 	<textarea class="inputbox" name="bemerkungen" id="bemerkungen" cols="40" rows="1" style="width:90%"><?php echo str_replace('&','&amp;',$row->bemerkungen);?></textarea>
@@ -353,7 +359,7 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 	</tr>
 	</table>
 	<table class="adminlist">
-	<legend><?php echo JText::_( 'REMARKS_INTERNAL' ); ?></legend>
+	<legend><?php echo Text::_( 'REMARKS_INTERNAL' ); ?></legend>
 	<tr>
 	<td width="100%" valign="top">
 	<textarea class="inputbox" name="bem_int" id="bem_int" cols="40" rows="1" style="width:90%"><?php echo str_replace('&','&amp;',$row->bem_int);?></textarea>
@@ -365,7 +371,7 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 </div>
 
 <?php if (($s_error == 0) AND (!$exist AND clm_core::$load->request_string( 'task') == "add") OR (clm_core::$load->request_string( 'task') == "edit")) {
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 
 	$filter_vid	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'int' );
 	$filter_sg_vid	= $mainframe->getUserStateFromRequest( "$option.filter_sg_vid",'filter_sg_vid',0,'int' );
@@ -375,15 +381,15 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 	if(clm_core::$load->request_string( 'task') == "add" AND (!$spieler or !$gid_exist or !$filter_gid)) { ?>
 	<br><br><br><br><br><br><br><br><br><br>
 	<fieldset class="adminform">
-	<legend><?php echo JText::_( 'RANGLISTE_TIP' ); ?></legend>
+	<legend><?php echo Text::_( 'RANGLISTE_TIP' ); ?></legend>
 	<?php if (!$gid_exist AND $filter_sid AND $filter_vid){ ?>
-	<h2><?php echo JText::_( 'RANGLISTE_TIP_LINE11' ); ?></h2>
+	<h2><?php echo Text::_( 'RANGLISTE_TIP_LINE11' ); ?></h2>
 	<br>
 	<?php } else { ?>
 	<?php if (!$spieler AND $filter_vid AND $filter_sid AND $filter_gid ) { ?>
-	<h2><?php echo JText::_( 'RANGLISTE_TIP_LINE21' ); ?></h2>
+	<h2><?php echo Text::_( 'RANGLISTE_TIP_LINE21' ); ?></h2>
 	<?php } else { ?>
-	<h2><?php echo JText::_( 'RANGLISTE_TIP_LINE31' ); ?></h2>
+	<h2><?php echo Text::_( 'RANGLISTE_TIP_LINE31' ); ?></h2>
 	<br>
 	<?php } ?>
 	</fieldset>
@@ -393,20 +399,20 @@ public static function Rangliste( $spieler, &$row,&$lists,$option,$jid,$vname,$s
 <div>
 <div class="width-50 fltlft">
   <fieldset class="adminform">
-   <legend><?php echo JText::_( 'RANGLISTE_PLATZ' ).' 1 - '.(1+intval(((count($spieler))/2))); ?></legend>
+   <legend><?php echo Text::_( 'RANGLISTE_PLATZ' ).' 1 - '.(1+intval(((count($spieler))/2))); ?></legend>
 	
 	<table class="admintable">
 
 	<tr>
-		<td width="5%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_M_NR' ); ?></td>
-		<td width="7%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_RANG' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_NAME' ); ?></td>
-		<td width="9%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_ZPSM' ); ?></td>
-		<td width="7%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_MGL_NR' ); ?></td>
-		<td width="11%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_PKZ' ); ?></td>
-		<td width="3%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_STATUS' ); ?></td>
-		<td colspan="2" width="10%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_DWZ' ); ?></td>
-		<td width="8" class="key" nowrap="nowrap"><?php echo JText::_( 'MELDELISTE_BLOCK' ); ?></td>
+		<td width="5%" class="key" nowrap="nowrap"><?php echo Text::_( 'RANGLISTE_M_NR' ); ?></td>
+		<td width="7%" class="key" nowrap="nowrap"><?php echo Text::_( 'RANGLISTE_RANG' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'RANGLISTE_NAME' ); ?></td>
+		<td width="9%" class="key" nowrap="nowrap"><?php echo Text::_( 'RANGLISTE_ZPSM' ); ?></td>
+		<td width="7%" class="key" nowrap="nowrap"><?php echo Text::_( 'RANGLISTE_MGL_NR' ); ?></td>
+		<td width="11%" class="key" nowrap="nowrap"><?php echo Text::_( 'RANGLISTE_PKZ' ); ?></td>
+		<td width="3%" class="key" nowrap="nowrap"><?php echo Text::_( 'RANGLISTE_STATUS' ); ?></td>
+		<td colspan="2" width="10%" class="key" nowrap="nowrap"><?php echo Text::_( 'RANGLISTE_DWZ' ); ?></td>
+		<td width="8" class="key" nowrap="nowrap"><?php echo Text::_( 'MELDELISTE_BLOCK' ); ?></td>
 	</tr>
 
 <?php 
@@ -504,20 +510,20 @@ for ($x=0; $x < (count($spieler)-$count); $x++) {
 
 <div class="width-50 fltlft">
   <fieldset class="adminform">
-   <legend><?php echo JText::_( 'RANGLISTE_PLATZ' ).' '.intval(((count($spieler))/2)+2)." - ".count($spieler); ?></legend>
+   <legend><?php echo Text::_( 'RANGLISTE_PLATZ' ).' '.intval(((count($spieler))/2)+2)." - ".count($spieler); ?></legend>
 
 	<table class="admintable">
 
 	<tr>
-		<td width="5%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_M_NR' ); ?></td>
-		<td width="7%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_RANG' ); ?></td>
-		<td class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_NAME' ); ?></td>
-		<td width="9%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_ZPSM' ); ?></td>
-		<td width="7%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_MGL_NR' ); ?></td>
-		<td width="11%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_PKZ' ); ?></td>
-		<td width="3%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_STATUS' ); ?></td>
-		<td colspan="2" width="10%" class="key" nowrap="nowrap"><?php echo JText::_( 'RANGLISTE_DWZ' ); ?></td>
-		<td width="8" class="key" nowrap="nowrap"><?php echo JText::_( 'MELDELISTE_BLOCK' ); ?></td>
+		<td width="5%" class="key" nowrap="nowrap"><?php echo Text::_( 'RANGLISTE_M_NR' ); ?></td>
+		<td width="7%" class="key" nowrap="nowrap"><?php echo Text::_( 'RANGLISTE_RANG' ); ?></td>
+		<td class="key" nowrap="nowrap"><?php echo Text::_( 'RANGLISTE_NAME' ); ?></td>
+		<td width="9%" class="key" nowrap="nowrap"><?php echo Text::_( 'RANGLISTE_ZPSM' ); ?></td>
+		<td width="7%" class="key" nowrap="nowrap"><?php echo Text::_( 'RANGLISTE_MGL_NR' ); ?></td>
+		<td width="11%" class="key" nowrap="nowrap"><?php echo Text::_( 'RANGLISTE_PKZ' ); ?></td>
+		<td width="3%" class="key" nowrap="nowrap"><?php echo Text::_( 'RANGLISTE_STATUS' ); ?></td>
+		<td colspan="2" width="10%" class="key" nowrap="nowrap"><?php echo Text::_( 'RANGLISTE_DWZ' ); ?></td>
+		<td width="8" class="key" nowrap="nowrap"><?php echo Text::_( 'MELDELISTE_BLOCK' ); ?></td>
 	</tr>
 	
 <?php
@@ -616,7 +622,7 @@ if (clm_core::$load->request_string( 'task') == 'edit' ) {
 		<input type="hidden" name="pre_task" value="<?php echo clm_core::$load->request_string( 'task'); ?>" />
 		<input type="hidden" name="task" value="edit" />
 
-		<?php echo JHtml::_( 'form.token' ); ?>
+		<?php echo HTMLHelper::_( 'form.token' ); ?>
 		</form>
 		<?php
 	}

@@ -1,14 +1,21 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Router\Route;
+
 class CLMViewSaisons
 {
 public static function setSaisonsToolbar($countryversion)
@@ -17,30 +24,30 @@ public static function setSaisonsToolbar($countryversion)
 	// Menubilder laden
 		clm_core::$load->load_css("icons_images");
 
-		JToolBarHelper::title( JText::_( 'Saison Manager' ), 'clm_headmenu_saison.png' );
+		ToolBarHelper::title( Text::_( 'Saison Manager' ), 'clm_headmenu_saison.png' );
 //	  if ($countryversion =="de") {
-		JToolBarHelper::custom('dwz_del','cancel.png','unarchive_f2.png','RUNDE_DWZ_DELETE',true);	
-		JToolBarHelper::custom('dwz_start','default.png','apply_f2.png','RUNDE_DWZ_APPLY',true);			
+		ToolBarHelper::custom('dwz_del','cancel.png','unarchive_f2.png','RUNDE_DWZ_DELETE',true);	
+		ToolBarHelper::custom('dwz_start','default.png','apply_f2.png','RUNDE_DWZ_APPLY',true);			
 //	  }
 	/* Debugging / Testing
-		JToolBarHelper::custom( 'change', 'upload.png', 'upload_f2.png', 'Status ändern' , false);
+		ToolBarHelper::custom( 'change', 'upload.png', 'upload_f2.png', 'Status ändern' , false);
 	*/
-		JToolBarHelper::publishList();
-		JToolBarHelper::unpublishList();
-		JToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', 'Copy' );
-		JToolBarHelper::deleteList();
-		JToolBarHelper::editList();
-		JToolBarHelper::addNew();
-		JToolBarHelper::help( 'screen.clm.saison' );
+		ToolBarHelper::publishList();
+		ToolBarHelper::unpublishList();
+		ToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', 'Copy' );
+		ToolBarHelper::deleteList();
+		ToolBarHelper::editList();
+		ToolBarHelper::addNew();
+		ToolBarHelper::help( 'screen.clm.saison' );
 	}
 
 public static function saisons ( &$rows, &$lists, &$pageNav, $option )
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Nur CLM-Amin darf hier zugreifen
-	if (!JFactory::getUser()->authorise('core.manage.clm', 'com_clm')) 
+	if (!Factory::getUser()->authorise('core.manage.clm', 'com_clm')) 
 	{       
-	 	$mainframe->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'),'warning');
+	 	$mainframe->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'),'warning');
 		return;
 	}
 	 
@@ -48,13 +55,13 @@ public static function saisons ( &$rows, &$lists, &$pageNav, $option )
 		$config = clm_core::$db->config();
 		$countryversion = $config->countryversion;
 		CLMViewSaisons::setSaisonsToolbar($countryversion);
-		$user =JFactory::getUser();
+		$user =Factory::getUser();
 		//Ordering allowed ?
 		$ordering = ($lists['order'] == 'a.ordering');
 
 		// Auswahlfelder durchsuchbar machen
 		clm_core::$load->load_js("suche_liste");
-//		JHtml::_('behavior.tooltip');
+//		HTMLHelper::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT_SITE . DS . 'includes' . DS . 'tooltip.php');
 		?>
 		<form action="index.php?option=com_clm&section=saisons" method="post" name="adminForm" id="adminForm">
@@ -62,10 +69,10 @@ public static function saisons ( &$rows, &$lists, &$pageNav, $option )
 		<table>
 		<tr>
 			<td align="left" width="100%">
-				<?php echo JText::_( 'Filter' ); ?>:
+				<?php echo Text::_( 'Filter' ); ?>:
 		<input type="text" name="search" id="search" value="<?php echo $lists['search'];?>" class="text_area" onchange="document.adminForm.submit();" />
-		<button onclick="this.form.submit();"><?php echo JText::_( 'GO' ); ?></button>
-		<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo JText::_( 'Reset' ); ?></button>
+		<button onclick="this.form.submit();"><?php echo Text::_( 'GO' ); ?></button>
+		<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo Text::_( 'Reset' ); ?></button>
 			</td>
 			<td nowrap="nowrap">
 				<?php
@@ -86,23 +93,23 @@ public static function saisons ( &$rows, &$lists, &$pageNav, $option )
 						<?php echo $GLOBALS["clm"]["grid.checkall"]; ?>
 					</th>
 					<th class="title">
-						<?php echo JHtml::_('grid.sort',   'SAISON', 'a.name', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'SAISON', 'a.name', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="10%">
-						<?php echo JHtml::_('grid.sort',   'JDATE', 'a.datum', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'JDATE', 'a.datum', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="6%">
-						<?php echo JHtml::_('grid.sort',   'JPUBLISHED', 'a.published', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'JPUBLISHED', 'a.published', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="6%">
-						<?php echo JHtml::_('grid.sort',   'SAISON_ARCHIVE', 'a.archiv', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'SAISON_ARCHIVE', 'a.archiv', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 					<th width="8%" nowrap="nowrap">
-						<?php echo JHtml::_('grid.sort',   'JGRID_HEADING_ORDERING', 'a.ordering', @$lists['order_Dir'], @$lists['order'] ); ?>
-						<?php echo JHtml::_('grid.order',  $rows ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'JGRID_HEADING_ORDERING', 'a.ordering', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.order',  $rows ); ?>
 					</th>
 					<th width="1%" nowrap="nowrap">
-						<?php echo JHtml::_('grid.sort',   'JGRID_HEADING_ID', 'a.id', @$lists['order_Dir'], @$lists['order'] ); ?>
+						<?php echo HTMLHelper::_('grid.sort',   'JGRID_HEADING_ID', 'a.id', @$lists['order_Dir'], @$lists['order'] ); ?>
 					</th>
 				</tr>
 			</thead>
@@ -116,14 +123,14 @@ public static function saisons ( &$rows, &$lists, &$pageNav, $option )
 			<tbody>
 			<?php
 			$k = 0;
-			$row = JTable::getInstance('saisons', 'TableCLM');
+			$row = Table::getInstance('saisons', 'TableCLM');
 			for ($i=0, $n=count( $rows ); $i < $n; $i++) {
 				// load the row from the db table
 				$row->load( $rows[$i]->id );
-				$link 		= JRoute::_( 'index.php?option=com_clm&section=saisons&task=edit&id='. $row->id );
-				$checked 	= JHtml::_('grid.checkedout',   $row, $i );
-//				$published 	= JHtml::_('grid.published', $row, $i );
-				$published 	= JHtml::_('jgrid.published', $row->published, $i );
+				$link 		= Route::_( 'index.php?option=com_clm&section=saisons&task=edit&id='. $row->id );
+				$checked 	= HTMLHelper::_('grid.checkedout',   $row, $i );
+//				$published 	= HTMLHelper::_('grid.published', $row, $i );
+				$published 	= HTMLHelper::_('jgrid.published', $row->published, $i );
 
 				?>
 				<tr class="<?php echo 'row'. $k; ?>">
@@ -138,7 +145,7 @@ public static function saisons ( &$rows, &$lists, &$pageNav, $option )
 					</td>
 
 					<td>
-			 <span title="<?php echo JText::_( 'SAISON_EDIT' );?>"><a href="<?php echo $link; ?>">
+			 <span title="<?php echo Text::_( 'SAISON_EDIT' );?>"><a href="<?php echo $link; ?>">
 								<?php echo $row->name; ?></a></span>
 					</td>
 					
@@ -178,7 +185,7 @@ public static function saisons ( &$rows, &$lists, &$pageNav, $option )
 		<input type="hidden" name="boxchecked" value="0" />
 		<input type="hidden" name="filter_order" value="<?php echo $lists['order']; ?>" />
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $lists['order_Dir']; ?>" />
-		<?php echo JHtml::_( 'form.token' ); ?>
+		<?php echo HTMLHelper::_( 'form.token' ); ?>
 		</form>
 		<?php
 	}
@@ -186,27 +193,27 @@ public static function saisons ( &$rows, &$lists, &$pageNav, $option )
 public static function setSaisonToolbar()
 	{
 
-		if (clm_core::$load->request_string('task', '') == 'edit') { $text = JText::_( 'Edit' );}
-			else { $text = JText::_( 'New' );}
+		if (clm_core::$load->request_string('task', '') == 'edit') { $text = Text::_( 'Edit' );}
+			else { $text = Text::_( 'New' );}
 	
 		clm_core::$load->load_css("icons_images");
-		JToolBarHelper::title(  JText::_( 'SAISON' ).': [ '. $text.' ]', 'clm_headmenu_saison.png' );
-		JToolBarHelper::save();
-		JToolBarHelper::apply();
-		JToolBarHelper::cancel();
-		JToolBarHelper::help( 'screen.clm.edit' );
+		ToolBarHelper::title(  Text::_( 'SAISON' ).': [ '. $text.' ]', 'clm_headmenu_saison.png' );
+		ToolBarHelper::save();
+		ToolBarHelper::apply();
+		ToolBarHelper::cancel();
+		ToolBarHelper::help( 'screen.clm.edit' );
 	}
 		
 public static function saison( &$row,$lists, $option)
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	// Nur CLM-Admin darf hier zugreifen (neue Saison)
-	if (!JFactory::getUser()->authorise('core.manage.clm', 'com_clm')) 
+	if (!Factory::getUser()->authorise('core.manage.clm', 'com_clm')) 
 	{       
-	 	$mainframe->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'),'warning');
+	 	$mainframe->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'),'warning');
 		return;
 	}
-	JFactory::getApplication()->input->set('hidemainmenu', true);
+	Factory::getApplication()->input->set('hidemainmenu', true);
 	CLMViewSaisons::setSaisonToolbar();
 		
 	JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
@@ -220,12 +227,12 @@ public static function saison( &$row,$lists, $option)
 
 		<div class="width-50 fltlft">
 		<fieldset class="adminform">
-		<legend><?php echo JText::_( 'SAISON_DETAILS' ); ?></legend>
+		<legend><?php echo Text::_( 'SAISON_DETAILS' ); ?></legend>
 
 		<table class="admintable">
 		<tr>
 			<td class="key" width="20%" nowrap="nowrap">
-			<label for="name"><?php echo JText::_( 'SAISON' ).' : '; ?></label>
+			<label for="name"><?php echo Text::_( 'SAISON' ).' : '; ?></label>
 			</td>
 			<td>
 			<input class="inputbox" type="text" name="name" id="name" size="50" maxlength="60" value="<?php echo $row->name; ?>" />
@@ -233,7 +240,7 @@ public static function saison( &$row,$lists, $option)
 		</tr>
 
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="published"><?php echo JText::_( 'JPUBLISHED' ).' : '; ?></label>
+			<td class="key" nowrap="nowrap"><label for="published"><?php echo Text::_( 'JPUBLISHED' ).' : '; ?></label>
 			</td>
 			<td><fieldset class="radio">
 			<?php echo $lists['published']; ?>
@@ -241,7 +248,7 @@ public static function saison( &$row,$lists, $option)
 		</tr>
 
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="archiv"><?php echo JText::_( 'SAISON_ARCHIVED' ).' : '; ?></label>
+			<td class="key" nowrap="nowrap"><label for="archiv"><?php echo Text::_( 'SAISON_ARCHIVED' ).' : '; ?></label>
 			</td>
 			<td><fieldset class="radio">
 			<?php echo $lists['archiv']; ?>
@@ -249,7 +256,7 @@ public static function saison( &$row,$lists, $option)
 		</tr>
 		<tr>
 			<td class="key" width="20%" >
-			<label for="datum"><?php echo JText::_( 'SAISON_DSB_DATE' ).' : '; ?></label>
+			<label for="datum"><?php echo Text::_( 'SAISON_DSB_DATE' ).' : '; ?></label>
 			</td>
 			<td>
 			<?php echo CLMForm::calendar($row->datum, 'datum', 'datum', '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
@@ -257,7 +264,7 @@ public static function saison( &$row,$lists, $option)
 		</tr>
 		<?php if ($countryversion == 'en') { ?>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="rating_type"><?php echo JText::_( 'SAISON_RATING_TYPE' ).' : '; ?></label>
+			<td class="key" nowrap="nowrap"><label for="rating_type"><?php echo Text::_( 'SAISON_RATING_TYPE' ).' : '; ?></label>
 			</td>
 			<td><fieldset class="radio">
 			<?php echo $lists['rating_type']; ?>
@@ -271,9 +278,9 @@ public static function saison( &$row,$lists, $option)
 
  <div class="width-50 fltrt">
   <fieldset class="adminform">
-   <legend><?php echo JText::_( 'REMARKS' ); ?></legend>
+   <legend><?php echo Text::_( 'REMARKS' ); ?></legend>
 	<table class="adminlist">
-	<legend><?php echo JText::_( 'REMARKS_PUBLIC' ); ?></legend>
+	<legend><?php echo Text::_( 'REMARKS_PUBLIC' ); ?></legend>
 	<br>
 	<tr>
 	<td width="100%" valign="top">
@@ -284,7 +291,7 @@ public static function saison( &$row,$lists, $option)
 	</table>
 
 	<table class="adminlist">
-	<tr><legend><?php echo JText::_( 'REMARKS_INTERNAL' ); ?></legend>
+	<tr><legend><?php echo Text::_( 'REMARKS_INTERNAL' ); ?></legend>
 	<br>
 	<td width="100%" valign="top">
 	<?php if (is_null($row->bem_int)) $row->bem_int = ''; ?>
@@ -300,7 +307,7 @@ public static function saison( &$row,$lists, $option)
 		<input type="hidden" name="option" value="com_clm" />
 		<input type="hidden" name="id" value="<?php echo $row->id; ?>" />
 		<input type="hidden" name="task" value="" />
-		<?php echo JHtml::_( 'form.token' ); ?>
+		<?php echo HTMLHelper::_( 'form.token' ); ?>
 		</form>
 		<?php
 	}

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -14,14 +14,14 @@
 /**
  * CategoryTree
 */
+use Joomla\CMS\Factory;
 	
 class CLMCategoryTree {
-
 
 	public static function getTree() {
 	
 		// DB
-		$_db				= JFactory::getDBO();
+		$_db				= Factory::getDBO();
 	
 		// alle Cats holen
 		$query = "SELECT id, name, parentid FROM #__clm_categories";

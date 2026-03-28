@@ -1,15 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 $swt_file    = clm_core::$load->request_string('swt_file', '');
 $update = clm_core::$load->request_int('update', 0);
@@ -37,7 +40,7 @@ $name_land   = clm_core::$load->request_string( 'name_land', '0');
         }
         // do field validation
         if (form.name.value == "") {
-            alert( "<?php echo JText::_( 'MANNSCHAFT_NAMEN_ANGEBEN', true ); ?>" );
+            alert( "<?php echo Text::_( 'MANNSCHAFT_NAMEN_ANGEBEN', true ); ?>" );
         } else {
             Joomla.submitform( pressbutton );
         }
@@ -48,18 +51,18 @@ $name_land   = clm_core::$load->request_string( 'name_land', '0');
 <form action="index.php" method="get" name="adminForm" id="adminForm">
     <div class="col width-50">
         <fieldset class="adminform">
-            <legend><?php echo JText::_( 'SWT_LEAGUE_TEAM_DATA' ); ?></legend>
+            <legend><?php echo Text::_( 'SWT_LEAGUE_TEAM_DATA' ); ?></legend>
             <table class="admintable">
                 <tr>
                     <td width="20%" nowrap="nowrap">
-                        <label for="name"><?php echo JText::_( 'SWT_LEAGUE_TEAM_NAME' ); ?></label>
+                        <label for="name"><?php echo Text::_( 'SWT_LEAGUE_TEAM_NAME' ); ?></label>
                     </td>
                     <td colspan="2">
                         <input class="inputbox" type="text" name="name" id="name" size="22" maxlength="32" value="<?php echo htmlspecialchars($this->swt_data['man_name'], ENT_QUOTES); ?>" />
                     </td>
                     <?php if (isset($this->db_man_nr)) { ?>
 						<td nowrap="nowrap">
-							<label for="man_nr"><?php echo JText::_( 'SWT_LEAGUE_TEAM_ID' ); ?></label>
+							<label for="man_nr"><?php echo Text::_( 'SWT_LEAGUE_TEAM_ID' ); ?></label>
 						</td>
 						<td colspan="2">
 							<?php if (isset($this->db_man_nr)) echo $this->db_man_nr; else echo ''; ?>
@@ -69,7 +72,7 @@ $name_land   = clm_core::$load->request_string( 'name_land', '0');
                 <tr>
 				  <?php if ($noOrgReference == '0') { ?>
                     <td nowrap="nowrap">
-                        <label for="verein"><?php echo JText::_( 'SWT_LEAGUE_TEAM_CLUB' ); ?></label>
+                        <label for="verein"><?php echo Text::_( 'SWT_LEAGUE_TEAM_CLUB' ); ?></label>
                     </td>
                     <td colspan="2">
                         <?php echo $this->lists['vereine']; ?>
@@ -78,7 +81,7 @@ $name_land   = clm_core::$load->request_string( 'name_land', '0');
 					<input type="hidden" name="zps" value="<?php echo '0'; ?>" />
 				  <?php } ?>
                     <td nowrap="nowrap">
-                        <label for="tln_nr"><?php echo JText::_( 'SWT_LEAGUE_TEAM_NUMBER' ); ?></label>
+                        <label for="tln_nr"><?php echo Text::_( 'SWT_LEAGUE_TEAM_NUMBER' ); ?></label>
                     </td>
                     <td colspan="2">
                         <?php echo $this->lists['tln_nr']; ?>
@@ -87,7 +90,7 @@ $name_land   = clm_core::$load->request_string( 'name_land', '0');
 				 <?php if ($noOrgReference == '0') { ?>
 				  <?php for ($i = 0; $i < $this->swt_db_data['anz_sgp']; $i++) { ?>
 				  <tr>
-					<td class="key" nowrap="nowrap"><label for="<?php echo 'sg_zps'.$i; ?>"><?php echo JText::_( 'SWT_LEAGUE_TEAM_SG_CLUB' )." : "; ?></label>
+					<td class="key" nowrap="nowrap"><label for="<?php echo 'sg_zps'.$i; ?>"><?php echo Text::_( 'SWT_LEAGUE_TEAM_SG_CLUB' )." : "; ?></label>
 					</td>
                     <td colspan="2">
 						<?php echo $this->lists['sg'.$i]; ?>
@@ -102,7 +105,7 @@ $name_land   = clm_core::$load->request_string( 'name_land', '0');
 
         <fieldset class="adminform">
 		  <?php  if ($noBoardResults == '0') { ?>
-            <legend><?php echo JText::_( 'SWT_LEAGUE_PLAYERS_1' ); ?></legend>
+            <legend><?php echo Text::_( 'SWT_LEAGUE_PLAYERS_1' ); ?></legend>
 	      <?php  } ?>
             <table  class="adminlist">
                 <?php echo $this->tables['stammspieler']; ?>
@@ -112,7 +115,7 @@ $name_land   = clm_core::$load->request_string( 'name_land', '0');
     <div class="col width-50">
         <fieldset class="adminform">
 		  <?php  if ($noBoardResults == '0') { ?>
-            <legend><?php echo JText::_( 'SWT_LEAGUE_PLAYERS_2' ); ?></legend>
+            <legend><?php echo Text::_( 'SWT_LEAGUE_PLAYERS_2' ); ?></legend>
 	      <?php  } ?>
             <table class="adminlist">
                 <?php echo $this->tables['ersatzspieler']; ?>
@@ -151,6 +154,6 @@ $name_land   = clm_core::$load->request_string( 'name_land', '0');
    			}
    		}
    	?>
-	<?php echo JHtml::_( 'form.token' ); ?>
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
 
 </form>

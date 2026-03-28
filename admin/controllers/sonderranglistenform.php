@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,10 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
 
 class CLMControllerSonderranglistenForm extends JControllerLegacy {
 	
@@ -20,7 +24,7 @@ class CLMControllerSonderranglistenForm extends JControllerLegacy {
 		
 		parent::__construct( $config );
 		
-		$this->app	= JFactory::getApplication();
+		$this->app	= Factory::getApplication();
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save', 'edit' );
@@ -35,9 +39,9 @@ class CLMControllerSonderranglistenForm extends JControllerLegacy {
 		if ($result[0]) { // erfolgreich?
 			
 			if ($result[1]) { // neues Turnier?
-				$this->app->enqueueMessage( JText::_('SP_RANKING_CREATED') );
+				$this->app->enqueueMessage( Text::_('SP_RANKING_CREATED') );
 			} else {
-				$this->app->enqueueMessage( JText::_('SP_RANKING_EDITED') );
+				$this->app->enqueueMessage( Text::_('SP_RANKING_EDITED') );
 			}
 		} else {
 			$this->app->enqueueMessage( $result[2],$result[1] );					
@@ -71,7 +75,7 @@ class CLMControllerSonderranglistenForm extends JControllerLegacy {
 		$task = clm_core::$load->request_string('task');
 		
 		// Instanz der Tabelle
-		$row = JTable::getInstance( 'sonderranglistenform', 'TableCLM' );
+		$row = Table::getInstance( 'sonderranglistenform', 'TableCLM' );
 		
 		$post = $_POST; 
 		if (!$row->bind($post)) {
@@ -80,18 +84,18 @@ class CLMControllerSonderranglistenForm extends JControllerLegacy {
 
 		$clmAccess = clm_core::$access;      
 		if ($clmAccess->access('BE_tournament_edit_detail') === false) {
-			return array(false,'warning',JText::_('TOURNAMENT_NO_ACCESS'));
+			return array(false,'warning',Text::_('TOURNAMENT_NO_ACCESS'));
 		}
 		
 		// if new item, order last in appropriate group
 		if (!$row->id) {
 			$neu = true; // Flag für neues Turnier
-			$stringAktion = JText::_('SP_RANKING_CREATED');
+			$stringAktion = Text::_('SP_RANKING_CREATED');
 			// $where = "sid = " . (int) $row->sid; warum nur in Saison?
 			$row->ordering = $row->getNextOrder(); // ( $where );
 		} else {
 			$neu = false;
-			$stringAktion = JText::_('SP_RANKING_EDITED');
+			$stringAktion = Text::_('SP_RANKING_EDITED');
 		}
 		
 		// save the changes

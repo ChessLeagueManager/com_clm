@@ -1,20 +1,20 @@
 <?php
-
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-class TableCLMTurniere extends JTable
+use Joomla\CMS\Table\Table;
+
+class TableCLMTurniere extends Table
 {
 	var $id			= 0;
 	var $name		= '';
@@ -66,7 +66,7 @@ class TableCLMTurniere extends JTable
 	 *
 	 * @access public
 	 * @return boolean
-	 * @see JTable::check
+	 * @see Table::check
 	 * @since 1.5
 	 */
 	 // wegen Abwärtskompatibilität kein Überschreiben und Verwenden von check()
