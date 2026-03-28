@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,6 +12,10 @@
 defined('_JEXEC') or die('Restricted access');
 
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
  
 $lid		= clm_core::$load->request_int('liga',1); 
 $sid		= clm_core::$load->request_int('saison',0);
@@ -49,7 +53,7 @@ if(isset($liga[0])){
 	else $columnMP = 1;
 
 	if ($sid == 0) {
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$query = " SELECT a.* FROM #__clm_liga as a"
 			." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 			." WHERE a.id = ".$lid
@@ -68,11 +72,11 @@ if(isset($liga[0])){
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 	
 	// Browsertitelzeile setzen
-	$doc =JFactory::getDocument();
+	$doc =Factory::getDocument();
 	if(isset($liga[0])){
-		$doc->setTitle(JText::_('Tabelle').' '.$liga[0]->name);
+		$doc->setTitle(Text::_('Tabelle').' '.$liga[0]->name);
 	} else {
-		$doc->setTitle(JText::_('Tabelle'));
+		$doc->setTitle(Text::_('Tabelle'));
 	}
 
 	// Konfigurationsparameter auslesen
@@ -82,7 +86,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 	$show_sl_mail = $config->show_sl_mail;
 
 		// Userkennung holen
-	$user	=JFactory::getUser();
+	$user	=Factory::getUser();
 	$jid	= $user->get('id');
 
 echo '<div id="clm"><div id="rangliste">';
@@ -91,18 +95,18 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php');
 
 $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
-	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+	echo "<div id='wrong'>".Text::_('NO_ACCESS')."<br>".Text::_('NOT_REGISTERED')."</div>";
 }
 // existiert die Liga
 elseif (!$liga) {
 	
-	echo "<div id='wrong'>".JText::_('NOT_EXIST')." (".$lid.")<br>".JText::_('GEDULDA')."</div>";
+	echo "<div id='wrong'>".Text::_('NOT_EXIST')." (".$lid.")<br>".Text::_('GEDULDA')."</div>";
 
 }
 // schon veröffentlicht
 elseif (!$liga OR $liga[0]->published == 0) {
 	
-	echo CLMContent::clmWarning(JText::_('NOT_PUBLISHED')."<br/>".JText::_('GEDULD'));
+	echo CLMContent::clmWarning(Text::_('NOT_PUBLISHED')."<br/>".Text::_('GEDULD'));
 
 // falscher Modus
 } elseif (!in_array($liga[0]->runden_modus, array(1,2,3)) ) {
@@ -111,7 +115,7 @@ elseif (!$liga OR $liga[0]->published == 0) {
 	$link->view = 'paarungsliste';
 	$link->more = array('saison' => $sid, 'liga' => $lid, 'Itemid' => $item);
 	$link->makeURL();
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_TABLENOTAVAILABLE')."<br />".$link->makeLink(JText::_('PAAR_OVERVIEW')));
+	echo CLMContent::clmWarning(Text::_('TOURNAMENT_TABLENOTAVAILABLE')."<br />".$link->makeLink(Text::_('PAAR_OVERVIEW')));
 
 } else {
 
@@ -121,14 +125,14 @@ elseif (!$liga OR $liga[0]->published == 0) {
 
 	<div class="componentheading">
 
-	<?php echo JText::_('Tabelle'); echo "&nbsp;".$liga[0]->name; ?>
+	<?php echo Text::_('Tabelle'); echo "&nbsp;".$liga[0]->name; ?>
 
 	<div id="pdf">
 	<!--<img src="printButton.png" alt="drucken"  /></a>-->
 
 	<?php
-	echo CLMContent::createPDFLink('tabelle', JText::_('TABELLE_PDF'), array('saison' => $sid, 'layout' => 'tabelle', 'liga' => $lid));
-	echo CLMContent::createViewLink('rangliste', JText::_('TABELLE_GOTO_RANGLISTE'), array('saison' => $sid, 'liga' => $lid, 'Itemid' => $item) );
+	echo CLMContent::createPDFLink('tabelle', Text::_('TABELLE_PDF'), array('saison' => $sid, 'layout' => 'tabelle', 'liga' => $lid));
+	echo CLMContent::createViewLink('rangliste', Text::_('TABELLE_GOTO_RANGLISTE'), array('saison' => $sid, 'liga' => $lid, 'Itemid' => $item) );
 
 	// DWZ Durchschnitte - Aufstellung
 	$result = clm_core::$api->db_nwz_average($lid);
@@ -146,34 +150,34 @@ elseif (!$liga OR $liga[0]->published == 0) {
 
 	<table cellpadding="0" cellspacing="0" class="rangliste">
 		<tr>
-			<th class="rang"><div><?php echo JText::_('RANG') ?></div></th>
+			<th class="rang"><div><?php echo Text::_('RANG') ?></div></th>
 			<?php if ($s_tln == 1) { ?>
-				<th class="rang"><div><?php echo JText::_('TLN') ?></div></th>
+				<th class="rang"><div><?php echo Text::_('TLN') ?></div></th>
 			<?php } ?>
-			<th class="team"><div><?php echo JText::_('TEAM') ?></div></th>
+			<th class="team"><div><?php echo Text::_('TEAM') ?></div></th>
 				
-			<th class="gsrv"><div><?php echo JText::_('TABELLE_GAMES_PLAYED') ?></div></th>
-			<th class="gsrv"><div><?php echo JText::_('TABELLE_WINS') ?></div></th>
-			<th class="gsrv"><div><?php echo JText::_('TABELLE_DRAW') ?></div></th>
-			<th class="gsrv"><div><?php echo JText::_('TABELLE_LOST') ?></div></th>
+			<th class="gsrv"><div><?php echo Text::_('TABELLE_GAMES_PLAYED') ?></div></th>
+			<th class="gsrv"><div><?php echo Text::_('TABELLE_WINS') ?></div></th>
+			<th class="gsrv"><div><?php echo Text::_('TABELLE_DRAW') ?></div></th>
+			<th class="gsrv"><div><?php echo Text::_('TABELLE_LOST') ?></div></th>
 			<?php if ($columnMP == 1) { ?>
-				<th class="mp"><div><?php echo JText::_('MP') ?></div></th>
+				<th class="mp"><div><?php echo Text::_('MP') ?></div></th>
 			<?php } ?>			
 			<?php 
 			if ( $liga[0]->liga_mt == 0) { 
-				echo '<th class="bp"><div>'.JText::_('BP').'</div></th>';
+				echo '<th class="bp"><div>'.Text::_('BP').'</div></th>';
 				if ( $liga[0]->b_wertung > 0) { 
-					echo '<th class="bp"><div>'.JText::_('BW').'</div></th>';
+					echo '<th class="bp"><div>'.Text::_('BW').'</div></th>';
 				}
 			} else {
 				if ( $liga[0]->tiebr1 > 0 AND $liga[0]->tiebr1 < 50) { 
-					echo '<th class="bp"><div>'.JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr1).'</div></th>';
+					echo '<th class="bp"><div>'.Text::_('MTURN_TIEBRS_'.$liga[0]->tiebr1).'</div></th>';
 				}
 				if ( $liga[0]->tiebr2 > 0 AND $liga[0]->tiebr2 < 50) {  
-					echo '<th class="bp"><div>'.JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr2).'</div></th>';
+					echo '<th class="bp"><div>'.Text::_('MTURN_TIEBRS_'.$liga[0]->tiebr2).'</div></th>';
 				}
 				if ( $liga[0]->tiebr3 > 0 AND $liga[0]->tiebr3 < 50) {  
-					echo '<th class="bp"><div>'.JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr3).'</div></th>';
+					echo '<th class="bp"><div>'.Text::_('MTURN_TIEBRS_'.$liga[0]->tiebr3).'</div></th>';
 				}
 			}
 			?>	
@@ -287,9 +291,9 @@ elseif (!$liga OR $liga[0]->published == 0) {
 			if ( $liga[0]->sl <> "" ) { 
 				?>
 				<div class="ran_chief">
-					<div class="ran_chief_left"><?php echo JText::_('CHIEF') ?></div>
+					<div class="ran_chief_left"><?php echo Text::_('CHIEF') ?></div>
 					<?php if ($jid > 0 OR $show_sl_mail > 0) { ?>
-						<div class="ran_chief_right"><?php echo $liga[0]->sl; ?> | <?php echo JHTML::_( 'email.cloak', $liga[0]->email ); ?></div>	
+						<div class="ran_chief_right"><?php echo $liga[0]->sl; ?> | <?php echo HTMLHelper::_( 'email.cloak', $liga[0]->email ); ?></div>	
 					<?php } else { ?>
 						<div class="ran_chief_right"><?php echo $liga[0]->sl; ?></div>	
 					<?php } ?>
@@ -302,14 +306,14 @@ elseif (!$liga OR $liga[0]->published == 0) {
 			if ($liga[0]->bemerkungen <> "") { 
 				?>
 				<div class="ran_note">
-					<div class="ran_note_left"><?php echo JText::_('NOTICE_SL') ?></div>
+					<div class="ran_note_left"><?php echo Text::_('NOTICE_SL') ?></div>
 					<div class="ran_note_right"><?php echo nl2br($liga[0]->bemerkungen); ?></div>
 				</div>
 				<div class="clr"></div>
 			
 				<?php 
-				if ($diff == 1 AND $liga[0]->ab ==1 ) { echo JText::_('ROUND_NO_RELEGATED_TEAM'); }
-				//if ($diff == 1 AND $liga[0]->ab >1 ) { echo JText::_('ROUND_LESS_RELEGATED_TEAM'); }
+				if ($diff == 1 AND $liga[0]->ab ==1 ) { echo Text::_('ROUND_NO_RELEGATED_TEAM'); }
+				//if ($diff == 1 AND $liga[0]->ab >1 ) { echo Text::_('ROUND_LESS_RELEGATED_TEAM'); }
 				?>
 			<?php 
 			}  

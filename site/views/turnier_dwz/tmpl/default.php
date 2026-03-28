@@ -10,8 +10,10 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip');
+//HTMLHelper::_('behavior.tooltip', '.CLMTooltip');
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
+
+use Joomla\CMS\Language\Text;
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
@@ -25,7 +27,7 @@ $fixth_ttln		= $config->fixth_ttln;
 echo "<div id='clm'><div id='turnier_teilnehmer'>";
 
 // Componentheading
-$heading =  $this->turnier->name.": ".JText::_('TOURNAMENT_DWZ');
+$heading =  $this->turnier->name.": ".Text::_('TOURNAMENT_DWZ');
 
 $params = new clm_class_params($this->turnier->params);
 $inofDWZ = $params->get("inofDWZ","0");
@@ -36,26 +38,26 @@ $archive_check = clm_core::$api->db_check_season_user($this->turnier->sid);
 if (!$archive_check) {
 	echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('NO_ACCESS')."<br/>".JText::_('NOT_REGISTERED'));
+	echo CLMContent::clmWarning(Text::_('NO_ACCESS')."<br/>".Text::_('NOT_REGISTERED'));
 } elseif ( $this->turnier->published == 0) { 
 	echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
+	echo CLMContent::clmWarning(Text::_('TOURNAMENT_NOTPUBLISHED')."<br/>".Text::_('TOURNAMENT_PATIENCE'));
 
 } elseif (count($this->players) == 0) {
     echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOPLAYERSREGISTERED'));
+	echo CLMContent::clmWarning(Text::_('TOURNAMENT_NOPLAYERSREGISTERED'));
 
 } elseif ($inofDWZ == 0) {
    echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_DWZ_NO'));
+	echo CLMContent::clmWarning(Text::_('TOURNAMENT_DWZ_NO'));
 	
 } else {
 
 // PDF-Link
-echo CLMContent::createPDFLink('turnier_dwz', JText::_('TOURNAMENT_DWZ'), array('turnier' => $this->turnier->id, 'layout' => 'dwz'));
+echo CLMContent::createPDFLink('turnier_dwz', Text::_('TOURNAMENT_DWZ'), array('turnier' => $this->turnier->id, 'layout' => 'dwz'));
     echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
 	$turParams = new JRegistry();
@@ -67,40 +69,40 @@ echo CLMContent::createPDFLink('turnier_dwz', JText::_('TOURNAMENT_DWZ'), array(
 
 	<tr>
 		
-		<th class="tt_col_1"><?php echo JText::_('TOURNAMENT_NUMBERABB'); ?></th>
+		<th class="tt_col_1"><?php echo Text::_('TOURNAMENT_NUMBERABB'); ?></th>
 		
 		<?php
 		if ($turParams->get('displayPlayerTitle', 1) == 1) {
 		?>
-			<th class="tt_col_2"><?php echo JText::_('TOURNAMENT_TITLE'); ?></th>
+			<th class="tt_col_2"><?php echo Text::_('TOURNAMENT_TITLE'); ?></th>
 		<?php
 		}
 		?>
 		
-		<th class="tt_col_3"><?php echo JText::_('TOURNAMENT_PLAYERNAME'); ?></th>
+		<th class="tt_col_3"><?php echo Text::_('TOURNAMENT_PLAYERNAME'); ?></th>
 		
 		<?php
 		if ($turParams->get('displayPlayerClub', 1) == 2) {
 		?>
-			<th class="tt_col_4"><?php echo JText::_('TOURNAMENT_CLUB'); ?></th>
+			<th class="tt_col_4"><?php echo Text::_('TOURNAMENT_CLUB'); ?></th>
 		<?php
 		}
 		?>		
 		
-		<th class="tt_col_7"><?php echo JText::_('TOURNAMENT_RATING'); ?></th>
-		<th class="tt_col_7"><?php echo JText::_('DWZ_W'); ?></th>
-		<th class="tt_col_7"><?php echo JText::_('DWZ_WE'); ?></th>
-		<th class="tt_col_7"><?php echo JText::_('DWZ_EF'); ?></th>
-		<th class="tt_col_7"><?php echo JText::_('DWZ_RATING'); ?></th>
-		<th class="tt_col_7"><?php echo JText::_('DWZ_LEVEL'); ?></th>
-		<th class="tt_col_7"><?php echo JText::_('DWZ_POINTS'); ?></th>
-		<th class="tt_col_7"><?php echo JText::_('DWZ_NEW'); ?></th>
-		<th class="tt_col_7"><?php echo JText::_('DWZ_DIFF'); ?></th>
+		<th class="tt_col_7"><?php echo Text::_('TOURNAMENT_RATING'); ?></th>
+		<th class="tt_col_7"><?php echo Text::_('DWZ_W'); ?></th>
+		<th class="tt_col_7"><?php echo Text::_('DWZ_WE'); ?></th>
+		<th class="tt_col_7"><?php echo Text::_('DWZ_EF'); ?></th>
+		<th class="tt_col_7"><?php echo Text::_('DWZ_RATING'); ?></th>
+		<th class="tt_col_7"><?php echo Text::_('DWZ_LEVEL'); ?></th>
+		<th class="tt_col_7"><?php echo Text::_('DWZ_POINTS'); ?></th>
+		<th class="tt_col_7"><?php echo Text::_('DWZ_NEW'); ?></th>
+		<th class="tt_col_7"><?php echo Text::_('DWZ_DIFF'); ?></th>
 		<?php if ($optionEloAnalysis == '1') { ?>
-			<th class="tt_col_7"><?php echo JText::_('ELO'); ?></th>
-			<th class="tt_col_7"><?php echo JText::_('ELO_NEW'); ?></th>
-			<th class="tt_col_7"><?php echo JText::_('ELO_K'); ?></th>
-			<th class="tt_col_7"><?php echo JText::_('ELO_DIFF'); ?></th>	
+			<th class="tt_col_7"><?php echo Text::_('ELO'); ?></th>
+			<th class="tt_col_7"><?php echo Text::_('ELO_NEW'); ?></th>
+			<th class="tt_col_7"><?php echo Text::_('ELO_K'); ?></th>
+			<th class="tt_col_7"><?php echo Text::_('ELO_DIFF'); ?></th>	
 		<?php } ?>
 	</tr>
 	
@@ -200,9 +202,9 @@ echo CLMContent::createPDFLink('turnier_dwz', JText::_('TOURNAMENT_DWZ'), array(
 	echo '</table>';
 
 	if($dwz_date == "0000-00-00" OR $dwz_date == "1970-01-01") { 
-		echo '<div class="hint">'.JText::_('TOURNAMENT_DWZ_DATE_NO').'</div><br/>';
+		echo '<div class="hint">'.Text::_('TOURNAMENT_DWZ_DATE_NO').'</div><br/>';
 	} else {
-		echo '<div class="hint">'.JText::_('TOURNAMENT_DWZ_DATE').clm_core::$load->date_to_string($dwz_date,false,false).'.</div><br/>';
+		echo '<div class="hint">'.Text::_('TOURNAMENT_DWZ_DATE').clm_core::$load->date_to_string($dwz_date,false,false).'.</div><br/>';
 	}
 }
 

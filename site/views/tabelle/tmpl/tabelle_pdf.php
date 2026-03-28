@@ -1,15 +1,19 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 $lid = clm_core::$load->request_int( 'liga', '1' ); 
 $sid = clm_core::$load->request_int( 'saison','1');
@@ -64,7 +68,7 @@ $a_average_dwz_lineup = $result[2];
 	$show_sl_mail = $config->show_sl_mail;
 
 	// Userkennung holen
-	$user	=JFactory::getUser();
+	$user	=Factory::getUser();
 	$jid	= $user->get('id');
 
 // Spielfreie Teilnehmer finden
@@ -96,7 +100,7 @@ if ( $liga[0]->b_wertung == 0) $leer = $leer + 4;
 if ($leer < 3) $leer = 2;
  
 // Datum der Erstellung
-$date =JFactory::getDate();
+$date =Factory::getDate();
 $now = $date->toSQL();
 
 
@@ -106,7 +110,7 @@ $pdf->AddPage();
 
 $pdf->SetFont('Times','',$date_font);
 	$pdf->Cell(10,3,' ',0,0);
-	$pdf->Cell(175,2,clm_core::$load->utf8decode(JText::_('WRITTEN')).' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.clm_core::$load->utf8decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
+	$pdf->Cell(175,2,clm_core::$load->utf8decode(Text::_('WRITTEN')).' '.clm_core::$load->utf8decode(Text::_('ON_DAY')).' '.clm_core::$load->utf8decode(HTMLHelper::_('date',  $now, Text::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
 
 $pdf->SetFont('Times','B',$head_font+2);	
 	$pdf->Cell(180,15,clm_core::$load->utf8decode($liga[0]->name),0,1,'C');
@@ -124,29 +128,29 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 if ($lmax < (50-$nbreite)) $lmax = 50 - $nbreite;
 if ($lmax > 66) $lmax = 66;
  	$pdf->Cell($leer,$zelle,' ',0,0,'L');
-	$pdf->Cell(7-$rbreite,$zelle,JText::_('RANG'),1,0,'C',1);
-	$pdf->Cell(7-$rbreite,$zelle,JText::_('TLN'),1,0,'C',1);
-	//$pdf->Cell(60-$nbreite-$breite,$zelle,JText::_('TEAM'),1,0,'L',1);
-	$pdf->Cell($lmax+12-$breite,$zelle,JText::_('TEAM'),1,0,'L',1);
+	$pdf->Cell(7-$rbreite,$zelle,Text::_('RANG'),1,0,'C',1);
+	$pdf->Cell(7-$rbreite,$zelle,Text::_('TLN'),1,0,'C',1);
+	//$pdf->Cell(60-$nbreite-$breite,$zelle,Text::_('TEAM'),1,0,'L',1);
+	$pdf->Cell($lmax+12-$breite,$zelle,Text::_('TEAM'),1,0,'L',1);
  
-	$pdf->Cell(7-$rbreite,$zelle,JText::_('TABELLE_GAMES_PLAYED'),1,0,'C',1);
-	$pdf->Cell(7-$rbreite,$zelle,JText::_('TABELLE_WINS'),1,0,'C',1);
-	$pdf->Cell(7-$rbreite,$zelle,JText::_('TABELLE_DRAW'),1,0,'C',1);
-	$pdf->Cell(7-$rbreite,$zelle,JText::_('TABELLE_LOST'),1,0,'C',1);
+	$pdf->Cell(7-$rbreite,$zelle,Text::_('TABELLE_GAMES_PLAYED'),1,0,'C',1);
+	$pdf->Cell(7-$rbreite,$zelle,Text::_('TABELLE_WINS'),1,0,'C',1);
+	$pdf->Cell(7-$rbreite,$zelle,Text::_('TABELLE_DRAW'),1,0,'C',1);
+	$pdf->Cell(7-$rbreite,$zelle,Text::_('TABELLE_LOST'),1,0,'C',1);
 	if ($columnMP == 1) {
-		$pdf->Cell(8-$rbreite,$zelle,JText::_('MP'),1,0,'C',1);
+		$pdf->Cell(8-$rbreite,$zelle,Text::_('MP'),1,0,'C',1);
 	}
 	if ( $liga[0]->liga_mt == 0) { 
-		$pdf->Cell(10-$breite,$zelle,JText::_('BP'),1,0,'C',1); 
+		$pdf->Cell(10-$breite,$zelle,Text::_('BP'),1,0,'C',1); 
 		if ($liga[0]->b_wertung > 0) {
-			$pdf->Cell(10-$breite,$zelle,JText::_('WP'),1,0,'C',1); }
+			$pdf->Cell(10-$breite,$zelle,Text::_('WP'),1,0,'C',1); }
 	} else {
 		if ( $liga[0]->tiebr1 > 0 AND $liga[0]->tiebr1 < 50) { 
-			$pdf->Cell(13-$breite,$zelle,JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr1),1,0,'C',1); }
+			$pdf->Cell(13-$breite,$zelle,Text::_('MTURN_TIEBRS_'.$liga[0]->tiebr1),1,0,'C',1); }
 		if ( $liga[0]->tiebr2 > 0 AND $liga[0]->tiebr2 < 50) { 
-			$pdf->Cell(13-$breite,$zelle,JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr2),1,0,'C',1); }
+			$pdf->Cell(13-$breite,$zelle,Text::_('MTURN_TIEBRS_'.$liga[0]->tiebr2),1,0,'C',1); }
 		if ( $liga[0]->tiebr3 > 0 AND $liga[0]->tiebr3 < 50) { 
-			$pdf->Cell(13-$breite,$zelle,JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr3),1,0,'C',1); }
+			$pdf->Cell(13-$breite,$zelle,Text::_('MTURN_TIEBRS_'.$liga[0]->tiebr3),1,0,'C',1); }
 	}
 	$pdf->Ln();
 
@@ -207,7 +211,7 @@ if (is_null($liga[0]->bemerkungen)) $liga[0]->bemerkungen = '';
 if ($liga[0]->bemerkungen <> "") {
 	$pdf->SetFont('Times','B',$font+2);
 	$pdf->Cell(10,$zelle,' ',0,0,'L');
-	$pdf->Cell(150,$zelle,' '.clm_core::$load->utf8decode(JText::_('NOTICE_SL')).' :',0,1,'B');
+	$pdf->Cell(150,$zelle,' '.clm_core::$load->utf8decode(Text::_('NOTICE_SL')).' :',0,1,'B');
 	$pdf->SetFont('Times','',$font);
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
 	$pdf->MultiCell(150,$zelle,clm_core::$load->utf8decode($liga[0]->bemerkungen),0,'L',0);
@@ -217,7 +221,7 @@ if ($liga[0]->bemerkungen <> "") {
 	if (is_null($liga[0]->sl)) $liga[0]->sl = '';
 	$pdf->SetFont('Times','B',$font+2);
 	$pdf->Cell(10,$zelle,' ',0,0,'L');
-	$pdf->Cell(150,$zelle,JText::_('CHIEF').' :',0,1,'L');
+	$pdf->Cell(150,$zelle,Text::_('CHIEF').' :',0,1,'L');
 	$pdf->SetFont('Times','',$font);
 	$pdf->Cell(15,$zelle,' ',0,0,'L');
 	$pdf->Cell(150,$zelle,clm_core::$load->utf8decode($liga[0]->sl),0,1,'L');
@@ -230,7 +234,7 @@ if ($liga[0]->bemerkungen <> "") {
 	$pdf->Ln();
 
 // Ausgabe
-$pdf->Output(JText::_('TABELLE').' '.clm_core::$load->utf8decode($liga[0]->name).'.pdf','D');
+$pdf->Output(Text::_('TABELLE').' '.clm_core::$load->utf8decode($liga[0]->name).'.pdf','D');
 exit;
 ?>
 

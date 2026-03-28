@@ -1,12 +1,16 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
 */
 defined('_JEXEC') or die('Restricted access');
+
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
  
 $lid		= clm_core::$load->request_int('liga',1); 
 $sid		= clm_core::$load->request_int('saison',0);
@@ -37,7 +41,7 @@ $arbiter	= $this->arbiter;
 $lang = clm_core::$lang->liga_info;
 
 if ($sid == 0) {
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 	$query = " SELECT a.* FROM #__clm_liga as a"
 			." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 			." WHERE a.id = ".$lid
@@ -55,7 +59,7 @@ if ($sid == 0) {
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 	
 	// Browsertitelzeile setzen
-	$doc =JFactory::getDocument();
+	$doc =Factory::getDocument();
 	$doc->setTitle($lang->title.' '.$liga[0]->name);
 
 	// Konfigurationsparameter auslesen
@@ -70,7 +74,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'geo_functions.php');
 
 		// Userkennung holen
-	$user	=JFactory::getUser();
+	$user	=Factory::getUser();
 	$jid	= $user->get('id');
 
 echo '<div id="clm"><div id="rangliste">';
@@ -79,12 +83,12 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php');
 
 $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
-	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+	echo "<div id='wrong'>".Text::_('NO_ACCESS')."<br>".Text::_('NOT_REGISTERED')."</div>";
 }
 // schon veröffentlicht
 elseif (!$liga OR $liga[0]->published == 0) {
 	
-	echo CLMContent::clmWarning(JText::_('NOT_PUBLISHED')."<br/>".JText::_('GEDULD'));
+	echo CLMContent::clmWarning(Text::_('NOT_PUBLISHED')."<br/>".Text::_('GEDULD'));
 
 } else {
 
@@ -134,7 +138,7 @@ elseif (!$liga OR $liga[0]->published == 0) {
 	<br>
 	<table>
 	<tr>
-		<th align="left" colspan="2" class="anfang"><?php echo JText::_('TOURNAMENT_DATA'); ?></th>
+		<th align="left" colspan="2" class="anfang"><?php echo Text::_('TOURNAMENT_DATA'); ?></th>
 	</tr>
 	
 	<tr>
@@ -248,12 +252,12 @@ elseif (!$liga OR $liga[0]->published == 0) {
 		if (($lat == 0 AND $lon == 0)) {
 		?>
 			<tr>
-				<td align="left" width="100"><?php echo JText::_('CLUB_LOCATION'); ?>:</td>
+				<td align="left" width="100"><?php echo Text::_('CLUB_LOCATION'); ?>:</td>
 				<td><?php echo $liga[0]->lokal; ?></td>
 			</tr>
 		<?php } else { ?>
 			<tr>
-				<td align="left" width="100"><?php echo JText::_('CLUB_LOCATION'); ?>:</td>
+				<td align="left" width="100"><?php echo Text::_('CLUB_LOCATION'); ?>:</td>
 				<td>
 		<?php	$spiellokal = explode(",", $liga[0]->lokal); 
 			if ($spiellokal[0] ==! false ) $loc_text = $spiellokal[0]; else $loc_text = '';

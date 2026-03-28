@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link https://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,16 +12,18 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
+use Joomla\CMS\Factory;
+
 class CLMModelVereinsliste extends JModelLegacy
 {
 	function _getCLMVereine( &$options )
 	{
 	
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	$option 	= clm_core::$load->request_string( 'option' );
 
 	$sid	= clm_core::$load->request_int('saison', 0);
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
  
 	if ( !$sid OR $sid < 1) { // keine Saison vorgegeben
@@ -79,7 +81,7 @@ class CLMModelVereinsliste extends JModelLegacy
 	{
 	$sid	= clm_core::$load->request_int('saison', 1);
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 
 	$query = 'SELECT  a.zps, b.*, c.*'
 		." FROM #__clm_vereine AS a"
@@ -104,7 +106,7 @@ class CLMModelVereinsliste extends JModelLegacy
 	{
 	$sid	= clm_core::$load->request_int('saison', 1);
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
 
 	$query = 'SELECT DISTINCT a.zps, a.name, a.sid FROM #__clm_vereine as a'
@@ -124,7 +126,7 @@ class CLMModelVereinsliste extends JModelLegacy
 	
 	function getSaisonID()
 	{
-	   $db =JFactory::getDBO();
+	   $db =Factory::getDBO();
 	 
 	   $query = "SELECT id, archiv FROM #__clm_saison  WHERE archiv = 0 ";
 	   $db->setQuery( $query );
@@ -137,7 +139,7 @@ class CLMModelVereinsliste extends JModelLegacy
 	{
 	$sid	= clm_core::$load->request_int('saison', 1);
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
 
 	$query  = ' SELECT a.name, a.id, a.archiv FROM #__clm_saison AS a'

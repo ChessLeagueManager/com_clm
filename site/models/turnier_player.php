@@ -1,22 +1,21 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die();
-
 jimport('joomla.application.component.model');
 jimport( 'joomla.html.parameter' );
 
+use Joomla\CMS\Factory;
+
 class CLMModelTurnier_Player extends JModelLegacy {
-	
 	
 	function __construct() {
 		
@@ -56,7 +55,7 @@ class CLMModelTurnier_Player extends JModelLegacy {
 		$pgnPublic = $turParams->get('pgnPublic', 1);	
 		
 		// User ermitteln
-		$user =JFactory::getUser();
+		$user =Factory::getUser();
 		
 		// Flag für View und Template setzen: pgnShow
 		// FALSE - PGN nicht verlinken/anzeigen

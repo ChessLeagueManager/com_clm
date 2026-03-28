@@ -1,10 +1,13 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
 */
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+
 // Input: table clm_zeitmodus 
 // Output: pdf-Liste Zeitmodi
 function clm_api_db_time_controlliste($format='pdf') {
@@ -71,7 +74,7 @@ if ($format == 'pdf') {
 
 	$pdf->SetFont('Times','',$date_font);
 		$pdf->Cell(10,3,' ',0,0);
-		$pdf->Cell(175,2,clm_core::$load->utf8decode(JText::_('WRITTEN')).' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.clm_core::$load->utf8decode(JHTML::_('date',  $now, $lang->date_format_clm_pdf)),0,1,'R');
+		$pdf->Cell(175,2,clm_core::$load->utf8decode(Text::_('WRITTEN')).' '.clm_core::$load->utf8decode(Text::_('ON_DAY')).' '.clm_core::$load->utf8decode(HTMLHelper::_('date',  $now, $lang->date_format_clm_pdf)),0,1,'R');
 		
 	$pdf->SetFont('Times','B',$head_font+2);	
 		$pdf->Cell(180,10,'Timecontrolmodi',0,1,'C');

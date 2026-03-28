@@ -1,10 +1,12 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link https://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
+use Joomla\CMS\Factory;
+
 function clm_api_db_be_menu() {
 	$clmAccess = clm_core::$access;
 	$access = array();
@@ -50,7 +52,7 @@ function clm_api_db_be_menu() {
 				)
 			);
 
-			$jlang = JFactory::getLanguage();
+			$jlang = Factory::getLanguage();
 			
 			if (($fp = @file_get_contents("https://chessleaguemanager.org/clm/updateServer/status." . $jlang->getTag(), false, $ctx)) === false ) {
 				$status["content"] = "";

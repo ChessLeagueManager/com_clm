@@ -1,16 +1,17 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link https://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 jimport( 'joomla.application.component.view');
+
+use Joomla\CMS\Factory;
 
 class CLMViewRunde extends JViewLegacy
 {
@@ -62,7 +63,7 @@ class CLMViewRunde extends JViewLegacy
 		$this->paar1 = $paar1;
 
 	// Dokumenttyp setzen
-		$document =JFactory::getDocument();
+		$document =Factory::getDocument();
 		$document->setMimeEncoding('application/pdf');
  
 	parent::display($tpl);

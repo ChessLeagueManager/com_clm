@@ -11,7 +11,6 @@ function clm_api_db_ecf_org($orgs = array()) {
 		return array(true, "w_noOrgToUpdate");
 	}
 	// Umbau der DB von deutscher Version auf englische Version, einmalige Aktion
-//	$db = JFactory::getDBO();
 //	$keys = $db->getTableKeys($db->getPrefix()."clm_dwz_spieler");
 	$query = 'SHOW KEYS FROM #__clm_dwz_spieler';
 	$keys = clm_core::$db->loadObjectList($query);

@@ -1,15 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team. All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 jimport( 'joomla.application.component.view');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 class CLMViewVereinsliste extends JViewLegacy
 {
@@ -33,12 +36,12 @@ class CLMViewVereinsliste extends JViewLegacy
 		
 		$model		= $this->getModel();
 		
-		$mainframe = JFactory::getApplication();
-		$document =JFactory::getDocument();
-		$document->setTitle($mainframe->getCfg('sitename')." - ".JText::_('CLUBS_LIST'));
+		$mainframe = Factory::getApplication();
+		$document =Factory::getDocument();
+		$document->setTitle($mainframe->getCfg('sitename')." - ".Text::_('CLUBS_LIST'));
 		
 		/* Call the state object */
-		$mainframe =JFactory::getApplication();
+		$mainframe =Factory::getApplication();
 		global $option;
 		$lists['state'] = $mainframe->getUserStateFromRequest( "$option.filter_state",'filter_state','','word' );
  

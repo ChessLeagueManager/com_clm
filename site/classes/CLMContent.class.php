@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  Dorn. All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -15,8 +15,9 @@
 * Klassenbibliothek für content-bezogene, modulare, Funktionalitäten
 * keine Printausgabe, immer nur String-Rückgabe
 */
-class CLMContent {
+use Joomla\CMS\Language\Text;
 
+class CLMContent {
 	
 	/**
 	* componentheading()
@@ -58,7 +59,7 @@ class CLMContent {
 		$string = '<div class="pdf">';
 		
 		// imageTag zusammensetzen
-		$imageTag = '<img src="'.CLMImage::imageURL('pdf_button.png').'" width="16" height="19" title="'.JText::_('PDF_PRINT').$title.'" alt="PDF" class="CLMTooltip" />';
+		$imageTag = '<img src="'.CLMImage::imageURL('pdf_button.png').'" width="16" height="19" title="'.Text::_('PDF_PRINT').$title.'" alt="PDF" class="CLMTooltip" />';
 		
 		// Format ergänzen
 		$params['format'] = 'pdf';
@@ -82,7 +83,7 @@ class CLMContent {
 		$string = '<div class="pdf">';
 		
 		// imageTag zusammensetzen
-		$imageTag = '<img src="'.CLMImage::imageURL('ics_button.png').'" width="16" height="19" title="'.JText::_('ICS_OUTPUT').$title.'" alt="ICS" class="CLMTooltip" />';
+		$imageTag = '<img src="'.CLMImage::imageURL('ics_button.png').'" width="16" height="19" title="'.Text::_('ICS_OUTPUT').$title.'" alt="ICS" class="CLMTooltip" />';
 		
 		// Format ergänzen
 		$params['format'] = 'ics';
@@ -157,7 +158,7 @@ class CLMContent {
 		$string = '<br /><br /><br /><hr>';
 		$string .= '<div style="float:left; text-align:left; padding-left:1%">CLM '.$data['version'].'</div>';
 		$string .= '<div style=" text-align:right; padding-right:1%">';
-		$string .= '<label for="name" class="hasTip" title="'.JText::_('Das Chess League Manager (CLM) Projekt ist freie, kostenlose Software unter der GNU / GPL. Besuchen Sie unsere Projektseite www.fishpoke.de für die neueste Version, Dokumentationen und Fragen. Wenn Sie an der Entwicklung des CLM teilnehmen wollen melden Sie sich bei uns per E-mail. Wir sind für jede Hilfe dankbar !').'">Sie wollen am Projekt teilnehmen oder haben Verbesserungsvorschläge? - <a href="http://www.fishpoke.de">CLM Projektseite</a></label></div>';
+		$string .= '<label for="name" class="hasTip" title="'.Text::_('Das Chess League Manager (CLM) Projekt ist freie, kostenlose Software unter der GNU / GPL. Besuchen Sie unsere Projektseite www.fishpoke.de für die neueste Version, Dokumentationen und Fragen. Wenn Sie an der Entwicklung des CLM teilnehmen wollen melden Sie sich bei uns per E-mail. Wir sind für jede Hilfe dankbar !').'">Sie wollen am Projekt teilnehmen oder haben Verbesserungsvorschläge? - <a href="http://www.fishpoke.de">CLM Projektseite</a></label></div>';
 	
 		return $string;
 	

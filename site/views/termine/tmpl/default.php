@@ -1,15 +1,20 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Fjodor Schäfer
  * @email ich@vonfio.de
 */
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip');
+//HTMLHelper::_('behavior.tooltip', '.CLMTooltip');
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+
 $lang = clm_core::$lang->schedule;
 
 $sid	= clm_core::$load->request_int('saison', 1);	
@@ -27,20 +32,20 @@ $schnellmenu	= $this->schnellmenu;
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 // Browsertitelzeile setzen
-$doc =JFactory::getDocument();
-$doc->setTitle(JText::_('TERMINE_HEAD'));
+$doc =Factory::getDocument();
+$doc->setTitle(Text::_('TERMINE_HEAD'));
 
 ?>
 <div id="clm">
 <div id="termine">
-	<div class="componentheading"><?php echo JText::_('TERMINE_HEAD') ?>
+	<div class="componentheading"><?php echo Text::_('TERMINE_HEAD') ?>
 
 		<?php
 		// PDF-Links
-		echo CLMContent::createPDFLink('termine', JText::_('TERMINE_SHORT_PRINT'), array('layout' => 'termine_short', 'saison' => $sid));
-		echo CLMContent::createPDFLink('termine', JText::_('TERMINE_LONG_PRINT'), array('layout' => 'termine_long', 'saison' => $sid));
+		echo CLMContent::createPDFLink('termine', Text::_('TERMINE_SHORT_PRINT'), array('layout' => 'termine_short', 'saison' => $sid));
+		echo CLMContent::createPDFLink('termine', Text::_('TERMINE_LONG_PRINT'), array('layout' => 'termine_long', 'saison' => $sid));
 		if (clm_core::$access->getJid() > 0) {
-			echo clm_core::$load->create_link_xls('terminliste', JText::_('CSV_TERM'), array('layout' => 'terminliste', 'saison' => $sid));
+			echo clm_core::$load->create_link_xls('terminliste', Text::_('CSV_TERM'), array('layout' => 'terminliste', 'saison' => $sid));
 		}
 		?>	
 	</div>
@@ -50,46 +55,46 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
     <br />
     
     <?php if (count($termine) < 1 ) {	?>
-    <div class="wrong"><?php echo JText::_('NO_TERMINE') ?></div>
+    <div class="wrong"><?php echo Text::_('NO_TERMINE') ?></div>
     <?php  } elseif (isset($termine[0]) AND $termine[0]->nr == 0) {	?>
-    <div class="wrong"><?php echo JText::_('NO_ROUNDS') ?></div>
+    <div class="wrong"><?php echo Text::_('NO_ROUNDS') ?></div>
     <?php  } else { 
     
 	$arrMonth = array(
-		"January" => JText::_('MOD_CLM_TERMINE_M01'),
-		"February" => JText::_('MOD_CLM_TERMINE_M02'),
-		"March" => JText::_('MOD_CLM_TERMINE_M03'),
-		"April" => JText::_('MOD_CLM_TERMINE_M04'),
-		"May" => JText::_('MOD_CLM_TERMINE_M05'),
-		"June" => JText::_('MOD_CLM_TERMINE_M06'),
-		"July" => JText::_('MOD_CLM_TERMINE_M07'),
-		"August" => JText::_('MOD_CLM_TERMINE_M08'),
-		"September" => JText::_('MOD_CLM_TERMINE_M09'),
-		"October" => JText::_('MOD_CLM_TERMINE_M10'),
-		"November" => JText::_('MOD_CLM_TERMINE_M11'),
-		"December" => JText::_('MOD_CLM_TERMINE_M12'),
-		"01" => JText::_('MOD_CLM_TERMINE_M01'),
-		"02" => JText::_('MOD_CLM_TERMINE_M02'),
-		"03" => JText::_('MOD_CLM_TERMINE_M03'),
-		"04" => JText::_('MOD_CLM_TERMINE_M04'),
-		"05" => JText::_('MOD_CLM_TERMINE_M05'),
-		"06" => JText::_('MOD_CLM_TERMINE_M06'),
-		"07" => JText::_('MOD_CLM_TERMINE_M07'),
-		"08" => JText::_('MOD_CLM_TERMINE_M08'),
-		"09" => JText::_('MOD_CLM_TERMINE_M09'),
-		"10" => JText::_('MOD_CLM_TERMINE_M10'),
-		"11" => JText::_('MOD_CLM_TERMINE_M11'),
-		"12" => JText::_('MOD_CLM_TERMINE_M12')
+		"January" => Text::_('MOD_CLM_TERMINE_M01'),
+		"February" => Text::_('MOD_CLM_TERMINE_M02'),
+		"March" => Text::_('MOD_CLM_TERMINE_M03'),
+		"April" => Text::_('MOD_CLM_TERMINE_M04'),
+		"May" => Text::_('MOD_CLM_TERMINE_M05'),
+		"June" => Text::_('MOD_CLM_TERMINE_M06'),
+		"July" => Text::_('MOD_CLM_TERMINE_M07'),
+		"August" => Text::_('MOD_CLM_TERMINE_M08'),
+		"September" => Text::_('MOD_CLM_TERMINE_M09'),
+		"October" => Text::_('MOD_CLM_TERMINE_M10'),
+		"November" => Text::_('MOD_CLM_TERMINE_M11'),
+		"December" => Text::_('MOD_CLM_TERMINE_M12'),
+		"01" => Text::_('MOD_CLM_TERMINE_M01'),
+		"02" => Text::_('MOD_CLM_TERMINE_M02'),
+		"03" => Text::_('MOD_CLM_TERMINE_M03'),
+		"04" => Text::_('MOD_CLM_TERMINE_M04'),
+		"05" => Text::_('MOD_CLM_TERMINE_M05'),
+		"06" => Text::_('MOD_CLM_TERMINE_M06'),
+		"07" => Text::_('MOD_CLM_TERMINE_M07'),
+		"08" => Text::_('MOD_CLM_TERMINE_M08'),
+		"09" => Text::_('MOD_CLM_TERMINE_M09'),
+		"10" => Text::_('MOD_CLM_TERMINE_M10'),
+		"11" => Text::_('MOD_CLM_TERMINE_M11'),
+		"12" => Text::_('MOD_CLM_TERMINE_M12')
     );
             
     $arrWochentag = array( 
-		"Monday" => JText::_('MOD_CLM_TERMINE_T01'), 
-		"Tuesday" => JText::_('MOD_CLM_TERMINE_T02'), 
-		"Wednesday" => JText::_('MOD_CLM_TERMINE_T03'), 
-		"Thursday" => JText::_('MOD_CLM_TERMINE_T04'), 
-		"Friday" => JText::_('MOD_CLM_TERMINE_T05'), 
-		"Saturday" => JText::_('MOD_CLM_TERMINE_T06'), 
-		"Sunday" => JText::_('MOD_CLM_TERMINE_T07') );
+		"Monday" => Text::_('MOD_CLM_TERMINE_T01'), 
+		"Tuesday" => Text::_('MOD_CLM_TERMINE_T02'), 
+		"Wednesday" => Text::_('MOD_CLM_TERMINE_T03'), 
+		"Thursday" => Text::_('MOD_CLM_TERMINE_T04'), 
+		"Friday" => Text::_('MOD_CLM_TERMINE_T05'), 
+		"Saturday" => Text::_('MOD_CLM_TERMINE_T06'), 
+		"Sunday" => Text::_('MOD_CLM_TERMINE_T07') );
             
     ?>
     
@@ -170,7 +175,7 @@ $doc->setTitle(JText::_('TERMINE_HEAD'));
                 <?php if (isset($datum[$t-1]) AND $datum[$t] == $datum[$t-1]) {
 			echo '';
 		      } else {
-			 echo JHTML::_('date',  $termine[$t]->datum, JText::_('DATE_FORMAT_CLM_F'));
+			 echo HTMLHelper::_('date',  $termine[$t]->datum, Text::_('DATE_FORMAT_CLM_F'));
 		      }
 		      if (isset($datum[$t]) AND $datum[$t] != '0000-00-00' AND $datum[$t] != '1970-01-01') {
 			if ($termine[$t]->starttime != '00:00:00') echo '&nbsp;&nbsp;&nbsp;'.substr($termine[$t]->starttime,0,5).'&nbsp;';

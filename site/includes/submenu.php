@@ -1,16 +1,20 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
- * @author Thomas Schwietert
+ * @link https://chessleaguemanager.org
+* @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
-$document = JFactory::getDocument();
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
+$document = Factory::getDocument();
 // Konfigurationsparameter auslesen
 $config = clm_core::$db->config();
 $fe_submenu = $config->fe_submenu;
@@ -18,7 +22,7 @@ $test_button = $config->test_button;
 $mobile = clm_core::$load->is_mobile();
 
 if ($fe_submenu == 1) {
-	$document = JFactory::getDocument();
+	$document = Factory::getDocument();
 	if (!isset($submenu_where[0])) {
 		$submenu_where[0] = - 1;
 	}
@@ -53,12 +57,12 @@ if ($fe_submenu == 1) {
 		$array[0][1] = $array[0][3][$saison_activ][1];
 		$array[0][2] = $array[0][3][$saison_activ][2];
 	} else {
-		$array[0][0] = JText::_('SUBMENU_SAISON');
+		$array[0][0] = Text::_('SUBMENU_SAISON');
 		$array[0][1] = 2;
 		$array[0][2] = array();
 	}
 	// Liga
-	$array[1][0] = JText::_('SUBMENU_LEAGUE');
+	$array[1][0] = Text::_('SUBMENU_LEAGUE');
 	$array[1][1] = 2;
 	$array[1][2] = array();
 	$array[1][3] = array();
@@ -89,7 +93,7 @@ if ($fe_submenu == 1) {
 		}
 	}
 	// Mannschaften
-	$array[2][0] = JText::_('SUBMENU_MSCH');
+	$array[2][0] = Text::_('SUBMENU_MSCH');
 	if (isset($liga_on)) {
 		$array[2][1] = 2;
 		$array[2][2] = array();
@@ -116,7 +120,7 @@ if ($fe_submenu == 1) {
 		$array[2][3] = array();
 	}
 	// Paarungsliste
-	$array[3][0] = JText::_('SUBMENU_PAAR');
+	$array[3][0] = Text::_('SUBMENU_PAAR');
 	$i33 = 0;
 	if (isset($liga_on)) {
 		if (!$mobile) {
@@ -139,7 +143,7 @@ if ($fe_submenu == 1) {
 		$array[3][3] = array();
 
 		if ($mobile) {
-			$array[3][3][0][0] = JText::_('SUBMENU_PAAR');
+			$array[3][3][0][0] = Text::_('SUBMENU_PAAR');
 			if (clm_core::$load->request_string('view', -1) != "paarungsliste") {
 				$array[3][3][0][1] = 0;
 			} else {
@@ -157,7 +161,7 @@ if ($fe_submenu == 1) {
 		
 		// Aktuelle Runde
 		if(count($sub_runden)>0){		
-		$array[3][3][$i33][0] = JText::_('ROUND_CURRENT');
+		$array[3][3][$i33][0] = Text::_('ROUND_CURRENT');
 		require_once (JPATH_COMPONENT . DS . 'models' . DS . 'aktuell_runde.php');
 		$rnd_dg = CLMModelAktuell_Runde::Runden();
 		if (clm_core::$load->request_string('view', -1) != "runde" || clm_core::$load->request_string('runde', -1) != $rnd_dg[0] || clm_core::$load->request_string('dg', -1) != $rnd_dg[1]) {
@@ -220,11 +224,11 @@ if ($fe_submenu == 1) {
 		$array[3][3] = array();
 	}
 	// Mehr
-	$array[4][0] = JText::_('SUBMENU_ETC');
+	$array[4][0] = Text::_('SUBMENU_ETC');
 	$array[4][1] = 2;
 	$array[4][2] = array();
 	// Liga Teilnehmer
-	$array[4][3][0][0] = JText::_('SUBMENU_TEILNEHMER');
+	$array[4][3][0][0] = Text::_('SUBMENU_TEILNEHMER');
 	if (isset($liga_on)) {
 		if (clm_core::$load->request_string('view', -1) != "teilnehmer") {
 			$array[4][3][0][1] = 0;
@@ -243,7 +247,7 @@ if ($fe_submenu == 1) {
 		$array[4][3][0][1] = 3;
 	}
 	// DWZ der Liga
-	$array[4][3][1][0] = JText::_('SUBMENU_DWZMSCH');
+	$array[4][3][1][0] = Text::_('SUBMENU_DWZMSCH');
 	if (isset($liga_on)) {
 		if (clm_core::$load->request_string('view', -1) != "dwz_liga") {
 			$array[4][3][1][1] = 0;
@@ -262,7 +266,7 @@ if ($fe_submenu == 1) {
 		$array[4][3][1][2] = array();
 	}
 	// Liga Statistiken
-	$array[4][3][2][0] = JText::_('SUBMENU_STATS');
+	$array[4][3][2][0] = Text::_('SUBMENU_STATS');
 	if (isset($liga_on)) {
 		if (clm_core::$load->request_string('view', -1) != "statistik") {
 			$array[4][3][2][1] = 0;
@@ -281,7 +285,7 @@ if ($fe_submenu == 1) {
 		$array[4][3][2][1] = 3;
 	}
 	// Liga Org-Details
-	$array[4][3][3][0] = JText::_('SUBMENU_LIGA_INFO');
+	$array[4][3][3][0] = Text::_('SUBMENU_LIGA_INFO');
 	if (isset($liga_on)) {
 		if (clm_core::$load->request_string('view', -1) != "liga_info") {
 			$array[4][3][3][1] = 0;
@@ -307,7 +311,7 @@ if ($fe_submenu == 1) {
 	$array[4][3][4][3] = array();
 
     // Saisonstatistiken
-	$array[4][3][5][0] = JText::_('SUBMENU_SAISTATS');
+	$array[4][3][5][0] = Text::_('SUBMENU_SAISTATS');
 	if (clm_core::$load->request_string('view', -1) != "info") {
 		$array[4][3][5][1] = 0;
 	} else {
@@ -322,7 +326,7 @@ if ($fe_submenu == 1) {
 	}
 	$array[4][3][5][3] = array();
 	// Termine
-	$array[4][3][6][0] = JText::_('SUBMENU_TERMINE');
+	$array[4][3][6][0] = Text::_('SUBMENU_TERMINE');
 	if (clm_core::$load->request_string('view', -1) != "termine") {
 		$array[4][3][6][1] = 0;
 	} else {

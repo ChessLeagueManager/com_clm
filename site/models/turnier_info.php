@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -14,6 +14,8 @@ defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 jimport( 'joomla.html.parameter' );
 require_once JPATH_COMPONENT_ADMINISTRATOR. '/helpers/addresshandler.php';
+
+use Joomla\CMS\Factory;
 
 class CLMModelTurnier_Info extends JModelLegacy {
 	
@@ -149,7 +151,7 @@ class CLMModelTurnier_Info extends JModelLegacy {
 	$tid	= $this->turnierid;
 	$lid	= 0;
 	
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 		// alle Schiedsrichter im Turnier
 //		$query = "SELECT at.*, CONCAT(a.name,',',a.vorname,'(',a.fideid,')') as fname FROM #__clm_arbiter_turnier as at "
 		$query = "SELECT at.*, CONCAT(a.vorname,' ',a.name) as fname FROM #__clm_arbiter_turnier as at "

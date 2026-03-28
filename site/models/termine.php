@@ -1,14 +1,16 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Fjodor Schäfer
  * @email ich@vonfio.de
 */
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
+
+use Joomla\CMS\Factory;
 
 class CLMModelTermine extends JModelLegacy
 {
@@ -44,7 +46,7 @@ class CLMModelTermine extends JModelLegacy
 		}
 
 		$start	= clm_escape(clm_core::$load->request_string('start', '1'));
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		if ($start == '1') $date = date("Y-m-d");
 		else $date = $start;
 	
@@ -125,7 +127,7 @@ class CLMModelTermine extends JModelLegacy
 	{
 	
 		$nr		= clm_core::$load->request_int('nr', -1);
-		$db		= JFactory::getDBO();
+		$db		= Factory::getDBO();
 		$date 	= date("Y-m-d");
 		if($nr!=-1){
 		$query = " SELECT host FROM #__clm_termine AS a "
@@ -170,7 +172,7 @@ class CLMModelTermine extends JModelLegacy
 		$sid	= clm_core::$load->request_int('saison', 1);	
 		$liga	= clm_core::$load->request_int('liga', 1);
 		$start	= clm_core::$load->request_string('start', '1');
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		if ($start == '1') $date = date("Y-m-d");
 		else $date = $start;
 	 
@@ -198,7 +200,7 @@ class CLMModelTermine extends JModelLegacy
 	function _getCLMSumPlan ( &$options )
 	{
 	$sid	= clm_core::$load->request_int('saison', 1);	
-	$db		= JFactory::getDBO();
+	$db		= Factory::getDBO();
 	$date 	= date("Y-m-d");
 		$query = " SELECT a.dg,a.lid,a.sid,a.runde,a.paar,a.tln_nr,a.gegner "
 			." ,t.name as dat_name, t.datum as datum, t.startzeit AS starttime, l.ordering "

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,7 +11,11 @@
 */
 defined('clm') or die('Restricted access');
 
-$mainframe	= JFactory::getApplication();
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+
+$mainframe	= Factory::getApplication();
 // Variablen holen
 $sid 	= clm_core::$load->request_int('saison','1');
 $lid 	= clm_core::$load->request_int('liga');
@@ -24,27 +28,27 @@ $bemerkungen 	= clm_core::$load->request_string('bemerkungen');
 $bem_int 	= clm_core::$load->request_string('bem_int');
 
 	$option = clm_core::$load->request_string('option' );
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 
-$user 		=JFactory::getUser();
+$user 		=Factory::getUser();
 $meldung 	= $user->get('id');
 $clmuser        = $this->clmuser;
 $link = 'index.php?option=com_clm&view=info';
 
 // Login Status prüfen
 if (!$user->get('id')) {
-        $msg = JText::_( 'CLUB_DATA_SENT_LOGIN' );
+        $msg = Text::_( 'CLUB_DATA_SENT_LOGIN' );
         $mainframe->enqueueMessage( $msg );
         $mainframe->redirect( $link );
                         }
 if ($clmuser[0]->published < 1) {
-        $msg = JText::_( 'CLUB_DATA_SENT_ACCOUNT' );
+        $msg = Text::_( 'CLUB_DATA_SENT_ACCOUNT' );
         $mainframe->enqueueMessage( $msg );
         $mainframe->redirect( $link );
 }
 
 if (($clmuser[0]->zps <> $zps)  || ($clmuser[0]->usertype == "spl")) {
-        $msg = JText::_( 'CLUB_DATA_SENT_FALSE' );
+        $msg = Text::_( 'CLUB_DATA_SENT_FALSE' );
         $mainframe->enqueueMessage( $msg );
         $mainframe->redirect( $link );
                         }
@@ -62,12 +66,12 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 
 	$today = date("Y-m-d");
 	// Datum der Erstellung
-	$date =JFactory::getDate();
+	$date =Factory::getDate();
 	$now = $date->toSQL();
 /* if (count($abgabe) > 0) {
 
 	$link = 'index.php?option=com_clm&view=info';
-	$msg = JText::_( '<h2>Diese Rangliste wurde bereits abgegeben ! </h2>Bitte schauen Sie in die entsprechende Mannschaftsübersicht' );
+	$msg = Text::_( '<h2>Diese Rangliste wurde bereits abgegeben ! </h2>Bitte schauen Sie in die entsprechende Mannschaftsübersicht' );
 	$mainframe->redirect( $link, $msg);
  			}
 */
@@ -123,7 +127,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 	$lid_rang	= $db->loadObjectList();
 
 	// Datum und Uhrzeit für Meldung
-	$date =JFactory::getDate();
+	$date =Factory::getDate();
 	$now = $date->toSQL();
 
 	// Datensätze schreiben
@@ -264,7 +268,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 	clm_core::$db->query($query);
 
 
-	$msg = '<h5>'.JText::_( 'Die Rangliste wurde gespeichert!' ).'</h5>';
+	$msg = '<h5>'.Text::_( 'Die Rangliste wurde gespeichert!' ).'</h5>';
 	$mainframe->enqueueMessage( $msg, 'message' );
 	
 	
@@ -376,7 +380,7 @@ if ( $send == 1 ) {
 			<html>
 			<head>
 			<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-			<title>'.JText::_( 'CLUB_LIST_MAIL_HEADLINE' ).'</title>
+			<title>'.Text::_( 'CLUB_LIST_MAIL_HEADLINE' ).'</title>
 			</head>
 			<body>';
 	$body_html_footer = '
@@ -389,7 +393,7 @@ if ( $send == 1 ) {
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<td bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;" colspan="7"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_RANG_MAIL_HEADLINE' ).' '.JText::_( 'OF_DAY' ).JHTML::_('date', $now, JText::_('DATE_FORMAT_CLM_PDF')). '</strong></div></td>
+			<td bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;" colspan="7"><div align="center" style="font-size: 12px;"><strong>'.Text::_( 'CLUB_RANG_MAIL_HEADLINE' ).' '.Text::_( 'OF_DAY' ).HTMLHelper::_('date', $now, Text::_('DATE_FORMAT_CLM_PDF')). '</strong></div></td>
 		</tr>
 		<tr>
 			<td width="120">&nbsp;</td>
@@ -401,20 +405,20 @@ if ( $send == 1 ) {
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_RANG_MAIL_RANG' ).'</strong></td>
+			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.Text::_( 'CLUB_RANG_MAIL_RANG' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$rangliste_id[0]->Gruppe. '&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
-			<td width="80" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_SEASON' ).'</strong></td>
+			<td width="80" style="border-bottom: solid 1px #999999;"><strong>'.Text::_( 'CLUB_LIST_MAIL_SEASON' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$saison[0]->name. '&nbsp;</td>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_CLUB' ).'</strong></td>
+			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.Text::_( 'CLUB_LIST_MAIL_CLUB' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$mannschaft[0]->Vereinname. '&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
-			<td width="80" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( '' ).'</strong></td>
+			<td width="80" style="border-bottom: solid 1px #999999;"><strong>'.Text::_( '' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .''. '&nbsp;</td>
 			<td>&nbsp;</td>
 		</tr>';
@@ -433,13 +437,13 @@ if ( $send == 1 ) {
 	$body_html .=	'
 		<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px;">
 		<tr>
-			<td width="40" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_RANG_MAIL_MNR' ).'</strong></div></td>
-			<td width="60" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_RANG_MAIL_RNR' ).'</strong></div></td>
-			<td width="170" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_NAME' ).'</strong></div></td>
+			<td width="40" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.Text::_( 'CLUB_RANG_MAIL_MNR' ).'</strong></div></td>
+			<td width="60" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.Text::_( 'CLUB_RANG_MAIL_RNR' ).'</strong></div></td>
+			<td width="170" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.Text::_( 'CLUB_LIST_MAIL_NAME' ).'</strong></div></td>
 			<td width="15" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.$str_sp.'</strong></div></td>
-			<td width="60" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_RATING' ).'</strong></div></td>
-			<td width="60" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_NUMBER' ).'</strong></div></td>
-			<td width="210" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.JText::_( 'CLUB_LIST_MAIL_CLUBL' ).'</strong></div></td>
+			<td width="60" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.Text::_( 'CLUB_LIST_MAIL_RATING' ).'</strong></div></td>
+			<td width="60" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.Text::_( 'CLUB_LIST_MAIL_NUMBER' ).'</strong></div></td>
+			<td width="210" bgcolor="#F2F2F2" style="border-bottom: solid 1px #000000; border-top: solid 1px #000000; padding: 3px;"><div align="center" style="font-size: 12px;"><strong>'.Text::_( 'CLUB_LIST_MAIL_CLUBL' ).'</strong></div></td>
 		</tr>
 	';
 	foreach ($rangliste as $rangliste1) {
@@ -476,11 +480,11 @@ if ( $send == 1 ) {
 		</table>
 		<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px;">
 		<tr>
-			<td width="100" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_SENDER' ).'</strong></td>
+			<td width="100" style="border-bottom: solid 1px #999999;"><strong>'.Text::_( 'CLUB_LIST_MAIL_SENDER' ).'</strong></td>
 			<td width="150" style="border-bottom: solid 1px #999999;">' .$melder[0]->name. '&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
 			<td width="5" style="border-bottom: solid 1px #999999;">&nbsp;</td>
-			<td width="100" style="border-bottom: solid 1px #999999;"><strong>'.JText::_( '' ).'</strong></td>
+			<td width="100" style="border-bottom: solid 1px #999999;"><strong>'.Text::_( '' ).'</strong></td>
 			<td width="150" style="border-bottom: solid 1px #999999;">' .''. '&nbsp;</td>
 			<td width="20" style="border-bottom: solid 1px #999999;">&nbsp;</td>
 		</tr>';
@@ -488,29 +492,29 @@ if ( $send == 1 ) {
 	  $z_liga = $mannschaft1->liga;
 	  $body_html .=	'
 		<tr>
-			<td style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_LEAGUE' ).'</strong></td>
+			<td style="border-bottom: solid 1px #999999;"><strong>'.Text::_( 'CLUB_LIST_MAIL_LEAGUE' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$a_ligen[$z_liga]->name. '&nbsp;</td>
 			<td style="border-bottom: solid 1px #999999;">&nbsp;</td>
 			<td style="border-bottom: solid 1px #999999;">&nbsp;</td>
-			<td style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_CONTROLLER' ).'</strong></td>
+			<td style="border-bottom: solid 1px #999999;"><strong>'.Text::_( 'CLUB_LIST_MAIL_CONTROLLER' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$a_ligen[$z_liga]->sl_name. '&nbsp;</td>
 			<td style="border-bottom: solid 1px #999999;">&nbsp;</td>
 		</tr>
 		<tr>
-			<td style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_TEAM' ).'</strong></td>
+			<td style="border-bottom: solid 1px #999999;"><strong>'.Text::_( 'CLUB_LIST_MAIL_TEAM' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$mannschaft1->name. '&nbsp;</td>
 			<td style="border-bottom: solid 1px #999999;">&nbsp;</td>
 			<td style="border-bottom: solid 1px #999999;">&nbsp;</td>
-			<td style="border-bottom: solid 1px #999999;"><strong>'.JText::_( 'CLUB_LIST_MAIL_CAPTAIN' ).'</strong></td>
+			<td style="border-bottom: solid 1px #999999;"><strong>'.Text::_( 'CLUB_LIST_MAIL_CAPTAIN' ).'</strong></td>
 			<td style="border-bottom: solid 1px #999999;">' .$mannschaft1->mf_name. '&nbsp;</td>
 			<td style="border-bottom: solid 1px #999999;">&nbsp;</td>
 		</tr>
 		';
 	}
 	  $body_html .=	'  </table>';
-	$subject = $fromname.': '.JTEXT::_('CLUB_RANG_SUBJECT').' '.$mannschaft[0]->Vereinname.'  '.$rangliste_id[0]->Gruppe.'   '.$saison[0]->name;
+	$subject = $fromname.': '.Text::_('CLUB_RANG_SUBJECT').' '.$mannschaft[0]->Vereinname.'  '.$rangliste_id[0]->Gruppe.'   '.$saison[0]->name;
 
-	$body_name = JText::_('RESULT_NAME').$melder[0]->name.",";
+	$body_name = Text::_('RESULT_NAME').$melder[0]->name.",";
 	$countmail = 0;
 	$msg = '';
 	
@@ -520,7 +524,7 @@ if ( $send == 1 ) {
 	if ($rangliste_id[0]->Meldeschluss < $today) { $korr_moeglich = 0; 	// Korrektur möglich im FE nein
 														$deadline_roster = ''; }
 	else { $korr_moeglich = 1; 			// Korrektur möglich im FE ja
-		$deadline_roster = JHTML::_('date', $rangliste_id[0]->Meldeschluss, JText::_('DATE_FORMAT_CLM_F')); }
+		$deadline_roster = HTMLHelper::_('date', $rangliste_id[0]->Meldeschluss, Text::_('DATE_FORMAT_CLM_F')); }
 	
 	// Mail Melder
 	if (isset($melder[0]->email) AND clm_core::$load->is_email($melder[0]->email)) {
@@ -528,22 +532,22 @@ if ( $send == 1 ) {
 		$body_html_md = '
 		<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px;">
 		<tr>
-		  <td>'.JText::_('CLUB_RANG_MAIL_MD1').'</td>
+		  <td>'.Text::_('CLUB_RANG_MAIL_MD1').'</td>
   		</tr>
 		<tr>
 		  <td>';
-		if ($erstmeldung == 1)  $body_html_md .= JText::_('CLUB_LIST_MAIL_MD2'); 
-		else $body_html_md .= JText::_('CLUB_LIST_MAIL_MD2A');
+		if ($erstmeldung == 1)  $body_html_md .= Text::_('CLUB_LIST_MAIL_MD2'); 
+		else $body_html_md .= Text::_('CLUB_LIST_MAIL_MD2A');
 		$body_html_md .= '</td>
 		</tr>
 		<tr>';
 		if ($korr_moeglich == 1) { 
-			if ($erstmeldung == 1)  $body_html_md .= '<td>'.JText::_('CLUB_LIST_MAIL_MD3').$deadline_roster.'</td></tr><tr>'; 
-							  else $body_html_md .= '<td>'.JText::_('CLUB_LIST_MAIL_MD3A').$deadline_roster.'</td></tr><tr>'; }
+			if ($erstmeldung == 1)  $body_html_md .= '<td>'.Text::_('CLUB_LIST_MAIL_MD3').$deadline_roster.'</td></tr><tr>'; 
+							  else $body_html_md .= '<td>'.Text::_('CLUB_LIST_MAIL_MD3A').$deadline_roster.'</td></tr><tr>'; }
 		$body_html_md .= '</tr>
 		</table>
 		';
-		$body_name = JText::_('RESULT_NAME').$melder[0]->name.",";
+		$body_name = Text::_('RESULT_NAME').$melder[0]->name.",";
 		$body = $body_html_header.$body_name.$body_html_md.$body_html.$body_html_footer;
 		$result = clm_core::$api->mail_send($recipient,$subject,$body,1,null,$bcc);
 		if ($result[0] !== true) 
@@ -562,21 +566,21 @@ if ( $send == 1 ) {
 		<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px;">
 		<tr>
 		  <td>';
-		if ($erstmeldung == 1)  $body_html_mf .= JText::_('CLUB_RANG_MAIL_MF1'); 
-		else $body_html_mf .= JText::_('CLUB_RANG_MAIL_MF1A');
+		if ($erstmeldung == 1)  $body_html_mf .= Text::_('CLUB_RANG_MAIL_MF1'); 
+		else $body_html_mf .= Text::_('CLUB_RANG_MAIL_MF1A');
 		$body_html_mf .= '</td>
   		</tr>
 		<tr>
-		  <td>'.JText::_('CLUB_LIST_MAIL_MF2').'</td>
+		  <td>'.Text::_('CLUB_LIST_MAIL_MF2').'</td>
 		</tr>
 		<tr>';
 		if ($korr_moeglich == 1) { 
-			if ($erstmeldung == 1)  $body_html_mf .= '<td>'.JText::_('CLUB_LIST_MAIL_MF3').$deadline_roster.'</td></tr><tr>'; 
-							  else $body_html_mf .= '<td>'.JText::_('CLUB_LIST_MAIL_MF3A').$deadline_roster.'</td></tr><tr>'; }
+			if ($erstmeldung == 1)  $body_html_mf .= '<td>'.Text::_('CLUB_LIST_MAIL_MF3').$deadline_roster.'</td></tr><tr>'; 
+							  else $body_html_mf .= '<td>'.Text::_('CLUB_LIST_MAIL_MF3A').$deadline_roster.'</td></tr><tr>'; }
 		$body_html_mf .= '</tr>
 		</table>
 		';
-		$body_name = JText::_('RESULT_NAME').$mannschaft1->mf_name.",";
+		$body_name = Text::_('RESULT_NAME').$mannschaft1->mf_name.",";
 		$body = $body_html_header.$body_name.$body_html_mf.$body_html.$body_html_footer;
 		$result = clm_core::$api->mail_send($recipient,$subject,$body,1,null,$bcc);
 		if ($result[0] !== true) 
@@ -596,19 +600,19 @@ if ( $send == 1 ) {
 		$body_html_sl = '
 		<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px;">
 		<tr>';
-			if ($erstmeldung == 1)  $body_html_sl .= '<td>'.JText::_('CLUB_RANG_MAIL_SL1').'</td>'; 
-							  else $body_html_sl .= '<td>'.JText::_('CLUB_RANG_MAIL_SL1A').'</td>'; 
+			if ($erstmeldung == 1)  $body_html_sl .= '<td>'.Text::_('CLUB_RANG_MAIL_SL1').'</td>'; 
+							  else $body_html_sl .= '<td>'.Text::_('CLUB_RANG_MAIL_SL1A').'</td>'; 
 		$body_html_sl .= '</tr>
 		<tr>
-		  <td>'.JText::_('CLUB_LIST_MAIL_SL2').'</td>
+		  <td>'.Text::_('CLUB_LIST_MAIL_SL2').'</td>
 		</tr>
 		<tr>
-		  <td>'.JText::_('CLUB_LIST_MAIL_SL3').'</td>
+		  <td>'.Text::_('CLUB_LIST_MAIL_SL3').'</td>
 		</tr>
 		<tr> </tr>
 		</table>
 		';
-		$body_name = JText::_('RESULT_NAME').$a_ligen[$z_liga]->sl_name.",";
+		$body_name = Text::_('RESULT_NAME').$a_ligen[$z_liga]->sl_name.",";
 		$body = $body_html_header.$body_name.$body_html_sl.$body_html.$body_html_footer;
 		$result = clm_core::$api->mail_send($recipient,$subject,$body,1,null,$bcc);
 		if ($result[0] !== true) 
@@ -623,16 +627,16 @@ if ( $send == 1 ) {
 		$body_html_ad = '
 		<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px;">
 		<tr>';
-			if ($erstmeldung == 1)  $body_html_ad .= '<td>'.JText::_('CLUB_RANG_MAIL_AD1').'</td>'; 
-							  else $body_html_ad .= '<td>'.JText::_('CLUB_RANG_MAIL_AD1A').'</td>'; 
+			if ($erstmeldung == 1)  $body_html_ad .= '<td>'.Text::_('CLUB_RANG_MAIL_AD1').'</td>'; 
+							  else $body_html_ad .= '<td>'.Text::_('CLUB_RANG_MAIL_AD1A').'</td>'; 
 		$body_html_ad .= '</tr>
 		<tr>
-		  <td>'.JText::_('CLUB_LIST_MAIL_AD2').'</td>
+		  <td>'.Text::_('CLUB_LIST_MAIL_AD2').'</td>
 		</tr>
 		<tr> </tr>
 		</table>
 		';
-		$body_name = JText::_('RESULT_NAME').$bcc_name.",";
+		$body_name = Text::_('RESULT_NAME').$bcc_name.",";
 		$body = $body_html_header.$body_name.$body_html_ad.$body_html.$body_html_footer;
 		$result = clm_core::$api->mail_send($recipient,$subject,$body,1);
 		if ($result[0] !== true) 
@@ -640,12 +644,12 @@ if ( $send == 1 ) {
 		$countmail++;
 	}
 	if ($email_suppress != 1) 
-		$msg .= "<h5>".$countmail++. ' '.JText::_( 'Mail wurden gesendet' )."</h5>";
+		$msg .= "<h5>".$countmail++. ' '.Text::_( 'Mail wurden gesendet' )."</h5>";
 	$mainframe->enqueueMessage( $msg, 'message' );
 
 }
 } else {
-    $msg = JText::_( 'CLUB_DATA_SENT_FALSE' );
+    $msg = Text::_( 'CLUB_DATA_SENT_FALSE' );
     $mainframe->enqueueMessage( $msg );
 	$mainframe->redirect($link);
 

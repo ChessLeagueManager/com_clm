@@ -11,8 +11,12 @@
  * Kommentare Deutsch - Comments English
 */
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip');
+//HTMLHelper::_('behavior.tooltip', '.CLMTooltip');
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 // Konfigurationsparameter auslesen - get configuration parameters
 $itemid = clm_core::$load->request_int( 'Itemid' );
@@ -20,7 +24,7 @@ $config = clm_core::$db->config();
 $pgn	= clm_core::$load->request_int('pgn'); 
 
 // Userkennung holen - get user id
-$user	=JFactory::getUser();
+$user	=Factory::getUser();
 $jid	= $user->get('id');
 
   if ($pgn == 1) { 
@@ -38,7 +42,7 @@ $jid	= $user->get('id');
 			$resulthint = "";
 			fputs($pdatei, '[Event "'.clm_core::$load->utf8decode($this->turnier->name).'"]'.$nl);
 			fputs($pdatei, '[Site "?"]'.$nl);
-			fputs($pdatei, '[Date "'.JHTML::_('date',  $value->datum, JText::_('Y.m.d')).'"]'.$nl);
+			fputs($pdatei, '[Date "'.HTMLHelper::_('date',  $value->datum, Text::_('Y.m.d')).'"]'.$nl);
 			fputs($pdatei, '[Round "'.$value->nr.'"]'.$nl);
 			fputs($pdatei, '[Board "'.$matches->brett.'"]'.$nl);
 			fputs($pdatei, '[White "'.clm_core::$load->utf8decode($matches->wname).'"]'.$nl);
@@ -52,13 +56,13 @@ $jid	= $user->get('id');
 			if ($matches->ergebnis == "2") { fputs($pdatei, '[Result "1/2-1/2"]'.$nl); $gtmarker = "1/2-1/2"; }
 			elseif ($matches->ergebnis == "0") { fputs($pdatei, '[Result "0-1"]'.$nl); $gtmarker = "0-1"; }
 			elseif ($matches->ergebnis == "1") { fputs($pdatei, '[Result "1-0"]'.$nl); $gtmarker = "1-0"; }
-			elseif ($matches->ergebnis == "5") { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".clm_core::$load->utf8decode(JText::_('PAAR_RESULT_HINT_1'))."}"; $gtmarker = "1-0"; }
-			elseif ($matches->ergebnis == "4") { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{".clm_core::$load->utf8decode(JText::_('PAAR_RESULT_HINT_2'))."}"; $gtmarker = "0-1"; }
-			elseif ($matches->ergebnis == "6") { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{".clm_core::$load->utf8decode(JText::_('PAAR_RESULT_HINT_3'))."}"; $gtmarker = "*"; }
+			elseif ($matches->ergebnis == "5") { fputs($pdatei, '[Result "1-0"]'.$nl); $resulthint = "{".clm_core::$load->utf8decode(Text::_('PAAR_RESULT_HINT_1'))."}"; $gtmarker = "1-0"; }
+			elseif ($matches->ergebnis == "4") { fputs($pdatei, '[Result "0-1"]'.$nl); $resulthint = "{".clm_core::$load->utf8decode(Text::_('PAAR_RESULT_HINT_2'))."}"; $gtmarker = "0-1"; }
+			elseif ($matches->ergebnis == "6") { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{".clm_core::$load->utf8decode(Text::_('PAAR_RESULT_HINT_3'))."}"; $gtmarker = "*"; }
 			else fputs($pdatei, '[Result "'.$matches->ergebnis.'"]'.$nl);		
 			fputs($pdatei, '[PlyCount "0"]'.$nl);
-			fputs($pdatei, '[EventDate "'.JHTML::_('date',  $this->turnier->dateStart, JText::_('Y.m.d')).'"]'.$nl);
-			fputs($pdatei, '[SourceDate "'.JHTML::_('date',  $value->datum, JText::_('Y.m.d')).'"]'.$nl);
+			fputs($pdatei, '[EventDate "'.HTMLHelper::_('date',  $this->turnier->dateStart, Text::_('Y.m.d')).'"]'.$nl);
+			fputs($pdatei, '[SourceDate "'.HTMLHelper::_('date',  $value->datum, Text::_('Y.m.d')).'"]'.$nl);
 			fputs($pdatei, ' '.$nl);
 			fputs($pdatei, $resulthint.' '.$gtmarker.$nl);
 			fputs($pdatei, ' '.$nl);
@@ -72,7 +76,7 @@ $jid	= $user->get('id');
 		header('Pragma:');
 		readfile($file_name);
 		flush();
-		JFactory::getApplication()->close();
+		Factory::getApplication()->close();
   }	
 
 // Stylesheet laden - load CSS
@@ -83,28 +87,28 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 echo '<div id="clm"><div id="turnier_paarungsliste">';
 
 // componentheading vorbereiten - prepare componentheading
-$heading = $this->turnier->name.": ".JText::_('TOURNAMENT_PAIRINGLIST');
+$heading = $this->turnier->name.": ".Text::_('TOURNAMENT_PAIRINGLIST');
 
 $archive_check = clm_core::$api->db_check_season_user($this->turnier->sid);
 if (!$archive_check) {
 	echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('NO_ACCESS')."<br/>".JText::_('NOT_REGISTERED'));
+	echo CLMContent::clmWarning(Text::_('NO_ACCESS')."<br/>".Text::_('NOT_REGISTERED'));
 } elseif ( $this->turnier->published == 0) { 
 	echo CLMContent::componentheading($heading);
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
+	echo CLMContent::clmWarning(Text::_('TOURNAMENT_NOTPUBLISHED')."<br/>".Text::_('TOURNAMENT_PATIENCE'));
 
 } elseif ($this->turnier->rnd == 0) {
 	echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOROUNDS'));
+	echo CLMContent::clmWarning(Text::_('TOURNAMENT_NOROUNDS'));
 
 } else {
 	// PDF-Link - PGF-link
-	echo CLMContent::createPDFLink('turnier_paarungsliste', JText::_('TOURNAMENT_PAIRINGLIST_PRINT'), array('turnier' => $this->turnier->id, 'layout' => 'paarungsliste'));
+	echo CLMContent::createPDFLink('turnier_paarungsliste', Text::_('TOURNAMENT_PAIRINGLIST_PRINT'), array('turnier' => $this->turnier->id, 'layout' => 'paarungsliste'));
 	
 	if ($jid != 0) {
-		echo CLMContent::createPGNLink('turnier_paarungsliste', JText::_('TOURNAMENT_PGN_ALL'), array('turnier' => $this->turnier->id));
+		echo CLMContent::createPGNLink('turnier_paarungsliste', Text::_('TOURNAMENT_PGN_ALL'), array('turnier' => $this->turnier->id));
 	}
    
    echo CLMContent::componentheading($heading);
@@ -140,7 +144,7 @@ function pgn_element($contents, $uelement, $ustart, $debug = 0) {
 					echo '<b>';
 					echo $value->name;
 					if ($value->datum != "0000-00-00" AND $value->datum != "1970-01-01" AND $turParams->get('displayRoundDate', 1) == 1) {
-						echo ',&nbsp;'.JHTML::_('date',  $value->datum, JText::_('DATE_FORMAT_CLM_F'));
+						echo ',&nbsp;'.HTMLHelper::_('date',  $value->datum, Text::_('DATE_FORMAT_CLM_F'));
 						if(isset($value->startzeit) and $value->startzeit != '00:00:00') { echo '  '.substr($value->startzeit,0,5).' Uhr'; }
 					}
 					echo '</b>';
@@ -151,13 +155,13 @@ function pgn_element($contents, $uelement, $ustart, $debug = 0) {
 			// Spaltenüberschriften - title of columns
 			?>
 			<tr>
-				<th align="center"><?php echo JText::_('TOURNAMENT_TNR'); ?></th>
-				<th align="center"><?php echo JText::_('TOURNAMENT_WHITE'); ?></th>
-				<th align="center"><?php echo JText::_('TOURNAMENT_TWZ'); ?></th>
+				<th align="center"><?php echo Text::_('TOURNAMENT_TNR'); ?></th>
+				<th align="center"><?php echo Text::_('TOURNAMENT_WHITE'); ?></th>
+				<th align="center"><?php echo Text::_('TOURNAMENT_TWZ'); ?></th>
 				<th align="center">-</th>
-				<th align="center"><?php echo JText::_('TOURNAMENT_BLACK'); ?></th>
-				<th align="center"><?php echo JText::_('TOURNAMENT_TWZ'); ?></th>
-				<th align="center"><?php echo JText::_('RESULT'); ?></th>
+				<th align="center"><?php echo Text::_('TOURNAMENT_BLACK'); ?></th>
+				<th align="center"><?php echo Text::_('TOURNAMENT_TWZ'); ?></th>
+				<th align="center"><?php echo Text::_('RESULT'); ?></th>
 			</tr>
 			<?php
 		
@@ -230,7 +234,7 @@ function pgn_element($contents, $uelement, $ustart, $debug = 0) {
 							} else {
 								if (is_numeric($matches->pgn)) $pgntext = $matches->text; else $pgntext = $matches->pgn;
 								$ia++; $ic = 1;
-								echo '<span class="editlinktip hasTip" title="'.JText::_( 'PGN_SHOWMATCH' ).'">';
+								echo '<span class="editlinktip hasTip" title="'.Text::_( 'PGN_SHOWMATCH' ).'">';
 									echo '<a onclick="startPgnMatch('.$matches->id.', \'pgnArea'.$ia.'\');" class="pgn">'.CLMText::getResultString($matches->ergebnis).'</a>';
 								echo '</span>';
 								?>
@@ -262,7 +266,7 @@ function pgn_element($contents, $uelement, $ustart, $debug = 0) {
 			// tl_ok? Haken anzeigen! - tl_ok? shoe tick
 			if ($this->displayTlOK AND $value->tl_ok > 0) {
 				echo '<tr><td colspan="9">';
-					echo '<div style="float:right; padding-right:1%;"><label for="name" class="hasTip" title="'.JText::_('TOURNAMENT_ROUNDOK').'"><img  src="'.CLMImage::imageURL('accept.png').'" /></label></div>';
+					echo '<div style="float:right; padding-right:1%;"><label for="name" class="hasTip" title="'.Text::_('TOURNAMENT_ROUNDOK').'"><img  src="'.CLMImage::imageURL('accept.png').'" /></label></div>';
 				echo '</td></tr>';
 			}
 			
@@ -279,7 +283,7 @@ function pgn_element($contents, $uelement, $ustart, $debug = 0) {
 		} else {
 			echo '<table cellpadding="0" cellspacing="0" class="runde">';
 			echo '<tr><td colspan="9"><div style="text-align:left; padding-left:1%"><b>'.$value->name.'</b>&nbsp;&nbsp;&nbsp;</div></tr>';
-			echo '<tr><td><font color="#ff0000">'.JText::_('TOURNAMENT_ROUNDNOTPUBLISHED').'</font></td></tr>';
+			echo '<tr><td><font color="#ff0000">'.Text::_('TOURNAMENT_ROUNDNOTPUBLISHED').'</font></td></tr>';
 			echo '</table><br>';
 		}
 	

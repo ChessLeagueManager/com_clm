@@ -1,15 +1,21 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
 
 $vereine 		= $this->vereine; // muss erster Model-Aufruf sein, da ggf. sid gestellt wird
 $sid			= clm_core::$load->request_int('saison', 1);
@@ -29,8 +35,8 @@ $auser = (integer) clm_core::$access->getId(); // aktueller CLM-User
 $archive_check = clm_core::$api->db_check_season_user($sid);
 
 // Browsertitelzeile setzen
-$doc =JFactory::getDocument();
-$doc->setTitle(JText::_('CLUBS_LIST'));
+$doc =Factory::getDocument();
+$doc->setTitle(Text::_('CLUBS_LIST'));
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
@@ -60,13 +66,13 @@ function tableOrdering( order, dir, task )
 <div >
 <div id="vereinsliste">
 
-<div class="componentheading"><?php echo JText::_('CLUBS_LIST'); ?></div>
+<div class="componentheading"><?php echo Text::_('CLUBS_LIST'); ?></div>
     <div class="clmbox">
                 <span class="right">
                 <form name="form1">
                     <select name="select" onchange="goto(this.form)" class="selectteam">
 						<?php foreach ($saisons as $saisons) { ?>
-                            <option value="<?php echo JURI::base(); ?>index.php?option=com_clm&view=vereinsliste&saison=<?php echo $saisons->id; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+                            <option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=vereinsliste&saison=<?php echo $saisons->id; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
                             <?php if ($saisons->id == $sid) { echo 'selected="selected"'; } ?>><?php echo $saisons->name; ?> </option>
                         <?php } ?>
                     </select>
@@ -75,10 +81,10 @@ function tableOrdering( order, dir, task )
             <span class="right">
                 <form name="form1">
                     <select name="select" onchange="goto(this.form)" class="selectteam">
-                    <option value=""><?php echo JText::_('CLUB_SELECTTEAM') ?></option>
+                    <option value=""><?php echo Text::_('CLUB_SELECTTEAM') ?></option>
                     <?php  $cnt = 0;
                      foreach ($vereinsliste as $vereinsliste) { $cnt++; if ($vereinsliste->sid == $sid) {?>
-                    <option value="<?php echo JURI::base(); ?>index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $vereinsliste->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $vereinsliste->name; ?></option>
+                    <option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $vereinsliste->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $vereinsliste->name; ?></option>
                     <?php }} ?>
                     </select>
                 </form>
@@ -87,26 +93,26 @@ function tableOrdering( order, dir, task )
 </div>
 <br />
 
-<form id="adminForm" action="<?php echo JRoute::_( 'index.php?option=com_clm&view=vereinsliste' . $plink ) ;?>" method="post" name="adminForm">
+<form id="adminForm" action="<?php echo Route::_( 'index.php?option=com_clm&view=vereinsliste' . $plink ) ;?>" method="post" name="adminForm">
 <table cellpadding="0" cellspacing="0" class="vereinsliste">
 	<tr class="anfang">
- <!--       <th rowspan="2" class="col_1"><a href="javascript:tableOrdering('name','asc','');"><?php echo JText::_('CLUBS_LIST_NAME') ?></a></th> -->
-        <th rowspan="2" class="col_1"><?php echo JHTML::_( 'grid.sort', 'CLUBS_LIST_NAME', 'NAME', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-        <?php if ($fe_vereinsliste_vs == 1) { ?><th rowspan="2" class="col_2"><?php echo JText::_('CLUB_CHIEF') ?></th><?php } ?>
-        <?php if ($fe_vereinsliste_hpage == 1) { ?><th rowspan="2" class="col_3"><?php echo JText::_('CLUB_HOMEPAGE') ?></th><?php } ?>
-        <th colspan="4" class="col"><?php echo JHTML::_( 'grid.sort', 'CLUBS_LIST_MEMBER', 'MGL_SUM', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+ <!--       <th rowspan="2" class="col_1"><a href="javascript:tableOrdering('name','asc','');"><?php echo Text::_('CLUBS_LIST_NAME') ?></a></th> -->
+        <th rowspan="2" class="col_1"><?php echo HTMLHelper::_( 'grid.sort', 'CLUBS_LIST_NAME', 'NAME', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+        <?php if ($fe_vereinsliste_vs == 1) { ?><th rowspan="2" class="col_2"><?php echo Text::_('CLUB_CHIEF') ?></th><?php } ?>
+        <?php if ($fe_vereinsliste_hpage == 1) { ?><th rowspan="2" class="col_3"><?php echo Text::_('CLUB_HOMEPAGE') ?></th><?php } ?>
+        <th colspan="4" class="col"><?php echo HTMLHelper::_( 'grid.sort', 'CLUBS_LIST_MEMBER', 'MGL_SUM', $this->lists['order_Dir'], $this->lists['order']); ?></th>
         <?php if ($fe_vereinsliste_dwz == 1) { ?>
-            <th rowspan="2" class="col_7"><?php echo JHTML::_( 'grid.sort', 'CLUBS_LIST_DWZAV', 'DWZ', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+            <th rowspan="2" class="col_7"><?php echo HTMLHelper::_( 'grid.sort', 'CLUBS_LIST_DWZAV', 'DWZ', $this->lists['order_Dir'], $this->lists['order']); ?></th>
 		<?php } ?>
         <?php if ($fe_vereinsliste_elo == 1) { ?>
-            <th rowspan="2" class="col_8"><?php echo JHTML::_( 'grid.sort', 'CLUBS_LIST_ELOAV', 'FIDE_Elo', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+            <th rowspan="2" class="col_8"><?php echo HTMLHelper::_( 'grid.sort', 'CLUBS_LIST_ELOAV', 'FIDE_Elo', $this->lists['order_Dir'], $this->lists['order']); ?></th>
 		<?php } ?>
 	</tr>
 	<tr>
-      <th class="col_6"><?php echo JText::_('') ?></th>
-	  <th class="col_4"><?php echo JHTML::_( 'grid.sort', 'CLUBS_LIST_MEMBERM', 'MGL_M', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-      <th class="col_5"><?php echo JHTML::_( 'grid.sort', 'CLUBS_LIST_MEMBERW', 'MGL_W', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-      <th class="col_5"><?php echo JHTML::_( 'grid.sort', 'p', 'MGL_P', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+      <th class="col_6"><?php echo Text::_('') ?></th>
+	  <th class="col_4"><?php echo HTMLHelper::_( 'grid.sort', 'CLUBS_LIST_MEMBERM', 'MGL_M', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+      <th class="col_5"><?php echo HTMLHelper::_( 'grid.sort', 'CLUBS_LIST_MEMBERW', 'MGL_W', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+      <th class="col_5"><?php echo HTMLHelper::_( 'grid.sort', 'p', 'MGL_P', $this->lists['order_Dir'], $this->lists['order']); ?></th>
   	</tr>
 	<?php  
          for ($z = 0; $z < count ( $vereine ); $z++) { 

@@ -1,15 +1,19 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link https://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
@@ -42,11 +46,11 @@ $item		= clm_core::$load->request_int('Itemid',0);
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 	// Browsertitelzeile setzen
-	$doc =JFactory::getDocument();
+	$doc =Factory::getDocument();
 	if(isset($dwz[0])){
-		$doc->setTitle(JText::_('DWZ_LIGA').' '.(isset($dwz[0]) ? $dwz[0]->name : ""));
+		$doc->setTitle(Text::_('DWZ_LIGA').' '.(isset($dwz[0]) ? $dwz[0]->name : ""));
 	} else {
-		$doc->setTitle(JText::_('DWZ_LIGA'));
+		$doc->setTitle(Text::_('DWZ_LIGA'));
 	}
 	
 	//CLM parameter auslesen
@@ -56,36 +60,36 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 <div id="clm">
 <div id="dwz_liga">
-<?php echo CLMContent::componentheading(JText::_('DWZ_LIGA').'&nbsp;'.(isset($dwz[0]) ? $dwz[0]->name : "")); ?>
+<?php echo CLMContent::componentheading(Text::_('DWZ_LIGA').'&nbsp;'.(isset($dwz[0]) ? $dwz[0]->name : "")); ?>
 
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
 
 <?php
 if (!isset($params['dwz_date']) OR $params['dwz_date'] == '0000-00-00' OR $params['dwz_date'] == '1970-01-01') {
-	if (isset($dwz[0]) && $dwz[0]->dsb_datum  > '1970-01-01') $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $dwz[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F')); 
+	if (isset($dwz[0]) && $dwz[0]->dsb_datum  > '1970-01-01') $hint_dwzdsb = Text::_('DWZ_DSB_COMMENT_RUN').' '.clm_core::$load->utf8decode(Text::_('ON_DAY')).' '.HTMLHelper::_('date',  $dwz[0]->dsb_datum, Text::_('DATE_FORMAT_CLM_F')); 
 	else $hint_dwzdsb = ''; 
 } else {
-	$hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_LEAGUE').' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $params['dwz_date'], JText::_('DATE_FORMAT_CLM_F'));  
+	$hint_dwzdsb = Text::_('DWZ_DSB_COMMENT_LEAGUE').' '.clm_core::$load->utf8decode(Text::_('ON_DAY')).' '.HTMLHelper::_('date',  $params['dwz_date'], Text::_('DATE_FORMAT_CLM_F'));  
 }
 
 $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
-	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+	echo "<div id='wrong'>".Text::_('NO_ACCESS')."<br>".Text::_('NOT_REGISTERED')."</div>";
 }
 // existiert die Liga
 elseif (!isset($dwz[0])) {	
-	echo "<div id='wrong'>".JText::_('NOT_EXIST')." (".$lid.")<br>".JText::_('GEDULDA')."</div>";
+	echo "<div id='wrong'>".Text::_('NOT_EXIST')." (".$lid.")<br>".Text::_('GEDULDA')."</div>";
 }
 // schon veröffentlicht
 elseif ( !$dwz OR $dwz[0]->published == "0") { 
-	echo '<br><div class="wrong">'. JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD') .'</div><br>'; 
+	echo '<br><div class="wrong">'. Text::_('NOT_PUBLISHED').'<br>'.Text::_('GEDULD') .'</div><br>'; 
 } 
 else {
 
 ?>
 
-<?php if (!$liga) { echo "<br>".CLMContent::clmWarning(JText::_('DWZ_NO_RESULTS'))."<br>"; } 
-	elseif ($liga[0]->anzeige_ma == 1 ) { echo "<br>".CLMContent::clmWarning(JText::_('TEAM_FORMATION_BLOCKED'))."<br>"; } 
+<?php if (!$liga) { echo "<br>".CLMContent::clmWarning(Text::_('DWZ_NO_RESULTS'))."<br>"; } 
+	elseif ($liga[0]->anzeige_ma == 1 ) { echo "<br>".CLMContent::clmWarning(Text::_('TEAM_FORMATION_BLOCKED'))."<br>"; } 
 else {
 
 $count = 0;
@@ -103,7 +107,7 @@ if ($x!=1){
 if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 ?>
 <tr class="ende">
-	<td colspan="2" align="left"><?php echo JText::_('TEAM_TOTAL') ?></td>
+	<td colspan="2" align="left"><?php echo Text::_('TEAM_TOTAL') ?></td>
 	<td><?php if ($team_dwz_partien > 0) echo round($team_dwz_galt / $team_dwz_partien); ?></td>
 	<td><?php echo round($team_punkte, 1); ?></td>
 	<td><?php echo round($team_we, 2); ?></td>
@@ -143,23 +147,23 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 <?php } ?>	
 </tr>
 <tr>
-	<td><?php echo JText::_('DWZ_NR') ?></td>
-	<td><?php echo JText::_('DWZ_NAME') ?></td>
+	<td><?php echo Text::_('DWZ_NR') ?></td>
+	<td><?php echo Text::_('DWZ_NAME') ?></td>
 	<?php if ($old) { ?>
-		<td><a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php echo JText::_('DWZ_OLD') ?></a></td>
+		<td><a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php echo Text::_('DWZ_OLD') ?></a></td>
 	<?php } else { ?>
-		<td><a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php echo JText::_('DWZ_START') ?></a></td>
+		<td><a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php echo Text::_('DWZ_START') ?></a></td>
 	<?php } ?>
-	<td><?php echo JText::_('DWZ_W') ?></td>
-	<td><?php echo JText::_('DWZ_WE') ?></td>
-	<td><?php echo JText::_('DWZ_EF') ?></td>
-	<td><?php echo JText::_('DWZ_RATING') ?></td>
-	<td><?php echo JText::_('DWZ_LEVEL') ?></td>
-	<td><?php echo JText::_('DWZ_POINTS') ?></td>
-	<td colspan="2"><?php echo JText::_('DWZ_NEW'); //klkl ?></td>
+	<td><?php echo Text::_('DWZ_W') ?></td>
+	<td><?php echo Text::_('DWZ_WE') ?></td>
+	<td><?php echo Text::_('DWZ_EF') ?></td>
+	<td><?php echo Text::_('DWZ_RATING') ?></td>
+	<td><?php echo Text::_('DWZ_LEVEL') ?></td>
+	<td><?php echo Text::_('DWZ_POINTS') ?></td>
+	<td colspan="2"><?php echo Text::_('DWZ_NEW'); //klkl ?></td>
 	<?php if ($optionEloAnalysis == '1') { ?>	
-	  <td><?php echo JText::_('ELO') ?></td>
-	  <td colspan="2"><?php echo JText::_('ELO_NEW'); ?></td>
+	  <td><?php echo Text::_('ELO') ?></td>
+	  <td colspan="2"><?php echo Text::_('ELO_NEW'); ?></td>
 	<?php } ?>	
 </tr>
 
@@ -228,7 +232,7 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 			<td><?php echo $liga->dsbDWZ.'-'.$liga->DWZ_Index;?></td>
 			<?php }
 		if ($liga->dsbDWZ  == 0 AND $liga->DWZ == 0) { ?>
-			<td><?php echo JText::_('DWZ_REST') ?></td>
+			<td><?php echo Text::_('DWZ_REST') ?></td>
 		<?php } ?>
 	<?php } else {
 		if ($liga->DWZ > 0) {
@@ -238,7 +242,7 @@ if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 				<td><?php echo $liga->DWZ; ?></td>
 			<?php } ?>
 		<?php } else { ?>
-			<td><?php echo JText::_('DWZ_REST') ?></td>
+			<td><?php echo Text::_('DWZ_REST') ?></td>
 		<?php } ?>
 	<?php } ?>
     <td>
@@ -290,7 +294,7 @@ $count= $liga->tln_nr;
 if (isset($spieler[$count-1]) AND $spieler[$count-1]->count > 0) {
 ?>
 <tr class="ende">
-	<td colspan="2" align="left"><?php echo JText::_('TEAM_TOTAL') ?></td>
+	<td colspan="2" align="left"><?php echo Text::_('TEAM_TOTAL') ?></td>
 	<td><?php if ($team_dwz_partien > 0) echo round($team_dwz_galt / $team_dwz_partien); ?></td>
 	<td><?php echo round($team_punkte, 1); ?></td>
 	<td><?php echo round($team_we, 2); ?></td>

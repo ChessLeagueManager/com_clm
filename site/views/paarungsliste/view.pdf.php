@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -14,6 +14,9 @@ jimport( 'joomla.application.component.view');
 /**
  * HTML View class for the auto Component
  */
+ 
+use Joomla\CMS\Factory;
+
 class CLMViewPaarungsliste extends JViewLegacy
 {
 	function display($tpl = 'pdf')
@@ -46,7 +49,7 @@ class CLMViewPaarungsliste extends JViewLegacy
 		$rundensumme     = $model->getCLMRundensumme();
 		$this->rundensumme = $rundensumme;
 
-		$document =JFactory::getDocument();
+		$document =Factory::getDocument();
 		$document->setMimeEncoding('application/pdf');
 
 		parent::display($tpl);

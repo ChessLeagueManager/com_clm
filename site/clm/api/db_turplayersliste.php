@@ -5,6 +5,9 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
 */
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+
 // Eingang: ausgewälte ID's oder nichts 
 function clm_api_db_turplayersliste($lid,$format='csv') {
 	$lang = clm_core::$lang->turplayersliste;
@@ -174,7 +177,7 @@ if ($format == 'pdf') {
 
 			$pdf->SetFont('Times','B',$date_font+2);
 				$pdf->Cell(10,3,' ',0,0);
-				$pdf->Cell(175,3,clm_core::$load->utf8decode(JText::_('WRITTEN')).' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.clm_core::$load->utf8decode(JHTML::_('date',  $now, $lang->date_format_clm_pdf)),0,1,'R');
+				$pdf->Cell(175,3,clm_core::$load->utf8decode(Text::_('WRITTEN')).' '.clm_core::$load->utf8decode(Text::_('ON_DAY')).' '.clm_core::$load->utf8decode(HTMLHelper::_('date',  $now, $lang->date_format_clm_pdf)),0,1,'R');
 				$pdf->Ln(1);    	
 				
 			$pdf->SetFont('Times','B',$head_font);	

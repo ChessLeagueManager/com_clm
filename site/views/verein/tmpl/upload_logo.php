@@ -10,9 +10,14 @@
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access'); 
-	jimport( 'joomla.filesystem.file' );
+jimport( 'joomla.filesystem.file' );
 
-	$mainframe	= JFactory::getApplication();
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\Filesystem\File;
+use Joomla\CMS\Uri\Uri;
+
+$mainframe	= Factory::getApplication();
 
 // Include the AddressHandler class
 require_once JPATH_COMPONENT_ADMINISTRATOR. '/helpers/addresshandler.php';
@@ -28,21 +33,21 @@ $config = clm_core::$db->config();
 $clmuser 	= $this->clmuser;
 $row 		= $this->row;
 
-$user =JFactory::getUser();
-	$link = JURI::base() .'index.php?option=com_clm&view=verein&saison='. $sid .'&zps='. $zps;
+$user =Factory::getUser();
+	$link = URI::base() .'index.php?option=com_clm&view=verein&saison='. $sid .'&zps='. $zps;
 // Login Status prüfen
 if (!$user->get('id')) {
-	$msg = JText::_( 'CLUB_DATA_SENT_LOGIN' );
+	$msg = Text::_( 'CLUB_DATA_SENT_LOGIN' );
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
  			}
 if ($clmuser[0]->published < 1) { 
-	$msg = JText::_( 'CLUB_DATA_SENT_ACCOUNT' );
+	$msg = Text::_( 'CLUB_DATA_SENT_ACCOUNT' );
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
 			}
 if ($clmuser[0]->zps <> $zps  OR $clmuser[0]->usertype == "spl") {
-	$msg = JText::_( 'CLUB_DATA_SENT_FALSE' );
+	$msg = Text::_( 'CLUB_DATA_SENT_FALSE' );
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
  			}
@@ -50,28 +55,29 @@ if ($clmuser[0]->zps <> $zps  OR $clmuser[0]->usertype == "spl") {
 if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps OR $clmuser[0]->usertype == "admin")
 	{
 // Prüfen ob Datensatz schon vorhanden ist
-$db	=JFactory::getDBO();
+$db	=Factory::getDBO();
 
 	$msg = '';
 	if ($msg == '') {
 		//Datei wird hochgeladen
 		$file = clm_core::$load->request_file('logo_file', null);
 		//Dateiname wird bereinigt
-		$filename = JFile::makeSafe($file['name']);
+		$filename = File::makeSafe($file['name']);
 		$_POST['filename'] = $filename;
 		//Temporärer Name und Ziel werden festgesetzt
 		$src = $file['tmp_name'];
 		$dest = JPATH_COMPONENT . DIRECTORY_SEPARATOR . "swt" . DIRECTORY_SEPARATOR . $filename;
 		//Datei wird auf dem Server gespeichert (Abfrage auf .png Endung)
-		$ext = strtolower(JFile::getExt($filename));
+//		$ext = strtolower(File::getExt($filename));
+		$ext = strtolower(substr(strrchr(basename($filename), '.'),1) );
 		if ( $ext != 'png') {
-			$msg = JText::_( 'Falscher Dateityp - ist nicht .png' );
+			$msg = Text::_( 'Falscher Dateityp - ist nicht .png' );
 		}
 	}
 	if ($msg == '') {
 		// eigentliches Hochgeladen
-		if ( !JFile::upload($src, $dest) ) {
-			$msg = JText::_( 'Upload-Fehler' );
+		if ( !File::upload($src, $dest) ) {
+			$msg = Text::_( 'Upload-Fehler' );
 		}
 	} 
 	
@@ -79,9 +85,9 @@ $db	=JFactory::getDBO();
 		// eigentliches Hochgeladen
 		$size = getimagesize( $dest);
 		if ( $size[0] > 256 ) {
-			$msg = JText::_( 'Logo ist zu breit, max. 256 x 256 px' );
+			$msg = Text::_( 'Logo ist zu breit, max. 256 x 256 px' );
 		} elseif ( $size[1] > 256 ) {
-			$msg = JText::_( 'Logo ist zu hoch, max. 256 x 256 px' );
+			$msg = Text::_( 'Logo ist zu hoch, max. 256 x 256 px' );
 		}
 	} 
 
@@ -93,7 +99,7 @@ $db	=JFactory::getDBO();
 		$ndata = base64_encode($img);
 		$ndata = "data:image/".$ext.";base64,".$ndata;
 		if ( strlen($ndata) > 65535 ) { // max. Länge für ein DB-Feld vom Typ TEXT
-			$msg = JText::_( 'Bilddatei zu groß (base46-Code > 65535 Byte)' );
+			$msg = Text::_( 'Bilddatei zu groß (base46-Code > 65535 Byte)' );
 		}
 	}
 	

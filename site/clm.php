@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,14 @@
  */
 // kein direkter Zugriff
 defined('_JEXEC') or die('Restricted access');
+
+JLoader::registerAlias('JModelLegacy', '\\Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel', '6.0');
+JLoader::registerAlias('JControllerLegacy', '\\Joomla\\CMS\\MVC\\Controller\\BaseController', '6.0');
+JLoader::registerAlias('JViewLegacy', '\\Joomla\\CMS\\MVC\\View\\HtmlView', '6.0');
+JLoader::registerAlias('JFilterOutput', '\\Joomla\\CMS\\Filter\\OutputFilter', '6.0');
+
+use Joomla\Filesystem\Folder;
+use Joomla\CMS\Factory;
 
 require_once (JPATH_SITE . DIRECTORY_SEPARATOR . "components" . DIRECTORY_SEPARATOR . "com_clm" . DIRECTORY_SEPARATOR . "clm" . DIRECTORY_SEPARATOR . "index.php");
 
@@ -26,7 +34,7 @@ if (clm_core::$access->getSeason() != -1) {
 	// lädt alle CLM-Klassen - quasi autoload
 	$classpath = dirname(__FILE__) . DS . 'classes';
 	jimport('joomla.filesystem.folder');
-	foreach (JFolder::files($classpath) as $file) {
+	foreach (Folder::files($classpath) as $file) {
 		JLoader::register(str_replace('.class.php', '', $file), $classpath . DS . $file);
 	}
 
@@ -42,7 +50,7 @@ if (clm_core::$access->getSeason() != -1) {
 				if($fix[1] == "e_reportUnpublished" || $fix[1] == "e_reportAlready") {	
 					$error = clm_core::$load->load_view("notification", array($fix[1],false));	
 					$link = "index.php?option=com_clm&view=paarungsliste&saison=".$fix[2][1]."&liga=".$fix[2][0];
-					$mainframe	= JFactory::getApplication();
+					$mainframe	= Factory::getApplication();
 					$mainframe->redirect( $link, $error[1], $error[0]);
 				// sonst Fehlermeldung ausgeben
 				} else {
@@ -65,7 +73,7 @@ if (clm_core::$access->getSeason() != -1) {
 				if($fix[1] == "e_reportUnpublished" || $fix[1] == "e_reportAlready") {	
 					$error = clm_core::$load->load_view("notification", array($fix[1],false));	
 					$link = "index.php?option=com_clm&view=paarungsliste&saison=".$fix[2][1]."&liga=".$fix[2][0];
-					$mainframe	= JFactory::getApplication();
+					$mainframe	= Factory::getApplication();
 					$mainframe->redirect( $link, $error[1], $error[0]);
 				// sonst Fehlermeldung ausgeben
 				} else {

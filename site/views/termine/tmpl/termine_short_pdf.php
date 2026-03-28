@@ -1,15 +1,19 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 $sid			= clm_core::$load->request_int('saison', 1);
 $config			= clm_core::$db->config();
@@ -50,30 +54,30 @@ $date_font = 9;
 $page_length = 290; //375
 
 $arrMonth = array(
-		"January" => JText::_('MOD_CLM_TERMINE_M01'),
-		"February" => JText::_('MOD_CLM_TERMINE_M02'),
-		"March" => JText::_('MOD_CLM_TERMINE_M03'),
-		"April" => JText::_('MOD_CLM_TERMINE_M04'),
-		"May" => JText::_('MOD_CLM_TERMINE_M05'),
-		"June" => JText::_('MOD_CLM_TERMINE_M06'),
-		"July" => JText::_('MOD_CLM_TERMINE_M07'),
-		"August" => JText::_('MOD_CLM_TERMINE_M08'),
-		"September" => JText::_('MOD_CLM_TERMINE_M09'),
-		"October" => JText::_('MOD_CLM_TERMINE_M10'),
-		"November" => JText::_('MOD_CLM_TERMINE_M11'),
-		"December" => JText::_('MOD_CLM_TERMINE_M12')
+		"January" => Text::_('MOD_CLM_TERMINE_M01'),
+		"February" => Text::_('MOD_CLM_TERMINE_M02'),
+		"March" => Text::_('MOD_CLM_TERMINE_M03'),
+		"April" => Text::_('MOD_CLM_TERMINE_M04'),
+		"May" => Text::_('MOD_CLM_TERMINE_M05'),
+		"June" => Text::_('MOD_CLM_TERMINE_M06'),
+		"July" => Text::_('MOD_CLM_TERMINE_M07'),
+		"August" => Text::_('MOD_CLM_TERMINE_M08'),
+		"September" => Text::_('MOD_CLM_TERMINE_M09'),
+		"October" => Text::_('MOD_CLM_TERMINE_M10'),
+		"November" => Text::_('MOD_CLM_TERMINE_M11'),
+		"December" => Text::_('MOD_CLM_TERMINE_M12')
 	);
 $arrWochentag = array( 
-		"Monday" => JText::_('MOD_CLM_TERMINE_T01'), 
-		"Tuesday" => JText::_('MOD_CLM_TERMINE_T02'), 
-		"Wednesday" => JText::_('MOD_CLM_TERMINE_T03'), 
-		"Thursday" => JText::_('MOD_CLM_TERMINE_T04'), 
-		"Friday" => JText::_('MOD_CLM_TERMINE_T05'), 
-		"Saturday" => JText::_('MOD_CLM_TERMINE_T06'), 
-		"Sunday" => JText::_('MOD_CLM_TERMINE_T07') );
+		"Monday" => Text::_('MOD_CLM_TERMINE_T01'), 
+		"Tuesday" => Text::_('MOD_CLM_TERMINE_T02'), 
+		"Wednesday" => Text::_('MOD_CLM_TERMINE_T03'), 
+		"Thursday" => Text::_('MOD_CLM_TERMINE_T04'), 
+		"Friday" => Text::_('MOD_CLM_TERMINE_T05'), 
+		"Saturday" => Text::_('MOD_CLM_TERMINE_T06'), 
+		"Sunday" => Text::_('MOD_CLM_TERMINE_T07') );
             
 // Datum der Erstellung
-$date =JFactory::getDate();
+$date =Factory::getDate();
 $now = $date->toSQL();
 
 $pdf=new PDF();
@@ -92,11 +96,11 @@ $date = date("Y-m-d");
 			$pdf->AddPage();
 			$pdf->SetFont('Times','',$date_font);
 			$pdf->Cell(10,3,' ',0,0);
-			$pdf->Cell(175,3,clm_core::$load->utf8decode(JText::_('WRITTEN')).' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.clm_core::$load->utf8decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
+			$pdf->Cell(175,3,clm_core::$load->utf8decode(Text::_('WRITTEN')).' '.clm_core::$load->utf8decode(Text::_('ON_DAY')).' '.clm_core::$load->utf8decode(HTMLHelper::_('date',  $now, Text::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
 	
 			$pdf->SetFont('Times','',$head_font);
 			$pdf->Cell(10,10,' ',0,0);
-			$pdf->Cell(150,10,clm_core::$load->utf8decode(JText::_('TERMINE_HEAD')),0,1,'L');
+			$pdf->Cell(150,10,clm_core::$load->utf8decode(Text::_('TERMINE_HEAD')),0,1,'L');
 		}
 		$pdf->SetFont('Times','',$font);
 		$pdf->SetTextColor(0);
@@ -151,12 +155,12 @@ if ($t1 < 1) {
 	$pdf->AddPage();
 	$pdf->SetFont('Times','',$date_font);
 	$pdf->Cell(10,3,' ',0,0);
-	$pdf->Cell(175,3,clm_core::$load->utf8decode(JText::_('WRITTEN')).' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.clm_core::$load->utf8decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
+	$pdf->Cell(175,3,clm_core::$load->utf8decode(Text::_('WRITTEN')).' '.clm_core::$load->utf8decode(Text::_('ON_DAY')).' '.clm_core::$load->utf8decode(HTMLHelper::_('date',  $now, Text::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
 	
 	$pdf->SetFont('Times','',$head_font);
 	$pdf->Cell(10,10,' ',0,0);
-	$pdf->Cell(150,10,clm_core::$load->utf8decode(JText::_('NO_TERMINE')),0,1,'L');
+	$pdf->Cell(150,10,clm_core::$load->utf8decode(Text::_('NO_TERMINE')),0,1,'L');
 }
-$pdf->Output(clm_core::$load->utf8decode(JText::_('TERMINE_COMPACT')).'.pdf','D');
+$pdf->Output(clm_core::$load->utf8decode(Text::_('TERMINE_COMPACT')).'.pdf','D');
 exit;
 ?>

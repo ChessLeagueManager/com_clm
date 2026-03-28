@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,6 +12,8 @@
 
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
+
+use Joomla\CMS\Factory;
 
 class CLMModelMitglieder_Details extends JModelLegacy
 {
@@ -22,7 +24,7 @@ class CLMModelMitglieder_Details extends JModelLegacy
 	$zps 		= clm_escape(clm_core::$load->request_string('zps'));
 	$mgl		= clm_core::$load->request_int('mglnr');
 
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 	$id	= @$options['id'];
  
 	$query = "SELECT a.*, s.name AS saison, v.name AS verein " 
@@ -46,7 +48,7 @@ class CLMModelMitglieder_Details extends JModelLegacy
 	function _getCLMVerein( &$options )
 	{
 	$zps = clm_escape(clm_core::$load->request_string('zps'));
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 	$id	= @$options['id'];
  
 		$query = "SELECT name " 
@@ -65,11 +67,11 @@ class CLMModelMitglieder_Details extends JModelLegacy
 	// Prüfen ob User berechtigt ist zu melden
 	function _getCLMClmuser ( &$options )
 	{
-	$user	= JFactory::getUser();
+	$user	= Factory::getUser();
 	$jid	= $user->get('id');
 	$sid	= clm_core::$load->request_int('saison','1');
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$id	= @$options['id'];
 
 	$query	= "SELECT zps,published "

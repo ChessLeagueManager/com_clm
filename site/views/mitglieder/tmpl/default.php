@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,16 +12,19 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+
 // Variablen holen
 $sid = clm_core::$load->request_int( 'saison', '1' ); 
 $zps = clm_core::$load->request_string( 'zps' );
 
-
 // Login Status prüfen
 $clmuser 	= $this->clmuser;
-$user		=JFactory::getUser();
+$user		=Factory::getUser();
 
-$mainframe = JFactory::getApplication();
+$mainframe = Factory::getApplication();
 $link = 'index.php';
 	
 // Stylesheet laden
@@ -30,17 +33,17 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 $config = clm_core::$db->config();
 
 if (!$user->get('id')) {
-	$msg = JText::_( 'CLUB_LIST_LOGIN' );
+	$msg = Text::_( 'CLUB_LIST_LOGIN' );
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
  			}
 if ($clmuser[0]->published < 1) {
-	$msg = JText::_( 'CLUB_LIST_ACCOUNT' );
+	$msg = Text::_( 'CLUB_LIST_ACCOUNT' );
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
 				}
 if ($clmuser[0]->zps <> $zps) {
-	$msg = JText::_( 'CLUB_LIST_FALSE' );
+	$msg = Text::_( 'CLUB_LIST_FALSE' );
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
 				}
@@ -63,7 +66,7 @@ function tableOrdering( order, dir, task )
 </script>
 <div >
 <div id="mitglieder">
-    <div class="componentheading"><?php echo JText::_('Mitgliederverwaltung') ?> </div>
+    <div class="componentheading"><?php echo Text::_('Mitgliederverwaltung') ?> </div>
 
     <div class="clmbox">
     <span>Mitgliederliste</span> | 
@@ -78,15 +81,15 @@ function tableOrdering( order, dir, task )
 	<table class="admintable">
     
 		<tr class="anfang">
-			<th width="5%" class="key" nowrap="nowrap"><?php echo JText::_( 'Nr' ); ?></th>
-			<th width="5%" class="key" nowrap="nowrap"><?php echo JHTML::_( 'grid.sort', 'Mgl Nr.', 'id', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-			<th width="20%" class="key" nowrap="nowrap"><a href="javascript:tableOrdering('name','asc','');"><?php echo JText::_( 'Name' ); ?></a></th>
-			<th width="5%" class="key" nowrap="nowrap"><?php echo JHTML::_( 'grid.sort', 'G.jahr', 'Geburtsjahr', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-			<th width="5%" class="key" nowrap="nowrap"><?php echo JHTML::_( 'grid.sort', 'DWZ', 'dwz', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-			<th width="5%" class="key" nowrap="nowrap"><?php echo JHTML::_( 'grid.sort', 'ELO', 'elo', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-			<th width="5%" class="key" nowrap="nowrap" align="center"><?php echo JText::_( 'St.' ); ?></th>
-			<th width="5%" class="key" nowrap="nowrap" align="center"><?php echo JText::_( 'Edit' ); ?></th>
-			<th width="5%" class="key" nowrap="nowrap" align="center"><?php echo JText::_( 'Löschen' ); ?></th>
+			<th width="5%" class="key" nowrap="nowrap"><?php echo Text::_( 'Nr' ); ?></th>
+			<th width="5%" class="key" nowrap="nowrap"><?php echo HTMLHelper::_( 'grid.sort', 'Mgl Nr.', 'id', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+			<th width="20%" class="key" nowrap="nowrap"><a href="javascript:tableOrdering('name','asc','');"><?php echo Text::_( 'Name' ); ?></a></th>
+			<th width="5%" class="key" nowrap="nowrap"><?php echo HTMLHelper::_( 'grid.sort', 'G.jahr', 'Geburtsjahr', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+			<th width="5%" class="key" nowrap="nowrap"><?php echo HTMLHelper::_( 'grid.sort', 'DWZ', 'dwz', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+			<th width="5%" class="key" nowrap="nowrap"><?php echo HTMLHelper::_( 'grid.sort', 'ELO', 'elo', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+			<th width="5%" class="key" nowrap="nowrap" align="center"><?php echo Text::_( 'St.' ); ?></th>
+			<th width="5%" class="key" nowrap="nowrap" align="center"><?php echo Text::_( 'Edit' ); ?></th>
+			<th width="5%" class="key" nowrap="nowrap" align="center"><?php echo Text::_( 'Löschen' ); ?></th>
 		</tr>
         
 		<?php $i = 0; foreach($spieler as $spieler){  ?>
@@ -110,7 +113,7 @@ function tableOrdering( order, dir, task )
     <input type="hidden" name="zps" value="<?php echo $zps; ?>" />
     <input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
     <input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />
-    <?php echo JHTML::_( 'form.token' ); ?>
+    <?php echo HTMLHelper::_( 'form.token' ); ?>
     </form>
 
     <br>

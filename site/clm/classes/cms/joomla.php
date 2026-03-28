@@ -1,10 +1,14 @@
 <?php
 /*
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+
 class clm_class_cms_joomla extends clm_class_cms {
 	public function __construct() {
 		$this->cms = 1;
@@ -31,32 +35,32 @@ class clm_class_cms_joomla extends clm_class_cms {
 	}
 	public function sendMail($from, $fromname, $recipient, $subject, $body, $mode=0, $cc=null, $bcc=null, $attachment=null, $replyto=null, $replytoname=null) {
 		jimport( 'joomla.mail.mail' );
-		$mail = JFactory::getMailer();
+		$mail = Factory::getMailer();
 		return $mail->sendMail($from, $fromname, $recipient, $subject, $body, $mode, $cc, $bcc, $attachment, $replyto, $replytoname);
 	}
 	public function setTitle($text) {
-		$mydoc = JFactory::getDocument();
+		$mydoc = Factory::getDocument();
 		$mydoc->setTitle($text);
 	}
 	public function getTitle() {
-		$mydoc = JFactory::getDocument();
+		$mydoc = Factory::getDocument();
 		return $mydoc->getTitle();
 	}
 	public function addStyleSheet($url, $type = "text/css", $media = "all") {
-		$document = JFactory::getDocument();
+		$document = Factory::getDocument();
 		//$document->addStyleSheet($url, $type, $media);
 		$document->addStyleSheet($url);			// Joomla 4
 	}
 	public function addStyleDeclaration($content, $type = "text/css") {
-		$document = JFactory::getDocument();
+		$document = Factory::getDocument();
 		$document->addStyleDeclaration($content, $type);
 	}
 	public function addScript($url, $type = "text/javascript") {
-		$document = JFactory::getDocument();
+		$document = Factory::getDocument();
 		$document->addScript($url, $type);
 	}
 	public function addScriptDeclaration($content, $type = "text/javascript") {
-		$document = JFactory::getDocument();
+		$document = Factory::getDocument();
 		$document->addScriptDeclaration($content, $type);
 	}
 	// Leer, da Joomla dies generiert.
@@ -64,31 +68,31 @@ class clm_class_cms_joomla extends clm_class_cms {
 	 	return "";
 	}
 	public function getUserData() {
-		$id = JFactory::getUser()->get('id');
+		$id = Factory::getUser()->get('id');
 		if (isset($id) && !empty($id)) {
-			return array($id, JFactory::getUser()->get('username'), JFactory::getUser()->get('name'), JFactory::getUser()->get('email'));
+			return array($id, Factory::getUser()->get('username'), Factory::getUser()->get('name'), Factory::getUser()->get('email'));
 		}
 		return array(0);
 	}
 	public function getLanguage() {
-		$jlang = JFactory::getLanguage(); 
+		$jlang = Factory::getLanguage(); 
 		return $jlang->getTag();
 	}
 	public function getNowDate($format = "Y-m-d H:i:s") {
-		$date = JFactory::getDate('now'); 
+		$date = Factory::getDate('now'); 
 		$now = date( $format, strtotime( $date->toSQL() ) );
 		return $now;
 	}
 	public function showDate($date_time, $format = "") {
-		if ($format == "") $format = JText::_('DATE_FORMAT_LC2');
-		$output = JHtml::_('date',  $date_time, $format);
+		if ($format == "") $format = Text::_('DATE_FORMAT_LC2');
+		$output = HTMLHelper::_('date',  $date_time, $format);
 		return $output;
 	}
 	public function isRoot() {
-		return JFactory::getUser()->get('isRoot');
+		return Factory::getUser()->get('isRoot');
 	}
 	public function login($name,$password) {
-	 	$mainframe = JFactory::getApplication();
+	 	$mainframe = Factory::getApplication();
 	 	$credentials = array( 'username' => $name, 'password' => $password);
 		$this->logout();
       $success = $mainframe->login($credentials, array("silent" => true));
@@ -100,7 +104,7 @@ class clm_class_cms_joomla extends clm_class_cms {
 	}
 	public function logout() {
 		if(clm_core::$access->getJid()!=-1) {
-			$mainframe = JFactory::getApplication();
+			$mainframe = Factory::getApplication();
 			$mainframe->logout();
 			return parent::logout();
 		} else {

@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  *
@@ -10,7 +10,8 @@
  * neu ab 3.9.1 auch TUMx = Mannschaftsturnier im CH-Modus und TUTx = Mannschaftsturnier als Vollturnier
 */
 function clm_api_db_swm_import($file,$season,$turnier,$group=false,$update=false,$test=false) {
-	if (strtolower(JFile::getExt($file) ) == 'tumx' OR strtolower(JFile::getExt($file) ) == 'tutx') {
+//	if (strtolower(File::getExt($file) ) == 'tumx' OR strtolower(File::getExt($file) ) == 'tutx') {
+	if (strtolower(substr(strrchr(basename($file), '.'),1) ) == 'tumx' OR strtolower(substr(strrchr(basename($file), '.'),1) ) == 'tutx') {
 		$group = true; 
 	} else { $group = false; }
 	$pos1 = strrpos($file, '/'); if ($pos1 === false) $pos1 = 0;

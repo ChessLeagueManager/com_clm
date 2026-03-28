@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,8 @@
 */
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
+
+use Joomla\CMS\Factory;
 
 class CLMModelMeldeliste extends JModelLegacy
 {
@@ -23,7 +25,7 @@ class CLMModelMeldeliste extends JModelLegacy
 	$gid	= clm_core::$load->request_int('gid');
 
 		// TODO: Cache on the fingerprint of the arguments
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 //		$id	= @$options['id'];
 
  	if($layout =="rangliste"){
@@ -65,7 +67,7 @@ class CLMModelMeldeliste extends JModelLegacy
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
 		// TODO: Cache on the fingerprint of the arguments
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 //		$id	= @$options['id'];
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
@@ -169,7 +171,7 @@ class CLMModelMeldeliste extends JModelLegacy
 	{
 
 		// TODO: Cache on the fingerprint of the arguments
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 //		$id	= @$options['id'];
 		$sid	= clm_core::$load->request_int('saison','1');
 		$zps	= clm_escape(clm_core::$load->request_string('zps'));
@@ -204,7 +206,7 @@ class CLMModelMeldeliste extends JModelLegacy
 	$layout	= clm_escape(clm_core::$load->request_string('layout'));
 	$gid	= clm_core::$load->request_int('gid');
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 //		$id	= @$options['id'];
 	if($layout =="rangliste"){
 	$query	= "SELECT COUNT(snr) as snr "
@@ -236,7 +238,7 @@ class CLMModelMeldeliste extends JModelLegacy
 	$layout	= clm_escape(clm_core::$load->request_string('layout'));
 	$gid	= clm_core::$load->request_int('gid','1');
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 //		$id	= @$options['id'];
 
 	if($layout =="rangliste"){
@@ -265,12 +267,12 @@ class CLMModelMeldeliste extends JModelLegacy
 	// Prüfen ob User berechtigt ist zu melden
 	function _getCLMClmuser ( &$options )
 	{
-	$user	= JFactory::getUser();
+	$user	= Factory::getUser();
 	$jid	= $user->get('id');
 	$sid	= clm_core::$load->request_int('saison','1');
 
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 //		$id	= @$options['id'];
 
 	$query	= "SELECT * "
@@ -297,7 +299,7 @@ class CLMModelMeldeliste extends JModelLegacy
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
 
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 	$query = "SELECT a.zps, a.sg_zps, a.liga "
 		." FROM #__clm_mannschaften as a"
 		." WHERE a.sid = $sid AND a.zps = '$zps' AND a.man_nr = $man AND a.published = 1 "
@@ -348,7 +350,7 @@ class CLMModelMeldeliste extends JModelLegacy
 	$lid	= clm_core::$load->request_int('lid','1');
 	$zps 	= clm_escape(clm_core::$load->request_string('zps'));
 	$man	= clm_core::$load->request_int('man','1');
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 	
 	$query = "SELECT a.zps, a.sg_zps " 
 			." FROM #__clm_mannschaften as a"
@@ -384,7 +386,7 @@ class CLMModelMeldeliste extends JModelLegacy
 	$zps 	= clm_escape(clm_core::$load->request_string('zps'));
 	$layout	= clm_escape(clm_core::$load->request_string('layout'));
 	$gid	= clm_core::$load->request_int('gid');
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 	
 	$query	= "SELECT m.id, m.name, l.id as lid, l.rang, l.params as params "
 		." FROM #__clm_mannschaften as m"

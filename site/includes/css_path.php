@@ -1,12 +1,14 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 // Pfade zum Style Sheet und Stylesheet laden !
 // Es gab ein paar Probleme mit dem Joomla Dateiseperator die diese Massnahme noetig machen
+
+use Joomla\CMS\Factory;
 
 	// Falls nicht bereits aktiv.
 	require_once (JPATH_SITE . DIRECTORY_SEPARATOR . "components" . DIRECTORY_SEPARATOR . "com_clm" . DIRECTORY_SEPARATOR . "clm" . DIRECTORY_SEPARATOR . "index.php");
@@ -44,7 +46,7 @@
 
 	if ($template) {
 
-	$document = JFactory::getDocument();
+	$document = Factory::getDocument();
 	if ($config->div == 1) {
 		$document->addStyleSheet('components/com_clm/includes/clm_content.css', 'text/css');
 ?>

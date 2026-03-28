@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,6 +12,8 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
+use Joomla\CMS\Factory;
+
 class CLMModelPaarungsliste extends JModelLegacy
 {
 
@@ -19,7 +21,7 @@ class CLMModelPaarungsliste extends JModelLegacy
 	{
 //	$sid	= clm_core::$load->request_int('saison',1);
 	$liga	= clm_core::$load->request_int('liga',0);
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
  
 		$query = " SELECT a.*, u.name as sl, u.email FROM #__clm_liga as a"
@@ -42,7 +44,7 @@ class CLMModelPaarungsliste extends JModelLegacy
 	{
 //	$sid	= clm_core::$load->request_int('saison',1);
 	$liga	= clm_core::$load->request_int('liga',0);
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
  
 		$query = "SELECT nr, name, datum, startzeit, enddatum, bemerkungen, published FROM #__clm_runden_termine "
@@ -63,7 +65,7 @@ class CLMModelPaarungsliste extends JModelLegacy
 	{
 //	$sid	= clm_core::$load->request_int('saison',1);
 	$liga	= clm_core::$load->request_int('liga',0);
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
  
 		$query = " SELECT * FROM #__clm_mannschaften "
@@ -85,7 +87,7 @@ class CLMModelPaarungsliste extends JModelLegacy
 	{
 //	$sid	= clm_core::$load->request_int('saison',1);
 	$liga	= clm_core::$load->request_int('liga',0);
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
 
 		$query = " SELECT teil FROM #__clm_liga "
@@ -129,7 +131,7 @@ class CLMModelPaarungsliste extends JModelLegacy
 //	$sid	= clm_core::$load->request_int('saison',1);
 	$liga	= clm_core::$load->request_int('liga',0);
 	$runde	= clm_core::$load->request_int('runde');
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
 
 	$query = " SELECT a.dg,a.paar as paarung,a.runde as runde,a.brettpunkte as sum "
@@ -151,7 +153,7 @@ class CLMModelPaarungsliste extends JModelLegacy
 	{
 //	$sid	= clm_core::$load->request_int('saison',1);
 	$liga	= clm_core::$load->request_int('liga',0);
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
 
 	$query = " SELECT a.nr, a.sl_ok as sl_ok "
@@ -172,7 +174,7 @@ class CLMModelPaarungsliste extends JModelLegacy
 	function _getCLMArbiter ( &$options )
 	{
 	$liga	= clm_core::$load->request_int('liga',0);
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 
 	$query = " SELECT ta.*, a.name as aname, a.vorname as avorname FROM #__clm_arbiter_turnier as ta " 
 			." LEFT JOIN #__clm_arbiter as a ON ta.fideid = a.fideid "

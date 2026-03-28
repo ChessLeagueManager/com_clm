@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -11,8 +11,14 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
-$document = JFactory::getDocument();
-$cssDir = JURI::base().DS. 'components'.DS.'com_clm'.DS.'includes';
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+
+$document = Factory::getDocument();
+$cssDir = URI::base().DS. 'components'.DS.'com_clm'.DS.'includes';
 $document->addStyleSheet( $cssDir.DS.'clm_content.css', 'text/css', null, array() );
 	
 // Variablen holen
@@ -22,30 +28,30 @@ $gid	= clm_core::$load->request_int('gid');
 
 // Login Status prüfen
 $clmuser 	= $this->clmuser;
-$user		= JFactory::getUser();
-	$mainframe	= JFactory::getApplication();
+$user		= Factory::getUser();
+	$mainframe	= Factory::getApplication();
 	$link = "index.php?option=com_clm&view=info";
 // Konfigurationsparameter auslesen
 	$config		= clm_core::$db->config();
 	$conf_meldeliste= $config->conf_meldeliste;
 
 if ($conf_meldeliste != 1) {
-	$msg = JText::_( '<h2>Die Eingabe von Ranglisten wurde durch den Administrator gesperrt !</h2>');
+	$msg = Text::_( '<h2>Die Eingabe von Ranglisten wurde durch den Administrator gesperrt !</h2>');
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
 			}
 if (!$user->get('id')) {
-	$msg = JText::_( '<h1>Sie sind nicht angemeldet !</h1> <h2>Loggen Sie sich zuerst ein, bevor Sie eine Rangliste abgeben.</h2>' );
+	$msg = Text::_( '<h1>Sie sind nicht angemeldet !</h1> <h2>Loggen Sie sich zuerst ein, bevor Sie eine Rangliste abgeben.</h2>' );
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
  			}
 if ($clmuser[0]->published < 1) {
-	$msg = JText::_( '<h1>Ihr Account wurde gesperrt !</h1> <h2>Wenden Sie sich umgehend an einen Administrator.</h2>' );
+	$msg = Text::_( '<h1>Ihr Account wurde gesperrt !</h1> <h2>Wenden Sie sich umgehend an einen Administrator.</h2>' );
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
 				}
 if ($clmuser[0]->zps <> $zps) {
-	$msg = JText::_( '<h1>Sie können nicht für einen anderen Verein melden !</h1>' );
+	$msg = Text::_( '<h1>Sie können nicht für einen anderen Verein melden !</h1>' );
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
 				}
@@ -62,7 +68,7 @@ foreach ($ligen as $lig01) {
 	}
 }
 if (count($a_ligen) < 1) {
-	$msg = JText::_( '<h2>Sie können diese Rangfolge nicht (mehr) pflegen. Wenden Sie sich an einen Staffelleiter.</h2>' );
+	$msg = Text::_( '<h2>Sie können diese Rangfolge nicht (mehr) pflegen. Wenden Sie sich an einen Staffelleiter.</h2>' );
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
 				}
@@ -70,7 +76,7 @@ if (count($a_ligen) < 1) {
 $abgabe	= $this->abgabe;
 
 //if (isset($abgabe[0]->id) AND $abgabe[0]->id != "") {
-//	$msg = JText::_( '<h1>Diese Rangliste wurde bereits abgegeben ! </h1><h2>Bitte schauen Sie in die entsprechende Mannschaftsübersicht</h2>' );
+//	$msg = Text::_( '<h1>Diese Rangliste wurde bereits abgegeben ! </h1><h2>Bitte schauen Sie in die entsprechende Mannschaftsübersicht</h2>' );
 //	$mainframe->redirect( $link, $msg );
 // 			}
 // NICHT vorhanden
@@ -411,7 +417,7 @@ Liste absenden !
 
 <!-- <form action="index.php?option=com_clm&amp;view=meldeliste&amp;layout=sent_rangliste&amp;saison=<?php echo $sid ?>&amp;gid=<?php echo $gid ?>&amp;zps=<?php echo $zps ?>&amp;count=<?php echo count($spieler) ?>" method="post" name="adminForm" id="adminForm">
 --> 
-<form action="<?php echo JRoute::_('index.php'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo Route::_('index.php'); ?>" method="post" name="adminForm" id="adminForm">
 
 <style type="text/css">table { width:60%; }</style>
 
@@ -430,7 +436,7 @@ Liste absenden !
 		<td width="14%" class="key" nowrap="nowrap">PKZ</td>
 		<td width="4%" class="key" nowrap="nowrap">ST</td>
 		<td colspan="2" width="12%" class="key" nowrap="nowrap">DWZ</td>
-		<td width="8" class="key" nowrap="nowrap"><?php echo JText::_( 'gesperrt' ); ?></td>
+		<td width="8" class="key" nowrap="nowrap"><?php echo Text::_( 'gesperrt' ); ?></td>
 	</tr>
 
 <?php 
@@ -500,9 +506,9 @@ Liste absenden !
 		<?php if (is_null($liga[0]->bem_int)) $liga[0]->bem_int =''; ?>
 		<input type="hidden" name="bem_int" value="<?php echo $liga[0]->bem_int; ?>" />
 
-		<?php echo JHTML::_( 'form.token' ); ?>
+		<?php echo HTMLHelper::_( 'form.token' ); ?>
 		</form>
 </center>
 
 <br>
-<div style=" text-align:right; padding-right:1%"><label for="name" class="hasTip" title="<?php echo JText::_('Das Chess League Manager (CLM) Projekt ist freie, kostenlose Software unter der GNU / GPL. Besuchen Sie unsere Projektseite chessleaguemanager.org für die neueste Version, Dokumentationen und Fragen. Wenn Sie an der Entwicklung des CLM teilnehmen wollen melden Sie sich bei uns per E-mail. Wir sind für jede Hilfe dankbar !'); ?>">Sie wollen am Projekt teilnehmen oder haben Verbesserungsvorschläge - <a href="https://chessleaguemanager.org">CLM Projektseite</a></label></div>
+<div style=" text-align:right; padding-right:1%"><label for="name" class="hasTip" title="<?php echo Text::_('Das Chess League Manager (CLM) Projekt ist freie, kostenlose Software unter der GNU / GPL. Besuchen Sie unsere Projektseite chessleaguemanager.org für die neueste Version, Dokumentationen und Fragen. Wenn Sie an der Entwicklung des CLM teilnehmen wollen melden Sie sich bei uns per E-mail. Wir sind für jede Hilfe dankbar !'); ?>">Sie wollen am Projekt teilnehmen oder haben Verbesserungsvorschläge - <a href="https://chessleaguemanager.org">CLM Projektseite</a></label></div>

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,6 +12,10 @@
 
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class CLMModelMeldung extends JModelLegacy
 {
@@ -22,7 +26,7 @@ class CLMModelMeldung extends JModelLegacy
 	$runde	= JRequest::getInt('runde');
 	$dg	= JRequest::getInt('dg');        //klkl
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$id	= @$options['id'];
  
 		$query = "SELECT a.*,t.datum FROM #__clm_liga as a"
@@ -50,7 +54,7 @@ class CLMModelMeldung extends JModelLegacy
 	$tln_nr	= JRequest::getInt('tln');
 	$dg	= JRequest::getInt('dg');
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$id	= @$options['id'];
 /*
 		$query = " SELECT teil FROM #__clm_liga "
@@ -99,10 +103,10 @@ class CLMModelMeldung extends JModelLegacy
 	$paar	= JRequest::getInt('paar');
 	$dg	= JRequest::getInt('dg');
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$id	= @$options['id'];
 
-	$row = JTable::getInstance( 'ligen', 'TableCLM' );
+	$row = Table::getInstance( 'ligen', 'TableCLM' );
 	$row->load( $liga );
 
 /*
@@ -187,10 +191,10 @@ class CLMModelMeldung extends JModelLegacy
 	$paar	= JRequest::getInt('paar');
 	$dg	= JRequest::getInt('dg');
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$id	= @$options['id'];
 
-	$row = JTable::getInstance( 'ligen', 'TableCLM' );
+	$row = Table::getInstance( 'ligen', 'TableCLM' );
 	$row->load( $liga );
 
 	$data = "SELECT a.gemeldet,a.editor, a.id,a.sid, a.lid, a.runde, a.dg, a.tln_nr,"
@@ -257,10 +261,10 @@ class CLMModelMeldung extends JModelLegacy
 	$paar	= JRequest::getInt('paar');
 	$dg	= JRequest::getInt('dg');
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$id	= @$options['id'];
 
-	$row = JTable::getInstance( 'ligen', 'TableCLM' );
+	$row = Table::getInstance( 'ligen', 'TableCLM' );
 	$row->load( $liga );
 
 	$data = "SELECT a.gemeldet,a.editor, a.id,a.sid, a.lid, a.runde, a.dg, a.tln_nr,"
@@ -318,10 +322,10 @@ class CLMModelMeldung extends JModelLegacy
 	$paar	= JRequest::getInt('paar');
 	$dg	= JRequest::getInt('dg');
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$id	= @$options['id'];
 
-	$row = JTable::getInstance( 'ligen', 'TableCLM' );
+	$row = Table::getInstance( 'ligen', 'TableCLM' );
 	$row->load( $liga );
 
 	$data = "SELECT a.gemeldet,a.editor, a.id,a.sid, a.lid, a.runde, a.dg, a.tln_nr,"
@@ -385,7 +389,7 @@ class CLMModelMeldung extends JModelLegacy
 	$tln_nr	= JRequest::getInt('tln');
 	$paar	= JRequest::getInt('paar');
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$id	= @$options['id'];
 
 	$query = " SELECT eid, erg_text "
@@ -410,7 +414,7 @@ class CLMModelMeldung extends JModelLegacy
 	$sql = "SELECT a.id, a.erg_text "
 		." FROM #__clm_ergebnis as a "
 		;
-	$db 		=JFactory::getDBO();
+	$db 		=Factory::getDBO();
 	$db->setQuery( $sql );
 	$ergebnis	= $db->loadObjectList();
 
@@ -450,7 +454,7 @@ class CLMModelMeldung extends JModelLegacy
 	$dg	= JRequest::getInt('dg');
 
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$id	= @$options['id'];
 
 	$query	= "SELECT gemeldet "
@@ -471,11 +475,11 @@ class CLMModelMeldung extends JModelLegacy
 
 	function _getCLMClmuser ( &$options )
 	{
-	$user	= JFactory::getUser();
+	$user	= Factory::getUser();
 	$jid	= $user->get('id');
 	$sid	= JRequest::getInt('saison');
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$id	= @$options['id'];
 
 	$query	= "SELECT zps,published "
@@ -495,12 +499,12 @@ class CLMModelMeldung extends JModelLegacy
 
 	function _getCLMMeldung ( &$options )
 	{
-	$user	= JFactory::getUser();
+	$user	= Factory::getUser();
 	$jid	= $user->get('id');
 	$lid 	= JRequest::getInt('liga');
 	$sid 	= JRequest::getInt('saison');
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$id	= @$options['id'];
 
 	$query	= "SELECT mf,published "
@@ -522,7 +526,7 @@ class CLMModelMeldung extends JModelLegacy
 	$lid = JRequest::getInt('liga');
 	$sid = JRequest::getInt('saison');
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$id	= @$options['id'];
 
 	$query	= "SELECT *  "
@@ -550,7 +554,7 @@ class CLMModelMeldung extends JModelLegacy
 	$dg		= JRequest::getInt('dg');
 
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$id	= @$options['id'];
 
 	$query	= "SELECT * "

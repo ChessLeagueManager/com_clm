@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,7 +12,11 @@
 
 defined('clm') or die('Restricted access'); 
 
-$mainframe = JFactory::getApplication();
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
+$mainframe = Factory::getApplication();
 
 // Variablen holen
 $sid		= clm_core::$load->request_int('saison');
@@ -23,11 +27,11 @@ $clmuser 	= $this->clmuser;
 $spieler	= $this->spieler;
 $verein		= $this->verein;
 
-$user 		=JFactory::getUser();
-$link = JURI::base() . 'index.php?option=com_clm&view=mitglieder_details&saison='. $sid .'&zps='. $zps .'&mglnr='. $mgl; 
+$user 		=Factory::getUser();
+$link = URI::base() . 'index.php?option=com_clm&view=mitglieder_details&saison='. $sid .'&zps='. $zps .'&mglnr='. $mgl; 
 
 if ($clmuser[0]->zps <> $zps) {
-	$msg = JText::_( 'Sie sind nicht berechtigt, Aenderungen vorzunehmen.' );
+	$msg = Text::_( 'Sie sind nicht berechtigt, Aenderungen vorzunehmen.' );
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
 				}
@@ -36,7 +40,7 @@ if ($clmuser[0]->zps <> $zps) {
 if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps) {
 
 	// Prüfen ob Datensatz schon vorhanden ist
-	$db	=JFactory::getDBO();
+	$db	=Factory::getDBO();
 
 	// Variablen holen
 	$sid		= clm_core::$load->request_int('saison');
@@ -77,16 +81,16 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 		}
 
 	// Log
-	$date =JFactory::getDate();
+	$date =Factory::getDate();
 	$now = $date->toSQL();
-	$user 		=JFactory::getUser();
+	$user 		=Factory::getUser();
 	$jid_aktion =  ($user->get('id'));
 	$aktion = "Spielerdaten FE";
 
 
-$msg = JText::_( 'Spielerdaten geändert' );
+$msg = Text::_( 'Spielerdaten geändert' );
 $mainframe->enqueueMessage( $msg );
-$linkback = JURI::base() . 'index.php?option=com_clm&view=mitglieder&saison='. $sid .'&zps='. $zps; 
+$linkback = URI::base() . 'index.php?option=com_clm&view=mitglieder&saison='. $sid .'&zps='. $zps; 
 $mainframe->redirect( $linkback );
 
 }

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2026 Thomas Schwietert & Andreas Dorn. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,7 +12,8 @@
 /**
  * erstellt einen Link innerhalb des Frontends
 */
-	
+use Joomla\CMS\Router\Route;
+ 
 class CLMcLink extends stdClass {
 
 	function __construct($option = 'com_clm') {
@@ -47,7 +48,7 @@ class CLMcLink extends stdClass {
 			}
 		}
 		
-		$this->url = JRoute::_($this->url);
+		$this->url = Route::_($this->url);
 
 	}
 

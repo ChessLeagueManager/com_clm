@@ -5,6 +5,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
+use Joomla\CMS\Language\Text;
+
 function clm_view_schedule($out) {
 	clm_core::$load->load_css("schedule");
 	clm_core::$load->load_css("buttons");
@@ -45,7 +47,7 @@ location=form.select.options[index].value;}}
 	<span style="float:right;">
     <form name="form1">
         <select name="select" onchange="goto(this.form)" class="selectteam">
-        <option value=""><?php echo JText::_('CLUB_SELECTTEAM') ?></option>
+        <option value=""><?php echo Text::_('CLUB_SELECTTEAM') ?></option>
         <?php  $cnt = 0;   foreach ($club_list as $verein) { $cnt++; ?>
          <option value="<?php echo clm_core::$load->create_valuelink('schedule', array('season' => $verein->sid, 'club' => $verein->zps)); ?>"
         <?php if ($verein->zps == $club[0]->zps) { echo 'selected="selected"'; } ?>><?php echo $verein->name; ?></option>

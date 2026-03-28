@@ -11,6 +11,11 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
+
 $sid			= clm_core::$load->request_int('saison', 1);
 $zps			= clm_core::$load->request_string('zps');
 $itemid			= clm_core::$load->request_int('Itemid', 1);
@@ -26,7 +31,7 @@ else $google_lang = 'de';
 
 // Login Status prüfen
 $clmuser= $this->clmuser;
-$user	= JFactory::getUser();
+$user	= Factory::getUser();
 
 // Konfigurationsparameter auslesen
 $config 			= clm_core::$db->config();
@@ -41,7 +46,7 @@ $verein_mail 		= $config->verein_mail;
 $verein_tel 		= $config->verein_tel;
 
 // Browsertitelzeile setzen
-$doc =JFactory::getDocument();
+$doc =Factory::getDocument();
 if (isset($verein[0])) { $daten['title'] = $verein[0]->name; }
 else $daten['title'] = '';
 $doc->setTitle($daten['title']);
@@ -71,7 +76,7 @@ echo '<div ><div id="verein">';
 // Überprüfen ob diese Mannschaft bereits angelegt ist
 if (!isset($verein[0]->name)){
 
-echo '<div class="componentheading">'. JText::_('CLUB_NO_DATA') .'</div>';
+echo '<div class="componentheading">'. Text::_('CLUB_NO_DATA') .'</div>';
 
 }
 	
@@ -85,15 +90,15 @@ location=form.select.options[index].value;}}
 </SCRIPT>
 
 <div class="clmbox">
-<?php if (isset($verein[0]->name)){ ?><a href="index.php?option=com_clm&view=dwz&saison=<?php echo $sid; ?>&zps=<?php echo $zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('CLUB_MEMBER_LIST') ?></a> | 
-								<a href="index.php?option=com_clm&view=schedule&season=<?php echo $sid; ?>&club=<?php echo $zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('CLUB_SCHEDULE') ?></a> | 
-<?php } ?><a href="index.php?option=com_clm&view=vereinsliste&saison=<?php echo $sid; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('CLUBS_LIST') ?></a>
+<?php if (isset($verein[0]->name)){ ?><a href="index.php?option=com_clm&view=dwz&saison=<?php echo $sid; ?>&zps=<?php echo $zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo Text::_('CLUB_MEMBER_LIST') ?></a> | 
+								<a href="index.php?option=com_clm&view=schedule&season=<?php echo $sid; ?>&club=<?php echo $zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo Text::_('CLUB_SCHEDULE') ?></a> | 
+<?php } ?><a href="index.php?option=com_clm&view=vereinsliste&saison=<?php echo $sid; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo Text::_('CLUBS_LIST') ?></a>
 <span class="right">
     <form name="form1">
         <select name="select" onchange="goto(this.form)" class="selectteam">
-        <option value=""><?php echo JText::_('CLUB_SELECTTEAM') ?></option>
+        <option value=""><?php echo Text::_('CLUB_SELECTTEAM') ?></option>
         <?php  $cnt = 0;   foreach ($vereinsliste as $vereinsliste) { $cnt++;?>
-         <option value="<?php echo JURI::base(); ?>index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $vereinsliste->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+         <option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $vereinsliste->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
         <?php if ($vereinsliste->zps == $zps) { echo 'selected="selected"'; } ?>><?php echo $vereinsliste->name; ?></option>
         <?php } ?>
         </select>
@@ -108,7 +113,7 @@ location=form.select.options[index].value;}}
 if ($conf_vereinsdaten == 1) {
 	if ($user->get('id') > 0) {
 		if (isset($clmuser[0]) AND ($clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps OR $clmuser[0]->usertype == "admin")) {
-	 echo '<span class="edit"><a href="' . JURI::base() .'index.php?option=com_clm&view=verein&saison='. $sid .'&zps='. $zps .'&layout=vereinsdaten'; if ($itemid <>'') { echo "&Itemid=".$itemid; } echo '">'. JText::_('CLUB_DATA_EDIT') .'</a></span>'; 
+	 echo '<span class="edit"><a href="' . URI::base() .'index.php?option=com_clm&view=verein&saison='. $sid .'&zps='. $zps .'&layout=vereinsdaten'; if ($itemid <>'') { echo "&Itemid=".$itemid; } echo '">'. Text::_('CLUB_DATA_EDIT') .'</a></span>'; 
 	} }
 } 
  ?>
@@ -117,7 +122,7 @@ if ($conf_vereinsdaten == 1) {
 <?php
 $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
-	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+	echo "<div id='wrong'>".Text::_('NO_ACCESS')."<br>".Text::_('NOT_REGISTERED')."</div>";
 } else {
 ?>
 
@@ -135,15 +140,15 @@ if (!$archive_check) {
 					<?php echo clm_core::$load->show_club_logo($zps,150); ?>
                 </td></tr>
 				<tr>
-                    <td><?php echo JText::_('CLUBS_LIST_MEMBER') ?>:</td>
-                    <td><?php echo $vereinstats[0]->Mgl; ?> (<?php echo $vereinstats[0]->Mgl_m; ?> <?php echo JText::_('CLUBS_LIST_MEMBERM') ?> | <?php echo $vereinstats[0]->Mgl_w; ?> <?php echo JText::_('CLUBS_LIST_MEMBERW') ?>)</td>
+                    <td><?php echo Text::_('CLUBS_LIST_MEMBER') ?>:</td>
+                    <td><?php echo $vereinstats[0]->Mgl; ?> (<?php echo $vereinstats[0]->Mgl_m; ?> <?php echo Text::_('CLUBS_LIST_MEMBERM') ?> | <?php echo $vereinstats[0]->Mgl_w; ?> <?php echo Text::_('CLUBS_LIST_MEMBERW') ?>)</td>
                 </tr>
                 <tr>
-                    <td><?php echo JText::_('CLUBS_LIST_DWZAV') ?>:</td>
+                    <td><?php echo Text::_('CLUBS_LIST_DWZAV') ?>:</td>
                     <td><?php echo substr ($vereinstats[0]->DWZ, 0, -5 ); ?> ( <?php echo $vereinstats[0]->DWZ_SUM; ?> )</td>
                 </tr>
                 <tr>
-                    <td><?php echo JText::_('CLUBS_LIST_ELOAV') ?>:</td>
+                    <td><?php echo Text::_('CLUBS_LIST_ELOAV') ?>:</td>
                     <td><?php echo substr ($vereinstats[0]->FIDE_Elo, 0, -5); ?> ( <?php echo $vereinstats[0]->ELO_SUM; ?> )</td>
                 </tr>
                 <tr>
@@ -154,55 +159,55 @@ if (!$archive_check) {
               <?php } ?>
               
 				<table class="vereinstats" width="100%">
-					<tr><td><h4><?php echo JText::_('CLUB_CHIEF'); ?></h4></td></tr>
+					<tr><td><h4><?php echo Text::_('CLUB_CHIEF'); ?></h4></td></tr>
 					<tr><td><?php echo $verein[0]->vs; ?></td></tr>
 					<?php if ($user->get('id') > 0 OR $verein_mail == 1)
-						if ($verein[0]->vs_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->vs_mail ).'</td></tr>'; } ?>
+						if ($verein[0]->vs_mail <>'') { echo '<tr><td>'.HTMLHelper::_( 'email.cloak', $verein[0]->vs_mail ).'</td></tr>'; } ?>
 					<?php if ($user->get('id') > 0 OR $verein_tel == 1) { ?>
 					  <tr><td><?php echo $verein[0]->vs_tel; ?></td></tr>         
 					<?php } ?>
 
 					<?php if ( ($verein[0]->tl ==! false) or ($verein[0]->tl_mail ==! false) or ($verein[0]->tl_tel ==! false) ) { ?>
-						<tr><td><h4><?php echo JText::_('CLUB_TOURNAMENTS'); ?></h4></td></tr>
+						<tr><td><h4><?php echo Text::_('CLUB_TOURNAMENTS'); ?></h4></td></tr>
 						<?php if ($verein[0]->tl ==! false) ?> <tr><td><?php echo $verein[0]->tl; ?></td></tr>
 						<?php if ($user->get('id') > 0 OR $verein_mail == 1)
-						  if ($verein[0]->tl_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->tl_mail ).'</td></tr>'; } ?>
+						  if ($verein[0]->tl_mail <>'') { echo '<tr><td>'.HTMLHelper::_( 'email.cloak', $verein[0]->tl_mail ).'</td></tr>'; } ?>
 						<?php if ($user->get('id') > 0 OR $verein_tel == 1) { ?>
 						  <tr><td><?php echo $verein[0]->tl_tel; ?></td></tr>            
 					<?php } } ?>
             
 					<?php if ( ($verein[0]->jw ==! false) or ($verein[0]->jw_mail ==! false) or ($verein[0]->jw_tel ==! false) ) { ?>
-						<tr><td><h4><?php echo JText::_('CLUB_YOUTH') ?></h4></td></tr>
+						<tr><td><h4><?php echo Text::_('CLUB_YOUTH') ?></h4></td></tr>
 						<?php if ($verein[0]->jw ==! false) ?> <tr><td><?php echo $verein[0]->jw; ?></td></tr>
 						<?php if ($user->get('id') > 0 OR $verein_mail == 1)
-						  if ($verein[0]->jw_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->jw_mail ).'</td></tr>'; } ?>
+						  if ($verein[0]->jw_mail <>'') { echo '<tr><td>'.HTMLHelper::_( 'email.cloak', $verein[0]->jw_mail ).'</td></tr>'; } ?>
 						<?php if ($user->get('id') > 0 OR $verein_tel == 1) { ?>
 						  <tr><td><?php echo $verein[0]->jw_tel; ?></td></tr>
 					<?php } } ?>
             
 					<?php if ( ($verein[0]->pw ==! false) or ($verein[0]->pw_mail ==! false) or ($verein[0]->pw_tel ==! false) ) { ?>
-						<tr><td><h4><?php echo JText::_('CLUB_PRESS') ?></h4></td></tr>
+						<tr><td><h4><?php echo Text::_('CLUB_PRESS') ?></h4></td></tr>
 						<?php if ($verein[0]->pw ==! false) ?> <tr><td><?php echo $verein[0]->pw; ?></td></tr>
 						<?php if ($user->get('id') > 0 OR $verein_mail == 1)
-						  if ($verein[0]->pw_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->pw_mail ).'</td></tr>'; } ?>
+						  if ($verein[0]->pw_mail <>'') { echo '<tr><td>'.HTMLHelper::_( 'email.cloak', $verein[0]->pw_mail ).'</td></tr>'; } ?>
 						<?php if ($user->get('id') > 0 OR $verein_tel == 1) { ?>
 						  <tr><td><?php echo $verein[0]->pw_tel; ?></td></tr>
 					<?php } } ?>
             
 					<?php if ( ($verein[0]->kw ==! false) or ($verein[0]->kw_mail ==! false) or ($verein[0]->kw_tel ==! false) ) { ?>
-						<tr><td><h4><?php echo JText::_('CLUB_MONEY') ?></h4></td></tr>
+						<tr><td><h4><?php echo Text::_('CLUB_MONEY') ?></h4></td></tr>
 						<?php if ($verein[0]->kw ==! false) ?> <tr><td><?php echo $verein[0]->kw; ?></td></tr>
 						<?php if ($user->get('id') > 0 OR $verein_mail == 1)
-						  if ($verein[0]->kw_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->kw_mail ).'</td></tr>'; } ?>
+						  if ($verein[0]->kw_mail <>'') { echo '<tr><td>'.HTMLHelper::_( 'email.cloak', $verein[0]->kw_mail ).'</td></tr>'; } ?>
 						<?php if ($user->get('id') > 0 OR $verein_tel == 1) { ?>
 						  <tr><td><?php echo $verein[0]->kw_tel; ?></td></tr>            </div>
 					<?php } } ?>
             
 					<?php if ( ($verein[0]->sw ==! false) or ($verein[0]->sw_mail ==! false) or ($verein[0]->sw_tel ==! false) ) { ?>
-						<tr><td><h4><?php echo JText::_('CLUB_SENIOR') ?></h4></td></tr>
+						<tr><td><h4><?php echo Text::_('CLUB_SENIOR') ?></h4></td></tr>
 						<?php if ($verein[0]->sw ==! false) ?> <tr><td><?php echo $verein[0]->sw; ?></td></tr>
 						<?php if ($user->get('id') > 0 OR $verein_mail == 1)
-						  if ($verein[0]->sw_mail <>'') { echo '<tr><td>'.JHTML::_( 'email.cloak', $verein[0]->sw_mail ).'</td></tr>'; } ?>
+						  if ($verein[0]->sw_mail <>'') { echo '<tr><td>'.HTMLHelper::_( 'email.cloak', $verein[0]->sw_mail ).'</td></tr>'; } ?>
 						<?php if ($user->get('id') > 0 OR $verein_tel == 1) { ?>
 						  <tr><td><?php echo $verein[0]->sw_tel; ?></td></tr>
 					<?php } } ?>
@@ -210,7 +215,7 @@ if (!$archive_check) {
              
 			<?php if ( $verein[0]->bemerkungen <> '') { ?>
             <div class="column">
-            <br /><h4><?php echo JText::_('TEAM_NOTICE') ?></h4>
+            <br /><h4><?php echo Text::_('TEAM_NOTICE') ?></h4>
             <?php echo  str_replace ( "," , "<br />", $verein[0]->bemerkungen); ?>
             </div>
             <?php	} ?>
@@ -221,7 +226,7 @@ if (!$archive_check) {
 			<table class="vereinstats">
             <!---div class="column"--->
               <?php $lokal = explode(",", $verein[0]->adresse); ?>
-              <tr><td><h4><?php echo JText::_('CLUB_LOCATION') ?></h4></td></tr>
+              <tr><td><h4><?php echo Text::_('CLUB_LOCATION') ?></h4></td></tr>
 
 				
 	<?php //Kartenanzeige 
@@ -280,19 +285,19 @@ if (!$archive_check) {
 					if ($googlemaps_rtype == 1 AND isset($spiellokal1[2])) {
 						echo str_replace ( "," , "<br />", $verein[0]->lokal);
 						if ( $googlemaps_vrout == 1)
-							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal1[0].','. $spiellokal1[1].','.$spiellokal1[2] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal1[0].','. $spiellokal1[1].','.$spiellokal1[2] .'" target="_blank">'. Text::_('CLM_ROUTE') .'</a>'; 
 					} elseif ($googlemaps_rtype == 2 AND isset($spiellokal1[2])) {
 						echo str_replace ( "," , "<br />", $verein[0]->lokal);
 						if ( $googlemaps_vrout == 1)
-							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal1[1].','.$spiellokal1[2] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal1[1].','.$spiellokal1[2] .'" target="_blank">'. Text::_('CLM_ROUTE') .'</a>'; 
 					} elseif ($googlemaps_rtype == 3 AND isset($spiellokal1[1])) {
 						echo str_replace ( "," , "<br />", $verein[0]->lokal);
 						if ( $googlemaps_vrout == 1)
-							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal1[0].','.$spiellokal1[1] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal1[0].','.$spiellokal1[1] .'" target="_blank">'. Text::_('CLM_ROUTE') .'</a>'; 
 					} else {
 						echo str_replace ( "," , "<br />", $verein[0]->lokal); 
 						if ( $googlemaps_vrout == 1)
-							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $verein[0]->lokal .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $verein[0]->lokal .'" target="_blank">'. Text::_('CLM_ROUTE') .'</a>'; 
 					}
 				} ?>
                 </div>
@@ -302,19 +307,19 @@ if (!$archive_check) {
 					if ($googlemaps_rtype == 1 AND isset($spiellokal2[2])) {
 						echo  str_replace ( "," , "<br />", $verein[0]->adresse ); 
 						if ( $googlemaps_vrout == 1)
-							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal2[0].','. $spiellokal2[1].','.$spiellokal2[2] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal2[0].','. $spiellokal2[1].','.$spiellokal2[2] .'" target="_blank">'. Text::_('CLM_ROUTE') .'</a>'; 
 					} elseif ($googlemaps_rtype == 2 AND isset($spiellokal2[2])) {
 						echo  str_replace ( "," , "<br />", $verein[0]->adresse );
 						if ( $googlemaps_vrout == 1)
-							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal2[1].','.$spiellokal2[2] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal2[1].','.$spiellokal2[2] .'" target="_blank">'. Text::_('CLM_ROUTE') .'</a>'; 
 					} elseif ($googlemaps_rtype == 3 AND isset($spiellokal2[1])) {
 						echo  str_replace ( "," , "<br />", $verein[0]->adresse );
 						if ( $googlemaps_vrout == 1)
-							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal2[0].','.$spiellokal2[1] .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $spiellokal2[0].','.$spiellokal2[1] .'" target="_blank">'. Text::_('CLM_ROUTE') .'</a>'; 
 					} else {
 						echo  str_replace ( "," , "<br />", $verein[0]->adresse ); 
 						if ( $googlemaps_vrout == 1)
-							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $verein[0]->adresse .'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+							echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr='. $verein[0]->adresse .'" target="_blank">'. Text::_('CLM_ROUTE') .'</a>'; 
 					}
 			    } ?>
                 </div>
@@ -324,13 +329,13 @@ if (!$archive_check) {
             <?php if ($verein[0]->termine ==! false) { ?>
             <br />
             <div class="column">
-                <h4><?php echo JText::_('CLUB_EVENTS') ?></h4>
+                <h4><?php echo Text::_('CLUB_EVENTS') ?></h4>
                 <?php echo str_replace ( "," , "<br />", $verein[0]->termine); ?>            </div>
             <?php } ?>
             
             <?php if ($verein[0]->homepage ==! false) { ?>
             <div class="column">
-                <h4><?php echo JText::_('CLUB_HOMEPAGE') ?></h4>
+                <h4><?php echo Text::_('CLUB_HOMEPAGE') ?></h4>
                 <a href="<?php echo $verein[0]->homepage; ?>"><?php echo $verein[0]->homepage; ?></a>            </div>
             <?php } ?>
         <!-- </div> -->
@@ -348,14 +353,14 @@ if (!$archive_check) {
                 <form name="form1">
                     <select name="select" onchange="goto(this.form)" class="selectteam">
 						<?php foreach ($saisons as $saisons) { ?>
-                            <option value="<?php echo JURI::base(); ?>index.php?option=com_clm&view=verein&zps=<?php echo $zps; ?>&saison=<?php echo $saisons->id; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+                            <option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=verein&zps=<?php echo $zps; ?>&saison=<?php echo $saisons->id; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
                             <?php if ($saisons->id == $sid) { echo 'selected="selected"'; } ?>><?php echo $saisons->name; ?> </option>
                         <?php } ?>
                     </select>
                 </form>
                 </span>
                 <?php if (isset($mannschaft[0]->name)){ ?>
-                      <h4><?php echo JText::_('CLUB_TEAMS') ?></h4>
+                      <h4><?php echo Text::_('CLUB_TEAMS') ?></h4>
                         <ul>
                         <?php $cnt = 0;
                         foreach ($mannschaft as $mannschaft) { $cnt++;?>
@@ -365,7 +370,7 @@ if (!$archive_check) {
                     <br />
                 <?php } ?>
                 <?php if (isset($turniere[0]->name)){ ?>
-                	<h4><?php echo JText::_('CLUB_TOURN') ?></h4>
+                	<h4><?php echo Text::_('CLUB_TOURN') ?></h4>
                         <ul>
                         <?php $cnt = 0;
                         foreach ($turniere as $turniere) { $cnt++;?>

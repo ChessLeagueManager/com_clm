@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,22 +11,25 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
 // Konfigurationsparameter auslesen
 $itemid 	= clm_core::$load->request_int( 'Itemid' );
 $spRang		= clm_core::$load->request_int( 'spRang');	//Sonderranglisten
 		// Userkennung holen
-	$user	=JFactory::getUser();
+	$user	=Factory::getUser();
 	$jid	= $user->get('id');
 
 $pgn		= clm_core::$load->request_int('pgn'); 
 $option 	= clm_core::$load->request_string('option','com_clm' );
-$mainframe	= JFactory::getApplication();
+$mainframe	= Factory::getApplication();
 if ($pgn == 1 AND $spRang == 0) { 
 	$result = clm_core::$api->db_pgn_export($this->turnier->id,false);
 	$_GET['pgn'] = 0;
-	if (!$result[0]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
+	if (!$result[0]) $msg = Text::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
 	$link = 'index.php?option='.$option.'&view=turnier_rangliste&turnier='.$this->turnier->id.'&pgn=0';
 	if ($itemid != 0) $link .= '&Itemid='.$itemid;
 	$mainframe->enqueueMessage( $msg );
@@ -46,22 +49,22 @@ echo '<div id="clm"><div id="turnier_rangliste">';
 
 // Componentheading
 if($spRang != 0){			//Sonderranglisten
-	$heading = $this->turnier->name.": ".$this->turnier->spRangName." ".JText::_('TOURNAMENT_RANKING'); 
+	$heading = $this->turnier->name.": ".$this->turnier->spRangName." ".Text::_('TOURNAMENT_RANKING'); 
 } else {
-	$heading = $this->turnier->name.": ".JText::_('TOURNAMENT_RANKING');
+	$heading = $this->turnier->name.": ".Text::_('TOURNAMENT_RANKING');
 }
 
 $archive_check = clm_core::$api->db_check_season_user($this->turnier->sid);
 if (!$archive_check) {
 	echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('NO_ACCESS')."<br/>".JText::_('NOT_REGISTERED'));
+	echo CLMContent::clmWarning(Text::_('NO_ACCESS')."<br/>".Text::_('NOT_REGISTERED'));
 } elseif ( $this->turnier->published == 0) { 
 	echo CLMContent::componentheading($heading);
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
+	echo CLMContent::clmWarning(Text::_('TOURNAMENT_NOTPUBLISHED')."<br/>".Text::_('TOURNAMENT_PATIENCE'));
 
 } elseif ($spRang == 0 and $this->turnier->playersCount < $this->turnier->teil) { //Änderung wegen Sonderranglisten
-	$msg = JText::_('TOURNAMENT_PLAYERLISTNOTCOMPLETE')."<br/>".JText::_('TOURNAMENT_NORANKINGEXISTING');
+	$msg = Text::_('TOURNAMENT_PLAYERLISTNOTCOMPLETE')."<br/>".Text::_('TOURNAMENT_NORANKINGEXISTING');
 	$link = 'index.php?option='.$option.'&view=turnier_teilnehmer&turnier='.$this->turnier->id;
 	if ($itemid != 0) $link .= '&Itemid='.$itemid;
 	$mainframe->enqueueMessage( $msg );
@@ -70,20 +73,20 @@ if (!$archive_check) {
 } elseif ($spRang != 0 and $this->turnier->playersCount == 0 ) { //Hinzugefügt wegen Sonderranglisten
 	echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_SPECIALRANKING_NOPLAYERS'));
+	echo CLMContent::clmWarning(Text::_('TOURNAMENT_SPECIALRANKING_NOPLAYERS'));
 
 } else {
 	$turParams = new clm_class_params($this->turnier->params);
 // PDF-Link
-	echo CLMContent::createPDFLink('turnier_rangliste', JText::_('TOURNAMENT_RANKING'), array('turnier' => $this->turnier->id, 'layout' => 'rangliste', 'spRang' => $spRang));
+	echo CLMContent::createPDFLink('turnier_rangliste', Text::_('TOURNAMENT_RANKING'), array('turnier' => $this->turnier->id, 'layout' => 'rangliste', 'spRang' => $spRang));
 	if($spRang != 0){			//Sonderranglisten
-	  echo CLMContent::createViewLink('turnier_tabelle', JText::_('RANGLISTE_GOTO_TABELLE'), array('turnier' => $this->turnier->id, 'spRang' => $spRang, 'Itemid' => $itemid) );
+	  echo CLMContent::createViewLink('turnier_tabelle', Text::_('RANGLISTE_GOTO_TABELLE'), array('turnier' => $this->turnier->id, 'spRang' => $spRang, 'Itemid' => $itemid) );
 	} else {
-	  echo CLMContent::createViewLink('turnier_tabelle', JText::_('RANGLISTE_GOTO_TABELLE'), array('turnier' => $this->turnier->id, 'Itemid' => $itemid) );
+	  echo CLMContent::createViewLink('turnier_tabelle', Text::_('RANGLISTE_GOTO_TABELLE'), array('turnier' => $this->turnier->id, 'Itemid' => $itemid) );
 	}
 // PGN-Download gesamtes Turnier
 	if (($jid != 0 AND $turParams->get('pgnPublic', 0) == '1') OR $turParams->get('pgnDownload', 0) == '1') {
-		echo CLMContent::createPGNLink('turnier_rangliste', JText::_('RANGLISTE_PGN_ALL'), array('turnier' => $this->turnier->id), 1 );
+		echo CLMContent::createPGNLink('turnier_rangliste', Text::_('RANGLISTE_PGN_ALL'), array('turnier' => $this->turnier->id), 1 );
 	} 
 	
 	echo CLMContent::componentheading($heading);
@@ -123,7 +126,7 @@ if (!$archive_check) {
 					$link->view = 'turnier_rangliste';
 					$link->more = array('turnier' => $this->turnier->id, 'orderby' => 'pos', 'Itemid' => $itemid);
 					$link->makeURL();
-					echo $link->makeLink(JText::_('TOURNAMENT_RANKABB'));
+					echo $link->makeLink(Text::_('TOURNAMENT_RANKABB'));
 				echo '</div></th>';
 				if ($turParams->get('displayPlayerSnr', 1) == 1) {
 					echo '<th class="tln"><div>';
@@ -131,11 +134,11 @@ if (!$archive_check) {
 						$link->view = 'turnier_rangliste';
 						$link->more = array('turnier' => $this->turnier->id, 'orderby' => 'snr', 'Itemid' => $itemid);
 						$link->makeURL();
-						echo $link->makeLink(JText::_('TOURNAMENT_NUMBERABB'));
+						echo $link->makeLink(Text::_('TOURNAMENT_NUMBERABB'));
 					echo '</div></th>';
 				}
-				echo '<th class="name"><div>'.JText::_('TOURNAMENT_PLAYERNAME').'</div></th>';
-				echo '<th class="twz"><div>'.JText::_('TOURNAMENT_TWZ').'</div></th>';
+				echo '<th class="name"><div>'.Text::_('TOURNAMENT_PLAYERNAME').'</div></th>';
+				echo '<th class="twz"><div>'.Text::_('TOURNAMENT_TWZ').'</div></th>';
 			echo '</tr>';
 
 			// alle Spieler durchgehen
@@ -182,12 +185,12 @@ if (!$archive_check) {
 			// header
 
 			echo '<tr>';
-				echo '<th class="fw_col"><div>'.JText::_('TOURNAMENT_POINTS_ABB').'</div></th>';
+				echo '<th class="fw_col"><div>'.Text::_('TOURNAMENT_POINTS_ABB').'</div></th>';
 				// mgl. Feinwertungen
 				for ($f=1; $f<=3; $f++) {
 					$fwFieldName = 'tiebr'.$f;
 					if ($this->turnier->$fwFieldName > 0 AND $this->turnier->$fwFieldName < 50) {
-						echo '<th class="fw_col"><div>'.JText::_('TOURNAMENT_TIEBR_ABB_'.$this->turnier->$fwFieldName).'</div></th>';
+						echo '<th class="fw_col"><div>'.Text::_('TOURNAMENT_TIEBR_ABB_'.$this->turnier->$fwFieldName).'</div></th>';
 					}
 				}
 			echo '</tr>';
@@ -294,7 +297,7 @@ if (!$archive_check) {
 					$link->view = 'turnier_rangliste';
 					$link->more = array('turnier' => $this->turnier->id, 'orderby' => 'pos', 'Itemid' => $itemid);
 					$link->makeURL();
-					echo $link->makeLink(JText::_('TOURNAMENT_RANKABB'));
+					echo $link->makeLink(Text::_('TOURNAMENT_RANKABB'));
 				echo '</div></th>';
 				if ($turParams->get('displayPlayerSnr', 1) == 1) {
 					echo '<th class="tln"><div>';
@@ -302,11 +305,11 @@ if (!$archive_check) {
 						$link->view = 'turnier_rangliste';
 						$link->more = array('turnier' => $this->turnier->id, 'orderby' => 'snr', 'Itemid' => $itemid);
 						$link->makeURL();
-						echo $link->makeLink(JText::_('TOURNAMENT_NUMBERABB'));
+						echo $link->makeLink(Text::_('TOURNAMENT_NUMBERABB'));
 					echo '</div></th>';
 				}
-				echo '<th class="name"><div>'.JText::_('TOURNAMENT_PLAYERNAME').'</div></th>';
-				echo '<th class="twz"><div>'.JText::_('TOURNAMENT_TWZ').'</div></th>';
+				echo '<th class="name"><div>'.Text::_('TOURNAMENT_PLAYERNAME').'</div></th>';
+				echo '<th class="twz"><div>'.Text::_('TOURNAMENT_TWZ').'</div></th>';
 				
 			echo '</tr>';
 
@@ -348,12 +351,12 @@ if (!$archive_check) {
 			if ($fixth_tkreuz =="1") { echo 'class="tableWithFloatingHeader"'; };
 			
 			echo '<tr>';
-				echo '<th class="fw_col"><div>'.JText::_('TOURNAMENT_POINTS_ABB').'</div></th>';
+				echo '<th class="fw_col"><div>'.Text::_('TOURNAMENT_POINTS_ABB').'</div></th>';
 				// mgl. Feinwertungen
 				for ($f=1; $f<=3; $f++) {
 					$fwFieldName = 'tiebr'.$f;
 					if ($this->turnier->$fwFieldName > 0 AND $this->turnier->$fwFieldName < 50) {
-						echo '<th class="fw_col"><div>'.JText::_('TOURNAMENT_TIEBR_ABB_'.$this->turnier->$fwFieldName).'</div></th>';
+						echo '<th class="fw_col"><div>'.Text::_('TOURNAMENT_TIEBR_ABB_'.$this->turnier->$fwFieldName).'</div></th>';
 					}
 				}
 				

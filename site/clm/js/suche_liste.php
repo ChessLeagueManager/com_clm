@@ -8,8 +8,8 @@
 defined('clm') or die('Restricted access');
 
 // Joomla eigenes JQuery nutzen
-// $document = JFactory::getDocument();
-// JHtml::_('jquery.framework');
+// $document = Factory::getDocument();
+// HTMLHelper::_('jquery.framework');
 
 // Vom CLM bereitgestelltes JQuery nutzen
 // ACHTUNG : Es wird von Störungen (nicht CLM) bei gleichzeitig aktiviertem Joomla JQuery berichtet

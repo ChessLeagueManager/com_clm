@@ -1,6 +1,17 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link https://chessleaguemanager.org
+*/
+
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Version;
+use Joomla\CMS\Factory;
+
 if(!defined("DS")){define('DS', DIRECTORY_SEPARATOR);} // fix for Joomla 3.x
 class com_clmInstallerScript {
 	private $params = array();
@@ -8,16 +19,16 @@ class com_clmInstallerScript {
 	private $redirect = false;
 	function preflight($type, $parent) {
 		define('clm_install', "42");
-		$jversion = new JVersion();
+		$jversion = new Version();
 		if ($jversion->getShortVersion() < '2.5.0') {
-			$application = JFactory::getApplication();
+			$application = Factory::getApplication();
 			$application->enqueueMessage('Cannot install com_clm in a Joomla release prior to 2.5.0.', 'error');
 			return false;
 		}
 		if ($type == 'update') {
 			$this->version = $this->getParam('version');
 			if ($this->version < '1.5.2') {
-				$application = JFactory::getApplication();
+				$application = Factory::getApplication();
 				$application->enqueueMessage($type.'Please install com_clm 1.5.2 before this update.', 'error');
 				return false;
 			}
@@ -29,7 +40,7 @@ class com_clmInstallerScript {
 			$status = self::tableStatus();
 			// kleiner als 1.5.2
 			if($status == 0) {
-				$application = JFactory::getApplication();
+				$application = Factory::getApplication();
 				$application->enqueueMessage($type.'Please install com_clm 1.5.2 before this update.', 'error');
 				return false;
 			} else if($status == 1) {
@@ -54,7 +65,7 @@ class com_clmInstallerScript {
 		require_once (JPATH_SITE . DS . "components" . DS . "com_clm" . DS . "" . "clm" . DS . "index.php");
 		$out = clm_core::$load->db_update(0);
 		if (!$out) {
-			$application = JFactory::getApplication();
+			$application = Factory::getApplication();
 			$application->enqueueMessage('There is a problem with the database, is there an old table?', 'error');
 		} else {
 			$this->add(4,"installer_install",json_encode(array("old"=>"","new"=>clm)));
@@ -79,7 +90,7 @@ class com_clmInstallerScript {
 			}
 		}
 		if (!$out) {
-			$application = JFactory::getApplication();
+			$application = Factory::getApplication();
 			$application->enqueueMessage('There is a problem with the database, have you something changed?', 'error');
 		}
 		return $out;
@@ -166,7 +177,7 @@ class com_clmInstallerScript {
 	}
 	
 	private function getParam($name) {
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$db->setQuery('SELECT manifest_cache FROM #__extensions WHERE element = "com_clm"');
 		$manifest = json_decode($db->loadResult(), true);
 		return $manifest[$name];
@@ -195,7 +206,7 @@ class com_clmInstallerScript {
 	}
 	
 	public static function isTable($table) {
-		$db = JFactory::getDBO();
+		$db = Factory::getDBO();
 		$tables = $db->getTableList();
 		if(in_array($db->getPrefix().$table,$tables)) {
 			return true;
@@ -208,7 +219,7 @@ class com_clmInstallerScript {
 		if(!self::isTable($table)) {
 			return false;		
 		}
-		$db = JFactory::getDBO();
+		$db = Factory::getDBO();
 		$columns = $db->getTableColumns($db->getPrefix().$table);
 		if(isset($columns[$column])){
 			return true;

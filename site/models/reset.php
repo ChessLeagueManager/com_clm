@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 /**
  * @version		$Id: reset.php 7399 2007-05-14 04:10:09Z eddieajau $
@@ -17,11 +17,15 @@
  * source software licenses. See COPYRIGHT.php for copyright notices and
  * details.
  */
-
 // No direct access
 defined('_JEXEC') or die;
-
 jimport('joomla.application.component.model');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\User\User;
+use Joomla\CMS\User\UserHelper;
 
 /**
  * User Component Reset Model
@@ -52,17 +56,17 @@ class CLMModelReset extends JModelLegacy
 	 */
 	function confirmReset($token)
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 //	$option 	= JRequest::getCmd( 'option' );
 	$option 	= clm_core::$load->request_string('option', '');
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$db->setQuery('SELECT id FROM #__users WHERE block = 0 AND activation = '.$db->Quote($token));
 
 		// Verify the token
 		if (!($id = $db->loadResult()))
 		{
-			$this->setError(JText::_('INVALID_TOKEN'));
+			$this->setError(Text::_('INVALID_TOKEN'));
 			return false;
 		}
 
@@ -87,21 +91,21 @@ class CLMModelReset extends JModelLegacy
 	{
 		jimport('joomla.user.helper');
 
-		$mainframe	= JFactory::getApplication();
+		$mainframe	= Factory::getApplication();
 		//$option 	= JRequest::getCmd( 'option' );
 		$option 	= clm_core::$load->request_string('option', '');
 
 		// Make sure that we have a pasword
 		if ( ! $password1 )
 		{
-			$this->setError(JText::_('PASSWORD_MUST_GIVEN'));
+			$this->setError(Text::_('PASSWORD_MUST_GIVEN'));
 			return false;
 		}
 
 		// Verify that the passwords match
 		if ($password1 != $password2)
 		{
-			$this->setError(JText::_('PASSWORDS_DO_NOT_MATCH'));
+			$this->setError(Text::_('PASSWORDS_DO_NOT_MATCH'));
 			return false;
 		}
 
@@ -109,25 +113,25 @@ class CLMModelReset extends JModelLegacy
 		$pattern = '/(?=^.{8,}$)(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[+,.;:\-_!%&\/]).*$/';
 		if (!preg_match($pattern, $password1) == 1) 
 		{
-			$this->setError(JText::_('PASSWORD_DO_NOT_MATCH_RULES'));
+			$this->setError(Text::_('PASSWORD_DO_NOT_MATCH_RULES'));
 			return false;
 		}
 
 		// Get the necessary variables
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 		$id			= $mainframe->getUserState($this->_namespace.'id');
 		$token		= $mainframe->getUserState($this->_namespace.'token');
-//		$salt		= JUserHelper::genRandomPassword(32);
-//		$crypt		= JUserHelper::getCryptedPassword($password1, $salt);
+//		$salt		= UserHelper::genRandomPassword(32);
+//		$crypt		= UserHelper::getCryptedPassword($password1, $salt);
 //		$password	= $crypt.':'.$salt;
 
-		$password = JUserHelper::hashPassword($password1);
+		$password = UserHelper::hashPassword($password1);
  
 		// Get the user object
-		$user = new JUser($id);
+		$user = new User($id);
 
 		// Fire the onBeforeStoreUser trigger
-		JPluginHelper::importPlugin('user');
+		PluginHelper::importPlugin('user');
 //		$dispatcher =& JDispatcher::getInstance();
 //		$dispatcher->trigger('onBeforeStoreUser', array($user->getProperties(), false));
 
@@ -145,7 +149,7 @@ class CLMModelReset extends JModelLegacy
 //		if (!$result = $db->query())
 		if (!clm_core::$db->query($query))
 		{
-			$this->setError(JText::_('DATABASE_ERROR'));
+			$this->setError(Text::_('DATABASE_ERROR'));
 			return false;
 		}
 

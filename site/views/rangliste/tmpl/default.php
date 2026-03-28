@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,6 +12,10 @@
 defined('_JEXEC') or die('Restricted access');
 
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+ use Joomla\CMS\HTML\HTMLHelper;
  
 $lid		= clm_core::$load->request_int('liga','1'); 
 $sid		= clm_core::$load->request_int('saison',0);
@@ -21,7 +25,7 @@ $typeid		= clm_core::$load->request_int('typeid',0);
 $liga		= $this->liga;
 $option 	= clm_core::$load->request_string( 'option' );
 if ($option == '') $option = 'com_clm';
-$mainframe	= JFactory::getApplication();
+$mainframe	= Factory::getApplication();
 
 $offen		= $this->offen;
 $anz_offen	= count($offen);
@@ -36,7 +40,7 @@ foreach ($offen as $value) {
 }
 
 // Userkennung holen
-$user	=JFactory::getUser();
+$user	=Factory::getUser();
 $jid	= $user->get('id');
 
 //Liga-Parameter aufbereiten
@@ -63,9 +67,9 @@ $pgn		= clm_core::$load->request_int('pgn',0);
 if ($pgn == 1) {
 	if (($jid != 0 AND $params['pgnPublic'] == '1') OR $params['pgnDownload'] == '1') {
 		$result = clm_core::$api->db_pgn_export($lid,true);
-		if (!$result[0]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
+		if (!$result[0]) $msg = Text::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
 	} else {
-		$msg = JText::_('NO_PERMISSION');
+		$msg = Text::_('NO_PERMISSION');
 	}
 	$_POST['pgn'] = 0;
 	$link = 'index.php?option='.$option.'&view=rangliste&liga='.$lid.'&pgn=0';
@@ -86,7 +90,7 @@ if(isset($liga[0])){
 	else $columnMP = 1;
 
 	if ($sid == 0) {
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$query = " SELECT a.* FROM #__clm_liga as a"
 				." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 				." WHERE a.id = ".$lid
@@ -105,11 +109,11 @@ if(isset($liga[0])){
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 	// Browsertitelzeile setzen
-	$doc =JFactory::getDocument();
+	$doc =Factory::getDocument();
 	if(isset($liga[0])){
-		$doc->setTitle(JText::_('RANGLISTE').' '.$liga[0]->name);
+		$doc->setTitle(Text::_('RANGLISTE').' '.$liga[0]->name);
 	} else {
-		$doc->setTitle(JText::_('RANGLISTE'));
+		$doc->setTitle(Text::_('RANGLISTE'));
 	}
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
@@ -123,24 +127,24 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php');
 
 $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
-	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+	echo "<div id='wrong'>".Text::_('NO_ACCESS')."<br>".Text::_('NOT_REGISTERED')."</div>";
 }
 // existiert die Liga
 elseif (!$liga) {
 	
-	echo "<div id='wrong'>".JText::_('NOT_EXIST')." (".$lid.")<br>".JText::_('GEDULDA')."</div>";
+	echo "<div id='wrong'>".Text::_('NOT_EXIST')." (".$lid.")<br>".Text::_('GEDULDA')."</div>";
 
 }
 // schon veröffentlicht
 elseif ($liga[0]->published == "0") {
 	
-	echo "<div id='wrong'>".JText::_('NOT_PUBLISHED')."<br>".JText::_('GEDULD')."</div>";
+	echo "<div id='wrong'>".Text::_('NOT_PUBLISHED')."<br>".Text::_('GEDULD')."</div>";
 
 }
 // keine Rangliste bei KO-Modus
 elseif ($liga[0]->runden_modus == "4" OR $liga[0]->runden_modus == "5") {
 	
-	echo "<div id='wrong'>".JText::_('NOT_AVAILABLE')."<br>".JText::_('GO_TO_PAARUNGSLISTE')."</div>";
+	echo "<div id='wrong'>".Text::_('NOT_AVAILABLE')."<br>".Text::_('GO_TO_PAARUNGSLISTE')."</div>";
 	
 	// dieser Marker wird nur beim Extern Zugriff verwendet
 	echo '<input type="hidden" name="extern_comment" value="GO_TO_PAARUNGSLISTE" />';
@@ -152,30 +156,30 @@ elseif ($liga[0]->runden_modus == "4" OR $liga[0]->runden_modus == "5") {
 
 	<div class="componentheading">
 
-	<?php echo JText::_('RANGLISTE'); echo "&nbsp;".$liga[0]->name; ?>
+	<?php echo Text::_('RANGLISTE'); echo "&nbsp;".$liga[0]->name; ?>
 
 	<div id="pdf">
 	<!--<img src="printButton.png" alt="drucken"  /></a>-->
 
 	<?php
-	echo CLMContent::createPDFLink('rangliste', JText::_('PDF_RANGLISTETABLE'), array('saison' => $sid, 'layout' => 'rang', 'liga' => $lid));
+	echo CLMContent::createPDFLink('rangliste', Text::_('PDF_RANGLISTETABLE'), array('saison' => $sid, 'layout' => 'rang', 'liga' => $lid));
 
 	if ($pdf_melde == 1) {
 		// Neue Ausgabe: Saisonstart
-		echo CLMContent::createPDFLink('rangliste', JText::_('PDF_RANGLISTE_TEAM_LISTING'), array('saison' => $sid, 'layout' => 'start', 'liga' => $lid));
+		echo CLMContent::createPDFLink('rangliste', Text::_('PDF_RANGLISTE_TEAM_LISTING'), array('saison' => $sid, 'layout' => 'start', 'liga' => $lid));
 	
 		if ($jid != 0) { 
-			echo CLMContent::createPDFLink('rangliste', JText::_('PDF_RANGLISTE_LIGAHEFT_1'), array('saison' => $sid, 'layout' => 'heft', 'o_nr' => 1, 'saison' => $sid, 'liga' => $lid));
+			echo CLMContent::createPDFLink('rangliste', Text::_('PDF_RANGLISTE_LIGAHEFT_1'), array('saison' => $sid, 'layout' => 'heft', 'o_nr' => 1, 'saison' => $sid, 'liga' => $lid));
 		} 
 		
-		echo CLMContent::createPDFLink('rangliste', JText::_('PDF_RANGLISTE_LIGAHEFT'), array('saison' => $sid, 'layout' => 'heft', 'o_nr' => 0, 'saison' => $sid, 'liga' => $lid));
+		echo CLMContent::createPDFLink('rangliste', Text::_('PDF_RANGLISTE_LIGAHEFT'), array('saison' => $sid, 'layout' => 'heft', 'o_nr' => 0, 'saison' => $sid, 'liga' => $lid));
 		
 	}
-	echo CLMContent::createViewLink('tabelle', JText::_('RANGLISTE_GOTO_TABELLE'), array('saison' => $sid, 'liga' => $lid, 'Itemid' => $item));
+	echo CLMContent::createViewLink('tabelle', Text::_('RANGLISTE_GOTO_TABELLE'), array('saison' => $sid, 'liga' => $lid, 'Itemid' => $item));
 	// PGN gesamtes Turnier
 	if (($jid != 0 AND $params['pgnPublic'] == '1') OR $params['pgnDownload'] == '1') {
 	//if ($jid != 0 AND $params['pgnDownload'] == '1') {
-		echo CLMContent::createPGNLink('rangliste', JText::_('RANGLISTE_PGN_ALL'), array('liga' => $liga[0]->id), 1 );
+		echo CLMContent::createPGNLink('rangliste', Text::_('RANGLISTE_PGN_ALL'), array('liga' => $liga[0]->id), 1 );
 	} 
 	
 	// DWZ Durchschnitte - Aufstellung
@@ -190,11 +194,11 @@ elseif ($liga[0]->runden_modus == "4" OR $liga[0]->runden_modus == "5") {
 
 	<table cellpadding="0" cellspacing="0" class="rangliste">
 		<tr>
-			<th class="rang"><div><?php echo JText::_('RANG') ?></div></th>
+			<th class="rang"><div><?php echo Text::_('RANG') ?></div></th>
 			<?php if ($s_tln == 1) { ?>
-				<th class="rang"><div><?php echo JText::_('TLN') ?></div></th>
+				<th class="rang"><div><?php echo Text::_('TLN') ?></div></th>
 			<?php } ?>
-			<th class="team"><div><?php echo JText::_('TEAM') ?></div></th>
+			<th class="team"><div><?php echo Text::_('TEAM') ?></div></th>
 			
 			<?php 
 			// vollrundig
@@ -219,24 +223,24 @@ elseif ($liga[0]->runden_modus == "4" OR $liga[0]->runden_modus == "5") {
 			?>
 
 			<?php if ($columnMP == 1) { ?>
-				<th class="mp"><div><?php echo JText::_('MP') ?></div></th>
+				<th class="mp"><div><?php echo Text::_('MP') ?></div></th>
 			<?php } ?>			
 			
 			<?php 
 			if ( $liga[0]->liga_mt == 0) { 
-				echo '<th class="bp"><div>'.JText::_('BP').'</div></th>';
+				echo '<th class="bp"><div>'.Text::_('BP').'</div></th>';
 				if ( $liga[0]->b_wertung > 0) { 
-					echo '<th class="bp"><div>'.JText::_('BW').'</div></th>';
+					echo '<th class="bp"><div>'.Text::_('BW').'</div></th>';
 				}
 			} else {
 				if ( $liga[0]->tiebr1 > 0 AND $liga[0]->tiebr1 < 50) { 
-					echo '<th class="bp"><div>'.JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr1).'</div></th>';
+					echo '<th class="bp"><div>'.Text::_('MTURN_TIEBRS_'.$liga[0]->tiebr1).'</div></th>';
 				}
 				if ( $liga[0]->tiebr2 > 0 AND $liga[0]->tiebr2 < 50) {  
-					echo '<th class="bp"><div>'.JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr2).'</div></th>';
+					echo '<th class="bp"><div>'.Text::_('MTURN_TIEBRS_'.$liga[0]->tiebr2).'</div></th>';
 				}
 				if ( $liga[0]->tiebr3 > 0 AND $liga[0]->tiebr3 < 50) {  
-					echo '<th class="bp"><div>'.JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr3).'</div></th>';
+					echo '<th class="bp"><div>'.Text::_('MTURN_TIEBRS_'.$liga[0]->tiebr3).'</div></th>';
 				}
 			}
 			?>	
@@ -481,9 +485,9 @@ elseif ($liga[0]->runden_modus == "4" OR $liga[0]->runden_modus == "5") {
 			if ( $liga[0]->sl <> "" ) { 
 				?>
 				<div class="ran_chief">
-					<div class="ran_chief_left"><?php echo JText::_('CHIEF') ?></div>
+					<div class="ran_chief_left"><?php echo Text::_('CHIEF') ?></div>
 					<?php if ($jid > 0 OR $show_sl_mail > 0) { ?>
-						<div class="ran_chief_right"><?php echo $liga[0]->sl; ?> | <?php echo JHTML::_( 'email.cloak', $liga[0]->email ); ?></div>	
+						<div class="ran_chief_right"><?php echo $liga[0]->sl; ?> | <?php echo HTMLHelper::_( 'email.cloak', $liga[0]->email ); ?></div>	
 					<?php } else { ?>
 						<div class="ran_chief_right"><?php echo $liga[0]->sl; ?></div>	
 					<?php } ?>
@@ -496,14 +500,14 @@ elseif ($liga[0]->runden_modus == "4" OR $liga[0]->runden_modus == "5") {
 			if ($liga[0]->bemerkungen <> "") { 
 				?>
 				<div class="ran_note">
-					<div class="ran_note_left"><?php echo JText::_('NOTICE_SL') ?></div>
+					<div class="ran_note_left"><?php echo Text::_('NOTICE_SL') ?></div>
 					<div class="ran_note_right"><?php echo nl2br($liga[0]->bemerkungen); ?></div>
 				</div>
 				<div class="clr"></div>
 			
 				<?php 
-				//if ($diff == 1 AND $liga[0]->ab ==1 ) { echo JText::_('ROUND_NO_RELEGATED_TEAM'); }
-				//if ($diff == 1 AND $liga[0]->ab >1 ) { echo JText::_('ROUND_LESS_RELEGATED_TEAM'); }
+				//if ($diff == 1 AND $liga[0]->ab ==1 ) { echo Text::_('ROUND_NO_RELEGATED_TEAM'); }
+				//if ($diff == 1 AND $liga[0]->ab >1 ) { echo Text::_('ROUND_LESS_RELEGATED_TEAM'); }
 				?>
 			<?php 
 			}  

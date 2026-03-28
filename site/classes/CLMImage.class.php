@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2014 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -15,8 +15,9 @@
 * CLMImage
 * Klassenbibliothek für bild-bezogene Funktionalitäten
 */
-class CLMImage {
+use Joomla\CMS\Uri\Uri;
 
+class CLMImage {
 	
 	/**
 	* imageURL()
@@ -24,7 +25,7 @@ class CLMImage {
 	*/
 	public static function imageURL($image) {
 	
-		$string = JUri::root().'components/com_clm/images/'.$image;
+		$string = Uri::root().'components/com_clm/images/'.$image;
 		
 		return $string;
 	

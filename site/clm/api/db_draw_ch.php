@@ -5,6 +5,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
+use Joomla\CMS\Language\Text;
 /**
 * Auslosungsroutine für Einzelturnier im CH-Modus
 */
@@ -172,7 +173,7 @@ if ($debug > 0) echo "<br>Aktuelle Runde: ".$round;
 				;
 		$pairingCount = clm_core::$db->count($query);
 		if ($pairingCount != 0) {
-			$message .= "<br>".CLMText::sgpl(($pairingCount)/2, JText::_('PAIRING'), JText::_('PAIRINGS') )." ".JText::_('EXISTING');
+			$message .= "<br>".CLMText::sgpl(($pairingCount)/2, Text::_('PAIRING'), Text::_('PAIRINGS') )." ".Text::_('EXISTING');
 		}
 //die('npairingcount');	
 	
@@ -182,7 +183,7 @@ if ($debug > 0) echo "<br>Aktuelle Runde: ".$round;
 				;
 		$resultCount = clm_core::$db->count($query);
 		if ($resultCount != 0) {
-			$message .= "<br>".CLMText::sgpl(($resultCount)/2, JText::_('RESULT'), JText::_('RESULTS') )." ".JText::_('EXISTING');
+			$message .= "<br>".CLMText::sgpl(($resultCount)/2, Text::_('RESULT'), Text::_('RESULTS') )." ".Text::_('EXISTING');
 		}
 	
 //die('nresultcount');	

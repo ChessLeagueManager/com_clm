@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 /**
  * @version		$Id: view.html.php 7399 2007-05-14 04:10:09Z eddieajau $
@@ -20,8 +20,9 @@
 
 // No direct access
 defined('_JEXEC') or die;
-
 jimport('joomla.application.component.view');
+
+use Joomla\CMS\Factory;
 
 /**
  * HTML View class for the Users component
@@ -49,13 +50,13 @@ class CLMViewReset extends JViewLegacy
 	{
 		jimport('joomla.html.html');
 
-		$mainframe	= JFactory::getApplication();
+		$mainframe	= Factory::getApplication();
 
 		// Load the form validation behavior
-//		JHTML::_('behavior.formvalidation');
+//		HTMLHelper::_('behavior.formvalidation');
 
 		// Add the tooltip behavior
-//		JHtml::_('behavior.tooltip');
+//		HTMLHelper::_('behavior.tooltip');
 		require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'tooltip.php');
 
 		// Get the layout

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -14,13 +14,15 @@ jimport('joomla.application.component.model');
 
 require_once JPATH_COMPONENT_ADMINISTRATOR. '/helpers/addresshandler.php';
 
+use Joomla\CMS\Factory;
+
 class CLMModelVerein extends JModelLegacy
 {
 	function _getCLMVereinstats( &$options )
 	{
 	$sid	= clm_core::$load->request_int('saison', 1);
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
  
 	$query = " SELECT a.ZPS, a.sid, a.Geschlecht, a.DWZ, a.FIDE_Elo, a.FIDE_ID,"
@@ -51,7 +53,7 @@ class CLMModelVerein extends JModelLegacy
 	{
 	$sid	= clm_core::$load->request_int('saison', 1);
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
  
 	$query = " SELECT a.* "
@@ -81,7 +83,7 @@ class CLMModelVerein extends JModelLegacy
 	{
 	$sid	= clm_core::$load->request_int('saison');
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
  
 	$query = "SELECT a.*, l.name as liga_name "
@@ -106,7 +108,7 @@ class CLMModelVerein extends JModelLegacy
 	{
 	$sid	= clm_core::$load->request_int('saison', 1);
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
 
 	$query  = 'SELECT DISTINCT a.zps, a.name, a.published FROM #__clm_vereine as a'
@@ -129,7 +131,7 @@ class CLMModelVerein extends JModelLegacy
 	{
 	$sid	= clm_core::$load->request_int('saison', 1);
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
 
 	$query  = ' SELECT a.name, a.id, a.archiv FROM #__clm_saison AS a'
@@ -150,7 +152,7 @@ class CLMModelVerein extends JModelLegacy
 	{
 	$sid	= clm_core::$load->request_int('saison', 1);
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
 
 	$query  = ' SELECT a.name, a.id, a.sid, a.vereinZPS FROM #__clm_turniere AS a'
@@ -175,7 +177,7 @@ class CLMModelVerein extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison', 1);
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
 
 	$query	= "SELECT * "
@@ -199,7 +201,7 @@ class CLMModelVerein extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison', 1);
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
 
 	$query	= "SELECT Vereinname "
@@ -221,11 +223,11 @@ class CLMModelVerein extends JModelLegacy
 ////// Prüfen ob User berechtigt ist Daten zu ändern ///////////////////////////////////
 	function _getCLMClmuser ( &$options )
 	{
-	$user =JFactory::getUser();
+	$user =Factory::getUser();
 	$jid = $user->get('id');
 	$sid	= clm_core::$load->request_int('saison', 1);
 
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
 
 	$query	= "SELECT * "

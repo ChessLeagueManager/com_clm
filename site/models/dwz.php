@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,16 +12,18 @@
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.model');
 
+use Joomla\CMS\Factory;
+
 class CLMModelDWZ extends JModelLegacy
 {
 	function _getCLMzps ()
 	{
-	$mainframe	= JFactory::getApplication();
+	$mainframe	= Factory::getApplication();
 	$option 	= clm_core::$load->request_string( 'option' );
 
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$sid	= clm_core::$load->request_int('saison', 1);
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
 		
 	$query = " SELECT a.* FROM #__clm_dwz_spieler as a"
@@ -55,7 +57,7 @@ class CLMModelDWZ extends JModelLegacy
 	{
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$sid	= clm_core::$load->request_int('saison', 1);
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
  
 	$query = "SELECT Vereinname FROM #__clm_dwz_vereine as a "
@@ -78,7 +80,7 @@ class CLMModelDWZ extends JModelLegacy
 	{
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$sid	= clm_core::$load->request_int('saison', 1);
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
 
 	$query  = 'SELECT DISTINCT a.zps, a.name FROM #__clm_vereine as a'
@@ -99,7 +101,7 @@ class CLMModelDWZ extends JModelLegacy
 	{
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$sid	= clm_core::$load->request_int('saison', 1);
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
 
 	$query  = ' SELECT a.name, a.id, a.archiv FROM #__clm_saison AS a'

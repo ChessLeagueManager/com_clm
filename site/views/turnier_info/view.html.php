@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -10,6 +10,9 @@
  * @email webmaster@sbbl.org
 */
 jimport( 'joomla.application.component.view');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 class CLMViewTurnier_Info extends JViewLegacy {
 	
@@ -34,7 +37,7 @@ class CLMViewTurnier_Info extends JViewLegacy {
 			$prot = 'http';
 		}
 		
-		$document =JFactory::getDocument();
+		$document =Factory::getDocument();
 		
 		if ($googlemaps == 1) {
 			if ($googlemaps_ver == 1){ //Load Leaflet
@@ -48,7 +51,7 @@ class CLMViewTurnier_Info extends JViewLegacy {
 		}
 		
 		// Title in Browser
-		$headTitle = CLMText::composeHeadTitle( array( $model->turnier->name, JText::_('TOURNAMENT_INFO') ) );
+		$headTitle = CLMText::composeHeadTitle( array( $model->turnier->name, Text::_('TOURNAMENT_INFO') ) );
 		$document->setTitle( $headTitle );
 		
 		

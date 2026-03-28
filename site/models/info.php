@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,12 +12,14 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
+use Joomla\CMS\Factory;
+
 class CLMModelInfo extends JModelLegacy
 {
 
 	public static function CLMSid()
 	{
-	$db			= JFactory::getDBO();
+	$db			= Factory::getDBO();
 	$sid = clm_core::$load->request_int('saison',0);     	
 	If ($sid == 0) {							
 		$query = " SELECT id,name FROM #__clm_saison"
@@ -36,7 +38,7 @@ class CLMModelInfo extends JModelLegacy
 	public static function CLMLigen()
 	{
 	$sid = CLMModelInfo::CLMSid();				
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 		$query 	= " SELECT id, liga_mt, params FROM #__clm_liga"
 			." WHERE published = 1 "
 			." AND sid = ".$sid
@@ -78,7 +80,7 @@ class CLMModelInfo extends JModelLegacy
 	function _getCLMSaison( &$options )
 	{
 	$sid = CLMModelInfo::CLMSid();				
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
 
 		$query = " SELECT id,name,bemerkungen,datum as dsb_datum FROM #__clm_saison"
@@ -103,7 +105,7 @@ class CLMModelInfo extends JModelLegacy
 	$sid = CLMModelInfo::CLMSid();
 	$ligen = CLMModelInfo::CLMLigen();
 	
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = " SELECT COUNT(id) as remis FROM #__clm_rnd_spl"
@@ -125,7 +127,7 @@ class CLMModelInfo extends JModelLegacy
 	$sid = CLMModelInfo::CLMSid();
 	$ligen = CLMModelInfo::CLMLigen();
 	
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = " SELECT COUNT(id) as kampflos FROM #__clm_rnd_spl"
@@ -147,7 +149,7 @@ class CLMModelInfo extends JModelLegacy
 	$sid = CLMModelInfo::CLMSid();
 	$ligen = CLMModelInfo::CLMLigen();
 	
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = " SELECT brett,SUM(punkte) as sum FROM #__clm_rnd_spl "
@@ -170,7 +172,7 @@ class CLMModelInfo extends JModelLegacy
 	$sid = CLMModelInfo::CLMSid();
 	$ligen = CLMModelInfo::CLMLigen();
 	
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = " SELECT brett,SUM(punkte) as sum FROM #__clm_rnd_spl "
@@ -193,7 +195,7 @@ class CLMModelInfo extends JModelLegacy
 	$sid = CLMModelInfo::CLMSid();
 	$ligen = CLMModelInfo::CLMLigen();
 	
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = " SELECT COUNT(id) as gesamt FROM #__clm_rnd_spl"
@@ -214,7 +216,7 @@ class CLMModelInfo extends JModelLegacy
 	{
 	$sid = CLMModelInfo::CLMSid();
 	
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = " SELECT a.mgl_nr,a.PKZ,a.zps,a.Punkte,a.Partien,a.Niveau,a.Leistung,a.ZPS,a.DWZ,a.Spielername,v.Vereinname "
@@ -239,7 +241,7 @@ class CLMModelInfo extends JModelLegacy
 	{
 	$sid = CLMModelInfo::CLMSid();
 	
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = " SELECT COUNT(lid) as id FROM #__clm_meldeliste_spieler "
@@ -258,7 +260,7 @@ class CLMModelInfo extends JModelLegacy
 	$sid = CLMModelInfo::CLMSid();
 	$ligen = CLMModelInfo::CLMLigen();
 
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = " SELECT a.tln_nr,a.lid,l.name as liga,l.stamm,l.man_sieg,l.man_antritt, "
@@ -289,7 +291,7 @@ class CLMModelInfo extends JModelLegacy
 	$sid = CLMModelInfo::CLMSid();
 	$ligen = CLMModelInfo::CLMLigen();
 	
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = " SELECT stamm FROM #__clm_liga "
@@ -309,7 +311,7 @@ class CLMModelInfo extends JModelLegacy
 	$sid = CLMModelInfo::CLMSid();
 	$ligen = CLMModelInfo::CLMLigen();
 
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = " SELECT brett,SUM(punkte) as sum, COUNT(id) as count FROM #__clm_rnd_spl "
@@ -333,7 +335,7 @@ class CLMModelInfo extends JModelLegacy
 	$sid = CLMModelInfo::CLMSid();
 	$ligen = CLMModelInfo::CLMLigen();
 
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = " SELECT brett,COUNT(id) as sum FROM #__clm_rnd_spl "
@@ -358,7 +360,7 @@ class CLMModelInfo extends JModelLegacy
 	$sid = CLMModelInfo::CLMSid();
 	$ligen = CLMModelInfo::CLMLigen();
 
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = " SELECT brett,COUNT(id) as sum FROM #__clm_rnd_spl "
@@ -383,7 +385,7 @@ class CLMModelInfo extends JModelLegacy
 	$sid = CLMModelInfo::CLMSid();
 	$ligen = CLMModelInfo::CLMLigen();
 
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = " SELECT brett,COUNT(id) as sum FROM #__clm_rnd_spl "
@@ -408,7 +410,7 @@ class CLMModelInfo extends JModelLegacy
 	$sid = CLMModelInfo::CLMSid();
 	$ligen = CLMModelInfo::CLMLigen();
 
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = " SELECT brett,COUNT(id) as sum FROM #__clm_rnd_spl "

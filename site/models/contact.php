@@ -1,18 +1,20 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Fred Baumgarten
 */
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
+use Joomla\CMS\Factory;
+
 class CLMModelContact extends JModelLegacy
 {
 	function _getCLMClmuser ( &$options ) {
-		$user	= JFactory::getUser();
+		$user	= Factory::getUser();
 		$jid	= $user->get('id');
 		$query	= "SELECT c.*, u.email as jmail FROM #__clm_user as c "
 			." LEFT JOIN #__users as u ON c.jid = u.id "
@@ -27,7 +29,7 @@ class CLMModelContact extends JModelLegacy
 	}
 
 	function updateUser ( $fest, $mobil, $email, $jmail ) {
-		$user	= JFactory::getUser();
+		$user	= Factory::getUser();
 		$jid	= $user->get('id');
 		$parray = array();
 		$query	= "UPDATE #__clm_user SET ";

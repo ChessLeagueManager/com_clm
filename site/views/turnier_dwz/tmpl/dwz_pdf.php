@@ -1,15 +1,19 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 $turnierid		= clm_core::$load->request_int('turnier','1');
 $config			= clm_core::$db->config();
@@ -51,7 +55,7 @@ $br09 = 6;
 $font = 10;
 
 // Datum der Erstellung
-$date = JFactory::getDate();
+$date = Factory::getDate();
 $now = $date->toSQL();
 
 $pdf=new PDF();
@@ -68,29 +72,29 @@ foreach ($this->players as $key => $value) {
 $pdf->AddPage();
 $pdf->SetFont('Times','',7);
 	$pdf->Cell(10,3,' ',0,0);
-	$pdf->Cell(175,3,clm_core::$load->utf8decode(JText::_('WRITTEN')).' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.clm_core::$load->utf8decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
+	$pdf->Cell(175,3,clm_core::$load->utf8decode(Text::_('WRITTEN')).' '.clm_core::$load->utf8decode(Text::_('ON_DAY')).' '.clm_core::$load->utf8decode(HTMLHelper::_('date',  $now, Text::_('DATE_FORMAT_CLM_PDF'))),0,1,'R');
 	
 $pdf->SetFont('Times','',14);
 	$pdf->Cell(10,15,' ',0,0);
-	$pdf->Cell(150,15,clm_core::$load->utf8decode($this->turnier->name).": ".clm_core::$load->utf8decode(JText::_('TOURNAMENT_DWZ')),0,1,'L');
+	$pdf->Cell(150,15,clm_core::$load->utf8decode($this->turnier->name).": ".clm_core::$load->utf8decode(Text::_('TOURNAMENT_DWZ')),0,1,'L');
 		
 $pdf->SetFont('Times','',$font);
 $pdf->SetTextColor(255);
 $pdf->SetFillColor(0);
 	$pdf->Cell($br00,$zelle," ",0,0,'C');
-	$pdf->Cell($br01,$zelle,JText::_('TOURNAMENT_NUMBERABB'),1,0,'C',1);
+	$pdf->Cell($br01,$zelle,Text::_('TOURNAMENT_NUMBERABB'),1,0,'C',1);
 	if ($turParams->get('displayPlayerTitle', 1) == 1) {
-		$pdf->Cell($br02,$zelle,JText::_('TOURNAMENT_TITLE'),1,0,'C',1); }
-	$pdf->Cell($br03,$zelle,JText::_('TOURNAMENT_PLAYERNAME'),1,0,'L',1);
-	$pdf->Cell($br04,$zelle,JText::_('TOURNAMENT_RATING'),1,0,'L',1);
-	$pdf->Cell($br05,$zelle,JText::_('DWZ_W'),1,0,'C',1);
-	$pdf->Cell($br06,$zelle,JText::_('DWZ_WE_PDF'),1,0,'C',1); 
-	$pdf->Cell($br07,$zelle,JText::_('DWZ_EF_PDF'),1,0,'C',1); 
-	$pdf->Cell($br04,$zelle,JText::_('DWZ_RATING'),1,0,'C',1);
-	$pdf->Cell($br04,$zelle,JText::_('DWZ_LEVEL'),1,0,'C',1); 
-	$pdf->Cell($br08,$zelle,JText::_('DWZ_POINTS'),1,0,'C',1); 
-	$pdf->Cell($br04,$zelle,JText::_('DWZ_NEW_PDF'),1,0,'C',1); 
-	$pdf->Cell($br09,$zelle,JText::_('DWZ_DIFF'),1,0,'C',1);
+		$pdf->Cell($br02,$zelle,Text::_('TOURNAMENT_TITLE'),1,0,'C',1); }
+	$pdf->Cell($br03,$zelle,Text::_('TOURNAMENT_PLAYERNAME'),1,0,'L',1);
+	$pdf->Cell($br04,$zelle,Text::_('TOURNAMENT_RATING'),1,0,'L',1);
+	$pdf->Cell($br05,$zelle,Text::_('DWZ_W'),1,0,'C',1);
+	$pdf->Cell($br06,$zelle,Text::_('DWZ_WE_PDF'),1,0,'C',1); 
+	$pdf->Cell($br07,$zelle,Text::_('DWZ_EF_PDF'),1,0,'C',1); 
+	$pdf->Cell($br04,$zelle,Text::_('DWZ_RATING'),1,0,'C',1);
+	$pdf->Cell($br04,$zelle,Text::_('DWZ_LEVEL'),1,0,'C',1); 
+	$pdf->Cell($br08,$zelle,Text::_('DWZ_POINTS'),1,0,'C',1); 
+	$pdf->Cell($br04,$zelle,Text::_('DWZ_NEW_PDF'),1,0,'C',1); 
+	$pdf->Cell($br09,$zelle,Text::_('DWZ_DIFF'),1,0,'C',1);
 	$pdf->Cell(1,$zelle," ",0,1,'C');
 }
 // Anzahl der Teilnehmer durchlaufen
@@ -135,6 +139,6 @@ $pdf->SetTextColor(0);
 }	
 
 // Ausgabe
-$pdf->Output(clm_core::$load->utf8decode(JText::_('TOURNAMENT_DWZ_PDF')).' '.clm_core::$load->utf8decode($this->turnier->name).'.pdf','D');
+$pdf->Output(clm_core::$load->utf8decode(Text::_('TOURNAMENT_DWZ_PDF')).' '.clm_core::$load->utf8decode($this->turnier->name).'.pdf','D');
 exit;
 ?>

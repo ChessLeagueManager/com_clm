@@ -1,12 +1,15 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 // Spam-Check
 // z.B. für Online-Turnieranmeldung
+
+use Joomla\CMS\Factory;
+
 function clm_function_session_variables($string = '') {
 	if ($string == '') {
 		return true;		
@@ -27,7 +30,7 @@ function clm_function_session_variables($string = '') {
 		$zahl01 = rand_number(1); 
 		if ($zahl01 < 1) $zahl01 += 1;	
 		$zahl03	= $zahl02 + $zahl01;
-		$session = JFactory::getSession();
+		$session = Factory::getSession();
 		$session->set('reg_wert',$zahl03);
 		return array(true, $zahl02, $zahl01);		
 	}

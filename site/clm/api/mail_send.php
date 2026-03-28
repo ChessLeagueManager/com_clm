@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
 */
@@ -86,7 +86,7 @@ function clm_api_mail_send($mail_to, $mail_subj, $mail_body, $htmlMail=0, $mail_
 	$mail_debug = 0;
 	$umleitung = "";
 
-	if ($suppress == 3) {
+	if ($suppress == 2) {
 		$umleitung .= $nl."-------------------------------------";
 		$umleitung .= $nl."Orig.Empfänger: ".$mail_to;
 		$mail_to = $IDN->encode($replace);
@@ -114,7 +114,7 @@ function clm_api_mail_send($mail_to, $mail_subj, $mail_body, $htmlMail=0, $mail_
 
 //	$rc = mail($mail_to,$mail_subj,$mail_body.$mail_body2,implode("\r\n", $headers));
 
-	# $mailer = JFactory::getMailer();
+	# $mailer = Factory::getMailer();
 	# $mailer->setSender($fromname . " <" . $from . ">");
 	# $mailer->addRecipient($mail_to);
 	# $mailer->setSubject($mail_subj);	# $mailer->setCc($mail_cc);

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -15,13 +15,18 @@ defined('_JEXEC') or die('Restricted access');
 // Stylesheet laden - loas CSS
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
-	$mainframe	= JFactory::getApplication();
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
+
+$mainframe	= Factory::getApplication();
 
 // Variablen initialisieren - install variables
 $turnier 		= $this->turnier;
 
-$user =JFactory::getUser();
-	$link = JURI::base() .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
+$user =Factory::getUser();
+	$link = URI::base() .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
 
 
 // Datensätze in Tabelle schreiben - Transfer data into db-table
@@ -51,24 +56,24 @@ $f_source 		= clm_core::$load->request_string('f_source','');
 if ($f_source = 'sent') {
 	$reg_spieler 		= clm_core::$load->request_int('reg_spieler',100);
 }
-$session = JFactory::getSession();
+$session = Factory::getSession();
 $reg_wert = $session->get('reg_wert');
 $c_year = date("Y"); 
 
 // Überprüfen der Eingaben - check input
 $msg = '';
 if ($reg_name == '') 
-	$msg .= '<br>'.JText::_('REGISTRATION_E_NAME');
+	$msg .= '<br>'.Text::_('REGISTRATION_E_NAME');
 if ($reg_vorname == '') 
-	$msg .= '<br>'.JText::_('REGISTRATION_E_VORNAME');
+	$msg .= '<br>'.Text::_('REGISTRATION_E_VORNAME');
 if ($reg_jahr == '') 
-	$msg .= '<br>'.JText::_('REGISTRATION_E_YEAR');
+	$msg .= '<br>'.Text::_('REGISTRATION_E_YEAR');
 if ($reg_jahr != '' AND (!is_numeric($reg_jahr) OR $reg_jahr < ($c_year - 110) OR $reg_jahr > ($c_year -2)))
-	$msg .= '<br>'.JText::_('REGISTRATION_E_YEARK');
+	$msg .= '<br>'.Text::_('REGISTRATION_E_YEARK');
 if (!clm_core::$load->is_email($reg_mail)) 
-	$msg .= '<br>'.JText::_('REGISTRATION_E_MAIL');
+	$msg .= '<br>'.Text::_('REGISTRATION_E_MAIL');
 if ($typeAccount > '0') {
-	if ($reg_account == '') $msg .= '<br>'.JText::_('REGISTRATION_E_ACCOUNT_NO');
+	if ($reg_account == '') $msg .= '<br>'.Text::_('REGISTRATION_E_ACCOUNT_NO');
 	elseif ($typeAccount == '1') {
 		if (substr($reg_account,0,22) == 'https://lichess.org/@/') {
 			$reg_account1 = $reg_account;
@@ -77,19 +82,19 @@ if ($typeAccount > '0') {
 			$reg_account1 = 'https://lichess.org/@/'.$reg_account;
 			$s_account = 1;
 		}
-		if (@file_get_contents($reg_account1,false,NULL,0,1) === false) $msg .= '<br>'.JText::_('REGISTRATION_E_ACCOUNT_NK');
+		if (@file_get_contents($reg_account1,false,NULL,0,1) === false) $msg .= '<br>'.Text::_('REGISTRATION_E_ACCOUNT_NK');
 		if ($s_account == 1) $reg_account = 'https://lichess.org/@/'.$reg_account;
 	}}
 if ($reg_dsgvo == 0 AND $privacy_notice != '') 
-	$msg .= '<br>'.JText::_('REGISTRATION_E_CHECKBOX');
+	$msg .= '<br>'.Text::_('REGISTRATION_E_CHECKBOX');
 if ($f_source != 'sent') {
 	if ($reg_check01 == '') 
-		$msg .= '<br>'.JText::_('REGISTRATION_E_SPAM');
+		$msg .= '<br>'.Text::_('REGISTRATION_E_SPAM');
 	elseif ($reg_check01 != $reg_wert) 
-		$msg .= '<br>'.JText::_('REGISTRATION_E_SPAM');
+		$msg .= '<br>'.Text::_('REGISTRATION_E_SPAM');
 }
 if ($msg != '') {
-	$link = JURI::base() .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
+	$link = URI::base() .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
 	$link .= '&reg_name='.$reg_name.'&reg_vorname='.$reg_vorname.'&reg_club='.$reg_club.'&reg_mail='.$reg_mail.'&reg_jahr='.$reg_jahr;
 	$link .= '&reg_zps='.$reg_zps.'&reg_mgl_nr='.$reg_mgl_nr;
 	$link .= '&reg_dwz='.$reg_dwz.'&reg_elo='.$reg_elo.'&reg_tel_no='.$reg_tel_no.'&reg_account='.$reg_account.'&reg_comment='.$reg_comment;
@@ -123,18 +128,18 @@ $heading = $this->turnier->name;
 	<br />
 		<table>
 			<tr><th class="anfang">
-				<td class="anfang" style="font-size: 120%; font-weight: bolder;"><?php echo JText::_('REGISTRATION_CLUB_ELO'); ?></td>
+				<td class="anfang" style="font-size: 120%; font-weight: bolder;"><?php echo Text::_('REGISTRATION_CLUB_ELO'); ?></td>
 			</tr>
 		</table>
-	<?php echo JText::_('REGISTRATION_LIST_OF_PLAYERS'); ?>
+	<?php echo Text::_('REGISTRATION_LIST_OF_PLAYERS'); ?>
 	<br>	
 		<form action="index.php?option=com_clm&amp;view=turnier_registration&amp;layout=sent" method="post" name="adminForm" id="adminForm">
 		<table>
 			<tr><th class="anfang">
-				<td class="anfang"><?php echo JText::_('REGISTRATION_PLAYER'); ?>,<?php echo JText::_('REGISTRATION_VORNAME'); ?></td>
-				<td class="anfang"><?php echo JText::_('REGISTRATION_DWZ'); ?></td>
-				<td class="anfang"><?php echo JText::_('REGISTRATION_ELO'); ?></td>
-				<td class="anfang"><?php echo JText::_('REGISTRATION_CLUB'); ?></td>
+				<td class="anfang"><?php echo Text::_('REGISTRATION_PLAYER'); ?>,<?php echo Text::_('REGISTRATION_VORNAME'); ?></td>
+				<td class="anfang"><?php echo Text::_('REGISTRATION_DWZ'); ?></td>
+				<td class="anfang"><?php echo Text::_('REGISTRATION_ELO'); ?></td>
+				<td class="anfang"><?php echo Text::_('REGISTRATION_CLUB'); ?></td>
 			</th></tr>
 			<?php for ($i = 0; $i < $ii; $i++) { 
 				if ($names[$i]->gender == 'm') $names[$i]->gender = 'M';
@@ -161,90 +166,90 @@ $heading = $this->turnier->name;
 				</tr>
 			<?php } ?>
 		</table>
-	<?php echo "<br>".JText::_('REGISTRATION_EDIT_DATA'); ?><br>
-		<span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_MANDATORY'); ?> </span><br>
-		<span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_DWZ_EVALUATION'); ?> </span><br>
+	<?php echo "<br>".Text::_('REGISTRATION_EDIT_DATA'); ?><br>
+		<span style="font-size: 80%; font-weight: lighter;"><?php echo Text::_('REGISTRATION_MANDATORY'); ?> </span><br>
+		<span style="font-size: 80%; font-weight: lighter;"><?php echo Text::_('REGISTRATION_DWZ_EVALUATION'); ?> </span><br>
 		<table>
 			<tr><th class="anfang">
-				<td class="anfang"><?php echo JText::_('REGISTRATION_PLAYER'); ?>,<?php echo JText::_('REGISTRATION_VORNAME'); ?></td>
+				<td class="anfang"><?php echo Text::_('REGISTRATION_PLAYER'); ?>,<?php echo Text::_('REGISTRATION_VORNAME'); ?></td>
 			</th></tr>
 			<tr><td style="text-align: center;"><input type="radio" id="spieler99" name="reg_spieler" value="99"<?php if ($reg_spieler == 99) echo ' checked="checked"'; ?>></td><td><?php echo $reg_name.','.$reg_vorname; ?></td>
 			</tr>
 		</table>
 		<table>
 		<tr>
-			<td align="left" width="100" class="anfang"><?php echo JText::_('REGISTRATION_CLUB'); ?>(*):</td>
+			<td align="left" width="100" class="anfang"><?php echo Text::_('REGISTRATION_CLUB'); ?>(*):</td>
 			<td colspan="3">
 			<input class="inputbox" type="text" name="reg_club" id="reg_club" size="50" maxlength="100" value="<?php echo $reg_club; ?>" />
 			</td>
 		</tr>
 		<tr>
-			<td align="left" width="100" class="anfang"><?php echo JText::_('REGISTRATION_ZPS'); ?>(**):</td>
+			<td align="left" width="100" class="anfang"><?php echo Text::_('REGISTRATION_ZPS'); ?>(**):</td>
 			<td width="40%">
 			<input class="inputbox" type="text" name="reg_zps" id="reg_zps" size="5" maxlength="5" value="<?php echo $reg_zps; ?>" />
 			</td>
-			<td align="left" width="100" class="anfang"><?php echo JText::_('REGISTRATION_MGLNR'); ?>(**):</td>
+			<td align="left" width="100" class="anfang"><?php echo Text::_('REGISTRATION_MGLNR'); ?>(**):</td>
 			<td>
 			<input class="inputbox" type="text" name="reg_mgl_nr" id="reg_mgl_nr" size="4" maxlength="4" value="<?php echo $reg_mgl_nr; ?>" />
 			</td>
 		</tr>
 		<tr>
-			<td align="left" width="100" class="anfang"><?php echo JText::_('REGISTRATION_DWZ'); ?>:</td>
+			<td align="left" width="100" class="anfang"><?php echo Text::_('REGISTRATION_DWZ'); ?>:</td>
 			<td width="40%">
 			<input class="inputbox" type="text" name="reg_dwz" id="reg_dwz" size="4" maxlength="4" value="<?php echo $reg_dwz; ?>" />
 			</td>
-			<td align="left" width="100" class="anfang"><?php echo JText::_('REGISTRATION_ELO'); ?>:</td>
+			<td align="left" width="100" class="anfang"><?php echo Text::_('REGISTRATION_ELO'); ?>:</td>
 			<td>
 			<input class="inputbox" type="text" name="reg_elo" id="reg_elo" size="4" maxlength="4" value="<?php echo $reg_elo; ?>" />
 			</td>
 		</tr>
 		<?php if ($optionEloAnalysis == 1) { ?>
 		<tr>
-			<td align="left" width="100" class="anfang"><?php echo JText::_('REGISTRATION_FIDEID'); ?>:</td>
+			<td align="left" width="100" class="anfang"><?php echo Text::_('REGISTRATION_FIDEID'); ?>:</td>
 			<td colspan="3">
 			<input class="inputbox" type="text" name="reg_FIDEid" id="reg_FIDEid" size="8" maxlength="8" value="<?php echo $reg_FIDEid; ?>" />
 			</td>
 		</tr>
 		<?php } ?>
 		<tr>
-			<td align="left" width="100" class="anfang"><?php echo JText::_('REGISTRATION_SEX'); ?>:</td>
+			<td align="left" width="100" class="anfang"><?php echo Text::_('REGISTRATION_SEX'); ?>:</td>
 			<td class="paramlist_value" colspan="3">
 					<?php
 					$options = array();
 					$options[''] = '';
-					$options['M'] = JText::_('REGISTRATION_SEX_M');
-					$options['W'] = JText::_('REGISTRATION_SEX_W');
+					$options['M'] = Text::_('REGISTRATION_SEX_M');
+					$options['W'] = Text::_('REGISTRATION_SEX_W');
 					$optionlist = array();
 					foreach ($options as $key => $val) {
-						$optionlist[]	= JHtml::_('select.option', $key, $val, 'id', 'name' );
+						$optionlist[]	= HTMLHelper::_('select.option', $key, $val, 'id', 'name' );
 					}
-					echo JHtml::_('select.genericlist', $optionlist, 'reg_geschlecht', 'class="inputbox"', 'id', 'name', $reg_geschlecht);
+					echo HTMLHelper::_('select.genericlist', $optionlist, 'reg_geschlecht', 'class="inputbox"', 'id', 'name', $reg_geschlecht);
 					?>
 				</td>
 		</tr>
 		</table>
 		<table>
 		<tr>
-			<td align="left" width="100" class="anfang"><?php echo JText::_('REGISTRATION_COMMENT'); ?>:</td>
+			<td align="left" width="100" class="anfang"><?php echo Text::_('REGISTRATION_COMMENT'); ?>:</td>
 			<td>
-			<textarea class="inputbox" name="reg_comment" id="reg_comment" cols="47" rows="4" placeholder="<?php echo JText::_('REGISTRATION_PLACEHOLDER'); ?>"><?php echo $reg_comment; ?></textarea>
+			<textarea class="inputbox" name="reg_comment" id="reg_comment" cols="47" rows="4" placeholder="<?php echo Text::_('REGISTRATION_PLACEHOLDER'); ?>"><?php echo $reg_comment; ?></textarea>
 			</td>
 		</tr>
 		<tr>
-			<td align="left" width="100" class="anfang"><?php echo JText::_('REGISTRATION_CHECK'); ?>(*):</td>
+			<td align="left" width="100" class="anfang"><?php echo Text::_('REGISTRATION_CHECK'); ?>(*):</td>
 			<td><?php echo $sresult[1]." + ".$sresult[2]." = "; ?>	 
 				<input class="inputbox" type="text" name="reg_check01" id="reg_check01" size="8" maxlength="10" value="" />
 			</td>
 		</tr>
 		<tr>
 			<th align="left" colspan="2" class="anfang">
-				<span style="font-size: 80%; font-weight: lighter;"><?php echo JText::_('REGISTRATION_SUBMITTING_2'); ?></span></th>
+				<span style="font-size: 80%; font-weight: lighter;"><?php echo Text::_('REGISTRATION_SUBMITTING_2'); ?></span></th>
 		</tr>
 		
 		</table>
 
 		<br>
-		<input type="submit" value=" <?php echo JText::_('CLUB_DATA_SEND_BUTTON') ?> ">
+		<input type="submit" value=" <?php echo Text::_('CLUB_DATA_SEND_BUTTON') ?> ">
 
 		<input type="hidden" name="layout" value="sent" />
 		<input type="hidden" name="view" value="turnier_registration" />
@@ -260,7 +265,7 @@ $heading = $this->turnier->name;
 		<input type="hidden" name="reg_account" value="<?php echo $reg_account; ?>" />
 		<input type="hidden" name="reg_dsgvo" value="<?php echo $reg_dsgvo; ?>" />
 		<input type="hidden" name="task" value="" />
-		<?php echo JHTML::_( 'form.token' ); ?>
+		<?php echo HTMLHelper::_( 'form.token' ); ?>
 		
 	  </form>
 <?php

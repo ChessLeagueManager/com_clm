@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -13,6 +13,11 @@ defined('_JEXEC') or die('Restricted access');
 
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
  
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
+
 function RGB($Hex){ 
 	if (substr($Hex,0,1) == "#") $Hex = substr($Hex,1);
 	$R = substr($Hex,0,2);
@@ -44,7 +49,7 @@ $item		= clm_core::$load->request_int('Itemid',0);
 $typeid		= clm_core::$load->request_int('typeid',0);
 $liga		= $this->liga;
 $option 	= 'com_clm';
-$mainframe	= JFactory::getApplication();
+$mainframe	= Factory::getApplication();
 $pgn		= clm_core::$load->request_int('pgn',0); 
 $paar		= clm_core::$load->request_int('paar',0); 
 
@@ -54,7 +59,7 @@ if(isset($liga[0])){
 
 	if (($pgn == 1) OR ($pgn == 2) OR ($pgn == 3)) { 
 		$result = clm_core::$api->db_pgn_template($lid,$dg,$runde,$pgn,true,$paar);
-		if (!$result[1]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
+		if (!$result[1]) $msg = Text::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
 		$link = 'index.php?option='.$option.'&view=runde&saison='.$sid.'&liga='.$lid.'&dg='.$dg.'&runde='.$runde.'&pgn=0';
 		if ($item != 0) $link .= '&Itemid='.$item;
 		if ($typeid != 0) $link .= '&typeid='.$typeid;
@@ -90,7 +95,7 @@ if(isset($liga[0])){
 		clm_core::$load->load_js("view_reset");
 	}
 	// Userkennung holen
-	$user	=JFactory::getUser();
+	$user	=Factory::getUser();
 	$jid	= $user->get('id');
     // Check ob User Mitglied eines Vereins dieser Liga ist
 	if ($jid != 0) {
@@ -109,9 +114,9 @@ if(isset($liga[0])){
 	// Test alte/neue Standardrundenname bei 2 Durchgängen, nur bei Ligen/Turniere vor 2013 (Archiv!)
 	if ($liga[$runde_t-1]->datum < '2013-01-01') {
 		if ($liga[0]->durchgang > 1) {
-			if ($liga[$runde_t-1]->rname == JText::_('ROUND').' '.$runde_t) {  //alt
-				if ($dg == 1) { $liga[$runde_t-1]->rname = JText::_('ROUND').' '.$runde." (".JText::_('PAAR_HIN').")";}
-				if ($dg == 2) { $liga[$runde_t-1]->rname = JText::_('ROUND').' '.$runde." (".JText::_('PAAR_RUECK').")";}
+			if ($liga[$runde_t-1]->rname == Text::_('ROUND').' '.$runde_t) {  //alt
+				if ($dg == 1) { $liga[$runde_t-1]->rname = Text::_('ROUND').' '.$runde." (".Text::_('PAAR_HIN').")";}
+				if ($dg == 2) { $liga[$runde_t-1]->rname = Text::_('ROUND').' '.$runde." (".Text::_('PAAR_RUECK').")";}
 			}
 		}
 	}
@@ -126,19 +131,19 @@ if(isset($liga[0])){
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 // Browsertitelzeile setzen
-$doc =JFactory::getDocument();
+$doc =Factory::getDocument();
 if(isset($liga[0])){
-	$daten['title'] = $liga[0]->name.', '.$liga[$runde-1]->rname;      // JText::_('ROUND').' '.$runde; 
+	$daten['title'] = $liga[0]->name.', '.$liga[$runde-1]->rname;      // Text::_('ROUND').' '.$runde; 
 	if(isset($liga[$runde-1]->datum)) { 
-		$daten['title'] .= ' '.JText::_('ON_DAY').' '.JHTML::_('date',  $liga[$runde-1]->datum, JText::_('DATE_FORMAT_CLM_F'));
+		$daten['title'] .= ' '.Text::_('ON_DAY').' '.HTMLHelper::_('date',  $liga[$runde-1]->datum, Text::_('DATE_FORMAT_CLM_F'));
 		if(isset($liga[$runde-1]->startzeit)) { $daten['title'] .= '  '.substr($liga[$runde-1]->startzeit,0,5).' Uhr'; } }
 } else {
 	$daten['title'] = '';
 }
 	$doc->setTitle($daten['title']);
 
-			$doc->addScript(JURI::base().'components/com_clm/javascript/jsPgnViewer.js');
-			$doc->addScript(JURI::base().'components/com_clm/javascript/showPgnViewer.js');
+			$doc->addScript(URI::base().'components/com_clm/javascript/jsPgnViewer.js');
+			$doc->addScript(URI::base().'components/com_clm/javascript/showPgnViewer.js');
 			
 			// Zufallszahl
 			$now = time()+mt_rand();
@@ -150,16 +155,16 @@ if(isset($liga[0])){
 			$doc->addScriptDeclaration("param['fe_pgn_style'] = '".$config->fe_pgn_style."'");
 			// Tooltip-Texte
 			$doc->addScriptDeclaration("var text = new Array();");
-			$doc->addScriptDeclaration("text['altRewind'] = '".JText::_('PGN_ALT_REWIND')."';");
-			$doc->addScriptDeclaration("text['altBack'] = '".JText::_('PGN_ALT_BACK')."';");
-			$doc->addScriptDeclaration("text['altFlip'] = '".JText::_('PGN_ALT_FLIP')."';");
-			$doc->addScriptDeclaration("text['altShowMoves'] = '".JText::_('PGN_ALT_SHOWMOVES')."';");
-			$doc->addScriptDeclaration("text['altComments'] = '".JText::_('PGN_ALT_COMMENTS')."';");
-			$doc->addScriptDeclaration("text['altPlayMove'] = '".JText::_('PGN_ALT_PLAYMOVE')."';");
-			$doc->addScriptDeclaration("text['altFastForward'] = '".JText::_('PGN_ALT_FASTFORWARD')."';");
-			$doc->addScriptDeclaration("text['pgnClose'] = '".JText::_('PGN_CLOSE')."';");
+			$doc->addScriptDeclaration("text['altRewind'] = '".Text::_('PGN_ALT_REWIND')."';");
+			$doc->addScriptDeclaration("text['altBack'] = '".Text::_('PGN_ALT_BACK')."';");
+			$doc->addScriptDeclaration("text['altFlip'] = '".Text::_('PGN_ALT_FLIP')."';");
+			$doc->addScriptDeclaration("text['altShowMoves'] = '".Text::_('PGN_ALT_SHOWMOVES')."';");
+			$doc->addScriptDeclaration("text['altComments'] = '".Text::_('PGN_ALT_COMMENTS')."';");
+			$doc->addScriptDeclaration("text['altPlayMove'] = '".Text::_('PGN_ALT_PLAYMOVE')."';");
+			$doc->addScriptDeclaration("text['altFastForward'] = '".Text::_('PGN_ALT_FASTFORWARD')."';");
+			$doc->addScriptDeclaration("text['pgnClose'] = '".Text::_('PGN_CLOSE')."';");
 			// Pfad
-			$doc->addScriptDeclaration("var imagepath = '".JURI::base()."components/com_clm/images/pgnviewer/'");
+			$doc->addScriptDeclaration("var imagepath = '".URI::base()."components/com_clm/images/pgnviewer/'");
 
 
 // Konfigurationsparameter auslesen
@@ -187,21 +192,21 @@ if(isset($liga[0])){
 if(isset($liga[0])){
 	$ok=$this->ok;
 
-	if ((isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok > 0)) $hint_freenew = JText::_('CHIEF_OK');  
-	if ((isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok == 0)) $hint_freenew = JText::_('CHIEF_NOK');  
-	if ((!isset($ok[0]->sl_ok))) $hint_freenew = JText::_('CHIEF_NOK');  
+	if ((isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok > 0)) $hint_freenew = Text::_('CHIEF_OK');  
+	if ((isset($ok[0]->sl_ok)) AND ($ok[0]->sl_ok == 0)) $hint_freenew = Text::_('CHIEF_NOK');  
+	if ((!isset($ok[0]->sl_ok))) $hint_freenew = Text::_('CHIEF_NOK');  
 
 	if (isset($liga[$runde-1]->datum) AND ($liga[$runde-1]->datum =='0000-00-00' OR $liga[$runde-1]->datum =='1970-01-01' )) {
 ?>
-		<div class="componentheading"><?php echo $liga[0]->name.', '.$liga[$runde-1]->rname;      // JText::_('ROUND').' '.$runde; ?>
+		<div class="componentheading"><?php echo $liga[0]->name.', '.$liga[$runde-1]->rname;      // Text::_('ROUND').' '.$runde; ?>
 
 <?php } else { ?>
-		<div class="componentheading"><?php echo $liga[0]->name.', '.$liga[$runde-1]->rname;      // JText::_('ROUND').' '.$runde; 
+		<div class="componentheading"><?php echo $liga[0]->name.', '.$liga[$runde-1]->rname;      // Text::_('ROUND').' '.$runde; 
 			if(isset($liga[$runde-1]->datum)) {
-				echo ' '.JText::_('ON_DAY').' '.JHTML::_('date',  $liga[$runde-1]->datum, JText::_('DATE_FORMAT_CLM_F')); 
+				echo ' '.Text::_('ON_DAY').' '.HTMLHelper::_('date',  $liga[$runde-1]->datum, Text::_('DATE_FORMAT_CLM_F')); 
 				if($params['round_date'] == '0' and isset($liga[$runde-1]->startzeit) and $liga[$runde-1]->startzeit != '00:00:00') { echo '  '.substr($liga[$runde-1]->startzeit,0,5); } 
 				if($params['round_date'] == '1' and isset($liga[$runde-1]->enddatum) and $liga[$runde-1]->enddatum > '1970-01-01' and $liga[$runde-1]->enddatum != $liga[$runde-1]->datum) { 
-					echo ' - '.JHTML::_('date',  $liga[$runde-1]->enddatum, JText::_('DATE_FORMAT_CLM_F'));}
+					echo ' - '.HTMLHelper::_('date',  $liga[$runde-1]->enddatum, Text::_('DATE_FORMAT_CLM_F'));}
 			}   
 		}	?>
     
@@ -210,24 +215,24 @@ if(isset($liga[0])){
 			<?php 	
 			// PGN eigene Paarung
 			if (($params['pgntype'] > 0) AND ($jid != 0) AND ($club_jid == true)) { 
-				echo CLMContent::createPGNLink('runde', JText::_('ROUND_PGN_CLUB'), array('saison' => $liga[0]->sid, 'liga' => $liga[0]->id, 'runde' => $runde_orig, 'dg' => $dg) );
+				echo CLMContent::createPGNLink('runde', Text::_('ROUND_PGN_CLUB'), array('saison' => $liga[0]->sid, 'liga' => $liga[0]->id, 'runde' => $runde_orig, 'dg' => $dg) );
 			} 	
 			// PGN gesamte Runde
 			if ($params['pgntype'] > 0) {
-				echo CLMContent::createPGNLink('runde', JText::_('ROUND_PGN_ALL'), array('saison' => $liga[0]->sid, 'liga' => $liga[0]->id, 'runde' => $runde_orig, 'dg' => $dg), 2 );
+				echo CLMContent::createPGNLink('runde', Text::_('ROUND_PGN_ALL'), array('saison' => $liga[0]->sid, 'liga' => $liga[0]->id, 'runde' => $runde_orig, 'dg' => $dg), 2 );
 			}  
 			// PDF
-			echo CLMContent::createPDFLink('runde', JText::_('PDF_ROUND'), array('saison' => $liga[0]->sid, 'layout' => 'runde', 'liga' => $liga[0]->id, 'runde' => $runde_orig, 'dg' => $dg));
+			echo CLMContent::createPDFLink('runde', Text::_('PDF_ROUND'), array('saison' => $liga[0]->sid, 'layout' => 'runde', 'liga' => $liga[0]->id, 'runde' => $runde_orig, 'dg' => $dg));
 			
 			if ($liga[0]->runden_modus != 4 OR (isset($liga[$runde-1]->datum) AND ($liga[$runde-1]->datum > '2014-05-31'))) { ?>
-			<div class="pdf"><a href="index.php?option=com_clm&view=runde&Itemid=<?php echo $item ?>&saison=<?php echo $liga[0]->sid ?>&liga=<?php echo $liga[0]->id ?>&runde=<?php echo $runde_orig ?>&dg=<?php echo $dg ?>&detail=<?php echo $detailp ?>"><img src="<?php echo CLMImage::imageURL('lupe.png') ?>" width="16" height="19" alt="PDF" class="CLMTooltip" title="<?php echo JText::_('Details ein/aus') ?>"  /></a>
+			<div class="pdf"><a href="index.php?option=com_clm&view=runde&Itemid=<?php echo $item ?>&saison=<?php echo $liga[0]->sid ?>&liga=<?php echo $liga[0]->id ?>&runde=<?php echo $runde_orig ?>&dg=<?php echo $dg ?>&detail=<?php echo $detailp ?>"><img src="<?php echo CLMImage::imageURL('lupe.png') ?>" width="16" height="19" alt="PDF" class="CLMTooltip" title="<?php echo Text::_('Details ein/aus') ?>"  /></a>
 			</div>
 			<?php } ?>
 		</div>
     <?php } 
 } else {	?>
 
-		<div class="componentheading"><?php echo JText::_('ROUND'); ?>
+		<div class="componentheading"><?php echo Text::_('ROUND'); ?>
 <?php } ?>
 </div>
 <div class="clr"></div>
@@ -236,24 +241,24 @@ if(isset($liga[0])){
 
 $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
-	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+	echo "<div id='wrong'>".Text::_('NO_ACCESS')."<br>".Text::_('NOT_REGISTERED')."</div>";
 }
 elseif (!isset($liga[0])) {
-	echo "<br>". CLMContent::clmWarning(JText::_('NOT_EXIST').'<br>'.JText::_('GEDULDA'))."<br>"; }
+	echo "<br>". CLMContent::clmWarning(Text::_('NOT_EXIST').'<br>'.Text::_('GEDULDA'))."<br>"; }
 // schon veröffentlicht
 elseif (!$liga OR $liga[0]->published == 0) {
-	echo "<br>". CLMContent::clmWarning(JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD'))."<br>"; }
+	echo "<br>". CLMContent::clmWarning(Text::_('NOT_PUBLISHED').'<br>'.Text::_('GEDULD'))."<br>"; }
 elseif ($liga[0]->rnd == 0){ 
-	echo "<br>". CLMContent::clmWarning(JText::_('NO_ROUND_CREATED').'<br>'.JText::_('NO_ROUND_CREATED_HINT'))."<br>"; }
+	echo "<br>". CLMContent::clmWarning(Text::_('NO_ROUND_CREATED').'<br>'.Text::_('NO_ROUND_CREATED_HINT'))."<br>"; }
 elseif ($liga[$runde - 1]->pub == 0){ 
-	echo "<br>". CLMContent::clmWarning(JText::_('ROUND_UNPUBLISHED').'<br>'.JText::_('ROUND_UNPUBLISHED_HINT'))."<br>"; } 
+	echo "<br>". CLMContent::clmWarning(Text::_('ROUND_UNPUBLISHED').'<br>'.Text::_('ROUND_UNPUBLISHED_HINT'))."<br>"; } 
 else {   ?>
 
 <?php // Kommentare zur Liga
 if (is_null($liga[$runde-1]->comment)) $liga[$runde-1]->comment = '';
 if (isset($liga[$runde-1]->comment) AND $liga[$runde-1]->comment <> "") { ?>
 <div id="desc">
-    <p class="run_note_title"><?php echo JText::_('NOTICE_SL') ?></p>
+    <p class="run_note_title"><?php echo Text::_('NOTICE_SL') ?></p>
     <p><?php echo nl2br($liga[$runde-1]->comment); ?></p>
 </div>
 <?php } 
@@ -296,13 +301,13 @@ $col_h = (2 * $col_m) + 4;
         <?php // Wenn SL_OK dann Haken anzeigen (nur wenn Staffelleiter eingegeben ist)
          if (isset($liga[0]->mf_name)) {
          if (isset($ok[0]->sl_ok) AND ($ok[0]->sl_ok > 0)) { ?>
-            <div class="run_admit"><img  src="<?php echo CLMImage::imageURL('accept.png'); ?>" class="CLMTooltip" title="<?php echo $hint_freenew; 	//echo JText::_('CHIEF_OK'); ?>" /></div>
+            <div class="run_admit"><img  src="<?php echo CLMImage::imageURL('accept.png'); ?>" class="CLMTooltip" title="<?php echo $hint_freenew; 	//echo Text::_('CHIEF_OK'); ?>" /></div>
             <?php } 
          else { ?>
-            <div class="run_admit"><img  src="<?php echo CLMImage::imageURL('con_info.png'); ?>" class="CLMTooltip" title="<?php echo $hint_freenew; 	//echo JText::_('CHIEF_OK'); ?>" /></div>
+            <div class="run_admit"><img  src="<?php echo CLMImage::imageURL('con_info.png'); ?>" class="CLMTooltip" title="<?php echo $hint_freenew; 	//echo Text::_('CHIEF_OK'); ?>" /></div>
         <?php } } ?>
         <div class="run_titel">
-            <a href="index.php?option=com_clm&amp;view=paarungsliste&amp;liga=<?php echo $liga[0]->id ?>&amp;saison=<?php echo $liga[0]->sid; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $liga[$runde-1]->rname; ?><img src="<?php echo CLMImage::imageURL('cancel_f2.png'); ?>" title="<?php echo JText::_('ROUND_BACK') ?>"/></a>
+            <a href="index.php?option=com_clm&amp;view=paarungsliste&amp;liga=<?php echo $liga[0]->id ?>&amp;saison=<?php echo $liga[0]->sid; ?>&amp;Itemid=<?php echo $item; ?>"><?php echo $liga[$runde-1]->rname; ?><img src="<?php echo CLMImage::imageURL('cancel_f2.png'); ?>" title="<?php echo Text::_('ROUND_BACK') ?>"/></a>
         </div>
     </div>
     </td></tr>
@@ -317,7 +322,7 @@ if (isset($paar[$y]->htln)) {  // Leere Begegnungen ausblenden
 	if ($params['round_date'] == '1' AND $paar[$y]->pdate > '1970-01-01') { ?>
 		<tr><th colspan="<?php echo $col_h; ?>" class="paarung2" style="text-align: right;">
 			<?php 
-			echo JHTML::_('date',  $paar[$y]->pdate, JText::_('DATE_FORMAT_CLM_F')); 
+			echo HTMLHelper::_('date',  $paar[$y]->pdate, Text::_('DATE_FORMAT_CLM_F')); 
 			if ($paar[$y]->ptime > '00:00:00') echo '  '.substr($paar[$y]->ptime,0,5); 
 			?>
 		</th></tr>
@@ -330,18 +335,18 @@ if (isset($paar[$y]->htln)) {  // Leere Begegnungen ausblenden
 		?> <div class="paarung"> <?php	
 		if ($paar[$y]->hname != 'spielfrei' AND $paar[$y]->gname != 'spielfrei' AND $params['ReportForm'] != '0') {   // $jid != 0 AND 
 		?>
-            <div class="run_admit"><a href="index.php?option=com_clm&view=runde&saison=<?php echo $liga[0]->sid; ?>&liga=<?php echo $liga[0]->id; ?>&amp;layout=paarung&amp;runde=<?php echo $runde_orig; ?>&amp;dg=<?php echo $dg; ?>&amp;paarung=<?php echo ($y + 1); ?>&amp;format=pdf"><label for="name" class="hasTip"><img  src="<?php echo CLMImage::imageURL('pdf_button.png'); ?>"  class="CLMTooltip" title="<?php echo JText::_('PAIRING_PDF'); ?>" /></label></a>
+            <div class="run_admit"><a href="index.php?option=com_clm&view=runde&saison=<?php echo $liga[0]->sid; ?>&liga=<?php echo $liga[0]->id; ?>&amp;layout=paarung&amp;runde=<?php echo $runde_orig; ?>&amp;dg=<?php echo $dg; ?>&amp;paarung=<?php echo ($y + 1); ?>&amp;format=pdf"><label for="name" class="hasTip"><img  src="<?php echo CLMImage::imageURL('pdf_button.png'); ?>"  class="CLMTooltip" title="<?php echo Text::_('PAIRING_PDF'); ?>" /></label></a>
 			</div> 
 			<?php }
         // Meldenden einfügen wenn Runde eingegeben wurde
         if (isset($einzel[$w]->paar) AND $einzel[$w]->paar == ($y+1)) { ?>
-            <div class="run_admit"><label for="name" class="hasTip"><img  src="<?php echo CLMImage::imageURL('edit_f2.png'); ?>"  class="CLMTooltip" title="<?php echo JText::_('REPORTED_BY').' '.$summe[$z2]->name; ?>" /></label>
+            <div class="run_admit"><label for="name" class="hasTip"><img  src="<?php echo CLMImage::imageURL('edit_f2.png'); ?>"  class="CLMTooltip" title="<?php echo Text::_('REPORTED_BY').' '.$summe[$z2]->name; ?>" /></label>
             </div>
 			<?php 
 			if (isset($paar[$y]->hpublished) AND $paar[$y]->hpublished == 1 AND $params['noBoardResults'] == '0') { 
 				// PGN für diese Paarung
 				if (($params['pgntype'] > 0)) { ?> 
-					<div class="run_admit"><a href="index.php?option=com_clm&view=runde&saison=<?php echo $liga[0]->sid; ?>&liga=<?php echo $liga[0]->id; ?>&amp;runde=<?php echo $runde_orig; ?>&amp;dg=<?php echo $dg; ?>&amp;paar=<?php echo ($y + 1); ?>&amp;pgn=3"><label for="name" class="hasTip"><img  src="<?php echo CLMImage::imageURL('pgn.gif'); ?>" width="16" height="19" class="CLMTooltip" title="<?php echo JText::_('ROUND_PGN_PAAR'); ?>" /></label></a>
+					<div class="run_admit"><a href="index.php?option=com_clm&view=runde&saison=<?php echo $liga[0]->sid; ?>&liga=<?php echo $liga[0]->id; ?>&amp;runde=<?php echo $runde_orig; ?>&amp;dg=<?php echo $dg; ?>&amp;paar=<?php echo ($y + 1); ?>&amp;pgn=3"><label for="name" class="hasTip"><img  src="<?php echo CLMImage::imageURL('pgn.gif'); ?>" width="16" height="19" class="CLMTooltip" title="<?php echo Text::_('ROUND_PGN_PAAR'); ?>" /></label></a>
 					</div> 
 				<?php }  	        
 		}}
@@ -427,7 +432,7 @@ for ($x=0; $x<$liga[0]->stamm; $x++) {
 		<?php if ($einzel[$w]->pgnnr == 0 OR $params['pgnPublic'] == 0) { ?>
 		<td class="paarung"><div><b><?php echo $erg_text[$einzel[$w]->ergebnis]->erg_text; ?></b></div></td>
 		<?php } else { ?>
- 		<td class="paarung"><span class="editlinktip hasTip" title="<?php echo JText::_('PGN_SHOWMATCH'); //echo $erg_text[$einzel[$w]->ergebnis]->erg_text; ?>">
+ 		<td class="paarung"><span class="editlinktip hasTip" title="<?php echo Text::_('PGN_SHOWMATCH'); //echo $erg_text[$einzel[$w]->ergebnis]->erg_text; ?>">
 			<a onclick="startPgnMatch(<?php echo $w; ?>, 'pgnArea<?php echo $y ?>');" class="pgn"><?php echo $erg_text[$einzel[$w]->ergebnis]->erg_text; ?></a>
 			</span>
 			<?php if (is_null($einzel[$w]->text)) $einzel[$w]->text = ''; ;?>
@@ -454,32 +459,32 @@ for ($x=0; $x<$liga[0]->stamm; $x++) {
 $w++; }
  
 if ($edit > 0 OR $medit >0) { ?>
-	<tr><td colspan ="<?php echo $col_h; ?>"><?php if ($medit >0 AND $edit =="0"){ echo JText::_('CHIEF_EDIT_TEAM'); }
-	else { echo JText::_('CHIEF_EDIT_SINGLE'); }
-		echo JText::_('BREACH_TO') ?>
-	<?php if($edit >0) { ?><br><?php echo JText::_('CHIEF_EDIT_DWZ') ?></b><?php } ?>
+	<tr><td colspan ="<?php echo $col_h; ?>"><?php if ($medit >0 AND $edit =="0"){ echo Text::_('CHIEF_EDIT_TEAM'); }
+	else { echo Text::_('CHIEF_EDIT_SINGLE'); }
+		echo Text::_('BREACH_TO') ?>
+	<?php if($edit >0) { ?><br><?php echo Text::_('CHIEF_EDIT_DWZ') ?></b><?php } ?>
 	</td></tr>
 <?php } elseif ($remis_com == 1) { ?>
 	<tr><td colspan ="<?php echo $col_h; ?>"><?php  if ($paar[$y]->ko_decision == 1) { //1
-									if ($paar[$y]->wertpunkte > $paar[$y]->gwertpunkte) echo JText::_('ROUND_DECISION_WP_HEIM')." ".$paar[$y]->wertpunkte." : ".$paar[$y]->gwertpunkte." für ".$paar[$y]->hname; 
-									else echo JText::_('ROUND_DECISION_WP_GAST')." ".$paar[$y]->gwertpunkte." : ".$paar[$y]->wertpunkte." für ".$paar[$y]->gname; } 
-								if ($paar[$y]->ko_decision == 2) echo JText::_('ROUND_DECISION_BLITZ_HEIM')." ".$paar[$y]->hname;
-								if ($paar[$y]->ko_decision == 3) echo JText::_('ROUND_DECISION_BLITZ_GAST')." ".$paar[$y]->gname; 
-								if ($paar[$y]->ko_decision == 4) echo JText::_('ROUND_DECISION_LOS_HEIM')." ".$paar[$y]->hname;
-								if ($paar[$y]->ko_decision == 5) echo JText::_('ROUND_DECISION_LOS_GAST')." ".$paar[$y]->gname; ?>		
+									if ($paar[$y]->wertpunkte > $paar[$y]->gwertpunkte) echo Text::_('ROUND_DECISION_WP_HEIM')." ".$paar[$y]->wertpunkte." : ".$paar[$y]->gwertpunkte." für ".$paar[$y]->hname; 
+									else echo Text::_('ROUND_DECISION_WP_GAST')." ".$paar[$y]->gwertpunkte." : ".$paar[$y]->wertpunkte." für ".$paar[$y]->gname; } 
+								if ($paar[$y]->ko_decision == 2) echo Text::_('ROUND_DECISION_BLITZ_HEIM')." ".$paar[$y]->hname;
+								if ($paar[$y]->ko_decision == 3) echo Text::_('ROUND_DECISION_BLITZ_GAST')." ".$paar[$y]->gname; 
+								if ($paar[$y]->ko_decision == 4) echo Text::_('ROUND_DECISION_LOS_HEIM')." ".$paar[$y]->hname;
+								if ($paar[$y]->ko_decision == 5) echo Text::_('ROUND_DECISION_LOS_GAST')." ".$paar[$y]->gname; ?>		
 	</td></tr>
 <?php } ?>
 
 <?php if ($paar[$y]->comment != "") { ?>
-<tr><td colspan ="<?php echo $col_h; ?>"><?php  echo JText::_('PAAR_COMMENT').$paar[$y]->comment; ?>		
+<tr><td colspan ="<?php echo $col_h; ?>"><?php  echo Text::_('PAAR_COMMENT').$paar[$y]->comment; ?>		
 	</td></tr>
 <?php } ?>
 
 <?php } elseif ((isset($paar[$y]->gpublished) AND $paar[$y]->gpublished == 1 AND $paar[$y]->hpublished == 1) AND ($paar_exist== 0)) { ?>
-<!--    <tr><td colspan ="<?php echo $col_h; ?>" align="left"><?php echo JText::_('NO_RESULT_YET'); $NO_RESULT_YET++; ?></td></tr> -->
-    <tr><td colspan ="<?php echo $col_h; ?>" align="left"><?php echo JText::_('NO_RESULT_YET'); if ($paar[$y]->comment != "") echo "<br>".JText::_('PAAR_COMMENT').$paar[$y]->comment; $NO_RESULT_YET++; ?></td></tr>
+<!--    <tr><td colspan ="<?php echo $col_h; ?>" align="left"><?php echo Text::_('NO_RESULT_YET'); $NO_RESULT_YET++; ?></td></tr> -->
+    <tr><td colspan ="<?php echo $col_h; ?>" align="left"><?php echo Text::_('NO_RESULT_YET'); if ($paar[$y]->comment != "") echo "<br>".Text::_('PAAR_COMMENT').$paar[$y]->comment; $NO_RESULT_YET++; ?></td></tr>
     <?php } elseif (isset($paar[$y]) AND $paar[$y]->comment != "") { ?>
-	<tr><td colspan ="<?php echo $col_h; ?>"><?php  echo JText::_('PAAR_COMMENT').$paar[$y]->comment; ?></td></tr>
+	<tr><td colspan ="<?php echo $col_h; ?>"><?php  echo Text::_('PAAR_COMMENT').$paar[$y]->comment; ?></td></tr>
 	<?php } else { ?><tr><td colspan ="<?php echo $col_h; ?>" class="noborder">&nbsp;</td></tr><?php } ?>
 
 	<!--Bereich für pgn-Viewer-->
@@ -490,13 +495,17 @@ if ($edit > 0 OR $medit >0) { ?>
 </table>
 
 <div class="legend">
-    <p><img src="<?php echo CLMImage::imageURL('cancel_f2.png'); ?>" /> = <?php echo JText::_('HIDE_DETAILS') ?></p>
-    <p><img src="<?php echo CLMImage::imageURL('edit_f2.png'); ?>" /> = <?php echo JText::_('REPORTED_BY') ?></p>
+    <p><img src="<?php echo CLMImage::imageURL('cancel_f2.png'); ?>" /> = <?php echo Text::_('HIDE_DETAILS') ?></p>
+    <p><img src="<?php echo CLMImage::imageURL('edit_f2.png'); ?>" /> = <?php echo Text::_('REPORTED_BY') ?></p>
 </div>
 
 <?php
 // Rangliste
 if (($rang_runde =="1") AND ($liga[0]->runden_modus != 4 AND $liga[0]->runden_modus != 5)) { 
+
+	// Test MP als Feinwertung -> d.h. Spalte MP als Hauptwertung wird dann unterdrückt
+	if ($liga[0]->tiebr1 == 9 OR $liga[0]->tiebr2 == 9 OR $liga[0]->tiebr3 == 9) $columnMP = 0;
+	else $columnMP = 1;
 
 $lid		= $liga[0]->id; 
 $sid		= clm_core::$load->request_int('saison',1);
@@ -519,17 +528,17 @@ $diff = $spielfrei[0]->count; ?>
 	<tr><th colspan="<?php echo $columns+(($liga[0]->teil-$diff) * $liga[0]->durchgang); ?>"><?php 
 
 if($RESULT_YET>0 && $NO_RESULT_YET>0){
-echo JText::_('RANGLISTE').' '.$liga[$runde-1]->rname.' '.JText::_('NOT_FINISH'); 
+echo Text::_('RANGLISTE').' '.$liga[$runde-1]->rname.' '.Text::_('NOT_FINISH'); 
 }else if($RESULT_YET>0 && $NO_RESULT_YET==0){
-echo JText::_('RANGLISTE').' '.JText::_('AFTER').' '.$liga[$runde-1]->rname;  
+echo Text::_('RANGLISTE').' '.Text::_('AFTER').' '.$liga[$runde-1]->rname;  
 }else if($RESULT_YET==0 && $NO_RESULT_YET==0){
-echo JText::_('RANGLISTE').' '.$liga[$runde-1]->rname;
+echo Text::_('RANGLISTE').' '.$liga[$runde-1]->rname;
 }else{
-echo JText::_('RANGLISTE').' '.JText::_('BEFORE').' '.$liga[$runde-1]->rname;
+echo Text::_('RANGLISTE').' '.Text::_('BEFORE').' '.$liga[$runde-1]->rname;
 }
 ?></th></tr><?php //} ?>
-	<th class="rang"><div><?php echo JText::_('RANG') ?></div></th>
-	<th class="team"><div><?php echo JText::_('TEAM') ?></div></th>
+	<th class="rang"><div><?php echo Text::_('RANG') ?></div></th>
+	<th class="team"><div><?php echo Text::_('TEAM') ?></div></th>
 	<?php if ($liga[0]->runden_modus == 1 OR $liga[0]->runden_modus == 2) { // vollrundig
 	// erster Durchgang
 		for ($rnd=0; $rnd < $liga[0]->teil-$diff ; $rnd++) { ?>
@@ -551,14 +560,16 @@ echo JText::_('RANGLISTE').' '.JText::_('BEFORE').' '.$liga[$runde-1]->rname;
 		for ($rnd=0; $rnd < $liga[0]->runden ; $rnd++) { ?>
 			<th class="rndch"><div><?php echo $rnd+1;?></div></th>
 		<?php }} ?>
-	<th class="mp"><div><?php echo JText::_('MP') ?></div></th>
+	<?php if ($columnMP == 1) { ?>
+		<th class="mp"><div><?php echo Text::_('MP') ?></div></th>
+	<?php } ?>			
 	<?php if ( $liga[0]->liga_mt == 0) { 		// Liga ?>
-		<th class="bp"><div><?php echo JText::_('BP') ?></div></th>
-			<?php if ( $liga[0]->b_wertung > 0) { ?><th class="bp"><div><?php echo JText::_('BW') ?></div></th><?php } ?>
+		<th class="bp"><div><?php echo Text::_('BP') ?></div></th>
+			<?php if ( $liga[0]->b_wertung > 0) { ?><th class="bp"><div><?php echo Text::_('BW') ?></div></th><?php } ?>
 	<?php } else {										// CH-Turniere ?>
-		<?php if ( $liga[0]->tiebr1 > 0 AND $liga[0]->tiebr1 < 50) { ?><th class="bp"><div><?php echo JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr1) ?></div></th><?php } ?>
-		<?php if ( $liga[0]->tiebr2 > 0 AND $liga[0]->tiebr2 < 50) { ?><th class="bp"><div><?php echo JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr2) ?></div></th><?php } ?>
-		<?php if ( $liga[0]->tiebr3 > 0 AND $liga[0]->tiebr3 < 50) { ?><th class="bp"><div><?php echo JText::_('MTURN_TIEBRS_'.$liga[0]->tiebr3) ?></div></th><?php } ?>
+		<?php if ( $liga[0]->tiebr1 > 0 AND $liga[0]->tiebr1 < 50) { ?><th class="bp"><div><?php echo Text::_('MTURN_TIEBRS_'.$liga[0]->tiebr1) ?></div></th><?php } ?>
+		<?php if ( $liga[0]->tiebr2 > 0 AND $liga[0]->tiebr2 < 50) { ?><th class="bp"><div><?php echo Text::_('MTURN_TIEBRS_'.$liga[0]->tiebr2) ?></div></th><?php } ?>
+		<?php if ( $liga[0]->tiebr3 > 0 AND $liga[0]->tiebr3 < 50) { ?><th class="bp"><div><?php echo Text::_('MTURN_TIEBRS_'.$liga[0]->tiebr3) ?></div></th><?php } ?>
 	<?php } ?>
 </tr>
 
@@ -688,7 +699,9 @@ if ($liga[0]->runden_modus == 3) {
 	<?php }}}
 // Ende Runden
 ?>
-	<td class="mp"><div><?php echo $punkte[$x]->mp; if ($punkte[$x]->abzug > 0) echo '*'; ?></div></td>
+	<?php if ($columnMP == 1) { ?>
+		<td class="mp"><div><?php echo $punkte[$x]->mp; if ($punkte[$x]->abzug > 0) echo '*'; ?></div></td>
+	<?php } ?>
 	<?php if ( $liga[0]->liga_mt == 0) { // Liga ?>				
 		<td class="bp"><div><?php echo $punkte[$x]->bp; if ($punkte[$x]->bpabzug > 0) echo '*'; ?></div></td>
 		<?php if ( $liga[0]->b_wertung > 0) { ?><td class="bp"><div><?php echo $punkte[$x]->wp; ?></div></td><?php } ?>
@@ -716,8 +729,8 @@ if ($liga[0]->runden_modus == 3) {
 </table>
 
 
-<?php if ($diff == 1 AND $liga[0]->ab ==1 ) { echo JText::_('ROUND_NO_RELEGATED_TEAM'); }
-	//if ($diff == 1 AND $liga[0]->ab >1 ) { echo JText::_('ROUND_LESS_RELEGATED_TEAM'); }
+<?php if ($diff == 1 AND $liga[0]->ab ==1 ) { echo Text::_('ROUND_NO_RELEGATED_TEAM'); }
+	//if ($diff == 1 AND $liga[0]->ab >1 ) { echo Text::_('ROUND_LESS_RELEGATED_TEAM'); }
 	?>
 </div>
 <?php } // Ende Rangliste
@@ -726,7 +739,7 @@ if ($liga[0]->runden_modus == 3) {
  if (isset($liga[0]->mf_name)) {
  if (isset($ok[0]->sl_ok) AND $ok[0]->sl_ok > 0) { ?>
 
-<div class="legend"><p><img src="<?php echo CLMImage::imageURL('accept.png'); ?>" width="16" height="16"/> = <?php echo JText::_('CHIEF_OK') ?></p></div>
+<div class="legend"><p><img src="<?php echo CLMImage::imageURL('accept.png'); ?>" width="16" height="16"/> = <?php echo Text::_('CHIEF_OK') ?></p></div>
 <?php }  ?>
 
 <br>

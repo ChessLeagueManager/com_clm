@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -13,7 +13,12 @@
 defined('clm') or die('Restricted access');
 require_once JPATH_COMPONENT_ADMINISTRATOR. '/helpers/addresshandler.php';
 
-$mainframe	= JFactory::getApplication();
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Router\Route;
+
+$mainframe	= Factory::getApplication();
 
 // Stylesheet laden
 
@@ -44,7 +49,7 @@ $cids = implode(',',$cid_sql);
 
 // Login Status prüfen
 // Prüfen ob Datensatz schon vorhanden ist
-	$db			= JFactory::getDBO();
+	$db			= Factory::getDBO();
 	$query	= "SELECT id, liste "
 		." FROM #__clm_mannschaften "
 		." WHERE sid = $sid AND zps = '".$zps."' "
@@ -55,7 +60,7 @@ $cids = implode(',',$cid_sql);
 
 if ($test[0]->id < 1) {
 	$link = "index.php?option=com_clm&view=info";
-	$msg = JText::_( 'CLUB_LIST_TEAM_DISABLED' );
+	$msg = Text::_( 'CLUB_LIST_TEAM_DISABLED' );
 	$mainframe->redirect( $link, $msg );
  			}
 
@@ -77,12 +82,12 @@ $abgabe		= $this->abgabe;
 		$abgabe[0]->params['deadline_roster'] = '1970-01-01'; }
 
 if ($abgabe[0]->liste > 0 AND ($abgabe[0]->params['deadline_roster'] == '0000-00-00' OR $abgabe[0]->params['deadline_roster'] == '1970-01-01')) {
-	$msg = JText::_( 'CLUB_LIST_ALREADY_EXIST' ).'XX';
+	$msg = Text::_( 'CLUB_LIST_ALREADY_EXIST' ).'XX';
 	$link = "index.php?option=com_clm&view=info";
 	$mainframe->redirect( $link, $msg );
 }
 if ($abgabe[0]->liste > 0 AND $abgabe[0]->params['deadline_roster'] < $today) {
-	$msg = JText::_( 'CLUB_LIST_TOO_LATE' );
+	$msg = Text::_( 'CLUB_LIST_TOO_LATE' );
 	$link = "index.php?option=com_clm&view=info";
 	$mainframe->redirect( $link, $msg );
  			}
@@ -95,7 +100,7 @@ if(is_null($lokal_coord) or $lokal_coord==-1){
 	$lokal_coord = null;
 	if($config->googlemaps)//Only output a message if geo service is enabled
 	{
-		$mainframe->enqueueMessage( JText::_( 'CLUB_LIST_GEO_WARNING_ORDER' ), 'warning' );
+		$mainframe->enqueueMessage( Text::_( 'CLUB_LIST_GEO_WARNING_ORDER' ), 'warning' );
 	}
 }
 
@@ -105,9 +110,9 @@ if(is_null($lokal_coord) or $lokal_coord==-1){
 $liga 		= $this->liga;
 $mllist		= $this->mllist;
 $spieler		= $this->spieler;
-$mflist[]		= JHTML::_('select.option',  '0', JText::_( 'TEAM_SELECT_LEADER' ), 'mf', 'mfname' );
+$mflist[]		= HTMLHelper::_('select.option',  '0', Text::_( 'TEAM_SELECT_LEADER' ), 'mf', 'mfname' );
 $mflist			= array_merge( $mflist, $mllist );
-$lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox" size="1"', 'mf', 'mfname', $liga_mf );
+$lists['mf']	= HTMLHelper::_('select.genericlist',   $mflist, 'mf', 'class="inputbox" size="1"', 'mf', 'mfname', $liga_mf );
 
 	// Textparameter setzen
 	if ($abgabe[0]->liste > 0) $erstmeldung = 0;	// Erstmeldung nein
@@ -115,26 +120,26 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
 	if ($abgabe[0]->params['deadline_roster'] < $today) { $korr_moeglich = 0; 	// Korrektur möglich im FE nein
 														$deadline_roster = ''; }
 	else { $korr_moeglich = 1; 			// Korrektur möglich im FE ja
-		$deadline_roster = JHTML::_('date', $abgabe[0]->params['deadline_roster'], JText::_('DATE_FORMAT_CLM_F')); }
+		$deadline_roster = HTMLHelper::_('date', $abgabe[0]->params['deadline_roster'], Text::_('DATE_FORMAT_CLM_F')); }
 
 ?>
 <div >
 <div id="meldeliste">
-<div class="componentheading"><?php echo JText::_('CLUB_LIST_SORT_LIST') ?> <?php echo $man_name; ?></div>
+<div class="componentheading"><?php echo Text::_('CLUB_LIST_SORT_LIST') ?> <?php echo $man_name; ?></div>
 <br>
 <div id="desc">
-<h4><?php echo JText::_('CLUB_LIST_NOTE') ?></h4>
+<h4><?php echo Text::_('CLUB_LIST_NOTE') ?></h4>
 <ol>
-<li><?php echo JText::_('CLUB_LIST_HINT_S1') ?></li>
+<li><?php echo Text::_('CLUB_LIST_HINT_S1') ?></li>
 <?php if ($korr_moeglich == 0) { ?>
-	<li><?php echo JText::_('CLUB_LIST_HINT_S2') ?></li>
+	<li><?php echo Text::_('CLUB_LIST_HINT_S2') ?></li>
 <?php } else { ?>
-	<li><?php echo JText::_('CLUB_LIST_HINT_S2A1').$deadline_roster.JText::_('CLUB_LIST_HINT_S2A2').' '.JText::_('CLUB_LIST_HINT_S2A3') ?></li>
+	<li><?php echo Text::_('CLUB_LIST_HINT_S2A1').$deadline_roster.Text::_('CLUB_LIST_HINT_S2A2').' '.Text::_('CLUB_LIST_HINT_S2A3') ?></li>
 <?php } ?>
-<li><?php echo JText::_('CLUB_LIST_HINT_S3') ?></li>
-<li><?php echo JText::_('CLUB_LIST_HINT_S4') ?></li>
+<li><?php echo Text::_('CLUB_LIST_HINT_S3') ?></li>
+<li><?php echo Text::_('CLUB_LIST_HINT_S4') ?></li>
 </ol>
-<?php //echo JText::_('CLUB_LIST_PLANNED') ?>
+<?php //echo Text::_('CLUB_LIST_PLANNED') ?>
 </div>
 <?php 
 
@@ -267,22 +272,22 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
 
 <!--<form action="index.php?option=com_clm&amp;view=meldeliste&amp;layout=sent&amp;saison=<?php echo $sid ?>&amp;lid=<?php echo $lid ?>&amp;zps=<?php echo $zps ?>&amp;man=<?php echo $man ?>" method="post" name="adminForm">
 -->
-<form action="<?php echo JRoute::_('index.php'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo Route::_('index.php'); ?>" method="post" name="adminForm" id="adminForm">
 
 <table class="adminlist" cellpadding="0" cellspacing="0">
 	<tr> 
-		<th class="anfang" width="4%"><?php echo JText::_('CLUB_LIST_NR') ?></th>
-		<th class="anfang"><?php echo JText::_('CLUB_LIST_NAME') ?></th>
-		<th class="anfang" width="8%"><?php echo JText::_('CLUB_LIST_ATTR') ?></th>
-		<th class="anfang" width="8%"><?php echo JText::_('CLUB_LIST_DWZ') ?></th>
+		<th class="anfang" width="4%"><?php echo Text::_('CLUB_LIST_NR') ?></th>
+		<th class="anfang"><?php echo Text::_('CLUB_LIST_NAME') ?></th>
+		<th class="anfang" width="8%"><?php echo Text::_('CLUB_LIST_ATTR') ?></th>
+		<th class="anfang" width="8%"><?php echo Text::_('CLUB_LIST_DWZ') ?></th>
 		<?php if ($countryversion =="de") { ?>
-			<th class="anfang" width="35%"><?php echo JText::_('CLUBS_LIST_NAME') ?></th>
-			<th class="anfang" width="8%"><?php echo JText::_('CLUB_LIST_MGL') ?></th>
+			<th class="anfang" width="35%"><?php echo Text::_('CLUBS_LIST_NAME') ?></th>
+			<th class="anfang" width="8%"><?php echo Text::_('CLUB_LIST_MGL') ?></th>
 		<?php } else { ?>
-			<th class="anfang" width="28%"><?php echo JText::_('CLUBS_LIST_NAME') ?></th>
-			<th class="anfang" width="15%"><?php echo JText::_('CLUB_LIST_PKZ') ?></th>
+			<th class="anfang" width="28%"><?php echo Text::_('CLUBS_LIST_NAME') ?></th>
+			<th class="anfang" width="15%"><?php echo Text::_('CLUB_LIST_PKZ') ?></th>
 		<?php } ?>
-		<th class="anfang" width="12%"><?php echo JText::_('CLUB_LIST_SORT_DIR') ?></th>
+		<th class="anfang" width="12%"><?php echo Text::_('CLUB_LIST_SORT_DIR') ?></th>
 	</tr>
 
 <?php $i = 0;
@@ -329,28 +334,28 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
 </table>
 <table class="adminlist" cellpadding="0" cellspacing="0">
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="mf"><?php echo JText::_( 'TEAM_LEADER' )." : "; ?></label>
+			<td class="key" nowrap="nowrap"><label for="mf"><?php echo Text::_( 'TEAM_LEADER' )." : "; ?></label>
 			</td>
 			<td>
 			<?php echo $lists['mf']; ?>
 			</td>
 			<td>
-			<?php  echo JText::_( 'TEAM_LEADER_COMMENT' ) ; ?>
+			<?php  echo Text::_( 'TEAM_LEADER_COMMENT' ) ; ?>
 			</td>
 		</tr>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="lokal"><?php echo JText::_( 'TEAM_LOCATION' )." : "; ?></label>
+			<td class="key" nowrap="nowrap"><label for="lokal"><?php echo Text::_( 'TEAM_LOCATION' )." : "; ?></label>
 			</td>
 			<td>
 			<textarea class="inputbox" name="lokal" id="lokal" cols="40" rows="3" style="width:90%"><?php echo $liga_lokal; ?></textarea>
 			</td>
 			<td>
-			<?php  echo JText::_( 'CLM_KOMMA' )."<br>".JText::_( 'CLM_ADDRESS1' ); ?>
+			<?php  echo Text::_( 'CLM_KOMMA' )."<br>".Text::_( 'CLM_ADDRESS1' ); ?>
 			</td>
 		</tr>
 		</table>
 <br />
-	<input type="submit" value=" <?php echo JText::_('CLUB_LIST_SEND') ?> ">
+	<input type="submit" value=" <?php echo Text::_('CLUB_LIST_SEND') ?> ">
 		<input type="hidden" name="view" value="meldeliste" />
 		<input type="hidden" name="option" value="com_clm" />
 		<input type="hidden" name="layout" value="sent" />
@@ -362,7 +367,7 @@ $lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox"
 		<input type="hidden" name="ersatz" value="<?php echo $ersatz; ?>" />
 		<input type="hidden" name="man_name" value="<?php echo $man_name; ?>" />
 		<input type="hidden" name="task" value="" />
-	<?php echo JHTML::_( 'form.token' ); ?>
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
 </form>
 </center>
 <br>

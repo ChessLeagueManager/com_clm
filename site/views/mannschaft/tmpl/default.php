@@ -13,6 +13,10 @@ defined('_JEXEC') or die('Restricted access');
 
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+
 function RGB($Hex){ 
 	if (substr($Hex,0,1) == "#") $Hex = substr($Hex,1);
 	$R = substr($Hex,0,2);
@@ -68,7 +72,7 @@ $liga 		= clm_core::$load->request_int( 'liga',1);
 $tln 		= clm_core::$load->request_int('tlnr');
 $itemid 	= clm_core::$load->request_int('Itemid',1);
 $option 	= clm_core::$load->request_string( 'option' );
-$mainframe	= JFactory::getApplication();
+$mainframe	= Factory::getApplication();
  
 function vergleich($wert_a,$wert_b) {
 	$a = 1000*($wert_a->dg) + 50*($wert_a->runde) + 2*($wert_a->paar) + $wert_a->heim;
@@ -81,24 +85,24 @@ usort($bpr, 'vergleich');
   
 $sql = ' SELECT `sieg`, `remis`, `nieder`, `antritt` FROM #__clm_liga'
 		. ' WHERE `id` = "' . $liga . '"';
-$db =JFactory::getDBO ();
+$db =Factory::getDBO ();
 $db->setQuery ($sql);
 $ligapunkte = $db->loadObject ();
 
 if ($lparams['dwz_date'] == '0000-00-00' OR $lparams['dwz_date'] == '1970-01-01') {
-	if ($saison[0]->dsb_datum  > '1970-01-01') $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $saison[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F'));  
+	if ($saison[0]->dsb_datum  > '1970-01-01') $hint_dwzdsb = Text::_('DWZ_DSB_COMMENT_RUN').' '.clm_core::$load->utf8decode(Text::_('ON_DAY')).' '.HTMLHelper::_('date',  $saison[0]->dsb_datum, Text::_('DATE_FORMAT_CLM_F'));  
 	else $hint_dwzdsb = ''; 
 } else {
-	$hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_LEAGUE').' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $lparams['dwz_date'], JText::_('DATE_FORMAT_CLM_F'));  
+	$hint_dwzdsb = Text::_('DWZ_DSB_COMMENT_LEAGUE').' '.clm_core::$load->utf8decode(Text::_('ON_DAY')).' '.HTMLHelper::_('date',  $lparams['dwz_date'], Text::_('DATE_FORMAT_CLM_F'));  
 }
 if ( !$mannschaft OR $mannschaft[0]->lpublished == 0) {
-	$msg = JText::_('NOT_PUBLISHED').JText::_('GEDULD');
+	$msg = Text::_('NOT_PUBLISHED').Text::_('GEDULD');
 	$mainframe->enqueueMessage( $msg );
 	$link = 'index.php?option='.$option.'&view=info&Itemid='.$itemid;
 	$mainframe->redirect( $link );
 	 }
 if ( $mannschaft[0]->published == 0) {
-	$msg = JText::_('TEAM_NOT_PUBLISHED').JText::_('GEDULD');
+	$msg = Text::_('TEAM_NOT_PUBLISHED').Text::_('GEDULD');
 	$mainframe->enqueueMessage( $msg );
 	$link = 'index.php?option='.$option.'&view=info&Itemid='.$itemid;
 	$mainframe->redirect( $link );
@@ -108,7 +112,7 @@ if ( $mannschaft[0]->published == 0) {
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 	// Browsertitelzeile setzen
-	$doc =JFactory::getDocument();
+	$doc =Factory::getDocument();
 	$doc->setTitle($mannschaft[0]->name.' - '.$mannschaft[0]->liga_name);
 
 	// Konfigurationsparameter auslesen
@@ -145,7 +149,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'geo_functions.php');
 
 	// Userkennung holen
-	$user	=JFactory::getUser();
+	$user	=Factory::getUser();
 	$jid	= $user->get('id');
 	
 // Konfigurationsparameter auslesen Teil2
@@ -163,7 +167,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php');
 
 $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
-	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+	echo "<div id='wrong'>".Text::_('NO_ACCESS')."<br>".Text::_('NOT_REGISTERED')."</div>";
 }
 // Liga schon veröffentlicht
 elseif ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) { ?>
@@ -172,17 +176,17 @@ elseif ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) { ?>
 
     <?php if ($mannschaft[0]->zps != "0") { ?>
 		<div class="clmbox">
-		<a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $mannschaft[0]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('TEAM_DETAILS') ?></a>
-		| <a href="index.php?option=com_clm&view=dwz&saison=<?php echo $sid; ?>&zps=<?php echo $mannschaft[0]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('TEAM_OVERVIEW') ?></a>
+		<a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $mannschaft[0]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo Text::_('TEAM_DETAILS') ?></a>
+		| <a href="index.php?option=com_clm&view=dwz&saison=<?php echo $sid; ?>&zps=<?php echo $mannschaft[0]->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo Text::_('TEAM_OVERVIEW') ?></a>
 		<?php $isg = 0; $isgn = 0;
 		  while (isset($vereine[$isg]) AND $isg <= 10) :
 			if ($vereine[$isg]->zps != "0" AND  $vereine[$isg]->zps != "" AND $vereine[$isg]->vzps != "0" AND  $vereine[$isg]->vzps != "" AND $vereine[$isg]->zps != $vereine[$isg]->vzps ) { 
 				while (strlen($vereine[$isg]->name) < 40) :
 					$vereine[$isg]->name .= '&nbsp';
 				endwhile;  ?>
-				<br><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $vereine[$isg]->vzps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $vereine[$isg]->name.' &nbsp '.JText::_('TEAM_DETAILS'); ?></a>
+				<br><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $vereine[$isg]->vzps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $vereine[$isg]->name.' &nbsp '.Text::_('TEAM_DETAILS'); ?></a>
 				<?php echo ($isgn + 1); ?>
-				<a href="index.php?option=com_clm&view=dwz&saison=<?php echo $sid; ?>&zps=<?php echo $vereine[$isg]->vzps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('TEAM_OVERVIEW') ?></a>
+				<a href="index.php?option=com_clm&view=dwz&saison=<?php echo $sid; ?>&zps=<?php echo $vereine[$isg]->vzps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo Text::_('TEAM_OVERVIEW') ?></a>
 		<?php $isgn++; } $isg++;
 		  endwhile; ?>
     <?php } else { ?>
@@ -192,9 +196,9 @@ elseif ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) { ?>
 	
 	<?php 
 	if ($jid !="0") { 
-		echo CLMContent::createPDFLink('mannschaft', JText::_('PDF_TEAM1'), array('layout' => 'team', 'o_nr' => 1, 'saison' => $mannschaft[0]->sid, 'liga' => $mannschaft[0]->liga, 'tlnr' => $mannschaft[0]->tln_nr));
+		echo CLMContent::createPDFLink('mannschaft', Text::_('PDF_TEAM1'), array('layout' => 'team', 'o_nr' => 1, 'saison' => $mannschaft[0]->sid, 'liga' => $mannschaft[0]->liga, 'tlnr' => $mannschaft[0]->tln_nr));
 	} 
-	echo CLMContent::createPDFLink('mannschaft', JText::_('PDF_TEAM'), array('layout' => 'team', 'o_nr' => 0, 'saison' => $mannschaft[0]->sid, 'liga' => $mannschaft[0]->liga, 'tlnr' => $mannschaft[0]->tln_nr));
+	echo CLMContent::createPDFLink('mannschaft', Text::_('PDF_TEAM'), array('layout' => 'team', 'o_nr' => 0, 'saison' => $mannschaft[0]->sid, 'liga' => $mannschaft[0]->liga, 'tlnr' => $mannschaft[0]->tln_nr));
 	?>
 	
 	</div></div>
@@ -207,32 +211,32 @@ elseif ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) { ?>
 			<?php echo clm_core::$load->show_club_logo($mannschaft[0]->zps,150); ?>
 			</td><td style="border-style: hidden;" >	
    <?php if ($man_manleader =="1") { ?>
-        <b><?php echo JText::_('TEAM_LEADER') ?></b><br>
+        <b><?php echo Text::_('TEAM_LEADER') ?></b><br>
         <?php if ( $mannschaft[0]->mf_name <> '' ) {
         echo $mannschaft[0]->mf_name; ?><br>
-        <?php if ($mail=="1" OR ($mail =="0" AND $jid !="0")) { echo JHTML::_( 'email.cloak', $mannschaft[0]->email );} 
-              else { echo JText::_('TEAM_MAIL'); echo JText::_('TEAM_REGISTERED');} ?><br> 
+        <?php if ($mail=="1" OR ($mail =="0" AND $jid !="0")) { echo HTMLHelper::_( 'email.cloak', $mannschaft[0]->email );} 
+              else { echo Text::_('TEAM_MAIL'); echo Text::_('TEAM_REGISTERED');} ?><br> 
         
         <?php if ($mannschaft[0]->tel_fest !='') { 
-              if ($telefon =="1" OR ($telefon =="0" AND $jid !="0")) { echo JText::_('TEAM_FON'); echo " ".$mannschaft[0]->tel_fest; }
-              if ($telefon =="0" AND $jid =="0") { echo JText::_('TEAM_FON'); echo JText::_('TEAM_REGISTERED'); }
+              if ($telefon =="1" OR ($telefon =="0" AND $jid !="0")) { echo Text::_('TEAM_FON'); echo " ".$mannschaft[0]->tel_fest; }
+              if ($telefon =="0" AND $jid =="0") { echo Text::_('TEAM_FON'); echo Text::_('TEAM_REGISTERED'); }
               ?><br>
-        <?php } else { echo JText::_('TEAM_NO_FONE');  } ?>
+        <?php } else { echo Text::_('TEAM_NO_FONE');  } ?>
         
         <?php if ($mannschaft[0]->tel_mobil <> '') { 
-              if ($mobil =="1" OR ($mobil =="0" AND $jid !="0")) { echo JText::_('TEAM_MOBILE');echo " ".$mannschaft[0]->tel_mobil; }
-              if ($mobil =="0" AND $jid =="0") { echo JText::_('TEAM_MOBILE');echo JText::_('TEAM_REGISTERED'); }
+              if ($mobil =="1" OR ($mobil =="0" AND $jid !="0")) { echo Text::_('TEAM_MOBILE');echo " ".$mannschaft[0]->tel_mobil; }
+              if ($mobil =="0" AND $jid =="0") { echo Text::_('TEAM_MOBILE');echo Text::_('TEAM_REGISTERED'); }
         }
-        else { echo JText::_('TEAM_NO_MOBILE') ; }
+        else { echo Text::_('TEAM_NO_MOBILE') ; }
                                 }
-        else { ?><?php echo JText::_('TEAM_NOT_SET') ?><?php }} ?>
+        else { ?><?php echo Text::_('TEAM_NOT_SET') ?><?php }} ?>
 	</td></tr></table>
 	</div>
         <div id="rightalign">
     <?php if ($man_spiellokal =="1") { ?>
-        <b><?php echo JText::_('TEAM_LOCATION'); ?></b>
+        <b><?php echo Text::_('TEAM_LOCATION'); ?></b>
         <?php if ( ($mannschaft[0]->lokal ==! false) and ($googlemaps_msch > "0") and ($googlemaps == "1") ) { ?>&nbsp;(&nbsp;
-        <a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $mannschaft[0]->sid ?>&liga=<?php echo $mannschaft[0]->liga ?>&tlnr=<?php echo $mannschaft[0]->tln_nr ?>#google"><?php echo JText::_('TEAM_KARTE') ?></a>&nbsp;)<?php } ?>
+        <a href="index.php?option=com_clm&view=mannschaft&saison=<?php echo $mannschaft[0]->sid ?>&liga=<?php echo $mannschaft[0]->liga ?>&tlnr=<?php echo $mannschaft[0]->tln_nr ?>#google"><?php echo Text::_('TEAM_KARTE') ?></a>&nbsp;)<?php } ?>
         <br />
         <div style="float:left; width: 50%;">
             <?php $spiellokal1 = explode(",", $mannschaft[0]->lokal); 
@@ -248,16 +252,16 @@ elseif ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) { ?>
             // Routenplaner
             if($spiellokal1[0] ==! false AND $googlemaps_mrout == 1 ) { 
 				if ($googlemaps_rtype == 1 AND isset($spiellokal1[2])) {
-					echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[0].','. $spiellokal1[1].','.$spiellokal1[2].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+					echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[0].','. $spiellokal1[1].','.$spiellokal1[2].'" target="_blank">'. Text::_('CLM_ROUTE') .'</a>'; 
 				} elseif ($googlemaps_rtype == 2 AND isset($spiellokal1[2])) {
-					echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[1].','.$spiellokal1[2].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+					echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[1].','.$spiellokal1[2].'" target="_blank">'. Text::_('CLM_ROUTE') .'</a>'; 
 				} elseif ($googlemaps_rtype == 3 AND isset($spiellokal1[1])) {
-					echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[0].','.$spiellokal1[1].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+					echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[0].','.$spiellokal1[1].'" target="_blank">'. Text::_('CLM_ROUTE') .'</a>'; 
 				} elseif (isset($spiellokal1[2])) {
-					echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[0].','.$spiellokal1[1].','.$spiellokal1[2].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+					echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[0].','.$spiellokal1[1].','.$spiellokal1[2].'" target="_blank">'. Text::_('CLM_ROUTE') .'</a>'; 
 				} elseif (isset($spiellokal1[1])) {
-					echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[0].','.$spiellokal1[1].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
-				} else { echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[0].'" target="_blank">'. JText::_('CLM_ROUTE') .'</a>'; 
+					echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[0].','.$spiellokal1[1].'" target="_blank">'. Text::_('CLM_ROUTE') .'</a>'; 
+				} else { echo '<br><a href="http://maps.google.com/maps?hl='.$google_lang.'&saddr=&daddr=' . $spiellokal1[0].'" target="_blank">'. Text::_('CLM_ROUTE') .'</a>'; 
 				}
             } ?>
             </div>
@@ -284,7 +288,7 @@ elseif ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) { ?>
     <div class="clr"></div>
     
     <?php if ( $mannschaft[0]->bemerkungen <> '') { ?>
-    <br /><b><?php echo JText::_('TEAM_NOTICE') ?></b><br />
+    <br /><b><?php echo Text::_('TEAM_NOTICE') ?></b><br />
     <?php echo $mannschaft[0]->bemerkungen; ?>
     <?php	} ?>
     </div>
@@ -293,28 +297,28 @@ elseif ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) { ?>
   <?php if ($lparams['noBoardResults'] == '0') { ?>    
     <?php
 	if ($mannschaft[0]->anzeige_ma == 1){ ?>
-    <div id="wrong"><?php echo JText::_('TEAM_FORMATION_BLOCKED') ?></div><br>
+    <div id="wrong"><?php echo Text::_('TEAM_FORMATION_BLOCKED') ?></div><br>
     <?php }  elseif  (!$count){ ?>
-    <div id="wrong"><?php echo JText::_('TEAM_NO_FORMATION') ?></div><br>
+    <div id="wrong"><?php echo Text::_('TEAM_NO_FORMATION') ?></div><br>
     <?php }  else {
     
     ?>
-    <h4><?php echo JText::_('TEAM_FORMATION') ?></h4>
+    <h4><?php echo Text::_('TEAM_FORMATION') ?></h4>
     <table cellpadding="0" cellspacing="0" id="mannschaft" <?php if ($fixth_msch =="1") { ?>class="tableWithFloatingHeader"<?php } ?>>
     
     <tr>
-    <?php if($mannschaft[0]->lrang > 0) { ?><th class="nr"><?php echo JText::_('TEAM_RANK') ?></th><?php }
-        else { ?><th class="nr"><?php echo JText::_('DWZ_NR') ?></th><?php } ?>
+    <?php if($mannschaft[0]->lrang > 0) { ?><th class="nr"><?php echo Text::_('TEAM_RANK') ?></th><?php }
+        else { ?><th class="nr"><?php echo Text::_('DWZ_NR') ?></th><?php } ?>
     <?php if ($attr) { ?>
-		<th class="nr"><?php echo JText::_('CLUB_LIST_ATTR') ?></th>
+		<th class="nr"><?php echo Text::_('CLUB_LIST_ATTR') ?></th>
     <?php } ?>
-		<th class="nr"><?php echo JText::_('CLUB_LIST_TITEL') ?></th>
-        <th class="name"><?php echo JText::_('DWZ_NAME') ?></th>
+		<th class="nr"><?php echo Text::_('CLUB_LIST_TITEL') ?></th>
+        <th class="name"><?php echo Text::_('DWZ_NAME') ?></th>
         <th class="dwz">
 		<?php if ($hint_dwzdsb != '') { ?>
-			<a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php if ($countryversion == "de") echo JText::_('LEAGUE_STAT_DWZ'); else echo JText::_('LEAGUE_STAT_DWZ_EN')?></a>
+			<a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php if ($countryversion == "de") echo Text::_('LEAGUE_STAT_DWZ'); else echo Text::_('LEAGUE_STAT_DWZ_EN')?></a>
 		<?php } else { ?>
-			<?php if ($countryversion == "de") echo JText::_('LEAGUE_STAT_DWZ'); else echo JText::_('LEAGUE_STAT_DWZ_EN')?>
+			<?php if ($countryversion == "de") echo Text::_('LEAGUE_STAT_DWZ'); else echo Text::_('LEAGUE_STAT_DWZ_EN')?>
 		<?php } ?>
 		</th>
 	 <?php 
@@ -341,9 +345,9 @@ elseif ($mannschaft[0]->lpublished != 0 AND $mannschaft[0]->published != 0) { ?>
                             }
                 }
     ?>
-        <th class="punkte"><?php echo JText::_('TEAM_POINTS') ?></th>
-        <th class="spiele"><?php echo JText::_('TEAM_GAMES') ?></th>
-        <th class="prozent"><?php echo JText::_('LEAGUE_STAT_PERCENT') ?></th>
+        <th class="punkte"><?php echo Text::_('TEAM_POINTS') ?></th>
+        <th class="spiele"><?php echo Text::_('TEAM_GAMES') ?></th>
+        <th class="prozent"><?php echo Text::_('LEAGUE_STAT_PERCENT') ?></th>
     </tr>
     <?php
     $y = 1;
@@ -466,10 +470,10 @@ for ($x=0; $x< 400; $x++){
     $y++;
                     }
 	while (isset($einzel[$ie])) {
-		$ztext = "    ".JText::_( 'TEAM_WARNING' );
-		$ztext .= JText::_( 'TEAM_CLUB' ).$einzel[$ie]->zps.JText::_( 'TEAM_MEMBER' ).$einzel[$ie]->spieler.JText::_( 'TEAM_PKZ' ).$einzel[$ie]->PKZ;
-		$ztext .= JText::_( 'TEAM_DG' ).$einzel[$ie]->dg.JText::_( 'TEAM_ROUND' ).$einzel[$ie]->runde;
-		$ztext .= JText::_( 'TEAM_BOARD' ).$einzel[$ie]->brett.JText::_( 'TEAM_RESULT2' ).$einzel[$ie]->punkte; 	
+		$ztext = "    ".Text::_( 'TEAM_WARNING' );
+		$ztext .= Text::_( 'TEAM_CLUB' ).$einzel[$ie]->zps.Text::_( 'TEAM_MEMBER' ).$einzel[$ie]->spieler.Text::_( 'TEAM_PKZ' ).$einzel[$ie]->PKZ;
+		$ztext .= Text::_( 'TEAM_DG' ).$einzel[$ie]->dg.Text::_( 'TEAM_ROUND' ).$einzel[$ie]->runde;
+		$ztext .= Text::_( 'TEAM_BOARD' ).$einzel[$ie]->brett.Text::_( 'TEAM_RESULT2' ).$einzel[$ie]->punkte; 	
 		$zcolspan = 6 + ($mannschaft[0]->dg * $mannschaft[0]->runden);
 		?>
 		<tr class="<?php echo $zeilenr; ?>">
@@ -481,9 +485,9 @@ for ($x=0; $x< 400; $x++){
     ?>
     <tr class="ende">
     <?php if ($attr) { ?>
-		<td colspan="5"><?php echo JText::_('TEAM_TOTAL'); ?></td>
+		<td colspan="5"><?php echo Text::_('TEAM_TOTAL'); ?></td>
     <?php } else { ?>
-		<td colspan="4"><?php echo JText::_('TEAM_TOTAL'); ?></td>
+		<td colspan="4"><?php echo Text::_('TEAM_TOTAL'); ?></td>
     <?php } ?>
     <?php	$spl = 0; $gespielt = 0; $ibe = 0;
     // erster Durchgang
@@ -547,31 +551,31 @@ for ($x=0; $x< 400; $x++){
   <?php } ?>
     
     <?php if ($man_spielplan =="1") { ?>
-    <h4><?php echo JText::_('TEAM_PLAN') ?></h4>
+    <h4><?php echo Text::_('TEAM_PLAN') ?></h4>
     
     <table cellpadding="0" cellspacing="0" class="spielplan">
     <tr>
-        <th><?php echo JText::_('TEAM_ROUNDS') ?></th>
-        <th><?php echo JText::_('TEAM_PAIR') ?></th>
-        <th><?php echo JText::_('TEAM_DATE') ?></th>
-        <th><?php echo JText::_('TEAM_HOME') ?></th>
-        <th><?php echo JText::_('TEAM_GUEST') ?></th>
-        <th><?php echo JText::_('TEAM_RESULT') ?></th>
+        <th><?php echo Text::_('TEAM_ROUNDS') ?></th>
+        <th><?php echo Text::_('TEAM_PAIR') ?></th>
+        <th><?php echo Text::_('TEAM_DATE') ?></th>
+        <th><?php echo Text::_('TEAM_HOME') ?></th>
+        <th><?php echo Text::_('TEAM_GUEST') ?></th>
+        <th><?php echo Text::_('TEAM_RESULT') ?></th>
    </tr>
     <?php 
     $cnt = 0;
 	$ibpr = 0;
     foreach ($plan as $plan) { 
-		//$datum =JFactory::getDate($plan->datum);?>
+		//$datum =Factory::getDate($plan->datum);?>
     <tr>
     <td><a href="index.php?option=com_clm&view=runde&saison=<?php echo $sid; ?>&liga=<?php echo $liga; ?>&runde=<?php echo $plan->runde; ?>&dg=<?php echo $plan->dg; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php if ($mannschaft[0]->dg > 1) echo $plan->dg." / "; echo $plan->runde; ?></a></td>
     <td><?php echo $plan->paar; ?></td>
     <td><?php while (isset($termin[$cnt]->nr) AND ($plan->runde + $mannschaft[0]->runden*($plan->dg -1)) > $termin[$cnt]->nr) { 
 			$cnt++; }
 		    if (isset($termin[$cnt]->nr) AND ($plan->runde + $mannschaft[0]->runden*($plan->dg -1))== $termin[$cnt]->nr ) {
-				if ($termin[$cnt]->pdate > '1970-01-01') { echo JHTML::_('date',  $termin[$cnt]->pdate, JText::_('DATE_FORMAT_CLM'));
+				if ($termin[$cnt]->pdate > '1970-01-01') { echo HTMLHelper::_('date',  $termin[$cnt]->pdate, Text::_('DATE_FORMAT_CLM'));
 					if ($termin[$cnt]->ptime != '00:00:00') echo '  '.substr($termin[$cnt]->ptime,0,5); }
-				else if ($termin[$cnt]->datum > '1970-01-01') { echo JHTML::_('date',  $termin[$cnt]->datum, JText::_('DATE_FORMAT_CLM')); 
+				else if ($termin[$cnt]->datum > '1970-01-01') { echo HTMLHelper::_('date',  $termin[$cnt]->datum, Text::_('DATE_FORMAT_CLM')); 
 					if ($termin[$cnt]->startzeit != '00:00:00') echo '  '.substr($termin[$cnt]->startzeit,0,5); }
 			$cnt++; } ?></td>
     <?php if ($plan->tln_nr == $tln) { ?>
@@ -609,7 +613,7 @@ for ($x=0; $x< 400; $x++){
     <a name="google"></a>    
 	<?php //Kartenanzeige 
 	if ( ($mannschaft[0]->lokal ==! false) and (($googlemaps_msch == "3") || ($googlemaps_msch == "1"))  and ($googlemaps == "1") ) { ?>
-	<h4><?php echo JText::_('OSM_MAPS') ?></h4>
+	<h4><?php echo Text::_('OSM_MAPS') ?></h4>
     <?php 
 		$lat = $mannschaft[0]->lokal_coord_lat;
 		$lon = $mannschaft[0]->lokal_coord_long;

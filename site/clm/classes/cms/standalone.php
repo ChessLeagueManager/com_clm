@@ -1,10 +1,14 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+
 class clm_class_cms_standalone extends clm_class_cms {
 	
 	private $title;
@@ -95,8 +99,8 @@ class clm_class_cms_standalone extends clm_class_cms {
 	}
 	public function showDate($date_time, $format = "") {
 		$this->initJoomla();
-		if ($format == "") $format = JText::_('DATE_FORMAT_LC2');
-//		$output = JHtml::_('date',  $date_time, $format);
+		if ($format == "") $format = Text::_('DATE_FORMAT_LC2');
+//		$output = HTMLHelper::_('date',  $date_time, $format);
 		$output = \Joomla\CMS\HTML\HTMLHelper::_('date',  $date_time, $format);
 		return $output;
 	}

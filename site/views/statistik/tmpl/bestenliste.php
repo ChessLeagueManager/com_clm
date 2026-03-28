@@ -1,16 +1,20 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Router\Route;
 
 $liga		= $this->liga;
 $bestenliste= $this->bestenliste;
@@ -45,8 +49,8 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 $config = clm_core::$db->config();
 
 // Browsertitelzeile setzen
-$doc =JFactory::getDocument();
-$doc->setTitle(JText::_('LEAGUE_STATISTIK').' '.$liga[0]->name);
+$doc =Factory::getDocument();
+$doc->setTitle(Text::_('LEAGUE_STATISTIK').' '.$liga[0]->name);
 	
 ?>
 
@@ -64,38 +68,38 @@ function tableOrdering( order, dir, task )
 
 <div id="clm">
 <div id="statistik">
-<?php echo CLMContent::componentheading(JText::_('LEAGUE_STATISTIK').'&nbsp;'.$liga[0]->name); ?>
+<?php echo CLMContent::componentheading(Text::_('LEAGUE_STATISTIK').'&nbsp;'.$liga[0]->name); ?>
 
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
 
 <?php
-if ( !$liga OR $liga[0]->published == "0") { echo '<br>'.CLMContent::clmWarning(JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD')); } 
+if ( !$liga OR $liga[0]->published == "0") { echo '<br>'.CLMContent::clmWarning(Text::_('NOT_PUBLISHED').'<br>'.Text::_('GEDULD')); } 
 else {
 
-if (!$bestenliste OR !$liga) { echo '<br>'.CLMContent::clmWarning(JText::_('LEAGUE_NO_GAMES'));  } 
+if (!$bestenliste OR !$liga) { echo '<br>'.CLMContent::clmWarning(Text::_('LEAGUE_NO_GAMES'));  } 
 
 else { ?>
 
 <div>
 <br>
 
-<h4><?php echo JText::_('LEAGUE_RATING_ALL_PLAYERS').' '.$liga[0]->name; ?></h4>
+<h4><?php echo Text::_('LEAGUE_RATING_ALL_PLAYERS').' '.$liga[0]->name; ?></h4>
 <?php if (!$bestenliste) { ?>
-<div id="wrong"><?php echo JText::_('LEAGUE_NO_GAMES') ?></div>
+<div id="wrong"><?php echo Text::_('LEAGUE_NO_GAMES') ?></div>
 <?php } else { 
 // Sortierung
 if ($itemid <>'') { $plink = '&saison=' . $sid . '&liga='. $lid .'&layout=bestenliste&Itemid='.$itemid; }
 else { $plink = '&saison=' . $sid . '&liga='. $lid .'&layout=bestenliste' ;  } ?>
 
-<form id="adminForm" action="<?php echo JRoute::_( 'index.php?option=com_clm&view=statistik' . $plink ) ;?>" method="post" name="adminForm">
+<form id="adminForm" action="<?php echo Route::_( 'index.php?option=com_clm&view=statistik' . $plink ) ;?>" method="post" name="adminForm">
 <table cellpadding="0" cellspacing="0" class="details">
 	<tr>
-		<th><?php echo JText::_('DWZ_NR') ?></th>
-		<th><a href="javascript:tableOrdering('Spielername','asc','');"><?php echo JText::_('LEAGUE_STAT_PLAYER') ?></a></th>
-		<th><?php echo JHTML::_( 'grid.sort', 'LEAGUE_STAT_DWZ', 'DWZ', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-		<th><a href="javascript:tableOrdering('Vereinname','asc','');"><?php echo JText::_('LEAGUE_STAT_CLUB') ?></a></th>
-		<th><a href="javascript:tableOrdering('snr','asc','');"><?php echo JText::_('LEAGUE_STAT_TEAMRANKING') ?></a></th>
-<!---		<th><?php echo JHTML::_( 'grid.sort', 'LEAGUE_STAT_TEAMRANKING', 'snr', $this->lists['order_Dir'], $this->lists['order']); ?></th> -->
+		<th><?php echo Text::_('DWZ_NR') ?></th>
+		<th><a href="javascript:tableOrdering('Spielername','asc','');"><?php echo Text::_('LEAGUE_STAT_PLAYER') ?></a></th>
+		<th><?php echo HTMLHelper::_( 'grid.sort', 'LEAGUE_STAT_DWZ', 'DWZ', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+		<th><a href="javascript:tableOrdering('Vereinname','asc','');"><?php echo Text::_('LEAGUE_STAT_CLUB') ?></a></th>
+		<th><a href="javascript:tableOrdering('snr','asc','');"><?php echo Text::_('LEAGUE_STAT_TEAMRANKING') ?></a></th>
+<!---		<th><?php echo HTMLHelper::_( 'grid.sort', 'LEAGUE_STAT_TEAMRANKING', 'snr', $this->lists['order_Dir'], $this->lists['order']); ?></th> -->
 		<?php for ($xx=1; $xx < 7; $xx++) {   //max. 6 Spalten
 			//if ($params['btiebr'.$xx] == 1) { $hstring = 'LEAGUE_STAT_PLAYERPOINTS'; $vstring = 'gpunkte'; }
 			if ($params['btiebr'.$xx] == 1) { $hstring = 'LEAGUE_STAT_PLAYERPOINTS'; $vstring = 'Punkte'; }
@@ -110,7 +114,7 @@ else { $plink = '&saison=' . $sid . '&liga='. $lid .'&layout=bestenliste' ;  } ?
 			elseif ($params['btiebr'.$xx] == 8) { $hstring = 'LEAGUE_STAT_PERCENT_K'; $vstring = 'eprozent'; $ey = 1; }
 			elseif ($params['btiebr'.$xx] == 9) { $hstring = 'LEAGUE_STAT_BNUMBERS'; $vstring = 'ebrett'; }
 			if ($params['btiebr'.$xx] > 0) { ?>
-		<th align="center"><?php echo JHTML::_( 'grid.sort', $hstring, $vstring, $this->lists['order_Dir'], $this->lists['order']); ?></th>
+		<th align="center"><?php echo HTMLHelper::_( 'grid.sort', $hstring, $vstring, $this->lists['order_Dir'], $this->lists['order']); ?></th>
 			<?php } } ?>
 	</tr>
 <?php 
@@ -153,9 +157,9 @@ $ex = 0; $ey = 0;
 <input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
 <input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />
 </form>
-<div class="hint"><?php echo JText::_('LEAGUE_RATING_COMMENT') ?></div>
-<?php if($ex >0) { ?><div class="hint"><?php echo JText::_('LEAGUE_RATING_IMPOSSIBLE'); ?></div><?php } ?>
-<?php if($ey >0) { ?><div class="hint"><?php echo JText::_('LEAGUE_WITH_UNCONTESTED'); ?></div><?php } ?>
+<div class="hint"><?php echo Text::_('LEAGUE_RATING_COMMENT') ?></div>
+<?php if($ex >0) { ?><div class="hint"><?php echo Text::_('LEAGUE_RATING_IMPOSSIBLE'); ?></div><?php } ?>
+<?php if($ey >0) { ?><div class="hint"><?php echo Text::_('LEAGUE_WITH_UNCONTESTED'); ?></div><?php } ?>
 <?php } ?>
 
 </div>

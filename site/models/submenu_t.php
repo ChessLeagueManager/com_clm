@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2020 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,11 +12,13 @@
 
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Factory;
+
 	// Sonderranglisten
 	$turnierid = clm_core::$load->request_int('turnier', 0);
 	$spRang = clm_core::$load->request_int('spRang', 0); 	
 	
-    $db	= JFactory::getDBO();
+    $db	= Factory::getDBO();
         
     $query = "	SELECT 
 					`id`, `name`
@@ -33,7 +35,7 @@ defined('_JEXEC') or die();
 	// Runden
 	$turnierid = clm_core::$load->request_int('turnier', 0);
 	
-    $db	= JFactory::getDBO();
+    $db	= Factory::getDBO();
         
     $query = "	SELECT 
 					`dg`, `nr`, `name`

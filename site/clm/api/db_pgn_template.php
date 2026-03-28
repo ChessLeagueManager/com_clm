@@ -7,6 +7,8 @@
  *
  * erstellt pgn-Template einer Runde eines Mannschafts- oder Einzelturniers
 */
+use Joomla\CMS\Language\Text;
+
 function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true,$paar=0) {
  	$lang = clm_core::$lang->pgn;
 	$id = clm_core::$load->make_valid($id, 0, -1);
@@ -164,7 +166,7 @@ function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true,$paar=0) {
 		 	fputs($pdatei, '[Event "'.'"]'.$nl);
 		}
 		fputs($pdatei, '[Site "?"]'.$nl);
-//		fputs($pdatei, '[Date "'.JHTML::_('date',  $liga[$runde-1]->datum, JText::_('Y.m.d')).'"]'.$nl);
+//		fputs($pdatei, '[Date "'.HTMLHelper::_('date',  $liga[$runde-1]->datum, Text::_('Y.m.d')).'"]'.$nl);
 		fputs($pdatei, '[Date "'.clm_core::$cms->showDate($runde->datum, 'Y.m.d').'"]'.$nl);
 		fputs($pdatei, '[Round "'.$round.'.'.$einz->paar.'"]'.$nl);
 		fputs($pdatei, '[Board "'.$einz->brett.'"]'.$nl);
@@ -220,7 +222,7 @@ function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true,$paar=0) {
 			$resulthint = "";
 			fputs($pdatei, '[Event "'.clm_core::$load->utf8decode($turnier->name).'"]'.$nl);
 			fputs($pdatei, '[Site "?"]'.$nl);
-			//fputs($pdatei, '[Date "'.JHTML::_('date',  $runde->datum, JText::_('Y.m.d')).'"]'.$nl);
+			//fputs($pdatei, '[Date "'.HTMLHelper::_('date',  $runde->datum, Text::_('Y.m.d')).'"]'.$nl);
 			fputs($pdatei, '[Date "'.clm_core::$cms->showDate($runde->datum, 'Y.m.d').'"]'.$nl);
 			fputs($pdatei, '[Round "'.$runde->nr.'"]'.$nl);
 			fputs($pdatei, '[Board "'.$value->brett.'"]'.$nl);
@@ -246,8 +248,8 @@ function clm_api_db_pgn_template($id,$dg,$round,$type,$group=true,$paar=0) {
 			elseif ($value->ergebnis == "6") { fputs($pdatei, '[Result "*"]'.$nl); $resulthint = "{".clm_core::$load->utf8decode($lang->nobody)."}"; $gtmarker = "*"; }
 			else fputs($pdatei, '[Result "'.$value->ergebnis.'"]'.$nl);		
 			fputs($pdatei, '[PlyCount "0"]'.$nl);
-			//fputs($pdatei, '[EventDate "'.JHTML::_('date',  $turnier->dateStart, JText::_('Y.m.d')).'"]'.$nl);
-			//fputs($pdatei, '[SourceDate "'.JHTML::_('date',  $runde->datum, JText::_('Y.m.d')).'"]'.$nl);
+			//fputs($pdatei, '[EventDate "'.HTMLHelper::_('date',  $turnier->dateStart, Text::_('Y.m.d')).'"]'.$nl);
+			//fputs($pdatei, '[SourceDate "'.HTMLHelper::_('date',  $runde->datum, Text::_('Y.m.d')).'"]'.$nl);
 			fputs($pdatei, '[EventDate "'.clm_core::$cms->showDate($turnier->dateStart, 'Y.m.d').'"]'.$nl);
 			fputs($pdatei, '[SourceDate "'.clm_core::$cms->showDate($runde->datum, 'Y.m.d').'"]'.$nl);
 			fputs($pdatei, ' '.$nl);

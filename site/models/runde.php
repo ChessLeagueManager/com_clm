@@ -12,13 +12,15 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
+use Joomla\CMS\Factory;
+
 class CLMModelRunde extends JModelLegacy
 {
 	function _getCLMLiga( &$options )
 	{
 	$sid	= clm_core::$load->request_int('saison',0);
 	$liga	= clm_core::$load->request_int('liga',0);
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
  
 		$query = " SELECT a.*, r.datum, r.startzeit, r.enddatum, r.name as rname, r.bemerkungen as comment, r.published as pub,"
@@ -46,7 +48,7 @@ class CLMModelRunde extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison',0);
 	$liga	= clm_core::$load->request_int('liga',0);
 		// TODO: Cache on the fingerprint of the arguments
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = " SELECT * FROM #__clm_mannschaften "
@@ -71,7 +73,7 @@ class CLMModelRunde extends JModelLegacy
 	$dg 	= clm_core::$load->request_int('dg');
 	$runde = clm_core::$load->request_int('runde');
 
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
 
 	$query = " SELECT a.*,g.id as gid, g.name as gname, g.tln_nr as gtln,g.published as gpublished, g.rankingpos as grank, "
@@ -114,7 +116,7 @@ class CLMModelRunde extends JModelLegacy
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
 
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 
 	$query = " SELECT rang "
 		." FROM #__clm_liga as a "
@@ -205,7 +207,7 @@ class CLMModelRunde extends JModelLegacy
 	$dg 	= clm_core::$load->request_int('dg');
 	$runde = clm_core::$load->request_int('runde');
 
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
 
 	$query = " SELECT u.name,a.paar as paarung,a.runde as runde,a.brettpunkte as sum, dwz_editor "
@@ -228,7 +230,7 @@ class CLMModelRunde extends JModelLegacy
 
 	function _getCLMOK ( &$options )
 	{
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
 
 	$sid	= clm_core::$load->request_int('saison',1);
@@ -268,7 +270,7 @@ class CLMModelRunde extends JModelLegacy
 	{
 	$sid	= clm_core::$load->request_int('saison',1);
 	$liga	= clm_core::$load->request_int('liga',1);
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
  
 		$query = "SELECT COUNT(tln_nr) AS count FROM #__clm_mannschaften "
@@ -291,7 +293,7 @@ class CLMModelRunde extends JModelLegacy
 	$liga	= clm_core::$load->request_int('liga',1);
 	$dg 	= clm_core::$load->request_int('dg');
 	$runde = clm_core::$load->request_int('runde');
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
 	// ordering für Rangliste -> Ersatz für direkten Vergleich
 		$query = "SELECT a.order, a.runden, a.durchgang, a.b_wertung, a.liga_mt, a.runden_modus FROM #__clm_liga as a"  
@@ -358,7 +360,7 @@ class CLMModelRunde extends JModelLegacy
 	public static function punkte_tlnr ( $sid, $lid, $tlnr, $dg, $runden_modus )
 	{
 	//defined('_JEXEC') or die('Restricted access'); 
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 	$query = " SELECT a.runde, a.dg, a.tln_nr, a.gegner, a.brettpunkte, m.rankingpos, m.name "
 		." FROM #__clm_rnd_man as a "
 		." LEFT JOIN #__clm_mannschaften AS m ON m.liga = a.lid AND m.tln_nr = a.gegner "
@@ -370,7 +372,7 @@ class CLMModelRunde extends JModelLegacy
 		;
 	if ($runden_modus == 3) $query .= " ORDER BY a.runde";	
 	else $query .= " ORDER BY a.gegner ";
-	$db 	=JFactory::getDBO();
+	$db 	=Factory::getDBO();
 	$db->setQuery( $query );
 	$runden	=$db->loadObjectList();
 	
@@ -388,7 +390,7 @@ class CLMModelRunde extends JModelLegacy
 	$sql = "SELECT a.id, a.erg_text "
 		." FROM #__clm_ergebnis as a "
 		;
-	$db 		=JFactory::getDBO();
+	$db 		=Factory::getDBO();
 	$db->setQuery( $sql );
 	$ergebnis	= $db->loadObjectList();
 
@@ -426,7 +428,7 @@ class CLMModelRunde extends JModelLegacy
 	$dg 	= clm_core::$load->request_int('dg');
 	$runde = clm_core::$load->request_int('runde');
 	
-	$db			= JFactory::getDBO();
+	$db			= Factory::getDBO();
 //	$id			= @$options['id'];
 
 	// Anz.Runden und Durchgänge aus #__clm_liga holen
@@ -442,7 +444,7 @@ class CLMModelRunde extends JModelLegacy
 		$runde = 1;
 	} else $runde++;
 
-	$db			= JFactory::getDBO();
+	$db			= Factory::getDBO();
 //	$id			= @$options['id'];
 
 	$query = " SELECT a.*,g.id as gid, g.name as gname, g.tln_nr as gtln,g.published as gpublished, "
@@ -474,11 +476,11 @@ class CLMModelRunde extends JModelLegacy
 	
 	function _getCLMClmuser ( &$options )
 	{
-	$user	= JFactory::getUser();
+	$user	= Factory::getUser();
 	$jid	= $user->get('id');
 	$sid	= clm_core::$load->request_int('saison',1);
 
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 //		$id	= @$options['id'];
 
 	$query	= "SELECT zps,published "
@@ -498,7 +500,7 @@ class CLMModelRunde extends JModelLegacy
 
 	public static function team_tlnr ( $lid, $tlnr )
 	{
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 	$query = " SELECT rang "
 		." FROM #__clm_liga as a "
 		." WHERE a.id = ".$lid
@@ -529,7 +531,7 @@ class CLMModelRunde extends JModelLegacy
 		." ORDER BY m.snr "
 		;
 		
-	$db 	=JFactory::getDBO();
+	$db 	=Factory::getDBO();
 	$db->setQuery( $query );
 	$team	=$db->loadObjectList();
 	
@@ -543,7 +545,7 @@ class CLMModelRunde extends JModelLegacy
 		$dg 	= clm_core::$load->request_int('dg');
 		$runde = clm_core::$load->request_int('runde');
 	
-		$db		= JFactory::getDBO();
+		$db		= Factory::getDBO();
 		$query = " SELECT a.tln_nr,a.dg,a.runde,a.paar,a.ergebnis "
 				." FROM #__clm_rnd_spl as a "
 				." WHERE a.lid = ".$liga

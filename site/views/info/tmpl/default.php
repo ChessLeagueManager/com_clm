@@ -1,15 +1,19 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 $saison		= $this->saison;
 $sid 		= $saison[0]->id;
@@ -18,13 +22,13 @@ $itemid 	= clm_core::$load->request_int('Itemid');
 $sql = ' SELECT `sieg`, `remis`, `nieder`, `antritt`, `man_sieg`, `man_remis`, `man_nieder`, `man_antritt`'
 		. ' FROM #__clm_liga'
 		. ' WHERE `sid` = "' . $sid . '"';
-$db =JFactory::getDBO ();
+$db =Factory::getDBO ();
 $db->setQuery ($sql);
 $saisonpunkte = $db->loadObjectList ();
 if (isset($saisonpunkte[0])) $ligapunkte = $saisonpunkte[0];
 
-if ($saison[0]->dsb_datum  > 0) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $saison[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F'));  
-if (($saison[0]->dsb_datum == 0) || (!isset($saison))) $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_UNCLEAR');  
+if ($saison[0]->dsb_datum  > 0) $hint_dwzdsb = Text::_('DWZ_DSB_COMMENT_RUN').' '.clm_core::$load->utf8decode(Text::_('ON_DAY')).' '.HTMLHelper::_('date',  $saison[0]->dsb_datum, Text::_('DATE_FORMAT_CLM_F'));  
+if (($saison[0]->dsb_datum == 0) || (!isset($saison))) $hint_dwzdsb = Text::_('DWZ_DSB_COMMENT_UNCLEAR');  
 
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
@@ -35,11 +39,11 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 <div id="info">
 <?php
 	// Browsertitelzeile setzen
-	$doc =JFactory::getDocument();
-	$doc->setTitle(JText::_('SEASON_STATISTIK').' '.$saison[0]->name);
+	$doc =Factory::getDocument();
+	$doc->setTitle(Text::_('SEASON_STATISTIK').' '.$saison[0]->name);
 ?>
 <div class="componentheading">
-<?php echo JText::_('SEASON_STATISTIK') ?> <?php echo $saison[0]->name; ?></div>
+<?php echo Text::_('SEASON_STATISTIK') ?> <?php echo $saison[0]->name; ?></div>
 <div class="clr"></div>
 
 <?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php'); ?>
@@ -47,7 +51,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 <?php 
 $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
-	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+	echo "<div id='wrong'>".Text::_('NO_ACCESS')."<br>".Text::_('NOT_REGISTERED')."</div>";
 }
 else {
 $remis		= $this->remis;
@@ -66,44 +70,44 @@ $kbrett		= $this->kbrett;
 <div id="desc">
 <?php if ($saison[0]->bemerkungen <> "") { ?>
 
-<b><?php echo JText::_('SEASON_STAT_ADMIN') ?></b><br>
+<b><?php echo Text::_('SEASON_STAT_ADMIN') ?></b><br>
 <?php echo nl2br($saison[0]->bemerkungen); ?>
 <?php } ?>
 </div>
 
 <?php if (count($mannschaft) > 0) { ?>
-<h4><?php echo JText::_('SEASON_STAT_ALL') ?></h4>
+<h4><?php echo Text::_('SEASON_STAT_ALL') ?></h4>
 <?php if (!$spieler) {
-echo "<div id='wrong'>" . JText::_('SEASON_NO_GAMES') ."</div>";  }
+echo "<div id='wrong'>" . Text::_('SEASON_NO_GAMES') ."</div>";  }
 else { ?>
 <?php $bretter = CLMModelInfo::Bretter(); ?>
 
 
 <table cellpadding="0" cellspacing="0" class="info">
 	<tr>
-		<th><?php echo JText::_('SEASON_STAT_BRETT') ?></th>
-		<th colspan="5"><?php echo JText::_('SEASON_STAT_POINTS') ?></th>
-		<th colspan="2"><?php echo JText::_('SEASON_STAT_WHITE') ?></th>
-		<th colspan="2"><?php echo JText::_('SEASON_STAT_BLACK') ?></th>
-		<th colspan="2"><?php echo JText::_('SEASON_STAT_REMIS') ?></th>
-		<th colspan="2"><?php echo JText::_('SEASON_STAT_UNCONTESTED') ?></th>
+		<th><?php echo Text::_('SEASON_STAT_BRETT') ?></th>
+		<th colspan="5"><?php echo Text::_('SEASON_STAT_POINTS') ?></th>
+		<th colspan="2"><?php echo Text::_('SEASON_STAT_WHITE') ?></th>
+		<th colspan="2"><?php echo Text::_('SEASON_STAT_BLACK') ?></th>
+		<th colspan="2"><?php echo Text::_('SEASON_STAT_REMIS') ?></th>
+		<th colspan="2"><?php echo Text::_('SEASON_STAT_UNCONTESTED') ?></th>
 	</tr>
 	
 	<tr class="anfang">
 		<td align="center"></td>
-		<td class="punkte clmborder"><?php echo JText::_('SEASON_STAT_SUM') ?></td>
-		<td class="punkte"><?php echo JText::_('SEASON_STAT_HOME') ?></td>
-		<td class="punkte"><?php echo JText::_('SEASON_STAT_PERCENT') ?></td>
-		<td class="punkte"><?php echo JText::_('SEASON_STAT_GUEST') ?></td>
-		<td class="punkte"><?php echo JText::_('SEASON_STAT_PERCENT') ?></td>
-		<td class="white clmborder"><?php echo JText::_('SEASON_STAT_QUANTITY') ?></td>
-		<td class="white"><?php echo JText::_('SEASON_STAT_PERCENT') ?></td>
-		<td class="black clmborder"><?php echo JText::_('SEASON_STAT_QUANTITY') ?></td>
-		<td class="black"><?php echo JText::_('SEASON_STAT_PERCENT') ?></td>
-		<td class="remis clmborder"><?php echo JText::_('SEASON_STAT_QUANTITY') ?></td>
-		<td class="remis"><?php echo JText::_('SEASON_STAT_PERCENT') ?></td>
-		<td class="kampflos clmborder"><?php echo JText::_('SEASON_STAT_QUANTITY') ?></td>
-		<td class="kampflos"><?php echo JText::_('SEASON_STAT_PERCENT') ?></td>
+		<td class="punkte clmborder"><?php echo Text::_('SEASON_STAT_SUM') ?></td>
+		<td class="punkte"><?php echo Text::_('SEASON_STAT_HOME') ?></td>
+		<td class="punkte"><?php echo Text::_('SEASON_STAT_PERCENT') ?></td>
+		<td class="punkte"><?php echo Text::_('SEASON_STAT_GUEST') ?></td>
+		<td class="punkte"><?php echo Text::_('SEASON_STAT_PERCENT') ?></td>
+		<td class="white clmborder"><?php echo Text::_('SEASON_STAT_QUANTITY') ?></td>
+		<td class="white"><?php echo Text::_('SEASON_STAT_PERCENT') ?></td>
+		<td class="black clmborder"><?php echo Text::_('SEASON_STAT_QUANTITY') ?></td>
+		<td class="black"><?php echo Text::_('SEASON_STAT_PERCENT') ?></td>
+		<td class="remis clmborder"><?php echo Text::_('SEASON_STAT_QUANTITY') ?></td>
+		<td class="remis"><?php echo Text::_('SEASON_STAT_PERCENT') ?></td>
+		<td class="kampflos clmborder"><?php echo Text::_('SEASON_STAT_QUANTITY') ?></td>
+		<td class="kampflos"><?php echo Text::_('SEASON_STAT_PERCENT') ?></td>
 	</tr>
 
 <?php 
@@ -216,20 +220,20 @@ $sum_schwarz = 0;
 
 <br>
 <?php $count = count($spieler); $ex = 0; ?>
-<h4><?php echo JText::_('SEASON_RATING_BEST_PLAYER_I') ?> <?php if ($count < 10 AND $count >0) { echo $count; } else { ?> 10<?php } ?> <?php echo JText::_('SEASON_RATING_BEST_PLAYER_II') ?></h4>
+<h4><?php echo Text::_('SEASON_RATING_BEST_PLAYER_I') ?> <?php if ($count < 10 AND $count >0) { echo $count; } else { ?> 10<?php } ?> <?php echo Text::_('SEASON_RATING_BEST_PLAYER_II') ?></h4>
 <?php if (!$spieler) { ?>
-<?php echo "<div id='wrong'>" .JText::_('SEASON_NO_GAMES') ."</div>" ?>
+<?php echo "<div id='wrong'>" .Text::_('SEASON_NO_GAMES') ."</div>" ?>
 
 <?php } else { ?>
 <table cellpadding="0" cellspacing="0" class="info">
 	<tr>
-		<th><?php echo JText::_('DWZ_NR') ?></th>
-		<th><?php echo JText::_('DWZ_NAME') ?></th>
-		<th><a title="<?php echo $hint_dwzdsb; ?>"><?php echo JText::_('SEASON_STAT_DWZ') //klkl ?></a></th>
-		<th><?php echo JText::_('SEASON_STAT_CLUB') ?></th>
-		<th><?php echo JText::_('DWZ_POINTS') ?></th>
-		<th><?php echo JText::_('DWZ_LEVEL') ?></th>
-		<th><?php echo JText::_('SEASON_STAT_RATING') ?></th>
+		<th><?php echo Text::_('DWZ_NR') ?></th>
+		<th><?php echo Text::_('DWZ_NAME') ?></th>
+		<th><a title="<?php echo $hint_dwzdsb; ?>"><?php echo Text::_('SEASON_STAT_DWZ') //klkl ?></a></th>
+		<th><?php echo Text::_('SEASON_STAT_CLUB') ?></th>
+		<th><?php echo Text::_('DWZ_POINTS') ?></th>
+		<th><?php echo Text::_('DWZ_LEVEL') ?></th>
+		<th><?php echo Text::_('SEASON_STAT_RATING') ?></th>
 	</tr>
 
 <?php
@@ -251,33 +255,33 @@ if ($count < 10) { $a = $count; }
 <?php } ?>
 </table>
 
-<div class="hint"><?php echo JText::_('LEAGUE_RATING_COMMENT') ?></div>
-<?php if($ex >0) { ?><div class="hint"><?php echo JText::_('SEASON_RATING_IMPOSSIBLE') ?></div><?php }}
+<div class="hint"><?php echo Text::_('LEAGUE_RATING_COMMENT') ?></div>
+<?php if($ex >0) { ?><div class="hint"><?php echo Text::_('SEASON_RATING_IMPOSSIBLE') ?></div><?php }}
 if(isset($spieler[9]->Punkte)){ $punkte = CLMModelInfo::checkSpieler($spieler[9]->Punkte); }
 else { $punkte = 0; }
 if ($punkte == 11) {
 ?>
-<div class="hint">** <?php echo JText::_('SEASON_RATING_ONE_MORE') ?> <?php echo $spieler[9]->Punkte; ?></div>
+<div class="hint">** <?php echo Text::_('SEASON_RATING_ONE_MORE') ?> <?php echo $spieler[9]->Punkte; ?></div>
 <?php } if ($punkte > 11) { ?>
-<div class="hint">** <?php echo JText::_('SEASON_RATING_MORE_I') ?> <?php echo $punkte-10; ?> <?php echo JText::_('SEASON_RATING_MORE_II') ?> <?php echo $spieler[9]->Punkte; ?></div>
+<div class="hint">** <?php echo Text::_('SEASON_RATING_MORE_I') ?> <?php echo $punkte-10; ?> <?php echo Text::_('SEASON_RATING_MORE_II') ?> <?php echo $spieler[9]->Punkte; ?></div>
 <?php } ?>
 
 <br>
-<h4><?php echo JText::_('SEASON_RATING_BEST_TEAM_I') ?> <?php if (count($mannschaft) < 5 AND count($mannschaft) > 0) { echo count($mannschaft); $counter = count($mannschaft);} else { ?>5<?php $counter =5 ;} ?> <?php echo JText::_('SEASON_RATING_BEST_TEAM_II') ?></h4>
+<h4><?php echo Text::_('SEASON_RATING_BEST_TEAM_I') ?> <?php if (count($mannschaft) < 5 AND count($mannschaft) > 0) { echo count($mannschaft); $counter = count($mannschaft);} else { ?>5<?php $counter =5 ;} ?> <?php echo Text::_('SEASON_RATING_BEST_TEAM_II') ?></h4>
 
 <?php if (!$mannschaft OR !$spieler) { ?>
-<div id="wrong"><?php echo JText::_('SEASON_NO_GAMES') ?></div>
+<div id="wrong"><?php echo Text::_('SEASON_NO_GAMES') ?></div>
 
 <?php } else { ?>
 <table cellpadding="0" cellspacing="0" class="info">
 	<tr>
-		<th><?php echo JText::_('DWZ_NR') ?></th>
-		<th><?php echo JText::_('DWZ_NAME') ?></th>
-		<th><?php echo JText::_('SEASON_STAT_LEAGUE') ?></th>
-		<th><?php echo JText::_('SEASON_STAT_TEAM_POINTS') ?></th>
-		<th><?php echo JText::_('SEASON_STAT_TEAM_POINTS_PERCENT') ?></th>
-		<th><?php echo JText::_('SEASON_STAT_BOARD_POINTS') ?></th>
-		<th><?php echo JText::_('SEASON_STAT_BOARD_POINTS_PERCENT') ?></th>
+		<th><?php echo Text::_('DWZ_NR') ?></th>
+		<th><?php echo Text::_('DWZ_NAME') ?></th>
+		<th><?php echo Text::_('SEASON_STAT_LEAGUE') ?></th>
+		<th><?php echo Text::_('SEASON_STAT_TEAM_POINTS') ?></th>
+		<th><?php echo Text::_('SEASON_STAT_TEAM_POINTS_PERCENT') ?></th>
+		<th><?php echo Text::_('SEASON_STAT_BOARD_POINTS') ?></th>
+		<th><?php echo Text::_('SEASON_STAT_BOARD_POINTS_PERCENT') ?></th>
 	</tr>
 
 <?php for ($x=0; $x < $counter; $x++) {
@@ -303,9 +307,9 @@ if ($punkte == 11) {
 		else { break; }
 		}
 if ($count == 1) { ?>
-<div class="hint">* <?php echo JText::_('SEASON_RATING_MORE_TEAM_I') ?> <?php echo $mannschaft[4]->mp; ?>  <?php echo JText::_('SEASON_RATING_MORE_TEAM_II') ?></div>
+<div class="hint">* <?php echo Text::_('SEASON_RATING_MORE_TEAM_I') ?> <?php echo $mannschaft[4]->mp; ?>  <?php echo Text::_('SEASON_RATING_MORE_TEAM_II') ?></div>
 <?php } if ($count > 1) { ?>
-<div class="hint">* <?php echo JText::_('SEASON_RATING_MORE_I') ?> <?php echo $count; ?> <?php echo JText::_('SEASON_RATING_MORE_TEAMS') ?> <?php echo $mannschaft[4]->mp; ?>  <?php echo JText::_('SEASON_RATING_MORE_TEAM_II') ?></div>
+<div class="hint">* <?php echo Text::_('SEASON_RATING_MORE_I') ?> <?php echo $count; ?> <?php echo Text::_('SEASON_RATING_MORE_TEAMS') ?> <?php echo $mannschaft[4]->mp; ?>  <?php echo Text::_('SEASON_RATING_MORE_TEAM_II') ?></div>
 <?php } ?>
 
 <?php }   // count mannschaft?> 
@@ -313,7 +317,7 @@ if ($count == 1) { ?>
 <br>
 <?php echo '<div class="hint">'.$hint_dwzdsb.'</div>'; ?>
 <?php } else { 
-//echo "<div id='wrong'>" . JText::_('SEASON_NO_LEAGUES') ."</div>";  } 
+//echo "<div id='wrong'>" . Text::_('SEASON_NO_LEAGUES') ."</div>";  } 
 echo "<div>" . ' ' ."</div>";  } ?>
 
 <?php } ?>

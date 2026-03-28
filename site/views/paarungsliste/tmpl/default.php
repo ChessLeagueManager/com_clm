@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,6 +12,10 @@
 defined('_JEXEC') or die('Restricted access');
 
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 $lid		= clm_core::$load->request_int('liga',0); 
 $sid		= clm_core::$load->request_int('saison',0);
@@ -45,7 +49,7 @@ $arbiter 	= $this->arbiter;
 if(isset($liga[0])){
 	$runden_modus = $liga[0]->runden_modus;
 	if ($sid == 0) {
-		$db	= JFactory::getDBO();
+		$db	= Factory::getDBO();
 		$query = " SELECT a.* FROM #__clm_liga as a"
 				." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 				." WHERE a.id = ".$lid
@@ -62,10 +66,10 @@ if(isset($liga[0])){
 	$runde_t = $liga[0]->runden + 1;  
 	// Test alte/neue Standardrundenname bei 2 Durchgängen
 	if ($liga[0]->durchgang > 1) {
-		if ($termin[$runde_t-1]->name == JText::_('ROUND').' '.$runde_t) {  //alt
+		if ($termin[$runde_t-1]->name == Text::_('ROUND').' '.$runde_t) {  //alt
 			for ($xr=0; $xr< ($liga[0]->runden); $xr++) { 
-					$termin[$xr]->name = JText::_('ROUND').' '.($xr+1)." (".JText::_('PAAR_HIN').")";
-					$termin[$xr+$liga[0]->runden]->name = JText::_('ROUND').' '.($xr+1)." (".JText::_('PAAR_RUECK').")";
+					$termin[$xr]->name = Text::_('ROUND').' '.($xr+1)." (".Text::_('PAAR_HIN').")";
+					$termin[$xr+$liga[0]->runden]->name = Text::_('ROUND').' '.($xr+1)." (".Text::_('PAAR_RUECK').")";
 			}
 		}
 	}
@@ -78,11 +82,11 @@ if(isset($liga[0])){
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 
 // Browsertitelzeile setzen
-$doc =JFactory::getDocument();
+$doc =Factory::getDocument();
 if(isset($liga[0])){
-	$doc->setTitle(JText::_('PAAR_OVERVIEW').' '.$liga[0]->name);
+	$doc->setTitle(Text::_('PAAR_OVERVIEW').' '.$liga[0]->name);
 } else {
-	$doc->setTitle(JText::_('PAAR_OVERVIEW'));
+	$doc->setTitle(Text::_('PAAR_OVERVIEW'));
 }
 
 // Konfigurationsparameter auslesen
@@ -98,27 +102,27 @@ $countryversion	= $config->countryversion;
 
 $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
-	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+	echo "<div id='wrong'>".Text::_('NO_ACCESS')."<br>".Text::_('NOT_REGISTERED')."</div>";
 }
 // existiert die Liga
 elseif (!$liga) {	
-	echo "<div id='wrong'>".JText::_('NOT_EXIST')." (".$lid.")<br>".JText::_('GEDULDA')."</div>";
+	echo "<div id='wrong'>".Text::_('NOT_EXIST')." (".$lid.")<br>".Text::_('GEDULDA')."</div>";
 }
 // schon veröffentlicht
 elseif ($liga[0]->published == "0") {	
-	echo "<div id='wrong'>".JText::_('NOT_PUBLISHED')."<br>".JText::_('GEDULD')."</div>";
+	echo "<div id='wrong'>".Text::_('NOT_PUBLISHED')."<br>".Text::_('GEDULD')."</div>";
 
 } else { 
 ?>
 <div class="componentheading">
-<?php echo JText::_('PAAR_OVERVIEW') ?> : <?php if(isset($liga[0])){ echo $liga[0]->name; } ?>
+<?php echo Text::_('PAAR_OVERVIEW') ?> : <?php if(isset($liga[0])){ echo $liga[0]->name; } ?>
 
 <div id="pdf">
 <?php
-echo CLMContent::createPDFLink('paarungsliste', JText::_('PDF_PAAR'), array('saison' => $sid, 'layout' => 'paar', 'saison' => $liga[0]->sid, 'liga' => $liga[0]->id));
+echo CLMContent::createPDFLink('paarungsliste', Text::_('PDF_PAAR'), array('saison' => $sid, 'layout' => 'paar', 'saison' => $liga[0]->sid, 'liga' => $liga[0]->id));
 if ($countryversion == 'en')
-	echo clm_core::$load->create_link_xls('paarungsliste', JText::_('CSV_PAAR'), array('layout' => 'paarungsliste', 'liga' => $liga[0]->id));
-echo CLMContent::createICSLink('paarungsliste', JText::_('ICS_TERM'), array('saison' => $sid, 'layout' => 'ics', 'saison' => $liga[0]->sid, 'liga' => $liga[0]->id));
+	echo clm_core::$load->create_link_xls('paarungsliste', Text::_('CSV_PAAR'), array('layout' => 'paarungsliste', 'liga' => $liga[0]->id));
+echo CLMContent::createICSLink('paarungsliste', Text::_('ICS_TERM'), array('saison' => $sid, 'layout' => 'ics', 'saison' => $liga[0]->sid, 'liga' => $liga[0]->id));
 ?>
 </div></div>
 <div class="clr"></div>
@@ -143,8 +147,8 @@ echo CLMContent::createICSLink('paarungsliste', JText::_('ICS_TERM'), array('sai
     
     <?php if ( $liga[0]->sl <> "" ) { ?>
     <div class="ran_chief">
-        <div class="ran_chief_left"><?php echo JText::_('CHIEF') ?></div>
-        <div class="ran_chief_right"><?php echo $liga[0]->sl; ?> | <?php echo JHTML::_( 'email.cloak', $liga[0]->email ); ?></div>	
+        <div class="ran_chief_left"><?php echo Text::_('CHIEF') ?></div>
+        <div class="ran_chief_right"><?php echo $liga[0]->sl; ?> | <?php echo HTMLHelper::_( 'email.cloak', $liga[0]->email ); ?></div>	
 	</div>
 	<div class="clr"></div>
     <?php  } ?>
@@ -152,7 +156,7 @@ echo CLMContent::createICSLink('paarungsliste', JText::_('ICS_TERM'), array('sai
     <?php // Kommentare zur Liga
     if ($liga[0]->bemerkungen <> "") { ?>
     <div class="ran_note">
-        <div class="ran_note_left"><?php echo JText::_('NOTICE_SL') ?></div>
+        <div class="ran_note_left"><?php echo Text::_('NOTICE_SL') ?></div>
         <div class="ran_note_right"><?php echo nl2br($liga[0]->bemerkungen); ?></div>
     </div>
     <div class="clr"></div>
@@ -171,8 +175,8 @@ $rund_sum=0;
 $term = 0;
 
 for ($xx=0; $xx< ($liga[0]->durchgang); $xx++){
-if ( $liga[0]->durchgang == 2 AND $xx == 0) { ?><h4><?php echo JText::_('PAAR_HIN') ?></h4><?php }
-if ( $liga[0]->durchgang == 2 AND $xx == 1) { ?><br><h4><?php echo JText::_('PAAR_RUECK') ?></h4><?php } 
+if ( $liga[0]->durchgang == 2 AND $xx == 0) { ?><h4><?php echo Text::_('PAAR_HIN') ?></h4><?php }
+if ( $liga[0]->durchgang == 2 AND $xx == 1) { ?><br><h4><?php echo Text::_('PAAR_RUECK') ?></h4><?php } 
 if ( $liga[0]->durchgang > 2 AND $xx > 0) { ?><br><?php } ?>
 
 <?php for ($x=0; $x< ($liga[0]->runden); $x++){
@@ -194,15 +198,15 @@ if ($termin[$term]->published =="1") { ?>
 		<div class="left" style="width: 70%;">
 		<?php 
 		if ($termin[$term]->bemerkungen <> "") { ?>
-			<span class="editlinktip hasTip"><img src="<?php echo CLMImage::imageURL('con_info.png'); ?>" class="CLMTooltip" title="<?php echo JText::_( 'CHIEF_NOTE') ?>" /></span><?php }
+			<span class="editlinktip hasTip"><img src="<?php echo CLMImage::imageURL('con_info.png'); ?>" class="CLMTooltip" title="<?php echo Text::_( 'CHIEF_NOTE') ?>" /></span><?php }
 		// Wenn SL_OK dann Haken anzeigen
 		if ($rundensumme[$rund_sum]->sl_ok > 0) { ?>
-			<span class="editlinktip hasTip"><img  src="<?php echo CLMImage::imageURL('accept.png'); ?>" class="CLMTooltip" title="<?php echo JText::_( 'CHIEF_OK') ?>" /></span><?php } ?>
+			<span class="editlinktip hasTip"><img  src="<?php echo CLMImage::imageURL('accept.png'); ?>" class="CLMTooltip" title="<?php echo Text::_( 'CHIEF_OK') ?>" /></span><?php } ?>
 		<b>&nbsp;<?php if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1+ (($xx)*$liga[0]->runden)) ) { 
-			if ($termin[$term]->datum > 0) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); 
+			if ($termin[$term]->datum > 0) { echo HTMLHelper::_('date',  $termin[$term]->datum, Text::_('DATE_FORMAT_CLM_F')); 
 			if($params['round_date'] == '0' and isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { echo '  '.substr($termin[$term]->startzeit,0,5); }
 			if($params['round_date'] == '1' and isset($termin[$term]->enddatum) and $termin[$term]->enddatum > '1970-01-01' and $termin[$term]->enddatum != $termin[$term]->datum) { 
-						echo ' - '.JHTML::_('date',  $termin[$term]->enddatum, JText::_('DATE_FORMAT_CLM_F')); }
+						echo ' - '.HTMLHelper::_('date',  $termin[$term]->enddatum, Text::_('DATE_FORMAT_CLM_F')); }
 			} $term++;  }
 			else {  }?></b>
 		</div>
@@ -227,23 +231,23 @@ if ($termin[$term]->published =="1") { ?>
 </div>
 </td></tr>
 <tr>
-	<th class="paar"><?php echo JText::_('PAAR') ?></th>
+	<th class="paar"><?php echo Text::_('PAAR') ?></th>
 	<?php if ($fe_runde_tln =="1") { ?>
-	<th class="tln"><?php echo JText::_('TLN') ?></th>
+	<th class="tln"><?php echo Text::_('TLN') ?></th>
     <?php } ?>
-	<th class="heim"><?php echo JText::_('HOME') ?></th>
-	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
-	<th class="erg"><?php echo JText::_('RESULT') ?></th>
+	<th class="heim"><?php echo Text::_('HOME') ?></th>
+	<th class="dwz"><?php echo Text::_('DWZ') ?></th>
+	<th class="erg"><?php echo Text::_('RESULT') ?></th>
 	<?php if ($fe_runde_tln =="1") { ?>
-	<th class="tln"><?php echo JText::_('TLN') ?></th>
+	<th class="tln"><?php echo Text::_('TLN') ?></th>
     <?php } ?>
-	<th class="gast"><?php echo JText::_('GUEST') ?></th>
-	<th class="dwz"><?php echo JText::_('DWZ') ?></th>
+	<th class="gast"><?php echo Text::_('GUEST') ?></th>
+	<th class="dwz"><?php echo Text::_('DWZ') ?></th>
 	<?php if ($params['round_date'] == '1') { ?>
-	<th class="heim"><?php echo JText::_('FIXTURE_DATE') ?></th>
+	<th class="heim"><?php echo Text::_('FIXTURE_DATE') ?></th>
 	<?php } ?>
 	<?php if (count($arbiter) > 0) { ?>
-	<th class="heim"><?php echo JText::_('ARBITER') ?></th>
+	<th class="heim"><?php echo Text::_('ARBITER') ?></th>
 	<?php } ?>
 </tr>
 <?php
@@ -311,7 +315,7 @@ else { echo $paar[$z]->gname; } ?>
 		<td class="heim">
 		<?php 
 			if (isset($paar[$z]->pdate) AND $paar[$z]->pdate > '1970-01-01') {
-			echo JHTML::_('date',  $paar[$z]->pdate, JText::_('DATE_FORMAT_CLM_Y2')); 
+			echo HTMLHelper::_('date',  $paar[$z]->pdate, Text::_('DATE_FORMAT_CLM_Y2')); 
 			if($paar[$z]->ptime > '00:00:00') { echo '  '.substr($paar[$z]->ptime,0,5); } }
 		?>
 	</td>
@@ -332,19 +336,19 @@ if ($remis_com == 1) { $remis_com = 0; ?>
 	<tr class="<?php echo $zeilenr; ?>">
 	<td class="paar"><?php echo $paar[$z]->paar; ?></td>
 	<td colspan ="7"><?php  if ($paar[$z]->ko_decision == 1) {
-									if ($paar[$z]->wertpunkte > $paar[$z]->gwertpunkte) echo JText::_('ROUND_DECISION_WP_HEIM')." ".$paar[$z]->wertpunkte." : ".$paar[$z]->gwertpunkte." für ".$paar[$z]->hname; 
-									else echo JText::_('ROUND_DECISION_WP_GAST')." ".$paar[$z]->gwertpunkte." : ".$paar[$z]->wertpunkte." für ".$paar[$z]->gname; }
-								if ($paar[$z]->ko_decision == 2) echo JText::_('ROUND_DECISION_BLITZ_HEIM')." ".$paar[$z]->hname;
-								if ($paar[$z]->ko_decision == 3) echo JText::_('ROUND_DECISION_BLITZ_GAST')." ".$paar[$z]->gname; 
-								if ($paar[$z]->ko_decision == 4) echo JText::_('ROUND_DECISION_LOS_HEIM')." ".$paar[$z]->hname;
-								if ($paar[$z]->ko_decision == 5) echo JText::_('ROUND_DECISION_LOS_GAST')." ".$paar[$z]->gname; ?>		
+									if ($paar[$z]->wertpunkte > $paar[$z]->gwertpunkte) echo Text::_('ROUND_DECISION_WP_HEIM')." ".$paar[$z]->wertpunkte." : ".$paar[$z]->gwertpunkte." für ".$paar[$z]->hname; 
+									else echo Text::_('ROUND_DECISION_WP_GAST')." ".$paar[$z]->gwertpunkte." : ".$paar[$z]->wertpunkte." für ".$paar[$z]->gname; }
+								if ($paar[$z]->ko_decision == 2) echo Text::_('ROUND_DECISION_BLITZ_HEIM')." ".$paar[$z]->hname;
+								if ($paar[$z]->ko_decision == 3) echo Text::_('ROUND_DECISION_BLITZ_GAST')." ".$paar[$z]->gname; 
+								if ($paar[$z]->ko_decision == 4) echo Text::_('ROUND_DECISION_LOS_HEIM')." ".$paar[$z]->hname;
+								if ($paar[$z]->ko_decision == 5) echo Text::_('ROUND_DECISION_LOS_GAST')." ".$paar[$z]->gname; ?>		
 	</td></tr>
 <?php }  ?>
 
 <?php if ($paar[$z]->comment != "") { ?>
 <tr class="<?php echo $zeilenr; ?>">
 <td class="paar"><?php echo $paar[$z]->paar; ?></td>
-<td colspan ="7"><?php  echo JText::_('PAAR_COMMENT').$paar[$z]->comment; ?>		
+<td colspan ="7"><?php  echo Text::_('PAAR_COMMENT').$paar[$z]->comment; ?>		
 	</td></tr>
 <?php }  ?>
 
@@ -361,14 +365,14 @@ if ($remis_com == 1) { $remis_com = 0; ?>
 if ($rundensumme[$rund_sum]->nr == ($x+1) ) { $rund_sum++; }
 
 	if (isset($termin[$term]) AND $termin[$term]->nr == ($x+1+ (($xx)*$liga[0]->runden)) ) {
-		if ($termin[$term]->datum > 0) { echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); 
+		if ($termin[$term]->datum > 0) { echo HTMLHelper::_('date',  $termin[$term]->datum, Text::_('DATE_FORMAT_CLM_F')); 
 			if($params['round_date'] == '0' and isset($termin[$term]->startzeit) and $termin[$term]->startzeit != '00:00:00') { echo '  '.substr($termin[$term]->startzeit,0,5); }
 			if($params['round_date'] == '1' and isset($termin[$term]->enddatum) and $termin[$term]->enddatum > '1970-01-01' and $termin[$term]->enddatum != $termin[$term]->datum) { 
-						echo ' - '.JHTML::_('date',  $termin[$term]->enddatum, JText::_('DATE_FORMAT_CLM_F')); }
+						echo ' - '.HTMLHelper::_('date',  $termin[$term]->enddatum, Text::_('DATE_FORMAT_CLM_F')); }
 		}
 		$term++;
 	}
-//if ($termin[$term]->datum AND $termin[$term]->nr == ($x+1)) { if ($termin[$term]->datum > 0) echo JHTML::_('date',  $termin[$term]->datum, JText::_('DATE_FORMAT_CLM_F')); $term++;}
+//if ($termin[$term]->datum AND $termin[$term]->nr == ($x+1)) { if ($termin[$term]->datum > 0) echo HTMLHelper::_('date',  $termin[$term]->datum, Text::_('DATE_FORMAT_CLM_F')); $term++;}
  ?>
 </div>
 <div style="text-align: right; padding: 0 10px 0 0;"> <?php echo $termin[$x]->name; ?></div>
@@ -383,7 +387,7 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 	$z++;
 	} ?>
 <tr><td>
-<?php echo CLMContent::clmWarning(JText::_('PAAR_UNPUBLISHED')); ?>
+<?php echo CLMContent::clmWarning(Text::_('PAAR_UNPUBLISHED')); ?>
 </td></tr>
 </table>
 <br>
@@ -392,9 +396,9 @@ for ($y=0; $y< ($liga[0]->teil)/2; $y++){
 } ?>
 
 <div class="legend">
-<p><img src="<?php echo CLMImage::imageURL('accept.png'); ?>" width="16" height="16"/> = <?php echo JText::_('CHIEF_OK') ?></p>
-<p><img  src="<?php echo CLMImage::imageURL('con_info.png'); ?>" width="16" height="16"/> = <?php echo JText::_('CHIEF_NOTE') ?></p>
-<p><img src="<?php echo CLMImage::imageURL('lupe.png'); ?>" width="16" height="16"/> = <?php echo JText::_('CHIEF_DETAIL') ?></p>
+<p><img src="<?php echo CLMImage::imageURL('accept.png'); ?>" width="16" height="16"/> = <?php echo Text::_('CHIEF_OK') ?></p>
+<p><img  src="<?php echo CLMImage::imageURL('con_info.png'); ?>" width="16" height="16"/> = <?php echo Text::_('CHIEF_NOTE') ?></p>
+<p><img src="<?php echo CLMImage::imageURL('lupe.png'); ?>" width="16" height="16"/> = <?php echo Text::_('CHIEF_DETAIL') ?></p>
 </div>
 <br />
 <?php } 

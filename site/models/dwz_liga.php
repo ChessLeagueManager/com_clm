@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,16 +12,19 @@
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.model');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Table\Table;
+
 class CLMModelDWZ_Liga extends JModelLegacy
 {
 	function _getCLMLiga( &$options )
 	{
 	$sid	= clm_core::$load->request_int('saison',1);
 	$lid	= clm_core::$load->request_int('liga',1);
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
 
-	$row	= JTable::getInstance( 'ligen', 'TableCLM' );
+	$row	= Table::getInstance( 'ligen', 'TableCLM' );
 	$row->load( $lid );
 
 // Konfigurationsparameter auslesen
@@ -76,7 +79,7 @@ $countryversion = $config->countryversion;
 	{
 	$sid	= clm_core::$load->request_int('saison',1);
 	$lid	= clm_core::$load->request_int('liga',1);
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
 // Konfigurationsparameter auslesen
 $config = clm_core::$db->config();
@@ -110,7 +113,7 @@ $countryversion = $config->countryversion;
 	{
 	$sid	= clm_core::$load->request_int('saison',1);
 	$lid	= clm_core::$load->request_int('liga',1);
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
  
 	$query = " SELECT a.name, a.published, s.datum as dsb_datum "

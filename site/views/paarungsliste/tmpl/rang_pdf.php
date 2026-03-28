@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,7 +12,9 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-//require('fpdf.php');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 $lid = clm_core::$load->request_int( 'liga', '1' ); 
 $sid = clm_core::$load->request_int( 'saison','1');
@@ -60,7 +62,7 @@ $font = 12;
 $leer = 4+(9-$rnd)-$breite;
 
 // Datum der Erstellung
-$date =JFactory::getDate();
+$date =Factory::getDate();
 $now = $date->toSQL();
 
 $pdf=new PDF();
@@ -111,7 +113,7 @@ for ($x=0; $x< ($liga[0]->teil)-$diff; $x++){
 		." AND a.dg = 1"
 		." ORDER BY a.gegner "
 		;
-	$db 	=JFactory::getDBO();
+	$db 	=Factory::getDBO();
 	$db->setQuery( $query );
 	$runden	=$db->loadObjectList();
 
@@ -182,7 +184,7 @@ $pdf->Ln();
 
 $pdf->SetFont('Times','',5);
 	$pdf->Cell(10,2,' ',0,0);
-	$pdf->Cell(80,2,'erstellt am '.clm_core::$load->utf8decode(JHTML::_('date',  $now, JText::_('DATE_FORMAT_CLM_PDF'))),0,1,'L');
+	$pdf->Cell(80,2,'erstellt am '.clm_core::$load->utf8decode(HTMLHelper::_('date',  $now, Text::_('DATE_FORMAT_CLM_PDF'))),0,1,'L');
 
 // Ende Teilnehmer
 $pdf->Output('Rangliste '.$liga[0]->name.'.pdf','D');

@@ -9,10 +9,12 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined('_JEXEC') or die('Restricted access');
 
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 $liga		= $this->liga;
 $itemid		= clm_core::$load->request_int('Itemid',0);
@@ -23,7 +25,7 @@ if (isset($liga[0])) {
 	$sql = ' SELECT `sieg`, `remis`, `nieder`, `antritt`, `man_sieg`, `man_remis`, `man_nieder`, `man_antritt`'
 		. ' FROM #__clm_liga'
 		. ' WHERE `id` = "' . $lid . '"';
-	$db =JFactory::getDBO ();
+	$db =Factory::getDBO ();
 	$db->setQuery ($sql);
 	$ligapunkte = $db->loadObject ();
 
@@ -59,23 +61,23 @@ $config = clm_core::$db->config();
 $googlecharts   = $config->googlecharts;
 
 // Browsertitelzeile setzen
-$doc =JFactory::getDocument();
+$doc =Factory::getDocument();
 if (isset($liga[0])) {
-	$doc->setTitle(JText::_('LEAGUE_STATISTIK').' '.$liga[0]->name);
+	$doc->setTitle(Text::_('LEAGUE_STATISTIK').' '.$liga[0]->name);
 } else {
-	$doc->setTitle(JText::_('LEAGUE_STATISTIK'));
+	$doc->setTitle(Text::_('LEAGUE_STATISTIK'));
 }
 ?>
 <div class="componentheading">
 <?php if (isset($liga[0])) { 
-	echo JText::_('LEAGUE_STATISTIK'); echo "&nbsp;".$liga[0]->name;
+	echo Text::_('LEAGUE_STATISTIK'); echo "&nbsp;".$liga[0]->name;
 } else {
-	echo JText::_('LEAGUE_STATISTIK');
+	echo Text::_('LEAGUE_STATISTIK');
 }
 ?>
 <div id="pdf">
 <?php
-echo CLMContent::createPDFLink('statistik', JText::_('LEAGUE_STAT_PDF'), array('layout' => 'brettbeste', 'saison' => $liga[0]->sid, 'liga' => $liga[0]->id));
+echo CLMContent::createPDFLink('statistik', Text::_('LEAGUE_STAT_PDF'), array('layout' => 'brettbeste', 'saison' => $liga[0]->sid, 'liga' => $liga[0]->id));
 ?>
 
 </div></div>
@@ -86,11 +88,11 @@ echo CLMContent::createPDFLink('statistik', JText::_('LEAGUE_STAT_PDF'), array('
 <?php
 $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
-	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>"; }
+	echo "<div id='wrong'>".Text::_('NO_ACCESS')."<br>".Text::_('NOT_REGISTERED')."</div>"; }
 elseif (!isset($liga[0])) {
-	echo "<br>". CLMContent::clmWarning(JText::_('NOT_EXIST').'<br>'.JText::_('GEDULDA'))."<br>"; }
+	echo "<br>". CLMContent::clmWarning(Text::_('NOT_EXIST').'<br>'.Text::_('GEDULDA'))."<br>"; }
 elseif ( !$liga OR $liga[0]->published == "0") { 
-	echo '<br>'.CLMContent::clmWarning(JText::_('NOT_PUBLISHED').'<br>'.JText::_('GEDULD')); } 
+	echo '<br>'.CLMContent::clmWarning(Text::_('NOT_PUBLISHED').'<br>'.Text::_('GEDULD')); } 
 else { ?>
 	<div>
 <?php
@@ -116,37 +118,37 @@ $config		= clm_core::$db->config();
 	
 ?>
 <br>
-<h4><?php echo JText::_('LEAGUE_STAT_ALL') ?></h4>
+<h4><?php echo Text::_('LEAGUE_STAT_ALL') ?></h4>
 
 <?php if (!$bestenliste OR !$liga OR ($gesamt[0]->gesamt == 0)) {
-echo CLMContent::clmWarning(JText::_('LEAGUE_NO_GAMES')); 
+echo CLMContent::clmWarning(Text::_('LEAGUE_NO_GAMES')); 
 } else { ?>
 <table cellpadding="0" cellspacing="0" class="statistik">
 	<tr>
-		<th><?php echo JText::_('LEAGUE_STAT_BRETT') ?></th>
-		<th colspan="1"><?php echo JText::_('LEAGUE_STAT_PLAYERGAMES') ?></th>
-		<th colspan="4"><?php echo JText::_('LEAGUE_STAT_POINTS') ?></th>
-		<th colspan="2"><?php echo JText::_('LEAGUE_STAT_WHITE') ?></th>
-		<th colspan="2"><?php echo JText::_('LEAGUE_STAT_BLACK') ?></th>
-		<th colspan="2"><?php echo JText::_('LEAGUE_STAT_REMIS') ?></th>
-		<th colspan="2"><?php echo JText::_('LEAGUE_STAT_UNCONTESTED') ?></th>
+		<th><?php echo Text::_('LEAGUE_STAT_BRETT') ?></th>
+		<th colspan="1"><?php echo Text::_('LEAGUE_STAT_PLAYERGAMES') ?></th>
+		<th colspan="4"><?php echo Text::_('LEAGUE_STAT_POINTS') ?></th>
+		<th colspan="2"><?php echo Text::_('LEAGUE_STAT_WHITE') ?></th>
+		<th colspan="2"><?php echo Text::_('LEAGUE_STAT_BLACK') ?></th>
+		<th colspan="2"><?php echo Text::_('LEAGUE_STAT_REMIS') ?></th>
+		<th colspan="2"><?php echo Text::_('LEAGUE_STAT_UNCONTESTED') ?></th>
 	</tr>
 
 	<tr class="anfang">
 		<td></td>
-		<td class="punkte clmborder"><?php echo JText::_('LEAGUE_STAT_SUM') ?></td>
-		<td class="punkte"><?php echo JText::_('LEAGUE_STAT_HOME') ?></td>
-		<td class="punkte"><?php echo JText::_('LEAGUE_STAT_PERCENT') ?></td>
-		<td class="punkte"><?php echo JText::_('LEAGUE_STAT_GUEST') ?></td>
-		<td class="punkte"><?php echo JText::_('LEAGUE_STAT_PERCENT') ?></td>
-		<td class="white clmborder"><?php echo JText::_('LEAGUE_STAT_QUANTITY') ?></td>
-		<td class="white"><?php echo JText::_('LEAGUE_STAT_PERCENT') ?></td>
-		<td class="black clmborder"><?php echo JText::_('LEAGUE_STAT_QUANTITY') ?></td>
-		<td class="black"><?php echo JText::_('LEAGUE_STAT_PERCENT') ?></td>
-		<td class="remis clmborder"><?php echo JText::_('LEAGUE_STAT_QUANTITY') ?></td>
-		<td class="remis"><?php echo JText::_('LEAGUE_STAT_PERCENT') ?></td>
-		<td class="kampflos clmborder"><?php echo JText::_('LEAGUE_STAT_QUANTITY') ?></td>
-		<td class="kampflos"><?php echo JText::_('LEAGUE_STAT_PERCENT') ?></td>
+		<td class="punkte clmborder"><?php echo Text::_('LEAGUE_STAT_SUM') ?></td>
+		<td class="punkte"><?php echo Text::_('LEAGUE_STAT_HOME') ?></td>
+		<td class="punkte"><?php echo Text::_('LEAGUE_STAT_PERCENT') ?></td>
+		<td class="punkte"><?php echo Text::_('LEAGUE_STAT_GUEST') ?></td>
+		<td class="punkte"><?php echo Text::_('LEAGUE_STAT_PERCENT') ?></td>
+		<td class="white clmborder"><?php echo Text::_('LEAGUE_STAT_QUANTITY') ?></td>
+		<td class="white"><?php echo Text::_('LEAGUE_STAT_PERCENT') ?></td>
+		<td class="black clmborder"><?php echo Text::_('LEAGUE_STAT_QUANTITY') ?></td>
+		<td class="black"><?php echo Text::_('LEAGUE_STAT_PERCENT') ?></td>
+		<td class="remis clmborder"><?php echo Text::_('LEAGUE_STAT_QUANTITY') ?></td>
+		<td class="remis"><?php echo Text::_('LEAGUE_STAT_PERCENT') ?></td>
+		<td class="kampflos clmborder"><?php echo Text::_('LEAGUE_STAT_QUANTITY') ?></td>
+		<td class="kampflos"><?php echo Text::_('LEAGUE_STAT_PERCENT') ?></td>
 	</tr>
 
 <?php 
@@ -251,13 +253,13 @@ $bretter	= CLMModelStatistik::Bretter();
 $brett_all	= CLMModelStatistik::CLMBrett_all($bretter);
 for ($x=0; $x < $bretter; $x++) { echo $x+1; if ( $x < $bretter-1) { echo "|"; } }  ?>
 &chxt=x,y
-&chxl=0:|<?php echo JText::_('LEAGUE_STAT_WHITE') ?>|<?php echo JText::_('LEAGUE_STAT_BLACK') ?>|<?php echo JText::_('LEAGUE_STAT_REMIS') ?>|<?php echo JText::_('LEAGUE_STAT_UNCONTESTED') ?>"  alt="Horizontal bar chart" />
+&chxl=0:|<?php echo Text::_('LEAGUE_STAT_WHITE') ?>|<?php echo Text::_('LEAGUE_STAT_BLACK') ?>|<?php echo Text::_('LEAGUE_STAT_REMIS') ?>|<?php echo Text::_('LEAGUE_STAT_UNCONTESTED') ?>"  alt="Horizontal bar chart" />
         
 <img src="http://chart.apis.google.com/chart
 ?chs=300x225
 &cht=p
 &chd=t:<?php echo $sum_weiss/1; ?>,<?php echo $sum_schwarz/1; ?>,<?php echo $remis[0]->remis; ?>,<?php echo $kampflos[0]->kampflos; ?>
-&chdl=<?php echo JText::_('LEAGUE_STAT_WHITE') ?>|<?php echo JText::_('LEAGUE_STAT_BLACK') ?>|<?php echo JText::_('LEAGUE_STAT_REMIS') ?>|<?php echo JText::_('LEAGUE_STAT_UNCONTESTED') ?>
+&chdl=<?php echo Text::_('LEAGUE_STAT_WHITE') ?>|<?php echo Text::_('LEAGUE_STAT_BLACK') ?>|<?php echo Text::_('LEAGUE_STAT_REMIS') ?>|<?php echo Text::_('LEAGUE_STAT_UNCONTESTED') ?>
 &chdlp=b" width="300" height="225" alt="" />
 -->
 	
@@ -312,10 +314,10 @@ $brett_all2 = array();
         data.addColumn('string', 'Topping');
         data.addColumn('number', 'Slices');
         data.addRows([
-          ['<?php echo JText::_('LEAGUE_STAT_WHITE') ?>', <?php echo $sum_weiss/1; ?>],
-          ['<?php echo JText::_('LEAGUE_STAT_BLACK') ?>', <?php echo $sum_schwarz/1; ?>],
-          ['<?php echo JText::_('LEAGUE_STAT_REMIS') ?>', <?php echo $remis[0]->remis; ?>],
-          ['<?php echo JText::_('LEAGUE_STAT_UNCONTESTED') ?>', <?php echo $kampflos[0]->kampflos; ?>],
+          ['<?php echo Text::_('LEAGUE_STAT_WHITE') ?>', <?php echo $sum_weiss/1; ?>],
+          ['<?php echo Text::_('LEAGUE_STAT_BLACK') ?>', <?php echo $sum_schwarz/1; ?>],
+          ['<?php echo Text::_('LEAGUE_STAT_REMIS') ?>', <?php echo $remis[0]->remis; ?>],
+          ['<?php echo Text::_('LEAGUE_STAT_UNCONTESTED') ?>', <?php echo $kampflos[0]->kampflos; ?>],
         ]);
 
         // Set chart options
@@ -333,10 +335,10 @@ $brett_all2 = array();
 //        ['Ergebnis', 'Brett 1', 'Brett 2', 'Brett 3', 'Brett 4',
 //         'Brett 5', 'Brett 6', 'Brett 7', 'Brett 8', { role: 'annotation' } ],
         ['Ergebnis', <?php echo $textstr; ?>{ role: 'annotation' } ],
-        ['<?php echo JText::_('LEAGUE_STAT_WHITE'); ?>',<?php echo $wstring; ?> ''],
-        ['<?php echo JText::_('LEAGUE_STAT_BLACK') ?>',<?php echo $sstring; ?> ''],
-        ['<?php echo JText::_('LEAGUE_STAT_REMIS') ?>',<?php echo $rstring; ?> ''],
-        ['<?php echo JText::_('LEAGUE_STAT_UNCONTESTED') ?>',<?php echo $kstring; ?> '']
+        ['<?php echo Text::_('LEAGUE_STAT_WHITE'); ?>',<?php echo $wstring; ?> ''],
+        ['<?php echo Text::_('LEAGUE_STAT_BLACK') ?>',<?php echo $sstring; ?> ''],
+        ['<?php echo Text::_('LEAGUE_STAT_REMIS') ?>',<?php echo $rstring; ?> ''],
+        ['<?php echo Text::_('LEAGUE_STAT_UNCONTESTED') ?>',<?php echo $kstring; ?> '']
      ]);
 
 
@@ -388,30 +390,30 @@ $count = count($bestenliste);
 ?>
 <br><br><br><br>
 
-<a title="<?php echo JText::_('LEAGUE_STAT_PLAYERLIST') ?>" href="index.php?option=com_clm&amp;view=statistik&amp;saison=<?php echo $sid; ?>&amp;liga=<?php echo $lid; ?>&amp;layout=bestenliste<?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><h4><?php echo JText::_('LEAGUE_RATING_BEST_PLAYER_I') ?> <?php if ($count < 10 AND $count >0) { echo $count; } else { ?> 10<?php } ?> <?php echo JText::_('LEAGUE_RATING_BEST_PLAYER_II') ?> <?php echo $liga[0]->name; ?></h4></a>
+<a title="<?php echo Text::_('LEAGUE_STAT_PLAYERLIST') ?>" href="index.php?option=com_clm&amp;view=statistik&amp;saison=<?php echo $sid; ?>&amp;liga=<?php echo $lid; ?>&amp;layout=bestenliste<?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><h4><?php echo Text::_('LEAGUE_RATING_BEST_PLAYER_I') ?> <?php if ($count < 10 AND $count >0) { echo $count; } else { ?> 10<?php } ?> <?php echo Text::_('LEAGUE_RATING_BEST_PLAYER_II') ?> <?php echo $liga[0]->name; ?></h4></a>
 <?php if (!$bestenliste) {
-echo CLMContent::clmWarning(JText::_('LEAGUE_NO_GAMES'));
+echo CLMContent::clmWarning(Text::_('LEAGUE_NO_GAMES'));
 } else { ?>
 <table cellpadding="0" cellspacing="0" class="statistik">
 	<tr>
-		<th><?php echo JText::_('DWZ_NR') ?></th>
-		<th><?php echo JText::_('DWZ_NAME') ?></th>
-		<th><?php echo JText::_('LEAGUE_STAT_DWZ') ?></th>
-		<th><?php echo JText::_('LEAGUE_STAT_CLUB') ?></th>
+		<th><?php echo Text::_('DWZ_NR') ?></th>
+		<th><?php echo Text::_('DWZ_NAME') ?></th>
+		<th><?php echo Text::_('LEAGUE_STAT_DWZ') ?></th>
+		<th><?php echo Text::_('LEAGUE_STAT_CLUB') ?></th>
 		<?php 
  		$ex = 0; $ey = 0;
 		for ($xx=1; $xx < 7; $xx++) {   //max. 6 Spalten
 			$str_btiebr = 'btiebr'.$xx;
 			if (!isset($params[$str_btiebr])) continue;
-			if ($params[$str_btiebr] == 1) $hstring = JText::_('LEAGUE_STAT_PLAYERPOINTS');
-			elseif ($params[$str_btiebr] == 2) $hstring = JText::_('LEAGUE_STAT_PLAYERGAMES');
-			elseif ($params[$str_btiebr] == 3) $hstring = JText::_('LEAGUE_STAT_PLAYERLEVEL');
-			elseif ($params[$str_btiebr] == 4) $hstring = JText::_('LEAGUE_STAT_RATING');
-			elseif ($params[$str_btiebr] == 5) $hstring = JText::_('LEAGUE_STAT_PERCENT');
-			elseif ($params[$str_btiebr] == 6) $hstring = JText::_('LEAGUE_STAT_POINTS_K');
-			elseif ($params[$str_btiebr] == 7) $hstring = JText::_('LEAGUE_STAT_GAMES_K');
-			elseif ($params[$str_btiebr] == 8) $hstring = JText::_('LEAGUE_STAT_PERCENT_K');
-			elseif ($params[$str_btiebr] == 9) $hstring = JText::_('LEAGUE_STAT_BNUMBERS');
+			if ($params[$str_btiebr] == 1) $hstring = Text::_('LEAGUE_STAT_PLAYERPOINTS');
+			elseif ($params[$str_btiebr] == 2) $hstring = Text::_('LEAGUE_STAT_PLAYERGAMES');
+			elseif ($params[$str_btiebr] == 3) $hstring = Text::_('LEAGUE_STAT_PLAYERLEVEL');
+			elseif ($params[$str_btiebr] == 4) $hstring = Text::_('LEAGUE_STAT_RATING');
+			elseif ($params[$str_btiebr] == 5) $hstring = Text::_('LEAGUE_STAT_PERCENT');
+			elseif ($params[$str_btiebr] == 6) $hstring = Text::_('LEAGUE_STAT_POINTS_K');
+			elseif ($params[$str_btiebr] == 7) $hstring = Text::_('LEAGUE_STAT_GAMES_K');
+			elseif ($params[$str_btiebr] == 8) $hstring = Text::_('LEAGUE_STAT_PERCENT_K');
+			elseif ($params[$str_btiebr] == 9) $hstring = Text::_('LEAGUE_STAT_BNUMBERS');
 			if ($params[$str_btiebr] > 0) { ?>
 		<th><?php echo $hstring ?></th>
 			<?php } } ?>
@@ -449,46 +451,46 @@ if ($count < 10) { $a = $count; }
 	</tr>
 <?php } ?>
 </table>
-<div class="hint"><?php echo JText::_('LEAGUE_RATING_COMMENT') ?></div>
-<?php if($ex >0) { ?><div class="hint"><?php echo JText::_('LEAGUE_RATING_IMPOSSIBLE'); ?></div><?php } ?>
-<?php if($ey >0) { ?><div class="hint"><?php echo JText::_('LEAGUE_WITH_UNCONTESTED'); ?></div><?php } ?>
+<div class="hint"><?php echo Text::_('LEAGUE_RATING_COMMENT') ?></div>
+<?php if($ex >0) { ?><div class="hint"><?php echo Text::_('LEAGUE_RATING_IMPOSSIBLE'); ?></div><?php } ?>
+<?php if($ey >0) { ?><div class="hint"><?php echo Text::_('LEAGUE_WITH_UNCONTESTED'); ?></div><?php } ?>
 <?php
 if ($count >9 ) {
 $punkte = CLMModelStatistik::checkSpieler($bestenliste[9]->Punkte);
 if ($punkte == 11) {
 ?>
 <br>
-<div class="hint">** <?php echo JText::_('LEAGUE_RATING_ONE_MORE') ?> <?php echo $bestenliste[9]->Punkte; ?></div>
+<div class="hint">** <?php echo Text::_('LEAGUE_RATING_ONE_MORE') ?> <?php echo $bestenliste[9]->Punkte; ?></div>
 <?php } if ($punkte > 11) { ?>
-<div class="hint">** <?php echo JText::_('LEAGUE_RATING_MORE_I') ?> <?php echo $punkte-10; ?> <?php echo JText::_('LEAGUE_RATING_MORE_II') ?> <?php echo $bestenliste[9]->Punkte; ?></div><?php }}} ?>
+<div class="hint">** <?php echo Text::_('LEAGUE_RATING_MORE_I') ?> <?php echo $punkte-10; ?> <?php echo Text::_('LEAGUE_RATING_MORE_II') ?> <?php echo $bestenliste[9]->Punkte; ?></div><?php }}} ?>
 <br>
 
 <?php $ex = 0; $ey = 0;
 if (!$bestenliste OR !$liga OR ($gesamt[0]->gesamt == 0)) {
-echo CLMContent::clmWarning(JText::_('LEAGUE_NO_GAMES')); 
+echo CLMContent::clmWarning(Text::_('LEAGUE_NO_GAMES')); 
 } else { ?>
-		<h4><?php echo JText::_('LEAGUE_STAT_BEST'); ?></h4>
+		<h4><?php echo Text::_('LEAGUE_STAT_BEST'); ?></h4>
 <?php for ($x=0; $x < $liga[0]->stamm+1; $x++) { 
-		if ($x < $liga[0]->stamm) $xtext = $x+1; else $xtext = JText::_('LEAGUE_STAT_ERSATZ'); ?>
-		<h4><?php echo JText::_('LEAGUE_STAT_BRETT')." ".$xtext ?></h4>
+		if ($x < $liga[0]->stamm) $xtext = $x+1; else $xtext = Text::_('LEAGUE_STAT_ERSATZ'); ?>
+		<h4><?php echo Text::_('LEAGUE_STAT_BRETT')." ".$xtext ?></h4>
 <table cellpadding="0" cellspacing="0" class="statistik">
 	<tr>
-		<th><?php echo JText::_('LEAGUE_STAT_BRETT') ?></th>
-		<th><?php echo JText::_('DWZ_NAME') ?></th>
-		<th><?php echo JText::_('LEAGUE_STAT_DWZ') ?></th>
-		<th><?php echo JText::_('LEAGUE_STAT_CLUB') ?></th>
+		<th><?php echo Text::_('LEAGUE_STAT_BRETT') ?></th>
+		<th><?php echo Text::_('DWZ_NAME') ?></th>
+		<th><?php echo Text::_('LEAGUE_STAT_DWZ') ?></th>
+		<th><?php echo Text::_('LEAGUE_STAT_CLUB') ?></th>
 		<?php for ($xx=1; $xx < 7; $xx++) {   //max. 6 Spalten
 			$str_btiebr = 'btiebr'.$xx;
 			if (!isset($params[$str_btiebr])) continue;
-			if ($params[$str_btiebr] == 1) $hstring = JText::_('DWZ_POINTS');
-			elseif ($params[$str_btiebr] == 2) $hstring = JText::_('DWZ_GAMES');
-			elseif ($params[$str_btiebr] == 3) $hstring = JText::_('DWZ_LEVEL');
-			elseif ($params[$str_btiebr] == 4) $hstring = JText::_('LEAGUE_STAT_RATING');
-			elseif ($params[$str_btiebr] == 5) $hstring = JText::_('LEAGUE_STAT_PERCENT');
-			elseif ($params[$str_btiebr] == 6) $hstring = JText::_('LEAGUE_STAT_POINTS_K');
-			elseif ($params[$str_btiebr] == 7) $hstring = JText::_('LEAGUE_STAT_GAMES_K');
-			elseif ($params[$str_btiebr] == 8) $hstring = JText::_('LEAGUE_STAT_PERCENT_K');
-			elseif ($params[$str_btiebr] == 9) $hstring = JText::_('LEAGUE_STAT_BNUMBERS');
+			if ($params[$str_btiebr] == 1) $hstring = Text::_('DWZ_POINTS');
+			elseif ($params[$str_btiebr] == 2) $hstring = Text::_('DWZ_GAMES');
+			elseif ($params[$str_btiebr] == 3) $hstring = Text::_('DWZ_LEVEL');
+			elseif ($params[$str_btiebr] == 4) $hstring = Text::_('LEAGUE_STAT_RATING');
+			elseif ($params[$str_btiebr] == 5) $hstring = Text::_('LEAGUE_STAT_PERCENT');
+			elseif ($params[$str_btiebr] == 6) $hstring = Text::_('LEAGUE_STAT_POINTS_K');
+			elseif ($params[$str_btiebr] == 7) $hstring = Text::_('LEAGUE_STAT_GAMES_K');
+			elseif ($params[$str_btiebr] == 8) $hstring = Text::_('LEAGUE_STAT_PERCENT_K');
+			elseif ($params[$str_btiebr] == 9) $hstring = Text::_('LEAGUE_STAT_BNUMBERS');
 			if ($params[$str_btiebr] > 0) { ?>
 		<th><?php echo $hstring ?></th>
 			<?php } } ?>
@@ -527,13 +529,13 @@ echo CLMContent::clmWarning(JText::_('LEAGUE_NO_GAMES'));
 	} ?>
 </table>
 <?php } } ?>
-<div class="hint"><?php echo JText::_('LEAGUE_RATING_COMMENT') ?></div>
-<?php if($ex >0) { ?><div class="hint"><?php echo JText::_('LEAGUE_RATING_IMPOSSIBLE'); ?></div><?php } ?>
-<?php if($ey >0) { ?><div class="hint"><?php echo JText::_('LEAGUE_WITH_UNCONTESTED'); ?></div><?php } ?>
+<div class="hint"><?php echo Text::_('LEAGUE_RATING_COMMENT') ?></div>
+<?php if($ex >0) { ?><div class="hint"><?php echo Text::_('LEAGUE_RATING_IMPOSSIBLE'); ?></div><?php } ?>
+<?php if($ey >0) { ?><div class="hint"><?php echo Text::_('LEAGUE_WITH_UNCONTESTED'); ?></div><?php } ?>
 <br>
-<h4><?php echo JText::_('LEAGUE_STAT_UNCONTESTED_LIST') ?></h4>
+<h4><?php echo Text::_('LEAGUE_STAT_UNCONTESTED_LIST') ?></h4>
 <?php if (!$mannschaft) { 
-echo CLMContent::clmWarning(JText::_('LEAGUE_NO_GAMES')); 
+echo CLMContent::clmWarning(Text::_('LEAGUE_NO_GAMES')); 
 } else { 
 	$stat_kampflos = array();
 	foreach($mannschaft as $mannschaft1) {
@@ -553,10 +555,10 @@ echo CLMContent::clmWarning(JText::_('LEAGUE_NO_GAMES'));
 ?>
 <table cellpadding="0" cellspacing="0" class="statistik">
 	<tr>
-		<th><?php echo JText::_('DWZ_NR') ?></th>
-		<th><?php echo JText::_('DWZ_NAME') ?></th>
-		<th><?php echo JText::_('LEAGUE_STAT_UNCONTESTED_GEWO') ?></th>
-		<th><?php echo JText::_('LEAGUE_STAT_UNCONTESTED_VERL') ?></th>
+		<th><?php echo Text::_('DWZ_NR') ?></th>
+		<th><?php echo Text::_('DWZ_NAME') ?></th>
+		<th><?php echo Text::_('LEAGUE_STAT_UNCONTESTED_GEWO') ?></th>
+		<th><?php echo Text::_('LEAGUE_STAT_UNCONTESTED_VERL') ?></th>
 	</tr>
 <?php for ($x=0; $x < count($stat_kampflos); $x++) {
 		if ($x == 0) $xx = 0; 
@@ -575,19 +577,19 @@ echo CLMContent::clmWarning(JText::_('LEAGUE_NO_GAMES'));
 </table>
 <?php } ?>
 <br>
-<h4><?php echo JText::_('LEAGUE_RATING_BEST_TEAM_I') ?> <?php $counter = ceil((count($mannschaft))/2); if($counter < 2 AND count($mannschaft) >1){$counter++;}; echo $counter; ?> <?php echo JText::_('LEAGUE_RATING_BEST_TEAM_II') ?> <?php echo $liga[0]->name; ?></h4>
+<h4><?php echo Text::_('LEAGUE_RATING_BEST_TEAM_I') ?> <?php $counter = ceil((count($mannschaft))/2); if($counter < 2 AND count($mannschaft) >1){$counter++;}; echo $counter; ?> <?php echo Text::_('LEAGUE_RATING_BEST_TEAM_II') ?> <?php echo $liga[0]->name; ?></h4>
 <?php if (!$mannschaft) { 
-echo CLMContent::clmWarning(JText::_('LEAGUE_NO_GAMES')); 
+echo CLMContent::clmWarning(Text::_('LEAGUE_NO_GAMES')); 
 } else { ?>
 <table cellpadding="0" cellspacing="0" class="statistik">
 	<tr>
-		<th><?php echo JText::_('DWZ_NR') ?></th>
-		<th><?php echo JText::_('DWZ_NAME') ?></th>
-		<th><?php echo JText::_('LEAGUE_STAT_LEAGUE') ?></th>
-		<th><?php echo JText::_('LEAGUE_STAT_TEAM_POINTS') ?></th>
-		<th><?php echo JText::_('LEAGUE_STAT_TEAM_POINTS_PERCENT') ?></th>
-		<th><?php echo JText::_('LEAGUE_STAT_BOARD_POINTS') ?></th>
-		<th><?php echo JText::_('LEAGUE_STAT_BOARD_POINTS_PERCENT') ?></th>
+		<th><?php echo Text::_('DWZ_NR') ?></th>
+		<th><?php echo Text::_('DWZ_NAME') ?></th>
+		<th><?php echo Text::_('LEAGUE_STAT_LEAGUE') ?></th>
+		<th><?php echo Text::_('LEAGUE_STAT_TEAM_POINTS') ?></th>
+		<th><?php echo Text::_('LEAGUE_STAT_TEAM_POINTS_PERCENT') ?></th>
+		<th><?php echo Text::_('LEAGUE_STAT_BOARD_POINTS') ?></th>
+		<th><?php echo Text::_('LEAGUE_STAT_BOARD_POINTS_PERCENT') ?></th>
 	</tr>
 
 <?php for ($x=0; $x < $counter; $x++) {
@@ -616,9 +618,9 @@ $count = 0;
 		else { break; }
 		}
 if ($count == 1 AND $mannschaft) { ?>
-<div class="hint">* <?php echo JText::_('LEAGUE_RATING_MORE_TEAM_I') ?> <?php echo $mannschaft[4]->mp; ?> <?php echo JText::_('LEAGUE_RATING_MORE_TEAM_II') ?></div><?php }
+<div class="hint">* <?php echo Text::_('LEAGUE_RATING_MORE_TEAM_I') ?> <?php echo $mannschaft[4]->mp; ?> <?php echo Text::_('LEAGUE_RATING_MORE_TEAM_II') ?></div><?php }
 if ($count > 1 AND $mannschaft) { ?>
-<div class="hint">* <?php echo JText::_('LEAGUE_RATING_MORE_I') ?> <?php echo $count; ?> <?php echo JText::_('LEAGUE_RATING_MORE_TEAMS') ?> <?php echo $mannschaft[4]->mp; ?> <?php echo JText::_('LEAGUE_RATING_MORE_TEAM_II') ?></div>
+<div class="hint">* <?php echo Text::_('LEAGUE_RATING_MORE_I') ?> <?php echo $count; ?> <?php echo Text::_('LEAGUE_RATING_MORE_TEAMS') ?> <?php echo $mannschaft[4]->mp; ?> <?php echo Text::_('LEAGUE_RATING_MORE_TEAM_II') ?></div>
 <?php } ?>
 
 </div>

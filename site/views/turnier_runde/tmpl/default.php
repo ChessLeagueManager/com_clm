@@ -1,18 +1,21 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2022 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip');
+//HTMLHelper::_('behavior.tooltip', '.CLMTooltip');
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 // Konfigurationsparameter auslesen
 $itemid = clm_core::$load->request_int( 'Itemid' );
@@ -21,13 +24,13 @@ $commentParse = $config->tourn_comment_parse;
 $pgn		= clm_core::$load->request_int('pgn'); 
 
 // Userkennung holen
-$user	=JFactory::getUser();
+$user	=Factory::getUser();
 $jid	= $user->get('id');
 
   if ($pgn == 1) { 
 	$result = clm_core::$api->db_pgn_template($this->turnier->id,$this->round->dg,$this->round->nr,$pgn,false);
 	$_GET['pgn'] = 0;
-	if (!$result[1]) $msg = JText::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
+	if (!$result[1]) $msg = Text::_(strtoupper($result[1])).'<br><br>'; else $msg = '';
 	$link = 'index.php?option='.$option.'&view=turnier_runde&liga='.$this->turnier->id.'&dg='.$$this->round->dg.'&runde='.$this->round->nr.'&pgn=0';
 	if ($itemid != 0) $link .= '&Itemid='.$itemid;
 	$mainframe->redirect( $link, $msg );
@@ -46,36 +49,36 @@ $archive_check = clm_core::$api->db_check_season_user($this->turnier->sid);
 if (!$archive_check) {
 	echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('NO_ACCESS')."<br/>".JText::_('NOT_REGISTERED'));
+	echo CLMContent::clmWarning(Text::_('NO_ACCESS')."<br/>".Text::_('NOT_REGISTERED'));
 // Turnier unveröffentlicht?
 } elseif ( $this->turnier->published == 0) { 
 	echo CLMContent::componentheading($heading);
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOTPUBLISHED')."<br/>".JText::_('TOURNAMENT_PATIENCE'));
+	echo CLMContent::clmWarning(Text::_('TOURNAMENT_NOTPUBLISHED')."<br/>".Text::_('TOURNAMENT_PATIENCE'));
 
 // Runden nicht erstellt
 } elseif ($this->turnier->rnd == 0) {
 	echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_NOROUNDS'));
+	echo CLMContent::clmWarning(Text::_('TOURNAMENT_NOROUNDS'));
 
 } elseif ($this->round->published != 1) {
 	echo CLMContent::componentheading($heading);
 	require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu_t.php');
-	echo CLMContent::clmWarning(JText::_('TOURNAMENT_ROUNDNOTPUBLISHED'));
+	echo CLMContent::clmWarning(Text::_('TOURNAMENT_ROUNDNOTPUBLISHED'));
 
 // Turnier/Runde kann ausgegeben werden
 } else {
 	$turParams = new clm_class_params($this->turnier->params);
 	if ($this->round->datum != "0000-00-00" AND $this->round->datum != "1970-01-01" AND $turParams->get('displayRoundDate', 1) == 1) {
-		$heading .=  ',&nbsp;'.JHTML::_('date',  $this->round->datum, JText::_('DATE_FORMAT_CLM_F')); 
+		$heading .=  ',&nbsp;'.HTMLHelper::_('date',  $this->round->datum, Text::_('DATE_FORMAT_CLM_F')); 
 		if(isset($this->round->startzeit) and $this->round->startzeit != '00:00:00') { $heading .= '  '.substr($this->round->startzeit,0,5).' Uhr'; }
 	}
 
 	// PDF-Link
-	echo CLMContent::createPDFLink('turnier_runde', JText::_('PDF_TOURNAMENTROUND'), array('turnier' => $this->turnier->id, 'layout' => 'runde', 'dg' => $this->round->dg, 'runde' => $this->round->nr) );
+	echo CLMContent::createPDFLink('turnier_runde', Text::_('PDF_TOURNAMENTROUND'), array('turnier' => $this->turnier->id, 'layout' => 'runde', 'dg' => $this->round->dg, 'runde' => $this->round->nr) );
 	
 	if ($jid != 0) { 
-		echo CLMContent::createPGNLink('turnier_runde', JText::_('ROUND_PGN_ALL'), array('turnier' => $this->turnier->id, 'dg' => $this->round->dg, 'runde' => $this->round->nr) );
+		echo CLMContent::createPGNLink('turnier_runde', Text::_('ROUND_PGN_ALL'), array('turnier' => $this->turnier->id, 'dg' => $this->round->dg, 'runde' => $this->round->nr) );
 	} 
 	
 	echo CLMContent::componentheading($heading);
@@ -97,13 +100,13 @@ if (!$archive_check) {
 	?>
 
 	<tr>
-		<th align="center"><?php echo JText::_('TOURNAMENT_TNR'); ?></th>
-		<th align="center"><?php echo JText::_('TOURNAMENT_WHITE'); ?></th>
-		<th align="center"><?php echo JText::_('TOURNAMENT_TWZ'); ?></th>
+		<th align="center"><?php echo Text::_('TOURNAMENT_TNR'); ?></th>
+		<th align="center"><?php echo Text::_('TOURNAMENT_WHITE'); ?></th>
+		<th align="center"><?php echo Text::_('TOURNAMENT_TWZ'); ?></th>
 		<th align="center">-</th>
-		<th align="center"><?php echo JText::_('TOURNAMENT_BLACK'); ?></th>
-		<th align="center"><?php echo JText::_('TOURNAMENT_TWZ'); ?></th>
-		<th align="center"><?php echo JText::_('RESULT'); ?></th>
+		<th align="center"><?php echo Text::_('TOURNAMENT_BLACK'); ?></th>
+		<th align="center"><?php echo Text::_('TOURNAMENT_TWZ'); ?></th>
+		<th align="center"><?php echo Text::_('RESULT'); ?></th>
 	</tr>
 
 	<?php
@@ -162,7 +165,7 @@ if (!$archive_check) {
 					} else {
 						if (is_numeric($value->pgn)) $pgntext = $value->text; else $pgntext = $value->pgn;
 						$ia++; $ic = 1;
-						echo '<span class="editlinktip hasTip" title="'.JText::_( 'PGN_SHOWMATCH' ).'">';
+						echo '<span class="editlinktip hasTip" title="'.Text::_( 'PGN_SHOWMATCH' ).'">';
 							echo '<a onclick="startPgnMatch('.$value->id.', \'pgnArea'.$ia.'\');" class="pgn">'.CLMText::getResultString($value->ergebnis).'</a>';
 						echo '</span>';
 						?>
@@ -191,7 +194,7 @@ if (!$archive_check) {
 			// tl_ok? Haken anzeigen!
 	if ($this->displayTlOK AND $this->round->tl_ok > 0) {
 		echo '<tr><td colspan="9">';
-			echo '<div style="float:right; padding-right:1%;"><label for="name" class="hasTip" title="'.JText::_('TOURNAMENT_ROUNDOK').'"><img src="'.CLMImage::imageURL('accept.png').'" /></label></div>';
+			echo '<div style="float:right; padding-right:1%;"><label for="name" class="hasTip" title="'.Text::_('TOURNAMENT_ROUNDOK').'"><img src="'.CLMImage::imageURL('accept.png').'" /></label></div>';
 		echo '</td></tr>';
 	}
 
@@ -207,7 +210,7 @@ if (!$archive_check) {
 	if ($this->round->bemerkungen != '') {
 		echo "<div id='desc'>";
 		if ($commentParse) {
-			echo JHtml::_('content.prepare', "\n" . $this->round->bemerkungen . "\n");
+			echo HTMLHelper::_('content.prepare', "\n" . $this->round->bemerkungen . "\n");
 		} else {
 			echo CLMText::formatNote($this->round->bemerkungen);
 		}

@@ -14,6 +14,8 @@ jimport('joomla.application.component.model');
 
 require_once JPATH_COMPONENT_ADMINISTRATOR. '/helpers/addresshandler.php';
 
+use Joomla\CMS\Factory;
+
 class CLMModelMannschaft extends JModelLegacy
 {
 
@@ -23,7 +25,7 @@ class CLMModelMannschaft extends JModelLegacy
 	$liga = clm_core::$load->request_int('liga',1);
 	$tln = clm_core::$load->request_int('tlnr');
 	
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = "SELECT a.zps,a.sg_zps,u.name as mf_name,u.email as email, a.lokal_coord, "
@@ -56,7 +58,7 @@ class CLMModelMannschaft extends JModelLegacy
 	$liga = clm_core::$load->request_int('liga',1);
 	$tln = clm_core::$load->request_int('tlnr');
 	
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = "SELECT a.zps,a.sg_zps,v.zps as vzps,v.name "
@@ -87,7 +89,7 @@ class CLMModelMannschaft extends JModelLegacy
 	$config = clm_core::$db->config();
 	$countryversion=$config->countryversion;
 
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
 
 		$query = " SELECT l.rang,a.zps as zps, a.sg_zps as sgzps, a.man_nr as man_nr, l.ersatz_regel as ersatz_regel"
@@ -169,7 +171,7 @@ class CLMModelMannschaft extends JModelLegacy
 	$liga = clm_core::$load->request_int('liga',1);
 	$tln = clm_core::$load->request_int('tlnr');
 
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
 
 		$query = " SELECT a.tln_nr,a.gegner,a.brettpunkte,a.runde,a.dg,a.paar,a.heim "
@@ -195,7 +197,7 @@ class CLMModelMannschaft extends JModelLegacy
 	$liga = clm_core::$load->request_int('liga',1);
 	$tln = clm_core::$load->request_int('tlnr');
 
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
 
 		$query = " SELECT SUM(a.brettpunkte) as summe "
@@ -219,7 +221,7 @@ class CLMModelMannschaft extends JModelLegacy
 	$sid = clm_core::$load->request_int('saison',1);
 	$liga = clm_core::$load->request_int('liga',1);
 	$tln = clm_core::$load->request_int('tlnr');
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 
 		// Rundenanzahl pro Durchgang aus Liga
 		$query = "SELECT a.* FROM #__clm_liga as a"
@@ -260,7 +262,7 @@ class CLMModelMannschaft extends JModelLegacy
 	$liga = clm_core::$load->request_int('liga',1);
 	$tln = clm_core::$load->request_int('tlnr');
 	
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
  
 		$query = "SELECT a.nr, a.datum, a.startzeit, m.pdate, m.ptime FROM #__clm_runden_termine as a "
@@ -289,7 +291,7 @@ class CLMModelMannschaft extends JModelLegacy
 	$config = clm_core::$db->config();
 	$countryversion=$config->countryversion;
 
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
 
 		$query = " SELECT l.rang,a.zps as zps, a.sg_zps as sgzps, a.man_nr as man_nr"
@@ -350,7 +352,7 @@ class CLMModelMannschaft extends JModelLegacy
 	{
 	$sid = clm_core::$load->request_int('saison',1);
 	
-		$db			= JFactory::getDBO();
+		$db			= Factory::getDBO();
 //		$id			= @$options['id'];
 
 		$query = " SELECT s.name, s.datum as dsb_datum "

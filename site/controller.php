@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -12,6 +12,11 @@
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die();
 jimport('joomla.application.component.controller');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\User\UserHelper;
 
 class CLMController extends JControllerLegacy
 {
@@ -27,12 +32,12 @@ class CLMController extends JControllerLegacy
 
 	function activate()
 	{
-		$mainframe	= JFactory::getApplication();
+		$mainframe	= Factory::getApplication();
 
 		// Initialize some variables
-		$db			=JFactory::getDBO();
-		$user 		=JFactory::getUser();
-		$document   =JFactory::getDocument();
+		$db			=Factory::getDBO();
+		$user 		=Factory::getUser();
+		$document   =Factory::getDocument();
 		$pathway 	=& $mainframe->getPathWay();
 
 		$usersConfig = JComponentHelper::getParams( 'com_users' );
@@ -46,7 +51,7 @@ class CLMController extends JControllerLegacy
 		}
 
 		if ($allowUserRegistration == '0' || $userActivation == '0') {
-			$this->setRedirect('index.php?option=com_user&view=reset', JText::_( 'Access Forbidden' ));
+			$this->setRedirect('index.php?option=com_user&view=reset', Text::_( 'Access Forbidden' ));
 			return;
 		}
 
@@ -63,12 +68,12 @@ class CLMController extends JControllerLegacy
 		if (empty( $activation ))
 		{
 			// Page Title
-			$document->setTitle( JText::_( 'REG_ACTIVATE_NOT_FOUND_TITLE' ) );
+			$document->setTitle( Text::_( 'REG_ACTIVATE_NOT_FOUND_TITLE' ) );
 			// Breadcrumb
-			$pathway->addItem( JText::_( 'REG_ACTIVATE_NOT_FOUND_TITLE' ));
+			$pathway->addItem( Text::_( 'REG_ACTIVATE_NOT_FOUND_TITLE' ));
 
-			$message->title = JText::_( 'REG_ACTIVATE_NOT_FOUND_TITLE' );
-			$message->text = JText::_( 'REG_ACTIVATE_NOT_FOUND' );
+			$message->title = Text::_( 'REG_ACTIVATE_NOT_FOUND_TITLE' );
+			$message->text = Text::_( 'REG_ACTIVATE_NOT_FOUND' );
 			$view->assign('message', $message);
 			$view->display('message');
 			return;
@@ -76,25 +81,25 @@ class CLMController extends JControllerLegacy
 
 		// Lets activate this user
 		jimport('joomla.user.helper');
-		if (JUserHelper::activateUser($activation))
+		if (UserHelper::activateUser($activation))
 		{
 			// Page Title
-			$document->setTitle( JText::_( 'REG_ACTIVATE_COMPLETE_TITLE' ) );
+			$document->setTitle( Text::_( 'REG_ACTIVATE_COMPLETE_TITLE' ) );
 			// Breadcrumb
-			$pathway->addItem( JText::_( 'REG_ACTIVATE_COMPLETE_TITLE' ));
+			$pathway->addItem( Text::_( 'REG_ACTIVATE_COMPLETE_TITLE' ));
 
-			$message->title = JText::_( 'REG_ACTIVATE_COMPLETE_TITLE' );
-			$message->text = JText::_( 'REG_ACTIVATE_COMPLETE' );
+			$message->title = Text::_( 'REG_ACTIVATE_COMPLETE_TITLE' );
+			$message->text = Text::_( 'REG_ACTIVATE_COMPLETE' );
 		}
 		else
 		{
 			// Page Title
-			$document->setTitle( JText::_( 'REG_ACTIVATE_NOT_FOUND_TITLE' ) );
+			$document->setTitle( Text::_( 'REG_ACTIVATE_NOT_FOUND_TITLE' ) );
 			// Breadcrumb
-			$pathway->addItem( JText::_( 'REG_ACTIVATE_NOT_FOUND_TITLE' ));
+			$pathway->addItem( Text::_( 'REG_ACTIVATE_NOT_FOUND_TITLE' ));
 
-			$message->title = JText::_( 'REG_ACTIVATE_NOT_FOUND_TITLE' );
-			$message->text = JText::_( 'REG_ACTIVATE_NOT_FOUND' );
+			$message->title = Text::_( 'REG_ACTIVATE_NOT_FOUND_TITLE' );
+			$message->text = Text::_( 'REG_ACTIVATE_NOT_FOUND' );
 		}
 
 		$view->assign('message', $message);
@@ -120,7 +125,7 @@ class CLMController extends JControllerLegacy
 		// Request a reset
 		if ($model->requestReset($email) === false)
 		{
-			$message = JText::sprintf('PASSWORD_RESET_REQUEST_FAILED', $model->getError());
+			$message = Text::sprintf('PASSWORD_RESET_REQUEST_FAILED', $model->getError());
 			$this->setRedirect('index.php?option=com_user&view=reset', $message);
 			return false;
 		}
@@ -148,7 +153,7 @@ class CLMController extends JControllerLegacy
 		// Verify the token
 		if ($model->confirmReset($token) === false)
 		{
-		//	$message = JText::sprintf('Der Link scheint fehlerhaft zu sein. Wenden Sie sich umgehend an einen Administrator', $model->getError());
+		//	$message = Text::sprintf('Der Link scheint fehlerhaft zu sein. Wenden Sie sich umgehend an einen Administrator', $model->getError());
 			$this->setRedirect('index.php?option=com_clm&view=reset&layout=error', $message);
 			return false;
 		}
@@ -176,12 +181,12 @@ class CLMController extends JControllerLegacy
 		// Reset the password
 		if ($model->completeReset($password1, $password2) === false)
 		{
-			$message = JText::_('PASSWORD_RESET_FAILED')." ". $model->getError();
+			$message = Text::_('PASSWORD_RESET_FAILED')." ". $model->getError();
 			$this->setRedirect('index.php?option=com_clm&view=reset&layout=complete', $message);
 			return false;
 		}
 
-		$message = JText::_('Ihr Passwort wurde gespeichert !');
-		$this->setRedirect(JRoute::_('index.php?option=com_users&view=login', $message));
+		$message = Text::_('Ihr Passwort wurde gespeichert !');
+		$this->setRedirect(Route::_('index.php?option=com_users&view=login', $message));
 	}
 }

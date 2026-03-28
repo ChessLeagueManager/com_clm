@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,6 +11,11 @@
 */
 
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Router\Route;
 
 // Variablen holen
 $sid = clm_core::$load->request_int('saison',1 ); 
@@ -21,8 +26,8 @@ $liga 		= $this->liga;
 
 // Login Status prüfen
 $clmuser 	= $this->clmuser;
-$user		=JFactory::getUser();
-	$mainframe	= JFactory::getApplication();
+$user		=Factory::getUser();
+	$mainframe	= Factory::getApplication();
 
 	$link = 'index.php';
 // Konfigurationsparameter auslesen
@@ -30,25 +35,25 @@ $user		=JFactory::getUser();
 	$conf_meldeliste=$config->conf_meldeliste;
 
 if ($conf_meldeliste != 1) {
-	$msg = JText::_( 'CLUB_LIST_DISABLED');
+	$msg = Text::_( 'CLUB_LIST_DISABLED');
 	$link = "index.php?option=com_clm&view=info";
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
 			}
 if (!$user->get('id')) {
-	$msg = JText::_( 'CLUB_LIST_LOGIN' );
+	$msg = Text::_( 'CLUB_LIST_LOGIN' );
 	$link = "index.php?option=com_clm&view=info";
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
  			}
 if ($clmuser[0]->published < 1) {
-	$msg = JText::_( 'CLUB_LIST_ACCOUNT' );
+	$msg = Text::_( 'CLUB_LIST_ACCOUNT' );
 	$link = "index.php?option=com_clm&view=info";
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
 				}
 if ($clmuser[0]->zps <> $zps AND strpos($liga[0]->sg_zps,$clmuser[0]->zps) === false ) {
-	$msg = JText::_( 'CLUB_LIST_FALSE' );
+	$msg = Text::_( 'CLUB_LIST_FALSE' );
 	$link = "index.php?option=com_clm&view=info";
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
@@ -61,7 +66,7 @@ $access		= $this->access;
 $abgabe		= $this->abgabe;
 
 if ($abgabe[0]->id < 1) {
-	$msg = JText::_( 'CLUB_LIST_TEAM_DISABLED' );
+	$msg = Text::_( 'CLUB_LIST_TEAM_DISABLED' );
 	$link = "index.php?option=com_clm&view=info";
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
@@ -83,13 +88,13 @@ if ($abgabe[0]->id < 1) {
 		$abgabe[0]->params['deadline_roster'] = '1970-01-01'; }
 
 if ($abgabe[0]->liste > 0 AND ($abgabe[0]->params['deadline_roster'] == '0000-00-00' OR $abgabe[0]->params['deadline_roster'] == '1970-01-01')) {
-	$msg = JText::_( 'CLUB_LIST_ALREADY_EXIST' );
+	$msg = Text::_( 'CLUB_LIST_ALREADY_EXIST' );
 	$link = "index.php?option=com_clm&view=info";
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
  			}
 if ($abgabe[0]->liste > 0 AND $abgabe[0]->params['deadline_roster'] < $today) {
-	$msg = JText::_( 'CLUB_LIST_TOO_LATE' );
+	$msg = Text::_( 'CLUB_LIST_TOO_LATE' );
 	$link = "index.php?option=com_clm&view=info";
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );
@@ -106,25 +111,25 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 $spieler	= $this->spieler;
 $count		= $this->count;
 $mllist		= $this->mllist;
-$mflist[]		= JHTML::_('select.option',  '0', JText::_( 'TEAM_SELECT_LEADER' ), 'mf', 'mfname' );
+$mflist[]		= HTMLHelper::_('select.option',  '0', Text::_( 'TEAM_SELECT_LEADER' ), 'mf', 'mfname' );
 $mflist			= array_merge( $mflist, $mllist );
-$lists['mf']	= JHTML::_('select.genericlist',   $mflist, 'mf', 'class="inputbox" size="1"', 'mf', 'mfname', $liga[0]->mf );
+$lists['mf']	= HTMLHelper::_('select.genericlist',   $mflist, 'mf', 'class="inputbox" size="1"', 'mf', 'mfname', $liga[0]->mf );
 if ($liga[0]->lokal == '') $liga[0]->lokal = $liga[0]->vlokal;
 ?>
 <div >
 <div id="meldeliste">
-<div class="componentheading"><?php echo JText::_('CLUB_LIST_LIST') ?> <?php echo $liga[0]->man_name; ?></div>
+<div class="componentheading"><?php echo Text::_('CLUB_LIST_LIST') ?> <?php echo $liga[0]->man_name; ?></div>
 <br>
 <div id="desc">
-<h4><?php echo JText::_('CLUB_LIST_NOTE') ?></h4>
+<h4><?php echo Text::_('CLUB_LIST_NOTE') ?></h4>
 <ol>
-<li><?php echo JText::_('CLUB_LIST_1') ?></li>
-<li><?php echo JText::_('CLUB_LIST_2') ?></li>
-<li><?php echo JText::_('CLUB_LIST_3') ?></li>
-<li><?php echo JText::_('CLUB_LIST_4') ?></li>
-<li><?php echo JText::_('CLUB_LIST_5') ?></li>
+<li><?php echo Text::_('CLUB_LIST_1') ?></li>
+<li><?php echo Text::_('CLUB_LIST_2') ?></li>
+<li><?php echo Text::_('CLUB_LIST_3') ?></li>
+<li><?php echo Text::_('CLUB_LIST_4') ?></li>
+<li><?php echo Text::_('CLUB_LIST_5') ?></li>
 </ol>
-<?php //echo JText::_('CLUB_LIST_PLANNED') ?>
+<?php //echo Text::_('CLUB_LIST_PLANNED') ?>
 </div>
 <?php /** echo "<br>Saison ".$sid;
 echo "<br>zps ".$zps;
@@ -168,26 +173,26 @@ echo "<br>published ".$clmuser[0]->published;
 
 <!--<form action="index.php?option=com_clm&amp;view=meldeliste&amp;layout=order&amp;saison=<?php echo $sid ?>&amp;lid=<?php echo $liga[0]->lid ?>&amp;zps=<?php echo $zps ?>&amp;man=<?php echo $man ?>" method="post" name="adminForm">
 -->
-<form action="<?php echo JRoute::_('index.php'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo Route::_('index.php'); ?>" method="post" name="adminForm" id="adminForm">
 
 <table class="adminlist" cellpadding="0" cellspacing="0">
 <tr> 
 	<th class="anfang"><b><input type="hidden" name="toggle" value=""  /></b></th> 
-	<th class="anfang" style="width:25%"><?php echo JText::_('CLUB_LIST_NAME') ?></th>
-	<th class="anfang" style="width:10%;"><?php echo JText::_('CLUB_LIST_ATTR') ?></th>
-	<th class="anfang" style="width:10%;"><?php echo JText::_('CLUB_LIST_DWZ') ?></th>
-	<th class="anfang" style="width:5%;"><?php echo JText::_('gesperrt') ?></th>
+	<th class="anfang" style="width:25%"><?php echo Text::_('CLUB_LIST_NAME') ?></th>
+	<th class="anfang" style="width:10%;"><?php echo Text::_('CLUB_LIST_ATTR') ?></th>
+	<th class="anfang" style="width:10%;"><?php echo Text::_('CLUB_LIST_DWZ') ?></th>
+	<th class="anfang" style="width:5%;"><?php echo Text::_('gesperrt') ?></th>
 	<th class="anfang" style="width:10%;"><?php echo '  '; ?></th>
 	<th class="anfang"><b><input type="hidden" name="toggle" value=""  /></b></th> 
-	<th class="anfang" style="width:25%;"><?php echo JText::_('CLUB_LIST_NAME') ?></th>
-	<th class="anfang" style="width:10%;"><?php echo JText::_('CLUB_LIST_ATTR') ?></th>
-	<th class="anfang" style="width:10%;"><?php echo JText::_('CLUB_LIST_DWZ') ?></th>
-	<th class="anfang" style="width:5%;"><?php echo JText::_('gesperrt') ?></th>
+	<th class="anfang" style="width:25%;"><?php echo Text::_('CLUB_LIST_NAME') ?></th>
+	<th class="anfang" style="width:10%;"><?php echo Text::_('CLUB_LIST_ATTR') ?></th>
+	<th class="anfang" style="width:10%;"><?php echo Text::_('CLUB_LIST_DWZ') ?></th>
+	<th class="anfang" style="width:5%;"><?php echo Text::_('gesperrt') ?></th>
 </tr>
 
 <?php $i = 0;
 	for ($i = 0; $i < (count($spieler)/2); $i++) {
-		//$checked = JHTML::_('grid.checkedout',   $spieler[$i], $i );
+		//$checked = HTMLHelper::_('grid.checkedout',   $spieler[$i], $i );
 		if ($spieler[$i]->snr > "0" AND $spieler[$i]->snr < "999") { $checked_marker = ' checked="checked"'; $spieler[$i]->checked_out = "1"; }
 		else $checked_marker = '';
 		$checked = '<input type="checkbox" id="cb'.$i.'"'.$checked_marker.' name="cid[]" value="'.$spieler[$i]->id.'" onclick="Joomla.isChecked(this.checked);" title="JGRID_CHECKBOX_ROW_N" />';
@@ -243,32 +248,32 @@ echo "<br>published ".$clmuser[0]->published;
 	
 	<table class="adminlist" cellpadding="0" cellspacing="0">
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="mf"><?php echo JText::_( 'TEAM_LEADER' )." : "; ?></label>
+			<td class="key" nowrap="nowrap"><label for="mf"><?php echo Text::_( 'TEAM_LEADER' )." : "; ?></label>
 			</td>
 			<td>
 			<?php echo $lists['mf']; ?>
 			</td>
 			<td>
-			<?php  echo JText::_( 'TEAM_LEADER_COMMENT' ) ; ?>
+			<?php  echo Text::_( 'TEAM_LEADER_COMMENT' ) ; ?>
 			</td>
 		</tr>
 		<tr>
-			<td class="key" nowrap="nowrap"><label for="lokal"><?php echo JText::_( 'TEAM_LOCATION' )." : "; ?></label>
+			<td class="key" nowrap="nowrap"><label for="lokal"><?php echo Text::_( 'TEAM_LOCATION' )." : "; ?></label>
 			</td>
 			<td>
 			<textarea class="inputbox" name="lokal" id="lokal" cols="40" rows="3" style="width:90%"><?php echo $liga[0]->lokal; ?></textarea>
 			</td>
 			<td>
-			<?php  echo JText::_( 'CLM_KOMMA' )."<br>".JText::_( 'CLM_ADDRESS1' ); ?>
+			<?php  echo Text::_( 'CLM_KOMMA' )."<br>".Text::_( 'CLM_ADDRESS1' ); ?>
 			</td>
 		</tr>
 	</table>
 <br>
 <!---
-	<input type="submit" value=" <?php echo JText::_('CLUB_LIST_SORT') ?> ">
+	<input type="submit" value=" <?php echo Text::_('CLUB_LIST_SORT') ?> ">
 --->
 			<button class="button" onclick="return Joomla.submitbutton();">
-				<?php echo JText::_('CLUB_LIST_SORT'); ?>
+				<?php echo Text::_('CLUB_LIST_SORT'); ?>
 			</button>
 		<input type="hidden" name="view" value="meldeliste" />
 		<input type="hidden" name="option" value="com_clm" />
@@ -282,7 +287,7 @@ echo "<br>published ".$clmuser[0]->published;
 		<input type="hidden" name="ersatz" value="<?php echo $liga[0]->ersatz; ?>" />
 		<input type="hidden" name="man_name" value="<?php echo $liga[0]->man_name; ?>" />
 		<input type="hidden" name="task" value="" />
-		<?php echo JHTML::_( 'form.token' ); ?>
+		<?php echo HTMLHelper::_( 'form.token' ); ?>
 		</form>
 <?php }} ?>
 </center>

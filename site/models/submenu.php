@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -11,10 +11,12 @@
 */
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Factory;
+
 	if (!isset($lid)) $lid = 0;
 	if (!isset($sid)) $sid = 0;
 	// Ligen
-    $db	= JFactory::getDBO();
+    $db	= Factory::getDBO();
 //  $id	= @$options['id'];
         
     $query = "SELECT a.*, b.datum as dsb_datum FROM #__clm_liga as a"
@@ -27,7 +29,7 @@ defined('_JEXEC') or die();
     $sub_liga = $db->loadObjectList();
 		
 	// Mannschaften
-    $db		= JFactory::getDBO();
+    $db		= Factory::getDBO();
 //  $id		= @$options['id'];
         
     $query = " SELECT a.name, a.liga, a.sid, a.tln_nr FROM #__clm_mannschaften as a"
@@ -40,7 +42,7 @@ defined('_JEXEC') or die();
     $sub_msch = $db->loadObjectList();
 		
 	// Rundenliste
-    $db		= JFactory::getDBO();
+    $db		= Factory::getDBO();
 //  $id		= @$options['id'];
         
     $query = " SELECT a.name, a.liga, a.sid, a.nr, b.runden as runden, b.durchgang as durchgang, b.runden_modus" //klkl
@@ -55,7 +57,7 @@ defined('_JEXEC') or die();
     $sub_runden = $db->loadObjectList();
 		
 	// Saisons
-	$db	= JFactory::getDBO();
+	$db	= Factory::getDBO();
 //	$id	= @$options['id'];
 		
 	$query = " SELECT a.name, a.id, a.archiv FROM #__clm_saison AS a"

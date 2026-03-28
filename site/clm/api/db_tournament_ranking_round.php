@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
 */
@@ -111,7 +111,8 @@
 		$mbrett_remis	= $team[0]->remis * $team[0]->stamm;
 		$id_stamm 	= $team[0]->stamm;
 		$sid = $team[0]->sid;
-		
+		$mbrett_max	= ($team[0]->sieg + $team[0]->antritt) * $team[0]->stamm;
+
 		// "spielfrei(e)" Mannschaft suchen
 		$query = " SELECT COUNT(id) FROM #__clm_mannschaften as a "
 			." WHERE a.liga = ".$id
@@ -156,6 +157,7 @@
 					." LEFT JOIN #__clm_mannschaften as n ON n.liga = a.lid AND n.sid = a.sid AND n.tln_nr = a.gegner"
 					. " WHERE a.lid = ".$id
 					. " AND a.tln_nr = ".$spielfrei->tln_nr   //.") OR (a.gegner =".$spielfrei."))"
+					. " AND dwz_zeit = '1970-01-01 00:00:00' " // neu
 					;
 				if (($runden_modus == 4) OR ($runden_modus == 5))
 					$query .= " AND a.dg = ".$dg_max." AND a.runde = ".$runde_max;
@@ -176,7 +178,8 @@
 				   clm_core::$db->query($query);
 					
 					$query = "UPDATE `#__clm_rnd_man`"
-						. " SET ergebnis = 5, kampflos = 1, manpunkte = ".$man_sieg.", brettpunkte = ".$id_stamm.", gemeldet = 62, zeit = '$now'";
+//						. " SET ergebnis = 5, kampflos = 1, manpunkte = ".$man_sieg.", brettpunkte = ".$id_stamm.", gemeldet = 62, zeit = '$now'";
+						. " SET ergebnis = 5, kampflos = 1, manpunkte = ".$man_sieg.", brettpunkte = ".$mbrett_max.", gemeldet = 62, zeit = '$now'";
 					if (($runden_modus == 4) OR ($runden_modus == 5)) 
 						$query .= " , ko_decision = 1";	
 					$query .= " WHERE lid = ".$id
@@ -327,13 +330,16 @@
 		$matrix = array();
 		if ($p_runde != 0) {
 			$maxround = ((($p_dg - 1) * $runden) + $p_runde);
+			foreach ($matchData as $key => $value) {
+				$matrix[$value->tln_nr][$value->dg][$value->runde] = 1;
+			}
 		} else {
 			foreach ($matchData as $key => $value) {
-			if ($value->ergebnis < 3 AND ((($value->dg - 1) * $runden) + $value->runde) > $maxround) $maxround = (($value->dg - 1) * $runden) + $value->runde;
-			$matrix[$value->tln_nr][$value->dg][$value->runde] = 1;
+				if ($value->ergebnis < 3 AND ((($value->dg - 1) * $runden) + $value->runde) > $maxround) $maxround = (($value->dg - 1) * $runden) + $value->runde;
+				$matrix[$value->tln_nr][$value->dg][$value->runde] = 1;
 			}
 		}
-			
+
 		// für Teams, die nicht gesetzt wurden, werden spielfreie Pseudo-Paarungen angelegt (für FIDE-Ranglistenkorrektur)
 		if ($params['optionTiebreakersFideCorrect'] == 1) {
 		  for ($s=1; $s<= $teil; $s++) { 		// alle Startnummern durchgehen
@@ -397,7 +403,10 @@
 			// Buchholz auf Basis Mannschaftspunkte
 			if (in_array(1, $arrayFW) OR in_array(2, $arrayFW) OR in_array(11, $arrayFW)) { // beliebige Buchholz als TieBreaker gewünscht?
 				if ($value->ergebnis < 3 OR $params['optionTiebreakersFideCorrect'] == 0) {
-					$array_PlayerBuchOpp[$value->tln_nr][] = $array_PlayerMPunkteTB[$value->gegner]; // Array mit Gegnerwerten - für Streichresultat
+					if ($value->gegner >= 1)
+						$array_PlayerBuchOpp[$value->tln_nr][] = $array_PlayerMPunkteTB[$value->gegner]; // Array mit Gegnerwerten - für Streichresultat
+					else
+						$array_PlayerBuchOpp[$value->tln_nr][] = 0; // Array mit Gegnerwerten - für Streichresultat
 				} else { //Ranglistenkorrektur nach FIDE (Teil 2) nur für CH-Turniere
 					$query = "SELECT tln_nr, gegner, dg, runde, ergebnis FROM `#__clm_rnd_man`"
 					. " WHERE lid = ".$id
@@ -421,7 +430,7 @@
 					$array_PlayerBuchOpp[$value->tln_nr][] = $PlayerPunkteKOR; // Array mit Gegnerwerten - für Streichresultat
 				}
 			}
-			
+
 			// Buchholz auf Basis Brettpunkte 
 			if (in_array(7, $arrayFW) OR in_array(8, $arrayFW) OR in_array(17, $arrayFW) OR in_array(18, $arrayFW)) { // beliebige Buchholz als TieBreaker gewünscht?
 				if ($value->ergebnis < 3 OR $params['optionTiebreakersFideCorrect'] == 0) {
@@ -513,8 +522,8 @@
 				else $array_PlayerBuch1StBP[$s] = array_sum($array_PlayerBuchOppBP[$s]);
 			}
 		}
-	
-		// BuchholzSumme  auf Basis Mannschaftspunkte
+
+		// BuchholzSumme auf Basis Mannschaftspunkte
 		if ((in_array(2, $arrayFW)) OR (in_array(12, $arrayFW))) { // Buchholz-Summe als TieBreaker gewünscht?
 			// erneut alle Matches durchgehen -> Spieler erhalten Buchholzsummen
 			foreach ($matchData as $key => $value) {
@@ -649,7 +658,7 @@
 				$query .= " ORDER BY z_summanpunkte DESC, z_sumtiebr1 DESC, z_sumtiebr2 DESC, z_sumtiebr3 DESC, tln_nr ASC";
 			else 
 				$query .= " ORDER BY summanpunkte DESC, sumtiebr1 DESC, sumtiebr2 DESC, sumtiebr3 DESC, tln_nr ASC";
-				;
+//				;
 			$players = clm_core::$db->loadObjectList($query);
 			// alle Mannschaften durchgehen
 			foreach ($players as $xvalue) {

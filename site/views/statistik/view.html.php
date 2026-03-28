@@ -1,15 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 jimport( 'joomla.application.component.view');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 class CLMViewStatistik extends JViewLegacy
 {
@@ -75,15 +78,15 @@ class CLMViewStatistik extends JViewLegacy
 		$kvmannschaft	= $model->getCLMkvMannschaft();
 		$this->kvmannschaft = $kvmannschaft;
 
-		$document =JFactory::getDocument();
+		$document =Factory::getDocument();
 		
 		// Title in Browser
-		$headTitle = CLMText::composeHeadTitle( array( $liga[0]->name, JText::_('LEAGUE_STATISTIK') ) );
+		$headTitle = CLMText::composeHeadTitle( array( $liga[0]->name, Text::_('LEAGUE_STATISTIK') ) );
 		$document->setTitle( $headTitle );
 
 		/* Call the state object */
 //		$state = $this->get( 'state' );
-		$mainframe =JFactory::getApplication();
+		$mainframe =Factory::getApplication();
 		global $option;
 		$lists['state'] = $mainframe->getUserStateFromRequest( "$option.filter_state",'filter_state','','word' );
  

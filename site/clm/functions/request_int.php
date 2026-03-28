@@ -1,17 +1,20 @@
 <?php
 /*
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2019 CLM Team. All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team. All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
-// Einlesen von Get-Parameter vom Typ Integer
+// Einlesen von GET-/POST-Parameter vom Typ Integer
+
+use Joomla\CMS\Factory;
+
 function clm_function_request_int($input, $standard = 0) {
 	if (isset($_GET[$input])) $value = $_GET[$input];
 	elseif (isset($_POST[$input])) $value = $_POST[$input];
-	elseif (!class_exists('JFactory')) return $standard; // kein Joomla
+	elseif (!class_exists('Factory')) return $standard; // kein Joomla
 	else {
-		$app =JFactory::getApplication(); // nur nötig wegen Menüeintragstypen
+		$app =Factory::getApplication(); // nur nötig wegen Menüeintragstypen
 		$xy = $app->input->getInt($input);
 		if (!is_null($xy)) $value = $xy;
 		else return $standard; 

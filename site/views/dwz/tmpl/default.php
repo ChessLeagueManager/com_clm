@@ -1,15 +1,21 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
 
 $sid	= clm_core::$load->request_int('saison',1);
 $rating_type = clm_core::$db->saison->get($sid)->rating_type;
@@ -30,13 +36,13 @@ $fixth_dwz = $config->fixth_dwz;
 $countryversion = $config->countryversion;
 
 	// Browsertitelzeile setzen
-	$doc =JFactory::getDocument();
+	$doc =Factory::getDocument();
 	if ($countryversion == "de") {
-		if (isset($liga[0])) $doc->setTitle(JText::_('CLUB_RATING').' '.$liga[0]->Vereinname);
-		else $doc->setTitle(JText::_('CLUB_RATING'));
+		if (isset($liga[0])) $doc->setTitle(Text::_('CLUB_RATING').' '.$liga[0]->Vereinname);
+		else $doc->setTitle(Text::_('CLUB_RATING'));
 	} else {
-		if (isset($liga[0])) $doc->setTitle(JText::_('CLUB_RATING_EN').' '.$liga[0]->Vereinname);
-		else $doc->setTitle(JText::_('CLUB_RATING_EN'));
+		if (isset($liga[0])) $doc->setTitle(Text::_('CLUB_RATING_EN').' '.$liga[0]->Vereinname);
+		else $doc->setTitle(Text::_('CLUB_RATING_EN'));
 	}
 ?>
 <Script language="JavaScript">
@@ -59,27 +65,27 @@ function tableOrdering( order, dir, task )
 <div >
 <div id="dwz">
 <div class="componentheading">
-<?php 	if ($countryversion == "de") echo JText::_('CLUB_RATING'); 
-		else echo JText::_('CLUB_RATING_EN'); 
+<?php 	if ($countryversion == "de") echo Text::_('CLUB_RATING'); 
+		else echo Text::_('CLUB_RATING_EN'); 
 		if (isset($liga[0])) echo " ::: ".$liga[0]->Vereinname; ?>
 <div id="pdf">
 
 <?php
 if (isset($liga[0]))
-	echo CLMContent::createPDFLink('dwz', JText::_('PDF_CLUBRATING'), array('layout' => 'dwz', 'saison' => $sid, 'zps' => $urlzps));
+	echo CLMContent::createPDFLink('dwz', Text::_('PDF_CLUBRATING'), array('layout' => 'dwz', 'saison' => $sid, 'zps' => $urlzps));
 ?>
 </div>
 </div>
 <div class="clr"></div>
 
     <div class="clmbox">
-        <a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $urlzps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('CLUB_DETAILS') ?></a> | <a href="index.php?option=com_clm&view=vereinsliste&saison=<?php echo $sid; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo JText::_('CLUBS_LIST') ?></a>
+        <a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $urlzps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo Text::_('CLUB_DETAILS') ?></a> | <a href="index.php?option=com_clm&view=vereinsliste&saison=<?php echo $sid; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo Text::_('CLUBS_LIST') ?></a>
     	
         <span class="right">
         	<form name="form1">
             	<select name="select" onchange="goto(this.form)" class="selectteam">
                 	<?php foreach ($saisons as $saisons) { ?>
-                    	<option value="<?php echo JURI::base(); ?>index.php?option=com_clm&view=dwz&saison=<?php echo $saisons->id; ?>&zps=<?php echo $urlzps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+                    	<option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=dwz&saison=<?php echo $saisons->id; ?>&zps=<?php echo $urlzps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
                         <?php if ($saisons->id == $sid) { echo 'selected="selected"'; } ?>><?php echo $saisons->name; ?> </option>
                     <?php } ?>
                 </select>
@@ -89,9 +95,9 @@ if (isset($liga[0]))
         <span class="right">
             <form name="form1">
                 <select name="select" onchange="goto(this.form)" class="selectteam">
-                <option value=""><?php echo JText::_('CLUB_SELECTTEAM') ?></option>
+                <option value=""><?php echo Text::_('CLUB_SELECTTEAM') ?></option>
                 <?php  $cnt = 0;   foreach ($vereinsliste as $vereinsliste) { $cnt++;?>
-                 <option value="<?php echo JURI::base(); ?>index.php?option=com_clm&view=dwz&saison=<?php echo $sid; ?>&zps=<?php echo $vereinsliste->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+                 <option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=dwz&saison=<?php echo $sid; ?>&zps=<?php echo $vereinsliste->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
                 <?php if ($vereinsliste->zps == $urlzps) { echo 'selected="selected"'; } ?>><?php echo $vereinsliste->name; ?></option>
                 <?php } ?>
                 </select>
@@ -106,41 +112,41 @@ if (isset($liga[0]))
 <?php
 $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
-	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+	echo "<div id='wrong'>".Text::_('NO_ACCESS')."<br>".Text::_('NOT_REGISTERED')."</div>";
 }
 else {
 // Prüfen ob ZPS vorhanden ist
  if (!isset($liga[0]) OR !$liga[0]->Vereinname) { 
-echo "<br>". CLMContent::clmWarning(JText::_('CLUB_UNKNOWN'))."<br>";
+echo "<br>". CLMContent::clmWarning(Text::_('CLUB_UNKNOWN'))."<br>";
  } else { 
  
  if ($itemid <>'') {  $postlink = '&saison=' . $sid . '&zps=' . $urlzps . '&Itemid='.$itemid; }
  else { $postlink = '&saison=' . $sid . '&zps=' . $urlzps ;  }
  ?>
 
-<form id="adminForm" action="<?php echo JRoute::_( 'index.php?option=com_clm&view=dwz' . $postlink );?>" method="post" name="adminForm">
+<form id="adminForm" action="<?php echo Route::_( 'index.php?option=com_clm&view=dwz' . $postlink );?>" method="post" name="adminForm">
 <table cellpadding="0" cellspacing="0" id="dwz" <?php if ($fixth_dwz =="1") { ?>class="tableWithFloatingHeader"<?php } ?>>
 
     <tr>
-    <th class="dwz_1"><?php echo JText::_('CLUB_NR') ?></th>
+    <th class="dwz_1"><?php echo Text::_('CLUB_NR') ?></th>
     <?php if ($countryversion =="de") {
      if ($cuser != -1) { ?>
-    <th class="dwz_2"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER', 'Mgl_Nr', $this->lists['order_Dir'], $this->lists['order']); ?></a></th>
+    <th class="dwz_2"><?php echo HTMLHelper::_( 'grid.sort', 'CLUB_MEMBER', 'Mgl_Nr', $this->lists['order_Dir'], $this->lists['order']); ?></a></th>
     <?php } } else { ?>
-    <th class="dwz_2"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_PKZ', 'PKZ', $this->lists['order_Dir'], $this->lists['order']); ?></a></th>
+    <th class="dwz_2"><?php echo HTMLHelper::_( 'grid.sort', 'CLUB_MEMBER_PKZ', 'PKZ', $this->lists['order_Dir'], $this->lists['order']); ?></a></th>
    <?php } ?>
-    <th class="dwz_8"><?php echo JText::_('CLUB_MEMBER_TITEL') ?></th>
-	<th class="dwz_3"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_NAME', 'Spielername', $this->lists['order_Dir'], $this->lists['order']); ?></a></th>
+    <th class="dwz_8"><?php echo Text::_('CLUB_MEMBER_TITEL') ?></th>
+	<th class="dwz_3"><?php echo HTMLHelper::_( 'grid.sort', 'CLUB_MEMBER_NAME', 'Spielername', $this->lists['order_Dir'], $this->lists['order']); ?></a></th>
      <?php if ($cuser != -1) { ?>
-     <th class="dwz_4"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_STATUS', 'Status', $this->lists['order_Dir'], $this->lists['order']); ?></th>
-     <th class="dwz_5"><?php echo JHtml::_( 'grid.sort', 'CLUB_MEMBER_GESCHL', 'Geschlecht', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+     <th class="dwz_4"><?php echo HTMLHelper::_( 'grid.sort', 'CLUB_MEMBER_STATUS', 'Status', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+     <th class="dwz_5"><?php echo HTMLHelper::_( 'grid.sort', 'CLUB_MEMBER_GESCHL', 'Geschlecht', $this->lists['order_Dir'], $this->lists['order']); ?></th>
      <?php } ?>
     <?php if ($countryversion == "de") { ?>
-		<th class="dwz_6"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_RATING', 'DWZ', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+		<th class="dwz_6"><?php echo HTMLHelper::_( 'grid.sort', 'CLUB_MEMBER_RATING', 'DWZ', $this->lists['order_Dir'], $this->lists['order']); ?></th>
     <?php } else { ?>
-		<th class="dwz_6"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_RATING_EN', 'DWZ', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+		<th class="dwz_6"><?php echo HTMLHelper::_( 'grid.sort', 'CLUB_MEMBER_RATING_EN', 'DWZ', $this->lists['order_Dir'], $this->lists['order']); ?></th>
     <?php } ?>
-    <th class="dwz_7"><?php echo JHTML::_( 'grid.sort', 'CLUB_MEMBER_ELO', 'FIDE_Elo', $this->lists['order_Dir'], $this->lists['order']); ?></th>
+    <th class="dwz_7"><?php echo HTMLHelper::_( 'grid.sort', 'CLUB_MEMBER_ELO', 'FIDE_Elo', $this->lists['order_Dir'], $this->lists['order']); ?></th>
     </tr>
 
 	<?php
