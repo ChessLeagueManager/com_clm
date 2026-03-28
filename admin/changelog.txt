@@ -16,6 +16,7 @@ $ -> Language fix or change
 ^ Anpassung Joomla 6
 + Teamwettbewerbe: Feinwertung Sonneborn-Berger mit Streichergebnis
 # Spieler: Einsatz in mehrern Ligen bei unterschiedlichen Wertungen
++ Ergänzungen in Bedenkzeittabelle
 
 - - - - - 4.3.2 - [30-01-2026] - - - - - - - - - - - - - - - - - - - -
 + Bedenkzeit: neue Tabelle und Einbau bei Einzel- und Teamwettbewerben
