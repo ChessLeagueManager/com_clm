@@ -1,17 +1,22 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link https://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
 defined('_JEXEC') or die('Restricted access');
-//JHtml::_('behavior.tooltip', '.CLMTooltip');
+//HTMLHelper::_('behavior.tooltip', '.CLMTooltip');
 require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
 
 // Variblen aus URL holen
 $sid 			= clm_core::$load->request_int('saison','1');
@@ -35,7 +40,7 @@ $ex = 0;
 
 if (isset($spieler[0]->Spielername)){ 
 	if (($spieler[0]->dsb_datum == '0000-00-00') || ($spieler[0]->dsb_datum == '1970-01-01') || (!isset($spieler))) $hint_dwzdsb = '';  
-	else $hint_dwzdsb = JText::_('DWZ_DSB_COMMENT_RUN').' '.clm_core::$load->utf8decode(JText::_('ON_DAY')).' '.JHTML::_('date',  $spieler[0]->dsb_datum, JText::_('DATE_FORMAT_CLM_F')); 
+	else $hint_dwzdsb = Text::_('DWZ_DSB_COMMENT_RUN').' '.clm_core::$load->utf8decode(Text::_('ON_DAY')).' '.HTMLHelper::_('date',  $spieler[0]->dsb_datum, Text::_('DATE_FORMAT_CLM_F')); 
 }
 // Stylesheet laden
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
@@ -43,15 +48,15 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 echo "<div id=\"clm\"><div id=\"spieler\">";
 	
 // Browsertitelzeile setzen
-$doc =JFactory::getDocument();
+$doc =Factory::getDocument();
 if (isset($spieler[0]->Spielername)){ 
 	$daten['title'] = $spieler[0]->Spielername;
 	if (isset($spieler[0]->Vereinname)){ 
 		$daten['title'] .= ' - '.$spieler[0]->Vereinname; }
 	$doc->setTitle($daten['title']);
 } else {
-$daten['title'] = JText::_('PLAYER_UNKNOWN_TITLE');
-$doc->setTitle(JText::_('PLAYER_UNKNOWN_TITLE'));
+$daten['title'] = Text::_('PLAYER_UNKNOWN_TITLE');
+$doc->setTitle(Text::_('PLAYER_UNKNOWN_TITLE'));
 }
 
 // Konfigurationsparameter auslesen
@@ -70,7 +75,7 @@ location=form.select.options[index].value;}}
 <?php
 $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
-	echo "<div id='wrong'>".JText::_('NO_ACCESS')."<br>".JText::_('NOT_REGISTERED')."</div>";
+	echo "<div id='wrong'>".Text::_('NO_ACCESS')."<br>".Text::_('NOT_REGISTERED')."</div>";
 }
 else { ?>
 
@@ -80,10 +85,10 @@ else { ?>
                 <select name="select" onchange="goto(this.form)" class="selectteam">
                 <?php  $cnt = 0;   foreach ($spielerliste as $spielerliste) { $cnt++;?>
 				  <?php if ($countryversion =="de") { ?>
-                     <option value="<?php echo JURI::base(); ?>index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $spielerliste->ZPS; ?>&mglnr=<?php echo $spielerliste->Mgl_Nr; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+                     <option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $spielerliste->ZPS; ?>&mglnr=<?php echo $spielerliste->Mgl_Nr; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
                     <?php if ($spielerliste->Mgl_Nr == $mgl) { echo 'selected="selected"'; } ?>><?php echo $spielerliste->Spielername; ?></option>
 				  <?php } else { ?>
-                     <option value="<?php echo JURI::base(); ?>index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $spielerliste->ZPS; ?>&PKZ=<?php echo $spielerliste->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+                     <option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $spielerliste->ZPS; ?>&PKZ=<?php echo $spielerliste->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
                     <?php if ($spielerliste->PKZ == $PKZ) { echo 'selected="selected"'; } ?>><?php echo $spielerliste->Spielername; ?></option>
                   <?php } ?>
                 <?php } ?>
@@ -95,7 +100,7 @@ else { ?>
         	<form name="form1">
             	<select name="select" onchange="goto(this.form)" class="selectteam">
                 	<?php foreach ($saisons as $saisons) { ?>
-                    	<option value="<?php echo JURI::base(); ?>index.php?option=com_clm&view=spieler&saison=<?php echo $saisons->id; ?>&zps=<?php echo $zps; ?>&mglnr=<?php echo $mgl; ?>&PKZ=<?php echo $PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+                    	<option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=spieler&saison=<?php echo $saisons->id; ?>&zps=<?php echo $zps; ?>&mglnr=<?php echo $mgl; ?>&PKZ=<?php echo $PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
                         <?php if ($saisons->id == $sid) { echo 'selected="selected"'; } ?>><?php echo $saisons->name; ?> </option>
                     <?php } ?>
                 </select>
@@ -106,7 +111,7 @@ else { ?>
             <form name="form1">
                 <select name="select" onchange="goto(this.form)" class="selectteam">
                 <?php  $cnt = 0;   foreach ($vereinsliste as $vereinsliste) { $cnt++;?>
-                     <option value="<?php echo JURI::base(); ?>index.php?option=com_clm&view=dwz&saison=<?php echo $sid; ?>&zps=<?php echo $vereinsliste->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+                     <option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=dwz&saison=<?php echo $sid; ?>&zps=<?php echo $vereinsliste->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
                     <?php if ($vereinsliste->zps == $zps) { echo 'selected="selected"'; } ?>><?php echo $vereinsliste->name; ?></option>
                 <?php } ?>
                 </select>
@@ -120,7 +125,7 @@ else { ?>
 <?php
 // Überprüfen ob Spieler existiert
 if (!isset($spieler[0]->Spielername)){ 
-echo CLMContent::clmWarning(JText::_('PLAYER_UNKNOWN'))."<br>";
+echo CLMContent::clmWarning(Text::_('PLAYER_UNKNOWN'))."<br>";
 }
 else {  ?>
 
@@ -137,14 +142,14 @@ else {  ?>
     <td valign="top" class="det_coltop1">
     	<table cellpadding="0" cellspacing="0" class="details">
             <tr>
-            <td class="det_col1"><?php echo JText::_('PLAYER_NAME') ?></td>
+            <td class="det_col1"><?php echo Text::_('PLAYER_NAME') ?></td>
             <td class="det_col2"><?php echo $spieler[0]->Spielername; ?></td>
             </tr>
             <tr>
           	<?php if ($countryversion =="de") { ?>
-				<td class="det_col1"><?php echo JText::_('PLAYER_DWZ') ?></td>
+				<td class="det_col1"><?php echo Text::_('PLAYER_DWZ') ?></td>
             <?php } else { ?>
-				<td class="det_col1"><?php echo JText::_('PLAYER_GRADE') ?></td>
+				<td class="det_col1"><?php echo Text::_('PLAYER_GRADE') ?></td>
             <?php } ?>			
         	<?php if ($countryversion =="out") { ?>
 				<?php  $mgl4 = ''.$mgl; while (strlen($mgl4) < 4) { $mgl4 = '0'.$mgl4; } ?>
@@ -158,7 +163,7 @@ else {  ?>
             <?php } ?>			
             </tr>
             <tr>
-            <td class="det_col1"><?php if ($spieler[0]->FIDE_ELO > 0) { ?><?php echo JText::_('PLAYER_ELO') ?><?php } ?></td>
+            <td class="det_col1"><?php if ($spieler[0]->FIDE_ELO > 0) { ?><?php echo Text::_('PLAYER_ELO') ?><?php } ?></td>
 			<td class="det_col2"><a href="https://ratings.fide.com/profile/<?php echo $spieler[0]->FIDE_ID;?>" target="_blank"><?php if ($spieler[0]->FIDE_ELO > 0) { ?><?php echo $spieler[0]->FIDE_ELO; ?><?php } ?></a></td>
         	</tr>
         </table>
@@ -169,7 +174,7 @@ else {  ?>
     <td valign="top" class="det_coltop2">
     	<table cellpadding="0" cellspacing="0" class="details">
             <tr>
-            <td class="det_col3"><?php echo JText::_('PLAYER_CLUB') ?></td>
+            <td class="det_col3"><?php echo Text::_('PLAYER_CLUB') ?></td>
             <?php if (isset($spieler[0]->Vereinname)) { ?>
 				<td class="det_col4"><a href="index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $spieler[0]->Vereinname; ?></a></td>
             <?php } ?>
@@ -181,7 +186,7 @@ else {  ?>
             </tr>
             <?php } ?>
 			<tr>
-			<td class="det_col3" valign="top"><?php echo JText::_('PLAYER_TEAMS') ?></td>
+			<td class="det_col3" valign="top"><?php echo Text::_('PLAYER_TEAMS') ?></td>
             <td class="det_col4" valign="top">
                 <?php if (count($erg) > 0) {
                 $c = 0;
@@ -203,28 +208,28 @@ else {  ?>
 </div>
 
 <!-- /// gespielte Partien /// -->
-<div class="title"><?php echo JText::_('PLAYER_GAMES') ?></div>
+<div class="title"><?php echo Text::_('PLAYER_GAMES') ?></div>
 
 <?php if (!$runden ) {
-echo CLMContent::clmWarning(JText::_('PLAYER_NO_GAMES'))."<br>";
+echo CLMContent::clmWarning(Text::_('PLAYER_NO_GAMES'))."<br>";
 } 
 else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
     <table cellpadding="0" cellspacing="0" class="spielerverlauf">
     
     <tr>
-        <th class="gsp"><?php echo JText::_('PLAYER_ROUND') ?></th>
-        <th class="gsp"><?php echo JText::_('PLAYER_LOCATION') ?></th>
-        <th class="gsp"><?php echo JText::_('PLAYER_BOARD') ?></th>
-        <th><?php echo JText::_('PLAYER_OPONENT') ?></th>
+        <th class="gsp"><?php echo Text::_('PLAYER_ROUND') ?></th>
+        <th class="gsp"><?php echo Text::_('PLAYER_LOCATION') ?></th>
+        <th class="gsp"><?php echo Text::_('PLAYER_BOARD') ?></th>
+        <th><?php echo Text::_('PLAYER_OPONENT') ?></th>
         <th class="gsp">
 		<?php if ($hint_dwzdsb != '') { ?>
-			<a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php echo JText::_('PLAYER_RATING') ?></a>
+			<a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php echo Text::_('PLAYER_RATING') ?></a>
 		<?php } else { ?>
-			<?php echo JText::_('PLAYER_RATING') ?>
+			<?php echo Text::_('PLAYER_RATING') ?>
 		<?php } ?>
-        <th><?php echo JText::_('PLAYER_TEAM') ?></th>
-        <th class="gsp2"><?php echo JText::_('DWZ_WE').' &sup1;'; ?></th>
-        <th class="gsp2"><?php echo JText::_('PLAYER_RESULT') ?></th>
+        <th><?php echo Text::_('PLAYER_TEAM') ?></th>
+        <th class="gsp2"><?php echo Text::_('DWZ_WE').' &sup1;'; ?></th>
+        <th class="gsp2"><?php echo Text::_('PLAYER_RESULT') ?></th>
     </tr>
     <?php 
 	$lid = -1;
@@ -237,16 +242,19 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
     <tr>
         <td class="gsp"><a href="index.php?option=com_clm&view=runde&saison=<?php echo $sid; ?>&liga=<?php echo $runden->lid; ?>&runde=<?php echo $runden->runde; ?>&dg=<?php echo $runden->dg; ?>"><?php echo $runden->runde ?></a></td>
     <?php if ($runden->heim > 0) { ?>
-        <td class="gsp"><?php echo JText::_('PLAYER_HOME') ?></td>
+        <td class="gsp"><?php echo Text::_('PLAYER_HOME') ?></td>
     <?php } else { ?>
-        <td class="gsp"><?php echo JText::_('PLAYER_AWAY') ?></td>
+        <td class="gsp"><?php echo Text::_('PLAYER_AWAY') ?></td>
     <?php } ?>
         <td class="gsp"><?php echo $runden->brett; ?></td>
         <td align="left"><?php if($runden->gzps=="ZZZZZ"){ ?>N.N.<?php } else { ?><a href="index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $runden->gzps; ?>&mglnr=<?php echo $runden->Mgl_Nr; ?>&PKZ=<?php echo $runden->gPKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $runden->Spielername ?></a><?php } ?></td>
        <?php if ($runden->start_dwz < 1) {    // start_dwz des gegners
 			$runden->start_dwz = $runden->DWZ;
         } 
-        if ($spieler[0]->start_dwz < 1) {    // start_dwz des spielers
+//		if ($spieler[0]->start_dwz < 1) {    // start_dwz des spielers
+		$params = new clm_class_params($spieler[0]->lparams);
+		$dwz_date = $params->get("dwz_date",'1970-01-01');		
+        if ($dwz_date <= '1970-01-01') {    // start_dwz des spielers
 			$spieler[0]->start_dwz = $spieler[0]->dsbDWZ;
         } ?>
         <td class="gsp2"><?php echo $runden->start_dwz ?></td>
@@ -254,20 +262,33 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
     <?php	
 		//$ea = clm_class_dwz_rechner::P($spieler[0]->dsbDWZ, $runden->DWZ);
 		$ea = clm_class_dwz_rechner::P($spieler[0]->start_dwz, $runden->start_dwz);
-        if ($runden->kampflos == 0) { $sum_ea = $sum_ea + $ea; }
+//		if ($runden->kampflos == 0) { $sum_ea = $sum_ea + $ea; }
+        if ($runden->kampflos == 0 AND $runden->start_dwz > 1) { 
+			$ea = clm_class_dwz_rechner::P($spieler[0]->start_dwz, $runden->start_dwz);
+			$sum_ea = $sum_ea + $ea;
+		}
     ?>
-        <td class="gsp2"><?php if ($runden->kampflos == 0) { echo $ea;} else { echo "-";} ?></td>
+        <td class="gsp2"><?php if ($runden->kampflos == 0 AND $runden->start_dwz > 1) { echo $ea;} else { echo "-";} ?></td>
             
     <?php 
     
 		$search = array ('.0', '0.5');
 		$replace = array ('', '&frac12;');
-		$punkte_text = str_replace ($search, $replace, $runden->punkte);
+		$rpunkte = '0';
+		if ($runden->ergebnis == 2) $rpunkte = '0.5';
+		elseif ($runden->heim == 0 AND $runden->ergebnis == 0) $rpunkte= '1'; // als Gast gewonnen 
+		elseif ($runden->heim == 1 AND $runden->ergebnis == 1) $rpunkte= '1'; // zu Hause gewonnen 
+		else $rpunkte = '0';
+//		$punkte_text = str_replace ($search, $replace, $runden->punkte);
+		$punkte_text = str_replace ($search, $replace, $rpunkte);
 		
 		if ($runden->kampflos == 0) {
 			$erg_text = $punkte_text;
-    			$sum_partien++;
-				$sum_punkte=$sum_punkte + $runden->punkte;											  
+			if ($runden->start_dwz > 1) {
+				$sum_partien++;
+//				$sum_punkte=$sum_punkte + $runden->punkte;											  
+				$sum_punkte=$sum_punkte + $rpunkte;											  
+			}
 		}
 		else {
 			if ($config->fe_display_lose_by_default == 0) {
@@ -298,7 +319,7 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
     <?php } ?>
     <tr><td class='noBorder' colspan='8'></td></tr>
     <tr class="ende">
-        <td colspan="6"><?php echo JText::_('PLAYER_SUM') ?></td>
+        <td colspan="6"><?php echo Text::_('PLAYER_SUM') ?></td>
         <?php  $Pkt = explode (".", $sum_punkte); ?>
         <td align="center"><?php echo $sum_ea; ?></td>
         <td align="center"><?php echo $sum_punkte.'  /  '.$sum_partien;?></td>
@@ -306,7 +327,7 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
     <!-- -->
     
     </table>
-<div class="hint"><?php echo JText::_('PLAYER_EA_HINT') ?></div>
+<div class="hint"><?php echo Text::_('PLAYER_EA_HINT') ?></div>
 <br>
 
 <?php }
@@ -316,7 +337,7 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
 ?>
 <!-- /// DWZ Auswertung /// -->
 <br>
-<div class="title"><?php echo JText::_('PLAYER_DWZ_EVAL') ?></div>
+<div class="title"><?php echo Text::_('PLAYER_DWZ_EVAL') ?></div>
 
 <?php //if($dwz =="0") {
 // Einzelauswertung der Ligen
@@ -324,29 +345,32 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
 	foreach ($spieler as $spielerl) {
 	if ($v_liga == $spielerl->liga) continue; else $v_liga = $spielerl->liga;
 	if ($spielerl->Punkte == 0 AND $spielerl->Partien == 0) {
-	echo CLMContent::clmWarning($spielerl->liga_name . '-' . JText::_('PLAYER_NO_EVAL_GAMES')).'<br>';
+	echo CLMContent::clmWarning($spielerl->liga_name . '-' . Text::_('PLAYER_NO_EVAL_GAMES')).'<br>';
 	} else { ?>
     <table cellpadding="0" cellspacing="0" class="spielerdwzneu">
     <tr>
         <th class="anfang" colspan="9"><?php echo $spielerl->liga_name; ?></th>
     </tr>
     <tr>
-        <td><a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php echo JText::_('PLAYER_RATING_OLD') ?></a></td>
-		<td><?php echo JText::_('PLAYER_W') ?></td>
-        <td><?php echo JText::_('PLAYER_WE') ?></td>
-        <td><?php echo JText::_('PLAYER_EF') ?></td>
-        <td><?php echo JText::_('PLAYER_PERFORMANCE') ?></td>
-        <td><?php echo JText::_('PLAYER_LEVEL') ?></td>
-        <td><?php echo JText::_('PLAYER_POINTS') ?></td>
-        <td><?php echo JText::_('PLAYER_DWZ_NEW') ?></td>
-        <td><?php echo JText::_('PLAYER_DIFFERENZ') ?></td>
+        <td><a title="<?php echo $hint_dwzdsb; ?>" class="CLMTooltip"><?php echo Text::_('PLAYER_RATING_OLD') ?></a></td>
+		<td><?php echo Text::_('PLAYER_W') ?></td>
+        <td><?php echo Text::_('PLAYER_WE') ?></td>
+        <td><?php echo Text::_('PLAYER_EF') ?></td>
+        <td><?php echo Text::_('PLAYER_PERFORMANCE') ?></td>
+        <td><?php echo Text::_('PLAYER_LEVEL') ?></td>
+        <td><?php echo Text::_('PLAYER_POINTS') ?></td>
+        <td><?php echo Text::_('PLAYER_DWZ_NEW') ?></td>
+        <td><?php echo Text::_('PLAYER_DIFFERENZ') ?></td>
 	</tr>
     
     <tr>
-       <?php if ($spielerl->start_dwz < 1) { 
-			$spielerl->start_dwz = $spielerl->dsbDWZ;
-			$spielerl->start_I0  = $spielerl->DWZ_Index;
-        } ?>
+       <?php // if ($spielerl->start_dwz < 1) { 
+			$params = new clm_class_params($spielerl->lparams);
+			$dwz_date = $params->get("dwz_date",'1970-01-01');		
+			if ($dwz_date <= '1970-01-01') {    // start_dwz des spielers
+				$spielerl->start_dwz = $spielerl->dsbDWZ;
+				$spielerl->start_I0  = $spielerl->DWZ_Index;
+			} ?>
 		<td><?php if ($countryversion == "de") echo $spielerl->start_dwz.'-'.$spielerl->start_I0;
 					else echo $spielerl->start_dwz; ?></td>
         <td><?php echo $spielerl->Punkte;?></td>
@@ -374,7 +398,7 @@ else { $sum_ea = 0; $sum_punkte = 0; $sum_partien = 0; $ex = 0; ?>
 							else echo $spieler->start_dwz; ?></td>
                 <?php }
             if ($spielerl->start_dwz  == 0 AND $spielerl->DWZ == 0) { ?>
-                <td><?php echo JText::_('PLAYER_REST') ?></td>
+                <td><?php echo Text::_('PLAYER_REST') ?></td>
                 <?php } ?>
         <td><?php $dwzdifferenz = $spielerl->DWZ - $spielerl->start_dwz; 
 		 if ( $dwzdifferenz > 0 ) { echo "+&nbsp;" . $dwzdifferenz; } else { echo $dwzdifferenz; } ?></td>
