@@ -26,7 +26,7 @@ $mainframe	= Factory::getApplication();
 $turnier 		= $this->turnier;
 
 $user =Factory::getUser();
-	$link = URI::base() .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
+	$link = URI::base(true) .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
 
 
 // Datensätze in Tabelle schreiben - Transfer data into db-table
@@ -94,7 +94,7 @@ if ($f_source != 'sent') {
 		$msg .= '<br>'.Text::_('REGISTRATION_E_SPAM');
 }
 if ($msg != '') {
-	$link = URI::base() .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
+	$link = URI::base(true) .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
 	$link .= '&reg_name='.$reg_name.'&reg_vorname='.$reg_vorname.'&reg_club='.$reg_club.'&reg_mail='.$reg_mail.'&reg_jahr='.$reg_jahr;
 	$link .= '&reg_zps='.$reg_zps.'&reg_mgl_nr='.$reg_mgl_nr;
 	$link .= '&reg_dwz='.$reg_dwz.'&reg_elo='.$reg_elo.'&reg_tel_no='.$reg_tel_no.'&reg_account='.$reg_account.'&reg_comment='.$reg_comment;

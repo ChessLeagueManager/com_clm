@@ -24,5 +24,6 @@ $sid		= clm_core::$load->request_int( 'saison',1);
 $lid		= clm_core::$load->request_int('liga',1);
  
 $mainframe	= Factory::getApplication();
-$link = URI::base() . 'index.php/component/clm/?view=runde&saison='.$sid.'&liga='.$lid.'&runde='.$runde.'&dg='.$dg.'&Itemid='.$itemid;
+$link = URI::base(true) . 'index.php/component/clm/?view=runde&saison='.$sid.'&liga='.$lid.'&runde='.$runde.'&dg='.$dg.'&Itemid='.$itemid;
 $mainframe->redirect( $link );
+?>

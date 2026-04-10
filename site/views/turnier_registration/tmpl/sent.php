@@ -21,7 +21,7 @@ use Joomla\CMS\Uri\Uri;
 $turnier 		= $this->turnier;
 
 $user =Factory::getUser();
-	$link = URI::base() .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
+	$link = URI::base(true) .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
 
 // Datensätze in Tabelle schreiben - insert data into table
 
@@ -130,7 +130,7 @@ elseif ($reg_check01 != $reg_wert)
 		$msg .= '<br>'.Text::_('REGISTRATION_E_CHECKBOX');
 
 if ($msg != '') {
-	$link = URI::base() .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
+	$link = URI::base(true) .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
 	if ($typeRegistration == 5) {
 		$link .= '&layout=selection&f_source=sent&reg_spieler='.$reg_spieler;
 	}
@@ -164,7 +164,7 @@ if ($msg != '') {
 
 	$result = $stmt->execute();
 	if ($result === false) { 
-		$link = URI::base() .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
+		$link = URI::base(true) .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
 		if ($typeRegistration == 5) {
 			$link .= '&layout=selection&f_source=sent&reg_spieler='.$reg_spieler;
 		}
@@ -197,7 +197,7 @@ if ($msg != '') {
 	$email_TL = $turnier->tlemail;
 	$htmlMail = 0;
 //	$url = URI::base().'components/com_clm/clm/mail_approve.php?parameter='.$randomUid;
-	$url = URI::base().'index.php?option=com_clm&view=mailapprove&parameter='.$randomUid;
+	$url = URI::base(true).'index.php?option=com_clm&view=mailapprove&parameter='.$randomUid;
 	$msg = '';
 	// Email an TL - e-mail to tournament controller
 	if ($email_TL != "") {
@@ -228,7 +228,7 @@ if ($msg != '') {
 		$msg = Text::_( 'REGISTRATION_SUCCESS' );
 		$mainframe->enqueueMessage( $msg );
 	}
-	$link = URI::base() .'index.php?option=com_clm&view=turnier_info&turnier='. $turnier->id .'&Itemid='; 
+	$link = URI::base(true) .'index.php?option=com_clm&view=turnier_info&turnier='. $turnier->id .'&Itemid='; 
 	$mainframe->redirect( $link );
 
 ?>

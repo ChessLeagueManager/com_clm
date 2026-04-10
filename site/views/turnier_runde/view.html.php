@@ -27,8 +27,8 @@ class CLMViewTurnier_Runde extends JViewLegacy {
 		$document =Factory::getDocument();
 		
 		if ($model->pgnShow) {
-			$document->addScript(URI::base().'components/com_clm/javascript/jsPgnViewer.js');
-			$document->addScript(URI::base().'components/com_clm/javascript/showPgnViewer.js');
+			$document->addScript(URI::base(true).'components/com_clm/javascript/jsPgnViewer.js');
+			$document->addScript(URI::base(true).'components/com_clm/javascript/showPgnViewer.js');
 			
 			// Zufallszahl
 			$now = time()+mt_rand();
@@ -49,7 +49,7 @@ class CLMViewTurnier_Runde extends JViewLegacy {
 			$document->addScriptDeclaration("text['altFastForward'] = '".Text::_('PGN_ALT_FASTFORWARD')."';");
 			$document->addScriptDeclaration("text['pgnClose'] = '".Text::_('PGN_CLOSE')."';");
 			// Pfad
-			$document->addScriptDeclaration("var imagepath = '".URI::base()."components/com_clm/images/pgnviewer/'");
+			$document->addScriptDeclaration("var imagepath = '".URI::base(true)."components/com_clm/images/pgnviewer/'");
 		}
 		
 		// Title in Browser

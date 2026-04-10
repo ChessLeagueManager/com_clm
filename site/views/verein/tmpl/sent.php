@@ -33,7 +33,7 @@ $clmuser 	= $this->clmuser;
 $row 		= $this->row;
 
 $user =Factory::getUser();
-	$link = URI::base() .'index.php?option=com_clm&view=verein&saison='. $sid .'&zps='. $zps;
+	$link = URI::base(true) .'index.php?option=com_clm&view=verein&saison='. $sid .'&zps='. $zps;
 // Login Status prüfen
 if (!$user->get('id')) {
 	$msg = Text::_( 'CLUB_DATA_SENT_LOGIN' );

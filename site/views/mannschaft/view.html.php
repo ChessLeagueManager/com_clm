@@ -22,11 +22,7 @@ class CLMViewMannschaft extends JViewLegacy
 		$googlemaps     = $config->googlemaps;
 		$googlemaps_msch     = $config->googlemaps_msch;
 		
-		if (isset($_SERVER['HTTPS']) AND $_SERVER['HTTPS'] != 'off') {
-			$prot = 'https';
-		} else {
-			$prot = 'http';
-		}
+		$prot = 'https';
 		$document =Factory::getDocument();
 		if ($googlemaps == 1) {
 			if ($googlemaps_msch == 1){ //Load Leaflet
@@ -41,7 +37,7 @@ class CLMViewMannschaft extends JViewLegacy
 		
 //		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
 		clm_core::$cms->addScript(clm_core::$url."includes/jquery-3.7.1.min.js");
-		$document->addScript(URI::base().'components/com_clm/javascript/updateTableHeaders.js');
+		$document->addScript(URI::base(true).'components/com_clm/javascript/updateTableHeaders.js');
 		
 		$model	  = $this->getModel();
   		$mannschaft     = $model->getCLMMannschaft();

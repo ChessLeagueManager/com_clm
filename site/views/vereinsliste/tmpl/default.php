@@ -72,7 +72,7 @@ function tableOrdering( order, dir, task )
                 <form name="form1">
                     <select name="select" onchange="goto(this.form)" class="selectteam">
 						<?php foreach ($saisons as $saisons) { ?>
-                            <option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=vereinsliste&saison=<?php echo $saisons->id; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+                            <option value="<?php echo URI::base(true); ?>index.php?option=com_clm&view=vereinsliste&saison=<?php echo $saisons->id; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
                             <?php if ($saisons->id == $sid) { echo 'selected="selected"'; } ?>><?php echo $saisons->name; ?> </option>
                         <?php } ?>
                     </select>
@@ -84,7 +84,7 @@ function tableOrdering( order, dir, task )
                     <option value=""><?php echo Text::_('CLUB_SELECTTEAM') ?></option>
                     <?php  $cnt = 0;
                      foreach ($vereinsliste as $vereinsliste) { $cnt++; if ($vereinsliste->sid == $sid) {?>
-                    <option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $vereinsliste->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $vereinsliste->name; ?></option>
+                    <option value="<?php echo URI::base(true); ?>index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $vereinsliste->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $vereinsliste->name; ?></option>
                     <?php }} ?>
                     </select>
                 </form>

@@ -142,8 +142,8 @@ if(isset($liga[0])){
 }
 	$doc->setTitle($daten['title']);
 
-			$doc->addScript(URI::base().'components/com_clm/javascript/jsPgnViewer.js');
-			$doc->addScript(URI::base().'components/com_clm/javascript/showPgnViewer.js');
+			$doc->addScript(URI::base(true).'components/com_clm/javascript/jsPgnViewer.js');
+			$doc->addScript(URI::base(true).'components/com_clm/javascript/showPgnViewer.js');
 			
 			// Zufallszahl
 			$now = time()+mt_rand();

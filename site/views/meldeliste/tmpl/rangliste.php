@@ -18,7 +18,7 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Router\Route;
 
 $document = Factory::getDocument();
-$cssDir = URI::base().DS. 'components'.DS.'com_clm'.DS.'includes';
+$cssDir = URI::base(true).DS. 'components'.DS.'com_clm'.DS.'includes';
 $document->addStyleSheet( $cssDir.DS.'clm_content.css', 'text/css', null, array() );
 	
 // Variablen holen

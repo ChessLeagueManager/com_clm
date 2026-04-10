@@ -25,7 +25,7 @@ class CLMImage {
 	*/
 	public static function imageURL($image) {
 	
-		$string = Uri::root().'components/com_clm/images/'.$image;
+		$string = Uri::root(true).'components/com_clm/images/'.$image;
 		
 		return $string;
 	

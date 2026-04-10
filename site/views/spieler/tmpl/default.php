@@ -85,10 +85,10 @@ else { ?>
                 <select name="select" onchange="goto(this.form)" class="selectteam">
                 <?php  $cnt = 0;   foreach ($spielerliste as $spielerliste) { $cnt++;?>
 				  <?php if ($countryversion =="de") { ?>
-                     <option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $spielerliste->ZPS; ?>&mglnr=<?php echo $spielerliste->Mgl_Nr; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+                     <option value="<?php echo URI::base(true); ?>index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $spielerliste->ZPS; ?>&mglnr=<?php echo $spielerliste->Mgl_Nr; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
                     <?php if ($spielerliste->Mgl_Nr == $mgl) { echo 'selected="selected"'; } ?>><?php echo $spielerliste->Spielername; ?></option>
 				  <?php } else { ?>
-                     <option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $spielerliste->ZPS; ?>&PKZ=<?php echo $spielerliste->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+                     <option value="<?php echo URI::base(true); ?>index.php?option=com_clm&view=spieler&saison=<?php echo $sid; ?>&zps=<?php echo $spielerliste->ZPS; ?>&PKZ=<?php echo $spielerliste->PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
                     <?php if ($spielerliste->PKZ == $PKZ) { echo 'selected="selected"'; } ?>><?php echo $spielerliste->Spielername; ?></option>
                   <?php } ?>
                 <?php } ?>
@@ -100,7 +100,7 @@ else { ?>
         	<form name="form1">
             	<select name="select" onchange="goto(this.form)" class="selectteam">
                 	<?php foreach ($saisons as $saisons) { ?>
-                    	<option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=spieler&saison=<?php echo $saisons->id; ?>&zps=<?php echo $zps; ?>&mglnr=<?php echo $mgl; ?>&PKZ=<?php echo $PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+                    	<option value="<?php echo URI::base(true); ?>index.php?option=com_clm&view=spieler&saison=<?php echo $saisons->id; ?>&zps=<?php echo $zps; ?>&mglnr=<?php echo $mgl; ?>&PKZ=<?php echo $PKZ; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
                         <?php if ($saisons->id == $sid) { echo 'selected="selected"'; } ?>><?php echo $saisons->name; ?> </option>
                     <?php } ?>
                 </select>
@@ -111,7 +111,7 @@ else { ?>
             <form name="form1">
                 <select name="select" onchange="goto(this.form)" class="selectteam">
                 <?php  $cnt = 0;   foreach ($vereinsliste as $vereinsliste) { $cnt++;?>
-                     <option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=dwz&saison=<?php echo $sid; ?>&zps=<?php echo $vereinsliste->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+                     <option value="<?php echo URI::base(true); ?>index.php?option=com_clm&view=dwz&saison=<?php echo $sid; ?>&zps=<?php echo $vereinsliste->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
                     <?php if ($vereinsliste->zps == $zps) { echo 'selected="selected"'; } ?>><?php echo $vereinsliste->name; ?></option>
                 <?php } ?>
                 </select>

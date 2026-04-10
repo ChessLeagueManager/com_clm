@@ -43,7 +43,7 @@ class CLMViewVereinsliste extends JViewLegacy
 		
 //		$document->addScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
 		clm_core::$cms->addScript(clm_core::$url."includes/jquery-3.7.1.min.js");
-		$document->addScript(URI::base().'components/com_clm/javascript/updateTableHeaders.js');
+		$document->addScript(URI::base(true).'components/com_clm/javascript/updateTableHeaders.js');
 		
 		/* Call the state object */
 //		$state = $this->get( 'state' );

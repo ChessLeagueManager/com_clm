@@ -23,6 +23,6 @@ $sid		= clm_core::$load->request_string( 'saison','1');
 $lid		= clm_core::$load->request_string('liga','1');
  
 $mainframe	= Factory::getApplication();
-$link = URI::base() . 'index.php/component/clm/?view=runde&saison='.$sid.'&liga='.$lid.'&runde='.$runde.'&dg='.$dg.'&format=raw&Itemid='.$itemid;
+$link = URI::base(true) . 'index.php/component/clm/?view=runde&saison='.$sid.'&liga='.$lid.'&runde='.$runde.'&dg='.$dg.'&format=raw&Itemid='.$itemid;
 $mainframe->redirect( $link, '' );
 ?>

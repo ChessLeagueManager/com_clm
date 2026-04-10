@@ -98,7 +98,7 @@ location=form.select.options[index].value;}}
         <select name="select" onchange="goto(this.form)" class="selectteam">
         <option value=""><?php echo Text::_('CLUB_SELECTTEAM') ?></option>
         <?php  $cnt = 0;   foreach ($vereinsliste as $vereinsliste) { $cnt++;?>
-         <option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $vereinsliste->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+         <option value="<?php echo URI::base(true); ?>index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $vereinsliste->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
         <?php if ($vereinsliste->zps == $zps) { echo 'selected="selected"'; } ?>><?php echo $vereinsliste->name; ?></option>
         <?php } ?>
         </select>
@@ -113,7 +113,7 @@ location=form.select.options[index].value;}}
 if ($conf_vereinsdaten == 1) {
 	if ($user->get('id') > 0) {
 		if (isset($clmuser[0]) AND ($clmuser[0]->published > 0 AND $clmuser[0]->zps == $zps OR $clmuser[0]->usertype == "admin")) {
-	 echo '<span class="edit"><a href="' . URI::base() .'index.php?option=com_clm&view=verein&saison='. $sid .'&zps='. $zps .'&layout=vereinsdaten'; if ($itemid <>'') { echo "&Itemid=".$itemid; } echo '">'. Text::_('CLUB_DATA_EDIT') .'</a></span>'; 
+	 echo '<span class="edit"><a href="' . URI::base(true) .'index.php?option=com_clm&view=verein&saison='. $sid .'&zps='. $zps .'&layout=vereinsdaten'; if ($itemid <>'') { echo "&Itemid=".$itemid; } echo '">'. Text::_('CLUB_DATA_EDIT') .'</a></span>'; 
 	} }
 } 
  ?>
@@ -353,7 +353,7 @@ if (!$archive_check) {
                 <form name="form1">
                     <select name="select" onchange="goto(this.form)" class="selectteam">
 						<?php foreach ($saisons as $saisons) { ?>
-                            <option value="<?php echo URI::base(); ?>index.php?option=com_clm&view=verein&zps=<?php echo $zps; ?>&saison=<?php echo $saisons->id; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
+                            <option value="<?php echo URI::base(true); ?>index.php?option=com_clm&view=verein&zps=<?php echo $zps; ?>&saison=<?php echo $saisons->id; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"
                             <?php if ($saisons->id == $sid) { echo 'selected="selected"'; } ?>><?php echo $saisons->name; ?> </option>
                         <?php } ?>
                     </select>

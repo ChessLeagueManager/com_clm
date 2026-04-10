@@ -24,21 +24,21 @@ require ("index.php");
 	if ($result[0] === true) {
 		$tid  = $result[2];
 		$type = 'message';
-		$link = str_replace('components/com_clm/clm/','',URI::base()).'index.php?option=com_clm&view=turnier_info&turnier='.$tid.'&Itemid='; 
+		$link = str_replace('components/com_clm/clm/','',URI::base(true)).'index.php?option=com_clm&view=turnier_info&turnier='.$tid.'&Itemid='; 
 	} elseif ($result[1] == 'e_alreadyApproved') {
 		$tid  = $result[2];
 		$type = 'warning';
-		$link = str_replace('components/com_clm/clm/','',URI::base()).'index.php?option=com_clm&view=turnier_info&turnier='.$tid.'&Itemid='; 
+		$link = str_replace('components/com_clm/clm/','',URI::base(true)).'index.php?option=com_clm&view=turnier_info&turnier='.$tid.'&Itemid='; 
 	} elseif ($result[1] == 'e_toolateApproved') {
 		$tid  = $result[2];
 		$type = 'warning';
-		$link = str_replace('components/com_clm/clm/','',URI::base()).'index.php?option=com_clm&view=turnier_info&turnier='.$tid.'&Itemid='; 
+		$link = str_replace('components/com_clm/clm/','',URI::base(true)).'index.php?option=com_clm&view=turnier_info&turnier='.$tid.'&Itemid='; 
 	} else {
 		$tid  = 0;
 		$type = 'warning';
 		$mtext	= 'e_approve_error';
 		$msg	= $lang->$mtext;
-		$link = str_replace('components/com_clm/clm/','',URI::base()).'index.php'; 
+		$link = str_replace('components/com_clm/clm/','',URI::base(true)).'index.php'; 
 	}
 	$app->enqueueMessage( $msg, $type );
 	$app->redirect( $link );

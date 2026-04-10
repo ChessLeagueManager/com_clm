@@ -28,7 +28,7 @@ $spieler	= $this->spieler;
 $verein		= $this->verein;
 
 $user 		=Factory::getUser();
-$link = URI::base() . 'index.php?option=com_clm&view=mitglieder_details&saison='. $sid .'&zps='. $zps .'&mglnr='. $mgl; 
+$link = URI::base(true) . 'index.php?option=com_clm&view=mitglieder_details&saison='. $sid .'&zps='. $zps .'&mglnr='. $mgl; 
 
 if ($clmuser[0]->zps <> $zps) {
 	$msg = Text::_( 'Sie sind nicht berechtigt, Aenderungen vorzunehmen.' );
@@ -90,7 +90,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 
 $msg = Text::_( 'Spielerdaten geändert' );
 $mainframe->enqueueMessage( $msg );
-$linkback = URI::base() . 'index.php?option=com_clm&view=mitglieder&saison='. $sid .'&zps='. $zps; 
+$linkback = URI::base(true) . 'index.php?option=com_clm&view=mitglieder&saison='. $sid .'&zps='. $zps; 
 $mainframe->redirect( $linkback );
 
 }

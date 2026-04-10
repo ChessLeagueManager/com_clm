@@ -28,7 +28,7 @@ $user	= Factory::getUser();
 
 	$mainframe	= Factory::getApplication();
 
-	$link = URI::base() .'index.php?option=com_clm&view=verein&saison='. $sid .'&zps='. $zps;
+	$link = URI::base(true) .'index.php?option=com_clm&view=verein&saison='. $sid .'&zps='. $zps;
 
 // Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
@@ -64,7 +64,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND ($clmuser[0]->zps =
 
 // Stylesheet laden
 	$document = Factory::getDocument();
-	$cssDir = URI::base().DS. 'components'.DS.'com_clm'.DS.'includes';
+	$cssDir = URI::base(true).DS. 'components'.DS.'com_clm'.DS.'includes';
 	$document->addStyleSheet( $cssDir.DS.'clm_content_0.css', 'text/css', null, array() );
 
 $row 	= $this->row;
