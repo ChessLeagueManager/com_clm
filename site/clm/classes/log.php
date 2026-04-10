@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 class clm_class_log {
 	private $callid;
@@ -135,7 +135,7 @@ class clm_class_log {
 				if($lang->exist($name)) {
 					$name = '<p title="'.$name.'" >'.$lang->$name . "</p>";
 				}
-				if (strlen($content) > 200) {
+				if (strlen($content) > 400) {
 					$content = self::hideError($content,$lang->messagelog);
 				}
 			break;
