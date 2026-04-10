@@ -18,6 +18,7 @@ $ -> Language fix or change
 # Spieler: Einsatz in mehrern Ligen bei unterschiedlichen Wertungen
 + Ergänzungen in Bedenkzeittabelle
 ^ Vereinfachung interner Links
+# Einzelturniere: Buchholz mit Streichwertung bei freiwillig nicht gespielten Partien
 
 - - - - - 4.3.2 - [30-01-2026] - - - - - - - - - - - - - - - - - - - -
 + Bedenkzeit: neue Tabelle und Einbau bei Einzel- und Teamwettbewerben

@@ -209,7 +209,8 @@ class CLMTournament extends stdClass {
 			$fieldname = 'tiebr'.$tb;
 			$arrayFW[$tb] = $this->data->$fieldname;
 		}
-	
+		// freiwilling nicht gespielte Partien
+		$array_vug = array(3,4,6,8,11,12,13);
 		// für alle Spieler Datensätze mit Summenwert 0 anlegen
 		// TODO: da gab es einen eigenen PHP-Befehl für?!
 		$array_PlayerSpiele = array();
@@ -217,6 +218,7 @@ class CLMTournament extends stdClass {
 		$array_PlayerPunkteTB = array(); // Punkte, die für Feinwertungen herangezogen werden
 		$array_PlayerBuch = array();
 		$array_PlayerBuchOpp = array();
+		$array_PlayerBuchOppvug = array();  // voluntarily unplayed games - freiwilling nicht gespielte Partien wie kampflos verloren, nicht gepaart (BYE)
 		$array_PlayerBuch1St = array();
 		$array_PlayerBuchm11 = array();
 		$array_PlayerBuchm22 = array();
@@ -391,11 +393,12 @@ class CLMTournament extends stdClass {
 						// Gibt es noch andere Ergebnisse bis Turnierende?
 						$s_erg8 = 0;
 						for ($i = ($value->runde + 1); $i <= $maxround; $i++) {
-							If (isset($matrix[$value->tln_nr][$value->dg][$i])) $s_erg8 = 1;
+							if (isset($matrix[$value->tln_nr][$value->dg][$i])) $s_erg8 = 1;
 							}
 						if ($s_erg8 == 1) $array_PlayerPunkteTB[$value->tln_nr] += 0;
 						else 
-							if ($value->runde == $runden) 
+//							if ($value->runde == $runden) 
+							if ($value->runde == $maxround) 
 								$array_PlayerPunkteTB[$value->tln_nr] += $vremis; // FW-Korrektur Teil 1
 //								$array_PlayerPunkteTB[$value->tln_nr] += $vsieg; // FW-Korrektur Teil 1
 							else
@@ -422,16 +425,24 @@ class CLMTournament extends stdClass {
 			if (in_array(1, $arrayFW) OR in_array(2, $arrayFW) OR in_array(11, $arrayFW) OR in_array(12, $arrayFW) OR in_array(5, $arrayFW) OR in_array(15, $arrayFW)) { // beliebige Buchholz als TieBreaker gewünscht?
 				if ($value->ergebnis < 3 OR $value->ergebnis == 9 OR $value->ergebnis == 10 OR $paramTBFideCorrect == 0) {
 					$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkteTB[$value->gegner]; // Array mit Gegnerwerten - für Streichresultat
+					if (in_array($value->ergebnis, $array_vug)) $array_PlayerBuchOppvug[$value->tln_nr][$value->runde] = $array_PlayerPunkteTB[$value->gegner];
 				} else { //Ranglistenkorrektur nach FIDE (Teil 2) nur für CH-Turniere
 					if ($dateEnd > $enddate_vg) {
-						if ($value->gegner == 0)
-//							if ($value->ergebnis == 12)
-							if ($value->runde == 1)
-								$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = 0;
-							else
+						if ($value->gegner == 0) {
+							if ($value->runde == 1) {
+//								$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = 0;
 								$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
-						else
+								if (in_array($value->ergebnis, $array_vug)) $array_PlayerBuchOppvug[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
+							} else {
+								$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
+//								$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = ($value->runde - 1) * $vremis;
+								if (in_array($value->ergebnis, $array_vug)) $array_PlayerBuchOppvug[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
+							}
+						} else {
 							$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
+//							$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = ($value->runde - 1) * $vremis;
+							if (in_array($value->ergebnis, $array_vug)) $array_PlayerBuchOppvug[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
+						}
 					} else {
 						$query = "SELECT tln_nr, heim, gegner, dg, runde, ergebnis FROM `#__clm_turniere_rnd_spl`"
 							. " WHERE turnier = ".$this->turnierid
@@ -585,8 +596,11 @@ class CLMTournament extends stdClass {
 				elseif (count($array_PlayerBuchOpp[$s]) == 1) 
 //					$array_PlayerBuch1St[$s] = $array_PlayerBuchOpp[$s][0];
 					$array_PlayerBuch1St[$s] = array_sum($array_PlayerBuchOpp[$s]);
-				elseif (count($array_PlayerBuchOpp[$s]) > 2) //== ($dg * $runden)) 
-					$array_PlayerBuch1St[$s] = array_sum($array_PlayerBuchOpp[$s]) - min($array_PlayerBuchOpp[$s]);
+				elseif (count($array_PlayerBuchOpp[$s]) > 2) //== ($dg * $runden))
+					if (isset($array_PlayerBuchOppvug[$s]) AND count($array_PlayerBuchOppvug[$s]) > 0)
+						$array_PlayerBuch1St[$s] = array_sum($array_PlayerBuchOpp[$s]) - min($array_PlayerBuchOppvug[$s]);
+					else 
+						$array_PlayerBuch1St[$s] = array_sum($array_PlayerBuchOpp[$s]) - min($array_PlayerBuchOpp[$s]);				
 				else $array_PlayerBuch1St[$s] = array_sum($array_PlayerBuchOpp[$s]);
 			}
 		}
