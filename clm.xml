@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="4.0.0" method="upgrade">
 	<name>CLM</name>
-	<creationDate>28.03.2026</creationDate>
+	<creationDate>20.04.2026</creationDate>
 	<author>CLM Team</author>
 	<copyright>(C) Copyright 2008-2026 by CLM Project</copyright>
 	<license>GNU/GPL</license>
 	<authorEmail>fishpoke@fishpoke.de</authorEmail>
 	<authorUrl>chessleaguemanager.org</authorUrl>
-	<version>4.9.2</version>
+	<version>5.0.0</version>
  	<scriptfile>installer.php</scriptfile>
 	<description>
 		<![CDATA[
@@ -16,10 +16,10 @@
 		 <p>Die CLM Komponente ist eine Verwaltung für Schachligen und Schachturniere.</p>
 		 <a href="https://joomla.chessleaguemanager.org" target="blank">CLM Projekt Homepage</a>  |  <a href="https://joomla.chessleaguemanager.org/index.php/kunena" target="blank">Support Forum</a>
 		 <br><br>
-		 <u>Das Wichtigste zur neuen Version 5.0.0 (Testpaket 4.9.2) :</u>
+		 <u>Das Wichtigste zur neuen Version 5.0.0 :</u>
 		 <ul type="square">
 		 <li><font color="red">Anpassung Joomla 6 </font></li>
-		 <li>nur sehr geringe inhaltlichen Änderungen zu Beta 4.3.2</li>
+		 <li>sowie nur sehr geringe inhaltlichen Änderungen zu Beta 4.3.2</li>
 		 <li>Paket ist geeignet für J 4.x, J 5.x und J 6.x</li>
 		 </ul></br>
 		 <p>Hinweise, Fehlermeldungen, Wünsche bitte über unser Forum</p>

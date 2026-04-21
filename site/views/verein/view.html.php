@@ -58,7 +58,12 @@ class CLMViewVerein extends JViewLegacy
   		$clmuser     = $model->getCLMCLMuser();
 		$this->clmuser = $clmuser;
 		
-		$prot = 'https';
+//		$prot = 'https';
+		if (isset($_SERVER['HTTPS']) AND $_SERVER['HTTPS'] != 'off') {
+                       $prot = 'https';
+               } else {
+                       $prot = 'http';
+               }
 		$document =Factory::getDocument();
 		
 		if ($googlemaps == 1) {

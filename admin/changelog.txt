@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 5.0.0 - [xx-xx-2026] - - - - - - - - - - - - - - - - - - - -
+- - - - - 5.0.0 - [20-04-2026] - - - - - - - - - - - - - - - - - - - -
 ^ Anpassung Joomla 6
 + Teamwettbewerbe: Feinwertung Sonneborn-Berger mit Streichergebnis
 # Spieler: Einsatz in mehrern Ligen bei unterschiedlichen Wertungen
