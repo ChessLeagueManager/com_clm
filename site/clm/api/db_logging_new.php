@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link https://chessleaguemanager.org
+*/
 function clm_api_db_logging_new($ids) {
 	$lines = array();
 	$lines[] = time();
@@ -15,6 +21,7 @@ function clm_api_db_logging_new($ids) {
 	if(is_array($ids)) {
 		foreach($ids as $id) {
 			$element = clm_core::$db->logging->get($id);
+			$h_content =  html_entity_decode($element->content);
 			if(is_numeric($id) && !$element->isNew()) {
 				$lines[] =				
 				$id .", ".
@@ -23,7 +30,7 @@ function clm_api_db_logging_new($ids) {
 				$element->timestamp .", ".
 				$element->type .", ".
 				$element->name .", ".
-				$element->content;
+				$h_content;
 			}
 		}
 	}
