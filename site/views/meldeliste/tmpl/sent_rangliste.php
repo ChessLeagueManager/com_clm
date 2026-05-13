@@ -188,6 +188,18 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 				$z_ordering = 0;
 				$z_start_dwz = NULL;
 				$z_start_I0 = NULL;
+				// Ergänen von DWZ und Index
+				$sql = " SELECT a.sid,a.ZPS,a.Mgl_Nr,a.PKZ,a.DWZ,a.DWZ_Index,a.Geburtsjahr,a.Spielername,a.Status, a.gesperrt"
+					." FROM #__clm_dwz_spieler as a"
+					." WHERE a.ZPS = '$ZPSmgl[$y]' AND mgl_nr = '$mgl[$y]' "
+					." AND sid =".$sid
+					;
+				$db->setQuery($sql);
+				$spieler_neu = $db->loadObjectList();
+				if (is_array($spieler_neu) AND count($spieler_neu) == 1) {
+					$z_start_dwz = $spieler_neu[0]->DWZ;
+					$z_start_I0 = $spieler_neu[0]->DWZ_Index;				
+					}
 				$z_DWZ		 = 0; 
 				$z_I0	 	 = 0; 
 				$z_Punkte	 = 0; 
