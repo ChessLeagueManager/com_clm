@@ -289,6 +289,7 @@ class CLMModelSWTLigasave extends JModelLegacy {
 		// man_nr für spielfrei zurücksetzen
 		$sql_fix = ' UPDATE #__clm_mannschaften'
 					. ' SET `man_nr` = "0", `name` = "spielfrei"'
+					. ' , `published` = "0"'
 					. ' WHERE `liga` = "' . $liga_id . '"'
 					. ' AND (`name` = "spielfrei" OR `name` = "")'
 					. ' AND `zps` = "0"';
@@ -392,7 +393,7 @@ class CLMModelSWTLigasave extends JModelLegacy {
 					return false;
 				}
 		}
-		$fields = '`sid`, `name`, `liga`, `nr`, `datum`, `startzeit`, `published`, `bem_int`, `gemeldet`, `zeit`';
+		$fields = '`sid`, `name`, `liga`, `nr`, `datum`, `startzeit`, `published`, `sl_ok`, `bem_int`, `gemeldet`, `zeit`';
 		$values = '';
 		for ($d = 1; $d <= $anz_durchgaenge; $d++) {
 		
@@ -400,9 +401,11 @@ class CLMModelSWTLigasave extends JModelLegacy {
 		
 				if (($r <= $gesp_runden AND $d == $gesp_dgang) OR $d < $gesp_dgang ) {
 					$published = 1;
+					$sl_ok = 1;
 				}
 				else {
 					$published = 0;
+					$sl_ok = 0;
 				}
 				
 				$rt = (($d - 1) *  $anz_runden) + $r;
@@ -414,13 +417,13 @@ class CLMModelSWTLigasave extends JModelLegacy {
 					$name = 'Durchgang ' . $d . ', Runde ' . $r;
 				}
 				if (isset($swt_data['runden_datum'][$rt]) AND $swt_data['runden_datum'][$rt] != "0000-00-00" AND $swt_data['runden_datum'][$rt] != "1970-01-01") {
-					$values .= ' ( "'.$sid.'", "'.$name.'", "'.$liga_id.'", "'.$rt.'", "'.$swt_data['runden_datum'][$rt].'", "'.$swt_data['runden_beginn'][$rt].'", "'.$published.'", '
+					$values .= ' ( "'.$sid.'", "'.$name.'", "'.$liga_id.'", "'.$rt.'", "'.$swt_data['runden_datum'][$rt].'", "'.$swt_data['runden_beginn'][$rt].'", "'.$published.'", "'.$sl_ok.'", '
 							. '"Import durch SWT Datei.", "9997", "'.$zeit.'" ), ';
 				} elseif (isset($termineFromDatabase[$rt]) AND $termineFromDatabase[$rt]->datum != "0000-00-00" AND $termineFromDatabase[$rt]->datum != "1970-01-01") {
-					$values .= ' ( "'.$sid.'", "'.$name.'", "'.$liga_id.'", "'.$rt.'", "'.$termineFromDatabase[$rt]->datum.'", "'.$termineFromDatabase[$rt]->startzeit.'", "'.$published.'", '
+					$values .= ' ( "'.$sid.'", "'.$name.'", "'.$liga_id.'", "'.$rt.'", "'.$termineFromDatabase[$rt]->datum.'", "'.$termineFromDatabase[$rt]->startzeit.'", "'.$published.'", "'.$sl_ok.'", '
 							. '"Import durch SWT Datei.", "9997", "'.$zeit.'" ), ';
 				} else {
-					$values .= ' ( "'.$sid.'", "'.$name.'", "'.$liga_id.'", "'.$rt.'", "1970-01-01", "00:00:00", "'.$published.'", '
+					$values .= ' ( "'.$sid.'", "'.$name.'", "'.$liga_id.'", "'.$rt.'", "1970-01-01", "00:00:00", "'.$published.'", "'.$sl_ok.'", '
 							. '"Import durch SWT Datei.", "9997", "'.$zeit.'" ), ';
 				}
 			}

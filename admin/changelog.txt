@@ -15,6 +15,7 @@ $ -> Language fix or change
 - - - - - 5.0.1 - [xx-xx-2026] - - - - - - - - - - - - - - - - - - - -
 # Teamwettbewerbe: Paarungsliste 2 x spielfrei in Liga
 # Teamwettbewerbe: Rangfolge ergänzt um Spieler mit DWZ
+# SWT-Import Liga: spielfrei-Teams unveröffentlicht
 
 - - - - - 5.0.0 - [20-04-2026] - - - - - - - - - - - - - - - - - - - -
 ^ Anpassung Joomla 6
