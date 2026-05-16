@@ -61,7 +61,7 @@ function clm_view_schedule_xls($out) {
 	if (!file_exists('components'.DS.'com_clm'.DS.'pgn'.DS)) mkdir('components'.DS.'com_clm'.DS.'pgn'.DS);
 	$pdatei = fopen('components'.DS.'com_clm'.DS.'pgn'.DS.$file_name,"wt");
 	foreach($schedule as $schedule1) {
-		$return = fputcsv($pdatei, $schedule1);
+		$return = fputcsv($pdatei, $schedule1, ",", '"', '');
 	}
 	fclose($pdatei);
     if (file_exists('components'.DS.'com_clm'.DS.'pgn'.DS.$file_name)) {

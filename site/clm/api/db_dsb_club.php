@@ -1,4 +1,10 @@
 <?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link https://chessleaguemanager.org
+*/
 function clm_api_db_dsb_club($vereine = array()) {
 	@set_time_limit(0); // hope
 	$sid = clm_core::$access->getSeason();
@@ -10,7 +16,7 @@ function clm_api_db_dsb_club($vereine = array()) {
 	$stmt = clm_core::$db->prepare($sql);
 	for ($i = 0;$i < count($vereine);$i++) {
 		//ZPS,LV,Verband,Vereinname
-		$einVerein = str_getcsv($vereine[$i], ",", '"');
+		$einVerein = str_getcsv($vereine[$i], ",", '"', "");
 		if (count($einVerein) != 4) {
 			continue;
 		}

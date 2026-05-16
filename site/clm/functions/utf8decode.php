@@ -1,15 +1,16 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 // Ersatz für die ehemalige php-Funktion utf8_decode (deprecated in php 8.2)
 // nach https://php.watch/versions/8.2/utf8_encode-utf8_decode-deprecated
 // Verwendung: $string = clm_core::$load->utf8decode($string);
 
-function clm_function_utf8decode(string $string = null): string {
+//function clm_function_utf8decode(string $string = null): string {  // deprecated in php 8.4
+function clm_function_utf8decode(?string $string = null): string {
     $s = (string) $string;
     $len = \strlen($s);
 

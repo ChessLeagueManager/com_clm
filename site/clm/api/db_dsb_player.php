@@ -1,9 +1,9 @@
 <?php
 /**
- * @ Chess League Manager (CLM) Modul
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @ Chess League Manager (CLM) Component
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 function clm_api_db_dsb_player($spieler = array(), $incl_pd = 0, $file_v = 0) {
 	@set_time_limit(0); // hope
@@ -40,7 +40,7 @@ function clm_api_db_dsb_player($spieler = array(), $incl_pd = 0, $file_v = 0) {
 	for ($i = 0;$i < count($spieler);$i++) {
 		if ($file_v == 1) {
 			//ZPS,Mgl-Nr,Status,Spielername,Geschlecht,Spielberechtigung,Geburtsjahr,Letzte-Auswertung,DWZ,Index,FIDE-Elo,FIDE-Titel,FIDE-ID,FIDE-Land
-			$einSpieler = str_getcsv($spieler[$i], ",", '"');
+			$einSpieler = str_getcsv($spieler[$i], ",", '"', '');
 			if (count($einSpieler) != 14 || ($einSpieler[2] == 'P' && $incl_pd == 0)) {
 				continue;
 			}
@@ -58,7 +58,7 @@ function clm_api_db_dsb_player($spieler = array(), $incl_pd = 0, $file_v = 0) {
 			$stmt->bind_param('isssssssssssssiss', $sid, $einSpieler[0], $out[0], $out[1], $rating, $rating_index, $out[2], $out[3], $einSpieler[6], $einSpieler[10], $out[4], $einSpieler[12], $einSpieler[2], $einSpieler[11], $gesperrt, $joiningdate, $leavingdate);
 		} else {
 			//ID,VKZ,Mgl-Nr,Status,Spielername,Geschlecht,Spielberechtigung,Geburtsjahr,Letzte-Auswertung,DWZ,Index,FIDE-Elo,FIDE-Titel,FIDE-ID,FIDE-Land
-			$einSpieler = str_getcsv($spieler[$i], ",", '"');
+			$einSpieler = str_getcsv($spieler[$i], ",", '"', '');
 			if (count($einSpieler) != 15 || ($einSpieler[3] == 'P' && $incl_pd == 0)) {
 				continue;
 			}
