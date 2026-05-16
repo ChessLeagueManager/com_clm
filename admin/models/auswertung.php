@@ -167,14 +167,15 @@ function datei() {
 			$rnd_kampflos =$db->loadObjectList();
 			if (is_null($rnd_kampflos)) $count_kampflos = 0;
 			else $count_kampflos = count($rnd_kampflos) * $liga_name[0]->stamm;
-			
-			$fehler	= 0;
-			if($rnd_count < ($counter - $count_kampflos) AND $rnd_count == 0){
-				$app->enqueueMessage(Text::_( 'DB_WTEXT0' ).Text::_( 'DB_ROUND' ).$rnd.Text::_( 'DB_DG' ).$dg, 'warning');
-				$fehler = 1;
-			} elseif($rnd_count < ($counter - $count_kampflos)){
-				$app->enqueueMessage(Text::_( 'DB_WTEXT1' ).Text::_( 'DB_ROUND' ).$rnd.Text::_( 'DB_DG' ).$dg, 'warning');
-				$fehler = 1;
+			if($format !="4" AND $format !="14") {
+				$fehler	= 0;
+				if($rnd_count < ($counter - $count_kampflos) AND $rnd_count == 0){
+					$app->enqueueMessage(Text::_( 'DB_WTEXT0' ).Text::_( 'DB_ROUND' ).$rnd.Text::_( 'DB_DG' ).$dg, 'warning');
+					$fehler = 1;
+				} elseif($rnd_count < ($counter - $count_kampflos)){
+					$app->enqueueMessage(Text::_( 'DB_WTEXT1' ).Text::_( 'DB_ROUND' ).$rnd.Text::_( 'DB_DG' ).$dg, 'warning');
+					$fehler = 1;
+				}
 			}
 		  }
 		}
@@ -487,10 +488,32 @@ function datei() {
 	// FIDE TRF Format //
 	/////////////////////
 
-	if ($format == "4") {
-		$xml = clm_core::$api->db_trf_export($et, false, false, false, true);
+	if ($format == "4" OR $format == "14") {
+		if ($format == "4") {
+			if(!is_null($et)) { // Einzelturnier
+				$result = clm_core::$api->db_trf_export($et, false, false, false, true);
+			} else {			// Teamwettbewerb
+				$result = clm_core::$api->db_trf_export($liga, true, false, false, true);
+			}
+		} else {
+			if(!is_null($et)) { // Einzelturnier
+				$result = clm_core::$api->db_trf_export($et, false, false, true, true);
+			} else {			// Teamwettbewerb
+				$result = clm_core::$api->db_trf_export($liga, true, false, true, true);
+			}
+		}
+		$xml = $result[0];
+		$elines = $result[1];
+		if(is_array($elines) && count($elines) > 0) {
+			$emessage = '';
+			foreach($elines as $line){
+				$emessage .= '###'.substr($line,3).'<br>';
+			}
+			$emessage .= '- alle Warnungen und Hinweise sind auch Teil der Ausgabedatei, gelistet als Kommentare am Dateiende -';
+			$app->enqueueMessage($emessage , 'warning');
+		}
 	}
-	
+
 	//////////////////////
 	// DEWIS XML Format //
 	//////////////////////
@@ -1109,6 +1132,7 @@ $xml = $xmla->writeData();
 	if($format =="2"){ $datei_endung = "xml";}
 	if($format =="3"){ $datei_endung = "xml";}
 	if($format =="4"){ $datei_endung = "trf";}
+	if($format =="14"){ $datei_endung = "trf";}
 	$write		= $path.DS.$file.'.'.$datei_endung;
 
 	// Datei schreiben ggf. Fehlermeldung absetzen
@@ -1216,11 +1240,13 @@ function liga_filter() {
 	// Ligafilter
 	$sql = 'SELECT d.id AS cid, d.name FROM #__clm_liga as d'
 		." LEFT JOIN #__clm_saison as s ON s.id = d.sid"
-		." WHERE s.archiv = 0 AND d.liga_mt = 0 "
+//		." WHERE s.archiv = 0 AND d.liga_mt = 0 "
+		." WHERE s.archiv = 0 "
 		." AND d.published = 1 "
 		." ORDER BY d.ordering ";
 	$db->setQuery($sql);
-	$ligalist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'MANNSCHAFTEN_LIGA' ), 'cid', 'name' );
+//	$ligalist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'MANNSCHAFTEN_LIGA' ), 'cid', 'name' );
+	$ligalist[]	= HTMLHelper::_('select.option',  '0', Text::_( '- Teamwettbewerb auswählen -' ), 'cid', 'name' );
 	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
 	$lists['lid']	= HTMLHelper::_('select.genericlist', $ligalist, 'filter_lid', 'class="inputbox" size="1" onchange=""','cid', 'name', '' );
 	

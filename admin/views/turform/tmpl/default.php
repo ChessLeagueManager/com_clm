@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -557,8 +557,37 @@ $turnier_entry_fee = $clm_config->turnier_entry_fee;
 				}
 				echo HTMLHelper::_('select.genericlist', $optionlist, 'params[drawing_mode]', 'class="inputbox"', 'id', 'name', $turParams->get('drawing_mode', 0)); ?>
 			</td>
+		</tr>	
+		<tr>
+			<td width="30%" class="paramlist_key" title="<?php echo Text::_( 'DRAWING_ACCEL_ROUNDS_HINT' ); ?>">
+				<?php echo Text::_('DRAWING_ACCEL_ROUNDS'); ?>:
+			</td>
+			<td class="paramlist_value" title="<?php echo Text::_( 'DRAWING_ACCEL_ROUNDS_HINT' ); ?>">
+					<input class="inputbox" type="text" name="params[accel_rounds]" id="params[accel_rounds]" size="2" maxlength="2" value="<?php echo $turParams->get('accel_rounds', 0); ?>" />
+			</td>
+			<td width="30%" class="paramlist_key" title="<?php echo Text::_( 'DRAWING_ACCEL_GROUPS_HINT' ); ?>">
+				<?php echo Text::_('DRAWING_ACCEL_GROUPS'); ?>:
+			</td>
+			<td class="paramlist_value" title="<?php echo Text::_( 'DRAWING_ACCEL_GROUPS_HINT' ); ?>">
+					<input class="inputbox" type="text" name="params[accel_groups]" id="params[accel_groups]" size="2" maxlength="2" value="<?php echo $turParams->get('accel_groups', 0); ?>" />
+			</td>
 		</tr>
-	
+		<tr>
+			<td width="30%" class="paramlist_key">
+				<?php echo Text::_('DRAWING_PREV_TEAMING'); ?>:
+			</td>
+			<td class="paramlist_value">
+				<?php 
+				$options = array();
+				$options[0] = Text::_('DRAWING_PREV_TEAMING_0');
+				$options[1] = Text::_('DRAWING_PREV_TEAMING_1');
+				$optionlist = array();
+				foreach ($options as $key => $val) {
+					$optionlist[]	= HTMLHelper::_('select.option', $key, $val, 'id', 'name' );
+				}
+				echo HTMLHelper::_('select.genericlist', $optionlist, 'params[prev_teaming]', 'class="inputbox"', 'id', 'name', $turParams->get('prev_teaming', 0)); ?>
+			</td>
+		</tr>
 	  </table>
 	</fieldset>
 	<?php } ?>

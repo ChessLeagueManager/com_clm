@@ -17,6 +17,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
+	$test_button = $config->test_button;
 ?>
 
 <style type="text/css">
@@ -35,7 +36,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 <div class="width-50 fltlft">
 		<form action="index.php?option=com_clm&view=auswertung" method="post" id="auswertung_dewis" name="adminForm"  enctype="multipart/form-data" >
 		<fieldset class="adminform"> 
-		<legend><?php echo Text::_( 'DB_EXPORT_LEAGUE' ); ?></legend>
+		<legend><?php echo Text::_( 'Teamwettbewerbe: Auswertungsdatei erstellen' ); ?></legend>
 			<table width="100%">
 				<tr>
 					<td width="70%"><?php echo $this->lists['lid'] ?></td>
@@ -47,10 +48,21 @@ use Joomla\CMS\HTML\HTMLHelper;
 						<?php if ($countryversion =="de") { ?>
 							<option value="1"><?php echo Text::_( 'DB_FILE_FORMAT_1' ); ?></option>
 							<option value="2"><?php echo Text::_( 'DB_FILE_FORMAT_2' ); ?></option>
+							<option value="4"><?php echo Text::_( 'DB_FILE_FORMAT_4' ); ?></option>
+							<?php if ($test_button == 1) { ?>
+								<option value="14"><?php echo Text::_( 'TRF mit Turnierdetails' ); ?></option>
+							<?php } ?>
 						<?php } elseif ($countryversion =="en") { ?>
 							<option value="3"><?php echo Text::_( 'DB_FILE_FORMAT_3' ); ?></option>
 						<?php } ?>
-					</select></td><td width="30%">
+					</select></td>
+					<td width="30%">
+				</tr>
+				<tr>
+					<td width="70%">
+						<font size="-1"> * Die TRF-Datei <b>mit Turnierdetails</b> ist gedacht zum Einspielen in eine andere CLM-Installation, bitte nicht zur FIDE einsenden</font>
+					</td>
+					<td width="30%"></td>
 				</tr>
 				<tr>
 					<td width="70%" nowrap="nowrap" title="<?php echo Text::_( 'DEWIS_FROM_ROUND_HINT' ); ?>">
@@ -74,25 +86,36 @@ use Joomla\CMS\HTML\HTMLHelper;
 		<input type="hidden" name="task" value="datei" />
 		<?php echo HTMLHelper::_( 'form.token' ); ?>
 		</form>
-		
+	<br><br>	
 	<?php //if ($countryversion =="de") { ?>	
 		<form action="index.php?option=com_clm&view=auswertung" method="post" id="auswertung_dewis" name="adminForm"  enctype="multipart/form-data" >
 		<fieldset class="adminform">
 		<legend><?php echo Text::_( 'DB_EXPORT_TOURNAMENT' ); ?></legend> 
 			<table width="100%">
 				<tr>
+					<td width="70%"><?php echo $this->lists['et_lid'] ?></td>
+					<td width="30%"><input type="submit" value="<?php echo Text::_( 'DB_FILE_CREATE' ); ?>"></td>
+				</tr>
+				<tr>
 					<td width="70%"><select id="filter_format" name="filter_format" class="inputbox" size="1" onchange="">
+						<option value="0"><?php echo Text::_( 'DB_FILE_FORMAT_0' ); ?></option>
 					<?php if ($countryversion =="de") { ?>
 						<option value="2"><?php echo Text::_( 'DB_FILE_FORMAT_2' ); ?></option>
 					<?php } elseif ($countryversion =="en") { ?>
 						<option value="3"><?php echo Text::_( 'DB_FILE_FORMAT_3' ); ?></option>
 					<?php } ?>
 						<option value="4"><?php echo Text::_( 'DB_FILE_FORMAT_4' ); ?></option>
-					</select></td><td width="30%"></td>
+						<?php //if ($test_button == 1) { ?>
+							<option value="14"><?php echo Text::_( 'TRF mit Turnierdetails' ); ?></option>
+						<?php //} ?>
+					</select></td>
+					<td width="30%"></td>
 				</tr>
 				<tr>
-				<td width="70%"><?php echo $this->lists['et_lid'] ?></td>
-				<td width="30%"><input type="submit" value="<?php echo Text::_( 'DB_FILE_CREATE' ); ?>"></td>
+					<td width="70%">
+						<font size="-1"> * Die TRF-Datei <b>mit Turnierdetails</b> ist gedacht zum Einspielen in eine andere CLM-Installation, bitte nicht zur FIDE einsenden</font>
+					</td>
+					<td width="30%"></td>
 				</tr>
 			</table>
 		</fieldset>
@@ -102,7 +125,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 		</form>
 	
 	<?php //} ?>
-	<?php //if ($countryversion =="de") { ?>		
+	<?php if ($countryversion =="xy") { ?>		
 		<form action="index.php?option=com_clm&view=auswertung" method="post" id="auswertung_dewis" name="adminForm"  enctype="multipart/form-data" >
 		<fieldset class="adminform">
 		<legend><?php echo Text::_( 'DB_EXPORT_TEAMTOURNAMENT' ); ?></legend> 
@@ -133,6 +156,6 @@ use Joomla\CMS\HTML\HTMLHelper;
 		<input type="hidden" name="task" value="datei" />
 		<?php echo HTMLHelper::_( 'form.token' ); ?>
 		</form>
-	<?php //} ?>
+	<?php } ?>
 <div class="clr"></div>
 </div>

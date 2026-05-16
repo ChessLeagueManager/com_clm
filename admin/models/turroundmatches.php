@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
@@ -106,8 +106,10 @@ class CLMModelTurRoundMatches extends JModelLegacy {
 		// Spielerliste laden
 		$query = "SELECT snr, name"
 			." FROM `#__clm_turniere_tlnr` " 
-			." WHERE turnier = ".$this->param['turnierid']
-			."   AND tlnrStatus = 1 ";
+			." WHERE turnier = ".$this->param['turnierid'];
+		if ($this->turnier->typ != '1') {
+			$query .= " AND tlnrStatus = 1 ";
+		}
 		if ($this->turnier->rname != Text::_('ROUND_KO_1') AND ($this->turnier->typ == '3' or $this->turnier->typ == '5')) {
 			if (($this->turnier->typ == '3' AND $this->round->nr < $this->turnier->runden) OR ($this->turnier->typ == '5' AND $this->round->nr < $this->turnier->runden-1)) {
 				$query .= " AND ( koStatus = '1' OR  koRound >= ".$this->round->nr.")"; }
@@ -126,9 +128,6 @@ class CLMModelTurRoundMatches extends JModelLegacy {
 	
 	}
 	
-	
-
-
 }
 
 ?>

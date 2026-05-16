@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 /**
 * Ergebnis der Auslosungsroutine für Einzelturnier im CH-Modus in DB speichern
@@ -23,9 +23,19 @@ echo "<br>turnier:"; var_dump($turnier);
 	$delete_query = " DELETE FROM #__clm_turniere_rnd_spl "
 					." WHERE turnier = ".$turnierid
 					." AND dg = ".$dg
-					." AND runde = ".$round;
+					." AND runde = ".$round
+					." AND ergebnis is null;";
 	clm_core::$db->query($delete_query);
-	
+
+	$tlquery = "SELECT id,brett FROM #__clm_turniere_rnd_spl WHERE turnier = ".$turnierid ." AND dg = ".$dg ." AND runde = ".$round . " ORDER BY brett ASC,heim DESC;";
+	$tischliste = clm_core::$db->loadObjectList($tlquery);
+	$tischnummer = (count($pairings) + 1) * 2;
+	foreach($tischliste as $tisch) {
+		$tnquery = " UPDATE #__clm_turniere_rnd_spl SET brett=" . floor($tischnummer/2) . " WHERE id = ". $tisch->id . ";";
+		$tischnummer ++;
+		$stmt = clm_core::$db->prepare($tnquery);
+		$result = $stmt->execute();
+	}
 	//Copy Paarungen/Ergebnisse
 	$brett = 0;
 	$record = new stdClass();
@@ -45,6 +55,9 @@ echo "<br>pairing:"; var_dump($pairing);
 		$record->gegner = $pairing["bsnr"];
 		if (isset($pairing["werg"])) $record->ergebnis = $pairing["werg"]; 
 		else $record->ergebnis = NULL;
+		if ($pairing["bsnr"] == '0') {
+			$record->ergebnis = 8;
+		}
 		$record->tiebrS = 0;
 		$record->tiebrG = 0;
 		$record->kampflos = NULL;
@@ -64,6 +77,9 @@ die('11');
 		$record->gegner = $pairing["wsnr"];
 		if (isset($pairing["berg"])) $record->ergebnis = $pairing["berg"]; 
 		else $record->ergebnis = NULL;
+		if ($pairing["bsnr"] == '0') {
+			$record->ergebnis = 4;
+		}
 echo "<br>brecord:"; var_dump($record); //die('00');
 		if(!clm_core::$db->insertObject('#__clm_turniere_rnd_spl',$record,'id')) {
 die('33');

@@ -36,7 +36,7 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 			$adminLink = new AdminLink();
 			$adminLink->view = "trfturnier";
 			$adminLink->makeURL();			
-			$msg = Text::_( 'TRF_FILE_ERROR' ); 			
+			$msg = Text::_( 'Please choose a filename! / Bitte wählen Sie einen Dateinamen aus!' ); 			
 			$this->app->enqueueMessage( $msg );
 			$this->app->redirect($adminLink->url); 		
 		}
@@ -50,6 +50,7 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 			$this->app->redirect($adminLink->url); 		
 		}
 		$_REQUEST['tid'] = $tid;
+
 		$result = clm_core::$api->db_trf_import($path.$trf_file,$sid,$tid,false,true,false);
 		if (isset($result[2]) AND $result[2] > 0) {
 			$new_ID = $result[2];
@@ -69,18 +70,23 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 		$language->load('com_clm');
 		$language->load('com_clm.swtimport');	
 
-		// Log schreiben
-		$msg = Text::_( 'SWT_STORE_SUCCESS' );
-		$clmLog = new CLMLog();
-		$clmLog->aktion = 'TRF-Import - '.$msg;
-		$clmLog->params = array('sid' => $sid, 'tid' => $tid, 'trf_file' => $trf_file);
-		$clmLog->write();
-
+		if (isset($result[0]) AND $result[0] == false) {
+			$msg = $result[1];
+			$mtyp = 'warning';
+		} else {
+			$msg = Text::_( 'SWT_STORE_SUCCESS' );
+			$mtyp = 'message';
+			// Log schreiben
+			$clmLog = new CLMLog();
+			$clmLog->aktion = 'TRF-Import - '.$msg;
+			$clmLog->params = array('sid' => $sid, 'tid' => $new_ID, 'trf_file' => $trf_file);
+			$clmLog->write();
+		}
 		$_REQUEST['view'] = 'trfturnier';
 		if (isset($result[2]) AND $result[2] > 0) { $htext = " (ID = ".$new_ID.")"; } else $htext = ""; 
-		$this->app->enqueueMessage( Text::_( 'SWT_STORE_SUCCESS' ).$htext,'message' );
+		JFactory::getApplication()->enqueueMessage( $msg.$htext,$mtyp );
 		$_REQUEST['trf_file'] = $trf_file;
-		
+
 		parent::display();
 	}
 	
@@ -92,7 +98,7 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 			$adminLink = new AdminLink();
 			$adminLink->view = "trfturnier";
 			$adminLink->makeURL();			
-			$msg = Text::_( 'TRF_FILE_ERROR' ); 			
+			$msg = Text::_( 'Please choose a filename! / Bitte wählen Sie einen Dateinamen aus!' ); 			
 			$this->app->enqueueMessage( $msg );
 			$this->app->redirect($adminLink->url); 		
 		}
@@ -116,16 +122,21 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 		$language->load('com_clm');
 		$language->load('com_clm.swtimport');	
 
-		// Log schreiben
-		$msg = Text::_( 'SWT_STORE_SUCCESS' );
-		$clmLog = new CLMLog();
-		$clmLog->aktion = 'TRF-Import - '.$msg;
-		$clmLog->params = array('sid' => $sid, 'tid' => $new_ID, 'trf_file' => $trf_file);
-		$clmLog->write();
-
+		if (isset($result[0]) AND $result[0] == false) {
+			$msg = $result[1];
+			$mtyp = 'warning';
+		} else {
+			$msg = Text::_( 'SWT_STORE_SUCCESS' );
+			$mtyp = 'message';
+			// Log schreiben
+			$clmLog = new CLMLog();
+			$clmLog->aktion = 'TRF-Import - '.$msg;
+			$clmLog->params = array('sid' => $sid, 'tid' => $new_ID, 'trf_file' => $trf_file);
+			$clmLog->write();
+		}
 		$_REQUEST['view'] = 'trfturnier';
 		if (isset($result[2]) AND $result[2] > 0) { $htext = " (ID = ".$new_ID.")"; } else $htext = ""; 
-		Factory::getApplication()->enqueueMessage( Text::_( 'SWT_STORE_SUCCESS' ).$htext,'message' );
+		Factory::getApplication()->enqueueMessage( $msg.$htext,$mtyp );
 		$_REQUEST['trf_file'] = $trf_file;
 
 		parent::display();

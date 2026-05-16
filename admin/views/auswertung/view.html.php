@@ -9,7 +9,6 @@
  * @author Andreas Dorn
  * @email webmaster@sbbl.org
 */
-
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
 use Joomla\CMS\Factory;
@@ -21,7 +20,9 @@ class CLMViewAuswertung extends JViewLegacy {
 		
 		$app	= Factory::getApplication();
 		$jinput = $app->input;
-		$task 	= $jinput->get('task', null, null);
+//		$task 	= $jinput->get('task', null, null);
+//		if (is_null($task)) $task = '';
+		$task	= clm_core::$load->request_string('task');
  		$model	= $this->getModel('auswertung');
 
 		//Toolbar
@@ -30,8 +31,10 @@ class CLMViewAuswertung extends JViewLegacy {
 		$tpl = null;
 		
 		if($task =='datei'){
-			$liga	= $jinput->get('filter_lid', null, null);
-			$format	= $jinput->get('filter_format', null, null);
+//			$liga	= $jinput->get('filter_lid', null, null);
+//			$format	= $jinput->get('filter_format', null, null);
+			$liga	= clm_core::$load->request_string('filter_lid');
+			$format	= clm_core::$load->request_string('filter_format');
 			$et	= $jinput->get('filter_et', null, null);
 			$mt	= $jinput->get('filter_mt', null, null);
 			if(!$liga AND !$et AND !$mt){

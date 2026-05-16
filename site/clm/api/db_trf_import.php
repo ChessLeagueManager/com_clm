@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://www.chessleaguemanager.org
  *
  * Import einer Turnierdatei im TRF-Format von Sevilla, lichess, ... 
  * zur Zeit nur Einzelturnier im CH-Modus
@@ -25,8 +25,7 @@ if ($debug > 0) echo "<br>turnier: ".$turnier; 	//echo "<br>end"; //die();
 	$f_pos = max(strrpos($file,'/'),strrpos($file,'\\'));
 	$filename = substr($file,$f_pos + 1); 
 	if (!$file) {
-		echo '<p>Please choose a filename! / Bitte wählen Sie einen Dateinamen aus!</p>';
-		return false;
+		return array(false,'Please choose a filename! / Bitte wählen Sie einen Dateinamen aus!');
 	}
 //die();	
 	$lines = file($file);
@@ -44,7 +43,13 @@ if ($debug > 0) echo "<br>turnier: ".$turnier; 	//echo "<br>end"; //die();
 	$xxs_nieder = 0.0; $xxs_niederk = 0.0;
 	$xxs_zpb = 0.0; $xxs_hpb = 0.5; $xxs_fpb = 1.0; $xxs_pab = 1.0;
 	$xxs_fw = 1.0; $xxs_fl = 0.0;
+	// weitere Standardwerte
 	$rundenzahl = 0;
+	$city = '';
+	$FIDEcco = '';
+	$lokal = '';
+	$tiebr1 = $tiebr2 = $tiebr3 = 0;
+	$params = '';
 	// Durchgehen des Arrays inkl. Zuordnund der Zeilen
 	// read common tournament data
 	// Allgemeine Turnierdaten auslesen
@@ -62,6 +67,12 @@ if ($debug > 1) { echo "<br>value:"; var_dump($value); }
 			case '012': $name = addslashes($value); 
 if ($debug > 1) { echo "<br>name:"; var_dump($name); } 
 						break;
+			case '022': $city = addslashes($value); 
+if ($debug > 1) { echo "<br>city:"; var_dump($city); } 
+						break;
+			case '032': $FIDEcco = addslashes($value); 
+if ($debug > 1) { echo "<br>FIDEcco:"; var_dump($FIDEcco); } 
+						break;
 			case '042': $adate = $value; 
 						if (substr($adate,2,1) == '.') {
 							// Aufbereiten des Startdatums DD.MM.YYYY
@@ -77,9 +88,16 @@ if ($debug > 1) { echo "<br>name:"; var_dump($name); }
 							$dd = substr($adate,0,2);
 							$adate = $yyyy.'-'.$mm.'-'.$dd;
 						}
+						if (substr($adate,4,1) == '/') {
+							// Aufbereiten des Startdatums YYYY/MM/DD
+							$yyyy = substr($adate,0,4);
+							$mm = substr($adate,5,2);
+							$dd = substr($adate,8,2);
+							$adate = $yyyy.'-'.$mm.'-'.$dd;
+						}
+if ($debug > 0) { echo "<br>adate:"; var_dump($adate); }
 						if (!clm_core::$load->is_date($adate,'Y-m-d')) {
 							$adate = '1970-01-01'; }
-if ($debug > 0) { echo "<br>adate:"; var_dump($adate); }
 						break;
 			case '052': $edate = $value; 
 						if (substr($edate,2,1) == '.') {
@@ -96,11 +114,23 @@ if ($debug > 0) { echo "<br>adate:"; var_dump($adate); }
 							$dd = substr($edate,0,2);
 							$edate = $yyyy.'-'.$mm.'-'.$dd;
 						}
+						if (substr($edate,4,1) == '/') {
+							// Aufbereiten des Enddatums YYYY/MM/DD
+							$yyyy = substr($edate,0,4);
+							$mm = substr($edate,5,2);
+							$dd = substr($edate,8,2);
+							$edate = $yyyy.'-'.$mm.'-'.$dd;
+						}
 if ($debug > 0) { echo "<br>edate:"; var_dump($edate); }
 						if (!clm_core::$load->is_date($edate,'Y-m-d')) {
 							$edate = '1970-01-01'; }
 						break;
 			case '062': $teil = $value; break;
+			case '082': $man = (integer) $value; 
+						if ($man > 0) {  
+							return array(false,'Der Import von Teamwettbewerbeb im TRF-Format sind noch nicht realisiert!');
+						}
+						break;
 			case 'XXR': $rundenzahl = $value; break;
 			case 'XXS': $a_xxs = explode(' ', $value);
 						if (count($a_xxs) > 0) {
@@ -152,12 +182,24 @@ if ($debug > 0) { echo "<br>e_xxs"; var_dump($e_xxs); }
 						}
 						break;
 			case 'XCA': $xca_rounds = $value; break;
-			case 'XCZ': $snr = trim(substr($line,4,4));
-						$a_spielerCZ[$snr] = str_replace("’","'",$line); break;
 			case 'XCC': $snr = trim(substr($line,4,4));
 						$a_spielerCC[$snr] = str_replace("’","'",$line); break;
+			case 'XCF': //$a_xcf = explode(' ', $value);
+						$tiebr1 = (integer) trim(substr($line,4,2));
+						$tiebr2 = (integer) trim(substr($line,7,2));
+						$tiebr3 = (integer) trim(substr($line,10,2));
+						break;
+			case 'XCL': $lokal = addslashes($value); 
+if ($debug > 1) { echo "<br>lokal:"; var_dump($lokal); } 
+						break;
+			case 'XCP': $params = addslashes($value); 
+						$params = str_replace(";;","\n",$params);			
+if ($debug > 1) { echo "<br>params:"; var_dump($params); } 
+						break;
 			case 'XCR': $snr = trim(substr($line,4,4));
 						$a_spielerCR[$snr] = str_replace("’","'",$line); break;					
+			case 'XCZ': $snr = trim(substr($line,4,4));
+						$a_spielerCZ[$snr] = str_replace("’","'",$line); break;
 		}
 	}
 	if (isset($xxs_pab) AND ($xxs_pab == '0.5' OR $xxs_pab == '.5')) $erg_pab = 12; 
@@ -187,16 +229,20 @@ if ($debug > 0) { echo "<br>name:"; var_dump($name); }
 	If ($group) { 	// Mannschaftsturniere
 		$typ = '4'; 														   // Mannschaft-Schweizer Sytem .TUM
 		if (strpos($file,'.TUT') > 0 OR strpos($file,'.tut') > 0 ) $typ = '2'; // Mannschaft-Rundenturnier	 .TUT
-		$keyS = '`name`,`sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `name`, `bezirkTur`';
-		$valueS = "'".$name."', ".$season.", '".$typ."', 1, 1, 0, 1, '".$name."', '0'";
+		$keyS = '`name`,`sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `bezirkTur`, `dateStart`, `dateEnd`, `bem_int`,';
+		$keyS .= '`city`, `FIDEcco`, `lokal`, `tiebr1`, `tiebr2`, `tiebr3`, `params`';
+		$valueS = "'".$name."', ".$season.", '".$typ."', 1, 1, 0, 1, '0', '".$adate."', '".$edate."', '".$bem_int."', ";
+		$valueS .= "'".$city."', '".$FIDEcco."', '".$lokal."', '".$tiebr1."', '".$tiebr2."', '".$tiebr3."', '".$params."'";
 	} else { 		// Einzelturniere
 		$typ = '1'; 														   // Einzel-Schweizer Sytem
 		$bem_int = $lang->trf_remark.' '.$filename;
 		$keyS = '`name`, `sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `runden`, `teil`, `bezirkTur`, `dateStart`, `dateEnd`, `bem_int`, ';
-		$keyS .= '`sieg`, `siegs`, `remis`, `remiss`, `nieder`, `niederk`';
+		$keyS .= '`sieg`, `siegs`, `remis`, `remiss`, `nieder`, `niederk`,';
+		$keyS .= '`city`, `FIDEcco`, `lokal`, `tiebr1`, `tiebr2`, `tiebr3`, `params`';
 		$valueS = "'".$name."',".$season.", '".$typ."', 1, 1, 0, 1, '".$rundenzahl."', '".$teil."', '0', '".$adate."', '".$edate."', '".$bem_int."', ";
-		$valueS .= "'".$xxs_sieg."', '".$xxs_siegs."', '".$xxs_remis."', '".$xxs_remiss."', '".$xxs_nieder."', '".$xxs_niederk."'";
-		$params_array = array();
+		$valueS .= "'".$xxs_sieg."', '".$xxs_siegs."', '".$xxs_remis."', '".$xxs_remiss."', '".$xxs_nieder."', '".$xxs_niederk."',";
+		$valueS .= "'".$city."', '".$FIDEcco."', '".$lokal."', '".$tiebr1."', '".$tiebr2."', '".$tiebr3."', '".$params."'";
+/*		$params_array = array();
 		$params_array[] = 'playerViewDisplaySex=0';
 		$params_array[] = 'playerViewDisplayBirthYear=0';
 		if (isset($xca_rounds) AND isset($rundenzahl) AND is_integer($xca_rounds) AND ($xca_rounds < $rundenzahl)) { 
@@ -207,7 +253,7 @@ if ($debug > 2) { echo "<br>params_array: ";	var_dump($params_array); }
 		$keyS .= ', `params`';
 		$valueS .= ", '".$params."'";
 if ($debug > 1) { echo "<br>params: ";	var_dump($params); }
-
+*/
 		$sql = 'INSERT INTO #__clm_swt_turniere ('.$keyS.') VALUES ('.$valueS.')';
 if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 //die();
