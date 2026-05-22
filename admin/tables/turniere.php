@@ -90,7 +90,7 @@ class TableCLMTurniere extends Table
 		} elseif ($this->teil <= 1) { // Teilnehmerzahl >= 2
 			$this->setError( CLMText::errorText('PARTICIPANT_COUNT', 'TOOLOW') );
 			return false;
-		} elseif ($this->teil > 500) { // Teilnehmerzahl 
+		} elseif ($this->teil > 5000) { // Teilnehmerzahl 
 			$this->setError( CLMText::errorText('PARTICIPANT_COUNT', 'TOOBIG') );
 			return false;
 		} elseif ($this->teil < $tournament->getPlayersIn()) {

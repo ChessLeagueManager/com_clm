@@ -53,9 +53,10 @@ class CLMControllerTurForm extends JControllerLegacy {
 
 	function save() {
 	
-		$result = $this->_saveDo();   
 		$app =Factory::getApplication();
 		$adminLink = new AdminLink();
+		$this->adminLink = $adminLink;
+		$result = $this->_saveDo();   
 		
 		if ($result[0]) { // erfolgreich?
 		

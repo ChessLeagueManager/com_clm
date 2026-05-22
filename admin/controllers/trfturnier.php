@@ -84,7 +84,7 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 		}
 		$_REQUEST['view'] = 'trfturnier';
 		if (isset($result[2]) AND $result[2] > 0) { $htext = " (ID = ".$new_ID.")"; } else $htext = ""; 
-		JFactory::getApplication()->enqueueMessage( $msg.$htext,$mtyp );
+		Factory::getApplication()->enqueueMessage( $msg.$htext,$mtyp );
 		$_REQUEST['trf_file'] = $trf_file;
 
 		parent::display();
