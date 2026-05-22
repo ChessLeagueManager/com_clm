@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 if (!function_exists('mb_str_pad')) {
 	function mb_str_pad( $input, $pad_length, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
@@ -94,6 +94,8 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 			$params[$key] = substr($value, $ipos + 1);
 		}
 	}
+	if (!isset($params['team_complete']))  {   //Standardbelegung
+		$params['team_complete'] = '0'; }
 	if (!isset($params['color_order'])) { //Standardbelegung
 		$params['color_order'] = '1';
 	}
@@ -276,13 +278,29 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 	}
 	// Antrittspunkte addieren falls angetreten
 	if ($out["liga"][0]->stamm > $hkl) {
-		$hman_punkte = $hman_punkte + $out["liga"][0]->man_antritt;
+//		$hman_punkte = $hman_punkte + $out["liga"][0]->man_antritt;
+		if ($params['team_complete'] == 0) {
+			$hman_punkte = $hman_punkte + $out["liga"][0]->man_antritt;
+		} else {
+			$rc = clm_core::$api->db_team_complete($lid,$dg,$rnd,$paarung,1);
+//clm_core::$api->test_print('rc-heim',$rc);
+			if (is_array($rc) AND $rc[0] == true AND $rc[1] == 1) $hman_punkte = $hman_punkte + $out["liga"][0]->man_antritt;
+			elseif (is_array($rc) AND $rc[0] == false) echo "<br>".$rc[2];
+		}
 	} else { 
 		$hkampflos = 1;
 		$gkampflos = 1;
 	}
 	if ($out["liga"][0]->stamm > $gkl) {
 		$gman_punkte = $gman_punkte + $out["liga"][0]->man_antritt;
+		if ($params['team_complete'] == 0) {
+			$gman_punkte = $gman_punkte + $out["liga"][0]->man_antritt;
+		} else {
+			$rc = clm_core::$api->db_team_complete($lid,$dg,$rnd,$paarung,0);
+//clm_core::$api->test_print('rc-gast',$rc);
+			if (is_array($rc) AND $rc[0] == true AND $rc[1] == 1) $gman_punkte = $gman_punkte + $out["liga"][0]->man_antritt;
+			elseif (is_array($rc) AND $rc[0] == false) echo "<br>".$rc[2];
+		}
 	} else { 
 		$hkampflos = 1;
 		$gkampflos = 1;

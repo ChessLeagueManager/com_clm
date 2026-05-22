@@ -119,6 +119,8 @@ class CLMViewMTurniere
 		$row->params['fe_sl_ergebnisse'] = '0'; }
 	if (!isset($row->params['fe_ar_ergebnisse']))  {   //Standardbelegung
 		$row->params['fe_ar_ergebnisse'] = '0'; }
+	if (!isset($row->params['team_complete']))  {   //Standardbelegung
+		$row->params['team_complete'] = '0'; }
 
 	// Auswahlfelder durchsuchbar machen
 	clm_core::$load->load_js("suche_liste");
@@ -443,7 +445,7 @@ class CLMViewMTurniere
 		<option value="9" <?php if ($row->tiebr1 == 9) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_9' );?></option>
 		<option value="10" <?php if ($row->tiebr1 == 10) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_10' );?></option>
 		<option value="3" <?php if ($row->tiebr1 == 3) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_3' );?></option>
-		<option value="33" <?php if ($row->tiebr1 == 33) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_33' );?></option>
+		<option value="33" <?php if ($row->tiebr1 == 33) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_33' );?></option>
 		<option value="25" <?php if ($row->tiebr1 == 25) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_25' );?></option>
 		<option value="51" <?php if ($row->tiebr1 == 51) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_51' );?></option>
 		</select>
@@ -470,7 +472,7 @@ class CLMViewMTurniere
 		<option value="9" <?php if ($row->tiebr2 == 9) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_9' );?></option>
 		<option value="10" <?php if ($row->tiebr2 == 10) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_10' );?></option>
 		<option value="3" <?php if ($row->tiebr2 == 3) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_3' );?></option>
-		<option value="33" <?php if ($row->tiebr2 == 33) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_33' );?></option>
+		<option value="33" <?php if ($row->tiebr2 == 33) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_33' );?></option>
 		<option value="25" <?php if ($row->tiebr2 == 25) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_25' );?></option>
 		<option value="51" <?php if ($row->tiebr2 == 51) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_51' );?></option>
 		</select>
@@ -498,7 +500,7 @@ class CLMViewMTurniere
 		<option value="9" <?php if ($row->tiebr3 == 9) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_9' );?></option>
 		<option value="10" <?php if ($row->tiebr3 == 10) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_10' );?></option>
 		<option value="3" <?php if ($row->tiebr3 == 3) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_3' );?></option>
-		<option value="33" <?php if ($row->tiebr3 == 33) {echo 'selected="selected"';} ?>><?php echo JText::_( 'MTURN_TIEBR_33' );?></option>
+		<option value="33" <?php if ($row->tiebr3 == 33) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_33' );?></option>
 		<option value="25" <?php if ($row->tiebr3 == 25) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_25' );?></option>
 		<option value="51" <?php if ($row->tiebr3 == 51) {echo 'selected="selected"';} ?>><?php echo Text::_( 'MTURN_TIEBR_51' );?></option>
 		</select>
@@ -681,6 +683,13 @@ class CLMViewMTurniere
 	<td>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="man_remis" id="man_remis" size="4" maxlength="4" value="<?php if($row->man_remis !=""){ echo $row->man_remis;} else { echo "1";}; ?>" /></td>
 	<td>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="man_nieder" id="man_nieder" size="4" maxlength="4" value="<?php if($row->man_nieder !=""){ echo $row->man_nieder;} else { echo "0";}; ?>" /></td>
 	<td>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="man_antritt" id="man_antritt" size="4" maxlength="4" value="<?php if($row->man_antritt !=""){ echo $row->man_antritt;} else { echo "0";}; ?>" /></td>
+		<td colspan="1" nowrap="nowrap" title="<?php echo Text::_( 'LEAGUE_TEAM_COMPLETE_HINT' );?>">
+			<?php echo Text::_( 'LEAGUE_TEAM_COMPLETE' ); ?>&nbsp;&nbsp;
+		</td>
+		<td colspan="1"><fieldset class="radio">
+				<?php echo HTMLHelper::_('select.booleanlist', 'params[team_complete]', 'class="inputbox"', $row->params['team_complete']); ?>
+			</fieldset>
+		</td>
 	</tr>
 
 	<tr>

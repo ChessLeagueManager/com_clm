@@ -18,6 +18,7 @@ $ -> Language fix or change
 # SWT-Import Liga: spielfrei-Teams unveröffentlicht
 + TRF-Import/Export erweitert
 ^ Anpassung php 8.4
++ Teamwettbewerbe: Mannschaftsantrittspunkt nur, wenn alle Bretter besetzt sind
 
 - - - - - 5.0.0 - [20-04-2026] - - - - - - - - - - - - - - - - - - - -
 ^ Anpassung Joomla 6

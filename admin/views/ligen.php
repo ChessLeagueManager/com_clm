@@ -122,7 +122,8 @@ class CLMViewLigen
 		$row->params['fe_sl_ergebnisse'] = '0'; }
 	if (!isset($row->params['fe_ar_ergebnisse']))  {   //Standardbelegung
 		$row->params['fe_ar_ergebnisse'] = '0'; }
-
+	if (!isset($row->params['team_complete']))  {   //Standardbelegung
+		$row->params['team_complete'] = '0'; }
 	// Auswahlfelder durchsuchbar machen
 	clm_core::$load->load_js("suche_liste");
 	
@@ -464,10 +465,10 @@ class CLMViewLigen
 		</td>
 	</tr>
 	<tr>
-		<td nowrap="nowrap" colspan="2" title="<?php echo Text::_( 'OPTION_ELO_ANALYSIS_HINT' );?>">
+		<td nowrap="nowrap" colspan="1" title="<?php echo Text::_( 'OPTION_ELO_ANALYSIS_HINT' );?>">
 			<label for="params[optionEloAnalysis]"><?php echo Text::_( 'OPTION_ELO_ANALYSIS' ); ?></label>
 		</td>
-		<td colspan="1">
+		<td colspan="2">
 			<fieldset class="radio">
 				<?php echo HTMLHelper::_('select.booleanlist', 'params[optionEloAnalysis]', 'class="inputbox"', $row->params['optionEloAnalysis']); ?>
 			</fieldset>
@@ -576,6 +577,13 @@ class CLMViewLigen
 	<td>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="man_remis" id="man_remis" size="4" maxlength="4" value="<?php if($row->man_remis !=""){ echo $row->man_remis;} else { echo "1";}; ?>" /></td>
 	<td>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="man_nieder" id="man_nieder" size="4" maxlength="4" value="<?php if($row->man_nieder !=""){ echo $row->man_nieder;} else { echo "0";}; ?>" /></td>
 	<td>&nbsp;&nbsp;&nbsp;<input class="inputbox" type="text" name="man_antritt" id="man_antritt" size="4" maxlength="4" value="<?php if($row->man_antritt !=""){ echo $row->man_antritt;} else { echo "0";}; ?>" /></td>
+		<td colspan="1" nowrap="nowrap" title="<?php echo Text::_( 'LEAGUE_TEAM_COMPLETE_HINT' );?>">
+			<?php echo Text::_( 'LEAGUE_TEAM_COMPLETE' ); ?>&nbsp;&nbsp;
+		</td>
+		<td colspan="1"><fieldset class="radio">
+				<?php echo HTMLHelper::_('select.booleanlist', 'params[team_complete]', 'class="inputbox"', $row->params['team_complete']); ?>
+			</fieldset>
+		</td>
 	</tr>
 
 	<tr>

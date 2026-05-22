@@ -96,6 +96,7 @@ $rights["db_turplayersliste"]=array();
 $rights["db_time_controlliste"]=array();
 $rights["db_clubmemberliste"]=array();
 $rights["test_print"]=array();
+$rights["db_team_complete"]=array();
 //************************
 // Turniere
 //************************

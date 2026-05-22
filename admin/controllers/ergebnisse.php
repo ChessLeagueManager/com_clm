@@ -558,6 +558,7 @@ function remove()
 		$query	=" UPDATE #__clm_rnd_man"
 			." SET gemeldet = NULL"
 			." , editor = NULL"
+			." , dwz_editor = NULL"
 			." , zeit = '1970-01-01 00:00:00'"
 			." , edit_zeit = '1970-01-01 00:00:00'"
 			." , ergebnis = NULL"
@@ -580,6 +581,7 @@ function remove()
 		$query	= "UPDATE #__clm_rnd_man"
 			." SET gemeldet = NULL"
 			." , editor = NULL"
+			." , dwz_editor = NULL"
 			." , zeit = '1970-01-01 00:00:00'"
 			." , edit_zeit = '1970-01-01 00:00:00'"
 			." , ergebnis = NULL"
@@ -670,6 +672,7 @@ function save()
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
+	
 	// Überprüfen ob Runde schon gemeldet ist
 	$query	= "SELECT gemeldet, tln_nr, gegner "
 		." FROM #__clm_rnd_man "
@@ -713,6 +716,8 @@ function save()
 			$params[$key] = substr($value,$ipos+1);
 		}
 	}	
+	if (!isset($params['team_complete']))  {   //Standardbelegung
+		$params['team_complete'] = '0'; }
 	if (!isset($params['color_order']))  {   //Standardbelegung
 		$params['color_order'] = '1'; }
 	switch ($params['color_order']) {
@@ -937,7 +942,7 @@ function save()
 			$gergebnis = 1;
 		}
 	}
-	// erweiterter Standard : mehr als die H�lfte der BP -> Sieg, H�lfte der BP -> halbe MP Zahl
+	// erweiterter Standard : mehr als die Hälfte der BP -> Sieg, Hälfte der BP -> halbe MP Zahl
 	if ($sieg_bed == 2) {
 		if ( $hmpunkte >  (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_sieg; $hergebnis = 1;}
 		if ( $hmpunkte == (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_remis; $hergebnis = 2;}
@@ -948,13 +953,29 @@ function save()
 		if ( $gmpunkte <  (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_nieder; $gergebnis = 0;}
 	}
 	// Antrittspunkte addieren falls angetreten
-	if ( $stamm > $man_kl_punkte ) { $hman_punkte = $hman_punkte + $man_antritt;}
-	else { 
+	if ( $stamm > $man_kl_punkte ) { 
+		if ($params['team_complete'] == 0) {
+			$hman_punkte = $hman_punkte + $man_antritt;
+		} else {
+			$rc = clm_core::$api->db_team_complete($lid,$dg,$rnd,$paarung,1);
+//clm_core::$api->test_print('rc-heim',$rc);
+			if (is_array($rc) AND $rc[0] == true AND $rc[1] == 1) $hman_punkte = $hman_punkte + $man_antritt;
+			elseif (is_array($rc) AND $rc[0] == false) echo "<br>".$rc[2];
+		}
+	} else { 
 		$hkampflos = 1;
 		$gkampflos = 1;
 	}
-	if ( $stamm > $gman_kl_punkte ) { $gman_punkte = $gman_punkte + $man_antritt;}
-	else { 
+	if ( $stamm > $gman_kl_punkte ) { 
+		if ($params['team_complete'] == 0) {
+			$gman_punkte = $gman_punkte + $man_antritt;
+		} else {
+			$rc = clm_core::$api->db_team_complete($lid,$dg,$rnd,$paarung,0);
+//clm_core::$api->test_print('rc-gast',$rc);
+			if (is_array($rc) AND $rc[0] == true AND $rc[1] == 1) $gman_punkte = $gman_punkte + $man_antritt;
+			elseif (is_array($rc) AND $rc[0] == false) echo "<br>".$rc[2];
+		}
+	} else { 
 		$hkampflos = 1;
 		$gkampflos = 1;
 	}
@@ -1290,7 +1311,7 @@ function save()
 			$gergebnis = 1;
 		}
 	}
-	// erweiterter Standard : mehr als die H�lfte der BP -> Sieg, H�lfte der BP -> halbe MP Zahl
+	// erweiterter Standard : mehr als die Hälfte der BP -> Sieg, Hälfte der BP -> halbe MP Zahl
 	if ($sieg_bed == 2) {
 		if ( $hmpunkte >  (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_sieg; $hergebnis = 1;}
 		if ( $hmpunkte == (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_remis; $hergebnis = 2;}
@@ -1301,13 +1322,29 @@ function save()
 		if ( $gmpunkte <  (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_nieder; $gergebnis = 0;}
 	}
 	// Antrittspunkte addieren falls angetreten
-	if ( $stamm > $man_kl_punkte ) { $hman_punkte = $hman_punkte + $man_antritt;}
-	else { 
+	if ( $stamm > $man_kl_punkte ) { 
+		if ($params['team_complete'] == 0) {
+			$hman_punkte = $hman_punkte + $man_antritt;
+		} else {
+			$rc = clm_core::$api->db_team_complete($lid,$dg,$rnd,$paarung,1);
+//clm_core::$api->test_print('rc-heim',$rc);
+			if (is_array($rc) AND $rc[0] == true AND $rc[1] == 1) $hman_punkte = $hman_punkte + $man_antritt;
+			elseif (is_array($rc) AND $rc[0] == false) echo "<br>".$rc[2];
+		}
+	} else { 
 		$hkampflos = 1;
 		$gkampflos = 1;
 	}
-	if ( $stamm > $gman_kl_punkte ) { $gman_punkte = $gman_punkte + $man_antritt;}
-	else { 
+	if ( $stamm > $gman_kl_punkte ) { 
+		if ($params['team_complete'] == 0) {
+			$gman_punkte = $gman_punkte + $man_antritt;
+		} else {
+			$rc = clm_core::$api->db_team_complete($lid,$dg,$rnd,$paarung,0);
+//clm_core::$api->test_print('rc-gast',$rc);
+			if (is_array($rc) AND $rc[0] == true AND $rc[1] == 1) $gman_punkte = $gman_punkte + $man_antritt;
+			elseif (is_array($rc) AND $rc[0] == false) echo "<br>".$rc[2];
+		}
+	} else { 
 		$hkampflos = 1;
 		$gkampflos = 1;
 	}
@@ -1746,7 +1783,7 @@ function save_wertung()
 	
 	// Punktemodus aus #__clm_liga holen
 	$query = " SELECT a.stamm, a.sieg, a.sieg_bed, a.remis, a.nieder, a.antritt, a.runden_modus, a.runden, "
-		." a.man_sieg, a.man_remis, a.man_nieder, a.man_antritt "
+		." a.man_sieg, a.man_remis, a.man_nieder, a.man_antritt, a.params "
 		." FROM #__clm_liga as a"
 		." WHERE a.id = ".$lid
 		;
@@ -1764,6 +1801,21 @@ function save_wertung()
 		$man_antritt	= $liga[0]->man_antritt;
 		$runden_modus	= $liga[0]->runden_modus;
 		$runden		= $liga[0]->runden;
+
+//Liga-Parameter aufbereiten
+	$paramsStringArray = explode("\n", $liga[0]->params);
+	$params = array();
+	foreach ($paramsStringArray as $value) {
+		$ipos = strpos ($value, '=');
+		if ($ipos !==false) {
+			$key = substr($value,0,$ipos);
+			if (substr($key,0,2) == "\'") $key = substr($key,2,strlen($key)-4);
+			if (substr($key,0,1) == "'") $key = substr($key,1,strlen($key)-2);
+			$params[$key] = substr($value,$ipos+1);
+		}
+	}	
+	if (!isset($params['team_complete']))  {   //Standardbelegung
+		$params['team_complete'] = '0'; }
 
 	// Arrays zur Punktevergabe
 	$heim_erg = array();
@@ -1998,29 +2050,53 @@ function save_wertung()
 	if ($ww_erg != -1) $hwpunkte = $ww_erg;
 	if ($sw_erg != -1) $gwpunkte = $sw_erg;
 	//}
+	
 	// Mannschaftspunkte Heim / Gast
 	// Standard : Mehrheit der BP gewinnt, BP gleich -> Punkteteilung
 	if ($sieg_bed == 1) {
-		if ( $hmpunkte >  $gmpunkte ) { $hman_punkte = $man_sieg; $gman_punkte = $man_nieder;}
-		if ( $hmpunkte == $gmpunkte AND $hmpunkte > 0) { $hman_punkte = $man_remis; $gman_punkte = $man_remis;}
-		if ( $hmpunkte == $gmpunkte AND $hmpunkte == 0) { $hman_punkte = $man_nieder; $gman_punkte = $man_nieder;}
-		if ( $hmpunkte <  $gmpunkte ) { $hman_punkte = $man_nieder; $gman_punkte = $man_sieg;}
+		if ( $hmpunkte >  $gmpunkte ) { $hman_punkte = $man_sieg; $gman_punkte = $man_nieder; $hergebnis = 1; $gergebnis = 0;}
+		if ( $hmpunkte == $gmpunkte AND $hmpunkte > 0) { $hman_punkte = $man_remis; $gman_punkte = $man_remis; $hergebnis = 2; $gergebnis = 2;}
+		if ( $hmpunkte == $gmpunkte AND $hmpunkte == 0) { $hman_punkte = $man_nieder; $gman_punkte = $man_nieder; $hergebnis = 6; $gergebnis = 6;}
+		if ( $hmpunkte <  $gmpunkte ) { $hman_punkte = $man_nieder; $gman_punkte = $man_sieg; $hergebnis = 0; $gergebnis = 1;}
 	}
 	// erweiterter Standard : mehr als die H�lfte der BP -> Sieg, H�lfte der BP -> halbe MP Zahl
 	if ($sieg_bed == 2) {
-		if ( $hmpunkte >  (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_sieg;}
-		if ( $hmpunkte == (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_remis;}
-		if ( $hmpunkte <  (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_nieder;}
+		if ( $hmpunkte >  (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_sieg; $hergebnis = 1;}
+		if ( $hmpunkte == (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_remis; $hergebnis = 2;}
+		if ( $hmpunkte <  (($stamm*($sieg+$antritt))/2) ) { $hman_punkte = $man_nieder; $hergebnis = 0;}
 		
-		if ( $gmpunkte >  (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_sieg;}
-		if ( $gmpunkte == (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_remis;}
-		if ( $gmpunkte <  (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_nieder;}
+		if ( $gmpunkte >  (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_sieg; $gergebnis = 1;}
+		if ( $gmpunkte == (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_remis; $gergebnis = 2;}
+		if ( $gmpunkte <  (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_nieder; $gergebnis = 0;}
 	}
 
 	// Antrittspunkte addieren falls angetreten
-	if ( $stamm > $man_kl_punkte ) { $hman_punkte = $hman_punkte + $man_antritt;}
-	if ( $stamm > $gman_kl_punkte ) { $gman_punkte = $gman_punkte + $man_antritt;}
-
+//clm_core::$api->test_print('complete',$params['team_complete']);
+//clm_core::$api->test_print('kampflos',$man_kl_punkte);
+//clm_core::$api->test_print('gkampflos',$gman_kl_punkte);
+//	if ( $stamm > $man_kl_punkte ) { $hman_punkte = $hman_punkte + $man_antritt;}
+//	if ( $stamm > $gman_kl_punkte ) { $gman_punkte = $gman_punkte + $man_antritt;}
+	if ( $stamm > $man_kl_punkte ) { 
+		if ($params['team_complete'] == 0) {
+			$hman_punkte = $hman_punkte + $man_antritt;
+		} else {
+			$rc = clm_core::$api->db_team_complete($lid,$dg,$rnd,$paarung,1);
+//clm_core::$api->test_print('rc-heim',$rc);
+			if (is_array($rc) AND $rc[0] == true AND $rc[1] == 1) $hman_punkte = $hman_punkte + $man_antritt;
+			elseif (is_array($rc) AND $rc[0] == false) echo "<br>".$rc[2];
+		}
+	} 
+	if ( $stamm > $gman_kl_punkte ) { 
+		if ($params['team_complete'] == 0) {
+			$gman_punkte = $gman_punkte + $man_antritt;
+		} else {
+			$rc = clm_core::$api->db_team_complete($lid,$dg,$rnd,$paarung,0);
+//clm_core::$api->test_print('rc-gast',$rc);
+			if (is_array($rc) AND $rc[0] == true AND $rc[1] == 1) $gman_punkte = $gman_punkte + $man_antritt;
+			elseif (is_array($rc) AND $rc[0] == false) echo "<br>".$rc[2];
+		}
+	} 
+	
 	// Datum und Uhrzeit für Meldung
 	$now = $date->toSQL();
 
@@ -2038,6 +2114,7 @@ function save_wertung()
 			." , dwz_zeit = '$now'";
 			}
 		$query = $query
+		." , ergebnis = '".$hergebnis."'"
 		." , brettpunkte = '".$hmpunkte."'"
 		." , manpunkte = '".$hman_punkte."'"
 		." , wertpunkte = '".$hwpunkte."'"
@@ -2064,6 +2141,7 @@ function save_wertung()
 			." , dwz_zeit = '$now'";
 			}
 		$query = $query
+		." , ergebnis = '".$gergebnis."'"
 		." , brettpunkte = '".$gmpunkte."'"
 		." , manpunkte = '".$gman_punkte."'"
 		." , wertpunkte = '".$gwpunkte."'"
@@ -2339,8 +2417,28 @@ function delete_wertung()
 		if ( $gmpunkte <  (($stamm*($sieg+$antritt))/2) ) { $gman_punkte = $man_nieder;}
 	}
 	// Antrittspunkte addieren falls angetreten
-	if ( $stamm > $man_kl_punkte ) { $hman_punkte = $hman_punkte + $man_antritt;}
-	if ( $stamm > $gman_kl_punkte ) { $gman_punkte = $gman_punkte + $man_antritt;}
+//	if ( $stamm > $man_kl_punkte ) { $hman_punkte = $hman_punkte + $man_antritt;}
+//	if ( $stamm > $gman_kl_punkte ) { $gman_punkte = $gman_punkte + $man_antritt;}
+	if ( $stamm > $man_kl_punkte ) { 
+		if ($params['team_complete'] == 0) {
+			$hman_punkte = $hman_punkte + $man_antritt;
+		} else {
+			$rc = clm_core::$api->db_team_complete($lid,$dg,$rnd,$paarung,1);
+//clm_core::$api->test_print('rc-heim',$rc);
+			if (is_array($rc) AND $rc[0] == true AND $rc[1] == 1) $hman_punkte = $hman_punkte + $man_antritt;
+			elseif (is_array($rc) AND $rc[0] == false) echo "<br>".$rc[2];
+		}
+	}
+	if ( $stamm > $gman_kl_punkte ) { 
+		if ($params['team_complete'] == 0) {
+			$gman_punkte = $gman_punkte + $man_antritt;
+		} else {
+			$rc = clm_core::$api->db_team_complete($lid,$dg,$rnd,$paarung,0);
+//clm_core::$api->test_print('rc-gast',$rc);
+			if (is_array($rc) AND $rc[0] == true AND $rc[1] == 1) $gman_punkte = $gman_punkte + $man_antritt;
+			elseif (is_array($rc) AND $rc[0] == false) echo "<br>".$rc[2];
+		}
+	} 
 
 	// Für Heimmannschaft updaten
 	$query	= "UPDATE #__clm_rnd_man"
