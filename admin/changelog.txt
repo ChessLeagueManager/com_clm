@@ -19,6 +19,7 @@ $ -> Language fix or change
 + TRF-Import/Export erweitert
 ^ Anpassung php 8.4
 + Teamwettbewerbe: Mannschaftsantrittspunkt nur, wenn alle Bretter besetzt sind
+^ Anpassung Joomla 6 (Nachtrag)
 
 - - - - - 5.0.0 - [20-04-2026] - - - - - - - - - - - - - - - - - - - -
 ^ Anpassung Joomla 6

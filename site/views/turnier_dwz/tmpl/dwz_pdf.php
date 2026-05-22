@@ -14,11 +14,12 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\Registry\Registry;
 
 $turnierid		= clm_core::$load->request_int('turnier','1');
 $config			= clm_core::$db->config();
 
-$turParams = new JRegistry();
+$turParams = new Registry();
 $turParams->loadString($this->turnier->params);
 
 require_once(clm_core::$path.DS.'classes'.DS.'fpdf.php');

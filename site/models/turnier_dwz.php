@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008 Thomas Schwietert & Andreas Dorn. All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.fishpoke.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -13,6 +13,8 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 jimport( 'joomla.html.parameter' );
+
+use Joomla\Registry\Registry;
 
 class CLMModelTurnier_DWZ extends JModelLegacy {
 	
@@ -38,7 +40,7 @@ class CLMModelTurnier_DWZ extends JModelLegacy {
 		$this->turnier = $this->_db->loadObject();
 
 		// turniernamen anpassen?
-		$turParams = new JRegistry();
+		$turParams = new Registry();
 		$turParams->loadString($this->turnier->params);
 		$addCatToName = $turParams->get('addCatToName', 0);
 		if ($addCatToName != 0 AND ($this->turnier->catidAlltime > 0 OR $this->turnier->catidEdition > 0)) {
