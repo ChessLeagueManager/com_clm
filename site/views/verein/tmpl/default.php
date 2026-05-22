@@ -124,9 +124,17 @@ $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {
 	echo "<div id='wrong'>".Text::_('NO_ACCESS')."<br>".Text::_('NOT_REGISTERED')."</div>";
 } else {
-?>
-
-<?php if (isset($verein[0]->name)){ 
+	if (!isset($vereinstats) OR (count($vereinstats) == 0)) {
+		$vereinstats[0]	= new stdClass();
+		$vereinstats[0]->Mgl = 0;
+		$vereinstats[0]->Mgl_m = 0;
+		$vereinstats[0]->Mgl_w = 0;
+		$vereinstats[0]->DWZ = '';
+		$vereinstats[0]->FIDE_Elo = '';
+		$vereinstats[0]->DWZ_SUM = '';
+		$vereinstats[0]->ELO_SUM = '';
+	}	
+	if (isset($verein[0]->name)){ 
 	if (is_null($vereinstats[0]->DWZ)) $vereinstats[0]->DWZ = '';
 	if (is_null($vereinstats[0]->FIDE_Elo)) $vereinstats[0]->FIDE_Elo = ''; ?>
 	<table cellpadding="0" cellspacing="0" width="100%">

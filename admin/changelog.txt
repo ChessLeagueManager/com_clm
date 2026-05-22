@@ -20,6 +20,8 @@ $ -> Language fix or change
 ^ Anpassung php 8.4
 + Teamwettbewerbe: Mannschaftsantrittspunkt nur, wenn alle Bretter besetzt sind
 ^ Anpassung Joomla 6 (Nachtrag)
+# Verein ohne Mitglieder
+
 
 - - - - - 5.0.0 - [20-04-2026] - - - - - - - - - - - - - - - - - - - -
 ^ Anpassung Joomla 6
