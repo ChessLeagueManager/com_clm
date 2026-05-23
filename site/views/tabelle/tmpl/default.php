@@ -39,6 +39,7 @@ if(isset($liga[0])){
 		}
 	}	
 	if (!isset($params['dwz_date'])) $params['dwz_date'] = '1970-01-01';
+	if (!isset($params['option_org_name'])) $params['option_org_name'] = '0';
 } else {
 	$paramsStringArray = array();
 }
@@ -220,6 +221,7 @@ elseif (!$liga OR $liga[0]->published == 0) {
 			
 					if ($punkte[$x]->published == 1) {
 						$link = new CLMcLink();
+						$link->title = clm_core::$api->db_org_name($params['option_org_name'],$punkte[$x]->zps);
 						$link->view = 'mannschaft';
 						$link->more = array('saison' => $sid, 'liga' => $lid, 'tlnr' => $punkte[$x]->tln_nr, 'Itemid' => $item);
 						$link->makeURL();

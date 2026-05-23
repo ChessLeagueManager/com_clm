@@ -124,6 +124,8 @@ class CLMViewLigen
 		$row->params['fe_ar_ergebnisse'] = '0'; }
 	if (!isset($row->params['team_complete']))  {   //Standardbelegung
 		$row->params['team_complete'] = '0'; }
+	if (!isset($row->params['option_org_name']))  {   //Standardbelegung
+		$row->params['option_org_name'] = '0'; }
 	// Auswahlfelder durchsuchbar machen
 	clm_core::$load->load_js("suche_liste");
 	
@@ -745,12 +747,22 @@ class CLMViewLigen
     <tr>
 	<td nowrap="nowrap">
 	<label for="params[ReportForm]"><?php echo Text::_( 'LEAGUE_REPORT_FORM' ); ?></label>
-	</td><td colspan="5">
+	</td><td colspan="3">
 <!--		<select name="params[ReportForm]" id="params-ReportForm" class="js-example-basic-single" value="<?php echo $row->params['ReportForm']; ?>" size="1"> -->
 		<select name="params[ReportForm]" id="params-ReportForm" class="<?php echo $field_search; ?>" value="<?php echo $row->params['ReportForm']; ?>" size="1">
 		<option value="0" <?php if ($row->params['ReportForm'] == 0) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_FORM_NO' );?></option>
 		<option value="1" <?php if ($row->params['ReportForm'] == 1) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_FORM_LINEUP_NO' );?></option>
 		<option value="2" <?php if ($row->params['ReportForm'] == 2) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_FORM_MEMBER_NO' );?></option>
+		</select>
+	</td>
+	<td nowrap="nowrap" style="text-align:right;">
+	<label for="params[option_org_name]"><?php echo Text::_( 'LEAGUE_ORG_NAME' ); ?></label>
+	</td><td colspan="3">
+		<select name="params[option_org_name]" id="params-option_org_name" class="<?php echo $field_search; ?>" value="<?php echo $row->params['option_org_name']; ?>" size="1">
+		<option value="0" <?php if ($row->params['option_org_name'] == 0) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_ORG_NO' );?></option>
+		<option value="1" <?php if ($row->params['option_org_name'] == 1) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_ORG_LAND' );?></option>
+		<option value="2" <?php if ($row->params['option_org_name'] == 2) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_ORG_VERBAND' );?></option>
+		<option value="3" <?php if ($row->params['option_org_name'] == 3) {echo 'selected="selected"';}  ?>><?php echo Text::_( 'LEAGUE_ORG_BEZIRK' );?></option>
 		</select>
 	</td>
 	</tr>

@@ -86,7 +86,7 @@ class CLMModelTabelle extends JModelLegacy
 			." SUM(case when (a.ergebnis = 1 OR a.ergebnis = 5) then 1 else 0 end) as count_S, "
 			." SUM(case when a.ergebnis = 2 then 1 else 0 end) as count_R, "
 			." SUM(case when (a.ergebnis = 0 OR a.ergebnis = 4) then 1 else 0 end) as count_V, "
-			." m.sumtiebr1, m.sumtiebr2, m.sumtiebr3 "
+			." m.sumtiebr1, m.sumtiebr2, m.sumtiebr3, m.zps "
 			." FROM #__clm_rnd_man as a "
 			." LEFT JOIN #__clm_mannschaften as m ON m.liga = $liga AND m.tln_nr = a.tln_nr "
 			." WHERE a.lid = ".$liga

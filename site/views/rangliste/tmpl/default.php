@@ -15,7 +15,7 @@ require_once (JPATH_COMPONENT . DS . 'includes' . DS . 'clm_tooltip.php');
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
- use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\HTML\HTMLHelper;
  
 $lid		= clm_core::$load->request_int('liga','1'); 
 $sid		= clm_core::$load->request_int('saison',0);
@@ -59,6 +59,7 @@ if(isset($liga[0])){
 	if (!isset($params['noBoardResults'])) $params['noBoardResults'] = '0';
 	if (!isset($params['pgnPublic'])) $params['pgnPublic'] = '0';
 	if (!isset($params['pgnDownload'])) $params['pgnDownload'] = '0';
+	if (!isset($params['option_org_name'])) $params['option_org_name'] = '0';
 } else {
 	$paramsStringArray = array();
 }
@@ -297,6 +298,7 @@ elseif ($liga[0]->runden_modus == "4" OR $liga[0]->runden_modus == "5") {
 					//if ($punkte[$x]->published == 1 AND $params['noBoardResults'] == '0') {
 					if ($punkte[$x]->published == 1) {
 						$link = new CLMcLink();
+						$link->title = clm_core::$api->db_org_name($params['option_org_name'],$punkte[$x]->zps);
 						$link->view = 'mannschaft';
 						$link->more = array('saison' => $sid, 'liga' => $lid, 'tlnr' => $punkte[$x]->tln_nr, 'Itemid' => $item);
 						$link->makeURL();
