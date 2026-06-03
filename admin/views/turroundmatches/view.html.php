@@ -59,6 +59,13 @@ class CLMViewTurRoundMatches extends JViewLegacy {
 		}
 		// Goto Teilnehmern
 		ToolBarHelper::custom( 'goto_players', 'forward.png', 'forward_f2.png', Text::_('GOTO_PLAYERS'), false);
+		if (PluginHelper::isEnabled('xxx', 'clm_pairing_files') AND $model->turnier->typ == 1) { 
+			if ($drawing_mode > 0) {
+				if ($model->round->tl_ok != 1) {
+					ToolBarHelper::custom( 'export_pdf', 'copy.png', 'copy_f2.png', 'Aushang Brettzuordnung', false);
+				}
+			}
+		}
 		ToolBarHelper::cancel();
 
 		// das MainMenu abschalten

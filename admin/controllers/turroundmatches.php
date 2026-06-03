@@ -871,5 +871,35 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 //die('napi');
 		
 	}
-	
+
+	function export_pdf() {
+
+		// Check for request forgeries
+		defined('_JEXEC') or die('Restricted access');
+			
+		$lid = clm_core::$load->request_int('turnierid');
+		$dg = clm_core::$load->request_int('dg',1);
+		$runde = clm_core::$load->request_int('runde');
+//clm_core::$api->test_print('lid',$lid);
+//clm_core::$api->test_print('runde',$runde);
+		$result = clm_core::$api->db_brettzuordnung($lid,$runde,'pdf');
+//clm_core::$api->test_print('result',$result);
+
+		$file_name = $result[2];
+		// Log schreiben
+		$clmLog = new CLMLog();
+		$clmLog->aktion = "BrettzuordnungRunde".$runde.".pdf"." ".Text::_('CLM_EXPORT');
+		$clmLog->params = array('file_name' => $file_name, 'turnierid' => $lid, 'roundid' => $runde, 'format' => 'pdf'); 
+		$clmLog->write();
+
+		$app =Factory::getApplication();
+		$app->enqueueMessage( 'Brettzuordnung als pdf exportiert','message' );					
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turroundmatches";
+		$adminLink->more = array('file_name' => $file_name, 'turnierlid' => $lid, 'roundid' => $runde);
+		$adminLink->makeURL();
+		$app->redirect( $adminLink->url );
+
+	}
  }

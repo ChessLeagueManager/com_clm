@@ -263,6 +263,7 @@ $pgnInput = $turParams->get('pgnInput', 1);
 	<input type="hidden" name="boxchecked" value="0" />
 	<input type="hidden" name="turnierid" value="<?php echo $this->param['turnierid']; ?>" />
 	<input type="hidden" name="roundid" value="<?php echo $this->param['roundid']; ?>" />
+	<input type="hidden" name="runde" value="<?php echo $this->round->nr; ?>" />
 	<?php echo HTMLHelper::_( 'form.token' ); ?>
 
 </form>
