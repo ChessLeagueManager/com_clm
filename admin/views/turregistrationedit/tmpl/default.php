@@ -87,7 +87,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo Text::_('PLAYER_FIDE_ID'); ?>:</td>
-				<td><input class="inputbox" type="text" name="FIDEid" id="FIDEid" size="8" maxlength="8" value="<?php if ($this->registration->FIDEid != 0) echo $this->registration->FIDEid; else echo ""; ?>" /></td>
+				<td><input class="inputbox" type="text" name="FIDEid" id="FIDEid" size="9" maxlength="9" value="<?php if ($this->registration->FIDEid != 0) echo $this->registration->FIDEid; else echo ""; ?>" /></td>
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo Text::_('PLAYER_FIDE_CCO'); ?>:</td>

@@ -23,6 +23,7 @@ $ -> Language fix or change
 # Verein ohne Mitglieder
 # Fehlerlink aktualisiert
 + Teamwettbewerbe: optionale Organisationsanzeige der Mannschaft als mouseover
+^ FIDE-ID bis zu 9 Stellen
  
 - - - - - 5.0.0 - [20-04-2026] - - - - - - - - - - - - - - - - - - - -
 ^ Anpassung Joomla 6

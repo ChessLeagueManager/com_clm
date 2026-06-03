@@ -204,7 +204,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 				<?php if ($optionEloAnalysis == 1) { ?>
 					<tr>
 						<td class="key" nowrap="nowrap"><?php echo Text::_('FIDE_ID'); ?>:</td>
-						<td><input class="inputbox" type="text" name="FIDEid" id="FIDEid" size="8" maxlength="8" /></td>
+						<td><input class="inputbox" type="text" name="FIDEid" id="FIDEid" size="9" maxlength="9" /></td>
 					</tr>
 				<?php } ?>
 				<tr>

@@ -80,7 +80,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 					<label for="fide"><?php echo $lang->fideid; ?>:</label>
 				</td>
 				<td class="paramlist_value">
-					<input class="inputbox" type="text" name="fideid" id="fideid" size="8" maxlength="8" value="<?php echo $this->arbiter->fideid; ?>" />
+					<input class="inputbox" type="text" name="fideid" id="fideid" size="9" maxlength="9" value="<?php echo $this->arbiter->fideid; ?>" />
 				</td>
 			</tr>
 			<tr>

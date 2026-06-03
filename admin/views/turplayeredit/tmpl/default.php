@@ -134,7 +134,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 			<?php if ($param_eloanalysis == 1) { ?>
 				<tr>
 					<td class="key" nowrap="nowrap"><?php echo Text::_('FIDE_ID'); ?>:</td>
-					<td><input class="inputbox" type="text" name="FIDEid" id="FIDEid" size="8" maxlength="8" value="<?php echo $this->player->FIDEid; ?>" /></td>
+					<td><input class="inputbox" type="text" name="FIDEid" id="FIDEid" size="9" maxlength="9" value="<?php echo $this->player->FIDEid; ?>" /></td>
 					<td class="key" nowrap="nowrap"><?php echo Text::_('FIDE_CCO'); ?>:</td>
 					<td><input class="inputbox" type="text" name="FIDEcco" id="FIDEcco" size="3" maxlength="3" value="<?php echo $this->player->FIDEcco; ?>" /></td>
 				</tr>

@@ -186,7 +186,7 @@ if ( $this->turnier->published == 0) {
 		<tr>
 			<td align="left" width="100"><?php echo Text::_('REGISTRATION_FIDEID'); ?><?php if ($optionEloAnalysis == 1) echo '(*)'; ?>:</td>
 			<td colspan="3">
-			<input class="inputbox" type="text" name="reg_FIDEid" id="reg_FIDEid" size="8" maxlength="8" value="<?php echo $reg_FIDEid; ?>" />
+			<input class="inputbox" type="text" name="reg_FIDEid" id="reg_FIDEid" size="9" maxlength="9" value="<?php echo $reg_FIDEid; ?>" />
 			</td>
 		</tr>
 		<?php } ?>

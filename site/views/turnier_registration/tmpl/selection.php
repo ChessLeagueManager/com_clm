@@ -207,7 +207,7 @@ $heading = $this->turnier->name;
 		<tr>
 			<td align="left" width="100" class="anfang"><?php echo Text::_('REGISTRATION_FIDEID'); ?>:</td>
 			<td colspan="3">
-			<input class="inputbox" type="text" name="reg_FIDEid" id="reg_FIDEid" size="8" maxlength="8" value="<?php echo $reg_FIDEid; ?>" />
+			<input class="inputbox" type="text" name="reg_FIDEid" id="reg_FIDEid" size="9" maxlength="9" value="<?php echo $reg_FIDEid; ?>" />
 			</td>
 		</tr>
 		<?php } ?>

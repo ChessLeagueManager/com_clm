@@ -316,7 +316,7 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 			<label for="FIDE_ID"><?php echo Text::_( 'Fide-ID' ); ?></label>
 			</td>
 			<td>
-			<input class="inputbox" type="text" name="FIDE_ID" id="FIDE_ID" size="9" maxlength="8" <?php if (isset($filter_mgl) AND $filter_mgl !="0") {?> value="<?php echo $spieler[0]->FIDE_ID ?>"<?php }?>/>
+			<input class="inputbox" type="text" name="FIDE_ID" id="FIDE_ID" size="9" maxlength="9" <?php if (isset($filter_mgl) AND $filter_mgl !="0") {?> value="<?php echo $spieler[0]->FIDE_ID ?>"<?php }?>/>
 			</td>
 			<td><?php echo Text::_( 'Bspl. 1503015' ); ?></td>
 		</tr>
