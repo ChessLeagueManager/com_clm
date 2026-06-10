@@ -15,7 +15,6 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 
 $swt_file = clm_core::$load->request_string('swt_file', '');
-//$swt = clm_core::$load->request_string('swt', '');
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm" >
@@ -45,7 +44,6 @@ $swt_file = clm_core::$load->request_string('swt_file', '');
 		</tr>		
 	</table>
 	
-<!--	<input type="hidden" name="swt" value="<?php echo $swt; ?>" /> -->
 	<input type="hidden" name="swt_file" value="<?php echo $swt_file; ?>" />
 	
 	<input type="hidden" name="option" value="com_clm" />

@@ -282,7 +282,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 				// aus Array entfernen!
 				unset($array_w[$key]);
 			} else {
-				$array_id[$key] = $id;
+//				$array_id[$key] = $id;
 			}
 			
 			// alle Startnummern in Duplo-Array eintragen (wenn Startnummer vorhanden)

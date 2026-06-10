@@ -33,18 +33,14 @@ class CLMControllerSWTTurnierErg extends JControllerLegacy
 			$rlast  = clm_core::$load->request_string('rlast');
 			$rrange = clm_core::$load->request_string('rrange');
 			$rcount = clm_core::$load->request_string('rcount');
-//			$this->_message = Text::_( 'SWT_STORE_SUCCESS' );
 			if ($rlast == $rcount) {
-//				$_REQUEST['view'] = 'swt';
 				$tid = clm_core::$load->request_int('tid');
 				$htext = " (ID = ".$tid.")";
 				$adminLink = new AdminLink();
-				$adminLink->more = array('swt_file' => $swt_file);
 				$adminLink->view = "swt";
 				$adminLink->makeURL();
 				$this->app->enqueueMessage( Text::_( 'SWT_STORE_SUCCESS' ).$htext,'message' );
 				$this->app->redirect($adminLink->url); 				
-//				parent::display ();
 			} else {
 				$_GET['rfirst'] = ($rlast + 1);
 				$_REQUEST['view'] = 'swtturniererg';
