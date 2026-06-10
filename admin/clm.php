@@ -198,7 +198,7 @@ if (substr($joomlaVersion,0,1) > 3) {  ?>
 					<?php if($clmAccess->access('BE_dewis_general')) { ?>
 					<li <?php if (clm_core::$load->request_string('view') == 'auswertung') echo 'class="active"'; ?>>
 						<?php if ($countryversion =="de") { ?>
-						<a href="index.php?option=com_clm&amp;view=auswertung"><?php echo Text::_('DeWIS'); ?>&nbsp;&nbsp;</a>
+						<a href="index.php?option=com_clm&amp;view=auswertung"><?php echo Text::_('DEWIS'); ?>&nbsp;&nbsp;</a>
 						<?php } ?>
 						<?php if ($countryversion =="en") { ?>
 						<a href="index.php?option=com_clm&amp;view=auswertung"><?php echo Text::_('GRADING_EXPORT'); ?>&nbsp;&nbsp;</a>

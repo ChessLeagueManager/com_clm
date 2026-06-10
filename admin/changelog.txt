@@ -24,6 +24,7 @@ $ -> Language fix or change
 # Fehlerlink aktualisiert
 + Teamwettbewerbe: optionale Organisationsanzeige der Mannschaft als mouseover
 ^ FIDE-ID bis zu 9 Stellen
+^ Admin-View DeWIS umbenannt in Exporte
  
 - - - - - 5.0.0 - [20-04-2026] - - - - - - - - - - - - - - - - - - - -
 ^ Anpassung Joomla 6
