@@ -514,6 +514,29 @@ function datei() {
 		}
 	}
 
+
+	////////////////////////
+	// DSB XML neu Format //
+	////////////////////////
+
+	if ($format == "5" ) {
+		if(!is_null($et)) { // Einzelturnier
+			$result = clm_core::$api->db_dsb_xml_export($et, false, false);
+		} else {			// Teamwettbewerb
+			$result = clm_core::$api->db_dsb_xml_export($liga, true, false);
+		}
+		$xml = $result[0];
+		$elines = $result[1];
+		if(is_array($elines) && count($elines) > 0) {
+			$emessage = '';
+			foreach($elines as $line){
+				$emessage .= '###'.substr($line,3).'<br>';
+			}
+//			$emessage .= '- alle Warnungen und Hinweise sind auch Teil der Ausgabedatei, gelistet als Kommentare am Dateiende -';
+			$app->enqueueMessage($emessage , 'warning');
+		}
+	}
+
 	//////////////////////
 	// DEWIS XML Format //
 	//////////////////////
@@ -1132,6 +1155,7 @@ $xml = $xmla->writeData();
 	if($format =="2"){ $datei_endung = "xml";}
 	if($format =="3"){ $datei_endung = "xml";}
 	if($format =="4"){ $datei_endung = "trf";}
+	if($format =="5"){ $datei_endung = "xml";}
 	if($format =="14"){ $datei_endung = "trf";}
 	$write		= $path.DS.$file.'.'.$datei_endung;
 

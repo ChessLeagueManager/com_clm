@@ -131,6 +131,7 @@ if ($debug > 0) { echo "<br>edate:"; var_dump($edate); }
 							return array(false,'Der Import von Teamwettbewerbeb im TRF-Format sind noch nicht realisiert!');
 						}
 						break;
+			case '142': $rundenzahl = $value; break;
 			case 'XXR': $rundenzahl = $value; break;
 			case 'XXS': $a_xxs = explode(' ', $value);
 						if (count($a_xxs) > 0) {
@@ -192,6 +193,7 @@ if ($debug > 0) { echo "<br>e_xxs"; var_dump($e_xxs); }
 			case 'XCL': $lokal = addslashes($value); 
 if ($debug > 1) { echo "<br>lokal:"; var_dump($lokal); } 
 						break;
+			case 'XCM': $typ = $value; break;
 			case 'XCP': $params = addslashes($value); 
 						$params = str_replace(";;","\n",$params);			
 if ($debug > 1) { echo "<br>params:"; var_dump($params); } 
@@ -234,7 +236,7 @@ if ($debug > 0) { echo "<br>name:"; var_dump($name); }
 		$valueS = "'".$name."', ".$season.", '".$typ."', 1, 1, 0, 1, '0', '".$adate."', '".$edate."', '".$bem_int."', ";
 		$valueS .= "'".$city."', '".$FIDEcco."', '".$lokal."', '".$tiebr1."', '".$tiebr2."', '".$tiebr3."', '".$params."'";
 	} else { 		// Einzelturniere
-		$typ = '1'; 														   // Einzel-Schweizer Sytem
+		if (!isset($typ)) $typ = '1'; 														   // Einzel-Schweizer Sytem
 		$bem_int = $lang->trf_remark.' '.$filename;
 		$keyS = '`name`, `sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `runden`, `teil`, `bezirkTur`, `dateStart`, `dateEnd`, `bem_int`, ';
 		$keyS .= '`sieg`, `siegs`, `remis`, `remiss`, `nieder`, `niederk`,';

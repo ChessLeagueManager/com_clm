@@ -48,6 +48,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 						<?php if ($countryversion =="de") { ?>
 							<option value="1"><?php echo Text::_( 'DB_FILE_FORMAT_1' ); ?></option>
 							<option value="2"><?php echo Text::_( 'DB_FILE_FORMAT_2' ); ?></option>
+							<option value="5"><?php echo Text::_( 'XML DSB neu' ); ?></option>
 							<option value="4"><?php echo Text::_( 'DB_FILE_FORMAT_4' ); ?></option>
 							<?php if ($test_button == 1) { ?>
 								<option value="14"><?php echo Text::_( 'TRF mit Turnierdetails' ); ?></option>
@@ -101,6 +102,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 						<option value="0"><?php echo Text::_( 'DB_FILE_FORMAT_0' ); ?></option>
 					<?php if ($countryversion =="de") { ?>
 						<option value="2"><?php echo Text::_( 'DB_FILE_FORMAT_2' ); ?></option>
+						<option value="5"><?php echo Text::_( 'XML DSB neu' ); ?></option>
 					<?php } elseif ($countryversion =="en") { ?>
 						<option value="3"><?php echo Text::_( 'DB_FILE_FORMAT_3' ); ?></option>
 					<?php } ?>
