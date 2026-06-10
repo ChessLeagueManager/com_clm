@@ -1,9 +1,9 @@
 <?php 
 /**
  * @ Chess League Manager (CLM) Component
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 // Berechenen der inoffiziellen DWZ eines Turniers
 function clm_api_db_tournament_genDWZ($id,$group=true) {
@@ -39,14 +39,18 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
  	clm_core::$api->db_tournament_delDWZ($id,$group);
 
 	// Liga Punktebereich auslesen
-	$query='SELECT sid, params'
+	$query='SELECT sid, params, dateEnd'
 			.' FROM '.$table_main
 			.' WHERE id='.$id;
 	$liga = clm_core::$db->loadObjectList($query);
 	if(count($liga)==0) {
-			return array(true, "e_calculateDWZNoLiga");
+			return array(false, "e_calculateDWZNoLiga");
 	}
 	$liga = $liga[0];
+	if($liga->dateEnd <= '1970-01-01') {
+			return array(false, "e_calculateEndDateMissing");
+	}
+
 	// DWZ-Handling ermitteln
 	$tparams = new clm_class_params($liga->params);
 	$param_dwz_date = $tparams->get('dwz_date', '1970-01-01');
@@ -62,7 +66,7 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
 			return array(true, "e_calculateDWZNoRound");
 	}
 	$year = substr($datum[0]->date,0,4);
-	if($year=="0000") {
+	if($year=="0000" OR $year=="1970") {
 		$year = date('Y'); // Falls kein Jahr angegeben wurde
 	} else {
 		$year = intval($year);
@@ -77,6 +81,8 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
 	if(count($spieler)==0) {
 			return array(false, "e_DWZnoPlayer");
 	}
+	// Berechnungsparameter entspr. Turnierenddatum setzen
+	$dwz->checkEndDate($liga->dateEnd);
 
 	// Spieler zur DWZ Auswertung hinzufügen
 	for ($i=0;$i < count($spieler);$i++)

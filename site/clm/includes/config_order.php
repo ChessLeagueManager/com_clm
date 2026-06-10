@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link https://chessleaguemanager.org
 */
@@ -14,7 +14,7 @@ $config_order = array(
 			),
 			array("results", 0,"conf_ergebnisse", "meldung_heim", "meldung_verein", "kommentarfeld", "ikommentarfeld", "app_security", "fe_sl_ergebnisse", "fe_ar_ergebnisse"),
 			array("register", 0, "conf_meldeliste", "pdf_meldelisten"),
-			array("database", 0, "execute_swt", "upload_swt","import_pgn", "upload_pgn","dsb_import_amount","dewis_import_delay"),
+			array("database", 0, "execute_swt", "upload_swt","import_pgn", "upload_pgn","dsb_import_amount","dewis_import_delay","dsb_uuid_key","dsb_secret_key"),
 			array("clubs", 0,  "verein_mail","verein_tel","conf_vereinsdaten","verein_fe_mail",
 				array("club_list", 0, "fe_vereinsliste_vs","fe_vereinsliste_hpage","fe_vereinsliste_dwz","fe_vereinsliste_elo")),
 			array("tournaments", 0, "tourn_linkclub", "tourn_showtlok"),

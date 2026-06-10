@@ -22,6 +22,7 @@ defined('clm') or die('Restricted access');
 //12 -> E-Mail
 //13 -> Länge
 //14 -> URL
+//21 -> UUID
 // Bei ungültigen Typ wird stets der Standardwert zurückgegeben!
 $config["countryversion"]=array(0,9,"de",array("de","en"));
 $config["lv"]=array(1,11,"000",array("db_units",array(true,true)));
@@ -83,8 +84,6 @@ $config["googlemaps_mrout"]=array(59,9,1,array(0,1));
 $config["googlecharts"]=array(60,9,0,array(0,1));
 $config["tourn_linkclub"]=array(61,9,1,array(0,1));
 $config["tourn_showtlok"]=array(62,9,0,array(0,1));
-$config["cl_config"]=array(63,8,"0.0.0",null);
-$config["db_config"]=array(64,8,"0",null);
 $config["template"]=array(66,9,1,array(0,1));
 $config["lesehilfe"]=array(67,9,1,array(0,1));
 $config["border_length"]=array(68,13,"1px",null); 
@@ -172,4 +171,15 @@ $config["mail_smtp_port"]=array(151,0,25,null);
 $config["mail_smtp_helo"]=array(152,7,"localhost",null);
 $config["mail_smtp_autotls"]=array(153,9,0,array(0,1));
 $config["turnier_entry_fee"]=array(154,9,0,array(0,1));
+$config["dsb_uuid_key"]=array(155,21,"",null);
+$config["dsb_secret_key"]=array(156,7,"",null);
+
+// nicht editierbar - Zugriff über Tabelle clm_config mit ID bzw. clm_core::$db->config() 
+$config["cl_config"]=array(63,8,"0.0.0",null);
+$config["db_config"]=array(64,8,"0",null);
+$config["joomla_version"]=array(1001,7,"",null);
+$config["dsb_refresh_token"]=array(2001,21,"",null);
+$config["dsb_access_token"]=array(2002,7,"",null);
+$config["dsb_expires_at"]=array(2003,7,"",null);
+
 ?>

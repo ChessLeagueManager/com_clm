@@ -26,6 +26,7 @@ $ -> Language fix or change
 ^ FIDE-ID bis zu 9 Stellen
 ^ Admin-View DeWIS umbenannt in Exporte
 + XML-Ausgabe für neue DWZ-Auswertung (Beta)
+^ Vorbereitungen zur neuen Datenübernahme vom DSB
  
 - - - - - 5.0.0 - [20-04-2026] - - - - - - - - - - - - - - - - - - - -
 ^ Anpassung Joomla 6

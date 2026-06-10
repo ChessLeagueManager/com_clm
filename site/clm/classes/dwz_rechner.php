@@ -1,14 +1,18 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 /*******************************************************/
 /********Implementierung der DWZ Berechnung nach********/
 /*******************DSB-Wertungsordnung*****************/
 /*****************Stand: Stand: 30. Mai 2014************/
+/***********für Wettbewerbe Endedatum bis 7.6.2026******/
+/*Quelle: http://www.schachbund.de/wertungsordnung.html*/
+/*****************Stand: Stand: 30. Mai 2026************/
+/************für Wettbewerbe Endedatum ab 8.6.2026******/
 /*Quelle: http://www.schachbund.de/wertungsordnung.html*/
 /***Keine Garantie auf Korrektheit der Implementierung**/
 /*******************************************************/
@@ -16,14 +20,29 @@ class clm_class_dwz_rechner {
 	private $tournament;
 	private $link;
 	private $result;
+	private $params;
 	function __construct() {
 		$this->tournament = array();
 		$this->tournament[0] = array(); // DWZ Spieler
 		$this->tournament[1] = array(); // Spiele von DWZ Spielern gegen DWZ lose Spieler
 		$this->tournament[2] = array(); // DWZ lose Spieler
 		$this->link = array();
+		
+		// Stellgrößen gültig ab 08.06.2026
+		$this->params = new clm_class_params();
+		$this->params->set('r',0);	// Korrektur-Faktor bei Erst DWZ
+		$this->params->set('t',1);	// Divisor bei Jugendaufschlag a
+		$this->params->set('u',0);	// Verschiebung bei Bremsfaktor b
+		$this->params->set('a1',0);	// Erfolgsaufschlag Junioren
+		$this->params->set('a2',0);	// Erfolgsaufschlag Erwachsene
+		$this->params->set('Kmax',0);		// Höchstwert des K-Faktors
 	}
 	public function addPlayer($id, $A, $R_o, $Index,$fide=0) {
+		// $id Teamwettbewerbe id = zps + ':' + mglnr
+		// $id Einzelturnier   id = 'p' + snr
+		// $A  Alter
+		// $R_o start_dwz
+		// $Index start_IO (Index der StartDWZ
 		// ID muss einmalig und keine Nummer sein
 		if (is_numeric($id) || isset($this->link[$id])) {
 			return false;
@@ -60,6 +79,8 @@ class clm_class_dwz_rechner {
 		return true;
 	}
 	public function addMatch($id1, $id2, $result, $gresult) {
+		// $id1 ID des Spielers
+		// $id2 ID des Gegners
 		if (!isset($this->link[$id1]) || !isset($this->link[$id2]) || !in_array($result, array(0, 0.5, 1)) || !in_array($gresult, array(0, 0.5, 1))) {
 			return false;
 		}
@@ -149,7 +170,7 @@ class clm_class_dwz_rechner {
 			$output["W"] = $this->result[$i][2];	// erzielte Punkte
 			$output["n"] = $this->result[$i][3];	// Anzahl wertbarer Partien
 			$output["W_e"] = $this->result[$i][4];	// Erwartung in Punkten
-			$output["E"] = $this->result[$i][5];	// Entwichlungskoeffizient
+			$output["E"] = $this->result[$i][5];	// Entwicklungskoeffizient / Entwicklungsfaktor
 			$output["R_p"] = $this->result[$i][6];	// Leistung
 			$output["R_c"] = $this->result[$i][7];	// Wertzahldurchschnitt der Gegner = Niveau
 			$output["R_n"] = $this->result[$i][8];	// neue Wertzahl
@@ -191,7 +212,7 @@ class clm_class_dwz_rechner {
 	public static $PTabReverse = array(0, 7, 14, 21, 29, 36, 43, 50, 57, 65, 72, 80, 87, 95, 102, 110, 117, 125, 133, 141, 149, 158, 166, 175, 184, 192, 202, 211, 220, 230, 240, 251, 262, 273, 284, 296, 309, 322, 336, 351, 366, 383, 401, 422, 444, 470, 501, 538, 589, 677);
 	// input: array(array($A, $Index, $R_o, $W,GAMES),array($A, $Index, $R_o, $W,GAMES)),array($W,array(mit DWZ),array(ohne DWZ)),array(mit DWZ, ohne DWZ (bisher), Ergebnis))
 	// output: 	array(DWZ alt,Index alt,W,n,We,E,Lstg.,Niveau,DWZ neu, Index neu)
-	public static function tournament($tournament) {
+	public function tournament($tournament) {
 		// Die neue DWZ der DWZlosen bestimmen
 		$neueSpieler = clm_class_dwz_rechner::newDWZ($tournament[2]);
 		// Die Spieler der 1. Zusatzstufe beisetzen
@@ -276,7 +297,7 @@ class clm_class_dwz_rechner {
 	// $player --> Punkte, DWZgegner, NichtDWZGegner array(index auf $player, punkt)
 	// Ausgabe:
 	// array(Neue DWZ), Anzahl gewerteter Partien, bewertete Punkte, Status, Niveau, ev. Restpartien)
-	public static function newDWZ($players) {
+	public function newDWZ($players) {
 		// Wer bekommt eine DWZ?
 		for ($i = 0;$i < count($players);$i++) {
 			// Spieler hat 5 Spiele gespielt und nicht alle gewonnen oder verloren.
@@ -484,12 +505,17 @@ class clm_class_dwz_rechner {
 		return $R_c + clm_class_dwz_rechner::D($W / $n);
 	}
 	// Ein Spieler mit DWZ gegen andere Spieler mit DWZ
-	public static function player($A, $Index, $R_o, $W, $DWZ_others) {
+	public function player($A, $Index, $R_o, $W, $DWZ_others) {
 		$W_e = clm_class_dwz_rechner::W_e($R_o, $DWZ_others);
 		$n = count($DWZ_others);
 		$J = clm_class_dwz_rechner::J($A);
-		$E = clm_class_dwz_rechner::E($R_o, $W, $W_e, $J, $Index);
-		return array(clm_class_dwz_rechner::R_n($R_o, $W, $W_e, $J, $Index, $n, $E), $Index + 1, $E, $W_e);
+		if ($this->params->get('Kmax',0) == 0) {
+			$E = clm_class_dwz_rechner::E($R_o, $W, $W_e, $J, $Index);
+			return array(clm_class_dwz_rechner::R_n($R_o, $W, $W_e, $J, $Index, $n, $E), $Index + 1, $E, $W_e);
+		} else {
+			$K = clm_class_dwz_rechner::K($R_o, $W, $W_e, $A, $Index);
+			return array(clm_class_dwz_rechner::R_n26($R_o, $W, $W_e, $J, $Index, $n, $K), $Index + 1, $K, $W_e);
+		}
 	}
 	// Bei Spielern, die bereits eine DWZ besessen haben oder auch ein FIDE-Rating bzw. eine anerkannte,
 	// vergleichbare nationale Wertung, wird die alte Wertungszahl Ro mit Hilfe der errechneten Punkterwartung We
@@ -497,6 +523,15 @@ class clm_class_dwz_rechner {
 	// Rn = Ro + 800 x (W - We) / (E + n)
 	public static function R_n($R_o, $W, $W_e, $J, $Index, $n, $E) {
 		return intval(round($R_o + 800 * ($W - $W_e) / ($E + $n)));
+	}
+	// Bei Spielern, die bereits eine DWZ besessen haben oder auch ein FIDE-Rating bzw. eine anerkannte,
+	// vergleichbare nationale Wertung, wird die alte Wertungszahl Ro mit Hilfe der errechneten Punkterwartung We
+	// und einem Entwicklungsfaktor K in die neue DWZ = Rn umgerechnet:
+	// Rn = Ro + 800 x (W - We) / (E + n)
+	public static function R_n26($R_o, $W, $W_e, $J, $Index, $n, $K) {
+		$R_n = $R_o + $K * ($W - $W_e);
+		if ($R_n < 1100) $R_n = 1100;
+		return intval(round($R_n));
 	}
 	//  	Durchschnitt der Gegner-DWZ
 	// (Rc = ∑Ro / n)
@@ -636,7 +671,7 @@ class clm_class_dwz_rechner {
 			return 15;
 		}
 	}
-	public static function test() {
+	public function test() {
 		// http://www.schachbund.de/turnier.html?code=B431-636-C4F
 		$test = new clm_class_dwz_rechner();
 		$test->addPlayer("Barthel", 20, 0, 0);
@@ -656,5 +691,90 @@ class clm_class_dwz_rechner {
 		// Abweichung Niveau kommt vom Einbezug der Restpartie, DSB nimmt diese aus
 		
 	}
+
+//------------------------------ neue Funktionen ab 08.06.2026 --------------------
+	// Setzen der Stellgrößen in Abhängigkeit des Turnierenddatum
+	public function checkEndDate($enddate) {
+
+		if (!clm_core::$load->is_date($enddate,'Y-m-d')) {
+			return false;
+		}
+		if ($enddate >= '2026-06-08') {
+			// Stellgrößen gültig ab 08.06.2026
+			$this->params->set('r',0.08);	// Korrektur-Faktor bei Erst DWZ
+			$this->params->set('t',30);		// Divisor bei Jugendaufschlag a
+			$this->params->set('u',800);	// Verschiebung bei Bremsfaktor b
+			$this->params->set('a1',4);		// Erfolgsaufschlag Junioren
+			$this->params->set('a2',4);		// Erfolgsaufschlag Erwachsene
+			$this->params->set('Kmax',80);	// Höchstwert des K-Faktors
+		}
+		return true;
+	}
+
+	// Der Entwicklungsfaktor K
+	// K = Grundwert K0 x Bremsfaktor b + Erfolgsaufzschlag a
+	// Für K gelten folgende Begrenzungen:
+	// Der Wert von K ist stets mit einer Kommastelle gerundet anzusetzen.
+	// Er ist abhängig vom Index und muss mindestens 5 betragen.
+	// Sein Maximalwert ist Kmax, eine vorgegebene Stellgröße, ab 08.06.26 80.	
+	public function K($R_o, $W, $W_e, $A, $Index) {
+		if ($Index == 0) {
+			$Index = 1;
+		}
+		$a = clm_class_dwz_rechner::a($A, $R_o, $W, $W_e);
+		$b = clm_class_dwz_rechner::b($R_o, $W, $W_e);
+		$K_0 = clm_class_dwz_rechner::K_0($A, $R_o, $Index);
+		$K = round((($K_0 * $b) + $a), 1);
+		return $K;
+	}
+	// Grundwert K0
+	// abhängig vom Alter, DWZ und Index 
+	public static function K_0($A, $R_o, $Index) {
+		$a_k = array();
+		$a_k[1] = array(0,60,60,48,46,44,42,40,38,36,34,32);
+		$a_k[2] = array(0,60,60,44,42,40,38,36,34,32,30,28);
+		$a_k[3] = array(0,60,60,41,39,37,35,33,31,29,27,25);
+		if ($A <= 25 && $R_o < 2200) $i = 1;
+		elseif ($A >= 26 && $R_o < 2000) $i = 2;
+		else $i = 3;
+		if ($Index < 1) $j = 1;
+		elseif ($Index > 10) $j = 11;
+		else $j = $Index;
+		
+		return $a_k[$i][$j];
+	}
+	// Bremsfaktor für DWZ Schwache
+	//Der Bremsfaktor b ist im Allgemeinen gleich 1.
+	//Ist jedoch W < We und zugleich R0 < 1600, gilt altersunabhängig: b = (R0 + u) / (1600 + u).
+	public function b($R_o, $W, $W_e) {
+		if (($W < $W_e) && ($R_o < 1600)) {
+			return (($R_o + $this->params->get('u')) / (1600 + $this->params->get('u')));
+		} else {
+			return 1;
+		}
+	}
+	// Erfolgsaufschlag
+	//Der Erfolgsaufschlag a ist im Allgemeinen gleich 0. Ist jedoch W ≥ We , so gilt:
+	//- für Jugendliche (bis 20 Jahre) mit DWZ R0 < 2000: a = (2000 – R0 ) / t
+	//- für Junioren und Erwachsene (ab 21 Jahren) mit DWZ R0 < 1600 : a = a1 bzw. a = a2 .
+	public function a($A, $R_o, $W, $W_e) {
+//clm_core::$api->test_print('param',$A.'-'.$R_o.'-'.$W.'-'.$W_e);
+//clm_core::$api->test_print('get-t',$this->params->get('t'));
+		if ($W >= $W_e) {
+			if (($A <= 20) && ($R_o < 2000)) {
+				return ((2000 - $R_o) / $this->params->get('t'));
+			} elseif (($A > 20) && ($A < 26) && ($R_o < 1600)) {
+				return $this->params->get('a1');
+			} elseif (($A >= 26) && ($R_o < 1600)) {
+				return $this->params->get('a2');
+			} else {
+				return 0;
+			}
+		} else {
+			return 0;
+		}
+	}
+
+
 }
 ?>

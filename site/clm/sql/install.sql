@@ -109,10 +109,14 @@ CREATE TABLE IF NOT EXISTS `#__clm_dwz_spieler` (
   `gesperrt` tinyint(1) UNSIGNED DEFAULT NULL,
   `inofFIDEelo` smallint(4) UNSIGNED DEFAULT NULL,
   `Fide_Kf` smallint(4) UNSIGNED DEFAULT NULL,
+  `created` timestamp DEFAULT current_timestamp(),
+  `updated` timestamp DEFAULT current_timestamp() ON UPDATE CURRENT_TIMESTAMP(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `sid_zps_mglnr` (`sid`,`ZPS`,`Mgl_Nr`),
   KEY `sid` (`sid`),
-  KEY `ZPS` (`ZPS`)
+  KEY `ZPS` (`ZPS`),
+  KEY `created` (`created`),
+  KEY `updated` (`updated`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -128,6 +132,24 @@ CREATE TABLE IF NOT EXISTS `#__clm_dwz_verbaende` (
   `Verbandname` varchar(45) NOT NULL DEFAULT '',
   PRIMARY KEY (`Verband`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `#__clm_dwz_parameter für die inoff. DWZ-Ermittlung
+--
+
+CREATE TABLE IF NOT EXISTS `#__clm_dwz_parameter` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` date DEFAULT NULL COMMENT 'Gültig ab',
+  `r` int NOT NULL COMMENT 'Korrektur-Faktor bei Erst-DWZ',
+  `t` int NOT NULL COMMENT 'Divisor bei Jugendaufschlag',
+  `u` int NOT NULL COMMENT 'Verschiebung beim Bremsfaktor b',
+  `a1` int NOT NULL COMMENT 'Erfolgsaufschlag Junioren',
+  `a2` int NOT NULL COMMENT 'Erfolgsaufschlag Erwachsene',
+  `kmax` int NOT NULL COMMENT 'Höchstwert des K-Faktors',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 

@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 // Diese Funktion filtert eingehende Variablen nach gewählten Kriterien
 // und sollte bei korrekter Verwendung sql Injection vollständig und XSS größtenteils verhindern
@@ -28,6 +28,7 @@
 //15 -> Zeit, z.B. 09:30
 //18 -> Stringbereinigung like clm_function_request_string
 //20 -> Bereinigung von Dateinamen bei Dateierstellung
+//21 -> UUID
 // Bei ungültigen Typ wird stets der Standardwert zurückgegeben!
 function clm_function_make_valid($input, $type, $standard, $choose = null) {
 	if (is_null($input)) {
@@ -176,6 +177,12 @@ function clm_function_make_valid($input, $type, $standard, $choose = null) {
 				"_"
 			); 
 			return preg_replace( $patterns, $replacements, $input );
+		break;
+		case 21: // is $input a UUID expression like 00000000-0000-0000-0000-000000000000 
+			if (clm_core::$load->is_uuid($input)) {
+				return $input;
+			}
+			return  '00000000-0000-0000-0000-000000000000';
 		break;
 		default:
 			return $standard; // falsche Nummer wird abgefangen
