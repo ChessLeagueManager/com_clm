@@ -110,7 +110,7 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 		if ($turnier->city <= '')
 			$warnings[] = 'FFF Es ist kein Spielort bzw. -region eingetragen';
 		else
-			$lines[] = "<location>".$turnier->city."</location>";
+			$lines[] = "<location>".clm_core::$load->utf8decode(clm_core::$load->sub_umlaute($turnier->city))."</location>";
 		$lines[] = '<notes>Erstellt mit CLM - ChessLeagueManager.org ('.$cl_config.') - '.$fromname.' - '.$user_name.'</notes>';
 
 		$lines[] = "</tournament>";
@@ -119,7 +119,7 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 	}
 
 	// Aufbau der Spielerzeilen als Array
-	function player_lines($group,$turnier,$players,$erg_array,$round) {	
+	function player_lines($group,$turnier,$players,$round) {	
 		$config = clm_core::$db->config();
  		$turparams = new clm_class_params($turnier->params);
 		
@@ -446,7 +446,10 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 		$query .= " WHERE turnier = ".$turnierid." AND tln_nr IS NOT NULL AND runde <= ".$round." AND heim = 1"; 
 		$query .= " ORDER by dg,runde,brett;";
 		$erg = clm_core::$db->loadObjectList($query);
-			
+		
+		// Leere Variable 
+		$teams = array();
+		
 	}
 	if ($debug > 0) { 
 		echo "<br><br>-- Ergebnisse --";	
@@ -508,7 +511,7 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 			echo "<br>W $i : "; var_dump(clm_core::$load->utf8decode($lines_common1));
 		}
 
-	$lines_player = player_lines($group,$turnier,$players,$erg_array,$round);
+	$lines_player = player_lines($group,$turnier,$players,$round);
 	$nl = "\n";
 		echo "<br><br>-- Player data --";	
 		$i = 0;
