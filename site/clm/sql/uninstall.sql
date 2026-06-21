@@ -1,8 +1,8 @@
 --
 -- @ Chess League Manager (CLM) Component 
--- @Copyright (C) 2008-2021 CLM Team.  All rights reserved
+-- @Copyright (C) 2008-2026 CLM Team.  All rights reserved
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
--- @link http://www.chessleaguemanager.de
+-- @link https://chessleaguemanager.org
 --
 -- phpMyAdmin SQL Dump
 -- version 4.1.13
@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS #__clm_categories;
 DROP TABLE IF EXISTS #__clm_config;
+DROP TABLE IF EXISTS #__clm_dwz_parameter;
 DROP TABLE IF EXISTS #__clm_dwz_spieler;
 DROP TABLE IF EXISTS #__clm_dwz_vereine;
 DROP TABLE IF EXISTS #__clm_dwz_verbaende;
