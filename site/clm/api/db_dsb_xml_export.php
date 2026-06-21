@@ -67,7 +67,7 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 
 
 	// Aufbau der allgemeinen Turnierzeilen als Array
-	function common_lines($group,$turnier,$players,$teams,$rundentermine) {
+	function common_lines($group,$turnier,$players,$teams,$arundentermine) {
 		$config = clm_core::$db->config();
  		$fromname = clm_core::$load->utf8decode(clm_core::$load->sub_umlaute($config->email_fromname));
 		$cl_config = $config->cl_config;
@@ -89,13 +89,23 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 			$lines[] = "<timecontrol>".clm_core::$load->utf8decode(clm_core::$load->sub_umlaute($time_control))."</timecontrol>";
 		
 		$lines[] = "<rounds>".$turnier->rounds."</rounds>";
-		if ($turnier->dateStart <= '1970-01-01')
-			$warnings[] = 'FFF Es ist kein Startdatum des Turniers eingetragen';
-		else
+		if ($turnier->dateStart <= '1970-01-01') {
+			if (!isset($arundentermine[1]) OR  $arundentermine[1] <= '1970-01-01') {
+				$warnings[] = 'FFF Es ist kein Startdatum des Turniers eingetragen';
+			} else {
+				$lines[] = "<startDate>".$arundentermine[1]."</startDate>";
+				$warnings[] = 'WWW Es ist kein Startdatum des Turniers eingetragen - Termin erste Runde verwendet';
+			}
+		} else
 			$lines[] = "<startDate>".$turnier->dateStart."</startDate>";
-		if ($turnier->dateEnd <= '1970-01-01')
-			$warnings[] = 'FFF Es ist kein Enddatum des Turniers eingetragen';
-		else
+		if ($turnier->dateEnd <= '1970-01-01') {
+			if (!isset($arundentermine[999]) OR  $arundentermine[999] <= '1970-01-01') {
+				$warnings[] = 'FFF Es ist kein Enddatum des Turniers eingetragen';
+			} else {
+				$lines[] = "<endDate>".$arundentermine[999]."</endDate>";
+				$warnings[] = 'WWW Es ist kein Enddatum des Turniers eingetragen - Termin letzte Runde verwendet';
+			}
+		} else
 			$lines[] = "<endDate>".$turnier->dateEnd."</endDate>";
 		if ($turnier->city <= '')
 			$warnings[] = 'FFF Es ist kein Spielort bzw. -region eingetragen';
@@ -124,7 +134,8 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 				$warnings[] = 'FFF Die Startnummer ist nicht korrekt';
 			else
 				$lines[] = "<tournamentPlayerNumber>".$players[$i]->snr."</tournamentPlayerNumber>";
-			if (isset($players[$i]->PKZ) AND $players[$i]->PKZ > '')
+			if (isset($players[$i]->PKZ) AND ((is_numeric($players[$i]->PKZ) AND $players[$i]->PKZ > '0') OR 
+				(((substr($players[$i]->PKZ, 0, 2) == "NU") OR (substr($players[$i]->PKZ, 0, 2) == "FI")) AND (is_numeric(substr($players[$i]->PKZ, 2))))))
 				$lines[] = "<dsbId>".$players[$i]->PKZ."</dsbId>";
 			$name = clm_core::$load->sub_umlaute($players[$i]->name);
 			$a_name = explode(',',$name);
@@ -140,7 +151,7 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 				$warnings[] = 'FFF Spieler '.$players[$i]->snr.' '.clm_core::$load->sub_umlaute($players[$i]->name).': Das Geburtsjahr ist nicht korrekt';
 			else
 				$lines[] = "<dobYear>".$players[$i]->birthYear."</dobYear>";
-			if (isset($players[$i]->birthDay) AND  $players[$i]->birthDay <= '1970-01-01') 
+			if (isset($players[$i]->birthDay) AND !is_null($players[$i]->birthDay)  AND $players[$i]->birthDay > '0000-00-00') 
 				$lines[] = "<dobDate>".$players[$i]->birthDay."</dobDate>";
 			if (isset($players[$i]->zps) AND  strlen($players[$i]->zps) == 5) 
 				$lines[] = "<vkz>".$players[$i]->zps."</vkz>";
@@ -287,6 +298,7 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 		$arundentermine = array();
 		foreach ($rundentermine as $rundentermine1) {
 			$arundentermine[$rundentermine1->nr] = $rundentermine1->datum;
+			$arundentermine[999] = $rundentermine1->datum;
 		}		
 				
 		// Spielerliste laden - alle Spieler
@@ -484,7 +496,7 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 			echo "<br>W $i : "; var_dump(clm_core::$load->utf8decode($lines_header1));
 		}
 
-	$lines_common = common_lines($group,$turnier,$players,$teams,$rundentermine);
+	$lines_common = common_lines($group,$turnier,$players,$teams,$arundentermine);
 		echo "<br><br>-- General --";	
 		$i = 0;
 		foreach ($lines_common[0] as $lines_common1) {

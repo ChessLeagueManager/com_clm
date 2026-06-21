@@ -31,9 +31,11 @@ if ($debug > 0) echo "<br>turnier: ".$turnier; 	//echo "<br>end"; //die();
 	$lines = file($file);
 //echo "<br>2inputfile:"; var_dump($lines); 	
 	$a_spielerdaten = array();
-	$a_spielerCZ = array();
 	$a_spielerCC = array();
+	$a_spielerCE = array();
 	$a_spielerCR = array();
+	$a_spielerCS = array();
+	$a_spielerCZ = array();
 	$a_teamdaten = array();
 	$a_rundendaten = array();
 	$adate = '1970-01-01';
@@ -185,6 +187,8 @@ if ($debug > 0) { echo "<br>e_xxs"; var_dump($e_xxs); }
 			case 'XCA': $xca_rounds = $value; break;
 			case 'XCC': $snr = trim(substr($line,4,4));
 						$a_spielerCC[$snr] = str_replace("’","'",$line); break;
+			case 'XCE': $snr = trim(substr($line,4,4));
+						$a_spielerCE[$snr] = str_replace("’","'",$line); break;					
 			case 'XCF': //$a_xcf = explode(' ', $value);
 						$tiebr1 = (integer) trim(substr($line,4,2));
 						$tiebr2 = (integer) trim(substr($line,7,2));
@@ -193,13 +197,15 @@ if ($debug > 0) { echo "<br>e_xxs"; var_dump($e_xxs); }
 			case 'XCL': $lokal = addslashes($value); 
 if ($debug > 1) { echo "<br>lokal:"; var_dump($lokal); } 
 						break;
-			case 'XCM': $typ = $value; break;
+			case 'XCM': $typ = (integer) $value; break;
 			case 'XCP': $params = addslashes($value); 
 						$params = str_replace(";;","\n",$params);			
 if ($debug > 1) { echo "<br>params:"; var_dump($params); } 
 						break;
 			case 'XCR': $snr = trim(substr($line,4,4));
 						$a_spielerCR[$snr] = str_replace("’","'",$line); break;					
+			case 'XCS': $snr = trim(substr($line,4,4));
+						$a_spielerCS[$snr] = str_replace("’","'",$line); break;					
 			case 'XCZ': $snr = trim(substr($line,4,4));
 						$a_spielerCZ[$snr] = str_replace("’","'",$line); break;
 		}
@@ -227,16 +233,16 @@ if ($debug > 0) { echo "<br>name:"; var_dump($name); }
 //die('endeende');
 
 //	Turnierdaten -> Tabelle clm_turniere
+		$bem_int = $lang->trf_remark.' '.$filename;
  
 	If ($group) { 	// Mannschaftsturniere
-		$typ = '4'; 														   // Mannschaft-Schweizer Sytem .TUM
-		if (strpos($file,'.TUT') > 0 OR strpos($file,'.tut') > 0 ) $typ = '2'; // Mannschaft-Rundenturnier	 .TUT
+		if (!isset($typ) OR !is_numeric($typ) OR $typ > 9) $typ = '4'; 														   // Mannschaft-Schweizer Sytem .TUM
 		$keyS = '`name`,`sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `bezirkTur`, `dateStart`, `dateEnd`, `bem_int`,';
 		$keyS .= '`city`, `FIDEcco`, `lokal`, `tiebr1`, `tiebr2`, `tiebr3`, `params`';
 		$valueS = "'".$name."', ".$season.", '".$typ."', 1, 1, 0, 1, '0', '".$adate."', '".$edate."', '".$bem_int."', ";
 		$valueS .= "'".$city."', '".$FIDEcco."', '".$lokal."', '".$tiebr1."', '".$tiebr2."', '".$tiebr3."', '".$params."'";
 	} else { 		// Einzelturniere
-		if (!isset($typ)) $typ = '1'; 														   // Einzel-Schweizer Sytem
+		if (!isset($typ) OR !is_numeric($typ) OR $typ > 9) $typ = '1'; 														   // Einzel-Schweizer Sytem
 		$bem_int = $lang->trf_remark.' '.$filename;
 		$keyS = '`name`, `sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `runden`, `teil`, `bezirkTur`, `dateStart`, `dateEnd`, `bem_int`, ';
 		$keyS .= '`sieg`, `siegs`, `remis`, `remiss`, `nieder`, `niederk`,';
@@ -317,7 +323,7 @@ if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 if ($debug > 0) { echo "<br><br>-- Spielerdaten --";	}
 	$a_name = array();
 	foreach ($a_spielerdaten as $line) {
-		$snr = trim(substr($line,4,4));
+		$snr = (integer) trim(substr($line,4,4));
 		$geschlecht = strtoupper(trim(substr($line,9,1)));
 		$titel = strtoupper(trim(substr($line,11,3)));
 		$name = addslashes(trim(substr($line,14,33)));
@@ -328,25 +334,28 @@ if ($debug > 0) { echo "<br><br>-- Spielerdaten --";	}
 		if (!is_numeric($FIDEid)) $FIDEid = '0';
 		$birthYear = trim(substr($line,69,4));
 		if (!is_numeric($birthYear)) $birthYear = '0000';
+		$birthMonth = trim(substr($line,74,2));
+		if (!is_numeric($birthMonth) OR $birthMonth < '01' OR $birthMonth > '12') $birthMonth = '';
+		$birthDay = trim(substr($line,77,2));
+		if (!is_numeric($birthDay) OR $birthDay < '01' OR $birthDay > '31') $birthDay = '';
+		if ($birthYear > '0000' AND $birthMonth > '00' AND $birthDay > '00') $birthDay = $birthYear.'-'.$birthMonth.'-'.$birthDay; 
+		else $birthDay = NULL;
 		$points = trim(substr($line,80,4));
 		$rang = trim(substr($line,85,4));
 if ($debug > 0) { echo "<br>snr: $snr  geschlecht: $geschlecht  titel: $titel  name: $name  elo: $FIDEelo  cco: $FIDEcco  id: $FIDEid  birthyear: $birthYear  points: $points  rang: $rang"; }
 		$a_name[$snr] = $name;
 
-		// XCZ club + member_no
-		if (isset($a_spielerCZ[$snr])) {
-			$zps = trim(substr($a_spielerCZ[$snr],9,5));
-			$mgl_nr = trim(substr($a_spielerCZ[$snr],15,4));
-			if (is_numeric($mgl_nr)) $mgl_nr = (integer) $mgl_nr; else $mgl_nr = 0;
-		} else {
-			$zps = '';
-			$mgl_nr = 0;
-		}
 		// XCC club name
 		if (isset($a_spielerCC[$snr])) {
 			$verein = addslashes(trim(substr($a_spielerCC[$snr],9,40)));
 		} else {
 			$verein = '';
+		}
+		// XCE email address
+		if (isset($a_spielerCE[$snr])) {
+			$email = addslashes(trim(substr($a_spielerCE[$snr],9,100)));
+		} else {
+			$email = '';
 		}
 		// XCR ratings
 		if (isset($a_spielerCR[$snr])) {
@@ -361,14 +370,29 @@ if ($debug > 0) { echo "<br>snr: $snr  geschlecht: $geschlecht  titel: $titel  n
 //			$FIDEelo   = 0;  // es wird dann FIDEelo aus Spielerkarte 001 genommen
 			$twz = 0;
 		}
+		// XCS phone number
+		if (isset($a_spielerCS[$snr])) {
+			$tel_no = addslashes(trim(substr($a_spielerCS[$snr],9,30)));
+		} else {
+			$tel_no = '';
+		}
+		// XCZ club + member_no
+		if (isset($a_spielerCZ[$snr])) {
+			$zps = trim(substr($a_spielerCZ[$snr],9,5));
+			$mgl_nr = trim(substr($a_spielerCZ[$snr],15,4));
+			if (is_numeric($mgl_nr)) $mgl_nr = (integer) $mgl_nr; else $mgl_nr = 0;
+		} else {
+			$zps = '';
+			$mgl_nr = 0;
+		}
 
 if ($debug > 0) { echo "<br>snr: $snr  XCZ zps: $zps  mgl_nr: $mgl_nr  XCC verein $verein  XCR start_dwz: $start_dwz  FIDEelo: $FIDEelo twz: $twz "; }
 		If ($group) { 	// Mannschaftsturniere
 		} else { 		// Einzelturniere	
-			$keyS = '`sid`, `swt_tid`, `snr`, `name`, `tlnrStatus`, `geschlecht`, `birthYear`, `twz`, `FIDEelo`, `FIDEid`, `FIDEcco`, ';
-			$keyS .= '`titel`,`zps`,`mgl_nr`,`verein`,`start_dwz`,`published`';
-			$valueS = $season.", ".$new_swt_tid.", ".$snr.", '".$name."', 1, '".$geschlecht."', '".$birthYear."', ".$twz.", ".$FIDEelo.", '".$FIDEid."', '".$FIDEcco;
-			$valueS .=  "', '".$titel."', '".$zps."', ".$mgl_nr.", '".$verein."', ".$start_dwz.", 1";
+			$keyS = '`sid`, `swt_tid`, `snr`, `name`, `tlnrStatus`, `geschlecht`, `birthYear`,`birthDay`, `twz`, `FIDEelo`, `FIDEid`, `FIDEcco`, ';
+			$keyS .= '`titel`,`zps`,`mgl_nr`,`verein`,`start_dwz`,`email`,`tel_no`,`published`';
+			$valueS = $season.", ".$new_swt_tid.", ".$snr.", '".$name."', 1, '".$geschlecht."', '".$birthYear."', '".$birthDay."', ".$twz.", ".$FIDEelo.", '".$FIDEid."', '".$FIDEcco;
+			$valueS .=  "', '".$titel."', '".$zps."', ".$mgl_nr.", '".$verein."', ".$start_dwz.", '".$email."', '".$tel_no."', 1";
 			$sql = "INSERT INTO #__clm_swt_turniere_tlnr (".$keyS.") VALUES (".$valueS.")";
 if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 			clm_core::$db->query($sql);
@@ -393,6 +417,7 @@ if ($debug > 0) { echo "<br><br>-- Einzel-Ergebnisdaten --";	}
 			$paarung = array();
 			$runde = $i+1;
 			$gegner = trim(substr($line,(91+($i*10)),4));
+			if ($gegner == '') continue;
 			$color = trim(substr($line,(96+($i*10)),1));
 			$result = trim(substr($line,(98+($i*10)),1));
 if ($debug > 0) { echo "<br> ( Runde: ".$runde."  Spieler: $spieler  Gegner: $gegner  Color: $color  Result: $result ) ";	}
