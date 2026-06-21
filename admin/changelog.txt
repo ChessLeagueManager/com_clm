@@ -27,6 +27,7 @@ $ -> Language fix or change
 ^ Admin-View DeWIS umbenannt in Exporte
 + XML-Ausgabe für neue DWZ-Auswertung (Beta)
 ^ Vorbereitungen zur neuen Datenübernahme vom DSB
+^ Online-Anmeldung überarbeitet
  
 - - - - - 5.0.0 - [20-04-2026] - - - - - - - - - - - - - - - - - - - -
 ^ Anpassung Joomla 6

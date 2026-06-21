@@ -12,8 +12,10 @@
 */
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Router\Route;
 
 // Stylesheet laden - load CSS
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
@@ -53,7 +55,7 @@ if ( $this->turnier->published == 0) {
 		// Konfigurationsparameter auslesen - get configuration parameter
 		$config = clm_core::$db->config();
 		$privacy_notice = $config->privacy_notice;
-
+		If ($privacy_notice > '') $s_privacy_notice = 1; else $s_privacy_notice = 0;
 		$turParams = new clm_class_params($this->turnier->params);
 		$typeRegistration = $turParams->get('typeRegistration', 0);
 		$typeAccount 	= $turParams->get('typeAccount', 0);
@@ -90,17 +92,56 @@ if ( $this->turnier->published == 0) {
 		 Joomla.submitbutton = function (pressbutton) { 		
 			var form = document.adminForm;
 			// do field validation
-			if (form.name99.value == "") {
-				alert( "<?php echo Text::_( 'REGISTRATION_PLAYER_INPUT', true ); ?>" );
-			} else if (form.club.value == "") {
-				alert( "<?php echo Text::_( 'REGISTRATION_CLUB_INPUT', true ); ?>" );
+			if (form.reg_name.value == "") {
+				alert( "<?php echo Text::_( 'REGISTRATION_E_NAME', true ); ?>" ); return false;
+			} else if (form.reg_vorname.value == "") {
+				alert( "<?php echo Text::_( 'REGISTRATION_E_VORNAME', true ); ?>" ); return false;
+			} else if (form.reg_jahr.value == "") {
+				alert( "<?php echo Text::_( 'REGISTRATION_E_YEAR', true ); ?>" ); return false;
+			} else if (Number.isNaN(form.reg_jahr.value) || (form.reg_jahr.value < "1900") || (form.reg_jahr.value > "2030")) {
+				alert( "<?php echo Text::_( 'REGISTRATION_E_YEARK', true ); ?>" ); return false;
+			} else if (form.reg_mail.value == "") {
+				alert( "<?php echo Text::_( 'REGISTRATION_E_MAIL', true ); ?>" ); return false;
+			}
+
+			if (<?php echo $typeRegistration; ?> == '0') {
+				if (form.reg_club.value == "") {
+					alert( "<?php echo Text::_( 'REGISTRATION_E_CLUB', true ); ?>" ); return false;
+				} else if ((form.reg_mgl_nr.value != "") && (isNaN(form.reg_mgl_nr.value))) {
+					alert( "<?php echo 'Mitgliedsnummer ist keine Zahl'; ?>" ); return false;
+				} else if ((form.reg_dwz.value != "") && (isNaN(form.reg_dwz.value))) {
+					alert( "<?php echo Text::_( 'REGISTRATION_E_NWZ', true ); ?>" ); return false;
+				} else if ((form.reg_elo.value != "") && (isNaN(form.reg_elo.value))) {
+					alert( "<?php echo Text::_( 'REGISTRATION_E_ELO', true ); ?>" ); return false;
+				} else if (<?php echo $optionEloAnalysis; ?> == '1') {
+					if (form.reg_FIDEid.value == "") {
+						alert( "<?php echo 'Das Turnier wird ELO-ausgewertet. Bitte tragen Sie Ihre FIDE-ID ein. Haben Sie noch keine ID, tragen Sie bitte 0 ein und kontaktieren Sie den Turnierleiter, z.B. über das Info-Feld dieses Formulars'; ?>" ); return false;
+					} else if ((form.reg_FIDEid.value != "") && (isNaN(form.reg_FIDEid.value))) {
+						alert( "<?php echo Text::_( 'REGISTRATION_E_FIDEID', true ); ?>" ); return false;
+					}
+				}
+			}	
+
+			if (<?php echo $typeAccount; ?> > 0) {
+				if (form.reg_account.value == "") {
+					alert( "<?php echo Text::_( 'REGISTRATION_E_ACCOUNT_NO', true ); ?>" ); return false;
+				}
+			}	
+			if ((<?php echo $s_privacy_notice; ?> == 1 ) && (form.reg_dsgvo.checked == false)) {
+				alert( "<?php echo Text::_( 'REGISTRATION_E_CHECKBOX', true ); ?>" ); return false;
+			} else if (form.reg_check01.value == "") {
+				alert( "<?php echo Text::_( 'REGISTRATION_E_SPAM', true ); ?>" ); return false;
+			} else if (form.reg_wert.value != form.reg_check01.value) {
+				alert( "<?php echo Text::_( 'REGISTRATION_E_SPAMK', true ); ?>" ); return false;
 			} else {
 				Joomla.submitform( pressbutton );
 			}
 		}
  
 		</script>
-	  <form action="index.php?option=com_clm&amp;view=turnier_registration&amp;layout=selection" method="post" name="adminForm" id="adminForm">
+<!--	  <form action="index.php?option=com_clm&amp;view=turnier_registration&amp;layout=selection" method="post" name="adminForm" id="adminForm">	  
+-->
+		<form action="<?php echo Route::_('index.php'); ?>" method="post" name="adminForm" id="adminForm">
 		<table>
 	
 		<tr>
@@ -216,10 +257,12 @@ if ( $this->turnier->published == 0) {
 		  } 
 		// Formular-Ausgabe abschließen und Captcha einbinden - Finish formular output and implement captcha
 		$result = clm_core::$load->session_variables('o'); 
+		$session = Factory::getSession();
+		$reg_wert = $session->get('reg_wert');
 		?>
 		<?php if ($privacy_notice != '') { ?>
 		  <tr>
-			<th style="align: center;" class="anfang">&nbsp;&nbsp;&nbsp;<input type="checkbox" id="reg_dsgvo" name="reg_dsgvo" value="1">
+			<th style="align: center;" class="anfang">&nbsp;&nbsp;&nbsp;<input type="checkbox" id="reg_dsgvo" name="reg_dsgvo" value="1" >
 				<span style="font-size: 80%; font-weight: lighter;">&nbsp;<?php echo Text::_('REGISTRATION_COMMENT_0'); ?></span></th>
 			<th align="left" colspan="3" class="anfang">
 				<span style="font-size: 80%; font-weight: lighter;"><?php echo Text::_('REGISTRATION_COMMENT_2A'); ?><a href="<?php echo $privacy_notice; ?>" target="_blank"><span style="color: black;"><?php echo Text::_('REGISTRATION_COMMENT_2B'); ?></span></a></span>
@@ -242,7 +285,11 @@ if ( $this->turnier->published == 0) {
 		</table>
 
 		<br>
-		<input type="submit" value=" <?php echo $button ?> ">
+<!--		<input type="submit" onclick="return Joomla.submitbutton();" value=" <?php echo $button ?> ">
+-->
+			<button class="button" onclick="return Joomla.submitbutton();">
+				<?php echo $button ?>
+			</button>
 
 		<input type="hidden" name="layout" value="<?php echo $layout; ?>" />
 		<input type="hidden" name="view" value="turnier_registration" />
@@ -251,7 +298,8 @@ if ( $this->turnier->published == 0) {
 		<input type="hidden" name="typeRegistration" value="<?php echo $typeRegistration; ?>" />
 		<input type="hidden" name="typeAccount" value="<?php echo $typeAccount; ?>" />
 		<input type="hidden" name="optionEloAnalysis" value="<?php echo $optionEloAnalysis; ?>" />
-		<input type="hidden" name="privacy_notice" value="<?php echo $privacy_notice; ?>" />
+		<input type="hidden" name="Itemid" value="<?php echo $itemid; ?>" />
+		<input type="hidden" name="reg_wert" value="<?php echo $reg_wert; ?>" />
 		<input type="hidden" name="task" value="" />
 		<?php echo HTMLHelper::_( 'form.token' ); ?>
 		
@@ -260,7 +308,6 @@ if ( $this->turnier->published == 0) {
 <?php	}
 
 
-	
 require_once(JPATH_COMPONENT.DS.'includes'.DS.'copy.php'); 
 echo '</div></div>';
 ?>

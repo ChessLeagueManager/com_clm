@@ -19,6 +19,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
 
 $mainframe	= Factory::getApplication();
 
@@ -26,8 +27,7 @@ $mainframe	= Factory::getApplication();
 $turnier 		= $this->turnier;
 
 $user =Factory::getUser();
-	$link = URI::base(true) .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
-
+//	$link = URI::base(true) .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
 
 // Datensätze in Tabelle schreiben - Transfer data into db-table
 
@@ -35,7 +35,6 @@ $user =Factory::getUser();
 $typeRegistration = clm_core::$load->request_string('typeRegistration','');
 $typeAccount	= clm_core::$load->request_string('typeAccount','');
 $optionEloAnalysis	= clm_core::$load->request_string('optionEloAnalysis', 0);
-$privacy_notice = clm_core::$load->request_string('privacy_notice','');
 $reg_dsgvo 		= clm_core::$load->request_int('reg_dsgvo',0);
 $reg_check01 	= clm_core::$load->request_string('reg_check01','');
 $reg_name 		= clm_core::$load->request_string('reg_name','');
@@ -62,58 +61,9 @@ $c_year = date("Y");
 
 // Überprüfen der Eingaben - check input
 $msg = '';
-if ($reg_name == '') 
-	$msg .= '<br>'.Text::_('REGISTRATION_E_NAME');
-if ($reg_vorname == '') 
-	$msg .= '<br>'.Text::_('REGISTRATION_E_VORNAME');
-if ($reg_jahr == '') 
-	$msg .= '<br>'.Text::_('REGISTRATION_E_YEAR');
-if ($reg_jahr != '' AND (!is_numeric($reg_jahr) OR $reg_jahr < ($c_year - 110) OR $reg_jahr > ($c_year -2)))
-	$msg .= '<br>'.Text::_('REGISTRATION_E_YEARK');
-if (!clm_core::$load->is_email($reg_mail)) 
-	$msg .= '<br>'.Text::_('REGISTRATION_E_MAIL');
-if ($typeAccount > '0') {
-	if ($reg_account == '') $msg .= '<br>'.Text::_('REGISTRATION_E_ACCOUNT_NO');
-	elseif ($typeAccount == '1') {
-		if (substr($reg_account,0,22) == 'https://lichess.org/@/') {
-			$reg_account1 = $reg_account;
-			$s_account = 0;
-		} else {
-			$reg_account1 = 'https://lichess.org/@/'.$reg_account;
-			$s_account = 1;
-		}
-		if (@file_get_contents($reg_account1,false,NULL,0,1) === false) $msg .= '<br>'.Text::_('REGISTRATION_E_ACCOUNT_NK');
-		if ($s_account == 1) $reg_account = 'https://lichess.org/@/'.$reg_account;
-	}}
-if ($reg_dsgvo == 0 AND $privacy_notice != '') 
-	$msg .= '<br>'.Text::_('REGISTRATION_E_CHECKBOX');
-if ($f_source != 'sent') {
-	if ($reg_check01 == '') 
-		$msg .= '<br>'.Text::_('REGISTRATION_E_SPAM');
-	elseif ($reg_check01 != $reg_wert) 
-		$msg .= '<br>'.Text::_('REGISTRATION_E_SPAM');
-}
-if ($msg != '') {
-	$link = URI::base(true) .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
-	$link .= '&reg_name='.$reg_name.'&reg_vorname='.$reg_vorname.'&reg_club='.$reg_club.'&reg_mail='.$reg_mail.'&reg_jahr='.$reg_jahr;
-	$link .= '&reg_zps='.$reg_zps.'&reg_mgl_nr='.$reg_mgl_nr;
-	$link .= '&reg_dwz='.$reg_dwz.'&reg_elo='.$reg_elo.'&reg_tel_no='.$reg_tel_no.'&reg_account='.$reg_account.'&reg_comment='.$reg_comment;
-	$msg = substr($msg,4);
-	$mainframe->enqueueMessage( $msg, "warning" );
-	$mainframe->redirect( $link );
-}
-if ($f_source != 'sent') {
-	$reg_club = '';
-	$reg_zps = '';
-	$reg_mgl_nr = '';
-	$reg_dwz = '';
-	$reg_elo = '';
-	$reg_FIDEid = '';
-	$reg_geschlecht = '';
-	$reg_comment = '';
-}
+
 $result = clm_core::$api->db_dewis_player_by_name($reg_name, $reg_vorname, $reg_jahr); 
-$names = $result[3];
+if (!isset($result[3])) $names = NULL; $names = $result[3];
 if (is_null($names)) $ii = 0;
 else $ii = count($names);
 
@@ -123,7 +73,8 @@ $heading = $this->turnier->name;
 	echo CLMContent::componentheading($heading);
 		// Captcha vorbereiten - prepare captcha
 		$sresult = clm_core::$load->session_variables('o'); 
-
+		$session = Factory::getSession();
+		$reg_wert = $session->get('reg_wert');
 ?>
 	<br />
 		<table>
@@ -133,10 +84,48 @@ $heading = $this->turnier->name;
 		</table>
 	<?php echo Text::_('REGISTRATION_LIST_OF_PLAYERS'); ?>
 	<br>	
-		<form action="index.php?option=com_clm&amp;view=turnier_registration&amp;layout=sent" method="post" name="adminForm" id="adminForm">
+
+	<script language="javascript" type="text/javascript">
+
+		 Joomla.submitbutton = function (pressbutton) { 		
+			var form = document.adminForm;
+			// do field validation
+			if (form.reg_spieler.value == 99) {
+				if (form.reg_club.value == "") {
+					alert( "<?php echo Text::_( 'REGISTRATION_E_CLUB', true ); ?>" ); return false;
+				} else if ((form.reg_mgl_nr.value != "") && (isNaN(form.reg_mgl_nr.value))) {
+					alert( "<?php echo 'Mitgliedsnummer ist keine Zahl'; ?>" ); return false;
+				} else if ((form.reg_dwz.value != "") && (isNaN(form.reg_dwz.value))) {
+					alert( "<?php echo Text::_( 'REGISTRATION_E_NWZ', true ); ?>" ); return false;
+				} else if ((form.reg_elo.value != "") && (isNaN(form.reg_elo.value))) {
+					alert( "<?php echo Text::_( 'REGISTRATION_E_ELO', true ); ?>" ); return false;
+				} else if (<?php echo $optionEloAnalysis; ?> == '1') {
+					if (form.reg_FIDEid.value == "") {
+						alert( "<?php echo 'Das Turnier wird ELO-ausgewertet. Bitte tragen Sie Ihre FIDE-ID ein. Haben Sie noch keine ID, tragen Sie bitte 0 ein und kontaktieren Sie den Turnierleiter, z.B. über das Info-Feld dieses Formulars'; ?>" ); return false;
+					} else if ((form.reg_FIDEid.value != "") && (isNaN(form.reg_FIDEid.value))) {
+						alert( "<?php echo Text::_( 'REGISTRATION_E_FIDEID', true ); ?>" ); return false;
+					} else if ((form.reg_FIDEid.value != "") && (form.reg_FIDEid.value != 0) && (form.reg_FIDEid.value < 10000)) {
+						alert( "<?php echo Text::_( 'REGISTRATION_E_FIDEID', true ); ?>" ); return false;
+					}
+				}
+			}
+			if (form.reg_check01.value == "") {
+				alert( "<?php echo Text::_( 'REGISTRATION_E_SPAM', true ); ?>" ); return false;
+			} else if (form.reg_wert.value != form.reg_check01.value) {
+				alert( "<?php echo Text::_( 'REGISTRATION_E_SPAMK', true ); ?>" ); return false;
+			} else {
+				Joomla.submitform( pressbutton ); 
+			}
+		}
+ 
+		</script>
+
+<!--		<form action="index.php?option=com_clm&amp;view=turnier_registration&amp;layout=sent" method="post" name="adminForm" id="adminForm">
+-->	  <form action="<?php echo Route::_('index.php'); ?>" method="post" name="adminForm" id="adminForm">
 		<table>
 			<tr><th class="anfang">
 				<td class="anfang"><?php echo Text::_('REGISTRATION_PLAYER'); ?>,<?php echo Text::_('REGISTRATION_VORNAME'); ?></td>
+				<td class="anfang"><?php echo Text::_('REGISTRATION_JAHR'); ?></td>
 				<td class="anfang"><?php echo Text::_('REGISTRATION_DWZ'); ?></td>
 				<td class="anfang"><?php echo Text::_('REGISTRATION_ELO'); ?></td>
 				<td class="anfang"><?php echo Text::_('REGISTRATION_CLUB'); ?></td>
@@ -146,6 +135,7 @@ $heading = $this->turnier->name;
 				if ($names[$i]->gender == 'f') $names[$i]->gender = 'W'; ?>
 				<tr><td style="text-align: center;"><input type="radio" id="<?php echo 'spieler'.($i); ?>" name="reg_spieler" value="<?php echo ($i); ?>"<?php if ($reg_spieler == $i) echo ' checked="checked"'; ?>></td>
 				<td><?php echo $names[$i]->surname.','.$names[$i]->firstname; ?></td>
+				<td><?php echo $names[$i]->yearOfBirth; ?></td>
 				<td><?php echo $names[$i]->rating; ?></td>
 				<td><?php echo $names[$i]->elo; ?></td>
 				<td><?php echo $names[$i]->club; ?></td>
@@ -164,7 +154,10 @@ $heading = $this->turnier->name;
 				<input type="hidden" name="<?php echo 'reg_FIDEid'.($i); ?>" value="<?php echo $names[$i]->idfide; ?>" />
 				<input type="hidden" name="<?php echo 'reg_FIDEcco'.($i); ?>" value="<?php echo $names[$i]->nationfide; ?>" />
 				</tr>
-			<?php } ?>
+			<?php } 
+				if ($ii == 0) { ?>
+				<tr><td colspan=6>Es wurde kein passender Spieler in den DSB-Daten gefunden</td><tr>
+			<?php } 				?>
 		</table>
 	<?php echo "<br>".Text::_('REGISTRATION_EDIT_DATA'); ?><br>
 		<span style="font-size: 80%; font-weight: lighter;"><?php echo Text::_('REGISTRATION_MANDATORY'); ?> </span><br>
@@ -172,8 +165,11 @@ $heading = $this->turnier->name;
 		<table>
 			<tr><th class="anfang">
 				<td class="anfang"><?php echo Text::_('REGISTRATION_PLAYER'); ?>,<?php echo Text::_('REGISTRATION_VORNAME'); ?></td>
+				<td class="anfang"><?php echo Text::_('REGISTRATION_JAHR'); ?></td>
 			</th></tr>
-			<tr><td style="text-align: center;"><input type="radio" id="spieler99" name="reg_spieler" value="99"<?php if ($reg_spieler == 99) echo ' checked="checked"'; ?>></td><td><?php echo $reg_name.','.$reg_vorname; ?></td>
+			<tr><td style="text-align: center;"><input type="radio" id="spieler99" name="reg_spieler" value="99"<?php if ($reg_spieler == 99) echo ' checked="checked"'; ?>></td>
+			<td><?php echo $reg_name.','.$reg_vorname; ?></td>
+			<td><?php echo $reg_jahr; ?></td>
 			</tr>
 		</table>
 		<table>
@@ -205,7 +201,7 @@ $heading = $this->turnier->name;
 		</tr>
 		<?php if ($optionEloAnalysis == 1) { ?>
 		<tr>
-			<td align="left" width="100" class="anfang"><?php echo Text::_('REGISTRATION_FIDEID'); ?>:</td>
+			<td align="left" width="100" class="anfang"><?php echo Text::_('REGISTRATION_FIDEID'); ?>(*):</td>
 			<td colspan="3">
 			<input class="inputbox" type="text" name="reg_FIDEid" id="reg_FIDEid" size="9" maxlength="9" value="<?php echo $reg_FIDEid; ?>" />
 			</td>
@@ -228,6 +224,7 @@ $heading = $this->turnier->name;
 				</td>
 		</tr>
 		</table>
+		<br>
 		<table>
 		<tr>
 			<td align="left" width="100" class="anfang"><?php echo Text::_('REGISTRATION_COMMENT'); ?>:</td>
@@ -249,7 +246,10 @@ $heading = $this->turnier->name;
 		</table>
 
 		<br>
-		<input type="submit" value=" <?php echo Text::_('CLUB_DATA_SEND_BUTTON') ?> ">
+
+			<button class="button" onclick="return Joomla.submitbutton();">
+				<?php echo Text::_('CLUB_DATA_SEND_BUTTON') ?>
+			</button>
 
 		<input type="hidden" name="layout" value="sent" />
 		<input type="hidden" name="view" value="turnier_registration" />
@@ -264,6 +264,7 @@ $heading = $this->turnier->name;
 		<input type="hidden" name="reg_tel_no" value="<?php echo $reg_tel_no; ?>" />
 		<input type="hidden" name="reg_account" value="<?php echo $reg_account; ?>" />
 		<input type="hidden" name="reg_dsgvo" value="<?php echo $reg_dsgvo; ?>" />
+		<input type="hidden" name="reg_wert" value="<?php echo $reg_wert; ?>" />
 		<input type="hidden" name="task" value="" />
 		<?php echo HTMLHelper::_( 'form.token' ); ?>
 		

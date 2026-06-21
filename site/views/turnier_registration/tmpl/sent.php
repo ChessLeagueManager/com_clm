@@ -76,43 +76,6 @@ $reg_wert = $session->get('reg_wert');
 $c_year = date("Y"); 
 // Überprüfen der Eingaben - check input
 $msg = '';
-if ($reg_name == '') 
-	$msg .= '<br>'.Text::_('REGISTRATION_E_NAME');
-if ($reg_club == '') 
-	$msg .= '<br>'.Text::_('REGISTRATION_E_CLUB');
-if ($reg_birthYear == '') 
-	$msg .= '<br>'.Text::_('REGISTRATION_E_YEAR');
-if ($reg_birthYear != '' AND (!is_numeric($reg_birthYear) OR $reg_birthYear < ($c_year - 110) OR $reg_birthYear > ($c_year -2)))
-	$msg .= '<br>'.Text::_('REGISTRATION_E_YEARK');
-if (!clm_core::$load->is_email($reg_mail)) 
-	$msg .= '<br>'.Text::_('REGISTRATION_E_MAIL');
-if ($typeAccount > '0') {
-	if ($reg_account == '') $msg .= '<br>'.Text::_('REGISTRATION_E_ACCOUNT_NO');
-	elseif ($typeAccount == '1') {
-		if (substr($reg_account,0,22) == 'https://lichess.org/@/') {
-			$reg_account1 = $reg_account;
-			$s_account = 0;
-		} else {
-			$reg_account1 = 'https://lichess.org/@/'.$reg_account;
-			$s_account = 1;
-		}
-		if (@file_get_contents($reg_account1,false,NULL,0,1) === false) $msg .= '<br>'.Text::_('REGISTRATION_E_ACCOUNT_NK');
-		if ($s_account == 1) $reg_account = 'https://lichess.org/@/'.$reg_account;
-	}}
-if ($reg_dwz != '' AND (!is_numeric($reg_dwz) OR $reg_dwz < 0 OR $reg_dwz > 3000))
-	$msg .= '<br>'.Text::_('REGISTRATION_E_NWZ');
-if ($reg_elo != '' AND (!is_numeric($reg_elo) OR $reg_elo < 0 OR $reg_elo > 3000))
-	$msg .= '<br>'.Text::_('REGISTRATION_E_ELO');
-if ($optionEloAnalysis == 1) {
-	if ($reg_FIDEid == '' )
-		$msg .= '<br>'.'Das Turnier wird ELO-ausgewertet. Bitte tragen Sie Ihre FIDE-ID ein'.'<br>'.'Haben Sie noch keine ID, tragen Sie bitte 0 ein und kontaktieren Sie den Turnierleiter, z.B. über das Info-Feld dieses Formulars';
-	if ($reg_FIDEid != '' AND (!is_numeric($reg_FIDEid) OR ($reg_FIDEid != 0 AND $reg_FIDEid < 10000)))
-		$msg .= '<br>'.Text::_('REGISTRATION_E_FIDEID');
-}
-if ($reg_check01 == '') 
-	$msg .= '<br>'.Text::_('REGISTRATION_E_SPAM');
-elseif ($reg_check01 != $reg_wert) 
-	$msg .= '<br>'.Text::_('REGISTRATION_E_SPAMK');
 
 	// Konfigurationsparameter auslesen - get configuration parameter
 	$config = clm_core::$db->config();
@@ -126,27 +89,13 @@ elseif ($reg_check01 != $reg_wert)
 	if ( $fromname == '' ) {
 		$msg .= '<br>'.Text::_('REGISTRATION_E_INSTALL_NAME');
 	}
-	if ($reg_dsgvo == '0' AND $privacy_notice != '') 
-		$msg .= '<br>'.Text::_('REGISTRATION_E_CHECKBOX');
-
-if ($msg != '') {
-	$link = URI::base(true) .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
-	if ($typeRegistration == 5) {
-		$link .= '&layout=selection&f_source=sent&reg_spieler='.$reg_spieler;
-	}
-	$link .= '&reg_name='.$reg_name.'&reg_vorname='.$reg_vorname.'&reg_club='.$reg_club.'&reg_mail='.$reg_mail.'&reg_jahr='.$reg_birthYear.'&reg_geschlecht='.$reg_geschlecht;
-	$link .= '&reg_dwz='.$reg_dwz.'&reg_elo='.$reg_elo.'&reg_FIDEid='.$reg_FIDEid.'&reg_tel_no='.$reg_tel_no.'&reg_account='.$reg_account.'&reg_comment='.$reg_comment.'&reg_dsgvo='.$reg_dsgvo;
-	$link .= '&optionEloAnalysis='.$optionEloAnalysis;
-	$msg = substr($msg,4);
-	$mainframe->enqueueMessage( $msg, "error" );
-	$mainframe->redirect( $link );
-}
+$msg = '';
 // kein Fehler => Meldung in Tabelle schreiben - no error => transfer data into table
 	$randomUid = md5(uniqid('', true) . '|' . microtime());
 	if (!is_numeric($reg_elo)) $reg_elo = 0; else $reg_elo = (int) $reg_elo;
 	if (!is_numeric($reg_dwz)) $reg_dwz = 0; else $reg_dwz = (int) $reg_dwz;
 	if (!is_numeric($reg_mgl_nr)) $reg_mgl_nr = 0; else $reg_mgl_nr = (int) $reg_mgl_nr;
-
+	$reg_comment = clm_core::$db->escape($reg_comment);
 	$sql = "INSERT INTO #__clm_online_registration "
 		." ( `tid`, `name`, `vorname`, `club`, `email`, `elo`, `dwz`,"
 		." `PKZ`, `titel`, `geschlecht`, `birthYear`, `mgl_nr`, `zps`, `dwz_I0`, `FIDEid`, `FIDEcco`,"
@@ -197,7 +146,8 @@ if ($msg != '') {
 	$email_TL = $turnier->tlemail;
 	$htmlMail = 0;
 //	$url = URI::base().'components/com_clm/clm/mail_approve.php?parameter='.$randomUid;
-	$url = URI::base(true).'index.php?option=com_clm&view=mailapprove&parameter='.$randomUid;
+//	$url = URI::base(true).'index.php?option=com_clm&view=mailapprove&parameter='.$randomUid;
+	$url = URI::base().'index.php?option=com_clm&view=mailapprove&parameter='.$randomUid;
 	$msg = '';
 	// Email an TL - e-mail to tournament controller
 	if ($email_TL != "") {
