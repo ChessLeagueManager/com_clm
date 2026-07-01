@@ -42,8 +42,8 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 	// Aufbau der header-Zeilen als Array
 	function header_lines() {
 		$config = clm_core::$db->config();
- 		$fromname = clm_core::$load->utf8decode(clm_core::$load->sub_umlaute($config->email_fromname));
-		$user_name = clm_core::$load->utf8decode(clm_core::$load->sub_umlaute(clm_core::$access->getName()));
+ 		$fromname = clm_core::$load->utf8encode($config->email_fromname);
+		$user_name = clm_core::$load->utf8encode(clm_core::$access->getName());
 
 		$lines = array();
 		$warnings = array();
@@ -69,9 +69,9 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 	// Aufbau der allgemeinen Turnierzeilen als Array
 	function common_lines($group,$turnier,$players,$teams,$arundentermine) {
 		$config = clm_core::$db->config();
- 		$fromname = clm_core::$load->utf8decode(clm_core::$load->sub_umlaute($config->email_fromname));
 		$cl_config = $config->cl_config;
-		$user_name = clm_core::$load->utf8decode(clm_core::$load->sub_umlaute(clm_core::$access->getName()));
+ 		$fromname = clm_core::$load->utf8encode($config->email_fromname);
+		$user_name = clm_core::$load->utf8encode(clm_core::$access->getName());
  		$turparams = new clm_class_params($turnier->params);
 
 		$lines = array();
@@ -80,14 +80,14 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 
 		$tournament_UUID = uuidv4();
 		$lines[] = "<tournamentUUID>".$tournament_UUID."</tournamentUUID>";
-		$lines[] = "<label>".clm_core::$load->utf8decode(clm_core::$load->sub_umlaute($turnier->name))."</label>";
+		$lines[] = "<label>".clm_core::$load->utf8encode($turnier->name)."</label>";
 		$lines[] = "<tournamentType>".$turnier->ktyp."</tournamentType>";
 		$time_control = clm_core::$api->db_time_control($turparams->get("time_control",""));
 		if ($time_control <= '')
 			$warnings[] = 'FFF Es ist keine Bedenkzeitangabe eingetragen';
 		else
-			$lines[] = "<timecontrol>".clm_core::$load->utf8decode(clm_core::$load->sub_umlaute($time_control))."</timecontrol>";
-		
+			$lines[] = "<timecontrol>".clm_core::$load->utf8encode($time_control)."</timecontrol>";
+
 		$lines[] = "<rounds>".$turnier->rounds."</rounds>";
 		if ($turnier->dateStart <= '1970-01-01') {
 			if (!isset($arundentermine[1]) OR  $arundentermine[1] <= '1970-01-01') {
@@ -110,7 +110,7 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 		if ($turnier->city <= '')
 			$warnings[] = 'FFF Es ist kein Spielort bzw. -region eingetragen';
 		else
-			$lines[] = "<location>".clm_core::$load->utf8decode(clm_core::$load->sub_umlaute($turnier->city))."</location>";
+			$lines[] = "<location>".clm_core::$load->utf8encode($turnier->city)."</location>";
 		$lines[] = '<notes>Erstellt mit CLM - ChessLeagueManager.org ('.$cl_config.') - '.$fromname.' - '.$user_name.'</notes>';
 
 		$lines[] = "</tournament>";
@@ -137,18 +137,17 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 			if (isset($players[$i]->PKZ) AND ((is_numeric($players[$i]->PKZ) AND $players[$i]->PKZ > '0') OR 
 				(((substr($players[$i]->PKZ, 0, 2) == "NU") OR (substr($players[$i]->PKZ, 0, 2) == "FI")) AND (is_numeric(substr($players[$i]->PKZ, 2))))))
 				$lines[] = "<dsbId>".$players[$i]->PKZ."</dsbId>";
-			$name = clm_core::$load->sub_umlaute($players[$i]->name);
-			$a_name = explode(',',$name);
+			$a_name = explode(',',$players[$i]->name);
 			if (!isset($a_name[0]) OR $a_name[0] <= '')
 				$warnings[] = 'FFF Spieler '.$players[$i]->snr.': Es ist kein Nachname eingetragen';
 			else
-				$lines[] = "<surname>".$a_name[0]."</surname>";
+				$lines[] = "<surname>".clm_core::$load->utf8encode($a_name[0])."</surname>";
 			if (!isset($a_name[1]) OR $a_name[1] <= '')
 				$warnings[] = 'FFF Spieler '.$players[$i]->snr.': Es ist kein Vorname eingetragen';
 			else
-				$lines[] = "<forename>".$a_name[1]."</forename>";
+				$lines[] = "<forename>".clm_core::$load->utf8encode($a_name[1])."</forename>";
 			if ($players[$i]->birthYear <= '0000' OR !is_numeric($players[$i]->birthYear))
-				$warnings[] = 'FFF Spieler '.$players[$i]->snr.' '.clm_core::$load->sub_umlaute($players[$i]->name).': Das Geburtsjahr ist nicht korrekt';
+				$warnings[] = 'FFF Spieler '.$players[$i]->snr.' '.clm_core::$load->utf8encode($players[$i]->name).': Das Geburtsjahr ist nicht korrekt';
 			else
 				$lines[] = "<dobYear>".$players[$i]->birthYear."</dobYear>";
 			if (isset($players[$i]->birthDay) AND !is_null($players[$i]->birthDay)  AND $players[$i]->birthDay > '0000-00-00') 
@@ -158,7 +157,7 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 			if (isset($players[$i]->mgl_nr) AND is_numeric($players[$i]->mgl_nr) AND ($players[$i]->mgl_nr <= 99999) AND ($players[$i]->mgl_nr > 0) ) 
 				$lines[] = "<numberClubMember>".$players[$i]->mgl_nr."</numberClubMember>";
 			if (isset($players[$i]->verein) AND ($players[$i]->verein > '') ) 
-				$lines[] = "<club>".clm_core::$load->sub_umlaute($players[$i]->verein)."</club>";
+				$lines[] = "<club>".clm_core::$load->utf8encode($players[$i]->verein)."</club>";
 			if (isset($players[$i]->FIDEid) AND is_numeric($players[$i]->FIDEid) AND ($players[$i]->FIDEid > 0) ) 
 				$lines[] = "<fideId>".$players[$i]->FIDEid."</fideId>";
 			if (isset($players[$i]->FIDEelo) AND is_numeric($players[$i]->FIDEelo) AND ($players[$i]->FIDEelo <= 5000) AND ($players[$i]->FIDEelo > 0) ) 
@@ -171,7 +170,7 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 
 /*			// Feldprüfungen$players
 			if ($players[$i]->FIDEid < 1) {
-				$lines[] = 'FFF Spieler '.$players[$i]->snr.' '.clm_core::$load->sub_umlaute($players[$i]->name)." ist ohne FIDE-ID";
+				$lines[] = 'FFF Spieler '.$players[$i]->snr.' '.clm_core::$load->utf8encode($players[$i]->name)." ist ohne FIDE-ID";
 			}	
 */
 			$lines[] = "</player>";
@@ -200,14 +199,19 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 		$lines[] = "<games>";
 		
 		for ($i = 0; $i <  count($ergs); $i++) { 
+			if ((!isset($ergs[$i]->spieler) OR !is_numeric($ergs[$i]->spieler) OR $ergs[$i]->spieler == 0 )
+				|| (!isset($ergs[$i]->gegner) OR !is_numeric($ergs[$i]->gegner) OR $ergs[$i]->gegner == 0 )) {
+				continue;
+			}
 			$lines[] = "<game>";
-
-			if (!isset($ergs[$i]->runde) OR $ergs[$i]->runde <= '' OR !is_numeric($ergs[$i]->runde))
+			if (!isset($ergs[$i]->runde) OR $ergs[$i]->runde <= '' OR !is_numeric($ergs[$i]->runde) OR
+				!isset($ergs[$i]->dg) OR $ergs[$i]->dg <= '' OR !is_numeric($ergs[$i]->dg))
 				$warnings[] = 'FFF Die Rundennummer ist nicht korrekt';
 			else {
-				$lines[] = "<round>".$ergs[$i]->runde."</round>";
-				if (isset($arundentermine[$ergs[$i]->runde]))
-					$lines[] = "<date>".$arundentermine[$ergs[$i]->runde]."</date>";
+				$t_runde = $ergs[$i]->runde + (($ergs[$i]->dg - 1) * $turnier->runden);
+				$lines[] = "<round>".$t_runde."</round>";
+				if (isset($arundentermine[$t_runde]))
+					$lines[] = "<date>".$arundentermine[$t_runde]."</date>";
 			}
 			if (!isset($ergs[$i]->spieler) OR !is_numeric($ergs[$i]->spieler) OR $ergs[$i]->spieler < 0 )
 				$warnings[] = 'FFF Die Spielernummer Weiss ist nicht korrekt';
@@ -236,7 +240,10 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 			elseif ($ergs[$i]->ergebnis == '11') { $erg_w = '+'; $erg_b = '-'; }
 			elseif ($ergs[$i]->ergebnis == '12') { $erg_w = '0.5'; $erg_b = '-'; }
 			elseif ($ergs[$i]->ergebnis == '13') { $erg_w = '0'; $erg_b = '-'; }
-			else { $erg_w = '-'; $erg_b = '-'; }						
+			else { $erg_w = '-'; $erg_b = '-'; }
+			if ($group AND $ergs[$i]->heim == 0) {
+				$erg_z = $erg_w; $erg_w = $erg_b; $erg_b = $erg_z;
+			}
 			$lines[] = "<pointWhite>".$erg_w."</pointWhite>";
 			$lines[] = "<pointBlack>".$erg_b."</pointBlack>";
 
@@ -259,6 +266,7 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 		// Anzahl Runden
 		$round = $turnier->durchgang * $turnier->runden;
 		$turnier->rounds = $turnier->durchgang * $turnier->runden;
+		$turnier->dg = $turnier->durchgang;
 		// Setzen Turniertyp
 		$typ	= $turnier->runden_modus;
 		$turnier->ttyp = '';
@@ -354,7 +362,8 @@ function clm_api_db_dsb_xml_export($turnierid,$group=false,$test=false) {
 		$query = "SELECT sp.*, ml.snr FROM #__clm_rnd_spl as sp " 
 				." LEFT JOIN #__clm_mannschaften AS m ON ((m.liga=sp.lid) AND (m.tln_nr=sp.tln_nr)) "
 				." LEFT JOIN #__clm_meldeliste_spieler AS ml ON ((sp.lid=ml.lid) AND (m.man_nr=ml.mnr) AND (sp.zps=ml.zps) AND (sp.spieler=ml.mgl_nr)) "
-				." WHERE sp.lid = " . $turnierid . " AND sp.spieler > 0 AND sp.runde <= " . $round . " ORDER by sp.tln_nr, ml.snr, sp.runde;";
+				." WHERE sp.lid = " . $turnierid . " AND sp.spieler > 0 AND sp.runde <= " . $round . " AND sp.weiss = 1 "
+				." ORDER by sp.tln_nr, ml.snr, sp.runde;";
 		$erg = clm_core::$db->loadObjectList($query);
 		$i = 0;
 		foreach ($erg as $erg1) {
