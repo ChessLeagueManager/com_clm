@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="4.0.0" method="upgrade">
 	<name>CLM</name>
-	<creationDate>19.06.2026</creationDate>
+	<creationDate>01.07.2026</creationDate>
 	<author>CLM Team</author>
 	<copyright>(C) Copyright 2008-2026 by CLM Project</copyright>
 	<license>GNU/GPL</license>

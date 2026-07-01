@@ -29,6 +29,7 @@ $ -> Language fix or change
 ^ Vorbereitungen zur neuen Datenübernahme vom DSB
 ^ Online-Anmeldung überarbeitet
 ^ DB-Felder für Namen vergrößert
+# Import/Export von Ligen
  
 - - - - - 5.0.0 - [20-04-2026] - - - - - - - - - - - - - - - - - - - -
 ^ Anpassung Joomla 6

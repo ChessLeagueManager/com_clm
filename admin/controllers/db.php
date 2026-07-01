@@ -554,7 +554,8 @@ class CLMControllerDB extends JControllerLegacy {
 							$dwz_editor = $mrnd[$x]->dwz_editor;
 						}
 					}
-					$man_rnd = $man_rnd . "\n('" . $mrnd[$x]->sid . "','" . $mrnd[$x]->lid . "','" . $mrnd[$x]->runde . "','" . $mrnd[$x]->paar . "','" . $mrnd[$x]->dg . "','" . $mrnd[$x]->heim . "','" . $mrnd[$x]->tln_nr . "','" . $mrnd[$x]->gegner . "','" . $bp . "','" . $mp . "','" . $bp_sum . "','" . $mp_sum . "','" . $gemeldet . "','" . $editor . "','" . $dwz_editor . "','" . $mrnd[$x]->zeit . "','" . $mrnd[$x]->edit_zeit . "','" . $mrnd[$x]->dwz_zeit . "','" . $mrnd[$x]->published . "','" . $mrnd[$x]->ordering . "');";
+//					$man_rnd = $man_rnd . "\n('" . $mrnd[$x]->sid . "','" . $mrnd[$x]->lid . "','" . $mrnd[$x]->runde . "','" . $mrnd[$x]->paar . "','" . $mrnd[$x]->dg . "','" . $mrnd[$x]->heim . "','" . $mrnd[$x]->tln_nr . "','" . $mrnd[$x]->gegner . "','" . $bp . "','" . $mp . "','" . $bp_sum . "','" . $mp_sum . "','" . $gemeldet . "','" . $editor . "','" . $dwz_editor . "','" . $mrnd[$x]->zeit . "','" . $mrnd[$x]->edit_zeit . "','" . $mrnd[$x]->dwz_zeit . "','" . $mrnd[$x]->published . "','" . $mrnd[$x]->ordering . "');";
+					$man_rnd = $man_rnd . "\n('" . $mrnd[$x]->sid . "','" . $mrnd[$x]->lid . "','" . $mrnd[$x]->runde . "','" . $mrnd[$x]->paar . "','" . $mrnd[$x]->dg . "','" . $mrnd[$x]->heim . "','" . $mrnd[$x]->tln_nr . "','" . $mrnd[$x]->gegner . "','" . $bp . "','" . $mp . "','" . $bp_sum . "','" . $mp_sum . "','" . $gemeldet . "','" . $editor . "','" . $dwz_editor . "','" . $mrnd[$x]->zeit . "','" . $mrnd[$x]->edit_zeit . "','" . $mrnd[$x]->dwz_zeit . "','" . $mrnd[$x]->published . "','" . $mrnd[$x]->ordering . "','" . $mrnd[$x]->ergebnis . "','" . $mrnd[$x]->kampflos . "');";
 				}
 			}
 		}
@@ -1405,7 +1406,9 @@ class CLMControllerDB extends JControllerLegacy {
 			$row->edit_zeit = $man_rnd[16];
 			$row->dwz_zeit = $man_rnd[17];
 			$row->published = $man_rnd[18];
-			$row->ordering = substr($man_rnd[19], 0, -2);
+			$row->ordering = $man_rnd[19];
+			$row->ergebnis = $man_rnd[20];
+			$row->kampflos = substr($man_rnd[21], 0, -2);
 			if (!$row->store()) {
 				$mainframe->enqueueMessage($row->getError(),'warning');
 				return;
