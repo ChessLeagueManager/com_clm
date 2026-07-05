@@ -12,7 +12,7 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-- - - - - 5.0.1 - [xx-xx-2026] - - - - - - - - - - - - - - - - - - - -
+- - - - - 5.0.1 - [04-07-2026] - - - - - - - - - - - - - - - - - - - -
 # Teamwettbewerbe: Paarungsliste 2 x spielfrei in Liga
 # Teamwettbewerbe: Rangfolge ergänzt um Spieler mit DWZ
 # SWT-Import Liga: spielfrei-Teams unveröffentlicht
@@ -27,6 +27,7 @@ $ -> Language fix or change
 ^ Admin-View DeWIS umbenannt in Exporte
 + XML-Ausgabe für neue DWZ-Auswertung (Beta)
 ^ Vorbereitungen zur neuen Datenübernahme vom DSB
++ CH-Auslosung für Einzelturniere
 ^ Online-Anmeldung überarbeitet
 ^ DB-Felder für Namen vergrößert
 # Import/Export von Ligen
