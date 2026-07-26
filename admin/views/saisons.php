@@ -38,7 +38,7 @@ public static function setSaisonsToolbar($countryversion)
 		ToolBarHelper::deleteList();
 		ToolBarHelper::editList();
 		ToolBarHelper::addNew();
-		ToolBarHelper::help( 'screen.clm.saison' );
+		ToolBarHelper::help(false, false, 'https://wiki.chessleaguemanager.org/index.php/clm/5.1.0/hilfe.clm.saison');
 	}
 
 public static function saisons ( &$rows, &$lists, &$pageNav, $option )

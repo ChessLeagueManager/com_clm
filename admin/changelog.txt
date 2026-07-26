@@ -17,6 +17,7 @@ $ -> Language fix or change
 + alternativ: Übernahme erweiterter Daten vom CLM-Server
 + Angebot Ansetzungsroutine für CH-Einzelturniere (Beta)
 # Logging: Sicherung gegen extrem große Einträge
+^ Support: erste eingebundene Hilfeseiten
  
 - - - - - 5.0.1 - [04-07-2026] - - - - - - - - - - - - - - - - - - - -
 # Teamwettbewerbe: Paarungsliste 2 x spielfrei in Liga

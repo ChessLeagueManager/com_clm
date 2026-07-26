@@ -38,7 +38,7 @@ class CLMViewDB extends JViewLegacy {
 			ToolBarHelper::custom('upload','upload.png','upload_f2.png',Text::_('DB_BUTTON_FILE_UPLOAD'),false);
 
 		}
-		ToolBarHelper::help( 'screen.clm.info' );
+		ToolBarHelper::help( false, false, 'https://wiki.chessleaguemanager.org/index.php/clm/5.1.0/hilfe.clm.datenbank' );
 
 		// Daten an Template
 		// keine!
