@@ -127,33 +127,43 @@ $heading = $this->turnier->name;
 				<td class="anfang"><?php echo Text::_('REGISTRATION_PLAYER'); ?>,<?php echo Text::_('REGISTRATION_VORNAME'); ?></td>
 				<td class="anfang"><?php echo Text::_('REGISTRATION_JAHR'); ?></td>
 				<td class="anfang"><?php echo Text::_('REGISTRATION_DWZ'); ?></td>
-				<td class="anfang"><?php echo Text::_('REGISTRATION_ELO'); ?></td>
-				<td class="anfang"><?php echo Text::_('REGISTRATION_CLUB'); ?></td>
+<!--			<td class="anfang"><?php echo Text::_('REGISTRATION_ELO'); ?></td>
+-->				<td class="anfang"><?php echo Text::_('REGISTRATION_CLUB'); ?></td>
 			</th></tr>
-			<?php for ($i = 0; $i < $ii; $i++) { 
-				if ($names[$i]->gender == 'm') $names[$i]->gender = 'M';
-				if ($names[$i]->gender == 'f') $names[$i]->gender = 'W'; ?>
+			<?php $jj = 0;
+			for ($i = 0; $i < $ii; $i++) { 
+				foreach ($names[$i]["memberships"] as $membership1) {
+					if ($jj == 0) $member = $membership1;
+					$jj++;
+					if (isset($member["licenceState"]) AND ($member["licenceState"] == 'ACTIVE')) {
+						$member = $membership1;
+						break;
+					}
+				}
+				if ($names[$i]['gender'] == 'MALE') $names[$i]['gender'] = 'M';
+				elseif ($names[$i]['gender'] == 'FEMALE') $names[$i]['gender'] = 'W'; 
+				else $names[$i]['gender'] = ''; ?>
 				<tr><td style="text-align: center;"><input type="radio" id="<?php echo 'spieler'.($i); ?>" name="reg_spieler" value="<?php echo ($i); ?>"<?php if ($reg_spieler == $i) echo ' checked="checked"'; ?>></td>
-				<td><?php echo $names[$i]->surname.','.$names[$i]->firstname; ?></td>
-				<td><?php echo $names[$i]->yearOfBirth; ?></td>
-				<td><?php echo $names[$i]->rating; ?></td>
-				<td><?php echo $names[$i]->elo; ?></td>
-				<td><?php echo $names[$i]->club; ?></td>
-				<input type="hidden" name="<?php echo 'reg_name'.($i); ?>" value="<?php echo $names[$i]->surname; ?>" />
-				<input type="hidden" name="<?php echo 'reg_vorname'.($i); ?>" value="<?php echo $names[$i]->firstname; ?>" />
-				<input type="hidden" name="<?php echo 'reg_club'.($i); ?>" value="<?php echo $names[$i]->club; ?>" />
-				<input type="hidden" name="<?php echo 'reg_dwz'.($i); ?>" value="<?php echo $names[$i]->rating; ?>" />
-				<input type="hidden" name="<?php echo 'reg_elo'.($i); ?>" value="<?php echo $names[$i]->elo; ?>" />
-				<input type="hidden" name="<?php echo 'reg_PKZ'.($i); ?>" value="<?php echo $names[$i]->pid; ?>" />
-				<input type="hidden" name="<?php echo 'reg_titel'.($i); ?>" value="<?php echo $names[$i]->fideTitle; ?>" />
-				<input type="hidden" name="<?php echo 'reg_geschlecht'.($i); ?>" value="<?php echo $names[$i]->gender; ?>" />
-				<input type="hidden" name="<?php echo 'reg_birthYear'.($i); ?>" value="<?php echo $names[$i]->yearOfBirth; ?>" />
-				<input type="hidden" name="<?php echo 'reg_mgl_nr'.($i); ?>" value="<?php echo $names[$i]->membership; ?>" />
-				<input type="hidden" name="<?php echo 'reg_zps'.($i); ?>" value="<?php echo $names[$i]->vkz; ?>" />
-				<input type="hidden" name="<?php echo 'reg_dwz_I0'.($i); ?>" value="<?php echo $names[$i]->ratingIndex; ?>" />
-				<input type="hidden" name="<?php echo 'reg_FIDEid'.($i); ?>" value="<?php echo $names[$i]->idfide; ?>" />
-				<input type="hidden" name="<?php echo 'reg_FIDEcco'.($i); ?>" value="<?php echo $names[$i]->nationfide; ?>" />
-				</tr>
+				<td><?php echo $names[$i]['lastname'].','.$names[$i]['firstname']; ?></td>
+				<td><?php echo $names[$i]['birthyear']; ?></td>
+				<td><?php echo $names[$i]['rating']; ?></td>
+<!--				<td><?php //echo $names[$i]->elo; ?></td>
+-->				<td><?php echo $member['clubName']; ?></td>
+				<input type="hidden" name="<?php echo 'reg_name'.($i); ?>" value="<?php echo $names[$i]['lastname']; ?>" />
+				<input type="hidden" name="<?php echo 'reg_vorname'.($i); ?>" value="<?php echo $names[$i]['firstname']; ?>" />
+				<input type="hidden" name="<?php echo 'reg_club'.($i); ?>" value="<?php echo $member['clubName']; ?>" />
+				<input type="hidden" name="<?php echo 'reg_dwz'.($i); ?>" value="<?php echo $names[$i]['rating']; ?>" />
+				<input type="hidden" name="<?php echo 'reg_PKZ'.($i); ?>" value="<?php echo $names[$i]['nuLigaPersonId']; ?>" />
+				<input type="hidden" name="<?php echo 'reg_geschlecht'.($i); ?>" value="<?php echo $names[$i]['gender']; ?>" />
+				<input type="hidden" name="<?php echo 'reg_birthYear'.($i); ?>" value="<?php echo $names[$i]['birthyear']; ?>" />
+				<input type="hidden" name="<?php echo 'reg_mgl_nr'.($i); ?>" value="<?php echo $member['memberNo']; ?>" />
+				<input type="hidden" name="<?php echo 'reg_zps'.($i); ?>" value="<?php echo $member['vkz']; ?>" />
+				<input type="hidden" name="<?php echo 'reg_dwz_I0'.($i); ?>" value="<?php echo $names[$i]['index']; ?>" />
+				<input type="hidden" name="<?php echo 'reg_FIDEid'.($i); ?>" value="<?php echo $names[$i]['fideId']; ?>" />
+<!--			<input type="hidden" name="<?php //echo 'reg_elo'.($i); ?>" value="<?php //echo $names[$i]->elo; ?>" />
+				<input type="hidden" name="<?php //echo 'reg_FIDEcco'.($i); ?>" value="<?php //echo $names[$i]->nationfide; ?>" />
+				<input type="hidden" name="<?php //echo 'reg_titel'.($i); ?>" value="<?php //echo $names[$i]->fideTitle; ?>" />
+-->				</tr>
 			<?php } 
 				if ($ii == 0) { ?>
 				<tr><td colspan=6>Es wurde kein passender Spieler in den DSB-Daten gefunden</td><tr>

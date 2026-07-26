@@ -1,36 +1,37 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2018 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 function clm_api_db_dewis_player_by_name($name = '', $vorname = '', $year = '') {
 	@set_time_limit(0); // hope
-	$source = "https://dwz.svw.info/services/files/dewis.wsdl";
 	if ($name == '' OR $vorname == '' ) {
 		return array(false, "e_wrongDataFormat");
 	}
 	$counter = 0;
 	// SOAP Webservice
 	try {
-		$client = clm_core::$load->soap_wrapper($source);
+		$client = new clm_class_OAuth2Client();
 
 		// Personenliste entspr. Namen
-		$searchByNameList	= $client->searchByName($name,$vorname);
-		$searchByNameList1	= $client->searchByName($name,$vorname);
+		$result = $client->callApiWithRefresh($client->apiBaseUrl . '/dwz/dwzliste/persons?lastname='.$name);
+		$playerlist = $result["body"];
 		$searchByName = array();
 		$stcard = 0;	
-		// Detaildaten zu Mitgliedern lesen
-		foreach ($searchByNameList->members as $p) {
+		// Detaildaten zu Mitgliedern verarbeiten
+		foreach ($playerlist['data'] as $player) {
 			$stcard++;
-			if ($year != '' AND $p->yearOfBirth != $year) {
+			if ($player['birthyear'] != $year) {
 				continue;
 			}
-			$searchByName[] = $p;
+			if (strpos($player['firstname'],$vorname) === false) {
+				continue;
+			}
+			$searchByName[] = $player;
 			$counter++;
 		}
-		unset($searchByNameList);
 		unset($client);
 	}
 	catch(SOAPFault $f) {

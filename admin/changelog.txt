@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 5.1.0 - [25-07-2026] - - - - - - - - - - - - - - - - - - - -
+^ neue Datenübernahme vom DSB-Server
+ 
 - - - - - 5.0.1 - [04-07-2026] - - - - - - - - - - - - - - - - - - - -
 # Teamwettbewerbe: Paarungsliste 2 x spielfrei in Liga
 # Teamwettbewerbe: Rangfolge ergänzt um Spieler mit DWZ

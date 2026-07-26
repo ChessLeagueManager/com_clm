@@ -1,14 +1,14 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2024 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
 */
 function clm_api_db_dewis_player($zps = - 1, $incl_pd = 0, $mgl_nr = array()) {
 	@set_time_limit(0); // hope
-	$source = "https://dwz.svw.info/services/files/dewis.wsdl";
 	$sid = clm_core::$access->getSeason();
+//clm_core::$api->test_print('zps',$zps);	
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$dewis_import_delay = $config->dewis_import_delay;
@@ -20,83 +20,154 @@ function clm_api_db_dewis_player($zps = - 1, $incl_pd = 0, $mgl_nr = array()) {
 		return array(true, "e_wrongZPSFormat",$counter);
 	}
 	
-	$sql01 = "SELECT Mgl_Nr, gesperrt, joiningdate, leavingdate FROM #__clm_dwz_spieler"
+	$sql = "SELECT *, 0 as inUpdate FROM #__clm_dwz_spieler"
 			." WHERE sid = ".$sid
-			." AND ZPS = '".$zps."'"
-			." AND (gesperrt = 1 OR joiningdate > '1970-01-01' OR leavingdate > '1970-01-01') "; 
-	$m_gesperrt = clm_core::$db->loadObjectList($sql01);
-	$a_gesperrt = array();
-	$a_joiningdate = array();
-	$a_leavingdate = array();
-	if (!is_null($m_gesperrt)) {
-		foreach ($m_gesperrt as $msp) {
-			if ($msp->gesperrt == 1) $a_gesperrt[$msp->Mgl_Nr] = $msp->gesperrt;
-			if ($msp->joiningdate > '1970-01-01') $a_joiningdate[$msp->Mgl_Nr] = $msp->joiningdate;
-			if ($msp->leavingdate > '1970-01-01') $a_leavingdate[$msp->Mgl_Nr] = $msp->leavingdate;
+			." AND ZPS = '".$zps."'";
+	if ($incl_pd == 0) 
+		$sql .= " AND Status = 'A'";
+	$mgl = clm_core::$db->loadObjectList($sql);
+	$aold = array();
+	if (!is_null($mgl)) {
+		foreach ($mgl as $m) {
+			$aold[$m->Mgl_Nr] = $m;
 		}
 	}
-	
-	// SOAP Webservice
+	// Webservice
 	try {
-		$client = clm_core::$load->soap_wrapper($source);
+		$client = new clm_class_OAuth2Client();
 
-		// VKZ des Vereins --> Vereinsliste
-			
 		usleep($dewis_import_delay);
 			
-		$unionRatingList = $client->unionRatingList($zps);
-		$str = '';
-		$sql = "REPLACE INTO #__clm_dwz_spieler ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Spielername`, `DWZ`, `DWZ_Index`, `Spielername_G`, `Geschlecht`, `Geburtsjahr`, `FIDE_Elo`, `FIDE_Land`, `FIDE_ID`, `Status`, `FIDE_Titel`, `gesperrt`, `joiningdate`, `leavingdate`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		$stmt = clm_core::$db->prepare($sql);
-		// Detaildaten zu Mitgliedern lesen
-		foreach ($unionRatingList->members as $m) {
-			if ($m->state == 'P' && $incl_pd == 0) {
-				continue;
-			}
-			if (count($mgl_nr)!=0)
-			{
-				$update=false;
-				foreach($mgl_nr as $mgl_nr1) {
-					if(intval($mgl_nr1)==intval($m->membership)) {
-						$update=true;
-						break;
-					}
-				}
-				if(!$update) {
-					continue;
-				}
-			}
-			
-			usleep($dewis_import_delay);
-			
-			$tcard = $client->tournamentCardForId($m->pid);
-			$out = clm_core::$load->player_dewis_to_clm($m->surname, $m->firstname, $m->membership, $m->gender, $m->idfide, $tcard->member->fideNation);
-
-			if (array_key_exists((integer)$out[0], $a_gesperrt)) $gesperrt = $a_gesperrt[(integer)$out[0]]; 
-			else $gesperrt = 0;
-			if (array_key_exists((integer)$out[0], $a_joiningdate)) $joiningdate = $a_joiningdate[(integer)$out[0]]; 
-			else $joiningdate = '1970-01-01';
-			if (array_key_exists((integer)$out[0], $a_leavingdate)) $leavingdate = $a_leavingdate[(integer)$out[0]]; 
-			else $leavingdate = '1970-01-01';
-			$rating = ($m->rating != '0' ? $m->rating : "NULL");
-			$rating_index = ($m->rating != '0' ? $m->ratingIndex : "NULL");
-			$state = ($m->state != '' ? $m->state : "A");
-			$stmt->bind_param('issssssssssssssiss', $sid, $zps, $out[0], $m->pid, $out[1], $rating, $rating_index, $out[2], $out[3], $m->yearOfBirth, $m->elo, $out[4], $m->idfide, $state, $m->fideTitle, $gesperrt, $joiningdate, $leavingdate);
-			$result = $stmt->execute();
-			if ($result === false) { $str .= " ".$zps."-".$out[0]; }
-			$counter++;
-			unset($tcard);
-		}
-		$stmt->close();
-		unset($unionRatingList);
+		// Mitglieder eines Vereins
+		$result = $client->callApiWithRefresh($client->apiBaseUrl . '/dwz/dwzliste/persons?vkz='.$zps);
+		$playerlist = $result["body"];
 		unset($client);
 	}
-	catch(SOAPFault $f) {
-		if($f->getMessage() == "that is not a valid union id" || $f->getMessage() == "that union does not exists") {
-			return array(true, "w_wrongZPS",0);
-		}
-		return array(false, "e_connectionError");
+	catch (RuntimeException $e) {
+        echo json_encode(['runtime error test_php_verein' => "❌ Fehler: " . $e->getMessage()]);
+        exit;
 	}
-	return array(true, "m_dewisPlayerSuccess".$str, $counter);
+
+	$str = '';
+clm_core::$api->test_print('playerlist-'.$zps,$playerlist);
+	// Detaildaten zu Mitgliedern verarbeiten
+	foreach ($playerlist['data'] as $player) {
+	  
+		foreach ($player["memberships"] as $membership1) {
+			if ($membership1["vkz"] == $zps) {
+				$member = $membership1;
+				break;
+			}
+		}
+		if ($member["licenceState"] != 'ACTIVE' && $incl_pd == 0) {
+				continue;
+		}
+		$mgl_nr = $member["memberNo"];
+		$counter++;
+		if (!array_key_exists((integer)$mgl_nr, $aold)) {  
+			// neuer Eintrag
+			$elements = "sid";
+			$values = $sid;
+			$elements .= ", PKZ";
+			$values .= ", '" . $player['nuLigaPersonId'] . "'";
+			$spielername = str_replace("'", "´", $player["lastname"].",".$player["firstname"]);
+			$elements .= ", Spielername";
+			$values .= ", '" . $spielername . "'";
+			$spielername_G = mb_strtoupper($spielername);
+			$elements .= ", Spielername_G";
+			$values .= ", '" . $spielername_G . "'";
+			$elements .= ", Geburtsjahr";
+			$values .= ", '" . $player['birthYear'] . "'";
+			if (!empty($player['gender'])) {
+				if ($player["gender"] == 'MALE') $geschlecht = 'M';
+				elseif ($player["gender"] == 'FEMALE') $geschlecht = 'W';
+				else $geschlecht = 'M';
+				$elements .= ", Geschlecht";
+				$values .= ", '" . $geschlecht . "'";
+			}
+			if (isset($player["rating"]) AND is_numeric($player["rating"]) AND  $player["rating"] > 0 ) {
+				$elements .= ", DWZ";
+				$values .= ", " . $player['rating'];
+				if (isset($player["index"]) AND is_numeric($player["index"]) AND  $player["index"] > 0 ) {
+					$elements .= ", DWZ_Index";
+					$values .= ", " . $player['index'];
+				}
+			}	
+			$elements .= ", ZPS";
+			$values .= ", '" . $zps . "'";
+			$elements .= ", Mgl_Nr";
+			$values .= ", " . $mgl_nr ;
+			if (isset($member["licenceState"])) {
+				if ($member["licenceState"] == 'ACTIVE') $state = 'A';
+				elseif ($member["licenceState"] == 'PASSIVE') $state = 'P';
+				else $state = '';
+				$elements .= ", Status";
+				$values .= ", '" . $state . "'";
+			}
+			if (isset($player["fide_id"]) AND is_numeric($player["fide_id"]) AND  $player["fide_id"] > 0 ) {
+				$elements .= ", FIDE_ID";
+				$values .= ", " . $player['fide_id'];
+			}	
+			$sql = "INSERT INTO #__clm_dwz_spieler (" . $elements . ") VALUES (" . $values . ");";
+		} else {
+			// Update eines bereits vorhandenen Vereinsmitglieds
+			$aold[$mgl_nr]->inUpdate = 1;
+			$old = $aold[$mgl_nr];
+			$updates = '';
+			if (! empty($player['nuLigaPersonId']) && ($old->PKZ != $player['nuLigaPersonId'])) {
+				$updates .= ", PKZ='" . $player['nuLigaPersonId'] . "'";
+			}
+			$spielername = str_replace("'", "´", $player["lastname"].",".$player["firstname"]);
+			if ($old->Spielername != $spielername) {
+				$updates .= ", Spielername='" . $spielername . "'";
+				$spielername_G = mb_strtoupper($spielername);
+				$updates .= ", Spielername_G='" . $spielername_G . "'";
+			}
+			if ($old->Geburtsjahr != $player['birthyear'])
+				$updates .= ", Geburtsjahr='" . $player['birthyear'] . "'";
+			if (!empty($player['gender'])) {
+				if ($player["gender"] == 'MALE') $geschlecht = 'M';
+				elseif ($player["gender"] == 'FEMALE') $geschlecht = 'W';
+				else $geschlecht = 'M';
+				if ($old->Geschlecht != $geschlecht ) 
+					$updates .= ", Geschlecht='" . $geschlecht . "'";
+			}
+			if (isset($player["rating"]) AND is_numeric($player["rating"]) AND  $player["rating"] > 0 ) {
+				if ($old->DWZ != $player["rating"] ) {
+					$updates .= ", DWZ='" . $player['rating'] . "'";
+					if (isset($player["index"]) AND is_numeric($player["index"]) AND  $player["index"] > 0 ) {
+						if ($old->DWZ_Index != $player["index"] ) {
+							$updates .= ", DWZ_Index='" . $player['index'] . "'";
+						}
+					}
+				}
+			}	
+			if (isset($member["licenceState"])) {
+				if ($member["licenceState"] == 'ACTIVE') $state = 'A';
+				elseif ($member["licenceState"] == 'PASSIVE') $state = 'P';
+				else $state = '';
+				if ($state > '' AND $old->Status != $state ) 
+					$updates .= ", Status='" . $state . "'";
+			}
+			if (isset($player["fide_id"]) AND is_numeric($player["fide_id"]) AND  $player["fide_id"] > 0 ) {
+				if ($old->FIDE_ID != $player["fide_id"] ) 
+					$updates .= ", FIDE_ID='" . $player["fide_id"] . "'";
+			}	
+
+			if ($updates == '') $sql = '';
+			else {
+				$pos = strpos($updates, ',');
+				if ($pos !== false) {
+					$updates = substr_replace($updates, '', $pos, 1);
+				}
+				$sql = "UPDATE #__clm_dwz_spieler SET " . $updates . " WHERE sid = $sid AND ZPS ='" . $zps . "' and Mgl_Nr =" . $mgl_nr . ";";
+			}
+		}	
+		if ($sql > '') {
+			$result = clm_core::$db->query($sql);	
+			if ($result === false) { $str .= " ".$zps."-".$mgl_nr; }
+		}
+	}
+	return array(true, "m_onlinePlayerSuccess".$str, $counter);
 }
 ?>
