@@ -52,6 +52,7 @@ class CLMModelVereinsliste extends JModelLegacy
 		." LEFT JOIN #__clm_dwz_verbaende AS d ON d.Verband = c.Verband"
 		." LEFT JOIN #__clm_saison AS e ON e.id = a.sid AND e.id = b.sid"
 		." WHERE a.sid = ".$sid
+		." AND a.published = 1"
 		." AND b.sid = ".$sid
 		." GROUP BY b.ZPS"
 		;

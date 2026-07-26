@@ -294,12 +294,15 @@ function edit()
 		$mainframe->redirect( $link);
 	}
 	if ($task !="edit") {
-	$saisonlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'VEREINE_SAISON' ), 'sid', 'name' );
-	$saisonlist	= array_merge( $saisonlist, $db->loadObjectList() );
-		} else { $saisonlist	= $db->loadObjectList(); }
-//	$lists['saison']= HTMLHelper::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1" style="width:300px" ','sid', 'name', $row->sid );
-	$lists['saison']= HTMLHelper::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1" style="width:300px" ','sid', 'name', $row->sid );
-	
+		$asid = clm_core::$access->getSeason(); // aktuelle Saison
+		$saisonlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'VEREINE_SAISON' ), 'sid', 'name' );
+		$saisonlist	= array_merge( $saisonlist, $db->loadObjectList() );
+		$lists['saison']= HTMLHelper::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1" style="width:300px" ','sid', 'name', $asid );
+	} else { 
+		$saisonlist	= $db->loadObjectList();
+		//$lists['saison']= HTMLHelper::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1" style="width:300px" ','sid', 'name', $row->sid );
+		$lists['saison']= HTMLHelper::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1" style="width:300px" ','sid', 'name', $row->sid );
+	}
 	$lists['published']	= HTMLHelper::_('select.booleanlist',  'published', 'class="inputbox"', $row->published );
 	$lists['cid']	= $cid[0];
 
