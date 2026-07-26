@@ -411,7 +411,7 @@ if ($debug > 0) echo "<br>Aktuelle Runde: ".$round;
 //		if ($debug > 0) echo "<br>Vereinstest bis Runde: ". $drawclubavoid;
 //		if ($drawclubavoid > 0) {
 		$tourn_prev_teaming = $turparams->get("prev_teaming","0");	
-		if ($debug > 0) echo "<br>Vereinstest bis Runde: ". $$tourn_prev_teaming;
+		if ($debug > 0) echo "<br>Vereinstest bis Runde: ". $tourn_prev_teaming;
 		if ($tourn_prev_teaming > 0) {
 			// Sinn Vereinstest prüfen
 			$query = "SELECT tlnrStatus, COUNT(tlnrStatus) as total"
@@ -538,10 +538,12 @@ echo "<br>Bisherige Ergebnisse: "; var_dump($erg);
 			elseif ($erg1->ergebnis == '2') $erg_array[$key]->ergebnis = '=';
 			elseif ($erg1->ergebnis == '3') $erg_array[$key]->ergebnis = '0';
 			elseif ($erg1->ergebnis == '4') $erg_array[$key]->ergebnis = '-';
-			elseif ($erg1->ergebnis == '5') $erg_array[$key]->ergebnis = '+';
+//			elseif ($erg1->ergebnis == '5') $erg_array[$key]->ergebnis = '+';
+			elseif ($erg1->ergebnis == '5') $erg_array[$key]->ergebnis = 'U';
 			elseif ($erg1->ergebnis == '6') $erg_array[$key]->ergebnis = '-';
 			elseif ($erg1->ergebnis == '7') $erg_array[$key]->ergebnis = '-';
-			elseif ($erg1->ergebnis == '8') $erg_array[$key]->ergebnis = 'U';
+//			elseif ($erg1->ergebnis == '8') $erg_array[$key]->ergebnis = 'U';
+			elseif ($erg1->ergebnis == '8') $erg_array[$key]->ergebnis = '';
 			elseif ($erg1->ergebnis == '9') $erg_array[$key]->ergebnis = '0';
 			elseif ($erg1->ergebnis == '10') $erg_array[$key]->ergebnis = '=';
 			elseif ($erg1->ergebnis == '11') $erg_array[$key]->ergebnis = 'F';
@@ -723,7 +725,8 @@ echo "<br>player_array:";	var_dump($player_array);
 		$pairings[$p_nr]['wsnr'] = $player_array[0];
 		$pairings[$p_nr]['wname'] = $players[$player_array[0]-1]->name;
 		$pairings[$p_nr]['bsnr'] = $player_array[1];
-		$pairings[$p_nr]['bname'] = $players[$player_array[1]-1]->name;
+		if ($player_array[1] > 0) $pairings[$p_nr]['bname'] = $players[$player_array[1]-1]->name;
+		else $pairings[$p_nr]['bname'] = '';
 	}
 echo "<br>pairings:";	var_dump($pairings);
 
@@ -736,8 +739,9 @@ echo "<br>pairings:";	var_dump($pairings);
 		if ($debug > 1) { echo "<br>result:"; var_dump($result); }
 	} else {
 		echo "<br><br>Test - Ende des Protokolls!<br><br>";
-	}
 //die('vtest');		
+//die('vtest');		
+	}
 	return array(true, $lines[0].' Paarungen wurden angesetzt'); 
 
 }

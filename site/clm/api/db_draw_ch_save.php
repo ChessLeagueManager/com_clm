@@ -56,7 +56,8 @@ echo "<br>pairing:"; var_dump($pairing);
 		if (isset($pairing["werg"])) $record->ergebnis = $pairing["werg"]; 
 		else $record->ergebnis = NULL;
 		if ($pairing["bsnr"] == '0') {
-			$record->ergebnis = 8;
+//			$record->ergebnis = 8;
+			$record->ergebnis = 5;
 		}
 		$record->tiebrS = 0;
 		$record->tiebrG = 0;

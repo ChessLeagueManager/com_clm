@@ -389,10 +389,11 @@ if ($debug > 0) { echo "<br>snr: $snr  geschlecht: $geschlecht  titel: $titel  n
 if ($debug > 0) { echo "<br>snr: $snr  XCZ zps: $zps  mgl_nr: $mgl_nr  XCC verein $verein  XCR start_dwz: $start_dwz  FIDEelo: $FIDEelo twz: $twz "; }
 		If ($group) { 	// Mannschaftsturniere
 		} else { 		// Einzelturniere	
-			$keyS = '`sid`, `swt_tid`, `snr`, `name`, `tlnrStatus`, `geschlecht`, `birthYear`,`birthDay`, `twz`, `FIDEelo`, `FIDEid`, `FIDEcco`, ';
-			$keyS .= '`titel`,`zps`,`mgl_nr`,`verein`,`start_dwz`,`email`,`tel_no`,`published`';
-			$valueS = $season.", ".$new_swt_tid.", ".$snr.", '".$name."', 1, '".$geschlecht."', '".$birthYear."', '".$birthDay."', ".$twz.", ".$FIDEelo.", '".$FIDEid."', '".$FIDEcco;
+			$keyS = '`sid`, `swt_tid`, `snr`, `name`, `tlnrStatus`, `geschlecht`, `birthYear`, `twz`, `FIDEelo`, `FIDEid`, `FIDEcco`, ';
+			$keyS .= '`titel`,`zps`,`mgl_nr`,`verein`,`start_dwz`,`email`,`tel_no`,`published`,`birthDay`';
+			$valueS = $season.", ".$new_swt_tid.", ".$snr.", '".$name."', 1, '".$geschlecht."', '".$birthYear."', ".$twz.", ".$FIDEelo.", '".$FIDEid."', '".$FIDEcco;
 			$valueS .=  "', '".$titel."', '".$zps."', ".$mgl_nr.", '".$verein."', ".$start_dwz.", '".$email."', '".$tel_no."', 1";
+			if ($birthDay > '0000-00-00') $valueS .= " , '".$birthDay."'"; else $valueS .= " , NULL";
 			$sql = "INSERT INTO #__clm_swt_turniere_tlnr (".$keyS.") VALUES (".$valueS.")";
 if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 			clm_core::$db->query($sql);
