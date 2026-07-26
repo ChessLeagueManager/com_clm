@@ -9,6 +9,8 @@ defined('clm') or die('Restricted access');
 // Welche APIs sollen beim Aufruf geloggt werden?
 $logs = array();
 $logs[]="db_config_save";
+$logs[]="db_clmorg_club";
+$logs[]="db_clmorg_player";
 $logs[]="db_dewis_club";
 $logs[]="db_dewis_player";
 $logs[]="db_ecfv2_club";

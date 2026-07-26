@@ -14,6 +14,7 @@ $ -> Language fix or change
 
 - - - - - 5.1.0 - [25-07-2026] - - - - - - - - - - - - - - - - - - - -
 ^ neue Datenübernahme vom DSB-Server
++ alternativ: Übernahme erweiterter Daten vom CLM-Server
  
 - - - - - 5.0.1 - [04-07-2026] - - - - - - - - - - - - - - - - - - - -
 # Teamwettbewerbe: Paarungsliste 2 x spielfrei in Liga

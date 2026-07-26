@@ -1,0 +1,170 @@
+/*
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2024 CLM Team  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link http://www.chessleaguemanager.de
+*/
+
+function clm_clmorg_import_player(object, p) {
+//alert("Hello player!");
+    unit = object.parentElement.getElementsByClassName("clm_view_form_select_options")[0];
+	var selopt = unit.options[unit.selectedIndex].text;
+	while ( selopt.substr(0,1) == '-' ) {
+		selopt = selopt.substr(1);
+	}
+    update = object.parentElement.parentElement.getElementsByClassName("clm_view_clmorg_import_update")[0];
+    update_buttons = object.parentElement.getElementsByTagName("button");
+//  update.innerHTML = clm_clmorg_import_update+" "+unit.options[unit.selectedIndex].text.replace(/(.*-)/g, '')+"<br/>"+clm_clmorg_import_loadingClubs;
+    update.innerHTML = clm_clmorg_import_update+" "+selopt+"<br/>"+clm_clmorg_import_loadingClubs;
+	 clm_clmorg_import_start(update, update_buttons);
+	 
+    var xmlhttp;
+    if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    } else { // code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4) {
+            if (xmlhttp.status == 200) {
+                try {
+                    var out = JSON.parse(xmlhttp.responseText);
+                } catch (e) {
+//alert("Hello player!" + clm_clmorg_import_wrongResponse + '00');
+                   clm_clmorg_import_end(update, update_buttons, clm_clmorg_import_noJson);
+                    return;
+                }
+                if (out.length != 1 || out[0].length != 3 || out[0][0] != true) {
+//alert("Hello player!" + out[0][0] + clm_clmorg_import_wrongResponse + '11');
+                    clm_clmorg_import_end(update, update_buttons, clm_clmorg_import_wrongResponse);
+                    return;
+                }
+//alert("Hello player!" + out[0][1] + '3301');
+//alert("Hello player!" + clm_clmorg_import_nothingToUpdate + '3302');
+				if(out[0][1]=="w_noAssociationFound") {
+                    clm_clmorg_import_end(update, update_buttons, clm_clmorg_import_nothingToUpdate);
+					return;
+				}
+//alert("Hello player!" + out[0][1] + '4444');
+                clm_clmorg_import_player_one(out[0][2], update, update_buttons, unit, p, 0, 0, 0)
+            } else {
+//alert("Hello player!" + out[0][1] + clm_clmorg_import_errorHttp + '5555');
+                clm_clmorg_import_end(update, update_buttons, clm_clmorg_import_errorHttp + " " + xmlhttp.status);
+            }
+        }
+    }
+//alert("Hello player!" + clm_clmorg_import_url + '22');
+    xmlhttp.open("POST", clm_clmorg_import_url, true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send('command=[0,["db_clubs",["' + unit.value + '"]]]');
+}
+
+function clm_clmorg_import_club(object) {
+    unit = object.parentElement.getElementsByClassName("clm_view_form_select_options")[0];  
+	var selopt = unit.options[unit.selectedIndex].text;
+	while ( selopt.substr(0,1) == '-' ) {
+		selopt = selopt.substr(1);
+	}
+    update = object.parentElement.parentElement.getElementsByClassName("clm_view_clmorg_import_update")[0];
+    update_buttons = object.parentElement.getElementsByTagName("button");
+//  update.innerHTML = clm_clmorg_import_update+" "+unit.options[unit.selectedIndex].text.replace(/(.*-)/g, '')+"<br/>"+clm_clmorg_import_updateClub;
+    update.innerHTML = clm_clmorg_import_update+" "+selopt+"<br/>"+clm_clmorg_import_updateClub;
+	 clm_clmorg_import_start(update, update_buttons);
+	 
+    var xmlhttp;
+    if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    } else { // code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4) {
+            if (xmlhttp.status == 200) {
+                try {
+                    var out = JSON.parse(xmlhttp.responseText);
+                } catch (e) {
+//alert("Hello player!" + clm_clmorg_import_wrongResponse);
+                    clm_clmorg_import_end(update, update_buttons, clm_clmorg_import_noJson);
+                    return;
+                }
+
+                if (out.length != 1 || out[0].length != 3 || out[0][0] != true) {
+//alert("Hello player!" + out[0][0] + clm_clmorg_import_wrongResponse);
+//                  clm_clmorg_import_end(update, update_buttons, clm_clmorg_import_wrongResponse + responseText);
+                    clm_clmorg_import_end(update, update_buttons, clm_clmorg_import_wrongResponse + '5502' + xmlhttp.responseText);
+                   return;
+                }
+
+//		clm_clmorg_import_end(update, update_buttons, clm_clmorg_import_update+" "+unit.options[unit.selectedIndex].text.replace(/(.*-)/g, '')+"<br/>"+clm_clmorg_import_finishedClub+" "+out[0][2]);
+		clm_clmorg_import_end(update, update_buttons, clm_clmorg_import_update+" "+selopt+"<br/>"+clm_clmorg_import_finishedClub+" "+out[0][2]);
+            } else {
+                clm_clmorg_import_end(update, update_buttons, clm_clmorg_import_errorHttp + " " + xmlhttp.status);
+            }
+        }
+    }
+    xmlhttp.open("POST", clm_clmorg_import_url, true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send('command=[0,["db_clmorg_club",["' + unit.value + '"]]]');
+}
+
+function clm_clmorg_import_player_one(obj, update, update_buttons, unit, p, i, player,count) {
+//alert("Hello player one!" + count);
+	var selopt = unit.options[unit.selectedIndex].text;
+	while ( selopt.substr(0,1) == '-' ) {
+		selopt = selopt.substr(1);
+	}
+//  update.innerHTML = clm_clmorg_import_update+" "+unit.options[unit.selectedIndex].text.replace(/(.*-)/g, '')+"<br/>"+clm_clmorg_import_alreadyFinishedClubs+" "+i + " " + clm_clmorg_import_of + " " + obj.length + "<br/>" + clm_clmorg_import_alreadyFinishedPlayers + " " + (player) +"<br/>"+clm_clmorg_import_working+" "+obj[i].Vereinname;
+    update.innerHTML = clm_clmorg_import_update+" "+selopt+"<br/>"+clm_clmorg_import_alreadyFinishedClubs+" "+i + " " + clm_clmorg_import_of + " " + obj.length + "<br/>" + clm_clmorg_import_alreadyFinishedPlayers + " " + (player) +"<br/>"+clm_clmorg_import_working+" "+obj[i].Vereinname;
+
+    var xmlhttp;
+    if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    } else { // code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4) {
+            if (xmlhttp.status == 200) {
+                try {
+                    var out = JSON.parse(xmlhttp.responseText);
+                } catch (e) {
+                    clm_clmorg_import_end(update, update_buttons, clm_clmorg_import_noJson + '5509' + xmlhttp.responseText);
+                    return;
+                }
+                if (out.length != 1 || out[0].length != 3 || out[0][0] != true) {
+					if(count<5) {
+                    	clm_clmorg_import_player_one(obj, update, update_buttons, unit, p, i, player,count+1);
+						return;
+					}
+                    clm_clmorg_import_end(update, update_buttons, clm_clmorg_import_wrongResponse + '5501' + xmlhttp.responseText);
+                    return;
+                }
+
+                if (i + 1 == obj.length) {
+//                  clm_clmorg_import_end(update, update_buttons, update.innerHTML = clm_clmorg_import_finished+" "+unit.options[unit.selectedIndex].text.replace(/(.*-)/g, '')+"<br/>"+clm_clmorg_import_alreadyFinishedClubs+" "+ (i+1) + " " + clm_clmorg_import_of + " " + obj.length + "<br/>" + clm_clmorg_import_alreadyFinishedPlayers + " " + (player + out[0][2]));
+                    clm_clmorg_import_end(update, update_buttons, update.innerHTML = clm_clmorg_import_finished+" "+selopt+"<br/>"+clm_clmorg_import_alreadyFinishedClubs+" "+ (i+1) + " " + clm_clmorg_import_of + " " + obj.length + "<br/>" + clm_clmorg_import_alreadyFinishedPlayers + " " + (player + out[0][2]));
+                } else {
+                    clm_clmorg_import_player_one(obj, update, update_buttons, unit, p, (i + 1), (player + out[0][2]),0);
+                }
+            } else {
+                clm_clmorg_import_end(update, update_buttons, clm_clmorg_import_errorHttp + " " + xmlhttp.status);
+            }
+        }
+    }
+//alert("Hello player one!" + clm_clmorg_import_url + '22');
+     xmlhttp.open("POST", clm_clmorg_import_url, true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send('command=[0,["db_clmorg_player",["' + obj[i].ZPS + '",' + p + ']]]');
+}
+function clm_clmorg_import_start(update, update_buttons) {
+    update_buttons[0].disabled = true;
+    update_buttons[1].disabled = true;
+    update_buttons[2].disabled = true;
+    update.style.display = "block";
+}
+function clm_clmorg_import_end(update, update_buttons, response) {
+    update.innerHTML = response;
+    update_buttons[0].disabled = false;
+    update_buttons[1].disabled = false;
+    update_buttons[2].disabled = false;
+}
