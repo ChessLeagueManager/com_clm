@@ -20,6 +20,9 @@ class CLMViewDWZ
 static function setDWZToolbar($countryversion)
 	{
 	$clmAccess = clm_core::$access;      
+	// Konfigurationsparameter auslesen
+	$config = clm_core::$db->config();
+	$test_button= $config->test_button;	
 	// Menubilder laden
 		clm_core::$load->load_css("icons_images");
 
@@ -30,7 +33,7 @@ static function setDWZToolbar($countryversion)
 		ToolBarHelper::custom( 'nachmeldung_delete', 'trash.png', 'trash_f2.png', Text::_( 'MEMBER_BUTTON_DEL_NACH'),false );
 		ToolBarHelper::custom( 'nachmeldung', 'apply.png', 'apply_f2.png', Text::_( 'MEMBER_BUTTON_NACH'),false );
 		ToolBarHelper::custom( 'daten_edit', 'apply.png', 'apply_f2.png', Text::_( 'MEMBER_BUTTON_EDIT'),false );
-		ToolBarHelper::custom( 'export_pdf', 'copy.png', 'copy_f2.png', 'pdf-Mitgliederliste', false);
+		if ($test_button == 1) ToolBarHelper::custom( 'export_pdf', 'copy.png', 'copy_f2.png', 'pdf-Mitgliederliste', false);
 	if ($clmAccess->access('BE_database_general') === true AND $countryversion == 'en') { 
 		ToolBarHelper::custom( 'player_move_to', 'apply.png', 'apply_f2.png', Text::_( 'MEMBER_BUTTON_MOVE_TO'),false );
 		ToolBarHelper::custom( 'player_move_from', 'apply.png', 'apply_f2.png', Text::_( 'MEMBER_BUTTON_MOVE_FROM'),false );
@@ -44,9 +47,10 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 	// Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion= $config->countryversion;	
-		CLMViewDWZ::setDWZToolbar($countryversion);
-		$_REQUEST['hidemainmenu'] = 1;
-		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
+	
+	CLMViewDWZ::setDWZToolbar($countryversion);
+	Factory::getApplication()->input->set('hidemainmenu', true);
+	JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 		
 	$clmAccess = clm_core::$access;      
 		

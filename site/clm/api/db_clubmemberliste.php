@@ -12,7 +12,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 function clm_api_db_clubmemberliste($sid,$zps,$format='pdf',$filter_sort = '0') {
 	$lang = clm_core::$lang->turplayersliste;
 	$out["input"]["sid"] = $sid;
-	$out["input"]["zps"] = $zzps;
+	$out["input"]["zps"] = $zps;
 	$out["input"]["format"] = $format;
 	$date = date("Y-m-d");
 
@@ -22,10 +22,10 @@ function clm_api_db_clubmemberliste($sid,$zps,$format='pdf',$filter_sort = '0') 
 	$test_button = $config->test_button;
 
   	$vereinModel = " SELECT a.*, s.name as season_name "
-				." FROM #__clm_vereine as a "
+				." FROM #__clm_dwz_vereine as a "
 				." LEFT JOIN #__clm_saison AS s ON s.id = a.sid "
 				." WHERE a.sid = ".$sid
-				." AND a.zps = '".$zps."'";
+				." AND a.ZPS = '".$zps."'";
 	$out["verein"] = clm_core::$db->loadObject($vereinModel);
 
   	$spielerModel = " SELECT * "
@@ -107,9 +107,8 @@ if ($format == 'pdf') {
 				
 			$pdf->SetFont('Times','B',$head_font);	
 				$pdf->Cell($leer+7,$zelle,' ',0,0,'L');
-				$pdf->Cell(140,7,clm_core::$load->utf8decode($verein->name),0,0,'L');
+				$pdf->Cell(140,7,clm_core::$load->utf8decode($verein->Vereinname),0,1,'L');
 			$pdf->SetFont('Times','',$head_font-4);	
-//				$pdf->Cell(95,7,'Standard-Startgeld:'.$turnier->entry_fee.' - '.$tanz->active.clm_core::$load->utf8decode(' TL bestätigt / ').$tanz->deactive.' TL in Wartestatus',0,1,'LB');
 				$pdf->Ln(1);    	
 			$pdf->SetFont('Times','',$font+2);
 			$pdf->SetFillColor(100);
@@ -171,8 +170,8 @@ if ($format == 'pdf') {
 	}
 	
 	// Ausgabe
-	$pdf->Output('Mitgliederliste '.clm_core::$load->utf8decode($verein->name).'.pdf','D');
-	exit;
+	$pdf->Output('Mitgliederliste '.clm_core::$load->utf8decode($verein->Vereinname).'.pdf','D');
+	exit();
 	
 }
 
