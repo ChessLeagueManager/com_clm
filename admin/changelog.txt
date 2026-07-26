@@ -16,6 +16,7 @@ $ -> Language fix or change
 ^ neue Datenübernahme vom DSB-Server
 + alternativ: Übernahme erweiterter Daten vom CLM-Server
 + Angebot Ansetzungsroutine für CH-Einzelturniere (Beta)
+# Logging: Sicherung gegen extrem große Einträge
  
 - - - - - 5.0.1 - [04-07-2026] - - - - - - - - - - - - - - - - - - - -
 # Teamwettbewerbe: Paarungsliste 2 x spielfrei in Liga

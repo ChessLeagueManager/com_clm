@@ -13,8 +13,13 @@ class clm_class_log {
 	private function add($type, $name, $content) {
 //	public function add($type, $name, $content) {
 		$userid = clm_core::$access->getId ();
-		$sql = 'INSERT INTO #__clm_logging (`callid`, `userid`,`timestamp`,`type`,`name`,`content`)'
-			.' VALUES ("' . $this->callid . '", ' . $userid . ', ' . time () . ', ' . $type . ',  "' . clm_core::$db->escape ( htmlspecialchars ( trim(preg_replace('/\s+/', ' ', $name)), ENT_QUOTES, "UTF-8" ) ) . '", "' . clm_core::$db->escape ( htmlspecialchars ( trim(preg_replace('/\s+/', ' ', $content)), ENT_QUOTES, "UTF-8" ) ) . '")';
+        if (strlen($content) < 32000) {
+			$sql = 'INSERT INTO #__clm_logging (`callid`, `userid`,`timestamp`,`type`,`name`,`content`)'
+				.' VALUES ("' . $this->callid . '", ' . $userid . ', ' . time () . ', ' . $type . ',  "' . clm_core::$db->escape ( htmlspecialchars ( trim(preg_replace('/\s+/', ' ', $name)), ENT_QUOTES, "UTF-8" ) ) . '", "' . clm_core::$db->escape ( htmlspecialchars ( trim(preg_replace('/\s+/', ' ', $content)), ENT_QUOTES, "UTF-8" ) ) . '")';
+        } else {
+			$sql = 'INSERT INTO #__clm_logging (`callid`, `userid`,`timestamp`,`type`,`name`,`content`)'
+				.' VALUES ("' . $this->callid . '", ' . $userid . ', ' . time () . ', ' . $type . ',  "' . clm_core::$db->escape ( htmlspecialchars ( trim(preg_replace('/\s+/', ' ', $name)), ENT_QUOTES, "UTF-8" ) ) . '", "' . clm_core::$db->escape ( htmlspecialchars ( trim(preg_replace('/\s+/', ' ', 'Abgeschnittene Fehlermeldung:' . substr($content, 0, 15000))), ENT_QUOTES, "UTF-8" ) ) . '")';
+		}
 		clm_core::$db->query ( $sql );
 	}
 	
