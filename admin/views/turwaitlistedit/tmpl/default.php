@@ -1,0 +1,223 @@
+<?php
+/**
+ * @ Chess League Manager (CLM) Component 
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @link https://chessleaguemanager.org
+ * @author Thomas Schwietert
+ * @email fishpoke@fishpoke.de
+ * @author Andreas Dorn
+ * @email webmaster@sbbl.org
+*/
+defined('_JEXEC') or die('Restricted access');
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+
+		$turParams = new clm_class_params($this->turnier->params);
+		$param_typeaccount = $turParams->get('typeAccount', 0);
+		$param_teamranking = $turParams->get('teamranking', 0);
+		$param_import_source = $turParams->get('import_source', 0);
+		$param_eloanalysis = $turParams->get('optionEloAnalysis', 0);
+		
+		$dview = clm_core::$load->request_string('dview','std');
+		//CLM parameter auslesen
+		$clm_config = clm_core::$db->config();
+		$turnier_entry_fee = $clm_config->turnier_entry_fee;
+		if ($turnier_entry_fee == 1 AND $this->turnier->entry_fee > 0) $sfee = 1; else $sfee = 0;
+?>
+
+	<script language="javascript" type="text/javascript">
+
+		 Joomla.submitbutton = function (pressbutton) { 		
+			var form = document.adminForm;
+			if (pressbutton == 'cancel') {
+				Joomla.submitform( pressbutton );
+				return;
+			}
+			// do field validation
+			if ((<?php echo $sfee; ?> == 1 ) && (form.amount_paid.value > 0) 
+				&& (form.date_paid.value <= "1970-01-01") ) {
+				alert( "Betrag ohne Bezahldatum ist nicht zulässig" );
+			} else if ((<?php echo $sfee; ?> == 1 ) 
+				&& (<?php echo $this->turnier->entry_fee; ?> != form.amount_paid.value) && (form.amount_paid.value > 0)
+				&& (form.reason.value == "") ) {
+				alert( "Betrag weicht ab - Grund fehlt" );
+			} else {	Joomla.submitform( pressbutton ); }
+		}
+
+		</script>
+
+<form action="index.php" method="post" name="adminForm" id="adminForm">
+
+	<div class="col width-50">
+		<fieldset class="adminform">
+		<table class="admintable">
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('CLM_NUMBER'); ?>:</td>
+				<td><input class="inputbox" type="text" name="snr" id="snr" size="3" maxlength="3" value="<?php echo $this->player->snr; ?>" /></td>
+			</tr>
+		</table>
+		
+		</fieldset>
+	</div>
+	
+	<div class="clr"></div>
+	
+	<div class="col width-50">
+		<fieldset class="adminform">
+		<br>
+		<legend><?php echo Text::_( 'PLAYER_DATA' ); ?></legend>
+
+		<table class="admintable">
+			<tr>
+				<td class="key" nowrap="nowrap">* <?php echo Text::_('PLAYER_NAME'); ?> (<?php echo Text::_('LASTNAME_FIRSTNAME'); ?>):</td>
+				<td><input class="inputbox" type="text" name="name" id="name" size="20" maxlength="60" value="<?php echo $this->player->name; ?>" /></td>
+			</tr>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('CLUB'); ?>:</td>
+				<td><input class="inputbox" type="text" name="verein" id="verein" size="20" maxlength="60" value="<?php echo $this->player->verein; ?>" /></td>
+			</tr>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('PLAYER_PKZ'); ?>:</td>
+				<td><input class="inputbox" type="text" name="PKZ" id="PKZ" size="9" maxlength="9" value="<?php echo $this->player->PKZ; ?>" /></td>
+			</tr>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('PLAYER_ZPS'); ?>:</td>
+				<td><input class="inputbox" type="text" name="zps" id="zps" size="5" maxlength="5" value="<?php if ($this->player->zps != '0') echo $this->player->zps; else echo ""; ?>" /></td>
+		
+	   
+				<td class="key" nowrap="nowrap"><?php echo Text::_('PLAYER_MGLNR'); ?>:</td>
+				<td><input class="inputbox" type="text" name="mgl_nr" id="mgl_nr" size="4" maxlength="4" value="<?php if ($this->player->mgl_nr != 0) echo $this->player->mgl_nr; else echo ""; ?>" /></td>
+			</tr>
+			<?php if ($param_teamranking > 0 ) { ?>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('TEAM'); ?>:</td>
+				<td class="paramlist_value">
+					<?php
+					$options = array();
+					$options[0] = Text::_('KEIN TEAM');
+					foreach ($this->teams as $team) {
+						$options[$team->tln_nr] = $team->name;
+					}
+					$optionlist = array();
+					foreach ($options as $key => $val) {
+						$optionlist[]	= HTMLHelper::_('select.option', $key, $val, 'id', 'name' );
+					}
+					echo HTMLHelper::_('select.genericlist', $optionlist, 'mtln_nr', 'class="inputbox"', 'id', 'name', $this->player->mtln_nr);
+					?>
+				</td>
+			</tr>
+			<?php } ?>
+			<?php if ($param_import_source != '' AND $param_import_source != 0) { ?>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('DECODE_NICKNAME'); ?> (<?php echo $param_import_source; ?>):</td>
+				<td><input class="inputbox" type="text" name="oname" id="oname" size="20" maxlength="60" value="<?php echo $this->player->oname; ?>" /></td>
+			</tr>
+			<?php } ?>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('TWZ'); ?>:</td>
+				<td><input class="inputbox" type="text" name="twz" id="twz" size="4" maxlength="4" value="<?php echo $this->player->twz; ?>" /></td>
+			</tr>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('RATING'); ?>:</td>
+				<td><input class="inputbox" type="text" name="start_dwz" id="start_dwz" size="4" maxlength="4" value="<?php echo $this->player->start_dwz; ?>" /></td>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('RATING_INDEX'); ?>:</td>
+				<td><input class="inputbox" type="text" name="start_I0" id="start_I0" size="4" maxlength="4" value="<?php echo $this->player->start_I0; ?>" /></td>
+			</tr>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('FIDE_ELO'); ?>:</td>
+				<td><input class="inputbox" type="text" name="FIDEelo" id="FIDEelo" size="4" maxlength="4" value="<?php echo $this->player->FIDEelo; ?>" /></td>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('PLAYER_TITLE'); ?>:</td>
+				<td><input class="inputbox" type="text" name="titel" id="titel" size="3" maxlength="3" value="<?php echo $this->player->titel; ?>" /></td>
+			</tr>
+			<?php if ($param_eloanalysis == 1) { ?>
+				<tr>
+					<td class="key" nowrap="nowrap"><?php echo Text::_('FIDE_ID'); ?>:</td>
+					<td><input class="inputbox" type="text" name="FIDEid" id="FIDEid" size="9" maxlength="9" value="<?php echo $this->player->FIDEid; ?>" /></td>
+					<td class="key" nowrap="nowrap"><?php echo Text::_('FIDE_CCO'); ?>:</td>
+					<td><input class="inputbox" type="text" name="FIDEcco" id="FIDEcco" size="3" maxlength="3" value="<?php echo $this->player->FIDEcco; ?>" /></td>
+				</tr>
+			<?php } ?>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('PLAYER_SEX'); ?>:</td>
+				<td class="paramlist_value">
+					<?php
+					$options = array();
+					$options[''] = '';
+					$options['M'] = Text::_('OPTION_SEX_M');
+					$options['W'] = Text::_('OPTION_SEX_W');
+					$optionlist = array();
+					foreach ($options as $key => $val) {
+						$optionlist[]	= HTMLHelper::_('select.option', $key, $val, 'id', 'name' );
+					}
+					echo HTMLHelper::_('select.genericlist', $optionlist, 'geschlecht', 'class="inputbox"', 'id', 'name', $this->player->geschlecht);
+					?>
+				</td>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('PLAYER_BIRTH_YEAR'); ?>:</td>
+				<td><input class="inputbox" type="text" name="birthYear" id="birthYear" size="4" maxlength="4" value="<?php echo $this->player->birthYear; ?>"/></td>
+			</tr>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('TOURNAMENT_SPECIAL_POINTS'); ?>:</td>
+				<td><input class="inputbox" type="text" name="s_punkte" id="s_punkte" size="4" maxlength="4" value="<?php echo $this->player->s_punkte; ?>"/></td>
+				<td class="key" nowrap="nowrap" title="<?php echo Text::_( 'PLAYER_BIRTH_DAY_HINT' );?>"><?php echo Text::_('PLAYER_BIRTH_DAY'); ?>:</td>
+				<td title="<?php echo Text::_( 'PLAYER_BIRTH_DAY_HINT' );?>"><?php echo CLMForm::calendar($this->player->birthDay, "birthDay", "birthDay", '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?></td>
+			</tr>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('PLAYER_EMAIL'); ?>:</td>
+				<td><input class="inputbox" type="text" name="email" id="email" size="40" maxlength="60" value="<?php echo $this->player->email; ?>" /></td>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('PLAYER_TEL_NO'); ?>:</td>
+				<td><input class="inputbox" type="text" name="tel_no" id="tel_no" size="30" maxlength="30" value="<?php echo $this->player->tel_no; ?>" /></td>
+			</tr>
+			<?php if ($param_typeaccount > '0') { ?>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('PLAYER_ACCOUNT_'.$param_typeaccount); ?>:</td>
+				<td><input class="inputbox" type="text" name="account" id="account" size="50" maxlength="50" value="<?php echo $this->player->account; ?>" /></td>
+			</tr>
+			<?php } ?>
+		</table>
+		
+		</fieldset>
+	</div>
+
+  <?php // Detail-View wechseln, nur wenn Startgeldverwaltung aktiv ist
+   if (($turnier_entry_fee == 1) AND !is_null($this->turnier->entry_fee) AND ($this->turnier->entry_fee > 0)) { ?>
+
+	<div class="col width-50">
+		<fieldset class="adminform">
+		<br>
+		<legend><?php echo Text::_( 'PLAYER_ENTRY_FEE'); ?><span style="font-size:80%"> (Standard hier: <?php echo $this->turnier->entry_fee; ?>)</span></legend>
+		
+		<table class="admintable">
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('PLAYER_DATE_PAID'); ?>:</td>
+				<td><?php echo CLMForm::calendar($this->player->date_paid, "date_paid", "date_paid", '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?></td>
+			</tr>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('PLAYER_AMOUNT_PAID'); ?>:</td>
+				<td><input class="inputbox" type="text" name="amount_paid" id="amount_paid" size="10" maxlength="10" value="<?php echo $this->player->amount_paid; ?>" /></td>
+			</tr>
+			<tr>
+				<td class="key" nowrap="nowrap"><?php echo Text::_('PLAYER_REASON'); ?>:</td>
+				<td><input class="inputbox" type="text" name="reason" id="reason" size="40" maxlength="40" value="<?php echo $this->player->reason; ?>" /></td>
+			</tr>
+		
+		</table>
+		
+		</fieldset>
+	</div>
+  <?php } ?>
+  
+	<div class="clr"></div>
+
+
+	<input type="hidden" name="option" value="com_clm" />
+	<input type="hidden" name="view" value="turwaitlistedit" />
+	<input type="hidden" name="playerid" value="<?php echo $this->param['playerid']; ?>" />
+	<input type="hidden" name="turnierid" value="<?php echo $this->player->turnier; ?>" />
+	<input type="hidden" name="controller" value="turwaitlistedit" />
+	<input type="hidden" name="task" value="" />
+	<input type="hidden" name="dview" value="<?php //echo $dview; ?>" />
+	<?php echo HTMLHelper::_( 'form.token' ); ?>
+
+</form>
