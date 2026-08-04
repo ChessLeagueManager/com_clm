@@ -11,22 +11,28 @@ function clm_api_db_dewis_player_by_name($name = '', $vorname = '', $year = '') 
 		return array(false, "e_wrongDataFormat");
 	}
 	$counter = 0;
-	// SOAP Webservice
+	// Webservice
 	try {
 		$client = new clm_class_OAuth2Client();
 
 		// Personenliste entspr. Namen
-		$result = $client->callApiWithRefresh($client->apiBaseUrl . '/dwz/dwzliste/persons?lastname='.$name);
+		setlocale(LC_CTYPE, 'de_DE.UTF-8' );
+		// Text von UTF-8 in ASCII umwandeln und ähnliche Zeichen annähern (TRANSLIT)
+		$zname = iconv('UTF-8', 'ASCII//TRANSLIT', $name);
+		$result = $client->callApiWithRefresh($client->apiBaseUrl . '/dwz/dwzliste/persons?lastname='.$zname);
 		$playerlist = $result["body"];
 		$searchByName = array();
-		$stcard = 0;	
+		$stcard = 0;
+		if (!isset($playerlist['data'])) {
+			return array(true, "m_dewisPlayerSuccess", 0,$searchByName);
+		}
 		// Detaildaten zu Mitgliedern verarbeiten
 		foreach ($playerlist['data'] as $player) {
 			$stcard++;
 			if ($player['birthyear'] != $year) {
 				continue;
 			}
-			if (strpos($player['firstname'],$vorname) === false) {
+			if (strpos(iconv('UTF-8', 'ASCII//TRANSLIT', $player['firstname']),iconv('UTF-8', 'ASCII//TRANSLIT', $vorname)) === false) {
 				continue;
 			}
 			$searchByName[] = $player;
@@ -34,11 +40,9 @@ function clm_api_db_dewis_player_by_name($name = '', $vorname = '', $year = '') 
 		}
 		unset($client);
 	}
-	catch(SOAPFault $f) {
-		if($f->getMessage() == "that is not a valid name" || $f->getMessage() == "that name does not exists") {
-			return array(true, "w_wrongName",0);
-		}
-		return array(false, "e_connectionError");
+	catch(RuntimeException $e) {
+		$error = json_encode(['runtime error test_php_verein' => "❌ Fehler: " . $e->getMessage()]);
+		clm_core::$api->test_print('RuntimeException',$error);
 	}
 	return array(true, "m_dewisPlayerSuccess", $counter,$searchByName);
 }

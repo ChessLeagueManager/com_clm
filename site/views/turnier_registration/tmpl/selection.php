@@ -58,14 +58,80 @@ if ($f_source = 'sent') {
 $session = Factory::getSession();
 $reg_wert = $session->get('reg_wert');
 $c_year = date("Y"); 
+$today = date("Y-m-d");
+// Konfigurationsparameter auslesen - get configuration parameter
+$config = clm_core::$db->config();
+$clm_key = $config->clmorg_data_key;
+If (strlen($clm_key) > 30) $s_clm_key = 1; else $s_clm_key = 0;
+$clm_domain = $config->request_domain;
+$test_button = $config->test_button;
 
 // Überprüfen der Eingaben - check input
 $msg = '';
+$success_clm = false;
 
-$result = clm_core::$api->db_dewis_player_by_name($reg_name, $reg_vorname, $reg_jahr); 
-if (!isset($result[3])) $names = NULL; $names = $result[3];
+if ($s_clm_key == 1) { // Spielersuche auf CLM-Server
+	$success_clm = true;
+	$spielerdatenurl = 'https://spielerdaten.chessleaguemanager.org/spieler.php';
+	$clm_name = $reg_name.','.$reg_vorname;
+	// Webservice
+	try {
+		$ch = curl_init($spielerdatenurl);
+		$post_data = array('clm_key' => $clm_key, 'clm_name' => $clm_name, 'clm_domain' => $clm_domain);
+		curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_data));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($ch);
+		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+		if ($httpCode !== 200) {
+			$error = json_encode(['error php_spieler' => 'Token ist ung&uuml;ltig oder abgelaufen (httpCode=' . $httpCode . "/" . json_encode($response) . ")."]);
+			clm_core::$api->test_print('httpCode-Error',$error);
+			$success_clm = false;
+		} else {
+			// Mitglieder eines Vereins
+			$playerlist = json_decode($response, true);
+		}
+	}
+	catch (RuntimeException $e) {
+		$error = json_encode(['runtime error test_php_verein' => "❌ Fehler: " . $e->getMessage()]);
+		clm_core::$api->test_print('RuntimeException',$error);
+		$success_clm = false;
+	}
+	if ($success_clm == true) {
+		$names = array();
+		if ($test_button > 0) {
+			clm_core::$api->test_print('data',$playerlist['data']); }
+		if (isset($playerlist['data'])) {				// notwendig, wenn Verein keine Mitglieder hat
+			foreach ($playerlist['data'] as $player) {
+				if (isset($player['memberships'][0])) {
+					$membership = $player['memberships'][0];
+					if (isset($membership['leavingdate']) AND $membership['leavingdate'] > '1970-01-01' AND $membership['leavingdate'] < $today) 
+						continue;
+				}
+				if ( $player['birthYear'] == $reg_jahr ) {
+					$names[] = $player;
+				}	
+			}
+		} else {
+			$names = NULL;
+		}
+	}
+}
+if ($success_clm == false) {					// Spielersuche auf DSB-Server	
+	$result = clm_core::$api->db_dewis_player_by_name($reg_name, $reg_vorname, $reg_jahr); 
+	if (!isset($result[3])) $names = NULL; $names = $result[3];
+}
 if (is_null($names)) $ii = 0;
 else $ii = count($names);
+if (isset($names) AND ($test_button > 0)) {				// notwendig, wenn Verein keine Mitglieder hat
+	foreach ($names as $player) {
+		if ($success_clm == false) echo "<br><br>DSB:"; else echo "<br><br>CLM:"; 
+		var_dump($player);
+	}
+}
 
 echo "<div><div id='turnier_info'>";
 // componentheading vorbereiten - prepare componentheading
@@ -127,28 +193,36 @@ $heading = $this->turnier->name;
 				<td class="anfang"><?php echo Text::_('REGISTRATION_PLAYER'); ?>,<?php echo Text::_('REGISTRATION_VORNAME'); ?></td>
 				<td class="anfang"><?php echo Text::_('REGISTRATION_JAHR'); ?></td>
 				<td class="anfang"><?php echo Text::_('REGISTRATION_DWZ'); ?></td>
-<!--			<td class="anfang"><?php echo Text::_('REGISTRATION_ELO'); ?></td>
--->				<td class="anfang"><?php echo Text::_('REGISTRATION_CLUB'); ?></td>
+				<?php if ($success_clm == true) { ?>
+					<td class="anfang"><?php echo Text::_('REGISTRATION_ELO'); ?></td>
+				<?php } ?>
+				<td class="anfang"><?php echo Text::_('REGISTRATION_CLUB'); ?></td>
 			</th></tr>
-			<?php $jj = 0;
+			<?php 
 			for ($i = 0; $i < $ii; $i++) { 
+				$jj = 0;
 				foreach ($names[$i]["memberships"] as $membership1) {
+					if (!isset($membership1['clubName'])) $membership1['clubName'] = 'xyz-'.$membership1['vkz'];
 					if ($jj == 0) $member = $membership1;
 					$jj++;
-					if (isset($member["licenceState"]) AND ($member["licenceState"] == 'ACTIVE')) {
+					if (isset($membership1["licenceState"]) AND ($membership1["licenceState"] == 'ACTIVE')) {
 						$member = $membership1;
 						break;
 					}
 				}
+				if (!isset($names[$i]['fideId'])) $names[$i]['fideId'] = $names[$i]['fide_id'];
+				if (!isset($names[$i]['birthyear'])) $names[$i]['birthyear'] = $names[$i]['birthYear'];
 				if ($names[$i]['gender'] == 'MALE') $names[$i]['gender'] = 'M';
 				elseif ($names[$i]['gender'] == 'FEMALE') $names[$i]['gender'] = 'W'; 
 				else $names[$i]['gender'] = ''; ?>
 				<tr><td style="text-align: center;"><input type="radio" id="<?php echo 'spieler'.($i); ?>" name="reg_spieler" value="<?php echo ($i); ?>"<?php if ($reg_spieler == $i) echo ' checked="checked"'; ?>></td>
 				<td><?php echo $names[$i]['lastname'].','.$names[$i]['firstname']; ?></td>
 				<td><?php echo $names[$i]['birthyear']; ?></td>
-				<td><?php echo $names[$i]['rating']; ?></td>
-<!--				<td><?php //echo $names[$i]->elo; ?></td>
--->				<td><?php echo $member['clubName']; ?></td>
+				<td><?php if (isset($names[$i]['rating'])) echo $names[$i]['rating']; else $names[$i]['rating'] = 0; ?></td>
+				<?php if ($success_clm == true) { ?>
+					<td><?php if (isset($names[$i]['fide_rating'])) echo $names[$i]['fide_rating']; ?></td>
+				<?php } ?>
+				<td><?php echo $member['clubName']; ?></td>
 				<input type="hidden" name="<?php echo 'reg_name'.($i); ?>" value="<?php echo $names[$i]['lastname']; ?>" />
 				<input type="hidden" name="<?php echo 'reg_vorname'.($i); ?>" value="<?php echo $names[$i]['firstname']; ?>" />
 				<input type="hidden" name="<?php echo 'reg_club'.($i); ?>" value="<?php echo $member['clubName']; ?>" />
@@ -160,10 +234,10 @@ $heading = $this->turnier->name;
 				<input type="hidden" name="<?php echo 'reg_zps'.($i); ?>" value="<?php echo $member['vkz']; ?>" />
 				<input type="hidden" name="<?php echo 'reg_dwz_I0'.($i); ?>" value="<?php echo $names[$i]['index']; ?>" />
 				<input type="hidden" name="<?php echo 'reg_FIDEid'.($i); ?>" value="<?php echo $names[$i]['fideId']; ?>" />
-<!--			<input type="hidden" name="<?php //echo 'reg_elo'.($i); ?>" value="<?php //echo $names[$i]->elo; ?>" />
-				<input type="hidden" name="<?php //echo 'reg_FIDEcco'.($i); ?>" value="<?php //echo $names[$i]->nationfide; ?>" />
-				<input type="hidden" name="<?php //echo 'reg_titel'.($i); ?>" value="<?php //echo $names[$i]->fideTitle; ?>" />
--->				</tr>
+				<input type="hidden" name="<?php echo 'reg_elo'.($i); ?>" value="<?php if (isset($names[$i]['fide_rating'])) echo $names[$i]['fide_rating']; else echo '0'; ?>" />
+				<input type="hidden" name="<?php echo 'reg_FIDEcco'.($i); ?>" value="<?php if (isset($names[$i]['fide_federation'])) echo $names[$i]['fide_federation']; else ''; ?>" />
+				<input type="hidden" name="<?php echo 'reg_titel'.($i); ?>" value="<?php if (isset($names[$i]['fide_title'])) echo $names[$i]['fide_title']; else ''; ?>" />
+				</tr>
 			<?php } 
 				if ($ii == 0) { ?>
 				<tr><td colspan=6>Es wurde kein passender Spieler in den DSB-Daten gefunden</td><tr>

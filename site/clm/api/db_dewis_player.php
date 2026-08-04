@@ -49,7 +49,7 @@ function clm_api_db_dewis_player($zps = - 1, $incl_pd = 0, $mgl_nr = array()) {
 	}
 
 	$str = '';
-clm_core::$api->test_print('playerlist-'.$zps,$playerlist);
+//clm_core::$api->test_print('playerlist-'.$zps,$playerlist);
 	// Detaildaten zu Mitgliedern verarbeiten
 	foreach ($playerlist['data'] as $player) {
 	  
@@ -59,10 +59,11 @@ clm_core::$api->test_print('playerlist-'.$zps,$playerlist);
 				break;
 			}
 		}
-		if ($member["licenceState"] != 'ACTIVE' && $incl_pd == 0) {
+		if ((!isset($member["licenceState"]) OR $member["licenceState"] != 'ACTIVE') && $incl_pd == 0) {
 				continue;
 		}
-		$mgl_nr = $member["memberNo"];
+		if (isset($member["memberNo"]) AND is_numeric($member["memberNo"]) AND $member["memberNo"] > 0) $mgl_nr = $member["memberNo"];
+		else $mgl_nr = '0';
 		$counter++;
 		if (!array_key_exists((integer)$mgl_nr, $aold)) {  
 			// neuer Eintrag
@@ -77,7 +78,8 @@ clm_core::$api->test_print('playerlist-'.$zps,$playerlist);
 			$elements .= ", Spielername_G";
 			$values .= ", '" . $spielername_G . "'";
 			$elements .= ", Geburtsjahr";
-			$values .= ", '" . $player['birthYear'] . "'";
+			if (isset($player['birthYear'])) $values .= ", '" . $player['birthYear'] . "'";
+			else $values .= ", '" . '0000' . "'";
 			if (!empty($player['gender'])) {
 				if ($player["gender"] == 'MALE') $geschlecht = 'M';
 				elseif ($player["gender"] == 'FEMALE') $geschlecht = 'W';
