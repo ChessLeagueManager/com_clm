@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -84,10 +84,12 @@ if ($this->playerPhoto != '') { ?>
 			if ($turParams->get('displayPlayerRating', 0) == 1) { ?>
 			<tr>
 				<td align="left" class="tp_col_1"><?php echo Text::_('TOURNAMENT_RATING') ?>:</td>
-				<?php 	if ($countryversion =="de") {
-							$mgl4 = ''.$this->player->mgl_nr; while (strlen($mgl4) < 4) { $mgl4 = '0'.$mgl4; } ?>
-					<td class="tp_col_data"><a href="http://schachbund.de/spieler.html?zps=<?php echo $this->player->zps; ?>-<?php echo $mgl4; ?>" target="_blank"><?php echo CLMText::formatRating($this->player->start_dwz) ?></td>
-				<?php 	} else { ?>
+				<?php if ($countryversion =="de") {
+						if (($this->player->start_dwz > 0) AND (substr($this->player->PKZ,0,2) != 'FI')) { ?>
+					<td class="tp_col_data"><a href="https://www.schachbund.de/dwz-spieler/<?php echo $this->player->PKZ; ?>.html" target="_blank"><?php echo CLMText::formatRating($this->player->start_dwz) ?></td>
+				  <?php } else { ?>
+					<td class="tp_col_data"><?php echo CLMText::formatRating($this->player->start_dwz) ?></td>
+				  <?php }} else { ?>
 					<td class="tp_col_data"><a href="http://www.ecfgrading.org.uk/new/player.php?PlayerCode=<?php echo $this->player->PKZ; ?>#top" target="_blank"><?php echo CLMText::formatRating($this->player->start_dwz) ?></td>
 				<?php } ?>
 			</tr>
@@ -98,7 +100,7 @@ if ($this->playerPhoto != '') { ?>
 			<tr>
 				<td align="left" class="tp_col_1"><?php echo Text::_('TOURNAMENT_ELO') ?>:</td>
 				<?php // FIDE Link
-					if ($turParams->get('displayPlayerFideLink', 0) == 1) { ?>
+					if ($turParams->get('displayPlayerFideLink', 0) == 1 AND $this->player->FIDEid > 0) { ?>
 						<td class="tp_col_data"><a href="https://ratings.fide.com/profile/<?php echo $this->player->FIDEid;?>" target="_blank"><?php echo CLMText::formatRating($this->player->FIDEelo) ?></td>
 					<?php } else { ?>
 						<td class="tp_col_data"><?php echo CLMText::formatRating($this->player->FIDEelo) ?></td>

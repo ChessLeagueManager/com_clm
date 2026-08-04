@@ -173,7 +173,7 @@ echo "<br>". CLMContent::clmWarning(Text::_('CLUB_UNKNOWN'))."<br>";
      <td class="dwz_5"><?php echo $zps->Geschlecht; ?></td>
     <?php } ?>
    <?php if ($countryversion =="de") { ?>	
-    <td class="dwz_6"><a href="https://schachbund.de/spieler.html?zps=<?php echo $zps->ZPS; ?>-<?php echo $zps->Mgl_Nr; ?>" target="_blank"><?php echo $zps->DWZ; ?></a> - <?php echo $zps->DWZ_Index; ?></td>
+    <td class="dwz_6"><a href="https://schachbund.de/dwz-spieler/<?php echo $zps->PKZ; ?>.html" target="_blank"><?php echo $zps->DWZ; ?></a> - <?php echo $zps->DWZ_Index; ?></td>
    <?php } elseif ($countryversion == "en" AND $rating_type == 0) { ?>
     <td class="dwz_6"><?php echo $zps->DWZ; echo '<font size="1"> ('.(600 + ($zps->DWZ * 8)).')</font>'; ?></td>
    <?php } elseif ($countryversion == "en" AND $rating_type == 1) { ?>
@@ -190,7 +190,7 @@ echo "<br>". CLMContent::clmWarning(Text::_('CLUB_UNKNOWN'))."<br>";
 </form>
   <?php if (isset($liga[0]) AND $urlzps != '-1') {
     if ($countryversion =="de") { ?>
-	<div class="hint">DWZ Liste: <a href="https://schachbund.de/verein.html?zps=<?php echo $urlzps; ?>" target="_blank">https://schachbund.de/verein.html?zps=<?php echo $urlzps; ?></a></div>   
+	<div class="hint">DWZ Liste: <a href="https://schachbund.de/dwz-vereine/<?php echo $urlzps; ?>.html" target="_blank">https://schachbund.de/vereine/<?php echo $urlzps; ?>.html</a></div>   
    <?php } elseif ($countryversion =="en") { ?>
 	<div class="hint">The ECF Grading Database: <a href="https://www.ecfgrading.org.uk/new/menu.php" target="_blank">https://www.ecfgrading.org.uk/new/menu.php</a></div>   
   <?php } } ?>

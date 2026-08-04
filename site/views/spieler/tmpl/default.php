@@ -151,10 +151,10 @@ else {  ?>
             <?php } else { ?>
 				<td class="det_col1"><?php echo Text::_('PLAYER_GRADE') ?></td>
             <?php } ?>			
-        	<?php if ($countryversion =="out") { ?>
-				<?php  $mgl4 = ''.$mgl; while (strlen($mgl4) < 4) { $mgl4 = '0'.$mgl4; } ?>
-				<td class="det_col2"><a href="http://schachbund.de/spieler.html?zps=<?php echo $zps; ?>-<?php echo $mgl4; ?>" target="_blank"><?php echo $spieler[0]->dsbDWZ; ?></a> - <?php echo $spieler[0]->DWZ_Index; ?></td>
-        	<?php } elseif ($countryversion =="en" AND $rating_type == 0) { ?> 
+        	<?php if ($countryversion =="de") { ?>
+			<?php if (($spieler[0]->dsbDWZ > 0) AND (substr($spieler[0]->PKZ,0,2) != 'FI')) { ?>
+					<td class="tp_col_data"><a href="https://www.schachbund.de/dwz-spieler/<?php echo $spieler[0]->PKZ; ?>.html" target="_blank"><?php echo CLMText::formatRating($spieler[0]->dsbDWZ) ?></td>
+			<?php } } elseif ($countryversion =="en" AND $rating_type == 0) { ?> 
 				<td class="det_col2"><a href="http://www.ecfgrading.org.uk/new/player.php?PlayerCode=<?php echo $spieler[0]->PKZ.'#top'; ?>" target="_self"><?php echo $spieler[0]->dsbDWZ; ?></a></td>
         	<?php } elseif ($countryversion =="en" AND $rating_type == 1) { ?> 
 				<td class="det_col2"><a href="https://www.ecfrating.org.uk/v2/new/player.php?ECF_code=<?php echo $spieler[0]->PKZ; ?>" target="_self"><?php echo $spieler[0]->dsbDWZ; ?></a></td>

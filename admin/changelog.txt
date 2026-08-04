@@ -14,6 +14,7 @@ $ -> Language fix or change
 
 - - - - - 5.1.1 - [xx-xx-2026] - - - - - - - - - - - - - - - - - - - -
 ^ Anpassung Online-Turnieranmeldung an neue DSB-Datenstruktur
+^ Anpassung Links (Spieler, Verein) an neue DSB-Datenstruktur
 
 - - - - - 5.1.0 - [25-07-2026] - - - - - - - - - - - - - - - - - - - -
 ^ neue Datenübernahme vom DSB-Server

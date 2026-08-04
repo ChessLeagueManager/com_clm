@@ -27,12 +27,12 @@ class CLMModelSpieler extends JModelLegacy
 	$countryversion = $config->countryversion;
 
 	$db	= Factory::getDBO();
-//	$id	= @$options['id'];
 
 	$query = "SELECT a.Spielername,l.name as liga_name,l.id as liga,a.ZPS,a.Mgl_Nr,a.PKZ,"
 		." l.params as lparams,"
 		." a.DWZ as dsbDWZ,a.DWZ_Index,a.FIDE_ELO,a.FIDE_ID,a.Status,"
-		." n.name,n.tln_nr, m.*, s.datum as dsb_datum, s.name as s_name";      
+		." n.name,n.tln_nr, s.datum as dsb_datum, s.name as s_name,"      
+		." m.start_dwz,m.start_I0,m.Punkte,m.Partien,m.We,m.EFaktor,m.Niveau,m.Leistung,m.DWZ,m.I0";      
 	if ($zps != '-1') $query .= ", d.Vereinname";     
 	$query .= " FROM #__clm_dwz_spieler as a ";
 	if ($countryversion =="de") {
@@ -81,7 +81,6 @@ class CLMModelSpieler extends JModelLegacy
 	$countryversion = $config->countryversion;
 
 	$db	= Factory::getDBO();
-//	$id	= @$options['id'];
 
 	// Array zum speichern von Liga,Tlnr und Mannschaftsname
 	$erg = array();
@@ -138,7 +137,6 @@ class CLMModelSpieler extends JModelLegacy
 	$countryversion = $config->countryversion;
 
 	$db	= Factory::getDBO();
-//	$id	= @$options['id'];
 
 	$query = " SELECT l.name as league, s.gegner as Mgl_Nr,s.gPKZ,s.gzps,s.lid,s.runde,s.heim,s.weiss,s.brett,"
 		." s.ergebnis,"
@@ -180,7 +178,6 @@ class CLMModelSpieler extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison','1');
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$db	= Factory::getDBO();
-//	$id	= @$options['id'];
 
 	$query  = 'SELECT DISTINCT a.zps, a.name FROM #__clm_vereine as a'
 		." WHERE a.published = 1"
@@ -201,7 +198,6 @@ class CLMModelSpieler extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison','1');
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$db	= Factory::getDBO();
-//	$id	= @$options['id'];
 
 	$query  = ' SELECT a.name, a.id, a.archiv FROM #__clm_saison AS a'
 		." ORDER BY a.name DESC "
@@ -223,7 +219,6 @@ class CLMModelSpieler extends JModelLegacy
 	$sid	= clm_core::$load->request_int('saison','1');
 	$zps	= clm_escape(clm_core::$load->request_string('zps'));
 	$db	= Factory::getDBO();
-//	$id	= @$options['id'];
 
 	$query  = " SELECT DISTINCT a.Spielername, a.ZPS, a.Mgl_Nr, a.PKZ, a.sid FROM #__clm_dwz_spieler AS a"
 		." WHERE a.sid= '$sid'"
