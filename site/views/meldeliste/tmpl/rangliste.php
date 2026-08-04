@@ -247,6 +247,15 @@ function Pruefen()
 	if (TempMa==0) {
 		break;
 	}		
+	//Hilfsprüfung: Mannschaftsnummer ohne Rangnummer bzw. Rangnummer nicht numerisch
+	if (TempRa == 'NaN') {
+        alert('Eine Rangnummer ist nicht numerisch (NaN)! \n Mannschaft: '+Ma);
+		return false;
+	}		
+	if (TempRa == '') {
+        alert('Eine Rangnummer ist leer! \n Mannschaft: '+Ma);
+		return false;
+	}		
 	//Hilfsprüfung: nur auf doppelte Einträge
     if ((TempMa==Ma) && (TempRa==Ra)) {
         alert('Doppelte Rangnummer! \n Mannschaft: '+Ma+'  Rang: '+Ra);

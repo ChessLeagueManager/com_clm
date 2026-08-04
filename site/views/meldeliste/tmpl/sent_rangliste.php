@@ -152,7 +152,15 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 		$block[]	= clm_core::$load->request_int('check'.$y);
 
 		if ($mnr[$y] !=="99" AND $mnr[$y] !=="0" AND $mnr[$y] !=="") {
- 			$query = " INSERT INTO #__clm_rangliste_spieler "
+			if (!is_numeric($mnr[$y]) OR $mnr[$y] == 'NaN') {
+				clm_core::$api->test_print('Mannschaftsfehler1',$mnr[$y]);
+				$mnr[$y] = 0;
+			}
+			if (!is_numeric($rang[$y]) OR $rang[$y] == 'NaN') {
+				clm_core::$api->test_print('Rangfehler1',$rang[$y]);
+				$rang[$y] = 0;
+			}
+			$query = " INSERT INTO #__clm_rangliste_spieler "
 				." (`Gruppe`, `ZPS`, `ZPSmgl`, `Mgl_Nr`, `PKZ`, `Rang`, `man_nr`, `sid`, gesperrt) "
 				." VALUES ('$gid','$zps','$ZPSmgl[$y]','$mgl[$y]','$pkz[$y]','$rang[$y]','$mnr[$y]','$sid','$block[$y]') "
 				;					   
