@@ -22,6 +22,10 @@ class CLMViewTurRegistrations extends JViewLegacy {
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
 		$model =   $this->getModel();
 		
+		//Turnier Parameter auslesen
+		$turParams = new clm_class_params($model->turnier->params);
+		$param_waitingList = $turParams->get('waitingList', 0);
+
 		$adminLink = new AdminLink();
 		$adminLink->view = "turform";
 		$adminLink->more = array('task' => 'edit', 'id' => $model->param['id']);
@@ -37,6 +41,11 @@ class CLMViewTurRegistrations extends JViewLegacy {
 			//ToolBarHelper::custom('move_registration', 'upload.png', 'upload_f2.png', Text::_('REGISTRATION_MOVE'),false);
 			ToolBarHelper::custom('edit_registration', 'copy.png', 'copy_f2.png', Text::_('REGISTRATION_EDIT'),false);
 			ToolBarHelper::custom('del_registrations', 'cancel.png', 'cancel_f2.png', Text::_('REGISTRATION_DEL'), false);
+			ToolBarHelper::custom( 'turplayers', 'forward.png', 'forward_f2.png', Text::_('Zur Teilnehmerliste'), false);
+			// Warteliste bearbeiten
+			if ($param_waitingList == 1) { 
+				ToolBarHelper::custom( 'turwaitList', 'forward.png', 'forward_f2.png', Text::_('Zur Warteliste'), false);
+			}
 			ToolBarHelper::spacer();
 		
 		}

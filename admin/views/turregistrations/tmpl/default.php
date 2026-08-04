@@ -201,7 +201,7 @@ $turParams = new clm_class_params($this->turnier->params);
 					?>
 					<td align="center">
 						<?php 
-						if ($row->status > 2) {
+						if ($row->status > 3) {
 							echo $row->status;
 						} else {
 							if ($row->approved == '0')

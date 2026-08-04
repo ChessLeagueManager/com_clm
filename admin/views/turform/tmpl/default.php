@@ -210,6 +210,12 @@ $turnier_entry_fee = $clm_config->turnier_entry_fee;
 			}
 			?>
 		</td>
+		<td class="paramlist_key" title="<?php echo Text::_( 'WAITING_LIST_HINT' );?>">
+			<?php echo Text::_('WAITING_LIST'); ?>:
+		</td>
+		<td class="paramlist_value" title="<?php echo Text::_( 'WAITING_LIST_HINT' );?>"><fieldset class="radio">
+			<?php echo HTMLHelper::_('select.booleanlist', 'params[waitingList]', 'class="inputbox"', $turParams->get('waitingList', 0)); ?>
+		</fieldset></td>
 	</tr>
 
 	<tr>

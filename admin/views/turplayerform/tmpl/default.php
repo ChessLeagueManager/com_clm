@@ -17,7 +17,8 @@ use Joomla\CMS\HTML\HTMLHelper;
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
-	
+
+	$list = clm_core::$load->request_string('list','tlnr');
 	$turParams = new clm_class_params($this->turnier->params);
 	$optionEloAnalysis = $turParams->get('optionEloAnalysis', 0);
 
@@ -248,6 +249,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $this->param['order_Dir']; ?>" />
 	<input type="hidden" name="id" value="<?php echo $this->param['id']; ?>" />
 	<input type="hidden" name="add_nz" value="<?php echo $this->param['add_nz']; ?>" />
+	<input type="hidden" name="list" value="<?php echo $list; ?>" />
 	<?php echo HTMLHelper::_( 'form.token' ); ?>
 
 </form>

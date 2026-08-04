@@ -23,6 +23,7 @@ class CLMModelTurnier_Player extends JModelLegacy {
 
 		$this->turnierid = clm_core::$load->request_int('turnier');
 		$this->snr = clm_core::$load->request_int('snr', 1);
+		$this->list = clm_core::$load->request_string('list','tlnr');
 
 		$this->_getTurnierData();
 
@@ -77,9 +78,11 @@ class CLMModelTurnier_Player extends JModelLegacy {
 	
 	function _getPlayerData() {
 	
-		$query = "SELECT *"
-			." FROM #__clm_turniere_tlnr"
-			." WHERE turnier = ".$this->turnierid." AND snr = ".$this->snr
+		if ($this->list == 'wait') 
+			$query = "SELECT * FROM #__clm_turniere_tlnr_wl";
+		else 
+			$query = "SELECT * FROM #__clm_turniere_tlnr";
+		$query .= " WHERE turnier = ".$this->turnierid." AND snr = ".$this->snr
 			;
 		$this->_db->setQuery( $query );
 		$this->player = $this->_db->loadObject();

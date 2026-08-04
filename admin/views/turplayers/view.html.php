@@ -26,6 +26,12 @@ class CLMViewTurPlayers extends JViewLegacy {
 
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
 		$model =   $this->getModel();
+
+		//Turnier Parameter auslesen
+		$turParams = new clm_class_params($model->turnier->params);
+		$param_teamranking = $turParams->get('teamranking', 0);
+		$param_teamranking  = preg_replace("/[^a-z\d_äöü ]/si" , '' , $param_teamranking); 
+		$param_waitingList = $turParams->get('waitingList', 0);
 		
 		$adminLink = new AdminLink();
 		$adminLink->view = "turform";
@@ -33,7 +39,7 @@ class CLMViewTurPlayers extends JViewLegacy {
 		$adminLink->makeURL();
 		
 		clm_core::$load->load_css("icons_images");
-		ToolBarHelper::title( $model->turnier->name.": ".Text::_('PARTICIPANTS'), 'clm_turnier.png'  );
+		ToolBarHelper::title( $model->turnier->name.": ".Text::_('Teilnehmerliste'), 'clm_turnier.png'  );
 		
 		$clmAccess = clm_core::$access;
 		if (($model->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
@@ -77,7 +83,12 @@ class CLMViewTurPlayers extends JViewLegacy {
 			
 			// Online-Anmeldungen bearbeiten
 			if ($model->turnier->dateRegistration > '1970-01-01') { 
-				ToolBarHelper::custom( 'onlineRegList', 'copy.png', 'copy_f2.png', Text::_('ONLINE_REG_LIST'), false);
+				ToolBarHelper::custom( 'onlineRegList', 'forward.png', 'forward_f2.png', Text::_('Zur den Onl.Anmeldungen'), false);
+				ToolBarHelper::spacer();
+			}
+			// Warteliste bearbeiten
+			if ($param_waitingList == 1) { 
+				ToolBarHelper::custom( 'waitList', 'forward.png', 'forward_f2.png', Text::_('Zur Warteliste'), false);
 				ToolBarHelper::spacer();
 			}
 			// Email an Teilnehmer (TL muss gesetzt sein)
@@ -85,9 +96,6 @@ class CLMViewTurPlayers extends JViewLegacy {
 				ToolBarHelper::custom( 'mail_to_all', 'copy.png', 'copy_f2.png', Text::_('MAIL_TO_ALL'), false);
 			}
 			// Turnier mit Mannschaftswertung
-			$turParams = new clm_class_params($model->turnier->params);
-			$param_teamranking = $turParams->get('teamranking', 0);
-			$param_teamranking  = preg_replace("/[^a-z\d_äöü ]/si" , '' , $param_teamranking); 
 			if ($param_teamranking > '0') {
 				ToolBarHelper::custom( 'edit_teams', 'copy.png', 'copy_f2.png', Text::_('EDIT_TEAMS'), false);
 			}

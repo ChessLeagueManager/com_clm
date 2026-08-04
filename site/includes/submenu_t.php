@@ -35,7 +35,7 @@ if ($fe_submenu_t == 1) {
 	// Turnierparameter bereitstellen
  	$params = new clm_class_params($this->turnier->params);
 	$params_teamranking = $params->get('teamranking','0');
-	
+	$params_waitingList = $params->get('waitingList',0);
 	// erzeugen des Array für die Anzeige
 	$array = array();
 	// Informationen
@@ -223,6 +223,22 @@ if ($fe_submenu_t == 1) {
 		}
 	}	
 		
+	if ($params_waitingList == 1) {
+		$array[3][3][$i0][0] = Text::_('Warteliste');
+		if (clm_core::$load->request_string('view', 0) != "turnier_waitlist") {
+			$array[3][3][$i0][1] = 0;
+		} else {
+			$array[3][3][$i0][1] = 1;
+		}
+		$array[3][3][$i0][2][] = array("option", "com_clm");
+		$array[3][3][$i0][2][] = array("view", "turnier_waitlist");
+		$array[3][3][$i0][2][] = array("turnier", $this->turnier->id);
+		if ($itemid <> '') {
+			$array[3][3][$i0][2][] = array("Itemid", $itemid);
+		}
+		$i0++;
+	}
+	
 	$array[3][3][$i0][0] = Text::_('TOURNAMENT_DWZ');
 	if (clm_core::$load->request_string('view', 0) != "turnier_dwz") {
 		$array[3][3][$i0][1] = 0;

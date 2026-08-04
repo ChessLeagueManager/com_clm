@@ -660,6 +660,19 @@ class CLMControllerTurPlayers extends JControllerLegacy {
 	}
 
 	// Weiterleitung!
+	function waitList() {		
+
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+		
+		$adminLink = new AdminLink();
+		$adminLink->view = "turwaitlist";
+		$adminLink->more = array('id' => $id);
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
+	}
+
+	// Weiterleitung!
 	function mail_to_all() {		
 
 		// turnierid

@@ -51,6 +51,7 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 		// turnierid
 		$turnierid = clm_core::$load->request_int('id');
 		$task		= clm_core::$load->request_string('task');
+		$list		= clm_core::$load->request_string('list','tlnr');
 
 		// abschließend offene Restteilnehmerzahl
 
@@ -59,7 +60,8 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 		if ($task == 'apply' OR $result === false)
 			$adminLink->view = "turplayerform";
 		else
-			$adminLink->view = "turplayers";
+			if ($list == 'wait') $adminLink->view = "turwaitlist";
+			else $adminLink->view = "turplayers";
 		$adminLink->makeURL();
 		$this->app->redirect( $adminLink->url );
 	
@@ -90,11 +92,18 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 	
 		$task		= clm_core::$load->request_string('task');
 		$cid 		= clm_core::$load->request_array_string('cid');
-	
-		// weiteren Daten aus TlnTabelle
-		$query = "SELECT MAX(mgl_nr), MAX(snr) FROM `#__clm_turniere_tlnr`"
-			." WHERE turnier = ".$turnierid
-			;
+		$list		= clm_core::$load->request_string('list','tlnr');
+
+		if ($list == 'wait')
+			// weiteren Daten aus Tabelle Warteliste
+			$query = "SELECT MAX(mgl_nr), MAX(snr) FROM `#__clm_turniere_tlnr_wl`"
+				." WHERE turnier = ".$turnierid
+				;
+		else 
+			// weiteren Daten aus TlnTabelle
+			$query = "SELECT MAX(mgl_nr), MAX(snr) FROM `#__clm_turniere_tlnr`"
+				." WHERE turnier = ".$turnierid
+				;
 		$db->setQuery($query);
 		list($maxFzps, $maxSnr) = $db->loadRow();
 		$maxFzps++; // fiktive ZPS für manuell eingegeben Spieler
@@ -107,11 +116,12 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 		$turParams = new clm_class_params($tournament->data->params);
 		$param_useastwz = $turParams->get('useAsTWZ', 0);
 	
-		// Turnier schon vorher voll?
-		if (!$this->_checkTournamentOpen($playersIn, $tournament->data->teil)) {
-			return false;
+		if ($list != 'wait') {
+			// Turnier schon vorher voll?
+			if (!$this->_checkTournamentOpen($playersIn, $tournament->data->teil)) {
+				return false;
+			}
 		}
-	
 		$name	= trim(clm_core::$load->request_string('name'));
 		// Spieler aus manueller Nachmeldung speichern
 		if ($name != "") {
@@ -141,10 +151,13 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 				$mgl_nr = $maxFzps;
 			}
 
-			$query = " INSERT INTO #__clm_turniere_tlnr"
-				." (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `FIDEid`, `titel`, `mgl_nr` ,`zps`)"
-				." VALUES"
-				." ('".$tournament->data->sid."', '".$turnierid."', '".$maxSnr++."', '$name', '$birthYear', '$geschlecht', '$verein', '$twz', '$natrating', '$fideelo', '$FIDEid', '$titel', '$mgl_nr', '".$zps."')";
+			if ($list == 'wait') 
+				$query = " INSERT INTO #__clm_turniere_tlnr_wl";
+			else 
+				$query = " INSERT INTO #__clm_turniere_tlnr";
+			$query .= " (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `FIDEid`, `titel`, `mgl_nr` ,`zps`)"
+					." VALUES"
+					." ('".$tournament->data->sid."', '".$turnierid."', '".$maxSnr++."', '$name', '$birthYear', '$geschlecht', '$verein', '$twz', '$natrating', '$fideelo', '$FIDEid', '$titel', '$mgl_nr', '".$zps."')";
 			if (clm_core::$db->query($query)) { 
 				$this->app->enqueueMessage(Text::_('PLAYER')." ".$name." ".Text::_('ADDED'));
 				$playersIn++; // den angemeldeten Spielern zufügen
@@ -161,7 +174,7 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 		foreach ($cid as $id) {
 			
 			// noch Platz im Turnier?
-			if ($this->_checkTournamentOpen($playersIn, $tournament->data->teil)) {
+			if ($list == 'wait' OR $this->_checkTournamentOpen($playersIn, $tournament->data->teil)) {
 			
 				// ausgelesene Daten
 				if ($countryversion =="de") {
@@ -195,8 +208,11 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 				if (isset($data->Spielername)) {
 					if ($PKZ == '') $PKZ = $data->PKZ;
 					// checken ob Spieler schon eingetragen, um Doppelungen zu vermeiden
-					$query = "SELECT COUNT(*) FROM #__clm_turniere_tlnr"
-							. " WHERE `turnier` = '".$turnierid."' AND `zps` = '$zps'";
+					if ($list == 'wait') 
+						$query = "SELECT COUNT(*) FROM #__clm_turniere_tlnr_wl";
+					else 
+						$query = "SELECT COUNT(*) FROM #__clm_turniere_tlnr";
+					$query .= " WHERE `turnier` = '".$turnierid."' AND `zps` = '$zps'";
 					if ($countryversion =="de") {
 						$query .= " AND mgl_nr = ".$mgl;
 					} else {
@@ -213,12 +229,13 @@ class CLMControllerTurPlayerForm extends JControllerLegacy {
 						if (is_null($data->FIDE_Elo) OR $data->FIDE_Elo == '') $data->FIDE_Elo = 0;						
 						if (is_null($data->FIDE_ID) OR $data->FIDE_ID == '') $data->FIDE_ID = 0;						
 						
-						$query = " INSERT INTO #__clm_turniere_tlnr"
-								. " (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `FIDEid`, `FIDEcco`, `titel`,`mgl_nr` ,`PKZ` ,`zps`) "
+						if ($list == 'wait') 
+							$query = " INSERT INTO #__clm_turniere_tlnr_wl";
+						else 
+							$query = " INSERT INTO #__clm_turniere_tlnr";
+						$query .= " (`sid`, `turnier`, `snr`, `name`, `birthYear`, `geschlecht`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `FIDEid`, `FIDEcco`, `titel`,`mgl_nr` ,`PKZ` ,`zps`) "
 								. " VALUES"
 								. " ('".$tournament->data->sid."','".$turnierid."', '".$maxSnr++."', '".clm_escape( $data->Spielername )."', '".$data->Geburtsjahr."', '".$data->Geschlecht."','".clm_escape( $data->Vereinname )."', '".$twz."', '".$data->DWZ."', '".$data->FIDE_Elo."', '".$data->FIDE_ID."', '".$data->FIDE_Land."', '".$data->FIDE_Titel."', '$mgl', '$PKZ', '$zps')";
-//						$this->_db->setQuery($query);
-//						if ($this->_db->query()) { 
 						if (clm_core::$db->query($query)) { 
 							$playersIn++;
 							$this->app->enqueueMessage(Text::_('PLAYER')." ".$data->Spielername." ".Text::_('ADDED'));

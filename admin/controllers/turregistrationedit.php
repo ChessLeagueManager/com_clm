@@ -29,11 +29,11 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
 		$this->registerTask( 'copy_to', 'save' );
+		$this->registerTask( 'copy_to_wl', 'save' );
 	
 	}
 
-	
-	
+		
 	function save() {
 	
 		$this->_saveDo();
@@ -46,14 +46,14 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		
 		$adminLink = new AdminLink();
 		// wenn 'apply', weiterleiten in form
-		if ($task == 'apply' OR $task == 'copy_to') {
+		if ($task == 'apply' OR $task == 'copy_to' OR $task == 'copy_to_wl') {
 			// Weiterleitung bleibt im Formular
 			$adminLink->more = array('registrationid' => $registrationid);
 			$adminLink->view = "turregistrationedit";
 		} else {
 			// Weiterleitung in Liste
 			$adminLink->more = array('id' => $turnierid);
-			$adminLink->view = "turregistrations"; // WL in Liste
+			$adminLink->view = "turregistrations"; // Weiterleitung in Liste
 		}
 		$adminLink->makeURL();
 		$this->app->redirect( $adminLink->url );
@@ -68,7 +68,7 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		// turnierid
 		$registrationid = clm_core::$load->request_int('registrationid');
 		$turnierid = clm_core::$load->request_int('turnierid');
-		$snrmax = clm_core::$load->request_int('snrmax');
+//		$snrmax = clm_core::$load->request_int('snrmax');
 
 		// Instanz der Tabelle
 		$rowt = Table::getInstance( 'turniere', 'TableCLM' );
@@ -103,6 +103,39 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 				// Weiterleitung zurück in Liste
 				return false;
 			}
+			// letzte Startnummer aus der Teilnehmertabelle
+			$query = 'SELECT MAX(snr) as snrmax '
+				. ' FROM #__clm_turniere_tlnr'
+				. ' WHERE turnier = '.$rowt->id
+				;
+			$turnierSnrMax = clm_core::$db->loadObject($query);	
+			if (isset($turnierSnrMax->snrmax)) $snrmax = $turnierSnrMax->snrmax; 
+			else $snrmax = 0;
+		}
+		if ($task == 'copy_to_wl') {
+			// Turnierdaten
+			$tournament = new CLMTournament($rowt->id, true);
+			$playersIn = $tournament->getPlayersIn();
+			$text = '';
+			if ($playersIn >= $rowt->teil) {
+				$text = CLMText::errorText('PLAYERLIST', 'FULL');
+			}
+			if ($row->status == 3) {
+				$text = Text::_('REGISTRATION_ALREADY_MOVED');
+			}
+			if ($text != '') {
+				$this->app->enqueueMessage( $text );
+				// Weiterleitung zurück in Liste
+				return false;
+			}
+			// letzte Startnummer aus der Wartelisttabelle
+			$query = 'SELECT MAX(snr) as snrmax '
+				. ' FROM #__clm_turniere_tlnr_wl'
+				. ' WHERE turnier = '.$rowt->id
+				;
+			$turnierSnrMax = clm_core::$db->loadObject($query);	
+			if (isset($turnierSnrMax->snrmax)) $snrmax = $turnierSnrMax->snrmax; 
+			else $snrmax = 0;
 		}
 		// registration existent?
 		if (!$row->id) {
@@ -127,6 +160,7 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 
 		if ($task == 'apply' OR $task == 'save') $row->status  = 1;
 		if ($task == 'copy_to') $row->status  = 2;
+		if ($task == 'copy_to_wl') $row->status  = 3;
 		if (!$row->check($post)) {
 			$this->app->enqueueMessage( $row->getError(), 'error' );
 			return false;
@@ -136,12 +170,16 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 			return false;
 		}
 
-		if ($task == 'copy_to') {
+		if ($task == 'copy_to' OR $task == 'copy_to_wl') {
 			$turParams = new clm_class_params($rowt->params);
 			$param_useastwz = $turParams->get('useAsTWZ', 0);
 
 			// Teilnehmerdaten holen
-			$tlnr = Table::getInstance( 'turnier_teilnehmer', 'TableCLM' );
+			if ($task == 'copy_to') {
+				$tlnr = Table::getInstance( 'turnier_teilnehmer', 'TableCLM' );
+			} else {
+				$tlnr = Table::getInstance( 'turnier_waitlist', 'TableCLM' );
+			}
 			$tlnr->sid		= $rowt->sid;
 			$tlnr->turnier	= $row->tid;
 			$tlnr->snr		= $snrmax + 1;  // 0
@@ -202,10 +240,13 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 				$this->app->enqueueMessage( $tlnr->getError(), 'error' );
 				return false;
 			}
-			if ($tlnr->zps == '99999') 
-				$text = Text::_('REGISTRATION_MOVED9');
-			else 
-				$text = Text::_('REGISTRATION_MOVED');
+			if ($task == 'copy_to') {
+				if ($tlnr->zps == '99999') $text = Text::_('REGISTRATION_MOVED9');
+				else $text = Text::_('REGISTRATION_MOVED');
+			} else {
+				if ($tlnr->zps == '99999') $text = Text::_('REGISTRATION_MOVEDW9');
+				else $text = Text::_('REGISTRATION_MOVEDW');
+			}
 		} else {
 			$text = Text::_('REGISTRATION_EDITED');
 		}

@@ -11,6 +11,7 @@
 */
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
@@ -18,7 +19,6 @@ class CLMViewTurPlayerForm extends JViewLegacy {
 
 	function display($tpl = NULL) {
 
-		
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
 		$model =   $this->getModel();
 		
@@ -29,7 +29,11 @@ class CLMViewTurPlayerForm extends JViewLegacy {
 		$adminLink->makeURL();
 		
 		clm_core::$load->load_css("icons_images");
-		ToolBarHelper::title( '<a href="'.$adminLink->url.'">'.$model->turnier->name."</a>: ".Text::_('PLAYERS_ADD'), 'clm_turnier.png'  );
+		$list = clm_core::$load->request_string('list','tlnr');
+		$title = '<a href="'.$adminLink->url.'">'.$model->turnier->name.'</a>';
+		if ($list == 'wait') $title .= '(Warteliste)';
+		$title .= ': '.Text::_('PLAYERS_ADD');
+		ToolBarHelper::title( $title, 'clm_turnier.png'  );
 	
 		ToolBarHelper::save();
 		ToolBarHelper::apply();
@@ -37,7 +41,7 @@ class CLMViewTurPlayerForm extends JViewLegacy {
 		ToolBarHelper::cancel();
 
 		// das MainMenu abschalten
-		$_GET['hidemainmenu'] = 1;
+		Factory::getApplication()->input->set('hidemainmenu', true);
 
 		// Daten an Template übergeben
 		$this->user = $model->user;

@@ -23,6 +23,7 @@ class TableCLMTurnier_Teilnehmer extends Table
 	var $snr		= 0;
 	var $name       = '';
 	var $birthYear  = '';
+	var $birthDay   = null;
 	var $geschlecht = '';
 	var $verein     = '';
 	var $email     	= '';

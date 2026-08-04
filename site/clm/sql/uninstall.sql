@@ -72,6 +72,7 @@ DROP TABLE IF EXISTS #__clm_turniere_rnd_termine;
 DROP TABLE IF EXISTS #__clm_turniere_sonderranglisten;
 DROP TABLE IF EXISTS #__clm_turniere_teams;
 DROP TABLE IF EXISTS #__clm_turniere_tlnr;
+DROP TABLE IF EXISTS #__clm_turniere_tlnr_wl;
 DROP TABLE IF EXISTS #__clm_user;
 DROP TABLE IF EXISTS #__clm_usertype;
 DROP TABLE IF EXISTS #__clm_vereine;

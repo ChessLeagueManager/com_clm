@@ -567,13 +567,28 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 	}
 */
 	// Weiterleitung!
-	function onlineRegList() {
+	function turplayers() {
 		
 		// turnierid
 		$id = clm_core::$load->request_int('id');
 
 		$adminLink = new AdminLink();
-		$adminLink->view = "turregistrations";
+		$adminLink->view = "turplayers";
+		$adminLink->more = array('id' => $id);
+		$adminLink->makeURL();
+		
+		$this->app->redirect( $adminLink->url );
+	
+	}
+
+	// Weiterleitung!
+	function turwaitlist() {
+		
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+
+		$adminLink = new AdminLink();
+		$adminLink->view = "turwaitlist";
 		$adminLink->more = array('id' => $id);
 		$adminLink->makeURL();
 		

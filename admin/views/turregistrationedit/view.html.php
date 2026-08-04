@@ -34,11 +34,17 @@ class CLMViewTurRegistrationEdit extends JViewLegacy {
 		$rowt = Table::getInstance( 'turniere', 'TableCLM' );
 		$rowt->load( $model->registrationData->tid ); // Daten zu dieser Turnier-ID laden
 
+		//Turnier Parameter auslesen
+		$turParams = new clm_class_params($model->turnierData->params);
+		$param_waitingList = $turParams->get('waitingList', 0);
+
 		$clmAccess = clm_core::$access;
 		if (($rowt->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') == 2) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
 			ToolBarHelper::save( 'save' );
 			ToolBarHelper::apply( 'apply' );
 			ToolBarHelper::custom('copy_to', 'copy.png', 'copy_f2.png', Text::_('REGISTRATION_COPY_TO'),false);
+			if ($param_waitingList == 1)
+				ToolBarHelper::custom('copy_to_wl', 'copy.png', 'copy_f2.png', Text::_('REGISTRATION_COPY_TO_WL'),false);
 		}
 		ToolBarHelper::spacer();
 		ToolBarHelper::cancel();
@@ -46,9 +52,6 @@ class CLMViewTurRegistrationEdit extends JViewLegacy {
 		// das MainMenu abschalten
 		$_GET['hidemainmenu'] = 1;
 		
-
-		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
-		$model =   $this->getModel();
 
 		// Document/Seite
 		$document =Factory::getDocument();

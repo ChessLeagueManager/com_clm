@@ -149,11 +149,15 @@ class CLMModelTurPlayerForm extends JModelLegacy {
 			$sqlDWZ = '';
 		}
 		
+		$list = clm_core::$load->request_string('list','tlnr');
 		// SELECT 
 		$query = 'SELECT ds.*, dv.Vereinname, tt.snr '
 			. ' FROM #__clm_dwz_spieler AS ds'
-			. ' LEFT JOIN #__clm_dwz_vereine AS dv ON dv.ZPS = ds.ZPS AND dv.sid = ds.sid'
-			. ' LEFT JOIN #__clm_turniere_tlnr AS tt ON tt.zps = ds.ZPS AND tt.sid = ds.sid AND tt.turnier ='.$this->param['id'];
+			. ' LEFT JOIN #__clm_dwz_vereine AS dv ON dv.ZPS = ds.ZPS AND dv.sid = ds.sid';
+		if ($list == 'wait') 
+			$query .= ' LEFT JOIN #__clm_turniere_tlnr_wl AS tt ON tt.zps = ds.ZPS AND tt.sid = ds.sid AND tt.turnier ='.$this->param['id'];
+		else 
+			$query .= ' LEFT JOIN #__clm_turniere_tlnr AS tt ON tt.zps = ds.ZPS AND tt.sid = ds.sid AND tt.turnier ='.$this->param['id'];
 		if ($countryversion == 'de') 
 			$query .= ' AND tt.mgl_nr = ds.Mgl_Nr ';
 		else   // en 
