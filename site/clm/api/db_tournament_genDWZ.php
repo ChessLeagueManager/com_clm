@@ -65,7 +65,7 @@ function clm_api_db_tournament_genDWZ($id,$group=true) {
 	if(count($datum)==0) {
 			return array(true, "e_calculateDWZNoRound");
 	}
-	$year = substr($datum[0]->date,0,4);
+	if (isset($datum[0]->date)) $year = substr($datum[0]->date,0,4); else $year = '0000';
 	if($year=="0000" OR $year=="1970") {
 		$year = date('Y'); // Falls kein Jahr angegeben wurde
 	} else {

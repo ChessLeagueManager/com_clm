@@ -37,6 +37,8 @@ class CLMModelVereinsliste extends JModelLegacy
 		$_GET['saison'] = $sid;
 	}
 
+	$today = date("Y-m-d");
+
 	$query = "SELECT DISTINCT b.ZPS, b.Status, a.zps, a.name, a.homepage, a.vs, a.vs_mail, c.*, d.*, "
 		." COUNT(Geschlecht) as MGL_SUM," // Mitglieder insgesamt
 		." COUNT(case Geschlecht when 'M' then 1 else NULL end) as MGL_M," // Männliche Mitglieder
@@ -54,6 +56,7 @@ class CLMModelVereinsliste extends JModelLegacy
 		." WHERE a.sid = ".$sid
 		." AND a.published = 1"
 		." AND b.sid = ".$sid
+		." AND ((b.leavingdate = '1970-01-01') OR (b.leavingdate > '".$today."'))"
 		." GROUP BY b.ZPS"
 		;
 		
