@@ -21,33 +21,26 @@ class CLMViewMannschaft extends JViewLegacy
   		$mannschaft     = $model->getCLMMannschaft();
 		$this->mannschaft = $mannschaft;
 
-		$model	  = $this->getModel();
   		$count     = $model->getCLMCount();
 		$this->count = $count;
 
-		$model	  = $this->getModel();
   		$bp     = $model->getCLMBP();
 		$this->bp = $bp;
 
-		$model	  = $this->getModel();
   		$sumbp     = $model->getCLMSumBP();
 		$this->sumbp = $sumbp;
 
-		$model	  = $this->getModel();
   		$plan     = $model->getCLMSumPlan();
 		$this->plan = $plan;
 
-		$model	  = $this->getModel();
 		$termin     = $model->getCLMTermin();
 		$this->termin = $termin;
 		
 		//neu Einzelergebnisse (klkl)
-		$model	  = $this->getModel();
 		$einzel     = $model->getCLMEinzel();
 		$this->einzel = $einzel;
 
 		//neu Saison (klkl)
-		$model	  = $this->getModel();
 		$saison     = $model->getCLMSaison();
 		$this->saison = $saison;
 

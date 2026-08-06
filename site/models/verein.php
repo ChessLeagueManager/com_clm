@@ -221,25 +221,17 @@ class CLMModelVerein extends JModelLegacy
 	}
 
 ////// Prüfen ob User berechtigt ist Daten zu ändern ///////////////////////////////////
-	function _getCLMClmuser ( &$options )
+	function _getCLMClmuser ()
 	{
-	$user =Factory::getUser();
-	$jid = $user->get('id');
-	$sid	= clm_core::$load->request_int('saison', 1);
-
-		$db			= Factory::getDBO();
-//		$id			= @$options['id'];
-
-	$query	= "SELECT * "
-		." FROM #__clm_user "
-		." WHERE jid = $jid "
-		." AND sid = " .$sid
-		;
-
+		$user = Factory::getUser();
+		$jid = $user->get('id');
+		$sid = clm_core::$load->request_int('saison', 1);
+		$db = Factory::getDBO();
+		$query	= "SELECT * FROM #__clm_user WHERE jid = " . $jid ." AND sid = " .$sid;
 		return $query;
 	}
 
-	function getCLMClmuser ( $options=array() )
+	function getCLMClmuser ()
 	{
 		$query	= $this->_getCLMClmuser( $options );
 		$result = $this->_getList( $query );

@@ -19,20 +19,31 @@ use Joomla\CMS\Factory;
 class CLMModelMannschaft extends JModelLegacy
 {
 
-	function _getCLMMannschaft( &$options )
+	function _getCLMMF() {
+		$sid = clm_core::$load->request_int('saison',1);
+		$zps = clm_core::$load->request_int('zps', '');
+		$query = "SELECT jid,name FROM #__clm_user WHERE zps = '" . $zps . "' AND sid=" . $sid;
+		return $query;
+	}
+
+	function getCLMMF() {
+		$query	= $this->_getCLMMF();
+		$result = $this->_getList( $query );
+		return @$result;
+	}
+
+	function _getCLMMannschaft()
 	{
-	$sid = clm_core::$load->request_int('saison',1);
-	$liga = clm_core::$load->request_int('liga',1);
-	$tln = clm_core::$load->request_int('tlnr');
+		$sid = clm_core::$load->request_int('saison',1);
+		$liga = clm_core::$load->request_int('liga',1);
+		$tln = clm_core::$load->request_int('tlnr');
 	
-		$db			= Factory::getDBO();
-//		$id			= @$options['id'];
- 
-		$query = "SELECT a.zps,a.sg_zps,u.name as mf_name,u.email as email, a.lokal_coord, "
+		$db = Factory::getDBO();
+		$query = "SELECT a.zps,a.sg_zps,a.mf,u.name as mf_name,u.email as email, a.lokal, a.lokal_coord, "
 			." u.tel_mobil,u.tel_fest, l.durchgang as dg, l.rang as lrang, l.params, l.stamm, "
 			." l.name as liga_name, l.runden as runden, l.published as lpublished, l.anzeige_ma as anzeige_ma, a.* "
 			." FROM #__clm_mannschaften as a "
-			." LEFT JOIN #__clm_user AS u ON u.jid = a.mf AND  u.sid = a.sid "
+			." LEFT JOIN #__clm_user AS u ON u.jid = a.mf AND u.sid = a.sid "
 			." LEFT JOIN #__clm_liga AS l ON l.id = a.liga"
 			." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 			." WHERE a.liga = ".$liga
@@ -43,9 +54,9 @@ class CLMModelMannschaft extends JModelLegacy
 		return $query;
 	}
 
-	function getCLMMannschaft( $options=array() )
+	function getCLMMannschaft()
 	{
-		$query	= $this->_getCLMMannschaft( $options );
+		$query	= $this->_getCLMMannschaft();
 		$result = $this->_getList( $query );
 		$addressHandler = new AddressHandler();
 		$addressHandler->queryLocation($result,0);
@@ -54,12 +65,10 @@ class CLMModelMannschaft extends JModelLegacy
 
 	function _getCLMVereine( &$options )
 	{
-	$sid = clm_core::$load->request_int('saison',1);
-	$liga = clm_core::$load->request_int('liga',1);
-	$tln = clm_core::$load->request_int('tlnr');
-	
-		$db			= Factory::getDBO();
-//		$id			= @$options['id'];
+		$sid = clm_core::$load->request_int('saison',1);
+		$liga = clm_core::$load->request_int('liga',1);
+		$tln = clm_core::$load->request_int('tlnr');
+		$db = Factory::getDBO();
  
 		$query = "SELECT a.zps,a.sg_zps,v.zps as vzps,v.name "
 			." FROM #__clm_mannschaften as a "
@@ -82,15 +91,14 @@ class CLMModelMannschaft extends JModelLegacy
 
 	function _getCLMCount ( &$options )
 	{
-	$sid = clm_core::$load->request_int('saison',1);
-	$liga = clm_core::$load->request_int('liga',1);
-	$tln = clm_core::$load->request_int('tlnr');
-	// Konfigurationsparameter auslesen
-	$config = clm_core::$db->config();
-	$countryversion=$config->countryversion;
+		$sid = clm_core::$load->request_int('saison',1);
+		$liga = clm_core::$load->request_int('liga',1);
+		$tln = clm_core::$load->request_int('tlnr');
+		// Konfigurationsparameter auslesen
+		$config = clm_core::$db->config();
+		$countryversion=$config->countryversion;
 
 		$db			= Factory::getDBO();
-//		$id			= @$options['id'];
 
 		$query = " SELECT l.rang,a.zps as zps, a.sg_zps as sgzps, a.man_nr as man_nr, l.ersatz_regel as ersatz_regel"
 			." FROM #__clm_mannschaften as a "
@@ -350,24 +358,34 @@ class CLMModelMannschaft extends JModelLegacy
 	//Saison
 	function _getCLMSaison ( &$options )
 	{
-	$sid = clm_core::$load->request_int('saison',1);
-	
-		$db			= Factory::getDBO();
-//		$id			= @$options['id'];
-
-		$query = " SELECT s.name, s.datum as dsb_datum "
-			." FROM #__clm_saison as s "
-			." WHERE s.id = ".$sid
-			;
+		$sid = clm_core::$load->request_int('saison',1);
+		$db = Factory::getDBO();
+		$query = "SELECT s.name, s.datum as dsb_datum FROM #__clm_saison as s WHERE s.id = ".$sid;
 		return $query;
 	}
 
 	function getCLMSaison ( $options=array() )
 	{
-		$query	= $this->_getCLMSaison( $options );
+		$query = $this->_getCLMSaison( $options );
 		$result = $this->_getList( $query );
 		return @$result;
 	}
-	
+
+        function _getCLMClmuser ( &$options ) {
+		$user = Factory::getUser();
+		$jid = $user->get('id');
+		$sid = clm_core::$load->request_int('saison', 1);
+                $db = Factory::getDBO();
+	        $query = "SELECT * FROM #__clm_user WHERE jid = " . $jid . " AND sid = " .$sid;
+                return $query;
+        }
+
+        function getCLMClmuser ()
+        {
+                $query = $this->_getCLMClmuser( $options );
+                $result = $this->_getList( $query );
+                return @$result;
+        }
+
 }
 ?>

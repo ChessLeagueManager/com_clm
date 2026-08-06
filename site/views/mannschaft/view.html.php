@@ -19,15 +19,15 @@ class CLMViewMannschaft extends JViewLegacy
 	function display($tpl = null)
 	{
 		$config = clm_core::$db->config();
-		$googlemaps     = $config->googlemaps;
-		$googlemaps_msch     = $config->googlemaps_msch;
+		$googlemaps = $config->googlemaps;
+		$googlemaps_msch = $config->googlemaps_msch;
 		
 //		$prot = 'https';
 		if (isset($_SERVER['HTTPS']) AND $_SERVER['HTTPS'] != 'off') {
                        $prot = 'https';
-               } else {
+                } else {
                        $prot = 'http';
-               }
+                }
 		$document =Factory::getDocument();
 		if ($googlemaps == 1) {
 			if ($googlemaps_msch == 1){ //Load Leaflet
@@ -48,37 +48,35 @@ class CLMViewMannschaft extends JViewLegacy
   		$mannschaft     = $model->getCLMMannschaft();
 		$this->mannschaft = $mannschaft;
 
-		$model	  = $this->getModel();
   		$vereine     = $model->getCLMVereine();
 		$this->vereine = $vereine;
 
-		$model	  = $this->getModel();
   		$count     = $model->getCLMCount();
 		$this->count = $count;
 
-		$model	  = $this->getModel();
   		$bp     = $model->getCLMBP();
 		$this->bp = $bp;
 
-		$model	  = $this->getModel();
   		$sumbp     = $model->getCLMSumBP();
 		$this->sumbp = $sumbp;
 
-		$model	  = $this->getModel();
   		$plan     = $model->getCLMSumPlan();
 		$this->plan = $plan;
 
-		$model	  = $this->getModel();
 		$termin     = $model->getCLMTermin();
 		$this->termin = $termin;
 
-		$model	  = $this->getModel();
 		$saison     = $model->getCLMSaison();
 		$this->saison = $saison;
 
-		$model	  = $this->getModel();
 		$einzel     = $model->getCLMEinzel();
 		$this->einzel = $einzel;
+
+		$clmuser     = $model->getCLMClmuser();
+		$this->clmuser = $clmuser;
+
+		$teammf     = $model->getCLMMF();
+		$this->teammf = $teammf;
 
 		parent::display($tpl);
 	}	

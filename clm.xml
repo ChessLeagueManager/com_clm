@@ -7,7 +7,7 @@
 	<license>GNU/GPL</license>
 	<authorEmail>fishpoke@fishpoke.de</authorEmail>
 	<authorUrl>chessleaguemanager.org</authorUrl>
-	<version>5.1.0a</version>
+	<version>5.1.0b</version>
  	<scriptfile>installer.php</scriptfile>
 	<description>
 		<![CDATA[
