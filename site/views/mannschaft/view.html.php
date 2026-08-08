@@ -48,6 +48,9 @@ class CLMViewMannschaft extends JViewLegacy
   		$mannschaft     = $model->getCLMMannschaft();
 		$this->mannschaft = $mannschaft;
 
+  		$gegner     = $model->getCLMGegner();
+		$this->gegner = $gegner;
+
   		$vereine     = $model->getCLMVereine();
 		$this->vereine = $vereine;
 

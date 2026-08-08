@@ -26,7 +26,6 @@ echo '<div ><div id="vereinsdaten">';
 
 // Login Status prüfen
 $clmuser= $this->clmuser;
-$teammf= $this->teammf;
 
 $user = Factory::getUser();
 
@@ -100,6 +99,7 @@ if ($user->get('id') > 0 AND $clmuser[0]->published > 0 AND ($clmuser[0]->zps ==
 			</td>
 			<td>
 			<textarea class="inputbox"  rows="2" name="adresse" id="adresse"><?php echo $mannschaft[0]->adresse; ?></textarea>
+			<br><?php  echo Text::_( 'CLM_ADDRESS' ) ; ?>
 			</td>
 		</tr>
 		<tr>
@@ -107,15 +107,20 @@ if ($user->get('id') > 0 AND $clmuser[0]->published > 0 AND ($clmuser[0]->zps ==
 			<td>
 				<select name="newteammf" id="newteammf">
   					<option value="0">--Please choose an option--</option>
-<?php foreach ($teammf as $mf) {
+<?php foreach ($this->teammf as $mf) {
 				if ($mf->jid == $mannschaft[0]->mf) {
 					echo '<option value="' . $mf->jid . '" selected>' . $mf->name . "</option>\n";
 				} else {
-					echo '<option value="' . $mf->jid . '">' . $mf->name . "</option>\n";
+					if ($mf->usertype == 'spl') {
+						echo '<option value="' . $mf->jid . '" disabled>' . $mf->name . "</option>\n";
+					} else {
+						echo '<option value="' . $mf->jid . '">' . $mf->name . "</option>\n";
+					}
 				}
 			}
 ?>
 				</select>
+			<br><?php  echo Text::_( 'CLM_SELEKTOR' ) ; ?>
 			</td>
 		</tr>
 
