@@ -209,6 +209,11 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
+			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.Text::_( 'TEAM_LIST_MAIL_LIGA' ).'</strong></td>
+			<td colspan="5" width="480" style="border-bottom: solid 1px #999999;">' .utf2html($mannschaft[0]->liga_name). '&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
 			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.Text::_( 'TEAM_LIST_MAIL_TEAM' ).'</strong></td>
 			<td width="200" style="border-bottom: solid 1px #999999;">' .utf2html($mannschaft[0]->name). '&nbsp;</td>
 			<td width="40" style="border-bottom: solid 1px #999999;">&nbsp;</td>
@@ -362,7 +367,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 	  		if (isset($gegnerteam->email) AND clm_core::$load->is_email($gegnerteam->email)) {
 				$recipient = $gegnerteam->email;
 				if (!in_array($recipient, $a_gegner)) {
-					$a_sl[] = $recipient;
+					$a_gegner[] = $recipient;
 					$body_html_gegner = '
 					<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px;">
 					<tr>
@@ -375,9 +380,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 					<td>'.Text::_('TEAM_DATA_MAIL_GEGNER3').'</td>
 					</tr>
 					</table>';
-		
 					$body_name = Text::_('RESULT_NAME').utf2html($gegnerteam->mf_name).",";
-
 					$body_main = $body_name . $body_html_gegner . $body_html;
 				       	# $body_main .= "<br><pre>" . hexdump($body_main) . "</pre>";
 					$body = $body_html_header.$body_main.$body_html_footer;
@@ -387,7 +390,37 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 				}
 			}
 		}
-	//die('ende');
+		// Vereinsleiter der Mannschaft
+		$a_verein = array();
+		foreach ($this->teammf as $mf) {
+                        if (($mf->usertype == 'vl') OR (($mf->jid == $newmf) AND ($mf->name != $melder[0]->name))) {
+	  			if (isset($mf->email) AND clm_core::$load->is_email($mf->email)) {
+					$recipient = $mf->email;
+					if (!in_array($recipient, $a_verein)) {
+						$a_verein[] = $recipient;
+						$body_html_verein = '
+						<table width="700" border="0" cellspacing="0" cellpadding="3" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px;">
+						<tr>
+						<td>'.Text::_('TEAM_DATA_MAIL_VEREIN1').'</td>
+						</tr>
+						<tr>
+						<td>'.Text::_('TEAM_DATA_MAIL_VEREIN2').'</td>
+						</tr>
+						<tr>
+						<td>'.Text::_('TEAM_DATA_MAIL_VEREIN3').'</td>
+						</tr>
+						</table>';
+						$body_name = Text::_('RESULT_NAME').utf2html($mf->name).",";
+						$body_main = $body_name . $body_html_verein . $body_html;
+				       		# $body_main .= "<br><pre>" . hexdump($body_main) . "</pre>";
+						$body = $body_html_header.$body_main.$body_html_footer;
+						$result = clm_core::$api->mail_send($recipient,$subject,$body,1,null,$bcc);
+						if ($result[0] !== true) $msg .= '<br>'.Text::_('MAIL_ERROR').' '.$recipient;
+						else $countmail++;
+					}
+                                }
+                        }
+                }
 	}	
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( $link );

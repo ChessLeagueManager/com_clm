@@ -22,7 +22,7 @@ class CLMModelMannschaft extends JModelLegacy
 	function _getCLMMF() {
 		$sid = clm_core::$load->request_int('saison',1);
 		$zps = clm_core::$load->request_int('zps', '');
-		$query = "SELECT jid,usertype,name FROM #__clm_user WHERE zps = '" . $zps . "' AND sid=" . $sid . " AND published=1";
+		$query = "SELECT jid,usertype,name,email,name FROM #__clm_user WHERE zps = '" . $zps . "' AND sid=" . $sid . " AND published=1";
 		return $query;
 	}
 
