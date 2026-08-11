@@ -22,12 +22,16 @@ class CLMViewMannschaft extends JViewLegacy
 		$googlemaps = $config->googlemaps;
 		$googlemaps_msch = $config->googlemaps_msch;
 		
-//		$prot = 'https';
 		if (isset($_SERVER['HTTPS']) AND $_SERVER['HTTPS'] != 'off') {
-                       $prot = 'https';
+			$prot = 'https';
                 } else {
-                       $prot = 'http';
-                }
+			$prot = 'http';
+			if (isset($config->request_domain) != "") {
+				if (substr($config->request_domain, 0, 5) == 'https') {
+					$prot = 'https';
+				}
+			}
+		}
 		$document =Factory::getDocument();
 		if ($googlemaps == 1) {
 			if ($googlemaps_msch == 1){ //Load Leaflet

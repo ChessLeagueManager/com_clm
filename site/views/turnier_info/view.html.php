@@ -35,6 +35,11 @@ class CLMViewTurnier_Info extends JViewLegacy {
 			$prot = 'https';
 		} else {
 			$prot = 'http';
+			if ($config->request_domain != "") {
+				if (substr($config->request_domain, 0, 5) == "https") {
+					$prot = 'https';
+				}
+			}
 		}
 		
 		$document =Factory::getDocument();

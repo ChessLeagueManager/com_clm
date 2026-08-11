@@ -58,14 +58,18 @@ class CLMViewVerein extends JViewLegacy
   		$clmuser     = $model->getCLMCLMuser();
 		$this->clmuser = $clmuser;
 		
-//		$prot = 'https';
 		if (isset($_SERVER['HTTPS']) AND $_SERVER['HTTPS'] != 'off') {
-                       $prot = 'https';
-               } else {
-                       $prot = 'http';
-               }
+			$prot = 'https';
+		} else {
+			$prot = 'http';
+			if ($config->request_domain != "") {
+				if (substr($config->request_domain, 0, 5) == "https") {
+					$prot = 'https';
+				}
+			}
+		}
+
 		$document =Factory::getDocument();
-		
 		if ($googlemaps == 1) {
 			if ($googlemaps_ver == 1){ //Load Leaflet
 				$document->addScript($prot.'://unpkg.com/leaflet@1.9.4/dist/leaflet.js');

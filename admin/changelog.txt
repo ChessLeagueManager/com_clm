@@ -13,6 +13,7 @@ $ -> Language fix or change
 ! -> Note
 
 - - - - - 5.1.1 - [xx-xx-2026] - - - - - - - - - - - - - - - - - - - -
+% in Views mit Maps: Verbesserung der Protokoll-Auswahl
 # E-Mail-Versand nach Änderung der Mannschaftsinfo korrigieren
 % Mannschaft- und Vereins-Views rufen Models nur noch ein Mal auf 
 + Views zur Frontend-Mannschaftsänderung im Login-Modul
