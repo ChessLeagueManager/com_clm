@@ -55,7 +55,7 @@ public static function setVereineToolbar()
 		ToolBarHelper::custom('add','new.png','new_f2.png','VEREIN_BUTTON_NEW',false);
 		ToolBarHelper::custom('geo','edit.png','delete_f2.png','VEREIN_BUTTON_GEO');
 	}
-		ToolBarHelper::help( 'screen.clm.verein' );
+		ToolBarHelper::help( null, null, 'https://wiki.chessleaguemanager.org/index.php/Clm/5.1.0/hilfe.clm.vereine' );
 	}
 
 public static function vereine ( $rows, $lists, $pageNav, $option )

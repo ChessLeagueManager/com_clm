@@ -16,36 +16,34 @@ use Joomla\CMS\Table\Table;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Router\Route;
 
-class CLMViewUsers
-{
-public static function setUsersToolbar()
-	{
-	// Menubilder laden
+class CLMViewUsers {
+
+	public static function setUsersToolbar() {
+		// Menubilder laden
 		clm_core::$load->load_css("icons_images");
 
-	ToolBarHelper::title( Text::_( 'TITLE_USER' ), 'clm_headmenu_benutzer.png' );
-	$clmAccess = clm_core::$access;      
+		ToolBarHelper::title( Text::_( 'TITLE_USER' ), 'clm_headmenu_benutzer.png' );
+		$clmAccess = clm_core::$access;      
 
-	if($clmAccess->access('BE_user_general') === true) {
-		ToolBarHelper::custom('copy_saison','copy.png','copy_f2.png','USER_VORSAISON',false);
-		if($clmAccess->access('BE_accessgroup_general') === true) {
-			ToolBarHelper::custom('showaccessgroups','specialrankings.png','specialrankings_f2.png', Text::_('ACCESSGROUPS_BUTTON'), false);
+		if ($clmAccess->access('BE_user_general') === true) {
+			ToolBarHelper::custom('copy_saison','copy.png','copy_f2.png','USER_VORSAISON',false);
+			if ($clmAccess->access('BE_accessgroup_general') === true) {
+				ToolBarHelper::custom('showaccessgroups','specialrankings.png','specialrankings_f2.png', Text::_('ACCESSGROUPS_BUTTON'), false);
 			}
-		ToolBarHelper::custom('send','mail.png','mail_f2.png','USER_ACCOUNT');
-		ToolBarHelper::publishList();
-		ToolBarHelper::unpublishList();
-		ToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', Text::_('COPY') ); 
-		ToolBarHelper::deleteList();
-		ToolBarHelper::editList();
-		ToolBarHelper::addNew();
-		ToolBarHelper::custom( 'email', 'mail.png', 'mail_f2.png', Text::_('USER_MAIL_FORMLESS') ); 
-		ToolBarHelper::custom( 'email_confirm', 'mail.png', 'mail_f2.png', Text::_('USER_MAIL_CONFIRM') ); 
-	}
-	ToolBarHelper::help( 'screen.clm.user' );
+			ToolBarHelper::custom('send','mail.png','mail_f2.png','USER_ACCOUNT');
+			ToolBarHelper::publishList();
+			ToolBarHelper::unpublishList();
+			ToolBarHelper::custom( 'copy', 'copy.png', 'copy_f2.png', Text::_('COPY') ); 
+			ToolBarHelper::deleteList();
+			ToolBarHelper::editList();
+			ToolBarHelper::addNew();
+			ToolBarHelper::custom( 'email', 'mail.png', 'mail_f2.png', Text::_('USER_MAIL_FORMLESS') ); 
+			ToolBarHelper::custom( 'email_confirm', 'mail.png', 'mail_f2.png', Text::_('USER_MAIL_CONFIRM') ); 
+		}
+		ToolBarHelper::help( null, null, 'https://wiki.chessleaguemanager.org/index.php/Clm/5.1.0/hilfe.clm.benutzer' );
 	}
 
-public static function users( &$rows, &$lists, &$pageNav, $option )
-	{
+	public static function users( &$rows, &$lists, &$pageNav, $option ) {
 		$mainframe	= Factory::getApplication();
 		CLMViewUsers::setUsersToolbar();
 		$user =Factory::getUser();
@@ -209,9 +207,7 @@ public static function users( &$rows, &$lists, &$pageNav, $option )
 		<?php
 	}
 
-public static function setUserToolbar()
-	{
-
+	public static function setUserToolbar() {
 		if (clm_core::$load->request_string('task') == 'edit') { 
 			$text = Text::_( 'Edit' );
 		} else { 
@@ -223,20 +219,19 @@ public static function setUserToolbar()
 		ToolBarHelper::save();
 		ToolBarHelper::apply();
 		ToolBarHelper::cancel();
-		ToolBarHelper::help( 'screen.clm.edit' );
+		ToolBarHelper::help( null, null, 'https://wiki.chessleaguemanager.org/index.php/Clm/5.1.0/hilfe.clm.benutzer.edit' );
 	}
 
-public static function user( &$row,$lists, $option )
-	{
+	public static function user( &$row,$lists, $option ) {
 		CLMViewUsers::setUserToolbar();
 		$_REQUEST['hidemainmenu'] = 1;
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 
-	// Konfigurationsparameter auslesen
-	$config = clm_core::$db->config();
-	$conf_user_member	= $config->user_member;
-	$countryversion = $config->countryversion;
-	$email_independent = $config->email_independent;
+		// Konfigurationsparameter auslesen
+		$config = clm_core::$db->config();
+		$conf_user_member	= $config->user_member;
+		$countryversion = $config->countryversion;
+		$email_independent = $config->email_independent;
 	
 		$_REQUEST['clm_user_member'] = $conf_user_member;
 		clm_core::$load->load_js("users");
