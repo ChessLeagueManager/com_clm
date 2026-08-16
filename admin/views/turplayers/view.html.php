@@ -83,7 +83,7 @@ class CLMViewTurPlayers extends JViewLegacy {
 			
 			// Online-Anmeldungen bearbeiten
 			if ($model->turnier->dateRegistration > '1970-01-01') { 
-				ToolBarHelper::custom( 'onlineRegList', 'forward.png', 'forward_f2.png', Text::_('Zur den Onl.Anmeldungen'), false);
+				ToolBarHelper::custom( 'onlineRegList', 'forward.png', 'forward_f2.png', Text::_('Zu den Onl.Anmeldungen'), false);
 				ToolBarHelper::spacer();
 			}
 			// Warteliste bearbeiten

@@ -67,6 +67,8 @@ if ($format == 'csv') {
 			$line[12] = $lang->dwz;
 			$line[13] = $lang->elo;
 			$line[14] = $lang->twz;
+			$line[15] = $lang->email;
+			$line[16] = $lang->regtime;
 			$output[] = $line;
 		}
 
@@ -87,6 +89,8 @@ if ($format == 'csv') {
 		$line[12] = $pl->start_dwz;
 		$line[13] = $pl->FIDEelo;
 		$line[14] = $pl->twz;
+		$line[15] = $pl->email;
+		if ($pl->regtime == "0000-00-00 00:00:00") $line[15] = ''; else $line[16] = $pl->regtime;
 
 		$output[] = $line;
     } 

@@ -22,6 +22,7 @@ $ -> Language fix or change
 ^ Anpassung Links (Spieler, Verein) an neue DSB-Datenstruktur
 + Warteliste für Einzelturniere (Beta) 
 # Rangfolgepflege im FE: verbesserte Eingabeprüfung
++ Anmeldedatum in Teilnehmer- und Warteliste
 
 - - - - - 5.1.0 - [25-07-2026] - - - - - - - - - - - - - - - - - - - -
 ^ neue Datenübernahme vom DSB-Server

@@ -65,6 +65,8 @@ class TableCLMTurnier_Teilnehmer extends Table
 	var $checked_out	= null;
 	var $checked_out_time	= null;
 	var $ordering		= 0;
+	var $regtime	= null;
+	var $pcomment	= '';
 
 
 	function __construct( &$_db ) {

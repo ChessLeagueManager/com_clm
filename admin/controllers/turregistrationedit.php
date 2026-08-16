@@ -98,9 +98,32 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 			if ($row->status == 2) {
 				$text = Text::_('REGISTRATION_ALREADY_MOVED');
 			}
+			if ($row->status == 3) {
+				$text = Text::_('REGISTRATION_ALREADY_MOVEDW');
+			}
 			if ($text != '') {
-				$this->app->enqueueMessage( $text );
+				$this->app->enqueueMessage( $text, 'warning' );
 				// Weiterleitung zurück in Liste
+				return false;
+			}
+			//Record in Teilnehmerliste suchen
+			$select_query = " SELECT * FROM #__clm_turniere_tlnr
+						WHERE turnier = ".$rowt->id." AND zps = '".$row->zps."' AND mgl_nr = ".$row->mgl_nr.";";
+			$lookup	= clm_core::$db->loadObject($select_query);
+			if (!is_null($lookup)) {
+				$text = 'Spieler bereits in Teilnehmerliste';
+				$this->app->enqueueMessage( $text, 'warning' );
+				// Weiterleitung zurück in Anzeige
+				return false;
+			}
+			//Record in Warteliste suchen
+			$select_query = " SELECT * FROM #__clm_turniere_tlnr_wl
+						WHERE turnier = ".$rowt->id." AND zps = '".$row->zps."' AND mgl_nr = ".$row->mgl_nr.";";
+			$lookup	= clm_core::$db->loadObject($select_query);
+			if (!is_null($lookup)) {
+				$text = 'Spieler bereits in Warteliste';
+				$this->app->enqueueMessage( $text, 'warning' );
+				// Weiterleitung zurück in Anzeige
 				return false;
 			}
 			// letzte Startnummer aus der Teilnehmertabelle
@@ -120,12 +143,35 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 			if ($playersIn >= $rowt->teil) {
 				$text = CLMText::errorText('PLAYERLIST', 'FULL');
 			}
-			if ($row->status == 3) {
+			if ($row->status == 2) {
 				$text = Text::_('REGISTRATION_ALREADY_MOVED');
 			}
+			if ($row->status == 3) {
+				$text = Text::_('REGISTRATION_ALREADY_MOVEDW');
+			}
 			if ($text != '') {
-				$this->app->enqueueMessage( $text );
+				$this->app->enqueueMessage( $text, 'warning' );
 				// Weiterleitung zurück in Liste
+				return false;
+			}
+			//Record in Teilnehmerliste suchen
+			$select_query = " SELECT * FROM #__clm_turniere_tlnr
+						WHERE turnier = ".$rowt->id." AND zps = '".$row->zps."' AND mgl_nr = ".$row->mgl_nr.";";
+			$lookup	= clm_core::$db->loadObject($select_query);
+			if (!is_null($lookup)) {
+				$text = 'Spieler bereits in Teilnehmerliste';
+				$this->app->enqueueMessage( $text, 'warning' );
+				// Weiterleitung zurück in Anzeige
+				return false;
+			}
+			//Record in Warteliste suchen
+			$select_query = " SELECT * FROM #__clm_turniere_tlnr_wl
+						WHERE turnier = ".$rowt->id." AND zps = '".$row->zps."' AND mgl_nr = ".$row->mgl_nr.";";
+			$lookup	= clm_core::$db->loadObject($select_query);
+			if (!is_null($lookup)) {
+				$text = 'Spieler bereits in Warteliste';
+				$this->app->enqueueMessage( $text, 'warning' );
+				// Weiterleitung zurück in Anzeige
 				return false;
 			}
 			// letzte Startnummer aus der Wartelisttabelle
@@ -232,6 +278,8 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 			$tlnr->titel	= $row->titel;
 			$tlnr->tlnrStatus = 1;
 			$tlnr->published = 1;
+			$tlnr->regtime = date('Y-m-d H:i:s', $row->timestamp);
+			$tlnr->pcomment = $row->comment;
 			if (!$tlnr->check($post)) {
 				$this->app->enqueueMessage( $tlnr->getError(), 'error' );
 				return false;

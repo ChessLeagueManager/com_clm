@@ -87,6 +87,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_dwz_spieler` (
   `Geschlecht` char(1) DEFAULT NULL,
   `Spielberechtigung` char(1) NOT NULL DEFAULT '',
   `Geburtsjahr` year(4) NOT NULL DEFAULT 0000,
+  `Geburtstag` DATE DEFAULT NULL,
   `Junior` tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
   `Letzte_Auswertung` DATE DEFAULT NULL,
   `DWZ` smallint(4) UNSIGNED DEFAULT NULL,
@@ -1409,6 +1410,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere_tlnr` (
   `date_paid` date DEFAULT NULL COMMENT 'Datum der Einzahlung',
   `amount_paid` decimal(6,2) DEFAULT NULL COMMENT 'eingezahlter Betrag',
   `reason` varchar(100) DEFAULT NULL COMMENT 'Grund der Differenz',
+  `regtime` datetime DEFAULT current_timestamp(),
+  `pcomment` text DEFAULT NULL, 
   PRIMARY KEY (`id`,`zps`,`mgl_nr`,`status`),
   KEY `turnier_snr` (`turnier`,`snr`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -1478,6 +1481,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere_tlnr_wl` (
   `date_paid` date DEFAULT NULL COMMENT 'Datum der Einzahlung',
   `amount_paid` decimal(6,2) DEFAULT NULL COMMENT 'eingezahlter Betrag',
   `reason` varchar(100) DEFAULT NULL COMMENT 'Grund der Differenz',
+  `regtime` datetime DEFAULT current_timestamp(),
+  `pcomment` text DEFAULT NULL, 
   PRIMARY KEY (`id`,`zps`,`mgl_nr`,`status`),
   KEY `turnier_snr` (`turnier`,`snr`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

@@ -73,6 +73,10 @@ use Joomla\CMS\HTML\HTMLHelper;
 			<tr>
 				<td class="key" nowrap="nowrap">* <?php echo Text::_('PLAYER_NAME'); ?> (<?php echo Text::_('LASTNAME_FIRSTNAME'); ?>):</td>
 				<td><input class="inputbox" type="text" name="name" id="name" size="20" maxlength="60" value="<?php echo $this->player->name; ?>" /></td>
+
+				<td class="key" nowrap="nowrap"><?php echo Text::_('Anmeldung von'); ?>:</td>
+				<td><input type="datetime-local" id="regtime" name="regtime" 
+				value="<?php echo substr($this->player->regtime,0,-3); ?>"></td>
 			</tr>
 			<tr>
 				<td class="key" nowrap="nowrap"><?php echo Text::_('CLUB'); ?>:</td>
