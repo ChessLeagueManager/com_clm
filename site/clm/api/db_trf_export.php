@@ -166,11 +166,12 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
 		$lines = array();
 		$line = "### Tournament Section  ";
 		$lines[] 	= $line;
-		$lines[] 	= '012 '.clm_core::$load->utf8decode($turnier->name);
-		$lines[]	= '022 '.clm_core::$load->utf8decode($turnier->city);
+		$lines[] 	= '012 '.clm_core::$load->sub_umlaute($turnier->name);
 		if ($turnier->city <= '')
 			$lines[] = 'FFF Es ist kein Spielort bzw. -region eingetragen';
-		$lines[]	= '032 '.clm_core::$load->utf8decode($turnier->FIDEcco);
+		else
+			$lines[]	= '022 '.clm_core::$load->sub_umlaute($turnier->city);
+		$lines[]	= '032 '.clm_core::$load->sub_umlaute($turnier->FIDEcco);
 		if ($turnier->FIDEcco <= '')
 			$lines[] = 'FFF Es ist keine Veranstalterföderation  eingetragen';
 		$lines[] 	= '042 '.substr($turnier->dateStart,0,4).'/'.substr($turnier->dateStart,5,2).'/'.substr($turnier->dateStart,8,2);
@@ -252,7 +253,10 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
 				$lines[] 	= 'XCL '.$turnier->lokal;
 			}
 			if ($turnier->params != "") {
-				$lines[] 	= 'XCP '. str_replace("\n",";;",$turnier->params);
+				$a_params = explode("\n",$turnier->params);
+				foreach($a_params as $line) {
+					$lines[] = 'XCP '.$line;
+				}
 			}
 			$lines[] 	= 'XCF '.sprintf('%2s',$turnier->tiebr1) . " " .sprintf('%2s',$turnier->tiebr2) . " " .sprintf('%2s',$turnier->tiebr3);
 		}

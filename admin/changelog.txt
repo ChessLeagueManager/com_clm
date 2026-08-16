@@ -23,6 +23,7 @@ $ -> Language fix or change
 + Warteliste für Einzelturniere (Beta) 
 # Rangfolgepflege im FE: verbesserte Eingabeprüfung
 + Anmeldedatum in Teilnehmer- und Warteliste
+^ TRF-Import/Export kleine Ergänzung
 
 - - - - - 5.1.0 - [25-07-2026] - - - - - - - - - - - - - - - - - - - -
 ^ neue Datenübernahme vom DSB-Server

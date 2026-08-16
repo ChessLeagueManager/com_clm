@@ -38,6 +38,7 @@ if ($debug > 0) echo "<br>turnier: ".$turnier; 	//echo "<br>end"; //die();
 	$a_spielerCZ = array();
 	$a_teamdaten = array();
 	$a_rundendaten = array();
+	$params = '';
 	$adate = '1970-01-01';
 	$edate = '1970-01-01';
 	// Standardwerte, falls XXS fehlt oder unvollständig
@@ -194,12 +195,12 @@ if ($debug > 0) { echo "<br>e_xxs"; var_dump($e_xxs); }
 						$tiebr2 = (integer) trim(substr($line,7,2));
 						$tiebr3 = (integer) trim(substr($line,10,2));
 						break;
-			case 'XCL': $lokal = addslashes($value); 
+			case 'XCL': $lokal = clm_core::$load->utf8encode($value);
 if ($debug > 1) { echo "<br>lokal:"; var_dump($lokal); } 
 						break;
 			case 'XCM': $typ = (integer) $value; break;
-			case 'XCP': $params = addslashes($value); 
-						$params = str_replace(";;","\n",$params);			
+			case 'XCP': if ($params == '') $params = $value; 
+						else $params .= "\n".$value;			
 if ($debug > 1) { echo "<br>params:"; var_dump($params); } 
 						break;
 			case 'XCR': $snr = trim(substr($line,4,4));
