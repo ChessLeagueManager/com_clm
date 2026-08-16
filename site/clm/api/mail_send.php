@@ -88,10 +88,10 @@ function clm_api_mail_send($mail_to, $mail_subj, $mail_body, $htmlMail=0, $mail_
 
 	if ($suppress == 2) {
 		$umleitung .= $nl."-------------------------------------";
-		$umleitung .= $nl."Orig.Empfänger: ".$mail_to;
+		$umleitung .= $nl."Orig. Empf&auml;nger: ".$mail_to;
 		$mail_to = $IDN->encode($replace);
 		if (!is_null($mail_cc) AND $mail_cc > ' ') {
-			$umleitung .= $nl."Orig.CC-Empfänger: ".$mail_cc;
+			$umleitung .= $nl."Orig. CC-Empf&auml;nger: ".$mail_cc;
 			if ($htmlMail == 0) $umleitung .= $nl;
 		}
 	}
