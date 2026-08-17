@@ -128,6 +128,9 @@ function clm_api_mail_send($mail_to, $mail_subj, $mail_body, $htmlMail=0, $mail_
 		$mail_body2 = $umleitung . $mail_body2;
 	}
 
+	// Verzögerung 0,1 Millisekunden
+	usleep(100);
+	
 	$tried = "";
 	try {
 		# Schritt 1: php Mail verwenden

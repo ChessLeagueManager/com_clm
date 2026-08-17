@@ -34,7 +34,7 @@ $mannschaft = $this->mannschaft;
 $gegner = $this->gegner;
 
 $user =Factory::getUser();
-$link = URI::base(true) .'index.php?option=com_clm&view=mannschaft&saison='. $sid . '&liga=' . $liga . '&tlnr=' . $tlnr;
+$link = URI::base(true) .'/index.php?option=com_clm&view=mannschaft&saison='. $sid . '&liga=' . $liga . '&tlnr=' . $tlnr;
 
 function utf2html($str) {
 	$str = str_replace('Ä', '&Auml;', $str);
@@ -239,21 +239,21 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 		</tr>
 		<tr>
 			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.Text::_( 'TEAM_LIST_MAIL_CLUB' ).'</strong></td>
-			<td colspan="5" width="480" style="border-bottom: solid 1px #999999;">' .utf2html($verein[0]->name). '&nbsp;</td>
+			<td colspan="5" width="480" style="border-bottom: solid 1px #999999;">' .clm_core::$load->utf8_to_html($verein[0]->name). '&nbsp;</td>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
 			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.Text::_( 'TEAM_LIST_MAIL_LIGA' ).'</strong></td>
-			<td colspan="5" width="480" style="border-bottom: solid 1px #999999;">' .utf2html($mannschaft[0]->liga_name). '&nbsp;</td>
+			<td colspan="5" width="480" style="border-bottom: solid 1px #999999;">' .clm_core::$load->utf8_to_html($mannschaft[0]->liga_name). '&nbsp;</td>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
 			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.Text::_( 'TEAM_LIST_MAIL_TEAM' ).'</strong></td>
-			<td width="200" style="border-bottom: solid 1px #999999;">' .utf2html($mannschaft[0]->name). '&nbsp;</td>
+			<td width="200" style="border-bottom: solid 1px #999999;">' .clm_core::$load->utf8_to_html($mannschaft[0]->name). '&nbsp;</td>
 			<td width="40" style="border-bottom: solid 1px #999999;">&nbsp;</td>
 			<td width="40" style="border-bottom: solid 1px #999999;">&nbsp;</td>
 			<td width="80" style="border-bottom: solid 1px #999999;"><strong>'.Text::_( 'TEAM_LIST_MAIL_SEASON' ).'</strong></td>
-			<td width="120" style="border-bottom: solid 1px #999999;">' .utf2html($saison[0]->name). '&nbsp;</td>
+			<td width="120" style="border-bottom: solid 1px #999999;">' .clm_core::$load->utf8_to_html($saison[0]->name). '&nbsp;</td>
 			<td>&nbsp;</td>
 		</tr>';	
 		$body_html .=	' 
@@ -269,22 +269,22 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 		</table>';
 
 		if ($mannschaft[0]->lokal != $lokal) {
-			$lokal = '<textarea cols="30" rows="2" style="border: solid 1px #999999; width:90%; color: #ff0000">' . utf2html($lokal) . '</textarea>';
+			$lokal = '<textarea cols="30" rows="2" style="border: solid 1px #999999; width:90%; color: #ff0000">' . clm_core::$load->utf8_to_html($lokal) . '</textarea>';
 		} else {
-			$lokal = '<textarea cols="30" rows="2" style="border: solid 1px #999999; width:90%">' . utf2html($lokal) . '</textarea>';
+			$lokal = '<textarea cols="30" rows="2" style="border: solid 1px #999999; width:90%">' . clm_core::$load->utf8_to_html($lokal) . '</textarea>';
 		}
 		if ($mannschaft[0]->adresse != $adresse) {
-			$adresse = '<textarea cols="30" rows="2" style="border: solid 1px #999999; width:90%; color: #ff0000">' . utf2html($adresse) . '</textarea>';
+			$adresse = '<textarea cols="30" rows="2" style="border: solid 1px #999999; width:90%; color: #ff0000">' . clm_core::$load->utf8_to_html($adresse) . '</textarea>';
 		} else {
-			$adresse = '<textarea cols="30" rows="2" style="border: solid 1px #999999; width:90%">' . utf2html($adresse) . '</textarea>';
+			$adresse = '<textarea cols="30" rows="2" style="border: solid 1px #999999; width:90%">' . clm_core::$load->utf8_to_html($adresse) . '</textarea>';
 		}
 		$neuername = '<font color="red">unbekannt - nicht in Spielerliste des Vereins</font>';
 		foreach ($this->teammf as $mf) {
 			if ($mf->jid == $newmf) {
 				if ($newmf != $mannschaft[0]->mf) {
-					$neuername = '<textarea cols="30" rows="2" style="border: solid 1px #999999; width:90%; color: #ff0000">' . utf2html($mf->name) . '</textarea>';
+					$neuername = '<textarea cols="30" rows="2" style="border: solid 1px #999999; width:90%; color: #ff0000">' . clm_core::$load->utf8_to_html($mf->name) . '</textarea>';
 				} else {
-					$neuername = '<textarea cols="30" rows="2" style="border: solid 1px #999999; width:90%">' . utf2html($mf->name) . '</textarea>';
+					$neuername = '<textarea cols="30" rows="2" style="border: solid 1px #999999; width:90%">' . clm_core::$load->utf8_to_html($mf->name) . '</textarea>';
 				}
 			}
 		}
@@ -328,7 +328,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 		</tr>
 		<tr>
 			<td width="120" style="border-bottom: solid 1px #999999;"><strong>'.Text::_( 'Melder :' ).'</strong></td>
-			<td width="140" style="border-bottom: solid 1px #999999;">' .utf2html($melder[0]->name). '&nbsp;</td>
+			<td width="140" style="border-bottom: solid 1px #999999;">' .clm_core::$load->utf8_to_html($melder[0]->name). '&nbsp;</td>
 			<td width="20" style="border-bottom: solid 1px #999999;">&nbsp;</td>
 			<td width="160" style="border-bottom: solid 1px #999999;">' .''. '&nbsp;</td>
 			<td width="20" style="border-bottom: solid 1px #999999;">&nbsp;</td>
@@ -337,7 +337,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 		</tr>	
 		</table>';
 
-		$subject = $fromname.': '.Text::_('TEAM_DATA_SUBJECT').' '.utf2html($verein[0]->name).'  -  '.Text::_( 'TEAM_LIST_MAIL_SEASON' ).'  '.utf2html($saison[0]->name);
+		$subject = $fromname.': '.Text::_('TEAM_DATA_SUBJECT').' '.clm_core::$load->utf8_to_html($verein[0]->name).'  -  '.Text::_( 'TEAM_LIST_MAIL_SEASON' ).'  '.clm_core::$load->utf8_to_html($saison[0]->name);
 		$countmail = 0;
 		$body_name = Text::_('RESULT_NAME').$melder[0]->name.",";
 
@@ -357,7 +357,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 				</tr>
 			</table>';
 		
-			$body_name = Text::_('RESULT_NAME').$melder[0]->name.",";
+			$body_name = Text::_('RESULT_NAME').clm_core::$load->utf8_to_html($melder[0]->name).",";
 			$body = $body_html_header.$body_name.$body_html_md.$body_html.$body_html_footer;
 			$result = clm_core::$api->mail_send($recipient,$subject,$body,1,null,$bcc);
 			if ($result[0] !== true) $msg .= '<br>'.Text::_('MAIL_ERROR').' '.$recipient;
@@ -384,7 +384,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 					</tr>
 					</table>';
 		
-					$body_name = Text::_('RESULT_NAME').utf2html($staffelleiter1->sl_name).",";
+					$body_name = Text::_('RESULT_NAME').clm_core::$load->utf8_to_html($staffelleiter1->sl_name).",";
 
 					$body_main = $body_name . $body_html_sl . $body_html;
 				       	# $body_main .= "<br><pre>" . hexdump($body_main) . "</pre>";
@@ -414,7 +414,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 					<td>'.Text::_('TEAM_DATA_MAIL_GEGNER3').'</td>
 					</tr>
 					</table>';
-					$body_name = Text::_('RESULT_NAME').utf2html($gegnerteam->mf_name).",";
+					$body_name = Text::_('RESULT_NAME').clm_core::$load->utf8_to_html($gegnerteam->mf_name).",";
 					$body_main = $body_name . $body_html_gegner . $body_html;
 				       	# $body_main .= "<br><pre>" . hexdump($body_main) . "</pre>";
 					$body = $body_html_header.$body_main.$body_html_footer;
@@ -444,7 +444,7 @@ if ($user->get('id') > 0 AND  $clmuser[0]->published > 0 AND $clmuser[0]->zps ==
 						<td>'.Text::_('TEAM_DATA_MAIL_VEREIN3').'</td>
 						</tr>
 						</table>';
-						$body_name = Text::_('RESULT_NAME').utf2html($mf->name).",";
+						$body_name = Text::_('RESULT_NAME').clm_core::$load->utf8_to_html($mf->name).",";
 						$body_main = $body_name . $body_html_verein . $body_html;
 				       		# $body_main .= "<br><pre>" . hexdump($body_main) . "</pre>";
 						$body = $body_html_header.$body_main.$body_html_footer;

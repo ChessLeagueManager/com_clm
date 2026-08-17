@@ -131,7 +131,6 @@ if ($user->get('id') > 0 AND $clmuser[0]->published > 0 AND ($clmuser[0]->zps ==
 <input type="submit" value=" <?php echo Text::_('TEAM_DATA_SEND_BUTTON') ?> ">
 <input type="button" value=" <?php echo Text::_('TEAM_DATA_BACK_BUTTON') ?> " onClick="history.back()">
 
-<input type="hidden" name="name" value="<?php echo $name[0]->Vereinname; ?>" />
 <input type="hidden" name="new" value="1" />
 
 		<input type="hidden" name="layout" value="sent" />
