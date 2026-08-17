@@ -21,7 +21,7 @@ use Joomla\CMS\Uri\Uri;
 $turnier 		= $this->turnier;
 
 $user =Factory::getUser();
-	$link = URI::base(true) .'index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
+	$link = URI::base(true) .'/index.php?option=com_clm&view=turnier_registration&turnier='. $turnier->id .'&Itemid='; 
 
 // Datensätze in Tabelle schreiben - insert data into table
 

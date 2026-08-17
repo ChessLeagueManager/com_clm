@@ -114,7 +114,7 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		if (is_null($row->s_punkte) OR !is_numeric($row->s_punkte)) $row->s_punkte = 0.0;
 		if (($row->date_paid == '') OR ($row->date_paid <= '1970-01-01')) $row->date_paid = NULL;
 		if ($row->amount_paid == '') $row->amount_paid = NULL;
-		
+		if ($row->regtime <= '1970-01-01') $row->regtime = NULL;
 		if (!$row->check($post)) {
 			$this->app->enqueueMessage($row->getError(),'error');
 			return false;

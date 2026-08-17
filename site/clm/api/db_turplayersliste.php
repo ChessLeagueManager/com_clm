@@ -81,7 +81,11 @@ if ($format == 'csv') {
 		$line[4] = clm_core::$load->utf8decode(str_replace("'",' ',$line[4]));
 		$line[5] = $pl->birthYear;
 		$line[6] = $pl->geschlecht;
-		$line[7] = $pl->amount_paid;
+		if ($pl->amount_paid > 0) {
+			$line[7] = number_format($pl->amount_paid, 2,',');
+		} else {
+			$line[7] = $pl->amount_paid;
+		}	
 		$line[8] = $pl->date_paid;
 		$line[9] = $pl->reason;
 		$line[10] = $pl->zps;
