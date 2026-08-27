@@ -233,7 +233,7 @@ class CLMModelVerein extends JModelLegacy
 
 	function getCLMClmuser ()
 	{
-		$query	= $this->_getCLMClmuser( $options );
+		$query	= $this->_getCLMClmuser();
 		$result = $this->_getList( $query );
 		return @$result;
 	}

@@ -29,7 +29,9 @@ class CLMViewAuswertung extends JViewLegacy {
 		clm_core::$load->load_css("icons_images");
 		ToolBarHelper::title( Text::_('DB_RATING_TITLE') ,'clm_headmenu_manager.png' );
 		$tpl = null;
-		
+		// das MainMenu abschalten
+		Factory::getApplication()->input->set('hidemainmenu', true);
+
 		if($task =='datei'){
 //			$liga	= $jinput->get('filter_lid', null, null);
 //			$format	= $jinput->get('filter_format', null, null);

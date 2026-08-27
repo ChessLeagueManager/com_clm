@@ -99,7 +99,7 @@ $db	=Factory::getDBO();
 		$ndata = base64_encode($img);
 		$ndata = "data:image/".$ext.";base64,".$ndata;
 		if ( strlen($ndata) > 65535 ) { // max. Länge für ein DB-Feld vom Typ TEXT
-			$msg = Text::_( 'Bilddatei zu groß (base46-Code > 65535 Byte)' );
+			$msg = Text::_( 'Bilddatei zu groß (base64-Code > 65535 Byte)' );
 		}
 	}
 	
