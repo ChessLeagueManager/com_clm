@@ -62,7 +62,7 @@ class CLMViewTurWaitlist extends JViewLegacy {
 			}
 			// Email an Teilnehmer (TL muss gesetzt sein)
 			if ($model->turnier->tl != '0') {
-//				ToolBarHelper::custom( 'mail_to_all', 'copy.png', 'copy_f2.png', Text::_('MAIL_TO_ALL'), false);
+				ToolBarHelper::custom( 'mail_to_all', 'copy.png', 'copy_f2.png', Text::_('Mail an alle auf der Liste'), false);
 			}
 
 		}

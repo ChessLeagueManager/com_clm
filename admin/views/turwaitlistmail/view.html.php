@@ -16,7 +16,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
-class CLMViewTurPlayerEdit extends JViewLegacy {
+class CLMViewTurWaitlistMail extends JViewLegacy {
 
 	function display($tpl = NULL) {
 
@@ -26,23 +26,22 @@ class CLMViewTurPlayerEdit extends JViewLegacy {
 		
 		// Die Toolbar erstellen, die über der Seite angezeigt wird
 		clm_core::$load->load_css("icons_images");
-		ToolBarHelper::title( $model->turnierData->name.", ".Text::_('PLAYER').": ".$model->playerData->name, 'clm_turnier.png'  );
+		ToolBarHelper::title( $model->turnierData->name.": ".Text::_('Mail an alle auf der Liste'), 'clm_turnier.png'  );
 	
 		// Instanz der Tabelle
 		$row = Table::getInstance( 'turniere', 'TableCLM' );
-		$row->load( $model->playerData->turnier ); // Daten zu dieser ID laden
+		$row->load( $model->turnierData->id ); // Daten zu dieser ID laden
 
 		$clmAccess = clm_core::$access;
 		if (($row->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') == 2) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
-			ToolBarHelper::save( 'save' );
-			ToolBarHelper::apply( 'apply' );
-			ToolBarHelper::custom('move_to', 'forward.png', 'forward.png', Text::_('Verschieben nach Warteliste'),false);
+			ToolBarHelper::custom('mail_send', 'copy.png', 'copy_f2.png', Text::_('MAIL_SEND'),false);
 		}
 		ToolBarHelper::spacer();
 		ToolBarHelper::cancel();
 
 		// das MainMenu abschalten
-		Factory::getApplication()->input->set('hidemainmenu', true);
+		$_REQUEST['hidemainmenu'] = 1;
+		
 
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
 		$model =   $this->getModel();
@@ -50,22 +49,14 @@ class CLMViewTurPlayerEdit extends JViewLegacy {
 		// Document/Seite
 		$document =Factory::getDocument();
 
-		// JS-Array jtext -> Fehlertexte
-		$document->addScriptDeclaration("var jtext = new Array();");
-		$document->addScriptDeclaration("jtext['enter_name'] = '".Text::_('PLEASE_ENTER')." ".Text::_('PLAYER_NAME')."';");
-		$document->addScriptDeclaration("jtext['enter_twz'] = '".Text::_('PLEASE_ENTER')." ".Text::_('TWZ')."';");
-		$document->addScriptDeclaration("jtext['number_twz'] = '".Text::_('PLEASE_NUMBER')." ".Text::_('TWZ')."';");
-
-		// Script
-		$document->addScript(CLM_PATH_JAVASCRIPT.'turplayeredit.js');
-
 
 		// Daten an Template übergeben
 		$this->user = $model->user;
 		
-		$this->player = $model->playerData;
+		$this->players = $model->playersData;
 		$this->turnier = $model->turnierData;
-		$this->teams = $model->teamData;
+		$this->tl = $model->tlData;
+
 		$this->param = $model->param;
 
 

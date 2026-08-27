@@ -28,7 +28,7 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		
 		// Register Extra tasks
 		$this->registerTask( 'apply', 'save' );
-	
+		$this->registerTask( 'move_to', 'save' );
 	}
 
 	
@@ -67,19 +67,19 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 		// turnierid
 		$playerid = clm_core::$load->request_int('playerid');
 		$turnierid = clm_core::$load->request_int('turnierid');
-
-		// Instanz der Tabelle
-		$row = Table::getInstance( 'turniere', 'TableCLM' );
-		$row->load( $turnierid ); // Daten zu dieser ID laden
-
-		$clmAccess = clm_core::$access;      
-		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
-			$this->app->enqueueMessage(Text::_('TOURNAMENT_NO_ACCESS'),'warning');
-			return false;
-		}
 	
 		// Task
 		$task = clm_core::$load->request_string('task');
+
+		// Instanz der Tabelle
+		$rowt = Table::getInstance( 'turniere', 'TableCLM' );
+		$rowt->load( $turnierid ); // Daten zu dieser ID laden
+
+		$clmAccess = clm_core::$access;      
+		if (($rowt->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
+			$this->app->enqueueMessage(Text::_('TOURNAMENT_NO_ACCESS'),'warning');
+			return false;
+		}
 		
 		// Instanz der Tabelle
 		$row = Table::getInstance( 'turnier_teilnehmer', 'TableCLM' );
@@ -124,11 +124,62 @@ class CLMControllerTurPlayerEdit extends JControllerLegacy {
 			return false;
 		}
 	
-		
 	 	clm_core::$api->direct("db_tournament_delDWZ",array($turnierid,false));
 
 		$text = Text::_('PARTICIPANT_EDITED').": ".$row->name;
 
+		if ($task == "move_to") {
+			// Turnierdaten
+			$tournament = new CLMTournament($rowt->id, true);
+			//Record aus Teilnehmerliste lesen
+			$select_query = " SELECT * FROM #__clm_turniere_tlnr
+						WHERE id = ".$row->id.";";
+			$tlnr	= clm_core::$db->loadObject($select_query);
+			//Record in Warteliste suchen
+			$select_query = " SELECT * FROM #__clm_turniere_tlnr_wl
+						WHERE turnier = ".$tlnr->turnier." AND zps = '".$tlnr->zps."' AND mgl_nr = ".$tlnr->mgl_nr.";";
+			$lookup	= clm_core::$db->loadObject($select_query);
+			if (!is_null($lookup)) {
+				$text = 'Spieler bereits in Warteliste';
+				$this->app->enqueueMessage( $text );
+				// Weiterleitung zurück in Anzeige
+				return false;
+			}
+
+			$tlnr->id = 0;
+			// letzte Startnummer aus der Teilnehmertabelle
+			$query = 'SELECT MAX(snr) as snrmax '
+				. ' FROM #__clm_turniere_tlnr_wl'
+				. ' WHERE turnier = '.$rowt->id
+				;
+			$turnierSnrMax = clm_core::$db->loadObject($query);	
+			if (isset($turnierSnrMax->snrmax)) $snrmax = $turnierSnrMax->snrmax; 
+			else $snrmax = 0;
+			$tlnr->snr		= $snrmax + 1;  
+			if (strlen($tlnr->zps) != 5 OR $tlnr->mgl_nr < 1) {
+				// weiteren Daten aus TlnTabelle
+				$db		= Factory::getDBO();
+				$query = "SELECT MAX(mgl_nr), MAX(snr) FROM `#__clm_turniere_tlnr_wl`"
+					." WHERE turnier = ".$rowt->id
+					." AND zps = 99999 "
+					;
+				$db->setQuery($query);
+				list($maxFzps, $maxSnr) = $db->loadRow();
+				$maxFzps++; // fiktive ZPS für manuell eingegeben Spieler
+				$tlnr->zps = '99999';
+				$tlnr->mgl_nr = $maxFzps;
+			}
+			if(!clm_core::$db->insertObject('#__clm_turniere_tlnr_wl',$tlnr,'id')) {
+				$this->app->enqueueMessage( $tlnr->getError(), 'error' );
+				return false;
+			}
+			//Löschen aus Teilnehmerliste
+			$delete_query = " DELETE FROM #__clm_turniere_tlnr
+						WHERE id = ".$row->id.";";
+			clm_core::$db->query($delete_query);
+			
+			$text = Text::_('In Warteliste geschoben ').": ".$row->name;
+		}
 		// Log schreiben
 		$clmLog = new CLMLog();
 		$clmLog->aktion = $text;

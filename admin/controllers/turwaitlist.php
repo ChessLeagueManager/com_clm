@@ -538,7 +538,7 @@ class CLMControllerTurWaitlist extends JControllerLegacy {
 		$id = clm_core::$load->request_int('id');
 		
 		$adminLink = new AdminLink();
-		$adminLink->view = "turplayersmail";
+		$adminLink->view = "turwaitlistmail";
 		$adminLink->more = array('turnierid' => $id);
 		$adminLink->makeURL();
 		$this->app->redirect( $adminLink->url );
