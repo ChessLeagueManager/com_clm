@@ -313,7 +313,7 @@ function edit()
 	// Rangliste in Abhängigkeit der Auswahl von vid,lid,sid ausgeben
 	if ($task == 'edit') {
 
-		$sql = " SELECT Gruppe, Meldeschluss, geschlecht, alter_grenze, `alter`, status, anz_sgp "
+		$sql = " SELECT Gruppe, Meldeschluss, geschlecht, stichtag_regel, stichtag, alter_grenze, `alter`, status, anz_sgp "
 			." FROM #__clm_rangliste_name"
 			." WHERE id =".$row->gid
 			." AND sid = ".$row->sid
@@ -324,7 +324,7 @@ function edit()
 		$sql_sid	= $row->sid;
    
 	} else {
-		$sql = " SELECT Gruppe, Meldeschluss, geschlecht, alter_grenze, `alter`, status, anz_sgp "
+		$sql = " SELECT Gruppe, Meldeschluss, geschlecht, stichtag_regel, stichtag, alter_grenze, `alter`, status, anz_sgp "
 			." FROM #__clm_rangliste_name"
 			." WHERE id =".intval( $filter_gid )
 			." AND sid = ".intval( $filter_sid )
@@ -336,6 +336,7 @@ function edit()
 	$db->setQuery($sql);
 	$gid	= $db->loadObjectList();
 
+	$tag ="";
 	$ges ="";
 	$geb ="";
 	$sta ="";
@@ -345,7 +346,15 @@ function edit()
 		$anz_sgp = $gid[0]->anz_sgp;
 		$melde = explode ("-",$gid[0]->Meldeschluss);
 		$jahr = $melde[0];
+		$melde = explode ("-",$gid[0]->stichtag);
+		$stjahr = $melde[0];
 
+		if ($gid[0]->stichtag_regel == "1") {
+			$tag = " AND a.Geburtsjahr >= ".$stjahr;
+		}
+		if ($gid[0]->stichtag_regel == "2") {
+			$tag = " AND a.Geburtsjahr <= ".$stjahr;
+		}
 		if ($gid[0]->alter_grenze == "1") {
 			$geb = " AND a.Geburtsjahr < ".($jahr - $gid[0]->alter);
 		}
@@ -372,7 +381,7 @@ function edit()
 			." WHERE (a.ZPS ='".$sql_zps."' OR FIND_IN_SET(a.ZPS,'".$sql_sg_zps."') != 0 )"
 			." AND i.id = ".$cid[0]
 			." AND a.sid =".$sql_sid
-			.$geb.$ges.$sta
+			.$tag.$geb.$ges.$sta
 //			." ORDER BY r.man_nr,r.Rang ASC, a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
 			." ORDER BY IFNULL(r.man_nr,999),r.Rang ASC, a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
 			;
@@ -388,7 +397,7 @@ function edit()
 //			." WHERE (a.ZPS = '$sql_zps' OR a.ZPS = '$sql_sg_zps')"
 			." WHERE (a.ZPS ='".$sql_zps."' OR FIND_IN_SET(a.ZPS,'".$sql_sg_zps."') != 0 )"
 			." AND sid =".$sql_sid
-			.$geb.$ges.$sta
+			.$tag.$geb.$ges.$sta
 			." ORDER BY a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
 			;
 	}

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="4.0.0" method="upgrade">
 	<name>CLM</name>
-	<creationDate>17.08.2026</creationDate>
+	<creationDate>30.08.2026</creationDate>
 	<author>CLM Team</author>
 	<copyright>(C) Copyright 2008-2026 by CLM Project</copyright>
 	<license>GNU/GPL</license>
 	<authorEmail>fishpoke@fishpoke.de</authorEmail>
 	<authorUrl>chessleaguemanager.org</authorUrl>
-	<version>5.1.0b</version>
+	<version>5.1.0d</version>
  	<scriptfile>installer.php</scriptfile>
 	<description>
 		<![CDATA[
@@ -16,7 +16,7 @@
 		 <p>Die CLM Komponente ist eine Verwaltung für Schachligen und Schachturniere.</p>
 		 <a href="https://joomla.chessleaguemanager.org" target="blank">CLM Projekt Homepage</a>  |  <a href="https://joomla.chessleaguemanager.org/index.php/kunena" target="blank">Support Forum</a>
 		 <br><br>
-		 <u>Das Wichtigste zur neuen Version 5.1.1 (Testpaket 5.1.0b):</u>
+		 <u>Das Wichtigste zur neuen Version 5.1.1 (Testpaket 5.1.0d):</u>
 		 <ul type="square">
 		 <li><font color="red">Anpassung Online-Turnieranmeldung neue DSB-Datenstruktur </font></li>
 		 <li><font color="red">Warteliste für Einzelturniere (Beta) </font></li>

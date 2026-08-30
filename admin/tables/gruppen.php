@@ -21,6 +21,8 @@ class TableCLMGruppen extends Table
 	var $Gruppe		= '';
 	var $Meldeschluss	= '1970-01-01';
 	var $geschlecht		= '0';
+	var $stichtag_regel	= '0';
+	var $stichtag	= null;
 	var $alter_grenze	= '0';
 	var $alter		= 0;
 	var $status		= '';

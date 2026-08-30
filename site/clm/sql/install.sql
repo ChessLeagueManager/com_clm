@@ -483,6 +483,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_rangliste_name` (
   `Gruppe` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `Meldeschluss` date DEFAULT '2009-06-30',
   `geschlecht` varchar(1) DEFAULT NULL,
+  `stichtag_regel` varchar(1) DEFAULT NULL,
+  `stichtag` date DEFAULT NULL,
   `alter_grenze` varchar(1) DEFAULT NULL,
   `alter` smallint(3) DEFAULT NULL,
   `status` varchar(3) NOT NULL DEFAULT '',

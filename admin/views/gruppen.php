@@ -188,9 +188,10 @@ public static function setGruppeToolbar()
 		ToolBarHelper::save();
 		ToolBarHelper::apply();
 		ToolBarHelper::cancel();
-		ToolBarHelper::help( 'screen.clm.edit' );
+//		ToolBarHelper::help( 'screen.clm.edit' );
+		ToolBarHelper::help( false, false, 'https://wiki.chessleaguemanager.org/index.php/clm/5.1.0/hilfe.clm.rangfolgegruppen' );
 	}
-		
+
 public static function gruppe( &$row,$lists, $option, $jid)
 	{
 		CLMViewGruppen::setGruppeToolbar();
@@ -248,6 +249,33 @@ public static function gruppe( &$row,$lists, $option, $jid)
 			<option <?php if ($row->geschlecht == "2") {echo 'selected="selected"';} ?> value="2"><?php echo Text::_( 'GROUPS_OVERVIEW_SEX_DD2' );?></option>
 			<option <?php if ($row->geschlecht == "0") {echo 'selected="selected"';} ?> value="0"><?php echo Text::_( 'GROUPS_OVERVIEW_SEX_DD3' );?></option>
 			</select>
+			</td>
+		</tr>
+
+		<tr>
+			<td class="key" nowrap="nowrap">
+			<label for="stichtag_regel">
+			<?php echo Text::_( 'Stichtagsregel' ); ?>
+			</label>
+			</td>
+			<td>
+			<select name="stichtag_regel" id="stichtag_regel" size="1" class="<?php echo $field_search;?>" >
+			<option value="9">- wählen -</option>
+			<option <?php if ($row->stichtag_regel == "1") {echo 'selected="selected"';} ?> value="1"><?php echo Text::_( 'geboren am oder jünger' );?></option>
+			<option <?php if ($row->stichtag_regel == "2") {echo 'selected="selected"';} ?> value="2"><?php echo Text::_( 'geboren am oder älter' );?></option>
+			<option <?php if ($row->stichtag_regel == "0") {echo 'selected="selected"';} ?> value="0"><?php echo Text::_( 'keine' );?></option>
+			</select>
+			</td>
+		</tr>
+
+		<tr>
+			<td class="key" nowrap="nowrap">
+			<label for="stichtag">
+			<?php echo Text::_( 'Stichtag' ); ?>
+			</label>
+			</td>
+			<td>
+ 			<?php echo CLMForm::calendar($row->stichtag, "stichtag", "stichtag", '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
 			</td>
 		</tr>
 

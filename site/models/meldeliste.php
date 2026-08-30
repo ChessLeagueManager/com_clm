@@ -96,10 +96,19 @@ class CLMModelMeldeliste extends JModelLegacy
 		$melde = explode ("-",$gid[0]->Meldeschluss);
 		$jahr = $melde[0];
 		$gid1 = $gid[0]->id;
+		$melde = explode ("-",$gid[0]->stichtag);
+		$stjahr = $melde[0];
 
+		$tag = "";
 		$geb = "";
 		$ges = "";
 		$sta = "";
+		if ($gid[0]->stichtag_regel == "1") {
+			$tag = " AND a.Geburtsjahr >= ".$stjahr;
+		}
+		if ($gid[0]->stichtag_regel == "2") {
+			$tag = " AND a.Geburtsjahr <= ".$stjahr;
+		}
 		if ($gid[0]->alter_grenze == "1") {
 			$geb = " AND a.Geburtsjahr < ".($jahr - $gid[0]->alter);
 		}
@@ -122,7 +131,7 @@ class CLMModelMeldeliste extends JModelLegacy
 //			." WHERE (a.ZPS = '$zps' OR a.ZPS = '$sg_zps') "
 			." WHERE (a.ZPS = '$zps' OR FIND_IN_SET(a.ZPS,'".$sg_zps."') != 0) "
 			." AND a.sid =".$sid
-			.$geb.$ges.$sta
+			.$tag.$geb.$ges.$sta
 			." ORDER BY IFNULL(l.man_nr,999) ASC,IFNULL(l.Rang,999) ASC,a.DWZ DESC, a.DWZ_Index ASC, a.Spielername ASC "
 			;
 		}

@@ -24,6 +24,7 @@ $ -> Language fix or change
 # Rangfolgepflege im FE: verbesserte Eingabeprüfung
 + Anmeldedatum in Teilnehmer- und Warteliste
 ^ TRF-Import/Export kleine Ergänzung
+^ Pflege Rangfolgegruppe um Stichtag erweitert
 
 - - - - - 5.1.0 - [25-07-2026] - - - - - - - - - - - - - - - - - - - -
 ^ neue Datenübernahme vom DSB-Server
