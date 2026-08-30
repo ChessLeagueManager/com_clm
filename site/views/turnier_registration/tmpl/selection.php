@@ -128,8 +128,8 @@ if (is_null($names)) $ii = 0;
 else $ii = count($names);
 if (isset($names) AND ($test_button > 0)) {				// notwendig, wenn Verein keine Mitglieder hat
 	foreach ($names as $player) {
-		if ($success_clm == false) echo "<br><br>DSB:"; else echo "<br><br>CLM:"; 
-		var_dump($player);
+//		if ($success_clm == false) echo "<br><br>DSB:"; else echo "<br><br>CLM:"; 
+//		var_dump($player);
 	}
 }
 
@@ -156,6 +156,9 @@ $heading = $this->turnier->name;
 		 Joomla.submitbutton = function (pressbutton) { 		
 			var form = document.adminForm;
 			// do field validation
+			if (form.reg_spieler.value == '') {
+				alert( "<?php echo Text::_( 'Bitte wählen Sie einen Eintrag aus!', true ); ?>" ); return false;
+			}
 			if (form.reg_spieler.value == 99) {
 				if (form.reg_club.value == "") {
 					alert( "<?php echo Text::_( 'REGISTRATION_E_CLUB', true ); ?>" ); return false;

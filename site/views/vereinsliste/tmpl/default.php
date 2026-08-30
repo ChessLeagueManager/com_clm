@@ -145,12 +145,17 @@ function tableOrdering( order, dir, task )
         <td class="col_5"><?php echo $vereine[$z]->MGL_M; ?></td>
         <td class="col_6"><?php echo $vereine[$z]->MGL_W; ?></td>
         <td class="col_6"><?php echo $vereine[$z]->MGL_P; ?></td>
-        <?php if ($fe_vereinsliste_dwz == 1) { ?><td class="col_7"><?php echo round($vereine[$z]->DWZ); ?> (<?php echo round($vereine[$z]->DWZ_SUM); ?>)</td><?php } ?>
-        <?php if ($fe_vereinsliste_elo == 1) { ?>
-        <td class="col_8">
-        <?php if ( $vereine[$z]->FIDE_Elo == 0 ) { echo "-"; } 
-		else { echo round($vereine[$z]->FIDE_Elo) . '(' . $vereine[$z]->ELO_SUM .')' ; } ?>
-        </td>
+        <?php if ($fe_vereinsliste_dwz == 1) { ?>
+			<td class="col_7">
+			<?php if ( $vereine[$z]->DWZ == 0 ) { echo "-"; } 
+			else { echo round($vereine[$z]->DWZ) . '(' . $vereine[$z]->DWZ_SUM .')' ; } ?>
+ 			</td>
+		<?php } ?>
+		<?php if ($fe_vereinsliste_elo == 1) { ?>
+			<td class="col_8">
+			<?php if ( $vereine[$z]->FIDE_Elo == 0 ) { echo "-"; } 
+			else { echo round($vereine[$z]->FIDE_Elo) . '(' . $vereine[$z]->ELO_SUM .')' ; } ?>
+			</td>
 		<?php } ?>
     </tr>
     <?php } ?>

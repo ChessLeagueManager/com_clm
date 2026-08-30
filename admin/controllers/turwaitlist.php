@@ -295,7 +295,7 @@ class CLMControllerTurWaitlist extends JControllerLegacy {
 		$id = clm_core::$load->request_int('id');
 		
 		$adminLink = new AdminLink();
-		$adminLink->view = "turplayers";
+		$adminLink->view = "turwaitlist";
 		$adminLink->more = array('id' => $id);
 		$adminLink->makeURL();
 		$this->app->redirect( $adminLink->url );
@@ -308,7 +308,7 @@ class CLMControllerTurWaitlist extends JControllerLegacy {
 		$id = clm_core::$load->request_int('id');
 		
 		$adminLink = new AdminLink();
-		$adminLink->view = "turplayers";
+		$adminLink->view = "turwaitlist";
 		$adminLink->more = array('id' => $id);
 		$adminLink->makeURL();
 		$this->app->redirect( $adminLink->url );
@@ -321,7 +321,7 @@ class CLMControllerTurWaitlist extends JControllerLegacy {
 		$id = clm_core::$load->request_int('id');
 		
 		$adminLink = new AdminLink();
-		$adminLink->view = "turplayers";
+		$adminLink->view = "turwaitlist";
 		$adminLink->more = array('id' => $id);
 		$adminLink->makeURL();
 		$this->app->redirect( $adminLink->url );
