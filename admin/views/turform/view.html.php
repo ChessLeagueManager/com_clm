@@ -40,6 +40,7 @@ class CLMViewTurForm extends JViewLegacy {
 			ToolBarHelper::save( 'save' );
 			ToolBarHelper::apply( 'apply' );
 			ToolBarHelper::custom('arbiter','edit.png','edit_f2.png',$lang->arbiter_assign,false);
+			ToolBarHelper::custom('turorg','edit.png','edit_f2.png',$lang->turorg_assign,false);
 		}
 		ToolBarHelper::spacer();
 		ToolBarHelper::cancel('cancel');

@@ -39,6 +39,15 @@ class CLMViewTurnier_Teilnehmer extends JViewLegacy {
 		$this->players = $model->players;
 		$this->s_gruppen = $model->s_gruppen;
 		
+		$mainframe =Factory::getApplication();
+		global $option;
+		$lists['state'] = $mainframe->getUserStateFromRequest( "$option.filter_state",'filter_state','','word' );
+ 
+		/* Get the values from the state object that were inserted in the model's construct function */
+		$lists['order'] = $mainframe->getUserStateFromRequest( "$option.filter_order", 'filter_order', 'snr', 'cmd' ); 
+		$lists['order_Dir'] = $mainframe->getUserStateFromRequest( "$option.filter_order_Dir",'filter_order_Dir','desc','word' );
+		$this->lists = $lists;
+
 		parent::display($tpl);
 	
 	}

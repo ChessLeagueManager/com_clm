@@ -13,6 +13,8 @@ defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 jimport( 'joomla.html.parameter' );
 
+use Joomla\CMS\Factory;
+
 class CLMModelTurnier_Teilnehmer extends JModelLegacy {
 	
 	function __construct() {
@@ -41,19 +43,40 @@ class CLMModelTurnier_Teilnehmer extends JModelLegacy {
 		if ($addCatToName != 0 AND ($this->turnier->catidAlltime > 0 OR $this->turnier->catidEdition > 0)) {
 			$this->turnier->name = CLMText::addCatToName($addCatToName, $this->turnier->name, $this->turnier->catidAlltime, $this->turnier->catidEdition);
 		}
+		
+		// sum of entry fee paid
+		$query = 'SELECT SUM(a.amount_paid) as sum_fee FROM #__clm_turniere_tlnr as a'
+				. ' WHERE  a.turnier = '.$this->turnier->id;
+		$this->_db->setQuery($query);
+		$ltlnr=$this->_db->loadObjectList();
+		$this->turnier->sum_fee=$ltlnr[0]->sum_fee;
+
 	}
 	
 	
 	function _getTurnierPlayers() {
 	
+		$mainframe	= Factory::getApplication();
+		$option 	= clm_core::$load->request_string( 'option' );
+
 		$query = "SELECT *"
 			." FROM `#__clm_turniere_tlnr`"
 			." WHERE turnier = ".$this->turnierid
-			." ORDER BY snr ASC"
 			;
+		$filter_order = clm_core::$load->request_string('filter_order');
+		$filter_order_Dir = clm_core::$load->request_string('filter_order_Dir');
+if (!isset($filter_order))		$filter_order     = $mainframe->getUserStateFromRequest( $option.'filter_order', 'filter_order', 'snr', 'cmd' );
+if (!isset($filter_order_Dir))	$filter_order_Dir = $mainframe->getUserStateFromRequest( $option.'filter_order_Dir', 'filter_order_Dir', '', 'word' );
+
+	if(!empty($filter_order) && !empty($filter_order_Dir) ){
+		$query .= ' ORDER BY '.$filter_order.' '.$filter_order_Dir;
+	} else {
+        $query .= ' ORDER BY snr ASC';
+	}
 		$this->_db->setQuery( $query );
-		$this->players = $this->_db->loadObjectList('snr');
-	
+//		$this->players = $this->_db->loadObjectList('snr');
+		$this->players = $this->_db->loadObjectList();
+
 		$query = "SELECT *"
 			." FROM `#__clm_turniere_sonderranglisten`"
 			." WHERE turnier = ".$this->turnierid
