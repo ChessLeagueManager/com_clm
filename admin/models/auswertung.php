@@ -44,6 +44,33 @@ function datei() {
 	$mt	= $jinput->get('filter_mt', null, null);
 	$et	= $jinput->get('filter_et', null, null);
 	$format	= $jinput->get('filter_format', null, null);
+	$monatswahl_m = $jinput->get('monatswahl_m', null, null);
+	$monatswahl_e = $jinput->get('monatswahl_e', null, null);
+
+	if ($monatswahl_m == "alle") {
+		$aktmonat_m = true;
+		$vormonat_m = true;
+	}
+	if ($monatswahl_m == "dieser") {
+		$aktmonat_m = true;
+		$vormonat_m = false;
+	}
+	if ($monatswahl_m == "letzter") {
+		$aktmonat_m = false;
+		$vormonat_m = true;
+	}
+	if ($monatswahl_e == "alle") {
+		$aktmonat_e = true;
+		$vormonat_e = true;
+	}
+	if ($monatswahl_e == "dieser") {
+		$aktmonat_e = true;
+		$vormonat_e = false;
+	}
+	if ($monatswahl_e == "letzter") {
+		$aktmonat_e = false;
+		$vormonat_e = true;
+	}
 
 	if(!is_null($liga)) {
 		$vround	= $jinput->get('lround', null, null);
@@ -491,15 +518,15 @@ function datei() {
 	if ($format == "4" OR $format == "14") {
 		if ($format == "4") {
 			if(!is_null($et)) { // Einzelturnier
-				$result = clm_core::$api->db_trf_export($et, false, false, false, true);
+				$result = clm_core::$api->db_trf_export($et, false, false, false, true, $vormonat_e, $aktmonat_e);
 			} else {			// Teamwettbewerb
-				$result = clm_core::$api->db_trf_export($liga, true, false, false, true);
+				$result = clm_core::$api->db_trf_export($liga, true, false, false, true, $vormonat_m, $aktmonat_m);
 			}
 		} else {
 			if(!is_null($et)) { // Einzelturnier
-				$result = clm_core::$api->db_trf_export($et, false, false, true, true);
+				$result = clm_core::$api->db_trf_export($et, false, false, true, true, true, true);
 			} else {			// Teamwettbewerb
-				$result = clm_core::$api->db_trf_export($liga, true, false, true, true);
+				$result = clm_core::$api->db_trf_export($liga, true, false, true, true, true, true);
 			}
 		}
 		$xml = $result[0];

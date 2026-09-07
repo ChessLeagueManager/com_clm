@@ -1,0 +1,307 @@
+diff --git a/admin/models/auswertung.php b/admin/models/auswertung.php
+index 41d22c1..b202ad3 100644
+--- a/admin/models/auswertung.php
++++ b/admin/models/auswertung.php
+@@ -44,6 +44,33 @@ function datei() {
+ 	$mt	= $jinput->get('filter_mt', null, null);
+ 	$et	= $jinput->get('filter_et', null, null);
+ 	$format	= $jinput->get('filter_format', null, null);
++	$monatswahl_m = $jinput->get('monatswahl_m', null, null);
++	$monatswahl_e = $jinput->get('monatswahl_e', null, null);
++
++	if ($monatswahl_m == "alle") {
++		$aktmonat_m = true;
++		$vormonat_m = true;
++	}
++	if ($monatswahl_m == "dieser") {
++		$aktmonat_m = true;
++		$vormonat_m = false;
++	}
++	if ($monatswahl_m == "letzter") {
++		$aktmonat_m = false;
++		$vormonat_m = true;
++	}
++	if ($monatswahl_e == "alle") {
++		$aktmonat_e = true;
++		$vormonat_e = true;
++	}
++	if ($monatswahl_e == "dieser") {
++		$aktmonat_e = true;
++		$vormonat_e = false;
++	}
++	if ($monatswahl_e == "letzter") {
++		$aktmonat_e = false;
++		$vormonat_e = true;
++	}
+ 
+ 	if(!is_null($liga)) {
+ 		$vround	= $jinput->get('lround', null, null);
+@@ -491,15 +518,15 @@ function datei() {
+ 	if ($format == "4" OR $format == "14") {
+ 		if ($format == "4") {
+ 			if(!is_null($et)) { // Einzelturnier
+-				$result = clm_core::$api->db_trf_export($et, false, false, false, true);
++				$result = clm_core::$api->db_trf_export($et, false, false, false, true, $vormonat_e, $aktmonat_e);
+ 			} else {			// Teamwettbewerb
+-				$result = clm_core::$api->db_trf_export($liga, true, false, false, true);
++				$result = clm_core::$api->db_trf_export($liga, true, false, false, true, $vormonat_m, $aktmonat_m);
+ 			}
+ 		} else {
+ 			if(!is_null($et)) { // Einzelturnier
+-				$result = clm_core::$api->db_trf_export($et, false, false, true, true);
++				$result = clm_core::$api->db_trf_export($et, false, false, true, true, $vormonat_e, $aktmonat_e);
+ 			} else {			// Teamwettbewerb
+-				$result = clm_core::$api->db_trf_export($liga, true, false, true, true);
++				$result = clm_core::$api->db_trf_export($liga, true, false, true, true, $vormonat_m, $aktmonat_m);
+ 			}
+ 		}
+ 		$xml = $result[0];
+diff --git a/admin/views/auswertung/tmpl/default.php b/admin/views/auswertung/tmpl/default.php
+index fbd210f..486926a 100644
+--- a/admin/views/auswertung/tmpl/default.php
++++ b/admin/views/auswertung/tmpl/default.php
+@@ -33,6 +33,27 @@ use Joomla\CMS\HTML\HTMLHelper;
+ 	</fieldset>
+ </div>
+ 
++<script>
++function checkTeam() {
++	var x = document.getElementById("filter_format_m");
++	var y = document.getElementById("div_monatswahl_m");
++	if (x.value == 4) {
++		y.style.display = "block";
++	} else {
++		y.style.display = "none";
++	}
++}
++function checkEinzel() {
++	var x = document.getElementById("filter_format_e");
++	var y = document.getElementById("div_monatswahl_e");
++	if (x.value == 4) {
++		y.style.display = "block";
++	} else {
++		y.style.display = "none";
++	}
++}
++</script>
++
+ <div class="width-50 fltlft">
+ 		<form action="index.php?option=com_clm&view=auswertung" method="post" id="auswertung_dewis" name="adminForm"  enctype="multipart/form-data" >
+ 		<fieldset class="adminform"> 
+@@ -43,7 +64,7 @@ use Joomla\CMS\HTML\HTMLHelper;
+ 					<td width="30%"><input type="submit" value="<?php echo Text::_( 'DB_FILE_CREATE' ); ?>"></td>
+ 				</tr>
+ 				<tr>
+-					<td width="70%"><select id="filter_format" name="filter_format" class="inputbox" size="1" onchange="">
++					<td width="70%"><select id="filter_format_m" name="filter_format" class="inputbox" size="1" onchange="checkTeam()">
+ 						<option value="0"><?php echo Text::_( 'DB_FILE_FORMAT_0' ); ?></option>
+ 						<?php if ($countryversion =="de") { ?>
+ 							<option value="1"><?php echo Text::_( 'DB_FILE_FORMAT_1' ); ?></option>
+@@ -58,6 +79,15 @@ use Joomla\CMS\HTML\HTMLHelper;
+ 						<?php } ?>
+ 					</select></td>
+ 					<td width="30%">
++						<div id="div_monatswahl_m" style="display:none;">
++							<input type="radio" id="monatswahl_m" name="monatswahl_m" value="alle" checked="checked">
++							<label for="alles">alle Monate</label><br />
++							<input type="radio" id="monatswahl_m" name="monatswahl_m" value="dieser">
++							<label for="aktuell">aktueller Monat</label><br />
++							<input type="radio" id="monatswahl_m" name="monatswahl_m" value="letzter">
++							<label for="letzter">letzterer Monat</label>
++						</div>
++					</td>
+ 				</tr>
+ 				<tr>
+ 					<td width="70%">
+@@ -98,7 +128,7 @@ use Joomla\CMS\HTML\HTMLHelper;
+ 					<td width="30%"><input type="submit" value="<?php echo Text::_( 'DB_FILE_CREATE' ); ?>"></td>
+ 				</tr>
+ 				<tr>
+-					<td width="70%"><select id="filter_format" name="filter_format" class="inputbox" size="1" onchange="">
++					<td width="70%"><select id="filter_format_e" name="filter_format" class="inputbox" size="1" onchange="checkEinzel()">
+ 						<option value="0"><?php echo Text::_( 'DB_FILE_FORMAT_0' ); ?></option>
+ 					<?php if ($countryversion =="de") { ?>
+ 						<option value="2"><?php echo Text::_( 'DB_FILE_FORMAT_2' ); ?></option>
+@@ -111,9 +141,18 @@ use Joomla\CMS\HTML\HTMLHelper;
+ 							<option value="14"><?php echo Text::_( 'TRF mit Turnierdetails' ); ?></option>
+ 						<?php //} ?>
+ 					</select></td>
+-					<td width="30%"></td>
+-				</tr>
+-				<tr>
++					<td width="30%">
++						<div id="div_monatswahl_e" style="display:none;">
++							<input type="radio" id="monatswahl_e" name="monatswahl_e" value="alle" checked="checked">
++							<label for="alles">alle Monate</label><br />
++							<input type="radio" id="monatswahl_e" name="monatswahl_e" value="dieser">
++							<label for="aktuell">aktueller Monat</label><br />
++							<input type="radio" id="monatswahl_e" name="monatswahl_e" value="letzter">
++							<label for="letzter">letzterer Monat</label>
++						</div>
++					</td>
++					</tr>
++					<tr>
+ 					<td width="70%">
+ 						<font size="-1"> * Die TRF-Datei <b>mit Turnierdetails</b> ist gedacht zum Einspielen in eine andere CLM-Installation, bitte nicht zur FIDE einsenden</font>
+ 					</td>
+diff --git a/site/clm/api/db_trf_export.php b/site/clm/api/db_trf_export.php
+index 0096555..9a036b4 100644
+--- a/site/clm/api/db_trf_export.php
++++ b/site/clm/api/db_trf_export.php
+@@ -9,7 +9,7 @@
+  * trf-Export eines Turniers / einer Liga
+  */
+ 
+-function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextensions=false,$ratingexport=false) {
++function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextensions=false,$ratingexport=false,$vormonat=false,$aktmonat=false) {
+ 	$lang = clm_core::$lang->draw;
+ 	//CLM parameter auslesen
+ 	$config = clm_core::$db->config();
+@@ -20,6 +20,18 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
+ 	if ($debug > 0) { echo "<br><br>-- allgemeine Daten --";	}
+ 	if ($debug > 0) echo "<br><br>Turnier: ".$turnierid; 		//echo "<br>end"; //die();
+ 
++	if ($vormonat == true) {
++		$monat = (new DateTime('first day of previous month'))->format('Y-m');
++		if ($aktmonat == true) {
++			$monat = "";
++		}
++	} else {
++		$monat = "";
++		if ($aktmonat == true) {
++			$monat = substr(date("c"), 0, 7);
++		}
++	}
++
+ 	//----------------- functions --------------------------------
+ 	//
+ 	function ausgeschr($line) {
+@@ -156,7 +168,7 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
+ 	}
+ 
+ 	// Aufbau der allgemeinen Turnierzeilen als Array
+-	function common_lines($group,$turnier,$players,$teams,$rundentermine,$clmextensions,$ratingexport) {
++	function common_lines($group,$turnier,$players,$teams,$rundentermine,$clmextensions,$ratingexport,$monat) {
+ 		$config = clm_core::$db->config();
+  		$turparams = new clm_class_params($turnier->params);
+ 		$drawclubavoid = $turparams->get("drawclubavoid","0");	
+@@ -172,12 +184,32 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
+ 		else
+ 			$lines[]	= '022 '.clm_core::$load->sub_umlaute($turnier->city);
+ 		$lines[]	= '032 '.clm_core::$load->sub_umlaute($turnier->FIDEcco);
++		$dateStart = "";
++		if ($monat != "") {
++			$runde = 0;
++			while ($runde < $turnier->runden) {
++				$d = $rundentermine[$runde]->datum;
++				if (substr($d,0,strlen($monat)) == $monat) {
++					if ($dateStart == "") {
++						$dateStart = $d;
++					}
++					$dateEnd = $d;
++				}
++				$runde++;
++			}
++		}
++		if ($dateStart == "") {
++			$dateStart = $turnier->dateStart;
++		}
++		if ($dateEnd == "") {
++			$dateEnd = $turnier->dateEnd;
++		}
+ 		if ($turnier->FIDEcco <= '')
+ 			$lines[] = 'FFF Es ist keine Veranstalterföderation  eingetragen';
+-		$lines[] 	= '042 '.substr($turnier->dateStart,0,4).'/'.substr($turnier->dateStart,5,2).'/'.substr($turnier->dateStart,8,2);
++		$lines[] 	= '042 '.substr($dateStart,0,4).'/'.substr($dateStart,5,2).'/'.substr($dateStart,8,2);
+ 		if ($turnier->dateStart <= '1970-01-01')
+ 			$lines[] = 'FFF Es ist kein Turnierstartdatum  eingetragen';
+-		$lines[] 	= '052 '.substr($turnier->dateEnd,0,4).'/'.substr($turnier->dateEnd,5,2).'/'.substr($turnier->dateEnd,8,2);
++		$lines[] 	= '052 '.substr($dateEnd,0,4).'/'.substr($dateEnd,5,2).'/'.substr($dateEnd,8,2);
+ 		if ($turnier->dateEnd <= '1970-01-01')
+ 			$lines[] = 'FFF Es ist kein Turnierendedatum  eingetragen';
+ 		$lines[] 	= '062 '.count($players);
+@@ -281,7 +313,7 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
+ 	}
+ 
+ 	// Aufbau der Spielerzeilen als Array
+-	function player_lines($group,$turnier,$players,$erg_array,$round,$clmextensions,$ratingexport) {	
++	function player_lines($group,$turnier,$players,$erg_array,$round,$clmextensions,$ratingexport,$rundentermine,$monat) {	
+ 		$config = clm_core::$db->config();
+  		$turparams = new clm_class_params($turnier->params);
+ 		$drawclubavoid = $turparams->get("drawclubavoid","0");	
+@@ -342,25 +374,29 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
+ 			$line	.= ' '.sprintf('%4s',$players[$i]->rankingPos);
+ 			for ($ir = 1; $ir <=  $turnier->runden; $ir++) { 
+ 				$key = ($ir * 1000) + $players[$i]->snr;
+-				if (!isset($erg_array[$key])) 
+-					if ($ir < $round) $line .= sprintf('%10s','  0000 - Z');
+-					elseif ($players[$i]->tlnrStatus == 0) $line .= sprintf('%10s','  0000 - Z');
+-					else $line .= sprintf('%10s',' ');
+-				else {
+-					if ($erg_array[$key]->gegner == '0000') {
+-						if ($erg_array[$key]->ergebnis == "-") {
+-							$erg_array[$key]->ergebnis = "Z";
+-						}
+-						if ($erg_array[$key]->ergebnis == "=") {
+-							$erg_array[$key]->ergebnis = "H";
+-						}
+-						if ($erg_array[$key]->ergebnis == "+") {
+-							$erg_array[$key]->ergebnis = "F";
++				if (substr($rundentermine[$ir - 1]->datum, 0, strlen($monat)) == $monat) {
++					if (!isset($erg_array[$key])) 
++						if ($ir < $round) $line .= sprintf('%10s','  0000 - Z');
++						elseif ($players[$i]->tlnrStatus == 0) $line .= sprintf('%10s','  0000 - Z');
++						else $line .= sprintf('%10s',' ');
++					else {
++						if ($erg_array[$key]->gegner == '0000') {
++							if ($erg_array[$key]->ergebnis == "-") {
++								$erg_array[$key]->ergebnis = "Z";
++							}
++							if ($erg_array[$key]->ergebnis == "=") {
++								$erg_array[$key]->ergebnis = "H";
++							}
++							if ($erg_array[$key]->ergebnis == "+") {
++								$erg_array[$key]->ergebnis = "F";
++							}
+ 						}
++						$line .= '  '.sprintf('%4s',$erg_array[$key]->gegner);
++						$line .= ' '.sprintf('%1s',$erg_array[$key]->color);
++						$line .= ' '.sprintf('%1s',$erg_array[$key]->ergebnis);
+ 					}
+-					$line .= '  '.sprintf('%4s',$erg_array[$key]->gegner);
+-					$line .= ' '.sprintf('%1s',$erg_array[$key]->color);
+-					$line .= ' '.sprintf('%1s',$erg_array[$key]->ergebnis);
++				} else {
++					$line .= '          ';
+ 				}
+ 			}
+ 			$lines[] 	= $line;
+@@ -813,7 +849,7 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
+ 		}
+ 	}
+ 
+-	$lines_common = common_lines($group,$turnier,$players,$teams,$rundentermine,$clmextensions,$ratingexport);
++	$lines_common = common_lines($group,$turnier,$players,$teams,$rundentermine,$clmextensions,$ratingexport,$monat);
+ 		echo "<br><br>-- General --";	
+ 		$i = 0;
+ 		foreach ($lines_common as $lines_common1) {
+@@ -859,7 +895,7 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
+ 		if ($debug > 0) echo "<br>Erg $key: "; if ($debug > 0) var_dump($erg_array[$key]); 			
+ 	}
+ 
+-	$lines_player = player_lines($group,$turnier,$players,$erg_array,$round,$clmextensions,$ratingexport);
++	$lines_player = player_lines($group,$turnier,$players,$erg_array,$round,$clmextensions,$ratingexport,$rundentermine,$monat);
+ 	$nl = "\n";
+ 		echo "<br><br>-- Player data --";	
+ 		$i = 0;
+@@ -912,6 +948,10 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
+ 		}
+ 	}
+ 
++	$ret = $ret . "### Vormonat: " . ($vormonat ? "true":"false") . $nl;
++	$ret = $ret . "### akt. Monat: " . ($aktmonat ? "true":"false") . $nl;
++	$ret = $ret . "### monat: " . $monat . $nl;
++
+ 	return array($ret,$elines);
+ }
+ 

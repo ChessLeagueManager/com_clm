@@ -9,7 +9,7 @@
  * trf-Export eines Turniers / einer Liga
  */
 
-function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextensions=false,$ratingexport=false,$vormonat=true,$aktmonat=true) {
+function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextensions=false,$ratingexport=false) {
 	$lang = clm_core::$lang->draw;
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
@@ -19,18 +19,6 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
 	$new_ID = 0;
 	if ($debug > 0) { echo "<br><br>-- allgemeine Daten --";	}
 	if ($debug > 0) echo "<br><br>Turnier: ".$turnierid; 		//echo "<br>end"; //die();
-
-	if ($vormonat == true) {
-		$monat = (new DateTime('first day of previous month'))->format('Y-m');
-		if ($aktmonat == true) {
-			$monat = "";
-		}
-	} else {
-		$monat = "";
-		if ($aktmonat == true) {
-			$monat = substr(date("c"), 0, 7);
-		}
-	}
 
 	//----------------- functions --------------------------------
 	//
@@ -168,7 +156,7 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
 	}
 
 	// Aufbau der allgemeinen Turnierzeilen als Array
-	function common_lines($group,$turnier,$players,$teams,$rundentermine,$clmextensions,$ratingexport,$monat) {
+	function common_lines($group,$turnier,$players,$teams,$rundentermine,$clmextensions,$ratingexport) {
 		$config = clm_core::$db->config();
  		$turparams = new clm_class_params($turnier->params);
 		$drawclubavoid = $turparams->get("drawclubavoid","0");	
@@ -178,42 +166,17 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
 		$lines = array();
 		$line = "### Tournament Section  ";
 		$lines[] 	= $line;
-		if ($monat == "") {
-			$lines[] 	= '012 '.clm_core::$load->sub_umlaute($turnier->name);
-		} else {
-			$lines[] 	= '012 '.clm_core::$load->sub_umlaute($turnier->name . " (" . $monat . ")");
-		}
+		$lines[] 	= '012 '.clm_core::$load->utf8decode($turnier->name);
+		$lines[]	= '022 '.clm_core::$load->utf8decode($turnier->city);
 		if ($turnier->city <= '')
 			$lines[] = 'FFF Es ist kein Spielort bzw. -region eingetragen';
-		else
-			$lines[]	= '022 '.clm_core::$load->sub_umlaute($turnier->city);
-		$lines[]	= '032 '.clm_core::$load->sub_umlaute($turnier->FIDEcco);
-		$dateStart = "";
-		if ($monat != "") {
-			$runde = 0;
-			while ($runde < $turnier->runden) {
-				$d = $rundentermine[$runde]->datum;
-				if (substr($d,0,strlen($monat)) == $monat) {
-					if ($dateStart == "") {
-						$dateStart = $d;
-					}
-					$dateEnd = $d;
-				}
-				$runde++;
-			}
-		}
-		if ($dateStart == "") {
-			$dateStart = $turnier->dateStart;
-		}
-		if ($dateEnd == "") {
-			$dateEnd = $turnier->dateEnd;
-		}
+		$lines[]	= '032 '.clm_core::$load->utf8decode($turnier->FIDEcco);
 		if ($turnier->FIDEcco <= '')
 			$lines[] = 'FFF Es ist keine Veranstalterföderation  eingetragen';
-		$lines[] 	= '042 '.substr($dateStart,0,4).'/'.substr($dateStart,5,2).'/'.substr($dateStart,8,2);
+		$lines[] 	= '042 '.substr($turnier->dateStart,0,4).'/'.substr($turnier->dateStart,5,2).'/'.substr($turnier->dateStart,8,2);
 		if ($turnier->dateStart <= '1970-01-01')
 			$lines[] = 'FFF Es ist kein Turnierstartdatum  eingetragen';
-		$lines[] 	= '052 '.substr($dateEnd,0,4).'/'.substr($dateEnd,5,2).'/'.substr($dateEnd,8,2);
+		$lines[] 	= '052 '.substr($turnier->dateEnd,0,4).'/'.substr($turnier->dateEnd,5,2).'/'.substr($turnier->dateEnd,8,2);
 		if ($turnier->dateEnd <= '1970-01-01')
 			$lines[] = 'FFF Es ist kein Turnierendedatum  eingetragen';
 		$lines[] 	= '062 '.count($players);
@@ -275,6 +238,18 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
 			$lines[] 	= $line;
 		}
 		$lines[] 	= '142 '.$turnier->runden;
+
+		if (random(0,2) == 0) {			# zufällig die Farbe des ersten Spielers in Runde 1 ermitteln
+			$colorfirst = "B";
+		} else {
+			$colorfirst = "W";
+		}
+		$colorfirst = $turparams->get("colorfirst", $colorfirst);
+		$key = 10001;				# erste Runde, Startnummer 1
+		if (!isset($erg_array[$key])) {
+			$colorfirst = $erg_array[$key]->color;
+		}
+		$lines[] 	= '152 '.$turparams->$colorfirst;
 		
 		$time_control_code = clm_core::$api->db_time_control($turparams->get("time_control",""),true);
 		if ($time_control_code > '') {
@@ -289,10 +264,7 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
 				$lines[] 	= 'XCL '.$turnier->lokal;
 			}
 			if ($turnier->params != "") {
-				$a_params = explode("\n",$turnier->params);
-				foreach($a_params as $line) {
-					$lines[] = 'XCP '.$line;
-				}
+				$lines[] 	= 'XCP '. str_replace("\n",";;",$turnier->params);
 			}
 			$lines[] 	= 'XCF '.sprintf('%2s',$turnier->tiebr1) . " " .sprintf('%2s',$turnier->tiebr2) . " " .sprintf('%2s',$turnier->tiebr3);
 		}
@@ -317,7 +289,7 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
 	}
 
 	// Aufbau der Spielerzeilen als Array
-	function player_lines($group,$turnier,$players,$erg_array,$round,$clmextensions,$ratingexport,$rundentermine,$monat) {	
+	function player_lines($group,$turnier,$players,$erg_array,$round,$clmextensions,$ratingexport) {	
 		$config = clm_core::$db->config();
  		$turparams = new clm_class_params($turnier->params);
 		$drawclubavoid = $turparams->get("drawclubavoid","0");	
@@ -340,10 +312,10 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
 		}
 		
 		$taillines = array();
-		if ($round == 1) {
-			$line =	'XXC white1';
-			$taillines[] = $line;
-		}
+#		if ($round == 1) {
+#			$line =	'XXC white1';
+#			$taillines[] = $line;
+#		}
 		$groups = $tourn_accel_groups;
 		if ($groups == 0) {
 			$groups = 1;
@@ -377,30 +349,26 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
 			$line	.= ' '.sprintf('%4s',$players[$i]->sum_punkte);
 			$line	.= ' '.sprintf('%4s',$players[$i]->rankingPos);
 			for ($ir = 1; $ir <=  $turnier->runden; $ir++) { 
-				$key = ($ir * 1000) + $players[$i]->snr;
-				if (substr($rundentermine[$ir - 1]->datum, 0, strlen($monat)) == $monat) {
-					if (!isset($erg_array[$key])) 
-						if ($ir < $round) $line .= sprintf('%10s','  0000 - Z');
-						elseif ($players[$i]->tlnrStatus == 0) $line .= sprintf('%10s','  0000 - Z');
-						else $line .= sprintf('%10s',' ');
-					else {
-						if ($erg_array[$key]->gegner == '0000') {
-							if ($erg_array[$key]->ergebnis == "-") {
-								$erg_array[$key]->ergebnis = "Z";
-							}
-							if ($erg_array[$key]->ergebnis == "=") {
-								$erg_array[$key]->ergebnis = "H";
-							}
-							if ($erg_array[$key]->ergebnis == "+") {
-								$erg_array[$key]->ergebnis = "F";
-							}
+				$key = ($ir * 10000) + $players[$i]->snr;
+				if (!isset($erg_array[$key])) 
+					if ($ir < $round) $line .= sprintf('%10s','  0000 - Z');
+					elseif ($players[$i]->tlnrStatus == 0) $line .= sprintf('%10s','  0000 - Z');
+					else $line .= sprintf('%10s',' ');
+				else {
+					if ($erg_array[$key]->gegner == '0000') {
+						if ($erg_array[$key]->ergebnis == "-") {
+							$erg_array[$key]->ergebnis = "Z";
 						}
-						$line .= '  '.sprintf('%4s',$erg_array[$key]->gegner);
-						$line .= ' '.sprintf('%1s',$erg_array[$key]->color);
-						$line .= ' '.sprintf('%1s',$erg_array[$key]->ergebnis);
+						if ($erg_array[$key]->ergebnis == "=") {
+							$erg_array[$key]->ergebnis = "H";
+						}
+						if ($erg_array[$key]->ergebnis == "+") {
+							$erg_array[$key]->ergebnis = "F";
+						}
 					}
-				} else {
-					$line .= '          ';
+					$line .= '  '.sprintf('%4s',$erg_array[$key]->gegner);
+					$line .= ' '.sprintf('%1s',$erg_array[$key]->color);
+					$line .= ' '.sprintf('%1s',$erg_array[$key]->ergebnis);
 				}
 			}
 			$lines[] 	= $line;
@@ -853,7 +821,7 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
 		}
 	}
 
-	$lines_common = common_lines($group,$turnier,$players,$teams,$rundentermine,$clmextensions,$ratingexport,$monat);
+	$lines_common = common_lines($group,$turnier,$players,$teams,$rundentermine,$clmextensions,$ratingexport);
 		echo "<br><br>-- General --";	
 		$i = 0;
 		foreach ($lines_common as $lines_common1) {
@@ -864,8 +832,8 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
 	$erg_array = array();
 	foreach ($erg as $erg1) {
 		if ($group) {
-			if ($erg1->lsnr < 1) ontinue;
-			$key = ($erg1->runde * 1000) + $erg1->lsnr;
+			if ($erg1->lsnr < 1) continue;
+			$key = ($erg1->runde * 10000) + $erg1->lsnr;
 			$erg_array[$key] = new stdClass();			
 			if ($erg1->lgsnr == 0) $erg_array[$key]->gegner = '0000';
 			else $erg_array[$key]->gegner = $erg1->lgsnr;
@@ -873,7 +841,7 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
 			elseif ($erg1->weiss == '1') $erg_array[$key]->color = 'w';
 			else $erg_array[$key]->color = 'b';
 		} else {
-			$key = ($erg1->runde * 1000) + $erg1->spieler;
+			$key = ($erg1->runde * 10000) + $erg1->spieler;
 			$erg_array[$key] = new stdClass();
 			if ($erg1->gegner == 0) $erg_array[$key]->gegner = '0000';
 			else $erg_array[$key]->gegner = $erg1->gegner;
@@ -899,7 +867,7 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
 		if ($debug > 0) echo "<br>Erg $key: "; if ($debug > 0) var_dump($erg_array[$key]); 			
 	}
 
-	$lines_player = player_lines($group,$turnier,$players,$erg_array,$round,$clmextensions,$ratingexport,$rundentermine,$monat);
+	$lines_player = player_lines($group,$turnier,$players,$erg_array,$round,$clmextensions,$ratingexport);
 	$nl = "\n";
 		echo "<br><br>-- Player data --";	
 		$i = 0;
@@ -951,10 +919,6 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
 			$ret = $ret . clm_core::$load->utf8decode($line_3).$nl;
 		}
 	}
-
-	$ret = $ret . "### Vormonat: " . ($vormonat ? "true":"false") . $nl;
-	$ret = $ret . "### akt. Monat: " . ($aktmonat ? "true":"false") . $nl;
-	$ret = $ret . "### monat: " . $monat . $nl;
 
 	return array($ret,$elines);
 }

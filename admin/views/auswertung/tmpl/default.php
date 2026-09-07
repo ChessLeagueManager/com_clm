@@ -33,6 +33,27 @@ use Joomla\CMS\HTML\HTMLHelper;
 	</fieldset>
 </div>
 
+<script>
+function checkTeam() {
+	var x = document.getElementById("filter_format_m");
+	var y = document.getElementById("div_monatswahl_m");
+	if (x.value == 4) {
+		y.style.display = "block";
+	} else {
+		y.style.display = "none";
+	}
+}
+function checkEinzel() {
+	var x = document.getElementById("filter_format_e");
+	var y = document.getElementById("div_monatswahl_e");
+	if (x.value == 4) {
+		y.style.display = "block";
+	} else {
+		y.style.display = "none";
+	}
+}
+</script>
+
 <div class="width-50 fltlft">
 		<form action="index.php?option=com_clm&view=auswertung" method="post" id="auswertung_dewis" name="adminForm"  enctype="multipart/form-data" >
 		<fieldset class="adminform"> 
@@ -43,7 +64,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 					<td width="30%"><input type="submit" value="<?php echo Text::_( 'DB_FILE_CREATE' ); ?>"></td>
 				</tr>
 				<tr>
-					<td width="70%"><select id="filter_format" name="filter_format" class="inputbox" size="1" onchange="">
+					<td width="70%"><select id="filter_format_m" name="filter_format" class="inputbox" size="1" onchange="checkTeam()">
 						<option value="0"><?php echo Text::_( 'DB_FILE_FORMAT_0' ); ?></option>
 						<?php if ($countryversion =="de") { ?>
 							<option value="1"><?php echo Text::_( 'DB_FILE_FORMAT_1' ); ?></option>
@@ -58,6 +79,15 @@ use Joomla\CMS\HTML\HTMLHelper;
 						<?php } ?>
 					</select></td>
 					<td width="30%">
+						<div id="div_monatswahl_m" style="display:none;">
+							<input type="radio" id="monatswahl_m" name="monatswahl_m" value="alle">
+							<label for="alles">alle Monate</label><br />
+							<input type="radio" id="monatswahl_m" name="monatswahl_m" value="dieser" checked="checked">
+							<label for="aktuell">aktueller Monat (<?php echo (new DateTime())->format('m/y'); ?>)</label><br />
+							<input type="radio" id="monatswahl_m" name="monatswahl_m" value="letzter">
+							<label for="letzter">letzterer Monat (<?php echo (new DateTime('first day of previous month'))->format('m/y'); ?>)</label>
+						</div>
+					</td>
 				</tr>
 				<tr>
 					<td width="70%">
@@ -98,7 +128,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 					<td width="30%"><input type="submit" value="<?php echo Text::_( 'DB_FILE_CREATE' ); ?>"></td>
 				</tr>
 				<tr>
-					<td width="70%"><select id="filter_format" name="filter_format" class="inputbox" size="1" onchange="">
+					<td width="70%"><select id="filter_format_e" name="filter_format" class="inputbox" size="1" onchange="checkEinzel()">
 						<option value="0"><?php echo Text::_( 'DB_FILE_FORMAT_0' ); ?></option>
 					<?php if ($countryversion =="de") { ?>
 						<option value="2"><?php echo Text::_( 'DB_FILE_FORMAT_2' ); ?></option>
@@ -111,9 +141,18 @@ use Joomla\CMS\HTML\HTMLHelper;
 							<option value="14"><?php echo Text::_( 'TRF mit Turnierdetails' ); ?></option>
 						<?php //} ?>
 					</select></td>
-					<td width="30%"></td>
-				</tr>
-				<tr>
+					<td width="30%">
+						<div id="div_monatswahl_e" style="display:none;">
+							<input type="radio" id="monatswahl_e" name="monatswahl_e" value="alle">
+							<label for="alles">alle Monate</label><br />
+							<input type="radio" id="monatswahl_e" name="monatswahl_e" value="dieser" checked="checked">
+							<label for="aktuell">aktueller Monat (<?php echo (new DateTime())->format('m/y'); ?>)</label><br />
+							<input type="radio" id="monatswahl_e" name="monatswahl_e" value="letzter">
+							<label for="letzter">letzterer Monat (<?php echo (new DateTime('first day of previous month'))->format('m/y'); ?>)</label>
+						</div>
+					</td>
+					</tr>
+					<tr>
 					<td width="70%">
 						<font size="-1"> * Die TRF-Datei <b>mit Turnierdetails</b> ist gedacht zum Einspielen in eine andere CLM-Installation, bitte nicht zur FIDE einsenden</font>
 					</td>
