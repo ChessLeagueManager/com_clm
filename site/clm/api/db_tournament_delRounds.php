@@ -38,7 +38,8 @@ function clm_api_db_tournament_delRounds($id, $group = true) {
 		if (clm_core::$db->turniere->get($id)->isNew()) {
 			return array(false, "e_tournamentNotExisting");
 		}
-		if ((clm_core::$db->turniere->get($id)->tl != clm_core::$access->getJid() && clm_core::$access->access('BE_tournament_edit_round') !== true) || (clm_core::$access->access('BE_tournament_edit_round') === false)) {
+//		if ((clm_core::$db->turniere->get($id)->tl != clm_core::$access->getJid() && clm_core::$access->access('BE_tournament_edit_round') !== true) || (clm_core::$access->access('BE_tournament_edit_round') === false)) {
+		if ((!clm_core::$load->rights_check('TL',clm_core::$db->turniere->get($id)->id) && clm_core::$access->access('BE_tournament_edit_round') !== true) || (clm_core::$access->access('BE_tournament_edit_round') === false)) {
 			return array(false, "e_noRights");
 		}
 		clm_core::$api->direct("db_tournament_delDWZ", array($id, false));

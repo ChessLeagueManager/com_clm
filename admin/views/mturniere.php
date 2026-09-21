@@ -27,6 +27,7 @@ class CLMViewMTurniere
 			ToolBarHelper::save( 'save' );
 			ToolBarHelper::apply( 'apply' );
 			ToolBarHelper::custom('arbiter','edit.png','edit_f2.png',$lang->arbiter_assign,false);
+			ToolBarHelper::custom('turorg','edit.png','edit_f2.png',$lang->turorg_assign,false);
 			ToolBarHelper::custom( 'email', 'mail.png', 'mail_f2.png', Text::_('LEAGUE_MAIL_TO_ML'),false); 
 		}
 		ToolBarHelper::cancel();

@@ -89,7 +89,25 @@ function display($cachable = false, $urlparams = array())
 		$mainframe->redirect( $link);
 	}
 	if ($clmAccess->access('BE_team_edit') === true) $where_sl = '';
-	else $where_sl = ' AND d.sl = '.clm_core::$access->getJid();
+//	else $where_sl = ' AND d.sl = '.clm_core::$access->getJid();
+	else {
+		// alle Teamwettbewerbe der aktuellen Saison
+		$sql = 'SELECT a.id AS cid, a.name FROM #__clm_liga as a'
+			." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
+			." WHERE s.archiv = 0 ";
+		$allligen	= clm_core::$db->loadObjectList($sql);
+//echo "<br>ligen1"; var_dump($allligen);
+		unset($ligen);
+		$strligen = '';
+		foreach ($allligen as $lig) {
+			if (clm_core::$load->rights_check('SL',$lig->cid)) $strligen .= ",".(string) $lig->cid;
+		}
+//echo "<br>strligen"; var_dump($strligen);
+		$where_sl = ' AND FIND_IN_SET(d.id,"'.$strligen.'") ';
+//echo "<br>where_sl"; var_dump($where_sl);
+	}
+//die();
+
 	// get the total number of records
 	$query = ' SELECT COUNT(*) '
 		.' FROM #__clm_mannschaften AS a'
@@ -293,7 +311,8 @@ function edit()
 			$mainframe->redirect( $link);
 		}
 
-		if (isset($lid[0]) && $lid[0]->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_edit') !== true ) {
+//		if (isset($lid[0]) && $lid[0]->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_edit') !== true ) {
+		if (isset($lid[0]) && !clm_core::$load->rights_check('SL',$row->liga) AND $clmAccess->access('BE_team_edit') !== true ) {
 			$mainframe->enqueueMessage( Text::_( 'MANNSCHAFTEN_ERROR_MANNSCHAFT_STAFFEL' ), 'warning' );
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link);
@@ -313,28 +332,39 @@ function edit()
 	// do stuff for new records
 		$row->published = 0;
 	}
-	// Ligaliste
+/*	// Ligaliste
 	$sql = " SELECT a.id as liga, a.name FROM #__clm_liga as a"
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 		." WHERE  s.archiv = 0 ".$where_sl;
 		;
 	$db->setQuery( $sql );
 	$non_sl=$db->loadObjectList();
+*/
+	// Ligaliste
+	$sql = " SELECT a.id as liga, a.name FROM #__clm_liga as a"
+		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
+		." WHERE  s.archiv = 0 ";
+		;
+	$ligen	= clm_core::$db->loadObjectList($sql);
+//echo "<br>ligen1"; var_dump($ligen);
+	if ($clmAccess->access('BE_team_edit') == '2') {
+		$allligen = $ligen;
+		unset($ligen);
+		$ligen = array();
+		foreach ($allligen as $lig) {
+			if (clm_core::$load->rights_check('SL',$lig->liga)) $ligen[] = $lig;
+		}
+	}
 	// Falls kein SL einer Liga dann kann auch keine Mannschaft angelegt werden
-	if (!isset($non_sl[0]->liga) AND $clmAccess->access('BE_team_create') === false) {
+	if (!isset($ligen[0]->liga) AND $clmAccess->access('BE_team_create') === false) {
 		$mainframe->enqueueMessage( Text::_( 'MANNSCHAFTEN_ERROR_STAFFEL_MANNSCHAFT' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
 
-	$db->setQuery($sql);
-	if (!clm_core::$db->query($sql)){
-		$mainframe->enqueueMessage( $db->getErrorMsg(), 'error' );
-		$link = 'index.php?option='.$option.'&section='.$section;
-		$mainframe->redirect( $link);
-	}
 	$ligalist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'MANNSCHAFTEN_LIGA') , 'liga', 'name' );
-	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
+//	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
+	$ligalist	= array_merge( $ligalist, $ligen );
 //	$lists['liga']	= HTMLHelper::_('select.genericlist',   $ligalist, 'liga', 'class="js-example-basic-single" size="1" style="width:300px"','liga', 'name', $row->liga );
 	$lists['liga']	= HTMLHelper::_('select.genericlist',   $ligalist, 'liga', 'class="'.$field_search.'" size="1" style="width:300px"','liga', 'name', $row->liga );
 	$lists['published']	= HTMLHelper::_('select.booleanlist',  'published', 'class="inputbox"', $row->published );
@@ -663,7 +693,8 @@ function remove()
 		$mainframe->redirect( $link);
 	}
 																								   
-	if ( $lid[0]->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_delete') !== true ) {
+//	if ( $lid[0]->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_delete') !== true ) {
+	if ( !clm_core::$load->rights_check('SL',$row->liga) AND $clmAccess->access('BE_team_delete') !== true ) {
 		$mainframe->enqueueMessage( Text::_( 'MANNSCHAFTEN_MANNSCHAFT_LOESCH' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
@@ -763,7 +794,8 @@ function publish()
 		$mainframe->redirect( $link);
 	}
 																								   
-	if ( $lid[0]->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_edit') !== true ) {
+//	if ( $lid[0]->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_edit') !== true ) {
+	if ( !clm_core::$load->rights_check('SL',$row->liga) AND $clmAccess->access('BE_team_edit') !== true ) {
 		$mainframe->enqueueMessage( Text::_( 'MANNSCHAFTEN_MANNSCHAFT_PUB' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
@@ -925,7 +957,8 @@ function copy()
 		$mainframe->redirect( $link);
 	}
 																								   
-	if ( $lid[0]->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_create') !== true ) {
+//	if ( $lid[0]->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_create') !== true ) {
+	if ( !clm_core::$load->rights_check('SL',$row->liga) AND $clmAccess->access('BE_team_create') !== true ) {
 		$mainframe->enqueueMessage( Text::_( 'MANNSCHAFTEN_MANNSCHAFT_KOPIE' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
@@ -1036,7 +1069,8 @@ public static function meldeliste()
 		$mainframe->redirect( $link);
 	}
 
-	if ( $rang == 0 AND $rowliga->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_registration_list') !== true) {
+//	if ( $rang == 0 AND $rowliga->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_registration_list') !== true) {
+	if ( $rang == 0 AND !clm_core::$load->rights_check('SL',$rowliga->id) AND $clmAccess->access('BE_team_registration_list') !== true) {
 		$mainframe->enqueueMessage( Text::_( 'MANNSCHAFTEN_MELDELISTE_BEARBEITEN' ), 'warning' );
 		$mainframe->redirect( $link);
 	}
@@ -1097,7 +1131,8 @@ public static function copy_meldeliste()
 		$mainframe->redirect( $link);
 	}
 
-	if ( $rang == 0 AND $rowliga->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_registration_list') !== true) {
+//	if ( $rang == 0 AND $rowliga->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_registration_list') !== true) {
+	if ( $rang == 0 AND !clm_core::$load->rights_check('SL',$rowliga->id) AND $clmAccess->access('BE_team_registration_list') !== true) {
 		$mainframe->enqueueMessage( Text::_( 'MANNSCHAFTEN_MELDELISTE_BEARBEITEN' ), 'warning' );
 		$mainframe->redirect( $link);
 	}
@@ -1165,7 +1200,8 @@ public static function delete_meldeliste()
 		$mainframe->redirect( $link);
 	}
 
-	if ( $rang == 0 AND $rowliga->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_registration_list') !== true) {
+//	if ( $rang == 0 AND $rowliga->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_registration_list') !== true) {
+	if ( $rang == 0 AND !clm_core::$load->rights_check('SL',$rowliga->id) AND $clmAccess->access('BE_team_registration_list') !== true) {
 		$mainframe->enqueueMessage( Text::_( 'MANNSCHAFTEN_NO_MELDE_LOESCH' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
@@ -1187,8 +1223,8 @@ public static function delete_meldeliste()
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
-	if ( $rowliga->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_registration_list') !== true) {
-																								   
+//	if ( $rowliga->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_registration_list') !== true) {
+	if ( !clm_core::$load->rights_check('SL',$rowliga->id) AND $clmAccess->access('BE_team_registration_list') !== true) {																								   
 		$mainframe->enqueueMessage( Text::_( 'MANNSCHAFTEN_MELDE_LOESCH' ), 'warning' );
 		$mainframe->redirect( $link);
 	}
@@ -1548,7 +1584,8 @@ public static function spielfrei()
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
-	if ( $rowliga->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_edit') !== true) {
+//	if ( $rowliga->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_edit') !== true) {
+	if ( !clm_core::$load->rights_check('SL',$rowliga->id) AND $clmAccess->access('BE_team_edit') !== true) {
 		$mainframe->enqueueMessage( Text::_( 'MANNSCHAFTEN_MANNSCHAFT_SPIELFREI' ), 'warning' );
 		$mainframe->redirect( $link);
 					}
@@ -1628,7 +1665,8 @@ public static function annull()			// Mannschaft annullieren d.h. Brett- und Wert
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
-	if ( $rowliga->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_edit') !== true) {
+//	if ( $rowliga->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_team_edit') !== true) {
+	if ( !clm_core::$load->rights_check('SL',$rowliga->id) AND $clmAccess->access('BE_team_edit') !== true) {
 		$mainframe->enqueueMessage( Text::_( 'MANNSCHAFTEN_MANNSCHAFT_ANNULL' ), 'warning' );
 		$mainframe->redirect( $link);
 	}

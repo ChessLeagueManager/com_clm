@@ -185,7 +185,8 @@ function display($cachable = false, $urlparams = array())
 		$mainframe->enqueueMessage( Text::_('LIGEN_STAFFEL_TOTAL'),'warning' );
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
-	} elseif ($clmAccess->access('BE_'.$mppoint.'_edit_result') === true) $where_sl = '';
+	} 
+/*	elseif ($clmAccess->access('BE_'.$mppoint.'_edit_result') === true) $where_sl = '';
 	else $where_sl = ' AND a.sl = '.clm_core::$access->getJid();
 	
 	if($rows[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
@@ -199,8 +200,24 @@ function display($cachable = false, $urlparams = array())
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
 		." WHERE a.rnd = 1 AND a.published = 1 AND s.archiv = 0 AND s.published = 1 ".$where_sl;
 	$db->setQuery($sql);
+*/
+	// Ligafilter
+	$sql = 'SELECT a.id AS cid, a.name FROM #__clm_liga as a'
+		." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
+		." WHERE a.rnd = 1 AND a.published = 1 AND s.archiv = 0 AND s.published = 1 ";
+	$ligen	= clm_core::$db->loadObjectList($sql);
+//echo "<br>ligen1"; var_dump($ligen);
+	if ($clmAccess->access('BE_'.$mppoint.'_edit_round') == '2') {
+		$allligen = $ligen;
+		unset($ligen);
+		$ligen = array();
+		foreach ($allligen as $lig) {
+			if (clm_core::$load->rights_check('SL',$lig->cid)) $ligen[] = $lig;
+		}
+	}
 	$ligalist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'ERGEBNISSE_LIGA' ), 'cid', 'name' );
-	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
+//	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
+	$ligalist	= array_merge( $ligalist, $ligen );
 //	$lists['lid']	= HTMLHelper::_('select.genericlist', $ligalist, 'filter_lid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
 	$lists['lid']	= HTMLHelper::_('select.genericlist', $ligalist, 'filter_lid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
 	// Rundenfilter
@@ -314,7 +331,8 @@ function edit()
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	} 
-	if ($runde[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+//	if ($runde[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+	if (!clm_core::$load->rights_check('SL',$runde[0]->lid) AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
 		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_IHRER'),'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
@@ -548,7 +566,8 @@ function remove()
 			$section = 'runden';
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 		} 
-		if ($data[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+//		if ($data[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+		if (!clm_core::$load->rights_check('SL',$data[0]->lid) AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
 			$mainframe->enqueueMessage( Text::_('ERGEBNISSE_LOESCH'),'warning' );
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link);
@@ -1545,6 +1564,8 @@ function wertung()
 	$option 	= clm_core::$load->request_string( 'option' );
 	$section 	= clm_core::$load->request_string( 'section' );
 	$cid 		= clm_core::$load->request_array_int('cid');
+	if (is_null($cid)) {
+		$cid[0] = $id; }
 
 	if (count($cid) < 1) {
 		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_SELECT'),'warning' );
@@ -1610,7 +1631,8 @@ function wertung()
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	} 
-	if ($runde[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+//	if ($runde[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+	if (!clm_core::$load->rights_check('SL',$runde[0]->lid) AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
 		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_DWZ_BEARBEIT'),'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
@@ -2302,7 +2324,8 @@ function delete_wertung()
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	} 
-	if ($liga_sl->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+//	if ($liga_sl->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+	if (!clm_core::$load->rights_check('SL',$liga->id) AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
 		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_DWZ_LOESCHEN'),'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
@@ -2618,7 +2641,8 @@ function kampflos($gast)
 		$section = 'runden';
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	} 
-	if ($liga_sl->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+//	if ($liga_sl->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+	if (!clm_core::$load->rights_check('SL',$lig->cid) AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
 		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_LIGEN_ARBEIT'),'warning' );
 		$mainframe->redirect( $link);
 					}

@@ -34,7 +34,7 @@ public static function setRundenToolbar($sid, $params_round_date)
 		}
 		ToolBarHelper::custom('check','preview.png','upload_f2.png','RUNDE_CHECK',false);
 		// Nur CLM-Admin hat Zugriff auf Toolbar
-	  if($clmAccess->access('BE_league_edit_round') !== false) {
+	  if(($clmAccess->access('BE_teamtournament_edit_round') !== false) OR ($clmAccess->access('BE_league_edit_round') !== false)) {
 		ToolBarHelper::custom( 'termine_copy', 'copy.png', 'copy_f2.png', 'Termine kopieren',false ); 
 		ToolBarHelper::publishList();
 		ToolBarHelper::unpublishList();

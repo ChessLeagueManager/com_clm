@@ -66,7 +66,7 @@ class CLMControllerMTurniere extends JControllerLegacy
 	$saison->load( $row->sid );
 	// illegaler Einbruchversuch über URL !
 	// evtl. mitschneiden !?!
-		if ($saison->archiv == "1" AND $clmAccess->access('BE_teamtournament_edit_detail') === false) {
+		if ($saison->archiv == "1" AND $clmAccess->access('BE_teamtournament_edit_detail') !== true) {
 			$msg = Text::_( 'MTURN_ARCHIV' );
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
@@ -77,7 +77,8 @@ class CLMControllerMTurniere extends JControllerLegacy
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 		}
-		if($row->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_teamtournament_edit_detail') !== true) {
+//		if($row->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_teamtournament_edit_detail') !== true) {
+		if(!clm_core::$load->rights_check('SL',$row->id) AND $clmAccess->access('BE_teamtournament_edit_detail') !== true) {
 			$msg = Text::_( 'MTURN_STAFFEL' );
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
@@ -421,13 +422,13 @@ public static function arbiter()
 
 	// Prüfen ob User Berechtigung hat
 	if ( $liga[0]->liga_mt == 0 ) {
-		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
+		if (( !clm_core::$load->rights_check('SL',$liga[0]->lid) AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
 			$msg = Text::_( 'LIGEN_NO_FIXTURE');
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$tid);
 		}
 	} else {
-		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
+		if (( !clm_core::$load->rights_check('SL',$liga[0]->lid) AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
 			$msg = Text::_( 'LIGEN_NO_FIXTURE');
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$tid);
@@ -436,6 +437,48 @@ public static function arbiter()
 
 	// Link MUSS hardcodiert sein !!!
 	$mainframe->redirect( 'index.php?option='.$option.'&view=arbiterassign&task=edit&returnview=mturniere&lid='.$lid.'&tid='.$tid);
+	}
+
+public static function turorg()
+	{
+	defined('clm') or die('Restricted access');
+	$mainframe	= Factory::getApplication();
+
+	$db 		=Factory::getDBO();
+	$user 		=Factory::getUser();
+	$lid 		= clm_core::$load->request_int('lid');
+	$tid 		= clm_core::$load->request_int('tid');
+
+	$option 	= clm_core::$load->request_string('option');
+	$section 	= clm_core::$load->request_string('section');
+
+	// Ligadaten und Paarungsdaten holen
+	$query	= "SELECT a.id as lid, a.sid, a.sl, a.liga_mt "
+		." FROM #__clm_liga as a"
+		." WHERE a.id = ".$lid
+		;
+	$db->setQuery($query);
+	$liga=$db->loadObjectList();
+
+	$clmAccess = clm_core::$access;      
+
+	// Prüfen ob User Berechtigung hat
+	if ( $liga[0]->liga_mt == 0 ) {
+		if (( !clm_core::$load->rights_check('SL',$liga[0]->lid) AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
+			$msg = Text::_( 'LIGEN_NO_FIXTURE');
+			$mainframe->enqueueMessage($msg, 'warning');
+			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$tid);
+		}
+	} else {
+		if (( !clm_core::$load->rights_check('SL',$liga[0]->lid) AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
+			$msg = Text::_( 'LIGEN_NO_FIXTURE');
+			$mainframe->enqueueMessage($msg, 'warning');
+			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$tid);
+		}
+	}	
+
+	// Link MUSS hardcodiert sein !!!
+	$mainframe->redirect( 'index.php?option='.$option.'&view=turorgassign&task=edit&returnview=mturniere&lid='.$lid.'&tid='.$tid);
 	}
 
 // freie Mail an alle Mannschaftsleiter
@@ -461,13 +504,13 @@ function email()
 	// Prüfen ob User Berechtigung hat
 	$clmAccess = clm_core::$access;
 	if ( $liga[0]->liga_mt == 0 ) {
-		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
+		if (( !clm_core::$load->rights_check('SL',$liga[0]->lid) AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
 			$msg = Text::_( 'LIGEN_NO_FIXTURE');
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$tid);
 		}
 	} else {
-		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
+		if (( !clm_core::$load->rights_check('SL',$liga[0]->lid) AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
 			$msg = Text::_( 'LIGEN_NO_FIXTURE');
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$tid);

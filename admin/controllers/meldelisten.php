@@ -185,7 +185,8 @@ function edit()
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
 	}
-	if ( isset($lid[0]) && $lid[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_team_registration_list') !== true AND $task == 'edit') {
+//	if ( isset($lid[0]) && $lid[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_team_registration_list') !== true AND $task == 'edit') {
+	if ( isset($lid[0]) && !clm_core::$load->rights_check('SL',$row->liga) AND $clmAccess->access('BE_team_registration_list') !== true AND $task == 'edit') {
 		$mainframe->enqueueMessage( Text::_( 'MELDELISTEN_STAFFEL' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section=mannschaften';
 		$mainframe->redirect( $link);

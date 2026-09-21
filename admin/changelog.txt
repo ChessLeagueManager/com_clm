@@ -16,6 +16,7 @@ $ -> Language fix or change
 + ELO-Auswertungsdatei monatlich erstellen
 + Einzelturniere: Startgeld-Aktualisierung durch Kassierer im Frontend
 + Einzelturniere mit erweiterten Org.Team
++ Teamwettbewerbe mit erweiterten Org.Team
 
 - - - - - 5.1.1 - [03-09-2026] - - - - - - - - - - - - - - - - - - - -
 + Weitere Hilfetexte Benutzer und Verein

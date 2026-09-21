@@ -54,7 +54,8 @@ function display($cachable = false, $urlparams = array())
 	}
 	$clmAccess = clm_core::$access;      
 	// Prüfen ob User Berechtigung hat
-	if (( $row->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_fixture') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_fixture') === false)) {
+//	if (( $row->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_fixture') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_fixture') === false)) {
+	if (( !clm_core::$load->rights_check('SL',$row->id) AND $clmAccess->access('BE_'.$mppoint.'_edit_fixture') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_fixture') === false)) {
 		$mainframe->enqueueMessage( Text::_( 'PAARUNG_LIGEN' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$csection;
 		$mainframe->redirect( $link);

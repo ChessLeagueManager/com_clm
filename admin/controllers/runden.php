@@ -150,28 +150,45 @@ function display($cachable = false, $urlparams = array())
 	if($clmAccess->access('BE_'.$mppoint.'_edit_round') === false) {
 		$mainframe->enqueueMessage(Text::_( 'LIGEN_STAFFEL_TOTAL' ), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&view=view_tournament_group&liga='.$liga_type);
-	} elseif ($clmAccess->access('BE_'.$mppoint.'_edit_round') === true) $where_sl = '';
+	}
+/*	elseif ($clmAccess->access('BE_'.$mppoint.'_edit_round') === true) $where_sl = '';
 	else $where_sl = ' AND a.sl = '.clm_core::$access->getJid();
-	
+ 
 	// Ligafilter
 	$sql = 'SELECT a.id AS cid, a.name FROM #__clm_liga as a'
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
 		." WHERE s.archiv = 0 ".$where_sl;
 	$db->setQuery($sql);
+*/
+	// Ligafilter
+	$sql = 'SELECT a.id AS cid, a.name FROM #__clm_liga as a'
+		." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
+		." WHERE s.archiv = 0 ";
+	$ligen	= clm_core::$db->loadObjectList($sql);
+	if ($clmAccess->access('BE_'.$mppoint.'_edit_round') == '2') {
+		$allligen = $ligen;
+		unset($ligen);
+		$ligen = array();
+		foreach ($allligen as $lig) {
+			if (clm_core::$load->rights_check('SL',$lig->cid)) $ligen[] = $lig;
+		}
+	}
 
 	$ligalist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'RUNDE_LIGA_WAE' ), 'cid', 'name' );
-	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
+//	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
+	$ligalist	= array_merge( $ligalist, $ligen );
 //	$lists['lid']	= HTMLHelper::_('select.genericlist', $ligalist, 'filter_lid', 'class="js-example-basic-single" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
 	$lists['lid']	= HTMLHelper::_('select.genericlist', $ligalist, 'filter_lid', 'class="'.$field_search.'" size="1" onchange="document.adminForm.submit();"','cid', 'name', intval( $filter_lid ) );
 	$ligalistq[]	= HTMLHelper::_('select.option',  '0', Text::_( 'Termine von Liga, nur nötig für Termine kopieren' ), 'cid', 'name' );
-	$ligalistq	= array_merge( $ligalistq, $db->loadObjectList() );
+//	$ligalistq	= array_merge( $ligalistq, $db->loadObjectList() );
+	$ligalistq	= array_merge( $ligalistq, $ligen );
 	$lists['qlid']	= HTMLHelper::_('select.genericlist', $ligalistq, 'filter_qlid', 'class="'.$field_search.'" size="1" ','cid', 'name', 0 );
 	// Ordering
 	$lists['order_Dir']	= $filter_order_Dir;
 	$lists['order']		= $filter_order;
 	// Suchefilter
 	$lists['search']= $search;
-	if(isset($rows[0]) && $rows[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) {
+	if(isset($rows[0]) && !clm_core::$load->rights_check('SL',$rows[0]->liga) AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) {
 		$mainframe->enqueueMessage(Text::_( 'LIGEN_STAFFEL' ), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&view=view_tournament_group&liga='.$liga_type);
 	}
@@ -221,22 +238,24 @@ function edit()
 
 	if($clmAccess->access('BE_'.$mppoint.'_edit_round') === false) {
 		$section = $csection;
-		$msg = Text::_( 'Kein Zugriff: ').Text::_( 'RUNDE_STAFFEL_TOTAL1' );    
+		$msg = Text::_( 'Kein Zugriff: ').Text::_( 'RUNDE_STAFFEL_TOTAL' );    
 		$mainframe->enqueueMessage($msg, 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 		}
  
 	if ($task == 'edit') {
-	// illegaler Einbruchversuch über URL !
-	// evtl. mitschneiden !?!
-	$saison		=Table::getInstance( 'saisons', 'TableCLM' );
-	$saison->load( $row->sid );
+		// illegaler Einbruchversuch über URL !
+		// evtl. mitschneiden !?!
+		$saison		=Table::getInstance( 'saisons', 'TableCLM' );
+		$saison->load( $row->sid );
 		if ($saison->archiv == "1" AND $clmAccess->access('BE_'.$mppoint.'_create') !== true) {
 			$mainframe->enqueueMessage(Text::_( 'RUNDE_ARCHIV' ), 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 			}
 		// Prüfen ob User Berechtigung zum editieren hat
-		if ( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) {
+//		if ( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) {
+		if ( !clm_core::$load->rights_check('SL',$liga->id) AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) {
+//clm_core::$load->rights_check('SL',$lig->cid)
 			$mainframe->enqueueMessage(Text::_( 'RUNDE_STAFFEL' ), 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 		}
@@ -245,8 +264,9 @@ function edit()
 	} else {
 	// do stuff for new records
 		// Prüfen ob User Berechtigung zum Bearbeiten hat
-		if ( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) {
-			$mainframe->enqueueMessage(Text::_( 'RUNDE_STAFFEL' ), 'warning');
+//		if ( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) {
+		if ( $clmAccess->access('BE_'.$mppoint.'_edit_round') === false) {
+			$mainframe->enqueueMessage(Text::_( 'RUNDE_STAFFEL2' ), 'warning');
 			$section = $csection;
 			$link = 'index.php?option='.$option.'&section='.$section;
 			$mainframe->redirect( $link );
@@ -254,7 +274,7 @@ function edit()
 		$row->published 	= 0;
 	}
 
-	// Ligaliste
+/*	// Ligaliste
 	$sql = " SELECT a.id as liga, a.name FROM #__clm_liga as a"
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid "
 		." WHERE  s.archiv = 0 AND a.sl = ".clm_core::$access->getJid()
@@ -270,8 +290,25 @@ function edit()
 		$mainframe->enqueueMessage($row->getErrorMsg(), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
+*/
+	// Ligafilter
+	$sql = 'SELECT a.id AS liga, a.name FROM #__clm_liga as a'
+		." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
+		." WHERE s.archiv = 0 ";
+	$ligen	= clm_core::$db->loadObjectList($sql);
+	if ($clmAccess->access('BE_'.$mppoint.'_edit_result') == '2') {
+		$allligen = $ligen;
+		unset($ligen);
+		$ligen = array();
+		foreach ($allligen as $lig) {
+			if (clm_core::$load->rights_check('SL',$lig->liga)) $ligen[] = $lig;
+		}
+	}
+
+
 	$ligalist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'RUNDE_LIGA_WAE') , 'liga', 'name' );
-	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
+//	$ligalist	= array_merge( $ligalist, $db->loadObjectList() );
+	$ligalist	= array_merge( $ligalist, $ligen );
 //	$lists['liga']	= HTMLHelper::_('select.genericlist',   $ligalist, 'liga', 'class="js-example-basic-single" size="1"','liga', 'name', $row->liga );
 	$lists['liga']	= HTMLHelper::_('select.genericlist',   $ligalist, 'liga', 'class="'.$field_search.'" size="1"','liga', 'name', $row->liga );
 //	$lists['published']	= HTMLHelper::_('select.booleanlist',  'published', 'class="js-example-basic-single"', $row->published );
@@ -470,8 +507,8 @@ function remove()
 	$clmAccess = clm_core::$access;      
 
 	// Prüfen ob User Berechtigung zum löschen hat
-	//if ( $liga->sl !== clm_core::$access->getJid() AND clm_core::$access->getType() !== 'admin') {
-	if (( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
+//	if (( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
+	if (( !clm_core::$load->rights_check('SL',$liga->id) AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
 		$mainframe->enqueueMessage(Text::_( 'RUNDE_ST_LOESCHEN' ), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
@@ -527,7 +564,8 @@ function publish()
 	$clmAccess = clm_core::$access;      
 
 	// Prüfen ob User Berechtigung hat
-	if (( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
+//	if (( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
+	if (( !clm_core::$load->rights_check('SL',$liga->id) AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
 		$mainframe->enqueueMessage(Text::_( 'RUNDE_ST_PUBLIZIEREN' ), 'warning');
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
@@ -677,13 +715,15 @@ public static function paarung()
 
 	// Prüfen ob User Berechtigung hat
 	if ( $liga[0]->liga_mt == 0 ) {
-		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
+//		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
+		if (( !clm_core::$load->rights_check('SL',$liga[0]->lid) AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
 			$msg = Text::_( 'LIGEN_NO_FIXTURE');
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid);
 		}
 	} else {
-		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
+//		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
+		if (( !clm_core::$load->rights_check('SL',$liga[0]->lid) AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
 			$msg = Text::_( 'LIGEN_NO_FIXTURE');
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid);
@@ -724,13 +764,15 @@ public static function pairingdates()
 
 	// Prüfen ob User Berechtigung hat
 	if ( $liga[0]->liga_mt == 0 ) {
-		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
+//		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
+		if (( !clm_core::$load->rights_check('SL',$liga[0]->lid) AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
 			$msg = Text::_( 'LIGEN_NO_FIXTURE');
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid);
 		}
 	} else {
-		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
+//		if (( $liga[0]->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
+		if (( !clm_core::$load->rights_check('SL',$liga[0]->lid) AND $clmAccess->access('BE_teamtournament_edit_fixture') !== true) OR ($clmAccess->access('BE_teamtournament_edit_fixture') === false)) {
 			$msg = Text::_( 'LIGEN_NO_FIXTURE');
 			$mainframe->enqueueMessage($msg, 'warning');
 			$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$cid);
@@ -770,7 +812,8 @@ function copy()
 	$clmAccess = clm_core::$access;      
 
 	// Prüfen ob User Berechtigung hat
-	if (( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
+//	if (( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
+	if (( !clm_core::$load->rights_check('SL',$liga->id) AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
 		$mainframe->enqueueMessage(Text::_( 'RUNDE_ST_KOPIE' ), 'warning');
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
@@ -853,8 +896,8 @@ function check()
 	$clmAccess = clm_core::$access;      
 
 	// Prüfen ob User Berechtigung hat
-	//if ( $liga->sl !== clm_core::$access->getJid() AND clm_core::$access->getType() !== 'admin') {
-	if (( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
+//	if (( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
+	if (( !clm_core::$load->rights_check('SL',$liga->id) AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
 		$mainframe->enqueueMessage(Text::_( 'RUNDE_ST_PRUEFEN' ) , 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section);
 				}
@@ -909,7 +952,8 @@ function check()
 		$row->load( $round->liga ); // Daten zu dieser ID laden
 
 	    $clmAccess = clm_core::$access;      
-		if (($row->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+//		if (($row->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+		if ((!clm_core::$load->rights_check('SL',$row->id) AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
 			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'),'warning' );
 		return array(false,$round->liga);
 		}
@@ -976,7 +1020,8 @@ function check()
 		$row->load( $round->liga ); // Daten zu dieser ID laden
 
 	    $clmAccess = clm_core::$access;      
-		if (($row->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+//		if (($row->sl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+		if ((!clm_core::$load->rights_check('SL',$row->id) AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
 			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return array(false,$round->liga);
 		}
@@ -1036,7 +1081,8 @@ function termine_copy()
 	$clmAccess = clm_core::$access;      
 
 	// Prüfen ob User Berechtigung hat
-	if (( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
+//	if (( $liga->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
+	if (( !clm_core::$load->rights_check('SL',$liga->id) AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) OR ($clmAccess->access('BE_'.$mppoint.'_edit_round') === false)) {
 		$mainframe->enqueueMessage(Text::_( 'RUNDE_ST_KOPIE' ), 'warning');
 		$link = 'index.php?option='.$option.'&section='.$section.'&liga='.$lid;
 		$mainframe->redirect( $link);
