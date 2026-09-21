@@ -130,8 +130,8 @@ class CLMControllerTermineMain extends JControllerLegacy {
 		$cid = clm_core::$load->request_array_int('cid');	
 		
 		$task = clm_core::$load->request_string('task', '');
-		$publish	= ($task == 'publish'); // zu vergebender Wert 0/1
-		
+//		$publish	= ($task == 'publish'); // zu vergebender Wert 0/1
+		if ($task == 'publish') $publish = 1; else $publish = 0;   // zu vergebender Wert 0/1
 		// Inhalte übergeben?
 		if (empty( $cid )) { 
 			
@@ -165,9 +165,15 @@ class CLMControllerTermineMain extends JControllerLegacy {
 			// immer noch Einträge vorhanden?
 			if ( !empty($cid) ) { 
 		
-				$row =Table::getInstance( 'termine', 'TableCLM' );
+/*				$row =Table::getInstance( 'termine', 'TableCLM' );
 				$row->publish( $cid, $publish );
-			
+*/
+				$query = "UPDATE #__clm_termine"
+					. " SET published = ".$publish
+					. " WHERE id = ".$cid[0] 
+				;
+				clm_core::$db->query($query);
+
 				// Meldung erstellen
 				$app =Factory::getApplication();
 				if ($publish) {

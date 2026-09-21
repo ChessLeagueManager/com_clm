@@ -85,7 +85,7 @@ function checkEinzel() {
 							<input type="radio" id="monatswahl_m" name="monatswahl_m" value="dieser" checked="checked">
 							<label for="aktuell">aktueller Monat (<?php echo (new DateTime())->format('m/y'); ?>)</label><br />
 							<input type="radio" id="monatswahl_m" name="monatswahl_m" value="letzter">
-							<label for="letzter">letzterer Monat (<?php echo (new DateTime('first day of previous month'))->format('m/y'); ?>)</label>
+							<label for="letzter">letzter Monat (<?php echo (new DateTime('first day of previous month'))->format('m/y'); ?>)</label>
 						</div>
 					</td>
 				</tr>
@@ -148,7 +148,7 @@ function checkEinzel() {
 							<input type="radio" id="monatswahl_e" name="monatswahl_e" value="dieser" checked="checked">
 							<label for="aktuell">aktueller Monat (<?php echo (new DateTime())->format('m/y'); ?>)</label><br />
 							<input type="radio" id="monatswahl_e" name="monatswahl_e" value="letzter">
-							<label for="letzter">letzterer Monat (<?php echo (new DateTime('first day of previous month'))->format('m/y'); ?>)</label>
+							<label for="letzter">letzter Monat (<?php echo (new DateTime('first day of previous month'))->format('m/y'); ?>)</label>
 						</div>
 					</td>
 					</tr>
