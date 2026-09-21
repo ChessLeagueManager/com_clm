@@ -292,7 +292,7 @@ function clm_api_db_report_save($liga, $runde, $dg, $paar, $comment, $ko_decisio
 		$gkampflos = 1;
 	}
 	if ($out["liga"][0]->stamm > $gkl) {
-		$gman_punkte = $gman_punkte + $out["liga"][0]->man_antritt;
+//		$gman_punkte = $gman_punkte + $out["liga"][0]->man_antritt;
 		if ($params['team_complete'] == 0) {
 			$gman_punkte = $gman_punkte + $out["liga"][0]->man_antritt;
 		} else {
