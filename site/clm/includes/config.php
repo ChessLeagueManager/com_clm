@@ -175,6 +175,7 @@ $config["dsb_uuid_key"]=array(155,21,"",null);
 $config["dsb_secret_key"]=array(156,7,"",null);
 $config["clmorg_data_key"]=array(157,7,"",null);
 $config["request_domain"]=array(158,14,"",null);
+$config["gstatus_active"]=array(159,9,0,array(0,1));
 
 // nicht editierbar - Zugriff über Tabelle clm_config mit ID bzw. clm_core::$db->config() 
 $config["cl_config"]=array(63,8,"0.0.0",null);

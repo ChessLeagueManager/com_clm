@@ -12,6 +12,7 @@ function clm_api_db_dewis_player($zps = - 1, $incl_pd = 0, $mgl_nr = array()) {
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$dewis_import_delay = $config->dewis_import_delay;
+	$gstatus_active = $config->gstatus_active;
 
 	$zps = clm_core::$load->make_valid($zps, 8, "");
 	$incl_pd = clm_core::$load->make_valid($incl_pd, 0, 0);
@@ -78,7 +79,7 @@ function clm_api_db_dewis_player($zps = - 1, $incl_pd = 0, $mgl_nr = array()) {
 			$elements .= ", Spielername_G";
 			$values .= ", '" . $spielername_G . "'";
 			$elements .= ", Geburtsjahr";
-			if (isset($player['birthYear'])) $values .= ", '" . $player['birthYear'] . "'";
+			if (isset($player['birthyear'])) $values .= ", '" . $player['birthyear'] . "'";
 			else $values .= ", '" . '0000' . "'";
 			if (!empty($player['gender'])) {
 				if ($player["gender"] == 'MALE') $geschlecht = 'M';
@@ -106,9 +107,21 @@ function clm_api_db_dewis_player($zps = - 1, $incl_pd = 0, $mgl_nr = array()) {
 				$elements .= ", Status";
 				$values .= ", '" . $state . "'";
 			}
-			if (isset($player["fide_id"]) AND is_numeric($player["fide_id"]) AND  $player["fide_id"] > 0 ) {
+			if (isset($player["fideId"]) AND is_numeric($player["fideId"]) AND  $player["fideId"] > 0 ) {
 				$elements .= ", FIDE_ID";
-				$values .= ", " . $player['fide_id'];
+				$values .= ", " . $player['fideId'];
+			}	
+			if (isset($player["fideRatingStandard"]) AND is_numeric($player["fideRatingStandard"]) AND  $player["fideRatingStandard"] > 0 ) {
+				$elements .= ", FIDE_Elo";
+				$values .= ", " . $player['fideRatingStandard'];
+			}	
+			if (isset($player["fideCountry"]) AND !is_numeric($player["fideCountry"]) ) {
+				$elements .= ", FIDE_Land";
+				$values .= ", '" . $player['fideCountry'] . "'";
+			}	
+			if (isset($player["fideTitle"]) AND !is_numeric($player["fideTitle"]) ) {
+				$elements .= ", FIDE_Titel";
+				$values .= ", '" . $player['fideTitle'] . "'";
 			}	
 			$sql = "INSERT INTO #__clm_dwz_spieler (" . $elements . ") VALUES (" . $values . ");";
 		} else {
@@ -151,9 +164,21 @@ function clm_api_db_dewis_player($zps = - 1, $incl_pd = 0, $mgl_nr = array()) {
 				if ($state > '' AND $old->Status != $state ) 
 					$updates .= ", Status='" . $state . "'";
 			}
-			if (isset($player["fide_id"]) AND is_numeric($player["fide_id"]) AND  $player["fide_id"] > 0 ) {
-				if ($old->FIDE_ID != $player["fide_id"] ) 
-					$updates .= ", FIDE_ID='" . $player["fide_id"] . "'";
+			if (isset($player["fideId"]) AND is_numeric($player["fideId"]) AND  $player["fideId"] > 0 ) {
+				if ($old->FIDE_ID != $player["fideId"] ) 
+					$updates .= ", FIDE_ID='" . $player["fideId"] . "'";
+			}	
+			if (isset($player["fideRatingStandard"]) AND is_numeric($player["fideRatingStandard"]) AND  $player["fideRatingStandard"] > 0 ) {
+				if ($old->FIDE_Elo != $player["fideRatingStandard"] ) 
+					$updates .= ", FIDE_Elo='" . $player["fideRatingStandard"] . "'";
+			}	
+			if (isset($player["fideCountry"]) AND !is_numeric($player["fideCountry"]) ) {
+				if ($old->FIDE_Land != $player["fideCountry"] ) 
+					$updates .= ", FIDE_Land='" . $player["fideCountry"] . "'";
+			}	
+			if (isset($player["fideTitle"]) AND !is_numeric($player["fideTitle"]) ) {
+				if ($old->FIDE_Titel != $player["fideTitle"] ) 
+					$updates .= ", FIDE_Titel='" . $player["fideTitle"] . "'";
 			}	
 
 			if ($updates == '') $sql = '';
@@ -170,6 +195,25 @@ function clm_api_db_dewis_player($zps = - 1, $incl_pd = 0, $mgl_nr = array()) {
 			if ($result === false) { $str .= " ".$zps."-".$mgl_nr; }
 		}
 	}
+	
+	// Aktualisierung von Gastspielern
+//clm_core::$api->test_print('gstatus_active',$gstatus_active);
+	if ($gstatus_active == 1) {
+		// Gibt es Gastspieler
+		$sql = 'SELECT * FROM #__clm_dwz_spieler '
+			. " WHERE sid = ".$sid." AND ZPS ='".$zps."'"
+			. " AND Status !='A'  AND Status !='P' AND Status !='F' AND Status !='' "
+			;
+		$spieler = clm_core::$db->loadObjectList($sql);	
+		if (is_null($spieler)) $cspieler = 0;
+		else $cspieler = count($spieler);
+//clm_core::$api->test_print('spieler',$spieler);	
+		if ($cspieler > 0) {
+			clm_core::$api->db_gstatus_update($spieler,'dsb');
+		}
+	}
+	
+	
 	return array(true, "m_onlinePlayerSuccess".$str, $counter);
 }
 ?>

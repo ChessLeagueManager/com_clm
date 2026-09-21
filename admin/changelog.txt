@@ -18,6 +18,8 @@ $ -> Language fix or change
 + Einzelturniere mit erweiterten Org.Team
 + Teamwettbewerbe mit erweiterten Org.Team
 # Textkorrekturen und ähnliches
+# Teamwettbewerbe: Mannschaftsantrittspunkt (bugfix)
++ DSB-Datenübernahme: Gastspieler mit Status G und ähnlichen
 
 - - - - - 5.1.1 - [03-09-2026] - - - - - - - - - - - - - - - - - - - -
 + Weitere Hilfetexte Benutzer und Verein

@@ -13,6 +13,7 @@ $logs[]="db_clmorg_club";
 $logs[]="db_clmorg_player";
 $logs[]="db_dewis_club";
 $logs[]="db_dewis_player";
+$logs[]="db_gstatus_update";
 $logs[]="db_ecfv2_club";
 $logs[]="db_ecfv2_player";
 $logs[]="db_dsb_club";

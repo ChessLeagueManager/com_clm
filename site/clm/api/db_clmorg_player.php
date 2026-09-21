@@ -14,6 +14,7 @@ function clm_api_db_clmorg_player($zps = - 1, $incl_pd = 0, $mgl_nr = array()) {
 	$dewis_import_delay = $config->dewis_import_delay;
 	$clm_key = $config->clmorg_data_key;
 	$clm_domain = $config->request_domain;
+	$gstatus_active = $config->gstatus_active;
 
 	$zps = clm_core::$load->make_valid($zps, 8, "");
 	$incl_pd = clm_core::$load->make_valid($incl_pd, 0, 0);
@@ -263,6 +264,23 @@ clm_core::$api->test_print('sqlfalse',$sql);
 		}
 	  }
 	}
+	
+	// Aktualisierung von Gastspielern
+	if ($gstatus_active == 1) {
+		// Gibt es Gastspieler
+		$sql = 'SELECT * FROM #__clm_dwz_spieler '
+			. " WHERE sid = ".$sid." AND ZPS ='".$zps."'"
+			. " AND Status !='A'  AND Status !='P' AND Status !='F' AND Status !='' "
+			;
+		$spieler = clm_core::$db->loadObjectList($sql);	
+		if (is_null($spieler)) $cspieler = 0;
+		else $cspieler = count($spieler);
+//clm_core::$api->test_print('spieler',$spieler);	
+		if ($cspieler > 0) {
+			clm_core::$api->db_gstatus_update($spieler,'clm');
+		}
+	}
+	
 	return array(true, "m_clmorgPlayerSuccess".$str, $counter);
 }
 ?>
