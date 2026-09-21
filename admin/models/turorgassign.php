@@ -45,9 +45,15 @@ class CLMModelTurorgAssign extends JModelLegacy {
 		// mögliche Organisatoren in der Installation
 		$query = "SELECT u.* FROM #__clm_user as u "
 				." LEFT JOIN #__clm_usertype as ut ON ut.usertype = u.usertype " 
-				." WHERE (ut.params LIKE '%BE_tournament_edit_detail=1%' OR ut.params LIKE '%BE_tournament_edit_detail=2%') "
-				." AND u.sid = ".$sid
+				." WHERE u.sid = ".$sid
 				." AND u.published = 1 AND ut.published = 1";
+		if ($lid > 0 AND $this->turnier[0]->liga_mt == 0) {
+			$query .= " AND (ut.params LIKE '%BE_league_edit_detail=1%' OR ut.params LIKE '%BE_league_edit_detail=2%') ";
+		} elseif ($lid > 0 AND $this->turnier[0]->liga_mt == 1) {
+			$query .= " AND (ut.params LIKE '%BE_teamtournament_edit_detail=1%' OR ut.params LIKE '%BE_teamtournament_edit_detail=2%') ";
+		} elseif ($tid > 0) {
+			$query .= " AND (ut.params LIKE '%BE_tournament_edit_detail=1%' OR ut.params LIKE '%BE_tournament_edit_detail=2%') ";
+		}
 //echo "<br>query".$query;
 		$this->organisers	= clm_core::$db->loadObjectList($query);
 //echo "<br>query0"; var_dump($this->organisers[0]);

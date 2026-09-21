@@ -126,7 +126,8 @@ class CLMControllerTurRegistrations extends JControllerLegacy {
 		}
 	
 		$clmAccess = clm_core::$access;      
-		if (($turnier->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
+//		if (($turnier->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
+		if ((!clm_core::$load->rights_check('TL',$turnier->id) AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
 			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'), 'warning' );
 			return false;
 		}

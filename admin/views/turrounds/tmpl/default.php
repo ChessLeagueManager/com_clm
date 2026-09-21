@@ -108,7 +108,8 @@ $clmAccess = clm_core::$access;
 				
 				<td>
 					<?php
-					if (($this->turnier->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true ) OR ($clmAccess->access('BE_tournament_edit_round') === false))
+//					if (($this->turnier->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true ) OR ($clmAccess->access('BE_tournament_edit_round') === false))
+					if ((!clm_core::$load->rights_check('TL',$this->turnier->id) AND $clmAccess->access('BE_tournament_edit_round') !== true ) OR ($clmAccess->access('BE_tournament_edit_round') === false))
 					{
 						echo $row->name;
 					} else {
@@ -132,7 +133,8 @@ $clmAccess = clm_core::$access;
 				
 				<td align="center">
 					<?php 
-					if (($this->turnier->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_result') !== true ) OR ($clmAccess->access('BE_tournament_edit_result') === false)) {
+//					if (($this->turnier->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_result') !== true ) OR ($clmAccess->access('BE_tournament_edit_result') === false)) {
+					if ((!clm_core::$load->rights_check('TL',$this->turnier->id) AND $clmAccess->access('BE_tournament_edit_result') !== true ) OR ($clmAccess->access('BE_tournament_edit_result') === false)) {
 						echo CLMText::sgpl($value->countMatches, Text::_('MATCH'), Text::_('MATCHES'));
 					} else {	
 						$adminLink = new AdminLink();

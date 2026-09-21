@@ -76,8 +76,13 @@ class CLMControllerTurorgAssign extends JControllerLegacy {
 		// Check for request forgeries
 		defined('_JEXEC') or die( 'Invalid Token' );
 		$lang = clm_core::$lang->arbiter;
+		$lid = clm_core::$load->request_int('lid');
+		$tid = clm_core::$load->request_int('tid');
 	
-		if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
+//		if (clm_core::$access->getType() != 'admin' AND clm_core::$access->getType() != 'tl') {
+		$clmAccess = clm_core::$access;      
+		if (($tid > 0 AND $clmAccess->access('BE_tournament_edit_detail') === false) OR
+			($lid > 0 AND ($clmAccess->access('BE_teamtournament_edit_detail') === false) AND ($clmAccess->access('BE_league_edit_detail') === false))) {
 			$this->app->enqueueMessage( Text::_('SECTION_NO_ACCESS'),'warning' );
 			return array(false);
 		}

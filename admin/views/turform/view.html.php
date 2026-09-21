@@ -36,7 +36,7 @@ class CLMViewTurForm extends JViewLegacy {
 		$row = Table::getInstance( 'turniere', 'TableCLM' );
 		$row->load($id);
 		$clmAccess = clm_core::$access;
-		if (($row->tl == $clmAccess->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR ($clmAccess->access('BE_tournament_edit_detail') === true) OR ($clmAccess->access('BE_tournament_create') === true)) {
+		if ((clm_core::$load->rights_check('TL',$row->id) AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR ($clmAccess->access('BE_tournament_edit_detail') === true) OR ($clmAccess->access('BE_tournament_create') === true)) {
 			ToolBarHelper::save( 'save' );
 			ToolBarHelper::apply( 'apply' );
 			ToolBarHelper::custom('arbiter','edit.png','edit_f2.png',$lang->arbiter_assign,false);

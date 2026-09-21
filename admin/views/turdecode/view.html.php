@@ -28,7 +28,8 @@ class CLMViewTurDecode extends JViewLegacy {
 		$row->load( $model->turnier->id ); // Daten zu dieser ID laden
 
 		$clmAccess = clm_core::$access;
-		if (($row->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') == 2) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
+//		if (($row->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') == 2) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
+		if ((clm_core::$load->rights_check('TL',$row->id) AND $clmAccess->access('BE_tournament_edit_detail') == 2) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
 			ToolBarHelper::save( 'save' );
 			ToolBarHelper::apply( 'apply' );
 		}

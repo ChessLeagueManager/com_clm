@@ -37,7 +37,8 @@ class CLMControllerTurInvite extends JControllerLegacy {
 		//$tournament = new CLMTournament($this->id, true);
 		//die('    tinvite');
 		//if (!$tournament->checkAccess(0,0,$row->tl)) {
-		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) AND ($clmAccess->access('BE_tournament_edit_detail') !== true)) {
+//		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) AND ($clmAccess->access('BE_tournament_edit_detail') !== true)) {
+		if ((!clm_core::$load->rights_check('TL',$row->id) AND $clmAccess->access('BE_tournament_edit_detail') !== false) AND ($clmAccess->access('BE_tournament_edit_detail') !== true)) {
 			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'), 'warning' );
 			$adminLink = new AdminLink();
 			$adminLink->view = "turmain";
@@ -85,7 +86,8 @@ class CLMControllerTurInvite extends JControllerLegacy {
 		$row->load( $id ); // Daten zu dieser ID laden
 
 		$clmAccess = clm_core::$access;      
-		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {																						   
+//		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {																						   
+		if ((!clm_core::$load->rights_check('TL',$row->id) AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {																						   
 			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'), 'warning' );
 			return false;
 		}

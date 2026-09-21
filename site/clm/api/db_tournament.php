@@ -34,7 +34,8 @@ function clm_api_db_tournament() {
 		$out["data"][$i][0] = $i+1;
 		
 		$out["data"][$i][1] = clm_class_category::name($out["data"][$i][14],false);
-		if (!(($out["data"][$i][9] != $clmAccess->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true ) OR ($clmAccess->access('BE_tournament_edit_detail') === false))) {
+//		if (!(($out["data"][$i][9] != $clmAccess->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true ) OR ($clmAccess->access('BE_tournament_edit_detail') === false))) {
+		if (!((!clm_core::$load->rights_check('TL',$out["data"][$i][14]) AND $clmAccess->access('BE_tournament_edit_detail') !== true ) OR ($clmAccess->access('BE_tournament_edit_detail') === false))) {
 			$out["data"][$i][1] = '<a href="'.clm_core::$load->gen_url(array("view"=>"turform","task"=>"edit","id"=>$out["data"][$i][14])).'">'.$out["data"][$i][1].'</a>';
 		}		
 		// Saisonname statt sid Anzeigen
@@ -63,7 +64,8 @@ function clm_api_db_tournament() {
 		} else {
 			$out["data"][$i][4] = $lang->column3_yes;
 		}
-		if (!(($out["data"][$i][9] != $clmAccess->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true ) OR ($clmAccess->access('BE_tournament_edit_detail') === false))) {
+//		if (!(($out["data"][$i][9] != $clmAccess->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true ) OR ($clmAccess->access('BE_tournament_edit_detail') === false))) {
+		if (!((!clm_core::$load->rights_check('TL',$out["data"][$i][14]) AND $clmAccess->access('BE_tournament_edit_detail') !== true ) OR ($clmAccess->access('BE_tournament_edit_detail') === false))) {
 			$out["data"][$i][4] = '<a href="'.clm_core::$load->gen_url(array("view"=>"turinvite","task"=>"edit","id"=>$out["data"][$i][14])).'">'.$out["data"][$i][4].'</a>';
 		}	
 		// Modus ID in Name umsetzen
@@ -73,7 +75,8 @@ function clm_api_db_tournament() {
 					. ' FROM #__clm_turniere_tlnr'
 					. ' WHERE turnier = '.$out["data"][$i][14]
 					;
-		if (!(($out["data"][$i][9] != $clmAccess->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true ) OR ($clmAccess->access('BE_tournament_edit_detail') === false))) {
+//		if (!(($out["data"][$i][9] != $clmAccess->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true ) OR ($clmAccess->access('BE_tournament_edit_detail') === false))) {
+		if (!((!clm_core::$load->rights_check('TL',$out["data"][$i][14]) AND $clmAccess->access('BE_tournament_edit_detail') !== true ) OR ($clmAccess->access('BE_tournament_edit_detail') === false))) {
 			$out["data"][$i][8] = '<a href="'.clm_core::$load->gen_url(array("view"=>"turplayers","task"=>"edit","id"=>$out["data"][$i][14])).'">' . $out["data"][$i][8] . " " . $lang->player.'</a>'. "<br/>".$lang->open.clm_core::$db->count($query)." ".$lang->registered.$lang->close;
 		} else {
 			$out["data"][$i][8] = $out["data"][$i][8] . " " .$lang->player. "<br/>".$lang->open.clm_core::$db->count($query)." ".$lang->registered.$lang->close;
@@ -90,7 +93,8 @@ function clm_api_db_tournament() {
 					$out["data"][$i][7]=clm_core::$db->turniere->get($out["data"][$i][14])->dg." x ".$out["data"][$i][7];
 		}
 		
-		if (!(($out["data"][$i][9] != $clmAccess->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true ) OR ($clmAccess->access('BE_tournament_edit_detail') === false))) {
+//		if (!(($out["data"][$i][9] != $clmAccess->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true ) OR ($clmAccess->access('BE_tournament_edit_detail') === false))) {
+		if (!((!clm_core::$load->rights_check('TL',$out["data"][$i][14]) AND $clmAccess->access('BE_tournament_edit_detail') !== true ) OR ($clmAccess->access('BE_tournament_edit_detail') === false))) {
 			$out["data"][$i][7] = '<a href="'.clm_core::$load->gen_url(array("view"=>"turrounds","task"=>"edit","id"=>$out["data"][$i][14])).'">' . $out["data"][$i][7] . " " .$lang->rounds.'</a>'."<br/>".$lang->open.clm_core::$db->count($query)." ".$lang->confirmed.$lang->close;
 		} else {
 			$out["data"][$i][7] = $out["data"][$i][7] . " " .$lang->rounds. "<br/>".$lang->open.clm_core::$db->count($query)." ".$lang->confirmed.$lang->close;
@@ -129,6 +133,7 @@ function clm_api_db_tournament() {
 		}
 		$out["data"][$i][13] = '<input class="clm_table_orderingBox" onkeypress="return clm_isChangeNumber(event);" value="'.$out["data"][$i][13].'" type="text">';
 		$out["data"][$i][13] .= '<input class="clm_table_orderingId" value="'.$out["data"][$i][14].'" type="hidden">';
+
 	}
 	
 	return array(true,"m_tableSuccess",$out);

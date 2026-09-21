@@ -76,7 +76,8 @@ class CLMControllerTurRounds extends JControllerLegacy {
 		$id = clm_core::$load->request_int('id');
 		$tournament = new CLMTournament($id, true);
 
-		if (($tournament->data->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+//		if (($tournament->data->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+		if ((!clm_core::$load->rights_check('TL',$tournament->data->id) AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
 			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return array(false);
 		}
@@ -205,7 +206,7 @@ class CLMControllerTurRounds extends JControllerLegacy {
 		$row->load( $id ); // Daten zu dieser ID laden
 
 	    $clmAccess = clm_core::$access;      
-		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+		if ((!clm_core::$load->rights_check('TL',$row->id) AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
 			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return false;
 		}
@@ -279,7 +280,7 @@ class CLMControllerTurRounds extends JControllerLegacy {
 		$row->load( $id ); // Daten zu dieser ID laden
 
 	    $clmAccess = clm_core::$access;      
-		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+		if ((!clm_core::$load->rights_check('TL',$row->id) AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
 			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return false;
 		}
@@ -351,7 +352,7 @@ class CLMControllerTurRounds extends JControllerLegacy {
 		$row->load( $id ); // Daten zu dieser ID laden
 
 	     $clmAccess = clm_core::$access;      
-		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
+		if ((!clm_core::$load->rights_check('TL',$row->id) AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
 			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return false;
 		}
@@ -443,7 +444,7 @@ class CLMControllerTurRounds extends JControllerLegacy {
 		$row->load( $this->id ); // Daten zu dieser ID laden
 
 	    $clmAccess = clm_core::$access;      
-		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
+		if ((!clm_core::$load->rights_check('TL',$row->id) AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
 			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return false;
 		}
@@ -475,7 +476,7 @@ class CLMControllerTurRounds extends JControllerLegacy {
 		$row->load( $this->id ); // Daten zu dieser ID laden
 
 	        $clmAccess = clm_core::$access;      
-		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+		if ((!clm_core::$load->rights_check('TL',$row->id) AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
 			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return false;
 		}

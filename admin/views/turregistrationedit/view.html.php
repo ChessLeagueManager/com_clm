@@ -39,7 +39,8 @@ class CLMViewTurRegistrationEdit extends JViewLegacy {
 		$param_waitingList = $turParams->get('waitingList', 0);
 
 		$clmAccess = clm_core::$access;
-		if (($rowt->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') == 2) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
+//		if (($rowt->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') == 2) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
+		if ((clm_core::$load->rights_check('TL',$rowt->id) AND $clmAccess->access('BE_tournament_edit_detail') == 2) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
 			ToolBarHelper::save( 'save' );
 			ToolBarHelper::apply( 'apply' );
 			ToolBarHelper::custom('copy_to', 'copy.png', 'copy_f2.png', Text::_('REGISTRATION_COPY_TO'),false);

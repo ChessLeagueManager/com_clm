@@ -95,7 +95,8 @@ class CLMControllerTurForm extends JControllerLegacy {
 		}
 		
 	    $clmAccess = clm_core::$access;
-		if ($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) {
+//		if ($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) {
+		if (!clm_core::$load->rights_check('TL',$row->id) AND $clmAccess->access('BE_tournament_edit_detail') !== true) {
 			if ($clmAccess->access('BE_tournament_create') !== true) {
 				return array(false,'warning',Text::_('TOURNAMENT_NO_ACCESS'));
 			}
@@ -229,8 +230,9 @@ class CLMControllerTurForm extends JControllerLegacy {
 	$clmAccess = clm_core::$access;      
 
 	// Prüfen ob User Berechtigung hat
-	if (( $turnier[0]->tl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
-		$msg = Text::_( 'LIGEN_NO_FIXTURE');
+//	if (( $turnier[0]->tl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
+	if (( !clm_core::$load->rights_check('TL',$turnier[0]->lid) AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR ($clmAccess->access('BE_tournament_edit_detail') === false)) {
+		$msg = Text::_( 'keine Berechtigung für diese Funktion');
 		$app->enqueueMessage($msg, 'warning');
 		$app->redirect( 'index.php?option='. $option.'&view=turform&task=edit&id='.$tid);
 	}
@@ -264,8 +266,9 @@ class CLMControllerTurForm extends JControllerLegacy {
 	$clmAccess = clm_core::$access;      
 
 	// Prüfen ob User Berechtigung hat
-	if (( $turnier[0]->tl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
-		$msg = Text::_( 'LIGEN_NO_FIXTURE');
+//	if (( $turnier[0]->tl !== clm_core::$access->getJid() AND $clmAccess->access('BE_league_edit_fixture') !== true) OR ($clmAccess->access('BE_league_edit_fixture') === false)) {
+	if (( !clm_core::$load->rights_check('TL',$turnier[0]->lid) AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR ($clmAccess->access('BE_tournament_edit_detail') === false)) {
+		$msg = Text::_( 'keine Berechtigung für diese Funktion');
 		$app->enqueueMessage($msg, 'warning');
 		$app->redirect( 'index.php?option='. $option.'&view=turform&task=edit&id='.$tid);
 	}

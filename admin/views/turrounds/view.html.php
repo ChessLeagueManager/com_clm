@@ -28,7 +28,8 @@ class CLMViewTurRounds extends JViewLegacy {
 	
 		ToolBarHelper::spacer();
 		$clmAccess = clm_core::$access;
-		if (($model->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== false) OR $clmAccess->access('BE_tournament_edit_round') === true) {
+//		if (($model->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== false) OR $clmAccess->access('BE_tournament_edit_round') === true) {
+		if ((clm_core::$load->rights_check('TL',$model->param['id']) AND $clmAccess->access('BE_tournament_edit_round') !== false) OR $clmAccess->access('BE_tournament_edit_round') === true) {
 			ToolBarHelper::spacer();
 			ToolBarHelper::publishList();
 			ToolBarHelper::unpublishList();
@@ -36,7 +37,8 @@ class CLMViewTurRounds extends JViewLegacy {
 		ToolBarHelper::spacer();
 		ToolBarHelper::cancel();
 
-		if (($model->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== false) OR $clmAccess->access('BE_tournament_edit_round') === true) {
+//		if (($model->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== false) OR $clmAccess->access('BE_tournament_edit_round') === true) {
+		if ((clm_core::$load->rights_check('TL',$model->param['id']) AND $clmAccess->access('BE_tournament_edit_round') !== false) OR $clmAccess->access('BE_tournament_edit_round') === true) {
 			ToolBarHelper::divider();
 			ToolBarHelper::spacer();
 			ToolBarHelper::custom( 'turform', 'config.png', 'config_f2.png', Text::_('TOURNAMENT'), false);

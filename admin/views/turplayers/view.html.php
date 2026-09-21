@@ -42,7 +42,8 @@ class CLMViewTurPlayers extends JViewLegacy {
 		ToolBarHelper::title( $model->turnier->name.": ".Text::_('Teilnehmerliste'), 'clm_turnier.png'  );
 		
 		$clmAccess = clm_core::$access;
-		if (($model->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
+//		if (($model->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
+		if ((clm_core::$load->rights_check('TL',$model->turnier->id) AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
 
 				
 			// noch Spieler möglich
@@ -120,7 +121,8 @@ class CLMViewTurPlayers extends JViewLegacy {
 		}
 
 		ToolBarHelper::cancel();
-		if (($model->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
+//		if (($model->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
+		if ((clm_core::$load->rights_check('TL',$model->turnier->id) AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
 			ToolBarHelper::divider();
 			ToolBarHelper::spacer();
 			ToolBarHelper::custom( 'turform', 'config.png', 'config_f2.png', Text::_('TOURNAMENT'), false);		

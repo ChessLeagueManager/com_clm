@@ -75,7 +75,8 @@ class CLMControllerTurRegistrationEdit extends JControllerLegacy {
 		$rowt->load( $turnierid ); // Daten zu dieser Turnier-ID laden
 
 		$clmAccess = clm_core::$access;      
-		if (($rowt->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
+//		if (($rowt->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
+		if ((!clm_core::$load->rights_check('TL',$rowt->id) AND $clmAccess->access('BE_tournament_edit_detail') !== true) OR $clmAccess->access('BE_tournament_edit_detail') === false) {
 			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'), 'warning' );
 			return false;
 		}

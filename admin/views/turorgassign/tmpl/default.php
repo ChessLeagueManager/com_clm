@@ -101,25 +101,6 @@ use Joomla\CMS\HTML\HTMLHelper;
 
 			<tr><td colspan="2">&nbsp;</td></tr>
 			<tr><td colspan="2">&nbsp;</td></tr>
-			<?php if ($lid > 0) { ?>
-				<tr>
-					<td width="40%" class="paramlist_key">
-						<label for="htext"><?php echo $lang->tip_assign; ?></label>
-					</td>
-					<td class="paramlist_value">
-						<pre>
-Die hier oben zugeordneten Schiedsrichter
-sind für diesen Wettbewerb fachlich zuständig.
-Systemtechnisch können diese Personen 
-die Brettergebnisse auf der Webseite dieser 
-CLM-Anwendung selbst eingeben.
-Voraussetzung ist ein Benutzerkonto mit FIDE-Id. 
-Für die mit <span style="color:green;font-size:100%;font-weight:bold;"> *</span> markierten Schiedsrichter 
-wurde bereits ein solches angelegt.
-						</pre>			
-					</td>
-				</tr>
-			<?php } ?>
 
 			</table>
 	  </fieldset>

@@ -66,7 +66,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		$row->load($turnierid);
 
 		$clmAccess = clm_core::$access;      
-		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+		if ((!clm_core::$load->rights_check('TL',$row->id) AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
 			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return false;
 		}
@@ -170,7 +170,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		$row->load($turnierid);
 
 		$clmAccess = clm_core::$access;      
-		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+		if ((!clm_core::$load->rights_check('TL',$row->id) AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
 			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return false;
 		}
@@ -516,7 +516,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		$row->load($turnierid);
 
 		$clmAccess = clm_core::$access;      
-		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+		if ((!clm_core::$load->rights_check('TL',$row->id) AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
 			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return false;
 		}
@@ -643,7 +643,8 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		$turnier->load( $turnierid ); // Daten zu dieser ID laden
 
 		$clmAccess = clm_core::$access;      
-		if (($turnier->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+//		if (($turnier->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+		if ((!clm_core::$load->rights_check('TL',$turnier->id) AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
 			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return false;
 		}
@@ -763,7 +764,7 @@ class CLMControllerTurRoundMatches extends JControllerLegacy {
 		$row->load($turnierid);
 
 		$clmAccess = clm_core::$access;      
-		if (($row->tl != clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
+		if ((!clm_core::$load->rights_check('TL',$row->id) AND $clmAccess->access('BE_tournament_edit_round') !== true) OR $clmAccess->access('BE_tournament_edit_round') === false) {
 			$this->app->enqueueMessage( Text::_('TOURNAMENT_NO_ACCESS'),'warning' );
 			return false;
 		}

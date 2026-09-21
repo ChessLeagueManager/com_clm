@@ -23,7 +23,9 @@ class CLMViewTurorgAssign extends JViewLegacy {
 		$this->field_search = $field_search;
 
 		$lang = clm_core::$lang->arbiter;
-		
+		$lid = clm_core::$load->request_int('lid');
+		$tid = clm_core::$load->request_int('tid');
+
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
 		$model =   $this->getModel();
 
@@ -38,11 +40,13 @@ class CLMViewTurorgAssign extends JViewLegacy {
 //		ToolBarHelper::title( $text );
 		ToolBarHelper::title(  $lang->turorg_assign .' '.$this->turnier[0]->name );
 		
-		if (clm_core::$access->getType() == 'admin' OR clm_core::$access->getType() == 'tl') {
+//		if (clm_core::$access->getType() == 'admin' OR clm_core::$access->getType() == 'tl') {
+		$clmAccess = clm_core::$access;      
+		if (($tid > 0 AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR
+			($lid > 0 AND ($clmAccess->access('BE_teamtournament_edit_detail') !== false) OR ($clmAccess->access('BE_league_edit_detail') !== false))) {
 			ToolBarHelper::save( 'save' );
 			ToolBarHelper::apply( 'apply' );
 		}
-//		ToolBarHelper::custom( 'arbitermain', 'forward.png', 'forward_f2.png', $lang->goto_arbitermain, false);
 		ToolBarHelper::spacer();
 		ToolBarHelper::custom('cancel', 'back.png', 'back_f2.png', $lang->back, false);
 
@@ -97,16 +101,17 @@ class CLMViewTurorgAssign extends JViewLegacy {
 				'jid', 'name', $htto );
 		}
 		
-		$this->cashierlist[]	= HTMLHelper::_('select.option',  '0', $lang->select_cashier , 'jid', 'name' );
-		$this->cashierlist	= array_merge( $this->cashierlist, $model->cashiers );
+		if ($tid > 0) {
+			$this->cashierlist[]	= HTMLHelper::_('select.option',  '0', $lang->select_cashier , 'jid', 'name' );
+			$this->cashierlist	= array_merge( $this->cashierlist, $model->cashiers );
 		
-		if (count($this->TKA) < 1) $n = 1; else $n = count($this->TKA) + 1;
-		for ($i = 0; $i < $n; $i++) {
-			if (isset($this->TKA[$i]->fideid)) $htka = $this->TKA[$i]->fideid; else $htka = 0;
-			$this->lists['TKA'.$i]= HTMLHelper::_('select.genericlist',   $this->cashierlist, 'tka'.$i, 'class="'.$field_search.'" style="width:300px" size="1" onchange="this.form.submit();"',
-				'jid', 'name', $htka );
+			if (count($this->TKA) < 1) $n = 1; else $n = count($this->TKA) + 1;
+			for ($i = 0; $i < $n; $i++) {
+				if (isset($this->TKA[$i]->fideid)) $htka = $this->TKA[$i]->fideid; else $htka = 0;
+				$this->lists['TKA'.$i]= HTMLHelper::_('select.genericlist',   $this->cashierlist, 'tka'.$i, 'class="'.$field_search.'" style="width:300px" size="1" onchange="this.form.submit();"',
+					'jid', 'name', $htka );
+			}
 		}
- 	
 
 		parent::display();
 

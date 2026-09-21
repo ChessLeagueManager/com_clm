@@ -331,8 +331,8 @@ class clm_class_access {
 			} else {
 				$right = $right[3];
 			}
-//			if ((clm_core::$db->liga->get($id)->tl != clm_core::$access->getJid() && clm_core::$access->access($right) !== true) || (clm_core::$access->access($right) === false)) {
-			if ((clm_core::$db->liga->get($id)->sl != clm_core::$access->getJid() && clm_core::$access->access($right) !== true) || (clm_core::$access->access($right) === false)) {
+//			if ((clm_core::$db->liga->get($id)->sl != clm_core::$access->getJid() && clm_core::$access->access($right) !== true) || (clm_core::$access->access($right) === false)) {
+			if ((clm_core::$load->rights_check('SL',clm_core::$db->liga->get($id)->id) && clm_core::$access->access($right) !== true) || (clm_core::$access->access($right) === false)) {
 				return false;
 			}
 		} else {
@@ -340,7 +340,8 @@ class clm_class_access {
 				//return array(false,"e_tournamentNotExisting");
 				return false;
 			}
-			if ((clm_core::$db->turniere->get($id)->tl != clm_core::$access->getJid() && clm_core::$access->access($right[1]) !== true ) || (clm_core::$access->access($right[1]) === false)) {
+//			if ((clm_core::$db->turniere->get($id)->tl != clm_core::$access->getJid() && clm_core::$access->access($right[1]) !== true ) || (clm_core::$access->access($right[1]) === false)) {
+			if ((clm_core::$load->rights_check('TL',clm_core::$db->turniere->get($id)->id) && clm_core::$access->access($right[1]) !== true ) || (clm_core::$access->access($right[1]) === false)) {
 				//return array(false,"e_noRights");
 				return false;
 			}

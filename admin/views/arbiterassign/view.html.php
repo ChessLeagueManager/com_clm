@@ -23,7 +23,9 @@ class CLMViewArbiterAssign extends JViewLegacy {
 		$this->field_search = $field_search;
 
 		$lang = clm_core::$lang->arbiter;
-		
+		$lid = clm_core::$load->request_int('lid');
+		$tid = clm_core::$load->request_int('tid');
+
 		// Das Modell wird instanziert und steht als Objekt in der Variable $model zur Verfügung
 		$model =   $this->getModel();
 
@@ -38,7 +40,10 @@ class CLMViewArbiterAssign extends JViewLegacy {
 //		ToolBarHelper::title( $text );
 		ToolBarHelper::title(  $lang->arbiter_assign .' '.$this->turnier[0]->name );
 		
-		if (clm_core::$access->getType() == 'admin' OR clm_core::$access->getType() == 'tl') {
+//		if (clm_core::$access->getType() == 'admin' OR clm_core::$access->getType() == 'tl') {
+		$clmAccess = clm_core::$access;      
+		if (($tid > 0 AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR
+			($lid > 0 AND ($clmAccess->access('BE_teamtournament_edit_detail') !== false) OR ($clmAccess->access('BE_league_edit_detail') !== false))) {
 			ToolBarHelper::save( 'save' );
 			ToolBarHelper::apply( 'apply' );
 		}

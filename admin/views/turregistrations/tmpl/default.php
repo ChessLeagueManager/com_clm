@@ -125,7 +125,8 @@ $turParams = new clm_class_params($this->turnier->params);
 						<?php 
 						
 						// admin/tl kann Spieler editieren
-						if (($this->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
+//						if (($this->turnier->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
+						if ((clm_core::$load->rights_check('TL',$this->turnier->id) AND $clmAccess->access('BE_tournament_edit_detail') !== false) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
 							$adminLink = new AdminLink();
 							$adminLink->view = "turregistrationedit";
 							$adminLink->more = array('registrationid' => $row->id);
@@ -138,7 +139,7 @@ $turParams = new clm_class_params($this->turnier->params);
 							</span>
 						<?php
 						} else {
-							echo $row->name;
+							echo $row->name.','.$row->vorname;
 						}
 						?>
 					</td>

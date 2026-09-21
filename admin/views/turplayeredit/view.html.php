@@ -33,7 +33,7 @@ class CLMViewTurPlayerEdit extends JViewLegacy {
 		$row->load( $model->playerData->turnier ); // Daten zu dieser ID laden
 
 		$clmAccess = clm_core::$access;
-		if (($row->tl == clm_core::$access->getJid() AND $clmAccess->access('BE_tournament_edit_detail') == 2) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
+		if ((clm_core::$load->rights_check('TL',$row->id) AND $clmAccess->access('BE_tournament_edit_detail') == 2) OR $clmAccess->access('BE_tournament_edit_detail') === true) {
 			ToolBarHelper::save( 'save' );
 			ToolBarHelper::apply( 'apply' );
 			ToolBarHelper::custom('move_to', 'forward.png', 'forward.png', Text::_('Verschieben nach Warteliste'),false);
