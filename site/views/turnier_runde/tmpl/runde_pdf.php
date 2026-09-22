@@ -135,6 +135,7 @@ if ( ($value->spieler != 0 AND $value->gegner != 0) OR !is_null($value->ergebnis
 		if ($value->ergebnis == 2) { $ergebnis = chr(189).":".chr(189); }
 		elseif ($value->ergebnis == 9) { $ergebnis = "0:".chr(189); }
 		elseif ($value->ergebnis == 10) { $ergebnis = chr(189).":0"; }
+		elseif ($value->ergebnis == 12) { $ergebnis = chr(189)."/-"; }
 		else { $ergebnis = CLMText::getResultString($value->ergebnis); }
 		if (($this->turnier->typ == 3 OR $this->turnier->typ == 5) AND ($value->tiebrS > 0 OR $value->tiebrG > 0)) {
 				$ergebnis .= '  ('.$value->tiebrS.':'.$value->tiebrG.')'; 

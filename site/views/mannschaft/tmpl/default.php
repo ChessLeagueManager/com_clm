@@ -83,11 +83,12 @@ function vergleich($wert_a,$wert_b) {
 $bpr = $bp;
 usort($bpr, 'vergleich');
   
-$sql = ' SELECT `sieg`, `remis`, `nieder`, `antritt` FROM #__clm_liga'
+$sql = ' SELECT `sieg`, `remis`, `nieder`, `antritt`, `stamm` FROM #__clm_liga'
 		. ' WHERE `id` = "' . $liga . '"';
 $db =Factory::getDBO ();
 $db->setQuery ($sql);
 $ligapunkte = $db->loadObject ();
+$stamm = $ligapunkte->stamm;
 
 if ($lparams['dwz_date'] == '0000-00-00' OR $lparams['dwz_date'] == '1970-01-01') {
 	if ($saison[0]->dsb_datum  > '1970-01-01') $hint_dwzdsb = Text::_('DWZ_DSB_COMMENT_RUN').' '.clm_core::$load->utf8decode(Text::_('ON_DAY')).' '.HTMLHelper::_('date',  $saison[0]->dsb_datum, Text::_('DATE_FORMAT_CLM_F'));  
@@ -155,8 +156,13 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'geo_functions.php');
 // Konfigurationsparameter auslesen Teil2
 $clm_zeile1			= $config->zeile1;
 $clm_zeile2			= $config->zeile2;
+$diff = 0 + (0 * 256) + (0 * 256 * 256);
+$clm_zeile3 = dechex(hexdec($clm_zeile1) - $diff);
+$clm_zeile4 = dechex(hexdec($clm_zeile2) - $diff);
 $clm_zeile1D			= RGB($clm_zeile1);
 $clm_zeile2D			= RGB($clm_zeile2);
+$clm_zeile3D			= RGB($clm_zeile3);
+$clm_zeile4D			= RGB($clm_zeile4);
 $attr = clm_core::$api->db_lineup_attr($lid);
 ?>
 
@@ -362,14 +368,16 @@ for ($x=0; $x< 400; $x++){
 	if (!isset($count[$x])) break;
 	if ($count[$x]->PKZ === NULL) { $count[$x]->PKZ = ""; }
 	if ($x%2 != 0) { $zeilenr = 'zeile1'; 
-		$zeiled = $clm_zeile1D; }
+		$zeiled = $clm_zeile1D; 
+		$zeilede = $clm_zeile3D; }
 	else { $zeilenr = 'zeile2';
-		$zeiled = $clm_zeile2D; }
+		$zeiled = $clm_zeile2D; 
+		$zeilede = $clm_zeile4D; }
 	?>
         
     <tr class="<?php echo $zeilenr; ?>">
     <?php if($mannschaft[0]->lrang > 0) { ?><td class="nr" ><?php echo $count[$x]->rmnr.' - '.$count[$x]->rrang; ?></td><?php }
-        else { ?><td class="nr" ><?php echo $y; ?></td><?php } ?>
+        else { ?><td class="nr" <?php if ($y > $stamm) echo 'style="background-color:'.$zeiled.';"';?>><?php echo $y; ?></td><?php } ?>
     <?php if ($attr) { ?>
 		<td class="dwz"><?php echo $count[$x]->attr; ?></td>
     <?php } ?>

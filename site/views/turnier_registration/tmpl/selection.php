@@ -93,6 +93,9 @@ if ($s_clm_key == 1) { // Spielersuche auf CLM-Server
 		} else {
 			// Mitglieder eines Vereins
 			$playerlist = json_decode($response, true);
+			if (isset($playerlist["warning"]) AND $playerlist["warning"] == "Spielerdatensatz konnte nicht gefunden werden") {
+				$success_clm = false;
+			}
 		}
 	}
 	catch (RuntimeException $e) {
@@ -213,7 +216,7 @@ $heading = $this->turnier->name;
 						break;
 					}
 				}
-				if (!isset($names[$i]['fideId'])) $names[$i]['fideId'] = $names[$i]['fide_id'];
+				if (!isset($names[$i]['fideId']) AND isset($names[$i]['fide_id'])) $names[$i]['fideId'] = $names[$i]['fide_id'];
 				if (!isset($names[$i]['birthyear'])) $names[$i]['birthyear'] = $names[$i]['birthYear'];
 				if ($names[$i]['gender'] == 'MALE') $names[$i]['gender'] = 'M';
 				elseif ($names[$i]['gender'] == 'FEMALE') $names[$i]['gender'] = 'W'; 
@@ -235,8 +238,8 @@ $heading = $this->turnier->name;
 				<input type="hidden" name="<?php echo 'reg_birthYear'.($i); ?>" value="<?php echo $names[$i]['birthyear']; ?>" />
 				<input type="hidden" name="<?php echo 'reg_mgl_nr'.($i); ?>" value="<?php echo $member['memberNo']; ?>" />
 				<input type="hidden" name="<?php echo 'reg_zps'.($i); ?>" value="<?php echo $member['vkz']; ?>" />
-				<input type="hidden" name="<?php echo 'reg_dwz_I0'.($i); ?>" value="<?php echo $names[$i]['index']; ?>" />
-				<input type="hidden" name="<?php echo 'reg_FIDEid'.($i); ?>" value="<?php echo $names[$i]['fideId']; ?>" />
+				<input type="hidden" name="<?php echo 'reg_dwz_I0'.($i); ?>" value="<?php if (isset($names[$i]['index'])) echo $names[$i]['index']; else echo '0'; ?>" />
+				<input type="hidden" name="<?php echo 'reg_FIDEid'.($i); ?>" value="<?php if (isset($names[$i]['fideId'])) echo $names[$i]['fideId']; else echo '0'; ?>" />
 				<input type="hidden" name="<?php echo 'reg_elo'.($i); ?>" value="<?php if (isset($names[$i]['fide_rating'])) echo $names[$i]['fide_rating']; else echo '0'; ?>" />
 				<input type="hidden" name="<?php echo 'reg_FIDEcco'.($i); ?>" value="<?php if (isset($names[$i]['fide_federation'])) echo $names[$i]['fide_federation']; else ''; ?>" />
 				<input type="hidden" name="<?php echo 'reg_titel'.($i); ?>" value="<?php if (isset($names[$i]['fide_title'])) echo $names[$i]['fide_title']; else ''; ?>" />

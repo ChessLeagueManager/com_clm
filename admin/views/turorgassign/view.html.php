@@ -50,6 +50,8 @@ class CLMViewTurorgAssign extends JViewLegacy {
 		ToolBarHelper::spacer();
 		ToolBarHelper::custom('cancel', 'back.png', 'back_f2.png', $lang->back, false);
 
+		ToolBarHelper::help( false, false, 'https://wiki.chessleaguemanager.org/index.php/clm/5.1.2/hilfe.clm.organisationsteam' );
+
 		// das MainMenu abschalten
 //		JFactory::getApplication()->input->set('hidemainmenu', true);
 
