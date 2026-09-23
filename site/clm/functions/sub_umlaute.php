@@ -10,7 +10,7 @@
 function clm_function_sub_umlaute($string = '') {
 	$search = array("Ä", "Ö", "Ü", "ä", "ö", "ü", "ß", "á", "é", "ó", "ç",
 					"ć", "ğ");
-	$replace = array("Ae", "Oe", "Ue", "ae", "oe", "ue", "ss", "a", "e", "o", "c"
+	$replace = array("Ae", "Oe", "Ue", "ae", "oe", "ue", "ss", "a", "e", "o", "c",
 					"c", "g");
 	return str_replace($search, $replace, $string);		
 }
