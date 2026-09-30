@@ -97,6 +97,9 @@ $turParams = new clm_class_params($this->turnier->params);
 					<?php 
 					} 
 					?>
+					<th width="14%">
+						<?php echo HTMLHelper::_('grid.sort', Text::_('TIMESTAMP'), 'FIDEid', $this->param['order_Dir'], $this->param['order'] ); ?>
+					</th>
 
 					<th width="10%" nowrap="nowrap">
 						<?php echo HTMLHelper::_('grid.sort', Text::_('JGRID_HEADING_ORDERING'), 'ordering', $this->param['order_Dir'], $this->param['order'] ); ?>
@@ -241,7 +244,16 @@ $turParams = new clm_class_params($this->turnier->params);
 					<?php 
 					} 
 					?>
-					
+					<td align="center">
+						<?php 
+						if ($row->regtime > 0) {
+							echo $row->regtime;
+						} else {
+							echo '-';
+						}
+						?>
+					</td>
+
 					<td class="order" width="10%">
 						<span><?php echo $this->pagination->orderUpIcon($i, true, 'orderup', 'Move Up', $this->param['order'] ); ?></span>
 						<span><?php echo $this->pagination->orderDownIcon($i, $n, true, 'orderdown', 'Move Down', $this->param['order'] ); ?></span>

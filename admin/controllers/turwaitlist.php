@@ -315,6 +315,19 @@ class CLMControllerTurWaitlist extends JControllerLegacy {
 		$this->app->redirect( $adminLink->url );
 	}
 	
+	function sortByregtime() {
+		$this->_sortBy('regtime');
+
+		// turnierid
+		$id = clm_core::$load->request_int('id');
+		
+		$adminLink = new AdminLink();
+		$adminLink->view = "turwaitlist";
+		$adminLink->more = array('id' => $id);
+		$adminLink->makeURL();
+		$this->app->redirect( $adminLink->url );
+	}
+	
 	function sortByOrdering() {
 		$this->_sortBy('ordering');
 
@@ -367,6 +380,12 @@ class CLMControllerTurWaitlist extends JControllerLegacy {
 								.' ORDER BY twz DESC'
 								;
 			$stringMessage = Text::_('ORDERED_BY_TWZ');
+		} elseif ($by == 'regtime') {
+			$queryOrderBy = 'SELECT id FROM `#__clm_turniere_tlnr_wl`'
+								.' WHERE turnier = '.$id
+								.' ORDER BY regtime ASC'
+								;
+			$stringMessage = Text::_('ORDERED_BY_REGTIME');
 		} elseif ($by == 'random') {
 			$queryOrderBy = 'SELECT id FROM `#__clm_turniere_tlnr_wl`'
 								.' WHERE turnier = '.$id

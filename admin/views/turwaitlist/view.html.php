@@ -47,6 +47,7 @@ class CLMViewTurWaitlist extends JViewLegacy {
 
 			ToolBarHelper::custom( 'sortByTWZ', 'copy.png', 'copy_f2.png', Text::_('SNR_BY_TWZ'), false);
 //			ToolBarHelper::custom( 'sortByRandom', 'copy.png', 'copy_f2.png', Text::_('SNR_BY_RANDOM'), false);
+			ToolBarHelper::custom( 'sortByRegTime', 'copy.png', 'copy_f2.png', Text::_('SNR_BY_REGTIME'), false );
 			ToolBarHelper::custom( 'sortByOrdering', 'copy.png', 'copy_f2.png', Text::_('SNR_BY_ORDERING'), false );
 			ToolBarHelper::spacer();
 			ToolBarHelper::deleteList();
