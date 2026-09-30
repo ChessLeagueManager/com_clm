@@ -1,6 +1,6 @@
 --
 -- @ Chess League Manager (CLM) Component
--- @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+-- @Copyright (C) 2008-2026 CLM Team.  All rights reserved
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 -- @link https://chessleaguemanager.org
 
@@ -103,7 +103,8 @@ REPLACE INTO `#__clm_zeitmodus`
 (30, 'Standard',90, '40/7200:20/3600:1800', '40/7200:20/3600:1800', '10800', '120 min / 40 Züge + 60 min / 20 Züge + 60 min / Rest der Partie ',40,7200,0,20,3600,0,3600,0,0, 1),
 (31, 'Standard',92, '7800+30', '7800+30', '9600', '130 min plus 30 sec / Zug ab dem 1. Zug ',0,7800,30,0,0,0,0,0,0, 1),
 (32, 'Rapid',37, '900+5', '900+5', '1200', '15 min plus 5 sec / Zug ab dem 1. Zug ',0,900,5,0,0,0,0,0,0, 1),
-(33, 'Standard',69, '36/5400:1800', '36/5400:1800', '7200', '90 min / 36 Züge + 30 min / Rest der Partie ',36,5400,0,0,1800,0,0,0,0, 1)
+(33, 'Standard',69, '36/5400:1800', '36/5400:1800', '7200', '90 min / 36 Züge + 30 min / Rest der Partie ',36,5400,0,0,1800,0,0,0,0, 1),
+(34, 'Standard',59, '3600+15', '3600+15', '4500', '60 min für die Partie plus 30 sec / Zug ab dem 1. Zug ',0,3600,15,0,0,0,0,0,0, 1)
 ;
 -- --------------------------------------------------------
 

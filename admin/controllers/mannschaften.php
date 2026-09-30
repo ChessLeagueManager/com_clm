@@ -191,6 +191,7 @@ function display($cachable = false, $urlparams = array())
 	// Suchefilter
 	$lists['search']= $search;
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'mannschaft.php');
+//clm_core::$api->test_print('lists mm',$lists);
 	CLMViewMannschaften::mannschaften( $rows, $lists, $pageNav, $option );
 }
 
@@ -347,7 +348,7 @@ function edit()
 		;
 	$ligen	= clm_core::$db->loadObjectList($sql);
 //echo "<br>ligen1"; var_dump($ligen);
-	if ($clmAccess->access('BE_team_edit') == '2') {
+	if ($clmAccess->access('BE_team_edit') !== true) {
 		$allligen = $ligen;
 		unset($ligen);
 		$ligen = array();
@@ -415,6 +416,29 @@ function edit()
 //	$lists['saison']= HTMLHelper::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" size="1" style="width:300px"','sid', 'name', $row->sid );
 	$lists['saison']= HTMLHelper::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1" style="width:300px"','sid', 'name', $row->sid );
 
+	// Ersatzverbot durch andere Mannschaften
+	$lists['noersatz'] = '';
+	if ($task == 'edit') { 
+		$query = " SELECT m.*, l.rang FROM #__clm_mannschaften as m "
+			." LEFT JOIN #__clm_liga AS l ON m.liga = l.id"
+				." WHERE m.id = '".$cid[0]."'"
+			;
+		$mannschaft = clm_core::$db->loadObject($query);	
+		if ($mannschaft->rang > 0) {
+			$query = " SELECT m.* FROM #__clm_mannschaften as m "
+				." LEFT JOIN #__clm_liga AS l ON m.liga = l.id"
+				." WHERE m.zps = '".$mannschaft->zps."' AND m.sid = ".$mannschaft->sid
+				." AND m.man_nr > ".$mannschaft->man_nr
+				." AND l.rang = ".$mannschaft->rang
+				." ORDER BY m.man_nr "
+			;
+			$vmannschaft = clm_core::$db->loadObjectlist($query);	
+			if (is_array($vmannschaft)) {
+				$lists['noersatz'] = $vmannschaft;
+			}
+		}
+	}
+
 	//Liga-Parameter aufbereiten
 	$lid_params = array();
 	if (isset($lid[0]->params)) {
@@ -443,6 +467,7 @@ function edit()
 		$lists['sg'.$i]= HTMLHelper::_('select.genericlist',   $vereinlist, 'sg_zps['.$i.']', 'class="'.$field_search.'" size="1" style="width:300px"','zps', 'name', $row->sg_zps[$i] );
 	}
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'mannschaft.php');
+//clm_core::$api->test_print('lists m',$lists);
 	CLMViewMannschaften::mannschaft( $row, $lists, $option );
 	}
 
@@ -474,8 +499,16 @@ function save()
 		$row->sg_zps = '';
 		$row->sg_zps = implode(',',$sg_array);
 	}
-	// pre-save checks
 
+	// Ersatzverbot durch andere Mannschaften
+	if (!is_null($row->noersatz) AND $row->noersatz != '') {
+		$no_array = array();
+		$no_array = $row->noersatz;
+		$row->noersatz = '';
+		$row->noersatz = implode(',',$no_array);
+	}
+
+	// pre-save checks
 	if (!$row->check()) {
 		$mainframe->enqueueMessage("Die Eingaben sind unvollständig.", 'error');
 	switch ($task)
@@ -1389,16 +1422,15 @@ public static function save_meldeliste()
 				$PKZ    = $teil[0];
 			}
 			$tzps	= $teil[1];
-//			if ($block[$y] != $z_gesperrt) {
-				$rc = clm_core::$api->db_syn_player_block($sid,$tzps,$mgl_nr,$block);
-				if ($rc[0] === false) {
-					$msg = "m_updateError".$rc[1];
-					$mainframe->enqueueMessage( $msg, 'error' );
-				} else {
-					$msg = $rc[1];
+			$rc = clm_core::$api->db_syn_player_block($sid,$tzps,$mgl_nr,$block);
+			if ($rc[0] === false) {
+				$msg = "m_updateError".$rc[1];
+				$mainframe->enqueueMessage( $msg, 'error' );
+			} else {
+				$msg = $rc[1];
+				if ($msg != 'm_noUpdate')
 					$mainframe->enqueueMessage( $msg, 'message' );
-				}
-//			}
+			}
 		}
 	}
 

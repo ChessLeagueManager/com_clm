@@ -1,7 +1,7 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link http://www.chessleaguemanager.de
 */
@@ -112,8 +112,8 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 	$someData = "SELECT a.gemeldet,a.editor, a.id,a.sid, a.lid, a.runde, a.dg, a.tln_nr,"
 		." a.gegner,a.paar, a.dwz_zeit, a.dwz_editor,  "
 		." a.zeit, a.edit_zeit,  "
-		." m.name as hname,m.zps as hzps,m.man_nr as hmnr,m.sg_zps as sgh_zps, "
-		." n.name as gname, n.zps as gzps, n.man_nr as gmnr, n.sg_zps as sgg_zps, "
+		." m.name as hname,m.zps as hzps,m.man_nr as hmnr,m.sg_zps as sgh_zps,m.noersatz as hnoersatz, "
+		." n.name as gname, n.zps as gzps, n.man_nr as gmnr, n.sg_zps as sgg_zps,n.noersatz as gnoersatz, "
 		." l.name as lname, l.stamm, l.ersatz, l.sl as sl, l.rang, l.id as lid"
 		." FROM #__clm_rnd_man as a "
 		." LEFT JOIN #__clm_liga AS l ON (l.id = a.lid ) "
@@ -159,6 +159,7 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 			$Heim = $Heim
 				." AND a.status = ".$someData[0]->rang
 				." AND a.lid = ".$someData[0]->lid
+				." AND (FIND_IN_SET(r.man_nr,'".$someData[0]->hnoersatz."') = 0)"
 				." ORDER BY r.man_nr,r.Rang"; }
 		else { $Heim = $Heim
 				." AND a.lid = ".$someData[0]->lid
@@ -207,6 +208,7 @@ function clm_api_db_report($liga, $runde, $dg, $paar) {
 			$Gast = $Gast
 				." AND a.status = ".$someData[0]->rang
 				." AND a.lid = ".$someData[0]->lid
+				." AND (FIND_IN_SET(r.man_nr,'".$someData[0]->gnoersatz."') = 0)"
 				." ORDER BY r.man_nr,r.Rang"; }
 		else { $Gast = $Gast
 				." AND a.lid = ".$someData[0]->lid

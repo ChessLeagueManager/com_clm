@@ -243,7 +243,8 @@ public static function setMannschaftToolbar()
 public static function mannschaft( &$row,$lists, $option )
 	{
 		CLMViewMannschaften::setMannschaftToolbar();
-		$_REQUEST['hidemainmenu'] = 1;
+//		$_REQUEST['hidemainmenu'] = 1;
+		Factory::getApplication()->input->set('hidemainmenu', true);
 		JFilterOutput::objectHTMLSafe( $row, ENT_QUOTES, 'extrainfo' );
 
 		$_POST['clm_noOrgReference'] = $lists['noOrgReference'];
@@ -359,6 +360,29 @@ public static function mannschaft( &$row,$lists, $option )
 			<input class="inputbox" type="text" name="bpabzug" id="bpabzug" size="10" maxlength="10" value="<?php echo $row->bpabzug; ?>" />
 			</td>
 		</tr>
+		<?php if (is_array($lists['noersatz']) AND count($lists['noersatz']) > 0) { ?>
+		<tr>
+			<td class="key" nowrap="nowrap" width="20%">
+				<label for="<?php echo 'noersatz'.$i; ?>" title="<?php echo Text::_( 'MANNSCHAFT_NOERSATZ_HINT' );?>"><?php echo Text::_( 'MANNSCHAFT_NOERSATZ' )." : "; ?></label>
+			</td>
+			<td>
+			<?php 	if (is_null($row->noersatz)) $no_array[0] = '';
+					else $no_array = explode(',',$row->noersatz);
+				if ($no_array[0] == '') $no_array[0] = '0';
+				if (count($lists['noersatz']) > 3) $anzl = 4;
+				elseif (count($lists['noersatz']) < 1) $anzl = 2;
+				else $anzl = count($lists['noersatz']) + 1;
+				$maxheight = (string) ($anzl * 1.8); 
+				?>
+			<select id="noersatz" name="noersatz[]" class="form-select" multiple style="max-width: 400px !important; max-height:<?php echo $maxheight; ?>em !important">
+				<option value="0" <?php if (in_array('0', $no_array)) echo 'selected="selected"'; ?>>- ausw&auml;hlen -</option>
+				<?php foreach ($lists['noersatz'] as $lnoersatz) { ?> 
+					<option value="<?php echo $lnoersatz->man_nr; ?>" <?php if (in_array($lnoersatz->man_nr, $no_array)) echo 'selected="selected"'; ?>><?php echo $lnoersatz->name; ?></option>
+				<?php } ?> 
+			</select>
+			</td>
+		</tr>
+		<?php } ?>
 		<tr><td colspan="2"><hr></td></tr>
 
 		<tr>

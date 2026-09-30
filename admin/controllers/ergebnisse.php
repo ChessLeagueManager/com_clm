@@ -207,7 +207,8 @@ function display($cachable = false, $urlparams = array())
 		." WHERE a.rnd = 1 AND a.published = 1 AND s.archiv = 0 AND s.published = 1 ";
 	$ligen	= clm_core::$db->loadObjectList($sql);
 //echo "<br>ligen1"; var_dump($ligen);
-	if ($clmAccess->access('BE_'.$mppoint.'_edit_round') == '2') {
+//	if ($clmAccess->access('BE_'.$mppoint.'_edit_round') == '2') {
+	if ($clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) {
 		$allligen = $ligen;
 		unset($ligen);
 		$ligen = array();
@@ -302,8 +303,8 @@ function edit()
 	$data = "SELECT a.gemeldet,a.editor, a.id,a.sid, a.lid, a.runde, a.dg, a.tln_nr, a.ko_decision, a.comment, a.icomment," //mtmt
 		." a.gegner,a.paar, a.dwz_zeit, a.dwz_editor, w.name as dwz_editor, "
 		." a.zeit, a.edit_zeit, u.name as melder, v.name as name_editor, "
-		." m.name as hname,m.zps as hzps,m.man_nr as hmnr,m.sg_zps as sgh_zps, "
-		." n.name as gname, n.zps as gzps, n.man_nr as gmnr, n.sg_zps as sgg_zps, "
+		." m.name as hname,m.zps as hzps,m.man_nr as hmnr,m.sg_zps as sgh_zps,m.noersatz as hnoersatz, "
+		." n.name as gname, n.zps as gzps, n.man_nr as gmnr, n.sg_zps as sgg_zps,n.noersatz as gnoersatz, "
 		." l.name as lname, l.stamm, l.ersatz, l.sl as sl, l.rang, l.id as lid, l.b_wertung, l.runden_modus, l.liga_mt " //mtmt
 		." FROM #__clm_rnd_man as a "
 		." LEFT JOIN #__clm_user as u ON u.jid = a.gemeldet AND u.sid = a.sid "
@@ -370,6 +371,7 @@ function edit()
 				." AND a.status = ".$runde[0]->rang
 				." AND a.lid = ".$runde[0]->lid
 				." AND a.mgl_nr <> '0' "
+				." AND (FIND_IN_SET(r.man_nr,'".$runde[0]->hnoersatz."') = 0)"
 				." ORDER BY r.man_nr,r.Rang"; }
 		else { $sql = $sql
 				." AND a.lid = ".$runde[0]->lid
@@ -465,6 +467,7 @@ function edit()
 				." AND a.status = ".$runde[0]->rang
 				." AND a.lid = ".$runde[0]->lid
 				." AND a.mgl_nr > 0 "
+				." AND (FIND_IN_SET(r.man_nr,'".$runde[0]->gnoersatz."') = 0)"
 				." ORDER BY r.man_nr,r.Rang"; }
 		else { $sql = $sql
 				." AND a.lid = ".$runde[0]->lid

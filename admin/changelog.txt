@@ -21,6 +21,7 @@ $ -> Language fix or change
 # Teamwettbewerbe: Mannschaftsantrittspunkt (bugfix)
 + DSB-Datenübernahme: Gastspieler mit Status G und ähnlichen
 ^ Teamwettbewerbe: Runden-View mit Zurück-Button
++ Teamwettbewerbe: Ersatzverbot aus unteren Mannschaften bei Rangfolgesystem (optional)
 
 - - - - - 5.1.1 - [03-09-2026] - - - - - - - - - - - - - - - - - - - -
 + Weitere Hilfetexte Benutzer und Verein

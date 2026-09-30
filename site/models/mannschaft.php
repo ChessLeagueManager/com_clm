@@ -132,7 +132,7 @@ class CLMModelMannschaft extends JModelLegacy
 
 		$db			= Factory::getDBO();
 
-		$query = " SELECT l.rang,a.zps as zps, a.sg_zps as sgzps, a.man_nr as man_nr, l.ersatz_regel as ersatz_regel"
+		$query = " SELECT l.rang,a.zps as zps, a.sg_zps as sgzps, a.man_nr as man_nr, l.ersatz_regel as ersatz_regel, noersatz"
 			." FROM #__clm_mannschaften as a "
 			." LEFT JOIN #__clm_liga as l ON l.id =".$liga
 			." WHERE a.liga = ".$liga
@@ -144,14 +144,14 @@ class CLMModelMannschaft extends JModelLegacy
 		$zps	=$man[0]->zps;
 		$sgzps	=$man[0]->sgzps;
 		$mnr	=$man[0]->man_nr;
-		
+		$no_string = $man[0]->noersatz;
 		if(!$mnr) {
 			$mnr = 0;	
 		}
 		$rang	=$man[0]->rang;
 		$ersatz_regel	=$man[0]->ersatz_regel;
 	if ($rang > 0) {
-		$query = " SELECT a.start_dwz, m.tln_nr as tln_nr,a.snr,a.dwz,a.mgl_nr,a.zps, '' as PKZ, d.Spielername as name,d.DWZ as dwz,d.FIDE_Titel,d.Status,d.gesperrt,a.gesperrtm "
+		$query = " SELECT a.mnr, a.start_dwz, m.tln_nr as tln_nr,a.snr,a.dwz,a.mgl_nr,a.zps, '' as PKZ, d.Spielername as name,d.DWZ as dwz,d.FIDE_Titel,d.Status,d.gesperrt,a.gesperrtm "
 			.",r.man_nr as rmnr, r.Rang as rrang "
 			." FROM #__clm_meldeliste_spieler as a "
 //			." LEFT JOIN #__clm_rangliste_spieler as r on r.ZPS = a.zps AND r.Mgl_Nr = a.mgl_nr AND r.sid = a.sid "
@@ -162,6 +162,7 @@ class CLMModelMannschaft extends JModelLegacy
 			." WHERE a.sid = ".$sid
 			." AND (( a.zps = '$zps' AND a.mnr = $mnr) OR ( a.zps='$sgzps' AND a.mnr = $mnr )) "
 			." AND a.lid = ".$liga
+			." AND (FIND_IN_SET(r.man_nr,'".$no_string."') = 0)"
 			." AND r.Gruppe = $rang ";
 		if ($ersatz_regel == 0) 
 			$query .= " AND r.man_nr NOT IN ( SELECT aa.man_nr FROM #__clm_mannschaften as aa "
