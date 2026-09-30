@@ -25,7 +25,7 @@ $ -> Language fix or change
 + Einzelturniere: Warteliste Sortierung nach Anmeldezeit möglich
 ^ Mitgliederverwaltung: Mitglieder mit Mitgl.Nr. 0 können gelöscht werden
 # Feinwertung Sonneborn-Berger (1 Streich), Vereinsliste Auswahlfeld, Datenbank-View Dateiverwaltung
-
+# Einzelturniere: Löschen von Teilnehmern
 
 - - - - - 5.1.1 - [03-09-2026] - - - - - - - - - - - - - - - - - - - -
 + Weitere Hilfetexte Benutzer und Verein
