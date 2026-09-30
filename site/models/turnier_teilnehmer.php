@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -68,14 +68,27 @@ class CLMModelTurnier_Teilnehmer extends JModelLegacy {
 if (!isset($filter_order))		$filter_order     = $mainframe->getUserStateFromRequest( $option.'filter_order', 'filter_order', 'snr', 'cmd' );
 if (!isset($filter_order_Dir))	$filter_order_Dir = $mainframe->getUserStateFromRequest( $option.'filter_order_Dir', 'filter_order_Dir', '', 'word' );
 
-	if(!empty($filter_order) && !empty($filter_order_Dir) ){
-		$query .= ' ORDER BY '.$filter_order.' '.$filter_order_Dir;
-	} else {
-        $query .= ' ORDER BY snr ASC';
-	}
+		if(!empty($filter_order) && !empty($filter_order_Dir) ){
+			$query .= ' ORDER BY '.$filter_order.' '.$filter_order_Dir;
+		} else {
+			$query .= ' ORDER BY snr ASC';
+		}
 		$this->_db->setQuery( $query );
 //		$this->players = $this->_db->loadObjectList('snr');
 		$this->players = $this->_db->loadObjectList();
+
+		$query = "SELECT *"
+			." FROM `#__clm_turniere_tlnr_wl`"
+			." WHERE turnier = ".$this->turnierid
+			;
+
+		if(!empty($filter_order) && !empty($filter_order_Dir) ){
+			$query .= ' ORDER BY '.$filter_order.' '.$filter_order_Dir;
+		} else {
+			$query .= ' ORDER BY snr ASC';
+		}
+		$this->_db->setQuery( $query );
+		$this->wlplayers = $this->_db->loadObjectList();
 
 		$query = "SELECT *"
 			." FROM `#__clm_turniere_sonderranglisten`"

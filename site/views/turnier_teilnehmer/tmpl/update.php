@@ -22,11 +22,7 @@ $turnier 		= $this->turnier;
 
 $filter_order     = $mainframe->getUserStateFromRequest( $option.'filter_order', 'filter_order', 'snr', 'cmd' );
 $filter_order_Dir = $mainframe->getUserStateFromRequest( $option.'filter_order_Dir', 'filter_order_Dir', '', 'word' );
-echo "<br>filter_order"; var_dump($filter_order);
-echo "<br>filter_order_Dir"; var_dump($filter_order_Dir);
-//die('update');
 
-//die();
 ?>
 		<input type="hidden" name="task" value="update" />
 		<input type="hidden" name="filter_order" value="<?php echo $filter_order; ?>" />
@@ -50,6 +46,7 @@ $reason 		= clm_core::$load->request_string($hreason,'');
 $config = clm_core::$db->config();
 $msg = '';
 
+if ($snr < 10000) {
 // Teilnehmer einlesen wegen Namen
 	$query = " SELECT * FROM #__clm_turniere_tlnr WHERE turnier = ". $turnier->id . " AND snr = ".$snr.";";
 	$teilnehmer = clm_core::$db->loadObjectList($query);	
@@ -63,16 +60,32 @@ $msg = '';
 
 // Log - log
 	$aktion = "Startgeldupdate";
-	$parray = array('turnier' => $turnier->id, 'snr' => $snr, 'name' => $teilnehmer[0]->name, 'date_paid' => $date_paid, 'amount_paid' => $amount_paid, 'reason' => $reason );
+	$parray = array('turnier' => $turnier->id, 'snr' => $snr, 'name' => $teilnehmer[0]->name, 'date_paid' => $date_paid, 'amount_paid' => $amount_paid, 'reason' => $reason, 'liste' => 'TL' );
 	clm_core::addDeprecated($aktion, json_encode($parray));
 
-	
 	$msg = Text::_( 'Startgeld aktualisiert: ' ).$teilnehmer[0]->name;
-	$mainframe->enqueueMessage( $msg );
+} else {
+	$snr = $snr - 10000;
+// Teilnehmer einlesen wegen Namen
+	$query = " SELECT * FROM #__clm_turniere_tlnr_wl WHERE turnier = ". $turnier->id . " AND snr = ".$snr.";";
+	$teilnehmer = clm_core::$db->loadObjectList($query);	
 
+// Teilnehmer aktualisieren
+	$query = " UPDATE #__clm_turniere_tlnr_wl SET date_paid='" . $date_paid . "', amount_paid='".$amount_paid."', reason='".$reason."' WHERE turnier = ". $turnier->id . " AND snr = ".$snr.";";
+echo "<br>query"; var_dump($query);
+	$stmt = clm_core::$db->prepare($query);
+	$result = $stmt->execute();
+echo "<br>result"; var_dump($result); //die();
+
+// Log - log
+	$aktion = "Startgeldupdate";
+	$parray = array('turnier' => $turnier->id, 'snr' => $snr, 'name' => $teilnehmer[0]->name, 'date_paid' => $date_paid, 'amount_paid' => $amount_paid, 'reason' => $reason, 'liste' => 'WL' );
+	clm_core::addDeprecated($aktion, json_encode($parray));
+
+	$msg = Text::_( 'Startgeld aktualisiert: ' ).$teilnehmer[0]->name;
+}
+	$mainframe->enqueueMessage( $msg, 'message' );
 	$link = URI::base(true) .'/index.php?option=com_clm&view=turnier_teilnehmer&layout=startgeld&turnier='. $turnier->id .'&Itemid='; 
-//echo "<br>link"; var_dump($link);
-//die();
 	$mainframe->redirect( $link );
 
 ?>

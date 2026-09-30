@@ -22,26 +22,35 @@ function clm_api_db_turplayersliste($lid,$format='csv') {
   	$turnierModel = " SELECT * "
 				." FROM #__clm_turniere "
 				." WHERE id = ".$lid;
-	$out["turnier"] = clm_core::$db->loadObject($turnierModel);
+	$turnier = clm_core::$db->loadObject($turnierModel);
 
-  	$playersModel = " SELECT * "
-				." FROM #__clm_turniere_tlnr "
-				." WHERE turnier = ".$lid
-				." ORDER BY name ";
-	$out["players"] = clm_core::$db->loadObjectList($playersModel);
+  	$playersModel = " SELECT 'TL' as liste, a.* "
+				." FROM #__clm_turniere_tlnr as a"
+				." WHERE a.turnier = ".$lid
+				." ORDER BY a.name ";
+	$players = clm_core::$db->loadObjectList($playersModel);
+
+  	$playersModel = " SELECT 'WL' as liste, a.* "
+				." FROM #__clm_turniere_tlnr_wl as a "
+				." WHERE a.turnier = ".$lid
+				." ORDER BY a.name ";
+	$wlplayers = clm_core::$db->loadObjectList($playersModel);
 
 	// Kein Ergebnis -> Daten Inkonsistent oder falsche Eingabe
-	if (!isset($out["players"][0])) {
+	if (!isset($players[0])) {
 		return array(false, "e_playerslisteError");
 	}	
 
-  	$countModel = " SELECT COUNT(IF((tlnrStatus = 1),1,NULL)) as active, COUNT(IF((tlnrStatus = 0),1,NULL)) as deactive  "
-				." FROM #__clm_turniere_tlnr "
-				." WHERE turnier = ".$lid;
-	$tanz = clm_core::$db->loadObject($countModel);
-
-	$turnier 	= $out["turnier"];
-	$players 	= $out["players"];
+ 	$tanz = count($players);
+	
+	if (isset($wlplayers[0])) {
+		$wanz = count($wlplayers);
+		foreach ($wlplayers as $pl) {
+			$players[] = $pl;
+		}
+	} else {
+		$wanz = count($wlplayers);
+	}
 	$now = time();
 
 if ($format == 'csv') {
@@ -53,7 +62,7 @@ if ($format == 'csv') {
 		if ($first) {
 			$first = false;
 			$line = array();	
-			$line[1] = $lang->status;
+			$line[1] = $lang->liste;
 			$line[2] = $lang->titel;
 			$line[3] = $lang->name;
 			$line[4] = $lang->verein;
@@ -73,7 +82,7 @@ if ($format == 'csv') {
 		}
 
 		$line = array();	
-		$line[1] = $pl->tlnrStatus;
+		$line[1] = $pl->liste;
 		$line[2] = $pl->titel;
 		$line[3] = str_replace(array('„','“','"','”'),' ',$pl->name);
 		$line[3] = clm_core::$load->utf8decode(str_replace("'",' ',$line[3]));
@@ -192,7 +201,7 @@ if ($format == 'pdf') {
 				$pdf->Cell($leer+7,$zelle,' ',0,0,'L');
 				$pdf->Cell(140,7,clm_core::$load->utf8decode($turnier->name),0,0,'L');
 			$pdf->SetFont('Times','',$head_font-4);	
-				$pdf->Cell(95,7,'Standard-Startgeld:'.$turnier->entry_fee.' - '.$tanz->active.clm_core::$load->utf8decode(' TL bestätigt / ').$tanz->deactive.' TL in Wartestatus',0,1,'LB');
+				$pdf->Cell(95,7,clm_core::$load->utf8decode('Standard-Startgeld:').$turnier->entry_fee.' - '.$tanz.clm_core::$load->utf8decode(' Teilnehmer sowie ').$wanz.' in Warteliste',0,1,'LB');
 				$pdf->Ln(1);    	
 			$pdf->SetFont('Times','',$font+2);
 			$pdf->SetFillColor(100);
@@ -216,7 +225,7 @@ if ($format == 'pdf') {
 		}
 		if ($x%2 != 0) { $fc = 1; } else { $fc = 0; }
 		$pdf->Cell($leer+7,$zelle,' ',0,0,'L');
-		if ($pl->tlnrStatus == 0) {
+		if ($pl->liste == 'WL') {
 			$pdf->SetFillColor(190);
 			$pdf->Cell(8,$zelle,$x,1,0,'C',1);
 			$pdf->SetFillColor(240);

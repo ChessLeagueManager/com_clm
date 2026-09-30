@@ -37,6 +37,7 @@ class CLMViewTurnier_Teilnehmer extends JViewLegacy {
 		$tourn_linkclub=$config->tourn_linkclub;
 		$this->tourn_linkclub = $tourn_linkclub;
 		$this->players = $model->players;
+		$this->wlplayers = $model->wlplayers;
 		$this->s_gruppen = $model->s_gruppen;
 		
 		$mainframe =Factory::getApplication();
