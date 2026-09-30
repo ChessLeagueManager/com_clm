@@ -20,6 +20,7 @@ $ -> Language fix or change
 # Textkorrekturen und ähnliches
 # Teamwettbewerbe: Mannschaftsantrittspunkt (bugfix)
 + DSB-Datenübernahme: Gastspieler mit Status G und ähnlichen
+^ Teamwettbewerbe: Runden-View mit Zurück-Button
 
 - - - - - 5.1.1 - [03-09-2026] - - - - - - - - - - - - - - - - - - - -
 + Weitere Hilfetexte Benutzer und Verein

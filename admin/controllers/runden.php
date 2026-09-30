@@ -165,7 +165,8 @@ function display($cachable = false, $urlparams = array())
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
 		." WHERE s.archiv = 0 ";
 	$ligen	= clm_core::$db->loadObjectList($sql);
-	if ($clmAccess->access('BE_'.$mppoint.'_edit_round') == '2') {
+//	if ($clmAccess->access('BE_'.$mppoint.'_edit_round') == '2') {
+	if ($clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) {
 		$allligen = $ligen;
 		unset($ligen);
 		$ligen = array();
@@ -296,7 +297,8 @@ function edit()
 		." LEFT JOIN #__clm_saison as s ON s.id = a.sid"
 		." WHERE s.archiv = 0 ";
 	$ligen	= clm_core::$db->loadObjectList($sql);
-	if ($clmAccess->access('BE_'.$mppoint.'_edit_result') == '2') {
+//	if ($clmAccess->access('BE_'.$mppoint.'_edit_result') == '2') {
+	if ($clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
 		$allligen = $ligen;
 		unset($ligen);
 		$ligen = array();
@@ -1130,6 +1132,20 @@ function termine_copy()
 	
 	$mainframe->enqueueMessage(Text::_( $n.' '.$msg ), 'message');
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section.'&liga='.$lid);
+	}
+
+function back()
+	{
+	$mainframe	= Factory::getApplication();
+	// Check for request forgeries
+	defined('clm') or die('Restricted access');
+
+	$liga_mt 		= clm_core::$load->request_int('liga_mt');
+	if ($liga_mt == 1) $liga_mt = 0;
+	else $liga_mt = 1;
+	$option 	= clm_core::$load->request_string('option');
+
+	$mainframe->redirect( 'index.php?option='. $option.'&view=view_tournament_group&liga='.$liga_mt);
 	}
 
 }

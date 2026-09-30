@@ -42,6 +42,7 @@ public static function setRundenToolbar($sid, $params_round_date)
 		ToolBarHelper::deleteList();
 		// ToolBarHelper::editList();
 		ToolBarHelper::addNew();
+		ToolBarHelper::custom( 'back', 'cancel.png','cancel_f2.png', 'Zurück', false );
 	  }
 	}
 		ToolBarHelper::help( 'screen.clm.runde' );
@@ -55,7 +56,7 @@ public static function runden( $rows, $lists, $pageNav, $option )
 
 	// Liga-Parameter holen
 	$db 		=Factory::getDBO();
-	$sql = "SELECT params FROM #__clm_liga as l"
+	$sql = "SELECT params, liga_mt FROM #__clm_liga as l"
 		." WHERE l.id = ".$rows[0]->liga;
 	$db->setQuery( $sql );
 	$tparams = $db->loadObjectList();
@@ -310,7 +311,8 @@ public static function runden( $rows, $lists, $pageNav, $option )
 
 		<input type="hidden" name="option" value="<?php echo $option;?>" />
 		<input type="hidden" name="task" value="" />
-		<input type="hidden" name="liga" value="<?php echo clm_core::$load->request_int('liga');; ?>" />
+		<input type="hidden" name="liga" value="<?php echo clm_core::$load->request_int('liga'); ?>" />
+		<input type="hidden" name="liga_mt" value="<?php echo $tparams[0]->liga_mt; ?>" />
 		<input type="hidden" name="boxchecked" value="0" />
 		<input type="hidden" name="filter_order" value="<?php echo $lists['order']; ?>" />
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $lists['order_Dir']; ?>" />
