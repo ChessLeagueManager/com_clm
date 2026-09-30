@@ -570,7 +570,8 @@ static function spieler_delete()
 	}
 
 	// Spieler muß ausgewählt sein
-	if ( $spieler == 0 OR $spieler == '') {
+//	if ( $spieler == 0 OR $spieler == '') {
+	if ( $spieler == '') {
 		$mainframe->enqueueMessage( Text::_( 'DWZ_SPIELER_LOESCH' ), 'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link );
@@ -579,11 +580,13 @@ static function spieler_delete()
 	$zps	= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'var' );
 
 	if ($countryversion =="de") {
-		$result = clm_core::$api->db_player_check($sid,$zps,$spieler);
-		if (!$result[0]) {
-			$mainframe->enqueueMessage( 'Löschen von '.$zps.'-'.$spieler.' nicht möglich, '.$result[1], 'warning' );
-			$link = 'index.php?option='.$option.'&section='.$section;
-			$mainframe->redirect( $link );
+		if ($spieler > 0) {
+			$result = clm_core::$api->db_player_check($sid,$zps,$spieler);
+			if (!$result[0]) {
+				$mainframe->enqueueMessage( 'Löschen von '.$zps.'-'.$spieler.' nicht möglich, '.$result[1], 'warning' );
+				$link = 'index.php?option='.$option.'&section='.$section;
+				$mainframe->redirect( $link );
+			}
 		}
 	}
 

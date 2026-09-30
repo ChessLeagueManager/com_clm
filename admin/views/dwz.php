@@ -442,7 +442,7 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 				<td class="key" nowrap="nowrap">
 <!--	  			<select class="js-example-basic-single" style="width:300px" size="1" name="del_spieler" id="del_spieler"> -->
 	  			<select class="<?php echo $field_search;?>" style="width:300px" size="1" name="del_spieler" id="del_spieler">
-					<option value="0"><?php echo Text::_( 'MEMBER_TABLE_28' ); ?></option>
+					<option value=""><?php echo Text::_( 'MEMBER_TABLE_28' ); ?></option>
 				<?php for ($x=0; $x < count($verein); $x++) { ?>
 		 		<?php if ($countryversion == "de") { ?>
 		 		  <option value="<?php echo $verein[$x]->Mgl_Nr; ?>"><?php echo $verein[$x]->Mgl_Nr.' - '.$verein[$x]->Spielername; ?></option> 
