@@ -84,7 +84,7 @@ function tableOrdering( order, dir, task )
                     <option value=""><?php echo Text::_('CLUB_SELECTTEAM') ?></option>
                     <?php  $cnt = 0;
                      foreach ($vereinsliste as $vereinsliste) { $cnt++; if ($vereinsliste->sid == $sid) {?>
-                    <option value="<?php echo URI::base(true); ?>index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $vereinsliste->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $vereinsliste->name; ?></option>
+                    <option value="<?php echo URI::base(true); ?>/index.php?option=com_clm&view=verein&saison=<?php echo $sid; ?>&zps=<?php echo $vereinsliste->zps; ?><?php if ($itemid <>'') { echo "&Itemid=".$itemid; } ?>"><?php echo $vereinsliste->name; ?></option>
                     <?php }} ?>
                     </select>
                 </form>

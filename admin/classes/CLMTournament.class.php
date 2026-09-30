@@ -571,7 +571,8 @@ class CLMTournament extends stdClass {
 				elseif (count($array_PlayerSoBeOpp[$s]) == 0) 
 					$array_PlayerSoBe[$s] = 0;
 				elseif (count($array_PlayerSoBeOpp[$s]) == 1) 
-					$array_PlayerSoBe[$s] = $array_PlayerSoBeOpp[$s][0];
+//					$array_PlayerSoBe[$s] = $array_PlayerSoBeOpp[$s][0];
+					$array_PlayerSoBe[$s] = array_sum($array_PlayerSoBeOpp[$s]);
 				elseif (count($array_PlayerSoBeOpp[$s]) > 2) //== ($dg * $runden)) 
 					$array_PlayerSoBe[$s] = array_sum($array_PlayerSoBeOpp[$s]) - min($array_PlayerSoBeOpp[$s]);
 				else $array_PlayerSoBe[$s] = array_sum($array_PlayerSoBeOpp[$s]);

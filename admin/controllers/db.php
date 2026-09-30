@@ -80,7 +80,8 @@ class CLMControllerDB extends JControllerLegacy {
 			File::delete($filesDir . DS . $export);
 		}
 		if ($export == "all") {
-			$export_files = CLMControllerDB::export_files();
+//			$export_files = CLMControllerDB::export_files();
+			$export_files = CLMControllerDB::files();
 			for ($x = 0;$x < count($export_files);$x++) {
 				File::delete($filesDir . DS . $export_files[$x]);
 			}
