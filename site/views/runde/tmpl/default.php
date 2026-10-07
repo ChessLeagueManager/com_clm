@@ -189,6 +189,8 @@ if(isset($liga[0])){
 <div id="runde">
 
 <?php
+require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php');
+
 if(isset($liga[0])){
 	$ok=$this->ok;
 
@@ -237,7 +239,7 @@ if(isset($liga[0])){
 </div>
 <div class="clr"></div>
 
-<?php require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php');
+<?php // require_once(JPATH_COMPONENT.DS.'includes'.DS.'submenu.php');
 
 $archive_check = clm_core::$api->db_check_season_user($sid);
 if (!$archive_check) {

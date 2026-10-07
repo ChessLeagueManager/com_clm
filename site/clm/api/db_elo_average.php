@@ -38,7 +38,7 @@ function clm_api_db_elo_average($lid,$runde=0,$dg=1) {
 	}
 
 	if ($l[0]->anzeige_ma == 1) {
-		return array(true, $a_average_dwz, $a_average_dwz_p);	
+		return array(true, $a_average_elo, $a_average_elo_p);	
 	}
 	
 	// Ligaparameter bereitstellen
@@ -46,7 +46,7 @@ function clm_api_db_elo_average($lid,$runde=0,$dg=1) {
 	$params_dwz_date = $params->get('dwz_date','1970-01-01');
 	$params_pseudo_dwz = $params->get('pseudo_dwz',0);
 	
-	// DWZ-Schnitt laut Aufstellung 
+	// Elo-Schnitt laut Aufstellung 
 	if ($runde == 0) {
 		$query = "SELECT ml.*, d.FIDE_Elo as elo, m.tln_nr "
 			." FROM #__clm_meldeliste_spieler AS ml "
@@ -57,7 +57,7 @@ function clm_api_db_elo_average($lid,$runde=0,$dg=1) {
 			$query .= " LEFT JOIN #__clm_dwz_spieler AS d ON (d.PKZ = ml.PKZ AND d.ZPS = ml.zps AND d.sid = ml.sid )";
 		$query 	.= " WHERE ml.lid = ".$lid
 			." AND ml.snr < ".($l[0]->stamm + 1);
-			
+		$query  .= " ORDER BY m.tln_nr, ml.snr ";	
 		$mliste = clm_core::$db->loadObjectList($query);
 		
 		foreach ($mliste as $mliste1) {
@@ -90,7 +90,7 @@ function clm_api_db_elo_average($lid,$runde=0,$dg=1) {
 		}
 	}	
 
-	// DWZ-Schnitt gespielt ermitteln
+	// Elo-Schnitt gespielt ermitteln
 	if ($runde > 0) {
 		$query = "SELECT s.*, d.FIDE_Elo as elo, ml.FIDEelo as FIDEelo "
 			." FROM #__clm_rnd_spl AS s ";

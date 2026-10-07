@@ -189,6 +189,7 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
 			$lines[]	= '022 '.clm_core::$load->sub_umlaute($turnier->city);
 		$lines[]	= '032 '.clm_core::$load->sub_umlaute($turnier->FIDEcco);
 		$dateStart = "";
+		$dateEnd = "";
 		if ($monat != "") {
 			$runde = 0;
 			while ($runde < $turnier->runden) {
@@ -647,10 +648,10 @@ function clm_api_db_trf_export($turnierid,$group=false,$test=false,$clmextension
 
 			$fehler	= 0;
 			if($rnd_count < ($counter - $count_kampflos) AND $rnd_count == 0){
-				$lines[] 	= 'FFF '.Text::_( 'DB_WTEXT0' ).Text::_( 'DB_ROUND' ).$rnd.Text::_( 'DB_DG' ).$dg;
+				$lines[] 	= 'FFF '.'Warnung! Vermutlich fehlen die Ergebnisse in'.' Runde: '.$rnd.' Durchgang: '.$dg;
 				$fehler = 1;
 			} elseif($rnd_count < ($counter - $count_kampflos)){
-				$lines[] 	= 'FFF '.Text::_( 'DB_WTEXT1' ).Text::_( 'DB_ROUND' ).$rnd.Text::_( 'DB_DG' ).$dg;
+				$lines[] 	= 'FFF '.'Warnung! Vermutlich fehlen einige Ergebnisse in'.' Runde: '.$rnd.' Durchgang: '.$dg;
 				$fehler = 1;
 			}
 		  }
