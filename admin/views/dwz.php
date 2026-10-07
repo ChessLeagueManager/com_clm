@@ -365,6 +365,16 @@ static function DWZ( $spieler,$verein,$verein_from,$lists, $pageNav, $option )
 			<td><?php echo Text::_( 'MEMBER_TABLE_23' ); ?></td>
 		</tr>
 		<tr>
+			<td class="key" nowrap="nowrap" title="<?php echo Text::_( 'MEMBER_TABLE_GEBTAG_HINT' ); ?>">
+			<label for="geburtstag"><?php echo Text::_( 'MEMBER_TABLE_GEBTAG' ); ?></label>
+			</td>
+			<td>
+				<?php if (isset($spieler[0]->Geburtstag) AND !is_null($spieler[0]->Geburtstag)) $zgeburtstag = $spieler[0]->Geburtstag; else $zgeburtstag = ''; ?>
+				<?php echo CLMForm::calendar($zgeburtstag, "geburtstag", "geburtstag", '%Y-%m-%d', array('class'=>'text_area', 'size'=>'12',  'maxlength'=>'19')); ?>
+			</td>
+			<td><?php echo Text::_( 'MEMBER_TABLE_GEBTAG_BEM' ); ?></td>
+		</tr>
+		<tr>
 			<td class="key" nowrap="nowrap">
 			<label for="status"><?php echo Text::_( 'MEMBER_TABLE_32' ); ?></label>
 			</td>

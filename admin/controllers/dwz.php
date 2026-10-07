@@ -291,6 +291,8 @@ static function nachmeldung()
 	$FIDE_Land 	= clm_core::$load->request_string('FIDE_Land', '');
 	$geschlecht	= clm_core::$load->request_string('geschlecht');
 	$geburtsjahr	= clm_core::$load->request_string('geburtsjahr');
+	$geburtstag = clm_core::$load->request_string('geburtstag', '0000-00-00');	
+	if ($geburtstag == '') $geburtstag = '0000-00-00';	
 	$zps		= clm_core::$load->request_string('zps');
 	$status		= clm_core::$load->request_string('status');	
 	$joiningdate = clm_core::$load->request_string('joiningdate', '1970-01-01');	
@@ -360,7 +362,7 @@ static function nachmeldung()
 	if ($geschlecht == '0') $geschlecht = 'M';
 
 	$query	= "INSERT INTO #__clm_dwz_spieler"
-		." ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Status`, `Spielername`, `Geschlecht`, `Geburtsjahr` , `joiningdate`, `leavingdate`, `DWZ`, `DWZ_Index` , `FIDE_Elo`, `FIDE_ID`, `FIDE_Titel`, `FIDE_Land` ) "
+		." ( `sid`,`ZPS`, `Mgl_Nr`, `PKZ`, `Status`, `Spielername`, `Geschlecht`, `Geburtsjahr` , `joiningdate`, `leavingdate`, `DWZ`, `DWZ_Index` , `FIDE_Elo`, `FIDE_ID`, `FIDE_Titel`, `FIDE_Land`, `Geburtstag` ) "
 		." VALUES ('".clm_escape($sid)."','".clm_escape($zps)."','".clm_escape($mglnr)."','".clm_escape($PKZ)."','".clm_escape($status)."','".clm_escape($name)."','"
 		.clm_escape($geschlecht)."','".clm_escape($geburtsjahr)."','".$joiningdate."','".$leavingdate."'";
 	if (!is_numeric($dwz) OR ($dwz == 0))
@@ -385,6 +387,10 @@ static function nachmeldung()
 		$query	.= " ,NULL ";
 	else 
 		$query	.= " , '$FIDE_Land' ";
+	if (is_null($geburtstag) OR ($geburtstag == '0000-00-00'))
+		$query	.= " ,NULL ";
+	else
+		$query	.= " , '$geburtstag' ";
 	$query	.= " )";
 	clm_core::$db->query($query);
 
@@ -427,6 +433,8 @@ static function daten_edit()
 	$FIDE_Land 	= clm_core::$load->request_string('FIDE_Land', '');
 	$geschlecht	= clm_core::$load->request_string('geschlecht');
 	$geburtsjahr	= clm_core::$load->request_string('geburtsjahr');
+	$geburtstag = clm_core::$load->request_string('geburtstag', '0000-00-00');	
+	if ($geburtstag == '') $geburtstag = '0000-00-00';	
 	$zps		= clm_core::$load->request_string('zps');
 	$status		= clm_core::$load->request_string('status');	
 	$joiningdate = clm_core::$load->request_string('joiningdate', '1970-01-01');	
@@ -514,6 +522,10 @@ static function daten_edit()
 		$query	.= " , Geburtsjahr = '0000' ";
 	else
 		$query	.= " , Geburtsjahr = '".clm_escape($geburtsjahr)."' ";
+	if (is_null($geburtstag) OR ($geburtstag == '0000-00-00'))
+		$query	.= " , Geburtstag = NULL ";
+	else
+		$query	.= " , Geburtstag = '".clm_escape($geburtstag)."' ";
 	$query	.= " , Status = '".clm_escape($status)."' "
 		." , joiningdate = '".$joiningdate."' "
 		." , leavingdate = '".$leavingdate."' "
