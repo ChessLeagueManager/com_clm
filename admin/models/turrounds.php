@@ -79,7 +79,7 @@ class CLMModelTurRounds extends JModelLegacy {
 
 	function _getTurnier() {
 	
-		$query = 'SELECT name, typ, runden, tl'
+		$query = 'SELECT id, name, typ, runden, tl'
 			. ' FROM #__clm_turniere'
 			. ' WHERE id = '.$this->param['id']
 			;
