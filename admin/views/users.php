@@ -61,9 +61,9 @@ class CLMViewUsers {
 		<tr>
 			<td align="left" width="100%">
 				<?php echo Text::_( 'FILTER' ); ?>:
-		<input type="text" name="search" id="search" value="<?php echo $lists['search'];?>" class="text_area" onchange="document.adminForm.submit();" />
+		<input type="text" name="search_user" id="search_user" value="<?php echo $lists['search_user'];?>" class="text_area" onchange="document.adminForm.submit();" />
 		<button onclick="this.form.submit();"><?php echo Text::_( 'GO' ); ?></button>
-		<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo Text::_( 'RESET' ); ?></button>
+		<button onclick="document.getElementById('search_user').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo Text::_( 'RESET' ); ?></button>
 			</td>
 			<td nowrap="nowrap">
 				<?php

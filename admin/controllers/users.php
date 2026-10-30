@@ -51,8 +51,8 @@ function display($cachable = false, $urlparams = array())
 	$filter_sid			= $mainframe->getUserStateFromRequest( "$option.filter_sid",'filter_sid',clm_core::$access->getSeason(),'int' );
 	$filter_vid			= $mainframe->getUserStateFromRequest( "$option.filter_vid",'filter_vid',0,'string' );
 	$filter_usertype	= $mainframe->getUserStateFromRequest( "$option.filter_usertype",'filter_usertype',0,'string' );
-	$search			= $mainframe->getUserStateFromRequest( "$option.search",'search','','string' );
-	$search			= strtolower( $search );
+	$search_user			= $mainframe->getUserStateFromRequest( "$option.search_user",'search_user','','string' );
+	$search_user			= strtolower( $search_user );
 	$limit			= $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
 	$limitstart		= $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
 
@@ -66,7 +66,7 @@ function display($cachable = false, $urlparams = array())
 	if ( $filter_usertype ) {	$where[] = "a.usertype = '$filter_usertype'"; }
 	if ( $filter_sid ) {	$where[] = 'a.sid = '.$filter_sid;}
 	if ( $filter_vid ) {	$where[] = "a.zps = '$filter_vid'"; }
-	if ($search) {	$where[] = 'LOWER(a.name) LIKE "'.$db->escape( '%'.$search.'%').'"';	}
+	if ($search_user) {	$where[] = 'LOWER(a.name) LIKE "'.$db->escape( '%'.$search_user.'%').'"';	}
 
 	if ( $filter_state ) {
 		if ( $filter_state == 'P' ) {
@@ -176,7 +176,7 @@ function display($cachable = false, $urlparams = array())
 	$lists['order_Dir']	= $filter_order_Dir;
 	$lists['order']		= $filter_order;
 	// Suchefilter
-	$lists['search']= $search;
+	$lists['search_user']= $search_user;
 
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'users.php');
 	CLMViewUsers::users( $rows, $lists, $pageNav, $option );

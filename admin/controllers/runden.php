@@ -60,8 +60,8 @@ function display($cachable = false, $urlparams = array())
 	$filter_sid		= $mainframe->getUserStateFromRequest( "$option.filter_sid",'filter_sid',0,'int' );
 	$filter_lid		= $mainframe->getUserStateFromRequest( "$option.filter_lid",'filter_lid',0,'int' );
 	$filter_catid		= $mainframe->getUserStateFromRequest( "$option.filter_catid",'filter_catid',0,'int' );
-	$search			= $mainframe->getUserStateFromRequest( "$option.search",'search','','string' );
-	$search			= strtolower( $search );
+	$search_runden			= $mainframe->getUserStateFromRequest( "$option.search_runden",'search_runden','','string' );
+	$search_runden			= strtolower( $search_runden );
 	$limit			= $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
 	$limitstart		= $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
 
@@ -75,7 +75,7 @@ function display($cachable = false, $urlparams = array())
 	if ( $filter_catid ) {	$where[] = 'a.published = '.(int) $filter_catid; }
 	if ( $filter_sid ) {	$where[] = 'a.sid = '.(int) $filter_sid; }
 	if ( $filter_lid ) {	$where[] = 'a.liga = '.(int) $filter_lid; }
-	if ($search) {	$where[] = 'LOWER(a.name) LIKE "'.$db->escape('%'.$search.'%').'"';}
+	if ($search_runden) {	$where[] = 'LOWER(a.name) LIKE "'.$db->escape('%'.$search_runden.'%').'"';}
 
 	if ( isset($filter_state) AND is_string($filter_state) ) {
 		if ( $filter_state == 'P' ) {
@@ -188,16 +188,17 @@ function display($cachable = false, $urlparams = array())
 	$lists['order_Dir']	= $filter_order_Dir;
 	$lists['order']		= $filter_order;
 	// Suchefilter
-	$lists['search']= $search;
+	$lists['search_runden']= $search_runden;
 	if(isset($rows[0]) && !clm_core::$load->rights_check('SL',$rows[0]->liga) AND $clmAccess->access('BE_'.$mppoint.'_edit_round') !== true) {
 		$mainframe->enqueueMessage(Text::_( 'LIGEN_STAFFEL' ), 'warning');
 		$mainframe->redirect( 'index.php?option='. $option.'&view=view_tournament_group&liga='.$liga_type);
 	}
 	if(!isset($rows[0])) {
-		$mainframe->enqueueMessage(Text::_( 'LIGEN_NOT_POSSIBLE' ), 'warning');
+		$mainframe->enqueueMessage(Text::_( 'kein Eintrag zum Filterwert, Filter wurde geleert' ), 'warning');
+		$mainframe->setUserState( "$option.search_runden",'' );
 		$mainframe->redirect( 'index.php?option='. $option.'&view=view_tournament_group&liga='.$liga_type);
 	}
- 
+
 	require_once(JPATH_COMPONENT.DS.'views'.DS.'runden.php');
 	CLMViewRunden::Runden( $rows, $lists, $pageNav, $option );
 	}

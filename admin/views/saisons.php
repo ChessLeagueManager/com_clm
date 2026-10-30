@@ -70,9 +70,9 @@ public static function saisons ( &$rows, &$lists, &$pageNav, $option )
 		<tr>
 			<td align="left" width="100%">
 				<?php echo Text::_( 'Filter' ); ?>:
-		<input type="text" name="search" id="search" value="<?php echo $lists['search'];?>" class="text_area" onchange="document.adminForm.submit();" />
+		<input type="text" name="search_saison" id="search_saison" value="<?php echo $lists['search_saison'];?>" class="text_area" onchange="document.adminForm.submit();" />
 		<button onclick="this.form.submit();"><?php echo Text::_( 'GO' ); ?></button>
-		<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo Text::_( 'Reset' ); ?></button>
+		<button onclick="document.getElementById('search_saison').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo Text::_( 'Reset' ); ?></button>
 			</td>
 			<td nowrap="nowrap">
 				<?php

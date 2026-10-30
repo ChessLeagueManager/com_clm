@@ -36,14 +36,14 @@ class CLMControllerSaisons extends JControllerLegacy {
 		$filter_order = $mainframe->getUserStateFromRequest("$option.filter_order", 'filter_order', 'a.id', 'cmd');
 		$filter_order_Dir = $mainframe->getUserStateFromRequest("$option.filter_order_Dir", 'filter_order_Dir', '', 'word');
 		$filter_state = $mainframe->getUserStateFromRequest("$option.filter_state", 'filter_state', '', 'word');
-		$search = $mainframe->getUserStateFromRequest("$option.search", 'search', '', 'string');
-		$search = strtolower($search);
+		$search_saison = $mainframe->getUserStateFromRequest("$option.search_saison", 'search_saison', '', 'string');
+		$search_saison = strtolower($search_saison);
 		$limit = $mainframe->getUserStateFromRequest('global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int');
 		$limitstart = $mainframe->getUserStateFromRequest($option . '.limitstart', 'limitstart', 0, 'int');
 		$where = array();
 		$orderby = "";
-		if ($search) {
-			$where[] = 'LOWER(a.name) LIKE "' . $db->escape('%' . $search . '%') . '"';
+		if ($search_saison) {
+			$where[] = 'LOWER(a.name) LIKE "' . $db->escape('%' . $search_saison . '%') . '"';
 		}
 		if ($filter_state) {
 			if ($filter_state == 'P') {
@@ -91,7 +91,7 @@ class CLMControllerSaisons extends JControllerLegacy {
 		$lists['order_Dir'] = $filter_order_Dir;
 		$lists['order'] = $filter_order;
 		// search filter
-		$lists['search'] = $search;
+		$lists['search_saison'] = $search_saison;
 		require_once (JPATH_COMPONENT . DS . 'views' . DS . 'saisons.php');
 		CLMViewSaisons::saisons($rows, $lists, $pageNav, $option);
 	}

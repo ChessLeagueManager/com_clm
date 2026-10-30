@@ -101,9 +101,9 @@ public static function runden( $rows, $lists, $pageNav, $option )
 		<tr>
 			<td align="left" width="100%">
 				<?php echo Text::_( 'Filter' ); ?>:
-		<input type="text" name="search" id="search" value="<?php echo $lists['search'];?>" class="text_area" onchange="document.adminForm.submit();" />
+		<input type="text" name="search_runden" id="search_runden" value="<?php echo $lists['search_runden'];?>" class="text_area" onchange="document.adminForm.submit();" />
 		<button onclick="this.form.submit();"><?php echo Text::_( 'GO' ); ?></button>
-		<button onclick="document.getElementById('search').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo Text::_( 'Reset' ); ?></button>
+		<button onclick="document.getElementById('search_runden').value='';this.form.getElementById('filter_catid').value='0';this.form.getElementById('filter_state').value='';this.form.submit();"><?php echo Text::_( 'Reset' ); ?></button>
 			</td>
 			<td nowrap="nowrap">
 				<?php
