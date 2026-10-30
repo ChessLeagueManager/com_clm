@@ -12,6 +12,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+- - - - - 5.1.3 - [xx-xx-2026] - - - - - - - - - - - - - - - - - - - -
+^ Teamwettbewerbe: Export/Import über TRF-Format
+
 - - - - - 5.1.2 - [07-10-2026] - - - - - - - - - - - - - - - - - - - -
 + ELO-Auswertungsdatei monatlich erstellen
 + Einzelturniere: Startgeld-Aktualisierung durch Kassierer im Frontend

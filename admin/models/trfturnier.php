@@ -41,11 +41,13 @@ class CLMModelTRFTurnier extends JModelLegacy {
 	
 	function getTurniere() {
 		if (empty( $this->_turniere )) { 
-			$query =  ' SELECT id, name, bem_int
-						FROM 
-							#__clm_turniere 
-						WHERE 
-							sid = '.$this->getState( 'filter_saison' ).'';
+			$query =  " SELECT id, name, bem_int "
+					." FROM #__clm_turniere " 
+					." WHERE sid = ".$this->getState( 'filter_saison' )
+					." UNION ALL "
+					." SELECT (id + 10000), name, bem_int "
+					." FROM #__clm_liga " 
+					." WHERE sid = ".$this->getState( 'filter_saison' );
 			$this->_turniere = $this->_getList( $query );
 		} 
 		return $this->_turniere;

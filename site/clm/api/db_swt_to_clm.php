@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2021 CLM Team  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  *
  * Copy der Turnierdaten aus den clm_swt_Tabellen in die clm_Dateien - Teil der Importe von SWT,SWM und TRF
 */
@@ -171,13 +171,15 @@ if ($debug > 0) { echo "<br>update!!";  }
 		$turnier->id = $turnier_orig->id;
 		$turnier->catidAlltime = $turnier_orig->catidAlltime;
 		$turnier->catidEdition = $turnier_orig->catidEdition;
-		$turnier->ordering = $turnier_orig->ordering;
+//		$turnier->ordering = $turnier_orig->ordering;
+		unset($turnier->order);
 		if (!clm_core::$db->updateObject('#__clm_liga',$turnier,'id')) {
 			return array(false,$turnier->tid);
 		}	
 		$turnier->tid = $turnier_orig->id;
 	} else {
 		if(clm_core::$db->insertObject('#__clm_liga',$turnier,'id')) {
+			unset($turnier->order);
 			//Turnier-ID in #__clm_swt_liga updaten, damit die neue turnier-id über die swt-id gefunden werden kann 
 			//für den Fall, dass mit (F5) die Daten erneut gesendet werden und das Turnier bereits in die CLM-Datenbank kopiert wurde
 			$new_ID = clm_core::$db->insert_id();
@@ -224,7 +226,7 @@ if ($debug > 0) { echo "<br>turnier-insertid:"; var_dump($turnier); } //die();
 	foreach($spieler as $spieler){
 		unset($spieler->id);
 //echo "<br>1spieler-Mgl_Nr: $spieler->Mgl_Nr "; 
-		$spieler->Mgl_Nr += $max_mglnr;
+		if ($teil->zps == '-1') $spieler->Mgl_Nr += $max_mglnr;
 //echo "<br>2spieler-Mgl_Nr: $spieler->Mgl_Nr "; 
 			
 		if(!clm_core::$db->insertObject('#__clm_dwz_spieler',$spieler,'id')) {
@@ -247,7 +249,7 @@ if ($debug > 0) { echo "<br>turnier-insertid:"; var_dump($turnier); } //die();
 		$teil->lid = $new_ID;
 		$teil->mnr = $teil->man_id;
 		unset($teil->man_id);
-		$teil->mgl_nr += $max_mglnr;
+		if ($teil->zps == '-1') $teil->mgl_nr += $max_mglnr;
 		
 		if(!clm_core::$db->insertObject('#__clm_meldeliste_spieler',$teil,'id')) {
 			return false;
@@ -278,9 +280,10 @@ if ($debug > 0) { echo "<br>turnier-insertid:"; var_dump($turnier); } //die();
 		unset($paarung->id);
 		unset($paarung->swt_id);
 		$paarung->lid = $new_ID;
-		if ($paarung->spieler >= 1) $paarung->spieler += $max_mglnr;
-		if ($paarung->gegner >= 1) $paarung->gegner += $max_mglnr;
-			
+		if ($paarung->zps == '-1')
+			if ($paarung->spieler >= 1) $paarung->spieler += $max_mglnr;
+		if ($paarung->gzps == '-1')
+			if ($paarung->gegner >= 1) $paarung->gegner += $max_mglnr;
 		$pgn_key = ($paarung->spieler * 10000) + ($paarung->gegner * 10) + $paarung->heim;
 		if (isset($pgn_array[$pgn_key])) {
 			$paarung->pgnnr = $pgn_array[$pgn_key];

@@ -11,7 +11,9 @@
 */
 function clm_api_db_trf_import($file,$season,$turnier,$group=false,$update=false,$test=false) {
 	set_time_limit(180);
+	$auser = clm_core::$access->getId();
 	$group = false;
+//  $group = false -> Einzelturnier       $group = true -> Teamwettbewerb
 //echo "<br>file:"; var_dump($file); //die('ende-controller');	
     $lang = clm_core::$lang->imports;
 //echo "<br>season:"; var_dump($season); //die('ende-controller');	
@@ -37,6 +39,7 @@ if ($debug > 0) echo "<br>turnier: ".$turnier; 	//echo "<br>end"; //die();
 	$a_spielerCS = array();
 	$a_spielerCZ = array();
 	$a_teamdaten = array();
+	$a_teamCD = array();
 	$a_rundendaten = array();
 	$params = '';
 	$adate = '1970-01-01';
@@ -60,8 +63,12 @@ if ($debug > 0) echo "<br>turnier: ".$turnier; 	//echo "<br>end"; //die();
 if ($debug > 1) { echo "<br>line:"; var_dump($line); }
 		$din = substr($line,0,3);
 if ($debug > 1) { echo "<br>din:"; var_dump($din); }
-		if ($din == '001') { $a_spielerdaten[] = str_replace("’","'",$line); continue; }
+		if ($din == '001') {
+			$snr = (integer) trim(substr($line,4,4));			
+			$a_spielerdaten[$snr] = str_replace("’","'",$line); continue; 
+		}
 		if ($din == '013') { $a_teamdaten[] = str_replace("’","'",$line); continue; }
+		if ($din == '310') { $a_teamdaten[] = str_replace("’","'",$line); continue; }
 		if ($din == '132') { $rundendata = substr($line,91); continue; }
 		if ($din == 'XCT') { $rundentime = substr($line,91); continue; }
 		$value = trim(substr($line,4));
@@ -130,9 +137,8 @@ if ($debug > 0) { echo "<br>edate:"; var_dump($edate); }
 						break;
 			case '062': $teil = $value; break;
 			case '082': $man = (integer) $value; 
-						if ($man > 0) {  
-							return array(false,'Der Import von Teamwettbewerbeb im TRF-Format sind noch nicht realisiert!');
-						}
+if ($debug > 0) { echo "<br>man:"; var_dump($man); }
+						if ($man > 0) $group = true;  
 						break;
 			case '142': $rundenzahl = $value; break;
 			case 'XXR': $rundenzahl = $value; break;
@@ -188,6 +194,8 @@ if ($debug > 0) { echo "<br>e_xxs"; var_dump($e_xxs); }
 			case 'XCA': $xca_rounds = $value; break;
 			case 'XCC': $snr = trim(substr($line,4,4));
 						$a_spielerCC[$snr] = str_replace("’","'",$line); break;
+			case 'XCD': $snr = trim(substr($line,4,4));
+						$a_teamCD[$snr] = str_replace("’","'",$line); break;
 			case 'XCE': $snr = trim(substr($line,4,4));
 						$a_spielerCE[$snr] = str_replace("’","'",$line); break;					
 			case 'XCF': //$a_xcf = explode(' ', $value);
@@ -198,7 +206,12 @@ if ($debug > 0) { echo "<br>e_xxs"; var_dump($e_xxs); }
 			case 'XCL': $lokal = clm_core::$load->utf8encode($value);
 if ($debug > 1) { echo "<br>lokal:"; var_dump($lokal); } 
 						break;
-			case 'XCM': $typ = (integer) $value; break;
+			case 'XCM': $typ = (integer) trim(substr($line,4,2));
+						$dg = (integer) trim(substr($line,7,2));
+						$rundenzahl = (integer) trim(substr($line,10,2));
+						$stamm = (integer) trim(substr($line,13,3));
+						$ersatz = (integer) trim(substr($line,17,3));
+						break;
 			case 'XCP': if ($params == '') $params = $value; 
 						else $params .= "\n".$value;			
 if ($debug > 1) { echo "<br>params:"; var_dump($params); } 
@@ -231,17 +244,34 @@ if ($debug > 0) { echo "<br> ( Rundenzahl: ".$rundenzahl." )" ;	}
 	if (!isset($rundendata)) $rundendata = '';
 	if (!isset($rundentime)) $rundentime = '';
 if ($debug > 0) { echo "<br>name:"; var_dump($name); }
+//if ($debug > 0) { echo "<br>teamCD:"; var_dump($a_teamCD); }
+//if ($debug > 0) { echo "<br>spielerCZ:"; var_dump($a_spielerCZ); }
 //die('endeende');
 
 //	Turnierdaten -> Tabelle clm_turniere
 		$bem_int = $lang->trf_remark.' '.$filename;
+		
+if ($debug > 0) { echo "<br>group:"; var_dump($group); }
  
 	If ($group) { 	// Mannschaftsturniere
+		if (!isset($stamm) OR !is_numeric($stamm)) $stamm = 4;
+		if (!isset($ersatz) OR !is_numeric($ersatz)) $stamm = 0;
 		if (!isset($typ) OR !is_numeric($typ) OR $typ > 9) $typ = '4'; 														   // Mannschaft-Schweizer Sytem .TUM
-		$keyS = '`name`,`sid`, `typ`, `dg`, `rnd`, `tl`, `published`, `bezirkTur`, `dateStart`, `dateEnd`, `bem_int`,';
-		$keyS .= '`city`, `FIDEcco`, `lokal`, `tiebr1`, `tiebr2`, `tiebr3`, `params`';
-		$valueS = "'".$name."', ".$season.", '".$typ."', 1, 1, 0, 1, '0', '".$adate."', '".$edate."', '".$bem_int."', ";
-		$valueS .= "'".$city."', '".$FIDEcco."', '".$lokal."', '".$tiebr1."', '".$tiebr2."', '".$tiebr3."', '".$params."'";
+		if ($tiebr1 == 0) $tiebr1 = 5;
+		$keyS = '`name`,`sid`, `runden_modus`, `teil`, `durchgang`, `rnd`, `sl`, `published`, `runden`, `dateStart`, `dateEnd`, `bem_int`,';
+		$keyS .= '`man_sieg`, `man_remis`, `man_nieder`, `man_antritt`, `sieg`, `remis`, `nieder`, `antritt`, `liga_mt`,';
+		$keyS .= '`city`, `FIDEcco`, `lokal`, `tiebr1`, `tiebr2`, `tiebr3`, `params`, `heim`, `order`, `stamm`, `ersatz`';
+if ($debug > 0) { echo "<br>keyS: ";	var_dump($keyS); }
+		$valueS = "'".$name."', ".$season.", '".$typ."', '".$man."', 1, 1, 0, 1, '".$rundenzahl."', '".$adate."', '".$edate."', '".$bem_int."', ";
+		$valueS .= "'".'2.00'."', '".'1.00'."', '".'0.00'."', '".'0.00'."', '".'1.00'."', '".'0.50'."', '".'0.00'."', '".'0.00'."', 1,";
+		$valueS .= "'".$city."', '".$FIDEcco."', '".$lokal."', '".$tiebr1."', '".$tiebr2."', '".$tiebr3."', '".$params."', 0, 0, '".$stamm."', '".$ersatz."'";
+if ($debug > 0) { echo "<br>valueS: ";	var_dump($valueS); }
+
+		$sql = 'INSERT INTO #__clm_swt_liga ('.$keyS.') VALUES ('.$valueS.')';
+if ($debug > 0) { echo "<br>sql: ";	var_dump($sql); }
+//die();
+		clm_core::$db->query($sql);
+		$new_swt_tid = clm_core::$db->insert_id();
 	} else { 		// Einzelturniere
 		if (!isset($typ) OR !is_numeric($typ) OR $typ > 9) $typ = '1'; 														   // Einzel-Schweizer Sytem
 		$bem_int = $lang->trf_remark.' '.$filename;
@@ -310,6 +340,12 @@ if ($debug > 0) { echo "<br>rtime nachher: >" . $rtime . "<"; }
 if ($debug > 0) { echo "<br>Rundenzeiten: $rundentime ";	}
 if ($debug > 0) { echo "<br>rtime:"; var_dump($rtime); }
 		If ($group) { 	// Mannschaftsturniere
+			$keyS = '`sid`, `name`, `swt_liga`, `nr`, `datum`, `startzeit`, `published`';
+			$valueS = $season.", 'Runde ".($i+1)."', ".$new_swt_tid.", ".($i+1).", '".$rdate."','".$rtime."', 1";
+			$sql = "INSERT INTO #__clm_swt_runden_termine (".$keyS.") VALUES (".$valueS.")";
+if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
+			clm_core::$db->query($sql);
+
 		} else { 		// Einzelturniere
 			$keyS = '`sid`, `name`, `swt_tid`, `dg`, `nr`, `datum`, `startzeit`, `published`';
 			$valueS = $season.", 'Runde ".($i+1)."', ".$new_swt_tid.", 1, ".($i+1).", '".$rdate."','".$rtime."', 1";
@@ -320,8 +356,174 @@ if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 	}
 //die('Rundendaten');
 
+//	Teamdaten 310 -> Tabelle clm_mannschaften
+if ($debug > 0) { echo "<br><br>-- Teamdaten --";	}
+  if ($group) {
+	$t_rdata = array();
+	foreach ($a_teamdaten as $line) {
+		$tln_nr = (integer) trim(substr($line,4,3));
+		$name = trim(substr($line,8,32));
+//if ($debug > 0) { echo "<br>tplayer: ";	var_dump(substr($line,(60),50)); }
+//if ($debug > 0) { echo "<br>tplayer: ";	var_dump(substr($line,(65+5),5)); }
+//if ($debug > 0) { echo "<br>tplayer: ";	var_dump(substr($line,(75+5),5)); }
+		$tplayer = array();
+		$ip = 1;
+		while ((strlen($line) > (65+($ip*5))) AND (substr($line,(65+($ip*5)),5)) > '   ') {  // result gesetzt
+			$tplayer[$ip] = (integer) trim(substr($line,(65+($ip*5)),5));
+			$ip++;
+			if ($ip > 99) break;
+		}
+if ($debug > 0) { echo "<br>tplayer: ";	var_dump($tplayer); }
+		// XCD team details
+		if (isset($a_teamCD[$tln_nr])) {
+			$zps = trim(substr($a_teamCD[$tln_nr],8,5));
+			$man_nr = trim(substr($a_teamCD[$tln_nr],15,3));
+		} else {
+			$zps = '';
+			$man_nr = 0;
+		}
+		$id = 1;
+//echo "<br>Runde 0 "; var_dump($a_teamCD[$tln_nr]);			
+//echo "<br>Runde 0 "; var_dump(substr($a_teamCD[$tln_nr],51,90));			
+		for ($ir = 1; $ir <= $rundenzahl; $ir++) {
+				$t_rdata[$tln_nr][$id][$ir] = new stdClass();
+				$t_rdata[$tln_nr][$id][$ir]->ergebnis = (integer) trim(substr($a_teamCD[$tln_nr],50+($ir*25),2));
+				$t_rdata[$tln_nr][$id][$ir]->kampflos = trim(substr($a_teamCD[$tln_nr],53+($ir*25),1));
+				$t_rdata[$tln_nr][$id][$ir]->gegner = (integer) trim(substr($a_teamCD[$tln_nr],56+($ir*25),3));
+				$t_rdata[$tln_nr][$id][$ir]->paar = (integer) trim(substr($a_teamCD[$tln_nr],59+($ir*25),2));
+				$t_rdata[$tln_nr][$id][$ir]->heim = trim(substr($a_teamCD[$tln_nr],62+($ir*25),1));
+				$t_rdata[$tln_nr][$id][$ir]->manpunkte = (integer) trim(substr($a_teamCD[$tln_nr],65+($ir*25),2));
+				$t_rdata[$tln_nr][$id][$ir]->brettpunkte = trim(substr($a_teamCD[$tln_nr],68+($ir*25),6));
+				if ($t_rdata[$tln_nr][$id][$ir]->brettpunkte <= ' ') $t_rdata[$tln_nr][$id][$ir]->nullmarker = 1; else $t_rdata[$tln_nr][$id][$ir]->nullmarker = 0;
+//echo "<br>Runde $tln_nr $id $ir "; var_dump($t_rdata[$tln_nr][$id][$ir]);			
+//die();
+		}
+//echo "<br>Runde $ip dann "; var_dump($p_rdata[$tp]);			
+//die();
+
+		$keyS = '`sid`, `swt_id`, `tln_nr`, `name`, `zps`, `man_nr`, `published`, `mf`, `sg_zps`, `liste` ';
+		$valueS = $season.", ".$new_swt_tid.", ".$tln_nr.", '".$name."', '".$zps."', '".$man_nr."', 1, 0, '', ".$auser;
+		$sql = "INSERT INTO #__clm_swt_mannschaften (".$keyS.") VALUES (".$valueS.")";
+if ($debug > 0) { echo "<br>sql: ";	var_dump($sql); }
+		clm_core::$db->query($sql);
+		
+		$isnr = 0;
+		foreach ($tplayer as $tp) {
+			$p_rdata = array();
+			$isnr++;
+if ($debug > 0) { echo "<br>tp: ";	var_dump($tp); }
+			$spielerid = $tp;
+			$sdata = $a_spielerdaten[$spielerid];
+if ($debug > 0) { echo "<br>sdata: $tp";	var_dump($sdata); }
+			for ($id = 1; $id <= $dg; $id++) {
+			  for ($ir = 1; $ir <= $rundenzahl; $ir++) {
+				$p_rdata[$id][$ir] = new stdClass();
+				$p_rdata[$id][$ir]->gegner = (integer) trim(substr($sdata,81+($ir*10),4));
+				$p_rdata[$id][$ir]->farbe = substr($sdata,86+($ir*10),1);
+			  }
+			}
+if ($debug > 0) { echo "<br>p_rdata: $tp";	var_dump($p_rdata); }
+			
+			// XCZ club membership
+			if (isset($a_spielerCZ[$tp])) {
+				$pzps = trim(substr($a_spielerCZ[$tp],9,5));
+				$mgl_nr = (integer) trim(substr($a_spielerCZ[$tp],15,4));
+			} else {
+				$pzps = '';
+				$mgl_nr = 0;
+			}
+//echo "<br>Runde 0 "; var_dump($a_spielerCZ[$tp]);			
+//echo "<br>Runde 0 "; var_dump(substr($a_spielerCZ[$tp],79,90));			
+			if (isset($a_spielerCZ[$tp])) {
+			  for ($id = 1; $id <= $dg; $id++) {
+				for ($ir = 1; $ir <= $rundenzahl; $ir++) {
+					$p_rdata[$id][$ir]->paar = (integer) trim(substr($a_spielerCZ[$tp],50+($ir*25),2));
+					$p_rdata[$id][$ir]->brett = (integer) trim(substr($a_spielerCZ[$tp],53+($ir*25),3));
+					$p_rdata[$id][$ir]->heim = (integer) trim(substr($a_spielerCZ[$tp],57+($ir*25),1));
+					$p_rdata[$id][$ir]->ergebnis = (integer) trim(substr($a_spielerCZ[$tp],59+($ir*25),2));
+					$p_rdata[$id][$ir]->kampflos = (integer) trim(substr($a_spielerCZ[$tp],62+($ir*25),1));
+					$p_rdata[$id][$ir]->punkte = trim(substr($a_spielerCZ[$tp],64+($ir*25),4));
+if ($debug > 1) { echo "<br>Spieler $tp Runde $ir "; var_dump($p_rdata[$id][$ir]); }			
+				}
+			  }
+			}
+if ($debug > 1) { echo "<br>Runden zu Spieler $tp dann "; var_dump($p_rdata); }			
+//die();
+			// XCR ratings
+			if (isset($a_spielerCR[$tp])) {
+				$start_dwz = (integer) trim(substr($a_spielerCR[$tp],9,4));
+				$FIDEelo = (integer) trim(substr($a_spielerCR[$tp],14,4));
+			} else {
+				$start_dwz = 0;
+				$FIDEelo = 0;
+			}
+			$keyS = '`spielerid`,`sid`, `swt_id`, `snr`, `zps`, `man_id`, `mgl_nr`, `start_dwz`, `FIDEelo` ';
+			$valueS = $spielerid.", ".$season.", ".$new_swt_tid.", ".$isnr.", '".$pzps."', '".$man_nr."', '".$mgl_nr."', '".$start_dwz."', '".$FIDEelo."' " ;
+			$sql = "INSERT INTO #__clm_swt_meldeliste_spieler (".$keyS.") VALUES (".$valueS.")";
+if ($debug > 0) { echo "<br>sql: ";	var_dump($sql); }
+			clm_core::$db->query($sql);
+
+			// Ausgabe Spielerergebnisse nach _clm_swt_rnd_spl
+			for ($id = 1; $id <= 1; $id++) {
+				for ($ir = 1; $ir <= $rundenzahl; $ir++) {
+					$data = $p_rdata[$id][$ir];
+					if ($data->brett > 0) {
+						if ($data->farbe == 'w') $data->weiss = '1'; else $data->weiss = '0';
+						// Gegner club membership aus XCZ
+						if (isset($a_spielerCZ[$data->gegner])) {
+							$gzps = trim(substr($a_spielerCZ[$data->gegner],9,5));
+							$gmgl_nr = (integer) trim(substr($a_spielerCZ[$data->gegner],15,4));
+						} else {
+							$gzps = '';
+							$gmgl_nr = 0;
+						}
+					
+						$keyS = '`sid`, `swt_id`, `runde`, `paar`, `brett`, `weiss`, `dg`, `heim`,';
+						$keyS .= ' `tln_nr`, `spieler`, `zps`, `gegner`,  `gzps`, '
+							. '`ergebnis`, `kampflos`, `punkte`, `gemeldet` ';
+						$valueS = $season.", ".$new_swt_tid.", ".$ir.", '".$data->paar."', '".$data->brett."', '".$data->weiss."', ".$id.", '".$data->heim."'";
+						$valueS .= ", '".$tln_nr."', '".$mgl_nr."', '".$pzps."', '".$gmgl_nr."', '".$gzps."', "
+							. "'".$data->ergebnis."', '".$data->kampflos."', '".$data->punkte."', ".$auser;
+						
+						$sql = "INSERT INTO #__clm_swt_rnd_spl (".$keyS.") VALUES (".$valueS.")";
+if ($debug > 0) { echo "<br>sql: ";	var_dump($sql); }
+						clm_core::$db->query($sql);
+					}
+				}
+			}
+//die('rnd_spl');
+		}
+//die('rnd_spl');
+if ($debug > 0) { echo "<br>tln_nr: ";	var_dump($tln_nr); }
+		// Ausgabe Mannschaftsergebnisse nach _clm_swt_rnd_man
+		for ($id = 1; $id <= 1; $id++) {
+			for ($ir = 1; $ir <= $rundenzahl; $ir++) {
+				$data = $t_rdata[$tln_nr][$id][$ir];
+				
+				$keyS = '`sid`, `swt_id`, `runde`, `paar`, `dg`, `heim`, `tln_nr`, `gegner`, '
+					. '`ergebnis`, `kampflos`, `brettpunkte`, `manpunkte`, `gemeldet`';
+				if ($data->nullmarker == 0) {	
+					$valueS = $season.", ".$new_swt_tid.", ".$ir.", '".$data->paar."', ".$id.", '".$data->heim."', '".$tln_nr."', '".$data->gegner."', "
+						. "'".$data->ergebnis."', '".$data->kampflos."', '".$data->brettpunkte."', '".$data->manpunkte."', ".$auser;
+				} else {	
+					$valueS = $season.", ".$new_swt_tid.", ".$ir.", '".$data->paar."', ".$id.", '".$data->heim."', '".$tln_nr."', '".$data->gegner."', "
+						. " NULL, NULL, NULL, NULL, NULL ";
+				}
+				$sql = "INSERT INTO #__clm_swt_rnd_man (".$keyS.") VALUES (".$valueS.")";
+if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
+				clm_core::$db->query($sql);
+			}
+		}
+
+	}
+  }
+//die('Teamdaten 510');
+
+
+
 //	Spielerdaten -> Tabelle clm_turniere_tlnr
 if ($debug > 0) { echo "<br><br>-- Spielerdaten --";	}
+  if (!$group) {
 	$a_name = array();
 	foreach ($a_spielerdaten as $line) {
 		$snr = (integer) trim(substr($line,4,4));
@@ -401,6 +603,7 @@ if ($debug > 1) { echo "<br>sql: ";	var_dump($sql); }
 		}
 
 	}
+//  }
 if ($debug > 0) { echo "<br>namen: ";	var_dump($a_name); }
 //die('Spielerdaten');
 
@@ -590,9 +793,10 @@ if ($debug > 0) { echo "<br>tlnr-query: ";	var_dump($query); }
 				}
 			}
 		}
-	
+  }	
 		
 	if (!$test) { 
+		if ($turnier >= 10000) $turnier -= 10000;
 		$result = clm_core::$api->db_swt_to_clm($new_swt_tid,$turnier,$group,$update);
 		if ($debug > 1) { echo "<br>result:"; var_dump($result); }
 		$new_tid = $result[1];
@@ -600,7 +804,7 @@ if ($debug > 0) { echo "<br>tlnr-query: ";	var_dump($query); }
 		$new_tid = 0;
 		echo "<br><br>Test - Ende des Protokolls!<br><br>"; 
 	}	
-	
+	if ($group) $new_tid += 10000;
 	return array(true, "m_SWMImportSuccess",$new_tid); 
 
 }

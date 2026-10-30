@@ -54,18 +54,28 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 		$result = clm_core::$api->db_trf_import($path.$trf_file,$sid,$tid,false,true,false);
 		if (isset($result[2]) AND $result[2] > 0) {
 			$new_ID = $result[2];
-			$turnier = new CLMTournament($new_ID,true);
+			if ($new_ID < 10000) { 		// Einzelturnier
+				$turnier = new CLMTournament($new_ID,true);
 		
-			//Punkte und Feinwertungen neu berechnen
-			$turnier->calculateRanking();
+				//Punkte und Feinwertungen neu berechnen
+				$turnier->calculateRanking();
 		
-			//Rangliste neu berechnen
-			$turnier->setRankingPositions();
+				//Rangliste neu berechnen
+				$turnier->setRankingPositions();
 
-			//inoffizielle DWZ-Ermittlung
-			clm_core::$api->direct("db_tournament_genDWZ",array($new_ID,false));
-		}
+				//inoffizielle DWZ-Ermittlung
+				clm_core::$api->direct("db_tournament_genDWZ",array($new_ID,false));
+			} else {						// Teamwettbewerb
+				$new_ID -= 10000;
 		
+				//Punkte und Feinwertungen neu berechnen
+				//Rangliste neu berechnen
+				clm_core::$api->db_tournament_ranking($new_ID,true);
+
+				//inoffizielle DWZ-Ermittlung
+				clm_core::$api->direct("db_tournament_genDWZ",array($new_ID,true));
+			}
+		}
 		$language = Factory::getLanguage();
 		$language->load('com_clm');
 		$language->load('com_clm.swtimport');	
@@ -106,18 +116,29 @@ class CLMControllerTRFTurnier extends JControllerLegacy
 
 		if (isset($result[2]) AND $result[2] > 0) {
 			$new_ID = $result[2];
-			$turnier = new CLMTournament($new_ID,true);
+			if ($new_ID < 10000) { 		// Einzelturnier
+				$turnier = new CLMTournament($new_ID,true);
 		
-			//Punkte und Feinwertungen neu berechnen
-			$turnier->calculateRanking();
+				//Punkte und Feinwertungen neu berechnen
+				$turnier->calculateRanking();
 		
-			//Rangliste neu berechnen
-			$turnier->setRankingPositions();
+				//Rangliste neu berechnen
+				$turnier->setRankingPositions();
 
-			//inoffizielle DWZ-Ermittlung
-			clm_core::$api->direct("db_tournament_genDWZ",array($new_ID,false));
-		}
+				//inoffizielle DWZ-Ermittlung
+				clm_core::$api->direct("db_tournament_genDWZ",array($new_ID,false));
+			} else {						// Teamwettbewerb
+				$new_ID -= 10000;
 		
+				//Punkte und Feinwertungen neu berechnen
+				//Rangliste neu berechnen
+				clm_core::$api->db_tournament_ranking($new_ID,true);
+
+				//inoffizielle DWZ-Ermittlung
+				clm_core::$api->direct("db_tournament_genDWZ",array($new_ID,true));
+			}
+		}
+
 		$language = Factory::getLanguage();
 		$language->load('com_clm');
 		$language->load('com_clm.swtimport');	
