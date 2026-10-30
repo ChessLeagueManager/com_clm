@@ -219,6 +219,7 @@ class CLMTournament extends stdClass {
 		$array_PlayerBuch = array();
 		$array_PlayerBuchOpp = array();
 		$array_PlayerBuchOppvug = array();  // voluntarily unplayed games - freiwilling nicht gespielte Partien wie kampflos verloren, nicht gepaart (BYE)
+		$array_PlayerBuchOppplg = array();  // played games - gespielte Partien einschl. kampflos gewonnen
 		$array_PlayerBuch1St = array();
 		$array_PlayerBuchm11 = array();
 		$array_PlayerBuchm22 = array();
@@ -261,8 +262,8 @@ class CLMTournament extends stdClass {
 			$array_PlayerDWZ1St[$s] = 0;
 			$array_PlayerTWZ[$s] = 0;
 			$array_PlayerTWZ1St[$s] = 0;
+			$array_PlayerBuchOppplg[$s][0] = 0;
 		}
-
 		// Startpunkt für Punktesumme sind Sonderpunkte
 		foreach($player as $player1) {
 			$array_PlayerPunkte[$player1->snr] = $player1->s_punkte;
@@ -413,7 +414,31 @@ class CLMTournament extends stdClass {
 					$array_PlayerPunkteTB[$value->tln_nr] += $vremis;
 			}
 		}
-	
+
+		// freiwilling nicht gespielte Partien
+//		$array_vug = array(3,4,6,8,11,12,13);
+		$array_vug = array(3,4,6,11,12,13);
+
+		// Ermittlung der durchschnittlichen Buchholzpunkte für gespielte Partien
+		// alle Matches durchgehen 
+		foreach ($matchData as $key => $value) {
+			if ($gamesCount[$value->tln_nr]->tab == 0) continue;    //teilnehmer hat weniger als 50% der Partien gespielt
+			if ($gamesCount[$value->gegner]->tab == 0) continue;    //gegner hat weniger als 50% der Partien gespielt
+			if ($maxround < ((($value->dg - 1) * $runden) + $value->runde)) continue;  // Ignorieren von bereits gesetzten kampflos oder spielfrei in Folgerunden
+			if (!in_array($value->ergebnis, $array_vug) AND $value->ergebnis != 5) $array_PlayerBuchOppplg[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->gegner];
+		}
+		for ($s=0; $s<= $this->data->teil; $s++) { // alle Startnummern durchgehen
+			$anz_plg = count($array_PlayerBuchOppplg[$s]);
+			if ($anz_plg > 1) { 
+				$sum_plg = array_sum($array_PlayerBuchOppplg[$s]);
+				$array_PlayerBuchOppplg[$s][0] = $sum_plg / ($anz_plg - 1);
+				$array_PlayerBuchOppplg[$s][0] = floor($sum_plg / ($anz_plg - 1));
+				$diff_plg = ($sum_plg / ($anz_plg - 1)) - $array_PlayerBuchOppplg[$s][0];
+				if ($diff_plg  > 0.75) $array_PlayerBuchOppplg[$s][0] += 1.0;
+				elseif ($diff_plg  > 0.25) $array_PlayerBuchOppplg[$s][0] += 0.5;
+			}
+		}
+
 		// Buchholz & Sonneborn-Berger
 		// erneut alle Matches durchgehen -> Spieler erhalten Feinwertungen
 		foreach ($matchData as $key => $value) {
@@ -431,17 +456,48 @@ class CLMTournament extends stdClass {
 						if ($value->gegner == 0) {
 							if ($value->runde == 1) {
 //								$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = 0;
-								$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
+								if (in_array($value->ergebnis, $array_vug)) {
+									$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
+								} else { 
+									$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
+								}
 								if (in_array($value->ergebnis, $array_vug)) $array_PlayerBuchOppvug[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
 							} else {
-								$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
-//								$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = ($value->runde - 1) * $vremis;
+								if (in_array($value->ergebnis, $array_vug)) {
+//									$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $array_PlayerBuchOppplg[$value->tln_nr][0];
+									if ($array_PlayerPunkte[$value->tln_nr] > ($runden * 0.5)) 
+										$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $runden * 0.5;
+									else 
+										$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
+								} else {
+//									$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
+									if ($array_PlayerPunkte[$value->tln_nr] > ($runden * 0.5)) 
+										$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $runden * 0.5;
+									else 
+										$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
+								}
 								if (in_array($value->ergebnis, $array_vug)) $array_PlayerBuchOppvug[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
 							}
 						} else {
-							$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
-//							$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = ($value->runde - 1) * $vremis;
-							if (in_array($value->ergebnis, $array_vug)) $array_PlayerBuchOppvug[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
+							if (in_array($value->ergebnis, $array_vug)) {
+								$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
+							} else {
+//								$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkteTB[$value->gegner];
+								// Hat Gegner es noch andere Ergebnisse bis Turnierende?
+								if ($value->runde == $maxround) $s_erg8 = 1; // ja, Prüfung nicht sinnvoll
+								else {
+									$s_erg8 = 0; // nein
+									for ($i = ($value->runde + 1); $i <= $maxround; $i++) {
+										if (isset($matrix[$value->gegner][$value->dg][$i])) $s_erg8 = 1; // ja
+									}
+								}
+								if ( ($s_erg8 == 0) AND $array_PlayerPunkteTB[$value->gegner] > (($runden * 0.5)-1)) {
+									$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = ($runden * 0.5)-1;
+								} else { 
+									$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkteTB[$value->gegner];
+								}
+							}
+							if (in_array($value->ergebnis, $array_vug)) $array_PlayerBuchOppvug[$value->tln_nr][$value->runde] = $array_PlayerBuchOpp[$value->tln_nr][$value->runde];
 						}
 					} else {
 						$query = "SELECT tln_nr, heim, gegner, dg, runde, ergebnis FROM `#__clm_turniere_rnd_spl`"
@@ -494,10 +550,38 @@ class CLMTournament extends stdClass {
 				} else { //Ranglistenkorrektur nach FIDE (Teil 2)
 					if ($dateEnd > $enddate_vg) {
 					  if ($value->ergebnis == 5) {
-						if ($value->gegner == 0)
-							$array_PlayerSoBeOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
-						else
-							$array_PlayerSoBeOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkteTB[$value->gegner]; // Array mit Gegnerwerten - für Streichresultat
+						if ($value->gegner == 0) {
+//							$array_PlayerSoBeOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkteTB[$value->tln_nr];
+							if ($array_PlayerPunkte[$value->tln_nr] > ($runden * 0.5)) 
+								$array_PlayerSoBeOpp[$value->tln_nr][$value->runde] = $runden * 0.5;
+							else 
+								$array_PlayerSoBeOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
+						} else {
+//							$array_PlayerSoBeOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkteTB[$value->gegner]; // Array mit Gegnerwerten - für Streichresultat
+								// Hat Gegner es noch andere Ergebnisse bis Turnierende?
+								if ($value->runde == $maxround) $s_erg8 = 1; // ja, Prüfung nicht sinnvoll
+								else {
+									$s_erg8 = 0; // nein
+									for ($i = ($value->runde + 1); $i <= $maxround; $i++) {
+										if (isset($matrix[$value->gegner][$value->dg][$i])) $s_erg8 = 1; // ja
+									}
+								}
+								if ( ($s_erg8 == 0) AND $array_PlayerPunkteTB[$value->gegner] > (($runden * 0.5)-1)) {
+									$array_PlayerSoBeOpp[$value->tln_nr][$value->runde] = ($runden * 0.5)-1;
+								} else { 
+									$array_PlayerSoBeOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkteTB[$value->gegner];
+								}
+						}
+					  } elseif ($value->ergebnis == 12) {
+							if ($value->runde == 1) {
+								$array_PlayerSoBeOpp[$value->tln_nr][$value->runde] = (0.5 * $array_PlayerPunkte[$value->tln_nr]);
+							} else {
+//								$array_PlayerSoBeOpp[$value->tln_nr][$value->runde] = (0.5 * $array_PlayerBuchOppplg[$value->tln_nr][0]);
+								if ($array_PlayerPunkte[$value->tln_nr] > ($runden * 0.5)) 
+									$array_PlayerSoBeOpp[$value->tln_nr][$value->runde] = (0.5 * ($runden * 0.5));
+								else 
+									$array_PlayerSoBeOpp[$value->tln_nr][$value->runde] = (0.5 * $array_PlayerPunkte[$value->tln_nr]);
+							}
 					  }
 					} else {
 						$query = "SELECT tln_nr, heim, gegner, dg, runde, ergebnis FROM `#__clm_turniere_rnd_spl`"
