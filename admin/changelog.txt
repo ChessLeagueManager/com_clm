@@ -16,6 +16,7 @@ $ -> Language fix or change
 ^ Teamwettbewerbe: Export/Import über TRF-Format
 ^ Einzelturniere: Anpassung Feinwertungen (FIDE 03/2026)
 ^ Admin-Views: Entflechten der Filterfelder (Runden, Saison, Benutzer)
+^ Admin-Views: aktuelle Saison als Standardwert bei Einzel-und Mannschaftswettbewerben
 
 - - - - - 5.1.2 - [07-10-2026] - - - - - - - - - - - - - - - - - - - -
 + ELO-Auswertungsdatei monatlich erstellen

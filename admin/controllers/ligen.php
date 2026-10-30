@@ -124,7 +124,12 @@ function display($cachable = false, $urlparams = array())
 	$saisonlist[]	= HTMLHelper::_('select.option',  '0', Text::_( 'LIGEN_SAISON' ), 'sid', 'name' );
 	$saisonlist	= array_merge( $saisonlist, $db->loadObjectList() );
 //	$lists['saison']= HTMLHelper::_('select.genericlist',   $saisonlist, 'sid', 'class="js-example-basic-single" style="width:300px" size="1"','sid', 'name', $row->sid );
-	$lists['saison']= HTMLHelper::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" style="width:300px" size="1"','sid', 'name', $row->sid );
+	if ($row->sid == 0) {
+		$asid = clm_core::$access->getSeason(); // aktuelle Saison
+		$lists['saison']= HTMLHelper::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1"','sid', 'name', $asid );
+	} else {
+		$lists['saison']= HTMLHelper::_('select.genericlist',   $saisonlist, 'sid', 'class="'.$field_search.'" size="1"','sid', 'name', $row->sid );
+	}
 	// Rangliste
 	$query = " SELECT id, Gruppe FROM #__clm_rangliste_name ";
 	if ($row->sid > 0)

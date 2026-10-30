@@ -50,8 +50,11 @@ class CLMModelTurForm extends JModelLegacy {
 		}
 		
 		// Saison
-		$this->form['sid']	= CLMForm::selectSeason('sid', $this->turnier->sid);
-	
+		if ($this->turnier->sid == 0)
+			$this->form['sid']	= CLMForm::selectSeason('sid', clm_core::$access->getSeason()); // aktuelle Saison
+		else 
+			$this->form['sid']	= CLMForm::selectSeason('sid', $this->turnier->sid);
+
 		// Bedenkzeit
 		$turParams = new clm_class_params($this->turnier->params);
 		$this->form['timecontrol']	= CLMForm::selectTimeControl('params[time_control]', $turParams->get('time_control', 0));
