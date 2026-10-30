@@ -97,6 +97,9 @@ use Joomla\CMS\HTML\HTMLHelper;
 							<th width="28%">
 								<?php echo HTMLHelper::_('grid.sort',   Text::_('CLUB'), 'Vereinname', $this->param['order_Dir'], $this->param['order'] ); ?>
 							</th>
+							<th width="5%">
+								<?php echo HTMLHelper::_('grid.sort',   Text::_('Status'), 'Status', $this->param['order_Dir'], $this->param['order'] ); ?>
+							</th>
 						</tr>
 					</thead>
 					<tfoot>
@@ -162,6 +165,9 @@ use Joomla\CMS\HTML\HTMLHelper;
 							</td>
 							<td align="left">
 								<?php echo $row->Vereinname; ?>
+							</td>
+							<td align="center">
+								<?php echo $row->Status; ?>
 							</td>
 		
 						</tr>

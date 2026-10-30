@@ -167,6 +167,7 @@ class CLMModelTurPlayerForm extends JModelLegacy {
 			. $sqlName
 			. $sqlDWZ
 			. " AND ds.sid = ".clm_core::$access->getSeason()
+			. " AND (ds.leavingdate = '1970-01-01' OR  ds.leavingdate > '".date("Y.m.d")."') "
 			. $this->_sqlOrder()
 			;
 
