@@ -1230,7 +1230,7 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere` (
   `nieder` decimal(2,1) UNSIGNED DEFAULT 0.0,
   `niederk` decimal(2,1) UNSIGNED DEFAULT 0.0,
   `dateRegistration` date NOT NULL DEFAULT '1970-01-01',
-  `entry_fee` decimal(6,2) DEFAULT NULL COMMENT 'Standard-Startgeld',
+  `entry_fee` decimal(6,2) DEFAULT 0.00 COMMENT 'Standard-Startgeld',
   `FIDEcco` char(3) DEFAULT 'GER' COMMENT 'Föderation des Veranstalters',
   `city` varchar(100) DEFAULT NULL COMMENT 'Ort des Turniers',
   `lokal` varchar(200) NOT NULL DEFAULT '' COMMENT 'Spiellokal einschl. Anschrift',

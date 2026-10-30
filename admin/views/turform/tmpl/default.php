@@ -18,6 +18,7 @@ use Joomla\CMS\Plugin\PluginHelper;
 $turParams = new clm_class_params($this->turnier->params);
 if (is_null($this->turnier->bemerkungen)) $this->turnier->bemerkungen = '';
 if (is_null($this->turnier->bem_int)) $this->turnier->bem_int = '';
+if (is_null($this->turnier->entry_fee)) $this->turnier->entry_fee = 0.00;
 
 //CLM parameter auslesen
 $clm_config = clm_core::$db->config();

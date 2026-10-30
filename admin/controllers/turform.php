@@ -131,7 +131,8 @@ class CLMControllerTurForm extends JControllerLegacy {
 		if ($row->dateEnd == '') $row->dateEnd = '1970-01-01'; 
 		if ($row->dateRegistration == '') $row->dateRegistration = '1970-01-01'; 
 		if ($row->dateStart != '0000-00-00' AND $row->dateStart != '1970-01-01' AND ($row->dateEnd == '0000-00-00' OR $row->dateEnd == '1970-01-01')) $row->dateEnd = $row->dateStart;
-		if ($row->entry_fee == '') $row->entry_fee = 0.00;
+		if (!is_numeric($row->entry_fee)) $row->entry_fee = str_replace(",", ".", $row->entry_fee);
+		if ($row->entry_fee == '' OR is_null($row->entry_fee) OR !is_numeric($row->entry_fee)) $row->entry_fee = 0.00;
 		
 		if (!$row->checkData()) {
 			// pre-save checks

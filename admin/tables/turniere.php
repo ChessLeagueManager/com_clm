@@ -52,6 +52,11 @@ class TableCLMTurniere extends Table
 	var $nieder			= 0.0;
 	var $niederk 		= 0.0;
 	var $dateRegistration 	= '1970-01-01';
+	var $entry_fee 		= 0.00;
+    var $FIDEcco			= 'GER';
+	var $city			= null;
+	var $lokal			= '';
+	var $lokal_coord		= null;  
 
 	function __construct( &$_db ) {
 		parent::__construct( '#__clm_turniere', 'id', $_db );
