@@ -100,7 +100,14 @@ if (!$archive_check) {
 	?>
 
 	<tr>
-		<th align="center"><?php echo Text::_('TOURNAMENT_TNR'); ?></th>
+		<th align="center">
+			<?php	$link = new CLMcLink();
+				$link->view = 'turnier_rbretter';
+				$link->more = array('turnier' => $this->turnier->id, 'runde' => $this->round->nr, 'dg' => $this->round->dg, 'Itemid' => $itemid);
+				$link->makeURL();
+				echo $link->makeLink(Text::_('TOURNAMENT_TNR'));
+		?>
+		</th>
 		<th align="center"><?php echo Text::_('TOURNAMENT_WHITE'); ?></th>
 		<th align="center"><?php echo Text::_('TOURNAMENT_TWZ'); ?></th>
 		<th align="center">-</th>

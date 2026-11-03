@@ -19,6 +19,7 @@ $ -> Language fix or change
 ^ Admin-Views: aktuelle Saison als Standardwert bei Einzel-und Mannschaftswettbewerben
 + Einzelturniere: bei Auswahl von Teilnehmer aus der DB Status und Austrittsdatum beachten
 # Startgeld: Betragsprüfung
++ Einzelturniere: alphabetische Teilnehmerliste pro Runde mit Tischnummer
 
 - - - - - 5.1.2 - [07-10-2026] - - - - - - - - - - - - - - - - - - - -
 + ELO-Auswertungsdatei monatlich erstellen
