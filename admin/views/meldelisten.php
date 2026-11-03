@@ -193,10 +193,12 @@ public static function setMeldelisteToolbar($row)
 		ToolBarHelper::title(  Text::_( 'MELDELISTE')." ".$row->name .': [ '. $text.' ]', 'clm_headmenu_mannschaften.png');
 		ToolBarHelper::custom( 'save_meldeliste', 'save.png', 'save_f2.png', Text::_('SAVE'), false );
 		ToolBarHelper::custom( 'apply_meldeliste', 'apply.png', 'apply_f2.png', Text::_('APPLY'), false );
+		ToolBarHelper::custom( 'refresh_meldeliste', 'apply.png', 'apply_f2.png', Text::_('Anzeige aktualisieren'), false );
 		ToolBarHelper::cancel();
-		ToolBarHelper::help( 'screen.clm.edit' );
+//		ToolBarHelper::help( 'screen.clm.edit' );
+ 		ToolBarHelper::help( false, false, 'https://wiki.chessleaguemanager.org/index.php/clm/5.1.3/hilfe.clm.meldelistenpflege' );
 	}
-		
+
 public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abgabe, $option)
 	{
 //		$_REQUEST['hidemainmenu'] = 1;
@@ -219,12 +221,17 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		$clm_config = clm_core::$db->config();
 		if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
 		else $field_search = "inputbox";
+
+		$vgebjahr = clm_core::$load->request_string('vgebjahr');
+		$bgebjahr = clm_core::$load->request_string('bgebjahr');
+		$geschlecht = clm_core::$load->request_string('geschlecht','');
+		
 		?>
 
 
 		<form action="index.php" method="post" name="adminForm" id="adminForm">
 
-		<div class="width-50 fltlft">
+		<div class="width-40 fltlft">
 <div>
 		<fieldset class="adminform">
 		<legend><?php echo Text::_( 'MELDELISTE_STAMMSPIELER' ); ?></legend>
@@ -281,7 +288,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 			  } else {
 				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ($row_sel[$i]->PKZ) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php }  
 			  } ?>><?php
-				echo $row_spl[$x]->name.'&nbsp;-&nbsp;&nbsp;'.$row_spl[$x]->id; ?></option> 
+				echo $row_spl[$x]->name.'&nbsp;-&nbsp;'.$row_spl[$x]->status.'&nbsp;-&nbsp;&nbsp;'.$row_spl[$x]->id; ?></option> 
 			<?php }	?>
 			<option value="9999"><?php echo Text::_( 'MELDELISTE_POSITION_EINFUEGEN'); ?></option>
 		  </select>
@@ -336,10 +343,51 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 
 		</div>
 
+		<div class="width-20 fltrt">
+		<fieldset class="adminform">
+		<legend><?php echo Text::_( 'optionale Auswahlhilfe:' ); ?></legend>
+		<table class="admintable">
+		<tr>
+			<td class="key" nowrap="nowrap"><label for="vgebjahr"><?php echo Text::_( 'ab Geburtsjahr' ).' : '; ?></label>
+			</td>
+			<td align="center">
+		  		<select size="1" class="<?php echo $field_search; ?>" name="vgebjahr" id="vgebjahr">
+					<option value="0"><?php echo Text::_( '-- Jahr auswählen --'); ?></option>
+						<?php for ($x=1920; $x < 2023; $x++) { ?>
+							<option value="<?php echo $x ?>" <?php if ($vgebjahr == $x ) { ?> selected="selected" <?php } ?>><?php echo $x; ?></option> 
+						<?php }	?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td class="key" nowrap="nowrap"><label for="bgebjahr"><?php echo Text::_( 'bis Geburtsjahr' ).' : '; ?></label>
+			</td>
+			<td align="center">
+		  		<select size="1" class="<?php echo $field_search; ?>" name="bgebjahr" id="bgebjahr">
+					<option value="0"><?php echo Text::_( '-- Jahr auswählen --'); ?></option>
+						<?php for ($x=1920; $x < 2023; $x++) { ?>
+							<option value="<?php echo $x ?>" <?php if ($bgebjahr == $x ) { ?> selected="selected" <?php } ?>><?php echo $x; ?></option> 
+						<?php }	?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td class="key" nowrap="nowrap"><label for="geschlecht"><?php echo Text::_( 'Geschlecht' ).' : '; ?></label>
+			</td>
+			<td align="center">
+		  		<select size="1" class="<?php echo "inputbox"; ?>" name="geschlecht" id="geschlecht">
+					<option value="" <?php if ($geschlecht =="")  { ?> selected="selected"<?php } ?>><?php echo Text::_( 'MEMBER_TABLE_19' ); ?></option>
+					<option value="M" <?php if ($geschlecht =="M") { ?> selected="selected"<?php } ?>><?php echo Text::_( 'MEMBER_TABLE_20' ); ?></option> 
+					<option value="W" <?php if ($geschlecht =="W") { ?> selected="selected"<?php } ?>><?php echo Text::_( 'MEMBER_TABLE_21' ); ?></option> 
+				</select>
+			</td>
+		</tr>
+		</table>
+		</fieldset>
+		</div>
 
 
-
-		<div class="width-50 fltrt">
+		<div class="width-40 fltrt">
 		<fieldset class="adminform">
 		<legend><?php echo Text::_( 'MELDELISTE_ERSATZSPIELER' ); ?></legend>
 
@@ -394,7 +442,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 			  } else {			
 				if (isset($row_sel[$i]) AND ((int)$row_spl[$x]->id) == ($row_sel[$i]->PKZ) AND ($row_spl[$x]->zps == $row_sel[$i]->zps)) { ?> selected="selected" <?php }  
 			  } ?>><?php
-				echo $row_spl[$x]->name.'&nbsp;-&nbsp;&nbsp;'.$row_spl[$x]->id; ?></option> 
+				echo $row_spl[$x]->name.'&nbsp;-&nbsp;'.$row_spl[$x]->status.'&nbsp;-&nbsp;&nbsp;'.$row_spl[$x]->id; ?></option> 
 			<?php }	?>
 			<option value="9999"><?php echo Text::_( 'MELDELISTE_POSITION_EINFUEGEN'); ?></option>
 		  </select>
@@ -414,6 +462,8 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		</table>
 		</fieldset>
 		</div>
+
+
 	<div class="clr"></div>
 		<input type="hidden" name="section" value="mannschaften" />
 		<input type="hidden" name="option" value="com_clm" />

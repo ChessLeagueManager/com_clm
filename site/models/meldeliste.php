@@ -147,9 +147,11 @@ class CLMModelMeldeliste extends JModelLegacy
 			$team = $db->loadObjectList();
 			$liga = $team[0]->liga;
 		if ($countryversion =="de") {
-			$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.Mgl_Nr) as id, a.zps, a.Mgl_Nr, a.PKZ, a.DWZ as dwz, a.DWZ_Index as dwz_I0, 0 as checked_out, l.attr, IFNULL(l.snr,999) as snr, l.gesperrt "; 
+			$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.Mgl_Nr) as id, a.zps, a.Mgl_Nr, a.PKZ, a.DWZ as dwz, a.DWZ_Index as dwz_I0"
+				.", 0 as checked_out, l.attr, IFNULL(l.snr,999) as snr, a.gesperrt, l.gesperrtm, a.Status "; 
 		} else {
-			$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.PKZ) as id, a.zps, a.Mgl_Nr, a.PKZ, a.DWZ as dwz, a.DWZ_Index as dwz_I0, 0 as checked_out, l.attr, IFNULL(l.snr,999) as snr, l.gesperrt "; 
+			$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.PKZ) as id, a.zps, a.Mgl_Nr, a.PKZ, a.DWZ as dwz, a.DWZ_Index as dwz_I0"
+				.", 0 as checked_out, l.attr, IFNULL(l.snr,999) as snr, a.gesperrt, l.gesperrtm, a.Status "; 
 		}
 		$query .= " FROM #__clm_dwz_spieler as a "
 			." LEFT JOIN #__clm_meldeliste_spieler as l ON l.lid = $liga AND l.sid = $sid AND l.mnr = $man "
@@ -319,10 +321,10 @@ class CLMModelMeldeliste extends JModelLegacy
 
 	if ($countryversion =="de") {
 		$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.Mgl_Nr) as id, a.zps, a.Mgl_Nr, a.PKZ"
-				.", a.DWZ as dwz, a.DWZ_Index as dwz_I0, IFNULL(l.snr,999) as snr, a.gesperrt "; 
+				.", a.DWZ as dwz, a.DWZ_Index as dwz_I0, IFNULL(l.snr,999) as snr, a.gesperrt, l.gesperrtm, a.Status "; 
 	} else {
 		$query = "SELECT a.Spielername as name, CONCAT(a.zps,a.PKZ) as id, a.zps, a.Mgl_Nr, a.PKZ"
-				.", a.DWZ as dwz, a.DWZ_Index as dwz_I0, IFNULL(l.snr,999) as snr, a.gesperrt "; 
+				.", a.DWZ as dwz, a.DWZ_Index as dwz_I0, IFNULL(l.snr,999) as snr, a.gesperrt, l.gesperrtm, a.Status "; 
 	}
 	$query .= " ,v.Vereinname "
 		." FROM #__clm_dwz_spieler as a "

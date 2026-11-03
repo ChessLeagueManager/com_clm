@@ -203,8 +203,9 @@ echo "<br>published ".$clmuser[0]->published;
 	</td>
 	<td>
 		<input type="hidden" name="mglnr<?php echo $i+1; ?>" value="<?php echo $spieler[$i]->id; ?>" />
-		<?php if ($spieler[$i]->gesperrt =="1") echo '<del>'.$spieler[$i]->name.'</del>';
-				else echo $spieler[$i]->name; ?>	
+		<?php if ($spieler[$i]->gesperrt == 1 OR $spieler[$i]->gesperrtm == 1 ) echo '<del>'.$spieler[$i]->name.'</del>';
+				else echo $spieler[$i]->name; 
+			if ($spieler[$i]->Status !="A") echo " (".$spieler[$i]->Status.")";?>	
 	</td>
 	<td>
 		<input class="inputbox" style="width:auto;" type="text" name="attr[<?php echo $spieler[$i]->id; ?>]" id="attr<?php echo $i+1; ?>" size="1" maxlength="4" value="<?php echo $spieler[$i]->attr; ?>" />
@@ -230,7 +231,9 @@ echo "<br>published ".$clmuser[0]->published;
 	</td>
 	<td>
 		<input type="hidden" name="mglnr<?php echo $j+1; ?>" value="<?php if (isset($spieler[$j])) echo $spieler[$j]->id; ?>" />
-		<?php if (isset($spieler[$j])) echo $spieler[$j]->name; ?>
+		<?php if ($spieler[$j]->gesperrt == 1 OR $spieler[$j]->gesperrtm == 1 ) echo '<del>'.$spieler[$j]->name.'</del>';
+				else echo $spieler[$j]->name; 
+			if ($spieler[$j]->Status !="A") echo " (".$spieler[$j]->Status.")";?>	
 	</td>
 	<td>
 		<input class="inputbox" style="width:auto;" type="text" name="attr[<?php if (isset($spieler[$j])) echo $spieler[$j]->id; ?>]" id="attr<?php echo $j+1; ?>" size="1" maxlength="4" value="<?php if (isset($spieler[$j])) echo $spieler[$j]->attr; ?>" />

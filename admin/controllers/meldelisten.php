@@ -158,6 +158,11 @@ function edit()
 	{
 	$mainframe	= Factory::getApplication();
 
+	//CLM parameter auslesen
+	$clm_config = clm_core::$db->config();
+	if ($clm_config->field_search == 1) $field_search = "js-example-basic-single";
+	else $field_search = "inputbox";
+
 	$db 		=Factory::getDBO();
 	$user 		=Factory::getUser();
 	$task 		= clm_core::$load->request_string( 'task');
@@ -168,6 +173,14 @@ function edit()
 	$section 	= clm_core::$load->request_string('section');
 	$liga 		= clm_core::$load->request_string( 'liga');
 										 
+	$vgebjahr 		= clm_core::$load->request_int( 'vgebjahr');
+	$bgebjahr 		= clm_core::$load->request_int( 'bgebjahr');
+	$geschlecht 		= clm_core::$load->request_string( 'geschlecht');
+
+	$where_gebjahr = '';
+	if ($vgebjahr > 0) {	$where_gebjahr .= ' AND Geburtsjahr >= "'.$vgebjahr.'"';	}
+	if ($bgebjahr > 0) {	$where_gebjahr .= ' AND Geburtsjahr <= "'.$bgebjahr.'"';	}
+	if ($geschlecht > '') {	$where_gebjahr .= ' AND Geschlecht = "'.$geschlecht.'"';	}
 	$row =Table::getInstance( 'mannschaften', 'TableCLM' );
 	// load the row from the db table
 	$row->load( $cid[0] );
@@ -195,6 +208,7 @@ function edit()
 	$maxsql = "SELECT COUNT(*) as max FROM #__clm_dwz_spieler"
 		//." WHERE ( ZPS ='".$row->zps."' OR ZPS ='".$row->sg_zps."')"
 		." WHERE ( ZPS ='".$row->zps."' OR FIND_IN_SET(ZPS,'".$row->sg_zps."') != 0 )"
+		.$where_gebjahr
 		." AND sid =".$row->sid
 		;
 	$db->setQuery( $maxsql);
@@ -221,9 +235,10 @@ function edit()
 		$sql = "SELECT mgl_nr as id, ";
 	else
 		$sql = "SELECT PKZ as id, ";
-	$sql .= "Spielername as name, DWZ as dwz, DWZ_Index as dwz_I0, ZPS as zps FROM #__clm_dwz_spieler"
+	$sql .= "Spielername as name, DWZ as dwz, DWZ_Index as dwz_I0, ZPS as zps, Status as status FROM #__clm_dwz_spieler"
 		." WHERE ( ZPS ='".$row->zps."' OR FIND_IN_SET(ZPS,'".$row->sg_zps."') != 0 )"
 		." AND sid =".$row->sid
+		.$where_gebjahr
 		." ORDER BY ".$order
 		;
 	$db->setQuery( $sql );
@@ -277,4 +292,5 @@ function cancel()
 	$mainframe->enqueueMessage( $msg );
 	$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	}
+
 }

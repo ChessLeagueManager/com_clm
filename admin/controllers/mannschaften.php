@@ -1748,4 +1748,26 @@ public static function annull()			// Mannschaft annullieren d.h. Brett- und Wert
 	$mainframe->enqueueMessage( $msg, 'message' );
 	$mainframe->redirect( 'index.php?option='.$option.'&section='.$section);
 	}
+
+function refresh_meldeliste()
+	{
+	$mainframe	= Factory::getApplication();
+	// Check for request forgeries
+	defined('clm') or die( 'Invalid Token' );
+
+	$option 	= clm_core::$load->request_string('option');
+	$section 	= clm_core::$load->request_string('section');
+	$vgebjahr 	= clm_core::$load->request_string('vgebjahr');
+	$bgebjahr 	= clm_core::$load->request_string('bgebjahr');
+	$geschlecht 	= clm_core::$load->request_string('geschlecht');
+	$id		= clm_core::$load->request_int('id');	
+	$row 		=Table::getInstance( 'meldelisten', 'TableCLM' );
+
+	$msg = Text::_( 'Anzeige entsprechend Auswahlhilfe erneuert');
+	$mainframe->enqueueMessage( $msg );
+	$link = 'index.php?option='. $option.'&section=meldelisten&task=edit&id='.$id
+		.'&vgebjahr='.$vgebjahr.'&bgebjahr='.$bgebjahr.'&geschlecht='.$geschlecht;
+	$mainframe->redirect( $link );
+	}
+
 }
