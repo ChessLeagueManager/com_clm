@@ -114,7 +114,7 @@ if ( ($value->spieler != 0 AND $value->gegner != 0) OR !is_null($value->ergebnis
 		if ($value->wname != '')
 			$pdf->Cell($br01,$zelle,clm_core::$load->utf8decode($value->wname)." (".$points.")",1,0,'L',1);
 		else
-			$pdf->Cell($br01,"",1,0,'L',1);
+			$pdf->Cell($br01,$zelle,"",1,0,'L',1);
 	} else {
 		$pdf->Cell($br01,$zelle,clm_core::$load->utf8decode($value->wname),1,0,'L',1);
 	}

@@ -348,7 +348,11 @@ if ($remis_com == 1) { $remis_com = 0; ?>
 <?php if ($paar[$z]->comment != "") { ?>
 <tr class="<?php echo $zeilenr; ?>">
 <td class="paar"><?php echo $paar[$z]->paar; ?></td>
-<td colspan ="7"><?php  echo Text::_('PAAR_COMMENT').$paar[$z]->comment; ?>		
+<?php if ($params['round_date'] == '1') { ?>
+	<td colspan ="8"><?php  echo Text::_('PAAR_COMMENT').$paar[$z]->comment; ?>
+<?php } else { ?>		
+	<td colspan ="7"><?php  echo Text::_('PAAR_COMMENT').$paar[$z]->comment; ?>
+<?php } ?>		
 	</td></tr>
 <?php }  ?>
 
