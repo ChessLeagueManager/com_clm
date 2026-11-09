@@ -193,7 +193,7 @@ public static function setMeldelisteToolbar($row)
 		ToolBarHelper::title(  Text::_( 'MELDELISTE')." ".$row->name .': [ '. $text.' ]', 'clm_headmenu_mannschaften.png');
 		ToolBarHelper::custom( 'save_meldeliste', 'save.png', 'save_f2.png', Text::_('SAVE'), false );
 		ToolBarHelper::custom( 'apply_meldeliste', 'apply.png', 'apply_f2.png', Text::_('APPLY'), false );
-		ToolBarHelper::custom( 'refresh_meldeliste', 'apply.png', 'apply_f2.png', Text::_('Anzeige aktualisieren'), false );
+//		ToolBarHelper::custom( 'refresh_meldeliste', 'apply.png', 'apply_f2.png', Text::_('Anzeige aktualisieren'), false );
 		ToolBarHelper::cancel();
 //		ToolBarHelper::help( 'screen.clm.edit' );
  		ToolBarHelper::help( false, false, 'https://wiki.chessleaguemanager.org/index.php/clm/5.1.3/hilfe.clm.meldelistenpflege' );
@@ -342,7 +342,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
   </div>
 
 		</div>
-
+<!--
 		<div class="width-20 fltrt">
 		<fieldset class="adminform">
 		<legend><?php echo Text::_( 'optionale Auswahlhilfe:' ); ?></legend>
@@ -385,7 +385,7 @@ public static function meldeliste( &$row, $row_spl, $row_sel, $max, $liga, $abga
 		</table>
 		</fieldset>
 		</div>
-
+-->
 
 		<div class="width-40 fltrt">
 		<fieldset class="adminform">

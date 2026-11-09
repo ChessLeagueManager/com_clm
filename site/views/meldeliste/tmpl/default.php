@@ -22,7 +22,9 @@ $sid = clm_core::$load->request_int('saison',1 );
 $zps = clm_core::$load->request_string('zps','1');
 $man = clm_core::$load->request_int('man'); 
 $liga 		= $this->liga;
+$itemid = clm_core::$load->request_int('Itemid', 1); 
 
+$refresh_link ='index.php?option=com_clm&view=meldeliste&saison='.$sid.'&zps='.$zps.'&lid='.$liga[0]->lid.'&man='.$man.'&Itemid='.$itemid;
 
 // Login Status prüfen
 $clmuser 	= $this->clmuser;
@@ -33,6 +35,11 @@ $user		=Factory::getUser();
 // Konfigurationsparameter auslesen
 	$config = clm_core::$db->config();
 	$conf_meldeliste=$config->conf_meldeliste;
+
+	// Auswahlfelder durchsuchbar machen
+	clm_core::$load->load_js("suche_liste");
+	if ($config->field_search == 1) $field_search = "js-example-basic-single";
+	else $field_search = "inputbox";
 
 if ($conf_meldeliste != 1) {
 	$msg = Text::_( 'CLUB_LIST_DISABLED');
@@ -115,22 +122,91 @@ $mflist[]		= HTMLHelper::_('select.option',  '0', Text::_( 'TEAM_SELECT_LEADER' 
 $mflist			= array_merge( $mflist, $mllist );
 $lists['mf']	= HTMLHelper::_('select.genericlist',   $mflist, 'mf', 'class="inputbox" size="1"', 'mf', 'mfname', $liga[0]->mf );
 if ($liga[0]->lokal == '') $liga[0]->lokal = $liga[0]->vlokal;
+
+		$vgebjahr = clm_core::$load->request_string('vgebjahr');
+		$bgebjahr = clm_core::$load->request_string('bgebjahr');
+		$geschlecht = clm_core::$load->request_string('geschlecht','');
+
 ?>
+	<script language="javascript" type="text/javascript">
+
+	function redirect() {
+		var form = document.adminForm;
+		var refreshlink = '<?php echo $refresh_link; ?>';
+		var vgebjahr = document.getElementById("vgebjahr").value;
+		var bgebjahr = document.getElementById("bgebjahr").value;
+		var geschlecht = document.getElementById("geschlecht").value;
+		window.location = refreshlink + "&vgebjahr=" + vgebjahr + "&bgebjahr=" + bgebjahr + "&geschlecht=" + geschlecht;
+	}
+		</script>
+
 <div >
 <div id="meldeliste">
 <div class="componentheading"><?php echo Text::_('CLUB_LIST_LIST') ?> <?php echo $liga[0]->man_name; ?></div>
 <br>
+<form method="post" name="adminForm" id="adminForm" >
 <div id="desc">
 <h4><?php echo Text::_('CLUB_LIST_NOTE') ?></h4>
-<ol>
+<!-- <table style="border: none !important; border-collapse: collapse !important; outline: none !important; box-shadow: none !important;" > -->
+<table style="border: none !important; border-collapse: collapse !important;" >
+<td style="border: none !important; border-collapse: collapse !important;"><ol>
 <li><?php echo Text::_('CLUB_LIST_1') ?></li>
 <li><?php echo Text::_('CLUB_LIST_2') ?></li>
 <li><?php echo Text::_('CLUB_LIST_3') ?></li>
 <li><?php echo Text::_('CLUB_LIST_4') ?></li>
 <li><?php echo Text::_('CLUB_LIST_5') ?></li>
-</ol>
-<?php //echo Text::_('CLUB_LIST_PLANNED') ?>
+</ol></td>
+<td style="border: none !important; border-collapse: collapse !important;">
+		<h4><?php echo Text::_( 'optionale Auswahlhilfe:' ); ?></h4>
+		<table style="border: none !important; border-collapse: collapse !important; font-size: 80%; line-height: 60%;">
+		<tr>
+			<td class="key" nowrap="nowrap" style="border: none !important;"><label for="vgebjahr"><?php echo Text::_( 'ab Geburtsjahr' ).' : '; ?></label>
+			</td>
+			<td align="center" style="border: none !important;">
+		  		<select size="1" class="<?php echo $field_search; ?>" name="vgebjahr" id="vgebjahr">
+					<option value="0"><?php echo Text::_( '-- Jahr auswählen --'); ?></option>
+						<?php for ($x=1920; $x < 2023; $x++) { ?>
+							<option value="<?php echo $x ?>" <?php if ($vgebjahr == $x ) { ?> selected="selected" <?php } ?>><?php echo $x; ?></option> 
+						<?php }	?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td class="key" nowrap="nowrap" style="border:none !important;"><label for="bgebjahr"><?php echo Text::_( 'bis Geburtsjahr' ).' : '; ?></label>
+			</td>
+			<td align="center"  style="border: none !important;">
+		  		<select size="1" class="<?php echo $field_search; ?>" name="bgebjahr" id="bgebjahr">
+					<option value="0"><?php echo Text::_( '-- Jahr auswählen --'); ?></option>
+						<?php for ($x=1920; $x < 2023; $x++) { ?>
+							<option value="<?php echo $x ?>" <?php if ($bgebjahr == $x ) { ?> selected="selected" <?php } ?>><?php echo $x; ?></option> 
+						<?php }	?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td class="key" nowrap="nowrap" style="border: none !important;"><label for="geschlecht"><?php echo Text::_( 'Geschlecht' ).' : '; ?></label>
+			</td>
+			<td align="center" style="border: none !important;">
+		  		<select size="1" class="<?php echo "$field_search"; ?>" name="geschlecht" id="geschlecht">
+					<option value="" <?php if ($geschlecht =="")  { ?> selected="selected"<?php } ?>><?php echo Text::_( 'alle' ); ?></option>
+					<option value="M" <?php if ($geschlecht =="M") { ?> selected="selected"<?php } ?>><?php echo Text::_( 'm&auml;nnlich' ); ?></option> 
+					<option value="W" <?php if ($geschlecht =="W") { ?> selected="selected"<?php } ?>><?php echo Text::_( 'weiblich' ); ?></option> 
+				</select>
+			</td>
+		</tr>
+		<tr><td style="border: none !important; line-height: 150%;" colspan="3">
+
+			<button type="button" name="test" id="test" onclick="redirect()">Auswahl aktualisieren</button><br/>
+
+		</td></tr>
+		</table>
+</td>
+</table>
 </div>
+		<?php echo HTMLHelper::_( 'form.token' ); ?>
+</form>
+
+ 
 <?php /** echo "<br>Saison ".$sid;
 echo "<br>zps ".$zps;
 echo "<br>man ".$man;
@@ -231,9 +307,11 @@ echo "<br>published ".$clmuser[0]->published;
 	</td>
 	<td>
 		<input type="hidden" name="mglnr<?php echo $j+1; ?>" value="<?php if (isset($spieler[$j])) echo $spieler[$j]->id; ?>" />
-		<?php if ($spieler[$j]->gesperrt == 1 OR $spieler[$j]->gesperrtm == 1 ) echo '<del>'.$spieler[$j]->name.'</del>';
-				else echo $spieler[$j]->name; 
-			if ($spieler[$j]->Status !="A") echo " (".$spieler[$j]->Status.")";?>	
+		<?php if (isset($spieler[$j])) {
+					if ($spieler[$j]->gesperrt == 1 OR $spieler[$j]->gesperrtm == 1 ) echo '<del>'.$spieler[$j]->name.'</del>';
+					else echo $spieler[$j]->name; 
+					if ($spieler[$j]->Status !="A") echo " (".$spieler[$j]->Status.")";
+		} ?>	
 	</td>
 	<td>
 		<input class="inputbox" style="width:auto;" type="text" name="attr[<?php if (isset($spieler[$j])) echo $spieler[$j]->id; ?>]" id="attr<?php echo $j+1; ?>" size="1" maxlength="4" value="<?php if (isset($spieler[$j])) echo $spieler[$j]->attr; ?>" />

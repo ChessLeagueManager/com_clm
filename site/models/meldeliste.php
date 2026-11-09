@@ -63,6 +63,7 @@ class CLMModelMeldeliste extends JModelLegacy
 	$man	= clm_core::$load->request_int('man','1');
 	$layout	= clm_escape(clm_core::$load->request_string('layout'));
 	$gid	= clm_core::$load->request_int('gid');
+
 	//CLM parameter auslesen
 	$config = clm_core::$db->config();
 	$countryversion = $config->countryversion;
@@ -139,6 +140,16 @@ class CLMModelMeldeliste extends JModelLegacy
 	else {
 		if ($val == 1) { $order = "IFNULL(l.snr,999), a.Spielername ASC"; }
 		else { $order = "IFNULL(l.snr,999), a.DWZ DESC";}
+		
+		$vgebjahr = clm_escape(clm_core::$load->request_string('vgebjahr'));
+		$bgebjahr = clm_escape(clm_core::$load->request_string('bgebjahr'));
+		$geschlecht = clm_escape(clm_core::$load->request_string('geschlecht'));
+		$geb = "";
+		$ges = "";
+		if ($vgebjahr > '0') 	$geb .= " AND a.Geburtsjahr >= $vgebjahr ";
+		if ($bgebjahr > '0') 	$geb .= " AND a.Geburtsjahr <= $bgebjahr ";
+		if ($geschlecht > '0')	$ges .= " AND a.Geschlecht = '$geschlecht' ";
+
 		$query = "SELECT a.zps, a.sg_zps, a.liga "
 			." FROM #__clm_mannschaften as a"
 			." WHERE a.sid = $sid AND a.zps = '$zps' AND a.man_nr = $man AND a.published = 1 "
@@ -166,7 +177,8 @@ class CLMModelMeldeliste extends JModelLegacy
 			$query .= " WHERE (a.zps = '$zps' OR FIND_IN_SET(a.zps,'".$team[0]->sg_zps."') != 0 )"; }
 		else {
 			$query .= " WHERE a.zps = '$zps' "; }
-		$query  .= " AND a.sid = ".$sid              
+		$query  .= " AND a.sid = ".$sid
+			.$geb.$ges
 			." ORDER BY $order ";
 	}
 	return $query;
