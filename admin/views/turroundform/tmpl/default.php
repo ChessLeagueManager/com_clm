@@ -18,7 +18,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 
 <form action="index.php"  id="adminForm"  method="post" name="adminForm">
 
-		<div class="width-50 fltlft">
+		<div class="width-40 fltlft">
 		<fieldset class="adminform">
 		<legend><?php echo Text::_( 'JDETAILS' ); ?></legend>
 
@@ -62,7 +62,18 @@ use Joomla\CMS\HTML\HTMLHelper;
 			<input class="inputbox" type="time" name="startzeit" id="startzeit" value="<?php echo substr($this->roundData->startzeit,0,5); ?>" />
 			</td>
         </tr>
-				
+
+	<tr>
+		<td width="40%" class="paramlist_key" title="<?php echo Text::_( 'Eingabe nur sinnvoll, wenn das Spiellokal der Runde vom Standardspiellokal des Turniers abweicht' ); ?>">
+			<label for="lokal">
+				<?php echo Text::_( 'TOURNAMENT_LOKAL' ); ?>:
+			</label>
+		</td>
+		<td colspan="4" class="paramlist_value" title="<?php echo Text::_( 'Eingabe nur sinnvoll, wenn das Spiellokal der Runde vom Standardspiellokal des Turniers abweicht' ); ?>">
+			<input class="inputbox" type="text" name="lokal" id="lokal" size="80" maxlength="200" value="<?php echo $this->roundData->lokal; ?>" />
+		</td>
+	</tr>
+
 		<tr>
 			<td class="key" nowrap="nowrap"><label for="published"><?php echo Text::_( 'CLM_PUBLISHED' ); ?>:</label>
 			</td>
@@ -91,7 +102,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 		</fieldset>
 		</div>
 
- <div class="width-50 fltrt">
+ <div class="width-40 fltrt">
   <fieldset class="adminform">
    <legend><?php echo Text::_( 'REMARKS' ); ?></legend>
 	<table class="adminlist">

@@ -37,6 +37,8 @@ class TableCLMTurnier_Runden extends Table
 	var $checked_out	= null;
 	var $checked_out_time	= null;
 	var $ordering		= null;
+	var $lokal			= '';
+	var $lokal_coord		= null;  
 
 	function __construct( &$_db ) {
 		parent::__construct( '#__clm_turniere_rnd_termine', 'id', $_db );

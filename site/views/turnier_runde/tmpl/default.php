@@ -91,6 +91,7 @@ if (!$archive_check) {
 	echo '<tr><td colspan="9">';
 		echo '<div style="text-align:left; padding-left:1%">';
 			echo '<b>'.$this->round->name.'</b>';
+			if ($this->round->lokal > ' ') echo ' &nbsp; &nbsp; Spiellokal: '.$this->round->lokal;
 		echo '</div>';
 	echo '</td></tr>';
 	// Ende Kopfzeile

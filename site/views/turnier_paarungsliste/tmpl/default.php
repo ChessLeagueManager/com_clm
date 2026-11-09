@@ -148,6 +148,7 @@ function pgn_element($contents, $uelement, $ustart, $debug = 0) {
 						if(isset($value->startzeit) and $value->startzeit != '00:00:00') { echo '  '.substr($value->startzeit,0,5).' Uhr'; }
 					}
 					echo '</b>';
+					if ($value->lokal > ' ') echo ' &nbsp; &nbsp; Spiellokal: '.$value->lokal;
 				echo '</div>';
 			echo '</td></tr>';
 			// Ende Kopfzeile - end of header

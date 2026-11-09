@@ -22,6 +22,7 @@ $ -> Language fix or change
 + Einzelturniere: alphabetische Teilnehmerliste pro Runde mit Tischnummer
 + View Meldeliste: optionale Auswahlhilfe (Geburtsjahr und/oder Geschlecht)
 ^ Einzelturniere: TRF-FIDE-Export aktualisiert
++ Einzelturniere: Spiellokal pro Runde möglich
 
 - - - - - 5.1.2 - [07-10-2026] - - - - - - - - - - - - - - - - - - - -
 + ELO-Auswertungsdatei monatlich erstellen

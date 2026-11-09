@@ -11,6 +11,8 @@
 */
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
+// Include the AddressHandler class
+require_once JPATH_COMPONENT_ADMINISTRATOR. '/helpers/addresshandler.php';
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
@@ -99,6 +101,18 @@ class CLMControllerTurRoundForm extends JControllerLegacy {
 		if (!$row->store()) {
 			$this->app->enqueueMessage( $row->getError(),'error' );
 			return array(false);
+		}
+		else {
+			if ($row->lokal > '') {
+				//Geometry points need to be safed manually		
+				$addressHandler = new AddressHandler();
+				$lokal_coord = $addressHandler->convertAddress($row->lokal);
+				$addressHandler->updateSingleRoundCoordinates($lokal_coord, $row->id);
+	
+				if(is_null($lokal_coord)){
+					$this->app->enqueueMessage(Text::_('WARNING_ADDRESS_LOOKUP'), 'warning');
+				}
+			}
 		}
 		
 	

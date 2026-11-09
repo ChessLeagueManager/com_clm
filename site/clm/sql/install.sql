@@ -1294,6 +1294,8 @@ CREATE TABLE IF NOT EXISTS `#__clm_turniere_rnd_termine` (
   `checked_out` int(11) UNSIGNED DEFAULT NULL,
   `checked_out_time` datetime DEFAULT NULL,
   `ordering` int(11) NOT NULL DEFAULT 0,
+  `lokal` varchar(200) NOT NULL DEFAULT '' COMMENT 'Spiellokal einschl. Anschrift',
+  `lokal_coord` text DEFAULT NULL COMMENT 'Geokoordinaten des Spiellokals',  
   PRIMARY KEY (`id`),
   KEY `published` (`published`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
