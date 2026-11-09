@@ -43,6 +43,16 @@ $turnier_entry_fee = $clm_config->turnier_entry_fee;
 			<input class="inputbox" type="text" name="name" id="name" size="40" maxlength="60" value="<?php echo $this->turnier->name; ?>" />
 		</td>
 	</tr>
+	<?php if ($turParams->get('optionEloAnalysis', 0) > 0) { ?>
+		<tr>
+			<td width="30%" class="paramlist_key" title="<?php echo Text::_( 'TOURNAMENT_FIDE_NAME_HINT' ); ?>">
+				<label for="params[fide_name]"><?php echo Text::_( 'TOURNAMENT_FIDE_NAME' ); ?>:</label>
+			</td>
+			<td class="paramlist_value" title="<?php echo Text::_( 'TOURNAMENT_FIDE_NAME_HINT' ); ?>">
+				<input class="inputbox" type="text" name="params[fide_name]" id="params[fide_name]" size="40" maxlength="60" value="<?php echo $turParams->get('fide_name',''); ?>" />
+			</td>
+		</tr>
+	<?php } ?>
 	
 	<?php 
 	if (isset($this->form['catidAlltime'])) {

@@ -524,9 +524,9 @@ function datei() {
 			}
 		} else {
 			if(!is_null($et)) { // Einzelturnier
-				$result = clm_core::$api->db_trf_export($et, false, false, true, true, true, true);
+				$result = clm_core::$api->db_trf_export($et, false, false, true, false, true, true);
 			} else {			// Teamwettbewerb
-				$result = clm_core::$api->db_trf_export($liga, true, false, true, true, true, true);
+				$result = clm_core::$api->db_trf_export($liga, true, false, true, false, true, true);
 			}
 		}
 		$xml = $result[0];

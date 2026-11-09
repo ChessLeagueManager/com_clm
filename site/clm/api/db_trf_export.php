@@ -174,10 +174,12 @@ echo '<br>monat0 $monat';
 		$drawclubavoid = $turparams->get("drawclubavoid","0");	
 		$tourn_accel_rounds = $turparams->get("accel_rounds","0");	
 		$tourn_accel_groups = $turparams->get("accel_groups","0");	
+		$fide_name = $turparams->get("fide_name","");	
 
 		$lines = array();
 		$line = "### Tournament Section  ";
 		$lines[] 	= $line;
+		if ($ratingexport AND $fide_name > ' ') $turnier->name = $fide_name;
 		if ($monat == "") {
 			$lines[] 	= '012 '.clm_core::$load->sub_umlaute($turnier->name);
 		} else {
@@ -339,7 +341,7 @@ echo "<br>dateEnd $dateEnd";
 		$lines = array();
 		$line = "### Player Section  ";
 		$lines[] 	= $line;
-		if ($ratingexport) {
+		if ($ratingexport OR $clmextensions) {
 			$line = "### SSSS ATTT NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN RRRR FFF IIIIIIIIIII BBBB/BB/BB PPPP RRRR  ";
 			$runde = 0;
 			while ($runde < $turnier->runden) {
@@ -369,19 +371,28 @@ echo "<br>dateEnd $dateEnd";
 			$line 	= '001 '.sprintf('%4s',$players[$i]->snr);
 			$line	.= ' '.sprintf('%1s',strtolower($players[$i]->geschlecht));
 			if (is_null($players[$i]->titel)) $players[$i]->titel = '';
-			if ($ratingexport == false) {
+			if ($ratingexport === false) {
 				$line	.= sprintf('%3s',strtolower($players[$i]->titel));
 			} else {
 				$line	.= sprintf('%3s',strtoupper($players[$i]->titel));
 			}
-			$line	.= ' '.sprintf('%-33s',clm_core::$load->sub_umlaute($players[$i]->name));
-			if ($ratingexport == false) {
+			if ($ratingexport === false) {
+				$line	.= ' '.sprintf('%-33s',clm_core::$load->sub_umlaute($players[$i]->name));
 				$line	.= ' '.sprintf('%4s',$players[$i]->twz);
 			} else {
+				if (isset($players[$i]->FIDEid) > 0) {
+					$result = clm_core::$api->db_player_by_fideid($players[$i]->FIDEid);
+					if ($result[0]) {
+						if (isset($result[1]["fide_name"]))
+							$players[$i]->name = $result[1]["fide_name"];
+						if (isset($result[1]["fide_rating"]) AND is_numeric($result[1]["fide_rating"]))
+							$players[$i]->FIDEelo = $result[1]["fide_rating"];
+					}
+				}
+				$line	.= ' '.sprintf('%-33s',clm_core::$load->sub_umlaute($players[$i]->name));
 				if ($players[$i]->FIDEelo <= 0) $players[$i]->FIDEelo = NULL;
 				$line	.= ' '.sprintf('%4s',$players[$i]->FIDEelo);
 			}
-			$line	.= ' '.sprintf('%3s',$players[$i]->FIDEcco);
 			$line	.= ' '.sprintf('%11s',$players[$i]->FIDEid);
 			$line	.= ' '.sprintf('%-4s/  /  ',$players[$i]->birthYear);
 
@@ -411,13 +422,15 @@ echo "<br>dateEnd $dateEnd";
 						$line .= '  '.sprintf('%4s',$erg_array[$key]->gegner);
 						$line .= ' '.sprintf('%1s',$erg_array[$key]->color);
 						$line .= ' '.sprintf('%1s',$erg_array[$key]->ergebnis);
-						$lineCZ .= ' '.sprintf('%2s',$erg_array[$key]->paar);
-						$lineCZ .= ' '.sprintf('%3s',$erg_array[$key]->brett);
-						$lineCZ .= ' '.sprintf('%1s',$erg_array[$key]->heim);
-						$lineCZ .= ' '.sprintf('%2s',$erg_array[$key]->ergebnisCLM);
-						$lineCZ .= ' '.sprintf('%1s',$erg_array[$key]->kampflos);
-						$lineCZ .= ' '.sprintf('%4s',$erg_array[$key]->punkte);
-						$lineCZ .= ' '.sprintf('%5s','');
+						if ($group) {
+							$lineCZ .= ' '.sprintf('%2s',$erg_array[$key]->paar);
+							$lineCZ .= ' '.sprintf('%3s',$erg_array[$key]->brett);
+							$lineCZ .= ' '.sprintf('%1s',$erg_array[$key]->heim);
+							$lineCZ .= ' '.sprintf('%2s',$erg_array[$key]->ergebnisCLM);
+							$lineCZ .= ' '.sprintf('%1s',$erg_array[$key]->kampflos);
+							$lineCZ .= ' '.sprintf('%4s',$erg_array[$key]->punkte);
+							$lineCZ .= ' '.sprintf('%5s','');
+						}
 					}
 				} else {
 					$line .= '          ';
@@ -592,7 +605,7 @@ echo "<br>dateEnd $dateEnd";
 		$lines = array();
 		$line = "### Team Section  ";
 		$lines[] 	= $line;
-		if ($ratingexport) {
+		if ($ratingexport OR $clmextensions) {
 			$line =	"### SSS NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN FFFFF EEEEEE MMMM GGGGGG RRR  PPPP PPPP PPPP PPPP PPPP PPPP PPPP PPPP PPPP PPPP PPPP PPPP PPPP PPPP PPPP PPPP PPPP PPPP PPPP PPPP ";
 			$lines[] 	= $line;
 		}
