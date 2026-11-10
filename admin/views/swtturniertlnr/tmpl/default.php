@@ -19,7 +19,7 @@ $pcount = count($this->teilnehmer);
 $_GET['pcount'] = $pcount;
 $plast = $pcount;
 $_GET['pfirst'] = $pfirst;
-$prange = 50;
+$prange = 40;
 $_GET['prange'] = $prange;
 
 /*
@@ -97,12 +97,15 @@ $useAsTWZ = clm_core::$load->request_string('useAsTWZ', '0');
 							echo "<td><input class='inputbox' type='text' name='verein[".$i."]' id='verein".$i."' size='40' maxlength='60' value='".htmlspecialchars($spieler->verein, ENT_QUOTES)."' /></td>";
 							echo "<td align='center'><input class='inputbox' type='text' name='start_dwz[".$i."]' id='start_dwz".$i."' size='4' maxlength='4' value='".$spieler->start_dwz."' /></td>";
 							echo "<td align='center'><input class='inputbox' type='text' name='FIDEelo[".$i."]' id='FIDEelo".$i."' size='4' maxlength='4' value='".$spieler->FIDEelo."' /><input type='hidden' name='twz[".$i."]' id='twz'  value='".$spieler->twz."' /></td>";
-							echo "<td align='center'><input class='inputbox' type='text' name='birthYear[".$i."]' id='birthYear".$i."' size='4' maxlength='4' value='".$spieler->birthYear."' /></td>";
+							echo "<td align='center'><input class='inputbox' type='text' name='birthYear[".$i."]' id='birthYear".$i."' size='4' maxlength='4' value='".$spieler->birthYear."' />";
 							echo "<input type='hidden' name='FIDEcco[".$i."]' id='FIDEcco".$i."' value='".$spieler->FIDEcco."' />";
 							echo "<input type='hidden' name='FIDEid[".$i."]' id='FIDEid".$i."' value='".$spieler->FIDEid."' />";
 							echo "<input type='hidden' name='PKZ[".$i."]' id='PKZ".$i."' value='".$spieler->PKZ."' />";
 							echo "<input type='hidden' name='s_punkte[".$i."]' id='s_punkte".$i."' value='".$spieler->s_punkte."' />";
-						echo "</tr>";
+							echo "<input type='hidden' name='sum_bhlz[".$i."]' id='sum_bhlz".$i."' value='".$spieler->sum_bhlz."' />";
+							echo "<input type='hidden' name='sum_busum[".$i."]' id='sum_busum".$i."' value='".$spieler->sum_busum."' />";
+							echo "<input type='hidden' name='sum_sobe[".$i."]' id='sum_sobe".$i."' value='".$spieler->sum_sobe."' />";
+						echo "</td></tr>";
 					$k = 1 - $k;
 					}
 				?>

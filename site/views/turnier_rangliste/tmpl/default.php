@@ -43,6 +43,7 @@ require_once(JPATH_COMPONENT.DS.'includes'.DS.'css_path.php');
 $config = clm_core::$db->config();
 // $pdf_melde = $config->pdf_meldelisten;
 $fixth_tkreuz = $config->fixth_tkreuz;
+$test_swt_fw = $config->test_swt_fw;
 
 // CLM-Container
 echo '<div id="clm"><div id="turnier_rangliste">';
@@ -103,6 +104,10 @@ if (!$archive_check) {
 		if ($this->turnier->$fwFieldName > 0) {
 			$rightcol++;
 		}
+	}
+	// Testunterstützung Feinwertungen
+	if ($test_swt_fw == 1) {
+		$rightcol += 3;
 	}
 	
 	if ($this->turnier->typ == 1) { // CH-System
@@ -212,6 +217,33 @@ if (!$archive_check) {
 						$plTiebrField = 'sumTiebr'.$f;
 						if ($this->turnier->$fwFieldName > 0 AND $this->turnier->$fwFieldName < 50) {
 							echo '<td class="fw_col"><div>'.CLMtext::tiebrFormat($this->turnier->$fwFieldName, $this->players[$p]->$plTiebrField).'</div></td>';
+						}
+					}
+					// Testunterstützung Feinwertungen
+					if ($test_swt_fw == 1) {
+						$a_sobe = array(3,13,23,33);
+						echo '<td class="fw_col"><div>'.number_format(($this->players[$p]->sum_bhlz / 2),1).'</div></td>';   // Anzahl Punkte
+						if (in_array($this->turnier->tiebr1, $a_sobe)) { 		
+							if ($this->players[$p]->sumTiebr1 == ($this->players[$p]->sum_busum / 4)) 		// 1.Feinwertung ist eine SoBe-Wertung
+								echo '<td class="fw_col"><div>'.number_format(($this->players[$p]->sum_busum / 4),2).'</div></td>';
+							else
+								echo '<td class="fw_col"><div><span style="color:#FF0000">'.number_format(($this->players[$p]->sum_busum / 4),2).'</span></div></td>';
+						} else {
+							if ($this->players[$p]->sumTiebr1 == ($this->players[$p]->sum_busum / 2)) 		// 1.Feinwertung ist keine SoBe-Wertung
+								echo '<td class="fw_col"><div>'.number_format(($this->players[$p]->sum_busum / 2),1).'</div></td>';
+							else
+								echo '<td class="fw_col"><div><span style="color:#FF0000">'.number_format(($this->players[$p]->sum_busum / 2),1).'</span></div></td>';
+						}
+						if (in_array($this->turnier->tiebr2, $a_sobe)) { 		
+							if ($this->players[$p]->sumTiebr2 == ($this->players[$p]->sum_sobe / 4))
+								echo '<td class="fw_col"><div>'.number_format(($this->players[$p]->sum_sobe / 4),2).'</div></td>';
+							else
+								echo '<td class="fw_col"><div><span style="color:#FF0000">'.number_format(($this->players[$p]->sum_sobe / 4),2).'</span></div></td>';
+						} else {
+							if ($this->players[$p]->sumTiebr2 == ($this->players[$p]->sum_sobe / 2))
+								echo '<td class="fw_col"><div>'.number_format(($this->players[$p]->sum_sobe / 2),1).'</div></td>';
+							else
+								echo '<td class="fw_col"><div><span style="color:#FF0000">'.number_format(($this->players[$p]->sum_sobe / 2),1).'</span></div></td>';
 						}
 					}
 				echo '</tr>';

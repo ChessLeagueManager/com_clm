@@ -1,8 +1,8 @@
 /**
   * CSS Style for Chess League Manager
-  * @Copyright (C) 2008-2025 CLM Team.  All rights reserved
+  * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
   * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
-  * @link https://www.chessleaguemanager.de
+  * @link https://chessleaguemanager.org
   * Author: Fjodor Schaefer
   * www.vonfio.de
   
@@ -318,11 +318,19 @@
 .righttable0, .righttable_ch0 { float:right; width: 35px; }
 .righttable1, .righttable_ch1 { float:right; width: 70px; }
 .righttable2, .righttable_ch2 { float:right; width: 142px; } /* 115 */
-.righttable3, .righttable_ch3 { float:right; width: 188px; } /* 150 175 */
+.righttable3, .righttable_ch3 { float:right; width: 188px; } /* 150 175*/
+.righttable4, .righttable_ch4 { float:right; width: 198px; } /* 150 175*/
+.righttable5, .righttable_ch5 { float:right; width: 225px; } /* 150 175*/
+.righttable6, .righttable_ch6 { float:right; width: 225px; } /* 150 175*/
+.righttable7, .righttable_ch7 { float:right; width: 225px; } /* 150 175*/
 #righttabletable0, #righttabletable_ch0 { width: 35px; border-left:1px solid #DDD; }
 #righttabletable1, #righttabletable_ch1 { width: 70px; border-left:1px solid #DDD; }
 #righttabletable2, #righttabletable_ch2 { width: 142px; border-left:1px solid #DDD; } 
 #righttabletable3, #righttabletable_ch3 { width: 188px; border-left:1px solid #DDD; }
+#righttabletable4, #righttabletable_ch4 { width: 198px; border-left:1px solid #DDD; }
+#righttabletable5, #righttabletable_ch5 { width: 225px; border-left:1px solid #DDD; }
+#righttabletable6, #righttabletable_ch6 { width: 225px; border-left:1px solid #DDD; }
+#righttabletable7, #righttabletable_ch7 { width: 225px; border-left:1px solid #DDD; }
 
 /** Definition Zellen **/
 #turnier_rangliste .rang, #turnier_rangliste .rang_auf, #turnier_rangliste .rang_auf_evtl, #turnier_rangliste .rang_ab, #turnier_rangliste .rang_ab_evtl {width: 20px; text-align: right !important;} 

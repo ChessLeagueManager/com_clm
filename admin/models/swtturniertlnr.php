@@ -103,6 +103,13 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 				$s_punkte = strval($s_points / 2);
 				$teilnehmer->set('s_punkte'   	, $s_punkte);
 
+				$sum_bhlz = CLMSWT::readInt($swt,$offset+292,1);	// Hauptwertung aus WinSwiss - meist Brettpunkte
+				$teilnehmer->set('sum_bhlz'   	, $sum_bhlz);
+				$sum_busum = CLMSWT::readInt($swt,$offset+296,1);	// 1.Feinwertung aus WinSwiss - oft Buchholz
+				$teilnehmer->set('sum_busum'   	, $sum_busum);
+				$sum_sobe = CLMSWT::readInt($swt,$offset+300,1);	// 2.Feinwertung aus WinSwiss - oft Buchholzsumme oder Sonneborn-Berger
+				$teilnehmer->set('sum_sobe'   	, $sum_sobe);
+
 				//TWZ-Bestimmen
 				$z_twz = clm_core::$load->gen_twz($useAsTWZ, $teilnehmer->start_dwz, $teilnehmer->FIDEelo);
 				$teilnehmer->set('twz'	, $z_twz);
@@ -149,9 +156,10 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 		$anz_teilnehmer 		= CLMSWT::readInt($swt,7,2);
 	
 		if($anz_teilnehmer > 0){
-			$insert_query = "INSERT IGNORE INTO 
-									#__clm_swt_turniere_tlnr" . " 
-									( `sid`, `turnier`, `swt_tid`, `snr`, `name`, `birthYear`, `geschlecht`, `tlnrStatus`, `verein`, `twz`, `start_dwz`, `FIDEelo`, `titel`, `FIDEcco`, `FIDEid`, `PKZ`, `mgl_nr`, `zps`, `status`, `s_punkte`) "
+			$insert_query = "INSERT IGNORE INTO #__clm_swt_turniere_tlnr"
+								." ( `sid`, `turnier`, `swt_tid`, `snr`, `name`, `birthYear`, `geschlecht`, `tlnrStatus`, `verein`, `twz`, `start_dwz`"
+								." , `FIDEelo`, `titel`, `FIDEcco`, `FIDEid`, `PKZ`, `mgl_nr`, `zps`, `status`, `s_punkte`"
+								." , `sum_bhlz`, `sum_busum`, `sum_sobe`) "
 						  . " 	VALUES";
 			
 			print clm_core::$load->request_string('snr[1]');
@@ -186,7 +194,10 @@ class CLMModelSWTTurnierTlnr extends JModelLegacy {
 										".CLMSWT::getFormValue('mgl_nr',0,'int',$i).", 
 										'".$zpscode."', 
 										"."0".", 
-										".CLMSWT::getFormValue('s_punkte','','string',$i)." 
+										".CLMSWT::getFormValue('s_punkte','','string',$i).", 
+										".CLMSWT::getFormValue('sum_bhlz','','string',$i).", 
+										".CLMSWT::getFormValue('sum_busum','','string',$i).", 
+										".CLMSWT::getFormValue('sum_sobe','','string',$i)." 
 									),";
 				  }
 				}

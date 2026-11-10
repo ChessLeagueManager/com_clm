@@ -1,9 +1,9 @@
 <?php
 /**
  * @ Chess League Manager (CLM) Component 
- * @Copyright (C) 2008-2023 CLM Team.  All rights reserved
+ * @Copyright (C) 2008-2026 CLM Team.  All rights reserved
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @link http://www.chessleaguemanager.de
+ * @link https://chessleaguemanager.org
  * @author Thomas Schwietert
  * @email fishpoke@fishpoke.de
  * @author Andreas Dorn
@@ -55,6 +55,7 @@ class CLMModelTurnier_Rangliste extends JModelLegacy {
 	function _getTurnierPlayers() {
 	
 		$query = "SELECT rankingPos, snr, name, sum_punkte, sumTiebr1, sumTiebr2, sumTiebr3, twz, '' AS quali"
+			.", sum_bhlz, sum_busum, sum_sobe "
 			." FROM `#__clm_turniere_tlnr`"
 			." WHERE turnier = ".$this->turnierid
 			.$this->_getSpecialRankingWhere()		//Sonderranglisten
