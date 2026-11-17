@@ -127,6 +127,9 @@ if ($liga[0]->lokal == '') $liga[0]->lokal = $liga[0]->vlokal;
 		$bgebjahr = clm_core::$load->request_string('bgebjahr');
 		$geschlecht = clm_core::$load->request_string('geschlecht','');
 
+$ajahr = date("Y");
+$vjahr = $ajahr - 106;
+$bjahr = $ajahr - 3;
 ?>
 	<script language="javascript" type="text/javascript">
 
@@ -160,24 +163,24 @@ if ($liga[0]->lokal == '') $liga[0]->lokal = $liga[0]->vlokal;
 		<h4><?php echo Text::_( 'optionale Auswahlhilfe:' ); ?></h4>
 		<table style="border: none !important; border-collapse: collapse !important; font-size: 80%; line-height: 60%;">
 		<tr>
-			<td class="key" nowrap="nowrap" style="border: none !important;"><label for="vgebjahr"><?php echo Text::_( 'ab Geburtsjahr' ).' : '; ?></label>
+			<td class="key" nowrap="nowrap" style="border: none !important; width: 40%;"><label for="vgebjahr"><?php echo Text::_( 'ab Geburtsjahr' ).' : '; ?></label>
 			</td>
-			<td align="center" style="border: none !important;">
+			<td align="center" style="border: none !important; width: 60%;">
 		  		<select size="1" class="<?php echo $field_search; ?>" name="vgebjahr" id="vgebjahr">
 					<option value="0"><?php echo Text::_( '-- Jahr auswählen --'); ?></option>
-						<?php for ($x=1920; $x < 2023; $x++) { ?>
+						<?php for ($x=$vjahr; $x < $bjahr; $x++) { ?>
 							<option value="<?php echo $x ?>" <?php if ($vgebjahr == $x ) { ?> selected="selected" <?php } ?>><?php echo $x; ?></option> 
 						<?php }	?>
 				</select>
 			</td>
 		</tr>
 		<tr>
-			<td class="key" nowrap="nowrap" style="border:none !important;"><label for="bgebjahr"><?php echo Text::_( 'bis Geburtsjahr' ).' : '; ?></label>
+			<td class="key" nowrap="nowrap" style="border: none !important;"><label for="bgebjahr"><?php echo Text::_( 'bis Geburtsjahr' ).' : '; ?></label>
 			</td>
 			<td align="center"  style="border: none !important;">
 		  		<select size="1" class="<?php echo $field_search; ?>" name="bgebjahr" id="bgebjahr">
 					<option value="0"><?php echo Text::_( '-- Jahr auswählen --'); ?></option>
-						<?php for ($x=1920; $x < 2023; $x++) { ?>
+						<?php for ($x=$vjahr; $x < $bjahr; $x++) { ?>
 							<option value="<?php echo $x ?>" <?php if ($bgebjahr == $x ) { ?> selected="selected" <?php } ?>><?php echo $x; ?></option> 
 						<?php }	?>
 				</select>
