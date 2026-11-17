@@ -454,7 +454,7 @@ class CLMTournament extends stdClass {
 				} else { //Ranglistenkorrektur nach FIDE (Teil 2) nur für CH-Turniere
 					if ($dateEnd > $enddate_vg) {
 						if ($value->gegner == 0) {
-							if ($value->runde == 1) {
+							if ($value->runde == 111) { // keine Sonderbehandlung für Runde 1 mehr
 //								$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = 0;
 								if (in_array($value->ergebnis, $array_vug)) {
 									$array_PlayerBuchOpp[$value->tln_nr][$value->runde] = $array_PlayerPunkte[$value->tln_nr];
@@ -641,6 +641,7 @@ class CLMTournament extends stdClass {
 					else $array_PlayerTWZOpp[$value->tln_nr][] = $value->start_dwz; } // Array mit Gegnerwerten - für Streichresultat
 			} 
 		}
+
 		// Sonneborn-Berger
 		if (in_array(3, $arrayFW)) { // normale Sonneborn-Berger als TieBreaker gewünscht?
 			for ($s=1; $s<= $this->data->teil; $s++) { // alle Startnummern durchgehen
