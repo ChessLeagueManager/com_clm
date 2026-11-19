@@ -221,7 +221,8 @@ $heading = $this->turnier->name;
 				if ($names[$i]['gender'] == 'MALE') $names[$i]['gender'] = 'M';
 				elseif ($names[$i]['gender'] == 'FEMALE') $names[$i]['gender'] = 'W'; 
 				else $names[$i]['gender'] = ''; ?>
-				<tr><td style="text-align: center;"><input type="radio" id="<?php echo 'spieler'.($i); ?>" name="reg_spieler" value="<?php echo ($i); ?>"<?php if ($reg_spieler == $i) echo ' checked="checked"'; ?>></td>
+<!--				<tr><td style="text-align: center;"><input type="radio" id="<?php echo 'spieler'.($i); ?>" name="reg_spieler" value="<?php echo ($i); ?>"<?php if ($reg_spieler == $i) echo ' checked="checked"'; ?>></td>
+-->				<tr><td style="text-align: center;"><input type="radio" id="<?php echo 'spieler'.($i); ?>" name="reg_spieler" value="<?php echo ($i); ?>"<?php if ($ii == 1) echo ' checked="checked"'; ?>></td>
 				<td><?php echo $names[$i]['lastname'].','.$names[$i]['firstname']; ?></td>
 				<td><?php echo $names[$i]['birthyear']; ?></td>
 				<td><?php if (isset($names[$i]['rating'])) echo $names[$i]['rating']; else $names[$i]['rating'] = 0; ?></td>
@@ -245,7 +246,7 @@ $heading = $this->turnier->name;
 				<input type="hidden" name="<?php echo 'reg_titel'.($i); ?>" value="<?php if (isset($names[$i]['fide_title'])) echo $names[$i]['fide_title']; else ''; ?>" />
 				</tr>
 			<?php } 
-				if ($ii == 0) { ?>
+			if ($ii == 0) { ?>
 				<tr><td colspan=6>Es wurde kein passender Spieler in den DSB-Daten gefunden</td><tr>
 			<?php } 				?>
 		</table>
@@ -257,7 +258,8 @@ $heading = $this->turnier->name;
 				<td class="anfang"><?php echo Text::_('REGISTRATION_PLAYER'); ?>,<?php echo Text::_('REGISTRATION_VORNAME'); ?></td>
 				<td class="anfang"><?php echo Text::_('REGISTRATION_JAHR'); ?></td>
 			</th></tr>
-			<tr><td style="text-align: center;"><input type="radio" id="spieler99" name="reg_spieler" value="99"<?php if ($reg_spieler == 99) echo ' checked="checked"'; ?>></td>
+<!--			<tr><td style="text-align: center;"><input type="radio" id="spieler99" name="reg_spieler" value="99"<?php if ($reg_spieler == 99) echo ' checked="checked"'; ?>></td>
+-->			<tr><td style="text-align: center;"><input type="radio" id="spieler99" name="reg_spieler" value="99"<?php if ($ii == 0) echo ' checked="checked"'; ?>></td>
 			<td><?php echo $reg_name.','.$reg_vorname; ?></td>
 			<td><?php echo $reg_jahr; ?></td>
 			</tr>

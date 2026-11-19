@@ -346,6 +346,7 @@ function edit()
 		$anz_sgp = $gid[0]->anz_sgp;
 		$melde = explode ("-",$gid[0]->Meldeschluss);
 		$jahr = $melde[0];
+		if (is_null($gid[0]->stichtag)) $gid[0]->stichtag = '0000-00-00';
 		$melde = explode ("-",$gid[0]->stichtag);
 		$stjahr = $melde[0];
 

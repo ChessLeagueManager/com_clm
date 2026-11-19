@@ -102,8 +102,6 @@ function display($cachable = false, $urlparams = array())
 			$where[] = 'a.dg = '.(int) $filter_dg; }
 		else { $where[] = 'a.dg = '.(int) $filter_dg; }}
 
-	if ($search) {	$where[] = 'LOWER(m.name) LIKE "'.$db->escape('%'.$search.'%').'"';}
-
 	if ( isset($filter_state) AND is_string($filter_state) ) {
 		if ( $filter_state == 'P' ) {
 			$where[] = 'a.published = 1';
@@ -111,8 +109,12 @@ function display($cachable = false, $urlparams = array())
 			$where[] = 'a.published = 0';
 		}
 	}
+	$where_count = $where;			// nur für SELECT COUNT - m.name gibt es nicht in clm_rnd_man - Bug wurde von älteren DB-Versionen wahrscheinlich ignoriert
+	if ($search) {	$where[] = 'LOWER(m.name) LIKE "'.$db->escape('%'.$search.'%').'"';}
 
 	$where 		= ( count( $where ) ? ' AND ' . implode( ' AND ', $where ) : '' );
+	$where_count = ( count( $where_count ) ? ' AND ' . implode( ' AND ', $where_count ) : '' );
+	
 	if ($filter_order == 'a.id'){
 		$orderby 	= ' ORDER BY a.sid ASC,a.lid ASC,a.dg ASC ,a.runde ASC ,a.paar ASC';
 	} else {
@@ -129,7 +131,7 @@ function display($cachable = false, $urlparams = array())
 		.' FROM #__clm_rnd_man AS a'
 		.' LEFT JOIN #__clm_saison AS s ON s.id = a.sid'
 		.' WHERE a.heim = 1 '
-		. $where
+		. $where_count
 	;
 	$db->setQuery( $query );
 	$total = $db->loadResult();
@@ -2328,7 +2330,7 @@ function delete_wertung()
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	} 
 //	if ($liga_sl->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
-	if (!clm_core::$load->rights_check('SL',$liga->id) AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+	if (!clm_core::$load->rights_check('SL',$liga_sl->id) AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
 		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_DWZ_LOESCHEN'),'warning' );
 		$link = 'index.php?option='.$option.'&section='.$section;
 		$mainframe->redirect( $link);
@@ -2645,7 +2647,7 @@ function kampflos($gast)
 		$mainframe->redirect( 'index.php?option='. $option.'&section='.$section );
 	} 
 //	if ($liga_sl->sl !== clm_core::$access->getJid() AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
-	if (!clm_core::$load->rights_check('SL',$lig->cid) AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
+	if (!clm_core::$load->rights_check('SL',$liga_sl->id) AND $clmAccess->access('BE_'.$mppoint.'_edit_result') !== true) {
 		$mainframe->enqueueMessage( Text::_('ERGEBNISSE_LIGEN_ARBEIT'),'warning' );
 		$mainframe->redirect( $link);
 					}
