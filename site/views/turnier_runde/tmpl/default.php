@@ -78,6 +78,7 @@ if (!$archive_check) {
 	echo CLMContent::createPDFLink('turnier_runde', Text::_('PDF_TOURNAMENTROUND'), array('turnier' => $this->turnier->id, 'layout' => 'runde', 'dg' => $this->round->dg, 'runde' => $this->round->nr) );
 	
 	if ($jid != 0) { 
+		echo CLMContent::createPDFLink('turnier_runde', Text::_('PDF_TOURNAMENTROUNDCARDS'), array('turnier' => $this->turnier->id, 'layout' => 'paarungskarten', 'dg' => $this->round->dg, 'runde' => $this->round->nr) );
 		echo CLMContent::createPGNLink('turnier_runde', Text::_('ROUND_PGN_ALL'), array('turnier' => $this->turnier->id, 'dg' => $this->round->dg, 'runde' => $this->round->nr) );
 	} 
 	
